@@ -3576,7 +3576,7 @@ const GameCreation = () => {
                     _hover={{ bg: '#190793' }}
                     color="#fff"
                     h={'46px'}
-                    w={'128px'}
+                    w={'128px'}     
                     // onClick={() => handleButtonClick(showFunction)}
                     onClick={() => handleNext()}
                     mr={'33px'}
@@ -3612,7 +3612,7 @@ const GameCreation = () => {
                   onClick={() => {
                     setTab(tab - 1);
                   }}
-                  size={46} // Adjust the size as needed
+                  size={46} 
                   color="#11047a"
                   style={{
                     position: 'fixed',
@@ -3655,17 +3655,7 @@ const GameCreation = () => {
                 reflectionQuestionsdefault={reflectionQuestionsdefault}
               />
             )}
-            {/* {entire && (
-              <EntirePreview
-                tab={tab}
-                prevdata={prevdata}
-                formData={formData}
-                show={img}
-                isOpen={isOpen}
-                onOpen={onOpen}
-                onClose={onClose}
-              />
-            )} */}
+           
             <Button
               bg="#11047a"
               _hover={{ bg: '#190793' }}

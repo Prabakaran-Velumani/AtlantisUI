@@ -924,14 +924,6 @@ const AddScores: React.FC<{
               /{Object.keys(Completion).length + 5})
             </Text>
             <Box className="Images">
-              {/* <Img
-                      src={ScreenMainImages[currentTab]}
-                      alt="Your Image"
-                      width="100%"
-                      height="100%"
-                      objectFit="cover" // Maintain aspect ratio and cover the container
-                      /> */}
-
               {currentTab === 0 && (
                 <CompletionContentScreen
                   preview={false}
@@ -996,13 +988,7 @@ const AddScores: React.FC<{
                 <Box className="right-icon">
                   <Icon
                     as={FaChevronCircleRight}
-                    // position="absolute"
-                    // top={currentTab === 0 ? '325px' : currentTab === 1 ? "325px" :"325px"}
-                    // right="10px"
-
-                    // transform="translate(0, -50%)"
-                    // aria-label="Slide Right"
-                    fontSize="25px" // Increase icon size here
+                    fontSize="25px" 
                     onClick={handleNext}
                   />
                 </Box>
@@ -1452,24 +1438,6 @@ const AddScores: React.FC<{
                   </>
                 )}
               </>
-
-              {/*  {formData.gameIsSetDistinctionScore === 'false' &&
-                    formData.gameIsSetMinPassScore === 'false' ? (
-                      <FormControl>
-                        <TextField
-                          // mb="30px"
-                          // me="30px"
-                          w={'100%'}
-                          // width="380px"
-                          placeholder="eg. Congratulations! You have completed..."
-                          mt="30px"
-                          id="gameCompletedCongratsMessage"
-                          name="gameCompletedCongratsMessage"
-                          value={formData?.gameCompletedCongratsMessage}
-                          onChange={handleChange}
-                        />
-                      </FormControl>
-                    ) : null}*/}
             </SimpleGrid>
           </Card>
         )}

@@ -160,21 +160,15 @@ const WelcomeContentScreen: React.FC<{
         <Box position={'relative'}>
           <Img src={imageSrc} width={'100%'} h={'90vh'} />
           <Box
-            position={'absolute'}         
+            position={'absolute'}
             width={'100%'}
             h={'70vh'}
             left={'0px'}
             bottom={'0'}
             fontFamily={'gametext'}
-            // top={'0'}
-            // right={'0'}
-            // w={'100%'}
-            // mt={{ base: '0px', sm: '0px', md: '10px', lg: '20px' }}
-            // lineHeight={1}
             display={'flex'}
             justifyContent={'center'}
             alignItems={'flex-start'}
-            // textAlign={'center'}
           >
             <Box w={'60%'} className="content" textAlign={'center'}>
               <Text
@@ -184,7 +178,7 @@ const WelcomeContentScreen: React.FC<{
                   md: '15px',
                   lg: '20px',
                 }}
-               >
+              >
                 {formData.gameTitle}
               </Text>
               {(formData.gameIsShowGameDuration === 'true' || preview) && (
@@ -204,13 +198,13 @@ const WelcomeContentScreen: React.FC<{
                   {/* Game Duration : {(formData.gameDuration > 1)?formData.gameDuration+"mins":"1mins"}*/}
                   <>
                     {' '}
-                    <Box w={'100%'} display={'flex'} justifyContent={'center'} > 
-                    <Icon   as={FaClock} style={customStylesicon} />{' '}
-                    <span style={customStylesicon}>
-                      {formData.gameDuration > 1
-                        ? formData.gameDuration + ' mins'
-                        : 'Few mins'}
-                    </span>
+                    <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                      <Icon as={FaClock} style={customStylesicon} />{' '}
+                      <span style={customStylesicon}>
+                        {formData.gameDuration > 1
+                          ? formData.gameDuration + ' mins'
+                          : 'Few mins'}
+                      </span>
                     </Box>
                   </>
                 </Text>
