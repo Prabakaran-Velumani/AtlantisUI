@@ -136,7 +136,7 @@ export const urls = {
   getAudio:'/game/getaudio/',
   entireQuestion:'/game/duplicate/question/',
   creatorBlocks:'/game/creator/blocks/',
-
+  getStoryValidtion:'/game/getStoryValidtion/',
 
   languages:'/languages/getlanguages',
    getCreatedLanguages:'/languages/getcreatedlanguages',

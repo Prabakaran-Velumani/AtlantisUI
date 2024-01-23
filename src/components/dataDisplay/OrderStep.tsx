@@ -102,7 +102,8 @@ export default function OrderStep(props: {
 						borderRadius='50%'
 					>
 
-						<Icon borderRadius={'50%'} border='1px solid' h='27px' borderColor={'green.500'} w='29px' bgColor={'#fff'} as={MdCheck} color='green.500' />
+<Icon  borderRadius={'50%'} border='1px solid' h='27px' borderColor={'green.500'} w='29px' bgColor={'transparent'} as={MdCheck} color='green.500' />
+		
 
 					</Flex>
 				) : status === 'error' ? (

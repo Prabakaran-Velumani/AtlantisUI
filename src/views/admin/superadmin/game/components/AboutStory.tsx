@@ -458,7 +458,13 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                 // minRows={1}
                 // as={ResizeTextarea}
                 // resize="none"
+<<<<<<< HEAD
                 // h="70px"      
+=======
+                // h="70px"
+        
+                
+>>>>>>> origin/milestone3
               /> */}
 
 <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>

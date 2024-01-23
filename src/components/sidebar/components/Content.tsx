@@ -17,6 +17,8 @@ import { useAuth } from 'contexts/auth.context';
 import { MdLogout } from 'react-icons/md';
 import { AiOutlineLogout } from "react-icons/ai";
 import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+
 
 // FUNCTIONS
 
@@ -36,6 +38,20 @@ function SidebarContent(props: {
       navigate('/auth/sign-in/default')
     // })
   }
+   
+  useEffect(() => {
+    // Check if the user is logged in
+    const checkUserLogin = () => {
+      const storedUser = localStorage.getItem('user');
+      if (!storedUser) {
+        setUser(null);
+        localStorage.removeItem('user')
+        navigate('/auth/sign-in/default')
+        window.location.reload();
+      }
+    };
+    checkUserLogin();
+  }, []); // Run only once when the component mounts
   // SIDEBAR
   return (
     <Flex direction="column" height="100%" p="25px" w="100%" borderRadius="30px"

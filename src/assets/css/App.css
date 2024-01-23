@@ -1182,3 +1182,11 @@ letter-spacing: 0.5px;
   margin-right: 5px;
 }
 
+
+
+
+
+/* Ashiq Work */
+.non-caret {
+  caret-color: transparent;
+}

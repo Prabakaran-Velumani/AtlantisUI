@@ -161,7 +161,6 @@ const steps = [
   { title: 'Summaries' },
   { title: 'Endpage' },
 ];
-
 interface ReflectionQuestion {
   length(arg0: string, length: any): unknown;
   ref1: any;
@@ -553,9 +552,9 @@ const GameCreation = () => {
     setBackgroundIndex('');
   };
   {
-    /****************************************************/
+    
   }
-  //////Changes-14/Dec/23//////////////////////
+  
   const handlePreview = (img: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchImg((prev: any) => {
@@ -3068,87 +3067,66 @@ const GameCreation = () => {
                                             bg: '#11047ae3',
                                           }}
                                           // onClick={() => handleButtonTwo(id)}
-                                          onClick={() =>
-                                            handleBackground(img, i)
-                                          }
+                                          onClick={() => handleBackground(img, i)}
                                         >
-                                          <span style={{ color: 'white' }}>
-                                            {selectedCardIndex === i
-                                              ? 'Selected'
-                                              : 'Select'}
-                                          </span>
+                                          <span style={{ color: 'white' }}>{selectedCardIndex === i ? 'Selected' : 'Select'}</span>
+
                                         </Box>
+
                                       </Flex>
+
                                     ) : (
                                       <Flex
-                                        position="absolute"
-                                        bottom="0"
-                                        transform="translate(-50%, 0)"
-                                        flexDirection="row"
-                                        alignItems="center"
-                                        justifyContent="space-between"
-                                        width="100%"
+                                        position='absolute'
+                                        bottom='0'
+
+                                        transform='translate(-50%, 0)'
+                                        flexDirection='row'
+                                        alignItems='center'
+                                        justifyContent='space-between'
+                                        width='100%'
                                         style={{
                                           opacity: '0',
                                           transform: 'translateY(20px)',
-                                          transition:
-                                            'transform 0.5s ease, opacity 0.5s ease',
+                                          transition: 'transform 0.5s ease, opacity 0.5s ease'
                                         }}
                                       >
                                         <Box
-                                          bg="white"
-                                          width="50%"
-                                          height="35px"
-                                          borderBottomLeftRadius="10px"
-                                          display="flex"
-                                          alignItems="center"
-                                          justifyContent="center"
-                                          cursor="pointer"
+                                          bg='white'
+                                          width='50%'
+                                          height='35px'
+                                          borderBottomLeftRadius='10px'
+                                          display='flex'
+                                          alignItems='center'
+                                          justifyContent='center'
+                                          cursor='pointer'
                                         >
-                                          <span style={{ color: 'black' }}>
-                                            Preview
-                                          </span>
+                                          <span style={{ color: 'black' }}>Preview</span>
                                         </Box>
-                                        <Box
-                                          bg="#11047a"
-                                          width="50%"
-                                          height="35px"
-                                          borderBottomRightRadius="10px"
-                                          display="flex"
-                                          alignItems="center"
-                                          justifyContent="center"
-                                          cursor="pointer"
-                                        >
+                                        <Box bg='#11047a' width='50%' height='35px' borderBottomRightRadius='10px' display='flex'
+                                          alignItems='center'
+                                          justifyContent='center'
+                                          cursor='pointer'>
                                           {/* <span style={{ color: 'white' }}>{selections[i] ? 'Selected' : 'Select'}</span> */}
-                                          <span style={{ color: 'white' }}>
-                                            {selectedCardIndex === i
-                                              ? 'Selected'
-                                              : 'Select'}
-                                          </span>
+                                          <span style={{ color: 'white' }}>{selectedCardIndex === i ? 'Selected' : 'Select'}</span>
                                         </Box>
                                       </Flex>
                                     )}
+
                                   </Box>
-                                  <Flex
-                                    justifyContent={'space-between'}
-                                    margin={'10px 0'}
-                                    flexDirection={'column'}
-                                  >
+                                  <Flex justifyContent={'space-between'} margin={'10px 0'} flexDirection={'column'}>
                                     <Box>
                                       <Text
-                                        color={
-                                          selectedCardIndex === i
-                                            ? 'white'
-                                            : 'black'
-                                        }
-                                        // fontSize={'16px'}
-                                        // fontWeight={'800'}
+                                        color={selectedCardIndex === i ? 'white' : 'black'}
+                                        // fontSize={'16px'} 
+                                        // fontWeight={'800'} 
                                         textTransform={'capitalize'}
-                                        fontSize="md"
+                                        fontSize='md'
                                         // fontWeight={'200'}
-                                        fontWeight="bold"
+                                        fontWeight='bold'
                                         fontFamily="DM Sans, sans-serif"
                                       >
+
                                         {img?.temp.tempTitle}
                                       </Text>
                                     </Box>

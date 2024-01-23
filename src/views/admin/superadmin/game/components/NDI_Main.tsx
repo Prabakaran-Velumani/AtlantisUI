@@ -1786,8 +1786,9 @@ console.log('setDialogNavigation',menuvalue)
                                                         (
                                                             <Box id={`tarSeqRef${seq.id}`}  position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} 
                                                             background={seq.input === lastInputName || dragData.isDragging === true ||seq.id === targetSequence?.id  ? '#c7c7c724' : 'unset'} _hover={{background: '#c7c7c724'}} zIndex={seq.input === lastInputName ? '9' : 'unset'}
-                                                            // onKeyDown={(e) => handleKeyDown(e, seq)}
-                                                            // onClick={(e) => handleKeyDown(e, seq)}
+                                                            tabIndex={0}
+                                                            onClick={(e) => handleKeyDown(e, seq)}
+                                                            onKeyDown={(e) => handleKeyDown(e, seq)}
                                                             >  
                                                                 <NoteCompo
                                                                     seq={seq}
@@ -1803,8 +1804,7 @@ console.log('setDialogNavigation',menuvalue)
                                                                     handleBlock={setNotelead}
                                                                     handleSelectBlock={handleNoteNavigation}
                                                                     items={items}                                                                    
-                                                                    setSelectBlock={setNotelead}
-                                                           
+                                                                    setSelectBlock={setNotelead}                                                           
                                                                     handleInput={(e: any) => handleInput(e, i)} />
                                                                 {seq.id == showMiniBox ? <MiniBox seq={seq} i={i} name={'Note'} /> : null}
                                                             </Box>
@@ -1812,9 +1812,9 @@ console.log('setDialogNavigation',menuvalue)
                                                         seq.type == 'Dialog' ?
                                                             (
                                                                 <Box id={`tarSeqRef${seq.id}`}  position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} background={seq.input === lastInputName || dragData.isDragging === true ? '#c7c7c724' : 'unset'} _hover={{background: '#c7c7c724'}} zIndex={seq.input === lastInputName ? '9' : 'unset'}
-                                                                // onKeyDown={(e) => handleKeyDown(e, seq)}
-                                                                // onClick={(e) => handleKeyDown(e, seq)}  
-                                                                
+                                                                tabIndex={0}
+                                                                onClick={(e) => handleKeyDown(e, seq)}
+                                                                onKeyDown={(e) => handleKeyDown(e, seq)}                                                                
                                                                 >
                                                                     <DialogCompo
                                                                         seq={seq}
@@ -1849,8 +1849,9 @@ console.log('setDialogNavigation',menuvalue)
                                                             seq.type == 'Interaction' ?
                                                                 (
                                                                     <Box id={`tarSeqRef${seq.id}`}  position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} background={seq.input === lastInputName || dragData.isDragging === true ? '#c7c7c724' : 'unset'} _hover={{background: '#c7c7c724'}} zIndex={seq.input === lastInputName ? '9' : 'unset'} 
-                                                                    // onKeyDown={(e) => handleKeyDown(e, seq)} 
-                                                                    // onClick={(e) => handleKeyDown(e, seq)}
+                                                                    tabIndex={0}
+                                                                    onClick={(e) => handleKeyDown(e, seq)}
+                                                                    onKeyDown={(e) => handleKeyDown(e, seq)}
                                                                     >
                                                                         <InteractionCompo
                                                                             seq={seq}
@@ -1960,8 +1961,8 @@ console.log('setDialogNavigation',menuvalue)
                     </Box>
                 </Card>
             </Box>
-           
-            <OnToast msg={'Drag Your Accordion'} status={'info'} setAlert={setAlert} position={'top-right'} />
+           f
+            {/* <OnToast msg={'Drag Your Accordion'} status={'info'} setAlert={setAlert} position={'top-right'} /> */}
         </>
     )
 }

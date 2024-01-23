@@ -113,6 +113,24 @@ const DialogCompo: React.FC<PropsDialog> = ({ seq, index, name, handleInput, han
 
 
 
+
+    let focusSeqRef: any;
+    const justClick = (event: any, seq: any) => {        
+      
+        if (event.type === 'click') {
+          focusSeqRef = document.getElementsByClassName(seq.id);
+          const element = focusSeqRef?.[0];
+      
+          if (element) {
+            element.classList.remove('non-caret');
+            element.removeAttribute('readonly');            
+            element.focus();
+            // console.log('event.----------------', element);
+          }
+        }
+    };
+
+
     console.log('seq', seq);
     
     return (
@@ -157,13 +175,18 @@ const DialogCompo: React.FC<PropsDialog> = ({ seq, index, name, handleInput, han
                         <Textarea
                             placeholder='Dialog'
                             id='Dialog'
+                            className={`${seq.id}`}
                             name={`Dialog${seq.input}`}
                             onChange={handleInput}
+                            onClick={(e)=>justClick(e, seq)}
                             value={input?.[`Dialog${seq.input}`]?.dialog}
                             borderRadius={'18px'}
                             style={{ overflowY: 'hidden' }}
                             minHeight="45px"
                             ref={textareaRef} // Add a ref to the textarea
+                            _focusVisible={{borderColor: '#0000', border: '1px solid #e5e5e5', boxShadow: 'unset'}}
+                            tabIndex={0}
+                            readOnly={true}
                         />
                     </Box>
                     {parseInt(input?.[`Dialog${seq.input}`]?.character, 10)!==99999 &&( 
