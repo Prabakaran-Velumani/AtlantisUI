@@ -957,7 +957,17 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                         </Td>
                                         <Td p={0} alignItems={'center'}>
                                         <Box>
-                                            <Input type='number' borderRadius={'15px'}   placeholder='00'  id={`Score${alp.option}`} title={alp.option} name={`Interaction${seq.input}`} onChange={handleInput} value={input?.[`Interaction${seq.input}`]?.scoreObject?.[alp.option]} /><span hidden>{alp.option}</span>
+                                            <Input type='text' borderRadius={'15px'}   placeholder='00'  id={`Score${alp.option}`} title={alp.option} name={`Interaction${seq.input}`} onChange={handleInput}
+                                            onKeyPress={(e) => {
+                                                // Allow only numeric characters and some special keys
+                                                const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+                                            
+                                                if (!allowedKeys.includes(e.key)) {
+                                                  e.preventDefault();
+                                                }
+                                              }}
+                                               value={input?.[`Interaction${seq.input}`]?.scoreObject?.[alp.option]} /><span hidden>{alp.option}</span>
+
                                             </Box>
                                         </Td>
                                         {/* <Td p={0}> <Box>

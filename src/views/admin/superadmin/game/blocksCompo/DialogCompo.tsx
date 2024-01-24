@@ -196,6 +196,7 @@ const DialogCompo: React.FC<PropsDialog> = ({ seq, index, name, handleInput, han
                                 placeholder={'Animate...'}
                                 id='Dialog'
                                 name={`Dialog${seq.input}`}
+                                menuPortalTarget={document.body}
                                 styles={customStyles}
                                 options={emotionsOptions}
                                 isSearchable={true}

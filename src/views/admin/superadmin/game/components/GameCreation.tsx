@@ -172,7 +172,7 @@ const GameCreation = () => {
   const [openQuest, setOpenQuest] = useState(false);
   const [input, setInput] = useState<any>({});
   const [items, setItems] = useState<any>([]);
-  const [alphabet, setAlphabet] = useState<MyObject[]>([]);
+  const [alphabet, setAlphabet] = useState<any>([]);
   const [showFunction, setShowFunction] = useState<any>('');
   const [interactionBlock, setInteractionBlock] = useState<any>();
 
@@ -181,10 +181,10 @@ const GameCreation = () => {
   const [sequence, setSequence] = useState<any>([]);
   const [dummySequence, setDummySequence] = useState<any>([]);
   //////////////////navin/////////////////////////
-  const [BlockItems, setBlockItems] = useState(null);
-  const[isDeleteSeq, setDeleteseq] = useState<any>(false);
-const reflectionQuestionsdefault = ["What were your biggest learnings?", "How can you apply these learnings back at work?", "'What's one thing you learned about your mindset?", 
-"What's one thing you are committing to change?"];
+  const [BlockItems, setBlockItems] = useState<any>(null);
+  const [isDeleteSeq, setDeleteseq] = useState<any>(false);
+  const reflectionQuestionsdefault = ["What were your biggest learnings?", "How can you apply these learnings back at work?", "'What's one thing you learned about your mindset?",
+    "What's one thing you are committing to change?"];
   const [reflectionQuestions, setReflectionQuestions] = useState({
     ref1: 'What were your biggest learnings?',
     ref2: 'How can you apply these learnings back at work?',
@@ -320,13 +320,11 @@ const reflectionQuestionsdefault = ["What were your biggest learnings?", "How ca
   const [showBadge, setShowBadge] = useState(null);
   const [selectedAud, setSelectedAud] = useState(null);
   const [previewId, setPreviewId] = useState(null);
-  //navin
-  const [eKeyWords, setEKeyWords] = useState({name: '', key: ''});
-  const [copySeq, setCopySeq] = useState<any>();
+  //navin  
   const [fetchImg, setFetchImg] = useState<any>(''),
-  [upNextCount, setUpNextCount] = useState<any>([]),
-  [upNext, setUpNext] = useState<any>(),
-[number, setNumber] = useState<any>([]),
+    [upNextCount, setUpNextCount] = useState<any>([]),
+    [upNext, setUpNext] = useState<any>(),
+    [number, setNumber] = useState<any>([]),
     [fetchPlayerImg, setFetchPlayerImg] = useState<any>(''),
     [selectedPlayer, setSelectedPlayer] = useState<any>(''),
     [backgroundIndex, setBackgroundIndex] = useState<any>(),
@@ -341,17 +339,17 @@ const reflectionQuestionsdefault = ["What were your biggest learnings?", "How ca
     [share, setShare] = useState(false),
     [bgIndex, setBgIndex] = useState<number>(),
     [formData, setFormData] = useState({
-      gameQuestNo:null,
+      gameQuestNo: null,
       gameCategoryId: null,
       gameabstract: null,
       gameBibliography: null,
-      
-     
+
+
       gameMaxScore: null,
       gameBackgroundId: null,
       gameCourseType: 'Public',
       gameNonPlayingCharacterId: null,
-      
+
       //navin
       gameNonPlayerName: null,
       gameNonPlayerVoice: null,
@@ -384,16 +382,16 @@ const reflectionQuestionsdefault = ["What were your biggest learnings?", "How ca
       gameIsFeedbackMandatory: 'false',
       gameIsLearnerMandatoryQuestion: 'false',
       // gameIsAddanotherQuestions:'',
-      
-     
+
+
       // gameScreenTitle: 'Quest Complete',
       gameIsSetCongratsSingleMessage: 'false',
-     
-      
-     
-     
-    
-     
+
+
+
+
+
+
       gameIsShowTakeaway: 'false',
       gameIsShowSkill: 'false',
       gameIsShowStoryline: 'false',
@@ -425,7 +423,7 @@ const reflectionQuestionsdefault = ["What were your biggest learnings?", "How ca
       gameTrackQuestionWiseAnswers: 'false',
       gameDisableLearnerMailNotifications: 'false',
       gameIntroMusic: null,
-      gameIntroMusicName:null,
+      gameIntroMusicName: null,
       gameGameStage: 'Creation',
       gameCompletionScreenId: null,
       gameLeaderboardScreenId: null,
@@ -457,36 +455,36 @@ const reflectionQuestionsdefault = ["What were your biggest learnings?", "How ca
       gameFeedBack: 'false',
       gameFeedBackLink: '',
     });
-   const [compliData, setCompliData] = useState({
-   0:{
-    gameQuestNo:null,
-     
-    gameTotalScore :0,
-     gameIsSetMinPassScore:null ,
-     gameMinScore: null,
-     gameIsSetDistinctionScore: null,
-     gameDistinctionScore: null,
-     gameIsSetSkillWiseScore:null ,
-     gameIsSetBadge:null ,
-     gameBadge: null,
-     gameBadgeName:null ,
-     gameIsSetCriteriaForBadge:null ,
-     gameAwardBadgeScore:null ,
-     gameScreenTitle:null ,
-     gameCompletedCongratsMessage:null ,
-     gameIsSetCongratsScoreWiseMessage:null ,
-     gameMinimumScoreCongratsMessage:null ,
-     gameaboveMinimumScoreCongratsMessage:null ,
-     gameLessthanDistinctionScoreCongratsMessage: null,
-     gameAboveDistinctionScoreCongratsMessage: null,
+  const [compliData, setCompliData] = useState({
+    0: {
+      gameQuestNo: null,
+
+      gameTotalScore: 0,
+      gameIsSetMinPassScore: null,
+      gameMinScore: null,
+      gameIsSetDistinctionScore: null,
+      gameDistinctionScore: null,
+      gameIsSetSkillWiseScore: null,
+      gameIsSetBadge: null,
+      gameBadge: null,
+      gameBadgeName: null,
+      gameIsSetCriteriaForBadge: null,
+      gameAwardBadgeScore: null,
+      gameScreenTitle: null,
+      gameCompletedCongratsMessage: null,
+      gameIsSetCongratsScoreWiseMessage: null,
+      gameMinimumScoreCongratsMessage: null,
+      gameaboveMinimumScoreCongratsMessage: null,
+      gameLessthanDistinctionScoreCongratsMessage: null,
+      gameAboveDistinctionScoreCongratsMessage: null,
 
 
-   },
-  
-      
-    });
-    const [Completion, setCompletion] = useState<any>({});
-    const [CompKeyCount, setCompKeyCount] = useState<any>(0);
+    },
+
+
+  });
+  const [Completion, setCompletion] = useState<any>({});
+  const [CompKeyCount, setCompKeyCount] = useState<any>(0);
   const [prevdata, setPrevdata] = useState();
   const { id } = useParams();
   const inputRef = useRef<HTMLButtonElement>(null);
@@ -506,7 +504,7 @@ const reflectionQuestionsdefault = ["What were your biggest learnings?", "How ca
     if (result?.status !== 'Success') return console.log('getSkills Error :', result?.error)
     // console.log('getSkills',result?.data)
     if (result?.data) {
-      console.log('result.data',result?.data)
+      console.log('result.data', result?.data)
       setDefaultSkills(result?.data);
     } else {
       setDefaultSkills([]);
@@ -542,20 +540,19 @@ const reflectionQuestionsdefault = ["What were your biggest learnings?", "How ca
   }
   useEffect(() => {
 
-    const setAudioInPage = async() =>{
+    const setAudioInPage = async () => {
       const res = await getAudio(parseInt(id));
       if (res?.status === 'Success') {
         console.log(res.data);
         setSelectedAud(res?.data)
       }
     }
-    if(tab == 6)
-    {
-    setAudioInPage();
+    if (tab == 6) {
+      setAudioInPage();
     }
     setFormData((prev) => ({ ...prev, gameLastTab: tab }));
 
-    if(tab==5){
+    if (tab == 5) {
       handleCompletionScreen(1);
     }
   }, [tab]);
@@ -625,13 +622,12 @@ const reflectionQuestionsdefault = ["What were your biggest learnings?", "How ca
     }
 
     const prev = await getPreview(id);
-    if (prev && prev?.status !== 'Success')
-    {
-       console.log(prev.message);
-    } else{
+    if (prev && prev?.status !== 'Success') {
+      console.log(prev.message);
+    } else {
       setPrevdata(prev?.data);
     }
-   
+
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
       return console.log('error:' + gameById?.message);
@@ -642,29 +638,29 @@ const reflectionQuestionsdefault = ["What were your biggest learnings?", "How ca
     const stringContainingNumbers = gameById?.data?.gameLastTabArray;
     const stringGameLastTab = gameById?.data?.gameLastTab;
     // alert(stringGameLastTab);
-    if(gameById?.data?.gameGameStage===null||gameById?.data?.gameGameStage===''){
+    if (gameById?.data?.gameGameStage === null || gameById?.data?.gameGameStage === '') {
       alert(gameById?.data?.gameGameStage)
       setFormData((prev) => ({ ...prev, gameGameStage: 'Creation' }));
     }
-    if(stringGameLastTab===111){
-setTab(1);
-  setFormData((prev) => ({ ...prev, gameLastTab: 1 }));
+    if (stringGameLastTab === 111) {
+      setTab(1);
+      setFormData((prev) => ({ ...prev, gameLastTab: 1 }));
     }
-  
-   else if (stringContainingNumbers) {
+
+    else if (stringContainingNumbers) {
       const numbersArray = stringContainingNumbers?.match(/\d+/g);
       const lastValue = numbersArray[numbersArray?.length - 1];
       console.log('parseInt(lastValue)', numbersArray?.length);
- if(numbersArray?.length===1){
- 
-  
-  setTab(2);
-  setFormData((prev) => ({ ...prev, gameLastTab: 2 }));
+      if (numbersArray?.length === 1) {
 
-}else{
-  setTab(parseInt(lastValue));
-}
-     
+
+        setTab(2);
+        setFormData((prev) => ({ ...prev, gameLastTab: 2 }));
+
+      } else {
+        setTab(parseInt(lastValue));
+      }
+
     }
 
 
@@ -677,7 +673,7 @@ setTab(1);
     const storedReflection = await getReflection(id);
     if (storedReflection?.status !== 'Success')
       // return alert('error:' + gameById?.message);
-    console.log('storedReflection', storedReflection.data)
+      console.log('storedReflection', storedReflection.data)
 
     setReflectionQuestions(storedReflection.data);
     setAtuoSave(true);
@@ -685,15 +681,15 @@ setTab(1);
     // setTab(gameById?.data?.gameLastTab)
   };
 
-  const handleGet = async (quest:number) => {
+  const handleGet = async (quest: number) => {
     setAtuoSave(false);
     console.log('handleGet');
     // return false;
     try {
-const data={
-  quest:quest,
-}
-      const result = await getStory(id,JSON.stringify(data) );
+      const data = {
+        quest: quest,
+      }
+      const result = await getStory(id, JSON.stringify(data));
 
       if (result?.status !== 'Success') {
         return console.log('updateBackground error :' + result?.err);
@@ -708,10 +704,10 @@ const data={
         }
         if (result.maxInput) {
 
-          
+
 
           // console.log('result.nextserios',result.nextserios);
-         
+
           // console.log('result1', result.items)
           const itemsArray = Object.values(result.items);
           let sequance = itemsArray.map((it: any) => it.id);
@@ -719,24 +715,17 @@ const data={
           setSequence(sequance);
           setDummySequence(sequance);
           // console.log('result.maxInput',result.maxInput)
-         
-            setItems(itemsArray);
-       
-         
-            setInput(result.input);
-        
-          
-            setAlphabet(Object.values(result.alp));
-          
-       
-            setInteractionBlock(result.intra)
-         
-         
-            setBlockItems(result.items);
-        
-         
-          
-        }else{
+
+          setItems(itemsArray);
+
+
+          setInput(result.input);
+
+
+          setAlphabet(Object.values(result.alp));
+          setInteractionBlock(result.intra)
+          setBlockItems(result.items);
+        } else {
           console.log('else part')
           setItems([]);
           setSequence([]);
@@ -744,12 +733,12 @@ const data={
           setInput([]);
           setInteractionBlock([]);
           setBlockItems([]);
-         
+
         }
         setTimeout(() => {
           setAtuoSave(true);
         }, 2000);
-      
+
         // const itemsData = Object.values(itemsArray)
         // const itemDataArr = itemsData.map((item: any) => item)
         // const data = itemDataArr.slice(-1).find((item: any) => item)?.upNext
@@ -773,81 +762,81 @@ const data={
     }
 
   }
-  const handleCompletionScreen = async (quest:number) => {
+  const handleCompletionScreen = async (quest: number) => {
     setAtuoSave(false);
-   
+
     // return false;
     try {
-const data={
-  quest:1,
-}
-      const result = await getCompletionScreen(id,JSON.stringify(data) );
+      const data = {
+        quest: 1,
+      }
+      const result = await getCompletionScreen(id, JSON.stringify(data));
 
       if (result?.status !== 'Success') {
         setAtuoSave(true);
         console.log('updateBackground error :' + result?.err);
         return false;
       }
-      else{
-        
+      else {
+
         setCompletion(result?.data);
         setCompliData(result?.data);
-      console.log('Completion',Object.keys(result?.data).length);
-      setCompKeyCount(Object.keys(result?.data).length-1)
-      setCurrentTab(0);
-      console.log('handleGet');
-      setAtuoSave(true);
+        console.log('Completion', Object.keys(result?.data).length);
+        setCompKeyCount(Object.keys(result?.data).length - 1)
+        setCurrentTab(0);
+        console.log('handleGet');
+        setAtuoSave(true);
       }
     }
     catch (error) {
 
-     
+
       setAtuoSave(true);
       console.error('An error occurred while sending the request:', error);
     }
 
   }
-  const handleCompliStore =async ()=>{
+  const handleCompliStore = async () => {
 
-console.log('handleCompliStore',compliData);
-  try {
-    let data = JSON.stringify(compliData);
-   
+    console.log('handleCompliStore', compliData);
+    try {
+      let data = JSON.stringify(compliData);
 
-    const result = await UpdateCompletionScreen(id, data);
-    if (result?.status !== 'Success') {
-      console.log('data not updated')
+
+      const result = await UpdateCompletionScreen(id, data);
+      if (result?.status !== 'Success') {
+        console.log('data not updated')
+      }
+
+
+    } catch (error) {
+      console.error('An error occurred while sending the request:', error);
     }
 
-
-  } catch (error) {
-    console.error('An error occurred while sending the request:', error);
   }
+  const getDuration = async () => {
 
-  }
-  const getDuration =async()=>{
-    
     try {
-     
-      
-  
+
+
+
       const result = await getTotalMinofWords(id);
       if (result?.status !== 'Success') {
         console.log('data not updated')
         return false;
       }
-        
+
       setFormData({
         ...formData,
         gameDuration: result.totalMinutes,
       });
- console.log('getDuration',formData.gameDuration)
-  
+      console.log('getDuration', formData.gameDuration)
+
     } catch (error) {
       console.error('An error occurred while sending the request:', error);
     }
   }
-  console.log('compliData',compliData);
+  console.log('compliData', compliData);
   const fetchGameIdUpdate = async () => {
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
@@ -860,19 +849,19 @@ console.log('handleCompliStore',compliData);
     }
     // setTab(gameById?.data?.gameLastTab)
   };
-const [intercount, setIntercount] = useState(0);
- const fetchBlockCount = async () => {
-    
-  const getblockcount = await getBlocks(id);
-//alert(id);
-   if (getblockcount?.status === 'Success') {
+  const [intercount, setIntercount] = useState(0);
+  const fetchBlockCount = async () => {
+
+    const getblockcount = await getBlocks(id);
+    //alert(id);
+    if (getblockcount?.status === 'Success') {
       setIntercount(getblockcount?.count);
 
-//alert(getblockcount?.count);
+      //alert(getblockcount?.count);
     }
   }
   const fetchBlocks = async () => {
-   
+
     // const result1 = await getStory(id);
     // if (result1?.status !== 'Success') {de
     //   console.log(result1.message);
@@ -912,11 +901,11 @@ const [intercount, setIntercount] = useState(0);
       handleCompletionScreen(1)
     }
   }, [id]);
-    useEffect(()=> {
+  useEffect(() => {
     if (id) {
       fetchBlocks();
     }
-  },[id, items])
+  }, [id, items])
 
   console.log('navin testing :', formData)
   const handleEntirePrev = () => {
@@ -1199,23 +1188,23 @@ const [intercount, setIntercount] = useState(0);
                       }
                       let isAtLeastOneTrue = false;
 
-                      for (const option of alphabet.map((alp: any) => alp.option)) {                    
-                          if (input[inputkey]?.ansObject[option] === 'true' || input[inputkey]?.ansObject[option] === true) {
-                            const ansValue = input[inputkey]?.ansObject[option];
-                            console.log("ansValue",ansValue)
-                            console.log("hit2")
-                              isAtLeastOneTrue = true;
-                              if (!input[inputkey]?.scoreObject[option]) {
-                                console.log("hit3")
-                                  toast({
-                                      title: `${option} Score is Empty On This Sequence ${key.id}`,
-                                      status: 'error',
-                                      duration: 3000,
-                                      isClosable: true,
-                                  });
-                                  return false;
-                              }
+                      for (const option of alphabet.map((alp: any) => alp.option)) {
+                        if (input[inputkey]?.ansObject[option] === 'true' || input[inputkey]?.ansObject[option] === true) {
+                          const ansValue = input[inputkey]?.ansObject[option];
+                          console.log("ansValue", ansValue)
+                          console.log("hit2")
+                          isAtLeastOneTrue = true;
+                          if (!input[inputkey]?.scoreObject[option]) {
+                            console.log("hit3")
+                            toast({
+                              title: `${option} Score is Empty On This Sequence ${key.id}`,
+                              status: 'error',
+                              duration: 3000,
+                              isClosable: true,
+                            });
+                            return false;
                           }
+                        }
                       }
                       if (!isAtLeastOneTrue) {
                         console.log("hit1")
@@ -1266,43 +1255,20 @@ const [intercount, setIntercount] = useState(0);
 
 
     // if (tab != tabs) {
-
-
-
-
-
-
-
-
-
     //   if (formData.gameLastTabArray.includes(tabs)) {
     //     setTab(tabs);
-
-
     //   } else {
     //     console.log('tabs2', tabs);
     //     const stringContainingNumbers = formData.gameLastTabArray;
     //     if (typeof stringContainingNumbers === 'string') {
-
-
-
-
-
     //       const numbersArray = (stringContainingNumbers as string).match(/\d+/g);
     //       const lastValue = numbersArray ? parseInt(numbersArray[numbersArray.length - 1], 10) : null;
-
     //       if (tabs === lastValue + 1) {
     //         setTab(tabs);
     //       }
     //     }
-
-
     //   }
     // }
-
-
-
-
   }
   ///navin 15-12
 
@@ -1339,16 +1305,16 @@ const [intercount, setIntercount] = useState(0);
     }
     let data = JSON.stringify(formData);
     // alert("cn"+tab);
-       const result = await updateGame(id, data);
-       if (result?.status !== 'Success') {
-         toast({
-           title: 'Data Not Updated.',
-           status: 'error',
-           duration: 3000,
-           isClosable: true,
-         });
-         return console.log('updateBackground error :' + result?.err);
-       }
+    const result = await updateGame(id, data);
+    if (result?.status !== 'Success') {
+      toast({
+        title: 'Data Not Updated.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return console.log('updateBackground error :' + result?.err);
+    }
     if (tab === 5 && result.status === 'Success') {
       // alert("comnex"+tab);
       // setOpenQuest(true);
@@ -1362,11 +1328,11 @@ const [intercount, setIntercount] = useState(0);
 
       const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
       setFormData(formDataWithoutLastTab);
-      
-      // setTab(tab + 1);
-// setTimeout(() => {
 
-  setOpenQuest(true);
+      // setTab(tab + 1);
+      // setTimeout(() => {
+
+      setOpenQuest(true);
     }
   }
   console.log('formdata', formData.gameLastTabArray)
@@ -1382,7 +1348,7 @@ const [intercount, setIntercount] = useState(0);
       return false;
     }
     if (tab === 2) {
-      
+
       console.log('formdata', formData.gameLastTabArray)
       if (!formData.gameNonPlayerName) {
         toast({
@@ -1623,23 +1589,23 @@ const [intercount, setIntercount] = useState(0);
                     }
                     let isAtLeastOneTrue = false;
 
-                    for (const option of alphabet.map((alp: any) => alp.option)) {                    
-                        if (input[inputkey]?.ansObject[option] === 'true' || input[inputkey]?.ansObject[option] === true) {
-                          const ansValue = input[inputkey]?.ansObject[option];
-                          console.log("ansValue",ansValue)
-                          console.log("hit2")
-                            isAtLeastOneTrue = true;
-                            if (!input[inputkey]?.scoreObject[option]) {
-                              console.log("hit3")
-                                toast({
-                                    title: `${option} Score is Empty On This Sequence ${key.id}`,
-                                    status: 'error',
-                                    duration: 3000,
-                                    isClosable: true,
-                                });
-                                return false;
-                            }
+                    for (const option of alphabet.map((alp: any) => alp.option)) {
+                      if (input[inputkey]?.ansObject[option] === 'true' || input[inputkey]?.ansObject[option] === true) {
+                        const ansValue = input[inputkey]?.ansObject[option];
+                        console.log("ansValue", ansValue)
+                        console.log("hit2")
+                        isAtLeastOneTrue = true;
+                        if (!input[inputkey]?.scoreObject[option]) {
+                          console.log("hit3")
+                          toast({
+                            title: `${option} Score is Empty On This Sequence ${key.id}`,
+                            status: 'error',
+                            duration: 3000,
+                            isClosable: true,
+                          });
+                          return false;
                         }
+                      }
                     }
                     if (!isAtLeastOneTrue) {
                       console.log("hit1")
@@ -1666,16 +1632,16 @@ const [intercount, setIntercount] = useState(0);
             const apiValidationResult = await getStoryValidtion(id);
 
             console.log('apiValidationResult', apiValidationResult);
-            
+
             if (apiValidationResult?.status === "Failure") {
-                // There are empty fields, show an error message
-                toast({
-                    title: ` ${apiValidationResult?.message}`,
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                });
-                return false;
+              // There are empty fields, show an error message
+              toast({
+                title: ` ${apiValidationResult?.message}`,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+              });
+              return false;
             }
 
           }
@@ -1738,7 +1704,7 @@ const [intercount, setIntercount] = useState(0);
           return console.log('updateBackground error :' + result?.err);
         } else {
 
-          
+
           if (tab === 1 && result.status === 'Success') {
             toast({
               title: 'Background Image Stored',
@@ -1757,7 +1723,7 @@ const [intercount, setIntercount] = useState(0);
               gameLastTabArray: parsedGameLastTabArray,
             });
             navigate(`/admin/superadmin/game/creation/${result.data.gameId}`);
-           window.location.reload();
+            //  window.location.reload();
           }
         }
       } catch (error) {
@@ -1983,7 +1949,7 @@ const [intercount, setIntercount] = useState(0);
 
   };
   const handleChange = (e: any) => {
-    
+
     const inputValue = e.target.value;
     const { name, value, checked } = e.target;
     if (name === 'gameDuration') {
@@ -2072,7 +2038,7 @@ const [intercount, setIntercount] = useState(0);
     }
     else if (name === 'gameIsSetCongratsScoreWiseMessage' && !checked) {
       // Reset the value when switch is turned off
-     
+
     }
 
     ///TakeAway Screen
@@ -2100,16 +2066,16 @@ const [intercount, setIntercount] = useState(0);
   };
 
 
-  const handlecompletion=(e:any)=>{
-const inputValue = e.target.value;
+  const handlecompletion = (e: any) => {
+    const inputValue = e.target.value;
     const { name, value, checked } = e.target;
-     if (
-//       gameIsSetMinPassScore
-// gameIsSetDistinctionScore
-// gameIsSetBadge
-// gameIsSetCriteriaForBadge
-// gameIsSetCongratsSingleMessage
-// gameIsSetCongratsScoreWiseMessage
+    if (
+      //       gameIsSetMinPassScore
+      // gameIsSetDistinctionScore
+      // gameIsSetBadge
+      // gameIsSetCriteriaForBadge
+      // gameIsSetCongratsSingleMessage
+      // gameIsSetCongratsScoreWiseMessage
 
       name === 'gameIsSetMinPassScore' ||
       name === 'gameIsSetDistinctionScore' ||
@@ -2117,65 +2083,65 @@ const inputValue = e.target.value;
       name === 'gameIsSetBadge' ||
       name === 'gameIsSetCriteriaForBadge' ||
       name === 'gameIsSetCongratsScoreWiseMessage' ||
-      name ===  'gameIsSetCongratsSingleMessage'
-     ) {
-      
-        setCompliData((prevInput: any) => {
-              return {
-                  ...prevInput,
-                  [CompKeyCount]: {
-                      ...prevInput[CompKeyCount],
-                      [name]: String(checked),
-                      
-                  }
-              }
+      name === 'gameIsSetCongratsSingleMessage'
+    ) {
+
+      setCompliData((prevInput: any) => {
+        return {
+          ...prevInput,
+          [CompKeyCount]: {
+            ...prevInput[CompKeyCount],
+            [name]: String(checked),
+
+          }
+        }
       })
 
 
-    
 
 
-    
-}else{
 
-  setCompliData((prevInput: any) => {
-    return {
-        ...prevInput,
-        [CompKeyCount]: {
+
+    } else {
+
+      setCompliData((prevInput: any) => {
+        return {
+          ...prevInput,
+          [CompKeyCount]: {
             ...prevInput[CompKeyCount],
             [name]: value
+          }
         }
+      })
+
+
+
     }
-})
-
-
-  
-}
-if(name==='gameIsSetCongratsSingleMessage' && checked === true){
-  setCompliData((prevInput: any) => {
-    return {
-        ...prevInput,
-        [CompKeyCount]: {
+    if (name === 'gameIsSetCongratsSingleMessage' && checked === true) {
+      setCompliData((prevInput: any) => {
+        return {
+          ...prevInput,
+          [CompKeyCount]: {
             ...prevInput[CompKeyCount],
             gameIsSetCongratsScoreWiseMessage: 'false',
-            
-        }
-    }
-  })
-}
 
-if(name==='gameIsSetCongratsScoreWiseMessage' && checked ===true){
-setCompliData((prevInput: any) => {
-  return {
-      ...prevInput,
-      [CompKeyCount]: {
-          ...prevInput[CompKeyCount],
-          gameIsSetCongratsSingleMessage: 'false',
-          
-      }
-  }
-})
-}
+          }
+        }
+      })
+    }
+
+    if (name === 'gameIsSetCongratsScoreWiseMessage' && checked === true) {
+      setCompliData((prevInput: any) => {
+        return {
+          ...prevInput,
+          [CompKeyCount]: {
+            ...prevInput[CompKeyCount],
+            gameIsSetCongratsSingleMessage: 'false',
+
+          }
+        }
+      })
+    }
 
   }
   // const handleMouse = (i: number) => {
@@ -2241,7 +2207,7 @@ setCompliData((prevInput: any) => {
     'whiteAlpha.200',
   );
   const completeShadow = "rgba(112, 144, 176, 0.1) 0px 18px 22px inset";
-  const incompleteShadow="rgba(112, 144, 176, 0.12) 0px 18px 40px";
+  const incompleteShadow = "rgba(112, 144, 176, 0.12) 0px 18px 40px";
   // const incompleteShadow = useColorModeValue(
   //   'inset 0px 18px 22px rgba(112, 144, 176, 0.1)',
   //   'inset 0px 4px 4px #0B1437',
@@ -2251,8 +2217,8 @@ setCompliData((prevInput: any) => {
   // SET BORDER IN IMAGE
   const stepImgActiveBorder = 'done';
   const stepImgBorder = '';
- 
-  
+
+
   const tab1 = formData && formData?.gameLastTabArray?.includes(1) ? stepImgActiveBorder : stepImgBorder;
   const tab2 = formData && formData?.gameLastTabArray?.includes(2) ? stepImgActiveBorder : stepImgBorder;
   const tab3 = formData && formData?.gameLastTabArray?.includes(3) ? stepImgActiveBorder : stepImgBorder;
@@ -2267,7 +2233,7 @@ setCompliData((prevInput: any) => {
   const stepBgImg = tab == 1 ? stepImgActiveHeight : stepImgHeight;
   const stepNonPlaying = tab == 2 ? stepImgActiveHeight : stepImgHeight;
   const stepAbtStory = tab == 3 ? stepImgActiveHeight : stepImgHeight;
-  const stepBlocks = tab == 4  ? stepImgActiveHeight : stepImgHeight;
+  const stepBlocks = tab == 4 ? stepImgActiveHeight : stepImgHeight;
   const stepScore = tab == 5 ? stepImgActiveHeight : stepImgHeight;
   const stepSummaries = tab == 6 ? stepImgActiveHeight : stepImgHeight;
   const stepEnd = tab == 7 ? stepImgActiveHeight : stepImgHeight;
@@ -2284,7 +2250,7 @@ setCompliData((prevInput: any) => {
 
   const stepPoseIcon = tab === 1 ? stepIconActiveColor : stepIconColor;
   const stepAboutStoryIcon = tab === 2 ? stepIconActiveColor : stepIconColor;
-  const stepBlockIcon = tab === 3  ? stepIconActiveColor : stepIconColor;
+  const stepBlockIcon = tab === 3 ? stepIconActiveColor : stepIconColor;
   const stepScoreIcon = tab === 4 ? stepIconActiveColor : stepIconColor;
   const stepSummariesIcon = tab === 5 ? stepIconActiveColor : stepIconColor;
   const stepCompleteIcon = tab === 6 ? stepIconActiveColor : stepIconColor;
@@ -2348,7 +2314,7 @@ setCompliData((prevInput: any) => {
     setIsEditing(false);
   };
   //navin 16-12
- 
+
   useEffect(() => {
 
     if (formData.gameIsSetCongratsSingleMessage === 'true') {
@@ -2364,127 +2330,127 @@ setCompliData((prevInput: any) => {
 
   //navin 16-12
   //priyaDharshini
-//   useEffect(() => {
-//     const getTotalScore = () => {
-//       let wordCount=[];
-//       if (typeof items === 'object' && items !== null) {
-//         var inputData = items;
-//         console.log("inputData", inputData);
-//         let maxArray = [];
-  
-//   let words;
-//         for (var i = 0; i < inputData.length; i++) {
-//           var key = inputData[i];
-//           var inputkey = key.type + key.input;
-  
-//           if(key.type === 'Note'){
-//   if(input[inputkey]?.note){
-//     words =input[inputkey]?.note.trim().split(/\s+/);
-//     wordCount.push(words.length)
-//   }
-           
-//           }
-//           if(key.type === 'Dialog'){
-//             if(input[inputkey]?.dialog){
-//              words = input[inputkey].dialog.trim().split(/\s+/);
-  
-//              wordCount.push(words.length)
-//             }
-             
-  
-//           }
-//           if (key.type === "Interaction") {
-//             //  words = sentence.trim().split(/\s+/);
-//             console.log("scoreObject", input[inputkey]?.scoreObject);
-//              //{ A: "2355", B: "22", C: "1000" }
-//         var wordInteraction= input[inputkey]?.interaction
-//         words = wordInteraction.trim().split(/\s+/);
-//         wordCount.push(words.length)
-  
-  
-   
-    
-  
-//     for (const key in input[inputkey]?.optionsObject) {
-  
-//       if (input[inputkey]?.optionsObject.hasOwnProperty(key)) {
-        
-       
-  
-//         var wordOptionsObject = input[inputkey]?.optionsObject[key];
-//         if(wordOptionsObject){
-//           words = wordOptionsObject?.trim().split(/\s+/);
-//           wordCount.push(words.length)
-//         }
-       
-  
-//         var wordfeedbackObject = input[inputkey]?.feedbackObject[key];
-//         if(wordfeedbackObject){
-//           words = wordfeedbackObject?.trim().split(/\s+/);
-//           wordCount.push(words.length)
-//         }
-       
-     
-//        var wordresponseObject= input[inputkey]?.responseObject[key];
-//        if(wordresponseObject){
-//         words = wordresponseObject?.trim().split(/\s+/);
-//         wordCount?.push(words.length)
-//        }
-       
-     
-//        var  wordoptionTitleObject = input[inputkey]?.optionTitleObject[key];
-//        if(wordoptionTitleObject){
-//         words = wordoptionTitleObject.trim().split(/\s+/);
-//         wordCount.push(words.length)
-//        }
-        
-  
-        
-//       }
-//     }
-  
-     
-  
-   
-//   // if(input[inputkey]?.ansObject==='true'){
+  //   useEffect(() => {
+  //     const getTotalScore = () => {
+  //       let wordCount=[];
+  //       if (typeof items === 'object' && items !== null) {
+  //         var inputData = items;
+  //         console.log("inputData", inputData);
+  //         let maxArray = [];
 
-//     var scoreObject = input[inputkey]?.scoreObject;
-  
-//     const objArray = scoreObject;
+  //   let words;
+  //         for (var i = 0; i < inputData.length; i++) {
+  //           var key = inputData[i];
+  //           var inputkey = key.type + key.input;
 
-//     // Find the max value across all keys (A, B, C)
-//     const maxValue = Math.max.apply(null, Object.values(objArray));
-    
-//     console.log("Max value:", maxValue);
-//     maxArray.push(maxValue);
-//   // }
-    
-//           }
-//         }
-  
-  
-//         console.log("maxArray", maxArray);
-//         const numericValues = maxArray.map(Number);
-//         const numericWord=wordCount.map(Number);
-//         const sum = numericValues.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-//   const sumWordLength=numericWord.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-//   const totalmintues =sumWordLength/100
-//         console.log("Sum of array values:", totalmintues);
-//         setFormData((prev) => ({
-//           ...prev,
-//           gameTotalScore: sum,
-//           gameDuration:totalmintues,
-//         }));
-//       }
-  
-     
-//     };
-//     if(input.length>0){
-//       getTotalScore();
-//     }
-   
-  
-// }, [input]);
+  //           if(key.type === 'Note'){
+  //   if(input[inputkey]?.note){
+  //     words =input[inputkey]?.note.trim().split(/\s+/);
+  //     wordCount.push(words.length)
+  //   }
+
+  //           }
+  //           if(key.type === 'Dialog'){
+  //             if(input[inputkey]?.dialog){
+  //              words = input[inputkey].dialog.trim().split(/\s+/);
+
+  //              wordCount.push(words.length)
+  //             }
+
+
+  //           }
+  //           if (key.type === "Interaction") {
+  //             //  words = sentence.trim().split(/\s+/);
+  //             console.log("scoreObject", input[inputkey]?.scoreObject);
+  //              //{ A: "2355", B: "22", C: "1000" }
+  //         var wordInteraction= input[inputkey]?.interaction
+  //         words = wordInteraction.trim().split(/\s+/);
+  //         wordCount.push(words.length)
+
+
+
+
+
+  //     for (const key in input[inputkey]?.optionsObject) {
+
+  //       if (input[inputkey]?.optionsObject.hasOwnProperty(key)) {
+
+
+
+  //         var wordOptionsObject = input[inputkey]?.optionsObject[key];
+  //         if(wordOptionsObject){
+  //           words = wordOptionsObject?.trim().split(/\s+/);
+  //           wordCount.push(words.length)
+  //         }
+
+
+  //         var wordfeedbackObject = input[inputkey]?.feedbackObject[key];
+  //         if(wordfeedbackObject){
+  //           words = wordfeedbackObject?.trim().split(/\s+/);
+  //           wordCount.push(words.length)
+  //         }
+
+
+  //        var wordresponseObject= input[inputkey]?.responseObject[key];
+  //        if(wordresponseObject){
+  //         words = wordresponseObject?.trim().split(/\s+/);
+  //         wordCount?.push(words.length)
+  //        }
+
+
+  //        var  wordoptionTitleObject = input[inputkey]?.optionTitleObject[key];
+  //        if(wordoptionTitleObject){
+  //         words = wordoptionTitleObject.trim().split(/\s+/);
+  //         wordCount.push(words.length)
+  //        }
+
+
+
+  //       }
+  //     }
+
+
+
+
+  //   // if(input[inputkey]?.ansObject==='true'){
+
+  //     var scoreObject = input[inputkey]?.scoreObject;
+
+  //     const objArray = scoreObject;
+
+  //     // Find the max value across all keys (A, B, C)
+  //     const maxValue = Math.max.apply(null, Object.values(objArray));
+
+  //     console.log("Max value:", maxValue);
+  //     maxArray.push(maxValue);
+  //   // }
+
+  //           }
+  //         }
+
+
+  //         console.log("maxArray", maxArray);
+  //         const numericValues = maxArray.map(Number);
+  //         const numericWord=wordCount.map(Number);
+  //         const sum = numericValues.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  //   const sumWordLength=numericWord.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  //   const totalmintues =sumWordLength/100
+  //         console.log("Sum of array values:", totalmintues);
+  //         setFormData((prev) => ({
+  //           ...prev,
+  //           gameTotalScore: sum,
+  //           gameDuration:totalmintues,
+  //         }));
+  //       }
+
+
+  //     };
+  //     if(input.length>0){
+  //       getTotalScore();
+  //     }
+
+
+  // }, [input]);
   //navin
   const playerPerview = (id: any) => {
 
@@ -2564,7 +2530,7 @@ setCompliData((prevInput: any) => {
           }
           console.log('datas', data)
           debouncedSubmit(data);
-        
+
         }
       }
     }
@@ -2602,20 +2568,20 @@ setCompliData((prevInput: any) => {
       // if (formData) {
 
       //   let data = JSON.stringify(formData);
-        
+
       //   debouncedSubmitGame(data);
       //   setExtensiveNavigation(null);
       // }
       if (formData && formData.gameQuestNo) {
         const newFormData = { ...formData };
-         delete newFormData['gameLastTabArray'];
-         delete newFormData['gameLastTab'];
-                let data = JSON.stringify(newFormData);
-                // let data = JSON.stringify(formData);
-                //alert("de"+tab);
-                debouncedSubmitGame(data);
-                setExtensiveNavigation(null);
-              }
+        delete newFormData['gameLastTabArray'];
+        delete newFormData['gameLastTab'];
+        let data = JSON.stringify(newFormData);
+        // let data = JSON.stringify(formData);
+        //alert("de"+tab);
+        debouncedSubmitGame(data);
+        setExtensiveNavigation(null);
+      }
     }
 
   }, [formData])
@@ -2653,18 +2619,18 @@ setCompliData((prevInput: any) => {
 
       try {
         let datas = JSON.stringify(data);
-       
-    
+
+
         const result = await UpdateCompletionScreen(id, datas);
         if (result?.status !== 'Success') {
           console.log('data not updated')
         }
-    
-    
+
+
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
       }
-      
+
     }, 500),
     [id] // Empty dependency array to ensure that the function is only created once
   );
@@ -2693,34 +2659,34 @@ setCompliData((prevInput: any) => {
           alphabet: alphabet,
           interactionBlock: interactionBlock
         }
-      
+
         debouncedStorySubmit(data);
       }
-    handleCompletionScreen(1)
-    getDuration();
+      handleCompletionScreen(1)
+      getDuration();
     }
-   
 
 
-  }, [input,items])
+
+  }, [input, items])
 
 
   useEffect(() => {
     if (id && autosave) {
 
-     
-      if(Object.keys(Completion).length)
+
+      if (Object.keys(Completion).length)
         debouncedCompliSubmit(compliData);
-      
-    // handleCompletionScreen(1)
+
+      // handleCompletionScreen(1)
     }
-   
+
 
 
   }, [compliData])
 
-  
-  
+
+
   ////handleCompliStore
 
 
@@ -2748,17 +2714,17 @@ setCompliData((prevInput: any) => {
     // setShowBox(true);       
     setUpNext(upNext);
     setCount(count + 1);
-    const newArr = { id, type: name, upNext, input: count ,questNo:serias };
+    const newArr = { id, type: name, upNext, input: count, questNo: serias };
 
     setItems((prevArray: any) => {
-        const nextIndex = i + 1;
-        console.log('prevArray', newArr.input);
-        setNumber([...number, newArr.input])
-        return [
-            ...prevArray.slice(0, nextIndex),
-            newArr,
-            ...prevArray.slice(nextIndex).map((item: any) => ({ ...item, upNext: id })),
-        ];
+      const nextIndex = i + 1;
+      console.log('prevArray', newArr.input);
+      setNumber([...number, newArr.input])
+      return [
+        ...prevArray.slice(0, nextIndex),
+        newArr,
+        ...prevArray.slice(nextIndex).map((item: any) => ({ ...item, upNext: id })),
+      ];
     });
 
     setSequence([...sequence, id]);
@@ -2768,152 +2734,164 @@ setCompliData((prevInput: any) => {
 
 
 
-        const currentAlpha = alphabet
-            .slice()
-            //  .reverse() // Reverse the array to start searching from the end
-            .find((item: any) => item.seqs === id);
-        if (id !== currentAlpha?.seqs) {
+      const currentAlpha = alphabet
+        .slice()
+        //  .reverse() // Reverse the array to start searching from the end
+        .find((item: any) => item.seqs === id);
+      if (id !== currentAlpha?.seqs) {
 
-            let secondaryArray: any = [];
-            let makcount = countalphabet;
+        let secondaryArray: any = [];
+        let makcount = countalphabet;
 
-            for (let i = 0; i < 3; i++) {
-                // Insert data into the array
-                let inc = makcount + i + 1;
-                console.log('secondaryArray', countalphabet, '--', inc)
-                secondaryArray.push(inc);
+        for (let i = 0; i < 3; i++) {
+          // Insert data into the array
+          let inc = makcount + i + 1;
+          console.log('secondaryArray', countalphabet, '--', inc)
+          secondaryArray.push(inc);
 
 
 
-            }
-            setAlphabetCount(secondaryArray[2]);
-            console.log('secondaryArray', secondaryArray);
-            setAlphabet((prev: any) => [
-                ...prev,
-                { seqs: id, option: 'A', secondaryId: secondaryArray[0] },
-                { seqs: id, option: 'B', secondaryId: secondaryArray[1] },
-                { seqs: id, option: 'C', secondaryId: secondaryArray[2] }
-            ]);
         }
-    }              
+        setAlphabetCount(secondaryArray[2]);
+        console.log('secondaryArray', secondaryArray);
+        setAlphabet((prev: any) => [
+          ...prev,
+          { seqs: id, option: 'A', secondaryId: secondaryArray[0] },
+          { seqs: id, option: 'B', secondaryId: secondaryArray[1] },
+          { seqs: id, option: 'C', secondaryId: secondaryArray[2] }
+        ]);
+      }
+    }
     setInput((prevInput: any) => {
-        const noteKey = `Note${count}`;
-        const dialogKey = `Dialog${count}`;
-        const interactionKey = `Interaction${count}`;                             
-        
-        // Previous Data Object
-        const oldNoteKey =  prevInput?.[`Note${seq.input}`]
-        const oldDialogKey =  prevInput?.[`Dialog${seq.input}`]
-        const oldInteractionKey =  prevInput?.[`Interaction${seq.input}`]
+      const noteKey = `Note${count}`;
+      const dialogKey = `Dialog${count}`;
+      const interactionKey = `Interaction${count}`;
+
+      // Previous Data Object
+      const oldNoteKey = prevInput?.[`Note${seq.input}`]
+      const oldDialogKey = prevInput?.[`Dialog${seq.input}`]
+      const oldInteractionKey = prevInput?.[`Interaction${seq.input}`]
 
 
-        // Activate RFST
-        if (oldInteractionKey?.responseObject?.A !== '' || null) {
-            setInteractionBlock((prev: any) => {
-                return { ...prev, [`Resp${[count]}`]: count  };
-              });
-        }
-        if (oldInteractionKey?.feedbackObject?.A !== '' || null) {
-            setInteractionBlock((prev: any) => {
-                return { ...prev, [`Feedbk${[count]}`]: count  };
-              });
-        }
-        if (oldInteractionKey?.SkillTag !== '' || null) {
-            setInteractionBlock((prev: any) => {
-                return { ...prev, [`Skills${[count]}`]: count  };
-              });
-        }
-        if (oldInteractionKey?.optionTitleObject?.A !== '' || null) {
-            setInteractionBlock((prev: any) => {
-                return { ...prev, [`Title${[count]}`]: count  };
-              });
-        }
+      // Activate RFST
+      if (oldInteractionKey?.responseObject?.A !== '' || null) {
+        setInteractionBlock((prev: any) => {
+          return { ...prev, [`Resp${[count]}`]: count };
+        });
+      }
+      if (oldInteractionKey?.feedbackObject?.A !== '' || null) {
+        setInteractionBlock((prev: any) => {
+          return { ...prev, [`Feedbk${[count]}`]: count };
+        });
+      }
+      if (oldInteractionKey?.SkillTag !== '' || null) {
+        setInteractionBlock((prev: any) => {
+          return { ...prev, [`Skills${[count]}`]: count };
+        });
+      }
+      if (oldInteractionKey?.optionTitleObject?.A !== '' || null) {
+        setInteractionBlock((prev: any) => {
+          return { ...prev, [`Title${[count]}`]: count };
+        });
+      }
 
 
-        if (seq.type === 'Note') {                                                
-            return {
-                ...prevInput,
-                [noteKey]: {
-                    ...prevInput?.noteKey,
-                    id: id,
-                    note: oldNoteKey?.note,
-                }
-            }
+      if (seq.type === 'Note') {
+        return {
+          ...prevInput,
+          [noteKey]: {
+            ...prevInput?.noteKey,
+            id: id,
+            note: oldNoteKey?.note,
+          }
         }
-        if (seq.type === 'Dialog') {                                
-            return {
-                ...prevInput,
-                [dialogKey]: {
-                    ...prevInput[dialogKey],
-                    id: id,
-                    dialog: oldDialogKey?.dialog,
-                    character: oldDialogKey?.character,
-                    animation: oldDialogKey?.animation,
-                    voice: "",
-                    
-                    
-                }
-            }
-        }
-        if (seq.type === 'Interaction') {
-            console.log('prevInput', oldInteractionKey)
+      }
+      if (seq.type === 'Dialog') {
+        return {
+          ...prevInput,
+          [dialogKey]: {
+            ...prevInput[dialogKey],
+            id: id,
+            dialog: oldDialogKey?.dialog,
+            character: oldDialogKey?.character,
+            animation: oldDialogKey?.animation,
+            voice: "",
 
 
-            //Previous Object Data's
-            const optionsObject = oldInteractionKey?.optionsObject;
-            const ansObject = oldInteractionKey?.ansObject;
-            const feedbackObject = oldInteractionKey?.feedbackObject;
-            const responseObject = oldInteractionKey?.responseObject;
-            const optionTitleObject = oldInteractionKey?.optionTitleObject;
-            const optionsemotionObject = oldInteractionKey?.optionsemotionObject;
-            const optionsvoiceObject = oldInteractionKey?.optionsvoiceObject;
-            const scoreObject = oldInteractionKey?.scoreObject;
-            const navigateObjects = oldInteractionKey?.navigateObjects;
-            return {
-                ...prevInput,
-                [interactionKey]: {
-                    ...prevInput[interactionKey],
-                    id: id,
-                    interaction: oldInteractionKey?.interaction,
-                    blockRoll: oldInteractionKey?.blockRoll,
-                    QuestionsEmotion: oldInteractionKey?.QuestionsEmotion,
-                    QuestionsVoice: oldInteractionKey?.QuestionsVoice,
-                    SkillTag: oldInteractionKey?.SkillTag,
-                    quesionTitle: oldInteractionKey?.quesionTitle,
-                    optionsObject:{A: optionsObject?.A,  B: optionsObject?.B,   C: optionsObject?.C},
-                    ansObject:{A: ansObject?.A,   B: ansObject?.B,   C: ansObject?.C},
-                    feedbackObject:{A: feedbackObject?.A,   B: feedbackObject?.B,    C: feedbackObject?.C},
-                    responseObject:{A: responseObject?.A,    B: responseObject?.B,    C: responseObject?.C},
-                    optionTitleObject:{A: optionTitleObject?.A,   B: optionTitleObject?.B,   C: optionTitleObject?.C},
-                    optionsemotionObject:{A: optionsemotionObject?.A,   B: optionsemotionObject?.B,   C: optionsemotionObject?.C},
-                    optionsvoiceObject:{A: optionsvoiceObject?.A,   B: optionsvoiceObject?.B,   C: optionsvoiceObject?.C},
-                    scoreObject:{A: scoreObject?.A?scoreObject?.A:null,    B: scoreObject?.B?scoreObject?.B:null,    C: scoreObject?.C?scoreObject?.C:null},
-                    navigateObjects:{A: navigateObjects?.A,    B: navigateObjects?.B,    C: navigateObjects?.C},
-                }
-            }
+          }
         }
+      }
+      if (seq.type === 'Interaction') {
+        console.log('prevInput', oldInteractionKey)
+        //Previous Object Data's
+        const optionsObject = oldInteractionKey?.optionsObject;
+        const ansObject = oldInteractionKey?.ansObject;
+        const feedbackObject = oldInteractionKey?.feedbackObject;
+        const responseObject = oldInteractionKey?.responseObject;
+        const optionTitleObject = oldInteractionKey?.optionTitleObject;
+        const optionsemotionObject = oldInteractionKey?.optionsemotionObject;
+        const optionsvoiceObject = oldInteractionKey?.optionsvoiceObject;
+        const scoreObject = oldInteractionKey?.scoreObject;
+        const navigateObjects = oldInteractionKey?.navigateObjects;
+        const filterNullFields = (obj: Record<string, any>): Record<string, any> => {
+          return Object.fromEntries(Object.entries(obj).filter(([key, value]) => value !== null));
+        };
+
+        return {
+          ...prevInput,
+          [interactionKey]: {
+            ...prevInput[interactionKey],
+            id: id,
+            interaction: oldInteractionKey?.interaction,
+            blockRoll: oldInteractionKey?.blockRoll,
+            QuestionsEmotion: oldInteractionKey?.QuestionsEmotion,
+            QuestionsVoice: oldInteractionKey?.QuestionsVoice,      
+            SkillTag: (oldInteractionKey?.SkillTag),
+            quesionTitle: (oldInteractionKey?.quesionTitle),
+            optionsObject: { A: optionsObject?.A, B: optionsObject?.B, C: optionsObject?.C },
+            ansObject: { A: ansObject?.A, B: ansObject?.B, C: ansObject?.C },
+            // feedbackObject:{A: feedbackObject?.A,   B: feedbackObject?.B,    C: feedbackObject?.C},
+            feedbackObject: filterNullFields({
+              A: feedbackObject?.A,
+              B: feedbackObject?.B,
+              C: feedbackObject?.C,
+            }),
+            // responseObject:{A: responseObject?.A,    B: responseObject?.B,    C: responseObject?.C},
+            responseObject: filterNullFields({
+              A: responseObject?.A,
+              B: responseObject?.B,
+              C: responseObject?.C,
+            }),
+            optionTitleObject: { A: optionTitleObject?.A, B: optionTitleObject?.B, C: optionTitleObject?.C },
+            optionsemotionObject: { A: optionsemotionObject?.A, B: optionsemotionObject?.B, C: optionsemotionObject?.C },
+            optionsvoiceObject: { A: optionsvoiceObject?.A, B: optionsvoiceObject?.B, C: optionsvoiceObject?.C },
+            scoreObject: { A: scoreObject?.A ? scoreObject?.A : null, B: scoreObject?.B ? scoreObject?.B : null, C: scoreObject?.C ? scoreObject?.C : null },
+            navigateObjects: { A: navigateObjects?.A, B: navigateObjects?.B, C: navigateObjects?.C },
+          }
+        }
+      }
     })
-};
+  };
 
   const delSeq = (seq: any, i: any, name: any) => {
 
     // removeDataBySeqs(seq.id);        
-  console.log('delSeq',seq);
-  
+    console.log('delSeq', seq);
+
     if (name === 'Interaction') {
-        setAlphabet((prevAlphabet:any) => {
-            // Use filter to create a new array without items that match the condition
-            const updatedAlphabet = prevAlphabet?.filter((item:any) => item.seqs !== seq.id);
-            return updatedAlphabet;
-        });
-  
-        console.log('roll', seq);
-  
-    }
-    setItems((previtems:any) => {
+      setAlphabet((prevAlphabet: any) => {
         // Use filter to create a new array without items that match the condition
-        const updatedItems = previtems?.filter((item:any) => item.input !== seq.input);
-        return updatedItems;
+        const updatedAlphabet = prevAlphabet?.filter((item: any) => item.seqs !== seq.id);
+        return updatedAlphabet;
+      });
+
+      console.log('roll', seq);
+
+    }
+    setItems((previtems: any) => {
+      // Use filter to create a new array without items that match the condition
+      const updatedItems = previtems?.filter((item: any) => item.input !== seq.input);
+      return updatedItems;
     });
     // setItems(items.filter((_: any, index: any) => {
     //     console.log('datadata', _)
@@ -2923,30 +2901,30 @@ setCompliData((prevInput: any) => {
     //     prevItem.map((item: any) =>
     //     item.id === seq.id ? { ...item, status: 'no' } : item
     // ))      
-  
+
     // setSequence(sequence.filter((_: any, index: any) => { return index !== i }))
     // setTimeout(() => {
     //     handleGet();
     // }, 3000);
     setDeleteseq(true);
   };
-  const deleteQuest = async(gameid:any,questNo:any) => {
+  const deleteQuest = async (gameid: any, questNo: any) => {
     console.log()
-    const data={
-      quest:questNo,
-      exid:id,
+    const data = {
+      quest: questNo,
+      exid: id,
     }
-          const result = await QuestDeletion(gameid,JSON.stringify(data) );
-          if (result?.status !== 'Success') {
-        return console.log('updateBackground error :' + result?.err);
-      }
-else{
-  fetchBlocks();
-handleGet(1);
-setQuestTabState(1);
+    const result = await QuestDeletion(gameid, JSON.stringify(data));
+    if (result?.status !== 'Success') {
+      return console.log('updateBackground error :' + result?.err);
+    }
+    else {
+      fetchBlocks();
+      handleGet(1);
+      setQuestTabState(1);
 
-}
-// QuestDeletion
+    }
+    // QuestDeletion
   };
 
 
@@ -2970,16 +2948,16 @@ setQuestTabState(1);
     onClose: onClose1,
   } = useDisclosure();
 
-  
+
   let arrowSeqRef: any;
-  let focusSeqRef: any;  
+  let focusSeqRef: any;
   // const handleKeyDown = (event:any, seq:any) => {
-  
+
   //   let indexToFind;
 
   // setTargetSequence(seq);
   // console.log('event.code',targetSequence.id)
-  
+
 
   // if(targetSequence){
   //   indexToFind = items.findIndex((item:any) => (
@@ -2988,7 +2966,7 @@ setQuestTabState(1);
   // }else{
   //   indexToFind=0;
   // }
-  
+
   //   if (indexToFind >= 0 && indexToFind < items.length) {
   //     console.log('Index:', indexToFind);
   //     if (
@@ -3006,11 +2984,11 @@ setQuestTabState(1);
   //   if(event.key ==='Escape'){
   //     setTargetSequence(null);
   //   }
-   
-    
-    
+
+
+
   //   switch (event.code) {
-  
+
   //     case 'ArrowUp':
   //       setTargetSequence(items[indexToFind===0? 0 : indexToFind-1])
   //       arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind===0? 0 : indexToFind-1]?.id}`); 
@@ -3018,7 +2996,7 @@ setQuestTabState(1);
   //         arrowSeqRef.scrollIntoView({ behavior: 'smooth', block: "center", inline: "nearest" });
   //         console.log('arrowSeqRef', arrowSeqRef);
   //       }   
-  
+
   //       break;
   //     case 'ArrowDown':
   //       setTargetSequence(items[indexToFind=== items.length-1 ? items.length :indexToFind+1])
@@ -3029,23 +3007,23 @@ setQuestTabState(1);
   //       }   
   //       break;
 
-    
+
   //     default:
   //       // Handle other key presses if needed
   //       break;
   //   }
   // }
   // };
-  
 
 
-  const handleKeyDown = (event: any, i:any, seq: any) => {
-    
+
+  const handleKeyDown = (event: any, i: any, seq: any) => {
+
     console.log('event.code', event.code)
     console.log('event.key', event.key)
     console.log('event.type', event.type)
     console.log('event.type', seq)
-    let indexToFind;
+    let indexToFind: any;
     setTargetSequence(seq);
     if (targetSequence) {
       indexToFind = items.findIndex((item: any) => (
@@ -3063,7 +3041,6 @@ setQuestTabState(1);
           event.key !== 'Delete' ||
           event.key !== 'Backspace' || event.ctrlKey === true)
       ) {
-        // console.log('event.code', event)
         if (seq) {
           setTargetSequence(seq);
         }
@@ -3074,11 +3051,13 @@ setQuestTabState(1);
       switch (event.code) {
         case 'ArrowUp':
           setTargetSequence(items[indexToFind === 0 ? 0 : indexToFind - 1])
-          arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`);
-          focusSeqRef = document.getElementsByClassName(`${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`);
-          focusSeqRef?.[0].classList.add('non-caret');
-          focusSeqRef?.[0].focus();
-          focusSeqRef?.[0].setAttribute('readonly', 'true');
+          setTimeout(() => {
+            arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`);
+            focusSeqRef = document.getElementsByClassName(`${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`);
+            focusSeqRef?.[0].classList.add('non-caret');
+            focusSeqRef?.[0].focus();
+            focusSeqRef?.[0].setAttribute('readonly', 'true');
+          }, 200)
 
           if (arrowSeqRef) {
             arrowSeqRef.scrollIntoView({ behavior: 'smooth', block: "center", inline: "nearest" });
@@ -3087,134 +3066,163 @@ setQuestTabState(1);
           break;
         case 'ArrowDown':
           setTargetSequence(items[indexToFind === items.length - 1 ? items.length : indexToFind + 1])
-          arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id}`);
-          focusSeqRef = document.getElementsByClassName(`${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id}`);
-          focusSeqRef?.[0]?.classList?.add('non-caret');
-          focusSeqRef?.[0]?.focus();
-          focusSeqRef?.[0]?.setAttribute('readonly', 'true');
-          // console.log('focusSeqRef',focusSeqRef?.[0]);
+          setTimeout(() => {
+            arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id}`);
+            focusSeqRef = document.getElementsByClassName(`${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id}`);
+            focusSeqRef?.[0]?.classList?.add('non-caret');
+            focusSeqRef?.[0]?.focus();
+            focusSeqRef?.[0]?.setAttribute('readonly', 'true');
+          }, 200)
           if (arrowSeqRef) {
             arrowSeqRef.scrollIntoView({ behavior: 'smooth', block: "center", inline: "nearest" });
             console.log('event.----------------', focusSeqRef?.[0]);
           }
           break;
-        // case 'Enter':                             
-        //   break;                                                       
 
         default:
           break;
       }
-      /**********navin***************** */
-      if(event.type == 'click') {
-        if(targetSequence?.id !== seq?.id){
+
+      if (event.type == 'click') {
+        if (targetSequence?.id !== seq?.id) {
           focusSeqRef = document.getElementsByClassName(seq.id);
           focusSeqRef?.[0].classList.remove('non-caret');
           focusSeqRef?.[0].focus();
-          console.log('event.----------------Click', focusSeqRef?.[0]);            
+          console.log('event.----------------Click', focusSeqRef?.[0]);
         }
-   
+
       }
-  
-      if(event.code == 'Enter') {
+
+      if (event.code == 'Enter') {
         focusSeqRef = document.getElementsByClassName(seq.id);
         focusSeqRef?.[0].removeAttribute('readonly');
-        focusSeqRef?.[0].classList.remove('non-caret');            
+        focusSeqRef?.[0].classList.remove('non-caret');
         focusSeqRef?.[0].focus();
-        console.log('event.----------------Enter', focusSeqRef?.[0]);     
+        console.log('event.----------------Enter', focusSeqRef?.[0]);
       }
-      
-      if(event.key === 'Backspace' || event.key === 'Delete') {
+
+      if (event.key === 'Backspace' || event.key === 'Delete') {
         focusSeqRef = document.getElementsByClassName(seq.id);
         var isFieldFocused = document.activeElement.classList.contains(seq.id);
         var isFormFieldFocused = ['input', 'textarea', 'select'].includes(document.activeElement.tagName.toLowerCase());
-       
-        console.log('focusSeqRef?.[0].focus()',focusSeqRef?.[0].readOnly);
-        
-        if(focusSeqRef?.[0].readOnly) {          
+
+        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
+
+        if (focusSeqRef?.[0].readOnly) {
           delSeq(seq, Number(0), seq.type);
         }
-      
-      
-      }    
-  
-      if (event.code === 'ControlLeft') {                 
-        setEKeyWords({...eKeyWords, name: 'Control'})        
+
       }
-      else {
-        setEKeyWords({...eKeyWords, name: ''})   
-      }
-        if (event.ctrlKey === true && event.code === 'KeyC'
-        ) {
-          focusSeqRef = document.getElementsByClassName(seq.id);
+
+      if (event.ctrlKey === true && event.code === 'KeyC'
+      ) {
+        focusSeqRef = document.getElementsByClassName(seq.id);
         var isFieldFocused = document.activeElement.classList.contains(seq.id);
         var isFormFieldFocused = ['input', 'textarea', 'select'].includes(document.activeElement.tagName.toLowerCase());
-       
-        console.log('focusSeqRef?.[0].focus()',focusSeqRef?.[0].readOnly);
+
+        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
 
         console.log("test45");
-        if(focusSeqRef?.[0].readOnly) {          
+        if (focusSeqRef?.[0].readOnly) {
           setCopySequence(seq);
         }
-
-       
-        
       }
-      
+
       if (event.code === 'KeyV' && event.ctrlKey === true) {
         focusSeqRef = document.getElementsByClassName(seq.id);
         var isFieldFocused = document.activeElement.classList.contains(seq.id);
         var isFormFieldFocused = ['input', 'textarea', 'select'].includes(document.activeElement.tagName.toLowerCase());
-       
-        console.log('focusSeqRef?.[0].focus()',focusSeqRef?.[0].readOnly);
+
+        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
 
         console.log("test45");
-        if(focusSeqRef?.[0].readOnly) {          
-        if (copySequence) {
-          // setTargetSequence(copySequence);
-          duplicateSeq(copySequence, i, copySequence.type);
+        if (focusSeqRef?.[0].readOnly) {
+          if (copySequence) {
+            duplicateSeq(copySequence, i, copySequence.type);
+          }
         }
       }
-      }  
+
       if (event.ctrlKey === true && event.code === 'KeyD') {
         focusSeqRef = document.getElementsByClassName(seq.id);
         var isFieldFocused = document.activeElement.classList.contains(seq.id);
         var isFormFieldFocused = ['input', 'textarea', 'select'].includes(document.activeElement.tagName.toLowerCase());
-       
-        console.log('focusSeqRef?.[0].focus()',focusSeqRef?.[0].readOnly);
+
+        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
 
         console.log("test45");
-        if(focusSeqRef?.[0].readOnly) {          
+        if (focusSeqRef?.[0].readOnly) {
 
-        duplicateSeq(seq, i, seq.type);
+          duplicateSeq(seq, i, seq.type);
         }
-    }
-   
-      // if(event.code === 'KeyC') {
-      //   setEKeyWords({...eKeyWords, key: 'C'}) 
-      // }
-      // else if(event.code === 'v') {
-      //   setEKeyWords({...eKeyWords, key: ''}) 
-      // }    
-  
-      copySeqFunc(seq);
-    }
-    };
-  
-  
-    function copySeqFunc(seq: any) {
-      if(eKeyWords.name === 'Control' && eKeyWords.key === 'C') {       
-        setCopySeq(seq)
       }
-      else {
-        setCopySeq('');
+
+      if (event.ctrlKey && event.shiftKey) {
+        if (event.code === 'ArrowUp') {
+          setTimeout(() => {
+            focusSeqRef = document.getElementsByClassName(`${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`);
+            focusSeqRef?.[0]?.focus();
+          }, 200)
+          console.log('event.----------------ShiftArrowUp', focusSeqRef?.[0]);
+          moveItem(i, i - 1, seq);
+        } else if (event.code === 'ArrowDown') {
+          setTimeout(() => {
+            focusSeqRef = document.getElementsByClassName(`${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id}`);
+            focusSeqRef?.[0]?.focus();
+          }, 200)
+          console.log('event.----------------ShiftArrowDown', focusSeqRef?.[0]);
+          moveItem(i, i + 1, seq);
+        }
       }
+
     }
-  
+  };
+ 
+
+  const moveItem = (startIndex: number, endIndex: number, seq: any) => {
+    // Ensure endIndex is within the bounds of the array
+    endIndex = Math.max(0, Math.min(items.length - 1, endIndex));
+    focusSeqRef = document.getElementsByClassName(seq.id);
+    focusSeqRef?.[0]?.focus();
+
+    // Perform the move
+    const updatedItems = [...items];
+    const [movedItem] = updatedItems.splice(startIndex, 1);
+    updatedItems.splice(endIndex, 0, movedItem);
+
+    const updatedMovingItems = updatedItems.map((item: any, index) => {
+      return { ...item, id: dummySequence[index] || item.id, upNext: upNextCount[index] };
+    });
+
+    const updateInteraction = updatedItems.map((item, index) => {  
+      if (item?.type === 'Interaction') {
+        return { ...item, from: item.id, to: sequence[index] };
+      }
+      return null; // Return null for items that don't meet the condition
+    }).filter(item => item !== null);
+
+    const updatedAlphabet = alphabet.map((item: { seqs: string; }) => {
+        // Find the corresponding updateInteraction item
+        const correspondingUpdate = updateInteraction.find(updateItem => updateItem.from === item.seqs);
+      
+        // If a corresponding updateInteraction item is found, update the seqs value
+        if (correspondingUpdate) {
+          return { ...item, seqs: correspondingUpdate.to };
+        }
+      
+        // If no corresponding updateInteraction item is found, return the original item
+        return item;
+    });
+    // Update the state with the new order
+    setItems(updatedMovingItems);
+    setAlphabet(updatedAlphabet);
+    setBlockItems(updatedItems)
+  };
+
   // COnsole's
   console.log('Copied sequence:', copySequence);
   console.log('Pasted sequence:', copySequence);
-  console.log('ctrlCGood', eKeyWords); 
-  console.log('ctrlCGood',copySeq);
+
   const updateExtensiveNavigation = (id: number) => {
     setExtensiveNavigation(id);
   };
@@ -3246,14 +3254,14 @@ setQuestTabState(1);
                 backgroundImage: 'linear-gradient(315deg, #f1f2f6 0%, #c9c6c6 74%)',
               }}
             >
-            
-            <Flex display={'flex'} justifyContent={'space-around'} alignItems={'center'}>
-               
-               <Text color={'black'} fontSize={25} fontWeight={800} letterSpacing={'2px'} mr={'px'} ml={'0px'}>ATLANTIS</Text>
-                <Box ml={'10px'} transform={'scale(1.3)'}  borderRadius={'50%'} >
-                 <SidebarResponsive routes={routes} />
-               </Box>
-             </Flex>
+
+              <Flex display={'flex'} justifyContent={'space-around'} alignItems={'center'}>
+
+                <Text color={'black'} fontSize={25} fontWeight={800} letterSpacing={'2px'} mr={'px'} ml={'0px'}>ATLANTIS</Text>
+                <Box ml={'10px'} transform={'scale(1.3)'} borderRadius={'50%'} >
+                  <SidebarResponsive routes={routes} />
+                </Box>
+              </Flex>
               <Flex><Box display="flex"
                 height="1px"
                 width="100%"
@@ -3289,7 +3297,7 @@ setQuestTabState(1);
                       icon={
                         <Icon
                           as={TbView360}
-                          color={tab===1 ? 'brand.500':stepbgCheck}//icon color
+                          color={tab === 1 ? 'brand.500' : stepbgCheck}//icon color
                           h="24px"
                           w="24px"
                         />
@@ -3311,12 +3319,12 @@ setQuestTabState(1);
                       ml="8px"
                       // color='#fff'
                       boxShadow={stepAboutStoryIcon}
-                               bg="#FFFFFF"
+                      bg="#FFFFFF"
                       transition="all 0.2s linear 0s"
                       icon={
                         <Icon
                           as={FaRobot}
-                          color={tab===2 ? 'brand.500':stepPoseCheck}//icon color{}
+                          color={tab === 2 ? 'brand.500' : stepPoseCheck}//icon color{}
                           h="24px"
                           w="24px"
                         />
@@ -3338,15 +3346,15 @@ setQuestTabState(1);
                       ml="8px"
                       boxShadow={stepBlockIcon}
                       bg="#FFFFFF"
-                    transition="all 0.2s linear 0s"
-                    icon={
-                      <Icon
-                        as={MdOutlineSubtitles}
-                        color={tab===3 ? 'brand.500':stepAboutStoryCheck}//icon color{}{}
-                        h="24px"
-                        w="24px"
-                      />
-                    }
+                      transition="all 0.2s linear 0s"
+                      icon={
+                        <Icon
+                          as={MdOutlineSubtitles}
+                          color={tab === 3 ? 'brand.500' : stepAboutStoryCheck}//icon color{}{}
+                          h="24px"
+                          w="24px"
+                        />
+                      }
                     />
                   }
                 />
@@ -3359,7 +3367,7 @@ setQuestTabState(1);
                   name="Story"
                   status={tab4}
                   handleTargetQuest={handleTargetQuest}
-                  updateExtensiveNavigation={(id : number | null)=>updateExtensiveNavigation(id)}
+                  updateExtensiveNavigation={(id: number | null) => updateExtensiveNavigation(id)}
                   extensiveNavigation={extensiveNavigation}
                   icon={
                     <IconBox
@@ -3367,18 +3375,18 @@ setQuestTabState(1);
                       w="46px"
                       ml="8px"
                       boxShadow={stepAboutStoryCheck}
-                        bg="#FFFFFF"
+                      bg="#FFFFFF"
                       transition="all 0.2s linear 0s"
 
                       icon={
                         <Icon
                           as={GiBlackBook}
-                          color={tab===4 ? 'brand.500':stepBlockCheck}//icon color{}{}{}
+                          color={tab === 4 ? 'brand.500' : stepBlockCheck}//icon color{}{}{}
                           h="24px"
                           w="24px"
                         />
                       }
-                     
+
                     />
                   }
                   BlockItems={BlockItems}
@@ -3388,9 +3396,9 @@ setQuestTabState(1);
                   handleGet={handleGet}
                   fetchBlocks={fetchBlocks}
                   questTabState={questTabState}
-                   setQuestTabState={setQuestTabState}
-                   deleteQuest={deleteQuest}
-                   delSeq={delSeq}
+                  setQuestTabState={setQuestTabState}
+                  deleteQuest={deleteQuest}
+                  delSeq={delSeq}
                 />
                 <OrderStep
                   cursor={'pointer'}
@@ -3406,15 +3414,15 @@ setQuestTabState(1);
                       ml="8px"
                       boxShadow={stepScoreIcon}
                       bg="#FFFFFF"
-                    transition="all 0.2s linear 0s"
-                    icon={
-                      <Icon
-                        as={FaCubes}
-                        color={tab===5 ? 'brand.500':stepScoreCheck}//icon color{}{}{}{}
-                        h="24px"
-                        w="24px"
-                      />
-                    }
+                      transition="all 0.2s linear 0s"
+                      icon={
+                        <Icon
+                          as={FaCubes}
+                          color={tab === 5 ? 'brand.500' : stepScoreCheck}//icon color{}{}{}{}
+                          h="24px"
+                          w="24px"
+                        />
+                      }
                     />
                   }
                 />
@@ -3432,12 +3440,12 @@ setQuestTabState(1);
                       ml="8px"
                       // bg="radial-gradient(circle at 50% 40%, #fcfcfc, #efeff1 66%, #422afb 100%)"
                       boxShadow={stepSummariesIcon}
-                        bg="#FFFFFF"
+                      bg="#FFFFFF"
                       transition="all 0.2s linear 0s"
                       icon={
                         <Icon
                           as={MdTune}
-                          color={tab===6 ? 'brand.500':stepSummariesCheck}//icon color{}{}{}{}{}
+                          color={tab === 6 ? 'brand.500' : stepSummariesCheck}//icon color{}{}{}{}{}
                           h="24px"
                           w="24px"
                         />
@@ -3561,7 +3569,7 @@ setQuestTabState(1);
                                           _hover={{
                                             bg: '#f0f0f0',
                                           }}
-                                          // onClick={() => handlePreview(img, backgroundIndex, i)}
+                                        // onClick={() => handlePreview(img, backgroundIndex, i)}
 
                                         >
                                           <span style={{ color: 'black' }}>Preview</span>
@@ -3754,16 +3762,16 @@ setQuestTabState(1);
                       setDummySequence={setDummySequence}
                       showSelectBlock={showSelectBlock}
                       setSelectBlock={setSelectBlock}
-                      targetSequence={targetSequence}  
+                      targetSequence={targetSequence}
                       handleKeyDown={handleKeyDown}
                       isDeleteSeq={isDeleteSeq}
-                       setDeleteseq={setDeleteseq}
-                       handleGet={handleGet}
-                       fetchBlocks={fetchBlocks}
-                       listQuest ={listQuest}
-                       questTabState={questTabState}
-                        setQuestTabState={setQuestTabState}
-                        deleteQuest={deleteQuest}
+                      setDeleteseq={setDeleteseq}
+                      handleGet={handleGet}
+                      fetchBlocks={fetchBlocks}
+                      listQuest={listQuest}
+                      questTabState={questTabState}
+                      setQuestTabState={setQuestTabState}
+                      deleteQuest={deleteQuest}
                     />
                   </>
                 ) : tab === 5 ? (
@@ -3799,14 +3807,14 @@ setQuestTabState(1);
                       setOpenQuest={setOpenQuest}
                       handleGet={handleGet}
                       fetchBlocks={fetchBlocks}
-                      
+
                       setQuestTabState={setQuestTabState}
                       listQuest={listQuest}
                       CompKeyCount={CompKeyCount}
-                       setCompKeyCount={setCompKeyCount}
+                      setCompKeyCount={setCompKeyCount}
 
                       Completion={Completion}
-                      compliData={compliData} 
+                      compliData={compliData}
                       setCompliData={setCompliData}
                       handleCompletionScreen={handleCompletionScreen}
                       handlecompletion={handlecompletion}
@@ -3852,7 +3860,7 @@ setQuestTabState(1);
                 background={'#0000 !important'}
               // alignItems="flex-end"
               >
- 
+
                 <Menu isOpen={isOpen1} onClose={onClose1}>
                   <MenuButton
                     alignItems="center"
@@ -3893,17 +3901,17 @@ setQuestTabState(1);
                     p="15px"
                     zIndex="1000"
                   ><MenuList
-                      w="150px"
-                      minW="unset"
-                      maxW="150px !important"
-                      border="transparent"
-                      backdropFilter="blur(63px)"
-                      boxShadow={bgShadow}
-                      borderRadius="20px"
-                      position="absolute"
-                      p="15px"
-                      zIndex="1000" // Set a higher z-index value
-                    >
+                    w="150px"
+                    minW="unset"
+                    maxW="150px !important"
+                    border="transparent"
+                    backdropFilter="blur(63px)"
+                    boxShadow={bgShadow}
+                    borderRadius="20px"
+                    position="absolute"
+                    p="15px"
+                    zIndex="1000" // Set a higher z-index value
+                  >
                       <MenuItem
                         transition="0.2s linear"
                         color={textColor}
@@ -4049,8 +4057,8 @@ setQuestTabState(1);
                 onClose={onClose}
               />
             )}
-            
-          
+
+
           </Box>
         </GridItem>
       </Grid>
