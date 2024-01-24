@@ -1,4 +1,4 @@
-// ALTER TABLE `lmsgame` ADD `gameQuestNo` INT(100) NULL AFTER `gameId`;
+
 import {
   Accordion,
   AccordionButton,
@@ -475,6 +475,7 @@ const GameCreation = () => {
   const [selectedBadge, setSelectedBadge] = useState(null);
   const [CompKeyCount, setCompKeyCount] = useState<any>(0);
   const [prevdata, setPrevdata] = useState();
+  const [gameId,setGameId] = useState();
   const { id } = useParams();
   const inputRef = useRef<HTMLButtonElement>(null);
   const [voices, setVoices] = useState([]);
@@ -618,7 +619,9 @@ const GameCreation = () => {
     if (gameById?.status !== 'Success')
       return console.log('error:' + gameById?.message);
     setDefaultstatus(true);
+   setGameId(gameById?.data?.gameId);
     setFormData(gameById?.data);
+
     // const lastTab = gameById?.data?.gameLastTabArray[gameById.data.gameLastTabArray.length - 2];
     // const lastTab = gameById?.data?.gameLastTabArray[gameById.data.gameLastTabArray.length - 2];
     const stringContainingNumbers = gameById?.data?.gameLastTabArray;
@@ -2010,8 +2013,7 @@ const GameCreation = () => {
     console.log('formData', selectedOption.value);
   };
 
-  const myBlink = keyframes`
-  0% {
+  const myBlink = keyframes`0% {
     filter: drop-shadow(2px 4px 6px #0000);
   }
   50% {
@@ -3067,66 +3069,87 @@ const GameCreation = () => {
                                             bg: '#11047ae3',
                                           }}
                                           // onClick={() => handleButtonTwo(id)}
-                                          onClick={() => handleBackground(img, i)}
+                                          onClick={() =>
+                                            handleBackground(img, i)
+                                          }
                                         >
-                                          <span style={{ color: 'white' }}>{selectedCardIndex === i ? 'Selected' : 'Select'}</span>
-
+                                          <span style={{ color: 'white' }}>
+                                            {selectedCardIndex === i
+                                              ? 'Selected'
+                                              : 'Select'}
+                                          </span>
                                         </Box>
-
                                       </Flex>
-
                                     ) : (
                                       <Flex
-                                        position='absolute'
-                                        bottom='0'
-
-                                        transform='translate(-50%, 0)'
-                                        flexDirection='row'
-                                        alignItems='center'
-                                        justifyContent='space-between'
-                                        width='100%'
+                                        position="absolute"
+                                        bottom="0"
+                                        transform="translate(-50%, 0)"
+                                        flexDirection="row"
+                                        alignItems="center"
+                                        justifyContent="space-between"
+                                        width="100%"
                                         style={{
                                           opacity: '0',
                                           transform: 'translateY(20px)',
-                                          transition: 'transform 0.5s ease, opacity 0.5s ease'
+                                          transition:
+                                            'transform 0.5s ease, opacity 0.5s ease',
                                         }}
                                       >
                                         <Box
-                                          bg='white'
-                                          width='50%'
-                                          height='35px'
-                                          borderBottomLeftRadius='10px'
-                                          display='flex'
-                                          alignItems='center'
-                                          justifyContent='center'
-                                          cursor='pointer'
+                                          bg="white"
+                                          width="50%"
+                                          height="35px"
+                                          borderBottomLeftRadius="10px"
+                                          display="flex"
+                                          alignItems="center"
+                                          justifyContent="center"
+                                          cursor="pointer"
                                         >
-                                          <span style={{ color: 'black' }}>Preview</span>
+                                          <span style={{ color: 'black' }}>
+                                            Preview
+                                          </span>
                                         </Box>
-                                        <Box bg='#11047a' width='50%' height='35px' borderBottomRightRadius='10px' display='flex'
-                                          alignItems='center'
-                                          justifyContent='center'
-                                          cursor='pointer'>
+                                        <Box
+                                          bg="#11047a"
+                                          width="50%"
+                                          height="35px"
+                                          borderBottomRightRadius="10px"
+                                          display="flex"
+                                          alignItems="center"
+                                          justifyContent="center"
+                                          cursor="pointer"
+                                        >
                                           {/* <span style={{ color: 'white' }}>{selections[i] ? 'Selected' : 'Select'}</span> */}
-                                          <span style={{ color: 'white' }}>{selectedCardIndex === i ? 'Selected' : 'Select'}</span>
+                                          <span style={{ color: 'white' }}>
+                                            {selectedCardIndex === i
+                                              ? 'Selected'
+                                              : 'Select'}
+                                          </span>
                                         </Box>
                                       </Flex>
                                     )}
-
                                   </Box>
-                                  <Flex justifyContent={'space-between'} margin={'10px 0'} flexDirection={'column'}>
+                                  <Flex
+                                    justifyContent={'space-between'}
+                                    margin={'10px 0'}
+                                    flexDirection={'column'}
+                                  >
                                     <Box>
                                       <Text
-                                        color={selectedCardIndex === i ? 'white' : 'black'}
-                                        // fontSize={'16px'} 
-                                        // fontWeight={'800'} 
+                                        color={
+                                          selectedCardIndex === i
+                                            ? 'white'
+                                            : 'black'
+                                        }
+                                        // fontSize={'16px'}
+                                        // fontWeight={'800'}
                                         textTransform={'capitalize'}
-                                        fontSize='md'
+                                        fontSize="md"
                                         // fontWeight={'200'}
-                                        fontWeight='bold'
+                                        fontWeight="bold"
                                         fontFamily="DM Sans, sans-serif"
                                       >
-
                                         {img?.temp.tempTitle}
                                       </Text>
                                     </Box>
@@ -3398,11 +3421,97 @@ const GameCreation = () => {
                 ) : null}
               </GridItem>
             </Grid>
+            {tab !== 4 ? (
+              <Menu>
+                <MenuButton
+                  p="0px"
+                  bg={'brandScheme'}
+                  position={'fixed'}
+                  bottom={'0'}
+                  right={'5px'}
+                  // onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                  <Icon
+                    as={AiFillMessage}
+                    bg={'#3311db'}
+                    color={'#fff'}
+                    w="70px"
+                    h="70px"
+                    borderRadius={'50%'}
+                    p={'15px'}
+                    me="10px"
+                  />
+                </MenuButton>
+                <MenuList
+                  boxShadow={shadow}
+                  p="20px"
+                  me={{ base: '30px', md: 'unset' }}
+                  borderRadius="20px"
+                  bg={menuBg}
+                  border="none"
+                  mt="10px"
+                  minW={{ base: '360px' }}
+                  maxW={{ base: '360px', md: 'unset' }}
+                >
+                  {/* <SelectFie
+                mb="10px"
+                me="30px"
+                id="gameIntroMusic"
+                name="gameIntroMusic"
+                label="Feedback Options"
+                options={overOptions}
+                onChange={handleFeed}
+              /> */}
+                  <FormControl>
+                    <FormLabel fontSize={18} fontWeight={700}>
+                      Feedback For{' '}
+                      {tab === 1
+                        ? 'BackGround'
+                        : tab === 2
+                        ? 'Non Playing Character'
+                        : tab === 3
+                        ? 'Overview'
+                        : tab === 5
+                        ? 'Design'
+                        : 'Preference'}
+                    </FormLabel>
+                    <Box w={'360px'}>
+                      <Text>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua. Ut enim ad minim veniam, quis nostrud
+                        exercitation ullamco laboris nisi ut aliquip ex ea
+                        commodo consequat.
+                      </Text>
+                    </Box>
+                  </FormControl>
+                  <MenuItem>
+                    <Box
+                      w={'100%'}
+                      display={'flex'}
+                      justifyContent={'flex-end'}
+                    >
+                      <Button
+                        bg="#11047a"
+                        _hover={{ bg: '#190793' }}
+                        color="#fff"
+                        h={'46px'}
+                        w={'128px'}
+                        mr={'33px'}
+                        mt={'7px'}
+                      >
+                        Okay...!
+                      </Button>
+                    </Box>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            ) : null}
             <Flex justify="center">
               <Card
                 display={'flex'}
                 justifyContent={tab === 1 || tab === 2 ? 'end' : 'flex-end'}
-                // w="350px"
+               
                 flexDirection="row"
                 h="95px"
                 w="500px"
@@ -3412,16 +3521,13 @@ const GameCreation = () => {
                 right={'8px'}
                 zIndex={99}
                 background={'#0000 !important'}
-                // alignItems="flex-end"
+        
               >
                 <Menu isOpen={isOpen1} onClose={onClose1}>
                   <MenuButton
                     alignItems="center"
                     justifyContent="center"
-                    // bg={bgButton}
-                    // _hover={bgHover}
-                    // _focus={bgFocus}
-                    // _active={bgFocus}
+                  
                     w="37px"
                     h="37px"
                     lineHeight="100%"
@@ -3447,8 +3553,7 @@ const GameCreation = () => {
                     minW="unset"
                     maxW="150px !important"
                     border="transparent"
-                    // backdropFilter="blur(63px)"
-                    // boxShadow={bgShadow}
+                    
                     borderRadius="20px"
                     bg="transparent"
                     p="15px"
@@ -3554,7 +3659,7 @@ const GameCreation = () => {
                     _hover={{ bg: '#190793' }}
                     color="#fff"
                     h={'46px'}
-                    w={'128px'}     
+                    w={'128px'}
                     // onClick={() => handleButtonClick(showFunction)}
                     onClick={() => handleNext()}
                     mr={'33px'}
@@ -3590,7 +3695,7 @@ const GameCreation = () => {
                   onClick={() => {
                     setTab(tab - 1);
                   }}
-                  size={46} 
+                  size={46}
                   color="#11047a"
                   style={{
                     position: 'fixed',
@@ -3601,13 +3706,13 @@ const GameCreation = () => {
                   }}
                 />
               </Flex>
-            )}           
+            )}
             {share && tableDataCheck && (
               <ShareReviewTable
                 isOpen={isOpen}
                 onClose={onClose}
                 onOpen={onOpen}
-                tableData={tableDataCheck}              
+                tableData={tableDataCheck}
               />
             )}
             {entire && (
@@ -3633,7 +3738,7 @@ const GameCreation = () => {
                 reflectionQuestionsdefault={reflectionQuestionsdefault}
               />
             )}
-           
+
             <Button
               bg="#11047a"
               _hover={{ bg: '#190793' }}

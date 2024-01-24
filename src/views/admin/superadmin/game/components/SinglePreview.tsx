@@ -239,7 +239,7 @@ const SinglePreview: React.FC<{
   const handleFeed = () => {
     setIsMenuOpen(false);
   };
-  // const options = [1, 2, 3, 4];
+console.log('previous datas inside the dramp',prevdata);
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full">
       <ModalOverlay />
@@ -265,15 +265,10 @@ const SinglePreview: React.FC<{
                     h={'100vh'}
                     backgroundRepeat={'no-repeat'}
                     backgroundSize={'cover'}
-                    // transform={`scale(${first ? 1 : 1.3}) translateY(${
-                    //   first ? 0 : -10
-                    // }%) translateX(${first ? 0 : -10}%)`}
-                    // transition={'transform 0.9s ease-in-out'}
                     display={'flex'}
                     alignItems={'center'}
                     justifyContent={'center'}
                   >
-                    {/* <Box h={'50vh'} overflowY={'scroll'}> */}
                     <Box className="Game-Screen">
                       <Box className={'Images'}>
                         <WelcomeContentScreen
@@ -283,7 +278,6 @@ const SinglePreview: React.FC<{
                         />
                       </Box>
                     </Box>
-                    {/* </Box> */}
                   </Box>
                 </Box>{' '}
               </>

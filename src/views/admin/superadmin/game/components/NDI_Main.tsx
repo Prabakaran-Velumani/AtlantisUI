@@ -13,7 +13,13 @@ import {
     ListItem,
     Img, 
     useToast,
-    Divider
+    Divider,
+    Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionIcon,
+    AccordionPanel,
+    useColorModeValue
 } from '@chakra-ui/react'
 import { MdAdd, MdDelete, MdInbox, MdNote, MdNoteAdd, MdOutlineStickyNote2, MdTextsms } from 'react-icons/md';
 import { AiFillInteraction, AiOutlineInteraction } from 'react-icons/ai';
@@ -29,9 +35,10 @@ import Avatar1 from 'assets/img/avatars/avatar1.png';
 import Avatar2 from 'assets/img/avatars/avatar2.png';
 import Avatar3 from 'assets/img/avatars/avatar3.png';
 import { TbHandClick, TbMessages } from 'react-icons/tb';
-
+import pro from 'assets/img/crm/pro.png';
 import { setStory, getStory } from 'utils/game/gameService';
 import NDITabs from './dragNdrop/QuestTab'
+import { BiSolidDislike, BiSolidLike } from 'react-icons/bi';
 interface NDIMainProps {
     handleShowComponent?: (componentName: string) => void;
     id?: any;
@@ -1749,206 +1756,752 @@ console.log('setDialogNavigation',menuvalue)
         };
     }, []);
   
+    const textColor = useColorModeValue('secondaryGray.900', 'white');
   
 
     return (
-        <>
-            <Box mt={{ base: '0px', xl: '0px' }} className='NDI' position={'relative'} >
-                <Card mb={'20px'}>
+      <>
+        <Box
+          mt={{ base: '0px', xl: '0px' }}
+          className="NDI"
+          position={'relative'}
+        >
+          <Card mb={'20px'}>
+            <Text fontSize={22} fontWeight={800} mb={'20px'}>
+              Story
+            </Text>
+            <NDITabs
+              handleGet={handleGet}
+              fetchBlocks={fetchBlocks}
+              listQuest={listQuest}
+              questTabState={questTabState}
+              setQuestTabState={setQuestTabState}
+              deleteQuest={deleteQuest}
+            />
+            <Box className="sequence-lists" mt={'40px'} w={'100%'}>
+              <CustomAccordion
+                items={items}
+                setItems={setItems}
+                sequence={sequence}
+                dummySequence={dummySequence}
+                upNextCount={upNextCount}
+                setAlphabet={setAlphabet}
+                alphabet={alphabet}
+                setBlockItems={setBlockItems}
+              >
+                {(type || items) &&
+                  items.map((seq: any, i: number) => {
+                    return (
+                      <Draggable key={seq.id} draggableId={seq.id} index={i}>
+                        {(provided, dragData) => {
+                          return (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <Box key={i}>
+                                {seq.type == 'Note' ? (
+                                  <Box
+                                    id={`tarSeqRef${seq.id}`}
+                                    position={'relative'}
+                                    boxShadow={
+                                      seq.input === lastInputName
+                                        ? '1px 2px 13px #a2a1b00a'
+                                        : 'unset'
+                                    }
+                                    borderRadius={'12px'}
+                                    transform={
+                                      seq.input === lastInputName
+                                        ? 'scale(1.030)'
+                                        : 'unset'
+                                    }
+                                    transition={'0.1s linear'}
+                                    borderLeft={
+                                      seq.id === targetSequence?.id
+                                        ? '3px solid #3311db'
+                                        : 'unset'
+                                    }
+                                    background={
+                                      seq.input === lastInputName ||
+                                      dragData.isDragging === true ||
+                                      seq.id === targetSequence?.id
+                                        ? '#c7c7c724'
+                                        : 'unset'
+                                    }
+                                    _hover={{ background: '#c7c7c724' }}
+                                    zIndex={
+                                      seq.input === lastInputName
+                                        ? '9'
+                                        : 'unset'
+                                    }
+                                    tabIndex={0}
+                                    onClick={(e) => handleKeyDown(e, seq)}
+                                    onKeyDown={(e) => handleKeyDown(e, seq)}
+                                  >
+                                    <NoteCompo
+                                      seq={seq}
+                                      index={i}
+                                      name={'Note'}
+                                      getSeq={getSeq}
+                                      duplicateSeq={duplicateSeq}
+                                      delSeq={delSeq}
+                                      alphabet={alphabet}
+                                      input={input}
+                                      setNavigation={setNoteNavigation}
+                                      showSelectBlock={showSelectBlock}
+                                      handleBlock={setNotelead}
+                                      handleSelectBlock={handleNoteNavigation}
+                                      items={items}
+                                      setSelectBlock={setNotelead}
+                                      handleInput={(e: any) =>
+                                        handleInput(e, i)
+                                      }
+                                    />
+                                    <Accordion allowToggle>
+                                      <AccordionItem>
+                                        <h2>
+                                          <AccordionButton>
+                                            <Box
+                                              as="span"
+                                              flex="1"
+                                              textAlign="left"
+                                              fontSize={'14'}
+                                              color={textColor}  
 
-                    <Text fontSize={22} fontWeight={800} mb={'20px'}>Story</Text>
-                    <NDITabs
-                    handleGet={handleGet}
-                    fetchBlocks={fetchBlocks}
-                    listQuest={listQuest}
-                    questTabState={questTabState}
-    setQuestTabState={setQuestTabState}
-    deleteQuest={deleteQuest}
-                    
-                    />
-                    <Box className='sequence-lists' mt={'40px'} w={'100%'}>
-                        <CustomAccordion items={items} setItems={setItems} sequence={sequence} dummySequence={dummySequence} upNextCount={upNextCount} setAlphabet={setAlphabet} alphabet={alphabet} setBlockItems={setBlockItems}>
-                            {(type || items) && items.map((seq: any, i: number) => {
-
-                                console.log('off', seq);
-                                
-                                return (
-                                    <Draggable key={seq.id} draggableId={seq.id} index={i}>
-                                        {(provided, dragData) => {                                             
-                                            return (
-                                             <div
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
                                             >
-                                                <Box    key={i} >
-                                                    {seq.type == 'Note' ?
-                                                        (
-                                                            <Box id={`tarSeqRef${seq.id}`}  position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} 
-                                                            background={seq.input === lastInputName || dragData.isDragging === true ||seq.id === targetSequence?.id  ? '#c7c7c724' : 'unset'} _hover={{background: '#c7c7c724'}} zIndex={seq.input === lastInputName ? '9' : 'unset'}
-                                                            tabIndex={0}
-                                                            onClick={(e) => handleKeyDown(e, seq)}
-                                                            onKeyDown={(e) => handleKeyDown(e, seq)}
-                                                            >  
-                                                                <NoteCompo
-                                                                    seq={seq}
-                                                                    index={i}
-                                                                    name={'Note'}
-                                                                    getSeq={getSeq}
-                                                                    duplicateSeq={duplicateSeq}
-                                                                    delSeq={delSeq}
-                                                                    alphabet={alphabet}
-                                                                    input={input}
-                                                                    setNavigation={setNoteNavigation} 
-                                                                    showSelectBlock={showSelectBlock}
-                                                                    handleBlock={setNotelead}
-                                                                    handleSelectBlock={handleNoteNavigation}
-                                                                    items={items}                                                                    
-                                                                    setSelectBlock={setNotelead}                                                           
-                                                                    handleInput={(e: any) => handleInput(e, i)} />
-                                                                {seq.id == showMiniBox ? <MiniBox seq={seq} i={i} name={'Note'} /> : null}
-                                                            </Box>
-                                                        ) :
-                                                        seq.type == 'Dialog' ?
-                                                            (
-                                                                <Box id={`tarSeqRef${seq.id}`}  position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} background={seq.input === lastInputName || dragData.isDragging === true ? '#c7c7c724' : 'unset'} _hover={{background: '#c7c7c724'}} zIndex={seq.input === lastInputName ? '9' : 'unset'}
-                                                                tabIndex={0}
-                                                                onClick={(e) => handleKeyDown(e, seq)}
-                                                                onKeyDown={(e) => handleKeyDown(e, seq)}                                                                
-                                                                >
-                                                                    <DialogCompo
-                                                                        seq={seq}
-                                                                        index={i}
-                                                                        name={'Dialog'}
-                                                                        getSeq={getSeq}
-                                                                        duplicateSeq={duplicateSeq}
-                                                                        delSeq={delSeq}
-                                                                        input={input}
-                                                                        handleInput={(e: any) => handleInput(e, i)}
-                                                                        handleSelect={handleSelect}
-                                                                        characterOption={characterOption}
-                                                                        dialogOption={dialogOption}
-                                                                        voicePoseOption={voicePoseOption}
-                                                                        animateBtn={animateBtn}
-                                                                        setAnimateBtn={setAnimateBtn}
-                                                                        handleDialogEmotion={handleDialogEmotion}
-                                                                        handleDialogVoice={handleDialogVoice}
-                                                                        formData={formData}
-                                                                        alphabet={alphabet}
-                                                                        handleBlock={setDialoglead}
-                                                                        setNavigation={setDialogNavigation} 
-                                                                        handleSelectBlock={handleDialogNavigation}
-                                                                        items={items}
-                                                                        handleDialogBlockRoll={handleDialogBlockRoll}
-                                                                        showSelectBlock={showSelectBlock}
-                                                                        setSelectBlock={setSelectBlock}
-   />
-                                                                    {seq.id == showMiniBox ? <MiniBox seq={seq} i={i} name={'Dialog'} /> : null}
-                                                                </Box>
-                                                            ) :
-                                                            seq.type == 'Interaction' ?
-                                                                (
-                                                                    <Box id={`tarSeqRef${seq.id}`}  position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} background={seq.input === lastInputName || dragData.isDragging === true ? '#c7c7c724' : 'unset'} _hover={{background: '#c7c7c724'}} zIndex={seq.input === lastInputName ? '9' : 'unset'} 
-                                                                    tabIndex={0}
-                                                                    onClick={(e) => handleKeyDown(e, seq)}
-                                                                    onKeyDown={(e) => handleKeyDown(e, seq)}
-                                                                    >
-                                                                        <InteractionCompo
-                                                                            seq={seq}
-                                                                            index={i}
-                                                                            name={'Interaction'}
-                                                                            number={number}
-                                                                            dummySequence={dummySequence}
-                                                                            getSeq={getSeq}
-                                                                            duplicateSeq={duplicateSeq}
-                                                                            delSeq={delSeq}
-                                                                            input={input}
-                                                                            handleInput={(e: any) => handleInput(e, i)}
-                                                                            handleSelect={handleSelect}
-                                                                            characterOption={characterOption}
-                                                                            alphabet={alphabet}
-                                                                            setAlphabet={setAlphabet}
-                                                                            animateBtn={animateBtn}
-                                                                            setAnimateBtn={setAnimateBtn}
-                                                                            interactionBlock={interactionBlock}
-                                                                            setInteractionBlock={setInteractionBlock}
-                                                                            formData={formData}
-                                                                            handleBlockRoll={handleBlockRoll}
+                                               See All Reviews{' '}(2)
+                                            </Box>
+                                            <AccordionIcon />
+                                          </AccordionButton>
+                                        </h2>
+                                        <AccordionPanel pb={4}>
+                                          <Box
+                                            w={'100%'}
+                                            display={'flex'}
+                                            justifyContent={'space-between'}
+                                          >
+                                            <Box
+                                              w={'100%'}
+                                              display={'flex'}
+                                              //   h={'50px'}
+                                              alignItems={'center'}
+                                            >
+                                              <Img
+                                                src={pro}
+                                                w={'40px'}
+                                                h={'40px'}
+                                                alt="pro"
+                                                borderRadius={'50%'}
+                                              />
+                                              <Text ml={'15px'}>User8695</Text>
+                                            </Box>
+                                            <Box whiteSpace={'nowrap'}>
+                                              <Text fontSize={'14'}>
+                                                Posted On :12-10-23
+                                              </Text>
+                                            </Box>
+                                          </Box>
+                                          <Box mb={'10px'} mt={'10px'}>
+                                            Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit, sed do
+                                            eiusmod tempor incididunt ut labore
+                                            et dolore magna aliqua. Ut enim ad
+                                            minim veniam, quis nostrud
+                                            exercitation ullamco laboris nisi ut
+                                            aliquip ex ea commodo consequat.
+                                          </Box>
+                                          {/* <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                                            <Box display={'flex'}>
+                                               <Icon as={BiSolidDislike} mt={'2px'} color={textColor}/>
+                                               <Icon as={BiSolidLike} ml={'5px'} color={textColor}/>
+                                            </Box>
+                                          </Box> */}
+                                          <Box
+                                            w={'100%'}
+                                            display={'flex'}
+                                            justifyContent={'space-between'}
+                                          >
+                                            <Box
+                                              w={'100%'}
+                                              display={'flex'}
+                                              //   h={'50px'}
+                                              alignItems={'center'}
+                                            >
+                                              <Img
+                                                src={pro}
+                                                w={'40px'}
+                                                h={'40px'}
+                                                alt="pro"
+                                                borderRadius={'50%'}
+                                              />
+                                              <Text ml={'15px'}>User8695</Text>
+                                            </Box>
+                                            <Box whiteSpace={'nowrap'}>
+                                              <Text fontSize={'14'}>
+                                                Posted On :12-10-23
+                                              </Text>
+                                            </Box>
+                                          </Box>
+                                          <Box mb={'10px'} mt={'10px'}>
+                                            Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit, sed do
+                                            eiusmod tempor incididunt ut labore
+                                            et dolore magna aliqua. Ut enim ad
+                                            minim veniam, quis nostrud
+                                            exercitation ullamco laboris nisi ut
+                                            aliquip ex ea commodo consequat.
+                                          </Box>
+                                          {/* <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                                            <Box display={'flex'}>
+                                               <Icon as={BiSolidDislike} mt={'2px'} color={textColor}/>
+                                               <Icon as={BiSolidLike} ml={'5px'} color={textColor}/>
+                                            </Box>
+                                          </Box> */}
+                                        </AccordionPanel>
+                                      </AccordionItem>
+                                    </Accordion>
+                                    {seq.id == showMiniBox ? (
+                                      <MiniBox seq={seq} i={i} name={'Note'} />
+                                    ) : null}
+                                  </Box>
+                                ) : seq.type == 'Dialog' ? (
+                                  <Box
+                                    id={`tarSeqRef${seq.id}`}
+                                    position={'relative'}
+                                    boxShadow={
+                                      seq.input === lastInputName
+                                        ? '1px 2px 13px #a2a1b00a'
+                                        : 'unset'
+                                    }
+                                    borderRadius={'12px'}
+                                    transform={
+                                      seq.input === lastInputName
+                                        ? 'scale(1.030)'
+                                        : 'unset'
+                                    }
+                                    transition={'0.1s linear'}
+                                    borderLeft={
+                                      seq.id === targetSequence?.id
+                                        ? '3px solid #3311db'
+                                        : 'unset'
+                                    }
+                                    background={
+                                      seq.input === lastInputName ||
+                                      dragData.isDragging === true
+                                        ? '#c7c7c724'
+                                        : 'unset'
+                                    }
+                                    _hover={{ background: '#c7c7c724' }}
+                                    zIndex={
+                                      seq.input === lastInputName
+                                        ? '9'
+                                        : 'unset'
+                                    }
+                                    tabIndex={0}
+                                    onClick={(e) => handleKeyDown(e, seq)}
+                                    onKeyDown={(e) => handleKeyDown(e, seq)}
+                                  >
+                                    <DialogCompo
+                                      seq={seq}
+                                      index={i}
+                                      name={'Dialog'}
+                                      getSeq={getSeq}
+                                      duplicateSeq={duplicateSeq}
+                                      delSeq={delSeq}
+                                      input={input}
+                                      handleInput={(e: any) =>
+                                        handleInput(e, i)
+                                      }
+                                      handleSelect={handleSelect}
+                                      characterOption={characterOption}
+                                      dialogOption={dialogOption}
+                                      voicePoseOption={voicePoseOption}
+                                      animateBtn={animateBtn}
+                                      setAnimateBtn={setAnimateBtn}
+                                      handleDialogEmotion={handleDialogEmotion}
+                                      handleDialogVoice={handleDialogVoice}
+                                      formData={formData}
+                                      alphabet={alphabet}
+                                      handleBlock={setDialoglead}
+                                      setNavigation={setDialogNavigation}
+                                      handleSelectBlock={handleDialogNavigation}
+                                      items={items}
+                                      handleDialogBlockRoll={
+                                        handleDialogBlockRoll
+                                      }
+                                      showSelectBlock={showSelectBlock}
+                                      setSelectBlock={setSelectBlock}
+                                    />
+                                    <Accordion allowToggle>
+                                      <AccordionItem>
+                                        <h2>
+                                          <AccordionButton>
+                                            <Box
+                                              as="span"
+                                              flex="1"
+                                              textAlign="left"
+                                              fontSize={'14'}
+                                              color={textColor}  
+                                            >
+                                              See All Reviews{' '}(2)
+                                            </Box>
+                                            <AccordionIcon />
+                                          </AccordionButton>
+                                        </h2>
+                                        <AccordionPanel pb={4}>
+                                        <Box
+                                            w={'100%'}
+                                            display={'flex'}
+                                            justifyContent={'space-between'}
+                                          >
+                                            <Box
+                                              w={'100%'}
+                                              display={'flex'}
+                                              //   h={'50px'}
+                                              alignItems={'center'}
+                                            >
+                                              <Img
+                                                src={pro}
+                                                w={'40px'}
+                                                h={'40px'}
+                                                alt="pro"
+                                                borderRadius={'50%'}
+                                              />
+                                              <Text ml={'15px'}>User8695</Text>
+                                            </Box>
+                                            <Box whiteSpace={'nowrap'}>
+                                              <Text   fontSize={'14'}>
+                                                Posted On :12-10-23
+                                              </Text>
+                                            </Box>
+                                          </Box>
+                                          <Box mb={'10px'} mt={'10px'}>
+                                            Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit, sed do
+                                            eiusmod tempor incididunt ut labore
+                                            et dolore magna aliqua. Ut enim ad
+                                            minim veniam, quis nostrud
+                                            exercitation ullamco laboris nisi ut
+                                            aliquip ex ea commodo consequat.
+                                          </Box>
+                                          {/* <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                                            <Box display={'flex'}>
+                                               <Icon as={BiSolidDislike} mt={'2px'} color={textColor}/>
+                                               <Icon as={BiSolidLike} ml={'5px'} color={textColor}/>
+                                            </Box>
+                                          </Box> */}
+                                          <Box
+                                            w={'100%'}
+                                            display={'flex'}
+                                            justifyContent={'space-between'}
+                                          >
+                                            <Box
+                                              w={'100%'}
+                                              display={'flex'}
+                                              //   h={'50px'}
+                                              alignItems={'center'}
+                                            >
+                                              <Img
+                                                src={pro}
+                                                w={'40px'}
+                                                h={'40px'}
+                                                alt="pro"
+                                                borderRadius={'50%'}
+                                              />
+                                              <Text ml={'15px'}>User8695</Text>
+                                            </Box>
+                                            <Box whiteSpace={'nowrap'}>
+                                              <Text fontSize={'14'}>
+                                                Posted On :12-10-23
+                                              </Text>
+                                            </Box>
+                                          </Box>
+                                          <Box mb={'10px'} mt={'10px'}>
+                                            Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit, sed do
+                                            eiusmod tempor incididunt ut labore
+                                            et dolore magna aliqua. Ut enim ad
+                                            minim veniam, quis nostrud
+                                            exercitation ullamco laboris nisi ut
+                                            aliquip ex ea commodo consequat.
+                                          </Box>
+                                          {/* <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                                            <Box display={'flex'}>
+                                               <Icon as={BiSolidDislike} mt={'2px'} color={textColor}/>
+                                               <Icon as={BiSolidLike} ml={'5px'} color={textColor}/>
+                                            </Box>
+                                          </Box> */}
+                                        </AccordionPanel>
+                                      </AccordionItem>
+                                    </Accordion>
+                                    {seq.id == showMiniBox ? (
+                                      <MiniBox
+                                        seq={seq}
+                                        i={i}
+                                        name={'Dialog'}
+                                      />
+                                    ) : null}
+                                  </Box>
+                                ) : seq.type == 'Interaction' ? (
+                                  <Box
+                                    id={`tarSeqRef${seq.id}`}
+                                    position={'relative'}
+                                    boxShadow={
+                                      seq.input === lastInputName
+                                        ? '1px 2px 13px #a2a1b00a'
+                                        : 'unset'
+                                    }
+                                    borderRadius={'12px'}
+                                    transform={
+                                      seq.input === lastInputName
+                                        ? 'scale(1.030)'
+                                        : 'unset'
+                                    }
+                                    transition={'0.1s linear'}
+                                    borderLeft={
+                                      seq.id === targetSequence?.id
+                                        ? '3px solid #3311db'
+                                        : 'unset'
+                                    }
+                                    background={
+                                      seq.input === lastInputName ||
+                                      dragData.isDragging === true
+                                        ? '#c7c7c724'
+                                        : 'unset'
+                                    }
+                                    _hover={{ background: '#c7c7c724' }}
+                                    zIndex={
+                                      seq.input === lastInputName
+                                        ? '9'
+                                        : 'unset'
+                                    }
+                                    tabIndex={0}
+                                    onClick={(e) => handleKeyDown(e, seq)}
+                                    onKeyDown={(e) => handleKeyDown(e, seq)}
+                                  >
+                                    <InteractionCompo
+                                      seq={seq}
+                                      index={i}
+                                      name={'Interaction'}
+                                      number={number}
+                                      dummySequence={dummySequence}
+                                      getSeq={getSeq}
+                                      duplicateSeq={duplicateSeq}
+                                      delSeq={delSeq}
+                                      input={input}
+                                      handleInput={(e: any) =>
+                                        handleInput(e, i)
+                                      }
+                                      handleSelect={handleSelect}
+                                      characterOption={characterOption}
+                                      alphabet={alphabet}
+                                      setAlphabet={setAlphabet}
+                                      animateBtn={animateBtn}
+                                      setAnimateBtn={setAnimateBtn}
+                                      interactionBlock={interactionBlock}
+                                      setInteractionBlock={setInteractionBlock}
+                                      formData={formData}
+                                      handleBlockRoll={handleBlockRoll}
+                                      handleResponseRoll={handleResponseRoll}
+                                      handleQuestionEmotion={
+                                        handleQuestionEmotion
+                                      }
+                                      handleOptionEmotion={handleOptionEmotion}
+                                      handleResponseEmotion={
+                                        handleResponseEmotion
+                                      }
+                                      handleCheckBox={handleCheckBox}
+                                      handleOptionVoice={handleOptionVoice}
+                                      handleQuestionVoice={handleQuestionVoice}
+                                      setNavigation={setNavigation}
+                                      handleSelectBlock={handleSelectBlock}
+                                      handleBlock={handleBlock}
+                                      countalphabet={countalphabet}
+                                      setAlphabetCount={setAlphabetCount}
+                                      items={items}
+                                      handleTagsChange={handleTagsChange}
+                                      showSelectBlock={showSelectBlock}
+                                      setSelectBlock={setSelectBlock}
+                                    />
+                                    <Accordion allowToggle>
+                                      <AccordionItem>
+                                        <h2>
+                                          <AccordionButton>
+                                            <Box
+                                              as="span"
+                                              flex="1"
+                                              textAlign="left"
+                                              fontSize={'14'}
+                                              color={textColor}  
+                                            >
+                                              See All Reviews{' '}(2)
+                                            </Box>
+                                            <AccordionIcon />
+                                          </AccordionButton>
+                                        </h2>
+                                        <AccordionPanel pb={4}>
+                                        <Box
+                                            w={'100%'}
+                                            display={'flex'}
+                                            justifyContent={'space-between'}
+                                          >
+                                            <Box
+                                              w={'100%'}
+                                              display={'flex'}
+                                              //   h={'50px'}
+                                              alignItems={'center'}
+                                            >
+                                              <Img
+                                                src={pro}
+                                                w={'40px'}
+                                                h={'40px'}
+                                                alt="pro"
+                                                borderRadius={'50%'}
+                                              />
+                                              <Text ml={'15px'}>User8695</Text>
+                                            </Box>
+                                            <Box whiteSpace={'nowrap'}>
+                                              <Text   fontSize={'14'} >
+                                                Posted On :12-10-23
+                                              </Text>
+                                            </Box>
+                                          </Box>
+                                          <Box mb={'10px'} mt={'10px'}>
+                                            Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit, sed do
+                                            eiusmod tempor incididunt ut labore
+                                            et dolore magna aliqua. Ut enim ad
+                                            minim veniam, quis nostrud
+                                            exercitation ullamco laboris nisi ut
+                                            aliquip ex ea commodo consequat.
+                                          </Box>
+                                          {/* <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                                            <Box display={'flex'}>
+                                               <Icon as={BiSolidDislike} mt={'2px'} color={textColor}/>
+                                               <Icon as={BiSolidLike} ml={'5px'} color={textColor}/>
+                                            </Box>
+                                          </Box> */}
+                                          <Box
+                                            w={'100%'}
+                                            display={'flex'}
+                                            justifyContent={'space-between'}
+                                          >
+                                            <Box
+                                              w={'100%'}
+                                              display={'flex'}
+                                              //   h={'50px'}
+                                              alignItems={'center'}
+                                            >
+                                              <Img
+                                                src={pro}
+                                                w={'40px'}
+                                                h={'40px'}
+                                                alt="pro"
+                                                borderRadius={'50%'}
+                                              />
+                                              <Text ml={'15px'}>User8695</Text>
+                                            </Box>
+                                            <Box whiteSpace={'nowrap'}>
+                                              <Text   fontSize={'14'}>
+                                                Posted On :12-10-23
+                                              </Text>
+                                            </Box>
+                                          </Box>
+                                          <Box mb={'10px'} mt={'10px'}>
+                                            Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit, sed do
+                                            eiusmod tempor incididunt ut labore
+                                            et dolore magna aliqua. Ut enim ad
+                                            minim veniam, quis nostrud
+                                            exercitation ullamco laboris nisi ut
+                                            aliquip ex ea commodo consequat.
+                                          </Box>
+                                          {/* <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                                            <Box display={'flex'}>
+                                               <Icon as={BiSolidDislike} mt={'2px'} color={textColor}/>
+                                               <Icon as={BiSolidLike} ml={'5px'} color={textColor}/>
+                                            </Box>
+                                          </Box> */}
+                                        </AccordionPanel>
+                                      </AccordionItem>
+                                    </Accordion>
+                                    {seq.id == showMiniBox ? (
+                                      <MiniBox
+                                        seq={seq}
+                                        i={i}
+                                        name={'Interaction'}
+                                      />
+                                    ) : null}
+                                  </Box>
+                                ) : null}
+                              </Box>
+                            </div>
+                          );
+                        }}
+                      </Draggable>
+                    );
+                  })}
+              </CustomAccordion>
+              <Flex justifyContent={'space-between'} mt={'20px'}>
+                <Box display={'flex'} alignItems={'start'}>
+                  <Flex justify={'start'} mb={'20px'} position={'relative'}>
+                    <Button
+                      bg={'#3311db'}
+                      _hover={{ bg: '#3311db' }}
+                      color={'#fff'}
+                      mr={'10px'}
+                      className="showFormBox"
+                      onClick={() => setShowBox(!showBox)}
+                    >
+                      <Icon as={MdAdd} />
+                    </Button>
+                    {showBox ? (
+                      <Box
+                        position={'absolute'}
+                        background={'#fff'}
+                        p={'10px'}
+                        top={'55px'}
+                        left={'0px'}
+                        boxShadow={'1px 1px 17px #69627914'}
+                        borderRadius={'8px'}
+                        zIndex={9}
+                        className="showBox"
+                      >
+                        <List cursor={'pointer'}>
+                          <ListItem
+                            onClick={() => handleNDI('Note')}
+                            p={'10px'}
+                            display={'flex'}
+                            alignItems={'center'}
+                            borderBottom={'2px solid #f1f1f170'}
+                          >
+                            <Icon
+                              as={MdOutlineStickyNote2}
+                              mr={'10px'}
+                              color={'#3311db'}
+                            />
+                            Note
+                          </ListItem>
+                          <ListItem
+                            onClick={() => handleNDI('Dialog')}
+                            p={'10px'}
+                            display={'flex'}
+                            alignItems={'center'}
+                            borderBottom={'2px solid #f1f1f170'}
+                          >
+                            <Icon
+                              as={TbMessages}
+                              mr={'10px'}
+                              color={'#3311db'}
+                            />
+                            Dialog
+                          </ListItem>
+                          <ListItem
+                            onClick={() => handleNDI('Interaction')}
+                            p={'10px'}
+                            display={'flex'}
+                            alignItems={'center'}
+                          >
+                            <Icon
+                              as={TbHandClick}
+                              mr={'10px'}
+                              color={'#3311db'}
+                            />
+                            Interaction
+                          </ListItem>
+                        </List>
+                      </Box>
+                    ) : null}
+                  </Flex>
+                  <Box
+                    className="up-next-count"
+                    mr={'10px'}
+                    fontSize={'17px'}
+                    color={'#1b2559'}
+                    fontWeight={'700'}
+                  >
+                    {upNext}
+                  </Box>
+                  <Box mr={'10px'} display={'flex'}>
+                    <form onSubmit={(e: any) => handleSubmit(e)}>
+                      <Box display={'flex'}>
+                        <InputField
+                          onChange={(e: any) => handleFieldBlock(e)}
+                          value={blockInput}
+                          placeholder='Type "/" to insert Blocks'
+                        />
+                        <Text color={'#bcbcbc'}>{notify}</Text>
+                      </Box>
+                    </form>
+                  </Box>
+                </Box>
+                <Box>
+                  {/* {items && <Button bg={'#3311db'} _hover={{ bg: '#3311db' }} color={'#fff'} mr={'10px'} onClick={handleSave}>Save</Button>} */}
+                  {/* {items && <Button bg={'#3311db'} _hover={{ bg: '#3311db' }} color={'#fff'} mr={'10px'} onClick={handleGet}>get</Button>} */}
+                </Box>
+              </Flex>
+            </Box>
 
-                                                                            handleResponseRoll={handleResponseRoll}
-                                                                            handleQuestionEmotion={handleQuestionEmotion} handleOptionEmotion={handleOptionEmotion}
-                                                                            handleResponseEmotion={handleResponseEmotion}
-                                                                            handleCheckBox={handleCheckBox}
-                                                                            handleOptionVoice={handleOptionVoice}
-                                                                            handleQuestionVoice={handleQuestionVoice}
-                                                                            setNavigation={setNavigation}
-                                                                            handleSelectBlock={handleSelectBlock}
-
-                                                                            handleBlock={handleBlock}
-                                                                            countalphabet={countalphabet}
-                                                                            setAlphabetCount={setAlphabetCount}
-                                                                            items={items}
-                                                                            handleTagsChange={handleTagsChange}
-                                                                    showSelectBlock={showSelectBlock}
-                                                                        setSelectBlock={setSelectBlock}
-   
-                                                                           
-                                                                        />
-                                                                        {seq.id == showMiniBox ? <MiniBox seq={seq} i={i} name={'Interaction'} /> : null}
-                                                                    </Box>
-                                                                ) :
-                                                                null}
-                                                </Box>
-                                            </div>
-                                        )}}
-                                    </Draggable>
-                                )
-                            })}
-                        </CustomAccordion>
-                        <Flex justifyContent={'space-between'} mt={'20px'}>
-                            <Box display={'flex'} alignItems={'start'}>
-                                <Flex justify={'start'} mb={'20px'} position={'relative'}>
-                                    <Button bg={'#3311db'} _hover={{ bg: '#3311db' }} color={'#fff'} mr={'10px'} className='showFormBox' onClick={() => setShowBox(!showBox)}>
-                                        <Icon as={MdAdd} />
-                                    </Button>
-                                    {showBox ?
-                                        <Box position={'absolute'} background={'#fff'} p={'10px'} top={'55px'} left={'0px'} boxShadow={'1px 1px 17px #69627914'} borderRadius={'8px'} zIndex={9} className='showBox'>
-                                            <List cursor={'pointer'}>
-                                                <ListItem onClick={() => handleNDI('Note')} p={'10px'} display={'flex'} alignItems={'center'} borderBottom={'2px solid #f1f1f170'} ><Icon as={MdOutlineStickyNote2} mr={'10px'} color={'#3311db'} />Note</ListItem>
-                                                <ListItem onClick={() => handleNDI('Dialog')} p={'10px'} display={'flex'} alignItems={'center'} borderBottom={'2px solid #f1f1f170'} ><Icon as={TbMessages} mr={'10px'} color={'#3311db'} />Dialog</ListItem>
-                                                <ListItem onClick={() => handleNDI('Interaction')} p={'10px'} display={'flex'} alignItems={'center'}><Icon as={TbHandClick} mr={'10px'} color={'#3311db'} />Interaction</ListItem>
-                                            </List>
-                                        </Box> : null}
-                                </Flex>
-                                <Box className='up-next-count' mr={'10px'} fontSize={'17px'} color={'#1b2559'} fontWeight={'700'}>{upNext}</Box>
-                                <Box mr={'10px'} display={'flex'}>
-                                    <form onSubmit={(e: any) => handleSubmit(e)}>
-                                        <Box display={'flex'}>
-                                            <InputField onChange={(e: any) => handleFieldBlock(e)} value={blockInput} placeholder='Type "/" to insert Blocks' />
-                                            <Text color={'#bcbcbc'}>{notify}</Text>
-                                        </Box>
-                                    </form>
-                                </Box>
-                            </Box>
-                            <Box>
-                                {/* {items && <Button bg={'#3311db'} _hover={{ bg: '#3311db' }} color={'#fff'} mr={'10px'} onClick={handleSave}>Save</Button>} */}
-                                {/* {items && <Button bg={'#3311db'} _hover={{ bg: '#3311db' }} color={'#fff'} mr={'10px'} onClick={handleGet}>get</Button>} */}
-                            </Box>
-                        </Flex>
-                    </Box>
-
-                    <Box className='bottom-block' display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                        {/* <Text mr={'30px'} fontWeight={'600'} fontSize={'17px'}>Add Block : </Text> */}
-                        <Box mr={'20px'} p={'20px'} h={'60px'} w={'60px'} color={'#3311db'} display={'grid'} placeItems={'center'} borderRadius={'100px'} boxShadow={'1px 3px 10px #6565641f'} cursor={'pointer'} filter={'drop-shadow(4px 5px 8px #8080807d)'} _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }} onClick={() => handleBottomNDI('Note')}>
-                            <Icon as={MdOutlineStickyNote2} fontSize={'23px'} />
-                        </Box>
-                        <Box mr={'20px'} p={'20px'} h={'60px'} w={'60px'} color={'#3311db'} display={'grid'} placeItems={'center'} borderRadius={'100px'} boxShadow={'1px 3px 10px #6565641f'} cursor={'pointer'} filter={'drop-shadow(4px 5px 8px #8080807d)'} _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }} onClick={() => handleBottomNDI('Dialog')}>
-                            <Icon as={TbMessages} fontSize={'23px'} />
-                        </Box>
-                        <Box mr={'20px'} p={'20px'} h={'60px'} w={'60px'} color={'#3311db'} display={'grid'} placeItems={'center'} borderRadius={'100px'} boxShadow={'1px 3px 10px #6565641f'} cursor={'pointer'} filter={'drop-shadow(4px 5px 8px #8080807d)'} _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }} onClick={() => handleBottomNDI('Interaction')}>
-                            <Icon as={TbHandClick} fontSize={'23px'} />
-                        </Box>
-                        {/* <Text mr={'30px'} fontWeight={'600'} fontSize={'17px'}>Add Block : </Text>
+            <Box
+              className="bottom-block"
+              display={'flex'}
+              justifyContent={'center'}
+              alignItems={'center'}
+            >
+              {/* <Text mr={'30px'} fontWeight={'600'} fontSize={'17px'}>Add Block : </Text> */}
+              <Box
+                mr={'20px'}
+                p={'20px'}
+                h={'60px'}
+                w={'60px'}
+                color={'#3311db'}
+                display={'grid'}
+                placeItems={'center'}
+                borderRadius={'100px'}
+                boxShadow={'1px 3px 10px #6565641f'}
+                cursor={'pointer'}
+                filter={'drop-shadow(4px 5px 8px #8080807d)'}
+                _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
+                onClick={() => handleBottomNDI('Note')}
+              >
+                <Icon as={MdOutlineStickyNote2} fontSize={'23px'} />
+              </Box>
+              <Box
+                mr={'20px'}
+                p={'20px'}
+                h={'60px'}
+                w={'60px'}
+                color={'#3311db'}
+                display={'grid'}
+                placeItems={'center'}
+                borderRadius={'100px'}
+                boxShadow={'1px 3px 10px #6565641f'}
+                cursor={'pointer'}
+                filter={'drop-shadow(4px 5px 8px #8080807d)'}
+                _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
+                onClick={() => handleBottomNDI('Dialog')}
+              >
+                <Icon as={TbMessages} fontSize={'23px'} />
+              </Box>
+              <Box
+                mr={'20px'}
+                p={'20px'}
+                h={'60px'}
+                w={'60px'}
+                color={'#3311db'}
+                display={'grid'}
+                placeItems={'center'}
+                borderRadius={'100px'}
+                boxShadow={'1px 3px 10px #6565641f'}
+                cursor={'pointer'}
+                filter={'drop-shadow(4px 5px 8px #8080807d)'}
+                _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
+                onClick={() => handleBottomNDI('Interaction')}
+              >
+                <Icon as={TbHandClick} fontSize={'23px'} />
+              </Box>
+              {/* <Text mr={'30px'} fontWeight={'600'} fontSize={'17px'}>Add Block : </Text>
                     <Box mr={'20px'} p={'20px'}  display={'grid'} placeItems={'center'} borderRadius={'10px'} boxShadow={'1px 3px 10px #6565641f'} cursor={'pointer'} filter={'drop-shadow(4px 5px 8px #8080807d)'} _hover={{boxShadow: '#7090b01a 0px 18px 22px inset'}} onClick={()=>handleBottomNDI('Note')}>
                         Notes
                     </Box>
@@ -1958,13 +2511,12 @@ console.log('setDialogNavigation',menuvalue)
                     <Box mr={'20px'} p={'20px'}  display={'grid'} placeItems={'center'} borderRadius={'10px'} boxShadow={'1px 3px 10px #6565641f'} cursor={'pointer'} filter={'drop-shadow(4px 5px 8px #8080807d)'} _hover={{boxShadow: '#7090b01a 0px 18px 22px inset'}} onClick={()=>handleBottomNDI('Interaction')}>
                         Interaction
                     </Box> */}
-                    </Box>
-                </Card>
             </Box>
-           f
-            {/* <OnToast msg={'Drag Your Accordion'} status={'info'} setAlert={setAlert} position={'top-right'} /> */}
-        </>
-    )
+          </Card>
+        </Box>
+        {/* <OnToast msg={'Drag Your Accordion'} status={'info'} setAlert={setAlert} position={'top-right'} /> */}
+      </>
+    );
 }
 
 
