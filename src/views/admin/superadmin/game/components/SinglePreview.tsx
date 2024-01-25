@@ -993,7 +993,7 @@ console.log('previous datas inside the dramp',prevdata);
               </Box>
             )}
           </Flex>
-          <Menu closeOnSelect={false}>
+          {/* <Menu closeOnSelect={false}>
             <MenuButton
               p="0px"
               bg={'brandScheme'}
@@ -1063,7 +1063,7 @@ console.log('previous datas inside the dramp',prevdata);
                 </Box>
               </MenuItem>
             </MenuList>
-          </Menu>
+          </Menu> */}
         </ModalBody>
       </ModalContent>
     </Modal>

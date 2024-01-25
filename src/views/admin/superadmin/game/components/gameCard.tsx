@@ -75,14 +75,16 @@ export default function NFT(props: {
   };
 
   useEffect(() => {
-   
     gameSkill();
     if(author){
-      const Array = author.split(',');
-      setauthorArray(Array)
+      if(!Array.isArray(author)){
+        const Array = author.split(',');
+        setauthorArray(Array);
+      }
+      else if(Array.isArray(author)){
+        setauthorArray(author);
+      }
     }
-    
-    
   },[]);
 
   

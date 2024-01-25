@@ -123,8 +123,8 @@ const CompletionScreen: React.FC<{
               alignItems={'flex-start'}
             >
               <Box w={'60%'} className="content" textAlign={'center'}>
-                <Text>{compliData[CompKeyCount]?.gameScreenTitle}</Text>
-                <Box>
+                <Text fontFamily={'AtlantisText'} color={'#D9C7A2'}>{compliData[CompKeyCount]?.gameScreenTitle}</Text>
+                <Box fontFamily={'AtlantisText'} color={'#D9C7A2'}>
                   {compliData[CompKeyCount]?.gameCompletedCongratsMessage}
                   {compliData[CompKeyCount]
                     ?.gameIsSetCongratsScoreWiseMessage === 'true' && (
@@ -155,7 +155,8 @@ const CompletionScreen: React.FC<{
                       position={'absolute'}
                       top={'10px'}
                       left={'100px'}
-                      fontFamily={'content'}
+                      fontFamily={'AtlantisText'} 
+                      color={'black'}
                     >
                       points
                     </Text>
@@ -171,7 +172,8 @@ const CompletionScreen: React.FC<{
                         position={'absolute'}
                         top={'40px'}
                         left={'90px'}
-                        fontFamily={'content'}
+                        fontFamily={'AtlantisText'} 
+                        color={'black'}
                       >
                         {(compliData[CompKeyCount]?.gameMinScore || 100) +
                           '/' +
@@ -186,7 +188,7 @@ const CompletionScreen: React.FC<{
                     preview) && (
                     <Box className="box-2">
                       <Img src={back} className="box-2_img" />
-                      <Text className="points-text" fontFamily={'content'}>
+                      <Text className="points-text" fontFamily={'AtlantisText'} >
                         {compliData[CompKeyCount]?.gameBadgeName}
                       </Text>
                       {compliData[CompKeyCount]?.gameBadge && (

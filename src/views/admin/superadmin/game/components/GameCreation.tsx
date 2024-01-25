@@ -1,4 +1,3 @@
-
 import {
   Accordion,
   AccordionButton,
@@ -58,6 +57,7 @@ import {
   GoDotFill,
   GoCodeReview,
 } from 'react-icons/go';
+import pro from 'assets/img/crm/pro.png';
 import Card from 'components/card/Card';
 import InputField from 'components/fields/InputField';
 import TextField from 'components/fields/TextField';
@@ -152,6 +152,7 @@ import tableDataCheck from 'views/admin/dashboards/rtl/variables/tableDataCheck'
 import EntirePreview from './EntirePreview';
 import { AiFillMessage } from 'react-icons/ai';
 import SinglePreview from './SinglePreview';
+import { getAllReviews } from 'utils/reviews/reviews';
 const steps = [
   { title: 'BackGround' },
   { title: 'Non Playing Charater' },
@@ -471,11 +472,12 @@ const GameCreation = () => {
       gameAboveDistinctionScoreCongratsMessage: null,
     },
   });
+  const [reviews, setReviews] = useState<any[]>([]);
   const [Completion, setCompletion] = useState<any>({});
   const [selectedBadge, setSelectedBadge] = useState(null);
   const [CompKeyCount, setCompKeyCount] = useState<any>(0);
   const [prevdata, setPrevdata] = useState();
-  const [gameId,setGameId] = useState();
+  const [gameId, setGameId] = useState();
   const { id } = useParams();
   const inputRef = useRef<HTMLButtonElement>(null);
   const [voices, setVoices] = useState([]);
@@ -487,6 +489,7 @@ const GameCreation = () => {
       setVoices(result?.voices);
     }
   };
+  console.log('the reviews of the api data' ,reviews);
   ////////////////Over view //////////////
   const fetchDefaultSkill = async () => {
     const result = await getDefaultSkill(id);
@@ -553,9 +556,8 @@ const GameCreation = () => {
     setBackgroundIndex('');
   };
   {
-    
   }
-  
+
   const handlePreview = (img: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchImg((prev: any) => {
@@ -604,6 +606,9 @@ const GameCreation = () => {
     // console.log('BackgroundIndex--',backgroundIndex);
   };
   const fetchGameId = async () => {
+    const reviews = await getAllReviews(id);
+    if (reviews && reviews?.status !== 'Success') return console.log(reviews?.message);
+    setReviews(reviews?.reviewlist);
     const images = await getCreatorBlocks(id);
     if (images?.status !== 'Success') {
       console.log(images.message);
@@ -619,7 +624,7 @@ const GameCreation = () => {
     if (gameById?.status !== 'Success')
       return console.log('error:' + gameById?.message);
     setDefaultstatus(true);
-   setGameId(gameById?.data?.gameId);
+    setGameId(gameById?.data?.gameId);
     setFormData(gameById?.data);
 
     // const lastTab = gameById?.data?.gameLastTabArray[gameById.data.gameLastTabArray.length - 2];
@@ -1232,7 +1237,7 @@ const GameCreation = () => {
     }
     setOpenQuest(true);
   };
-  console.log('formdata', formData.gameLastTabArray);
+  
   const commonNextFunction = async () => {
     if (tab === 1 && !formData.gameBackgroundId) {
       toast({
@@ -3475,14 +3480,52 @@ const GameCreation = () => {
                         ? 'Design'
                         : 'Preference'}
                     </FormLabel>
-                    <Box w={'360px'}>
-                      <Text>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat.
-                      </Text>
+                    <Box w={'360px'} maxH={'50vh'} overflowY={'scroll'}>
+                      {reviews[tab] && reviews[tab]?.length !== 0 ? (
+                        reviews[tab].map((it:any,ind:number)=>(<>
+                          <Box
+                            w={'100%'}
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                          >
+                            <Box
+                              w={'100%'}
+                              display={'flex'}
+                              //   h={'50px'}
+                              alignItems={'center'}
+                            >
+                              <Img
+                                src={pro}
+                                w={'40px'}
+                                h={'40px'}
+                                alt="pro"
+                                borderRadius={'50%'}
+                              />
+                              <Text ml={'15px'}>User8695</Text>
+                            </Box>
+
+                            <Box whiteSpace={'nowrap'}>
+                              <Text fontSize={'14'}>Posted On :12-10-23</Text>
+                            </Box>
+                          </Box>
+                          <Box mb={'10px'} mt={'10px'}>
+                          {it?.review}
+                          </Box>
+                        </>))
+                      ) : (
+                        <Box mb={'10px'} mt={'10px'}>
+                          No FeedBack For{' '}
+                          {tab === 1
+                            ? 'BackGround'
+                            : tab === 2
+                            ? 'Non Playing Character'
+                            : tab === 3
+                            ? 'Overview'
+                            : tab === 5
+                            ? 'Design'
+                            : 'Preference'}
+                        </Box>
+                      )}
                     </Box>
                   </FormControl>
                   <MenuItem>
@@ -3511,7 +3554,6 @@ const GameCreation = () => {
               <Card
                 display={'flex'}
                 justifyContent={tab === 1 || tab === 2 ? 'end' : 'flex-end'}
-               
                 flexDirection="row"
                 h="95px"
                 w="500px"
@@ -3521,13 +3563,11 @@ const GameCreation = () => {
                 right={'8px'}
                 zIndex={99}
                 background={'#0000 !important'}
-        
               >
                 <Menu isOpen={isOpen1} onClose={onClose1}>
                   <MenuButton
                     alignItems="center"
                     justifyContent="center"
-                  
                     w="37px"
                     h="37px"
                     lineHeight="100%"
@@ -3553,7 +3593,6 @@ const GameCreation = () => {
                     minW="unset"
                     maxW="150px !important"
                     border="transparent"
-                    
                     borderRadius="20px"
                     bg="transparent"
                     p="15px"
@@ -3715,6 +3754,14 @@ const GameCreation = () => {
                 tableData={tableDataCheck}
               />
             )}
+            {/* {share && tableDataCheck && (
+              <ShareReviewTable
+                isOpen={isOpen}
+                onClose={onClose}
+                onOpen={onOpen}
+                tableData={tableDataCheck}
+              />
+            )} */}
             {entire && (
               <SinglePreview
                 tab={tab}
@@ -3738,7 +3785,6 @@ const GameCreation = () => {
                 reflectionQuestionsdefault={reflectionQuestionsdefault}
               />
             )}
-
             <Button
               bg="#11047a"
               _hover={{ bg: '#190793' }}

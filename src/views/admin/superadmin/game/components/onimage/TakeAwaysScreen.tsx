@@ -122,7 +122,7 @@ const TakewayScreen: React.FC<{
                   const contentAfterBullet =
                     bulletIndex !== -1 ? it.slice(bulletIndex + 1).trim() : it;
                   return (
-                    <Box className="content">
+                    <Box className="content" fontFamily={'AtlantisText'} color={'#D9C7A2'}>
                       <>
                         <Img
                           src={bull}

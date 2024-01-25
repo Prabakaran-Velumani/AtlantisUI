@@ -484,6 +484,7 @@ export async function UpdateCompletionScreen(id,data) {
     console.log('getCreator Error:', err);
   }
 }
+
 export async function getStoryValidtion(id) {
   try {
     const response = await fetch(`${API_SERVER}${urls.getStoryValidtion}${id}`,getMethod);

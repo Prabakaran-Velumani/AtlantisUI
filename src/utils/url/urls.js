@@ -142,7 +142,10 @@ export const urls = {
    getCreatedLanguages:'/languages/getcreatedlanguages',
    updatelanguages:'/languages/updatelanguages',
 
+    /****************************Reviews ********************************/
+
    addReviews:'/gamereview/addreviewers',
+   getAllReviews:'/gamereview/getblockreviewlist/',
 };
 
 const person = localStorage.getItem('user');
