@@ -273,12 +273,7 @@ const CompletionScreen: React.FC<{
                   <Img
                     className="inside-img"
                     src={imgb}
-                    // ml={'23px'}
-                    // mt={'2px'}
-                    // borderRadius={'10px'}
-                    // w={'50px'}
-                    // h={'50px'}
-                    // alt="Selected Badge Image"
+                   
                   />
                 )}{' '}
               </Box>

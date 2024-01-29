@@ -116,7 +116,7 @@ export const urls = {
   defaultskill:'/game/defaultskill/', 
   createReflection:'/question/createreflection',
   getReflection:'/question/getReflection/',
-  storyInsterting :'/game/stroy/',
+  storyInsterting :'/game/stroy/', 
   getStory:'/game/getstroy/',
   gameBlocks:'/game/getBlocks/',
   listStory:'/game/liststroy/',

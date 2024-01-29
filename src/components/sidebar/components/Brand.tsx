@@ -12,6 +12,19 @@ export function SidebarBrand(props: { mini: boolean; hovered: boolean }) {
 
   return (
     <Flex alignItems="center" flexDirection="column" p={'0px'} mb={'20px'}>
+      {/* <HorizonLogo
+        h="26px"
+        w="175px"
+        my="32px"
+        color={logoColor}
+        display={
+          mini === false
+            ? 'block'
+            : mini === true && hovered === true
+            ? 'block'
+            : 'none'
+        }
+      /> */}
       {/* <Text fontSize={20} fontWeight={600} mb='20px' letterSpacing={'2px'} >ATLANTIS</Text> */}
       <Text fontSize={25} fontWeight={800}  letterSpacing={'2px'} color={'#fff'} mr={'7px'} >ATLANTIS</Text>
       <Text

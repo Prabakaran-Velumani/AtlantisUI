@@ -1,3 +1,4 @@
+// ALTER TABLE `lmsgame` ADD `gameQuestNo` INT(100) NULL AFTER `gameId`;
 import {
   Accordion,
   AccordionButton,
@@ -94,6 +95,7 @@ import {
   getCompletionScreen,
   UpdateCompletionScreen,
   getTotalMinofWords,
+  getStoryValidtion,
 } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
 import AboutStory from './AboutStory';
@@ -183,7 +185,7 @@ const GameCreation = () => {
   const [openQuest, setOpenQuest] = useState(false);
   const [input, setInput] = useState<any>({});
   const [items, setItems] = useState<any>([]);
-  const [alphabet, setAlphabet] = useState<MyObject[]>([]);
+  const [alphabet, setAlphabet] = useState<any>([]);
   const [showFunction, setShowFunction] = useState<any>('');
   const [interactionBlock, setInteractionBlock] = useState<any>();
 
@@ -192,7 +194,7 @@ const GameCreation = () => {
   const [sequence, setSequence] = useState<any>([]);
   const [dummySequence, setDummySequence] = useState<any>([]);
   //////////////////navin/////////////////////////
-  const [BlockItems, setBlockItems] = useState(null);
+  const [BlockItems, setBlockItems] = useState<any>(null);
   const [isDeleteSeq, setDeleteseq] = useState<any>(false);
   const reflectionQuestionsdefault = [
     'What were your biggest learnings?',
@@ -212,6 +214,7 @@ const GameCreation = () => {
   const [listQuest, setListQuest] = useState(null);
   const [serias, setserias] = useState(1);
   const [targetSequence, setTargetSequence] = useState<any>();
+  const [copySequence, setCopySequence] = useState<any>();
   const [badge, setBadge] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
@@ -325,6 +328,9 @@ const GameCreation = () => {
   const [previewId, setPreviewId] = useState(null);
   //navin
   const [fetchImg, setFetchImg] = useState<any>(''),
+    [upNextCount, setUpNextCount] = useState<any>([]),
+    [upNext, setUpNext] = useState<any>(),
+    [number, setNumber] = useState<any>([]),
     [fetchPlayerImg, setFetchPlayerImg] = useState<any>(''),
     [selectedPlayer, setSelectedPlayer] = useState<any>(''),
     [backgroundIndex, setBackgroundIndex] = useState<any>(),
@@ -339,6 +345,7 @@ const GameCreation = () => {
     [share, setShare] = useState(false),
     [bgIndex, setBgIndex] = useState<number>(),
     [formData, setFormData] = useState({
+      gameQuestNo: null,
       gameCategoryId: null,
       gameabstract: null,
       gameBibliography: null,
@@ -347,7 +354,6 @@ const GameCreation = () => {
       gameBackgroundId: null,
       gameCourseType: 'Public',
       gameNonPlayingCharacterId: null,
-      gameQuestNo: null,
       //navin
       gameNonPlayerName: null,
       gameNonPlayerVoice: null,
@@ -415,7 +421,8 @@ const GameCreation = () => {
       gameTrackQuestionWiseAnswers: 'false',
       gameDisableLearnerMailNotifications: 'false',
       gameIntroMusic: null,
-      gameGameStage: '',
+      gameIntroMusicName: null,
+      gameGameStage: 'Creation',
       gameCompletionScreenId: null,
       gameLeaderboardScreenId: null,
       // gameReflectionPageId: null,
@@ -450,9 +457,7 @@ const GameCreation = () => {
     0: {
       gameQuestNo: null,
 
-      gameTotalScore: {
-        maxScore: 0,
-      },
+      gameTotalScore: 0,
       gameIsSetMinPassScore: null,
       gameMinScore: null,
       gameIsSetDistinctionScore: null,
@@ -478,6 +483,7 @@ const GameCreation = () => {
   const [CompKeyCount, setCompKeyCount] = useState<any>(0);
   const [prevdata, setPrevdata] = useState();
   const [gameId, setGameId] = useState();
+  const [reviewers, setReviewers] = useState<any[]>([]);
   const { id } = useParams();
   const inputRef = useRef<HTMLButtonElement>(null);
   const [voices, setVoices] = useState([]);
@@ -489,7 +495,11 @@ const GameCreation = () => {
       setVoices(result?.voices);
     }
   };
-  console.log('the reviews of the api data' ,reviews);
+  let menuBg = useColorModeValue('white', 'navy.800');
+  const shadow = useColorModeValue(
+    '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
+    '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
+  );
   ////////////////Over view //////////////
   const fetchDefaultSkill = async () => {
     const result = await getDefaultSkill(id);
@@ -497,6 +507,7 @@ const GameCreation = () => {
       return console.log('getSkills Error :', result?.error);
     // console.log('getSkills',result?.data)
     if (result?.data) {
+      console.log('result.data', result?.data);
       setDefaultSkills(result?.data);
     } else {
       setDefaultSkills([]);
@@ -538,6 +549,10 @@ const GameCreation = () => {
       setAudioInPage();
     }
     setFormData((prev) => ({ ...prev, gameLastTab: tab }));
+
+    if (tab == 5) {
+      handleCompletionScreen(1);
+    }
   }, [tab]);
   const handleBackGroundImage = (e: any) => {
     setFormData((prev) => ({
@@ -556,8 +571,9 @@ const GameCreation = () => {
     setBackgroundIndex('');
   };
   {
+    /****************************************************/
   }
-
+  //////Changes-14/Dec/23//////////////////////
   const handlePreview = (img: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchImg((prev: any) => {
@@ -606,9 +622,12 @@ const GameCreation = () => {
     // console.log('BackgroundIndex--',backgroundIndex);
   };
   const fetchGameId = async () => {
-    const reviews = await getAllReviews(id);
-    if (reviews && reviews?.status !== 'Success') return console.log(reviews?.message);
-    setReviews(reviews?.reviewlist);
+    const review = await getAllReviews(id);
+    if (review && review?.status !== 'Success')
+      return console.log(review?.message);
+    setReviewers(review?.reviewerDetails);
+    setReviews(review?.reviewlist);
+    console.log('you should read this reviews', review?.reviewlist[4]);
     const images = await getCreatorBlocks(id);
     if (images?.status !== 'Success') {
       console.log(images.message);
@@ -624,14 +643,19 @@ const GameCreation = () => {
     if (gameById?.status !== 'Success')
       return console.log('error:' + gameById?.message);
     setDefaultstatus(true);
-    setGameId(gameById?.data?.gameId);
     setFormData(gameById?.data);
-
     // const lastTab = gameById?.data?.gameLastTabArray[gameById.data.gameLastTabArray.length - 2];
     // const lastTab = gameById?.data?.gameLastTabArray[gameById.data.gameLastTabArray.length - 2];
     const stringContainingNumbers = gameById?.data?.gameLastTabArray;
     const stringGameLastTab = gameById?.data?.gameLastTab;
     // alert(stringGameLastTab);
+    if (
+      gameById?.data?.gameGameStage === null ||
+      gameById?.data?.gameGameStage === ''
+    ) {
+      alert(gameById?.data?.gameGameStage);
+      setFormData((prev) => ({ ...prev, gameGameStage: 'Creation' }));
+    }
     if (stringGameLastTab === 111) {
       setTab(1);
       setFormData((prev) => ({ ...prev, gameLastTab: 1 }));
@@ -654,8 +678,8 @@ const GameCreation = () => {
 
     const storedReflection = await getReflection(id);
     if (storedReflection?.status !== 'Success')
-      return alert('error:' + gameById?.message);
-    console.log('storedReflection', storedReflection.data);
+      // return alert('error:' + gameById?.message);
+      console.log('storedReflection', storedReflection.data);
 
     setReflectionQuestions(storedReflection.data);
     setAtuoSave(true);
@@ -673,7 +697,7 @@ const GameCreation = () => {
       };
       const result = await getStory(id, JSON.stringify(data));
 
-      if (result?.status === 'Success') {
+      if (result?.status !== 'Success') {
         return console.log('updateBackground error :' + result?.err);
       } else {
         setserias(result.serias);
@@ -691,21 +715,14 @@ const GameCreation = () => {
           setSequence(sequance);
           setDummySequence(sequance);
           // console.log('result.maxInput',result.maxInput)
-          setTimeout(() => {
-            setItems(itemsArray);
-          }, 1000);
-          setTimeout(() => {
-            setInput(result.input);
-          }, 1200);
-          setTimeout(() => {
-            setAlphabet(Object.values(result.alp));
-          }, 1400);
-          setTimeout(() => {
-            setInteractionBlock(result.intra);
-          }, 1500);
-          setTimeout(() => {
-            setBlockItems(result.items);
-          }, 1600);
+
+          setItems(itemsArray);
+
+          setInput(result.input);
+
+          setAlphabet(Object.values(result.alp));
+          setInteractionBlock(result.intra);
+          setBlockItems(result.items);
         } else {
           console.log('else part');
           setItems([]);
@@ -717,7 +734,7 @@ const GameCreation = () => {
         }
         setTimeout(() => {
           setAtuoSave(true);
-        }, 5000);
+        }, 2000);
 
         // const itemsData = Object.values(itemsArray)
         // const itemDataArr = itemsData.map((item: any) => item)
@@ -742,7 +759,7 @@ const GameCreation = () => {
   };
   const handleCompletionScreen = async (quest: number) => {
     setAtuoSave(false);
-    console.log('handleGet');
+
     // return false;
     try {
       const data = {
@@ -751,12 +768,16 @@ const GameCreation = () => {
       const result = await getCompletionScreen(id, JSON.stringify(data));
 
       if (result?.status !== 'Success') {
+        setAtuoSave(true);
         console.log('updateBackground error :' + result?.err);
         return false;
       } else {
         setCompletion(result?.data);
         setCompliData(result?.data);
-        console.log('Completion', Object.keys(Completion).length);
+        console.log('Completion', Object.keys(result?.data).length);
+        setCompKeyCount(Object.keys(result?.data).length - 1);
+        setCurrentTab(0);
+        console.log('handleGet');
         setAtuoSave(true);
       }
     } catch (error) {
@@ -798,7 +819,7 @@ const GameCreation = () => {
   const fetchGameIdUpdate = async () => {
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
-      return alert('error:' + gameById?.message);
+      console.log('error:' + gameById?.message);
 
     const storedSelectedIndex = localStorage.getItem('selectedCardIndex');
     if (storedSelectedIndex !== null) {
@@ -830,7 +851,7 @@ const GameCreation = () => {
     const result2 = await getListStory(id);
 
     if (result2?.status !== 'Success') {
-      console.log(result2.message);
+      console.log(result2?.message);
     } else {
       setListBlockItems(result2.BlockObject);
       console.log('result2.gameIn', result2.gameIn);
@@ -847,6 +868,7 @@ const GameCreation = () => {
       handleGet(1);
       fetchBlockCount();
       setExtensiveNavigation(null);
+      handleCompletionScreen(1);
     }
   }, [id]);
   useEffect(() => {
@@ -1173,30 +1195,25 @@ const GameCreation = () => {
     }
 
     // if (tab != tabs) {
-
     //   if (formData.gameLastTabArray.includes(tabs)) {
     //     setTab(tabs);
-
     //   } else {
     //     console.log('tabs2', tabs);
     //     const stringContainingNumbers = formData.gameLastTabArray;
     //     if (typeof stringContainingNumbers === 'string') {
-
     //       const numbersArray = (stringContainingNumbers as string).match(/\d+/g);
     //       const lastValue = numbersArray ? parseInt(numbersArray[numbersArray.length - 1], 10) : null;
-
     //       if (tabs === lastValue + 1) {
     //         setTab(tabs);
     //       }
     //     }
-
     //   }
     // }
   };
   ///navin 15-12
 
   //navin
-  const handleNext = () => {
+  const handleNext = async () => {
     const selectedOptions = [
       formData.gameContent,
       formData.gameRecommendation,
@@ -1235,9 +1252,39 @@ const GameCreation = () => {
         return false;
       }
     }
-    setOpenQuest(true);
+    let data = JSON.stringify(formData);
+    // alert("cn"+tab);
+    const result = await updateGame(id, data);
+    if (result?.status !== 'Success') {
+      toast({
+        title: 'Data Not Updated.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return console.log('updateBackground error :' + result?.err);
+    }
+    if (tab === 5 && result.status === 'Success') {
+      // alert("comnex"+tab);
+      // setOpenQuest(true);
+      toast({
+        title: 'All Screens are Updated',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
+
+      const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
+      setFormData(formDataWithoutLastTab);
+
+      // setTab(tab + 1);
+      // setTimeout(() => {
+
+      setOpenQuest(true);
+    }
   };
-  
+  console.log('formdata', formData.gameLastTabArray);
   const commonNextFunction = async () => {
     if (tab === 1 && !formData.gameBackgroundId) {
       toast({
@@ -1249,7 +1296,7 @@ const GameCreation = () => {
       return false;
     }
     if (tab === 2) {
-      console.log('formdata', formData);
+      console.log('formdata', formData.gameLastTabArray);
       if (!formData.gameNonPlayerName) {
         toast({
           title: 'Please Enter a NonplayerName.',
@@ -1513,6 +1560,21 @@ const GameCreation = () => {
                 }
               }
             }
+
+            const apiValidationResult = await getStoryValidtion(id);
+
+            console.log('apiValidationResult', apiValidationResult);
+
+            if (apiValidationResult?.status === 'Failure') {
+              // There are empty fields, show an error message
+              toast({
+                title: ` ${apiValidationResult?.message}`,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+              });
+              return false;
+            }
           }
         } else {
           toast({
@@ -1583,6 +1645,7 @@ const GameCreation = () => {
               gameLastTabArray: parsedGameLastTabArray,
             });
             navigate(`/admin/superadmin/game/creation/${result.data.gameId}`);
+            //  window.location.reload();
           }
         }
       } catch (error) {
@@ -1665,20 +1728,20 @@ const GameCreation = () => {
           // setFormData((prev)=>({...prev,gameLastTab:formData.gameLastTab+1}));
         }
 
-        if (tab === 5 && result.status === 'Success') {
-          toast({
-            title: 'Score Updated',
-            status: 'success',
-            duration: 3000,
-            isClosable: true,
-            position: 'bottom-right',
-          });
-          const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
-          setFormData(formDataWithoutLastTab);
-          setTab(tab + 1);
+        // if (tab === 5 && result.status === 'Success') {
+        //   toast({
+        //     title: 'Score Updated',
+        //     status: 'success',
+        //     duration: 3000,
+        //     isClosable: true,
+        //     position: 'bottom-right',
+        //   });
+        //   const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
+        //   setFormData(formDataWithoutLastTab);
+        //   setTab(tab + 1);
 
-          // setFormData((prev)=>({...prev,gameLastTab:formData.gameLastTab+1}));
-        }
+        //   // setFormData((prev)=>({...prev,gameLastTab:formData.gameLastTab+1}));
+        // }
 
         if (tab === 6 && result.status === 'Success') {
           toast({
@@ -2018,7 +2081,8 @@ const GameCreation = () => {
     console.log('formData', selectedOption.value);
   };
 
-  const myBlink = keyframes`0% {
+  const myBlink = keyframes`
+  0% {
     filter: drop-shadow(2px 4px 6px #0000);
   }
   50% {
@@ -2037,18 +2101,20 @@ const GameCreation = () => {
     'white',
     'linear-gradient(180deg, #1F2A4F 0%, #18224D 50.63%, #111C44 100%)',
   );
-  const completeShadow = useColorModeValue(
-    '0px 18px 40px rgba(112, 144, 176, 0.12)',
-    'inset 0px 4px 4px rgba(255, 255, 255, 0.2)',
-  );
+  // const completeShadow = useColorModeValue(
+  //   '0px 18px 40px rgba(112, 144, 176, 0.12)',
+  //   'inset 0px 4px 4px rgba(255, 255, 255, 0.2)',
+  // );
   const incompleteColor = useColorModeValue(
     'secondaryGray.600',
     'whiteAlpha.200',
   );
-  const incompleteShadow = useColorModeValue(
-    'inset 0px 18px 22px rgba(112, 144, 176, 0.1)',
-    'inset 0px 4px 4px #0B1437',
-  );
+  const completeShadow = 'rgba(112, 144, 176, 0.1) 0px 18px 22px inset';
+  const incompleteShadow = 'rgba(112, 144, 176, 0.12) 0px 18px 40px';
+  // const incompleteShadow = useColorModeValue(
+  //   'inset 0px 18px 22px rgba(112, 144, 176, 0.1)',
+  //   'inset 0px 4px 4px #0B1437',
+  // );
   const lineColor = useColorModeValue('%23a3aed0', '%23FFFFFF1A');
   console.log(formData.gameLastTabArray);
   // SET BORDER IN IMAGE
@@ -2068,7 +2134,7 @@ const GameCreation = () => {
       ? stepImgActiveBorder
       : stepImgBorder;
   const tab4 =
-    formData && formData?.gameLastTabArray?.includes(4) && intercount > 0
+    formData && formData?.gameLastTabArray?.includes(4)
       ? stepImgActiveBorder
       : stepImgBorder;
   const tab5 =
@@ -2098,13 +2164,19 @@ const GameCreation = () => {
   // SET ACTIVE STATUS BASED ON TAB
   const stepIconActiveColor = completeShadow;
   const stepIconColor = incompleteShadow;
-  const stepPoseIcon = tab >= 2 ? stepIconActiveColor : stepIconColor;
-  const stepAboutStoryIcon =
-    tab >= 3 && intercount > 0 ? stepIconActiveColor : stepIconColor;
-  const stepBlockIcon = tab >= 4 ? stepIconActiveColor : stepIconColor;
-  const stepScoreIcon = tab >= 5 ? stepIconActiveColor : stepIconColor;
-  const stepSummariesIcon = tab >= 6 ? stepIconActiveColor : stepIconColor;
-  const stepCompleteIcon = tab >= 7 ? stepIconActiveColor : stepIconColor;
+  // const stepPoseIcon = tab >= 2 ? stepIconActiveColor : stepIconColor;
+  // const stepAboutStoryIcon = tab >= 3 && intercount > 0  ? stepIconActiveColor : stepIconColor;
+  // const stepBlockIcon = tab >= 4  ? stepIconActiveColor : stepIconColor;
+  // const stepScoreIcon = tab >= 5 ? stepIconActiveColor : stepIconColor;
+  // const stepSummariesIcon = tab >= 6 ? stepIconActiveColor : stepIconColor;
+  // const stepCompleteIcon = tab >= 7 ? stepIconActiveColor : stepIconColor;
+
+  const stepPoseIcon = tab === 1 ? stepIconActiveColor : stepIconColor;
+  const stepAboutStoryIcon = tab === 2 ? stepIconActiveColor : stepIconColor;
+  const stepBlockIcon = tab === 3 ? stepIconActiveColor : stepIconColor;
+  const stepScoreIcon = tab === 4 ? stepIconActiveColor : stepIconColor;
+  const stepSummariesIcon = tab === 5 ? stepIconActiveColor : stepIconColor;
+  const stepCompleteIcon = tab === 6 ? stepIconActiveColor : stepIconColor;
 
   // SET ACTIVE CHECK BASED ON TAB
   const stepCheckActiveColor = brandColor;
@@ -2124,12 +2196,11 @@ const GameCreation = () => {
     : tab === 3
     ? 'brand.500'
     : stepCheckColor;
-  const stepBlockCheck =
-    formData?.gameLastTabArray?.includes(4) && intercount > 0
-      ? stepCheckActiveColor
-      : tab === 4
-      ? 'brand.500'
-      : stepCheckColor;
+  const stepBlockCheck = formData?.gameLastTabArray?.includes(4)
+    ? stepCheckActiveColor
+    : tab === 4
+    ? 'brand.500'
+    : stepCheckColor;
   const stepScoreCheck = formData?.gameLastTabArray?.includes(5)
     ? stepCheckActiveColor
     : tab === 5
@@ -2403,8 +2474,20 @@ const GameCreation = () => {
 
   useEffect(() => {
     if (id && autosave) {
-      if (formData) {
-        let data = JSON.stringify(formData);
+      // if (formData) {
+
+      //   let data = JSON.stringify(formData);
+
+      //   debouncedSubmitGame(data);
+      //   setExtensiveNavigation(null);
+      // }
+      if (formData && formData.gameQuestNo) {
+        const newFormData = { ...formData };
+        delete newFormData['gameLastTabArray'];
+        delete newFormData['gameLastTab'];
+        let data = JSON.stringify(newFormData);
+        // let data = JSON.stringify(formData);
+        //alert("de"+tab);
         debouncedSubmitGame(data);
         setExtensiveNavigation(null);
       }
@@ -2494,6 +2577,197 @@ const GameCreation = () => {
   }, [items]);
 
   // onClick Func
+  const duplicateSeq = (seq: any, i: any, name: any) => {
+    // const id = `${Math.floor(count / 10) + 1}.${count % 10 || 1}`;
+    // const upNext = `${Math.floor(count / 10) + 1}.${(count + 1) % 10 || 1}`;
+    const sequencial = `${count / 10 + 1}`;
+    const upNextSequencial = `${(count + 1) / 10 + 1}`;
+    const floatRegex = /^[-+]?(\d*\.\d+|\.\d+)$/;
+    // const id = floatRegex.test(sequencial) ? sequencial : `${count / 10 + 1}.${0}`
+    // const upNext = floatRegex.test(upNextSequencial) ? upNextSequencial : `${(count + 1) / 10 + 1}.${0}`
+    const id = `${serias}.${count}`;
+    const upNext = `${serias}.${count + 1}`;
+    // setShowBox(true);
+    setUpNext(upNext);
+    setCount(count + 1);
+    const newArr = { id, type: name, upNext, input: count, questNo: serias };
+
+    setItems((prevArray: any) => {
+      const nextIndex = i + 1;
+      console.log('prevArray', newArr.input);
+      setNumber([...number, newArr.input]);
+      return [
+        ...prevArray.slice(0, nextIndex),
+        newArr,
+        ...prevArray
+          .slice(nextIndex)
+          .map((item: any) => ({ ...item, upNext: id })),
+      ];
+    });
+
+    setSequence([...sequence, id]);
+    setDummySequence([...dummySequence, id]);
+    setUpNextCount([...upNextCount, upNext]);
+    if (name === 'Interaction') {
+      const currentAlpha = alphabet
+        .slice()
+        //  .reverse() // Reverse the array to start searching from the end
+        .find((item: any) => item.seqs === id);
+      if (id !== currentAlpha?.seqs) {
+        let secondaryArray: any = [];
+        let makcount = countalphabet;
+
+        for (let i = 0; i < 3; i++) {
+          // Insert data into the array
+          let inc = makcount + i + 1;
+          console.log('secondaryArray', countalphabet, '--', inc);
+          secondaryArray.push(inc);
+        }
+        setAlphabetCount(secondaryArray[2]);
+        console.log('secondaryArray', secondaryArray);
+        setAlphabet((prev: any) => [
+          ...prev,
+          { seqs: id, option: 'A', secondaryId: secondaryArray[0] },
+          { seqs: id, option: 'B', secondaryId: secondaryArray[1] },
+          { seqs: id, option: 'C', secondaryId: secondaryArray[2] },
+        ]);
+      }
+    }
+    setInput((prevInput: any) => {
+      const noteKey = `Note${count}`;
+      const dialogKey = `Dialog${count}`;
+      const interactionKey = `Interaction${count}`;
+
+      // Previous Data Object
+      const oldNoteKey = prevInput?.[`Note${seq.input}`];
+      const oldDialogKey = prevInput?.[`Dialog${seq.input}`];
+      const oldInteractionKey = prevInput?.[`Interaction${seq.input}`];
+
+      // Activate RFST
+      if (oldInteractionKey?.responseObject?.A !== '' || null) {
+        setInteractionBlock((prev: any) => {
+          return { ...prev, [`Resp${[count]}`]: count };
+        });
+      }
+      if (oldInteractionKey?.feedbackObject?.A !== '' || null) {
+        setInteractionBlock((prev: any) => {
+          return { ...prev, [`Feedbk${[count]}`]: count };
+        });
+      }
+      if (oldInteractionKey?.SkillTag !== '' || null) {
+        setInteractionBlock((prev: any) => {
+          return { ...prev, [`Skills${[count]}`]: count };
+        });
+      }
+      if (oldInteractionKey?.optionTitleObject?.A !== '' || null) {
+        setInteractionBlock((prev: any) => {
+          return { ...prev, [`Title${[count]}`]: count };
+        });
+      }
+
+      if (seq.type === 'Note') {
+        return {
+          ...prevInput,
+          [noteKey]: {
+            ...prevInput?.noteKey,
+            id: id,
+            note: oldNoteKey?.note,
+          },
+        };
+      }
+      if (seq.type === 'Dialog') {
+        return {
+          ...prevInput,
+          [dialogKey]: {
+            ...prevInput[dialogKey],
+            id: id,
+            dialog: oldDialogKey?.dialog,
+            character: oldDialogKey?.character,
+            animation: oldDialogKey?.animation,
+            voice: '',
+          },
+        };
+      }
+      if (seq.type === 'Interaction') {
+        console.log('prevInput', oldInteractionKey);
+        //Previous Object Data's
+        const optionsObject = oldInteractionKey?.optionsObject;
+        const ansObject = oldInteractionKey?.ansObject;
+        const feedbackObject = oldInteractionKey?.feedbackObject;
+        const responseObject = oldInteractionKey?.responseObject;
+        const optionTitleObject = oldInteractionKey?.optionTitleObject;
+        const optionsemotionObject = oldInteractionKey?.optionsemotionObject;
+        const optionsvoiceObject = oldInteractionKey?.optionsvoiceObject;
+        const scoreObject = oldInteractionKey?.scoreObject;
+        const navigateObjects = oldInteractionKey?.navigateObjects;
+        const filterNullFields = (
+          obj: Record<string, any>,
+        ): Record<string, any> => {
+          return Object.fromEntries(
+            Object.entries(obj).filter(([key, value]) => value !== null),
+          );
+        };
+
+        return {
+          ...prevInput,
+          [interactionKey]: {
+            ...prevInput[interactionKey],
+            id: id,
+            interaction: oldInteractionKey?.interaction,
+            blockRoll: oldInteractionKey?.blockRoll,
+            QuestionsEmotion: oldInteractionKey?.QuestionsEmotion,
+            QuestionsVoice: oldInteractionKey?.QuestionsVoice,
+            SkillTag: oldInteractionKey?.SkillTag,
+            quesionTitle: oldInteractionKey?.quesionTitle,
+            optionsObject: {
+              A: optionsObject?.A,
+              B: optionsObject?.B,
+              C: optionsObject?.C,
+            },
+            ansObject: { A: ansObject?.A, B: ansObject?.B, C: ansObject?.C },
+            // feedbackObject:{A: feedbackObject?.A,   B: feedbackObject?.B,    C: feedbackObject?.C},
+            feedbackObject: filterNullFields({
+              A: feedbackObject?.A,
+              B: feedbackObject?.B,
+              C: feedbackObject?.C,
+            }),
+            // responseObject:{A: responseObject?.A,    B: responseObject?.B,    C: responseObject?.C},
+            responseObject: filterNullFields({
+              A: responseObject?.A,
+              B: responseObject?.B,
+              C: responseObject?.C,
+            }),
+            optionTitleObject: {
+              A: optionTitleObject?.A,
+              B: optionTitleObject?.B,
+              C: optionTitleObject?.C,
+            },
+            optionsemotionObject: {
+              A: optionsemotionObject?.A,
+              B: optionsemotionObject?.B,
+              C: optionsemotionObject?.C,
+            },
+            optionsvoiceObject: {
+              A: optionsvoiceObject?.A,
+              B: optionsvoiceObject?.B,
+              C: optionsvoiceObject?.C,
+            },
+            scoreObject: {
+              A: scoreObject?.A ? scoreObject?.A : null,
+              B: scoreObject?.B ? scoreObject?.B : null,
+              C: scoreObject?.C ? scoreObject?.C : null,
+            },
+            navigateObjects: {
+              A: navigateObjects?.A,
+              B: navigateObjects?.B,
+              C: navigateObjects?.C,
+            },
+          },
+        };
+      }
+    });
+  };
+
   const delSeq = (seq: any, i: any, name: any) => {
     // removeDataBySeqs(seq.id);
     console.log('delSeq', seq);
@@ -2568,13 +2842,72 @@ const GameCreation = () => {
     onOpen: onOpen1,
     onClose: onClose1,
   } = useDisclosure();
-  let arrowSeqRef;
-  const handleKeyDown = (event: any, seq: any) => {
-    let indexToFind;
 
+  let arrowSeqRef: any;
+  let focusSeqRef: any;
+  // const handleKeyDown = (event:any, seq:any) => {
+
+  //   let indexToFind;
+
+  // setTargetSequence(seq);
+  // console.log('event.code',targetSequence.id)
+
+  // if(targetSequence){
+  //   indexToFind = items.findIndex((item:any) => (
+  //     item.id === targetSequence.id
+  //   ));
+  // }else{
+  //   indexToFind=0;
+  // }
+
+  //   if (indexToFind >= 0 && indexToFind < items.length) {
+  //     console.log('Index:', indexToFind);
+  //     if (
+  //       event.key &&
+  //       (event.type === 'click' ||
+  //         event.key !== 'Escape' ||
+  //         event.key !== 'Delete' ||
+  //         event.key !== 'Backspace')
+  //     ){
+  //       console.log('event.code',event)
+  //       if(seq){
+  //         setTargetSequence(seq);
+  //       }
+  //     }
+  //   if(event.key ==='Escape'){
+  //     setTargetSequence(null);
+  //   }
+
+  //   switch (event.code) {
+
+  //     case 'ArrowUp':
+  //       setTargetSequence(items[indexToFind===0? 0 : indexToFind-1])
+  //       arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind===0? 0 : indexToFind-1]?.id}`);
+  //       if (arrowSeqRef) {
+  //         arrowSeqRef.scrollIntoView({ behavior: 'smooth', block: "center", inline: "nearest" });
+  //         console.log('arrowSeqRef', arrowSeqRef);
+  //       }
+
+  //       break;
+  //     case 'ArrowDown':
+  //       setTargetSequence(items[indexToFind=== items.length-1 ? items.length :indexToFind+1])
+  //       arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind=== items.length ? 0 :indexToFind+1]?.id}`);
+  //       if (arrowSeqRef) {
+  //         arrowSeqRef.scrollIntoView({ behavior: 'smooth', block: "center", inline: "nearest" });
+  //         console.log('arrowSeqRef', arrowSeqRef);
+  //       }
+  //       break;
+
+  //     default:
+  //       // Handle other key presses if needed
+  //       break;
+  //   }
+  // }
+  // };
+
+  const handleKeyDown = (event: any, i: any, seq: any) => {
+    let indexToFind: any;
     setTargetSequence(seq);
-    console.log('event.code', targetSequence.id);
-
     if (targetSequence) {
       indexToFind = items.findIndex(
         (item: any) => item.id === targetSequence.id,
@@ -2582,7 +2915,6 @@ const GameCreation = () => {
     } else {
       indexToFind = 0;
     }
-
     if (indexToFind >= 0 && indexToFind < items.length) {
       console.log('Index:', indexToFind);
       if (
@@ -2590,9 +2922,9 @@ const GameCreation = () => {
         (event.type === 'click' ||
           event.key !== 'Escape' ||
           event.key !== 'Delete' ||
-          event.key !== 'Backspace')
+          event.key !== 'Backspace' ||
+          event.ctrlKey === true)
       ) {
-        console.log('event.code', event);
         if (seq) {
           setTargetSequence(seq);
         }
@@ -2600,22 +2932,29 @@ const GameCreation = () => {
       if (event.key === 'Escape') {
         setTargetSequence(null);
       }
-
       switch (event.code) {
         case 'ArrowUp':
           setTargetSequence(items[indexToFind === 0 ? 0 : indexToFind - 1]);
-          arrowSeqRef = document.getElementById(
-            `tarSeqRef${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`,
-          );
+          setTimeout(() => {
+            arrowSeqRef = document.getElementById(
+              `tarSeqRef${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`,
+            );
+            focusSeqRef = document.getElementsByClassName(
+              `${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`,
+            );
+            focusSeqRef?.[0].classList.add('non-caret');
+            focusSeqRef?.[0].focus();
+            focusSeqRef?.[0].setAttribute('readonly', 'true');
+          }, 200);
+
           if (arrowSeqRef) {
             arrowSeqRef.scrollIntoView({
               behavior: 'smooth',
               block: 'center',
               inline: 'nearest',
             });
-            console.log('arrowSeqRef', arrowSeqRef);
+            console.log('event.----------------', focusSeqRef?.[0]);
           }
-
           break;
         case 'ArrowDown':
           setTargetSequence(
@@ -2623,37 +2962,195 @@ const GameCreation = () => {
               indexToFind === items.length - 1 ? items.length : indexToFind + 1
             ],
           );
-          arrowSeqRef = document.getElementById(
-            `tarSeqRef${
-              items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
-            }`,
-          );
+          setTimeout(() => {
+            arrowSeqRef = document.getElementById(
+              `tarSeqRef${
+                items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
+              }`,
+            );
+            focusSeqRef = document.getElementsByClassName(
+              `${
+                items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
+              }`,
+            );
+            focusSeqRef?.[0]?.classList?.add('non-caret');
+            focusSeqRef?.[0]?.focus();
+            focusSeqRef?.[0]?.setAttribute('readonly', 'true');
+          }, 200);
           if (arrowSeqRef) {
             arrowSeqRef.scrollIntoView({
               behavior: 'smooth',
               block: 'center',
               inline: 'nearest',
             });
-            console.log('arrowSeqRef', arrowSeqRef);
+            console.log('event.----------------', focusSeqRef?.[0]);
           }
           break;
 
         default:
-          // Handle other key presses if needed
           break;
+      }
+
+      if (event.type == 'click') {
+        if (targetSequence?.id !== seq?.id) {
+          focusSeqRef = document.getElementsByClassName(seq.id);
+          focusSeqRef?.[0].classList.remove('non-caret');
+          focusSeqRef?.[0].focus();
+          console.log('event.----------------Click', focusSeqRef?.[0]);
+        }
+      }
+
+      if (event.code == 'Enter') {
+        focusSeqRef = document.getElementsByClassName(seq.id);
+        focusSeqRef?.[0].removeAttribute('readonly');
+        focusSeqRef?.[0].classList.remove('non-caret');
+        focusSeqRef?.[0].focus();
+        console.log('event.----------------Enter', focusSeqRef?.[0]);
+      }
+
+      if (event.key === 'Backspace' || event.key === 'Delete') {
+        focusSeqRef = document.getElementsByClassName(seq.id);
+        var isFieldFocused = document.activeElement.classList.contains(seq.id);
+        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(
+          document.activeElement.tagName.toLowerCase(),
+        );
+
+        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
+
+        if (focusSeqRef?.[0].readOnly) {
+          delSeq(seq, Number(0), seq.type);
+        }
+      }
+
+      if (event.ctrlKey === true && event.code === 'KeyC') {
+        focusSeqRef = document.getElementsByClassName(seq.id);
+        var isFieldFocused = document.activeElement.classList.contains(seq.id);
+        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(
+          document.activeElement.tagName.toLowerCase(),
+        );
+
+        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
+
+        console.log('test45');
+        if (focusSeqRef?.[0].readOnly) {
+          setCopySequence(seq);
+        }
+      }
+
+      if (event.code === 'KeyV' && event.ctrlKey === true) {
+        focusSeqRef = document.getElementsByClassName(seq.id);
+        var isFieldFocused = document.activeElement.classList.contains(seq.id);
+        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(
+          document.activeElement.tagName.toLowerCase(),
+        );
+
+        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
+
+        console.log('test45');
+        if (focusSeqRef?.[0].readOnly) {
+          if (copySequence) {
+            duplicateSeq(copySequence, i, copySequence.type);
+          }
+        }
+      }
+
+      if (event.ctrlKey === true && event.code === 'KeyD') {
+        focusSeqRef = document.getElementsByClassName(seq.id);
+        var isFieldFocused = document.activeElement.classList.contains(seq.id);
+        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(
+          document.activeElement.tagName.toLowerCase(),
+        );
+
+        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
+
+        console.log('test45');
+        if (focusSeqRef?.[0].readOnly) {
+          duplicateSeq(seq, i, seq.type);
+        }
+      }
+
+      if (event.ctrlKey && event.shiftKey) {
+        if (event.code === 'ArrowUp') {
+          setTimeout(() => {
+            focusSeqRef = document.getElementsByClassName(
+              `${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`,
+            );
+            focusSeqRef?.[0]?.focus();
+          }, 200);
+          console.log('event.----------------ShiftArrowUp', focusSeqRef?.[0]);
+          moveItem(i, i - 1, seq);
+        } else if (event.code === 'ArrowDown') {
+          setTimeout(() => {
+            focusSeqRef = document.getElementsByClassName(
+              `${
+                items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
+              }`,
+            );
+            focusSeqRef?.[0]?.focus();
+          }, 200);
+          console.log('event.----------------ShiftArrowDown', focusSeqRef?.[0]);
+          moveItem(i, i + 1, seq);
+        }
       }
     }
   };
+
+  const moveItem = (startIndex: number, endIndex: number, seq: any) => {
+    // Ensure endIndex is within the bounds of the array
+    endIndex = Math.max(0, Math.min(items.length - 1, endIndex));
+    focusSeqRef = document.getElementsByClassName(seq.id);
+    focusSeqRef?.[0]?.focus();
+
+    // Perform the move
+    const updatedItems = [...items];
+    const [movedItem] = updatedItems.splice(startIndex, 1);
+    updatedItems.splice(endIndex, 0, movedItem);
+
+    const updatedMovingItems = updatedItems.map((item: any, index) => {
+      return {
+        ...item,
+        id: dummySequence[index] || item.id,
+        upNext: upNextCount[index],
+      };
+    });
+
+    const updateInteraction = updatedItems
+      .map((item, index) => {
+        if (item?.type === 'Interaction') {
+          return { ...item, from: item.id, to: sequence[index] };
+        }
+        return null; // Return null for items that don't meet the condition
+      })
+      .filter((item) => item !== null);
+
+    const updatedAlphabet = alphabet.map((item: { seqs: string }) => {
+      // Find the corresponding updateInteraction item
+      const correspondingUpdate = updateInteraction.find(
+        (updateItem) => updateItem.from === item.seqs,
+      );
+
+      // If a corresponding updateInteraction item is found, update the seqs value
+      if (correspondingUpdate) {
+        return { ...item, seqs: correspondingUpdate.to };
+      }
+
+      // If no corresponding updateInteraction item is found, return the original item
+      return item;
+    });
+    // Update the state with the new order
+    setItems(updatedMovingItems);
+    setAlphabet(updatedAlphabet);
+    setBlockItems(updatedItems);
+  };
+
+  // COnsole's
+  console.log('Copied sequence:', copySequence);
+  console.log('Pasted sequence:', copySequence);
 
   const updateExtensiveNavigation = (id: number) => {
     setExtensiveNavigation(id);
   };
 
-  let menuBg = useColorModeValue('white', 'navy.800');
-  const shadow = useColorModeValue(
-    '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
-    '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
-  );
   return (
     <>
       <Grid templateColumns="repeat(5, 1fr)" gap={2}>
@@ -2684,19 +3181,19 @@ const GameCreation = () => {
                 justifyContent={'space-around'}
                 alignItems={'center'}
               >
-                <Box ml={'10px'} transform={'scale(1.3)'} borderRadius={'50%'}>
-                  <SidebarResponsive routes={routes} />
-                </Box>
                 <Text
                   color={'black'}
                   fontSize={25}
                   fontWeight={800}
                   letterSpacing={'2px'}
-                  mr={'7px'}
-                  ml={'20px'}
+                  mr={'px'}
+                  ml={'0px'}
                 >
                   ATLANTIS
                 </Text>
+                <Box ml={'10px'} transform={'scale(1.3)'} borderRadius={'50%'}>
+                  <SidebarResponsive routes={routes} />
+                </Box>
               </Flex>
               <Flex>
                 <Box
@@ -2742,14 +3239,15 @@ const GameCreation = () => {
                       h="46px"
                       w="46px"
                       ml="8px"
-                      bg="radial-gradient(circle at 50% 40%, #fcfcfc, #efeff1 66%, #422afb 100%)"
+                      bg="#FFFFFF"
+                      transition="all 0.2s linear 0s"
                       boxShadow={stepPoseIcon}
                       icon={
                         <Icon
                           as={TbView360}
-                          color={stepbgCheck}
-                          h="30px"
-                          w="30px"
+                          color={tab === 1 ? 'brand.500' : stepbgCheck} //icon color
+                          h="24px"
+                          w="24px"
                         />
                       }
                     />
@@ -2768,14 +3266,15 @@ const GameCreation = () => {
                       w="46px"
                       ml="8px"
                       // color='#fff'
-                      bg="radial-gradient(circle at 50% 40%, #fcfcfc, #efeff1 66%, #422afb 100%)"
                       boxShadow={stepAboutStoryIcon}
+                      bg="#FFFFFF"
+                      transition="all 0.2s linear 0s"
                       icon={
                         <Icon
                           as={FaRobot}
-                          color={stepPoseCheck}
-                          h="30px"
-                          w="30px"
+                          color={tab === 2 ? 'brand.500' : stepPoseCheck} //icon color{}
+                          h="24px"
+                          w="24px"
                         />
                       }
                     />
@@ -2793,14 +3292,15 @@ const GameCreation = () => {
                       h="46px"
                       w="46px"
                       ml="8px"
-                      bg="radial-gradient(circle at 50% 40%, #fcfcfc, #efeff1 66%, #422afb 100%)"
                       boxShadow={stepBlockIcon}
+                      bg="#FFFFFF"
+                      transition="all 0.2s linear 0s"
                       icon={
                         <Icon
                           as={MdOutlineSubtitles}
-                          color={stepAboutStoryCheck}
-                          h="30px"
-                          w="30px"
+                          color={tab === 3 ? 'brand.500' : stepAboutStoryCheck} //icon color{}{}
+                          h="24px"
+                          w="24px"
                         />
                       }
                     />
@@ -2824,14 +3324,15 @@ const GameCreation = () => {
                       h="46px"
                       w="46px"
                       ml="8px"
-                      bg="radial-gradient(circle at 50% 40%, #fcfcfc, #efeff1 66%, #422afb 100%)"
                       boxShadow={stepAboutStoryCheck}
+                      bg="#FFFFFF"
+                      transition="all 0.2s linear 0s"
                       icon={
                         <Icon
                           as={GiBlackBook}
-                          color={stepBlockCheck}
-                          h="30px"
-                          w="30px"
+                          color={tab === 4 ? 'brand.500' : stepBlockCheck} //icon color{}{}{}
+                          h="24px"
+                          w="24px"
                         />
                       }
                     />
@@ -2859,14 +3360,15 @@ const GameCreation = () => {
                       h="46px"
                       w="46px"
                       ml="8px"
-                      bg="radial-gradient(circle at 50% 40%, #fcfcfc, #efeff1 66%, #422afb 100%)"
                       boxShadow={stepScoreIcon}
+                      bg="#FFFFFF"
+                      transition="all 0.2s linear 0s"
                       icon={
                         <Icon
                           as={FaCubes}
-                          color={stepScoreCheck}
-                          h="30px"
-                          w="30px"
+                          color={tab === 5 ? 'brand.500' : stepScoreCheck} //icon color{}{}{}{}
+                          h="24px"
+                          w="24px"
                         />
                       }
                     />
@@ -2884,14 +3386,16 @@ const GameCreation = () => {
                       h="46px"
                       w="46px"
                       ml="8px"
-                      bg="radial-gradient(circle at 50% 40%, #fcfcfc, #efeff1 66%, #422afb 100%)"
+                      // bg="radial-gradient(circle at 50% 40%, #fcfcfc, #efeff1 66%, #422afb 100%)"
                       boxShadow={stepSummariesIcon}
+                      bg="#FFFFFF"
+                      transition="all 0.2s linear 0s"
                       icon={
                         <Icon
                           as={MdTune}
-                          color={stepSummariesCheck}
-                          h="30px"
-                          w="30px"
+                          color={tab === 6 ? 'brand.500' : stepSummariesCheck} //icon color{}{}{}{}{}
+                          h="24px"
+                          w="24px"
                         />
                       }
                     />
@@ -3049,13 +3553,7 @@ const GameCreation = () => {
                                           _hover={{
                                             bg: '#f0f0f0',
                                           }}
-                                          onClick={() =>
-                                            handlePreview(
-                                              img,
-                                              backgroundIndex,
-                                              i,
-                                            )
-                                          }
+                                          // onClick={() => handlePreview(img, backgroundIndex, i)}
                                         >
                                           <span style={{ color: 'black' }}>
                                             Preview
@@ -3324,6 +3822,8 @@ const GameCreation = () => {
                 ) : tab === 4 ? (
                   <>
                     <Customization
+                      reviewers={reviewers && reviewers}
+                      reviews={reviews && reviews[4]}
                       id={id}
                       formData={formData}
                       setBlockItems={setBlockItems}
@@ -3482,41 +3982,61 @@ const GameCreation = () => {
                     </FormLabel>
                     <Box w={'360px'} maxH={'50vh'} overflowY={'scroll'}>
                       {reviews[tab] && reviews[tab]?.length !== 0 ? (
-                        reviews[tab].map((it:any,ind:number)=>(<>
-                          <Box
-                            w={'100%'}
-                            display={'flex'}
-                            justifyContent={'space-between'}
-                          >
-                            <Box
-                              w={'100%'}
-                              display={'flex'}
-                              //   h={'50px'}
-                              alignItems={'center'}
-                            >
-                              <Img
-                                src={pro}
-                                w={'40px'}
-                                h={'40px'}
-                                alt="pro"
-                                borderRadius={'50%'}
-                              />
-                              <Text ml={'15px'}>User8695</Text>
-                            </Box>
-
-                            <Box whiteSpace={'nowrap'}>
-                              <Text fontSize={'14'}>Posted On :12-10-23</Text>
-                            </Box>
-                          </Box>
-                          <Box mb={'10px'} mt={'10px'}>
-                          {it?.review}
-                          </Box>
-                        </>))
+                        reviews[tab]
+                          .filter((item: any) =>
+                            tab === 5
+                              ? item?.tabAttributeValue === String(currentTab)
+                              : true,
+                          )
+                          .map((it: any, ind: number) =>{
+                              const reviewer = reviewers && reviewers.find((rev: any) => rev?.gameReviewerId === it?.gameReviewerId); 
+                              return (
+                                <React.Fragment key={ind}>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'space-between'}
+                                  >
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      alignItems={'center'}
+                                    >
+                                      <Img
+                                        src={pro}
+                                        w={'40px'}
+                                        h={'40px'}
+                                        alt="pro"
+                                        borderRadius={'50%'}
+                                      />
+                                      <Text ml={'15px'}>
+                                        {reviewer?.emailId === null
+                                          ? reviewer?.ReviewingCreator?.ctMail
+                                          : reviewer?.emailId}
+                                      </Text>
+                                    </Box>
+                                    <Box whiteSpace={'nowrap'}>
+                                      <Text fontSize={'14'}>
+                                        Posted On :{' '}
+                                        {it?.updatedAt
+                                          ? new Date(
+                                              it.updatedAt,
+                                            ).toLocaleDateString()
+                                          : ''}
+                                      </Text>
+                                    </Box>
+                                  </Box>
+                                  <Box mb={'10px'} mt={'10px'}>
+                                    {it?.review}
+                                  </Box>
+                                </React.Fragment>
+                              );}
+                          )
                       ) : (
                         <Box mb={'10px'} mt={'10px'}>
-                          No FeedBack For{' '}
+                          No Feedback For{' '}
                           {tab === 1
-                            ? 'BackGround'
+                            ? 'Background'
                             : tab === 2
                             ? 'Non Playing Character'
                             : tab === 3
@@ -3554,6 +4074,7 @@ const GameCreation = () => {
               <Card
                 display={'flex'}
                 justifyContent={tab === 1 || tab === 2 ? 'end' : 'flex-end'}
+                // w="350px"
                 flexDirection="row"
                 h="95px"
                 w="500px"
@@ -3563,11 +4084,16 @@ const GameCreation = () => {
                 right={'8px'}
                 zIndex={99}
                 background={'#0000 !important'}
+                // alignItems="flex-end"
               >
                 <Menu isOpen={isOpen1} onClose={onClose1}>
                   <MenuButton
                     alignItems="center"
                     justifyContent="center"
+                    // bg={bgButton}
+                    // _hover={bgHover}
+                    // _focus={bgFocus}
+                    // _active={bgFocus}
                     w="37px"
                     h="37px"
                     lineHeight="100%"
@@ -3593,6 +4119,8 @@ const GameCreation = () => {
                     minW="unset"
                     maxW="150px !important"
                     border="transparent"
+                    // backdropFilter="blur(63px)"
+                    // boxShadow={bgShadow}
                     borderRadius="20px"
                     bg="transparent"
                     p="15px"
@@ -3734,7 +4262,7 @@ const GameCreation = () => {
                   onClick={() => {
                     setTab(tab - 1);
                   }}
-                  size={46}
+                  size={46} // Adjust the size as needed
                   color="#11047a"
                   style={{
                     position: 'fixed',

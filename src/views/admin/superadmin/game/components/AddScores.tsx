@@ -585,7 +585,6 @@ const AddScores: React.FC<{
           toast({
             title: 'Please Select Badge.',
             status: 'error',
-            duration: 3000,
             isClosable: true,
           });
           return false;
@@ -603,28 +602,6 @@ const AddScores: React.FC<{
           if (!compliData[CompKeyCount]?.gameAwardBadgeScore) {
             toast({
               title: 'Please Set Criteria for Badge .',
-              status: 'error',
-              duration: 3000,
-              isClosable: true,
-            });
-            return false;
-          }
-        }
-        if (!compliData[CompKeyCount]?.gameScreenTitle) {
-          toast({
-            title: 'Please Screen Title.',
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
-          });
-          return false;
-        }
-        if (
-          compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true'
-        ) {
-          if (!compliData[CompKeyCount]?.gameCompletedCongratsMessage) {
-            toast({
-              title: 'Please Set CongratsMessage.',
               status: 'error',
               duration: 3000,
               isClosable: true,
