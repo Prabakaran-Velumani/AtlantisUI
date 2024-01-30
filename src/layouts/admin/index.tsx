@@ -3,7 +3,7 @@ import {
   Portal,
   Box,
   useDisclosure,
-  useColorModeValue, 
+  useColorModeValue,
 } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin';
 // Layout components
@@ -32,22 +32,22 @@ import LearnerUpdation from 'views/admin/superadmin/learner/components/learnerUp
 // Custom Chakra theme
 const usePath = () => {
   const location = useLocation();
-  return location.pathname
-}
-export default function Dashboard(props: { [x: string]: any }) { 
+  return location.pathname;
+};
+export default function Dashboard(props: { [x: string]: any }) {
   const { ...rest } = props;
   // states and functions
   const storage = JSON.parse(localStorage.getItem('user'));
   const path = usePath();
-let role='' ;
-if (!storage) {
-  role= 'Admin'
-}else{
-  role =storage.data.role
-}
+  let role = '';
+  if (!storage) {
+    role = 'Admin';
+  } else {
+    role = storage.data.role;
+  }
   const [fixed] = useState(false);
   const [toggleSidebar, setToggleSidebar] = useState(false);
-  const [mini, setMini] = useState(false); 
+  const [mini, setMini] = useState(false);
   const [hovered, setHovered] = useState(false);
   // functions for changing the states from components
   const getRoute = () => {
@@ -97,15 +97,27 @@ if (!storage) {
             <>
               <Route key={key} element={<ProtectedRoute />}>
                 <Route path={route.path} element={route.component} />
-		<Route path='/superadmin/game/creation' element={<GameCreation />} />
-		<Route path='/superadmin/game/creation/:id' element={<GameCreation />} />
-    <Route path='/superadmin/game/home' element={<Fristpage />} />
-    
-              <Route path='/superadmin/game/template' element={<SecondPage />} />
-	        <Route path='/superadmin/game/template' element={<SecondPage />} />
-		<Route path='/game/preview/:id' element={<ListPreview />} />
                 <Route
- path="/superadmin/learner/creation"
+                  path="/superadmin/game/creation"
+                  element={<GameCreation />}
+                />
+                <Route
+                  path="/superadmin/game/creation/:id"
+                  element={<GameCreation />}
+                />
+                <Route path="/superadmin/game/home" element={<Fristpage />} />
+
+                <Route
+                  path="/superadmin/game/template"
+                  element={<SecondPage />}
+                />
+                <Route
+                  path="/superadmin/game/template"
+                  element={<SecondPage />}
+                />
+                <Route path="/game/preview/:id" element={<ListPreview />} />
+                <Route
+                  path="/superadmin/learner/creation"
                   element={<LearnerCreation />}
                 />
                 <Route
@@ -117,21 +129,23 @@ if (!storage) {
                   element={<LearnerUpdation />}
                 />
                 <Route path="/superadmin/game/:id" element={<GameCreation />} />
-                 
+
                 {role === 'Creator' ? (
                   <>
-                  <Route path='/creator/settings/:id' element={<ProfileSetting />} />  
                     <Route
-                  path="/superadmin/creator/profile/:id"
-                  element={<SuperAdminCreatorCreation />}
-                />
-                <Route
-                  path="/superadmin/creator/password/:id"
-                  element={<CreatorChangePassword />}
-                />
-                
+                      path="/creator/settings/:id"
+                      element={<ProfileSetting />}
+                    />
+                    <Route
+                      path="/superadmin/creator/profile/:id"
+                      element={<SuperAdminCreatorCreation />}
+                    />
+                    <Route
+                      path="/superadmin/creator/password/:id"
+                      element={<CreatorChangePassword />}
+                    />
                   </>
-                ) : ( 
+                ) : (
                   <></>
                 )}
                 {role === 'Admin' ? (
@@ -156,7 +170,7 @@ if (!storage) {
                       path="/superadmin/plan/updation/:id"
                       element={<SuperAdminPlanUpdation />}
                     />
-                     <Route
+                    <Route
                       path="/superadmin/plan/updationPlan/:id"
                       element={<SuperAdminPlanNameUpdation />}
                     />
@@ -164,7 +178,7 @@ if (!storage) {
                       path="/superadmin/plan/updatePlanDuration/:id"
                       element={<SuperAdminPlanDurationAdd />}
                     />
-                    
+
                     <Route
                       path="/superadmin/industry/creation"
                       element={<SuperAdminIndustryCreation />}
@@ -177,7 +191,7 @@ if (!storage) {
                 ) : (
                   <></>
                 )}
- 
+
                 <Route
                   path="/superadmin/creator/creation"
                   element={<SuperAdminCreatorCreation />}
@@ -207,9 +221,14 @@ if (!storage) {
   const { onOpen } = useDisclosure();
   const bg = useColorModeValue('background.100', 'background.900');
   return (
-    <Box bg={bg} h="100vh" w="100vw"   border="2px slid black"
-                    alignItems="flex-start"
-                    m="0px">
+    <Box
+      bg={bg}
+      h="100vh"
+      w="100vw"
+      border="2px slid black"
+      alignItems="flex-start"
+      m="0px"
+    >
       <SidebarContext.Provider
         value={{
           toggleSidebar,
@@ -222,7 +241,7 @@ if (!storage) {
           mini={mini}
           routes={routes}
           display="none"
-          {...rest} 
+          {...rest}
         />
         <Box
           float="right"
@@ -233,18 +252,33 @@ if (!storage) {
           maxHeight="100%"
           w={
             mini === false
-              ? { base: '100%', xl: path.startsWith('/admin/superadmin/game/creation')||path.startsWith('/admin/superadmin/game/template')||path.startsWith('/admin/game/preview/') ? '100%':'calc( 100% - 290px )' }
+              ? {
+                  base: '100%',
+                  xl:
+                    path.startsWith('/admin/superadmin/game/creation') ||
+                    path.startsWith('/admin/superadmin/game/template') ||
+                    path.startsWith('/admin/game/preview/')
+                      ? '100%'
+                      : 'calc( 100% - 290px )',
+                }
               : mini === true && hovered === true
-                ? { base: '100%', xl: 'calc( 100% - 290px )' }
-                : { base: '100%', xl: 'calc( 100% - 120px )' }
+              ? { base: '100%', xl: 'calc( 100% - 290px )' }
+              : { base: '100%', xl: 'calc( 100% - 120px )' }
           }
-          
           maxWidth={
             mini === false
-              ? { base: '100%', xl: path.startsWith('/admin/superadmin/game/creation')||path.startsWith('/admin/superadmin/game/template')||path.startsWith('/admin/game/preview/') ? '100%':'calc( 100% - 290px )' }
+              ? {
+                  base: '100%',
+                  xl:
+                    path.startsWith('/admin/superadmin/game/creation') ||
+                    path.startsWith('/admin/superadmin/game/template') ||
+                    path.startsWith('/admin/game/preview/')
+                      ? '100%'
+                      : 'calc( 100% - 290px )',
+                }
               : mini === true && hovered === true
-                ? { base: '100%', xl: 'calc( 100% - 290px )' }
-                : { base: '100%', xl: 'calc( 100% - 120px )' }
+              ? { base: '100%', xl: 'calc( 100% - 290px )' }
+              : { base: '100%', xl: 'calc( 100% - 120px )' }
           }
           transition="all 1s cubic-bezier(0.685, 0.0473, 0.346, 1)"
           transitionDuration=".2s, .2s, 1s"
@@ -253,7 +287,10 @@ if (!storage) {
         >
           <Portal>
             <Box
-            display={{ sm: 'none', xl: path.startsWith('/admin/game/preview/') ? 'none' : 'block' }}
+              display={{
+                sm: 'none',
+                xl: path.startsWith('/admin/game/preview/') ? 'none' : 'block',
+              }}
             >
               <Navbar
                 hovered={hovered}
@@ -281,7 +318,7 @@ if (!storage) {
             >
               <Routes>
                 {getRoutes(routes)}
-                
+
                 <Route
                   path="/"
                   // element={<Navigate to="/admin/dashboards/default" replace />}

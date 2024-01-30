@@ -103,6 +103,7 @@ const CompletionScreenRight: React.FC<{
               ...prevInput[CompKeyCount],
               gameBadge: badge.gasId,
       gameBadgeName: badge.gasAssetName,
+      gameMaxScore: 100,
               
           }
       }
@@ -110,8 +111,9 @@ const CompletionScreenRight: React.FC<{
 
     setSelectedBadge(badge);
     setIsModalOpen(false);
-    console.log('Selected Image:', badge);
+    
   };
+  console.log('Selected Image:', compliData);
   const handleClear = () => {
    
     setCompliData((prevInput: any) => {

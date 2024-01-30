@@ -151,7 +151,7 @@ import { error } from 'console';
 import { IoIosPersonAdd } from 'react-icons/io';
 import ShareReviewTable from './ShareReview';
 import tableDataCheck from 'views/admin/dashboards/rtl/variables/tableDataCheck';
-import EntirePreview from './EntirePreview';
+
 import { AiFillMessage } from 'react-icons/ai';
 import SinglePreview from './SinglePreview';
 import { getAllReviews } from 'utils/reviews/reviews';
@@ -3958,15 +3958,7 @@ const GameCreation = () => {
                   minW={{ base: '360px' }}
                   maxW={{ base: '360px', md: 'unset' }}
                 >
-                  {/* <SelectFie
-                mb="10px"
-                me="30px"
-                id="gameIntroMusic"
-                name="gameIntroMusic"
-                label="Feedback Options"
-                options={overOptions}
-                onChange={handleFeed}
-              /> */}
+                
                   <FormControl>
                     <FormLabel fontSize={18} fontWeight={700}>
                       Feedback For{' '}
@@ -4089,17 +4081,12 @@ const GameCreation = () => {
                 <Menu isOpen={isOpen1} onClose={onClose1}>
                   <MenuButton
                     alignItems="center"
-                    justifyContent="center"
-                    // bg={bgButton}
-                    // _hover={bgHover}
-                    // _focus={bgFocus}
-                    // _active={bgFocus}
+                    justifyContent="center"                  
                     w="37px"
                     h="37px"
                     lineHeight="100%"
                     onClick={onOpen1}
-                    borderRadius="10px"
-                    // {...rest}
+                    borderRadius="10px"                    
                   >
                     <Icon
                       as={BsShareFill}
@@ -4118,9 +4105,7 @@ const GameCreation = () => {
                     w="150px"
                     minW="unset"
                     maxW="150px !important"
-                    border="transparent"
-                    // backdropFilter="blur(63px)"
-                    // boxShadow={bgShadow}
+                    border="transparent"                   
                     borderRadius="20px"
                     bg="transparent"
                     p="15px"
@@ -4136,7 +4121,7 @@ const GameCreation = () => {
                       borderRadius="20px"
                       position="absolute"
                       p="15px"
-                      zIndex="1000" // Set a higher z-index value
+                      zIndex="1000" 
                     >
                       <MenuItem
                         transition="0.2s linear"

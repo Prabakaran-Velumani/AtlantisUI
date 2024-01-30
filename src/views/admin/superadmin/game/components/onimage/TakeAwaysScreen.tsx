@@ -56,6 +56,7 @@ import bull from 'assets/img/screens/bullet.png';
 interface Badge {
   gasId: number;
   gasAssetImage: string;
+
   gasAssetName: string;
 }
 
@@ -69,48 +70,74 @@ const TakewayScreen: React.FC<{
   return (
     <>
       {imageSrc && preview ? (
-        <Box position={'relative'}>
-          <Img src={imageSrc} w={'100%'} h="100vh" />
-          <Box
-            position={'absolute'}
-            width={'100%'}
-            h={'70vh'}
-            left={'0px'}
-            bottom={'0'}
-            fontFamily={'gametext'}
-            display={'flex'}
-            justifyContent={'center'}
-            alignItems={'flex-start'}
-          >
-            <Box w={'70%'} className="content">
-              <Box h={'60vh'} overflowY={'scroll'}>
-                {data &&
-                  data.map((it: any, ind: number) => {
-                    const bulletIndex = it.indexOf('\u2022');
-                    const contentAfterBullet =
-                      bulletIndex !== -1
-                        ? it.slice(bulletIndex + 1).trim()
-                        : it;
-                    return (
-                      <Box display={'flex'}>
-                        <>
-                          <Img
-                            mt={'5px'}
-                            mr={'5px'}
-                            src={bull}
-                            className="dot-img"
-                            w={'16px'}
-                            h={'16px'}
-                          />
-                          {contentAfterBullet}
-                        </>
-                      </Box>
-                    );
-                  })}
-              </Box>
-            </Box>
+        // <Box position={'relative'}>
+        //   <Img src={imageSrc} w={'100%'} h="100vh" />
+        //   <Box
+        //     position={'absolute'}
+        //     width={'100%'}
+        //     h={'70vh'}
+        //     left={'0px'}
+        //     bottom={'0'}
+        //     fontFamily={'gametext'}
+        //     display={'flex'}
+        //     justifyContent={'center'}
+        //     alignItems={'flex-start'}
+        //   >
+        //     <Box w={'70%'} className="content">
+        //       <Box h={'60vh'} overflowY={'scroll'}>
+        //         {data &&
+        //           data.map((it: any, ind: number) => {
+        //             const bulletIndex = it.indexOf('\u2022');
+        //             const contentAfterBullet =
+        //               bulletIndex !== -1
+        //                 ? it.slice(bulletIndex + 1).trim()
+        //                 : it;
+        //             return (
+        //               <Box display={'flex'}>
+        //                 <>
+        //                   <Img
+        //                     mt={'5px'}
+        //                     mr={'5px'}
+        //                     src={bull}
+        //                     className="dot-img"
+        //                     w={'16px'}
+        //                     h={'16px'}
+        //                   />
+        //                   {contentAfterBullet}
+        //                 </>
+        //               </Box>
+        //             );
+        //           })}
+        //       </Box>
+        //     </Box>
+        //   </Box>
+        // </Box>
+        <Box className="takeaway-screen">
+        <Box className="takeaway-screen-box">
+          <Img src={imageSrc} className="bg-img" />
+          <Box className="content-box" width={'315px !important'} overflowY={'scroll'}  position={'absolute'}>
+            {data &&
+              data.map((it: any, ind: number) => {
+                const bulletIndex = it.indexOf('\u2022');
+                const contentAfterBullet =
+                  bulletIndex !== -1 ? it.slice(bulletIndex + 1).trim() : it;
+                return (
+                  <Box className="content"  fontFamily={'AtlantisText'} color={'#D9C7A2'}>
+                    <>
+                      <Img
+                        src={bull}
+                        className="dot-img"
+                        w={'16px'}
+                        h={'16px'}
+                      />
+                      {contentAfterBullet}
+                    </>
+                  </Box>
+                );
+              })}
           </Box>
         </Box>
+      </Box>
       ) : (
         <Box className="takeaway-screen">
           <Box className="takeaway-screen-box">

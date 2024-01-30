@@ -76,7 +76,7 @@ import {
           >
             <Img src={imageSrc} className='bg-img' />           
           </Box>
-          <Box className='content-box' position={preview ? 'fixed' : 'inherit'} top={preview ? '285px': '0'} left={preview ? '555px': '0'} >
+          <Box className='content-box' >
             <SimpleGrid columns={{base:2}} spacing={2} className='grid'>
               {Array.from({ length: formData.gameReflectionQuestion }, (_, index) => (
                 <Box>

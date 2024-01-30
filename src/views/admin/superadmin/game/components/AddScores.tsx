@@ -886,7 +886,7 @@ const AddScores: React.FC<{
           }}
           alignItems="start"
         >
-          <Box className="Game-Screen">
+          <Box className="Game-Screen"> 
             <Text
               color="black"
               fontSize="14"
