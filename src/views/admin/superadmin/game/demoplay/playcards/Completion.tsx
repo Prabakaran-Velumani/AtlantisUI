@@ -2,7 +2,6 @@ import { Box, Img, Text } from "@chakra-ui/react";
 import rew from 'assets/img/screens/Reward Bar.png';
 import back from 'assets/img/screens/back.png';
 import point from 'assets/img/screens/points.png';
-import skill from 'assets/img/screens/skill.png';
 import next from 'assets/img/screens/next.png';
 import { useEffect, useState } from "react";
 import { getImages } from "utils/game/gameService";

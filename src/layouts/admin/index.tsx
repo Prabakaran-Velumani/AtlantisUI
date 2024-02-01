@@ -106,7 +106,6 @@ export default function Dashboard(props: { [x: string]: any }) {
                   element={<GameCreation />}
                 />
                 <Route path="/superadmin/game/home" element={<Fristpage />} />
-
                 <Route
                   path="/superadmin/game/template"
                   element={<SecondPage />}

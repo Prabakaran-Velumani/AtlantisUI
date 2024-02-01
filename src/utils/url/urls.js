@@ -194,3 +194,17 @@ export const putMethod = (data) => {
   };
   return method;
 };
+export const postMethodVoice = (data) => {
+  let method = {
+    method: 'POST',
+    mode: 'cors',
+   
+    headers: {
+      XI_API_KEY:'28f7b776bb262ab1140ce635a90bd8f9',
+      // Authorization: user?.token,
+      'Content-Type': 'application/json',
+    },
+    body: data,
+  };
+  return method;
+};

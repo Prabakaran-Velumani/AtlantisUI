@@ -67,6 +67,7 @@ import ReflectionContentScreen from './onimage/ReflectionScreen';
 import RefScreen1 from '../../../../../assets/img/screens/refscreen1.png';
 import Screen4 from '../../../../../assets/img/screens/screen4.png';
 import TyContentScreen from './onimage/TyContentScreen';
+import { getVoiceMessage } from 'utils/game/gameService';
 const SinglePreview: React.FC<{
   prevdata?: any;
   isOpen?: any;
@@ -120,6 +121,7 @@ const SinglePreview: React.FC<{
     const [feed, setFeed] = useState<string>('');
     const [navi, setNavi] = useState<string>('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [currentAudio, setCurrentAudio] = useState(null);
     useEffect(() => {
       setShowNote(true);
       setFirst(true);
@@ -130,6 +132,13 @@ const SinglePreview: React.FC<{
       setType(prevdata.items[0].type);
       setItem(prevdata.items[0]);
       setData(findKeyByTex(prevdata.input, prevdata.items[0]));
+      getVoice(findKeyByTex(prevdata.input, prevdata.items[0]));
+      // const initialTimeout = setTimeout(() => {
+      //   if (audioRef.current) {
+      //     audioRef.current.muted = false; // Unmute after the timeout
+      //   }
+      // }, 500);
+      // return () => clearTimeout(initialTimeout);
     }, []);
 
     function findKeyByValue(obj: any, value: any) {
@@ -140,12 +149,38 @@ const SinglePreview: React.FC<{
       const dt = String(value.type + value.input);
       return obj[dt];
     }
+
+    const getVoice = async (info: any) => {
+      const send = {
+        text: info?.dialogue || info?.interaction || info?.note,
+        model_id: 'eleven_multilingual_v2',
+        voice_settings: {
+          stability: 0.5,
+          similarity_boost: 0.5,
+        }
+      }
+      const defaultVoiceIds = {
+        narrator: '5Q0t7uMcjvnagumLfvZi',
+        player: 'EXAVITQu4vr4xnSDxMaL',
+        NPC: '29vD33N1CtxCmqQRPOHJ',
+        Intro: '',
+      };
+      const data = JSON.stringify(send);
+      const res = await getVoiceMessage(defaultVoiceIds.player, data);
+      const blob = new Blob([res], { type: 'audio/mpeg' });
+    const audioUrl = URL.createObjectURL(blob);
+    const audio = new Audio(audioUrl);
+    audio.play();
+    }
     useEffect(() => {
       setShowNote(true);
       setTimeout(() => {
         setShowNote(false);
       }, 1000);
     }, [item, type]);
+
+    const audioRef = useRef(null);
+
     const getData = (next: any) => {
       const handleInteractionType = (delay: any) => {
         const mins = findKeyByTex(prevdata.input, delay);
@@ -209,6 +244,8 @@ const SinglePreview: React.FC<{
           }
         }
       }
+      const value = findKeyByValue(prevdata.items, next.upNext);
+      getVoice(findKeyByTex(prevdata.input, value));
     };
 
     const handleValidate = (item: any, ind: number) => {
@@ -217,36 +254,16 @@ const SinglePreview: React.FC<{
       setNavi(data.navigateObjects[item]);
       setOption(ind === option ? null : ind);
     };
-    const cameraPosition = new THREE.Vector3(3, 3, 10);
-
     console.log('whole item', prevdata);
     console.log('this is the item', item, 'and the data', data);
-    let menuBg = useColorModeValue('white', 'navy.800');
-    const shadow = useColorModeValue(
-      '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
-      '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
-    );
-    const overOptions = [
-      { value: 1, label: 'Bacground' },
-      { value: 2, label: 'Non Playing Character' },
-      { value: 3, label: 'Overview' },
-      { value: 4, label: 'Story' },
-      { value: 5, label: 'Design' },
-    ];
-    const handleMenuClose = () => {
-      setIsMenuOpen(false);
-    };
-    const handleFeed = () => {
-      setIsMenuOpen(false);
-    };
-    console.log('previous datas inside the dramp', prevdata);
+
     return (
       <Modal isOpen={isOpen} onClose={onClose} size="full">
         <ModalOverlay />
         <ModalContent backgroundColor="rgba(0, 0, 0, 0.9)">
           <ModalCloseButton zIndex={99999999999} color={'white'} />
           <ModalBody p={0}>
-            <Flex height="100vh" className='AddScores'>
+            <Flex height="100vh" className="AddScores">
               {tab === 3 && (
                 <>
                   <Box
@@ -376,9 +393,8 @@ const SinglePreview: React.FC<{
                         fontWeight: '900',
                         color: '#D9C7A2',
                         fontSize: '18px',
-
                         lineHeight: 1,
-                        fontFamily: 'cont',
+                        fontFamily: 'AtlantisText',
                       }}
                     >
                       {data.note}
@@ -388,8 +404,6 @@ const SinglePreview: React.FC<{
                         mt={'20px'}
                         display={'flex'}
                         justifyContent={'center'}
-                        // backgroundRepeat={'no-repeat'}
-                        // backgroundSize={'contain'}
                         cursor={'pointer'}
                       >
                         <Img src={next} w={'200px'} h={'60px'} />
@@ -432,28 +446,24 @@ const SinglePreview: React.FC<{
                   />
                   {!showNote && (
                     <>
-                      <Box
-                        backgroundImage={char}
-                        position={'fixed'}
-                        h={'70px'}
-                        w={'25%'}
-                        left={'13%'}
-                        fontSize={'25'}
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        fontWeight={700}
-                        textAlign={'center'}
-                        bottom={'150px'}
-                        backgroundRepeat={'no-repeat'}
-                        backgroundSize={'contain'}
-                        fontFamily={'albuma'}
-                      >
-                        {data.character === '999999'
-                          ? 'Player'
-                          : data.character === '99999'
-                            ? 'Narrator'
-                            : formData.gameNonPlayerName}
+                      <Box position={'relative'}>
+                        <Img
+                          src={char}
+                          position={'fixed'}
+                          h={'70px'}
+                          w={'25%'}
+                          left={'13%'}
+                          bottom={'150px'}
+                        />
+                        <Text position={'fixed'} left={'25%'} bottom={'167px'} fontSize={'25'}
+                          fontWeight={700}
+                          textAlign={'center'} fontFamily={'AtlantisText'} >
+                          {data.character === '999999'
+                            ? 'Player'
+                            : data.character === '99999'
+                              ? 'Narrator'
+                              : formData.gameNonPlayerName}
+                        </Text>
                       </Box>
                       <Box
                         display={'flex'}
@@ -505,7 +515,7 @@ const SinglePreview: React.FC<{
                     maxH={'100%'}
                     w={'100%'}
                     h={'100vh'}
-                    transform={`scale(1.3}) translateY(-10%) translateX(${showNote ? -200 : 0
+                    transform={`scale(1.5}) translateY(-10%) translateX(${showNote ? -200 : 0
                       }px)`}
                     transition={'transform 0.9s ease-in-out'}
                   />
@@ -517,11 +527,12 @@ const SinglePreview: React.FC<{
                     }}
                     backgroundImage={parch}
                     position={'fixed'}
-                    w={'500px'}
-                    h={'76vh'}
-                    left={'120px'}
+                    w={{ sm: '350px', md: '500px' }}
+                    h={{ sm: '50vh', md: '76vh' }}
+                    left={{ sm: '60px', md: '120px' }}
                     backgroundSize={'contain'}
                     backgroundRepeat={'no-repeat'}
+
                   >
                     <Box
                       textAlign={'center'}
@@ -530,25 +541,48 @@ const SinglePreview: React.FC<{
                       justifyContent={'center'}
                       alignItems={'center'}
                       fontWeight={700}
-                      fontFamily={'cont'}
+                      fontFamily={'AtlantisText'}
+                      lineHeight={1}
+                      w={'100%'}
                     >
-                      {data.interaction}
+                      <Box w={'50%'} fontSize={'21px'}>Here You Can Answer the Interactions...! </Box>
                     </Box>
-                    <Box w={'400px'} fontWeight={700} ml={'15%'}>
+                    <Box
+                      textAlign={'center'}
+                      h={'100px'}
+                      display={'flex'}
+                      justifyContent={'center'}
+                      alignItems={'center'}
+                      fontWeight={500}
+                      fontFamily={'AtlantisText'}
+                      lineHeight={1}
+                      w={'100%'}
+                    >
+                      <Box w={'60%'} fontSize={'18px'} letterSpacing={1} >{data.interaction}</Box>
+                    </Box>
+                    <Box
+                      mt={'10px'}
+                      w={{ sm: '200px', md: '400px' }}
+                      fontWeight={500}
+                      ml={'17%'}
+                      h={'220px'}
+                      overflowY={'scroll'}
+                    >
                       {Object.keys(data.optionsObject).map((item, ind) => (
                         <Box
+                          mb={'10px'}
                           w={'80%'}
                           lineHeight={1}
                           color={option === ind ? 'purple' : ''}
                           textAlign={'center'}
                           cursor={'pointer'}
                           onClick={() => handleValidate(item, ind)}
-                          fontFamily={'cont'}
+                          fontFamily={'AtlantisText'}
                         >
                           <Img
                             src={option === ind ? on : off}
                             h={'30px'}
-                            w={'100%'}
+                            w={'95%'}
                           />
                           {data.optionsObject[item]}
                         </Box>
@@ -561,7 +595,7 @@ const SinglePreview: React.FC<{
                       w={'500px'}
                       left={'-10px'}
                     >
-                      <Img src={left} w={'50px'} h={'50px'} transform={'rotateZ(-90deg)'} cursor={'pointer'} />
+                      <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
                       {option !== null && (
                         <Img
                           src={right}
@@ -789,7 +823,7 @@ const SinglePreview: React.FC<{
                   position={'relative'}
                   overflow={'visible'}
                   style={{ perspective: '1000px' }}
-                  className='Main-Content'
+                  className="Main-Content"
                 >
                   <Box
                     backgroundImage={img}
@@ -804,9 +838,9 @@ const SinglePreview: React.FC<{
                     // display={'flex'}
                     alignItems={'center'}
                     justifyContent={'center'}
-                    className='Game-Screen'
+                    className="Game-Screen"
                   >
-                    <Box className='Images'>
+                    <Box className="Images">
                       <CompletionContentScreen
                         preview={true}
                         selectedBadge={selectedBadge}
@@ -830,7 +864,7 @@ const SinglePreview: React.FC<{
                   position={'relative'}
                   overflow={'visible'}
                   style={{ perspective: '1000px' }}
-                  className='Main-Content'
+                  className="Main-Content"
                 >
                   <Box
                     backgroundImage={img}
@@ -845,9 +879,9 @@ const SinglePreview: React.FC<{
                     // display={'flex'}
                     alignItems={'center'}
                     justifyContent={'center'}
-                    className='Game-Screen'
+                    className="Game-Screen"
                   >
-                    <Box className='Images'>
+                    <Box className="Images">
                       <Box className="LearderBoards">
                         <Img
                           src={Screen2}
@@ -869,7 +903,7 @@ const SinglePreview: React.FC<{
                   position={'relative'}
                   overflow={'visible'}
                   style={{ perspective: '1000px' }}
-                  className='Main-Content'
+                  className="Main-Content"
                 >
                   <Box
                     backgroundImage={img}
@@ -884,9 +918,9 @@ const SinglePreview: React.FC<{
                     // display={'flex'}
                     alignItems={'center'}
                     justifyContent={'center'}
-                    className='Game-Screen'
+                    className="Game-Screen"
                   >
-                    <Box className='Images'>
+                    <Box className="Images">
                       <ReflectionContentScreen
                         preview={true}
                         formData={formData}
@@ -908,7 +942,7 @@ const SinglePreview: React.FC<{
                   position={'relative'}
                   overflow={'visible'}
                   style={{ perspective: '1000px' }}
-                  className='Main-Content'
+                  className="Main-Content"
                 >
                   <Box
                     backgroundImage={img}
@@ -923,9 +957,9 @@ const SinglePreview: React.FC<{
                     // display={'flex'}
                     alignItems={'center'}
                     justifyContent={'center'}
-                    className='Game-Screen'
+                    className="Game-Screen"
                   >
-                    <Box className='Images'>
+                    <Box className="Images">
                       <TakeAwaysContentScreen
                         preview={true}
                         formData={formData}
@@ -946,7 +980,7 @@ const SinglePreview: React.FC<{
                     position={'relative'}
                     overflow={'visible'}
                     style={{ perspective: '1000px' }}
-                    className='Main-Content'
+                    className="Main-Content"
                   >
                     <Box
                       backgroundImage={img}
@@ -961,9 +995,9 @@ const SinglePreview: React.FC<{
                       // display={'flex'}
                       alignItems={'center'}
                       justifyContent={'center'}
-                      className='Game-Screen'
+                      className="Game-Screen"
                     >
-                      <Box className='Images'>
+                      <Box className="Images">
                         <WelcomeContentScreen
                           formData={formData}
                           imageSrc={Screen5}
@@ -972,47 +1006,51 @@ const SinglePreview: React.FC<{
                       </Box>
                     </Box>
                   </Box>
-
-
                 </>
               )}
               {tab === 5 && currentTab === 5 && (
                 <Box
-                w={'100%'}
-                h={'100vh'}
-                // display={'flex'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-                className='Main-Content'
-              >
-                <Box
-                  backgroundImage={img}
-                  w={'100% !important'}
+                  w={'100%'}
                   h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-                  // transform={`scale(${first ? 1 : 1.3}) translateY(${
-                  //   first ? 0 : -10
-                  // }%) translateX(${first ? 0 : -10}%)`}
-                  // transition={'transform 0.9s ease-in-out'}
                   // display={'flex'}
                   alignItems={'center'}
                   justifyContent={'center'}
-                  className='Game-Screen'
+                  position={'relative'}
+                  overflow={'visible'}
+                  style={{ perspective: '1000px' }}
+                  className="Main-Content"
                 >
-                  <Box className='Images'>
-                    <TyContentScreen
-                      formData={formData}
-                      imageSrc={Screen6}
-                      preview={true}
-                    />
+                  <Box
+                    backgroundImage={img}
+                    w={'100% !important'}
+                    h={'100vh'}
+                    backgroundRepeat={'no-repeat'}
+                    backgroundSize={'cover'}
+                    // transform={`scale(${first ? 1 : 1.3}) translateY(${
+                    //   first ? 0 : -10
+                    // }%) translateX(${first ? 0 : -10}%)`}
+                    // transition={'transform 0.9s ease-in-out'}
+                    // display={'flex'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    className="Game-Screen"
+                  >
+                    <Box className="Images">
+                      <TyContentScreen
+                        formData={formData}
+                        imageSrc={Screen6}
+                        preview={true}
+                      />
                     </Box>
                   </Box>
                 </Box>
               )}
+              {currentAudio && <audio ref={audioRef} controls  
+              style={{ display: 'none' }}
+              >
+                <source src={currentAudio} type="audio/mpeg" />
+                Your browser does not support the audio tag.
+              </audio>}
             </Flex>
             {/* <Menu closeOnSelect={false}>
             <MenuButton
@@ -1087,7 +1125,7 @@ const SinglePreview: React.FC<{
           </Menu> */}
           </ModalBody>
         </ModalContent>
-      </Modal >
+      </Modal>
     );
   };
 

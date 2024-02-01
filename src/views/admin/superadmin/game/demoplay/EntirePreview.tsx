@@ -77,13 +77,14 @@ const EntirePreview: React.FC<{
   const [item, setItem] = useState(null);
   const [data, setData] = useState(null);
   const [showNote, setShowNote] = useState(false),
-    [first, setFirst] = useState(false);
+    [first, setFirst] = useState(false); 
   const [intOpt, setIntOpt] = useState([]);
   const [type, setType] = useState<string>('');
   const [resMsg, setResMsg] = useState<string>('');
   const [feed, setFeed] = useState<string>('');
   const [navi, setNavi] = useState<string>('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
   useEffect(() => {
     setShowNote(true);
     setFirst(true);
@@ -200,12 +201,13 @@ const EntirePreview: React.FC<{
   }
   // const options = [1, 2, 3, 4];
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full">
-      <ModalOverlay />
-      <ModalContent backgroundColor="rgba(0, 0, 0, 0.9)">
-        <ModalCloseButton zIndex={99999999999} color={'white'} />
-        <ModalBody p={0}>
-          <Flex height="100vh">
+    // <Modal isOpen={isOpen} onClose={onClose} size="full">
+    //   <ModalOverlay />
+    //   <ModalContent backgroundColor="rgba(0, 0, 0, 0.9)">
+    //     <ModalCloseButton zIndex={99999999999} color={'white'} />
+    //     <ModalBody p={0}>
+    <>
+          <Flex height="100vh">            
             {item && data && type === 'Note' && (
               <Box
                 w={'100%'}
@@ -716,6 +718,7 @@ const EntirePreview: React.FC<{
                 </Box>
               </Box>
             )}
+           
           </Flex>
           <Menu closeOnSelect={false}>
             <MenuButton p="0px" bg={'brandScheme'}  position={'fixed'}
@@ -805,9 +808,10 @@ const EntirePreview: React.FC<{
               </MenuItem>
             </MenuList>
           </Menu>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+    </>
+    //     </ModalBody>
+    //   </ModalContent>
+    // </Modal>
   );
 };
 

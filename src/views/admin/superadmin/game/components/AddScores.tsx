@@ -549,7 +549,7 @@ const AddScores: React.FC<{
 
   const handleNext = () => {
     if (currentTab === 0) {
-      if (!compliData[CompKeyCount]?.gameTotalScore.maxScore) {
+      if (compliData[CompKeyCount]?.gameTotalScore.maxScore) {
         toast({
           title: 'Please Enter Total Score.',
           status: 'error',

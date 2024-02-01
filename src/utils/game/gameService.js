@@ -1,5 +1,5 @@
 import { API_SERVER } from 'config/constant';
-import { getMethod, postMethod, putMethod ,urls,postMethodfile} from 'utils/url/urls';
+import { getMethod, postMethod, putMethod ,urls,postMethodfile, postMethodVoice} from 'utils/url/urls';
 const person = localStorage.getItem('user');
 const user = JSON.parse(person);
 
@@ -487,6 +487,16 @@ export async function UpdateCompletionScreen(id,data) {
 export async function getStoryValidtion(id) {
   try {
     const response = await fetch(`${API_SERVER}${urls.getStoryValidtion}${id}`,getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getStoryValidtion Error:', err);
+  }
+}
+
+export async function getVoiceMessage(id,data) {
+  try {
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${id}`,postMethodVoice(data));
     const result = await response.json(); 
     return result;
   } catch (err) {
