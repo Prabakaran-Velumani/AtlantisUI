@@ -157,8 +157,8 @@ const SinglePreview: React.FC<{
         voice_settings: {
           stability: 0.5,
           similarity_boost: 0.5,
-        }
-      }
+        },
+      };
       const defaultVoiceIds = {
         narrator: '5Q0t7uMcjvnagumLfvZi',
         player: 'EXAVITQu4vr4xnSDxMaL',
@@ -167,10 +167,11 @@ const SinglePreview: React.FC<{
       };
       const data = JSON.stringify(send);
       const res = await getVoiceMessage(defaultVoiceIds.player, data);
+      if (!res) return console.log('missing audio for the block');
       const blob = new Blob([res], { type: 'audio/mpeg' });
-    const audioUrl = URL.createObjectURL(blob);
-    const audio = new Audio(audioUrl);
-    audio.play();
+      const audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(audioUrl);
+      audio.play();
     }
     useEffect(() => {
       setShowNote(true);

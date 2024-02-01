@@ -143,9 +143,12 @@ export const urls = {
    updatelanguages:'/languages/updatelanguages',
 
     /****************************Reviews ********************************/
-
-   addReviews:'/gamereview/addreviewers',
-   getAllReviews:'/gamereview/getblockreviewlist/',
+       addReviews:'/gamereview/addreviewers',
+       getAllReviews:'/gamereview/getblockreviewlist/',
+    
+      /******** Game Demo with review ******/
+      getGameDemoData : '/game/tryout/',
+      addGameReview : "/gamereview/addblockreview"
 };
 
 const person = localStorage.getItem('user');

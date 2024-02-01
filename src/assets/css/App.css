@@ -266,7 +266,10 @@ option {
   font-family: 'AtlantisText';  
   src: url(../fonts/DESIGN.JASONWALCOTT.FAIRYTALEJF.TTF);  
 }
-
+@font-face {
+  font-family: 'AtlantisContent';  
+  src: url(../fonts/AGENCYB.TTF);  
+}
 
 /* AddScores */
 

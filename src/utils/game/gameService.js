@@ -503,3 +503,32 @@ export async function getVoiceMessage(id,data) {
     console.log('getStoryValidtion Error:', err);
   }
 }
+
+// export async function getGamePreview(id){
+//   try {
+//     const response = await fetch(`${API_SERVER}${urls.getDemo}${id}`,getMethod);
+//     const result = await response.json(); 
+//     return result;
+//   } catch (err) {
+//     console.log('getDemo play Error:', err);
+//   }
+// }
+export async function getGameDemoData(uuid) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getGameDemoData}${uuid}`,getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getCreator Error:', err);
+  }
+}
+
+export async function SubmitReview(data) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.addGameReview}`,postMethod(data));
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getCreator Error:', err);
+  }
+}

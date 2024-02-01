@@ -63,7 +63,7 @@ const Welcome: React.FC<{
 
   useEffect(() => {
     if (profile.gameSkills) {
-      const Array = profile.gameSkills.split(',');
+      const Array = profile.gameSkills?.split(',');
       setauthorArray(Array);
     }
   }, [profile]);
@@ -78,9 +78,9 @@ const Welcome: React.FC<{
   const renderContent = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
 
-    const parts = formData.gameAdditionalWelcomeNote.split(linkRegex);
+    const parts = formData?.gameAdditionalWelcomeNote?.split(linkRegex);
 
-    const contentWithLinks = parts.map((part: any, index: any) => {
+    const contentWithLinks = parts?.map((part: any, index: any) => {
       if (linkRegex.test(part)) {
         return (
           <a
@@ -100,16 +100,15 @@ const Welcome: React.FC<{
 
     return <React.Fragment>{contentWithLinks}</React.Fragment>;
   };
-  // const link = extractLink(formData.gameAdditionalWelcomeNote);
-
+  
   const data =
-    formData.gameLearningOutcome !== ''
-      ? formData.gameLearningOutcome?.split('\n')
+    formData?.gameLearningOutcome !== ''
+      ? formData?.gameLearningOutcome?.split('\n')
       : '';
 
   return (
     <>
-      {imageSrc && (
+      {true && (
         <Box position={'relative'}>
           <Img src={imageSrc} width={'100%'} h={'90vh'} />
           <Box
@@ -132,9 +131,9 @@ const Welcome: React.FC<{
                   lg: '20px',
                 }}
               >
-                {formData.gameTitle}
+                {formData?.gameTitle}
               </Text>
-              {(formData.gameIsShowGameDuration === 'true' || preview) && (
+              {(formData?.gameIsShowGameDuration === 'true' || preview) && (
                 <Text
                   fontSize={{
                     base: '11px',
@@ -148,14 +147,14 @@ const Welcome: React.FC<{
                   display={'flex'}
                   alignItems={'center'}
                 >
-                  {/* Game Duration : {(formData.gameDuration > 1)?formData.gameDuration+"mins":"1mins"}*/}
+                  {/* Game Duration : {(formData?.gameDuration > 1)?formData?.gameDuration+"mins":"1mins"}*/}
                   <>
                     {' '}
                     <Box w={'100%'} display={'flex'} justifyContent={'center'}>
                       <Icon as={FaClock} style={customStylesicon} />{' '}
                       <span style={customStylesicon}>
-                        {formData.gameDuration > 1
-                          ? formData.gameDuration + ' mins'
+                        {formData?.gameDuration > 1
+                          ? formData?.gameDuration + ' mins'
                           : 'Few mins'}
                       </span>
                     </Box>
@@ -163,7 +162,7 @@ const Welcome: React.FC<{
                 </Text>
               )}
 
-              {(formData.gameIsShowStoryline === 'true' || preview) && (
+              {(formData?.gameIsShowStoryline === 'true' || preview) && (
                 <Text
                   mt={'20px'}
                   fontSize={{
@@ -174,11 +173,11 @@ const Welcome: React.FC<{
                   }}
                   fontFamily={'content'}
                 >
-                  {formData.gameStoryLine}
+                  {formData?.gameStoryLine}
                 </Text>
               )}
-              {(formData.gameIsShowSkill === 'true' ||
-                formData.gameIsShowLearningOutcome === 'true') &&
+              {(formData?.gameIsShowSkill === 'true' ||
+                formData?.gameIsShowLearningOutcome === 'true') &&
               preview ? (
                 <Img src={rew} mt={'25px'} alt="rew" w={'100%'} h={'20px'} />
               ) : (
@@ -187,13 +186,13 @@ const Welcome: React.FC<{
               <Box
                 display={'flex'}
                 className={
-                  formData.gameIsShowSkill === 'true' ||
-                  formData.gameIsShowLearningOutcome === 'true'
+                  formData?.gameIsShowSkill === 'true' ||
+                  formData?.gameIsShowLearningOutcome === 'true'
                     ? 'rewards-box'
                     : 'empty-rewards-box'
                 }
               >
-                {(formData.gameIsShowSkill === 'true' || preview) && (
+                {(formData?.gameIsShowSkill === 'true' || preview) && (
                   <>
                     <Box
                       className="box-1"
@@ -298,7 +297,7 @@ const Welcome: React.FC<{
                     </Box>
                   </>
                 )}
-                {(formData.gameIsShowLearningOutcome === 'true' || preview) && (
+                {(formData?.gameIsShowLearningOutcome === 'true' || preview) && (
                   <>
                     <Box
                       className="box-1"
@@ -405,7 +404,7 @@ const Welcome: React.FC<{
                     </Box>
                   </>
                 )}
-                {/*{formData.gameIsShowLearningOutcome === 'true' && (
+                {/*{formData?.gameIsShowLearningOutcome === 'true' && (
                       <Box className='box-2'
                         ml={'25px'}
                         h={{
@@ -452,7 +451,7 @@ const Welcome: React.FC<{
                       </Box>
                     )}*/}
               </Box>
-              {(formData.gameIsShowAuhorName === 'true' || preview) && (
+              {(formData?.gameIsShowAuhorName === 'true' || preview) && (
                 <Box
                   w={'100%'}
                   h={'50px'}
@@ -475,11 +474,11 @@ const Welcome: React.FC<{
                     fontFamily={'content'}
                     color={'black'}
                   >
-                    *Author* <br /> {formData.gameAuthorName}
+                    *Author* <br /> {formData?.gameAuthorName}
                   </Text>
                 </Box>
               )}
-              {(formData.gameIsShowAdditionalWelcomeNote === 'true' ||
+              {(formData?.gameIsShowAdditionalWelcomeNote === 'true' ||
                 preview) && (
                 <Box
                   w={'100%'}
