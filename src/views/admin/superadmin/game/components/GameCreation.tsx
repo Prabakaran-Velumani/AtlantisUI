@@ -179,6 +179,7 @@ const GameCreation = () => {
   const [countalphabet, setAlphabetCount] = useState<any>(0);
   const [count, setCount] = useState<any>(1);
   const [sequence, setSequence] = useState<any>([]);
+ 
   const [dummySequence, setDummySequence] = useState<any>([]);
   //////////////////navin/////////////////////////
   const [BlockItems, setBlockItems] = useState<any>(null);
@@ -703,37 +704,30 @@ const GameCreation = () => {
           setAlphabetCount(result.alpacount)
         }
         if (result.maxInput) {
-
-
-
           // console.log('result.nextserios',result.nextserios);
-
           // console.log('result1', result.items)
           const itemsArray = Object.values(result.items);
           let sequance = itemsArray.map((it: any) => it.id);
-          console.log('sequancesequance', sequance)
+          let upNext = itemsArray.map((it: any) => it.upNext);
+          console.log('sequancesequance', itemsArray)
           setSequence(sequance);
+          setUpNextCount(upNext);
           setDummySequence(sequance);
           // console.log('result.maxInput',result.maxInput)
-
           setItems(itemsArray);
-
-
           setInput(result.input);
-
-
           setAlphabet(Object.values(result.alp));
-          setInteractionBlock(result.intra)
+          setInteractionBlock(result.intra);
           setBlockItems(result.items);
         } else {
           console.log('else part')
           setItems([]);
           setSequence([]);
+          setUpNextCount([]);
           setDummySequence([]);
           setInput([]);
           setInteractionBlock([]);
           setBlockItems([]);
-
         }
         setTimeout(() => {
           setAtuoSave(true);
@@ -3772,6 +3766,8 @@ const GameCreation = () => {
                       questTabState={questTabState}
                       setQuestTabState={setQuestTabState}
                       deleteQuest={deleteQuest}
+                      upNextCount={upNextCount}
+                       setUpNextCount={setUpNextCount}
                     />
                   </>
                 ) : tab === 5 ? (
