@@ -220,6 +220,8 @@ const DialogCompo: React.FC<PropsDialog> = ({ seq, index, name, handleInput, han
                                                     for={`Dialog${seq.input}`}
                                                     setNavigation={setNavigation}
                                                     handleBlock={handleBlock}
+                                                    items={items}
+                                                    seq={seq}
                                                 />            
                                             </Box>      
                                             <Box ml={'4px'} cursor={'pointer'} display={input?.[`Dialog${seq.input}`]?.DialogleadShow ? 'block' : 'none'} >   

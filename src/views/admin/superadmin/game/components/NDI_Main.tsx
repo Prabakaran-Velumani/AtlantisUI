@@ -67,6 +67,8 @@ interface NDIMainProps {
             questTabState?:any;
              setQuestTabState?:any;
              deleteQuest?:any;
+             upNextCount?:any;
+             setUpNextCount?:any;
    
 }
 
@@ -89,18 +91,18 @@ type ItemType = {
     type: string;
 };
 const NDIMain: React.FC<NDIMainProps> = ({ id, formData,setBlockItems,serias,setserias,setInput,input,setItems,items,alphabet,setAlphabet,interactionBlock,setInteractionBlock,countalphabet,setAlphabetCount,count,setCount,sequence,setSequence,dummySequence,setDummySequence,showSelectBlock,setSelectBlock,targetSequence,handleKeyDown,isDeleteSeq, setDeleteseq, handleGet,fetchBlocks,listQuest, questTabState,
-    setQuestTabState,deleteQuest}) => {
+    setQuestTabState,deleteQuest,upNextCount,setUpNextCount}) => {
     const dragRef = useRef<any>();
     const bodyRef = useRef<any>();
     const toast = useToast();
     const [showBox, setShowBox] = useState(false),
         [showMiniBox, setShowMiniBox] = useState<any>(),
-        
+         
         [type, setType] = useState<any>(),
         
         
         [alert, setAlert] = useState(false),
-        [upNextCount, setUpNextCount] = useState<any>([]),
+        
         [upNext, setUpNext] = useState<any>(),
         [blockInput, setBlockInput] = useState<any>(),
         
@@ -113,7 +115,7 @@ const NDIMain: React.FC<NDIMainProps> = ({ id, formData,setBlockItems,serias,set
         
         [lastInputName, setLastInputName] = useState<any>();
         
-console.log('upNextCount',upNextCount)
+console.log('upNextCount',sequence)
     // For Character Options
     const characterOption = [
         { value: 'player', label: 'Player' },
@@ -955,22 +957,32 @@ console.log('keyvalue',keyvalue);
 });
       };
     const handleQuestionEmotion = (selectedOption: any, i: any,keyvalue:any) => {
-        
 
-        setInput((prevInput: any) => {
-            const interactionKey = keyvalue;
-            const QuestionsEmotion = selectedOption.value;
-            console.log('handleQuestionEmotion', QuestionsEmotion);
+        const selectedValues = selectedOption.map((option: any) => option.value);
 
-            return {
-                ...prevInput,
-                [interactionKey]: {
-                    ...prevInput[interactionKey],
-                    id: items[i]?.id,
-                    QuestionsEmotion: QuestionsEmotion,
-                },
-            };
-        });
+        const resultString = selectedValues.join(', ');
+        const resultArray = resultString.split(', ');
+        const arrayLength = resultArray.length;
+
+        console.log('handleQuestionEmotion', resultString);
+if(arrayLength<=2){
+    setInput((prevInput: any) => {
+        const interactionKey = keyvalue;
+        const QuestionsEmotion = resultString;
+
+      
+
+        return {
+            ...prevInput,
+            [interactionKey]: {
+                ...prevInput[interactionKey],
+                id: items[i]?.id,
+                QuestionsEmotion: QuestionsEmotion,
+            },
+        };
+    });
+}
+       
     };
     // const handleDialogEmotion = (selectedOption: any, i: any) => {
     //     let key = i - 1;
@@ -998,20 +1010,25 @@ console.log('keyvalue',keyvalue);
     
         // Use the array of strings as needed, for example, join them into a single string
         const resultString = selectedValues.join(', ');
-    
-        setInput((prevInput: any) => {
-            const interactionKey = `Dialog${i}`;
-            const DialogEmotion = resultString;
-    
-            return {
-                ...prevInput,
-                [interactionKey]: {
-                    ...prevInput[interactionKey],
-                    id: items[i]?.id,
-                    animation: DialogEmotion,
-                },
-            };
-        });
+        const resultArray = resultString.split(', ');
+        const arrayLength = resultArray.length;
+        if(arrayLength<=2){
+            setInput((prevInput: any) => {
+                const interactionKey = `Dialog${i}`;
+                const DialogEmotion = resultString;
+        
+                return {
+                    ...prevInput,
+                    [interactionKey]: {
+                        ...prevInput[interactionKey],
+                        id: items[i]?.id,
+                        animation: DialogEmotion,
+                    },
+                };
+            });
+
+        }
+       
     };
     
     
@@ -1057,7 +1074,12 @@ console.log('keyvalue',keyvalue);
     const handleOptionEmotion = (selectedOption: any, i: any, optionemotion: any,keyvalue:any) => {
         const key = i - 1;
         // console.log(`handleOptionEmotion - ${items[key]?.input} --- ${i} --- ${selectedOption.value}`);
+        const selectedValues = selectedOption.map((option: any) => option.value);
 
+        const resultString = selectedValues.join(', ');
+        const resultArray = resultString.split(', ');
+        const arrayLength = resultArray.length;
+if(arrayLength<=2){
         setInput((prevInput: any) => {
             const interactionKey = keyvalue;
             const OptionEmotion = selectedOption.value;
@@ -1066,7 +1088,7 @@ console.log('keyvalue',keyvalue);
             alphabet.forEach((item:any) => {
                 const optValue =
                     optionemotion === `Option${item.option}`
-                        ? selectedOption.value
+                        ? resultString
                         : prevInput[interactionKey]?.optionsemotionObject?.[item.option];
                 console.log('optValue', optionemotion)
                 optionsemotionObject[item.option] = optValue;
@@ -1081,6 +1103,7 @@ console.log('keyvalue',keyvalue);
                 },
             };
         });
+    }
     };
 
     const handleOptionVoice = (selectedOption: any, i: any, optionvoice: any,keyvalue:any) => {
@@ -1115,30 +1138,39 @@ console.log('handleOptionVoice',i);
     const handleResponseEmotion = (selectedOption: any, i: any, responseemotion: any,keyvalue:any) => {
         const key = i - 1;
         // console.log(`handleOptionEmotion - ${items[key]?.input} --- ${i} --- ${selectedOption.value}`);
+        const selectedValues = selectedOption.map((option: any) => option.value);
 
-        setInput((prevInput: any) => {
-            const interactionKey = keyvalue;
-            const OptionEmotion = selectedOption.value;
-            const responseemotionObject: any = {};
+        const resultString = selectedValues.join(', ');
+        const resultArray = resultString.split(', ');
+        const arrayLength = resultArray.length;
 
-            alphabet.forEach((item:any) => {
-                const optValue =
-                    responseemotion === `Option${item.option}`
-                        ? selectedOption.value
-                        : prevInput[interactionKey]?.responseemotionObject?.[item.option];
-                console.log('optValue', responseemotionObject)
-                responseemotionObject[item.option] = optValue;
+        console.log('handleQuestionEmotion', resultString);
+        if(arrayLength<=2){
+            setInput((prevInput: any) => {
+                const interactionKey = keyvalue;
+                const OptionEmotion = selectedOption.value;
+                const responseemotionObject: any = {};
+    
+                alphabet.forEach((item:any) => {
+                    const optValue =
+                        responseemotion === `Option${item.option}`
+                            ? resultString
+                            : prevInput[interactionKey]?.responseemotionObject?.[item.option];
+                    console.log('optValue', responseemotionObject)
+                    responseemotionObject[item.option] = optValue;
+                });
+                console.log('optionsemotionObject', responseemotionObject)
+                return {
+                    ...prevInput,
+                    [interactionKey]: {
+                        ...prevInput[interactionKey],
+                        id: items[i]?.id,
+                        responseemotionObject: responseemotionObject,
+                    },
+                };
             });
-            console.log('optionsemotionObject', responseemotionObject)
-            return {
-                ...prevInput,
-                [interactionKey]: {
-                    ...prevInput[interactionKey],
-                    id: items[i]?.id,
-                    responseemotionObject: responseemotionObject,
-                },
-            };
-        });
+        }
+       
     };
 
     const handleCheckBox = (checked: any, i: any, optionright: any,keyvalue:any) => {

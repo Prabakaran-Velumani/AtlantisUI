@@ -39,10 +39,11 @@ interface PropsInteraction {
    questTabState?:any;
     setQuestTabState?:any;
     deleteQuest?:any;
-                       
+    upNextCount?:any;
+    setUpNextCount?:any;                
 }
 
-const Customize: React.FC<PropsInteraction> = ({ id, formData, setBlockItems, serias, setserias, setInput, input, setItems, items, alphabet, setAlphabet, interactionBlock, setInteractionBlock, countalphabet, setAlphabetCount, count, setCount, sequence, setSequence, dummySequence, setDummySequence,showSelectBlock,setSelectBlock,targetSequence,handleKeyDown,isDeleteSeq, setDeleteseq,handleGet,fetchBlocks,listQuest,questTabState,setQuestTabState,deleteQuest }) => {
+const Customize: React.FC<PropsInteraction> = ({ id, formData, setBlockItems, serias, setserias, setInput, input, setItems, items, alphabet, setAlphabet, interactionBlock, setInteractionBlock, countalphabet, setAlphabetCount, count, setCount, sequence, setSequence, dummySequence, setDummySequence,showSelectBlock,setSelectBlock,targetSequence,handleKeyDown,isDeleteSeq, setDeleteseq,handleGet,fetchBlocks,listQuest,questTabState,setQuestTabState,deleteQuest,setUpNextCount,upNextCount }) => {
 
   const [showComponent, setComponent] = useState('CustomList');
   const navigate = useNavigate();
@@ -78,6 +79,8 @@ const Customize: React.FC<PropsInteraction> = ({ id, formData, setBlockItems, se
           questTabState={questTabState}
           setQuestTabState={setQuestTabState}
           deleteQuest={deleteQuest}
+          upNextCount={upNextCount}
+         setUpNextCount={setUpNextCount}       
         />
 
 
