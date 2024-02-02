@@ -269,35 +269,33 @@ const SinglePreview: React.FC<{
                 <>
                   <Box
                     w={'100%'}
-                    h={'100vh'}
-                    display={'flex'}
+                    h={'100vh'}                   
                     alignItems={'center'}
                     justifyContent={'center'}
                     position={'relative'}
                     overflow={'visible'}
                     style={{ perspective: '1000px' }}
+                    className="Main-Content"
                   >
                     <Box
                       backgroundImage={img}
-                      w={'100%'}
+                      w={'100% !important'}
                       h={'100vh'}
                       backgroundRepeat={'no-repeat'}
                       backgroundSize={'cover'}
-                      display={'flex'}
                       alignItems={'center'}
                       justifyContent={'center'}
+                      className="Game-Screen"
                     >
-                      <Box className="Game-Screen">
-                        <Box className={'Images'}>
-                          <WelcomeContentScreen
-                            formData={formData}
-                            imageSrc={Screen5}
-                            preview={true}
-                          />
-                        </Box>
+                      <Box className="Images">
+                        <WelcomeContentScreen
+                          formData={formData}
+                          imageSrc={Screen5}
+                          preview={true}
+                        />
                       </Box>
                     </Box>
-                  </Box>{' '}
+                  </Box>
                 </>
               )}
               {tab === 4 && item && data && type === 'Note' && (

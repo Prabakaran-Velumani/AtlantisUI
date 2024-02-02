@@ -13,9 +13,8 @@ import qs from 'assets/img/screens/QS.png';
 
 const Reflection: React.FC<{
     formData: any;
-    reflectionQuestions: any; imageSrc: any; reflectionQuestionsdefault: any, preview: any
+    reflectionQuestions?: any; imageSrc: any; reflectionQuestionsdefault?: any, preview?: any
 }> = ({ formData, reflectionQuestions, imageSrc, reflectionQuestionsdefault, preview }) => {
-
 
     return (
         <>
