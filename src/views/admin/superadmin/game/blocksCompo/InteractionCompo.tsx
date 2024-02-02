@@ -40,7 +40,7 @@ interface PropsInteraction {
     duplicateSeq?: any,
     delSeq?: any,
     input?: any,
-    handleInput?: any,
+    handleInput?: any, 
     handleSelect?: any,
     characterOption?: any,
     alphabet?: any,
@@ -495,7 +495,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
             borderColor: 'inherit',
             background: 'transparent',
             // height: '45px',
-            width: '130px',
+            width: '180px',
             padding: '0 !important',
         }),
     }
@@ -668,12 +668,22 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                     styles={customStyles}
                                     options={emotionsOptions}
                                     isSearchable={true}
+                                    
+                                    isMulti={true}
                                     className='react-select'
-                                    value={
-                                        emotionsOptions.find(
-                                            (option) => option.value === input?.[`Interaction${seq.input}`]?.QuestionsEmotion
-                                        ) || null
-                                    }
+                                    // value={
+                                    //     emotionsOptions.find(
+                                    //         (option) => option.value === input?.[`Interaction${seq.input}`]?.QuestionsEmotion
+                                    //     ) || null
+                                    // }
+
+                                    value={input?.[`Interaction${seq.input}`]?.QuestionsEmotion
+                                    ? input?.[`Interaction${seq.input}`]?.QuestionsEmotion.split(',').map((value: string) => ({ // Explicitly specify the type as string
+                                        value,
+                                        label: value,
+                                    }))
+                                    : []}
+
                                     onChange={(selectedOption: any) => handleQuestionEmotion(selectedOption, seq.input, `Interaction${seq.input}`)}
                                 />
                             </Box>
@@ -751,11 +761,20 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                                     options={emotionsOptions}
                                                     isSearchable={true}
                                                     className='react-select'
-                                                    value={
-                                                        emotionsOptions.find(
-                                                            (option) => option.value === input?.[`Interaction${seq.input}`]?.optionsemotionObject?.[alp.option]
-                                                        ) || null
-                                                    }
+                                                    isMulti={true}
+                                                    // value={
+                                                    //     emotionsOptions.find(
+                                                    //         (option) => option.value === input?.[`Interaction${seq.input}`]?.optionsemotionObject?.[alp.option]
+                                                    //     ) || null
+                                                    // }
+                                                    value=
+                                                    {input?.[`Interaction${seq.input}`]?.optionsemotionObject?.[alp.option]
+                                                    ? input?.[`Interaction${seq.input}`]?.optionsemotionObject?.[alp.option].split(',').map((value: string) => ({ // Explicitly specify the type as string
+                                                        value,
+                                                        label: value,
+                                                    }))
+                                                    : []}
+
                                                     onChange={(e: any) => handleOptionEmotion(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)}
                                                 />
                                             </Box>
@@ -1069,12 +1088,21 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                                     styles={customStyles}
                                                     options={emotionsOptions}
                                                     isSearchable={true}
+                                                    isMulti={true}
                                                     className='react-select'
-                                                    value={
-                                                        emotionsOptions.find(
-                                                            (option) => option.value === input?.[`Interaction${seq.input}`]?.responseemotionObject?.[alp.option]
-                                                        ) || null
-                                                    }
+                                                    value=
+                                                    {input?.[`Interaction${seq.input}`]?.responseemotionObject?.[alp.option]
+                                                    ? input?.[`Interaction${seq.input}`]?.responseemotionObject?.[alp.option].split(',').map((value: string) => ({ // Explicitly specify the type as string
+                                                        value,
+                                                        label: value,
+                                                    }))
+                                                    : []}
+
+                                                    // value={
+                                                    //     emotionsOptions.find(
+                                                    //         (option) => option.value === input?.[`Interaction${seq.input}`]?.responseemotionObject?.[alp.option]
+                                                    //     ) || null
+                                                    // }
                                                     onChange={(e: any) => handleResponseEmotion(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)}
                                                 />
                                                 </Box>
