@@ -1,5 +1,5 @@
 import { API_SERVER } from 'config/constant';
-import { getMethod, postMethod, putMethod ,urls,postMethodfile, postMethodVoice} from 'utils/url/urls';
+import { getMethod, postMethod, putMethod ,urls,postMethodfile, postMethodVoice,postMethodGameReview,getMethodGameReview } from 'utils/url/urls';
 const person = localStorage.getItem('user');
 const user = JSON.parse(person);
 
@@ -525,7 +525,7 @@ export async function getGameDemoData(uuid) {
 
 export async function SubmitReview(data) {
   try {
-    const response = await fetch(`${API_SERVER}${urls.addGameReview}`,postMethod(data));
+    const response = await fetch(`${API_SERVER}${urls.addGameReview}`,postMethodGameReview(data));
     const result = await response.json(); 
     return result;
   } catch (err) {

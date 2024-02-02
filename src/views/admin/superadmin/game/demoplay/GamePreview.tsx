@@ -51,7 +51,7 @@ import React, {
 } from 'react';
 
 // import ModelViewer from "../three/ModelViewer";
-import { useParams } from 'react-router-dom';
+import { json, useParams } from 'react-router-dom';
 import { getGameDemoData,SubmitReview } from 'utils/game/gameService';
 // import NoAuth from './NoAuth';
 // import NoAuth from './NoAuth';
@@ -63,7 +63,7 @@ const gameScreens = ['GameIntro','Welcome','Story','Reflection',"Leaderboard", "
 const GamePreview = () => {
   const { uuid } = useParams();
   const [gameInfo, setGameInfo] = useState<any | null>();
-  const [currentScreenId, setCurrentScreenId] = useState<Number>(2);
+  const [currentScreenId, setCurrentScreenId] = useState<Number>(3);
   const toast = useToast();
   const [toastObj, setToastObj] = useState<any>();
     
@@ -76,6 +76,7 @@ const GamePreview = () => {
   */
   const fetchGameData = async () => {
     const gamedata = await getGameDemoData(uuid);
+    // console.log("gamedata",gamedata)
     updateGameInfo(gamedata)
   };
 
@@ -85,7 +86,7 @@ const GamePreview = () => {
   */
 const updateGameInfo = (info: any)=>{
 
-  console.log('info',info)
+  // console.log('info',info)
   const {
     gameReviewerId,
     creatorId,
@@ -134,12 +135,13 @@ const updateGameInfo = (info: any)=>{
     gameHistory:gameview,
     assets: image,
     blocks: sortBlockSequence(lmsblocks),
-    questOptions: lmsquestionsoptions
+    questOptions: lmsquestionsoptions,
+    reflectionQuestions: info?.resultReflection
   })
 }
 
 
-const handleSubmitReview= async(data: any)=>{
+const handleSubmitReview= async(inputdata: any)=>{
   /** Sample post data
    * {"data" :{
     "reviewerId": 4,
@@ -151,8 +153,22 @@ const handleSubmitReview= async(data: any)=>{
    }
 } 
    */
+  if(!inputdata.reviewerId || !inputdata.reviewGameId){
+    setToastObj((prev:any) => {return {...prev, status: "failure", title: "You are Unauthorized..!"}});
+    return ;
+}else if(!inputdata.tabId)
+{
+  setToastObj((prev:any) => {return {...prev, status: "failure", title: "Select Feedback Options"}});
+  return ;
+}
+else if(!inputdata.review)
+{
+  setToastObj((prev:any) => {return {...prev, status: "failure", title: "Review Field is Empty"}});
+  return ;
+}
 
-const addReviewResponse = await SubmitReview(data);
+
+const addReviewResponse = await SubmitReview(JSON.stringify({data: inputdata}));
 
 if(addReviewResponse?.status =="Failure")
 {

@@ -30,7 +30,7 @@ import {
   MenuItem,
 } from '@chakra-ui/react';
 import Screen2 from 'assets/img/screens/screen2.png';
-import Screen5 from "assets/img/screens/screen5.png";
+import Screen5 from 'assets/img/screens/screen5.png';
 // import bk from 'assets/img/games/17.png';
 // import note from 'assets/img/games/note.png';
 // import next from 'assets/img/screens/next.png';
@@ -602,7 +602,7 @@ interface Review {
   reviewerId: String | null;
   reviewGameId: String | null;
   review: String | null;
-  tabId: Number;
+  tabId: Number | null;
   tabAttribute: String | null;
   tabAttributeValue: String | null;
 }
@@ -615,12 +615,38 @@ interface ShowPreviewProps {
   setToastObj: React.Dispatch<React.SetStateAction<any>>;
   handleSubmitReview: (data: any) => Promise<void>;
 }
-const EntirePreview: React.FC<ShowPreviewProps> = ({  gameScreens,
+
+type TabAttributeSet = {
+  [key: string]: {
+    tabAttribute: string | null;
+    tabAttributeValue: string | null;
+  };
+};
+//no need for story
+const overOptions = [
+  { value: 1, label: 'Background' },
+  { value: 2, label: 'Characters' },
+  { value: 3, label: 'Game Overview' },
+  { value: 4, label: 'Story' },
+  { value: 5, label: 'Design' },
+];
+
+const tabOptions = [
+  { value: 1, label: 'Background' },
+  { value: 2, label: 'Characters' },
+  { value: 3, label: 'Game Overview' },
+  { value: 4, label: 'Story' },
+  { value: 5, label: 'Design' },
+];
+
+const EntirePreview: React.FC<ShowPreviewProps> = ({
+  gameScreens,
   currentScreenId,
   setCurrentScreenId,
   gameInfo,
   setToastObj,
-  handleSubmitReview, }) => {
+  handleSubmitReview,
+}) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const [showFullText, setShowFullText] = useState(false);
@@ -637,7 +663,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({  gameScreens,
   const [data, setData] = useState(null);
   // handle the transition effect
   const [showNote, setShowNote] = useState(false),
-       [first, setFirst] = useState(false);
+    [first, setFirst] = useState(false);
   const [intOpt, setIntOpt] = useState([]);
   // type to render component ( conditional render)
   const [type, setType] = useState<string>('');
@@ -647,15 +673,27 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({  gameScreens,
   const [navi, setNavi] = useState<string>('');
   const [options, setOptions] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [review, setReview] = useState<Review>({
-    reviewerId: null,
-    reviewGameId: null,
+  const [backgroundScreenUrl, setBackgroundScreenUrl] = useState(null);
+  /** This state handles the Review Form Tab and Sub Tab options */
+  const [reviewTabOptions, setReviewTabOptions] = useState([]);
+  const [filteredTabOptions, setFilteredTabOptions] = useState([]);
+  const [reviewSubTabOptions, setReviewSubTabOptions] = useState<Array<{ value: string; label: string }>>([]);
+  const [reviewInput, setReviewInput] = useState<Review>({
+    reviewerId: gameInfo?.reviewer?.ReviewerId ?? null,
+    reviewGameId: gameInfo?.gameId ?? null,
     review: '',
     tabId: null,
     tabAttribute: '',
     tabAttributeValue: '',
   });
-  const [backgroundScreenUrl, setBackgroundScreenUrl] = useState(null);
+
+  const tabAttributeSets: TabAttributeSet[] = [
+    { '1': { tabAttribute: null, tabAttributeValue: null } },
+    { '2': { tabAttribute: null, tabAttributeValue: null } },
+    { '3': { tabAttribute: 'fieldName', tabAttributeValue: '' } },
+    { '4': { tabAttribute: 'blockSeqId', tabAttributeValue: '' } },
+    { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
+  ];
 
   useEffect(() => {
     setShowNote(true);
@@ -668,16 +706,26 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({  gameScreens,
     setType(demoBlocks['1']['1']?.blockChoosen);
     setData(demoBlocks['1']['1']);
   }, []);
-  
 
-useEffect(()=>{
-switch(currentScreenId){
-    case 1 && gameInfo?.gameData?.gameWelcomepageBackground: setBackgroundScreenUrl("http://192.168.1.29:5555/uploads/background/reflectionBg.png"); break;
-    case 3 && gameInfo?.gameData?.gameReflectionpageBackground: setBackgroundScreenUrl("http://192.168.1.29:5555/uploads/background/20252.jpg"); break;
-    default : setBackgroundScreenUrl("http://192.168.1.29:5555/uploads/background/41524_1701765021527.jpg"); break;
-}
-},[currentScreenId])
- 
+  useEffect(() => {
+    switch (currentScreenId) {
+      case 1 && gameInfo?.gameData?.gameWelcomepageBackground:
+        setBackgroundScreenUrl(
+          'http://192.168.1.29:5555/uploads/background/20252.jpg',
+        );
+        break;
+      case 3 && gameInfo?.gameData?.gameReflectionpageBackground:
+        setBackgroundScreenUrl(
+          'http://192.168.1.29:5555/uploads/background/reflectionBg.png',
+        );
+        break;
+      default:
+        setBackgroundScreenUrl(
+          'http://192.168.1.29:5555/uploads/background/41524_1701765021527.jpg',
+        );
+        break;
+    }
+  }, [currentScreenId]);
 
   // to handle the transition whenever the note,dialog or interaction change
   useEffect(() => {
@@ -694,13 +742,12 @@ switch(currentScreenId){
     const NextItem = currentBlock + 1;
     const nextSeq = `${next?.blockDragSequence.split('.')[0]}.${NextItem}`;
     const quest = next?.blockDragSequence.split('.')[0];
-    const currentQuest =  parseInt(next?.blockDragSequence.split('.')[0]);
-    const nextLevel = String(currentQuest+1);
+    const currentQuest = parseInt(next?.blockDragSequence.split('.')[0]);
+    const nextLevel = String(currentQuest + 1);
     const nextBlock = Object.keys(demoBlocks[quest])
-    .filter((key) => demoBlocks[quest][key]?.blockDragSequence === nextSeq)
-    .map((key) => demoBlocks[quest][key]);
-    if(nextBlock.length === 0)
-    {
+      .filter((key) => demoBlocks[quest][key]?.blockDragSequence === nextSeq)
+      .map((key) => demoBlocks[quest][key]);
+    if (nextBlock.length === 0) {
       setType(demoBlocks['1']['1']?.blockChoosen);
       setData(demoBlocks['1']['1']);
     }
@@ -720,33 +767,35 @@ switch(currentScreenId){
     ) {
       if (navi === 'Repeat Question') {
         setType('Interaction');
-        setSelectedOption(null)
+        setSelectedOption(null);
       } else if (navi === 'New Block') {
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
-        setSelectedOption(null)
+        setSelectedOption(null);
       } else if (navi === 'Replay Point') {
         setType(demoBlocks['1']['1']?.blockChoosen);
         setData(demoBlocks['1']['1']);
-        setSelectedOption(null)
+        setSelectedOption(null);
       } else if (navi === 'Select Block') {
-        setSelectedOption(null)
+        setSelectedOption(null);
       } else {
         setType(demoBlocks[nextLevel]['1']?.blockChoosen);
         setData(demoBlocks[nextLevel]['1']);
         if (demoBlocks[nextLevel]['1']?.blockChoosen === 'Interaction') {
           const optionsFiltered = gameData?.questOptions.filter(
-            (key: any) => key.qpSequence === demoBlocks[nextLevel]['1']?.blockPrimarySequence,
+            (key: any) =>
+              key.qpSequence ===
+              demoBlocks[nextLevel]['1']?.blockPrimarySequence,
           );
           setOptions(optionsFiltered);
         }
-        setSelectedOption(null)
+        setSelectedOption(null);
       }
     } else {
       setType(nextBlock[0]?.blockChoosen);
       setData(nextBlock[0]);
-      setSelectedOption(null)
-    }  
+      setSelectedOption(null);
+    }
   };
 
   let menuBg = useColorModeValue('white', 'navy.800');
@@ -763,50 +812,167 @@ switch(currentScreenId){
     setSelectedOption(ind === selectedOption ? null : ind);
   };
 
+  useEffect(() => {
+    setFeedBackFromValue();
+  }, [currentScreenId]);
+  /***
+   * @param currentScreenId ->Number
+   * @param isInteraction ->Boolean
+   * @param
+   *
+   */
+  const setFeedBackFromValue = () => {
+    switch (currentScreenId) {
+      case 0:
+        setReviewTabOptions([1, 3, 5]); //GameInto screen
+        break;
+      case 1:
+        setReviewTabOptions([1, 3, 5]); //Welcome
+        break;
+      case 2:
+        setReviewTabOptions([1, 2, 4]); //Story
+        break;
+      case 3:
+        setReviewTabOptions([1, 5]); //Reflection
+        break;
+      case 4:
+        setReviewTabOptions([1, 5]); //Leaderboard
+        break;
+      case 5:
+        setReviewTabOptions([1, 5]); //ThanksScreen
+        break;
+      case 6:
+        setReviewTabOptions([1, 5]); //Completion
+        break;
+      case 7:
+        setReviewTabOptions([1, 5]); //TakeAway
+        break;
+      default:
+        setReviewTabOptions([1, 2, 3, 4, 5]); //All
+    }
+  };
 
-//no need for story 
-  const overOptions = [
-    { value: 1, label: 'Background' },
-    { value: 2, label: 'Non Playing Character' },
-    { value: 3, label: 'Overview' },
-    { value: 4, label: 'Story' },
-    { value: 5, label: 'Design' },
+  useEffect(() => {
+    if (reviewTabOptions) {
+      const filterTabOptions = tabOptions.filter((tabOption) =>
+        reviewTabOptions.includes(tabOption.value),
+      );
+      setFilteredTabOptions(filterTabOptions);
+    }
+  }, [reviewTabOptions]);
+
+  const subTabOptionsForTabIds: Array<{
+    [key: string]: Array<{ value: string; label: string }> | null;
+  }> = [
+    { '1': null },
+    { '2': null },
+    {
+      '3': [
+        { value: 'Title', label: 'Title' },
+        { value: 'Skill', label: 'Skill' },
+        { value: 'Storyline', label: 'Storyline' },
+        { value: 'Outcomes', label: 'Outcomes' },
+        { value: 'Category', label: 'Category' },
+        { value: 'Author', label: 'Author' },
+      ],
+    },
+    { '4': null },
+    {
+      '5': [
+        { value: '1', label: 'Completion' },
+        { value: '2', label: 'Leaderboard' },
+        { value: '3', label: 'Reflection' },
+        { value: '4', label: 'Takeaway' },
+        { value: '5', label: 'Welcome' },
+        { value: '6', label: 'Thanks' },
+      ],
+    },
   ];
 
-//no need for story 
-  const handleFeed = () => {
-    setIsMenuOpen(false);
-  };
-// console.log('game details of the data',gameInfo?.gameData,currentScreenId);
+  useEffect(() => {
+    if(reviewInput?.tabId){
+      const subOptions= subTabOptionsForTabIds.find((item:any )=> Object.keys(item)[0] == reviewInput?.tabId.toString());      
+      setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
+    }
+  
+  }, [reviewInput]);
+
+  //no need for story
+  const handleTabSelection = (selectedOption:any) => {    
+    if(selectedOption?.value){
+      setReviewInput((prev: Review) => ({
+        ...prev,
+        tabId: selectedOption?.value ? selectedOption?.value : null,
+        tabAttribute: '',
+        tabAttributeValue: '',
+      }));
+      setIsMenuOpen(true);
+    }
+    else{
+      setReviewInput((prev: Review) => ({
+        ...prev,
+        tabId: selectedOption?.value ? selectedOption?.value : null,
+        tabAttribute: '',
+        tabAttributeValue: '',
+      }));
+      setReviewSubTabOptions([]);
+    }
+    }
+
+  const handleSubTabSelection = (selectedOption:any) => {
+      const selectedTabFileds = tabAttributeSets.find((item) => Object.keys(item)[0] == reviewInput?.tabId.toString());
+      
+      setReviewInput((prev: Review)=> ({...prev, tabAttribute: selectedOption?.value ? selectedTabFileds[reviewInput?.tabId.toString()].tabAttribute : null, tabAttributeValue: selectedOption?.value ? selectedOption?.value: null }));
+
+      // setIsMenuOpen(true);
+  }
+
+  const handleMenubtn = (e: React.MouseEvent<HTMLButtonElement>)=>{
+      e.stopPropagation();
+      setIsMenuOpen(true)
+}
+
+const handleReview = (e: any)=>{
+setReviewInput((prev: Review)=>({...prev, review: e.target.value}));
+}
+
+const hanldeSubmit =(data: any)=>{
+  handleSubmitReview(data);
+  setIsMenuOpen(false);
+}
+  console.log("reviewInput", reviewInput);
+ 
   return (
     <>
       <Box
         w={'100%'}
         h={'100vh'}
-        display={currentScreenId === 2 ?'block':'flex'}
+        display={currentScreenId === 2 ? 'block' : 'flex'}
         alignItems={'center'}
         justifyContent={'center'}
         position={'relative'}
         overflow={'visible'}
         style={{ perspective: '1000px' }}
       >
-        {currentScreenId === 2 ? null :<Img
-          src={backgroundScreenUrl}
-          w={'100%'}
-          h={'100%'}
-          alt="background image"
-        />}
+        {currentScreenId === 2 ? null : (
+          <Img
+            src={backgroundScreenUrl}
+            w={'100%'}
+            h={'100%'}
+            alt="background image"
+          />
+        )}
         <Box
-          className={currentScreenId === 2 ?'':"Game-Screen"}
-          position={currentScreenId === 2 ?'inherit':'absolute'}
+          className={currentScreenId === 2 ? '' : 'Game-Screen'}
+          position={currentScreenId === 2 ? 'inherit' : 'absolute'}
           top={0}
-          display={currentScreenId === 2 ?'block':'flex'}
+          display={currentScreenId === 2 ? 'block' : 'flex'}
           justifyContent={'center'}
           alignItems={'center'}
           w={'100%'}
           h={'100vh'}
         >
-          <Box className={currentScreenId === 2 ?'':'Images'}>
+          <Box className={currentScreenId === 2 ? '' : 'Images'}>
             {(() => {
               switch (currentScreenId) {
                 case 0:
@@ -876,15 +1042,15 @@ switch(currentScreenId){
         </Box>
       </Box>
 
-      <Menu closeOnSelect={false}>
+      <Menu  isOpen={isMenuOpen}>
         <MenuButton
           p="0px"
           bg={'brandScheme'}
           position={'fixed'}
           bottom={'0'}
           right={'5px'}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleMenubtn(e)}
+          >
           <Icon
             as={AiFillMessage}
             bg={'#3311db'}
@@ -896,67 +1062,70 @@ switch(currentScreenId){
             me="10px"
           />
         </MenuButton>
-        <MenuList
-          boxShadow={shadow}
-          p="20px"
-          me={{ base: '30px', md: 'unset' }}
-          borderRadius="20px"
-          bg={menuBg}
-          border="none"
-          mt="10px"
-          minW={{ base: '360px' }}
-          maxW={{ base: '360px', md: 'unset' }}
-        >
-          <SelectField
-            mb="10px"
-            me="30px"
-            id="gameIntroMusic"
-            name="gameIntroMusic"
-            label="Feedback Options"
-            options={overOptions}
-            onChange={handleFeed}
-          />
-          <FormControl>
-            <FormLabel fontSize={18} fontWeight={700}>
-              Feedback
-              {/* {tab === 1
-                    ? 'Background'
-                    : tab === 2
-                    ? 'Non playing Character'
-                    : tab === 3
-                    ? 'Overview'
-                    : tab === 4
-                    ? 'story'
-                    : tab === 5
-                    ? 'Design'
-                    : 'Preference'} */}
-            </FormLabel>
-            <Textarea
-              resize="none"
-              w="100%"
-              h="200px"
-              border="1px solid #CBD5E0"
-              borderRadius="20px"
-              p="4"
-              placeholder="Please Share your Thoughts..."
+        {isMenuOpen && (
+          <MenuList
+            boxShadow={shadow}
+            p="20px"
+            me={{ base: '30px', md: 'unset' }}
+            borderRadius="20px"
+            bg={menuBg}
+            border="none"
+            mt="10px"
+            minW={{ base: '360px' }}
+            maxW={{ base: '360px', md: 'unset' }}
+          >
+            <SelectField
+              mb="10px"
+              me="30px"
+              id="tab"
+              name="tab"
+              label="Feedback Options"
+              options={filteredTabOptions}
+              onChange={ handleTabSelection}
             />
-          </FormControl>
-          <MenuItem>
-            <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
-              <Button
-                bg="#11047a"
-                _hover={{ bg: '#190793' }}
-                color="#fff"
-                h={'46px'}
-                w={'128px'}
-                mr={'33px'}
-                mt={'7px'}
-              >
-                Submit
-              </Button>
-            </Box>
-          </MenuItem>
-        </MenuList>
+        {reviewInput?.tabId !==null && reviewInput?.tabId !==undefined && reviewSubTabOptions?.length > 0 &&
+            <SelectField
+              mb="10px"
+              me="30px"
+              id="subtab"
+              name="subtab"
+              label="Secondary Options"
+              options={reviewSubTabOptions}
+              onChange={ handleSubTabSelection}
+            />}
+            <FormControl>
+              <FormLabel fontSize={18} fontWeight={700}>
+                Feedback
+              </FormLabel>
+              <Textarea
+                resize="none"
+                w="100%"
+                h="200px"
+                border="1px solid #CBD5E0"
+                borderRadius="20px"
+                p="4"
+                placeholder="Please Share your Thoughts..."
+                onChange={handleReview}
+              />
+            </FormControl>
+            <MenuItem>
+              <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                <Button
+                  bg="#11047a"
+                  _hover={{ bg: '#190793' }}
+                  color="#fff"
+                  h={'46px'}
+                  w={'128px'}
+                  mr={'33px'}
+                  mt={'7px'}
+                  onClick={()=>hanldeSubmit(reviewInput)}
+                >
+                  Submit
+                </Button>
+              </Box>
+            </MenuItem>
+          </MenuList>
+        )}
       </Menu>
     </>
   );
