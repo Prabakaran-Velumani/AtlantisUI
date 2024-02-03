@@ -667,8 +667,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                     menuPortalTarget={document.body}
                                     styles={customStyles}
                                     options={emotionsOptions}
-                                    isSearchable={true}
-                                    
+                                    isSearchable={true}                                   
                                     isMulti={true}
                                     className='react-select'
                                     // value={

@@ -711,24 +711,16 @@ const GameCreation = () => {
           // console.log('result1', result.items)
           const itemsArray = Object.values(result.items);
           let sequance = itemsArray.map((it: any) => it.id);
-<<<<<<< HEAD
-          console.log('sequancesequance', sequance);
-=======
           let upNext = itemsArray.map((it: any) => it.upNext);
           console.log('sequancesequance', itemsArray)
->>>>>>> 14a1142849ba1a1b6d40f316e06caaab8c12a02e
           setSequence(sequance);
           setUpNextCount(upNext);
           setDummySequence(sequance);
           // console.log('result.maxInput',result.maxInput)
           setItems(itemsArray);
-<<<<<<< HEAD
 
           setInput(result.input);
 
-=======
-          setInput(result.input);
->>>>>>> 14a1142849ba1a1b6d40f316e06caaab8c12a02e
           setAlphabet(Object.values(result.alp));
           setInteractionBlock(result.intra);
           setBlockItems(result.items);
@@ -3867,8 +3859,8 @@ const GameCreation = () => {
                       questTabState={questTabState}
                       setQuestTabState={setQuestTabState}
                       deleteQuest={deleteQuest}
-                      upNextCount={upNextCount}
-                       setUpNextCount={setUpNextCount}
+                      // upNextCount={upNextCount}
+                      //  setUpNextCount={setUpNextCount}
                     />
                   </>
                 ) : tab === 5 ? (

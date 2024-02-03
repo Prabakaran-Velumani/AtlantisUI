@@ -60,7 +60,7 @@ const Story: React.FC<{
     setTimeout(() => {
       setShowNote(false);
     }, 1000);
-  }, [type]);
+  }, [data,type]);
   useEffect(() => {
     setShowNote(true);
     setFirst(true);
@@ -95,6 +95,7 @@ const Story: React.FC<{
               first ? 0 : -10
             }%) translateX(${first ? 0 : -10}%)`}
             transition={'transform 0.9s ease-in-out'}
+            // backdropFilter={}
           >
             <Box
               position={'fixed'}
@@ -244,7 +245,8 @@ const Story: React.FC<{
                 justifyContent={'space-between'}
                 w={'75%'}
                 bottom={'55px'}
-                fontFamily={'cont'}
+                fontFamily={'AtlantisContent'}
+                 fontSize={'21px'}
               >
                 {data?.blockText}
               </Box>

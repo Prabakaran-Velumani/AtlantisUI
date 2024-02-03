@@ -440,11 +440,11 @@ const AboutStory: React.FC<{
                 borderColor={borderColor}
                 borderRadius="16px"
                 _focus={{ borderColor: 'teal.300' }}
-                minH='30px'
-                maxH='300px' 
-                h='stretch'
-                cursor='text'
-                style={{ overflowY: 'auto' }}  
+                minH="30px"
+                maxH="300px"
+                h="stretch"
+                cursor="text"
+                style={{ overflowY: 'auto' }}
               >
                 {defaultskills &&
                   defaultskills?.map((tag: any, index: any) => {

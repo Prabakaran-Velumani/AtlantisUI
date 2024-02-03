@@ -40,19 +40,11 @@ interface PropsInteraction {
    questTabState?:any;
     setQuestTabState?:any;
     deleteQuest?:any;
-<<<<<<< HEAD
     reviewers?:any
                        
 }
 
 const Customize: React.FC<PropsInteraction> = ({ reviewers,reviews,id, formData, setBlockItems, serias, setserias, setInput, input, setItems, items, alphabet, setAlphabet, interactionBlock, setInteractionBlock, countalphabet, setAlphabetCount, count, setCount, sequence, setSequence, dummySequence, setDummySequence,showSelectBlock,setSelectBlock,targetSequence,handleKeyDown,isDeleteSeq, setDeleteseq,handleGet,fetchBlocks,listQuest,questTabState,setQuestTabState,deleteQuest }) => {
-=======
-    upNextCount?:any;
-    setUpNextCount?:any;                
-}
-
-const Customize: React.FC<PropsInteraction> = ({ id, formData, setBlockItems, serias, setserias, setInput, input, setItems, items, alphabet, setAlphabet, interactionBlock, setInteractionBlock, countalphabet, setAlphabetCount, count, setCount, sequence, setSequence, dummySequence, setDummySequence,showSelectBlock,setSelectBlock,targetSequence,handleKeyDown,isDeleteSeq, setDeleteseq,handleGet,fetchBlocks,listQuest,questTabState,setQuestTabState,deleteQuest,setUpNextCount,upNextCount }) => {
->>>>>>> 14a1142849ba1a1b6d40f316e06caaab8c12a02e
 
   const [showComponent, setComponent] = useState('CustomList');
   const navigate = useNavigate();
@@ -90,9 +82,7 @@ const Customize: React.FC<PropsInteraction> = ({ id, formData, setBlockItems, se
           listQuest={listQuest}
           questTabState={questTabState}
           setQuestTabState={setQuestTabState}
-          deleteQuest={deleteQuest}
-          upNextCount={upNextCount}
-         setUpNextCount={setUpNextCount}       
+          deleteQuest={deleteQuest}     
         />
 
 

@@ -697,9 +697,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   // story inside next button function for the blocks
 
   const getData = (next: any) => { 
-     console.log(data);
-     console.log(type);
-     console.log(next);
     const currentBlock = parseInt(next?.blockDragSequence.split('.')[1]);
     const NextItem = currentBlock + 1;
     const nextSeq = `${next?.blockDragSequence.split('.')[0]}.${NextItem}`;
@@ -810,7 +807,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setIsMenuOpen(false);
   };
 
-  console.log(currentScreenId);
+  console.log(demoBlocks);
 
   return (
     <>

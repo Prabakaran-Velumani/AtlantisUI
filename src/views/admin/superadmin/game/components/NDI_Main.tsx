@@ -91,8 +91,6 @@ interface NDIMainProps {
   setQuestTabState?: any;
   deleteQuest?: any;
   reviewers?: any;
-  upNextCount?:any; 
-  setUpNextCount?:any;      
 }
 
 const initial = {
@@ -115,8 +113,6 @@ type ItemType = {
 };
 const NDIMain: React.FC<NDIMainProps> = ({
   reviews,
-  upNextCount,
-  setUpNextCount,
   id,
   formData,
   setBlockItems,
