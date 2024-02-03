@@ -613,7 +613,7 @@ interface ShowPreviewProps {
   setCurrentScreenId: React.Dispatch<React.SetStateAction<Number>>;
   gameInfo: any;
   setToastObj: React.Dispatch<React.SetStateAction<any>>;
-  handleSubmitReview: (data: any) => Promise<void>;
+  handleSubmitReview: (data: any) => Promise<boolean>;
 }
 
 type TabAttributeSet = {
@@ -686,7 +686,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     tabAttribute: '',
     tabAttributeValue: '',
   });
-
+const [isFormValid, setIsFormValid] = useState<boolean>(false);
+const [currentStoryBlockSeq, setCurrentStoryBlockSeq] = useState<string>(null);
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
     { '2': { tabAttribute: null, tabAttributeValue: null } },
@@ -695,6 +696,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
   ];
 
+  
   useEffect(() => {
     setShowNote(true);
     setFirst(true);
@@ -811,7 +813,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setNavi(item?.qpNavigateShow);
     setSelectedOption(ind === selectedOption ? null : ind);
   };
-
   useEffect(() => {
     setFeedBackFromValue();
   }, [currentScreenId]);
@@ -891,11 +892,50 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   useEffect(() => {
     if(reviewInput?.tabId){
-      const subOptions= subTabOptionsForTabIds.find((item:any )=> Object.keys(item)[0] == reviewInput?.tabId.toString());      
-      setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
+      console.log("reviewInput?.tabId != 5",reviewInput?.tabId != 5)
+      if(reviewInput?.tabId == 5){ //for Design Tab
+        const subOptions= subTabOptionsForTabIds.find((item:any )=> Object.keys(item)[0] == reviewInput?.tabId.toString());      
+        const subTabValueOfCurrentScreenId = subOptions[reviewInput?.tabId.toString()].filter((screenitem: any) => screenitem.value == currentScreenId.toString());
+        ;
+        handleSubTabSelection(subTabValueOfCurrentScreenId[0]);
+      }
+      else if(reviewInput?.tabId == 4){  //for Story Tab
+        const blockSeqId = data.blockPrimarySequence.replace(/\./g, "@");
+        setReviewInput((prev: Review)=> ({...prev, tabAttribute:"blockSeqId", tabAttributeValue:blockSeqId}));
+      }
+      else
+      {
+        const subOptions= subTabOptionsForTabIds.find((item:any )=> Object.keys(item)[0] == reviewInput?.tabId.toString());
+        setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
+      }
+      /** To hide the sub tab options and set the subtab selection based on the current screen it here */
     }
   
-  }, [reviewInput]);
+  }, [reviewInput.tabId]);
+
+useEffect(()=>{
+  /**Validate form */
+if(reviewInput.reviewGameId && reviewInput.reviewerId && reviewInput.tabId  && reviewInput.review)
+{
+  if(reviewInput.tabId == 3 || reviewInput.tabId == 5)
+  {
+    if(reviewInput.tabAttribute && reviewInput.tabAttributeValue )
+    {
+      setIsFormValid(true);
+    }
+    else{
+      setIsFormValid(false);
+    }
+  }
+  else{
+    setIsFormValid(true);
+  }
+}
+else{
+  setIsFormValid(false);
+}
+
+},[reviewInput])
 
   //no need for story
   const handleTabSelection = (selectedOption:any) => {    
@@ -920,11 +960,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
 
   const handleSubTabSelection = (selectedOption:any) => {
+    console.log("selectedOption", selectedOption);
       const selectedTabFileds = tabAttributeSets.find((item) => Object.keys(item)[0] == reviewInput?.tabId.toString());
-      
       setReviewInput((prev: Review)=> ({...prev, tabAttribute: selectedOption?.value ? selectedTabFileds[reviewInput?.tabId.toString()].tabAttribute : null, tabAttributeValue: selectedOption?.value ? selectedOption?.value: null }));
-
-      // setIsMenuOpen(true);
   }
 
   const handleMenubtn = (e: React.MouseEvent<HTMLButtonElement>)=>{
@@ -935,13 +973,24 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 const handleReview = (e: any)=>{
 setReviewInput((prev: Review)=>({...prev, review: e.target.value}));
 }
-
-const hanldeSubmit =(data: any)=>{
-  handleSubmitReview(data);
+const resetInputFields=()=>{
+  setReviewInput((prev)=>({...prev, review:'', tabId: null, tabAttribute:'', tabAttributeValue:''}));
+}
+const hanldeSubmit =async (data: any)=>{
+  const response = handleSubmitReview(data);//returns true or false
+if(response){
   setIsMenuOpen(false);
+  resetInputFields();
+}
 }
   console.log("reviewInput", reviewInput);
  
+
+  const hanldeClose = ()=>{
+    setIsFormValid(false);
+    resetInputFields();
+    setIsMenuOpen(false);
+  }
   return (
     <>
       <Box
@@ -1080,8 +1129,10 @@ const hanldeSubmit =(data: any)=>{
               id="tab"
               name="tab"
               label="Feedback Options"
+              labelStyle={{ fontSize: 18, fontWeight:700 }}
               options={filteredTabOptions}
               onChange={ handleTabSelection}
+              style={{ fontSize: '18px' }}
             />
         {reviewInput?.tabId !==null && reviewInput?.tabId !==undefined && reviewSubTabOptions?.length > 0 &&
             <SelectField
@@ -1090,12 +1141,14 @@ const hanldeSubmit =(data: any)=>{
               id="subtab"
               name="subtab"
               label="Secondary Options"
+              // labelStyle={{ fontSize: 18, fontWeight:700 }}
+              fontSize={'md'}
               options={reviewSubTabOptions}
               onChange={ handleSubTabSelection}
             />}
             <FormControl>
-              <FormLabel fontSize={18} fontWeight={700}>
-                Feedback
+              <FormLabel fontSize={"sm"} fontWeight={700} pl="4">
+                Feedback 
               </FormLabel>
               <Textarea
                 resize="none"
@@ -1107,9 +1160,26 @@ const hanldeSubmit =(data: any)=>{
                 placeholder="Please Share your Thoughts..."
                 onChange={handleReview}
               />
+              <Text color='#CBD5E0' fontSize={{ base: 'sm', '2xl': 'md' }}>
+								{"Maximum of 250 characters..."}
+							</Text>
             </FormControl>
             <MenuItem>
+              <Box w={'100%'} display={'flex'} justifyContent={'flex-start'}><Button
+                  bg="#11047a"
+                  _hover={{ bg: '#190793' }}
+                  color="#fff"
+                  h={'46px'}
+                  w={'128px'}
+                  mr={'33px'}
+                  mt={'7px'}
+                  onClick={()=>hanldeClose()}
+                >
+                  close
+                </Button></Box>
+                
               <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+              
                 <Button
                   bg="#11047a"
                   _hover={{ bg: '#190793' }}
@@ -1119,6 +1189,7 @@ const hanldeSubmit =(data: any)=>{
                   mr={'33px'}
                   mt={'7px'}
                   onClick={()=>hanldeSubmit(reviewInput)}
+                  isDisabled={!isFormValid}
                 >
                   Submit
                 </Button>

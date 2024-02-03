@@ -63,7 +63,7 @@ const gameScreens = ['GameIntro','Welcome','Story','Reflection',"Leaderboard", "
 const GamePreview = () => {
   const { uuid } = useParams();
   const [gameInfo, setGameInfo] = useState<any | null>();
-  const [currentScreenId, setCurrentScreenId] = useState<Number>(3);
+  const [currentScreenId, setCurrentScreenId] = useState<Number>(1);
   const toast = useToast();
   const [toastObj, setToastObj] = useState<any>();
     
@@ -155,27 +155,28 @@ const handleSubmitReview= async(inputdata: any)=>{
    */
   if(!inputdata.reviewerId || !inputdata.reviewGameId){
     setToastObj((prev:any) => {return {...prev, status: "failure", title: "You are Unauthorized..!"}});
-    return ;
+    return false;
 }else if(!inputdata.tabId)
 {
   setToastObj((prev:any) => {return {...prev, status: "failure", title: "Select Feedback Options"}});
-  return ;
+  return false;
 }
 else if(!inputdata.review)
 {
   setToastObj((prev:any) => {return {...prev, status: "failure", title: "Review Field is Empty"}});
-  return ;
+  return false;
 }
 
 
-const addReviewResponse = await SubmitReview(JSON.stringify({data: inputdata}));
-
+const addReviewResponse = await SubmitReview(JSON.stringify({data: inputdata, id: uuid}));
 if(addReviewResponse?.status =="Failure")
 {
   setToastObj((prev:any) => {return {...prev, status: "failure", title: "Failed to add Review"}});
-  return ;
+  return false;
 }
 setToastObj((prev:any) => {return {...prev, status: "success", title: "Review Added Successfully..!"}});
+fetchGameData();
+return true;
 }
 
 /** Handle Toast for this Component and childs too */
