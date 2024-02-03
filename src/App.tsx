@@ -29,7 +29,7 @@ export default function Main() {
           element={
             <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
           }
-        />
+        />     
         <Route
           path="rtl/*"
           element={

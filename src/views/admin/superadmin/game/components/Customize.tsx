@@ -82,7 +82,7 @@ const Customize: React.FC<PropsInteraction> = ({ reviewers,reviews,id, formData,
           listQuest={listQuest}
           questTabState={questTabState}
           setQuestTabState={setQuestTabState}
-          deleteQuest={deleteQuest}
+          deleteQuest={deleteQuest}     
         />
 
 

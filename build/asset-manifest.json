@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.850ec02e.css",
-    "main.js": "/static/js/main.751e88f7.js",
+    "main.css": "/static/css/main.2e39f1e7.css",
+    "main.js": "/static/js/main.77eca9b5.js",
     "static/media/new-level-final.png": "/static/media/new-level-final.5da0cd3df68f1246adce.png",
     "static/media/log.png": "/static/media/log.a3e8b19a810e029b4813.png",
     "static/media/select-character-final.png": "/static/media/select-character-final.9bb86f77e488e219ecb6.png",
@@ -9,12 +9,12 @@
     "static/media/parch.png": "/static/media/parch.4cac43febb1525341d86.png",
     "static/media/refquestions.png": "/static/media/refquestions.1b99655ebb87ee038c30.png",
     "static/media/note.png": "/static/media/note.f714a96e9725753e6d53.png",
+    "static/media/feed.png": "/static/media/feed.812d47f507c54da2d094.png",
     "static/media/Dialogue.png": "/static/media/Dialogue.819371b7ccac72ef0a16.png",
     "static/media/refscreen1.png": "/static/media/refscreen1.ed03fe4b84386dba3bbb.png",
     "static/media/screen5.png": "/static/media/screen5.106d3c52dd8306ac55a0.png",
     "static/media/screen2.png": "/static/media/screen2.02580702281955c18988.png",
     "static/media/screen1.png": "/static/media/screen1.bd4a77536f4a09c9a207.png",
-    "static/media/17.png": "/static/media/17.7e12b804f8ae79103f77.png",
     "static/media/screen6.png": "/static/media/screen6.764f9fc918d859a7e421.png",
     "static/media/badges-game-read-format.png": "/static/media/badges-game-read-format.1e1fc4e2a03dc24b2aea.png",
     "static/media/screen4.png": "/static/media/screen4.22453251e7f8524770e4.png",
@@ -33,20 +33,21 @@
     "static/media/book.png": "/static/media/book.8f25f6c73f68fa043087.png",
     "static/media/avatar1.png": "/static/media/avatar1.eeef2af6dfcd3ff23cb8.png",
     "static/media/pro.png": "/static/media/pro.29281f374994be554581.png",
+    "static/media/AGENCYB.TTF": "/static/media/AGENCYB.8ea49f04bdda6f43b4c3.TTF",
     "static/media/DESIGN.JASONWALCOTT.FAIRYTALEJF.TTF": "/static/media/DESIGN.JASONWALCOTT.FAIRYTALEJF.f7a39cff75d0004b85b1.TTF",
     "static/media/topbg.jpg": "/static/media/topbg.64d25ca74f3a1cce38f6.jpg",
     "static/media/next.png": "/static/media/next.8b171bf48e4da334bc04.png",
     "static/media/avatar11.png": "/static/media/avatar11.1a8e2392055df9fe6812.png",
     "static/media/points.png": "/static/media/points.d73e69ea380576c22947.png",
-    "static/media/left.png": "/static/media/left.ad0e0e606f2c8afd067a.png",
+    "static/media/left.png": "/static/media/left.c81aacee278a4990df7c.png",
     "static/media/right.png": "/static/media/right.9d0943e68825f448209f.png",
     "static/media/Reward Bar.png": "/static/media/Reward Bar.2845bf83c80b73fd15ce.png",
     "index.html": "/index.html",
-    "main.850ec02e.css.map": "/static/css/main.850ec02e.css.map",
-    "main.751e88f7.js.map": "/static/js/main.751e88f7.js.map"
+    "main.2e39f1e7.css.map": "/static/css/main.2e39f1e7.css.map",
+    "main.77eca9b5.js.map": "/static/js/main.77eca9b5.js.map"
   },
   "entrypoints": [
-    "static/css/main.850ec02e.css",
-    "static/js/main.751e88f7.js"
+    "static/css/main.2e39f1e7.css",
+    "static/js/main.77eca9b5.js"
   ]
 }

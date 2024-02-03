@@ -52,6 +52,17 @@ interface MenuItem {
   }
   
   const [showMenu, setMenu] = useState<MenuItem[]>([]);
+  const [showNewBlock, newBlockState] = useState<MenuItem[]>([]);
+
+
+  useEffect(() => {
+
+	const lastInput = rest?.items?.length > 0 ? rest?.items[rest?.items?.length - 1]?.input : null;
+	console.log('lastInput',rest?.items)
+  }, [rest?.items]);
+  
+
+
   
   useEffect(() => {
 	// Define your menu options

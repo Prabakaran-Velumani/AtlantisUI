@@ -192,6 +192,7 @@ const GameCreation = () => {
   const [countalphabet, setAlphabetCount] = useState<any>(0);
   const [count, setCount] = useState<any>(1);
   const [sequence, setSequence] = useState<any>([]);
+ 
   const [dummySequence, setDummySequence] = useState<any>([]);
   //////////////////navin/////////////////////////
   const [BlockItems, setBlockItems] = useState<any>(null);
@@ -237,6 +238,7 @@ const GameCreation = () => {
     null,
   );
 
+  console.log("currentTab",currentTab);
   ///////reflectionQuestions///////////////
 
   const handleReflectionInput = (e: any, i?: any) => {
@@ -707,15 +709,15 @@ const GameCreation = () => {
         }
         if (result.maxInput) {
           // console.log('result.nextserios',result.nextserios);
-
           // console.log('result1', result.items)
           const itemsArray = Object.values(result.items);
           let sequance = itemsArray.map((it: any) => it.id);
-          console.log('sequancesequance', sequance);
+          let upNext = itemsArray.map((it: any) => it.upNext);
+          console.log('sequancesequance', itemsArray)
           setSequence(sequance);
+          setUpNextCount(upNext);
           setDummySequence(sequance);
           // console.log('result.maxInput',result.maxInput)
-
           setItems(itemsArray);
 
           setInput(result.input);
@@ -727,6 +729,7 @@ const GameCreation = () => {
           console.log('else part');
           setItems([]);
           setSequence([]);
+          setUpNextCount([]);
           setDummySequence([]);
           setInput([]);
           setInteractionBlock([]);
@@ -3857,6 +3860,8 @@ const GameCreation = () => {
                       questTabState={questTabState}
                       setQuestTabState={setQuestTabState}
                       deleteQuest={deleteQuest}
+                      // upNextCount={upNextCount}
+                      //  setUpNextCount={setUpNextCount}
                     />
                   </>
                 ) : tab === 5 ? (
@@ -3973,7 +3978,7 @@ const GameCreation = () => {
                         : 'Preference'}
                     </FormLabel>
                     <Box w={'360px'} maxH={'50vh'} overflowY={'scroll'}>
-                      {reviews[tab] && reviews[tab]?.length !== 0 ? (
+                      {reviews && reviews[tab] && reviews[tab]?.length !== 0 ? (
                         reviews[tab]
                           .filter((item: any) =>
                             tab === 5

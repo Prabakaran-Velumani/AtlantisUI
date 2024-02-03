@@ -31,6 +31,7 @@ import {
 } from '@chakra-ui/react';
 import Screen2 from 'assets/img/screens/screen2.png';
 import Screen5 from 'assets/img/screens/screen5.png';
+import Screen1 from 'assets/img/screens/screen1.png';
 // import bk from 'assets/img/games/17.png';
 // import note from 'assets/img/games/note.png';
 // import next from 'assets/img/screens/next.png';
@@ -51,7 +52,6 @@ import React, {
 import SelectField from 'components/fields/SelectField';
 import InitialImg from 'assets/img/games/load.jpg';
 import { Canvas, useLoader, useFrame } from 'react-three-fiber';
-// import Sample from '../../../../assets/img/games/Character_sample.glb';
 import Sample from 'assets/img/games/Character_sample.glb';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -59,543 +59,14 @@ import feedi from 'assets/img/screens/feed.png';
 import { AiFillMessage } from 'react-icons/ai';
 import Story from './playcards/Story';
 import Welcome from './playcards/Welcome';
-
-const gameData: any = {
-  gameId: 7,
-  reviewer: {
-    ReviewerId: 1,
-    ReviewerName: 'brindha',
-    ReviewerEmailId: null,
-    ReviewerGender: 'Female',
-    ReviewerStatus: 'YES',
-    ReviewerDeleteStatus: 'NO',
-  },
-  reviews: [
-    {
-      reviewId: 1,
-      gameReviewerId: 1,
-      reviewGameId: 7,
-      tabId: 1,
-      tabAttribute: null,
-      tabAttributeValue: null,
-      review: 'Background',
-      createdAt: '2024-01-23T04:21:48.000Z',
-      updatedAt: '2024-01-23T04:21:48.000Z',
-    },
-  ],
-  gameHistory: {
-    gvId: 7,
-    gvgameId: 25,
-    gvViewUserId: 3,
-    createdAt: '2024-01-04T10:35:19.000Z',
-    updatedAt: null,
-  },
-  assets: {
-    gasId: 1,
-    gasAssetType: '1',
-    gasAssetName: 'Forest',
-    gasStatus: 'Active',
-    gasDeleteStatus: 'NO',
-    gasAssetImage:
-      'http://192.168.1.29:5555/uploads/background/41524_1701765021527.jpg',
-  },
-  blocks: {
-    '1': {
-      '1': {
-        blockGameId: 7,
-        blockQuestNo: 1,
-        blockId: 139,
-        blockSecondaryId: 2,
-        blockPrimarySequence: '1.1',
-        blockDragSequence: '1.1',
-        blockType: null,
-        blockRoll: 'Narrator',
-        blockResponseRoll: null,
-        blockSkillTag: null,
-        blockTitleTag: null,
-        blockText: 'hi this is me',
-        blockNoOfOptions: null,
-        blockChoosen: 'Note',
-        blockVoiceGender: null,
-        blockVoiceEmotions: null,
-        blockShowNavigate: null,
-        blockLeadTo: null,
-        blockVoiceAccents: null,
-        blockCharacterposesId: null,
-        blockAssetId: null,
-        blockAnimationId: null,
-        blockCreatedDatetime: '2024-02-01T05:01:33.000Z',
-        blockEditedDatetime: null,
-        blockDeleteStatus: 'No',
-        blockActiveStatus: 'Active',
-      },
-      '2': {
-        blockGameId: 7,
-        blockQuestNo: 1,
-        blockId: 8,
-        blockSecondaryId: 1,
-        blockPrimarySequence: '1.5',
-        blockDragSequence: '1.2',
-        blockType: null,
-        blockRoll: '22',
-        blockResponseRoll: null,
-        blockSkillTag: null,
-        blockTitleTag: null,
-        blockText: 'hi how are you ?\n',
-        blockNoOfOptions: null,
-        blockChoosen: 'Interaction',
-        blockVoiceGender: null,
-        blockVoiceEmotions: null,
-        blockShowNavigate: null,
-        blockLeadTo: null,
-        blockVoiceAccents: null,
-        blockCharacterposesId: 'Anger',
-        blockAssetId: null,
-        blockAnimationId: null,
-        blockCreatedDatetime: '2024-02-01T05:01:33.000Z',
-        blockEditedDatetime: null,
-        blockDeleteStatus: 'No',
-        blockActiveStatus: 'Active',
-      },
-      '3': {
-        blockGameId: 7,
-        blockQuestNo: 1,
-        blockId: 140,
-        blockSecondaryId: 3,
-        blockPrimarySequence: '1.2',
-        blockDragSequence: '1.3',
-        blockType: null,
-        blockRoll: 'Narrator',
-        blockResponseRoll: null,
-        blockSkillTag: null,
-        blockTitleTag: null,
-        blockText: 'welcome to the game',
-        blockNoOfOptions: null,
-        blockChoosen: 'Note',
-        blockVoiceGender: null,
-        blockVoiceEmotions: null,
-        blockShowNavigate: null,
-        blockLeadTo: null,
-        blockVoiceAccents: null,
-        blockCharacterposesId: null,
-        blockAssetId: null,
-        blockAnimationId: null,
-        blockCreatedDatetime: '2024-02-01T05:01:33.000Z',
-        blockEditedDatetime: null,
-        blockDeleteStatus: 'No',
-        blockActiveStatus: 'Active',
-      },
-      '4': {
-        blockGameId: 7,
-        blockQuestNo: 1,
-        blockId: 141,
-        blockSecondaryId: 4,
-        blockPrimarySequence: '1.3',
-        blockDragSequence: '1.4',
-        blockType: null,
-        blockRoll: 'Narrator',
-        blockResponseRoll: null,
-        blockSkillTag: null,
-        blockTitleTag: null,
-        blockText: 'shall we start the game',
-        blockNoOfOptions: null,
-        blockChoosen: 'Note',
-        blockVoiceGender: null,
-        blockVoiceEmotions: null,
-        blockShowNavigate: null,
-        blockLeadTo: null,
-        blockVoiceAccents: null,
-        blockCharacterposesId: null,
-        blockAssetId: null,
-        blockAnimationId: null,
-        blockCreatedDatetime: '2024-02-01T05:01:33.000Z',
-        blockEditedDatetime: null,
-        blockDeleteStatus: 'No',
-        blockActiveStatus: 'Active',
-      },
-      '5': {
-        blockGameId: 7,
-        blockQuestNo: 1,
-        blockId: 142,
-        blockSecondaryId: 5,
-        blockPrimarySequence: '1.4',
-        blockDragSequence: '1.5',
-        blockType: null,
-        blockRoll: '22',
-        blockResponseRoll: null,
-        blockSkillTag: null,
-        blockTitleTag: null,
-        blockText: 'lets start the game ',
-        blockNoOfOptions: null,
-        blockChoosen: 'Dialog',
-        blockVoiceGender: null,
-        blockVoiceEmotions: '',
-        blockShowNavigate: null,
-        blockLeadTo: null,
-        blockVoiceAccents: null,
-        blockCharacterposesId: 'Anger',
-        blockAssetId: null,
-        blockAnimationId: null,
-        blockCreatedDatetime: '2024-02-01T05:01:33.000Z',
-        blockEditedDatetime: null,
-        blockDeleteStatus: 'No',
-        blockActiveStatus: 'Active',
-      },
-      '6': {
-        blockGameId: 7,
-        blockQuestNo: 1,
-        blockId: 143,
-        blockSecondaryId: 6,
-        blockPrimarySequence: '1.6',
-        blockDragSequence: '1.6',
-        blockType: null,
-        blockRoll: '22',
-        blockResponseRoll: null,
-        blockSkillTag: null,
-        blockTitleTag: null,
-        blockText: 'who is the king of the forest',
-        blockNoOfOptions: null,
-        blockChoosen: 'Interaction',
-        blockVoiceGender: null,
-        blockVoiceEmotions: null,
-        blockShowNavigate: null,
-        blockLeadTo: null,
-        blockVoiceAccents: null,
-        blockCharacterposesId: 'Anticipation',
-        blockAssetId: null,
-        blockAnimationId: null,
-        blockCreatedDatetime: '2024-02-01T05:01:33.000Z',
-        blockEditedDatetime: null,
-        blockDeleteStatus: 'No',
-        blockActiveStatus: 'Active',
-      },
-    },
-    '2': {
-      '1': {
-        blockGameId: 7,
-        blockQuestNo: 2,
-        blockId: 41,
-        blockSecondaryId: 1,
-        blockPrimarySequence: '2.3',
-        blockDragSequence: '2.1',
-        blockType: null,
-        blockRoll: '22',
-        blockResponseRoll: null,
-        blockSkillTag: null,
-        blockTitleTag: null,
-        blockText:
-          "sffeWriting a brilliant 100-150 word article requires focus and conciseness. First, choose a clear and engaging topic that you can cover in a brief space. Start with a compelling opening sentence to grab the reader's attention. Then, develop your mai",
-        blockNoOfOptions: null,
-        blockChoosen: 'Interaction',
-        blockVoiceGender: null,
-        blockVoiceEmotions: null,
-        blockShowNavigate: null,
-        blockLeadTo: null,
-        blockVoiceAccents: null,
-        blockCharacterposesId: 'Joy',
-        blockAssetId: null,
-        blockAnimationId: null,
-        blockCreatedDatetime: '2024-01-31T08:56:13.000Z',
-        blockEditedDatetime: null,
-        blockDeleteStatus: 'No',
-        blockActiveStatus: 'Active',
-      },
-      '2': {
-        blockGameId: 7,
-        blockQuestNo: 2,
-        blockId: 144,
-        blockSecondaryId: 2,
-        blockPrimarySequence: '2.1',
-        blockDragSequence: '2.2',
-        blockType: null,
-        blockRoll: 'Narrator',
-        blockResponseRoll: null,
-        blockSkillTag: null,
-        blockTitleTag: null,
-        blockText: 'let start with one',
-        blockNoOfOptions: null,
-        blockChoosen: 'Note',
-        blockVoiceGender: null,
-        blockVoiceEmotions: null,
-        blockShowNavigate: null,
-        blockLeadTo: null,
-        blockVoiceAccents: null,
-        blockCharacterposesId: null,
-        blockAssetId: null,
-        blockAnimationId: null,
-        blockCreatedDatetime: '2024-01-31T08:56:13.000Z',
-        blockEditedDatetime: null,
-        blockDeleteStatus: 'No',
-        blockActiveStatus: 'Active',
-      },
-      '3': {
-        blockGameId: 7,
-        blockQuestNo: 2,
-        blockId: 145,
-        blockSecondaryId: 3,
-        blockPrimarySequence: '2.2',
-        blockDragSequence: '2.3',
-        blockType: null,
-        blockRoll: '22',
-        blockResponseRoll: null,
-        blockSkillTag: null,
-        blockTitleTag: null,
-        blockText: 'once a king lead the gen',
-        blockNoOfOptions: null,
-        blockChoosen: 'Dialog',
-        blockVoiceGender: null,
-        blockVoiceEmotions: '',
-        blockShowNavigate: null,
-        blockLeadTo: null,
-        blockVoiceAccents: null,
-        blockCharacterposesId: 'Surprise',
-        blockAssetId: null,
-        blockAnimationId: null,
-        blockCreatedDatetime: '2024-01-31T08:56:13.000Z',
-        blockEditedDatetime: null,
-        blockDeleteStatus: 'No',
-        blockActiveStatus: 'Active',
-      },
-    },
-  },
-  questOptions: [
-    {
-      qpOptionId: 12,
-      qpGameId: 7,
-      qpQuestionId: 8,
-      qpSecondaryId: 1,
-      qpQuestNo: 1,
-      qpOptions: 'A',
-      qpSequence: '1.5',
-      qpOptionText: 'fine',
-      qpResponse: '',
-      qpResponseEmotion: '',
-      qpBlockSecondaryId: '1',
-      qpNavigateShow: '',
-      qpTag: 'true',
-      qpFeedback: '',
-      qpSkillTag: null,
-      qpScore: '455',
-      qpTitleTag: '',
-      qpEmotion: 'Fear',
-      qpVoice: '',
-      qpNextOption: '',
-      qpCreatedDatetime: '2024-02-01T05:01:33.000Z',
-      qpEditedDatetime: '2024-02-01T05:01:33.000Z',
-      qpDeleteStatus: 'No',
-      qpActiveStatus: 'Yes',
-    },
-    {
-      qpOptionId: 13,
-      qpGameId: 7,
-      qpQuestionId: 8,
-      qpSecondaryId: 2,
-      qpQuestNo: 1,
-      qpOptions: 'B',
-      qpSequence: '1.5',
-      qpOptionText: 'not fine',
-      qpResponse: '',
-      qpResponseEmotion: '',
-      qpBlockSecondaryId: '1',
-      qpNavigateShow: '',
-      qpTag: 'true',
-      qpFeedback: '',
-      qpSkillTag: null,
-      qpScore: '20',
-      qpTitleTag: '',
-      qpEmotion: 'Fear',
-      qpVoice: '',
-      qpNextOption: '',
-      qpCreatedDatetime: '2024-02-01T05:01:33.000Z',
-      qpEditedDatetime: '2024-02-01T05:01:33.000Z',
-      qpDeleteStatus: 'No',
-      qpActiveStatus: 'Yes',
-    },
-    {
-      qpOptionId: 14,
-      qpGameId: 7,
-      qpQuestionId: 8,
-      qpSecondaryId: 3,
-      qpQuestNo: 1,
-      qpOptions: 'C',
-      qpSequence: '1.5',
-      qpOptionText: 'noted',
-      qpResponse: '',
-      qpResponseEmotion: '',
-      qpBlockSecondaryId: '1',
-      qpNavigateShow: '',
-      qpTag: 'true',
-      qpFeedback: '',
-      qpSkillTag: null,
-      qpScore: '0',
-      qpTitleTag: '',
-      qpEmotion: 'Guilt',
-      qpVoice: '',
-      qpNextOption: '',
-      qpCreatedDatetime: '2024-02-01T05:01:33.000Z',
-      qpEditedDatetime: '2024-02-01T05:01:33.000Z',
-      qpDeleteStatus: 'No',
-      qpActiveStatus: 'Yes',
-    },
-    {
-      qpOptionId: 146,
-      qpGameId: 7,
-      qpQuestionId: 41,
-      qpSecondaryId: 4,
-      qpQuestNo: 2,
-      qpOptions: 'A',
-      qpSequence: '2.3',
-      qpOptionText: 'sfafasfa',
-      qpResponse: '',
-      qpResponseEmotion: '',
-      qpBlockSecondaryId: '1',
-      qpNavigateShow: 'New Block',
-      qpTag: 'false',
-      qpFeedback: '',
-      qpSkillTag: null,
-      qpScore: '0',
-      qpTitleTag: '',
-      qpEmotion: 'Joy',
-      qpVoice: '',
-      qpNextOption: '',
-      qpCreatedDatetime: '2024-01-31T08:56:13.000Z',
-      qpEditedDatetime: '2024-01-31T08:56:13.000Z',
-      qpDeleteStatus: 'No',
-      qpActiveStatus: 'Yes',
-    },
-    {
-      qpOptionId: 147,
-      qpGameId: 7,
-      qpQuestionId: 41,
-      qpSecondaryId: 5,
-      qpQuestNo: 2,
-      qpOptions: 'B',
-      qpSequence: '2.3',
-      qpOptionText: 'sfsf',
-      qpResponse: '',
-      qpResponseEmotion: '',
-      qpBlockSecondaryId: '1',
-      qpNavigateShow: 'New Block',
-      qpTag: 'true',
-      qpFeedback: '',
-      qpSkillTag: null,
-      qpScore: '34',
-      qpTitleTag: '',
-      qpEmotion: 'Joy',
-      qpVoice: '',
-      qpNextOption: '',
-      qpCreatedDatetime: '2024-01-31T08:56:13.000Z',
-      qpEditedDatetime: '2024-01-31T08:56:13.000Z',
-      qpDeleteStatus: 'No',
-      qpActiveStatus: 'Yes',
-    },
-    {
-      qpOptionId: 148,
-      qpGameId: 7,
-      qpQuestionId: 41,
-      qpSecondaryId: 6,
-      qpQuestNo: 2,
-      qpOptions: 'C',
-      qpSequence: '2.3',
-      qpOptionText: 'afa',
-      qpResponse: '',
-      qpResponseEmotion: '',
-      qpBlockSecondaryId: '1',
-      qpNavigateShow: 'New Block',
-      qpTag: 'false',
-      qpFeedback: '',
-      qpSkillTag: null,
-      qpScore: '0',
-      qpTitleTag: '',
-      qpEmotion: 'Surprise',
-      qpVoice: '',
-      qpNextOption: '',
-      qpCreatedDatetime: '2024-01-31T08:56:13.000Z',
-      qpEditedDatetime: '2024-01-31T08:56:13.000Z',
-      qpDeleteStatus: 'No',
-      qpActiveStatus: 'Yes',
-    },
-    {
-      qpOptionId: 1110,
-      qpGameId: 7,
-      qpQuestionId: 143,
-      qpSecondaryId: 7,
-      qpQuestNo: 1,
-      qpOptions: 'A',
-      qpSequence: '1.6',
-      qpOptionText: 'lion',
-      qpResponse: '',
-      qpResponseEmotion: '',
-      qpBlockSecondaryId: '6',
-      qpNavigateShow: 'New Block',
-      qpTag: 'true',
-      qpFeedback: '',
-      qpSkillTag: null,
-      qpScore: '70',
-      qpTitleTag: '',
-      qpEmotion: 'Anticipation',
-      qpVoice: '',
-      qpNextOption: '',
-      qpCreatedDatetime: '2024-02-01T05:01:33.000Z',
-      qpEditedDatetime: '2024-02-01T05:01:33.000Z',
-      qpDeleteStatus: 'No',
-      qpActiveStatus: 'Yes',
-    },
-    {
-      qpOptionId: 1111,
-      qpGameId: 7,
-      qpQuestionId: 143,
-      qpSecondaryId: 8,
-      qpQuestNo: 1,
-      qpOptions: 'B',
-      qpSequence: '1.6',
-      qpOptionText: 'tiger',
-      qpResponse: '',
-      qpResponseEmotion: '',
-      qpBlockSecondaryId: '6',
-      qpNavigateShow: 'New Block',
-      qpTag: 'false',
-      qpFeedback: '',
-      qpSkillTag: null,
-      qpScore: '10',
-      qpTitleTag: '',
-      qpEmotion: 'Anticipation',
-      qpVoice: '',
-      qpNextOption: '',
-      qpCreatedDatetime: '2024-02-01T05:01:33.000Z',
-      qpEditedDatetime: '2024-02-01T05:01:33.000Z',
-      qpDeleteStatus: 'No',
-      qpActiveStatus: 'Yes',
-    },
-    {
-      qpOptionId: 1112,
-      qpGameId: 7,
-      qpQuestionId: 143,
-      qpSecondaryId: 9,
-      qpQuestNo: 1,
-      qpOptions: 'C',
-      qpSequence: '1.6',
-      qpOptionText: 'bear',
-      qpResponse: '',
-      qpResponseEmotion: '',
-      qpBlockSecondaryId: '6',
-      qpNavigateShow: 'New Block',
-      qpTag: 'false',
-      qpFeedback: '',
-      qpSkillTag: null,
-      qpScore: '8',
-      qpTitleTag: '',
-      qpEmotion: 'Surprise',
-      qpVoice: '',
-      qpNextOption: '',
-      qpCreatedDatetime: '2024-02-01T05:01:33.000Z',
-      qpEditedDatetime: '2024-02-01T05:01:33.000Z',
-      qpDeleteStatus: 'No',
-      qpActiveStatus: 'Yes',
-    },
-  ],
-};
-const demoBlocks: any = gameData?.blocks;
+import ThankYou from './playcards/Thankyou';
+import Screen6 from 'assets/img/screens/screen6.png';
+import Reflection from './playcards/Reflection';
+import RefScreen1 from 'assets/img/screens/refscreen1.png';
+import Takeway from './playcards/Takeaway';
+import Screen4 from 'assets/img/screens/screen4.png';
+import Completion from './playcards/Completion';
+import { API_SERVER } from 'config/constant';
 
 interface Review {
   // reviewId: Number;
@@ -612,7 +83,7 @@ interface ShowPreviewProps {
   currentScreenId: Number;
   setCurrentScreenId: React.Dispatch<React.SetStateAction<Number>>;
   gameInfo: any;
-  setToastObj: React.Dispatch<React.SetStateAction<any>>;
+  setToastObj?: React.Dispatch<React.SetStateAction<any>>;
   handleSubmitReview: (data: any) => Promise<boolean>;
 }
 
@@ -677,7 +148,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   /** This state handles the Review Form Tab and Sub Tab options */
   const [reviewTabOptions, setReviewTabOptions] = useState([]);
   const [filteredTabOptions, setFilteredTabOptions] = useState([]);
-  const [reviewSubTabOptions, setReviewSubTabOptions] = useState<Array<{ value: string; label: string }>>([]);
+   
+  const [reviewSubTabOptions, setReviewSubTabOptions] = useState<
+    Array<{ value: string; label: string }>
+  >([]);
   const [reviewInput, setReviewInput] = useState<Review>({
     reviewerId: gameInfo?.reviewer?.ReviewerId ?? null,
     reviewGameId: gameInfo?.gameId ?? null,
@@ -686,8 +160,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     tabAttribute: '',
     tabAttributeValue: '',
   });
-const [isFormValid, setIsFormValid] = useState<boolean>(false);
-const [currentStoryBlockSeq, setCurrentStoryBlockSeq] = useState<string>(null);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
+  const [currentStoryBlockSeq, setCurrentStoryBlockSeq] =
+    useState<string>(null);
+  const [demoBlocks, setDemoBlocks] = useState(null);
+  const Tab5attribute = [6, 4,3, 7, 1,5 ];
+
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
     { '2': { tabAttribute: null, tabAttributeValue: null } },
@@ -696,46 +174,34 @@ const [currentStoryBlockSeq, setCurrentStoryBlockSeq] = useState<string>(null);
     { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
   ];
 
-  
   useEffect(() => {
-    setShowNote(true);
-    setFirst(true);
-    setTimeout(() => {
-      setFirst(false);
-      setShowNote(false);
-    }, 1000);
-    // to set the first data for the game
-    setType(demoBlocks['1']['1']?.blockChoosen);
-    setData(demoBlocks['1']['1']);
+    console.log('gameInfo', gameInfo);
+    setDemoBlocks(gameInfo?.blocks);
+    setType(gameInfo?.blocks['1']['1']?.blockChoosen);
+    setData(gameInfo?.blocks['1']['1']);
   }, []);
 
   useEffect(() => {
     switch (currentScreenId) {
       case 1 && gameInfo?.gameData?.gameWelcomepageBackground:
         setBackgroundScreenUrl(
-          'http://192.168.1.29:5555/uploads/background/20252.jpg',
+          API_SERVER+'/uploads/background/20252.jpg',
         );
         break;
       case 3 && gameInfo?.gameData?.gameReflectionpageBackground:
         setBackgroundScreenUrl(
-          'http://192.168.1.29:5555/uploads/background/reflectionBg.png',
+          API_SERVER+'/uploads/background/reflectionBg.png',
         );
         break;
       default:
         setBackgroundScreenUrl(
-          'http://192.168.1.29:5555/uploads/background/41524_1701765021527.jpg',
+          API_SERVER+'/uploads/background/41524_1701765021527.jpg',
         );
         break;
     }
   }, [currentScreenId]);
 
   // to handle the transition whenever the note,dialog or interaction change
-  useEffect(() => {
-    setShowNote(true);
-    setTimeout(() => {
-      setShowNote(false);
-    }, 1000);
-  }, [item, type]);
 
   // story inside next button function for the blocks
 
@@ -750,11 +216,11 @@ const [currentStoryBlockSeq, setCurrentStoryBlockSeq] = useState<string>(null);
       .filter((key) => demoBlocks[quest][key]?.blockDragSequence === nextSeq)
       .map((key) => demoBlocks[quest][key]);
     if (nextBlock.length === 0) {
-      setType(demoBlocks['1']['1']?.blockChoosen);
-      setData(demoBlocks['1']['1']);
+      setCurrentScreenId(5);
+      return false;
     }
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
-      const optionsFiltered = gameData?.questOptions.filter(
+      const optionsFiltered = gameInfo?.questOptions.filter(
         (key: any) => key.qpSequence === nextBlock[0]?.blockPrimarySequence,
       );
       setOptions(optionsFiltered);
@@ -780,11 +246,14 @@ const [currentStoryBlockSeq, setCurrentStoryBlockSeq] = useState<string>(null);
         setSelectedOption(null);
       } else if (navi === 'Select Block') {
         setSelectedOption(null);
+      } else if (navi === 'Complete') {
+        setCurrentScreenId(6);
+        return false;
       } else {
         setType(demoBlocks[nextLevel]['1']?.blockChoosen);
         setData(demoBlocks[nextLevel]['1']);
         if (demoBlocks[nextLevel]['1']?.blockChoosen === 'Interaction') {
-          const optionsFiltered = gameData?.questOptions.filter(
+          const optionsFiltered = gameInfo?.questOptions.filter(
             (key: any) =>
               key.qpSequence ===
               demoBlocks[nextLevel]['1']?.blockPrimarySequence,
@@ -792,6 +261,11 @@ const [currentStoryBlockSeq, setCurrentStoryBlockSeq] = useState<string>(null);
           setOptions(optionsFiltered);
         }
         setSelectedOption(null);
+        if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+          setCurrentScreenId(7);
+        } else {
+          setCurrentScreenId(5);
+        }
       }
     } else {
       setType(nextBlock[0]?.blockChoosen);
@@ -880,66 +354,81 @@ const [currentStoryBlockSeq, setCurrentStoryBlockSeq] = useState<string>(null);
     { '4': null },
     {
       '5': [
-        { value: '1', label: 'Completion' },
-        { value: '2', label: 'Leaderboard' },
-        { value: '3', label: 'Reflection' },
-        { value: '4', label: 'Takeaway' },
-        { value: '5', label: 'Welcome' },
-        { value: '6', label: 'Thanks' },
+        { value: '0', label: 'Completion' },
+        { value: '1', label: 'Leaderboard' },
+        { value: '2', label: 'Reflection' },
+        { value: '3', label: 'Takeaway' },
+        { value: '4', label: 'Welcome' },
+        { value: '5', label: 'Thanks' },
       ],
     },
   ];
 
   useEffect(() => {
-    if(reviewInput?.tabId){
-      console.log("reviewInput?.tabId != 5",reviewInput?.tabId != 5)
-      if(reviewInput?.tabId == 5){ //for Design Tab
-        const subOptions= subTabOptionsForTabIds.find((item:any )=> Object.keys(item)[0] == reviewInput?.tabId.toString());      
-        const subTabValueOfCurrentScreenId = subOptions[reviewInput?.tabId.toString()].filter((screenitem: any) => screenitem.value == currentScreenId.toString());
-        ;
-        handleSubTabSelection(subTabValueOfCurrentScreenId[0]);
-      }
-      else if(reviewInput?.tabId == 4){  //for Story Tab
-        const blockSeqId = data.blockPrimarySequence.replace(/\./g, "@");
-        setReviewInput((prev: Review)=> ({...prev, tabAttribute:"blockSeqId", tabAttributeValue:blockSeqId}));
-      }
-      else
-      {
-        const subOptions= subTabOptionsForTabIds.find((item:any )=> Object.keys(item)[0] == reviewInput?.tabId.toString());
+    if (reviewInput?.tabId) {
+      console.log('reviewInput?.tabId ', reviewInput?.tabId);
+      console.log('reviewInput?.tabId == 5 ', reviewInput?.tabId == 5);
+      if (reviewInput?.tabId == 5) {
+
+        //for Design Tab
+        // const subOptions = subTabOptionsForTabIds.find(
+        //   (item: any) => Object.keys(item)[0] == reviewInput?.tabId.toString(),
+        // );
+        // const subTabValueOfCurrentScreenId = subOptions[
+        //   reviewInput?.tabId.toString()
+        // ].filter(
+        //   (screenitem: any) => screenitem.value == currentScreenId.toString(),
+        // );
+
+        // handleSubTabSelection(subTabValueOfCurrentScreenId[0]);
+        
+        setReviewSubTabOptions([]);
+        setReviewInput((prev: Review) => ({...prev,tabAttribute: 'screenId',tabAttributeValue: Tab5attribute.indexOf(Number(currentScreenId)).toString() }));
+      } else if (reviewInput?.tabId == 4) {
+        //for Story Tab
+        const blockSeqId = data.blockQuestNo+"@"+data.blockSecondaryId;
+        setReviewSubTabOptions([]);
+        setReviewInput((prev: Review) => ({
+          ...prev,
+          tabAttribute: 'blockSeqId',
+          tabAttributeValue: blockSeqId,
+        }));
+      } else {
+        const subOptions = subTabOptionsForTabIds.find(
+          (item: any) => Object.keys(item)[0] == reviewInput?.tabId.toString(),
+        );
         setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
       }
       /** To hide the sub tab options and set the subtab selection based on the current screen it here */
     }
-  
   }, [reviewInput.tabId]);
-
-useEffect(()=>{
-  /**Validate form */
-if(reviewInput.reviewGameId && reviewInput.reviewerId && reviewInput.tabId  && reviewInput.review)
-{
-  if(reviewInput.tabId == 3 || reviewInput.tabId == 5)
-  {
-    if(reviewInput.tabAttribute && reviewInput.tabAttributeValue )
-    {
-      setIsFormValid(true);
-    }
-    else{
+console.log("reviewInput", reviewInput);
+  useEffect(() => {
+    /**Validate form */
+    if (
+      reviewInput.reviewGameId &&
+      reviewInput.reviewerId &&
+      reviewInput.tabId &&
+      reviewInput.review
+    ) {
+      if (reviewInput.tabId == 3 || reviewInput.tabId == 5) {
+        if (reviewInput.tabAttribute && reviewInput.tabAttributeValue) {
+          setIsFormValid(true);
+        } else {
+          setIsFormValid(false);
+        }
+      } else {
+        setIsFormValid(true);
+      }
+    } else {
       setIsFormValid(false);
     }
-  }
-  else{
-    setIsFormValid(true);
-  }
-}
-else{
-  setIsFormValid(false);
-}
+  }, [reviewInput]);
 
-},[reviewInput])
 
   //no need for story
-  const handleTabSelection = (selectedOption:any) => {    
-    if(selectedOption?.value){
+  const handleTabSelection = (selectedOption: any) => {
+    if (selectedOption?.value) {
       setReviewInput((prev: Review) => ({
         ...prev,
         tabId: selectedOption?.value ? selectedOption?.value : null,
@@ -947,8 +436,7 @@ else{
         tabAttributeValue: '',
       }));
       setIsMenuOpen(true);
-    }
-    else{
+    } else {
       setReviewInput((prev: Review) => ({
         ...prev,
         tabId: selectedOption?.value ? selectedOption?.value : null,
@@ -957,141 +445,307 @@ else{
       }));
       setReviewSubTabOptions([]);
     }
+  };
+
+  const handleSubTabSelection = (selectedOption: any) => {
+    console.log('selectedOption', selectedOption);
+    const selectedTabFileds = tabAttributeSets.find(
+      (item) => Object.keys(item)[0] == reviewInput?.tabId.toString(),
+    );
+    setReviewInput((prev: Review) => ({
+      ...prev,
+      tabAttribute: selectedOption?.value
+        ? selectedTabFileds[reviewInput?.tabId.toString()].tabAttribute
+        : null,
+      tabAttributeValue: selectedOption?.value ? selectedOption?.value : null,
+    }));
+  };
+
+  const handleMenubtn = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsMenuOpen(true);
+  };
+
+  const handleReview = (e: any) => {
+    setReviewInput((prev: Review) => ({ ...prev, review: e.target.value }));
+  };
+  const resetInputFields = () => {
+    setReviewInput((prev) => ({
+      ...prev,
+      review: '',
+      tabId: null,
+      tabAttribute: '',
+      tabAttributeValue: '',
+    }));
+  };
+  const hanldeSubmit = async (data: any) => {
+    const response = handleSubmitReview(data); //returns true or false
+    if (response) {
+      setIsMenuOpen(false);
+      resetInputFields();
     }
-
-  const handleSubTabSelection = (selectedOption:any) => {
-    console.log("selectedOption", selectedOption);
-      const selectedTabFileds = tabAttributeSets.find((item) => Object.keys(item)[0] == reviewInput?.tabId.toString());
-      setReviewInput((prev: Review)=> ({...prev, tabAttribute: selectedOption?.value ? selectedTabFileds[reviewInput?.tabId.toString()].tabAttribute : null, tabAttributeValue: selectedOption?.value ? selectedOption?.value: null }));
-  }
-
-  const handleMenubtn = (e: React.MouseEvent<HTMLButtonElement>)=>{
-      e.stopPropagation();
-      setIsMenuOpen(true)
-}
-
-const handleReview = (e: any)=>{
-setReviewInput((prev: Review)=>({...prev, review: e.target.value}));
-}
-const resetInputFields=()=>{
-  setReviewInput((prev)=>({...prev, review:'', tabId: null, tabAttribute:'', tabAttributeValue:''}));
-}
-const hanldeSubmit =async (data: any)=>{
-  const response = handleSubmitReview(data);//returns true or false
-if(response){
-  setIsMenuOpen(false);
-  resetInputFields();
-}
-}
-  console.log("reviewInput", reviewInput);
- 
-
-  const hanldeClose = ()=>{
+  };
+  const hanldeClose = () => {
     setIsFormValid(false);
     resetInputFields();
     setIsMenuOpen(false);
-  }
+  };
   return (
     <>
-      <Box
-        w={'100%'}
-        h={'100vh'}
-        display={currentScreenId === 2 ? 'block' : 'flex'}
-        alignItems={'center'}
-        justifyContent={'center'}
-        position={'relative'}
-        overflow={'visible'}
-        style={{ perspective: '1000px' }}
-      >
-        {currentScreenId === 2 ? null : (
-          <Img
-            src={backgroundScreenUrl}
-            w={'100%'}
-            h={'100%'}
-            alt="background image"
-          />
-        )}
-        <Box
-          className={currentScreenId === 2 ? '' : 'Game-Screen'}
-          position={currentScreenId === 2 ? 'inherit' : 'absolute'}
-          top={0}
-          display={currentScreenId === 2 ? 'block' : 'flex'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          w={'100%'}
-          h={'100vh'}
-        >
-          <Box className={currentScreenId === 2 ? '' : 'Images'}>
-            {(() => {
-              switch (currentScreenId) {
-                case 0:
-                  return <h1>Game Introduction</h1>;
-                case 1:
-                  return (
-                    <>
-                      <Welcome
-                        formData={gameInfo?.gameData}
-                        imageSrc={Screen5}
-                        preview={true}
-                      />
-                    </>
-                  );
-                case 2:
-                  return (
-                    <>
-                      <Story
-                        data={data}
-                        type={type}
-                        first={first}
-                        handleValidate={handleValidate}
-                        showNote={showNote}
-                        resMsg={resMsg}
-                        feed={feed}
-                        getData={getData}
-                        options={options}
-                        option={selectedOption}
-                      />
-                    </>
-                  );
-                case 3:
-                  return <h1>Reflection</h1>;
-                //     return  <Reflection
-                //     preview={true}
-                //     formData={gameInfo?.gameData}
-                //     imageSrc={RefScreen1}
-                //     reflectionQuestions={reflectionQuestions}
-                //     reflectionQuestionsdefault={reflectionQuestionsdefault}
-                //   />;
-                case 4:
-                  return (
-                    <Box className="LearderBoards" position={'relative'}>
-                      <Img
-                        src={Screen2}
-                        alt="Your Image"
-                        className="LearderBoards-Img"
-                      />
+      <Flex height="100vh" className={currentScreenId === 2 ? '' : 'AddScores'}>
+        {(() => {
+          switch (currentScreenId) {
+            case 0:
+              return (
+                <>
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={backgroundScreenUrl}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      // when you import the component you can remove this property
+                      display={'flex'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+                      <Box className="Images">
+                        <h1>Game Introduction</h1>
+                      </Box>
                     </Box>
-                  );
-                case 5:
-                  return <h1>Thanks Screen</h1>;
-                case 6:
-                  return <h1>Completion</h1>;
-                case 7:
-                  return <h1>TakeAway</h1>;
-                default:
-                  console.log(
-                    'game details of the data',
-                    gameInfo?.gameData,
-                    currentScreenId,
-                  );
-                  return <h1>Loading Screen </h1>;
-              }
-            })()}
-          </Box>
-        </Box>
-      </Box>
+                  </Box>
+                </>
+              );
+            case 1:
+              return (
+                <>
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={backgroundScreenUrl}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+                      <Box className="Images">
+                        <Welcome
+                          setCurrentScreenId={setCurrentScreenId}
+                          formData={gameInfo?.gameData}
+                          imageSrc={Screen5}
+                          preview={true}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                </>
+              );
+            case 2:
+              return (
+                <>
+                  {data && type && (
+                    <Story
+                      backGroundImg={backgroundScreenUrl}
+                      data={data}
+                      type={type}
+                      // first={first}
+                      handleValidate={handleValidate}
+                      // showNote={showNote}
+                      resMsg={resMsg}
+                      feed={feed}
+                      getData={getData}
+                      options={options}
+                      option={selectedOption}
+                    />
+                  )}
+                </>
+              );
+            case 3:
+              return (
+                <>
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    // display={'flex'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={backgroundScreenUrl}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      // transform={`scale(${first ? 1 : 1.3}) translateY(${
+                      //   first ? 0 : -10
+                      // }%) translateX(${first ? 0 : -10}%)`}
+                      // transition={'transform 0.9s ease-in-out'}
+                      // display={'flex'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+                      <Box className="Images">
+                        <Reflection
+                          // preview={true}
+                          formData={gameInfo?.gameData}
+                          imageSrc={RefScreen1}
+                          // reflectionQuestions={reflectionQuestions}
+                          // reflectionQuestionsdefault={reflectionQuestionsdefault}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                </>
+              );
+            case 4:
+              return (
+                <Box className="LearderBoards" position={'relative'}>
+                  <Img
+                    src={Screen2}
+                    alt="Your Image"
+                    className="LearderBoards-Img"
+                  />
+                </Box>
+              );
+            case 5:
+              return (
+                <>
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={backgroundScreenUrl}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+                      <Box className="Images">
+                        <ThankYou
+                          formData={gameInfo?.gameData}
+                          imageSrc={Screen6}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                </>
+              );
+            case 6:
+              return (
+                <>
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={backgroundScreenUrl}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+                      <Box className="Images">
+                        <Completion
+                          setCurrentScreenId={setCurrentScreenId}
+                          formData={gameInfo?.gameData}
+                          imageSrc={Screen1}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                </>
+              );
+            case 7:
+              return (
+                <>
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={backgroundScreenUrl}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+                      <Box className="Images">
+                        <Takeway
+                          formData={gameInfo?.gameData}
+                          imageSrc={Screen4}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                </>
+              );
+            default:
+              console.log(
+                'game details of the data',
+                gameInfo?.gameData,
+                currentScreenId,
+              );
+              return <h1>Loading Screen </h1>;
+          }
+        })()}
+      </Flex>
 
-      <Menu  isOpen={isMenuOpen}>
+      <Menu isOpen={isMenuOpen}>
         <MenuButton
           p="0px"
           bg={'brandScheme'}
@@ -1099,7 +753,7 @@ if(response){
           bottom={'0'}
           right={'5px'}
           onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleMenubtn(e)}
-          >
+        >
           <Icon
             as={AiFillMessage}
             bg={'#3311db'}
@@ -1129,26 +783,28 @@ if(response){
               id="tab"
               name="tab"
               label="Feedback Options"
-              labelStyle={{ fontSize: 18, fontWeight:700 }}
+              labelStyle={{ fontSize: 18, fontWeight: 700 }}
               options={filteredTabOptions}
-              onChange={ handleTabSelection}
+              onChange={handleTabSelection}
               style={{ fontSize: '18px' }}
             />
-        {reviewInput?.tabId !==null && reviewInput?.tabId !==undefined && reviewSubTabOptions?.length > 0 &&
-            <SelectField
-              mb="10px"
-              me="30px"
-              id="subtab"
-              name="subtab"
-              label="Secondary Options"
-              // labelStyle={{ fontSize: 18, fontWeight:700 }}
-              fontSize={'md'}
-              options={reviewSubTabOptions}
-              onChange={ handleSubTabSelection}
-            />}
+            {reviewInput?.tabId !== null &&
+              reviewInput?.tabId !== undefined &&
+              reviewSubTabOptions?.length > 0 && (
+                <SelectField
+                  mb="10px"
+                  me="30px"
+                  id="subtab"
+                  name="subtab"
+                  label="Secondary Options"
+                  fontSize={'md'}
+                  options={reviewSubTabOptions}
+                  onChange={handleSubTabSelection}
+                />
+              )}
             <FormControl>
-              <FormLabel fontSize={"sm"} fontWeight={700} pl="4">
-                Feedback 
+              <FormLabel fontSize={'sm'} fontWeight={700} pl="4">
+                Feedback
               </FormLabel>
               <Textarea
                 resize="none"
@@ -1160,26 +816,12 @@ if(response){
                 placeholder="Please Share your Thoughts..."
                 onChange={handleReview}
               />
-              <Text color='#CBD5E0' fontSize={{ base: 'sm', '2xl': 'md' }}>
-								{"Maximum of 250 characters..."}
-							</Text>
+              <Text color="#CBD5E0" fontSize={{ base: 'sm', '2xl': 'md' }}>
+                {'Maximum of 250 characters...'}
+              </Text>
             </FormControl>
             <MenuItem>
-              <Box w={'100%'} display={'flex'} justifyContent={'flex-start'}><Button
-                  bg="#11047a"
-                  _hover={{ bg: '#190793' }}
-                  color="#fff"
-                  h={'46px'}
-                  w={'128px'}
-                  mr={'33px'}
-                  mt={'7px'}
-                  onClick={()=>hanldeClose()}
-                >
-                  close
-                </Button></Box>
-                
-              <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
-              
+              <Box w={'100%'} display={'flex'} justifyContent={'flex-start'}>
                 <Button
                   bg="#11047a"
                   _hover={{ bg: '#190793' }}
@@ -1188,7 +830,22 @@ if(response){
                   w={'128px'}
                   mr={'33px'}
                   mt={'7px'}
-                  onClick={()=>hanldeSubmit(reviewInput)}
+                  onClick={() => hanldeClose()}
+                >
+                  close
+                </Button>
+              </Box>
+
+              <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                <Button
+                  bg="#11047a"
+                  _hover={{ bg: '#190793' }}
+                  color="#fff"
+                  h={'46px'}
+                  w={'128px'}
+                  mr={'33px'}
+                  mt={'7px'}
+                  onClick={() => hanldeSubmit(reviewInput)}
                   isDisabled={!isFormValid}
                 >
                   Submit
@@ -1202,48 +859,48 @@ if(response){
   );
 };
 
-const Model: React.FC = () => {
-  const groupRef = useRef<any>();
-  const gltf = useLoader(GLTFLoader, Sample);
+// const Model: React.FC = () => {
+//   const groupRef = useRef<any>();
+//   const gltf = useLoader(GLTFLoader, Sample);
 
-  const mixer = new THREE.AnimationMixer(gltf.scene);
-  const action = mixer.clipAction(gltf.animations[0]);
+//   const mixer = new THREE.AnimationMixer(gltf.scene);
+//   const action = mixer.clipAction(gltf.animations[0]);
 
-  useFrame((state, delta) => {
-    // Rotate the model on the Y-axis
-    if (groupRef.current) {
-      // groupRef.current.rotation.y += 0.01;
-      groupRef.current.castShadow = true;
-    }
+//   useFrame((state, delta) => {
+//     // Rotate the model on the Y-axis
+//     if (groupRef.current) {
+//       // groupRef.current.rotation.y += 0.01;
+//       groupRef.current.castShadow = true;
+//     }
 
-    mixer.update(delta);
-  });
-  action.play();
+//     mixer.update(delta);
+//   });
+//   action.play();
 
-  useLayoutEffect(() => {
-    if (groupRef.current) {
-      groupRef.current.traverse((obj: any) => {
-        if (obj.isMesh) {
-          obj.castShadow = true;
-          obj.receiveShadow = true;
-        }
-      });
-    }
-  }, []);
+//   useLayoutEffect(() => {
+//     if (groupRef.current) {
+//       groupRef.current.traverse((obj: any) => {
+//         if (obj.isMesh) {
+//           obj.castShadow = true;
+//           obj.receiveShadow = true;
+//         }
+//       });
+//     }
+//   }, []);
 
-  gltf.scene.traverse((child) => {
-    if (child instanceof THREE.Mesh) {
-      child.material.color.set(0xffccaaf0); // Set your desired color
-      child.material.roughness = 0.4; // Adjust roughness as needed
-      child.material.metalness = 0.8; // Adjust metalness as needed
-    }
-  });
+//   gltf.scene.traverse((child) => {
+//     if (child instanceof THREE.Mesh) {
+//       child.material.color.set(0xffccaaf0); // Set your desired color
+//       child.material.roughness = 0.4; // Adjust roughness as needed
+//       child.material.metalness = 0.8; // Adjust metalness as needed
+//     }
+//   });
 
-  return (
-    <group ref={groupRef}>
-      <primitive object={gltf.scene} />
-    </group>
-  );
-};
+//   return (
+//     <group ref={groupRef}>
+//       <primitive object={gltf.scene} />
+//     </group>
+//   );
+// };
 
 export default EntirePreview;

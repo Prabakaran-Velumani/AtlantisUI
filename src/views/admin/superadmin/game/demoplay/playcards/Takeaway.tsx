@@ -11,8 +11,7 @@ import bull from 'assets/img/screens/bullet.png';
 const Takeway: React.FC<{
     formData: any;
     imageSrc: any;
-    preview: any;
-}> = ({ formData, imageSrc, preview }) => {
+}> = ({ formData, imageSrc }) => {
     const data = formData.gameTakeawayContent?.split('\n');
 
     return (

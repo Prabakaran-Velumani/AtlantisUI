@@ -104,6 +104,7 @@ const WelcomeContentScreen: React.FC<{
     color: '#D9C7A2',
     marginRight: '4px',
   };
+  
   useEffect(() => {
     fetch();
   }, []);
