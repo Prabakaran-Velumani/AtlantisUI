@@ -97,7 +97,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
-  
   const maxTextLength = 80;
 
   // const find = show.find((it: any) => it.gasId === formData.gameBackgroundId);
@@ -130,7 +129,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     tabAttributeValue: '',
   });
   const [backgroundScreenUrl, setBackgroundScreenUrl] = useState(null);
-  const [demoBlocks,setDemoBlocks] = useState(null);
+  const [demoBlocks, setDemoBlocks] = useState(null);
   useEffect(() => {
     switch (currentScreenId) {
       case 1 && gameInfo?.gameData?.gameWelcomepageBackground:
@@ -152,18 +151,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [currentScreenId]);
 
   useEffect(() => {
-    console.log('gameInfo',gameInfo);
-    setDemoBlocks(gameInfo?.blocks)
+    console.log('gameInfo', gameInfo);
+    setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
     setData(gameInfo?.blocks['1']['1']);
   }, []);
-
 
   // to handle the transition whenever the note,dialog or interaction change
 
   // story inside next button function for the blocks
 
-  const getData = (next: any) => { 
+  const getData = (next: any) => {
     const currentBlock = parseInt(next?.blockDragSequence.split('.')[1]);
     const NextItem = currentBlock + 1;
     const nextSeq = `${next?.blockDragSequence.split('.')[0]}.${NextItem}`;
@@ -204,12 +202,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
       } else if (navi === 'Select Block') {
         setSelectedOption(null);
-      }
-      else if (navi === 'Complete') {
-        setCurrentScreenId(6)
+      } else if (navi === 'Complete') {
+        setCurrentScreenId(6);
         return false;
-      } 
-      else {
+      } else {
         setType(demoBlocks[nextLevel]['1']?.blockChoosen);
         setData(demoBlocks[nextLevel]['1']);
         if (demoBlocks[nextLevel]['1']?.blockChoosen === 'Interaction') {
@@ -272,8 +268,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const handleFeed = () => {
     setIsMenuOpen(false);
   };
-
-
 
   return (
     <>
@@ -379,7 +373,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 <>
                   {data && type && (
                     <Story
-                    formData={gameInfo?.gameData}
+                      formData={gameInfo?.gameData}
                       backGroundImg={backgroundScreenUrl}
                       data={data}
                       type={type}
@@ -571,7 +565,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       className="Game-Screen"
                     >
                       <Box className="Images">
-                        <ReplayGame formData={gameInfo?.gameData} imageSrc={Replay}/>
+                        <ReplayGame
+                          formData={gameInfo?.gameData}
+                          imageSrc={Replay}
+                        />
                       </Box>
                     </Box>
                   </Box>
@@ -707,7 +704,7 @@ const Model: React.FC = () => {
 
   gltf.scene.traverse((child) => {
     if (child instanceof THREE.Mesh) {
-      child.material.color.set(0xffccaaf0); // Set your desired color
+      child.material.color.set(0xffccaaf0); 
       child.material.roughness = 0.4; // Adjust roughness as needed
       child.material.metalness = 0.8; // Adjust metalness as needed
     }
