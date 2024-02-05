@@ -32,6 +32,7 @@ import {
 import Screen2 from 'assets/img/screens/screen2.png';
 import Screen5 from 'assets/img/screens/screen5.png';
 import Screen1 from 'assets/img/screens/screen1.png';
+import Replay from 'assets/img/screens/Replay.png';
 // import bk from 'assets/img/games/17.png';
 // import note from 'assets/img/games/note.png';
 // import next from 'assets/img/screens/next.png';
@@ -67,543 +68,7 @@ import RefScreen1 from 'assets/img/screens/refscreen1.png';
 import Takeway from './playcards/Takeaway';
 import Screen4 from 'assets/img/screens/screen4.png';
 import Completion from './playcards/Completion';
-// const gameData: any = {
-//   gameId: 7,
-//   reviewer: {
-//     ReviewerId: 1,
-//     ReviewerName: 'brindha',
-//     ReviewerEmailId: null,
-//     ReviewerGender: 'Female',
-//     ReviewerStatus: 'YES',
-//     ReviewerDeleteStatus: 'NO',
-//   },
-//   reviews: [
-//     {
-//       reviewId: 1,
-//       gameReviewerId: 1,
-//       reviewGameId: 7,
-//       tabId: 1,
-//       tabAttribute: null,
-//       tabAttributeValue: null,
-//       review: 'Background',
-//       createdAt: '2024-01-23T04:21:48.000Z',
-//       updatedAt: '2024-01-23T04:21:48.000Z',
-//     },
-//   ],
-//   gameHistory: {
-//     gvId: 7,
-//     gvgameId: 25,
-//     gvViewUserId: 3,
-//     createdAt: '2024-01-04T10:35:19.000Z',
-//     updatedAt: null,
-//   },
-//   assets: {
-//     gasId: 1,
-//     gasAssetType: '1',
-//     gasAssetName: 'Forest',
-//     gasStatus: 'Active',
-//     gasDeleteStatus: 'NO',
-//     gasAssetImage:
-//       'http://192.168.1.29:5555/uploads/background/41524_1701765021527.jpg',
-//   },
-//   blocks: {
-//     '1': {
-//       '1': {
-//         blockGameId: 7,
-//         blockQuestNo: 1,
-//         blockId: 139,
-//         blockSecondaryId: 2,
-//         blockPrimarySequence: '1.1',
-//         blockDragSequence: '1.1',
-//         blockType: null,
-//         blockRoll: 'Narrator',
-//         blockResponseRoll: null,
-//         blockSkillTag: null,
-//         blockTitleTag: null,
-//         blockText: 'hi this is me',
-//         blockNoOfOptions: null,
-//         blockChoosen: 'Note',
-//         blockVoiceGender: null,
-//         blockVoiceEmotions: null,
-//         blockShowNavigate: null,
-//         blockLeadTo: null,
-//         blockVoiceAccents: null,
-//         blockCharacterposesId: null,
-//         blockAssetId: null,
-//         blockAnimationId: null,
-//         blockCreatedDatetime: '2024-02-01T05:01:33.000Z',
-//         blockEditedDatetime: null,
-//         blockDeleteStatus: 'No',
-//         blockActiveStatus: 'Active',
-//       },
-//       '2': {
-//         blockGameId: 7,
-//         blockQuestNo: 1,
-//         blockId: 8,
-//         blockSecondaryId: 1,
-//         blockPrimarySequence: '1.5',
-//         blockDragSequence: '1.2',
-//         blockType: null,
-//         blockRoll: '22',
-//         blockResponseRoll: null,
-//         blockSkillTag: null,
-//         blockTitleTag: null,
-//         blockText: 'hi how are you ?\n',
-//         blockNoOfOptions: null,
-//         blockChoosen: 'Interaction',
-//         blockVoiceGender: null,
-//         blockVoiceEmotions: null,
-//         blockShowNavigate: null,
-//         blockLeadTo: null,
-//         blockVoiceAccents: null,
-//         blockCharacterposesId: 'Anger',
-//         blockAssetId: null,
-//         blockAnimationId: null,
-//         blockCreatedDatetime: '2024-02-01T05:01:33.000Z',
-//         blockEditedDatetime: null,
-//         blockDeleteStatus: 'No',
-//         blockActiveStatus: 'Active',
-//       },
-//       '3': {
-//         blockGameId: 7,
-//         blockQuestNo: 1,
-//         blockId: 140,
-//         blockSecondaryId: 3,
-//         blockPrimarySequence: '1.2',
-//         blockDragSequence: '1.3',
-//         blockType: null,
-//         blockRoll: 'Narrator',
-//         blockResponseRoll: null,
-//         blockSkillTag: null,
-//         blockTitleTag: null,
-//         blockText: 'welcome to the game',
-//         blockNoOfOptions: null,
-//         blockChoosen: 'Note',
-//         blockVoiceGender: null,
-//         blockVoiceEmotions: null,
-//         blockShowNavigate: null,
-//         blockLeadTo: null,
-//         blockVoiceAccents: null,
-//         blockCharacterposesId: null,
-//         blockAssetId: null,
-//         blockAnimationId: null,
-//         blockCreatedDatetime: '2024-02-01T05:01:33.000Z',
-//         blockEditedDatetime: null,
-//         blockDeleteStatus: 'No',
-//         blockActiveStatus: 'Active',
-//       },
-//       '4': {
-//         blockGameId: 7,
-//         blockQuestNo: 1,
-//         blockId: 141,
-//         blockSecondaryId: 4,
-//         blockPrimarySequence: '1.3',
-//         blockDragSequence: '1.4',
-//         blockType: null,
-//         blockRoll: 'Narrator',
-//         blockResponseRoll: null,
-//         blockSkillTag: null,
-//         blockTitleTag: null,
-//         blockText: 'shall we start the game',
-//         blockNoOfOptions: null,
-//         blockChoosen: 'Note',
-//         blockVoiceGender: null,
-//         blockVoiceEmotions: null,
-//         blockShowNavigate: null,
-//         blockLeadTo: null,
-//         blockVoiceAccents: null,
-//         blockCharacterposesId: null,
-//         blockAssetId: null,
-//         blockAnimationId: null,
-//         blockCreatedDatetime: '2024-02-01T05:01:33.000Z',
-//         blockEditedDatetime: null,
-//         blockDeleteStatus: 'No',
-//         blockActiveStatus: 'Active',
-//       },
-//       '5': {
-//         blockGameId: 7,
-//         blockQuestNo: 1,
-//         blockId: 142,
-//         blockSecondaryId: 5,
-//         blockPrimarySequence: '1.4',
-//         blockDragSequence: '1.5',
-//         blockType: null,
-//         blockRoll: '22',
-//         blockResponseRoll: null,
-//         blockSkillTag: null,
-//         blockTitleTag: null,
-//         blockText: 'lets start the game ',
-//         blockNoOfOptions: null,
-//         blockChoosen: 'Dialog',
-//         blockVoiceGender: null,
-//         blockVoiceEmotions: '',
-//         blockShowNavigate: null,
-//         blockLeadTo: null,
-//         blockVoiceAccents: null,
-//         blockCharacterposesId: 'Anger',
-//         blockAssetId: null,
-//         blockAnimationId: null,
-//         blockCreatedDatetime: '2024-02-01T05:01:33.000Z',
-//         blockEditedDatetime: null,
-//         blockDeleteStatus: 'No',
-//         blockActiveStatus: 'Active',
-//       },
-//       '6': {
-//         blockGameId: 7,
-//         blockQuestNo: 1,
-//         blockId: 143,
-//         blockSecondaryId: 6,
-//         blockPrimarySequence: '1.6',
-//         blockDragSequence: '1.6',
-//         blockType: null,
-//         blockRoll: '22',
-//         blockResponseRoll: null,
-//         blockSkillTag: null,
-//         blockTitleTag: null,
-//         blockText: 'who is the king of the forest',
-//         blockNoOfOptions: null,
-//         blockChoosen: 'Interaction',
-//         blockVoiceGender: null,
-//         blockVoiceEmotions: null,
-//         blockShowNavigate: null,
-//         blockLeadTo: null,
-//         blockVoiceAccents: null,
-//         blockCharacterposesId: 'Anticipation',
-//         blockAssetId: null,
-//         blockAnimationId: null,
-//         blockCreatedDatetime: '2024-02-01T05:01:33.000Z',
-//         blockEditedDatetime: null,
-//         blockDeleteStatus: 'No',
-//         blockActiveStatus: 'Active',
-//       },
-//     },
-//     '2': {
-//       '1': {
-//         blockGameId: 7,
-//         blockQuestNo: 2,
-//         blockId: 41,
-//         blockSecondaryId: 1,
-//         blockPrimarySequence: '2.3',
-//         blockDragSequence: '2.1',
-//         blockType: null,
-//         blockRoll: '22',
-//         blockResponseRoll: null,
-//         blockSkillTag: null,
-//         blockTitleTag: null,
-//         blockText:
-//           "sffeWriting a brilliant 100-150 word article requires focus and conciseness. First, choose a clear and engaging topic that you can cover in a brief space. Start with a compelling opening sentence to grab the reader's attention. Then, develop your mai",
-//         blockNoOfOptions: null,
-//         blockChoosen: 'Interaction',
-//         blockVoiceGender: null,
-//         blockVoiceEmotions: null,
-//         blockShowNavigate: null,
-//         blockLeadTo: null,
-//         blockVoiceAccents: null,
-//         blockCharacterposesId: 'Joy',
-//         blockAssetId: null,
-//         blockAnimationId: null,
-//         blockCreatedDatetime: '2024-01-31T08:56:13.000Z',
-//         blockEditedDatetime: null,
-//         blockDeleteStatus: 'No',
-//         blockActiveStatus: 'Active',
-//       },
-//       '2': {
-//         blockGameId: 7,
-//         blockQuestNo: 2,
-//         blockId: 144,
-//         blockSecondaryId: 2,
-//         blockPrimarySequence: '2.1',
-//         blockDragSequence: '2.2',
-//         blockType: null,
-//         blockRoll: 'Narrator',
-//         blockResponseRoll: null,
-//         blockSkillTag: null,
-//         blockTitleTag: null,
-//         blockText: 'let start with one',
-//         blockNoOfOptions: null,
-//         blockChoosen: 'Note',
-//         blockVoiceGender: null,
-//         blockVoiceEmotions: null,
-//         blockShowNavigate: null,
-//         blockLeadTo: null,
-//         blockVoiceAccents: null,
-//         blockCharacterposesId: null,
-//         blockAssetId: null,
-//         blockAnimationId: null,
-//         blockCreatedDatetime: '2024-01-31T08:56:13.000Z',
-//         blockEditedDatetime: null,
-//         blockDeleteStatus: 'No',
-//         blockActiveStatus: 'Active',
-//       },
-//       '3': {
-//         blockGameId: 7,
-//         blockQuestNo: 2,
-//         blockId: 145,
-//         blockSecondaryId: 3,
-//         blockPrimarySequence: '2.2',
-//         blockDragSequence: '2.3',
-//         blockType: null,
-//         blockRoll: '22',
-//         blockResponseRoll: null,
-//         blockSkillTag: null,
-//         blockTitleTag: null,
-//         blockText: 'once a king lead the gen',
-//         blockNoOfOptions: null,
-//         blockChoosen: 'Dialog',
-//         blockVoiceGender: null,
-//         blockVoiceEmotions: '',
-//         blockShowNavigate: null,
-//         blockLeadTo: null,
-//         blockVoiceAccents: null,
-//         blockCharacterposesId: 'Surprise',
-//         blockAssetId: null,
-//         blockAnimationId: null,
-//         blockCreatedDatetime: '2024-01-31T08:56:13.000Z',
-//         blockEditedDatetime: null,
-//         blockDeleteStatus: 'No',
-//         blockActiveStatus: 'Active',
-//       },
-//     },
-//   },
-//   questOptions: [
-//     {
-//       qpOptionId: 12,
-//       qpGameId: 7,
-//       qpQuestionId: 8,
-//       qpSecondaryId: 1,
-//       qpQuestNo: 1,
-//       qpOptions: 'A',
-//       qpSequence: '1.5',
-//       qpOptionText: 'fine',
-//       qpResponse: '',
-//       qpResponseEmotion: '',
-//       qpBlockSecondaryId: '1',
-//       qpNavigateShow: 'New Block',
-//       qpTag: 'true',
-//       qpFeedback: '',
-//       qpSkillTag: null,
-//       qpScore: '455',
-//       qpTitleTag: '',
-//       qpEmotion: 'Fear',
-//       qpVoice: '',
-//       qpNextOption: '',
-//       qpCreatedDatetime: '2024-02-01T05:01:33.000Z',
-//       qpEditedDatetime: '2024-02-01T05:01:33.000Z',
-//       qpDeleteStatus: 'No',
-//       qpActiveStatus: 'Yes',
-//     },
-//     {
-//       qpOptionId: 13,
-//       qpGameId: 7,
-//       qpQuestionId: 8,
-//       qpSecondaryId: 2,
-//       qpQuestNo: 1,
-//       qpOptions: 'B',
-//       qpSequence: '1.5',
-//       qpOptionText: 'not fine',
-//       qpResponse: '',
-//       qpResponseEmotion: '',
-//       qpBlockSecondaryId: '1',
-//       qpNavigateShow: 'Complete',
-//       qpTag: 'true',
-//       qpFeedback: '',
-//       qpSkillTag: null,
-//       qpScore: '20',
-//       qpTitleTag: '',
-//       qpEmotion: 'Fear',
-//       qpVoice: '',
-//       qpNextOption: '',
-//       qpCreatedDatetime: '2024-02-01T05:01:33.000Z',
-//       qpEditedDatetime: '2024-02-01T05:01:33.000Z',
-//       qpDeleteStatus: 'No',
-//       qpActiveStatus: 'Yes',
-//     },
-//     {
-//       qpOptionId: 14,
-//       qpGameId: 7,
-//       qpQuestionId: 8,
-//       qpSecondaryId: 3,
-//       qpQuestNo: 1,
-//       qpOptions: 'C',
-//       qpSequence: '1.5',
-//       qpOptionText: 'noted',
-//       qpResponse: '',
-//       qpResponseEmotion: '',
-//       qpBlockSecondaryId: '1',
-//       qpNavigateShow: 'Repeat Question',
-//       qpTag: 'true',
-//       qpFeedback: '',
-//       qpSkillTag: null,
-//       qpScore: '0',
-//       qpTitleTag: '',
-//       qpEmotion: 'Guilt',
-//       qpVoice: '',
-//       qpNextOption: '',
-//       qpCreatedDatetime: '2024-02-01T05:01:33.000Z',
-//       qpEditedDatetime: '2024-02-01T05:01:33.000Z',
-//       qpDeleteStatus: 'No',
-//       qpActiveStatus: 'Yes',
-//     },
-//     {
-//       qpOptionId: 146,
-//       qpGameId: 7,
-//       qpQuestionId: 41,
-//       qpSecondaryId: 4,
-//       qpQuestNo: 2,
-//       qpOptions: 'A',
-//       qpSequence: '2.3',
-//       qpOptionText: 'sfafasfa',
-//       qpResponse: '',
-//       qpResponseEmotion: '',
-//       qpBlockSecondaryId: '1',
-//       qpNavigateShow: 'New Block',
-//       qpTag: 'false',
-//       qpFeedback: '',
-//       qpSkillTag: null,
-//       qpScore: '0',
-//       qpTitleTag: '',
-//       qpEmotion: 'Joy',
-//       qpVoice: '',
-//       qpNextOption: '',
-//       qpCreatedDatetime: '2024-01-31T08:56:13.000Z',
-//       qpEditedDatetime: '2024-01-31T08:56:13.000Z',
-//       qpDeleteStatus: 'No',
-//       qpActiveStatus: 'Yes',
-//     },
-//     {
-//       qpOptionId: 147,
-//       qpGameId: 7,
-//       qpQuestionId: 41,
-//       qpSecondaryId: 5,
-//       qpQuestNo: 2,
-//       qpOptions: 'B',
-//       qpSequence: '2.3',
-//       qpOptionText: 'sfsf',
-//       qpResponse: '',
-//       qpResponseEmotion: '',
-//       qpBlockSecondaryId: '1',
-//       qpNavigateShow: 'New Block',
-//       qpTag: 'true',
-//       qpFeedback: '',
-//       qpSkillTag: null,
-//       qpScore: '34',
-//       qpTitleTag: '',
-//       qpEmotion: 'Joy',
-//       qpVoice: '',
-//       qpNextOption: '',
-//       qpCreatedDatetime: '2024-01-31T08:56:13.000Z',
-//       qpEditedDatetime: '2024-01-31T08:56:13.000Z',
-//       qpDeleteStatus: 'No',
-//       qpActiveStatus: 'Yes',
-//     },
-//     {
-//       qpOptionId: 148,
-//       qpGameId: 7,
-//       qpQuestionId: 41,
-//       qpSecondaryId: 6,
-//       qpQuestNo: 2,
-//       qpOptions: 'C',
-//       qpSequence: '2.3',
-//       qpOptionText: 'afa',
-//       qpResponse: '',
-//       qpResponseEmotion: '',
-//       qpBlockSecondaryId: '1',
-//       qpNavigateShow: 'New Block',
-//       qpTag: 'false',
-//       qpFeedback: '',
-//       qpSkillTag: null,
-//       qpScore: '0',
-//       qpTitleTag: '',
-//       qpEmotion: 'Surprise',
-//       qpVoice: '',
-//       qpNextOption: '',
-//       qpCreatedDatetime: '2024-01-31T08:56:13.000Z',
-//       qpEditedDatetime: '2024-01-31T08:56:13.000Z',
-//       qpDeleteStatus: 'No',
-//       qpActiveStatus: 'Yes',
-//     },
-//     {
-//       qpOptionId: 1110,
-//       qpGameId: 7,
-//       qpQuestionId: 143,
-//       qpSecondaryId: 7,
-//       qpQuestNo: 1,
-//       qpOptions: 'A',
-//       qpSequence: '1.6',
-//       qpOptionText: 'lion',
-//       qpResponse: '',
-//       qpResponseEmotion: '',
-//       qpBlockSecondaryId: '6',
-//       qpNavigateShow: 'New Block',
-//       qpTag: 'true',
-//       qpFeedback: '',
-//       qpSkillTag: null,
-//       qpScore: '70',
-//       qpTitleTag: '',
-//       qpEmotion: 'Anticipation',
-//       qpVoice: '',
-//       qpNextOption: '',
-//       qpCreatedDatetime: '2024-02-01T05:01:33.000Z',
-//       qpEditedDatetime: '2024-02-01T05:01:33.000Z',
-//       qpDeleteStatus: 'No',
-//       qpActiveStatus: 'Yes',
-//     },
-//     {
-//       qpOptionId: 1111,
-//       qpGameId: 7,
-//       qpQuestionId: 143,
-//       qpSecondaryId: 8,
-//       qpQuestNo: 1,
-//       qpOptions: 'B',
-//       qpSequence: '1.6',
-//       qpOptionText: 'tiger',
-//       qpResponse: '',
-//       qpResponseEmotion: '',
-//       qpBlockSecondaryId: '6',
-//       qpNavigateShow: 'New Block',
-//       qpTag: 'false',
-//       qpFeedback: '',
-//       qpSkillTag: null,
-//       qpScore: '10',
-//       qpTitleTag: '',
-//       qpEmotion: 'Anticipation',
-//       qpVoice: '',
-//       qpNextOption: '',
-//       qpCreatedDatetime: '2024-02-01T05:01:33.000Z',
-//       qpEditedDatetime: '2024-02-01T05:01:33.000Z',
-//       qpDeleteStatus: 'No',
-//       qpActiveStatus: 'Yes',
-//     },
-//     {
-//       qpOptionId: 1112,
-//       qpGameId: 7,
-//       qpQuestionId: 143,
-//       qpSecondaryId: 9,
-//       qpQuestNo: 1,
-//       qpOptions: 'C',
-//       qpSequence: '1.6',
-//       qpOptionText: 'bear',
-//       qpResponse: '',
-//       qpResponseEmotion: '',
-//       qpBlockSecondaryId: '6',
-//       qpNavigateShow: '',
-//       qpTag: 'false',
-//       qpFeedback: '',
-//       qpSkillTag: null,
-//       qpScore: '8',
-//       qpTitleTag: '',
-//       qpEmotion: 'Surprise',
-//       qpVoice: '',
-//       qpNextOption: '',
-//       qpCreatedDatetime: '2024-02-01T05:01:33.000Z',
-//       qpEditedDatetime: '2024-02-01T05:01:33.000Z',
-//       qpDeleteStatus: 'No',
-//       qpActiveStatus: 'Yes',
-//     },
-//   ],
-// };
-// const demoBlocks: any = gameData?.blocks;
-
+import ReplayGame from './playcards/ReplayGame';
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
@@ -632,7 +97,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const [showFullText, setShowFullText] = useState(false);
+  
   const maxTextLength = 80;
 
   // const find = show.find((it: any) => it.gasId === formData.gameBackgroundId);
@@ -692,6 +157,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
     setData(gameInfo?.blocks['1']['1']);
   }, []);
+
+
   // to handle the transition whenever the note,dialog or interaction change
 
   // story inside next button function for the blocks
@@ -707,7 +174,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       .filter((key) => demoBlocks[quest][key]?.blockDragSequence === nextSeq)
       .map((key) => demoBlocks[quest][key]);
     if (nextBlock.length === 0) {
-      setCurrentScreenId(5);
+      setCurrentScreenId(6);
       return false;
     }
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
@@ -785,7 +252,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const overOptions = [
     { value: 1, label: 'Background' },
     { value: 2, label: 'Non Playing Character' },
-
     { value: 3, label: 'Overview' },
     { value: 4, label: 'Story' },
     { value: 5, label: 'Design' },
@@ -807,7 +273,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setIsMenuOpen(false);
   };
 
-  console.log(demoBlocks);
+
 
   return (
     <>
@@ -913,6 +379,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 <>
                   {data && type && (
                     <Story
+                    formData={gameInfo?.gameData}
                       backGroundImg={backgroundScreenUrl}
                       data={data}
                       type={type}
@@ -1075,6 +542,36 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           formData={gameInfo?.gameData}
                           imageSrc={Screen4}
                         />
+                      </Box>
+                    </Box>
+                  </Box>
+                </>
+              );
+            case 8:
+              return (
+                <>
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={backgroundScreenUrl}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+                      <Box className="Images">
+                        <ReplayGame formData={gameInfo?.gameData} imageSrc={Replay}/>
                       </Box>
                     </Box>
                   </Box>

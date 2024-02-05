@@ -62,7 +62,7 @@ const ThankYou: React.FC<{
         <>
           <Box className="thankyou-screen">
             <Box className="thankyou-screen-box">
-              <Img src={imageSrc} className="bg-img" />
+              <Img src={imageSrc} className="bg-thankyou" />
             </Box>
             <Box
               w={'100%'}

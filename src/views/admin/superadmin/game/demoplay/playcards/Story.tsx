@@ -26,6 +26,7 @@ import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 //   import * as THREE from 'three';
 //   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import feedi from 'assets/img/screens/feed.png';
+import TypingEffect from './Typing';
 //   import { AiFillMessage } from 'react-icons/ai';
 
 const Story: React.FC<{
@@ -40,11 +41,10 @@ const Story: React.FC<{
   handleValidate: any;
   resMsg: any;
   feed: any;
+  formData: any;
 }> = ({
   data,
   type,
-  // first,
-  // showNote,
   resMsg,
   feed,
   getData,
@@ -52,15 +52,19 @@ const Story: React.FC<{
   options,
   handleValidate,
   backGroundImg,
+  formData,
 }) => {
   const [showNote, setShowNote] = useState(false),
     [first, setFirst] = useState(false);
+
+  console.log('this is the game data of the blocks', formData);
+  console.log(data);
   useEffect(() => {
     setShowNote(true);
     setTimeout(() => {
       setShowNote(false);
     }, 1000);
-  }, [data,type]);
+  }, [data, type]);
   useEffect(() => {
     setShowNote(true);
     setFirst(true);
@@ -95,7 +99,6 @@ const Story: React.FC<{
               first ? 0 : -10
             }%) translateX(${first ? 0 : -10}%)`}
             transition={'transform 0.9s ease-in-out'}
-            // backdropFilter={}
           >
             <Box
               position={'fixed'}
@@ -150,6 +153,7 @@ const Story: React.FC<{
             <Img w={'80%'} h={'80vh'} src={note} />
             <Box
               position={'fixed'}
+              overflowY={'scroll'}
               w={'50%'}
               mt={'10px'}
               display={'flex'}
@@ -164,8 +168,10 @@ const Story: React.FC<{
                 lineHeight: 1,
               }}
             >
-              {data?.blockText}
-              <Box
+              <Box w={'100%'} overflowY={'scroll'} h={'100px'} display={'flex'} alignItems={'center'}  mt={'20px'}>
+                {data?.blockText}
+              </Box>
+              <Box 
                 w={'100%'}
                 onClick={() => getData(data)}
                 mt={'20px'}
@@ -224,19 +230,16 @@ const Story: React.FC<{
                 />
                 <Text
                   position={'fixed'}
-                  left={'25%'}
+                  left={'24%'}
                   bottom={'167px'}
                   fontSize={'25'}
                   fontWeight={700}
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
                 >
-                  Logan
-                  {/* {data.character === '999999'
-                            ? 'Player'
-                            : data.character === '99999'
-                              ? 'Narrator'
-                              : formData.gameNonPlayerName} */}
+                  {data.blockRoll === 'Narrator'
+                    ? data.blockRoll
+                    : formData.gameNonPlayerName}
                 </Text>
               </Box>
               <Box
@@ -246,9 +249,9 @@ const Story: React.FC<{
                 w={'75%'}
                 bottom={'55px'}
                 fontFamily={'AtlantisContent'}
-                 fontSize={'21px'}
+                fontSize={'21px'}
               >
-                {data?.blockText}
+                <TypingEffect text={data?.blockText} speed={50} />
               </Box>
               <Box
                 display={'flex'}

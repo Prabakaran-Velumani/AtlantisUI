@@ -63,7 +63,7 @@ const gameScreens = ['GameIntro','Welcome','Story','Reflection',"Leaderboard", "
 const GamePreview = () => {
   const { uuid } = useParams();
   const [gameInfo, setGameInfo] = useState<any | null>();
-  const [currentScreenId, setCurrentScreenId] = useState<Number>(0);
+  const [currentScreenId, setCurrentScreenId] = useState<Number>(8);
   const toast = useToast();
   const [toastObj, setToastObj] = useState<any>();
     
@@ -73,7 +73,7 @@ const GamePreview = () => {
 
   useEffect(() => {
     setTimeout(()=>{
-      setCurrentScreenId(1);
+      setCurrentScreenId(8);
     },3000)
   }, []);
    

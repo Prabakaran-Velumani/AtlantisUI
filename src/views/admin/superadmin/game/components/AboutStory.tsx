@@ -473,10 +473,6 @@ const AboutStory: React.FC<{
                               (element: any) =>
                                 element.crSkillId !== tag.crSkillId,
                             );
-                            console.log(
-                              'updatedDefaultCat',
-                              updatedDefaultSkill,
-                            );
                             setDefaultSkills(updatedDefaultSkill);
                           }}
                         />
@@ -520,7 +516,7 @@ const AboutStory: React.FC<{
                 // as={ResizeTextarea}
                 // resize="none"
 <<<<<<< HEAD
-<<<<<<< HEAD
+<<<<<<< HEAD      
                 // h="70px"      
 =======
                 // h="70px"

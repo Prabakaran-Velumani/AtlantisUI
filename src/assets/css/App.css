@@ -698,6 +698,11 @@ letter-spacing: 0.5px;
     width: 580px; 
     background-position: center;
   }
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .welcome-screen-box .bg-welcome {
+    height: 650px; 
+    width: 800px; 
+    background-position: center;
+  }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box {
     display: flex;
     justify-content: center;
@@ -809,6 +814,11 @@ letter-spacing: 0.5px;
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .thankyou-screen-box .bg-img {
     height: 800px; 
     width: 600px; 
+    background-position: center;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .thankyou-screen-box .bg-thankyou {
+    height: 800px; 
+    width: 800px; 
     background-position: center;
   }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback {   

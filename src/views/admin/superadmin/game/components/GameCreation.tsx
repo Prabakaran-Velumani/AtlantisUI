@@ -4059,10 +4059,10 @@ const GameCreation = () => {
                         mr={'33px'}
                         mt={'7px'}
                       >
-                        Okay...!
+                        Close
                       </Button>
                     </Box>
-                  </MenuItem>
+                  </MenuItem> 
                 </MenuList>
               </Menu>
             ) : null}
@@ -4196,19 +4196,6 @@ const GameCreation = () => {
                     Preview
                   </Button>
                 ) : null}
-                {/* {tab <= 1 ? null : (
-                  <Button
-                    bg={'#f4f7fe'}
-                    color={'#000'}
-                    _hover={{ bg: '#e9edf7' }}
-                    w="80px"
-                    mr="10px"
-                    onClick={() => setTab(tab - 1)}
-                  >
-                    Back
-                  </Button>
-                )} */}
-                {/* navin 15-12 */}
                 {tab === 5 && currentTab === 5 ? (
                   <Button
                     bg="#11047a"
@@ -4271,14 +4258,7 @@ const GameCreation = () => {
                 tableData={tableDataCheck}
               />
             )}
-            {/* {share && tableDataCheck && (
-              <ShareReviewTable
-                isOpen={isOpen}
-                onClose={onClose}
-                onOpen={onOpen}
-                tableData={tableDataCheck}
-              />
-            )} */}
+           
             {entire && (
               <SinglePreview
                 tab={tab}
@@ -4323,4 +4303,4 @@ const GameCreation = () => {
   );
 };
 
-export default GameCreation;
+export default GameCreation;  

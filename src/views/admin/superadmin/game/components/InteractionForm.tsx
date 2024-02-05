@@ -45,42 +45,6 @@ const InteractionForm: React.FC<InteractionFormProps> = ({ handleShowComponent }
     <>
         <Box mt={{ base: '0px', xl: '0px' }}>
             <Card mb={{ base: '0px', xl: '20px', sm: '20px' }}>               
-                {/* <Grid templateColumns='repeat(2, 1fr)' gap={6}>
-                    <GridItem w='100%' >                
-                        <InputField
-                            mb="0px"
-                            me="30px"
-                            w="100%"
-                            id="title"
-                            label="Title*"
-                            placeholder="eg. Game"
-                            name="title"                    
-                        />
-                    </GridItem>  
-                    <GridItem w='100%' >                      
-                        <TextField
-                            mb="0px"
-                            me="30px"
-                            id="question"
-                            label="Question*"
-                            placeholder="eg. Game"
-                            name="question"                    
-                        />
-                    </GridItem>
-                    <GridItem w='100%' >
-                        <InputField
-                            mb="0px"
-                            me="30px"
-                            id="noofoptions"
-                            type='number'
-                            label="No Of Options"
-                            placeholder="eg. 2"
-                            name="noofoptions"   
-                            onChange={handleChange}                 
-                        />
-                    </GridItem>
-                </Grid> */}
-
                 <Box display={{base: 'block', xl: 'flex'}}>
                     <Box display={'flex'} flexDir={'column'} w={'60%'} mr={'20px'}>
                         <Box display={'flex'} mb={'20px'} justifyContent={'space-between'}> 
@@ -124,11 +88,6 @@ const InteractionForm: React.FC<InteractionFormProps> = ({ handleShowComponent }
                             <Box m={'0 0px 10px 0'}>
                                 <Img src={NFT} h={'150px'} w={'100%'} borderRadius={'10px'} boxShadow={'1px 3px 10px #8080803b'} />
                             </Box>
-                            {/* <Box display={'flex'} flexDir={'column'} overflowY={'auto'} height={'520px'}>
-                                {img.map((img, i)=> (
-                                    <Img key={i} src={img} h={'60px'} w={'60px'} mb={'10px'} borderRadius={'10px'} boxShadow={'1px 3px 10px #8080803b'} />                                
-                                ))}
-                            </Box> */}
                         </Box>
                         <Box overflowX={'auto'} display={'flex'} mt={'10px'} zIndex={'999'} bg={'#fff'}>
                             {img.map((img, i)=> (

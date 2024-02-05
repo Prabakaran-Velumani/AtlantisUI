@@ -806,16 +806,12 @@ const NDIMain: React.FC<NDIMainProps> = ({
     if (NDI === 'Interaction') {
       const currentAlpha = alphabet
         .slice()
-        //  .reverse() // Reverse the array to start searching from the end
         .find((item: any) => item.seqs === id);
       if (id !== currentAlpha?.seqs) {
         let secondaryArray: any = [];
         let makcount = countalphabet;
-
         for (let i = 0; i < 3; i++) {
-          // Insert data into the array
           let inc = makcount + i + 1;
-          console.log('secondaryArray', countalphabet, '--', inc);
           secondaryArray.push(inc);
         }
         setAlphabetCount(secondaryArray[2]);
@@ -2200,7 +2196,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     showSelectBlock={showSelectBlock}
                                     setSelectBlock={setSelectBlock}
                                   />
-
                                   <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
