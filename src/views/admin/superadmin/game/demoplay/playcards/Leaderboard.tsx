@@ -22,8 +22,7 @@ const LeaderBoard: React.FC<{
         <>
             {imageSrc && (    
                 <Box className='reflection-screen' >  
-                    <Box className='reflection-screen-box'
-                    >
+                    <Box className='reflection-screen-box'>
                         <Img src={imageSrc} className='bg-img' />
                     </Box>
                     <Box className='content-box' >

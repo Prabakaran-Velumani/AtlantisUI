@@ -238,6 +238,7 @@ const GameCreation = () => {
     null,
   );
 
+  console.log("currentTab",currentTab);
   ///////reflectionQuestions///////////////
 
   const handleReflectionInput = (e: any, i?: any) => {
@@ -3977,7 +3978,7 @@ const GameCreation = () => {
                         : 'Preference'}
                     </FormLabel>
                     <Box w={'360px'} maxH={'50vh'} overflowY={'scroll'}>
-                      {reviews[tab] && reviews[tab]?.length !== 0 ? (
+                      {reviews && reviews[tab] && reviews[tab]?.length !== 0 ? (
                         reviews[tab]
                           .filter((item: any) =>
                             tab === 5

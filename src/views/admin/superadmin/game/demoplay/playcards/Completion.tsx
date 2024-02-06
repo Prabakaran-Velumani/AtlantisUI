@@ -100,6 +100,6 @@ const Completion: React.FC<{
         <Img src={next} onClick={()=> formData.gameIsShowReflectionScreen === 'true' ? setCurrentScreenId(3) :setCurrentScreenId(5)} cursor={'pointer'} />
       </Box>
     </>
-  );
+  )
 };
 export default Completion;

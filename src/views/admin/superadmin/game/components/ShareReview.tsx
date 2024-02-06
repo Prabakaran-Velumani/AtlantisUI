@@ -366,44 +366,6 @@ export default function ShareReviewTable(props: {
               </Button>
             </Box>
           </Box>
-          {/* <Card flexDirection='column' w='100%' h={'50vh'} px='8px'>
-						  
-						  <Box>
-							  
-							  <Flex align="center" justify="space-between" mt="1" style={{ marginRight: '19px' }}>
-								  <Box width='300px'>
-									  <Flex direction='row' p='10px' wrap='wrap' bg='transparent' border='1px solid' borderColor={borderColor} borderRadius='16px' _focus={{ borderColor: 'teal.300' }} =' h='stretch' cursor='text' style={{ overflowY: 'auto' }}>
-										  {tags.map((tag, index) => (
-											  <Tag key={index} fontSize='xs' h='25px' mb='6px' me='6px' borderRadius='12px' variant='solid' bg={lightBlue}>
-												  <TagLabel w='100%' color={textColor}>{tag}</TagLabel>
-												  <TagCloseButton
-													  justifySelf='flex-end'
-													  color='black'
-													  onClick={() => {
-														  setTags((prevTags) => prevTags.filter((t: any) => t !== tag));
-													  }}
-													/>
-											  </Tag>
-										  ))}
-										  <TextField
-											  variant='main'
-											  bg='transparent'
-											  border='none'
-											  p='0px'
-											  onKeyDown={(e: any) => keyPressSkill(e)}
-											  fontSize='sm'
-											  width={100}
-											  height={'150px'}
-										  />
-									  </Flex>
-									  <Text fontSize='xs' color='gray.500' mt='2px' style={{ textAlign: 'left' }}>
-										  
-									  </Text>
-								  </Box>
-								  
-							  </Flex>
-						  </Box>
-					  </Card> */}
         </ModalBody>
       </ModalContent>
     </Modal>

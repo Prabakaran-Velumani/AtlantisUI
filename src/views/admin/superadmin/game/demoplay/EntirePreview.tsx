@@ -53,7 +53,6 @@ import React, {
 import SelectField from 'components/fields/SelectField';
 import InitialImg from 'assets/img/games/load.jpg';
 import { Canvas, useLoader, useFrame } from 'react-three-fiber';
-// import Sample from '../../../../assets/img/games/Character_sample.glb';
 import Sample from 'assets/img/games/Character_sample.glb';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -69,12 +68,16 @@ import Takeway from './playcards/Takeaway';
 import Screen4 from 'assets/img/screens/screen4.png';
 import Completion from './playcards/Completion';
 import ReplayGame from './playcards/ReplayGame';
+import { API_SERVER } from 'config/constant';
+import { getTestAudios } from 'utils/game/gameService';
+import PlayInfo from './playcards/playinfo';
+
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
   reviewGameId: String | null;
   review: String | null;
-  tabId: Number;
+  tabId: Number | null;
   tabAttribute: String | null;
   tabAttributeValue: String | null;
 }
@@ -84,9 +87,33 @@ interface ShowPreviewProps {
   currentScreenId: Number;
   setCurrentScreenId: React.Dispatch<React.SetStateAction<Number>>;
   gameInfo: any;
-  setToastObj: React.Dispatch<React.SetStateAction<any>>;
-  handleSubmitReview: (data: any) => Promise<void>;
+  setToastObj?: React.Dispatch<React.SetStateAction<any>>;
+  handleSubmitReview: (data: any) => Promise<boolean>;
 }
+
+type TabAttributeSet = {
+  [key: string]: {
+    tabAttribute: string | null;
+    tabAttributeValue: string | null;
+  };
+};
+//no need for story
+const overOptions = [
+  { value: 1, label: 'Background' },
+  { value: 2, label: 'Characters' },
+  { value: 3, label: 'Game Overview' },
+  { value: 4, label: 'Story' },
+  { value: 5, label: 'Design' },
+];
+
+const tabOptions = [
+  { value: 1, label: 'Background' },
+  { value: 2, label: 'Characters' },
+  { value: 3, label: 'Game Overview' },
+  { value: 4, label: 'Story' },
+  { value: 5, label: 'Design' },
+];
+
 const EntirePreview: React.FC<ShowPreviewProps> = ({
   gameScreens,
   currentScreenId,
@@ -98,7 +125,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const { colorMode, toggleColorMode } = useColorMode();
 
   const maxTextLength = 80;
-
+  const audioRef = React.useRef(null);
   // const find = show.find((it: any) => it.gasId === formData.gameBackgroundId);
   // const img = find.gasAssetImage;
 
@@ -120,42 +147,73 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [navi, setNavi] = useState<string>('');
   const [options, setOptions] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [review, setReview] = useState<Review>({
-    reviewerId: null,
-    reviewGameId: null,
+  /** This state handles the Review Form Tab and Sub Tab options */
+  const [reviewTabOptions, setReviewTabOptions] = useState([]);
+  const [filteredTabOptions, setFilteredTabOptions] = useState([]);
+
+  const [reviewSubTabOptions, setReviewSubTabOptions] = useState<
+    Array<{ value: string; label: string }>
+  >([]);
+  const [reviewInput, setReviewInput] = useState<Review>({
+    reviewerId: gameInfo?.reviewer?.ReviewerId ?? null,
+    reviewGameId: gameInfo?.gameId ?? null,
     review: '',
     tabId: null,
     tabAttribute: '',
     tabAttributeValue: '',
   });
   const [backgroundScreenUrl, setBackgroundScreenUrl] = useState(null);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
+  const [audio, setAudio] = useState();
+  const [currentStoryBlockSeq, setCurrentStoryBlockSeq] =
+    useState<string>(null);
   const [demoBlocks, setDemoBlocks] = useState(null);
+  const Tab5attribute = [6, 4, 3, 7, 1, 5];
+
+  const tabAttributeSets: TabAttributeSet[] = [
+    { '1': { tabAttribute: null, tabAttributeValue: null } },
+    { '2': { tabAttribute: null, tabAttributeValue: null } },
+    { '3': { tabAttribute: 'fieldName', tabAttributeValue: '' } },
+    { '4': { tabAttribute: 'blockSeqId', tabAttributeValue: '' } },
+    { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
+  ];
+
+  const fetch = async () => {
+    const res = await getTestAudios();
+    if (res?.status === 'success') setAudio(res?.url);
+  };
+
+  useEffect(() => {
+    fetch();
+    setDemoBlocks(gameInfo?.blocks);
+    setType(gameInfo?.blocks['1']['1']?.blockChoosen);
+    setData(gameInfo?.blocks['1']['1']);
+  }, []);
+
   useEffect(() => {
     switch (currentScreenId) {
       case 1 && gameInfo?.gameData?.gameWelcomepageBackground:
-        setBackgroundScreenUrl(
-          'http://192.168.1.29:5555/uploads/background/reflectionBg.png',
-        );
+        setBackgroundScreenUrl(API_SERVER + '/uploads/background/20252.jpg');
         break;
       case 3 && gameInfo?.gameData?.gameReflectionpageBackground:
         setBackgroundScreenUrl(
-          'http://192.168.1.29:5555/uploads/background/20252.jpg',
+          API_SERVER + '/uploads/background/reflectionBg.png',
         );
         break;
       default:
         setBackgroundScreenUrl(
-          'http://192.168.1.29:5555/uploads/background/41524_1701765021527.jpg',
+          API_SERVER + '/uploads/background/41524_1701765021527.jpg',
         );
         break;
     }
   }, [currentScreenId]);
 
-  useEffect(() => {
-    console.log('gameInfo', gameInfo);
-    setDemoBlocks(gameInfo?.blocks);
-    setType(gameInfo?.blocks['1']['1']?.blockChoosen);
-    setData(gameInfo?.blocks['1']['1']);
-  }, []);
+  // useEffect(() => {
+
+  //   setDemoBlocks(gameInfo?.blocks);
+  //   setType(gameInfo?.blocks['1']['1']?.blockChoosen);
+  //   setData(gameInfo?.blocks['1']['1']);
+  // }, []);
 
   // to handle the transition whenever the note,dialog or interaction change
 
@@ -243,94 +301,240 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setNavi(item?.qpNavigateShow);
     setSelectedOption(ind === selectedOption ? null : ind);
   };
-
-  //no need for story
-  const overOptions = [
-    { value: 1, label: 'Background' },
-    { value: 2, label: 'Non Playing Character' },
-    { value: 3, label: 'Overview' },
-    { value: 4, label: 'Story' },
-    { value: 5, label: 'Design' },
-  ];
-
-  // const withNpc = [
-  //   { value: 1, label: 'Background' },
-  //   { value: 2, label: 'Non Playing Character' },
-  //   {value: 4, label:'story'},
-  // ];
-  // const withOutNpc = [
-  //   { value: 1, label: 'Background' },
-  //   { value: 2, label: 'Non Playing Character' },
-  //   {value: 4, label:'story'},
-  // ];
-
-  //no need for story
-  const handleFeed = () => {
-    setIsMenuOpen(false);
+  useEffect(() => {
+    setFeedBackFromValue();
+  }, [currentScreenId]);
+  /***
+   * @param currentScreenId ->Number
+   * @param isInteraction ->Boolean
+   * @param
+   * */
+  const setFeedBackFromValue = () => {
+    switch (currentScreenId) {
+      case 0:
+        setReviewTabOptions([1, 3, 5]); //GameInto screen
+        break;
+      case 1:
+        setReviewTabOptions([1, 3, 5]); //Welcome
+        break;
+      case 2:
+        setReviewTabOptions([1, 2, 4]); //Story
+        break;
+      case 3:
+        setReviewTabOptions([1, 5]); //Reflection
+        break;
+      case 4:
+        setReviewTabOptions([1, 5]); //Leaderboard
+        break;
+      case 5:
+        setReviewTabOptions([1, 5]); //ThanksScreen
+        break;
+      case 6:
+        setReviewTabOptions([1, 5]); //Completion
+        break;
+      case 7:
+        setReviewTabOptions([1, 5]); //TakeAway
+        break;
+      default:
+        setReviewTabOptions([1, 2, 3, 4, 5]); //All
+    }
   };
 
+  useEffect(() => {
+    if (reviewTabOptions) {
+      const filterTabOptions = tabOptions.filter((tabOption) =>
+        reviewTabOptions.includes(tabOption.value),
+      );
+      setFilteredTabOptions(filterTabOptions);
+    }
+  }, [reviewTabOptions]);
+
+  const subTabOptionsForTabIds: Array<{
+    [key: string]: Array<{ value: string; label: string }> | null;
+  }> = [
+    { '1': null },
+    { '2': null },
+    {
+      '3': [
+        { value: 'Title', label: 'Title' },
+        { value: 'Skill', label: 'Skill' },
+        { value: 'Storyline', label: 'Storyline' },
+        { value: 'Outcomes', label: 'Outcomes' },
+        { value: 'Category', label: 'Category' },
+        { value: 'Author', label: 'Author' },
+      ],
+    },
+    { '4': null },
+    {
+      '5': [
+        { value: '0', label: 'Completion' },
+        { value: '1', label: 'Leaderboard' },
+        { value: '2', label: 'Reflection' },
+        { value: '3', label: 'Takeaway' },
+        { value: '4', label: 'Welcome' },
+        { value: '5', label: 'Thanks' },
+      ],
+    },
+  ];
+
+  useEffect(() => {
+    if (reviewInput?.tabId) {
+      console.log('reviewInput?.tabId ', reviewInput?.tabId);
+      console.log('reviewInput?.tabId == 5 ', reviewInput?.tabId == 5);
+      if (reviewInput?.tabId == 5) {
+        //for Design Tab
+        // const subOptions = subTabOptionsForTabIds.find(
+        //   (item: any) => Object.keys(item)[0] == reviewInput?.tabId.toString(),
+        // );
+        // const subTabValueOfCurrentScreenId = subOptions[
+        //   reviewInput?.tabId.toString()
+        // ].filter(
+        //   (screenitem: any) => screenitem.value == currentScreenId.toString(),
+        // );
+
+        // handleSubTabSelection(subTabValueOfCurrentScreenId[0]);
+
+        setReviewSubTabOptions([]);
+        setReviewInput((prev: Review) => ({
+          ...prev,
+          tabAttribute: 'screenId',
+          tabAttributeValue: Tab5attribute.indexOf(
+            Number(currentScreenId),
+          ).toString(),
+        }));
+      } else if (reviewInput?.tabId == 4) {
+        //for Story Tab
+        const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
+        setReviewSubTabOptions([]);
+        setReviewInput((prev: Review) => ({
+          ...prev,
+          tabAttribute: 'blockSeqId',
+          tabAttributeValue: blockSeqId,
+        }));
+      } else {
+        const subOptions = subTabOptionsForTabIds.find(
+          (item: any) => Object.keys(item)[0] == reviewInput?.tabId.toString(),
+        );
+        setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
+      }
+      /** To hide the sub tab options and set the subtab selection based on the current screen it here */
+    }
+  }, [reviewInput.tabId]);
+  console.log('reviewInput', reviewInput);
+  useEffect(() => {
+    /**Validate form */
+    if (
+      reviewInput.reviewGameId &&
+      reviewInput.reviewerId &&
+      reviewInput.tabId &&
+      reviewInput.review
+    ) {
+      if (reviewInput.tabId == 3 || reviewInput.tabId == 5) {
+        if (reviewInput.tabAttribute && reviewInput.tabAttributeValue) {
+          setIsFormValid(true);
+        } else {
+          setIsFormValid(false);
+        }
+      } else {
+        setIsFormValid(true);
+      }
+    } else {
+      setIsFormValid(false);
+    }
+  }, [reviewInput]);
+
+  //no need for story
+  const handleTabSelection = (selectedOption: any) => {
+    if (selectedOption?.value) {
+      setReviewInput((prev: Review) => ({
+        ...prev,
+        tabId: selectedOption?.value ? selectedOption?.value : null,
+        tabAttribute: '',
+        tabAttributeValue: '',
+      }));
+      setIsMenuOpen(true);
+    } else {
+      setReviewInput((prev: Review) => ({
+        ...prev,
+        tabId: selectedOption?.value ? selectedOption?.value : null,
+        tabAttribute: '',
+        tabAttributeValue: '',
+      }));
+      setReviewSubTabOptions([]);
+    }
+  };
+
+  const handleSubTabSelection = (selectedOption: any) => {
+    console.log('selectedOption', selectedOption);
+    const selectedTabFileds = tabAttributeSets.find(
+      (item) => Object.keys(item)[0] == reviewInput?.tabId.toString(),
+    );
+    setReviewInput((prev: Review) => ({
+      ...prev,
+      tabAttribute: selectedOption?.value
+        ? selectedTabFileds[reviewInput?.tabId.toString()].tabAttribute
+        : null,
+      tabAttributeValue: selectedOption?.value ? selectedOption?.value : null,
+    }));
+  };
+
+  const handleMenubtn = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsMenuOpen(true);
+  };
+
+  const handleReview = (e: any) => {
+    setReviewInput((prev: Review) => ({ ...prev, review: e.target.value }));
+  };
+  const resetInputFields = () => {
+    setReviewInput((prev) => ({
+      ...prev,
+      review: '',
+      tabId: null,
+      tabAttribute: '',
+      tabAttributeValue: '',
+    }));
+  };
+  const hanldeSubmit = async (data: any) => {
+    const response = handleSubmitReview(data); //returns true or false
+    if (response) {
+      setIsMenuOpen(false);
+      resetInputFields();
+    }
+  };
+  const hanldeClose = () => {
+    setIsFormValid(false);
+    resetInputFields();
+    setIsMenuOpen(false);
+  };
+  const {
+    isOpen: isOpen1,
+    onOpen: onOpen1,
+    onClose: onClose1,
+  } = useDisclosure();
+  const startDemo = () => {
+    const aud = new Audio(audio);
+    aud.play();
+    onClose1();
+    setCurrentScreenId(1);  
+  };
+  
   return (
     <>
       <Flex height="100vh" className={currentScreenId === 2 ? '' : 'AddScores'}>
-        {/* <Box
-        w={'100%'}
-        h={'100vh'}
-        display={currentScreenId === 2 ?'block':'flex'}
-        alignItems={'center'}
-        justifyContent={'center'}
-        position={'relative'}
-        overflow={'visible'}
-        style={{ perspective: '1000px' }}
-      >
-        {currentScreenId === 2 ? null :<Img
-          src={backgroundScreenUrl}
-          w={'100%'}
-          h={'100%'}
-          alt="background image"
-        />}
-        <Box
-          className={currentScreenId === 2 ?'':"Game-Screen"}
-          position={currentScreenId === 2 ?'inherit':'absolute'}
-          top={0}
-          display={currentScreenId === 2 ?'block':'flex'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          w={'100%'}
-          h={'100vh'}
-        >
-          <Box className={currentScreenId === 2 ?'':'Images'}> */}
         {(() => {
           switch (currentScreenId) {
             case 0:
               return (
                 <>
-                  <Box
-                    w={'100%'}
-                    h={'100vh'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                    overflow={'visible'}
-                    style={{ perspective: '1000px' }}
-                    className="Main-Content"
-                  >
-                    <Box
-                      backgroundImage={backgroundScreenUrl}
-                      w={'100% !important'}
-                      h={'100vh'}
-                      backgroundRepeat={'no-repeat'}
-                      backgroundSize={'cover'}
-                      // when you import the component you can remove this property
-                      display={'flex'}
-                      alignItems={'center'}
-                      justifyContent={'center'}
-                      className="Game-Screen"
-                    >
-                      <Box className="Images">
-                        <h1>Game Introduction</h1>
-                      </Box>
-                    </Box>
-                  </Box>
+                  {
+                    <PlayInfo
+                      onOpen={onOpen1}
+                      onClose={onClose1}
+                      isOpen={true}
+                      startDemo={startDemo}
+                    />
+                  }
                 </>
               );
             case 1:
@@ -358,6 +562,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     >
                       <Box className="Images">
                         <Welcome
+                          intro={audio}
                           setCurrentScreenId={setCurrentScreenId}
                           formData={gameInfo?.gameData}
                           imageSrc={Screen5}
@@ -583,18 +788,16 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return <h1>Loading Screen </h1>;
           }
         })()}
-        {/* </Box>
-        </Box>
-      </Box> */}
       </Flex>
-      <Menu closeOnSelect={false}>
+
+      <Menu isOpen={isMenuOpen}>
         <MenuButton
           p="0px"
           bg={'brandScheme'}
           position={'fixed'}
           bottom={'0'}
           right={'5px'}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleMenubtn(e)}
         >
           <Icon
             as={AiFillMessage}
@@ -607,114 +810,147 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             me="10px"
           />
         </MenuButton>
-        <MenuList
-          boxShadow={shadow}
-          p="20px"
-          me={{ base: '30px', md: 'unset' }}
-          borderRadius="20px"
-          bg={menuBg}
-          border="none"
-          mt="10px"
-          minW={{ base: '360px' }}
-          maxW={{ base: '360px', md: 'unset' }}
-        >
-          <SelectField
-            mb="10px"
-            me="30px"
-            id="gameIntroMusic"
-            name="gameIntroMusic"
-            label="Feedback Options"
-            options={overOptions}
-            onChange={handleFeed}
-          />
-          <FormControl>
-            <FormLabel fontSize={18} fontWeight={700}>
-              Feedback
-              {/* {tab === 1
-                    ? 'Background'
-                    : tab === 2
-                    ? 'Non playing Character'
-                    : tab === 3
-                    ? 'Overview'
-                    : tab === 4
-                    ? 'story'
-                    : tab === 5
-                    ? 'Design'
-                    : 'Preference'} */}
-            </FormLabel>
-            <Textarea
-              resize="none"
-              w="100%"
-              h="200px"
-              border="1px solid #CBD5E0"
-              borderRadius="20px"
-              p="4"
-              placeholder="Please Share your Thoughts..."
+        {isMenuOpen && (
+          <MenuList
+            boxShadow={shadow}
+            p="20px"
+            me={{ base: '30px', md: 'unset' }}
+            borderRadius="20px"
+            bg={menuBg}
+            border="none"
+            mt="10px"
+            minW={{ base: '360px' }}
+            maxW={{ base: '360px', md: 'unset' }}
+          >
+            <SelectField
+              mb="10px"
+              me="30px"
+              id="tab"
+              name="tab"
+              label="Feedback Options"
+              labelStyle={{ fontSize: 18, fontWeight: 700 }}
+              options={filteredTabOptions}
+              onChange={handleTabSelection}
+              style={{ fontSize: '18px' }}
             />
-          </FormControl>
-          <MenuItem>
-            <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
-              <Button
-                bg="#11047a"
-                _hover={{ bg: '#190793' }}
-                color="#fff"
-                h={'46px'}
-                w={'128px'}
-                mr={'33px'}
-                mt={'7px'}
-              >
-                Submit
-              </Button>
-            </Box>
-          </MenuItem>
-        </MenuList>
+            {reviewInput?.tabId !== null &&
+              reviewInput?.tabId !== undefined &&
+              reviewSubTabOptions?.length > 0 && (
+                <SelectField
+                  mb="10px"
+                  me="30px"
+                  id="subtab"
+                  name="subtab"
+                  label="Secondary Options"
+                  fontSize={'md'}
+                  options={reviewSubTabOptions}
+                  onChange={handleSubTabSelection}
+                />
+              )}
+            <FormControl>
+              <FormLabel fontSize={'sm'} fontWeight={700} pl="4">
+                Feedback
+              </FormLabel>
+              <Textarea
+                resize="none"
+                w="100%"
+                h="200px"
+                border="1px solid #CBD5E0"
+                borderRadius="20px"
+                p="4"
+                placeholder="Please Share your Thoughts..."
+                onChange={handleReview}
+              />
+              <Text color="#CBD5E0" fontSize={{ base: 'sm', '2xl': 'md' }}>
+                {'Maximum of 250 characters...'}
+              </Text>
+            </FormControl>
+            <MenuItem>
+              <Box w={'100%'} display={'flex'} justifyContent={'flex-start'}>
+                <Button
+                  bg="#11047a"
+                  _hover={{ bg: '#190793' }}
+                  color="#fff"
+                  h={'46px'}
+                  w={'128px'}
+                  mr={'33px'}
+                  mt={'7px'}
+                  onClick={() => hanldeClose()}
+                >
+                  close
+                </Button>
+              </Box>
+
+              <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                <Button
+                  bg="#11047a"
+                  _hover={{ bg: '#190793' }}
+                  color="#fff"
+                  h={'46px'}
+                  w={'128px'}
+                  mr={'33px'}
+                  mt={'7px'}
+                  onClick={() => hanldeSubmit(reviewInput)}
+                  isDisabled={!isFormValid}
+                >
+                  Submit
+                </Button>
+              </Box>
+            </MenuItem>
+          </MenuList>
+        )}
       </Menu>
+      {audio && (
+        <audio controls autoPlay ref={audioRef}>
+          <source src={audio} type="audio/mpeg" />
+        </audio>
+      )}
     </>
   );
 };
 
-const Model: React.FC = () => {
-  const groupRef = useRef<any>();
-  const gltf = useLoader(GLTFLoader, Sample);
+// const Model: React.FC = () => {
+//   const groupRef = useRef<any>();
+//   const gltf = useLoader(GLTFLoader, Sample);
 
-  const mixer = new THREE.AnimationMixer(gltf.scene);
-  const action = mixer.clipAction(gltf.animations[0]);
+//   const mixer = new THREE.AnimationMixer(gltf.scene);
+//   const action = mixer.clipAction(gltf.animations[0]);
 
-  useFrame((state, delta) => {
-    // Rotate the model on the Y-axis
-    if (groupRef.current) {
-      // groupRef.current.rotation.y += 0.01;
-      groupRef.current.castShadow = true;
-    }
+//   useFrame((state, delta) => {
+//     // Rotate the model on the Y-axis
+//     if (groupRef.current) {
+//       // groupRef.current.rotation.y += 0.01;
+//       groupRef.current.castShadow = true;
+//     }
 
-    mixer.update(delta);
-  });
-  action.play();
+//     mixer.update(delta);
+//   });
+//   action.play();
 
-  useLayoutEffect(() => {
-    if (groupRef.current) {
-      groupRef.current.traverse((obj: any) => {
-        if (obj.isMesh) {
-          obj.castShadow = true;
-          obj.receiveShadow = true;
-        }
-      });
-    }
-  }, []);
+//   useLayoutEffect(() => {
+//     if (groupRef.current) {
+//       groupRef.current.traverse((obj: any) => {
+//         if (obj.isMesh) {
+//           obj.castShadow = true;
+//           obj.receiveShadow = true;
+//         }
+//       });
+//     }
+//   }, []);
 
-  gltf.scene.traverse((child) => {
-    if (child instanceof THREE.Mesh) {
-      child.material.color.set(0xffccaaf0); 
-      child.material.roughness = 0.4; // Adjust roughness as needed
-      child.material.metalness = 0.8; // Adjust metalness as needed
-    }
-  });
+//   gltf.scene.traverse((child) => {
+//     if (child instanceof THREE.Mesh) {
+//       child.material.color.set(0xffccaaf0); // Set your desired color
+//       child.material.roughness = 0.4; // Adjust roughness as needed
+//       child.material.metalness = 0.8; // Adjust metalness as needed
+//     }
+//   });
 
-  return (
-    <group ref={groupRef}>
-      <primitive object={gltf.scene} />
-    </group>
-  );
-};
+//   return (
+//     <group ref={groupRef}>
+//       <primitive object={gltf.scene} />
+//     </group>
+//   );
+// };
 
 export default EntirePreview;

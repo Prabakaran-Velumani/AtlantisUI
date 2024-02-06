@@ -27,7 +27,7 @@ const ReplayGame: React.FC<{
               alignItems={'center'}
               position={'relative'}
             >
-              <Box className="title">
+              <Box className="title" mt={'80px'}>
                 <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
                   Do You Want Replay Again ?
                 </Text>

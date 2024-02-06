@@ -27,6 +27,8 @@ import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 //   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import feedi from 'assets/img/screens/feed.png';
 import TypingEffect from './Typing';
+import { getVoiceMessage } from 'utils/game/gameService';
+
 //   import { AiFillMessage } from 'react-icons/ai';
 
 const Story: React.FC<{
@@ -75,6 +77,14 @@ const Story: React.FC<{
     // to set the first data for the game
   }, []);
 
+  //  useEffect(()=>{
+  //   const res = await getVoiceMessage(defaultVoiceIds.player, data);
+  //   if (!res) return console.log('missing audio for the block');
+  //   const blob = new Blob([res], { type: 'audio/mpeg' });
+  //   const audioUrl = URL.createObjectURL(blob);
+  //   const audio = new Audio(audioUrl);
+  //   audio.play();
+  //  },[])
   return (
     <>
       {data && type === 'Note' && (

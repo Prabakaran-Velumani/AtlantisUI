@@ -148,7 +148,8 @@ export const urls = {
     
       /******** Game Demo with review ******/
       getGameDemoData : '/game/tryout/',
-      addGameReview : "/gamereview/addblockreview"
+      addGameReview : "/gamereview/addblockreview",
+      testAudios: '/game/audioTest',
 };
 
 const person = localStorage.getItem('user');
@@ -210,4 +211,25 @@ export const postMethodVoice = (data) => {
     body: data,
   };
   return method;
+};
+
+export const postMethodGameReview = (data) => {
+  let method = {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      // Authorization: user?.token,
+      'Content-Type': 'application/json',
+    },
+    body: data,
+  };
+  return method;
+};
+
+export const getMethodGameReview = {
+  method: 'GET',
+  mode: 'cors',
+  headers: {
+    'Content-Type': 'application/json',
+  },
 };

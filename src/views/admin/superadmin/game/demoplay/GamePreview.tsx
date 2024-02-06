@@ -51,31 +51,37 @@ import React, {
 } from 'react';
 
 // import ModelViewer from "../three/ModelViewer";
-import { useParams } from 'react-router-dom';
+import { json, useParams } from 'react-router-dom';
 import { getGameDemoData,SubmitReview } from 'utils/game/gameService';
 // import NoAuth from './NoAuth';
 // import NoAuth from './NoAuth';
 import EntirePreview from './EntirePreview';
 
 
-const gameScreens = ['GameIntro','Welcome','Story','Reflection',"Leaderboard", "ThanksScreen", "Completion","TakeAway"];
+// const gameScreens = ['GameIntro','Welcome','Story','Reflection',"Leaderboard", "ThanksScreen", "Completion","TakeAway"];
+const gameScreens = ["Completion", "Leaderboard","Reflection", "TakeAway", "Welcome", "ThanksScreen"];
+// const gameScreens = ['GameIntro', "4": 'Welcome', "2": 'Reflection',"1": "Leaderboard", "" : "5": "ThanksScreen", "0": "Completion","3": "TakeAway"];
+
+// const Tab5attribute = [{'attribute': 0,"currentScreenName": "Completion", "currentScreenId": 6} ];
+// const Tab5attribute = [6, 4,3, 7, 1,5 ];
+
 
 const GamePreview = () => {
   const { uuid } = useParams();
   const [gameInfo, setGameInfo] = useState<any | null>();
-  const [currentScreenId, setCurrentScreenId] = useState<Number>(8);
+  const [currentScreenId, setCurrentScreenId] = useState<Number>(0);
   const toast = useToast();
-  const [toastObj, setToastObj] = useState<any>();
+  // const [toastObj, setToastObj] = useState<any>();
     
   useEffect(() => {
     uuid && fetchGameData();
   }, [uuid]);
 
-  useEffect(() => {
-    setTimeout(()=>{
-      setCurrentScreenId(8);
-    },3000)
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(()=>{
+  //     setCurrentScreenId(1);
+  //   },3000)
+  // }, []);
    
   /*** Collect details of a game based on uuid not gameId
    * This API took gameId based on uuid
@@ -112,10 +118,9 @@ const updateGameInfo = (info: any)=>{
   } = info?.result?.lmsgame;
 
   const sortBlockSequence = (blockArray: []) =>{
-
       const transformedArray = blockArray.reduce((result: any, obj: any) => {
         const groupKey = obj?.blockQuestNo.toString();
-        const seqKey = obj?.blockDragSequence ? obj?.blockDragSequence?.split(".")[1] : obj?.blockPrimarySequence?.split(".")[1];
+        const seqKey = obj?.blockSecondaryId;
         if (!result[groupKey]) {
           result[groupKey] = {};
         }
@@ -130,24 +135,25 @@ const updateGameInfo = (info: any)=>{
     gameData: gameData,
     reviewer: {
       ReviewerId: gameReviewerId,
-      ReviewerName: ReviewingCreator.ctName,
+      ReviewerName: ReviewingCreator === null ? null: ReviewingCreator?.ctName,
       ReviewerEmailId: emailId,
-      ReviewerGender: ReviewingCreator.ctGender,
+      ReviewerGender: ReviewingCreator ? ReviewingCreator?.ctGender : null,
       ReviewerStatus: activeStatus,
-      ReviewerDeleteStatus: ReviewingCreator.ctDeleteStatus,
+      ReviewerDeleteStatus: ReviewingCreator ? ReviewingCreator?.ctDeleteStatus: null,
     },
     reviews: reviews,
     gameHistory:gameview,
     assets: image,
     blocks: sortBlockSequence(lmsblocks),
-    questOptions: lmsquestionsoptions
+    questOptions: lmsquestionsoptions,
+    reflectionQuestions: info?.resultReflection
   })
 }
 
 
-const handleSubmitReview= async(data: any)=>{
-/* Sample post data
-    {"data" :{
+const handleSubmitReview= async(inputdata: any)=>{
+  /** Sample post data
+   * {"data" :{
     "reviewerId": 4,
     "reviewGameId": 3,
     "review": "Character Tab",
@@ -156,26 +162,68 @@ const handleSubmitReview= async(data: any)=>{
     "tabAttributeValue": ""
    }
 } 
-*/
-
-const addReviewResponse = await SubmitReview(data);
-
-if(addReviewResponse?.status ==="Failure")
-{
-  setToastObj((prev:any) => {return {...prev, status: "failure", title: "Failed to add Review"}});
-  return ;
-}
-setToastObj((prev:any) => {return {...prev, status: "success", title: "Review Added Successfully..!"}});
-}
-
-/** Handle Toast for this Component and childs too */
-toastObj?.status && toast({
-      title: toastObj.title,
-      status: toastObj.status,
+   */
+  if(!inputdata.reviewerId || !inputdata.reviewGameId){
+    toast({
+      title: "You are Unauthorized..!",
+      status: "error",
       duration: 3000,
       isClosable: true,
       position: 'top-right'
     })
+    return false;
+}else if(!inputdata.tabId)
+{
+  toast({
+    title: "Select Feedback Options",
+    status: "error",
+    duration: 3000,
+    isClosable: true,
+    position: 'top-right'
+  })
+  return false;
+}
+else if(!inputdata.review)
+{
+  toast({
+    title: "Review Field is Empty",
+    status: "error",
+    duration: 3000,
+    isClosable: true,
+    position: 'top-right'
+  })
+  return false;
+}
+
+
+const addReviewResponse = await SubmitReview(JSON.stringify({data: inputdata, id: uuid}));
+if(addReviewResponse?.status ==="Failure")
+{
+  toast({
+    title: "Failed to Add Review",
+    status: "error",
+    duration: 3000,
+    isClosable: true,
+    position: 'top-right'
+  })
+  return false;
+}
+if(addReviewResponse?.status ==="Success")
+{
+  toast({
+    title: "Review added Successfully..!",
+    status: "success",
+    duration: 3000,
+    isClosable: true,
+    position: 'top-right'
+  })
+fetchGameData();
+return true;
+}
+}
+
+// console.log("currentScreenId",currentScreenId);
+console.log("gameData",gameInfo);
   
   return (
     <>
@@ -184,7 +232,7 @@ toastObj?.status && toast({
         (<h1> {"Your are Not Authorized...."}</h1>)
        :
        gameInfo?.gameId &&
-        <EntirePreview gameScreens={gameScreens} currentScreenId={currentScreenId} setCurrentScreenId={setCurrentScreenId} gameInfo={gameInfo} setToastObj={setToastObj} handleSubmitReview={handleSubmitReview}/>
+        <EntirePreview gameScreens={gameScreens} currentScreenId={currentScreenId} setCurrentScreenId={setCurrentScreenId} gameInfo={gameInfo}  handleSubmitReview={handleSubmitReview}/>
       }
     </>
   );
