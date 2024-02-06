@@ -1,3 +1,4 @@
+// testing activity
 const fetch = require('node-fetch');
 
 // An API key is defined here. You'd normally get this from the service you're accessing. It's a form of authentication.
