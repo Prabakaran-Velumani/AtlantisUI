@@ -625,14 +625,27 @@ letter-spacing: 0.5px;
   width: 500px; 
   background-position: center;
 }
+.reflection-screen .bg-ref {
+  height: 700px; 
+  width: 800px; 
+  background-position: center;
+}
 .AddScores .Main-Content .Game-Screen .Images .reflection-screen .content-box {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   position: absolute;
-  transform: translate(0px, 263px);
+  transform: translate(0px, 216px);
   }
+  .reflection-screen .content-ref {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    transform: translate(0px, 100px);
+    }
   .AddScores .Main-Content .Game-Screen .Images .reflection-screen .content-box .grid .text{
     font-family: 'AtlantisText';
     letter-spacing: 0.4px; 
@@ -1257,7 +1270,15 @@ letter-spacing: 0.5px;
     align-items: center;
     width: 100%;
     position: absolute;
-    transform: translate(0px, 263px);
+    transform: translate(0px, 216px);
+  }
+  .reflection-screen .content-ref {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    transform: translate(0px, 100px);
   }
   .AddScores .Main-Content .Game-Screen .Images .reflection-screen .content-box .grid{
    width: 280px;

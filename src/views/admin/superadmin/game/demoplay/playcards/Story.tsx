@@ -114,9 +114,9 @@ const Story: React.FC<{
               zIndex={999}
               w={'300px'}
             >
-              <Canvas
+              {/* <Canvas
                 camera={{ position: [3, 3, 10] }}
-                // style={{ width: '50%', height: '50vh'}}
+                
               >
                 <directionalLight
                   position={[5, 5, 5]}
@@ -130,7 +130,7 @@ const Story: React.FC<{
                   color={0xff0000}
                   intensity={1}
                 />
-                {/* <Model /> */}
+              
                 <mesh
                   rotation={[-Math.PI / 2, 0, 0]}
                   position={[0, -5, 0]}
@@ -139,7 +139,7 @@ const Story: React.FC<{
                   <planeGeometry args={[100, 100]} />
                   <shadowMaterial opacity={0.5} />
                 </mesh>
-              </Canvas>
+              </Canvas> */}
             </Box>
           </Box>
           <Box
@@ -516,7 +516,10 @@ const Story: React.FC<{
               zIndex={999}
               w={'300px'}
             >
-              <Canvas camera={{ position: [3, 3, 10] }}>
+                {/* <Canvas
+                camera={{ position: [3, 3, 10] }}
+                
+              >
                 <directionalLight
                   position={[5, 5, 5]}
                   intensity={0.8}
@@ -529,7 +532,7 @@ const Story: React.FC<{
                   color={0xff0000}
                   intensity={1}
                 />
-                {/* <Model /> */}
+              
                 <mesh
                   rotation={[-Math.PI / 2, 0, 0]}
                   position={[0, -5, 0]}
@@ -538,7 +541,7 @@ const Story: React.FC<{
                   <planeGeometry args={[100, 100]} />
                   <shadowMaterial opacity={0.5} />
                 </mesh>
-              </Canvas>
+              </Canvas> */}
             </Box>
           </Box>
           <Box

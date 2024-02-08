@@ -14,6 +14,8 @@ const Completion: React.FC<{
   CompKeyCount?: any;
   preview?: any;
   setCurrentScreenId?: any;
+  getData?: any;
+  data?: any;
 }> = ({
   setCurrentScreenId,
   preview,
@@ -23,6 +25,8 @@ const Completion: React.FC<{
   compliData,
   setCompliData,
   CompKeyCount,
+  getData,
+  data
 }) => {
   const [imgb, setbImg] = useState<any>();
   const [showComplete, setShowComplete] = useState(false);
@@ -118,15 +122,7 @@ const Completion: React.FC<{
           <Box className="next-btn">
             <Img
               src={next}
-              onClick={() =>
-                formData?.gameReplayAllowed === 'false'
-                  ? setCurrentScreenId(8)
-                  : formData?.gameReflectionpageAllowed === 'true'
-                  ? setCurrentScreenId(3)
-                  : formData?.gameIsShowTakeaway === 'true'
-                  ? setCurrentScreenId(7)
-                  : setCurrentScreenId(6)
-              }
+              onClick={()=>getData(data)}
               cursor={'pointer'}
             />
           </Box>

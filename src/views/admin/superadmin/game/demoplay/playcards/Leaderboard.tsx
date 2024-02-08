@@ -1,47 +1,65 @@
-
-import {
-    Img,
-    Text,
-    SimpleGrid,
-    Box,
-} from '@chakra-ui/react';
+import { Img, Text, SimpleGrid, Box } from '@chakra-ui/react';
 import React from 'react';
 
 /* for reflection question inside the image */
 import ref from 'assets/img/screens/refquestions.png';
 import qs from 'assets/img/screens/QS.png';
 
-
 const LeaderBoard: React.FC<{
-    formData: any;
-    reflectionQuestions: any; imageSrc: any; reflectionQuestionsdefault: any, preview: any
-}> = ({ formData, reflectionQuestions, imageSrc, reflectionQuestionsdefault, preview }) => {
-
-
-    return (
-        <>
-            {imageSrc && (    
-                <Box className='reflection-screen' >  
-                    <Box className='reflection-screen-box'>
-                        <Img src={imageSrc} className='bg-img' />
-                    </Box>
-                    <Box className='content-box' >
-                        <SimpleGrid columns={{ base: 2 }} spacing={2} className='grid'>
-                            {Array.from({ length: formData.gameReflectionQuestion }, (_, index) => (
-                                <Box>
-                                    <Box w={{ base: '150px', sm: '100px', md: '150px', lg: '180px' }} lineHeight={1} display={'flex'} wordBreak="break-all" fontFamily={'content'} fontSize={{ base: '8px', sm: '12px', md: '13px', lg: '15px' }}>
-                                        <Img src={qs} alt='ref' w={'20px'} h={'20px'} />
-                                        <Text fontFamily={'AtlantisText'} color={'#D9C7A2'} className='text drop' style={{ whiteSpace: 'break-spaces' }}>{` ${reflectionQuestions[`ref${index + 1}`]?.padEnd(90, ' ') || reflectionQuestionsdefault[index]?.padEnd(90, ' ')}`}</Text>
-                                    </Box>
-                                    <Img w={'200px'} h={{ base: '20px', sm: '30px', md: '50px', lg: '50px' }} src={ref} />
-                                </Box>
-                            ))}
-                        </SimpleGrid>
-                    </Box>
-                </Box>
-            )}
-        </>
-    );
-}
+  formData: any;
+  imageSrc: any;
+}> = ({ imageSrc, formData }) => {
+    const content =[1,2,3,4,5,6]
+  return (
+    <>
+      {imageSrc && (
+        <Box className="takeaway-screen">
+          <Box className="takeaway-screen-box">
+            <Img src={imageSrc} className="bg-take" />
+            {/* <Box
+              className="content-box"
+              width={'633px !important'}
+              overflowY={'scroll'}
+              position={'absolute'}
+              display={'flex'}
+              flexDirection={'column'}
+              justifyContent={'space-between'}
+            >
+              <Box>
+                {content &&
+                  content.map((it: any, ind: number) => (
+                    
+                      <Box
+                        className="content"
+                        fontFamily={'AtlantisText'}
+                        color={'#D9C7A2'}
+                      >
+                        <>
+                          <Img
+                            src={bull}
+                            className="dot-img"
+                            w={'16px'}
+                            h={'16px'}
+                          />
+                          {it}
+                        </>
+                      </Box>
+                    ))}
+              </Box>
+              <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                <Img
+                  src={right}
+                  w={'50px'}
+                  h={'50px'}
+                  cursor={'pointer'}
+                  onClick={() => getData(data)}
+                />
+              </Box>
+            </Box> */}
+          </Box>
+        </Box>
+      )}
+    </>
+  );
+};
 export default LeaderBoard;
-

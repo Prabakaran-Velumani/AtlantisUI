@@ -116,7 +116,6 @@ const updateGameInfo = (info: any)=>{
   lmsquestionsoptions,
   ...gameData
   } = info?.result?.lmsgame;
-
   const sortBlockSequence = (blockArray: []) =>{
       const transformedArray = blockArray.reduce((result: any, obj: any) => {
         const groupKey = obj?.blockQuestNo.toString();
@@ -222,8 +221,6 @@ return true;
 }
 }
 
-// console.log("currentScreenId",currentScreenId);
-console.log("gameData",gameInfo);
   
   return (
     <>

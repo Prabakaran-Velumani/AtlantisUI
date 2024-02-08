@@ -11,9 +11,11 @@ import right from 'assets/img/games/right.png';
 const Takeway: React.FC<{
   formData: any;
   imageSrc: any;
-  takeAwayNext:any;
-}> = ({ formData, imageSrc,takeAwayNext }) => {
-  const data = formData.gameTakeawayContent?.split('\n');
+  getData?: any;
+  data?: any;
+}> = ({ formData, imageSrc, getData,
+  data }) => {
+  const content = formData.gameTakeawayContent?.split('\n');
 
   return (
     <>
@@ -31,8 +33,8 @@ const Takeway: React.FC<{
               justifyContent={'space-between'}
             >
               <Box>
-                {data &&
-                  data.map((it: any, ind: number) => {
+                {content &&
+                  content.map((it: any, ind: number) => {
                     const bulletIndex = it.indexOf('\u2022');
                     const contentAfterBullet =
                       bulletIndex !== -1
@@ -63,7 +65,7 @@ const Takeway: React.FC<{
                   w={'50px'}
                   h={'50px'}
                   cursor={'pointer'}
-                    onClick={takeAwayNext}
+                    onClick={()=>getData(data)}
                 />
               </Box>
             </Box>

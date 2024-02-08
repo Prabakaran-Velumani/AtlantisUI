@@ -13,7 +13,16 @@ const ReplayGame: React.FC<{
   imageSrc: any;
   replayGame: any;
   setCurrentScreenId: any;
-}> = ({ formData, imageSrc, replayGame, setCurrentScreenId }) => {
+  getData?: any;
+  data?: any;
+}> = ({
+  formData,
+  imageSrc,
+  replayGame,
+  setCurrentScreenId,
+  getData,
+  data,
+}) => {
   return (
     <>
       {imageSrc && (
@@ -54,13 +63,7 @@ const ReplayGame: React.FC<{
                   w={'200px'}
                   h={'60px'}
                   cursor={'pointer'}
-                  onClick={() =>
-                    formData?.gameReflectionpageAllowed === 'true'
-                      ? setCurrentScreenId(3)
-                      : formData?.gameIsShowTakeaway === 'true'
-                      ? setCurrentScreenId(7)
-                      : setCurrentScreenId(6)
-                  }
+                  onClick={()=>getData(data)}
                 />
               </Box>
             </Box>

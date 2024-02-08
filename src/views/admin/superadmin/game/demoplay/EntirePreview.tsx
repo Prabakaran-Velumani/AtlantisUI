@@ -223,21 +223,98 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   const getData = (next: any) => {
     const isPreference = gameInfo?.gameData?.gameIsShowInteractionFeedBack;
-
-    const currentBlock = parseInt(next?.blockDragSequence.split('.')[1]);
-    const NextItem = currentBlock + 1;
-    const nextSeq = `${next?.blockDragSequence.split('.')[0]}.${NextItem}`;
-    const quest = next?.blockDragSequence.split('.')[0];
-    const currentQuest = parseInt(next?.blockDragSequence.split('.')[0]);
-    const nextLevel = String(currentQuest + 1);
-    const nextBlock = Object.keys(demoBlocks[quest])
-      .filter((key) => demoBlocks[quest][key]?.blockDragSequence === nextSeq)
-      .map((key) => demoBlocks[quest][key]);
-    if (nextBlock.length === 0) {
+    const currentBlock = next
+      ? parseInt(next?.blockDragSequence.split('.')[1])
+      : null;
+    const NextItem = currentBlock != null ? currentBlock + 1 : null;
+    const nextSeq = next
+      ? `${next?.blockDragSequence.split('.')[0]}.${NextItem}`
+      : '';
+    const quest = next ? next?.blockDragSequence.split('.')[0] : null;
+    const currentQuest = next
+      ? parseInt(next?.blockDragSequence.split('.')[0])
+      : null;
+    const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    const nextBlock = next
+      ? Object.keys(demoBlocks[quest] || {})
+          .filter(
+            (key) => demoBlocks[quest]?.[key]?.blockDragSequence === nextSeq,
+          )
+          .map((key) => demoBlocks[quest]?.[key])
+      : ['completed'];
+    if (nextBlock.length === 0) { 
       if (demoBlocks.hasOwnProperty(nextLevel)) {
         setType(demoBlocks[nextLevel]['1']?.blockChoosen);
         setData(demoBlocks[nextLevel]['1']);
         setCurrentScreenId(6);
+        return false;
+      } else {
+        setType(null);
+        setData(null);
+        setCurrentScreenId(6);
+        return false;
+      }
+    }
+    if (currentScreenId === 6) {
+      if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
+        setCurrentScreenId(8);
+        return false;
+      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+        setCurrentScreenId(3);
+        return false;
+      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+        setCurrentScreenId(7);
+        return false;
+      } else {
+        if (data && type) {
+          setCurrentScreenId(2);
+          return false;
+        } else {
+          setType(null);
+          setData(null);
+          setCurrentScreenId(5);
+          return false;
+        }
+      }
+    }
+    if (currentScreenId === 8) {
+      if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+        setCurrentScreenId(3);
+        return false;
+      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+        setCurrentScreenId(7);
+        return false;
+      } else {
+        if (data && type) {
+          setCurrentScreenId(2);
+          return false;
+        } else {
+          setType(null);
+          setData(null);
+          setCurrentScreenId(5);
+          return false;
+        }
+      }
+    }
+    if (currentScreenId === 3) {
+      if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+        setCurrentScreenId(7);
+        return false;
+      } else {
+        if (data && type) {
+          setCurrentScreenId(2);
+          return false;
+        } else {
+          setType(null);
+          setData(null);
+          setCurrentScreenId(5);
+          return false;
+        }
+      }
+    }
+    if (currentScreenId === 7) {
+      if (data && type) {
+        setCurrentScreenId(2);
         return false;
       } else {
         setType(null);
@@ -557,11 +634,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setCurrentScreenId(2);
   };
 
-  const completion = () => {};
-  const takeAwayNext = () => {
-    getData(data);
-  };
-
   return (
     <>
       <Flex height="100vh" className={currentScreenId === 2 ? '' : 'AddScores'}>
@@ -642,7 +714,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   <Box
                     w={'100%'}
                     h={'100vh'}
-                    // display={'flex'}
                     alignItems={'center'}
                     justifyContent={'center'}
                     position={'relative'}
@@ -651,27 +722,23 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     className="Main-Content"
                   >
                     <Box
-                      backgroundImage={backgroundScreenUrl}
+                      // backgroundImage={backgroundScreenUrl}
                       w={'100% !important'}
                       h={'100vh'}
-                      backgroundRepeat={'no-repeat'}
-                      backgroundSize={'cover'}
-                      // transform={`scale(${first ? 1 : 1.3}) translateY(${
-                      //   first ? 0 : -10
-                      // }%) translateX(${first ? 0 : -10}%)`}
-                      // transition={'transform 0.9s ease-in-out'}
-                      // display={'flex'}
+                      // backgroundRepeat={'no-repeat'}
+                      // backgroundSize={'cover'}
                       alignItems={'center'}
                       justifyContent={'center'}
                       className="Game-Screen"
+                      backgroundColor={'#D9C7A2'}
                     >
                       <Box className="Images">
                         <Reflection
-                          // preview={true}
                           formData={gameInfo?.gameData}
                           imageSrc={RefScreen1}
-                          // reflectionQuestions={reflectionQuestions}
-                          // reflectionQuestionsdefault={reflectionQuestionsdefault}
+                          getData={getData}
+                          data={data}
+                          reflectionQuestions={gameInfo?.reflectionQuestions}
                         />
                       </Box>
                     </Box>
@@ -746,6 +813,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     >
                       <Box className="Images">
                         <Completion
+                          getData={getData}
+                          data={data}
                           setCurrentScreenId={setCurrentScreenId}
                           formData={gameInfo?.gameData}
                           imageSrc={Screen1}
@@ -780,9 +849,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     >
                       <Box className="Images">
                         <Takeway
-                          takeAwayNext={takeAwayNext}
                           formData={gameInfo?.gameData}
                           imageSrc={Screen4}
+                          getData={getData}
+                          data={data}
                         />
                       </Box>
                     </Box>
@@ -818,6 +888,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           setCurrentScreenId={setCurrentScreenId}
                           formData={gameInfo?.gameData}
                           imageSrc={Replay}
+                          getData={getData}
+                          data={data}
                         />
                       </Box>
                     </Box>
