@@ -219,7 +219,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   // story inside next button function for the blocks
 
+  // old function
+
   const getData = (next: any) => {
+    const isPreference = gameInfo?.gameData?.gameIsShowInteractionFeedBack;
+
     const currentBlock = parseInt(next?.blockDragSequence.split('.')[1]);
     const NextItem = currentBlock + 1;
     const nextSeq = `${next?.blockDragSequence.split('.')[0]}.${NextItem}`;
@@ -230,17 +234,59 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       .filter((key) => demoBlocks[quest][key]?.blockDragSequence === nextSeq)
       .map((key) => demoBlocks[quest][key]);
     if (nextBlock.length === 0) {
-      setCurrentScreenId(6);
-      return false;
+      if (demoBlocks.hasOwnProperty(nextLevel)) {
+        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+        setData(demoBlocks[nextLevel]['1']);
+        setCurrentScreenId(6);
+        return false;
+      } else {
+        setType(null);
+        setData(null);
+        setCurrentScreenId(5);
+        return false;
+      }
+    }
+    if (next?.blockShowNavigate) {
+      if (next?.blockShowNavigate === 'Repeat Question') {
+        setType(next?.blockChoosen);
+        setData(next);
+        return false;
+      } else if (next?.blockShowNavigate === 'New Block') {
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
+        setSelectedOption(null);
+        return false;
+      } else if (next?.blockShowNavigate === 'Replay Point') {
+        setType(demoBlocks['1']['1']?.blockChoosen);
+        setData(demoBlocks['1']['1']);
+        setSelectedOption(null);
+        return false;
+      } else if (next?.blockShowNavigate === 'Select Block') {
+        setSelectedOption(null);
+      } else if (next?.blockShowNavigate === 'Complete') {
+        setCurrentScreenId(6);
+        return false;
+      }
     }
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = gameInfo?.questOptions.filter(
-        (key: any) => key.qpSequence === nextBlock[0]?.blockPrimarySequence,
+        (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
       );
       setOptions(optionsFiltered);
     }
-    if (type === 'Interaction' && resMsg !== '') setType('response');
-    else if ((type === 'Interaction' || type === 'response') && feed !== '')
+    if (
+      type === 'Interaction' &&
+      resMsg !== '' &&
+      next?.gameIsShowInteractionFeedBack &&
+      next?.gameIsShowInteractionFeedBack === 'Each'
+    )
+      setType('response');
+    else if (
+      (type === 'Interaction' || type === 'response') &&
+      feed !== '' &&
+      next?.gameIsShowInteractionFeedBack &&
+      next?.gameIsShowInteractionFeedBack === 'Each'
+    )
       setType('feedback');
     else if (
       type === 'Interaction' ||
@@ -379,21 +425,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   useEffect(() => {
     if (reviewInput?.tabId) {
-      console.log('reviewInput?.tabId ', reviewInput?.tabId);
-      console.log('reviewInput?.tabId == 5 ', reviewInput?.tabId == 5);
-      if (reviewInput?.tabId == 5) {
-        //for Design Tab
-        // const subOptions = subTabOptionsForTabIds.find(
-        //   (item: any) => Object.keys(item)[0] == reviewInput?.tabId.toString(),
-        // );
-        // const subTabValueOfCurrentScreenId = subOptions[
-        //   reviewInput?.tabId.toString()
-        // ].filter(
-        //   (screenitem: any) => screenitem.value == currentScreenId.toString(),
-        // );
-
-        // handleSubTabSelection(subTabValueOfCurrentScreenId[0]);
-
+      if (reviewInput?.tabId === 5) {
         setReviewSubTabOptions([]);
         setReviewInput((prev: Review) => ({
           ...prev,
@@ -402,7 +434,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             Number(currentScreenId),
           ).toString(),
         }));
-      } else if (reviewInput?.tabId == 4) {
+      } else if (reviewInput?.tabId === 4) {
         //for Story Tab
         const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
         setReviewSubTabOptions([]);
@@ -413,14 +445,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         }));
       } else {
         const subOptions = subTabOptionsForTabIds.find(
-          (item: any) => Object.keys(item)[0] == reviewInput?.tabId.toString(),
+          (item: any) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
         );
         setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
       }
       /** To hide the sub tab options and set the subtab selection based on the current screen it here */
     }
   }, [reviewInput.tabId]);
-  console.log('reviewInput', reviewInput);
+
   useEffect(() => {
     /**Validate form */
     if (
@@ -429,7 +461,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       reviewInput.tabId &&
       reviewInput.review
     ) {
-      if (reviewInput.tabId == 3 || reviewInput.tabId == 5) {
+      if (reviewInput.tabId === 3 || reviewInput.tabId === 5) {
         if (reviewInput.tabAttribute && reviewInput.tabAttributeValue) {
           setIsFormValid(true);
         } else {
@@ -465,9 +497,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const handleSubTabSelection = (selectedOption: any) => {
-    console.log('selectedOption', selectedOption);
     const selectedTabFileds = tabAttributeSets.find(
-      (item) => Object.keys(item)[0] == reviewInput?.tabId.toString(),
+      (item) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
     );
     setReviewInput((prev: Review) => ({
       ...prev,
@@ -514,11 +545,23 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   } = useDisclosure();
   const startDemo = () => {
     const aud = new Audio(audio);
+    aud.loop = true;
     aud.play();
     onClose1();
-    setCurrentScreenId(1);  
+    setCurrentScreenId(1);
   };
-  
+
+  const replayGame = () => {
+    setType(gameInfo?.blocks['1']['1']?.blockChoosen);
+    setData(gameInfo?.blocks['1']['1']);
+    setCurrentScreenId(2);
+  };
+
+  const completion = () => {};
+  const takeAwayNext = () => {
+    getData(data);
+  };
+
   return (
     <>
       <Flex height="100vh" className={currentScreenId === 2 ? '' : 'AddScores'}>
@@ -560,7 +603,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       justifyContent={'center'}
                       className="Game-Screen"
                     >
-                      <Box className="Images">
+                      <Box className="Images" h={'100vh !important'}>
                         <Welcome
                           intro={audio}
                           setCurrentScreenId={setCurrentScreenId}
@@ -582,9 +625,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       backGroundImg={backgroundScreenUrl}
                       data={data}
                       type={type}
-                      // first={first}
+                      setCurrentScreenId={setCurrentScreenId}
                       handleValidate={handleValidate}
-                      // showNote={showNote}
                       resMsg={resMsg}
                       feed={feed}
                       getData={getData}
@@ -738,6 +780,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     >
                       <Box className="Images">
                         <Takeway
+                          takeAwayNext={takeAwayNext}
                           formData={gameInfo?.gameData}
                           imageSrc={Screen4}
                         />
@@ -771,6 +814,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     >
                       <Box className="Images">
                         <ReplayGame
+                          replayGame={replayGame}
+                          setCurrentScreenId={setCurrentScreenId}
                           formData={gameInfo?.gameData}
                           imageSrc={Replay}
                         />
@@ -900,11 +945,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           </MenuList>
         )}
       </Menu>
-      {audio && (
+
+      {/* {audio && (
         <audio controls autoPlay ref={audioRef}>
           <source src={audio} type="audio/mpeg" />
         </audio>
-      )}
+      )} */}
     </>
   );
 };

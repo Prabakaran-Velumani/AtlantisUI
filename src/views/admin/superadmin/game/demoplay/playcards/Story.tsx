@@ -44,6 +44,7 @@ const Story: React.FC<{
   resMsg: any;
   feed: any;
   formData: any;
+  setCurrentScreenId:any;
 }> = ({
   data,
   type,
@@ -55,12 +56,11 @@ const Story: React.FC<{
   handleValidate,
   backGroundImg,
   formData,
+  setCurrentScreenId,
 }) => {
-  const [showNote, setShowNote] = useState(false),
+  const [showNote, setShowNote] = useState(true),
     [first, setFirst] = useState(false);
 
-  console.log('this is the game data of the blocks', formData);
-  console.log(data);
   useEffect(() => {
     setShowNote(true);
     setTimeout(() => {
@@ -77,14 +77,8 @@ const Story: React.FC<{
     // to set the first data for the game
   }, []);
 
-  //  useEffect(()=>{
-  //   const res = await getVoiceMessage(defaultVoiceIds.player, data);
-  //   if (!res) return console.log('missing audio for the block');
-  //   const blob = new Blob([res], { type: 'audio/mpeg' });
-  //   const audioUrl = URL.createObjectURL(blob);
-  //   const audio = new Audio(audioUrl);
-  //   audio.play();
-  //  },[])
+
+
   return (
     <>
       {data && type === 'Note' && (
@@ -100,6 +94,7 @@ const Story: React.FC<{
         >
           {/* <Box w={'80%'}> */}
           <Box
+             color={'rgba(0, 0, 0, 0.5)'}
             backgroundImage={backGroundImg}
             w={'100%'}
             h={'100vh'}
@@ -159,8 +154,8 @@ const Story: React.FC<{
             flexDirection={'column'}
             justifyContent={'center'}
             alignItems={'center'}
-          >
-            <Img w={'80%'} h={'80vh'} src={note} />
+            >
+            <Img w={'100%'} h={'80vh'} src={note} />
             <Box
               position={'fixed'}
               overflowY={'scroll'}
@@ -178,10 +173,17 @@ const Story: React.FC<{
                 lineHeight: 1,
               }}
             >
-              <Box w={'100%'} overflowY={'scroll'} h={'100px'} display={'flex'} alignItems={'center'}  mt={'20px'}>
+              <Box
+                w={'100%'}
+                overflowY={'scroll'}
+                h={'100px'}
+                display={'flex'}
+                alignItems={'center'}
+                mt={'20px'}
+              >
                 {data?.blockText}
               </Box>
-              <Box 
+              <Box
                 w={'100%'}
                 onClick={() => getData(data)}
                 mt={'20px'}
@@ -573,7 +575,15 @@ const Story: React.FC<{
               {feed}
               <Box
                 w={'100%'}
-                onClick={() => getData(data)}
+                onClick={() =>
+                  formData?.gameReplayAllowed === 'false'
+                    ? setCurrentScreenId(8)
+                    : formData?.gameReflectionpageAllowed === 'true'
+                    ? setCurrentScreenId(3)
+                    : formData?.gameIsShowTakeaway === 'true'
+                    ? setCurrentScreenId(7)
+                    : setCurrentScreenId(6)
+                }
                 mt={'20px'}
                 display={'flex'}
                 justifyContent={'center'}

@@ -45,15 +45,15 @@ import ReplayBox from 'assets/img/screens/ReplayBox.png';
 import play from 'assets/img/games/Play.png';
 // Assets
 
-type RowObj = {
-  name: [string, boolean];
-  progress: string;
-  quantity: number;
-  date: string;
-  info: boolean;
-};
+// type RowObj = {
+//   name: [string, boolean];
+//   progress: string;
+//   quantity: number;
+//   date: string;
+//   info: boolean;
+// };
 
-const columnHelper = createColumnHelper<RowObj>();
+// const columnHelper = createColumnHelper<RowObj>();
 
 // const columns = columnsDataCheck;
 export default function PlayInfo(props: {
@@ -102,8 +102,7 @@ export default function PlayInfo(props: {
                 Every Screens Just Click the Right Side Bottom Corner Option and
                 You Can Select The Screen To Add FeedBack
               </Box>
-              <Text mt={'20px'} mb={'10px'} fontSize={'25px'} fontWeight={700}>Thank You...!</Text>
-            </Box>
+              {/* <Text mt={'20px'} mb={'10px'} fontSize={'25px'} fontWeight={700}>Thank You...!</Text> */}
             <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
               <Button
                 bg="#11047a"
@@ -116,6 +115,7 @@ export default function PlayInfo(props: {
               >
                 Go
               </Button>
+            </Box>
             </Box>
           </Box>
         </ModalBody>

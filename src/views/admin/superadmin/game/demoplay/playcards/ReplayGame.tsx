@@ -11,7 +11,9 @@ interface Badge {
 const ReplayGame: React.FC<{
   formData: any;
   imageSrc: any;
-}> = ({ formData, imageSrc }) => {
+  replayGame: any;
+  setCurrentScreenId: any;
+}> = ({ formData, imageSrc, replayGame, setCurrentScreenId }) => {
   return (
     <>
       {imageSrc && (
@@ -29,7 +31,7 @@ const ReplayGame: React.FC<{
             >
               <Box className="title" mt={'80px'}>
                 <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
-                  Do You Want Replay Again ?
+                  Do You Want Play Again ?
                 </Text>
               </Box>
               <Box
@@ -45,8 +47,21 @@ const ReplayGame: React.FC<{
                   w={'200px'}
                   h={'60px'}
                   cursor={'pointer'}
+                  onClick={replayGame}
                 />
-                <Img src={next} w={'200px'} h={'60px'} cursor={'pointer'} />
+                <Img
+                  src={next}
+                  w={'200px'}
+                  h={'60px'}
+                  cursor={'pointer'}
+                  onClick={() =>
+                    formData?.gameReflectionpageAllowed === 'true'
+                      ? setCurrentScreenId(3)
+                      : formData?.gameIsShowTakeaway === 'true'
+                      ? setCurrentScreenId(7)
+                      : setCurrentScreenId(6)
+                  }
+                />
               </Box>
             </Box>
           </Box>
