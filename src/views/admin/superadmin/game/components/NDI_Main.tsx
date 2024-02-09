@@ -50,13 +50,12 @@ import Avatar1 from 'assets/img/avatars/avatar1.png';
 import Avatar2 from 'assets/img/avatars/avatar2.png';
 import Avatar3 from 'assets/img/avatars/avatar3.png';
 import { TbHandClick, TbMessages } from 'react-icons/tb';
+
 import pro from 'assets/img/crm/pro.png';
 import { setStory, getStory } from 'utils/game/gameService';
 import NDITabs from './dragNdrop/QuestTab';
-import { BiSolidDislike, BiSolidLike } from 'react-icons/bi';
 interface NDIMainProps {
   handleShowComponent?: (componentName: string) => void;
-  reviews?: any;
   id?: any;
   formData: any;
   setBlockItems: any;
@@ -90,6 +89,9 @@ interface NDIMainProps {
   questTabState?: any;
   setQuestTabState?: any;
   deleteQuest?: any;
+  upNextCount?: any;
+  setUpNextCount?: any;
+  reviews?: any ;
   reviewers?: any;
 }
 
@@ -112,7 +114,6 @@ type ItemType = {
   type: string;
 };
 const NDIMain: React.FC<NDIMainProps> = ({
-  reviews,
   id,
   formData,
   setBlockItems,
@@ -146,7 +147,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
   questTabState,
   setQuestTabState,
   deleteQuest,
-  reviewers,
+  upNextCount,
+  setUpNextCount,
+  reviews,
+  reviewers
 }) => {
   const dragRef = useRef<any>();
   const bodyRef = useRef<any>();
@@ -155,7 +159,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     [showMiniBox, setShowMiniBox] = useState<any>(),
     [type, setType] = useState<any>(),
     [alert, setAlert] = useState(false),
-    [upNextCount, setUpNextCount] = useState<any>([]),
     [upNext, setUpNext] = useState<any>(),
     [blockInput, setBlockInput] = useState<any>(),
     [animateBtn, setAnimateBtn] = useState<any>(),
@@ -163,7 +166,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
     [notify, setNotify] = useState<any>(''),
     [lastInputName, setLastInputName] = useState<any>();
 
-  console.log('upNextCount', upNextCount);
+  console.log('upNextCount', sequence);
   // For Character Options
   const characterOption = [
     { value: 'player', label: 'Player' },
@@ -806,12 +809,16 @@ const NDIMain: React.FC<NDIMainProps> = ({
     if (NDI === 'Interaction') {
       const currentAlpha = alphabet
         .slice()
+        //  .reverse() // Reverse the array to start searching from the end
         .find((item: any) => item.seqs === id);
       if (id !== currentAlpha?.seqs) {
         let secondaryArray: any = [];
         let makcount = countalphabet;
+
         for (let i = 0; i < 3; i++) {
+          // Insert data into the array
           let inc = makcount + i + 1;
+          console.log('secondaryArray', countalphabet, '--', inc);
           secondaryArray.push(inc);
         }
         setAlphabetCount(secondaryArray[2]);
@@ -981,20 +988,28 @@ const NDIMain: React.FC<NDIMainProps> = ({
     i: any,
     keyvalue: any,
   ) => {
-    setInput((prevInput: any) => {
-      const interactionKey = keyvalue;
-      const QuestionsEmotion = selectedOption.value;
-      console.log('handleQuestionEmotion', QuestionsEmotion);
+    const selectedValues = selectedOption.map((option: any) => option.value);
 
-      return {
-        ...prevInput,
-        [interactionKey]: {
-          ...prevInput[interactionKey],
-          id: items[i]?.id,
-          QuestionsEmotion: QuestionsEmotion,
-        },
-      };
-    });
+    const resultString = selectedValues.join(', ');
+    const resultArray = resultString.split(', ');
+    const arrayLength = resultArray.length;
+
+    console.log('handleQuestionEmotion', resultString);
+    if (arrayLength <= 2) {
+      setInput((prevInput: any) => {
+        const interactionKey = keyvalue;
+        const QuestionsEmotion = resultString;
+
+        return {
+          ...prevInput,
+          [interactionKey]: {
+            ...prevInput[interactionKey],
+            id: items[i]?.id,
+            QuestionsEmotion: QuestionsEmotion,
+          },
+        };
+      });
+    }
   };
   // const handleDialogEmotion = (selectedOption: any, i: any) => {
   //     let key = i - 1;
@@ -1022,20 +1037,23 @@ const NDIMain: React.FC<NDIMainProps> = ({
 
     // Use the array of strings as needed, for example, join them into a single string
     const resultString = selectedValues.join(', ');
+    const resultArray = resultString.split(', ');
+    const arrayLength = resultArray.length;
+    if (arrayLength <= 2) {
+      setInput((prevInput: any) => {
+        const interactionKey = `Dialog${i}`;
+        const DialogEmotion = resultString;
 
-    setInput((prevInput: any) => {
-      const interactionKey = `Dialog${i}`;
-      const DialogEmotion = resultString;
-
-      return {
-        ...prevInput,
-        [interactionKey]: {
-          ...prevInput[interactionKey],
-          id: items[i]?.id,
-          animation: DialogEmotion,
-        },
-      };
-    });
+        return {
+          ...prevInput,
+          [interactionKey]: {
+            ...prevInput[interactionKey],
+            id: items[i]?.id,
+            animation: DialogEmotion,
+          },
+        };
+      });
+    }
   };
 
   const handleDialogVoice = (selectedOption: any, i: any) => {
@@ -1074,7 +1092,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
       };
     });
   };
-
   const handleOptionEmotion = (
     selectedOption: any,
     i: any,
@@ -1083,30 +1100,36 @@ const NDIMain: React.FC<NDIMainProps> = ({
   ) => {
     const key = i - 1;
     // console.log(`handleOptionEmotion - ${items[key]?.input} --- ${i} --- ${selectedOption.value}`);
+    const selectedValues = selectedOption.map((option: any) => option.value);
 
-    setInput((prevInput: any) => {
-      const interactionKey = keyvalue;
-      const OptionEmotion = selectedOption.value;
-      const optionsemotionObject: any = {};
+    const resultString = selectedValues.join(', ');
+    const resultArray = resultString.split(', ');
+    const arrayLength = resultArray.length;
+    if (arrayLength <= 2) {
+      setInput((prevInput: any) => {
+        const interactionKey = keyvalue;
+        const OptionEmotion = selectedOption.value;
+        const optionsemotionObject: any = {};
 
-      alphabet.forEach((item: any) => {
-        const optValue =
-          optionemotion === `Option${item.option}`
-            ? selectedOption.value
-            : prevInput[interactionKey]?.optionsemotionObject?.[item.option];
-        console.log('optValue', optionemotion);
-        optionsemotionObject[item.option] = optValue;
+        alphabet.forEach((item: any) => {
+          const optValue =
+            optionemotion === `Option${item.option}`
+              ? resultString
+              : prevInput[interactionKey]?.optionsemotionObject?.[item.option];
+          console.log('optValue', optionemotion);
+          optionsemotionObject[item.option] = optValue;
+        });
+        console.log('optionsemotionObject', optionsemotionObject);
+        return {
+          ...prevInput,
+          [interactionKey]: {
+            ...prevInput[interactionKey],
+            id: items[i]?.id,
+            optionsemotionObject: optionsemotionObject,
+          },
+        };
       });
-      console.log('optionsemotionObject', optionsemotionObject);
-      return {
-        ...prevInput,
-        [interactionKey]: {
-          ...prevInput[interactionKey],
-          id: items[i]?.id,
-          optionsemotionObject: optionsemotionObject,
-        },
-      };
-    });
+    }
   };
 
   const handleOptionVoice = (
@@ -1151,30 +1174,38 @@ const NDIMain: React.FC<NDIMainProps> = ({
   ) => {
     const key = i - 1;
     // console.log(`handleOptionEmotion - ${items[key]?.input} --- ${i} --- ${selectedOption.value}`);
+    const selectedValues = selectedOption.map((option: any) => option.value);
 
-    setInput((prevInput: any) => {
-      const interactionKey = keyvalue;
-      const OptionEmotion = selectedOption.value;
-      const responseemotionObject: any = {};
+    const resultString = selectedValues.join(', ');
+    const resultArray = resultString.split(', ');
+    const arrayLength = resultArray.length;
 
-      alphabet.forEach((item: any) => {
-        const optValue =
-          responseemotion === `Option${item.option}`
-            ? selectedOption.value
-            : prevInput[interactionKey]?.responseemotionObject?.[item.option];
-        console.log('optValue', responseemotionObject);
-        responseemotionObject[item.option] = optValue;
+    console.log('handleQuestionEmotion', resultString);
+    if (arrayLength <= 2) {
+      setInput((prevInput: any) => {
+        const interactionKey = keyvalue;
+        const OptionEmotion = selectedOption.value;
+        const responseemotionObject: any = {};
+
+        alphabet.forEach((item: any) => {
+          const optValue =
+            responseemotion === `Option${item.option}`
+              ? resultString
+              : prevInput[interactionKey]?.responseemotionObject?.[item.option];
+          console.log('optValue', responseemotionObject);
+          responseemotionObject[item.option] = optValue;
+        });
+        console.log('optionsemotionObject', responseemotionObject);
+        return {
+          ...prevInput,
+          [interactionKey]: {
+            ...prevInput[interactionKey],
+            id: items[i]?.id,
+            responseemotionObject: responseemotionObject,
+          },
+        };
       });
-      console.log('optionsemotionObject', responseemotionObject);
-      return {
-        ...prevInput,
-        [interactionKey]: {
-          ...prevInput[interactionKey],
-          id: items[i]?.id,
-          responseemotionObject: responseemotionObject,
-        },
-      };
-    });
+    }
   };
 
   const handleCheckBox = (
@@ -1924,14 +1955,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
   const textColor = useColorModeValue('secondaryGray.900', 'white');
-  console.log('filtered item', items);
-  console.log('filtered', reviews);
-  const t = 1;
-  const a = 1;
 
-  
   return (
     <>
       <Box
@@ -1964,6 +1989,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
             >
               {(type || items) &&
                 items.map((seq: any, i: number) => {
+                  console.log('off', seq);
+
                   return (
                     <Draggable key={seq.id} draggableId={seq.id} index={i}>
                       {(provided, dragData) => {
@@ -2007,8 +2034,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     seq.input === lastInputName ? '9' : 'unset'
                                   }
                                   tabIndex={0}
-                                  onClick={(e) => handleKeyDown(e, seq)}
-                                  onKeyDown={(e) => handleKeyDown(e, seq)}
+                                  onClick={(e) => handleKeyDown(e, i, seq)}
+                                  onKeyDown={(e) => handleKeyDown(e, i, seq)}
                                 >
                                   <NoteCompo
                                     seq={seq}
@@ -2027,6 +2054,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     setSelectBlock={setNotelead}
                                     handleInput={(e: any) => handleInput(e, i)}
                                   />
+                                  {/* Review Preview Accordian for Note*/}
                                   <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
@@ -2165,8 +2193,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     seq.input === lastInputName ? '9' : 'unset'
                                   }
                                   tabIndex={0}
-                                  onClick={(e) => handleKeyDown(e, seq)}
-                                  onKeyDown={(e) => handleKeyDown(e, seq)}
+                                  onClick={(e) => handleKeyDown(e, i, seq)}
+                                  onKeyDown={(e) => handleKeyDown(e, i, seq)}
                                 >
                                   <DialogCompo
                                     seq={seq}
@@ -2197,6 +2225,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     showSelectBlock={showSelectBlock}
                                     setSelectBlock={setSelectBlock}
                                   />
+
+                                  {/* Accordian For Dialog Blocks */}
                                   <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
@@ -2299,6 +2329,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                       </AccordionPanel>
                                     </AccordionItem>
                                   </Accordion>
+
+
                                   {seq.id == showMiniBox ? (
                                     <MiniBox seq={seq} i={i} name={'Dialog'} />
                                   ) : null}
@@ -2335,8 +2367,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     seq.input === lastInputName ? '9' : 'unset'
                                   }
                                   tabIndex={0}
-                                  onClick={(e) => handleKeyDown(e, seq)}
-                                  onKeyDown={(e) => handleKeyDown(e, seq)}
+                                  onClick={(e) => handleKeyDown(e, i, seq)}
+                                  onKeyDown={(e) => handleKeyDown(e, i, seq)}
                                 >
                                   <InteractionCompo
                                     seq={seq}
@@ -2380,7 +2412,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     showSelectBlock={showSelectBlock}
                                     setSelectBlock={setSelectBlock}
                                   />
-                                <Accordion allowToggle>
+                                 {/* Accordian for Interaction Blocks */}
+                                 <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
                                         <AccordionButton>
@@ -2475,6 +2508,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                       </AccordionPanel>
                                     </AccordionItem>
                                   </Accordion>
+
+
                                   {seq.id == showMiniBox ? (
                                     <MiniBox
                                       seq={seq}
@@ -2659,6 +2694,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
           </Box>
         </Card>
       </Box>
+
       {/* <OnToast msg={'Drag Your Accordion'} status={'info'} setAlert={setAlert} position={'top-right'} /> */}
     </>
   );

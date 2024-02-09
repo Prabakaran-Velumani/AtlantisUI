@@ -60,11 +60,9 @@ import {
  
     const ReflectionScreen: React.FC<{formData: any;
       reflectionQuestions:any;imageSrc:any;reflectionQuestionsdefault:any,preview:any}> = ({formData,reflectionQuestions,imageSrc,reflectionQuestionsdefault,preview}) => {
-     console.log("reflectionQuestions-123",formData.gameReflectionQuestion)
-
+    
      const arrayInfo = [1,2,3,4]
      let i=0;
-     
 
   return (
    <>

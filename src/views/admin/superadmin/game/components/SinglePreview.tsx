@@ -61,7 +61,7 @@ import Screen5 from '../../../../../assets/img/screens/screen5.png';
 import { AiFillMessage } from 'react-icons/ai';
 import WelcomeContentScreen from './onimage/WelcomeContentScreen';
 import Screen1 from '../../../../../assets/img/screens/screen1.png';
-import CompletionContentScreen from './onimage/CompletionScreen ';
+import CompletionContentScreen from './onimage/CompletionContentScreen';
 import Screen2 from '../../../../../assets/img/screens/screen2.png';
 import ReflectionContentScreen from './onimage/ReflectionScreen';
 import RefScreen1 from '../../../../../assets/img/screens/refscreen1.png';
@@ -103,137 +103,120 @@ const SinglePreview: React.FC<{
   reflectionQuestions,
   reflectionQuestionsdefault,
 }) => {
-    const { colorMode, toggleColorMode } = useColorMode();
-    const [showFullText, setShowFullText] = useState(false);
-    const maxTextLength = 80;
+  const { colorMode, toggleColorMode } = useColorMode();
+  const [showFullText, setShowFullText] = useState(false);
+  const maxTextLength = 80;
 
-    const find = show.find((it: any) => it.gasId === formData.gameBackgroundId);
-    const img = find.gasAssetImage;
+  const find = show.find((it: any) => it.gasId === formData.gameBackgroundId);
+  const img = find.gasAssetImage;
 
-    const [option, setOption] = useState(null);
-    const [item, setItem] = useState(null);
-    const [data, setData] = useState(null);
-    const [showNote, setShowNote] = useState(false),
-      [first, setFirst] = useState(false);
-    const [intOpt, setIntOpt] = useState([]);
-    const [type, setType] = useState<string>('');
-    const [resMsg, setResMsg] = useState<string>('');
-    const [feed, setFeed] = useState<string>('');
-    const [navi, setNavi] = useState<string>('');
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [currentAudio, setCurrentAudio] = useState(null);
-    useEffect(() => {
-      setShowNote(true);
-      setFirst(true);
-      setTimeout(() => {
-        setFirst(false);
-        setShowNote(false);
-      }, 1000);
-      setType(prevdata.items[0].type);
-      setItem(prevdata.items[0]);
-      setData(findKeyByTex(prevdata.input, prevdata.items[0]));
-      getVoice(findKeyByTex(prevdata.input, prevdata.items[0]));
-      // const initialTimeout = setTimeout(() => {
-      //   if (audioRef.current) {
-      //     audioRef.current.muted = false; // Unmute after the timeout
-      //   }
-      // }, 500);
-      // return () => clearTimeout(initialTimeout);
-    }, []);
+  const [option, setOption] = useState(null);
+  const [item, setItem] = useState(null);
+  const [data, setData] = useState(null);
+  const [showNote, setShowNote] = useState(false),
+    [first, setFirst] = useState(false);
+  const [intOpt, setIntOpt] = useState([]);
+  const [type, setType] = useState<string>('');
+  const [resMsg, setResMsg] = useState<string>('');
+  const [feed, setFeed] = useState<string>('');
+  const [navi, setNavi] = useState<string>('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentAudio, setCurrentAudio] = useState(null);
+  useEffect(() => {
+    setShowNote(true);
+    setFirst(true);
+    setTimeout(() => {
+      setFirst(false);
+      setShowNote(false);
+    }, 1000);
+    setType(prevdata.items[0].type);
+    setItem(prevdata.items[0]);
+    setData(findKeyByTex(prevdata.input, prevdata.items[0]));
+    getVoice(findKeyByTex(prevdata.input, prevdata.items[0]));
+    // const initialTimeout = setTimeout(() => {
+    //   if (audioRef.current) {
+    //     audioRef.current.muted = false; // Unmute after the timeout
+    //   }
+    // }, 500);
+    // return () => clearTimeout(initialTimeout);
+  }, []);
 
-    function findKeyByValue(obj: any, value: any) {
-      const key = Object.keys(obj).find((key) => obj[key]['id'] === value);
-      return obj[key];
+  function findKeyByValue(obj: any, value: any) {
+    const key = Object.keys(obj).find((key) => obj[key]['id'] === value);
+    return obj[key];
+  }
+  function findKeyByTex(obj: any, value: any) {
+    const dt = String(value.type + value.input);
+    return obj[dt];
+  }
+
+  const getVoice = async (info: any) => {
+    const send = {
+      text: info?.dialogue || info?.interaction || info?.note,
+      model_id: 'eleven_multilingual_v2',
+      voice_settings: {
+        stability: 0.5,
+        similarity_boost: 0.5,
+      },
+    };
+    const defaultVoiceIds = {
+      narrator: '5Q0t7uMcjvnagumLfvZi',
+      player: 'EXAVITQu4vr4xnSDxMaL',
+      NPC: '29vD33N1CtxCmqQRPOHJ',
+      Intro: '',
+    };
+    const data = JSON.stringify(send);
+    {
+      /** Working API for getting voice for the text */
     }
-    function findKeyByTex(obj: any, value: any) {
-      const dt = String(value.type + value.input);
-      return obj[dt];
+    // const res = await getVoiceMessage(defaultVoiceIds.player, data);
+    const res = await getVoiceMessage(defaultVoiceIds.player, data);
+    {
+      /** Working API for getting voice for the text */
     }
-
-    const getVoice = async (info: any) => {
-      const send = {
-        text: info?.dialogue || info?.interaction || info?.note,
-        model_id: 'eleven_multilingual_v2',
-        voice_settings: {
-          stability: 0.5,
-          similarity_boost: 0.5,
-        },
-      };
-      const defaultVoiceIds = {
-        narrator: '5Q0t7uMcjvnagumLfvZi',
-        player: 'EXAVITQu4vr4xnSDxMaL',
-        NPC: '29vD33N1CtxCmqQRPOHJ',
-        Intro: '',
-      };
-      const data = JSON.stringify(send);
-      const res = await getVoiceMessage(defaultVoiceIds.player, data);
-      if (!res) return console.log('missing audio for the block');
-      const blob = new Blob([res], { type: 'audio/mpeg' });
+    const contentType = res.headers.get('Content-Type');
+    if (contentType && contentType.includes('audio/mpeg')) {
+      // const blob = new Blob([res], { type: 'audio/mpeg' });
+      const blob = await res.blob();
       const audioUrl = URL.createObjectURL(blob);
       const audio = new Audio(audioUrl);
       audio.play();
+    } else {
+      return console.log('missing audio for the block');
     }
-    useEffect(() => {
-      setShowNote(true);
-      setTimeout(() => {
-        setShowNote(false);
-      }, 1000);
-    }, [item, type]);
+  };
+  useEffect(() => {
+    setShowNote(true);
+    setTimeout(() => {
+      setShowNote(false);
+    }, 1000);
+  }, [item, type]);
 
-    const audioRef = useRef(null);
+  const audioRef = useRef(null);
 
-    const getData = (next: any) => {
-      const handleInteractionType = (delay: any) => {
-        const mins = findKeyByTex(prevdata.input, delay);
-        setType('Interaction');
-        setItem(delay);
-        setData(mins);
-        const getOption = () => {
-          const alp = prevdata.alp;
-          const matchedOptions = [];
-          for (const key in alp) {
-            if (alp[key]?.seqs === delay?.id) {
-              matchedOptions.push(alp[key]?.option);
-            }
+  const getData = (next: any) => {
+    const handleInteractionType = (delay: any) => {
+      const mins = findKeyByTex(prevdata.input, delay);
+      setType('Interaction');
+      setItem(delay);
+      setData(mins);
+      const getOption = () => {
+        const alp = prevdata.alp;
+        const matchedOptions = [];
+        for (const key in alp) {
+          if (alp[key]?.seqs === delay?.id) {
+            matchedOptions.push(alp[key]?.option);
           }
-          setIntOpt(matchedOptions);
-        };
-        getOption();
+        }
+        setIntOpt(matchedOptions);
       };
-      if (type === 'Interaction') setType('response');
-      else if (type === 'response') setType('feedback');
-      else if (type === 'feedback') {
-        if (navi === 'Repeat Question') setType('Interaction');
-        else if (navi === 'New Block') {
-          const delay = findKeyByValue(prevdata.items, next.upNext);
-          if (delay) {
-            if (delay.type === 'Interaction') handleInteractionType(delay);
-            else {
-              const mins = findKeyByTex(prevdata.input, delay);
-              setType(delay.type);
-              setItem(delay);
-              setData(mins);
-            }
-          }
-        } else if (navi === 'Replay Point') {
-          setType(prevdata.items[0].type);
-          setItem(prevdata.items[0]);
-          setData(findKeyByTex(prevdata.input, prevdata.items[0]));
-        } else if (navi === 'Select Block') {
-          const delay = findKeyByValue(prevdata.items, next.upNext);
-          if (delay) {
-            if (delay.type === 'Interaction') handleInteractionType(delay);
-            else {
-              const mins = findKeyByTex(prevdata.input, delay);
-              setType(delay.type);
-              setItem(delay);
-              setData(mins);
-            }
-          }
-        } else setType('ThankYou');
-      }
-
-      if (type === 'Note' || type === 'Dialog') {
+      getOption();
+    };
+    if (type === 'Interaction') setType('response');
+    else if (type === 'response') setType('feedback');
+    else if (type === 'feedback') {
+      if (navi === 'Repeat Question') setType('Interaction');
+      else if (navi === 'New Block') {
         const delay = findKeyByValue(prevdata.items, next.upNext);
         if (delay) {
           if (delay.type === 'Interaction') handleInteractionType(delay);
@@ -244,116 +227,151 @@ const SinglePreview: React.FC<{
             setData(mins);
           }
         }
+      } else if (navi === 'Replay Point') {
+        setType(prevdata.items[0].type);
+        setItem(prevdata.items[0]);
+        setData(findKeyByTex(prevdata.input, prevdata.items[0]));
+      } else if (navi === 'Select Block') {
+        const delay = findKeyByValue(prevdata.items, next.upNext);
+        if (delay) {
+          if (delay.type === 'Interaction') handleInteractionType(delay);
+          else {
+            const mins = findKeyByTex(prevdata.input, delay);
+            setType(delay.type);
+            setItem(delay);
+            setData(mins);
+          }
+        }
+      } else setType('ThankYou');
+    }
+
+    if (type === 'Note' || type === 'Dialog') {
+      const delay = findKeyByValue(prevdata.items, next.upNext);
+      if (delay) {
+        if (delay.type === 'Interaction') handleInteractionType(delay);
+        else {
+          const mins = findKeyByTex(prevdata.input, delay);
+          setType(delay.type);
+          setItem(delay);
+          setData(mins);
+        }
       }
-      const value = findKeyByValue(prevdata.items, next.upNext);
-      getVoice(findKeyByTex(prevdata.input, value));
-    };
+    }
+    const value = findKeyByValue(prevdata.items, next.upNext);
+    getVoice(findKeyByTex(prevdata.input, value));
+  };
 
-    const handleValidate = (item: any, ind: number) => {
-      setResMsg(data.responseObject[item]);
-      setFeed(data.feedbackObject[item]);
-      setNavi(data.navigateObjects[item]);
-      setOption(ind === option ? null : ind);
-    };
-    console.log('whole item', prevdata);
-    console.log('this is the item', item, 'and the data', data);
+  const handleValidate = (item: any, ind: number) => {
+    setResMsg(data.responseObject[item]);
+    setFeed(data.feedbackObject[item]);
+    setNavi(data.navigateObjects[item]);
+    setOption(ind === option ? null : ind);
+  };
+  const modalClose = () => {
+    setType(prevdata.items[0].type);
+    setItem(prevdata.items[0]);
+    setData(findKeyByTex(prevdata.input, prevdata.items[0]));
+    getVoice(findKeyByTex(prevdata.input, prevdata.items[0]));
+    onClose();
+  };
 
-    return (
-      <Modal isOpen={isOpen} onClose={onClose} size="full">
-        <ModalOverlay />
-        <ModalContent backgroundColor="rgba(0, 0, 0, 0.9)">
-          <ModalCloseButton zIndex={99999999999} color={'white'} />
-          <ModalBody p={0}>
-            <Flex height="100vh" className="AddScores">
-              {tab === 3 && (
-                <>
-                  <Box
-                    w={'100%'}
-                    h={'100vh'}                   
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                    overflow={'visible'}
-                    style={{ perspective: '1000px' }}
-                    className="Main-Content"
-                  >
-                    <Box
-                      backgroundImage={img}
-                      w={'100% !important'}
-                      h={'100vh'}
-                      backgroundRepeat={'no-repeat'}
-                      backgroundSize={'cover'}
-                      alignItems={'center'}
-                      justifyContent={'center'}
-                      className="Game-Screen"
-                    >
-                      <Box className="Images">
-                        <WelcomeContentScreen
-                          formData={formData}
-                          imageSrc={Screen5}
-                          preview={true}
-                        />
-                      </Box>
-                    </Box>
-                  </Box>
-                </>
-              )}
-              {tab === 4 && item && data && type === 'Note' && (
+  return (
+    <Modal isOpen={isOpen} onClose={modalClose} size="full">
+      <ModalOverlay />
+      <ModalContent backgroundColor="rgba(0, 0, 0, 0.9)">
+        <ModalCloseButton zIndex={99999999999} color={'white'} />
+        <ModalBody p={0}>
+          <Flex height="100vh" className="AddScores">
+            {tab === 3 && (
+              <>
                 <Box
                   w={'100%'}
                   h={'100vh'}
-                  display={'flex'}
                   alignItems={'center'}
                   justifyContent={'center'}
                   position={'relative'}
                   overflow={'visible'}
                   style={{ perspective: '1000px' }}
+                  className="Main-Content"
                 >
                   <Box
                     backgroundImage={img}
-                    w={'100%'}
+                    w={'100% !important'}
                     h={'100vh'}
                     backgroundRepeat={'no-repeat'}
                     backgroundSize={'cover'}
-                    transform={`scale(${first ? 1 : 1.3}) translateY(${first ? 0 : -10
-                      }%) translateX(${first ? 0 : -10}%)`}
-                    transition={'transform 0.9s ease-in-out'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    className="Game-Screen"
                   >
-                    <Box
-                      position={'fixed'}
-                      top={'200px'}
-                      // left={0}
-                      right={'0px'}
-                      bottom={0}
-                      zIndex={999}
-                      w={'300px'}
-                    >
-                      <Canvas camera={{ position: [3, 3, 10] }}>
-                        <directionalLight
-                          position={[5, 5, 5]}
-                          intensity={0.8}
-                          color={0xffccaa}
-                          castShadow
-                        />
-                        <ambientLight intensity={5.5} />
-                        <pointLight
-                          position={[5, 5, 5]}
-                          color={0xff0000}
-                          intensity={1}
-                        />
-                        <Model />
-                        <mesh
-                          rotation={[-Math.PI / 2, 0, 0]}
-                          position={[0, -5, 0]}
-                          receiveShadow
-                        >
-                          <planeGeometry args={[100, 100]} />
-                          <shadowMaterial opacity={0.5} />
-                        </mesh>
-                      </Canvas>
+                    <Box className="Images">
+                      <WelcomeContentScreen
+                        formData={formData}
+                        imageSrc={Screen5}
+                        preview={true}
+                      />
                     </Box>
                   </Box>
-                  {/* <Img
+                </Box>
+              </>
+            )}
+            {tab === 4 && item && data && type === 'Note' && (
+              <Box
+                w={'100%'}
+                h={'100vh'}
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                position={'relative'}
+                overflow={'visible'}
+                style={{ perspective: '1000px' }}
+              >
+                <Box
+                  backgroundImage={img}
+                  w={'100%'}
+                  h={'100vh'}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'cover'}
+                  transform={`scale(${first ? 1 : 1.3}) translateY(${
+                    first ? 0 : -10
+                  }%) translateX(${first ? 0 : -10}%)`}
+                  transition={'transform 0.9s ease-in-out'}
+                >
+                  <Box
+                    position={'fixed'}
+                    top={'200px'}
+                    // left={0}
+                    right={'0px'}
+                    bottom={0}
+                    zIndex={999}
+                    w={'300px'}
+                  >
+                    <Canvas camera={{ position: [3, 3, 10] }}>
+                      <directionalLight
+                        position={[5, 5, 5]}
+                        intensity={0.8}
+                        color={0xffccaa}
+                        castShadow
+                      />
+                      <ambientLight intensity={5.5} />
+                      <pointLight
+                        position={[5, 5, 5]}
+                        color={0xff0000}
+                        intensity={1}
+                      />
+                      <Model />
+                      <mesh
+                        rotation={[-Math.PI / 2, 0, 0]}
+                        position={[0, -5, 0]}
+                        receiveShadow
+                      >
+                        <planeGeometry args={[100, 100]} />
+                        <shadowMaterial opacity={0.5} />
+                      </mesh>
+                    </Canvas>
+                  </Box>
+                </Box>
+                {/* <Img
                         src={bk}
                         maxW={'100%'}
                         maxH={'100%'}
@@ -365,143 +383,148 @@ const SinglePreview: React.FC<{
                         }%) translateX(${first ? 0 : -10}%) `}
                         transition={'transform 0.9s ease-in-out'}
                           /> */}
-                  {/* </Box> */}
+                {/* </Box> */}
+                <Box
+                  style={{
+                    transform: `scale(${showNote ? 0.2 : 1})`,
+                    transition: 'transform 0.5s ease-in-out',
+                  }}
+                  position={'fixed'}
+                  w={'40%'}
+                  h={'80vh'}
+                  display={'flex'}
+                  flexDirection={'column'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                >
+                  <Img w={'80%'} h={'80vh'} src={note} />
                   <Box
-                    style={{
-                      transform: `scale(${showNote ? 0.2 : 1})`,
-                      transition: 'transform 0.5s ease-in-out',
-                    }}
                     position={'fixed'}
-                    w={'40%'}
-                    h={'80vh'}
+                    w={'50%'}
+                    mt={'10px'}
                     display={'flex'}
                     flexDirection={'column'}
+                    textAlign={'center'}
                     justifyContent={'center'}
-                    alignItems={'center'}
+                    style={{
+                      fontWeight: '900',
+                      color: '#D9C7A2',
+                      fontSize: '18px',
+                      lineHeight: 1,
+                      fontFamily: 'AtlantisText',
+                    }}
                   >
-                    <Img w={'80%'} h={'80vh'} src={note} />
+                    {data.note}
                     <Box
-                      position={'fixed'}
-                      w={'50%'}
-                      mt={'10px'}
+                      w={'100%'}
+                      onClick={() => getData(item)}
+                      mt={'20px'}
                       display={'flex'}
-                      flexDirection={'column'}
-                      textAlign={'center'}
                       justifyContent={'center'}
-                      style={{
-                        fontWeight: '900',
-                        color: '#D9C7A2',
-                        fontSize: '18px',
-                        lineHeight: 1,
-                        fontFamily: 'AtlantisText',
-                      }}
+                      cursor={'pointer'}
                     >
-                      {data.note}
-                      <Box
-                        w={'100%'}
-                        onClick={() => getData(item)}
-                        mt={'20px'}
-                        display={'flex'}
-                        justifyContent={'center'}
-                        cursor={'pointer'}
-                      >
-                        <Img src={next} w={'200px'} h={'60px'} />
-                      </Box>
+                      <Img src={next} w={'200px'} h={'60px'} />
                     </Box>
                   </Box>
                 </Box>
-              )}
-              {tab === 4 && item && data && type === 'Dialog' && (
-                <Box
+              </Box>
+            )}
+            {tab === 4 && item && data && type === 'Dialog' && (
+              <Box
+                w={'100%'}
+                h={'100vh'}
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                position={'relative'}
+              >
+                <Img
+                  src={img}
+                  maxW={'100%'}
+                  maxH={'100%'}
                   w={'100%'}
                   h={'100vh'}
-                  display={'flex'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                >
-                  <Img
-                    src={img}
-                    maxW={'100%'}
-                    maxH={'100%'}
-                    w={'100%'}
-                    h={'100vh'}
-                    transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
-                    transition={'transform 0.9s ease-in-out'}
-                  />
-                  <Img
-                    style={{
-                      transform: `translateY(${showNote ? 200 : 0}px)`,
-                      transition:
-                        'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                    }}
-                    position={'fixed'}
-                    maxW={'100%'}
-                    maxH={'100%'}
-                    w={'100%'}
-                    h={'240px'}
-                    bottom={'0'}
-                    src={dial}
-                  />
-                  {!showNote && (
-                    <>
-                      <Box position={'relative'}>
-                        <Img
-                          src={char}
-                          position={'fixed'}
-                          h={'70px'}
-                          w={'25%'}
-                          left={'13%'}
-                          bottom={'150px'}
-                        />
-                        <Text position={'fixed'} left={'25%'} bottom={'167px'} fontSize={'25'}
-                          fontWeight={700}
-                          textAlign={'center'} fontFamily={'AtlantisText'} >
-                          {data.character === '999999'
-                            ? 'Player'
-                            : data.character === '99999'
-                              ? 'Narrator'
-                              : formData.gameNonPlayerName}
-                        </Text>
-                      </Box>
-                      <Box
-                        display={'flex'}
+                  transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
+                  transition={'transform 0.9s ease-in-out'}
+                />
+                <Img
+                  style={{
+                    transform: `translateY(${showNote ? 200 : 0}px)`,
+                    transition:
+                      'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+                  }}
+                  position={'fixed'}
+                  maxW={'100%'}
+                  maxH={'100%'}
+                  w={'100%'}
+                  h={'240px'}
+                  bottom={'0'}
+                  src={dial}
+                />
+                {!showNote && (
+                  <>
+                    <Box position={'relative'}>
+                      <Img
+                        src={char}
                         position={'fixed'}
-                        justifyContent={'space-between'}
-                        w={'75%'}
-                        bottom={'55px'}
-                        fontFamily={'cont'}
-                      >
-                        {data.dialog}
-                      </Box>
-                      <Box
-                        display={'flex'}
+                        h={'70px'}
+                        w={'25%'}
+                        left={'13%'}
+                        bottom={'150px'}
+                      />
+                      <Text
                         position={'fixed'}
-                        justifyContent={'space-between'}
-                        w={'80%'}
-                        bottom={'0'}
+                        left={'25%'}
+                        bottom={'167px'}
+                        fontSize={'25'}
+                        fontWeight={700}
+                        textAlign={'center'}
+                        fontFamily={'AtlantisText'}
                       >
-                        <Img
-                          src={left}
-                          w={'50px'}
-                          h={'50px'}
-                          cursor={'pointer'}
-                        />
-                        <Img
-                          src={right}
-                          w={'50px'}
-                          h={'50px'}
-                          cursor={'pointer'}
-                          onClick={() => getData(item)}
-                        />
-                      </Box>
-                    </>
-                  )}
-                </Box>
-              )}
-              {tab === 4 && item && data && type === 'Interaction' && (
-                
-                <Box
+                        {data.character === '999999'
+                          ? 'Player'
+                          : data.character === '99999'
+                          ? 'Narrator'
+                          : formData.gameNonPlayerName}
+                      </Text>
+                    </Box>
+                    <Box
+                      display={'flex'}
+                      position={'fixed'}
+                      justifyContent={'space-between'}
+                      w={'75%'}
+                      bottom={'55px'}
+                      fontFamily={'cont'}
+                    >
+                      {data.dialog}
+                    </Box>
+                    <Box
+                      display={'flex'}
+                      position={'fixed'}
+                      justifyContent={'space-between'}
+                      w={'80%'}
+                      bottom={'0'}
+                    >
+                      <Img
+                        src={left}
+                        w={'50px'}
+                        h={'50px'}
+                        cursor={'pointer'}
+                      />
+                      <Img
+                        src={right}
+                        w={'50px'}
+                        h={'50px'}
+                        cursor={'pointer'}
+                        onClick={() => getData(item)}
+                      />
+                    </Box>
+                  </>
+                )}
+              </Box>
+            )}
+            {tab === 4 && item && data && type === 'Interaction' && (
+              <Box
                 w={'100%'}
                 h={'100vh'}
                 display={'flex'}
@@ -617,407 +640,367 @@ const SinglePreview: React.FC<{
                   </Box>
                 </Box>
               </Box>
-              )}
-              {tab === 4 && item && data && type === 'response' && (
-                <Box
+            )}
+            {tab === 4 && item && data && type === 'response' && (
+              <Box
+                w={'100%'}
+                h={'100vh'}
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                position={'relative'}
+              >
+                <Img
+                  src={img}
+                  maxW={'100%'}
+                  maxH={'100%'}
                   w={'100%'}
                   h={'100vh'}
-                  display={'flex'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                >
-                  <Img
-                    src={img}
-                    maxW={'100%'}
-                    maxH={'100%'}
-                    w={'100%'}
-                    h={'100vh'}
-                    transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
-                    transition={'transform 0.9s ease-in-out'}
-                  />
-                  <Img
-                    style={{
-                      transform: `translateY(${showNote ? 200 : 0}px)`,
-                      transition:
-                        'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                    }}
-                    position={'fixed'}
-                    maxW={'100%'}
-                    maxH={'100%'}
-                    w={'100%'}
-                    h={'240px'}
-                    bottom={'0'}
-                    src={dial}
-                  />
-                  {!showNote && (
-                    <>
-                      <Box
-                        backgroundImage={char}
-                        position={'fixed'}
-                        h={'70px'}
-                        w={'25%'}
-                        left={'13%'}
-                        fontSize={'25'}
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        fontWeight={700}
-                        textAlign={'center'}
-                        bottom={'150px'}
-                        backgroundRepeat={'no-repeat'}
-                        backgroundSize={'contain'}
-                        fontFamily={'albuma'}
-                      >
-                        {data.character === '999999'
-                          ? 'Player'
-                          : data.character === '99999'
-                            ? 'Narrator'
-                            : formData.gameNonPlayerName}
-                      </Box>
-                      <Box
-                        display={'flex'}
-                        position={'fixed'}
-                        justifyContent={'space-between'}
-                        w={'75%'}
-                        bottom={'55px'}
-                        fontFamily={'cont'}
-                      >
-                        {resMsg}
-                      </Box>
-                      <Box
-                        display={'flex'}
-                        position={'fixed'}
-                        justifyContent={'space-between'}
-                        w={'80%'}
-                        bottom={'0'}
-                      >
-                        <Img
-                          src={left}
-                          w={'50px'}
-                          h={'50px'}
-                          cursor={'pointer'}
-                        />
-                        <Img
-                          src={right}
-                          w={'50px'}
-                          h={'50px'}
-                          cursor={'pointer'}
-                          onClick={() => getData(item)}
-                        />
-                      </Box>
-                    </>
-                  )}
-                </Box>
-              )}
-              {tab === 4 && item && data && type === 'feedback' && (
-                <Box
+                  transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
+                  transition={'transform 0.9s ease-in-out'}
+                />
+                <Img
+                  style={{
+                    transform: `translateY(${showNote ? 200 : 0}px)`,
+                    transition:
+                      'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+                  }}
+                  position={'fixed'}
+                  maxW={'100%'}
+                  maxH={'100%'}
                   w={'100%'}
-                  h={'100vh'}
-                  display={'flex'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                  overflow={'visible'}
-                  style={{ perspective: '1000px' }}
-                >
-                  {/* <Box w={'80%'}> */}
-                  <Box
-                    backgroundImage={img}
-                    w={'100%'}
-                    h={'100vh'}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'cover'}
-                    transform={`scale(${first ? 1 : 1.3}) translateY(${first ? 0 : -10
-                      }%) translateX(${first ? 0 : -10}%)`}
-                    transition={'transform 0.9s ease-in-out'}
-                  >
+                  h={'240px'}
+                  bottom={'0'}
+                  src={dial}
+                />
+                {!showNote && (
+                  <>
                     <Box
+                      backgroundImage={char}
                       position={'fixed'}
-                      top={'200px'}
-                      // left={0}
-                      right={'0px'}
-                      bottom={0}
-                      zIndex={999}
-                      w={'300px'}
-                    >
-                      <Canvas
-                        camera={{ position: [3, 3, 10] }}
-                      // style={{ width: '50%', height: '50vh'}}
-                      >
-                        <directionalLight
-                          position={[5, 5, 5]}
-                          intensity={0.8}
-                          color={0xffccaa}
-                          castShadow
-                        />
-                        <ambientLight intensity={5.5} />
-                        <pointLight
-                          position={[5, 5, 5]}
-                          color={0xff0000}
-                          intensity={1}
-                        />
-                        <Model />
-                        <mesh
-                          rotation={[-Math.PI / 2, 0, 0]}
-                          position={[0, -5, 0]}
-                          receiveShadow
-                        >
-                          <planeGeometry args={[100, 100]} />
-                          <shadowMaterial opacity={0.5} />
-                        </mesh>
-                      </Canvas>
-                    </Box>
-                  </Box>
-                  <Box
-                    // backgroundImage={note}
-                    style={{
-                      transform: `scale(${showNote ? 0.2 : 1})`,
-                      transition: 'transform 0.5s ease-in-out',
-                    }}
-                    position={'fixed'}
-                    w={'40%'}
-                    h={'80vh'}
-                    // backgroundRepeat={'no-repeat'}
-                    // backgroundSize={'contain'}
-                    display={'flex'}
-                    flexDirection={'column'}
-                    justifyContent={'center'}
-                    alignItems={'center'}
-                  >
-                    <Img w={'80%'} h={'80vh'} src={feedi} />
-                    <Box
-                      position={'fixed'}
-                      // mr={'110px'}
-                      w={'50%'}
-                      mt={'10px'}
+                      h={'70px'}
+                      w={'25%'}
+                      left={'13%'}
+                      fontSize={'25'}
                       display={'flex'}
-                      flexDirection={'column'}
-                      textAlign={'center'}
-                      justifyContent={'center'}
-                      style={{
-                        fontWeight: '900',
-                        color: '#D9C7A2',
-                        fontSize: '18px',
-                        // fontFamily: 'serif, georgia',
-                        lineHeight: 1,
-                        fontFamily: 'cont',
-                      }}
-                    >
-                      {feed}
-                      <Box
-                        w={'100%'}
-                        // backgroundImage={next}
-                        onClick={() => getData(item)}
-                        mt={'20px'}
-                        display={'flex'}
-                        justifyContent={'center'}
-                        // backgroundRepeat={'no-repeat'}
-                        // backgroundSize={'contain'}
-                        cursor={'pointer'}
-                      >
-                        <Img src={next} w={'200px'} h={'60px'} />
-                      </Box>
-                    </Box>
-                  </Box>
-                </Box>
-              )}
-              {tab === 5 && currentTab === 0 && (
-                <Box
-                  w={'100%'}
-                  h={'100vh'}
-                  // display={'flex'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                  overflow={'visible'}
-                  style={{ perspective: '1000px' }}
-                  className="Main-Content"
-                >
-                  <Box
-                    backgroundImage={img}
-                    w={'100% !important'}
-                    h={'100vh'}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'cover'}
-                    // transform={`scale(${first ? 1 : 1.3}) translateY(${
-                    //   first ? 0 : -10
-                    // }%) translateX(${first ? 0 : -10}%)`}
-                    // transition={'transform 0.9s ease-in-out'}
-                    // display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    className="Game-Screen"
-                  >
-                    <Box className="Images">
-                      <CompletionContentScreen
-                        preview={true}
-                        selectedBadge={selectedBadge}
-                        formData={formData}
-                        imageSrc={Screen1}
-                        compliData={compliData}
-                        setCompliData={setCompliData}
-                        CompKeyCount={CompKeyCount}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              )}
-              {tab === 5 && currentTab === 1 && (
-                <Box
-                  w={'100%'}
-                  h={'100vh'}
-                  // display={'flex'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                  overflow={'visible'}
-                  style={{ perspective: '1000px' }}
-                  className="Main-Content"
-                >
-                  <Box
-                    backgroundImage={img}
-                    w={'100% !important'}
-                    h={'100vh'}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'cover'}
-                    // transform={`scale(${first ? 1 : 1.3}) translateY(${
-                    //   first ? 0 : -10
-                    // }%) translateX(${first ? 0 : -10}%)`}
-                    // transition={'transform 0.9s ease-in-out'}
-                    // display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    className="Game-Screen"
-                  >
-                    <Box className="Images">
-                      <Box className="LearderBoards">
-                        <Img
-                          src={Screen2}
-                          alt="Your Image"
-                          className="LearderBoards-Img"
-                        />
-                      </Box>
-                    </Box>
-                  </Box>
-                </Box>
-              )}
-              {tab === 5 && currentTab === 2 && (
-                <Box
-                  w={'100%'}
-                  h={'100vh'}
-                  // display={'flex'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                  overflow={'visible'}
-                  style={{ perspective: '1000px' }}
-                  className="Main-Content"
-                >
-                  <Box
-                    backgroundImage={img}
-                    w={'100% !important'}
-                    h={'100vh'}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'cover'}
-                    // transform={`scale(${first ? 1 : 1.3}) translateY(${
-                    //   first ? 0 : -10
-                    // }%) translateX(${first ? 0 : -10}%)`}
-                    // transition={'transform 0.9s ease-in-out'}
-                    // display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    className="Game-Screen"
-                  >
-                    <Box className="Images">
-                      <ReflectionContentScreen
-                        preview={true}
-                        formData={formData}
-                        imageSrc={RefScreen1}
-                        reflectionQuestions={reflectionQuestions}
-                        reflectionQuestionsdefault={reflectionQuestionsdefault}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              )}
-              {tab === 5 && currentTab === 3 && (
-                <Box
-                  w={'100%'}
-                  h={'100vh'}
-                  // display={'flex'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                  overflow={'visible'}
-                  style={{ perspective: '1000px' }}
-                  className="Main-Content"
-                >
-                  <Box
-                    backgroundImage={img}
-                    w={'100% !important'}
-                    h={'100vh'}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'cover'}
-                    // transform={`scale(${first ? 1 : 1.3}) translateY(${
-                    //   first ? 0 : -10
-                    // }%) translateX(${first ? 0 : -10}%)`}
-                    // transition={'transform 0.9s ease-in-out'}
-                    // display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    className="Game-Screen"
-                  >
-                    <Box className="Images">
-                      <TakeAwaysContentScreen
-                        preview={true}
-                        formData={formData}
-                        imageSrc={Screen4}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              )}
-              {tab === 5 && currentTab === 4 && (
-                <>
-                  <Box
-                    w={'100%'}
-                    h={'100vh'}
-                    // display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                    overflow={'visible'}
-                    style={{ perspective: '1000px' }}
-                    className="Main-Content"
-                  >
-                    <Box
-                      backgroundImage={img}
-                      w={'100% !important'}
-                      h={'100vh'}
-                      backgroundRepeat={'no-repeat'}
-                      backgroundSize={'cover'}
-                      // transform={`scale(${first ? 1 : 1.3}) translateY(${
-                      //   first ? 0 : -10
-                      // }%) translateX(${first ? 0 : -10}%)`}
-                      // transition={'transform 0.9s ease-in-out'}
-                      // display={'flex'}
                       alignItems={'center'}
                       justifyContent={'center'}
-                      className="Game-Screen"
+                      fontWeight={700}
+                      textAlign={'center'}
+                      bottom={'150px'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'contain'}
+                      fontFamily={'albuma'}
                     >
-                      <Box className="Images">
-                        <WelcomeContentScreen
-                          formData={formData}
-                          imageSrc={Screen5}
-                          preview={true}
-                        />
-                      </Box>
+                      {data.character === '999999'
+                        ? 'Player'
+                        : data.character === '99999'
+                        ? 'Narrator'
+                        : formData.gameNonPlayerName}
+                    </Box>
+                    <Box
+                      display={'flex'}
+                      position={'fixed'}
+                      justifyContent={'space-between'}
+                      w={'75%'}
+                      bottom={'55px'}
+                      fontFamily={'cont'}
+                    >
+                      {resMsg}
+                    </Box>
+                    <Box
+                      display={'flex'}
+                      position={'fixed'}
+                      justifyContent={'space-between'}
+                      w={'80%'}
+                      bottom={'0'}
+                    >
+                      <Img
+                        src={left}
+                        w={'50px'}
+                        h={'50px'}
+                        cursor={'pointer'}
+                      />
+                      <Img
+                        src={right}
+                        w={'50px'}
+                        h={'50px'}
+                        cursor={'pointer'}
+                        onClick={() => getData(item)}
+                      />
+                    </Box>
+                  </>
+                )}
+              </Box>
+            )}
+            {tab === 4 && item && data && type === 'feedback' && (
+              <Box
+                w={'100%'}
+                h={'100vh'}
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                position={'relative'}
+                overflow={'visible'}
+                style={{ perspective: '1000px' }}
+              >
+                {/* <Box w={'80%'}> */}
+                <Box
+                  backgroundImage={img}
+                  w={'100%'}
+                  h={'100vh'}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'cover'}
+                  transform={`scale(${first ? 1 : 1.3}) translateY(${
+                    first ? 0 : -10
+                  }%) translateX(${first ? 0 : -10}%)`}
+                  transition={'transform 0.9s ease-in-out'}
+                >
+                  <Box
+                    position={'fixed'}
+                    top={'200px'}
+                    // left={0}
+                    right={'0px'}
+                    bottom={0}
+                    zIndex={999}
+                    w={'300px'}
+                  >
+                    <Canvas camera={{ position: [3, 3, 10] }}>
+                      <directionalLight
+                        position={[5, 5, 5]}
+                        intensity={0.8}
+                        color={0xffccaa}
+                        castShadow
+                      />
+                      <ambientLight intensity={5.5} />
+                      <pointLight
+                        position={[5, 5, 5]}
+                        color={0xff0000}
+                        intensity={1}
+                      />
+                      <Model />
+                      <mesh
+                        rotation={[-Math.PI / 2, 0, 0]}
+                        position={[0, -5, 0]}
+                        receiveShadow
+                      >
+                        <planeGeometry args={[100, 100]} />
+                        <shadowMaterial opacity={0.5} />
+                      </mesh>
+                    </Canvas>
+                  </Box>
+                </Box>
+                <Box
+                  // backgroundImage={note}
+                  style={{
+                    transform: `scale(${showNote ? 0.2 : 1})`,
+                    transition: 'transform 0.5s ease-in-out',
+                  }}
+                  position={'fixed'}
+                  w={'40%'}
+                  h={'80vh'}
+                  // backgroundRepeat={'no-repeat'}
+                  // backgroundSize={'contain'}
+                  display={'flex'}
+                  flexDirection={'column'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                >
+                  <Img w={'80%'} h={'80vh'} src={feedi} />
+                  <Box
+                    position={'fixed'}
+                    // mr={'110px'}
+                    w={'50%'}
+                    mt={'10px'}
+                    display={'flex'}
+                    flexDirection={'column'}
+                    textAlign={'center'}
+                    justifyContent={'center'}
+                    style={{
+                      fontWeight: '900',
+                      color: '#D9C7A2',
+                      fontSize: '18px',
+                      // fontFamily: 'serif, georgia',
+                      lineHeight: 1,
+                      fontFamily: 'cont',
+                    }}
+                  >
+                    {feed}
+                    <Box
+                      w={'100%'}
+                      // backgroundImage={next}
+                      onClick={() => getData(item)}
+                      mt={'20px'}
+                      display={'flex'}
+                      justifyContent={'center'}
+                      // backgroundRepeat={'no-repeat'}
+                      // backgroundSize={'contain'}
+                      cursor={'pointer'}
+                    >
+                      <Img src={next} w={'200px'} h={'60px'} />
                     </Box>
                   </Box>
-                </>
-              )}
-              {tab === 5 && currentTab === 5 && (
+                </Box>
+              </Box>
+            )}
+            {tab === 5 && currentTab === 0 && (
+              <Box
+                w={'100%'}
+                h={'100vh'}
+                // display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                position={'relative'}
+                overflow={'visible'}
+                style={{ perspective: '1000px' }}
+                className="Main-Content"
+              >
+                <Box
+                  backgroundImage={img}
+                  w={'100% !important'}
+                  h={'100vh'}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'cover'}
+                  // transform={`scale(${first ? 1 : 1.3}) translateY(${
+                  //   first ? 0 : -10
+                  // }%) translateX(${first ? 0 : -10}%)`}
+                  // transition={'transform 0.9s ease-in-out'}
+                  // display={'flex'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  className="Game-Screen"
+                >
+                  <Box className="Images">
+                    <CompletionContentScreen
+                      preview={true}
+                      selectedBadge={selectedBadge}
+                      formData={formData}
+                      imageSrc={Screen1}
+                      compliData={compliData}
+                      setCompliData={setCompliData}
+                      CompKeyCount={CompKeyCount}
+                    />
+                  </Box>
+                </Box>
+              </Box>
+            )}
+            {tab === 5 && currentTab === 1 && (
+              <Box
+                w={'100%'}
+                h={'100vh'}
+                // display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                position={'relative'}
+                overflow={'visible'}
+                style={{ perspective: '1000px' }}
+                className="Main-Content"
+              >
+                <Box
+                  backgroundImage={img}
+                  w={'100% !important'}
+                  h={'100vh'}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'cover'}
+                  // transform={`scale(${first ? 1 : 1.3}) translateY(${
+                  //   first ? 0 : -10
+                  // }%) translateX(${first ? 0 : -10}%)`}
+                  // transition={'transform 0.9s ease-in-out'}
+                  // display={'flex'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  className="Game-Screen"
+                >
+                  <Box className="Images">
+                    <Box className="LearderBoards">
+                      <Img
+                        src={Screen2}
+                        alt="Your Image"
+                        className="LearderBoards-Img"
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
+            )}
+            {tab === 5 && currentTab === 2 && (
+              <Box
+                w={'100%'}
+                h={'100vh'}
+                // display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                position={'relative'}
+                overflow={'visible'}
+                style={{ perspective: '1000px' }}
+                className="Main-Content"
+              >
+                <Box
+                  backgroundImage={img}
+                  w={'100% !important'}
+                  h={'100vh'}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'cover'}
+                  // transform={`scale(${first ? 1 : 1.3}) translateY(${
+                  //   first ? 0 : -10
+                  // }%) translateX(${first ? 0 : -10}%)`}
+                  // transition={'transform 0.9s ease-in-out'}
+                  // display={'flex'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  className="Game-Screen"
+                >
+                  <Box className="Images">
+                    <ReflectionContentScreen
+                      preview={true}
+                      formData={formData}
+                      imageSrc={RefScreen1}
+                      reflectionQuestions={reflectionQuestions}
+                      reflectionQuestionsdefault={reflectionQuestionsdefault}
+                    />
+                  </Box>
+                </Box>
+              </Box>
+            )}
+            {tab === 5 && currentTab === 3 && (
+              <Box
+                w={'100%'}
+                h={'100vh'}
+                // display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                position={'relative'}
+                overflow={'visible'}
+                style={{ perspective: '1000px' }}
+                className="Main-Content"
+              >
+                <Box
+                  backgroundImage={img}
+                  w={'100% !important'}
+                  h={'100vh'}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'cover'}
+                  // transform={`scale(${first ? 1 : 1.3}) translateY(${
+                  //   first ? 0 : -10
+                  // }%) translateX(${first ? 0 : -10}%)`}
+                  // transition={'transform 0.9s ease-in-out'}
+                  // display={'flex'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  className="Game-Screen"
+                >
+                  <Box className="Images">
+                    <TakeAwaysContentScreen
+                      preview={true}
+                      formData={formData}
+                      imageSrc={Screen4}
+                    />
+                  </Box>
+                </Box>
+              </Box>
+            )}
+            {tab === 5 && currentTab === 4 && (
+              <>
                 <Box
                   w={'100%'}
                   h={'100vh'}
@@ -1045,23 +1028,61 @@ const SinglePreview: React.FC<{
                     className="Game-Screen"
                   >
                     <Box className="Images">
-                      <TyContentScreen
+                      <WelcomeContentScreen
                         formData={formData}
-                        imageSrc={Screen6}
+                        imageSrc={Screen5}
                         preview={true}
                       />
                     </Box>
                   </Box>
                 </Box>
-              )}
-              {currentAudio && <audio ref={audioRef} controls  
-              style={{ display: 'none' }}
+              </>
+            )}
+            {tab === 5 && currentTab === 5 && (
+              <Box
+                w={'100%'}
+                h={'100vh'}
+                // display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                position={'relative'}
+                overflow={'visible'}
+                style={{ perspective: '1000px' }}
+                className="Main-Content"
               >
+                <Box
+                  backgroundImage={img}
+                  w={'100% !important'}
+                  h={'100vh'}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'cover'}
+                  // transform={`scale(${first ? 1 : 1.3}) translateY(${
+                  //   first ? 0 : -10
+                  // }%) translateX(${first ? 0 : -10}%)`}
+                  // transition={'transform 0.9s ease-in-out'}
+                  // display={'flex'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  className="Game-Screen"
+                >
+                  <Box className="Images">
+                    <TyContentScreen
+                      formData={formData}
+                      imageSrc={Screen6}
+                      preview={true}
+                    />
+                  </Box>
+                </Box>
+              </Box>
+            )}
+            {currentAudio && (
+              <audio ref={audioRef} controls style={{ display: 'none' }}>
                 <source src={currentAudio} type="audio/mpeg" />
                 Your browser does not support the audio tag.
-              </audio>}
-            </Flex>
-            {/* <Menu closeOnSelect={false}>
+              </audio>
+            )}
+          </Flex>
+          {/* <Menu closeOnSelect={false}>
             <MenuButton
               p="0px"
               bg={'brandScheme'}
@@ -1132,11 +1153,11 @@ const SinglePreview: React.FC<{
               </MenuItem>
             </MenuList>
           </Menu> */}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    );
-  };
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+};
 
 const Model: React.FC = () => {
   const groupRef = useRef<any>();

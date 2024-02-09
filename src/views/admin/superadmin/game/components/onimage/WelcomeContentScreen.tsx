@@ -77,11 +77,11 @@ const extractLink = (text: any) => {
   }
   return null;
 };
-const WelcomeContentScreen: React.FC<{
-  formData: any;
-  imageSrc: any;
-  preview: any;
-}> = ({ formData, imageSrc, preview }) => {
+const WelcomeContentScreen: React.FC<{ formData: any; imageSrc: any, preview: any }> = ({
+  formData,
+  imageSrc,
+  preview
+}) => {
   const { id } = useParams();
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);

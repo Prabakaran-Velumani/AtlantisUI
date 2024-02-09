@@ -58,7 +58,7 @@ import {
   GoDotFill,
   GoCodeReview,
 } from 'react-icons/go';
-import pro from 'assets/img/crm/pro.png';
+
 import Card from 'components/card/Card';
 import InputField from 'components/fields/InputField';
 import TextField from 'components/fields/TextField';
@@ -130,6 +130,7 @@ import { BsShareFill } from 'react-icons/bs';
 import AddScores from './AddScores';
 import CompletionScreen from './Completion';
 
+import pro from 'assets/img/crm/pro.png';
 import Background from 'assets/img/stepper/background.png';
 import Block from 'assets/img/stepper/blocks.png';
 import pose from 'assets/img/stepper/pose.png';
@@ -151,10 +152,11 @@ import { error } from 'console';
 import { IoIosPersonAdd } from 'react-icons/io';
 import ShareReviewTable from './ShareReview';
 import tableDataCheck from 'views/admin/dashboards/rtl/variables/tableDataCheck';
-
-import { AiFillMessage } from 'react-icons/ai';
+// import EntirePreview from './EntirePreview';
 import SinglePreview from './SinglePreview';
+import { AiFillMessage } from 'react-icons/ai';
 import { getAllReviews } from 'utils/reviews/reviews';
+
 const steps = [
   { title: 'BackGround' },
   { title: 'Non Playing Charater' },
@@ -480,12 +482,15 @@ const GameCreation = () => {
     },
   });
   const [reviews, setReviews] = useState<any[]>([]);
-  const [Completion, setCompletion] = useState<any>({});
-  const [selectedBadge, setSelectedBadge] = useState(null);
-  const [CompKeyCount, setCompKeyCount] = useState<any>(0);
-  const [prevdata, setPrevdata] = useState();
   const [gameId, setGameId] = useState();
   const [reviewers, setReviewers] = useState<any[]>([]);
+  const [selectedBadge, setSelectedBadge] = useState(null);
+  const [Completion, setCompletion] = useState<any>({});
+  // const [selectedBadge, setSelectedBadge] = useState(null);
+  const [CompKeyCount, setCompKeyCount] = useState<any>(0);
+  const [prevdata, setPrevdata] = useState();
+  // const [gameId, setGameId] = useState();
+  // const [reviewers, setReviewers] = useState<any[]>([]);
   const { id } = useParams();
   const inputRef = useRef<HTMLButtonElement>(null);
   const [voices, setVoices] = useState([]);
@@ -494,9 +499,9 @@ const GameCreation = () => {
     const result = await getVoices();
 
     if (result) {
-      setVoices(result?.voices);
-    }
-  };
+      setVoices(result?.voices)
+    };
+  }
   let menuBg = useColorModeValue('white', 'navy.800');
   const shadow = useColorModeValue(
     '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
@@ -593,9 +598,7 @@ const GameCreation = () => {
       };
     });
     onOpen();
-
-    // console.log('SavedSTATE--',savedState);
-  };
+  }
   ///////////////////////////////////////////////
   const fetch = async () => {
     const result = await getBadge(parseInt(id));
@@ -621,15 +624,13 @@ const GameCreation = () => {
       };
     });
     onOpen();
-    // console.log('BackgroundIndex--',backgroundIndex);
   };
   const fetchGameId = async () => {
-    const review = await getAllReviews(id);
-    if (review && review?.status !== 'Success')
-      return console.log(review?.message);
-    setReviewers(review?.reviewerDetails);
-    setReviews(review?.reviewlist);
-    console.log('you should read this reviews', review?.reviewlist[4]);
+    const reviews = await getAllReviews(id);
+    if (reviews && reviews?.status !== 'Success')
+      return console.log(reviews?.message);
+    setReviewers(reviews?.reviewerDetails);
+    setReviews(reviews?.reviewlist);
     const images = await getCreatorBlocks(id);
     if (images?.status !== 'Success') {
       console.log(images.message);
@@ -687,6 +688,7 @@ const GameCreation = () => {
     setAtuoSave(true);
 
     // setTab(gameById?.data?.gameLastTab)
+
   };
 
   const handleGet = async (quest: number) => {
@@ -2422,8 +2424,6 @@ const GameCreation = () => {
   }, [formData.gameNonPlayingCharacterId]);
   // navin
 
-  // console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',img);
-
   //// debounced for auto upload when onchange for reflection
 
   const debouncedSubmit = useCallback(
@@ -3824,22 +3824,10 @@ const GameCreation = () => {
                   </>
                 ) : tab === 4 ? (
                   <>
-                    <Customization
-                      reviewers={reviewers && reviewers}
-                      reviews={reviews && reviews[4]}
-                      id={id}
-                      formData={formData}
-                      setBlockItems={setBlockItems}
-                      serias={serias}
-                      setserias={setserias}
-                      setInput={setInput}
-                      input={input}
-                      setItems={setItems}
-                      items={items}
-                      alphabet={alphabet}
-                      setAlphabet={setAlphabet}
-                      interactionBlock={interactionBlock}
-                      setInteractionBlock={setInteractionBlock}
+                    <Customization reviewers={reviewers && reviewers}
+                      reviews={reviews && reviews[4]} id={id} formData={formData} setBlockItems={setBlockItems} serias={serias} setserias={setserias} setInput={setInput} input={input} setItems={setItems} items={items}
+                      alphabet={alphabet} setAlphabet={setAlphabet}
+                      interactionBlock={interactionBlock} setInteractionBlock={setInteractionBlock}
                       countalphabet={countalphabet}
                       setAlphabetCount={setAlphabetCount}
                       count={count}
@@ -3860,8 +3848,8 @@ const GameCreation = () => {
                       questTabState={questTabState}
                       setQuestTabState={setQuestTabState}
                       deleteQuest={deleteQuest}
-                      // upNextCount={upNextCount}
-                      //  setUpNextCount={setUpNextCount}
+                      upNextCount={upNextCount}
+                      setUpNextCount={setUpNextCount}
                     />
                   </>
                 ) : tab === 5 ? (
@@ -3941,6 +3929,7 @@ const GameCreation = () => {
                   right={'5px'}
                   // onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
+                  {/* $$$$$$$$ */}
                   <Icon
                     as={AiFillMessage}
                     bg={'#3311db'}
@@ -4086,12 +4075,12 @@ const GameCreation = () => {
                 <Menu isOpen={isOpen1} onClose={onClose1}>
                   <MenuButton
                     alignItems="center"
-                    justifyContent="center"                  
+                    justifyContent="center"
                     w="37px"
                     h="37px"
                     lineHeight="100%"
                     onClick={onOpen1}
-                    borderRadius="10px"                    
+                    borderRadius="10px"
                   >
                     <Icon
                       as={BsShareFill}
@@ -4110,7 +4099,7 @@ const GameCreation = () => {
                     w="150px"
                     minW="unset"
                     maxW="150px !important"
-                    border="transparent"                   
+                    border="transparent"
                     borderRadius="20px"
                     bg="transparent"
                     p="15px"
@@ -4262,41 +4251,27 @@ const GameCreation = () => {
            
             {entire && (
               <SinglePreview
-                tab={tab}
-                currentTab={currentTab}
-                prevdata={prevdata}
-                formData={formData}
-                show={img}
-                isOpen={isOpen}
-                onOpen={onOpen}
-                onClose={onClose}
-                selectedBadge={selectedBadge}
-                setSelectedBadge={setSelectedBadge}
-                setFormData={setFormData}
-                handleChange={handleChange}
-                setBadge={setBadge}
-                compliData={compliData}
-                setCompliData={setCompliData}
-                CompKeyCount={CompKeyCount}
-                handlecompletion={handlecompletion}
-                reflectionQuestions={reflectionQuestions}
-                reflectionQuestionsdefault={reflectionQuestionsdefault}
-              />
+              tab={tab}
+              currentTab={currentTab}
+              prevdata={prevdata}
+              formData={formData}
+              show={img}
+              isOpen={isOpen}
+              onOpen={onOpen}
+              onClose={onClose}
+              selectedBadge={selectedBadge}
+              setSelectedBadge={setSelectedBadge}
+              setFormData={setFormData}
+              handleChange={handleChange}
+              setBadge={setBadge}
+              compliData={compliData}
+              setCompliData={setCompliData}
+              CompKeyCount={CompKeyCount}
+              handlecompletion={handlecompletion}
+              reflectionQuestions={reflectionQuestions}
+              reflectionQuestionsdefault={reflectionQuestionsdefault}
+            />
             )}
-            <Button
-              bg="#11047a"
-              _hover={{ bg: '#190793' }}
-              color="#fff"
-              h={'46px'}
-              w={'128px'}
-              onClick={() => {
-                handleGet(1);
-              }}
-              mr={'33px'}
-              mt={'7px'}
-            >
-              check
-            </Button>
           </Box>
         </GridItem>
       </Grid>

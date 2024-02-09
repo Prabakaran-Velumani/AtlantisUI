@@ -141,15 +141,14 @@ export const urls = {
   languages:'/languages/getlanguages',
    getCreatedLanguages:'/languages/getcreatedlanguages',
    updatelanguages:'/languages/updatelanguages',
-
     /****************************Reviews ********************************/
-       addReviews:'/gamereview/addreviewers',
-       getAllReviews:'/gamereview/getblockreviewlist/',
-    
-      /******** Game Demo with review ******/
-      getGameDemoData : '/game/tryout/',
-      addGameReview : "/gamereview/addblockreview",
-      testAudios: '/game/audioTest',
+    addReviews:'/gamereview/addreviewers',
+    getAllReviews:'/gamereview/getblockreviewlist/',
+ 
+   /******** Game Demo with review ******/
+   getGameDemoData : '/game/tryout/',
+   addGameReview : "/gamereview/addblockreview",
+   testAudios: '/game/audioTest',
 };
 
 const person = localStorage.getItem('user');
