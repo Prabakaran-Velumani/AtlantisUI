@@ -673,6 +673,11 @@ letter-spacing: 0.5px;
   width: 800px; 
   background-position: center;
 }
+.takeaway-screen .bg-lead {
+  height: 600px; 
+  width: 800px; 
+  background-position: center;
+}
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box {
   display: flex;
   /* justify-content: center; */
@@ -691,6 +696,10 @@ letter-spacing: 0.5px;
   display: flex;
   
 } 
+.content-box  .content-lead {  
+  width: 100%;
+  display: flex;
+}
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box  .content p  {  
   width: 334px;  
   color: #D9C7A2
@@ -1290,6 +1299,9 @@ letter-spacing: 0.5px;
   }
   .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box  .content {  
     width: 280px;    
+  } 
+  .content-box .content-lead{  
+    width: 100%;    
   } 
   .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box  .content p  {  
     width: 280px;  

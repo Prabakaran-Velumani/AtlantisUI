@@ -65,6 +65,7 @@ const Reflection: React.FC<{
                         color={'black'}
                         className="text drop"
                         style={{ whiteSpace: 'break-spaces' }}
+                        fontSize={'large'}
                       >
                         {item?.refQuestion}
                       </Text>

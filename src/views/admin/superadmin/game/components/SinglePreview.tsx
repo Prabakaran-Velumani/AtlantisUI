@@ -500,113 +500,123 @@ const SinglePreview: React.FC<{
                 </Box>
               )}
               {tab === 4 && item && data && type === 'Interaction' && (
+                
                 <Box
+                w={'100%'}
+                h={'100vh'}
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                position={'relative'}
+              >
+                <Img
+                  src={img}
+                  maxW={'100%'}
+                  maxH={'100%'}
                   w={'100%'}
                   h={'100vh'}
-                  display={'flex'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
+                  transform={`scale(1.5}) translateY(-10%) translateX(${
+                    showNote ? -200 : 0
+                  }px)`}
+                  transition={'transform 0.9s ease-in-out'}
+                />
+                <Box
+                  style={{
+                    transform: `translateX(${
+                      showNote ? -200 : 0
+                    }px) scale(1.2)`,
+                    transition:
+                      'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+                  }}
+                  backgroundImage={parch}
+                  position={'fixed'}
+                  w={{ sm: '350px', md: '500px' }}
+                  h={{ sm: '50vh', md: ' 550px' }}
+                  // top={'4vh'}
+                  left={{ sm: '60px', md: '180px' }}
+                  backgroundSize={'contain'}
+                  backgroundRepeat={'no-repeat'}
                 >
-                  <Img
-                    src={img}
-                    maxW={'100%'}
-                    maxH={'100%'}
-                    w={'100%'}
-                    h={'100vh'}
-                    transform={`scale(1.5}) translateY(-10%) translateX(${showNote ? -200 : 0
-                      }px)`}
-                    transition={'transform 0.9s ease-in-out'}
-                  />
                   <Box
-                    style={{
-                      transform: `translateX(${showNote ? -200 : 0}px)`,
-                      transition:
-                        'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                    }}
-                    backgroundImage={parch}
-                    position={'fixed'}
-                    w={{ sm: '350px', md: '500px' }}
-                    h={{ sm: '50vh', md: '76vh' }}
-                    left={{ sm: '60px', md: '120px' }}
-                    backgroundSize={'contain'}
-                    backgroundRepeat={'no-repeat'}
-
+                    textAlign={'center'}
+                    h={'100px'}
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    fontWeight={700}
+                    fontFamily={'AtlantisText'}
+                    lineHeight={1}
+                    w={'100%'}
                   >
-                    <Box
-                      textAlign={'center'}
-                      h={'100px'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                      alignItems={'center'}
-                      fontWeight={700}
-                      fontFamily={'AtlantisText'}
-                      lineHeight={1}
-                      w={'100%'}
-                    >
-                      <Box w={'50%'} fontSize={'21px'}>Here You Can Answer the Interactions...! </Box>
-                    </Box>
-                    <Box
-                      textAlign={'center'}
-                      h={'100px'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                      alignItems={'center'}
-                      fontWeight={500}
-                      fontFamily={'AtlantisText'}
-                      lineHeight={1}
-                      w={'100%'}
-                    >
-                      <Box w={'60%'} fontSize={'18px'} letterSpacing={1} >{data.interaction}</Box>
-                    </Box>
-                    <Box
-                      mt={'10px'}
-                      w={{ sm: '200px', md: '400px' }}
-                      fontWeight={500}
-                      ml={'17%'}
-                      h={'220px'}
-                      overflowY={'scroll'}
-                    >
-                      {Object.keys(data.optionsObject).map((item, ind) => (
-                        <Box
-                          mb={'10px'}
-                          w={'80%'}
-                          lineHeight={1}
-                          color={option === ind ? 'purple' : ''}
-                          textAlign={'center'}
-                          cursor={'pointer'}
-                          onClick={() => handleValidate(item, ind)}
-                          fontFamily={'AtlantisText'}
-                        >
-                          <Img
-                            src={option === ind ? on : off}
-                            h={'30px'}
-                            w={'95%'}
-                          />
-                          {data.optionsObject[item]}
-                        </Box>
-                      ))}
-                    </Box>
-                    <Box
-                      display={'flex'}
-                      position={'fixed'}
-                      justifyContent={'space-between'}
-                      w={'500px'}
-                      left={'-10px'}
-                    >
-                      <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
-                      {option !== null && (
-                        <Img
-                          src={right}
-                          w={'50px'}
-                          h={'50px'}
-                          cursor={'pointer'}
-                          onClick={() => getData(item)}
-                        />
-                      )}
+                    <Box w={'50%'} fontSize={'21px'}>
+                      Here You Can Answer the Interactions...!{' '}
                     </Box>
                   </Box>
+                  <Box
+                    textAlign={'center'}
+                    h={'100px'}
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    fontWeight={500}
+                    fontFamily={'AtlantisText'}
+                    lineHeight={1}
+                    w={'96%'}
+                    overflowY={'scroll'}
+                  >
+                    <Box w={'60%'} fontSize={'20px'} letterSpacing={1}>
+                      {data?.interaction}
+                    </Box>
+                  </Box>
+                  <Box
+                    mt={'10px'}
+                    w={{ sm: '200px', md: '400px' }}
+                    fontWeight={500}
+                    ml={'17%'}
+                    h={'220px'}
+                    overflowY={'scroll'}
+                  >
+                    {Object.keys(data.optionsObject).map((item, ind) => (
+                      <Box
+                        mb={'10px'}
+                        w={'80%'}
+                        lineHeight={1}
+                        color={option === ind ? 'purple' : ''}
+                        textAlign={'center'}
+                        cursor={'pointer'}
+                        onClick={() => handleValidate(item, ind)}
+                        fontFamily={'AtlantisText'}
+                        fontSize={'20px'}
+                      >
+                        <Img
+                          src={option === ind ? on : off}
+                          h={'30px'}
+                          w={'95%'}
+                        />
+                        {data.optionsObject[item]}
+                      </Box>
+                    ))}
+                  </Box>
+                  <Box
+                    display={'flex'}
+                    position={'fixed'}
+                    justifyContent={'space-between'}
+                    w={'508px'}
+                    left={'-10px'}
+                  >
+                    <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+                    {option !== null && (
+                      <Img
+                        src={right}
+                        w={'50px'}
+                        h={'50px'}
+                        cursor={'pointer'}
+                        onClick={() => getData(data)}
+                      />
+                    )}
+                  </Box>
                 </Box>
+              </Box>
               )}
               {tab === 4 && item && data && type === 'response' && (
                 <Box

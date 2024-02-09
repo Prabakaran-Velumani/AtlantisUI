@@ -29,10 +29,12 @@ import {
   Textarea,
   MenuItem,
 } from '@chakra-ui/react';
+import next from 'assets/img/screens/next.png';
 import Screen2 from 'assets/img/screens/screen2.png';
 import Screen5 from 'assets/img/screens/screen5.png';
 import Screen1 from 'assets/img/screens/screen1.png';
 import Replay from 'assets/img/screens/Replay.png';
+import Lead from 'assets/img/screens/Leaderboard.png';
 // import bk from 'assets/img/games/17.png';
 // import note from 'assets/img/games/note.png';
 // import next from 'assets/img/screens/next.png';
@@ -71,6 +73,7 @@ import ReplayGame from './playcards/ReplayGame';
 import { API_SERVER } from 'config/constant';
 import { getTestAudios } from 'utils/game/gameService';
 import PlayInfo from './playcards/playinfo';
+import LeaderBoard from './playcards/Leaderboard';
 
 interface Review {
   // reviewId: Number;
@@ -242,7 +245,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           )
           .map((key) => demoBlocks[quest]?.[key])
       : ['completed'];
-    if (nextBlock.length === 0) { 
+    if (nextBlock.length === 0) {
       if (demoBlocks.hasOwnProperty(nextLevel)) {
         setType(demoBlocks[nextLevel]['1']?.blockChoosen);
         setData(demoBlocks[nextLevel]['1']);
@@ -256,8 +259,42 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
     if (currentScreenId === 6) {
+      if (
+        next?.gameIsShowInteractionFeedBack &&
+        next?.gameIsShowInteractionFeedBack === 'Complete'
+      ) {
+        setCurrentScreenId(9);
+        return false;
+      } else if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
+        setCurrentScreenId(8);
+        return false;
+      } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+        setCurrentScreenId(4);
+        return false;
+      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+        setCurrentScreenId(3);
+        return false;
+      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+        setCurrentScreenId(7);
+        return false;
+      } else {
+        if (data && type) {
+          setCurrentScreenId(2);
+          return false;
+        } else {
+          setType(null);
+          setData(null);
+          setCurrentScreenId(5);
+          return false;
+        }
+      }
+    }
+    if (currentScreenId === 9) {
       if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
         setCurrentScreenId(8);
+        return false;
+      } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+        setCurrentScreenId(4);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
         setCurrentScreenId(3);
@@ -278,6 +315,28 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
     if (currentScreenId === 8) {
+      if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+        setCurrentScreenId(4);
+        return false;
+      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+        setCurrentScreenId(3);
+        return false;
+      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+        setCurrentScreenId(7);
+        return false;
+      } else {
+        if (data && type) {
+          setCurrentScreenId(2);
+          return false;
+        } else {
+          setType(null);
+          setData(null);
+          setCurrentScreenId(5);
+          return false;
+        }
+      }
+    }
+    if (currentScreenId === 4) {
       if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
         setCurrentScreenId(3);
         return false;
@@ -747,12 +806,35 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               );
             case 4:
               return (
-                <Box className="LearderBoards" position={'relative'}>
-                  <Img
-                    src={Screen2}
-                    alt="Your Image"
-                    className="LearderBoards-Img"
-                  />
+                <Box
+                  w={'100%'}
+                  h={'100vh'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  position={'relative'}
+                  overflow={'visible'}
+                  style={{ perspective: '1000px' }}
+                  className="Main-Content"
+                >
+                  <Box
+                    backgroundImage={backgroundScreenUrl}
+                    w={'100% !important'}
+                    h={'100vh'}
+                    backgroundRepeat={'no-repeat'}
+                    backgroundSize={'cover'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    className="Game-Screen"
+                  >
+                    <Box className="Images">
+                      <LeaderBoard
+                        formData={gameInfo?.gameData}
+                        imageSrc={Lead}
+                        getData={getData}
+                        data={data}
+                      />
+                    </Box>
+                  </Box>
                 </Box>
               );
             case 5:
@@ -891,6 +973,86 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           getData={getData}
                           data={data}
                         />
+                      </Box>
+                    </Box>
+                  </Box>
+                </>
+              );
+            case 9:
+              return (
+                <>
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    display={'flex'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                  >
+                    <Box
+                      backgroundImage={backgroundScreenUrl}
+                      w={'100%'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      transform={`scale(${first ? 1 : 1.3}) translateY(${
+                        first ? 0 : -10
+                      }%) translateX(${first ? 0 : -10}%)`}
+                      transition={'transform 0.9s ease-in-out'}
+                    >
+                      <Box
+                        position={'fixed'}
+                        top={'200px'}
+                        right={'0px'}
+                        bottom={0}
+                        zIndex={999}
+                        w={'300px'}
+                      ></Box>
+                    </Box>
+                    <Box
+                      style={{
+                        transform: `scale(${showNote ? 0.2 : 1})`,
+                        transition: 'transform 0.5s ease-in-out',
+                      }}
+                      position={'fixed'}
+                      w={'40%'}
+                      h={'80vh'}
+                      display={'flex'}
+                      flexDirection={'column'}
+                      justifyContent={'center'}
+                      alignItems={'center'}
+                    >
+                      <Img w={'80%'} h={'80vh'} src={feedi} />
+                      <Box
+                        position={'fixed'}
+                        w={'50%'}
+                        mt={'10px'}
+                        display={'flex'}
+                        flexDirection={'column'}
+                        textAlign={'center'}
+                        justifyContent={'center'}
+                        style={{
+                          fontWeight: '900',
+                          color: '#D9C7A2',
+                          fontSize: '18px',
+
+                          lineHeight: 1,
+                          fontFamily: 'cont',
+                        }}
+                      >
+                        {feed}
+                        <Box
+                          w={'100%'}
+                          onClick={() => getData(data)}
+                          mt={'20px'}
+                          display={'flex'}
+                          justifyContent={'center'}
+                          cursor={'pointer'}
+                        >
+                          <Img src={next} w={'200px'} h={'60px'} />
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
