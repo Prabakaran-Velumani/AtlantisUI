@@ -199,13 +199,14 @@ export const putMethod = (data) => {
 };
 
 export const postMethodVoice = (data) => {
+  console.log("data", data)
   let method = {
     method: 'POST',
-    mode: 'cors',
+    // mode: 'cors',
    
     headers: {
-      XI_API_KEY:'28f7b776bb262ab1140ce635a90bd8f9',
-      // Authorization: user?.token,
+      // XI_API_KEY:'28f7b776bb262ab1140ce635a90bd8f9',
+      'xi-api-key':'e8b9d84992ae3b4e70a232136717f5ab',
       'Content-Type': 'application/json',
     },
     body: data,

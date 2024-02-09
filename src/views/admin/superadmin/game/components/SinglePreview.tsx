@@ -134,12 +134,6 @@ const SinglePreview: React.FC<{
       setItem(prevdata.items[0]);
       setData(findKeyByTex(prevdata.input, prevdata.items[0]));
       getVoice(findKeyByTex(prevdata.input, prevdata.items[0]));
-      // const initialTimeout = setTimeout(() => {
-      //   if (audioRef.current) {
-      //     audioRef.current.muted = false; // Unmute after the timeout
-      //   }
-      // }, 500);
-      // return () => clearTimeout(initialTimeout);
     }, []);
 
     function findKeyByValue(obj: any, value: any) {
@@ -152,11 +146,20 @@ const SinglePreview: React.FC<{
     }
 
     const getVoice = async (info: any) => {
+      let text ='';
+       if(info?.interaction){
+        text = info.interaction + "? ";
+        Object.entries(info?.optionsObject).forEach(([key, value]) => {
+          console.log("Key:", key, "- Value:", value);
+          text += `, Option ${key}, ${value}`;
+      });
+       }
+       
       const send = {
-        text: info?.dialogue || info?.interaction || info?.note,
+        text: info?.dialog || text || info?.note,
         model_id: 'eleven_multilingual_v2',
         voice_settings: {
-          stability: 0.5,
+          stability: 0.2,
           similarity_boost: 0.5,
         },
       };
@@ -168,7 +171,6 @@ const SinglePreview: React.FC<{
       };
       const data = JSON.stringify(send);
       {/** Working API for getting voice for the text */}
-      // const res = await getVoiceMessage(defaultVoiceIds.player, data);
       const res = await getVoiceMessage(defaultVoiceIds.player, data);
       {/** Working API for getting voice for the text */}
       const contentType = res.headers.get('Content-Type');
@@ -182,7 +184,6 @@ const SinglePreview: React.FC<{
       else{
         return console.log('missing audio for the block');
       }
-   
     }
     useEffect(() => {
       setShowNote(true);
