@@ -58,51 +58,68 @@ import {
   }
 
 
-    const TakewayScreen: React.FC<{formData: any;imageSrc:any}> = ({formData,imageSrc}) => {
+    const TakewayScreen: React.FC<{formData: any;imageSrc:any; preview: any}> = ({formData,imageSrc, preview}) => {
       const data = formData.gameTakeawayContent?.split('\n');
       
   return (
     <>
-      {imageSrc && (
-        <Box className='takeaway-screen'>
-          <Box className='takeaway-screen-box'
-            // w={{base:'100%',sm:'100%',md:'100%',lg:'90%'}}
-            // ml={{base:'10px',sm:'10px',md:'20px',lg:'28px'}} 
-            // h={{base:'150px',sm:'450px',md:'550px',lg:'450px'}}
-            // backgroundImage={imageSrc}
-            // backgroundRepeat={'no-repeat'}
-            // backgroundSize={'contain'}
-            // fontFamily={'content'}
-            // color="#D9C7A2"
-            // display={'flex'}
-            // justifyContent={'center'}
-            // alignItems={'center'}
-          >
-            <Img src={imageSrc} className='bg-img' />         
-          <Box className='content-box' overflowY={'scroll'}>
-            {data && data.map((it: any, ind: number) => {
-              const bulletIndex = it.indexOf('\u2022');
-              const contentAfterBullet =
-                bulletIndex !== -1 ? it.slice(bulletIndex + 1).trim() : it;
-              return (
-                <Box   className='content'             
-                  // mt={{ base: '0px', sm: '0px', md: '10px', lg: '50px' }}
-                  // lineHeight={1}
-                  // display={'flex'}
-                  // listStyleType={'none'}
-                >
-                  <>
-                    <Img src={bull} className='dot-img' w={'16px'} h={'16px'} />
-                    {contentAfterBullet}
-                  </>
-                </Box>
-              );
-            })}
+      {imageSrc && preview ? (
+        <Box className="takeaway-screen">
+        <Box className="takeaway-screen-box">
+          <Img src={imageSrc} className="bg-img" />
+          <Box className="content-box" width={'315px !important'} overflowY={'scroll'}  position={'absolute'}>
+            {data &&
+              data.map((it: any, ind: number) => {
+                const bulletIndex = it.indexOf('\u2022');
+                const contentAfterBullet =
+                  bulletIndex !== -1 ? it.slice(bulletIndex + 1).trim() : it;
+                return (
+                  <Box className="content"  fontFamily={'AtlantisText'} color={'#D9C7A2'}>
+                    <>
+                      <Img
+                        src={bull}
+                        className="dot-img"
+                        w={'16px'}
+                        h={'16px'}
+                      />
+                      {contentAfterBullet}
+                    </>
+                  </Box>
+                );
+              })}
+          </Box>
+        </Box>
+      </Box>
+      ) : (
+        <Box className="takeaway-screen">
+          <Box className="takeaway-screen-box">
+            <Img src={imageSrc} className="bg-img" />
+            <Box className="content-box" overflowY={'scroll'}>
+              {data &&
+                data.map((it: any, ind: number) => {
+                  const bulletIndex = it.indexOf('\u2022');
+                  const contentAfterBullet =
+                    bulletIndex !== -1 ? it.slice(bulletIndex + 1).trim() : it;
+                  return (
+                    <Box className="content" fontFamily={'AtlantisText'} color={'#D9C7A2'}>
+                      <>
+                        <Img
+                          src={bull}
+                          className="dot-img"
+                          w={'16px'}
+                          h={'16px'}
+                        />
+                        {contentAfterBullet}
+                      </>
+                    </Box>
+                  );
+                })}
             </Box>
           </Box>
         </Box>
       )}
     </>
   );
-}
+};
+
 export default TakewayScreen;

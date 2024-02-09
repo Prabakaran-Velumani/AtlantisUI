@@ -1,5 +1,5 @@
 import { API_SERVER } from 'config/constant';
-import { getMethod, postMethod, putMethod ,urls,postMethodfile} from 'utils/url/urls';
+import { getMethod, postMethod, putMethod ,urls,postMethodfile, postMethodGameReview, postMethodVoice} from 'utils/url/urls';
 const person = localStorage.getItem('user');
 const user = JSON.parse(person);
 
@@ -492,4 +492,44 @@ export async function getStoryValidtion(id) {
   } catch (err) {
     console.log('getStoryValidtion Error:', err);
   }
+}
+export async function getVoiceMessage(id,data) {
+  try {
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${id}`,postMethodVoice(data));
+    // const result = response; 
+    return response;
+  } catch (err) {
+    console.log('getStoryValidtion Error:', err);
+  }
+}
+
+export async function getGameDemoData(uuid) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getGameDemoData}${uuid}`,getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getCreator Error:', err);
+  }
+}
+
+export async function SubmitReview(data) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.addGameReview}`,postMethodGameReview(data));
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getCreator Error:', err);
+  }
+}
+
+export async function getTestAudios(){
+  try{
+      const response = await fetch(`${API_SERVER}${urls.testAudios}`,getMethod);
+      const result = await response.json();
+      return result;
+  }
+  catch (err) {
+      console.log('editLanguage Error:', err.message);
+    }
 }

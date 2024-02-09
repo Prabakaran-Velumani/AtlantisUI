@@ -956,15 +956,15 @@ const handleQuestNo = (selectedOption: any) => {
                     </Box>
                     )}
                     {currentTab === 2 && (
-                      <ReflectionContentScreen formData={formData}  imageSrc={ScreenMainImages[currentTab]} reflectionQuestions={reflectionQuestions} reflectionQuestionsdefault={reflectionQuestionsdefault}/>
+                      <ReflectionContentScreen preview={false} formData={formData}  imageSrc={ScreenMainImages[currentTab]} reflectionQuestions={reflectionQuestions} reflectionQuestionsdefault={reflectionQuestionsdefault}/>
                     )}
                     {currentTab === 3 && (
-                      <TakeAwaysContentScreen formData={formData} imageSrc={ScreenMainImages[currentTab]}/>
+                      <TakeAwaysContentScreen preview={false} formData={formData} imageSrc={ScreenMainImages[currentTab]}/>
                     )}
                     {currentTab === 4 && (
-                      <WelcomeContentScreen formData={formData} imageSrc={ScreenMainImages[currentTab]} />
+                      <WelcomeContentScreen preview={false} formData={formData} imageSrc={ScreenMainImages[currentTab]} />
                     )}
-                    {currentTab === 5 && <TyContentScreen formData={formData} imageSrc={ScreenMainImages[currentTab]}/>}
+                    {currentTab === 5 && <TyContentScreen preview={false} formData={formData} imageSrc={ScreenMainImages[currentTab]}/>}
                     {
   (currentTab !== 0 || CompKeyCount !== 0) && (
     <Box className='left-icon'>

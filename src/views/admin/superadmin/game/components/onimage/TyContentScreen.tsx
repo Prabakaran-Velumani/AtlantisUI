@@ -70,9 +70,10 @@ interface Badge {
   gasAssetName: string;
 }
 
-const TyContentScreen: React.FC<{ formData: any; imageSrc: any }> = ({
+const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview:any }> = ({
   formData,
   imageSrc,
+  preview
 }) => {
   const renderContentTy = () => {
   const linkRegex = /(https?:\/\/[^\s]+)/g;

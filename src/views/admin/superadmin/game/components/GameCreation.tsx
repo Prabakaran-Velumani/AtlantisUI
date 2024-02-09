@@ -43,6 +43,9 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  FormControl,
+  FormLabel,
+  Textarea,
 } from '@chakra-ui/react';
 import { MdOutlineSubtitles } from 'react-icons/md';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
@@ -120,6 +123,7 @@ import { BsShareFill } from 'react-icons/bs';
 import AddScores from './AddScores';
 import CompletionScreen from './Completion';
 
+import pro from 'assets/img/crm/pro.png';
 import Background from 'assets/img/stepper/background.png';
 import Block from 'assets/img/stepper/blocks.png';
 import pose from 'assets/img/stepper/pose.png';
@@ -141,7 +145,11 @@ import { error } from 'console';
 import { IoIosPersonAdd } from 'react-icons/io';
 import ShareReviewTable from './ShareReview';
 import tableDataCheck from 'views/admin/dashboards/rtl/variables/tableDataCheck';
-import EntirePreview from './EntirePreview';
+// import EntirePreview from './EntirePreview';
+import SinglePreview from './SinglePreview';
+import { AiFillMessage } from 'react-icons/ai';
+import { getAllReviews } from 'utils/reviews/reviews';
+
 const steps = [
   { title: 'BackGround' },
   { title: 'Non Playing Charater' },
@@ -478,12 +486,12 @@ const GameCreation = () => {
       gameaboveMinimumScoreCongratsMessage: null,
       gameLessthanDistinctionScoreCongratsMessage: null,
       gameAboveDistinctionScoreCongratsMessage: null,
-
-
     },
-
-
   });
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [gameId, setGameId] = useState();
+  const [reviewers, setReviewers] = useState<any[]>([]);
+  const [selectedBadge, setSelectedBadge] = useState(null);
   const [Completion, setCompletion] = useState<any>({});
   const [CompKeyCount, setCompKeyCount] = useState<any>(0);
   const [prevdata, setPrevdata] = useState();
@@ -498,6 +506,11 @@ const GameCreation = () => {
       setVoices(result?.voices)
     };
   }
+  let menuBg = useColorModeValue('white', 'navy.800');
+  const shadow = useColorModeValue(
+    '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
+    '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
+  );
   ////////////////Over view //////////////
   const fetchDefaultSkill = async () => {
 
@@ -580,9 +593,6 @@ const GameCreation = () => {
       return { ...prev, gasId: img?.gasId, gasAssetImage: img?.gasAssetImage, gasAssetName: img?.gasAssetName, backgroundIndex, i, temp: { tempTitle: img.temp.tempTitle, tempStoryLine: img.temp.tempStoryLine } }
     });
     onOpen();
-
-
-    // console.log('SavedSTATE--',savedState);
   }
   ///////////////////////////////////////////////
   const fetch = async () => {
@@ -609,7 +619,6 @@ const GameCreation = () => {
       };
     });
     onOpen();
-    // console.log('BackgroundIndex--',backgroundIndex);
   };
   const fetchGameId = async () => {
     const images = await getCreatorBlocks(id);
@@ -680,6 +689,13 @@ const GameCreation = () => {
     setAtuoSave(true);
 
     // setTab(gameById?.data?.gameLastTab)
+
+    const review = await getAllReviews(id);
+    if (review && review?.status !== 'Success')
+      return console.log(review?.message);
+    setReviewers(review?.reviewerDetails);
+    setReviews(review?.reviewlist);
+    console.log('you should read this reviews', review?.reviewlist[4]);
   };
 
   const handleGet = async (quest: number) => {
@@ -2488,8 +2504,6 @@ const GameCreation = () => {
   }, [formData.gameNonPlayingCharacterId]);
   // navin
 
-  // console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',img);
-
   //// debounced for auto upload when onchange for reflection
 
   const debouncedSubmit = useCallback(
@@ -3743,7 +3757,8 @@ const GameCreation = () => {
                   </>
                 ) : tab === 4 ? (
                   <>
-                    <Customization id={id} formData={formData} setBlockItems={setBlockItems} serias={serias} setserias={setserias} setInput={setInput} input={input} setItems={setItems} items={items}
+                    <Customization reviewers={reviewers && reviewers}
+                      reviews={reviews && reviews[4]} id={id} formData={formData} setBlockItems={setBlockItems} serias={serias} setserias={setserias} setInput={setInput} input={input} setItems={setItems} items={items}
                       alphabet={alphabet} setAlphabet={setAlphabet}
                       interactionBlock={interactionBlock} setInteractionBlock={setInteractionBlock}
                       countalphabet={countalphabet}
@@ -3767,7 +3782,7 @@ const GameCreation = () => {
                       setQuestTabState={setQuestTabState}
                       deleteQuest={deleteQuest}
                       upNextCount={upNextCount}
-                       setUpNextCount={setUpNextCount}
+                      setUpNextCount={setUpNextCount}
                     />
                   </>
                 ) : tab === 5 ? (
@@ -3840,6 +3855,143 @@ const GameCreation = () => {
                 ) : null}
               </GridItem>
             </Grid>
+            {tab !== 4 ? (
+              <Menu>
+                <MenuButton
+                  p="0px"
+                  bg={'brandScheme'}
+                  position={'fixed'}
+                  bottom={'0'}
+                  right={'5px'}
+                  // onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                  {/* $$$$$$$$ */}
+                  <Icon
+                    as={AiFillMessage}
+                    bg={'#3311db'}
+                    color={'#fff'}
+                    w="70px"
+                    h="70px"
+                    borderRadius={'50%'}
+                    p={'15px'}
+                    me="10px"
+                  />
+                </MenuButton>
+                <MenuList
+                  boxShadow={shadow}
+                  p="20px"
+                  me={{ base: '30px', md: 'unset' }}
+                  borderRadius="20px"
+                  bg={menuBg}
+                  border="none"
+                  mt="10px"
+                  minW={{ base: '360px' }}
+                  maxW={{ base: '360px', md: 'unset' }}
+                >
+                
+                  <FormControl>
+                    <FormLabel fontSize={18} fontWeight={700}>
+                      Feedback For{' '}
+                      {tab === 1
+                        ? 'BackGround'
+                        : tab === 2
+                        ? 'Non Playing Character'
+                        : tab === 3
+                        ? 'Overview'
+                        : tab === 5
+                        ? 'Design'
+                        : 'Preference'}
+                    </FormLabel>
+                    <Box w={'360px'} maxH={'50vh'} overflowY={'scroll'}>
+                      {reviews && reviews[tab] && reviews[tab]?.length !== 0 ? (
+                        reviews[tab]
+                          .filter((item: any) =>
+                            tab === 5
+                              ? item?.tabAttributeValue === String(currentTab)
+                              : true,
+                          )
+                          .map((it: any, ind: number) =>{
+                              const reviewer = reviewers && reviewers.find((rev: any) => rev?.gameReviewerId === it?.gameReviewerId); 
+                              return (
+                                <React.Fragment key={ind}>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'space-between'}
+                                  >
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      alignItems={'center'}
+                                    >
+                                      <Img
+                                        src={pro}
+                                        w={'40px'}
+                                        h={'40px'}
+                                        alt="pro"
+                                        borderRadius={'50%'}
+                                      />
+                                      <Text ml={'15px'}>
+                                        {reviewer?.emailId === null
+                                          ? reviewer?.ReviewingCreator?.ctMail
+                                          : reviewer?.emailId}
+                                      </Text>
+                                    </Box>
+                                    <Box whiteSpace={'nowrap'}>
+                                      <Text fontSize={'14'}>
+                                        Posted On :{' '}
+                                        {it?.updatedAt
+                                          ? new Date(
+                                              it.updatedAt,
+                                            ).toLocaleDateString()
+                                          : ''}
+                                      </Text>
+                                    </Box>
+                                  </Box>
+                                  <Box mb={'10px'} mt={'10px'}>
+                                    {it?.review}
+                                  </Box>
+                                </React.Fragment>
+                              );}
+                          )
+                      ) : (
+                        <Box mb={'10px'} mt={'10px'}>
+                          No Feedback For{' '}
+                          {tab === 1
+                            ? 'Background'
+                            : tab === 2
+                            ? 'Non Playing Character'
+                            : tab === 3
+                            ? 'Overview'
+                            : tab === 5
+                            ? 'Design'
+                            : 'Preference'}
+                        </Box>
+                      )}
+                    </Box>
+                  </FormControl>
+                  <MenuItem>
+                    <Box
+                      w={'100%'}
+                      display={'flex'}
+                      justifyContent={'flex-end'}
+                    >
+                      <Button
+                        bg="#11047a"
+                        _hover={{ bg: '#190793' }}
+                        color="#fff"
+                        h={'46px'}
+                        w={'128px'}
+                        mr={'33px'}
+                        mt={'7px'}
+                      >
+                        Close
+                      </Button>
+                    </Box>
+                  </MenuItem> 
+                </MenuList>
+              </Menu>
+            ) : null}
             <Flex justify="center">
               <Card
                 display={'flex'}
@@ -3861,16 +4013,11 @@ const GameCreation = () => {
                   <MenuButton
                     alignItems="center"
                     justifyContent="center"
-                    // bg={bgButton}
-                    // _hover={bgHover}
-                    // _focus={bgFocus}
-                    // _active={bgFocus}
                     w="37px"
                     h="37px"
                     lineHeight="100%"
                     onClick={onOpen1}
                     borderRadius="10px"
-                  // {...rest}
                   >
                     <Icon
                       as={BsShareFill}
@@ -3890,8 +4037,6 @@ const GameCreation = () => {
                     minW="unset"
                     maxW="150px !important"
                     border="transparent"
-                    // backdropFilter="blur(63px)"
-                    // boxShadow={bgShadow}
                     borderRadius="20px"
                     bg="transparent"
                     p="15px"
@@ -3955,8 +4100,6 @@ const GameCreation = () => {
                     </MenuList>
                   </Box>
                 </Menu>
-
-
 
                 {tab !== 1 && tab !== 2 ? (
                   <Button
@@ -4044,17 +4187,28 @@ const GameCreation = () => {
               <ShareReviewTable isOpen={isOpen} onClose={onClose} onOpen={onOpen} tableData={tableDataCheck} />
             )}
             {entire && (
-              <EntirePreview
-                prevdata={prevdata}
-                formData={formData}
-                show={img}
-                isOpen={isOpen}
-                onOpen={onOpen}
-                onClose={onClose}
-              />
+              <SinglePreview
+              tab={tab}
+              currentTab={currentTab}
+              prevdata={prevdata}
+              formData={formData}
+              show={img}
+              isOpen={isOpen}
+              onOpen={onOpen}
+              onClose={onClose}
+              selectedBadge={selectedBadge}
+              setSelectedBadge={setSelectedBadge}
+              setFormData={setFormData}
+              handleChange={handleChange}
+              setBadge={setBadge}
+              compliData={compliData}
+              setCompliData={setCompliData}
+              CompKeyCount={CompKeyCount}
+              handlecompletion={handlecompletion}
+              reflectionQuestions={reflectionQuestions}
+              reflectionQuestionsdefault={reflectionQuestionsdefault}
+            />
             )}
-
-
           </Box>
         </GridItem>
       </Grid>

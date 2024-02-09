@@ -141,6 +141,14 @@ export const urls = {
   languages:'/languages/getlanguages',
    getCreatedLanguages:'/languages/getcreatedlanguages',
    updatelanguages:'/languages/updatelanguages',
+    /****************************Reviews ********************************/
+    addReviews:'/gamereview/addreviewers',
+    getAllReviews:'/gamereview/getblockreviewlist/',
+ 
+   /******** Game Demo with review ******/
+   getGameDemoData : '/game/tryout/',
+   addGameReview : "/gamereview/addblockreview",
+   testAudios: '/game/audioTest',
 };
 
 const person = localStorage.getItem('user');
@@ -188,4 +196,40 @@ export const putMethod = (data) => {
     body: data,
   };
   return method;
+};
+
+export const postMethodVoice = (data) => {
+  let method = {
+    method: 'POST',
+    mode: 'cors',
+   
+    headers: {
+      XI_API_KEY:'28f7b776bb262ab1140ce635a90bd8f9',
+      // Authorization: user?.token,
+      'Content-Type': 'application/json',
+    },
+    body: data,
+  };
+  return method;
+};
+
+export const postMethodGameReview = (data) => {
+  let method = {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      // Authorization: user?.token,
+      'Content-Type': 'application/json',
+    },
+    body: data,
+  };
+  return method;
+};
+
+export const getMethodGameReview = {
+  method: 'GET',
+  mode: 'cors',
+  headers: {
+    'Content-Type': 'application/json',
+  },
 };

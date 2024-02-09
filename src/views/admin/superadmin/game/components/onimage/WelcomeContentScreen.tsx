@@ -77,9 +77,10 @@ if(text){
 }
 return null
 };
-const WelcomeContentScreen: React.FC<{ formData: any; imageSrc: any }> = ({
+const WelcomeContentScreen: React.FC<{ formData: any; imageSrc: any, preview: any }> = ({
   formData,
   imageSrc,
+  preview
 }) => {
   const { id } = useParams();
   const [profile, setProfile] = useState<any>([]);
