@@ -74,7 +74,7 @@ import { API_SERVER } from 'config/constant';
 import { getTestAudios } from 'utils/game/gameService';
 import PlayInfo from './playcards/playinfo';
 import LeaderBoard from './playcards/Leaderboard';
-
+import RefBg from 'assets/img/games/refbg.png';
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
@@ -794,7 +794,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       <Box className="Images">
                         <Reflection
                           formData={gameInfo?.gameData}
-                          imageSrc={RefScreen1}
+                          imageSrc={RefBg}
                           getData={getData}
                           data={data}
                           reflectionQuestions={gameInfo?.reflectionQuestions}

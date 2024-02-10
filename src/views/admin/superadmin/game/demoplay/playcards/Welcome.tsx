@@ -58,7 +58,7 @@ const Welcome: React.FC<{
       setProfile(result.data);
     }
     const res = await getSkills();
-    if (res?.status === 'Success') {        
+    if (res?.status === 'Success') {
       setApSkl(res?.data);
     }
   };
@@ -110,13 +110,11 @@ const Welcome: React.FC<{
   const [isPlay, setIsPlay] = useState(false);
   // const audioRef = React.useRef(null);
 
- 
   const data =
     formData?.gameLearningOutcome !== ''
       ? formData?.gameLearningOutcome?.split('\n')
       : '';
 
-  
   return (
     <>
       {true && (
@@ -170,7 +168,12 @@ const Welcome: React.FC<{
                     </>
                   </Text>
                 )}
-                <Box w={'60%'} className="content">
+                <Box
+                  w={'60%'}
+                  className="content"
+                  width={'440px !important'}
+                  overflowY={'scroll'}
+                >
                   {formData.gameIsShowStoryline === 'true' && (
                     <Text
                       mt={'20px'}
@@ -200,7 +203,7 @@ const Welcome: React.FC<{
                   <Box
                     display={'flex'}
                     className={
-                      formData.gameIsShowSkill == 'true' ||
+                      formData.gameIsShowSkill === 'true' ||
                       formData.gameIsShowLearningOutcome === 'true'
                         ? 'rewards-box'
                         : 'empty-rewards-box'
@@ -208,17 +211,7 @@ const Welcome: React.FC<{
                   >
                     {formData.gameIsShowSkill === 'true' && (
                       <>
-                        <Box
-                          className="box-1"
-                          // width={'105px'}
-                          // backgroundImage={back}
-                          // backgroundSize={'contain'}
-                          // backgroundRepeat={'no-repeat'}
-                          // h={'95px'}
-                          // fontWeight={'600'}
-                          // fontSize={'13px'}
-                          // color={'#D9C7A2'}
-                        >
+                        <Box className="box-1">
                           <Img src={back} className="bg-img" />
                           <Text
                             className="skill-text"
@@ -262,51 +255,9 @@ const Welcome: React.FC<{
                                       </Text>
                                       <Text></Text>
                                     </Box>
-                                    {/*<Box
-                            backgroundImage={bar}
-                            w={'50px'}
-                            h={'20px'}
-                            backgroundSize={'cover'}
-                            backgroundRepeat={'no-repeat'}
-                          >
-                           <Img
-                              src={fill}
-                              w={'20%'}
-                              h={'10px'}
-                              alt="fill"
-                            />
-                          </Box>*/}
                                   </Box>
                                 </Box>
                               ))}
-                            {/*<Box display={'flex'}>
-                    <Img src={write} w={'25px'} h={'25px'} />
-                    <Box>
-                      <Box
-                        display={'flex'}
-                        w={'50px'}
-                        h={'20px'}
-                        justifyContent={'space-between'}
-                      >
-                        <Text color={'#D9C7A2'}>tested</Text>
-                        <Text>20%</Text>
-                      </Box>
-                      <Box
-                        backgroundImage={bar}
-                        w={'50px'}
-                        h={'20px'}
-                        backgroundSize={'cover'}
-                        backgroundRepeat={'no-repeat'}
-                      >
-                        <Img
-                          src={fill}
-                          w={'20%'}
-                          h={'20px'}
-                          alt="fill"
-                        />
-                      </Box>
-                    </Box>
-                  </Box>*/}
                           </Box>
                         </Box>
                       </>
