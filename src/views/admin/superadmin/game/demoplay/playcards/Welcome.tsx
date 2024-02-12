@@ -376,7 +376,7 @@ const Welcome: React.FC<{
                       transform={'scale(1.3)'}
                       src={next}
                       onClick={() => setCurrentScreenId(2)}
-                      cursor={'pointer'}
+                      // cursor={'pointer'}
                     />
                   </Box>
                 </Box>

@@ -35,6 +35,7 @@ import Screen5 from 'assets/img/screens/screen5.png';
 import Screen1 from 'assets/img/screens/screen1.png';
 import Replay from 'assets/img/screens/Replay.png';
 import Lead from 'assets/img/screens/Leaderboard.png';
+import Login from 'assets/img/games/log_non.png';
 // import bk from 'assets/img/games/17.png';
 // import note from 'assets/img/games/note.png';
 // import next from 'assets/img/screens/next.png';
@@ -45,6 +46,7 @@ import Lead from 'assets/img/screens/Leaderboard.png';
 // import parch from 'assets/img/games/parch.png';
 // import on from 'assets/img/games/on.png';
 // import off from 'assets/img/games/off.png';
+import { motion } from 'framer-motion';
 import React, {
   Suspense,
   useEffect,
@@ -75,6 +77,9 @@ import { getTestAudios } from 'utils/game/gameService';
 import PlayInfo from './playcards/playinfo';
 import LeaderBoard from './playcards/Leaderboard';
 import RefBg from 'assets/img/games/refbg.png';
+import { MdClose } from 'react-icons/md';
+import ProfileScreen from './playcards/ProfileScreen';
+import Characterspage from './playcards/CharacterSelection';
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
@@ -486,11 +491,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   useEffect(() => {
     setFeedBackFromValue();
   }, [currentScreenId]);
-  /***
-   * @param currentScreenId ->Number
-   * @param isInteraction ->Boolean
-   * @param
-   * */
+
   const setFeedBackFromValue = () => {
     switch (currentScreenId) {
       case 0:
@@ -611,6 +612,16 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   }, [reviewInput]);
 
+  const handleClose = () => {
+    const element = document.getElementById('container');
+    if (element) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch((err) => {
+          alert(`${err.message}`);
+        });
+      }
+    }
+  };
   //no need for story
   const handleTabSelection = (selectedOption: any) => {
     if (selectedOption?.value) {
@@ -684,7 +695,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     aud.loop = true;
     aud.play();
     onClose1();
-    setCurrentScreenId(1);
+    setCurrentScreenId(10);
   };
 
   const replayGame = () => {
@@ -714,132 +725,121 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             case 1:
               return (
                 <>
-                  <Box
-                    w={'100%'}
-                    h={'100vh'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                    overflow={'visible'}
-                    style={{ perspective: '1000px' }}
-                    className="Main-Content"
+                  <motion.div
+                    initial={{ opacity: 0, background: '#000' }}
+                    animate={{ opacity: 1, background: '#0000' }}
+                    transition={{ duration: 0.3, delay: 0.5 }}
                   >
                     <Box
-                      backgroundImage={backgroundScreenUrl}
-                      w={'100% !important'}
+                      w={'100%'}
                       h={'100vh'}
-                      backgroundRepeat={'no-repeat'}
-                      backgroundSize={'cover'}
                       alignItems={'center'}
                       justifyContent={'center'}
-                      className="Game-Screen"
+                      position={'relative'}
+                      overflow={'visible'}
+                      style={{ perspective: '1000px' }}
+                      className="Main-Content"
                     >
-                      <Box className="Images" h={'100vh !important'}>
-                        <Welcome
-                          intro={audio}
-                          setCurrentScreenId={setCurrentScreenId}
-                          formData={gameInfo?.gameData}
-                          imageSrc={Screen5}
-                          preview={true}
-                        />
+                      <Box
+                        backgroundImage={backgroundScreenUrl}
+                        w={'100% !important'}
+                        h={'100vh'}
+                        backgroundRepeat={'no-repeat'}
+                        backgroundSize={'cover'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        className="Game-Screen"
+                      >
+                        <Box className="Images" h={'100vh !important'}>
+                          <Welcome
+                            intro={audio}
+                            setCurrentScreenId={setCurrentScreenId}
+                            formData={gameInfo?.gameData}
+                            imageSrc={Screen5}
+                            preview={true}
+                          />
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
+                  </motion.div>
                 </>
               );
             case 2:
               return (
                 <>
-                  {data && type && (
-                    <Story
-                      formData={gameInfo?.gameData}
-                      backGroundImg={backgroundScreenUrl}
-                      data={data}
-                      type={type}
-                      setCurrentScreenId={setCurrentScreenId}
-                      handleValidate={handleValidate}
-                      resMsg={resMsg}
-                      feed={feed}
-                      getData={getData}
-                      options={options}
-                      option={selectedOption}
-                    />
-                  )}
+                  <motion.div
+                    initial={{ opacity: 0, background: '#000' }}
+                    animate={{ opacity: 1, background: '#0000' }}
+                    transition={{ duration: 0.3, delay: 0.5 }}
+                  >
+                    {data && type && (
+                      <Story
+                        formData={gameInfo?.gameData}
+                        backGroundImg={backgroundScreenUrl}
+                        data={data}
+                        type={type}
+                        setCurrentScreenId={setCurrentScreenId}
+                        handleValidate={handleValidate}
+                        resMsg={resMsg}
+                        feed={feed}
+                        getData={getData}
+                        options={options}
+                        option={selectedOption}
+                      />
+                    )}
+                  </motion.div>
                 </>
               );
             case 3:
               return (
                 <>
-                  <Box
-                    w={'100%'}
-                    h={'100vh'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                    overflow={'visible'}
-                    style={{ perspective: '1000px' }}
-                    className="Main-Content"
+                  <motion.div
+                    initial={{ opacity: 0, background: '#000' }}
+                    animate={{ opacity: 1, background: '#0000' }}
+                    transition={{ duration: 0.3, delay: 0.5 }}
                   >
                     <Box
-                      // backgroundImage={backgroundScreenUrl}
-                      w={'100% !important'}
+                      w={'100%'}
                       h={'100vh'}
-                      // backgroundRepeat={'no-repeat'}
-                      // backgroundSize={'cover'}
                       alignItems={'center'}
                       justifyContent={'center'}
-                      className="Game-Screen"
-                      backgroundColor={'#D9C7A2'}
+                      position={'relative'}
+                      overflow={'visible'}
+                      style={{ perspective: '1000px' }}
+                      className="Main-Content"
                     >
-                      <Box className="Images">
-                        <Reflection
-                          formData={gameInfo?.gameData}
-                          imageSrc={RefBg}
-                          getData={getData}
-                          data={data}
-                          reflectionQuestions={gameInfo?.reflectionQuestions}
-                        />
+                      <Box
+                        // backgroundImage={backgroundScreenUrl}
+                        w={'100% !important'}
+                        h={'100vh'}
+                        // backgroundRepeat={'no-repeat'}
+                        // backgroundSize={'cover'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        className="Game-Screen"
+                        backgroundColor={'#D9C7A2'}
+                      >
+                        <Box className="Images">
+                          <Reflection
+                            formData={gameInfo?.gameData}
+                            imageSrc={RefBg}
+                            getData={getData}
+                            data={data}
+                            reflectionQuestions={gameInfo?.reflectionQuestions}
+                          />
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
+                  </motion.div>
                 </>
               );
             case 4:
               return (
-                <Box
-                  w={'100%'}
-                  h={'100vh'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                  overflow={'visible'}
-                  style={{ perspective: '1000px' }}
-                  className="Main-Content"
+                <motion.div
+                  initial={{ opacity: 0, background: '#000' }}
+                  animate={{ opacity: 1, background: '#0000' }}
+                  transition={{ duration: 0.3, delay: 0.5 }}
                 >
-                  <Box
-                    backgroundImage={backgroundScreenUrl}
-                    w={'100% !important'}
-                    h={'100vh'}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'cover'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    className="Game-Screen"
-                  >
-                    <Box className="Images">
-                      <LeaderBoard
-                        formData={gameInfo?.gameData}
-                        imageSrc={Lead}
-                        getData={getData}
-                        data={data}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              );
-            case 5:
-              return (
-                <>
                   <Box
                     w={'100%'}
                     h={'100vh'}
@@ -861,201 +861,331 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       className="Game-Screen"
                     >
                       <Box className="Images">
-                        <ThankYou
+                        <LeaderBoard
                           formData={gameInfo?.gameData}
-                          imageSrc={Screen6}
+                          imageSrc={Lead}
+                          getData={getData}
+                          data={data}
                         />
                       </Box>
                     </Box>
                   </Box>
+                </motion.div>
+              );
+            case 5:
+              return (
+                <>
+                  <motion.div
+                    initial={{ opacity: 0, background: '#000' }}
+                    animate={{ opacity: 1, background: '#0000' }}
+                    transition={{ duration: 0.3, delay: 0.5 }}
+                  >
+                    <Box
+                      w={'100%'}
+                      h={'100vh'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      position={'relative'}
+                      overflow={'visible'}
+                      style={{ perspective: '1000px' }}
+                      className="Main-Content"
+                    >
+                      <Box
+                        backgroundImage={backgroundScreenUrl}
+                        w={'100% !important'}
+                        h={'100vh'}
+                        backgroundRepeat={'no-repeat'}
+                        backgroundSize={'cover'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        className="Game-Screen"
+                      >
+                        <Box className="Images">
+                          <ThankYou
+                            formData={gameInfo?.gameData}
+                            imageSrc={Screen6}
+                          />
+                        </Box>
+                      </Box>
+                    </Box>
+                  </motion.div>
                 </>
               );
             case 6:
               return (
                 <>
-                  <Box
-                    w={'100%'}
-                    h={'100vh'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                    overflow={'visible'}
-                    style={{ perspective: '1000px' }}
-                    className="Main-Content"
+                  <motion.div
+                    initial={{ opacity: 0, background: '#000' }}
+                    animate={{ opacity: 1, background: '#0000' }}
+                    transition={{ duration: 0.3, delay: 0.5 }}
                   >
                     <Box
-                      backgroundImage={backgroundScreenUrl}
-                      w={'100% !important'}
+                      w={'100%'}
                       h={'100vh'}
-                      backgroundRepeat={'no-repeat'}
-                      backgroundSize={'cover'}
                       alignItems={'center'}
                       justifyContent={'center'}
-                      className="Game-Screen"
+                      position={'relative'}
+                      overflow={'visible'}
+                      style={{ perspective: '1000px' }}
+                      className="Main-Content"
                     >
-                      <Box className="Images">
-                        <Completion
-                          getData={getData}
-                          data={data}
-                          setCurrentScreenId={setCurrentScreenId}
-                          formData={gameInfo?.gameData}
-                          imageSrc={Screen1}
-                        />
+                      <Box
+                        backgroundImage={backgroundScreenUrl}
+                        w={'100% !important'}
+                        h={'100vh'}
+                        backgroundRepeat={'no-repeat'}
+                        backgroundSize={'cover'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        className="Game-Screen"
+                      >
+                        <Box className="Images">
+                          <Completion
+                            getData={getData}
+                            data={data}
+                            setCurrentScreenId={setCurrentScreenId}
+                            formData={gameInfo?.gameData}
+                            imageSrc={Screen1}
+                          />
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
+                  </motion.div>
                 </>
               );
             case 7:
               return (
                 <>
-                  <Box
-                    w={'100%'}
-                    h={'100vh'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                    overflow={'visible'}
-                    style={{ perspective: '1000px' }}
-                    className="Main-Content"
+                  <motion.div
+                    initial={{ opacity: 0, background: '#000' }}
+                    animate={{ opacity: 1, background: '#0000' }}
+                    transition={{ duration: 0.3, delay: 0.5 }}
                   >
                     <Box
-                      backgroundImage={backgroundScreenUrl}
-                      w={'100% !important'}
+                      w={'100%'}
                       h={'100vh'}
-                      backgroundRepeat={'no-repeat'}
-                      backgroundSize={'cover'}
                       alignItems={'center'}
                       justifyContent={'center'}
-                      className="Game-Screen"
+                      position={'relative'}
+                      overflow={'visible'}
+                      style={{ perspective: '1000px' }}
+                      className="Main-Content"
                     >
-                      <Box className="Images">
-                        <Takeway
-                          formData={gameInfo?.gameData}
-                          imageSrc={Screen4}
-                          getData={getData}
-                          data={data}
-                        />
+                      <Box
+                        backgroundImage={backgroundScreenUrl}
+                        w={'100% !important'}
+                        h={'100vh'}
+                        backgroundRepeat={'no-repeat'}
+                        backgroundSize={'cover'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        className="Game-Screen"
+                      >
+                        <Box className="Images">
+                          <Takeway
+                            formData={gameInfo?.gameData}
+                            imageSrc={Screen4}
+                            getData={getData}
+                            data={data}
+                          />
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
+                  </motion.div>
                 </>
               );
             case 8:
               return (
                 <>
-                  <Box
-                    w={'100%'}
-                    h={'100vh'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                    overflow={'visible'}
-                    style={{ perspective: '1000px' }}
-                    className="Main-Content"
+                  <motion.div
+                    initial={{ opacity: 0, background: '#000' }}
+                    animate={{ opacity: 1, background: '#0000' }}
+                    transition={{ duration: 0.3, delay: 0.5 }}
                   >
                     <Box
-                      backgroundImage={backgroundScreenUrl}
-                      w={'100% !important'}
+                      w={'100%'}
                       h={'100vh'}
-                      backgroundRepeat={'no-repeat'}
-                      backgroundSize={'cover'}
                       alignItems={'center'}
                       justifyContent={'center'}
-                      className="Game-Screen"
+                      position={'relative'}
+                      overflow={'visible'}
+                      style={{ perspective: '1000px' }}
+                      className="Main-Content"
                     >
-                      <Box className="Images">
-                        <ReplayGame
-                          replayGame={replayGame}
-                          setCurrentScreenId={setCurrentScreenId}
-                          formData={gameInfo?.gameData}
-                          imageSrc={Replay}
-                          getData={getData}
-                          data={data}
-                        />
+                      <Box
+                        backgroundImage={backgroundScreenUrl}
+                        w={'100% !important'}
+                        h={'100vh'}
+                        backgroundRepeat={'no-repeat'}
+                        backgroundSize={'cover'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        className="Game-Screen"
+                      >
+                        <Box className="Images">
+                          <ReplayGame
+                            replayGame={replayGame}
+                            setCurrentScreenId={setCurrentScreenId}
+                            formData={gameInfo?.gameData}
+                            imageSrc={Replay}
+                            getData={getData}
+                            data={data}
+                          />
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
+                  </motion.div>
                 </>
               );
             case 9:
               return (
                 <>
-                  <Box
-                    w={'100%'}
-                    h={'100vh'}
-                    display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                    overflow={'visible'}
-                    style={{ perspective: '1000px' }}
+                  <motion.div
+                    initial={{ opacity: 0, background: '#000' }}
+                    animate={{ opacity: 1, background: '#0000' }}
+                    transition={{ duration: 0.3, delay: 0.5 }}
                   >
                     <Box
-                      backgroundImage={backgroundScreenUrl}
                       w={'100%'}
                       h={'100vh'}
-                      backgroundRepeat={'no-repeat'}
-                      backgroundSize={'cover'}
-                      transform={`scale(${first ? 1 : 1.3}) translateY(${
-                        first ? 0 : -10
-                      }%) translateX(${first ? 0 : -10}%)`}
-                      transition={'transform 0.9s ease-in-out'}
-                    >
-                      <Box
-                        position={'fixed'}
-                        top={'200px'}
-                        right={'0px'}
-                        bottom={0}
-                        zIndex={999}
-                        w={'300px'}
-                      ></Box>
-                    </Box>
-                    <Box
-                      style={{
-                        transform: `scale(${showNote ? 0.2 : 1})`,
-                        transition: 'transform 0.5s ease-in-out',
-                      }}
-                      position={'fixed'}
-                      w={'40%'}
-                      h={'80vh'}
                       display={'flex'}
-                      flexDirection={'column'}
-                      justifyContent={'center'}
                       alignItems={'center'}
+                      justifyContent={'center'}
+                      position={'relative'}
+                      overflow={'visible'}
+                      style={{ perspective: '1000px' }}
                     >
-                      <Img w={'80%'} h={'80vh'} src={feedi} />
                       <Box
+                        backgroundImage={backgroundScreenUrl}
+                        w={'100%'}
+                        h={'100vh'}
+                        backgroundRepeat={'no-repeat'}
+                        backgroundSize={'cover'}
+                        transform={`scale(${first ? 1 : 1.3}) translateY(${
+                          first ? 0 : -10
+                        }%) translateX(${first ? 0 : -10}%)`}
+                        transition={'transform 0.9s ease-in-out'}
+                      >
+                        <Box
+                          position={'fixed'}
+                          top={'200px'}
+                          right={'0px'}
+                          bottom={0}
+                          zIndex={999}
+                          w={'300px'}
+                        ></Box>
+                      </Box>
+                      <Box
+                        style={{
+                          transform: `scale(${showNote ? 0.2 : 1})`,
+                          transition: 'transform 0.5s ease-in-out',
+                        }}
                         position={'fixed'}
-                        w={'50%'}
-                        mt={'10px'}
+                        w={'40%'}
+                        h={'80vh'}
                         display={'flex'}
                         flexDirection={'column'}
-                        textAlign={'center'}
                         justifyContent={'center'}
-                        style={{
-                          fontWeight: '900',
-                          color: '#D9C7A2',
-                          fontSize: '18px',
-
-                          lineHeight: 1,
-                          fontFamily: 'cont',
-                        }}
+                        alignItems={'center'}
                       >
-                        {feed}
+                        <Img w={'80%'} h={'80vh'} src={feedi} />
                         <Box
-                          w={'100%'}
-                          onClick={() => getData(data)}
-                          mt={'20px'}
+                          position={'fixed'}
+                          w={'50%'}
+                          mt={'10px'}
                           display={'flex'}
+                          flexDirection={'column'}
+                          textAlign={'center'}
                           justifyContent={'center'}
-                          cursor={'pointer'}
+                          style={{
+                            fontWeight: '900',
+                            color: '#D9C7A2',
+                            fontSize: '18px',
+
+                            lineHeight: 1,
+                            fontFamily: 'cont',
+                          }}
                         >
-                          <Img src={next} w={'200px'} h={'60px'} />
+                          {feed}
+                          <Box
+                            w={'100%'}
+                            onClick={() => getData(data)}
+                            mt={'20px'}
+                            display={'flex'}
+                            justifyContent={'center'}
+                            cursor={'pointer'}
+                          >
+                            <Img src={next} w={'200px'} h={'60px'} />
+                          </Box>
                         </Box>
                       </Box>
                     </Box>
+                  </motion.div>
+                </>
+              );
+            case 10:
+              return (
+                <>
+                  <Box className="Play-game First-Screen">
+                    <Box
+                      position={'fixed'}
+                      top={0}
+                      left={0}
+                      right={0}
+                      bottom={0}
+                      zIndex={999}
+                    >
+                      <motion.div
+                        initial={{ opacity: 0, background: '#000' }}
+                        animate={{ opacity: 1, background: '#0000' }}
+                        transition={{ duration: 0.3, delay: 0.5 }}
+                      >
+                        <Box className="img-box" position={'relative'}>
+                          {/* <Img className='img-bg' src={`${API_SERVER}/${useData?.Response?.[0]?.gasAssetImage}`} />  */}
+                          <Img className="img-bg" src={backgroundScreenUrl} />
+                          <Img className="img" src={Login} loading="lazy" />
+                          <Text className="heading">Atlantis</Text>
+                          <Text className="welcome-text">Welcome To</Text>
+                          <Text
+                            className="welcome-text-name"
+                            textTransform={'capitalize'}
+                          >
+                            The Demo Play
+                          </Text>
+                          <Button
+                            className="btn"
+                            onClick={() => setCurrentScreenId(11)}
+                          ></Button>
+                        </Box>
+                        <Button
+                          position={'absolute'}
+                          top={0}
+                          right={0}
+                          onClick={() => setCurrentScreenId(1)}
+                        >
+                          <Icon as={MdClose} />
+                        </Button>
+                      </motion.div>
+                    </Box>
                   </Box>
+                </>
+              );
+            case 11:
+              return (
+                <>
+                  <ProfileScreen
+                    imageSrc={backgroundScreenUrl}
+                    setCurrentScreenId={setCurrentScreenId}
+                  />
+                </>
+              );
+            case 12:
+              return (
+                <>
+                  <Characterspage
+                    imageSrc={backgroundScreenUrl}
+                    setCurrentScreenId={setCurrentScreenId}
+                  />
                 </>
               );
             default:
@@ -1179,58 +1309,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           </MenuList>
         )}
       </Menu>
-
-      {/* {audio && (
-        <audio controls autoPlay ref={audioRef}>
-          <source src={audio} type="audio/mpeg" />
-        </audio>
-      )} */}
     </>
   );
 };
 
-// const Model: React.FC = () => {
-//   const groupRef = useRef<any>();
-//   const gltf = useLoader(GLTFLoader, Sample);
 
-//   const mixer = new THREE.AnimationMixer(gltf.scene);
-//   const action = mixer.clipAction(gltf.animations[0]);
-
-//   useFrame((state, delta) => {
-//     // Rotate the model on the Y-axis
-//     if (groupRef.current) {
-//       // groupRef.current.rotation.y += 0.01;
-//       groupRef.current.castShadow = true;
-//     }
-
-//     mixer.update(delta);
-//   });
-//   action.play();
-
-//   useLayoutEffect(() => {
-//     if (groupRef.current) {
-//       groupRef.current.traverse((obj: any) => {
-//         if (obj.isMesh) {
-//           obj.castShadow = true;
-//           obj.receiveShadow = true;
-//         }
-//       });
-//     }
-//   }, []);
-
-//   gltf.scene.traverse((child) => {
-//     if (child instanceof THREE.Mesh) {
-//       child.material.color.set(0xffccaaf0); // Set your desired color
-//       child.material.roughness = 0.4; // Adjust roughness as needed
-//       child.material.metalness = 0.8; // Adjust metalness as needed
-//     }
-//   });
-
-//   return (
-//     <group ref={groupRef}>
-//       <primitive object={gltf.scene} />
-//     </group>
-//   );
-// };
 
 export default EntirePreview;

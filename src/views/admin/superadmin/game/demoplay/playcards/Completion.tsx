@@ -123,7 +123,7 @@ const Completion: React.FC<{
             <Img
               src={next}
               onClick={()=>getData(data)}
-              cursor={'pointer'}
+              // cursor={'pointer'}
             />
           </Box>
         </>

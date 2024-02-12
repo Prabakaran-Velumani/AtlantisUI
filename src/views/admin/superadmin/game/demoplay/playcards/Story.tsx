@@ -18,16 +18,12 @@ import React, {
   useRef,
   useState,
 } from 'react';
-//   import SelectField from 'components/fields/SelectField';
-//   import InitialImg from 'assets/img/games/load.jpg';
+
 import { Canvas, useLoader, useFrame } from 'react-three-fiber';
-// import Sample from '../../../../assets/img/games/Character_sample.glb';
-//   import Sample from 'assets/img/games/Character_sample.glb';
-//   import * as THREE from 'three';
-//   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
 import feedi from 'assets/img/screens/feed.png';
 import TypingEffect from './Typing';
-import { getVoiceMessage } from 'utils/game/gameService';
+
 
 //   import { AiFillMessage } from 'react-icons/ai';
 
@@ -74,8 +70,7 @@ const Story: React.FC<{
       setFirst(false);
       setShowNote(false);
     }, 1000);
-    // to set the first data for the game
-  }, []);
+}, []);
 
 
 
@@ -190,7 +185,7 @@ const Story: React.FC<{
                 display={'flex'}
                 justifyContent={'center'}
                 cursor={'pointer'}
-              >
+               >
                 <Img src={next} w={'200px'} h={'60px'} />
               </Box>
             </Box>
