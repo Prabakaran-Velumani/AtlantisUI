@@ -396,16 +396,17 @@ const SinglePreview: React.FC<{
     setNavi('');
     setOption('');
     setCurrentAudio('');
+    onClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full">
+    <Modal isOpen={isOpen} onClose={handlePreviewPanelClose} size="full">
       <ModalOverlay />
       <ModalContent backgroundColor="rgba(0, 0, 0, 0.9)">
         <ModalCloseButton
           zIndex={99999999999}
           color={'white'}
-          onClick={handlePreviewPanelClose}
+          // onClick={handlePreviewPanelClose}
         />
         <ModalBody p={0} pointerEvents={allowPointerEvents? null : 'none'}>
           <Flex height="100vh" className="AddScores">
