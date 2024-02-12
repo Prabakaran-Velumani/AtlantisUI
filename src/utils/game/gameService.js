@@ -1,3 +1,4 @@
+import { options } from '@fullcalendar/core/preact';
 import { API_SERVER } from 'config/constant';
 import { getMethod, postMethod, putMethod ,urls,postMethodfile, postMethodGameReview, postMethodVoice} from 'utils/url/urls';
 const person = localStorage.getItem('user');
@@ -503,6 +504,17 @@ export async function getVoiceMessage(id,data) {
   }
 }
 
+// export async function getLanguageModel(id,data) {
+//   try {
+//     const options = {method: 'GET', headers: {'xi-api-key': "e8b9d84992ae3b4e70a232136717f5ab"}};
+//     const response = await fetch(`https://api.elevenlabs.io/v1/models`,options);
+//     // const result = response; 
+//     console.log("response",response);
+//     return response;
+//   } catch (err) {
+//     console.log('getStoryValidtion Error:', err);
+//   }
+// }
 export async function getGameDemoData(uuid) {
   try {
     const response = await fetch(`${API_SERVER}${urls.getGameDemoData}${uuid}`,getMethod);

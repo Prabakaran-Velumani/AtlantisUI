@@ -244,7 +244,7 @@ const GameCreation = () => {
         [refkey]: reflecation
       }
     })
-    console.log('reflectionQuestions', reflectionQuestions)
+    // console.log('reflectionQuestions', reflectionQuestions)
 
   }
 
@@ -254,7 +254,7 @@ const GameCreation = () => {
       gameReflectionQuestion: formData.gameReflectionQuestion,
       gameId: id,
     }
-    console.log('handlesaveReflection', data)
+    // console.log('handlesaveReflection', data)
     const datas = JSON.stringify(data);
     const resu = await createReflection(datas);
 
@@ -557,7 +557,7 @@ const GameCreation = () => {
     const setAudioInPage = async () => {
       const res = await getAudio(parseInt(id));
       if (res?.status === 'Success') {
-        console.log(res.data);
+        // console.log(res.data);
         setSelectedAud(res?.data)
       }
     }
@@ -640,7 +640,7 @@ const GameCreation = () => {
 
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
-      return console.log('error:' + gameById?.message);
+      // return console.log('error:' + gameById?.message);
     setDefaultstatus(true);
     setFormData(gameById?.data);
     // const lastTab = gameById?.data?.gameLastTabArray[gameById.data.gameLastTabArray.length - 2];
@@ -660,7 +660,7 @@ const GameCreation = () => {
     else if (stringContainingNumbers) {
       const numbersArray = stringContainingNumbers?.match(/\d+/g);
       const lastValue = numbersArray[numbersArray?.length - 1];
-      console.log('parseInt(lastValue)', numbersArray?.length);
+      // console.log('parseInt(lastValue)', numbersArray?.length);
       if (numbersArray?.length === 1) {
 
 
@@ -683,7 +683,7 @@ const GameCreation = () => {
     const storedReflection = await getReflection(id);
     if (storedReflection?.status !== 'Success')
       // return alert('error:' + gameById?.message);
-      console.log('storedReflection', storedReflection.data)
+      // console.log('storedReflection', storedReflection.data)
 
     setReflectionQuestions(storedReflection.data);
     setAtuoSave(true);
@@ -695,12 +695,12 @@ const GameCreation = () => {
       return console.log(review?.message);
     setReviewers(review?.reviewerDetails);
     setReviews(review?.reviewlist);
-    console.log('you should read this reviews', review?.reviewlist[4]);
+    // console.log('you should read this reviews', review?.reviewlist[4]);
   };
 
   const handleGet = async (quest: number) => {
     setAtuoSave(false);
-    console.log('handleGet');
+    // console.log('handleGet');
     // return false;
     try {
       const data = {
@@ -2317,7 +2317,7 @@ const GameCreation = () => {
 
   };
 
-  console.log('input--', inputValue);
+  // console.log('input--', inputValue);
 
   const handleSave = () => {
     setIsSave(true);
@@ -2493,7 +2493,7 @@ const GameCreation = () => {
     }
   }
   const reducePercentage = 16 * tab - 16;
-  console.log(reducePercentage);
+  // console.log(reducePercentage);
   // alert(reducePercentage)
   useEffect(() => {
     if (formData.gameNonPlayingCharacterId) {
@@ -2509,7 +2509,7 @@ const GameCreation = () => {
   const debouncedSubmit = useCallback(
     debounce(async (data: any) => {
       try {
-        console.log('handlesaveReflection', data);
+        // console.log('handlesaveReflection', data);
         const datas = JSON.stringify(data);
         const resu = await createReflection(datas);
         if (resu.status !== 'Success') {
@@ -2536,7 +2536,7 @@ const GameCreation = () => {
             gameReflectionQuestion: formData.gameReflectionQuestion,
             gameId: id,
           }
-          console.log('datas', data)
+          // console.log('datas', data)
           debouncedSubmit(data);
 
         }
@@ -2551,7 +2551,7 @@ const GameCreation = () => {
     debounce(async (data: any) => {
       try {
 
-        console.log('debouncedSubmitGame', data)
+        // console.log('debouncedSubmitGame', data)
 
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
