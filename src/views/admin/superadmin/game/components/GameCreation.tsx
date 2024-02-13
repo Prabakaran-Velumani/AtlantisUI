@@ -4276,6 +4276,7 @@ const GameCreation = () => {
               handlecompletion={handlecompletion}
               reflectionQuestions={reflectionQuestions}
               reflectionQuestionsdefault={reflectionQuestionsdefault}
+              setPrevdata={setPrevdata}
             />
             )}
           </Box>

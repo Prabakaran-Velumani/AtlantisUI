@@ -67,7 +67,8 @@ import ReflectionContentScreen from './onimage/ReflectionScreen';
 import RefScreen1 from '../../../../../assets/img/screens/refscreen1.png';
 import Screen4 from '../../../../../assets/img/screens/screen4.png';
 import TyContentScreen from './onimage/TyContentScreen';
-import { getVoiceMessage } from 'utils/game/gameService';
+import { getVoiceMessage, getPreview } from 'utils/game/gameService';
+import { useParams } from 'react-router-dom';
 const SinglePreview: React.FC<{
   prevdata?: any;
   isOpen?: any;
@@ -88,6 +89,7 @@ const SinglePreview: React.FC<{
   selectedBadge?: any;
   reflectionQuestions?: any;
   reflectionQuestionsdefault?: any;
+  setPrevdata: any;
 }> = ({
   prevdata,
   show,
@@ -102,6 +104,7 @@ const SinglePreview: React.FC<{
   CompKeyCount,
   reflectionQuestions,
   reflectionQuestionsdefault,
+  setPrevdata
 }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const [showFullText, setShowFullText] = useState(false);
@@ -123,6 +126,17 @@ const SinglePreview: React.FC<{
   const [voiceIds, setVoiceIds] = useState<any>();
   const [allowPointerEvents, setAllowPointerEvents] = useState<boolean>(false);
   const audioRef = useRef(null);
+  const {id} = useParams();
+
+useEffect(()=>{
+  const fetchPreviewData = async() =>{
+      const prev = await getPreview(id);
+      if (prev && prev?.status !== 'Success') return console.log(prev.message);
+      setPrevdata(prev?.data);
+      console.log("prevdata1",prev?.data);
+    }
+    fetchPreviewData();
+  },[])
 
   useEffect(() => {
     setShowNote(true);
@@ -131,7 +145,7 @@ const SinglePreview: React.FC<{
       setFirst(false);
       setShowNote(false);
     }, 1000);
-    setType(prevdata.items[0].type);
+    setType(prevdata.items[0]?.type);
     setItem(prevdata.items[0]);
     const dataObj = findKeyByTex(prevdata.input, prevdata.items[0]);
     setData(dataObj);
@@ -143,12 +157,13 @@ const SinglePreview: React.FC<{
       NPC: formData?.gameNonPlayerVoice ?? '5Q0t7uMcjvnagumLfvZi',
       Intro: '', //Get the intro music for the game.gameBadge(Primary Key)
     });
+    console.log("prevdata",prevdata);
   }, [prevdata]);
  
 
   useEffect(() => {
-    // console.log("type", type)
-    // console.log("data", data)
+    console.log("type", type)
+    console.log("data", data)
     // console.log("resMsg", resMsg)
 
     switch (type) {
@@ -210,6 +225,8 @@ const SinglePreview: React.FC<{
     content: string | null,
     voice: string | null,
   ) => {
+    if(tab==4)
+    {
     setAllowPointerEvents(false);
     let text = '';
     let voiceId = '';
@@ -285,6 +302,7 @@ const SinglePreview: React.FC<{
         return console.log('missing audio for the block');
       }
     }
+  }
   };
   useEffect(() => {
     setShowNote(true);
@@ -295,10 +313,7 @@ const SinglePreview: React.FC<{
 
   useEffect(() => {   
     if (audioRef.current && currentAudio) {
-    //   audioRef.current && audioRef?.current?.pause();
       audioRef.current.src = currentAudio;
-      // audioRef.current?.pause();
-      // audioRef.current?.load();
       audioRef.current.play();
       setAllowPointerEvents(true);
     }
@@ -307,8 +322,6 @@ const SinglePreview: React.FC<{
     }
   }, [currentAudio]);
 
-  console.log("currentAudio",currentAudio);
-  console.log("src", audioRef.current);
   const getData = (next: any) => {
     setCurrentAudio('');
     const handleInteractionType = (delay: any) => {
@@ -347,6 +360,7 @@ const SinglePreview: React.FC<{
         setType(prevdata.items[0].type);
         setItem(prevdata.items[0]);
         setData(findKeyByTex(prevdata.input, prevdata.items[0]));
+        setOption(null);
       } else if (navi === 'Select Block') {
         const delay = findKeyByValue(prevdata.items, next.upNext);
         if (delay) {
@@ -377,6 +391,8 @@ const SinglePreview: React.FC<{
   };
 
   const handleValidate = (item: any, ind: number) => {
+    console.log("ind", ind);
+    console.log("item", item);
     setResMsg(data.responseObject[item]);
     setFeed(data.feedbackObject[item]);
     setNavi(data.navigateObjects[item]);
@@ -389,10 +405,13 @@ const SinglePreview: React.FC<{
     setResMsg('');
     setFeed('');
     setNavi('');
-    setOption('');
+    setOption(null);
     setCurrentAudio('');
+    setAllowPointerEvents(true);
     onClose();
+
   };
+
 
   return (
     <Modal isOpen={isOpen} onClose={handlePreviewPanelClose} size="full">
