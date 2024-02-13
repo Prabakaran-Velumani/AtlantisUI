@@ -1092,7 +1092,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
       };
     });
   };
-
   const handleOptionEmotion = (
     selectedOption: any,
     i: any,
@@ -2158,7 +2157,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                       </AccordionPanel>
                                     </AccordionItem>
                                   </Accordion>
-
                                   {seq.id == showMiniBox ? (
                                     <MiniBox seq={seq} i={i} name={'Note'} />
                                   ) : null}

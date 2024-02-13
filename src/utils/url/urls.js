@@ -197,7 +197,6 @@ export const putMethod = (data) => {
   };
   return method;
 };
-
 export const postMethodVoice = (data) => {
   console.log("data", data)
   let method = {

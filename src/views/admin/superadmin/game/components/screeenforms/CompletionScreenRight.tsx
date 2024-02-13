@@ -103,6 +103,7 @@ const CompletionScreenRight: React.FC<{
               ...prevInput[CompKeyCount],
               gameBadge: badge.gasId,
       gameBadgeName: badge.gasAssetName,
+      gameMaxScore: 100,
               
           }
       }
@@ -110,8 +111,9 @@ const CompletionScreenRight: React.FC<{
 
     setSelectedBadge(badge);
     setIsModalOpen(false);
-    console.log('Selected Image:', badge);
+    
   };
+  console.log('Selected Image:', compliData);
   const handleClear = () => {
    
     setCompliData((prevInput: any) => {
@@ -162,7 +164,7 @@ const CompletionScreenRight: React.FC<{
       charCode > 31 &&
       (charCode < 48 ||
         charCode > 57 ||
-        parseInt(enteredValue, 10) > compliData[CompKeyCount]?.gameTotalScore[0]?.maxScore)
+        parseInt(enteredValue, 10) > compliData[CompKeyCount]?.gameTotalScore.maxScore)
     ) {
       e.preventDefault();
     }
@@ -199,11 +201,15 @@ const CompletionScreenRight: React.FC<{
                   placeholder="eg. 1000"
                   name="gameTotalScore"
                   w="100px"
-                  value={compliData[CompKeyCount]?.gameTotalScore?compliData[CompKeyCount]?.gameTotalScore[0]?.maxScore :''}
+                  value={
+                    compliData[CompKeyCount]?.gameTotalScore
+                      ? compliData[CompKeyCount]?.gameTotalScore.maxScore
+                      : ''
+                  }
                   // onChange={handlecompletion}
                   onKeyPress={handleKeyPresss}
                   readOnly
-                /> 
+                />
               </FormControl>
             </Flex>
           </SimpleGrid>
@@ -226,7 +232,9 @@ const CompletionScreenRight: React.FC<{
               </FormLabel>
               <Switch
                 mb="10px"
-                isChecked={compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true'}
+                isChecked={
+                  compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true'
+                }
                 color="#fff"
                 colorScheme="brandScheme"
                 size="md"
@@ -253,16 +261,17 @@ const CompletionScreenRight: React.FC<{
                   color={textColorPrimary}
                 >
                   Minimum Score
-                  {compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' && (
-                    <span style={{ color: 'red' }}>*</span>
-                  )}
+                  {compliData[CompKeyCount]?.gameIsSetMinPassScore ===
+                    'true' && <span style={{ color: 'red' }}>*</span>}
                 </FormLabel>
                 <InputField
                   mt="10px"
                   id="gameMinScore"
                   name="gameMinScore"
                   type="text"
-                  disabled={compliData[CompKeyCount]?.gameIsSetMinPassScore !== 'true'}
+                  disabled={
+                    compliData[CompKeyCount]?.gameIsSetMinPassScore !== 'true'
+                  }
                   placeholder="eg. 1000"
                   w="100px"
                   value={compliData[CompKeyCount]?.gameMinScore}
@@ -291,7 +300,9 @@ const CompletionScreenRight: React.FC<{
               </FormLabel>
               <Switch
                 isChecked={
-                  compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' ? true : false
+                  compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true'
+                    ? true
+                    : false
                 }
                 color="#fff"
                 colorScheme="brandScheme"
@@ -321,15 +332,15 @@ const CompletionScreenRight: React.FC<{
                   color={textColorPrimary}
                 >
                   Distinction Score
-                  {compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && (
-                    <span style={{ color: 'red' }}>*</span>
-                  )}
+                  {compliData[CompKeyCount]?.gameIsSetDistinctionScore ===
+                    'true' && <span style={{ color: 'red' }}>*</span>}
                 </FormLabel>
                 <InputField
                   mt={'10px'}
                   w="100px"
                   disabled={
-                    compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true'
+                    compliData[CompKeyCount]?.gameIsSetDistinctionScore ===
+                    'true'
                       ? false
                       : true
                   }
@@ -365,7 +376,9 @@ const CompletionScreenRight: React.FC<{
 
             <Switch
               isChecked={
-                compliData[CompKeyCount]?.gameIsSetSkillWiseScore === 'true' ? true : false
+                compliData[CompKeyCount]?.gameIsSetSkillWiseScore === 'true'
+                  ? true
+                  : false
               }
               color="#fff"
               colorScheme="brandScheme"
@@ -399,7 +412,11 @@ const CompletionScreenRight: React.FC<{
               </Text>
             </FormLabel>
             <Switch
-              isChecked={compliData[CompKeyCount]?.gameIsSetBadge === 'true' ? true : false}
+              isChecked={
+                compliData[CompKeyCount]?.gameIsSetBadge === 'true'
+                  ? true
+                  : false
+              }
               color="#fff"
               colorScheme="brandScheme"
               size="md"
@@ -410,7 +427,7 @@ const CompletionScreenRight: React.FC<{
           </FormControl>
           {compliData[CompKeyCount]?.gameIsSetBadge === 'true' && (
             <>
-              <Flex mt={'10px'} >
+              <Flex mt={'10px'}>
                 <FormControl
                   display="flex"
                   alignItems="center"
@@ -468,32 +485,55 @@ const CompletionScreenRight: React.FC<{
                       </Text> 
                     </Box>
                     */}
-                      <Box display={'inline-block'}  position={'relative'} mt={'10px'} mb={'10px'} cursor={'pointer'} onClick={() =>handleBadgeImages()}>
-  <input type="file" style={{ width:'100px',
-                      position:'absolute',
-                      display:'none',
-                      textAlign:'right',
-                      
-                      opacity:0,
-                      zIndex:2,
-                      height:'100px' }}/>
-  <Box  position={'absolute'} className={'choosebadge'} top={0} left={0} zIndex={1} backgroundColor= {'#422AFB'}
-    p= {'2px'}
-    borderRadius= {'15px'}
-    pr={'8px'} 
-    pl= {'8px'} display={'flex'}  alignItems="center"
-                  justifyContent={'flex-start'} >
-    <SearchIcon color={'#fff'} w="15px" h="15px"/>
-    <Text fontSize="sm"
-                    //fontWeight="bold"
-                    //color={textColorPrimary}
-                    color={'#fff'}
-                    whiteSpace={'nowrap'} textAlign={'left'}>
+                    <Box
+                      display={'inline-block'}
+                      position={'relative'}
+                      mt={'10px'}
+                      mb={'10px'}
+                      cursor={'pointer'}
+                      onClick={() => handleBadgeImages()}
+                    >
+                      <input
+                        type="file"
+                        style={{
+                          width: '100px',
+                          position: 'absolute',
+                          display: 'none',
+                          textAlign: 'right',
+
+                          opacity: 0,
+                          zIndex: 2,
+                          height: '100px',
+                        }}
+                      />
+                      <Box
+                        position={'absolute'}
+                        className={'choosebadge'}
+                        top={0}
+                        left={0}
+                        zIndex={1}
+                        backgroundColor={'#422AFB'}
+                        p={'2px'}
+                        borderRadius={'15px'}
+                        pr={'8px'}
+                        pl={'8px'}
+                        display={'flex'}
+                        alignItems="center"
+                        justifyContent={'flex-start'}
+                      >
+                        <SearchIcon color={'#fff'} w="15px" h="15px" />
+                        <Text
+                          fontSize="sm"
+                          //fontWeight="bold"
+                          //color={textColorPrimary}
+                          color={'#fff'}
+                          whiteSpace={'nowrap'}
+                          textAlign={'left'}
+                        >
                           Choose Badge
                         </Text>
-  </Box>
-</Box> 
-                     
+                      </Box>
+                    </Box>
                   </>
                 ) : (
                   <Box position={'relative'}>
@@ -524,14 +564,12 @@ const CompletionScreenRight: React.FC<{
                 //mt={'10px'}
               >
                 <FormLabel
-                    fontSize="sm"
-                    fontWeight="bold"
-                    color={textColorPrimary}
-                    mb="0px"
-                    whiteSpace={'nowrap'}
-                  
-                  >
-                  
+                  fontSize="sm"
+                  fontWeight="bold"
+                  color={textColorPrimary}
+                  mb="0px"
+                  whiteSpace={'nowrap'}
+                >
                   Badge Name:{' '}
                   {compliData[CompKeyCount]?.gameIsSetBadge === 'true' && (
                     <span style={{ color: 'red' }}>*</span>
@@ -541,7 +579,11 @@ const CompletionScreenRight: React.FC<{
                   mb="0px"
                   id="gameBadgeName"
                   name="gameBadgeName"
-                  disabled={compliData[CompKeyCount]?.gameIsSetBadge === 'true' ? false : true}
+                  disabled={
+                    compliData[CompKeyCount]?.gameIsSetBadge === 'true'
+                      ? false
+                      : true
+                  }
                   placeholder="eg. Bronze"
                   w="150px" // Adjust the width as needed
                   value={compliData[CompKeyCount]?.gameBadgeName}
@@ -577,7 +619,8 @@ const CompletionScreenRight: React.FC<{
                   </FormLabel>
                   <Switch
                     isChecked={
-                      compliData[CompKeyCount]?.gameIsSetCriteriaForBadge === 'true'
+                      compliData[CompKeyCount]?.gameIsSetCriteriaForBadge ===
+                      'true'
                         ? true
                         : false
                     }
@@ -593,7 +636,8 @@ const CompletionScreenRight: React.FC<{
                 </FormControl>
 
                 <div style={{ width: '20px' }} />
-                {compliData[CompKeyCount]?.gameIsSetCriteriaForBadge === 'true' && (
+                {compliData[CompKeyCount]?.gameIsSetCriteriaForBadge ===
+                  'true' && (
                   <>
                     <FormControl
                       display="flex"
@@ -610,7 +654,8 @@ const CompletionScreenRight: React.FC<{
                           fontWeight="bold"
                         >
                           Score Greater Than{' '}
-                          {compliData[CompKeyCount]?.gameIsSetCriteriaForBadge === 'true' && (
+                          {compliData[CompKeyCount]
+                            ?.gameIsSetCriteriaForBadge === 'true' && (
                             <span style={{ color: 'red' }}>*</span>
                           )}
                         </Text>
@@ -621,7 +666,8 @@ const CompletionScreenRight: React.FC<{
                         w={'100px'}
                         name="gameAwardBadgeScore"
                         disabled={
-                          compliData[CompKeyCount]?.gameIsSetCriteriaForBadge === 'true'
+                          compliData[CompKeyCount]
+                            ?.gameIsSetCriteriaForBadge === 'true'
                             ? false
                             : true
                         }

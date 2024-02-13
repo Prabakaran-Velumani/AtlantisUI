@@ -112,6 +112,7 @@ const Customize: React.FC<PropsInteraction> = ({
           countalphabet={countalphabet}
           setAlphabetCount={setAlphabetCount}
           count={count}
+          reviewers={reviewers}
           setCount={setCount}
           sequence={sequence}
           setSequence={setSequence}
@@ -132,7 +133,6 @@ const Customize: React.FC<PropsInteraction> = ({
           upNextCount={upNextCount}
           setUpNextCount={setUpNextCount}
           reviews={reviews} 
-          reviewers={reviewers}
         />
       )}
       {showComponent === 'Note' && (

@@ -1,66 +1,71 @@
-
-
 import {
-    AlertDialog,
-    AlertDialogBody,
-    AlertDialogCloseButton,
-    AlertDialogContent,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogOverlay,
-    Box,
-    Button,
-    Flex,
-    FormControl,
-    FormLabel,
-    Grid,
-    GridItem,
-    HStack,
-    Icon,
-    Img,
-    Radio,
-    RadioGroup,
-    SimpleGrid,
-    Stack,
-    Switch,
-    Tab,
-    TabList,
-    TabPanel,
-    TabPanels,
-    Tabs,
-    Text,
-    useColorModeValue,
-    useDisclosure,
-    useTheme,
-    useToast,
-    // brindha start
-    Select,
-    Textarea,
-    Link,
-    Slider,
-    Image,
-    IconButton
-    // brindha end
-  } from '@chakra-ui/react';
-  import React, { useEffect, useRef, useState } from 'react';
-  import { gameDuplicateQuestionEntirely, getImages, updateGame } from 'utils/game/gameService';
-  import Card from 'components/card/Card';
-  import InputField from 'components/fields/InputField';
-  import BadgeImages from '../BadgeImages'
-  import { MdClose, MdOutlineCloudUpload } from 'react-icons/md';
-  import TextField from 'components/fields/TextField';
-  import take from 'assets/img/screens/takeaway.png';
-  import bull from 'assets/img/screens/bullet.png';
-  interface Badge {
-    gasId: number;
-    gasAssetImage: string;
-    gasAssetName: string;
-  }
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogCloseButton,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Grid,
+  GridItem,
+  HStack,
+  Icon,
+  Img,
+  Radio,
+  RadioGroup,
+  SimpleGrid,
+  Stack,
+  Switch,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+  useTheme,
+  useToast,
+  // brindha start
+  Select,
+  Textarea,
+  Link,
+  Slider,
+  Image,
+  IconButton,
+  // brindha end
+} from '@chakra-ui/react';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  gameDuplicateQuestionEntirely,
+  getImages,
+  updateGame,
+} from 'utils/game/gameService';
+import Card from 'components/card/Card';
+import InputField from 'components/fields/InputField';
+import BadgeImages from '../BadgeImages';
+import { MdClose, MdOutlineCloudUpload } from 'react-icons/md';
+import TextField from 'components/fields/TextField';
+import take from 'assets/img/screens/takeaway.png';
+import bull from 'assets/img/screens/bullet.png';
+interface Badge {
+  gasId: number;
+  gasAssetImage: string;
 
+  gasAssetName: string;
+}
 
-    const TakewayScreen: React.FC<{formData: any;imageSrc:any; preview: any}> = ({formData,imageSrc, preview}) => {
-      const data = formData.gameTakeawayContent?.split('\n');
-      
+const TakewayScreen: React.FC<{
+  formData: any;
+  imageSrc: any;
+  preview: any;
+}> = ({ formData, imageSrc, preview }) => {
+  const data = formData.gameTakeawayContent?.split('\n');
   return (
     <>
       {imageSrc && preview ? (

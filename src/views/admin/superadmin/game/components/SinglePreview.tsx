@@ -30,7 +30,6 @@ import {
   MenuItem,
 } from '@chakra-ui/react';
 
-import feedi from 'assets/img/screens/feed.png';
 import bk from 'assets/img/games/17.png';
 import note from 'assets/img/games/note.png';
 import next from 'assets/img/screens/next.png';
@@ -57,6 +56,7 @@ import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 import Sample from 'assets/img/games/Character_sample.glb';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import feedi from 'assets/img/screens/feed.png';
 import Screen5 from '../../../../../assets/img/screens/screen5.png';
 import { AiFillMessage } from 'react-icons/ai';
 import WelcomeContentScreen from './onimage/WelcomeContentScreen';
@@ -68,7 +68,6 @@ import RefScreen1 from '../../../../../assets/img/screens/refscreen1.png';
 import Screen4 from '../../../../../assets/img/screens/screen4.png';
 import TyContentScreen from './onimage/TyContentScreen';
 import { getVoiceMessage } from 'utils/game/gameService';
-
 const SinglePreview: React.FC<{
   prevdata?: any;
   isOpen?: any;
@@ -107,10 +106,8 @@ const SinglePreview: React.FC<{
   const { colorMode, toggleColorMode } = useColorMode();
   const [showFullText, setShowFullText] = useState(false);
   const maxTextLength = 80;
-
   const find = show.find((it: any) => it.gasId === formData.gameBackgroundId);
   const img = find.gasAssetImage;
-
   const [option, setOption] = useState(null);
   const [item, setItem] = useState(null);
   const [data, setData] = useState(null);
@@ -203,9 +200,7 @@ const SinglePreview: React.FC<{
     return obj[key];
   }
   function findKeyByTex(obj: any, value: any) {
-    // console.log("obj", obj)
-    // console.log("value", value)
-    const dt = String(value?.type + value?.input);
+    const dt = String(value.type + value.input);
     return obj[dt];
   }
 

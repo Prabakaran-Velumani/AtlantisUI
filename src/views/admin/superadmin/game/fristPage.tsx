@@ -76,8 +76,7 @@ const Game: React.FC = () => {
     const result = await getImages(1);
     if (result?.status !== 'Success')
       return console.log('getbackruond error:' + result?.message);
-    setImg(result?.data);
-
+     setImg(result?.data);
   };
   const fetchCount = async () => {
 

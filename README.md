@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # [React Horizon PRO](https://appseed.us/product/horizon-ui-pro/full-stack/) `Full-Stack`
 
 Designed for those who like modern UI elements and beautiful websites, Horizon UI is ready to help you create stunning websites and webapps.
@@ -144,3 +145,7 @@ The API server will start using the `PORT` specified in `.env` file (default 500
 
 ---
 [React Horizon UI PRO](https://appseed.us/product/horizon-ui-pro/full-stack/) - Provided by Simmmple and **AppSeed [App Generator](https://appseed.us/generator)**.
+=======
+# Customizable Games for Learning: User Journey & Functionalities
+Creators will use this tool to design their own mini games for learning. We will provide them the graphics and they can easily customize the content as per their needs. Ease of use and intuitiveness of the tool are very important.
+>>>>>>> 14a1142849ba1a1b6d40f316e06caaab8c12a02e
