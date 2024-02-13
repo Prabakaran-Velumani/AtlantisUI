@@ -266,8 +266,9 @@ export const postMethodGameReview = (data) => {
     headers: {
       // Authorization: user?.token,
       'Content-Type': 'application/json',
-
-
+    }
+  }
+}
 export const putFormDataMethod = (data) => {
   let method = {
     method: 'PUT',
