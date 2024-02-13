@@ -25,8 +25,8 @@ import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import { useGLTF } from '@react-three/drei';
-import { Environment, OrbitControls } from '@react-three/drei';
+// import { useGLTF } from '@react-three/drei';
+// import { Environment, OrbitControls } from '@react-three/drei';
 // import { FBXLoader } from 'three/addons/loaders/FBXLoader';
 
 // Components
@@ -80,14 +80,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                   ></Button>
                   <Button
                     className="btns right-btn"
-                    //  onClick={() => useData?.Function?.handleNextTab()}
+                     onClick={() => setCurrentScreenId(13)}
                   ></Button>
                 </Box>
-                {/* <Canvas camera={{ position: [0, 5, 10] }} >  */}
-                <Canvas camera={{ position: [0, 1, 9] }}>
-                  {' '}
-                  {/* For Single view */}
-                  {/* <Environment preset={"park"} background />   */}
+                {/* <Canvas camera={{ position: [0, 1, 9] }}>
                   <directionalLight
                     position={[2.0, 78.0, 100]}
                     intensity={0.8}
@@ -97,9 +93,8 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                   <ambientLight intensity={0.5} />
                   <OrbitControls />
                   <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
-                  {/* COMPONENTS */}
                   <Model />
-                </Canvas>
+                </Canvas> */}
               </Box>
             </Box>
           </motion.div>

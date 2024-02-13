@@ -533,7 +533,6 @@ const GameCreation = () => {
     const result = await getImages(1);
     if (result?.status !== 'Success')
       return console.log('getbackruond error:' + result?.message);
-
     setImg(result?.data);
     const players = await getImages(2);
     if (players?.status !== 'Success')

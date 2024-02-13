@@ -1,6 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Box, Button, FormLabel, Icon, Img, Input, Text } from '@chakra-ui/react'
-import { MdClose } from 'react-icons/md'
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  Box,
+  Button,
+  FormLabel,
+  Icon,
+  Img,
+  Input,
+  Text,
+} from '@chakra-ui/react';
+import { MdClose } from 'react-icons/md';
 
 import { motion } from 'framer-motion';
 import { API_SERVER } from 'config/constant';
@@ -9,38 +17,73 @@ import ProfileCard from 'assets/img/games/profile-card.png';
 import FormField from 'assets/img/games/formfield.png';
 import NextBtn from 'assets/img/screens/next.png';
 import Selected from 'assets/img/games/selected.png';
+import { ValueContainer } from 'react-select/dist/declarations/src/components/containers';
 // import { DataContext } from '../components/gamePlayArea';
 
 interface ProfileScreenProps {
-    imageSrc:any;  
-    setCurrentScreenId?:any;
-    formData?: any;   
+  imageSrc: any;
+  setCurrentScreenId?: any;
+  formData?: any;
 }
 
-const ProfileScreen: React.FC<ProfileScreenProps> = ({imageSrc,setCurrentScreenId,formData}) => {    
-//   const useData = useContext(DataContext)
-        const [select,setSelect] = useState(false);
-        const [profileData,setProfileData] = useState();
-      useEffect(() =>{
-        const fetchData = async () => {
-          try {           
-            // const res = await useData?.Function?.handlePlayGames();
-            console.log('handlePlayGames success:');
-      
-            console.log('hello');
-          } catch (error) {
-            console.error('Error in handlePlayGames:', error);
-          }
-        };
-      
-        fetchData(); // Call the async function
-      },[]);      
+const ProfileScreen: React.FC<ProfileScreenProps> = ({
+  imageSrc,
+  setCurrentScreenId,
+  formData,
+}) => {
+  //   const useData = useContext(DataContext)
+  const [select, setSelect] = useState(false);
+  const [isGender, setIsGender] = useState(false);
+  const [profileData, setProfileData] = useState({
+    name: '',
+    gender: '',
+    language: '',
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // const res = await useData?.Function?.handlePlayGames();
+        console.log('handlePlayGames success:');
 
-const handleProfile = (e) =>{
-  const {name,value} = e.target
-  setProfileData((prev)=>({...prev,[name]:value}))
-}
-    //   console.log('statePayload', useData?.state);
+        console.log('hello');
+      } catch (error) {
+        console.error('Error in handlePlayGames:', error);
+      }
+    };
+
+    fetchData(); // Call the async function
+  }, []);
+
+  const handleProfile = (e: any, lang?: any) => {
+    const { id, value } = e.target;
+    setProfileData((prev) => ({ ...prev, [id]: id === 'name' ? value : lang }));
+  };
+  console.log(profileData.name);
+  const spokenLanguages = [
+    'English',
+    'Spanish',
+    'Mandarin Chinese',
+    'Hindi',
+    'French',
+    'Arabic',
+    'Bengali',
+    'Russian',
+    'Portuguese',
+    'Urdu',
+    'Indonesian',
+    'German',
+    'Japanese',
+    'Swahili',
+    'Turkish',
+    'Italian',
+    'Thai',
+    'Dutch',
+    'Korean',
+    'Vietnamese',
+  ];
+
+  const gender = ['Male', 'female'];
+  //   console.log('statePayload', useData?.state);
   return (
     <>
       <Box className="Play-game ProfileScreen">
@@ -66,15 +109,17 @@ const handleProfile = (e) =>{
                   <Box className="nick-name" mb={'20px'}>
                     <FormLabel>Nick Name</FormLabel>
                     <Img className="formfield" src={FormField} />
-                    <Input type={'text'} onChange={handleProfile} />
-                  </Box>
-                  <Box className="gender">
-                    <FormLabel>Gender</FormLabel>
-                    <Img className="formfield" src={FormField} />
-                    <Input type={'text'} />
+                    <Input
+                      type={'text'}
+                      id={'name'}
+                      onChange={(e: any) => handleProfile(e)}
+                    />
                   </Box>
                   <Box className="gender">
                     <FormLabel>Language</FormLabel>
+                    <Text transform={'translate(0px,25px)'} textAlign={'center'}  onClick={() => setSelect(!select)} position={'relative'} zIndex={9999999}>
+                      {profileData?.language}
+                    </Text>
                     <Img
                       className="formfield"
                       src={FormField}
@@ -83,23 +128,46 @@ const handleProfile = (e) =>{
                     <Img className="selectField" src={Selected} />
                     {select && (
                       <Box className="dropdown">
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                        <Text ml={'5px'} _hover={{bgColor:'#377498'}}>the ruby</Text>
-                       
+                        {spokenLanguages &&
+                          spokenLanguages.map((lang, num) => (
+                            <Text
+                              ml={'5px'}
+                              key={num}
+                              _hover={{ bgColor: '#377498' }}
+                              id={'language'}
+                              onClick={(e: any) => handleProfile(e, lang)}
+                            >
+                              {lang}
+                            </Text>
+                          ))}
+                      </Box>
+                    )}
+                  </Box>
+                  <Box className="gender">
+                    <FormLabel mt={'40px'}>Gender</FormLabel>
+                    <Text transform={'translate(0px,25px)'} textAlign={'center'}  onClick={() => setSelect(!isGender)} position={'relative'} zIndex={9999999}>
+                      {profileData?.gender}
+                    </Text>
+                    <Img
+                      className="formfield"
+                      src={FormField}
+                      onClick={() => setIsGender(!isGender)}
+                    />
+                    <Img className="selectField" src={Selected} />
+                    {isGender && (
+                      <Box className="dropdown">
+                        {gender &&
+                          gender.map((lang, num) => (
+                            <Text
+                              key={num}
+                              ml={'5px'}
+                              _hover={{ bgColor: '#377498' }}
+                              id={'gender'}
+                              onClick={(e: any) => handleProfile(e, lang)}
+                            >
+                              {lang}
+                            </Text>
+                          ))}
                       </Box>
                     )}
                   </Box>
@@ -108,7 +176,7 @@ const handleProfile = (e) =>{
               {/* <Box className='pinewood' onClick={()=>dispatch({ type: 'level_3'})}></Box> */}
               <Button
                 className="next-btn"
-                onClick={() => setCurrentScreenId(12)}
+                onClick={() => setCurrentScreenId(13)}
               >
                 <Img src={NextBtn} />
               </Button>
@@ -126,6 +194,6 @@ const handleProfile = (e) =>{
       </Box>
     </>
   );
-}
+};
 
-export default ProfileScreen
+export default ProfileScreen;
