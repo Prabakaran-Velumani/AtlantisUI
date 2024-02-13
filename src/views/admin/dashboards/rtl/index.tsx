@@ -4,7 +4,7 @@
  | |_| | | | | |_) || |  / / | | |  \| | | | | || | 
  |  _  | |_| |  _ < | | / /| |_| | |\  | | |_| || |
  |_| |_|\___/|_| \_\___/____\___/|_| \_|  \___/|___|
-																																																																																	   
+                                                                                                                                                                                                                                                                                                                                       
 =========================================================
 * Horizon UI - v1.1.0
 =========================================================
@@ -21,69 +21,26 @@
 */
 
 // Chakra imports
-import { Box, Icon, Select, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
+import { Avatar, Box, Flex, FormLabel, Icon, Select, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
 // Assets
+import Usa from 'assets/img/dashboards/usa.png';
 // Custom components
+import MiniCalendar from 'components/calendar/MiniCalendar';
 import MiniStatistics from 'components/card/MiniStatistics';
 import IconBox from 'components/icons/IconBox';
-import React, { useEffect, useState } from 'react';
-import { MdCreate, MdGamepad, MdMoreTime, MdOutlineRocketLaunch } from 'react-icons/md';
-import { noofCompany } from 'utils/dashboard/dashboardService';
+import React from 'react';
+import { MdAddTask, MdAttachMoney, MdBarChart, MdFileCopy } from 'react-icons/md';
 import CheckTable from 'views/admin/dashboards/rtl/components/CheckTable';
-import CreatorDailyTraffic from 'views/admin/dashboards/rtl/components/CreatorDailyTraffic';
+import ComplexTable from 'views/admin/dashboards/rtl/components/ComplexTable';
+import DailyTraffic from 'views/admin/dashboards/rtl/components/DailyTraffic'; 
 import PieCard from 'views/admin/dashboards/rtl/components/PieCard';
-import CreatorPieCard from 'views/admin/dashboards/rtl/components/CreatorPieCard';
-import LearnerTotalSpent from 'views/admin/dashboards/rtl/components/LearnerTotalSpent';
-import CreatorTotalSpent from 'views/admin/dashboards/rtl/components/CreatorTotalSpent';
+import Tasks from 'views/admin/dashboards/rtl/components/Tasks';
+import TotalSpent from 'views/admin/dashboards/rtl/components/TotalSpent';
 import WeeklyRevenue from 'views/admin/dashboards/rtl/components/WeeklyRevenue';
 import tableDataCheck from 'views/admin/dashboards/rtl/variables/tableDataCheck';
-import LearnerDailyTraffic from './components/LearnerDailyTraffic';
-import { GiClassicalKnowledge, GiProgression, GiSandsOfTime } from 'react-icons/gi';
-import { FaBuildingColumns } from 'react-icons/fa6';
-
-interface YourStateType {
-	totalCompany: any;
-	totalCreators: any;
-	creatorsMonthwise: any;
-	GameMonthwise: any;
-	totalLearners: any;
-	learnerMonthwise: any;
-	totalGame: any;
-
-}
+import tableDataComplex from 'views/admin/dashboards/rtl/variables/tableDataComplex';
 
 export default function UserReports() {
-	const [result, setResult] = useState<YourStateType>({
-		totalCompany: '',
-		totalCreators: '',
-		creatorsMonthwise: '',
-		GameMonthwise: '',
-		totalLearners: '',
-		learnerMonthwise: '',
-		totalGame: '',
-
-	});
-	useEffect(() => {
-		const fetchData = async () => {
-			const res = await noofCompany();
-			if (res?.status !== 'Success') return console.log('noOf useEffect Error :', res?.message);
-			setResult((prev: YourStateType) => {
-				return {
-					...prev,
-					totalCompany: res?.data?.companyCount,
-					totalCreators: res?.data?.CreatorCount,
-					creatorsMonthwise: res?.data?.newCreator,
-					totalLearners: res?.data?.LearnerCount,
-					learnerMonthwise: res?.data?.newLearner,
-					totalGame: res?.data?.GamesCount,
-					GameMonthwise: res?.data?.newGames,
-
-
-				}
-			});
-		}
-		fetchData();
-	}, []);
 	// Chakra Color Mode
 	const brandColor = useColorModeValue('brand.500', 'white');
 	const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
@@ -96,11 +53,11 @@ export default function UserReports() {
 							w='56px'
 							h='56px'
 							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={FaBuildingColumns} color={brandColor} />}
+							icon={<Icon w='32px' h='32px' as={MdBarChart} color={brandColor} />}
 						/>
 					}
-					name='Companies'
-					value={result.totalCompany}
+					name='Earnings'
+					value='$350.4'
 				/>
 				<MiniStatistics
 					startContent={
@@ -108,84 +65,39 @@ export default function UserReports() {
 							w='56px'
 							h='56px'
 							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={MdCreate} color={brandColor} />}
+							icon={<Icon w='32px' h='32px' as={MdAttachMoney} color={brandColor} />}
 						/>
 					}
-					name='Creators'
-					value={result.totalCreators}
+					name='Spend this month'
+					value='$642.39'
+				/>
+				<MiniStatistics growth='+23%' name='Sales' value='$574.34' />
+				<MiniStatistics
+					endContent={
+						<Flex me='-16px' mt='10px'>
+							<FormLabel htmlFor='balance'>
+								<Avatar src={Usa} />
+							</FormLabel>
+							<Select id='balance' variant='mini' mt='5px' me='0px' defaultValue='usd'>
+								<option value='usd'>USD</option>
+								<option value='eur'>EUR</option>
+								<option value='gba'>GBA</option>
+							</Select>
+						</Flex>
+					}
+					name='Your balance'
+					value='$1,000'
 				/>
 				<MiniStatistics
 					startContent={
 						<IconBox
 							w='56px'
 							h='56px'
-							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={MdCreate} color={brandColor} />}
+							bg='linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)'
+							icon={<Icon w='28px' h='28px' as={MdAddTask} color='white' />}
 						/>
 					}
-					name='Active Creators'
-					value={result.creatorsMonthwise}
-				/>
-				<MiniStatistics
-					startContent={
-						<IconBox
-							w='56px'
-							h='56px'
-							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={MdGamepad} color={brandColor} />}
-						/>
-					}
-					name='Games Created'
-					value={result.totalGame}
-				/>
-				<MiniStatistics
-					startContent={
-						<IconBox
-							w='56px'
-							h='56px'
-							// bg='linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)'
-							bg={boxBg}
-							icon={<Icon w='28px' h='28px' as={MdOutlineRocketLaunch} color={brandColor} />}
-						/>
-					}
-					name='Games Launched'
-					value={result.GameMonthwise}
-				/>
-				<MiniStatistics
-					startContent={
-						<IconBox
-							w='56px'
-							h='56px'
-							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={GiClassicalKnowledge} color={brandColor} />}
-						/>
-					}
-					name='Learners'
-					value={result.totalLearners}
-				/>
-				<MiniStatistics
-					startContent={
-						<IconBox
-							w='56px'
-							h='56px'
-							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={GiClassicalKnowledge} color={brandColor} />}
-						/>
-					}
-					name='Active Learners'
-					value={result.learnerMonthwise}
-				/>
-				<MiniStatistics
-					startContent={
-						<IconBox
-							w='56px'
-							h='56px'
-							// bg='linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)'
-							bg={boxBg}
-							icon={<Icon w='28px' h='28px' as={MdMoreTime} color={brandColor} />}
-						/>
-					}
-					name='Time Spent Creating'
+					name='New Tasks'
 					value='154'
 				/>
 				<MiniStatistics
@@ -194,77 +106,32 @@ export default function UserReports() {
 							w='56px'
 							h='56px'
 							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={GiSandsOfTime} color={brandColor} />}
+							icon={<Icon w='32px' h='32px' as={MdFileCopy} color={brandColor} />}
 						/>
 					}
-					name='Time Spent Learning'
+					name='Total Projects'
 					value='2935'
 				/>
-				{/**Afrith-modified-09-JAN-24**/}
-				<MiniStatistics
-					startContent={
-						<IconBox
-							w='56px'
-							h='56px'
-							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={GiClassicalKnowledge} color={brandColor} />}
-						/>
-					}
-					name='Total Learners accessed'
-					value={result.creatorsMonthwise}
-				/>
-				<MiniStatistics
-					startContent={
-						<IconBox
-							w='56px'
-							h='56px'
-							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={GiProgression} color={brandColor} />}
-						/>
-					}
-					name='Progress of Learners'
-					value={result.creatorsMonthwise}
-				/>
-				<MiniStatistics
-					startContent={
-						<IconBox
-							w='56px'
-							h='56px'
-							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={GiClassicalKnowledge} color={brandColor} />}
-						/>
-					}
-					name='Scores of Learners'
-					value={result.creatorsMonthwise}
-				/>
-				{/*****************************/}
 			</SimpleGrid>
 
-			<SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
-				<CreatorTotalSpent />
-				<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px'>
-					<CreatorDailyTraffic />
-					<CreatorPieCard />
-				</SimpleGrid>
-			</SimpleGrid>
 			<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px' mb='20px'>
+				<TotalSpent />
 				<WeeklyRevenue />
-				<CheckTable tableData={tableDataCheck} />
 			</SimpleGrid>
 			<SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
-				<LearnerTotalSpent />
+				<CheckTable tableData={tableDataCheck} />
 				<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px'>
-					<LearnerDailyTraffic />
+					<DailyTraffic />
 					<PieCard />
 				</SimpleGrid>
 			</SimpleGrid>
-			{/* <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
+			<SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
 				<ComplexTable tableData={tableDataComplex} />
 				<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px'>
 					<Tasks />
 					<MiniCalendar h='100%' minW='100%' selectRange={false} />
 				</SimpleGrid>
-			</SimpleGrid> */}
+			</SimpleGrid>
 		</Box>
 	);
 }

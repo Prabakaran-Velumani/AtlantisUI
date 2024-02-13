@@ -18,11 +18,9 @@ const Toast = (props: {msg:any, status:any, setAlert?:any, position?:any}) => {
               position: position        
           });        
         
-          if (typeof setAlert === 'function') {
-            setTimeout(() => {
-              setAlert(false);
-            }, 300);
-          }      
+        setTimeout(()=>{          
+          setAlert(false);          
+        },300)        
     },[msg, status, toast])
            
 

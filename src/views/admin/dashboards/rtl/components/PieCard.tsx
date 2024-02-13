@@ -7,105 +7,32 @@ import {
   useColorModeValue,
   useTheme,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // Custom components
 import Card from 'components/card/Card';
 import PieChart from 'components/charts/PieChart';
-import { noOfLeaners } from 'utils/dashboard/dashboardService';
+import { pieChartData, pieChartOptions } from 'variables/charts';
 import { VSeparator } from 'components/separator/Separator';
-
 
 export default function Conversion(props: { [x: string]: any }) {
   const { ...rest } = props;
   const theme = useTheme();
+  //eslint-disable-next-line
+  const [chartColor, setChartColor] = useState(theme.colors.brand[500]);
+
+  const newOptions = {
+    ...pieChartOptions,
+    colors: [chartColor, '#6AD2FF', '#EFF4FB'],
+    fill: { colors: [chartColor, '#6AD2FF', '#EFF4FB'] },
+  };
+
+  // Chakra Color Mode
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const cardColor = useColorModeValue('white', 'navy.700');
   const cardShadow = useColorModeValue(
     '0px 18px 40px rgba(112, 144, 176, 0.12)',
     'unset',
   );
-  const [piechartData, setpieChartData] = useState([]);
- /*********Filter Creator Data********************** */
-
- const [selectedValue, setSelectedValue] = useState('');
- const handleSelectChange = (event: any) => {
-   const value = event.target.value;
-   setSelectedValue(value);
- };
-
- /***********End Filter component************************* */
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await noOfLeaners();
-      console.log('nooflearners',res);
-      if (res?.status !== 'Success') return console.log('noOf useEffect Error :', res?.message);
-      let combinedLearnerData;
-      if (selectedValue!=='') {
-        if (selectedValue === 'daily') {
-          const todayLearnerCount = res?.data?.todayLearnerCount || 0;
-          const todayActiveLearnerCount = res?.data?.todayActiveLearnerCount|| 0;
-          combinedLearnerData = [todayLearnerCount, todayActiveLearnerCount];
-        }
-        if (selectedValue === 'monthly') {
-          const monthLearnerCount = res?.data?.monthLearnerCount || 0;
-          const monthActiveLearnerCount = res?.data?.monthActiveLearnerCount || 0;
-          combinedLearnerData = [monthLearnerCount, monthActiveLearnerCount];
-        }
-        if (selectedValue === 'yearly') {
-          const yearLearnerCount = res?.data?.yearLearnerCount || 0;
-          const yearActiveLearnerCount = res?.data?.yearActiveLearnerCount || 0;
-          combinedLearnerData = [yearLearnerCount, yearActiveLearnerCount];
-        }
-      }
-      else{
-        const totalLearnerCount = res?.data?.totalLearnerCount || 0;
-        const Activelearnercount = res?.data?.Activelearnercount || 0;
-        combinedLearnerData = [totalLearnerCount, Activelearnercount];
-      }
-      setpieChartData(combinedLearnerData);
-    }
-    fetchData();
-  }, [selectedValue]);
-  const pieChart = piechartData;
-  const pieChartOptions = {
-    labels: ['Total Learners', 'Total Active Learners'],
-    colors: ['#4318FF', '#6AD2FF'],
-    chart: {
-      width: '50px'
-    },
-    states: {
-      hover: {
-        filter: {
-          type: 'none'
-        }
-      }
-    },
-    legend: {
-      show: false
-    },
-    dataLabels: {
-      enabled: false
-    },
-    // hover: { mode: null },
-    plotOptions: {
-      donut: {
-        expandOnClick: false,
-        donut: {
-          labels: {
-            show: false
-          }
-        }
-      }
-    },
-    fill: {
-      colors: ['#4318FF', '#6AD2FF']
-    },
-    tooltip: {
-      enabled: true,
-      theme: 'dark'
-    }
-  };
   return (
     <Card
       p="20px"
@@ -122,16 +49,14 @@ export default function Conversion(props: { [x: string]: any }) {
         mb="8px"
       >
         <Text color={textColor} fontSize="md" fontWeight="600" mt="4px">
-          Learners
+          Your Pie Chart
         </Text>
         <Select
           fontSize="sm"
           variant="subtle"
+          defaultValue="monthly"
           width="unset"
           fontWeight="700"
-          id='filterData'
-          onChange={handleSelectChange}
-          placeholder='Total'
         >
           <option value="daily">Daily</option>
           <option value="monthly">Monthly</option>
@@ -142,8 +67,8 @@ export default function Conversion(props: { [x: string]: any }) {
       <PieChart
         h="100%"
         w="100%"
-        chartData={pieChart}
-        chartOptions={pieChartOptions}
+        chartData={pieChartData}
+        chartOptions={newOptions}
       />
       <Card
         bg={cardColor}
@@ -164,11 +89,11 @@ export default function Conversion(props: { [x: string]: any }) {
               fontWeight="700"
               mb="5px"
             >
-              Learners
+              Your files
             </Text>
           </Flex>
           <Text fontSize="lg" color={textColor} fontWeight="700">
-            {pieChart[0]}%
+            63%
           </Text>
         </Flex>
         <VSeparator mx={{ base: '60px', xl: '60px', '2xl': '60px' }} />
@@ -181,11 +106,11 @@ export default function Conversion(props: { [x: string]: any }) {
               fontWeight="700"
               mb="5px"
             >
-              Active Learners
+              System
             </Text>
           </Flex>
           <Text fontSize="lg" color={textColor} fontWeight="700">
-            {pieChart[1]}%
+            25%
           </Text>
         </Flex>
       </Card>

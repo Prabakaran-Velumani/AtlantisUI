@@ -3,59 +3,6 @@ export const urls = {
   adminLogin: '/admin/login',
   /********************dashboard************************* */
   noofCompany: '/dashboard/noofcompany',
-  noOfGames: '/dashboard/noOfGames',
-  noOfLeaners: '/dashboard/noOfLeaners',
-  noOfCreators:'/dashboard/noOfCreators',
-  addgameassetbackground: '/gameassets/background/add',
-  updategameassetbackground: '/gameassets/background/update',
-  getgamebackgroundasset: '/gameassets/background/getAll',
-  getgameassetimage: '/gameassets/getassets',
-  deletegameassetbackground: '/gameassets/background/delete',
-
-  addgameassetwelcome: '/gameassets/welcome/add',
-  getgameWelcomeasset: '/gameassets/welcome/getAll',
-  updategameassetwelcome: '/gameassets/welcome/update',
-  deletegameassetwelcome: '/gameassets/welcome/delete',
-
-
-  addgameassetthankyou: '/gameassets/thankyou/add',
-  getgamethankyouasset: '/gameassets/thankyou/getAll',
-  updategameassetthankyou: '/gameassets/thankyou/update',
-  deletegameassetthankyou: '/gameassets/thankyou/delete',
-
-
-  addgameassetbadge: '/gameassets/badge/add',
-  getgamebadgeasset: '/gameassets/badge/getAll',
-  updategameassetbadge: '/gameassets/badge/update',
-  deletegameassetbadge: '/gameassets/badge/delete',
-
-  addgameassetreflection: '/gameassets/reflection/add',
-  getgamereflectionasset: '/gameassets/reflection/getAll',
-  updategameassetreflection: '/gameassets/reflection/update',
-  deletegameassetreflection: '/gameassets/reflection/delete',
-
-  addgameassetcompletion: '/gameassets/completion/add',
-  getgamecompletionasset: '/gameassets/completion/getAll',
-  updategameassetcompletion: '/gameassets/completion/update',
-  deletegameassetcompletion: '/gameassets/completion/delete',
-
-  addgameassetleaderboard: '/gameassets/leaderboard/add',
-  getgameleaderboardasset: '/gameassets/leaderboard/getAll',
-  updategameassetleaderboard: '/gameassets/leaderboard/update',
-  deletegameassetleaderboard: '/gameassets/leaderboard/delete',
-
-
-  addgameassettakeaway: '/gameassets/takeaway/add',
-  getgametakeawayasset: '/gameassets/takeaway/getAll',
-  updategameassettakeaway: '/gameassets/takeaway/update',
-  deletegameassettakeaway: '/gameassets/takeaway/delete',
-  
-
-
-  addgameassetaudio:'/gameassets/audios/add',
-  getaddgameaudio :'/gameassets/audios/getAll',
-  deleteaddgameassetaudio :'/gameassets/audios/delete',
-  updategameassetaudio:'/gameassets/audios/update',
   /*********companies***************** */
   createCopmany: '/companies/create',
   getCompany: '/companies/getCompany/',
@@ -76,7 +23,7 @@ export const urls = {
   updatePassword: '/creator/updatepassword/',
   emailchecker: '/creator/emailvalidator',
   createstatus: '/creator/updatestatus/',
-  changePassword: '/creator/changepassword/',
+  changePassword: '/creator/changepassword/', 
 /*****************plan************************* */
   updateplan: '/plan/updateplan/',
   createplan: '/plan/createplan',
@@ -123,9 +70,7 @@ export const urls = {
   removeCategory: '/category/removeCategory/',
   getCategory: '/category/getCategory/',
   getCategoryList: '/category/getCategoryList',
-// vb 03.01.2024
-  categorystatus: '/category/updateStatus/',
-// vb 03.01.2024
+
   /*****************animation********************************** */
   getImages: '/animation/getBackground/',
   getPlayer: '/animation/getPlayer',
@@ -170,17 +115,27 @@ export const urls = {
   defaultcat:'/game/defaultcat/',
   defaultskill:'/game/defaultskill/', 
   createReflection:'/question/createreflection',
-  storyInsterting :'/game/stroy/',
+  getReflection:'/question/getReflection/',
+  storyInsterting :'/game/stroy/', 
   getStory:'/game/getstroy/',
+  gameBlocks:'/game/getBlocks/',
   listStory:'/game/liststroy/',
+  gettemplategames:'/game/gettemplategame/',
+  gameviewhistory:"/game/viewhistory/",
+  opentemplate:'/game/opentemplate/', 
+  sentFeedMails:'/game/feedback',
+  deletequest:'/game/deletequest/',
+  completionscreen:'/game/completionscreen/',
+  getTotalMinofWords:'/game/getTotalMinofWords/',
+  Compliupdate:'/game/Compliupdate/',
     /****************************upload Badge ********************************/
   uploadBadge:'/game/uploadbadge/',
   uploadAudio:'/game/uploadaudio/',
   getBadge:'/game/getbadge/',
+  getpreview:'/game/preview/',
   getAudio:'/game/getaudio/',
   entireQuestion:'/game/duplicate/question/',
   creatorBlocks:'/game/creator/blocks/',
-
   getStoryValidtion:'/game/getStoryValidtion/',
 
   languages:'/languages/getlanguages',
@@ -194,9 +149,8 @@ export const urls = {
    getGameDemoData : '/game/tryout/',
    addGameReview : "/gamereview/addblockreview",
    testAudios: '/game/audioTest',
-
 };
-  
+
 const person = localStorage.getItem('user');
 const user = JSON.parse(person);
 export const getMethod = {
@@ -243,7 +197,6 @@ export const putMethod = (data) => {
   };
   return method;
 };
-
 export const postMethodVoice = (data) => {
   let method = {
     method: 'POST',
@@ -266,22 +219,11 @@ export const postMethodGameReview = (data) => {
     headers: {
       // Authorization: user?.token,
       'Content-Type': 'application/json',
-    }
-  }
-}
-export const putFormDataMethod = (data) => {
-  let method = {
-    method: 'PUT',
-    mode: 'cors',
-    headers: {
-      Authorization: user?.token,
-      // 'Content-Type': 'application/json'
     },
     body: data,
   };
   return method;
 };
-
 
 export const getMethodGameReview = {
   method: 'GET',
@@ -290,4 +232,3 @@ export const getMethodGameReview = {
     'Content-Type': 'application/json',
   },
 };
-

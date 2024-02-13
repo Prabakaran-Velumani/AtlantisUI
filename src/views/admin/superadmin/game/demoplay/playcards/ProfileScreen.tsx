@@ -117,13 +117,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
                   </Box>
                   <Box className="gender">
                     <FormLabel>Language</FormLabel>
-                    <Text
-                      transform={'translate(0px,25px)'}
-                      textAlign={'center'}
-                      onClick={() => setSelect(!select)}
-                      position={'relative'}
-                      zIndex={9999999}
-                    >
+                    <Text transform={'translate(0px,25px)'} textAlign={'center'}  onClick={() => setSelect(!select)} position={'relative'} zIndex={9999999}>
                       {profileData?.language}
                     </Text>
                     <Img
@@ -151,13 +145,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
                   </Box>
                   <Box className="gender">
                     <FormLabel mt={'40px'}>Gender</FormLabel>
-                    <Text
-                      transform={'translate(0px,25px)'}
-                      textAlign={'center'}
-                      onClick={() => setSelect(!isGender)}
-                      position={'relative'}
-                      zIndex={9999999}
-                    >
+                    <Text transform={'translate(0px,25px)'} textAlign={'center'}  onClick={() => setSelect(!isGender)} position={'relative'} zIndex={9999999}>
                       {profileData?.gender}
                     </Text>
                     <Img
@@ -188,7 +176,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
               {/* <Box className='pinewood' onClick={()=>dispatch({ type: 'level_3'})}></Box> */}
               <Button
                 className="next-btn"
-                onClick={() => setCurrentScreenId(12)}
+                onClick={() => setCurrentScreenId(13)}
               >
                 <Img src={NextBtn} />
               </Button>
