@@ -25,6 +25,8 @@ import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import SelectButton from 'assets/img/games/selectbtn.png';
+
 // import { useGLTF } from '@react-three/drei';
 // import { Environment, OrbitControls } from '@react-three/drei';
 // import { FBXLoader } from 'three/addons/loaders/FBXLoader';
@@ -54,10 +56,11 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
+  const [playerName,setPlayerName] = useState('')
   const handleClick = () => {
     console.log('Click"s');
   };
-
+console.log(playerName);
   return (
     <>
       <Box className="Play-game CharacterScreen">
@@ -74,6 +77,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 <Input
                   className="enter-name"
                   placeholder="Enter Character Name"
+                  onChange={(e:any)=>setPlayerName(e.target.value)}
                 />
                 <Box className="back-n-next-box">
                   <Button
@@ -95,6 +99,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     transform={'translate(0px, 34px)'}
                   />
                 )}
+
                 {/* <Canvas camera={{ position: [0, 1, 9] }}>
                   <directionalLight
                     position={[2.0, 78.0, 100]}
