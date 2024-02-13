@@ -19,7 +19,6 @@ import NextBtn from 'assets/img/screens/next.png';
 import Selected from 'assets/img/games/selected.png';
 import { ValueContainer } from 'react-select/dist/declarations/src/components/containers';
 // import { DataContext } from '../components/gamePlayArea';
-
 interface ProfileScreenProps {
   imageSrc: any;
   setCurrentScreenId?: any;
