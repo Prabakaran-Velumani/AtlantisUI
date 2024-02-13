@@ -50,8 +50,9 @@ const ChapterPage: React.FC<{ imageSrc: any; demoBlocks: any,setCurrentScreenId:
                     <Box
                       className="queue-box"
                       // onClick={() => useData?.Function?.handleNextTab()}
+                      onClick={()=>setCurrentScreenId(2)}
                     >
-                      <Img className="queue-screen" src={QueueScreen} onClick={()=>setCurrentScreenId(2)}/>
+                      <Img className="queue-screen" src={QueueScreen} />
                       <Text className="heading">Tritara Bridge</Text>
                       <Box className="badge">
                         {it !== '1' ? (

@@ -111,7 +111,6 @@ const GamePreview = () => {
       reviews,
       ReviewingCreator,
     } = info?.result?.lmsgamereviewer;
-
     const { gameview, image, lmsblocks, lmsquestionsoptions, ...gameData } =
       info?.result?.lmsgame;
     const sortBlockSequence = (blockArray: []) => {
@@ -147,6 +146,7 @@ const GamePreview = () => {
       blocks: sortBlockSequence(lmsblocks),
       questOptions: lmsquestionsoptions,
       reflectionQuestions: info?.resultReflection,
+      gamePlayers: info?.playerCharectorsUrl,
     });
   };
   

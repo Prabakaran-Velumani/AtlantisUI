@@ -1184,6 +1184,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return (
                 <>
                   <Characterspage
+                    players={gameInfo?.gamePlayers}
                     imageSrc={backgroundScreenUrl}
                     setCurrentScreenId={setCurrentScreenId}
                   />

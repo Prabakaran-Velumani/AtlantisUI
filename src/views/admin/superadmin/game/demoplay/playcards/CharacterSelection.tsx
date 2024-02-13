@@ -41,6 +41,7 @@ interface PlayGamesProps {
   setDatas?: any;
   imageSrc?: any;
   setCurrentScreenId?: any;
+  players?: any;
 }
 
 const Characterspage: React.FC<PlayGamesProps> = ({
@@ -49,9 +50,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   setDatas,
   imageSrc,
   setCurrentScreenId,
+  players,
 }) => {
   //   const useData = useContext(DataContext)
-
+  const [i, setI] = useState(0);
   const handleClick = () => {
     console.log('Click"s');
   };
@@ -76,13 +78,23 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 <Box className="back-n-next-box">
                   <Button
                     className="btns left-btn"
-                    onClick={handleClick}
+                    onClick={() => setI(i === 0 ? i : i - 1)}
                   ></Button>
                   <Button
                     className="btns right-btn"
-                     onClick={() => setCurrentScreenId(13)}
+                    onClick={() => setI(players.length - 1 === i ? i : i + 1)}
                   ></Button>
                 </Box>
+                {players[i] && (
+                  <Img
+                    src={`${API_SERVER}/${players[i]}`}
+                    position={'relative'}
+                    zIndex={9999999}
+                    w={'156px'}
+                    h={'324px'}
+                    transform={'translate(0px, 34px)'}
+                  />
+                )}
                 {/* <Canvas camera={{ position: [0, 1, 9] }}>
                   <directionalLight
                     position={[2.0, 78.0, 100]}

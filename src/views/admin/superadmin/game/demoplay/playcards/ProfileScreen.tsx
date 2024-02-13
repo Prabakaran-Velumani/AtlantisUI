@@ -31,7 +31,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
   setCurrentScreenId,
   formData,
 }) => {
-  //   const useData = useContext(DataContext)
+
   const [select, setSelect] = useState(false);
   const [isGender, setIsGender] = useState(false);
   const [profileData, setProfileData] = useState({
@@ -42,7 +42,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const res = await useData?.Function?.handlePlayGames();
         console.log('handlePlayGames success:');
 
         console.log('hello');
@@ -50,15 +49,13 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
         console.error('Error in handlePlayGames:', error);
       }
     };
-
-    fetchData(); // Call the async function
+    fetchData(); 
   }, []);
 
   const handleProfile = (e: any, lang?: any) => {
     const { id, value } = e.target;
     setProfileData((prev) => ({ ...prev, [id]: id === 'name' ? value : lang }));
   };
-  console.log(profileData.name);
   const spokenLanguages = [
     'English',
     'Spanish',
@@ -83,7 +80,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
   ];
 
   const gender = ['Male', 'female'];
-  //   console.log('statePayload', useData?.state);
+
   return (
     <>
       <Box className="Play-game ProfileScreen">
@@ -176,7 +173,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
               {/* <Box className='pinewood' onClick={()=>dispatch({ type: 'level_3'})}></Box> */}
               <Button
                 className="next-btn"
-                onClick={() => setCurrentScreenId(13)}
+                onClick={() => setCurrentScreenId(12)}
               >
                 <Img src={NextBtn} />
               </Button>
