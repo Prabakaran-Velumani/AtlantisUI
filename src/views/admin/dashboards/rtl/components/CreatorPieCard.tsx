@@ -11,11 +11,11 @@ import { useEffect, useState } from 'react';
 // Custom components
 import Card from 'components/card/Card';
 import PieChart from 'components/charts/PieChart';
-import { noOfLeaners } from 'utils/dashboard/dashboardService';
+import { noOfCreators } from 'utils/dashboard/dashboardService';
 import { VSeparator } from 'components/separator/Separator';
 
 
-export default function Conversion(props: { [x: string]: any }) {
+export default function Conversion1(props: { [x: string]: any }) {
   const { ...rest } = props;
   const theme = useTheme();
   const textColor = useColorModeValue('secondaryGray.900', 'white');
@@ -24,52 +24,55 @@ export default function Conversion(props: { [x: string]: any }) {
     '0px 18px 40px rgba(112, 144, 176, 0.12)',
     'unset',
   );
-  const [piechartData, setpieChartData] = useState([]);
- /*********Filter Creator Data********************** */
+  const [creatorpiechartData, setcreatorpieChartData] = useState([]);
 
- const [selectedValue, setSelectedValue] = useState('');
- const handleSelectChange = (event: any) => {
-   const value = event.target.value;
-   setSelectedValue(value);
- };
+  /*********Filter Creator Data********************** */
 
- /***********End Filter component************************* */
+  const [selectedValue, setSelectedValue] = useState('');
+  const handleSelectChange = (event: any) => {
+    const value = event.target.value;
+    setSelectedValue(value);
+  };
 
+  /***********End Filter component************************* */
   useEffect(() => {
     const fetchData = async () => {
-      const res = await noOfLeaners();
-      console.log('nooflearners',res);
+      const res = await noOfCreators();
       if (res?.status !== 'Success') return console.log('noOf useEffect Error :', res?.message);
-      let combinedLearnerData;
+      let combinedCreatorData;
       if (selectedValue!=='') {
         if (selectedValue === 'daily') {
-          const todayLearnerCount = res?.data?.todayLearnerCount || 0;
-          const todayActiveLearnerCount = res?.data?.todayActiveLearnerCount|| 0;
-          combinedLearnerData = [todayLearnerCount, todayActiveLearnerCount];
+          const todayCreatorCount = res?.data?.todayCreatorCount || 0;
+          const todayActiveCreatorCount = res?.data?.todayActiveCreatorCount|| 0;
+           combinedCreatorData = [todayCreatorCount, todayActiveCreatorCount];
         }
         if (selectedValue === 'monthly') {
-          const monthLearnerCount = res?.data?.monthLearnerCount || 0;
-          const monthActiveLearnerCount = res?.data?.monthActiveLearnerCount || 0;
-          combinedLearnerData = [monthLearnerCount, monthActiveLearnerCount];
+          const monthCreatorCount = res?.data?.monthCreatorCount || 0;
+          const monthActiveCreatorCount = res?.data?.monthActiveCreatorCount || 0;
+           combinedCreatorData = [monthCreatorCount, monthActiveCreatorCount];
         }
         if (selectedValue === 'yearly') {
-          const yearLearnerCount = res?.data?.yearLearnerCount || 0;
-          const yearActiveLearnerCount = res?.data?.yearActiveLearnerCount || 0;
-          combinedLearnerData = [yearLearnerCount, yearActiveLearnerCount];
+          const yearCreatorCount = res?.data?.yearCreatorCount || 0;
+          const yearActiveCreatorCount = res?.data?.yearActiveCreatorCount || 0;
+           combinedCreatorData = [yearCreatorCount, yearActiveCreatorCount];
         }
       }
       else{
-        const totalLearnerCount = res?.data?.totalLearnerCount || 0;
-        const Activelearnercount = res?.data?.Activelearnercount || 0;
-        combinedLearnerData = [totalLearnerCount, Activelearnercount];
+        const totalCreatorCount = res?.data?.totalCreatorCount || 0;
+        const ActiveCreatorCount = res?.data?.ActiveCreatorCount || 0;
+        combinedCreatorData = [totalCreatorCount, ActiveCreatorCount];
       }
-      setpieChartData(combinedLearnerData);
+      
+      //ActiveCreatorCount
+      setcreatorpieChartData(combinedCreatorData);
     }
     fetchData();
   }, [selectedValue]);
-  const pieChart = piechartData;
+
+
+  const pieChart = creatorpiechartData;
   const pieChartOptions = {
-    labels: ['Total Learners', 'Total Active Learners'],
+    labels: ['Total Creators', 'Total Active Creators'],
     colors: ['#4318FF', '#6AD2FF'],
     chart: {
       width: '50px'
@@ -106,6 +109,7 @@ export default function Conversion(props: { [x: string]: any }) {
       theme: 'dark'
     }
   };
+
   return (
     <Card
       p="20px"
@@ -122,7 +126,7 @@ export default function Conversion(props: { [x: string]: any }) {
         mb="8px"
       >
         <Text color={textColor} fontSize="md" fontWeight="600" mt="4px">
-          Learners
+          Creators
         </Text>
         <Select
           fontSize="sm"
@@ -164,7 +168,7 @@ export default function Conversion(props: { [x: string]: any }) {
               fontWeight="700"
               mb="5px"
             >
-              Learners
+              Creators
             </Text>
           </Flex>
           <Text fontSize="lg" color={textColor} fontWeight="700">
@@ -181,7 +185,7 @@ export default function Conversion(props: { [x: string]: any }) {
               fontWeight="700"
               mb="5px"
             >
-              Active Learners
+              Active Creators
             </Text>
           </Flex>
           <Text fontSize="lg" color={textColor} fontWeight="700">
