@@ -15,108 +15,124 @@ import {
 // Custom components
 import Card from 'components/card/Card';
 import Menu from 'components/menu/MainMenu';
+import { useEffect, useState } from 'react';
+
+import { noofCompany } from 'utils/dashboard/dashboardService';
+
+
+interface YourStateType {
+	
+	totalGame: any;
+	GameMonthwise: any;
+	// getGameList:{
+	//   gameTitle:any,
+	//   gameTotalScore:any,
+	// }[],
+	getGameList:any,
+
+  }
 
 type RowObj = {
-	name: [string, boolean];
+	name: string;
 	progress: string;
-	quantity: number;
+	score: number;
 	date: string;
-	info: boolean;
 };
  
 const columnHelper = createColumnHelper<RowObj>();
 
-// const columns = columnsDataCheck;
 export default function CheckTable(props: { tableData: any }) {
 	const { tableData } = props;
-	const [ sorting, setSorting ] = React.useState<SortingState>([]);
+	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const textColor = useColorModeValue('secondaryGray.900', 'white');
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
-	let defaultData= tableData;
+	let defaultData = tableData;
+  
+	const [result, setResult] = useState<YourStateType>({
+	  totalGame: 90,
+	  GameMonthwise: 10,
+	  getGameList: [],
+	});
+  
+	useEffect(() => {
+	  const fetchData = async () => {
+		const res = await noofCompany();
+		if (res?.status !== 'Success') return console.log('noOf useEffect Error :', res?.message);
+		setResult((prev: YourStateType) => {
+		  return {
+			...prev,
+			totalGame: res?.data?.GamesCount,
+			GameMonthwise: res?.data?.newGames,
+			getGameList: res?.data?.getGameList,
+		  };
+		});
+	  };
+	  fetchData();
+	}, []);
+  
+	console.log('tableResult--', result);
+  
 	const columns = [
 		columnHelper.accessor('name', {
-			id: 'name',
-			header: () => (
-				<Text
-					justifyContent='space-between'
-					align='center'
-					fontSize={{ sm: '10px', lg: '12px' }}
-					color='gray.400'>
-					NAME
-				</Text>
-			),
-			cell: (info: any) => (
-				<Flex align='center'>
-					<Checkbox defaultChecked={info.getValue()[1]} colorScheme='brandScheme' me='10px' />
-					<Text color={textColor} fontSize='sm' fontWeight='700'>
-						{info.getValue()[0]}
-					</Text>
-				</Flex>
-			)
+		  // ... (previous configuration)
+		  cell: (cell) => (
+			<Flex align='center'>
+			  <Text color={textColor} fontSize='sm' fontWeight='700'>
+				{result.getGameList[cell.row.index]?.gameTitle}
+			  </Text>
+			</Flex>
+		  ),
 		}),
 		columnHelper.accessor('progress', {
-			id: 'progress',
-			header: () => (
-				<Text
-					justifyContent='space-between'
-					align='center'
-					fontSize={{ sm: '10px', lg: '12px' }}
-					color='gray.400'>
-					PROGRESS
-				</Text>
-			),
-			cell: (info) => (
+		  // ... (previous configuration)
+		  cell: (cell) => {
+			const totalScore = 1000;
+			const gameTotalScore = result.getGameList[cell.row.index]?.gameTotalScore;
+	
+			if (totalScore && gameTotalScore !== null) {
+			  const percentage = (gameTotalScore / totalScore) * 100;
+			  return (
 				<Text color={textColor} fontSize='sm' fontWeight='700'>
-					{info.getValue()}
+				  {percentage}%
 				</Text>
-			)
+			  );
+			} else {
+			  return (
+				<Text color={textColor} fontSize='sm' fontWeight='700'>
+				  N/A
+				</Text>
+			  );
+			}
+		},
 		}),
-		columnHelper.accessor('quantity', {
-			id: 'quantity',
-			header: () => (
-				<Text
-					justifyContent='space-between'
-					align='center'
-					fontSize={{ sm: '10px', lg: '12px' }}
-					color='gray.400'>
-					QUANTITY
-				</Text>
-			),
-			cell: (info) => (
-				<Text color={textColor} fontSize='sm' fontWeight='700'>
-					{info.getValue()}
-				</Text>
-			)
+		columnHelper.accessor('score', {
+		  // ... (previous configuration)
+		  cell: (cell) => (
+			<Text color={textColor} fontSize='sm' fontWeight='700'>
+			  {result.getGameList[cell.row.index]?.gameTotalScore}
+			</Text>
+		  ),
 		}),
 		columnHelper.accessor('date', {
-			id: 'date',
-			header: () => (
-				<Text
-					justifyContent='space-between'
-					align='center'
-					fontSize={{ sm: '10px', lg: '12px' }}
-					color='gray.400'>
-					DATE
-				</Text>
-			),
-			cell: (info) => (
-				<Text color={textColor} fontSize='sm' fontWeight='700'>
-					{info.getValue()}
-				</Text>
-			)
-		})
-	];
-	const [ data, setData ] = React.useState(() => [ ...defaultData ]);
+		  // ... (previous configuration)
+		  cell: (cell) => (
+			<Text color={textColor} fontSize='sm' fontWeight='700'>
+			  {result.getGameList[cell.row.index]?.createdAt}
+			</Text>
+		  ),
+		}),
+	  ];
+	const [data, setData] = React.useState(() => [...defaultData]);
 	const table = useReactTable({
-		data,
-		columns,
-		state: {
-			sorting
-		},
-		onSortingChange: setSorting,
-		getCoreRowModel: getCoreRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-		debugTable: true
+	  data,
+	  columns,
+	  state: {
+		sorting,
+	  },
+	  onSortingChange: setSorting,
+	  getCoreRowModel: getCoreRowModel(),
+	  getSortedRowModel: getSortedRowModel(),
+	  debugTable: true,
 	});
 	return (
 		<Card flexDirection='column' w='100%' px='0px' overflowX={{ sm: 'scroll', lg: 'hidden' }}>
