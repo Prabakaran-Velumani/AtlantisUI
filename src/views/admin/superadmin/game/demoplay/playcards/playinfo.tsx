@@ -96,12 +96,11 @@ export default function PlayInfo(props: {
             //   color={'none'}
           >
             <Box>
-              <Text mt={'20px'} fontSize={'25px'} fontWeight={700} mb={'10px'} >Welcome</Text>
+              <Text mt={'20px'} fontSize={'25px'} fontWeight={700} mb={'10px'} >Welcome To Atlantis..!</Text>
               <Box ml={'20px'} color={textColor} fontSize={'sm'}>
-                Reviewer Please Review The Game And you Can Add FeedBack For The
-                Every Screens Just Click the Right Side Bottom Corner Option and
-                You Can Select The Screen To Add FeedBack
+              Reviewers, kindly assess the game thoroughly. Provide feedback for each screen by clicking the option in the bottom right corner. Select the screen and add your comments. Your input is invaluable.<br/> <span style={{textAlign: 'center'}}>Thank you.</span>
               </Box>
+              
               {/* <Text mt={'20px'} mb={'10px'} fontSize={'25px'} fontWeight={700}>Thank You...!</Text> */}
             <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
               <Button

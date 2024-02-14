@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Box, Button, Icon, Img, Input, position } from '@chakra-ui/react';
+import { Box, Button, Icon, Img, Input, position, Text } from '@chakra-ui/react';
 import { MdClose } from 'react-icons/md';
 import { motion, useAnimation } from 'framer-motion';
 import { API_SERVER } from 'config/constant';
@@ -37,6 +37,8 @@ import SelectButton from 'assets/img/games/selectbtn.png';
 // import Trex from '../three/Trex';
 // import { Parrot } from '../three/Parrot';
 
+// Import ProfileContext from EntirePreview
+import { ProfileContext } from '../EntirePreview';
 interface PlayGamesProps {
   state?: any;
   dispatch?: any;
@@ -56,11 +58,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
-  const [playerName,setPlayerName] = useState('')
-  const handleClick = () => {
-    console.log('Click"s');
-  };
-console.log(playerName);
+//   const [playerName,setPlayerName] = useState('')
+//   const handleClick = () => {
+//     console.log('Click"s');
+//   };
+// console.log(playerName);
+const playerInfo = useContext(ProfileContext);
   return (
     <>
       <Box className="Play-game CharacterScreen">
@@ -74,11 +77,12 @@ console.log(playerName);
               <Img className="img-bg" src={imageSrc} />
               <Box className="img-section">
                 <Img className="select-pad" src={Select} loading="lazy" />
-                <Input
+                {/* <Input
                   className="enter-name"
                   placeholder="Enter Character Name"
                   onChange={(e: any) => setPlayerName(e.target.value)}
-                />
+                /> */}
+                <Text className="enter-name">{playerInfo.name}</Text>
                 <Box className="back-n-next-box">
                   <Box
                     w={'230px'}

@@ -23,21 +23,20 @@ interface ProfileScreenProps {
   imageSrc: any;
   setCurrentScreenId?: any;
   formData?: any;
+  profileData?: any,
+  setProfileData: any
 }
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({
   imageSrc,
   setCurrentScreenId,
   formData,
+  profileData,
+  setProfileData
 }) => {
 
   const [select, setSelect] = useState(false);
   const [isGender, setIsGender] = useState(false);
-  const [profileData, setProfileData] = useState({
-    name: '',
-    gender: '',
-    language: '',
-  });
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,7 +52,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
 
   const handleProfile = (e: any, lang?: any) => {
     const { id, value } = e.target;
-    setProfileData((prev) => ({ ...prev, [id]: id === 'name' ? value : lang }));
+    setProfileData((prev:any) => ({ ...prev, [id]: id === 'name' ? value : lang }));
   };
   const spokenLanguages = [
     'English',
