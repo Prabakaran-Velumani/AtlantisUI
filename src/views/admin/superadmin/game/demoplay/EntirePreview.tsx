@@ -233,21 +233,21 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const getData = (next: any) => {
     const isPreference = gameInfo?.gameData?.gameIsShowInteractionFeedBack;
     const currentBlock = next
-      ? parseInt(next?.blockDragSequence.split('.')[1])
+      ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
     const NextItem = currentBlock != null ? currentBlock + 1 : null;
     const nextSeq = next
-      ? `${next?.blockDragSequence.split('.')[0]}.${NextItem}`
+      ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
       : '';
-    const quest = next ? next?.blockDragSequence.split('.')[0] : null;
+    const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
     const currentQuest = next
-      ? parseInt(next?.blockDragSequence.split('.')[0])
+      ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
-            (key) => demoBlocks[quest]?.[key]?.blockDragSequence === nextSeq,
+            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
           )
           .map((key) => demoBlocks[quest]?.[key])
       : ['completed'];
