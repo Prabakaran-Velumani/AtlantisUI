@@ -56,6 +56,7 @@ import { getGameDemoData, SubmitReview } from 'utils/game/gameService';
 // import NoAuth from './NoAuth';
 // import NoAuth from './NoAuth';
 import EntirePreview from './EntirePreview';
+import { API_SERVER } from 'config/constant';
 
 // const gameScreens = ['GameIntro','Welcome','Story','Reflection',"Leaderboard", "ThanksScreen", "Completion","TakeAway"];
 const gameScreens = [
@@ -74,7 +75,7 @@ const gameScreens = [
 const GamePreview = () => {
   const { uuid } = useParams();
   const [gameInfo, setGameInfo] = useState<any | null>();
-  const [currentScreenId, setCurrentScreenId] = useState<Number>(0);
+  const [currentScreenId, setCurrentScreenId] = useState<number>(0);
   const toast = useToast();
   // const [toastObj, setToastObj] = useState<any>();
 
@@ -93,7 +94,8 @@ const GamePreview = () => {
    */
   const fetchGameData = async () => {
     const gamedata = await getGameDemoData(uuid);
-    if (gamedata) {
+
+    if (!gamedata.error && gamedata) {
       updateGameInfo(gamedata);
     }
   };
@@ -146,16 +148,16 @@ const GamePreview = () => {
       questOptions: lmsquestionsoptions,
       reflectionQuestions: info?.resultReflection,
       gamePlayers: info?.assets?.playerCharectorsUrl,
-      nonPlayer :  info?.assets?.npcUrl,
-      introMusic: info?.assets?.bgMusicUrl,
+      bgMusic: API_SERVER+"/"+info?.assets?.bgMusicUrl,
+      gameNonPlayerUrl: API_SERVER+"/"+info?.assets?.npcUrl,
     });
   };
   
   const element = document.getElementById('container');
   if (element) {
     try {
-      if (!document.fullscreenElement) {
-        element.requestFullscreen();
+      if (!document?.fullscreenElement) {
+        element?.requestFullscreen();
       }
     } catch (error) {
       console.error('Error requesting fullscreen:', error);

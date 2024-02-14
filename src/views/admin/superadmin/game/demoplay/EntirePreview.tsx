@@ -53,6 +53,7 @@ import React, {
   useLayoutEffect,
   useRef,
   useState,
+  createContext
 } from 'react';
 import SelectField from 'components/fields/SelectField';
 import InitialImg from 'assets/img/games/load.jpg';
@@ -81,6 +82,7 @@ import { MdClose } from 'react-icons/md';
 import ProfileScreen from './playcards/ProfileScreen';
 import Characterspage from './playcards/CharacterSelection';
 import ChapterPage from './playcards/Chapters';
+
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
@@ -93,8 +95,8 @@ interface Review {
 
 interface ShowPreviewProps {
   gameScreens: string[];
-  currentScreenId: Number;
-  setCurrentScreenId: React.Dispatch<React.SetStateAction<Number>>;
+  currentScreenId: number;
+  setCurrentScreenId: React.Dispatch<React.SetStateAction<number>>;
   gameInfo: any;
   setToastObj?: React.Dispatch<React.SetStateAction<any>>;
   handleSubmitReview: (data: any) => Promise<boolean>;
@@ -123,6 +125,17 @@ const tabOptions = [
   { value: 5, label: 'Design' },
 ];
 
+interface ProfileDataType {
+  name?: string,
+  gender?: string,
+  language?: any,
+}
+
+export const ProfileContext = createContext<ProfileDataType>(
+ {name: '',
+  gender: '',
+  language: ''});
+
 const EntirePreview: React.FC<ShowPreviewProps> = ({
   gameScreens,
   currentScreenId,
@@ -132,7 +145,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   handleSubmitReview,
 }) => {
   const { colorMode, toggleColorMode } = useColorMode();
-
+  
   const maxTextLength = 80;
   const audioRef = React.useRef(null);
   // const find = show.find((it: any) => it.gasId === formData.gameBackgroundId);
@@ -161,7 +174,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [filteredTabOptions, setFilteredTabOptions] = useState([]);
 
   const [reviewSubTabOptions, setReviewSubTabOptions] = useState<
-    Array<{ value: string; label: string }>
+  Array<{ value: string; label: string }>
   >([]);
   const [reviewInput, setReviewInput] = useState<Review>({
     reviewerId: gameInfo?.reviewer?.ReviewerId ?? null,
@@ -178,7 +191,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [currentStoryBlockSeq, setCurrentStoryBlockSeq] = useState<string>(null);
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
-
+  
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
     { '2': { tabAttribute: null, tabAttributeValue: null } },
@@ -186,18 +199,47 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     { '4': { tabAttribute: 'blockSeqId', tabAttributeValue: '' } },
     { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
   ];
-
-  const fetch = async () => {
-    const res = await getTestAudios();
+  
+  const [profileData, setProfileData] = useState({
+    name: '',
+    gender: '',
+    language: ''
+  });
+ 
+  
+  const fetchDefaultBgMusic = async () => {
+    const res = await getTestAudios();//default bg audio fetch
     if (res?.status === 'success') setAudio(res?.url);
   };
 
   useEffect(() => {
-    fetch();
+   
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
     setData(gameInfo?.blocks['1']['1']);
   }, []);
+
+  useEffect(()=>{
+    if(!gameInfo?.bgMusic){
+      console.log("gameInfo.bgMusic Effct",gameInfo?.bgMusic)
+      fetchDefaultBgMusic();
+    }
+    else{
+      console.log("currentScreenId",currentScreenId);
+      console.log("gameInfo.bgMusic Else",gameInfo?.bgMusic)
+      currentScreenId > 0 && setAudio(gameInfo.bgMusic);
+    }
+  },[gameInfo])
+
+
+
+useEffect(()=>{
+console.log("Audio Updated");
+if(audio){
+  audioRef.current=new Audio(audio);
+  audioRef.current.play();
+}
+},[audio]);
 
   useEffect(() => {
     switch (currentScreenId) {
@@ -213,6 +255,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setBackgroundScreenUrl(
           API_SERVER + '/uploads/background/41524_1701765021527.jpg',
         );
+        currentScreenId > 0 && setAudio(gameInfo.bgMusic);
         break;
     }
   }, [currentScreenId]);
@@ -705,8 +748,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setCurrentScreenId(2);
   };
 
+  console.log("Audio", audio);
+console.log("audioRef", audioRef)
   return (
-    <>
+    <ProfileContext.Provider value={profileData}>
       <Flex height="100vh" className={currentScreenId === 2 ? '' : 'AddScores'}>
         {(() => {
           switch (currentScreenId) {
@@ -788,6 +833,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       getData={getData}
                       options={options}
                       option={selectedOption}
+                      setAudio={setAudio}
                     />
                   )}
                   {/* </motion.div> */}
@@ -1179,6 +1225,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   <ProfileScreen
                     imageSrc={backgroundScreenUrl}
                     setCurrentScreenId={setCurrentScreenId}
+                    profileData={profileData}
+                    setProfileData={setProfileData}
                   />
                 </>
               );
@@ -1209,7 +1257,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           }
         })()}
       </Flex>
-
+    
       <Menu isOpen={isMenuOpen}>
         <MenuButton
           p="0px"
@@ -1320,7 +1368,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           </MenuList>
         )}
       </Menu>
-    </>
+      {audio && (
+              <audio ref={audioRef} controls style={{ display: 'none' }}>
+                <source src={audio} type="audio/mpeg" />
+                Your browser does not support the audio tag.
+              </audio>
+            )}
+    </ProfileContext.Provider>
   );
 };
 

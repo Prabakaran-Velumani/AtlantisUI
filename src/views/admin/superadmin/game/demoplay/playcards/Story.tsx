@@ -13,6 +13,7 @@ import on from 'assets/img/games/on.png';
 import off from 'assets/img/games/off.png';
 import React, {
   Suspense,
+  useContext,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -23,10 +24,13 @@ import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 
 import feedi from 'assets/img/screens/feed.png';
 import TypingEffect from './Typing';
+import { getVoiceMessage, getPreview } from 'utils/game/gameService';
+import { useParams } from 'react-router-dom';
+// Import ProfileContext from EntirePreview
+import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
 import { API_SERVER } from 'config/constant';
 
-//   import { AiFillMessage } from 'react-icons/ai';
 
 const Story: React.FC<{
   data: any;
@@ -41,6 +45,7 @@ const Story: React.FC<{
   resMsg: any;
   feed: any;
   formData: any;
+  setAudio:any;
   setCurrentScreenId: any;
   selectedPlayer: any;
   selectedNpc: any;
@@ -56,18 +61,29 @@ const Story: React.FC<{
   backGroundImg,
   formData,
   setCurrentScreenId,
+  setAudio,
   selectedPlayer,
   selectedNpc,
 }) => {
   const [showNote, setShowNote] = useState(true),
     [first, setFirst] = useState(false);
-
+    const [voiceIds, setVoiceIds] = useState<any>();
+    // const [allowPointerEvents, setAllowPointerEvents] = useState<boolean>(false);
+    // const audioRef = useRef(null);
+    // const {id} = useParams();
+    const userProfile = useContext(ProfileContext);
+console.log("userProfile",userProfile);
   useEffect(() => {
+    getVoice(data,type);
+    console.log("data",data)
+    console.log("type",type)
+    
     setShowNote(true);
     setTimeout(() => {
       setShowNote(false);
     }, 1000);
   }, [data, type]);
+
   useEffect(() => {
     setShowNote(true);
     setFirst(true);
@@ -75,7 +91,99 @@ const Story: React.FC<{
       setFirst(false);
       setShowNote(false);
     }, 1000);
-  }, []);
+}, []);
+
+useEffect(()=>{
+  setVoiceIds({
+    narrator: formData?.gameNarratorVoice ?? 'D38z5RcWu1voky8WS1ja',
+    playerMale: formData?.gamePlayerMaleVoice ?? '2EiwWnXFnvU5JabPnv8n',
+    playerFemale: formData?.gamePlayerFemaleVoice ?? '21m00Tcm4TlvDq8ikWAM',
+    NPC: formData?.gameNonPlayerVoice ?? '5Q0t7uMcjvnagumLfvZi',
+    Intro: '', //Get the intro music for the game.gameBadge(Primary Key)
+  });
+},[formData])
+
+
+const getVoice = async (
+  blockInfo: any,
+  blockType: string,
+) => {
+  {
+  let text = '';
+  let voiceId = '';
+  /** 
+         * For voice 
+        data.includes('note') =>  Game Narattor
+        data.includes('dialog') =>  data.character
+        data.includes('interaction') => data.blockRoll
+        resMsg => data.blockRoll
+        
+        *For Animations & Emotion & voice Modulation 
+        data.includes('dialog') => data.animation
+        data.includes('interaction') //For Question => data.QuestionsEmotion
+        data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
+          resMsg =>responseObject[]  : responseemotionObject[]
+        */
+  console.log('voiceIds', voiceIds);
+switch(blockType){
+case "Note":
+  text = blockInfo.blockText;
+  voiceId = voiceIds?.narrator;
+  break;
+case "Dialog":
+  text =  blockInfo.blockText;
+  voiceId = blockInfo?.blockRoll == '999999' ? voiceIds.NPC : userProfile?.gender === 'Male' ? voiceIds?.playerMale : voiceIds?.playerFemale ;
+  break;
+case "Interaction":
+
+  let optionsText = '';
+   Object.entries(options).forEach((item:any)=>{
+    optionsText+="---Option "+item?.qpOptions + "-"+ item?.qpOptionText;
+  })
+  text =  blockInfo.blockText+optionsText;
+  voiceId = blockInfo?.blockRoll == '999999' ? voiceIds.NPC : userProfile?.gender === 'Male' ? voiceIds?.playerMale : voiceIds?.playerFemale ;
+  break;
+case "Response":
+  text =  resMsg;
+  voiceId = blockInfo?.blockRoll == '999999' ? voiceIds.NPC : userProfile?.gender === 'Male' ? voiceIds?.playerMale : voiceIds?.playerFemale ;
+  break;
+case "Feedback" :
+  text =  feed;
+  voiceId = blockInfo?.blockRoll == '999999' ? voiceIds.NPC : userProfile?.gender === 'Male' ? voiceIds?.playerMale : voiceIds?.playerFemale ;
+  break;
+}
+
+  console.log('text', text);
+  console.log('voiceId', voiceId);
+  console.log('data', data);
+
+  if (text && voiceId) {
+    const send = {
+      text: text,
+      model_id: 'eleven_multilingual_v2',
+      voice_settings: {
+        stability: 0.8,
+        similarity_boost: 0.5,
+      },
+    };
+
+    const data = JSON.stringify(send);
+      /** Working API for getting voice for the text */
+    const res = await getVoiceMessage(voiceId, data);
+      /** Working API for getting voice for the text */
+    const contentType = res.headers.get('Content-Type');
+    if (contentType && contentType.includes('audio/mpeg')) {
+      // const blob = new Blob([res], { type: 'audio/mpeg' });
+      let blob = await res.blob();
+      const audioUrl = URL.createObjectURL(blob);
+      setAudio(audioUrl);
+      blob = null;
+    } else {
+      return console.log('Audio file Missing');
+    }
+  }
+}
+};
 
   return (
     <>
