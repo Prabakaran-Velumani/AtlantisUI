@@ -223,10 +223,10 @@ const Story: React.FC<{
               src={`${API_SERVER}/${selectedPlayer}`}
               position={'fixed'}
               right={'300px'}
-              bottom={'150px'}
+              bottom={'100px'}
               w={'200px'}
               h={'324px'}
-              transform={'translate(0px, 55px)'}
+              // transform={'translate(0px, 55px)'}
             />
           )}
           {selectedNpc && (
@@ -234,10 +234,10 @@ const Story: React.FC<{
               src={`${API_SERVER}/${selectedNpc}`}
               position={'fixed'}
               right={'500px'}
-              bottom={'150px'}
+              bottom={'100px'}
               w={'200px'}
               h={'324px'}
-              transform={'translate(0px, 55px)'}
+              // transform={'translate(0px, 55px)'}
             />
           )}
           <Img
@@ -335,10 +335,11 @@ const Story: React.FC<{
               src={`${API_SERVER}/${selectedPlayer}`}
               position={'fixed'}
               right={'300px'}
-              bottom={'150px'}
+              bottom={'100px'}
               w={'200px'}
-              h={'324px'}
-              transform={'translate(0px, 55px)'}
+              h={'auto'}
+              transform={'translate(100px, 0px)'}
+              transition={'transform 2s ease-in-out'}
             />
           )}
           {selectedNpc && (
@@ -346,10 +347,11 @@ const Story: React.FC<{
               src={`${API_SERVER}/${selectedNpc}`}
               position={'fixed'}
               right={'500px'}
-              bottom={'150px'}
+              bottom={'100px'}
               w={'200px'}
-              h={'324px'}
-              transform={'translate(0px, 55px)'}
+              h={'auto'}
+              transform={'translate(100px, 0px)'}
+              transition={'transform 2s ease-in-out'}
             />
           )}
           <Box
