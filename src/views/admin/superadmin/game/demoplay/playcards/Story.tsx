@@ -23,7 +23,8 @@ import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 
 import feedi from 'assets/img/screens/feed.png';
 import TypingEffect from './Typing';
-
+import { motion } from 'framer-motion';
+import { API_SERVER } from 'config/constant';
 
 //   import { AiFillMessage } from 'react-icons/ai';
 
@@ -40,7 +41,9 @@ const Story: React.FC<{
   resMsg: any;
   feed: any;
   formData: any;
-  setCurrentScreenId:any;
+  setCurrentScreenId: any;
+  selectedPlayer: any;
+  selectedNpc: any;
 }> = ({
   data,
   type,
@@ -53,6 +56,8 @@ const Story: React.FC<{
   backGroundImg,
   formData,
   setCurrentScreenId,
+  selectedPlayer,
+  selectedNpc,
 }) => {
   const [showNote, setShowNote] = useState(true),
     [first, setFirst] = useState(false);
@@ -70,9 +75,7 @@ const Story: React.FC<{
       setFirst(false);
       setShowNote(false);
     }, 1000);
-}, []);
-
-
+  }, []);
 
   return (
     <>
@@ -87,9 +90,8 @@ const Story: React.FC<{
           overflow={'visible'}
           style={{ perspective: '1000px' }}
         >
-          {/* <Box w={'80%'}> */}
           <Box
-             color={'rgba(0, 0, 0, 0.5)'}
+            color={'rgba(0, 0, 0, 0.5)'}
             backgroundImage={backGroundImg}
             w={'100%'}
             h={'100vh'}
@@ -137,6 +139,11 @@ const Story: React.FC<{
               </Canvas> */}
             </Box>
           </Box>
+          {/* <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 100, damping: 10 }}
+          > */}
           <Box
             style={{
               transform: `scale(${showNote ? 0.2 : 1})`,
@@ -149,7 +156,7 @@ const Story: React.FC<{
             flexDirection={'column'}
             justifyContent={'center'}
             alignItems={'center'}
-            >
+          >
             <Img w={'100%'} h={'80vh'} src={note} />
             <Box
               position={'fixed'}
@@ -185,11 +192,12 @@ const Story: React.FC<{
                 display={'flex'}
                 justifyContent={'center'}
                 cursor={'pointer'}
-               >
+              >
                 <Img src={next} w={'200px'} h={'60px'} />
               </Box>
             </Box>
           </Box>
+          {/* </motion.div> */}
         </Box>
       )}
       {data && type === 'Dialog' && (
@@ -210,6 +218,28 @@ const Story: React.FC<{
             transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
             transition={'transform 0.9s ease-in-out'}
           />
+          {selectedPlayer && (
+            <Img
+              src={`${API_SERVER}/${selectedPlayer}`}
+              position={'fixed'}
+              right={'300px'}
+              bottom={'150px'}
+              w={'200px'}
+              h={'324px'}
+              transform={'translate(0px, 55px)'}
+            />
+          )}
+          {selectedNpc && (
+            <Img
+              src={`${API_SERVER}/${selectedNpc}`}
+              position={'fixed'}
+              right={'500px'}
+              bottom={'150px'}
+              w={'200px'}
+              h={'324px'}
+              transform={'translate(0px, 55px)'}
+            />
+          )}
           <Img
             style={{
               transform: `translateY(${showNote ? 200 : 0}px)`,
@@ -300,6 +330,28 @@ const Story: React.FC<{
             }px)`}
             transition={'transform 0.9s ease-in-out'}
           />
+            {selectedPlayer && (
+            <Img
+              src={`${API_SERVER}/${selectedPlayer}`}
+              position={'fixed'}
+              right={'300px'}
+              bottom={'150px'}
+              w={'200px'}
+              h={'324px'}
+              transform={'translate(0px, 55px)'}
+            />
+          )}
+          {selectedNpc && (
+            <Img
+              src={`${API_SERVER}/${selectedNpc}`}
+              position={'fixed'}
+              right={'500px'}
+              bottom={'150px'}
+              w={'200px'}
+              h={'324px'}
+              transform={'translate(0px, 55px)'}
+            />
+          )}
           <Box
             style={{
               transform: `translateX(${showNote ? -200 : 0}px) scale(1.2)`,
@@ -511,7 +563,7 @@ const Story: React.FC<{
               zIndex={999}
               w={'300px'}
             >
-                {/* <Canvas
+              {/* <Canvas
                 camera={{ position: [3, 3, 10] }}
                 
               >

@@ -174,8 +174,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [backgroundScreenUrl, setBackgroundScreenUrl] = useState(null);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [audio, setAudio] = useState();
-  const [currentStoryBlockSeq, setCurrentStoryBlockSeq] =
-    useState<string>(null);
+  const [selectedPlayer,setSelectedPlayer] = useState(null);
+  const [currentStoryBlockSeq, setCurrentStoryBlockSeq] = useState<string>(null);
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
 
@@ -775,6 +775,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   > */}
                   {data && type && (
                     <Story
+                       selectedNpc={gameInfo?.nonPlayer}
+                      selectedPlayer={selectedPlayer}
                       formData={gameInfo?.gameData}
                       backGroundImg={backgroundScreenUrl}
                       data={data}
@@ -1184,6 +1186,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return (
                 <>
                   <Characterspage
+                  setSelectedPlayer={setSelectedPlayer}
                     players={gameInfo?.gamePlayers}
                     imageSrc={backgroundScreenUrl}
                     setCurrentScreenId={setCurrentScreenId}

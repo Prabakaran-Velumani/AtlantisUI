@@ -44,6 +44,7 @@ interface PlayGamesProps {
   imageSrc?: any;
   setCurrentScreenId?: any;
   players?: any;
+  setSelectedPlayer?:any;
 }
 
 const Characterspage: React.FC<PlayGamesProps> = ({
@@ -53,14 +54,17 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   imageSrc,
   setCurrentScreenId,
   players,
+  setSelectedPlayer
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
   const [playerName,setPlayerName] = useState('')
-  const handleClick = () => {
-    console.log('Click"s');
-  };
-console.log(playerName);
+ 
+const selectPlayerClick = () =>
+{
+  setSelectedPlayer(players[i]);
+  setCurrentScreenId(13)
+}
   return (
     <>
       <Box className="Play-game CharacterScreen">
@@ -85,7 +89,7 @@ console.log(playerName);
                     h={'50px'}
                     transform={'translate(475px, 250px)'}
                     cursor={'pointer'}
-                    onClick={() => setCurrentScreenId(13)}
+                    onClick={selectPlayerClick}
                   ></Box>
                 </Box>
                 <Box className="back-n-next-box">
@@ -151,7 +155,6 @@ const Model: React.FC = () => {
       // groupRef.current.rotation.y += 0.01;
       groupRef.current.castShadow = true;
     }
-
     mixer.update(delta);
   });
   action.play();

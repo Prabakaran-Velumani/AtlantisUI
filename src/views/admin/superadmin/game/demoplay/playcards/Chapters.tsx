@@ -91,14 +91,14 @@ const ChapterPage: React.FC<{ imageSrc: any; demoBlocks: any,setCurrentScreenId:
                 </Box>
               </Box>
             </Box>
-            <Button
+            {/* <Button
               position={'absolute'}
               top={0}
               right={0}
               // onClick={()=> useData?.Function?.handleClose()}
             >
               <Icon as={MdClose} />
-            </Button>
+            </Button> */}
           </motion.div>
         </Box>
       </Box>

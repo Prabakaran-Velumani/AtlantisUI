@@ -125,7 +125,6 @@ const GamePreview = () => {
       }, {});
       return transformedArray;
     };
-
     setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,
@@ -146,7 +145,9 @@ const GamePreview = () => {
       blocks: sortBlockSequence(lmsblocks),
       questOptions: lmsquestionsoptions,
       reflectionQuestions: info?.resultReflection,
-      gamePlayers: info?.playerCharectorsUrl,
+      gamePlayers: info?.assets?.playerCharectorsUrl,
+      nonPlayer :  info?.assets?.npcUrl,
+      introMusic: info?.assets?.bgMusicUrl,
     });
   };
   

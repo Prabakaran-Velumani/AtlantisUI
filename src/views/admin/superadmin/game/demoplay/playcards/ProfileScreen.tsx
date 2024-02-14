@@ -53,6 +53,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
 
   const handleProfile = (e: any, lang?: any) => {
     const { id, value } = e.target;
+    setSelect(false);
+    setIsGender(false);
     setProfileData((prev) => ({ ...prev, [id]: id === 'name' ? value : lang }));
   };
   const spokenLanguages = [
@@ -141,7 +143,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
                   </Box>
                   <Box className="gender">
                     <FormLabel mt={'40px'}>Gender</FormLabel>
-                    <Text transform={'translate(0px,25px)'} textAlign={'center'}  onClick={() => setSelect(!isGender)} position={'relative'} zIndex={9999999}>
+                    <Text transform={'translate(0px,25px)'} textAlign={'center'}  onClick={() => setIsGender(!isGender)} position={'relative'} zIndex={9999999}>
                       {profileData?.gender}
                     </Text>
                     <Img
@@ -177,14 +179,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
                 <Img src={NextBtn} />
               </Button>
             </Box>
-            <Button
+            {/* <Button
               position={'absolute'}
               top={0}
               right={0}
               //   onClick={useData?.Function?.handleClose()}
             >
               <Icon as={MdClose} />
-            </Button>
+            </Button> */}
           </motion.div>
         </Box>
       </Box>
