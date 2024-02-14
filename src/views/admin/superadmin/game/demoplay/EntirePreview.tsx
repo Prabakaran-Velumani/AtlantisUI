@@ -858,11 +858,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     className="Main-Content"
                   >
                     <Box
-                      // backgroundImage={backgroundScreenUrl}
+                      backgroundImage={RefBg}
                       w={'100% !important'}
                       h={'100vh'}
-                      // backgroundRepeat={'no-repeat'}
-                      // backgroundSize={'cover'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
                       alignItems={'center'}
                       justifyContent={'center'}
                       className="Game-Screen"

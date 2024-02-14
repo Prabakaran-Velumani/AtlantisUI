@@ -21,7 +21,7 @@ const Reflection: React.FC<{
         <>
           <Box className="reflection-screen">
             <Box className="reflection-screen-box">
-            <Img src={imageSrc} className="bg-ref" />
+            {/* <Img src={imageSrc} className="bg-ref" /> */}
           </Box>
             <Box w={'100%'} display={'flex'} justifyContent={'center'} position={'relative'}>
               <Img src={question} w={'320px'} h={'100px'} />
