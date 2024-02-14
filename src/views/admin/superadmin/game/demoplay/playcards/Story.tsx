@@ -1,5 +1,5 @@
 // Chakra Imports
-import { Box, Flex, Img, Text } from '@chakra-ui/react';
+import { Box, Flex, Img, Text,useToast } from '@chakra-ui/react';
 
 import bk from 'assets/img/games/17.png';
 import note from 'assets/img/games/note.png';
@@ -72,9 +72,10 @@ const Story: React.FC<{
     // const audioRef = useRef(null);
     // const {id} = useParams();
     const userProfile = useContext(ProfileContext);
-console.log("userProfile",userProfile);
+    const toast = useToast();
+
   useEffect(() => {
-    getVoice(data,type);
+    // getVoice(data,type);
     console.log("data",data)
     console.log("type",type)
     

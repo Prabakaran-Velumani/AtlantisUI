@@ -208,6 +208,7 @@ const GamePreview = () => {
     const addReviewResponse = await SubmitReview(
       JSON.stringify({ data: inputdata, id: uuid }),
     );
+    console.log("addReviewResponse",addReviewResponse);
     if (addReviewResponse?.status === 'Failure') {
       toast({
         title: 'Failed to Add Review',

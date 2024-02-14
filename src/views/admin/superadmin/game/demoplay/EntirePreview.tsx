@@ -28,6 +28,7 @@ import {
   FormLabel,
   Textarea,
   MenuItem,
+  Select
 } from '@chakra-ui/react';
 import next from 'assets/img/screens/next.png';
 import Screen2 from 'assets/img/screens/screen2.png';
@@ -53,7 +54,7 @@ import React, {
   useLayoutEffect,
   useRef,
   useState,
-  createContext
+  createContext,
 } from 'react';
 import SelectField from 'components/fields/SelectField';
 import InitialImg from 'assets/img/games/load.jpg';
@@ -82,6 +83,7 @@ import { MdClose } from 'react-icons/md';
 import ProfileScreen from './playcards/ProfileScreen';
 import Characterspage from './playcards/CharacterSelection';
 import ChapterPage from './playcards/Chapters';
+// import Select from 'react-select';
 
 interface Review {
   // reviewId: Number;
@@ -98,7 +100,7 @@ interface ShowPreviewProps {
   currentScreenId: number;
   setCurrentScreenId: React.Dispatch<React.SetStateAction<number>>;
   gameInfo: any;
-  setToastObj?: React.Dispatch<React.SetStateAction<any>>;
+  // setToastObj?: React.Dispatch<React.SetStateAction<any>>;
   handleSubmitReview: (data: any) => Promise<boolean>;
 }
 
@@ -126,26 +128,26 @@ const tabOptions = [
 ];
 
 interface ProfileDataType {
-  name?: string,
-  gender?: string,
-  language?: any,
+  name?: string;
+  gender?: string;
+  language?: any;
 }
 
-export const ProfileContext = createContext<ProfileDataType>(
- {name: '',
+export const ProfileContext = createContext<ProfileDataType>({
+  name: '',
   gender: '',
-  language: ''});
+  language: '',
+});
 
 const EntirePreview: React.FC<ShowPreviewProps> = ({
   gameScreens,
   currentScreenId,
   setCurrentScreenId,
   gameInfo,
-  setToastObj,
   handleSubmitReview,
 }) => {
   const { colorMode, toggleColorMode } = useColorMode();
-  
+
   const maxTextLength = 80;
   const audioRef = React.useRef(null);
   // const find = show.find((it: any) => it.gasId === formData.gameBackgroundId);
@@ -174,7 +176,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [filteredTabOptions, setFilteredTabOptions] = useState([]);
 
   const [reviewSubTabOptions, setReviewSubTabOptions] = useState<
-  Array<{ value: string; label: string }>
+    Array<{ value: string; label: string }>
   >([]);
   const [reviewInput, setReviewInput] = useState<Review>({
     reviewerId: gameInfo?.reviewer?.ReviewerId ?? null,
@@ -187,11 +189,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [backgroundScreenUrl, setBackgroundScreenUrl] = useState(null);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [audio, setAudio] = useState();
-  const [selectedPlayer,setSelectedPlayer] = useState(null);
-  const [currentStoryBlockSeq, setCurrentStoryBlockSeq] = useState<string>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [currentStoryBlockSeq, setCurrentStoryBlockSeq] =
+    useState<string>(null);
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
-  
+
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
     { '2': { tabAttribute: null, tabAttributeValue: null } },
@@ -199,47 +202,45 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     { '4': { tabAttribute: 'blockSeqId', tabAttributeValue: '' } },
     { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
   ];
-  
+
   const [profileData, setProfileData] = useState({
     name: '',
     gender: '',
-    language: ''
+    language: '',
   });
- 
-  
+
   const fetchDefaultBgMusic = async () => {
-    const res = await getTestAudios();//default bg audio fetch
+    const res = await getTestAudios(); //default bg audio fetch
     if (res?.status === 'success') setAudio(res?.url);
   };
 
   useEffect(() => {
-   
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
     setData(gameInfo?.blocks['1']['1']);
   }, []);
 
-  useEffect(()=>{
-    if(!gameInfo?.bgMusic){
-      console.log("gameInfo.bgMusic Effct",gameInfo?.bgMusic)
+  useEffect(() => {
+    if (!gameInfo?.bgMusic) {
+      console.log('gameInfo.bgMusic Effct', gameInfo?.bgMusic);
       fetchDefaultBgMusic();
-    }
-    else{
-      console.log("currentScreenId",currentScreenId);
-      console.log("gameInfo.bgMusic Else",gameInfo?.bgMusic)
+    } else {
+      console.log('currentScreenId', currentScreenId);
+      console.log('gameInfo.bgMusic Else', gameInfo?.bgMusic);
       currentScreenId > 0 && setAudio(gameInfo.bgMusic);
     }
-  },[gameInfo])
+  }, [gameInfo]);
 
-
-
-useEffect(()=>{
-console.log("Audio Updated");
-if(audio){
-  audioRef.current=new Audio(audio);
-  audioRef.current.play();
-}
-},[audio]);
+  useEffect(() => {
+    console.log('Audio Updated');
+    if (audio) {
+      if(audioRef.current){
+        audioRef.current.pause();
+      }
+      audioRef.current = new Audio(audio);
+      audioRef.current.play();
+    }
+  }, [audio]);
 
   useEffect(() => {
     switch (currentScreenId) {
@@ -259,19 +260,6 @@ if(audio){
         break;
     }
   }, [currentScreenId]);
-
-  // useEffect(() => {
-
-  //   setDemoBlocks(gameInfo?.blocks);
-  //   setType(gameInfo?.blocks['1']['1']?.blockChoosen);
-  //   setData(gameInfo?.blocks['1']['1']);
-  // }, []);
-
-  // to handle the transition whenever the note,dialog or interaction change
-
-  // story inside next button function for the blocks
-
-  // old function
 
   const getData = (next: any) => {
     const isPreference = gameInfo?.gameData?.gameIsShowInteractionFeedBack;
@@ -568,14 +556,19 @@ if(audio){
   };
 
   useEffect(() => {
+    console.log('***currentScreenId', currentScreenId);
+    console.log('***reviewTabOptions', reviewTabOptions);
+    console.log('***tabOptions', tabOptions);
     if (reviewTabOptions) {
-      const filterTabOptions = tabOptions.filter((tabOption) =>
+      const filterTabOptionsList = tabOptions.filter((tabOption) =>
         reviewTabOptions.includes(tabOption.value),
       );
-      setFilteredTabOptions(filterTabOptions);
+      console.log('***filterTabOptions in ', filterTabOptionsList);
+
+      setFilteredTabOptions(filterTabOptionsList);
     }
   }, [reviewTabOptions]);
-
+  console.log('***filterTabOptions', filteredTabOptions);
   const subTabOptionsForTabIds: Array<{
     [key: string]: Array<{ value: string; label: string }> | null;
   }> = [
@@ -605,6 +598,7 @@ if(audio){
   ];
 
   useEffect(() => {
+    console.log("reviewInput?.tabId",reviewInput?.tabId);
     if (reviewInput?.tabId) {
       if (reviewInput?.tabId === 5) {
         setReviewSubTabOptions([]);
@@ -667,11 +661,13 @@ if(audio){
     }
   };
   //no need for story
-  const handleTabSelection = (selectedOption: any) => {
-    if (selectedOption?.value) {
+  const handleTabSelection = (e: any) => {
+    e.preventDefault();
+    
+    if (e.target.value) {
       setReviewInput((prev: Review) => ({
         ...prev,
-        tabId: selectedOption?.value ? selectedOption?.value : null,
+        tabId: e.target.value ?? null,
         tabAttribute: '',
         tabAttributeValue: '',
       }));
@@ -687,6 +683,7 @@ if(audio){
     }
   };
 
+  
   const handleSubTabSelection = (selectedOption: any) => {
     const selectedTabFileds = tabAttributeSets.find(
       (item) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
@@ -748,8 +745,8 @@ if(audio){
     setCurrentScreenId(2);
   };
 
-  console.log("Audio", audio);
-console.log("audioRef", audioRef)
+  console.log('Audio', audio);
+  console.log('audioRef', audioRef);
   return (
     <ProfileContext.Provider value={profileData}>
       <Flex height="100vh" className={currentScreenId === 2 ? '' : 'AddScores'}>
@@ -820,7 +817,7 @@ console.log("audioRef", audioRef)
                   > */}
                   {data && type && (
                     <Story
-                       selectedNpc={gameInfo?.nonPlayer}
+                      selectedNpc={gameInfo?.nonPlayer}
                       selectedPlayer={selectedPlayer}
                       formData={gameInfo?.gameData}
                       backGroundImg={backgroundScreenUrl}
@@ -1234,7 +1231,7 @@ console.log("audioRef", audioRef)
               return (
                 <>
                   <Characterspage
-                  setSelectedPlayer={setSelectedPlayer}
+                    setSelectedPlayer={setSelectedPlayer}
                     players={gameInfo?.gamePlayers}
                     imageSrc={backgroundScreenUrl}
                     setCurrentScreenId={setCurrentScreenId}
@@ -1244,7 +1241,11 @@ console.log("audioRef", audioRef)
             case 13:
               return (
                 <>
-                  <ChapterPage imageSrc={backgroundScreenUrl} demoBlocks={demoBlocks} setCurrentScreenId={setCurrentScreenId}/>
+                  <ChapterPage
+                    imageSrc={backgroundScreenUrl}
+                    demoBlocks={demoBlocks}
+                    setCurrentScreenId={setCurrentScreenId}
+                  />
                 </>
               );
             default:
@@ -1257,7 +1258,7 @@ console.log("audioRef", audioRef)
           }
         })()}
       </Flex>
-    
+
       <Menu isOpen={isMenuOpen}>
         <MenuButton
           p="0px"
@@ -1290,17 +1291,49 @@ console.log("audioRef", audioRef)
             minW={{ base: '360px' }}
             maxW={{ base: '360px', md: 'unset' }}
           >
-            <SelectField
+            <FormLabel
+              display="flex"
+              ms="10px"
+              // htmlFor={id}
+              fontSize="sm"
+              // color={textColorPrimary}
+              fontWeight="bold"
+            >
+              {/* // _hover={{ cursor: 'pointer' }}>
+				//  {label} */}
+              <Text fontSize="sm" fontWeight="400" ms="2px">
+                {'Feedback Options'}
+                <Text as="span" color="red.500">
+                  *
+                </Text>
+              </Text>
+            </FormLabel>
+            <Select
+              mb="10px"
+              me="30px"
+              id="tab"
+              name="tab"
+              onChange={handleTabSelection}
+            ><option value={''}>Select</option>
+              {filteredTabOptions.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
+            </Select>
+
+            {/* <SelectField
               mb="10px"
               me="30px"
               id="tab"
               name="tab"
               label="Feedback Options"
-              labelStyle={{ fontSize: 18, fontWeight: 700 }}
+              // labelStyle={{ fontSize: 18, fontWeight: 700 }}
               options={filteredTabOptions}
               onChange={handleTabSelection}
               style={{ fontSize: '18px' }}
-            />
+              isRequired={true}
+            /> */}
             {reviewInput?.tabId !== null &&
               reviewInput?.tabId !== undefined &&
               reviewSubTabOptions?.length > 0 && (
@@ -1313,6 +1346,7 @@ console.log("audioRef", audioRef)
                   fontSize={'md'}
                   options={reviewSubTabOptions}
                   onChange={handleSubTabSelection}
+                  isRequired={true}
                 />
               )}
             <FormControl>
@@ -1369,11 +1403,11 @@ console.log("audioRef", audioRef)
         )}
       </Menu>
       {audio && (
-              <audio ref={audioRef} controls style={{ display: 'none' }}>
-                <source src={audio} type="audio/mpeg" />
-                Your browser does not support the audio tag.
-              </audio>
-            )}
+        <audio ref={audioRef} controls style={{ display: 'none' }}>
+          <source src={audio} type="audio/mpeg" />
+          Your browser does not support the audio tag.
+        </audio>
+      )}
     </ProfileContext.Provider>
   );
 };
