@@ -1158,14 +1158,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             onClick={() => setCurrentScreenId(11)}
                           ></Button>
                         </Box>
-                        <Button
+                        {/* <Button
                           position={'absolute'}
                           top={0}
                           right={0}
                           onClick={() => setCurrentScreenId(1)}
                         >
                           <Icon as={MdClose} />
-                        </Button>
+                        </Button> */}
                       </motion.div>
                     </Box>
                   </Box>

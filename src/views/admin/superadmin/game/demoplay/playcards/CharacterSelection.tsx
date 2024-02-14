@@ -77,8 +77,17 @@ console.log(playerName);
                 <Input
                   className="enter-name"
                   placeholder="Enter Character Name"
-                  onChange={(e:any)=>setPlayerName(e.target.value)}
+                  onChange={(e: any) => setPlayerName(e.target.value)}
                 />
+                <Box className="back-n-next-box">
+                  <Box
+                    w={'230px'}
+                    h={'50px'}
+                    transform={'translate(475px, 250px)'}
+                    cursor={'pointer'}
+                    onClick={() => setCurrentScreenId(13)}
+                  ></Box>
+                </Box>
                 <Box className="back-n-next-box">
                   <Button
                     className="btns left-btn"
@@ -94,9 +103,9 @@ console.log(playerName);
                     src={`${API_SERVER}/${players[i]}`}
                     position={'relative'}
                     zIndex={9999999}
-                    w={'156px'}
+                    w={'200px'}
                     h={'324px'}
-                    transform={'translate(0px, 34px)'}
+                    transform={'translate(0px, 55px)'}
                   />
                 )}
 
@@ -116,14 +125,14 @@ console.log(playerName);
             </Box>
           </motion.div>
         </Box>
-        <Button
+        {/* <Button
           position={'absolute'}
           top={0}
           right={0}
           // onClick={useData?.Function?.handleClose}
         >
           <Icon as={MdClose} />
-        </Button>
+        </Button> */}
       </Box>
     </>
   );
