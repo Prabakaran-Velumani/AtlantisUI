@@ -187,8 +187,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [backgroundScreenUrl, setBackgroundScreenUrl] = useState(null);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [audio, setAudio] = useState();
-  const [currentStoryBlockSeq, setCurrentStoryBlockSeq] =
-  useState<string>(null);
+  const [selectedPlayer,setSelectedPlayer] = useState(null);
+  const [currentStoryBlockSeq, setCurrentStoryBlockSeq] = useState<string>(null);
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
   
@@ -276,21 +276,21 @@ if(audio){
   const getData = (next: any) => {
     const isPreference = gameInfo?.gameData?.gameIsShowInteractionFeedBack;
     const currentBlock = next
-      ? parseInt(next?.blockDragSequence.split('.')[1])
+      ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
     const NextItem = currentBlock != null ? currentBlock + 1 : null;
     const nextSeq = next
-      ? `${next?.blockDragSequence.split('.')[0]}.${NextItem}`
+      ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
       : '';
-    const quest = next ? next?.blockDragSequence.split('.')[0] : null;
+    const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
     const currentQuest = next
-      ? parseInt(next?.blockDragSequence.split('.')[0])
+      ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
-            (key) => demoBlocks[quest]?.[key]?.blockDragSequence === nextSeq,
+            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
           )
           .map((key) => demoBlocks[quest]?.[key])
       : ['completed'];
@@ -820,6 +820,8 @@ console.log("audioRef", audioRef)
                   > */}
                   {data && type && (
                     <Story
+                       selectedNpc={gameInfo?.nonPlayer}
+                      selectedPlayer={selectedPlayer}
                       formData={gameInfo?.gameData}
                       backGroundImg={backgroundScreenUrl}
                       data={data}
@@ -1232,6 +1234,7 @@ console.log("audioRef", audioRef)
               return (
                 <>
                   <Characterspage
+                  setSelectedPlayer={setSelectedPlayer}
                     players={gameInfo?.gamePlayers}
                     imageSrc={backgroundScreenUrl}
                     setCurrentScreenId={setCurrentScreenId}

@@ -26,11 +26,11 @@ import feedi from 'assets/img/screens/feed.png';
 import TypingEffect from './Typing';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
-
 // Import ProfileContext from EntirePreview
 import { ProfileContext } from '../EntirePreview';
+import { motion } from 'framer-motion';
+import { API_SERVER } from 'config/constant';
 
-//   import { AiFillMessage } from 'react-icons/ai';
 
 const Story: React.FC<{
   data: any;
@@ -45,8 +45,10 @@ const Story: React.FC<{
   resMsg: any;
   feed: any;
   formData: any;
-  setCurrentScreenId:any;
   setAudio:any;
+  setCurrentScreenId: any;
+  selectedPlayer: any;
+  selectedNpc: any;
 }> = ({
   data,
   type,
@@ -59,7 +61,9 @@ const Story: React.FC<{
   backGroundImg,
   formData,
   setCurrentScreenId,
-  setAudio
+  setAudio,
+  selectedPlayer,
+  selectedNpc,
 }) => {
   const [showNote, setShowNote] = useState(true),
     [first, setFirst] = useState(false);
@@ -194,9 +198,8 @@ case "Feedback" :
           overflow={'visible'}
           style={{ perspective: '1000px' }}
         >
-          {/* <Box w={'80%'}> */}
           <Box
-             color={'rgba(0, 0, 0, 0.5)'}
+            color={'rgba(0, 0, 0, 0.5)'}
             backgroundImage={backGroundImg}
             w={'100%'}
             h={'100vh'}
@@ -244,6 +247,11 @@ case "Feedback" :
               </Canvas> */}
             </Box>
           </Box>
+          {/* <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 100, damping: 10 }}
+          > */}
           <Box
             style={{
               transform: `scale(${showNote ? 0.2 : 1})`,
@@ -256,7 +264,7 @@ case "Feedback" :
             flexDirection={'column'}
             justifyContent={'center'}
             alignItems={'center'}
-            >
+          >
             <Img w={'100%'} h={'80vh'} src={note} />
             <Box
               position={'fixed'}
@@ -292,11 +300,12 @@ case "Feedback" :
                 display={'flex'}
                 justifyContent={'center'}
                 cursor={'pointer'}
-               >
+              >
                 <Img src={next} w={'200px'} h={'60px'} />
               </Box>
             </Box>
           </Box>
+          {/* </motion.div> */}
         </Box>
       )}
       {data && type === 'Dialog' && (
@@ -317,6 +326,28 @@ case "Feedback" :
             transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
             transition={'transform 0.9s ease-in-out'}
           />
+          {selectedPlayer && (
+            <Img
+              src={`${API_SERVER}/${selectedPlayer}`}
+              position={'fixed'}
+              right={'300px'}
+              bottom={'150px'}
+              w={'200px'}
+              h={'324px'}
+              transform={'translate(0px, 55px)'}
+            />
+          )}
+          {selectedNpc && (
+            <Img
+              src={`${API_SERVER}/${selectedNpc}`}
+              position={'fixed'}
+              right={'500px'}
+              bottom={'150px'}
+              w={'200px'}
+              h={'324px'}
+              transform={'translate(0px, 55px)'}
+            />
+          )}
           <Img
             style={{
               transform: `translateY(${showNote ? 200 : 0}px)`,
@@ -407,6 +438,28 @@ case "Feedback" :
             }px)`}
             transition={'transform 0.9s ease-in-out'}
           />
+            {selectedPlayer && (
+            <Img
+              src={`${API_SERVER}/${selectedPlayer}`}
+              position={'fixed'}
+              right={'300px'}
+              bottom={'150px'}
+              w={'200px'}
+              h={'324px'}
+              transform={'translate(0px, 55px)'}
+            />
+          )}
+          {selectedNpc && (
+            <Img
+              src={`${API_SERVER}/${selectedNpc}`}
+              position={'fixed'}
+              right={'500px'}
+              bottom={'150px'}
+              w={'200px'}
+              h={'324px'}
+              transform={'translate(0px, 55px)'}
+            />
+          )}
           <Box
             style={{
               transform: `translateX(${showNote ? -200 : 0}px) scale(1.2)`,
@@ -618,7 +671,7 @@ case "Feedback" :
               zIndex={999}
               w={'300px'}
             >
-                {/* <Canvas
+              {/* <Canvas
                 camera={{ position: [3, 3, 10] }}
                 
               >

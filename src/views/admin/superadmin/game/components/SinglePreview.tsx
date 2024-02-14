@@ -69,6 +69,7 @@ import Screen4 from '../../../../../assets/img/screens/screen4.png';
 import TyContentScreen from './onimage/TyContentScreen';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
+import TypingEffect from '../demoplay/playcards/Typing';
 const SinglePreview: React.FC<{
   prevdata?: any;
   isOpen?: any;
@@ -572,7 +573,7 @@ useEffect(()=>{
               </Box>
             )}
             {tab === 4 && item && data && type === 'Dialog' && (
-              <Box
+                <Box
                 w={'100%'}
                 h={'100vh'}
                 display={'flex'}
@@ -616,7 +617,7 @@ useEffect(()=>{
                       />
                       <Text
                         position={'fixed'}
-                        left={'25%'}
+                        left={'24%'}
                         bottom={'167px'}
                         fontSize={'25'}
                         fontWeight={700}
@@ -636,9 +637,10 @@ useEffect(()=>{
                       justifyContent={'space-between'}
                       w={'75%'}
                       bottom={'55px'}
-                      fontFamily={'cont'}
+                      fontFamily={'AtlantisContent'}
+                      fontSize={'21px'}
                     >
-                      {data.dialog}
+                      <TypingEffect text={data.dialog} speed={50} />
                     </Box>
                     <Box
                       display={'flex'}
@@ -647,12 +649,7 @@ useEffect(()=>{
                       w={'80%'}
                       bottom={'0'}
                     >
-                      <Img
-                        src={left}
-                        w={'50px'}
-                        h={'50px'}
-                        cursor={'pointer'}
-                      />
+                      <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
                       <Img
                         src={right}
                         w={'50px'}
@@ -664,6 +661,98 @@ useEffect(()=>{
                   </>
                 )}
               </Box>
+              // <Box
+              //   w={'100%'}
+              //   h={'100vh'}
+              //   display={'flex'}
+              //   alignItems={'center'}
+              //   justifyContent={'center'}
+              //   position={'relative'}
+              // >
+              //   <Img
+              //     src={img}
+              //     maxW={'100%'}
+              //     maxH={'100%'}
+              //     w={'100%'}
+              //     h={'100vh'}
+              //     transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
+              //     transition={'transform 0.9s ease-in-out'}
+              //   />
+              //   <Img
+              //     style={{
+              //       transform: `translateY(${showNote ? 200 : 0}px)`,
+              //       transition:
+              //         'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+              //     }}
+              //     position={'fixed'}
+              //     maxW={'100%'}
+              //     maxH={'100%'}
+              //     w={'100%'}
+              //     h={'240px'}
+              //     bottom={'0'}
+              //     src={dial}
+              //   />
+              //   {!showNote && (
+              //     <>
+              //       <Box position={'relative'}>
+              //         <Img
+              //           src={char}
+              //           position={'fixed'}
+              //           h={'70px'}
+              //           w={'25%'}
+              //           left={'13%'}
+              //           bottom={'150px'}
+              //         />
+              //         <Text
+              //           position={'fixed'}
+              //           left={'25%'}
+              //           bottom={'167px'}
+              //           fontSize={'25'}
+              //           fontWeight={700}
+              //           textAlign={'center'}
+              //           fontFamily={'AtlantisText'}
+              //         >
+              //           {data.character === '999999'
+              //             ? 'Player'
+              //             : data.character === '99999'
+              //             ? 'Narrator'
+              //             : formData.gameNonPlayerName}
+              //         </Text>
+              //       </Box>
+              //       <Box
+              //         display={'flex'}
+              //         position={'fixed'}
+              //         justifyContent={'space-between'}
+              //         w={'75%'}
+              //         bottom={'55px'}
+              //         fontFamily={'cont'}
+              //       >
+              //         {data.dialog}
+              //       </Box>
+              //       <Box
+              //         display={'flex'}
+              //         position={'fixed'}
+              //         justifyContent={'space-between'}
+              //         w={'80%'}
+              //         bottom={'0'}
+              //       >
+              //         <Img
+              //           src={left}
+              //           w={'50px'}
+              //           h={'50px'}
+              //           cursor={'pointer'}
+              //         />
+              //         <Img
+              //           src={right}
+              //           w={'50px'}
+              //           h={'50px'}
+              //           cursor={'pointer'}
+              //           onClick={() => getData(item)}
+              //         />
+              //       </Box>
+              //     </>
+              //   )}
+              // </Box>
             )}
             {tab === 4 && item && data && type === 'Interaction' && (
               <Box

@@ -127,7 +127,6 @@ const GamePreview = () => {
       }, {});
       return transformedArray;
     };
-
     setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,
