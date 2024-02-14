@@ -53,7 +53,7 @@ import React, {
   useLayoutEffect,
   useRef,
   useState,
-  createContext
+  createContext,
 } from 'react';
 import SelectField from 'components/fields/SelectField';
 import InitialImg from 'assets/img/games/load.jpg';
@@ -126,15 +126,16 @@ const tabOptions = [
 ];
 
 interface ProfileDataType {
-  name?: string,
-  gender?: string,
-  language?: any,
+  name?: string;
+  gender?: string;
+  language?: any;
 }
 
-export const ProfileContext = createContext<ProfileDataType>(
- {name: '',
+export const ProfileContext = createContext<ProfileDataType>({
+  name: '',
   gender: '',
-  language: ''});
+  language: '',
+});
 
 const EntirePreview: React.FC<ShowPreviewProps> = ({
   gameScreens,
@@ -145,7 +146,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   handleSubmitReview,
 }) => {
   const { colorMode, toggleColorMode } = useColorMode();
-  
+
   const maxTextLength = 80;
   const audioRef = React.useRef(null);
   // const find = show.find((it: any) => it.gasId === formData.gameBackgroundId);
@@ -174,7 +175,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [filteredTabOptions, setFilteredTabOptions] = useState([]);
 
   const [reviewSubTabOptions, setReviewSubTabOptions] = useState<
-  Array<{ value: string; label: string }>
+    Array<{ value: string; label: string }>
   >([]);
   const [reviewInput, setReviewInput] = useState<Review>({
     reviewerId: gameInfo?.reviewer?.ReviewerId ?? null,
@@ -187,11 +188,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [backgroundScreenUrl, setBackgroundScreenUrl] = useState(null);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [audio, setAudio] = useState();
-  const [selectedPlayer,setSelectedPlayer] = useState(null);
-  const [currentStoryBlockSeq, setCurrentStoryBlockSeq] = useState<string>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [currentStoryBlockSeq, setCurrentStoryBlockSeq] =
+    useState<string>(null);
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
-  
+
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
     { '2': { tabAttribute: null, tabAttributeValue: null } },
@@ -199,47 +201,42 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     { '4': { tabAttribute: 'blockSeqId', tabAttributeValue: '' } },
     { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
   ];
-  
+
   const [profileData, setProfileData] = useState({
     name: '',
     gender: '',
-    language: ''
+    language: '',
   });
- 
-  
+
   const fetchDefaultBgMusic = async () => {
-    const res = await getTestAudios();//default bg audio fetch
+    const res = await getTestAudios(); //default bg audio fetch
     if (res?.status === 'success') setAudio(res?.url);
   };
 
   useEffect(() => {
-   
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
     setData(gameInfo?.blocks['1']['1']);
   }, []);
 
-  useEffect(()=>{
-    if(!gameInfo?.bgMusic){
-      console.log("gameInfo.bgMusic Effct",gameInfo?.bgMusic)
+  useEffect(() => {
+    if (!gameInfo?.bgMusic) {
+      console.log('gameInfo.bgMusic Effct', gameInfo?.bgMusic);
       fetchDefaultBgMusic();
-    }
-    else{
-      console.log("currentScreenId",currentScreenId);
-      console.log("gameInfo.bgMusic Else",gameInfo?.bgMusic)
+    } else {
+      console.log('currentScreenId', currentScreenId);
+      console.log('gameInfo.bgMusic Else', gameInfo?.bgMusic);
       currentScreenId > 0 && setAudio(gameInfo.bgMusic);
     }
-  },[gameInfo])
+  }, [gameInfo]);
 
-
-
-useEffect(()=>{
-console.log("Audio Updated");
-if(audio){
-  audioRef.current=new Audio(audio);
-  audioRef.current.play();
-}
-},[audio]);
+  useEffect(() => {
+    console.log('Audio Updated');
+    if (audio) {
+      audioRef.current = new Audio(audio);
+      audioRef.current.play();
+    }
+  }, [audio]);
 
   useEffect(() => {
     switch (currentScreenId) {
@@ -495,22 +492,25 @@ if(audio){
         setCurrentScreenId(6);
         return false;
       } else {
-        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        setData(demoBlocks[nextLevel]['1']);
-        if (demoBlocks[nextLevel]['1']?.blockChoosen === 'Interaction') {
-          const optionsFiltered = gameInfo?.questOptions.filter(
-            (key: any) =>
-              key.qpSequence ===
-              demoBlocks[nextLevel]['1']?.blockPrimarySequence,
-          );
-          setOptions(optionsFiltered);
-        }
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
         setSelectedOption(null);
-        if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-          setCurrentScreenId(7);
-        } else {
-          setCurrentScreenId(5);
-        }
+        // setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+        // setData(demoBlocks[nextLevel]['1']);
+        // if (demoBlocks[nextLevel]['1']?.blockChoosen === 'Interaction') {
+        //   const optionsFiltered = gameInfo?.questOptions.filter(
+        //     (key: any) =>
+        //       key.qpSequence ===
+        //       demoBlocks[nextLevel]['1']?.blockPrimarySequence,
+        //   );
+        //   setOptions(optionsFiltered);
+        // }
+        // setSelectedOption(null);
+        // if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+        //   setCurrentScreenId(6);
+        // } else {
+        //   setCurrentScreenId(5);
+        // }
       }
     } else {
       setType(nextBlock[0]?.blockChoosen);
@@ -748,8 +748,8 @@ if(audio){
     setCurrentScreenId(2);
   };
 
-  console.log("Audio", audio);
-console.log("audioRef", audioRef)
+  console.log('Audio', audio);
+  console.log('audioRef', audioRef);
   return (
     <ProfileContext.Provider value={profileData}>
       <Flex height="100vh" className={currentScreenId === 2 ? '' : 'AddScores'}>
@@ -771,43 +771,43 @@ console.log("audioRef", audioRef)
             case 1:
               return (
                 <>
-                  <motion.div
+                  {/* <motion.div
                     initial={{ opacity: 0, background: '#000' }}
                     animate={{ opacity: 1, background: '#0000' }}
                     transition={{ duration: 0.3, delay: 0.5 }}
+                  > */}
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
                   >
                     <Box
-                      w={'100%'}
+                      backgroundImage={backgroundScreenUrl}
+                      w={'100% !important'}
                       h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
                       alignItems={'center'}
                       justifyContent={'center'}
-                      position={'relative'}
-                      overflow={'visible'}
-                      style={{ perspective: '1000px' }}
-                      className="Main-Content"
+                      className="Game-Screen"
                     >
-                      <Box
-                        backgroundImage={backgroundScreenUrl}
-                        w={'100% !important'}
-                        h={'100vh'}
-                        backgroundRepeat={'no-repeat'}
-                        backgroundSize={'cover'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        className="Game-Screen"
-                      >
-                        <Box className="Images" h={'100vh !important'}>
-                          <Welcome
-                            intro={audio}
-                            setCurrentScreenId={setCurrentScreenId}
-                            formData={gameInfo?.gameData}
-                            imageSrc={Screen5}
-                            preview={true}
-                          />
-                        </Box>
+                      <Box className="Images" h={'100vh !important'}>
+                        <Welcome
+                          intro={audio}
+                          setCurrentScreenId={setCurrentScreenId}
+                          formData={gameInfo?.gameData}
+                          imageSrc={Screen5}
+                          preview={true}
+                        />
                       </Box>
                     </Box>
-                  </motion.div>
+                  </Box>
+                  {/* </motion.div> */}
                 </>
               );
             case 2:
@@ -820,7 +820,7 @@ console.log("audioRef", audioRef)
                   > */}
                   {data && type && (
                     <Story
-                       selectedNpc={gameInfo?.nonPlayer}
+                      selectedNpc={gameInfo?.gameNonPlayerUrl}
                       selectedPlayer={selectedPlayer}
                       formData={gameInfo?.gameData}
                       backGroundImg={backgroundScreenUrl}
@@ -1234,7 +1234,7 @@ console.log("audioRef", audioRef)
               return (
                 <>
                   <Characterspage
-                  setSelectedPlayer={setSelectedPlayer}
+                    setSelectedPlayer={setSelectedPlayer}
                     players={gameInfo?.gamePlayers}
                     imageSrc={backgroundScreenUrl}
                     setCurrentScreenId={setCurrentScreenId}
@@ -1244,7 +1244,11 @@ console.log("audioRef", audioRef)
             case 13:
               return (
                 <>
-                  <ChapterPage imageSrc={backgroundScreenUrl} demoBlocks={demoBlocks} setCurrentScreenId={setCurrentScreenId}/>
+                  <ChapterPage
+                    imageSrc={backgroundScreenUrl}
+                    demoBlocks={demoBlocks}
+                    setCurrentScreenId={setCurrentScreenId}
+                  />
                 </>
               );
             default:
@@ -1257,7 +1261,7 @@ console.log("audioRef", audioRef)
           }
         })()}
       </Flex>
-    
+
       <Menu isOpen={isMenuOpen}>
         <MenuButton
           p="0px"
@@ -1369,11 +1373,11 @@ console.log("audioRef", audioRef)
         )}
       </Menu>
       {audio && (
-              <audio ref={audioRef} controls style={{ display: 'none' }}>
-                <source src={audio} type="audio/mpeg" />
-                Your browser does not support the audio tag.
-              </audio>
-            )}
+        <audio ref={audioRef} controls style={{ display: 'none' }}>
+          <source src={audio} type="audio/mpeg" />
+          Your browser does not support the audio tag.
+        </audio>
+      )}
     </ProfileContext.Provider>
   );
 };
