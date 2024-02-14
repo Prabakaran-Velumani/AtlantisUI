@@ -84,7 +84,10 @@ const Welcome: React.FC<{
     );
     return matchedSkill ? matchedSkill.name : null;
   };
-
+  console.log(
+    formData?.gameAdditionalWelcomeNote,
+    formData.gameIsShowAdditionalWelcomeNote,
+  );
   const renderContent = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
     const parts = formData?.gameAdditionalWelcomeNote?.split(linkRegex);
@@ -240,7 +243,12 @@ const Welcome: React.FC<{
                               .filter((skillName) => skillName !== null)
                               .map((filteredSkillName, index) => (
                                 <Box display={'flex'} key={index}>
-                                  <Img src={write} w={'25px'} h={'25px'} />
+                                  <Img
+                                    src={write}
+                                    w={'25px'}
+                                    h={'25px'}
+                                    mt={index === 0 ? '10px' : ''}
+                                  />
                                   <Box>
                                     <Box
                                       display={'flex'}
@@ -249,6 +257,7 @@ const Welcome: React.FC<{
                                       justifyContent={'space-between'}
                                       font-weight={'300'}
                                       margin-left={'5px'}
+                                      mt={index === 0 ? '10px' : ''}
                                     >
                                       <Text color={'#D9C7A2'}>
                                         {filteredSkillName}
@@ -294,7 +303,12 @@ const Welcome: React.FC<{
                                     : it;
                                 return (
                                   <Box display={'flex'} key={ind}>
-                                    <Img src={write} w={'25px'} h={'25px'} />
+                                    <Img
+                                      src={write}
+                                      w={'25px'}
+                                      h={'25px'}
+                                      mt={ind === 0 ? '10px' : ''}
+                                    />
                                     <Box>
                                       <Box
                                         display={'flex'}
@@ -303,6 +317,8 @@ const Welcome: React.FC<{
                                         justifyContent={'space-between'}
                                         font-weight={'300'}
                                         margin-left={'5px'}
+                                        lineHeight={0.9}
+                                        mt={ind === 0 ? '10px' : ''}
                                       >
                                         <Text color={'#D9C7A2'}>
                                           {contentAfterBullet}
@@ -366,14 +382,16 @@ const Welcome: React.FC<{
                     </Box>
                   )}
                   <Box
-                    className="next-btn"
+                    className="next-btn-welcome"
                     w={'100%'}
                     display={'flex'}
                     justifyContent={'center'}
-                    alignItems={'center'}
+                    alignItems={'flex-start'}
                   >
                     <Img
-                      transform={'scale(1.3)'}
+                      // transform={'scale(1.3)'}
+                      w={'100px'}
+                      h={'41px'}
                       src={next}
                       onClick={() => setCurrentScreenId(2)}
                       // cursor={'pointer'}

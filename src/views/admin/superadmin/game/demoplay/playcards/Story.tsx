@@ -31,7 +31,6 @@ import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
 import { API_SERVER } from 'config/constant';
 
-
 const Story: React.FC<{
   data: any;
   type: any;
@@ -45,7 +44,7 @@ const Story: React.FC<{
   resMsg: any;
   feed: any;
   formData: any;
-  setAudio:any;
+  setAudio: any;
   setCurrentScreenId: any;
   selectedPlayer: any;
   selectedNpc: any;
@@ -67,18 +66,11 @@ const Story: React.FC<{
 }) => {
   const [showNote, setShowNote] = useState(true),
     [first, setFirst] = useState(false);
-    const [voiceIds, setVoiceIds] = useState<any>();
-    // const [allowPointerEvents, setAllowPointerEvents] = useState<boolean>(false);
-    // const audioRef = useRef(null);
-    // const {id} = useParams();
-    const userProfile = useContext(ProfileContext);
-    const toast = useToast();
-
+  const [voiceIds, setVoiceIds] = useState<any>();
+  const userProfile = useContext(ProfileContext);
+  console.log('userProfile', userProfile);
   useEffect(() => {
-    // getVoice(data,type);
-    console.log("data",data)
-    console.log("type",type)
-    
+    getVoice(data, type);
     setShowNote(true);
     setTimeout(() => {
       setShowNote(false);
@@ -92,27 +84,23 @@ const Story: React.FC<{
       setFirst(false);
       setShowNote(false);
     }, 1000);
-}, []);
+  }, []);
 
-useEffect(()=>{
-  setVoiceIds({
-    narrator: formData?.gameNarratorVoice ?? 'D38z5RcWu1voky8WS1ja',
-    playerMale: formData?.gamePlayerMaleVoice ?? '2EiwWnXFnvU5JabPnv8n',
-    playerFemale: formData?.gamePlayerFemaleVoice ?? '21m00Tcm4TlvDq8ikWAM',
-    NPC: formData?.gameNonPlayerVoice ?? '5Q0t7uMcjvnagumLfvZi',
-    Intro: '', //Get the intro music for the game.gameBadge(Primary Key)
-  });
-},[formData])
+  useEffect(() => {
+    setVoiceIds({
+      narrator: formData?.gameNarratorVoice ?? 'D38z5RcWu1voky8WS1ja',
+      playerMale: formData?.gamePlayerMaleVoice ?? '2EiwWnXFnvU5JabPnv8n',
+      playerFemale: formData?.gamePlayerFemaleVoice ?? '21m00Tcm4TlvDq8ikWAM',
+      NPC: formData?.gameNonPlayerVoice ?? '5Q0t7uMcjvnagumLfvZi',
+      Intro: '', //Get the intro music for the game.gameBadge(Primary Key)
+    });
+  }, [formData]);
 
-
-const getVoice = async (
-  blockInfo: any,
-  blockType: string,
-) => {
-  {
-  let text = '';
-  let voiceId = '';
-  /** 
+  const getVoice = async (blockInfo: any, blockType: string) => {
+   
+      let text = '';
+      let voiceId = '';
+      /** 
          * For voice 
         data.includes('note') =>  Game Narattor
         data.includes('dialog') =>  data.character
@@ -125,66 +113,84 @@ const getVoice = async (
         data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
           resMsg =>responseObject[]  : responseemotionObject[]
         */
-  console.log('voiceIds', voiceIds);
-switch(blockType){
-case "Note":
-  text = blockInfo.blockText;
-  voiceId = voiceIds?.narrator;
-  break;
-case "Dialog":
-  text =  blockInfo.blockText;
-  voiceId = blockInfo?.blockRoll == '999999' ? voiceIds.NPC : userProfile?.gender === 'Male' ? voiceIds?.playerMale : voiceIds?.playerFemale ;
-  break;
-case "Interaction":
+      console.log('voiceIds', voiceIds);
+      switch (blockType) {
+        case 'Note':
+          text = blockInfo.blockText;
+          voiceId = voiceIds?.narrator;
+          break;
+        case 'Dialog':
+          text = blockInfo.blockText;
+          voiceId =
+            blockInfo?.blockRoll == '999999'
+              ? voiceIds.NPC
+              : userProfile?.gender === 'Male'
+              ? voiceIds?.playerMale
+              : voiceIds?.playerFemale;
+          break;
+        case 'Interaction':
+          let optionsText = '';
+          Object.entries(options).forEach((item: any) => {
+            optionsText +=
+              '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
+          });
+          text = blockInfo.blockText + optionsText;
+          voiceId =
+            blockInfo?.blockRoll == '999999'
+              ? voiceIds.NPC
+              : userProfile?.gender === 'Male'
+              ? voiceIds?.playerMale
+              : voiceIds?.playerFemale;
+          break;
+        case 'Response':
+          text = resMsg;
+          voiceId =
+            blockInfo?.blockRoll == '999999'
+              ? voiceIds.NPC
+              : userProfile?.gender === 'Male'
+              ? voiceIds?.playerMale
+              : voiceIds?.playerFemale;
+          break;
+        case 'Feedback':
+          text = feed;
+          voiceId =
+            blockInfo?.blockRoll == '999999'
+              ? voiceIds.NPC
+              : userProfile?.gender === 'Male'
+              ? voiceIds?.playerMale
+              : voiceIds?.playerFemale;
+          break;
+      }
 
-  let optionsText = '';
-   Object.entries(options).forEach((item:any)=>{
-    optionsText+="---Option "+item?.qpOptions + "-"+ item?.qpOptionText;
-  })
-  text =  blockInfo.blockText+optionsText;
-  voiceId = blockInfo?.blockRoll == '999999' ? voiceIds.NPC : userProfile?.gender === 'Male' ? voiceIds?.playerMale : voiceIds?.playerFemale ;
-  break;
-case "Response":
-  text =  resMsg;
-  voiceId = blockInfo?.blockRoll == '999999' ? voiceIds.NPC : userProfile?.gender === 'Male' ? voiceIds?.playerMale : voiceIds?.playerFemale ;
-  break;
-case "Feedback" :
-  text =  feed;
-  voiceId = blockInfo?.blockRoll == '999999' ? voiceIds.NPC : userProfile?.gender === 'Male' ? voiceIds?.playerMale : voiceIds?.playerFemale ;
-  break;
-}
+   
 
-  console.log('text', text);
-  console.log('voiceId', voiceId);
-  console.log('data', data);
+      if (text && voiceId) {
+        const send = {
+          text: text,
+          model_id: 'eleven_multilingual_v2',
+          voice_settings: {
+            stability: 0.8,
+            similarity_boost: 0.5,
+          },
+        };
 
-  if (text && voiceId) {
-    const send = {
-      text: text,
-      model_id: 'eleven_multilingual_v2',
-      voice_settings: {
-        stability: 0.8,
-        similarity_boost: 0.5,
-      },
-    };
-
-    const data = JSON.stringify(send);
-      /** Working API for getting voice for the text */
-    const res = await getVoiceMessage(voiceId, data);
-      /** Working API for getting voice for the text */
-    const contentType = res.headers.get('Content-Type');
-    if (contentType && contentType.includes('audio/mpeg')) {
-      // const blob = new Blob([res], { type: 'audio/mpeg' });
-      let blob = await res.blob();
-      const audioUrl = URL.createObjectURL(blob);
-      setAudio(audioUrl);
-      blob = null;
-    } else {
-      return console.log('Audio file Missing');
-    }
-  }
-}
-};
+        const data = JSON.stringify(send);
+        /** Working API for getting voice for the text */
+        const res = await getVoiceMessage(voiceId, data);
+        /** Working API for getting voice for the text */
+        const contentType = res.headers.get('Content-Type');
+        if (contentType && contentType.includes('audio/mpeg')) {
+          // const blob = new Blob([res], { type: 'audio/mpeg' });
+          let blob = await res.blob();
+          const audioUrl = URL.createObjectURL(blob);
+          setAudio(audioUrl);
+          blob = null;
+        } else {
+          return console.log('Audio file Missing');
+        }
+      }
+   
+  };
 
   return (
     <>
@@ -332,21 +338,21 @@ case "Feedback" :
               src={`${API_SERVER}/${selectedPlayer}`}
               position={'fixed'}
               right={'300px'}
-              bottom={'150px'}
+              bottom={'100px'}
               w={'200px'}
               h={'324px'}
-              transform={'translate(0px, 55px)'}
+              // transform={'translate(0px, 55px)'}
             />
           )}
           {selectedNpc && (
             <Img
-              src={`${API_SERVER}/${selectedNpc}`}
+              src={selectedNpc}
               position={'fixed'}
               right={'500px'}
-              bottom={'150px'}
+              bottom={'100px'}
               w={'200px'}
               h={'324px'}
-              transform={'translate(0px, 55px)'}
+              // transform={'translate(0px, 55px)'}
             />
           )}
           <Img
@@ -439,26 +445,28 @@ case "Feedback" :
             }px)`}
             transition={'transform 0.9s ease-in-out'}
           />
-            {selectedPlayer && (
+          {selectedPlayer && (
             <Img
               src={`${API_SERVER}/${selectedPlayer}`}
               position={'fixed'}
               right={'300px'}
-              bottom={'150px'}
+              bottom={'100px'}
               w={'200px'}
-              h={'324px'}
-              transform={'translate(0px, 55px)'}
+              h={'auto'}
+              transform={'translate(100px, 0px)'}
+              transition={'transform 2s ease-in-out'}
             />
           )}
           {selectedNpc && (
             <Img
-              src={`${API_SERVER}/${selectedNpc}`}
+              src={selectedNpc}
               position={'fixed'}
               right={'500px'}
-              bottom={'150px'}
+              bottom={'100px'}
               w={'200px'}
-              h={'324px'}
-              transform={'translate(0px, 55px)'}
+              h={'auto'}
+              transform={'translate(100px, 0px)'}
+              transition={'transform 2s ease-in-out'}
             />
           )}
           <Box

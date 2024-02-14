@@ -483,22 +483,25 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setCurrentScreenId(6);
         return false;
       } else {
-        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        setData(demoBlocks[nextLevel]['1']);
-        if (demoBlocks[nextLevel]['1']?.blockChoosen === 'Interaction') {
-          const optionsFiltered = gameInfo?.questOptions.filter(
-            (key: any) =>
-              key.qpSequence ===
-              demoBlocks[nextLevel]['1']?.blockPrimarySequence,
-          );
-          setOptions(optionsFiltered);
-        }
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
         setSelectedOption(null);
-        if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-          setCurrentScreenId(7);
-        } else {
-          setCurrentScreenId(5);
-        }
+        // setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+        // setData(demoBlocks[nextLevel]['1']);
+        // if (demoBlocks[nextLevel]['1']?.blockChoosen === 'Interaction') {
+        //   const optionsFiltered = gameInfo?.questOptions.filter(
+        //     (key: any) =>
+        //       key.qpSequence ===
+        //       demoBlocks[nextLevel]['1']?.blockPrimarySequence,
+        //   );
+        //   setOptions(optionsFiltered);
+        // }
+        // setSelectedOption(null);
+        // if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+        //   setCurrentScreenId(6);
+        // } else {
+        //   setCurrentScreenId(5);
+        // }
       }
     } else {
       setType(nextBlock[0]?.blockChoosen);
@@ -768,43 +771,43 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             case 1:
               return (
                 <>
-                  <motion.div
+                  {/* <motion.div
                     initial={{ opacity: 0, background: '#000' }}
                     animate={{ opacity: 1, background: '#0000' }}
                     transition={{ duration: 0.3, delay: 0.5 }}
+                  > */}
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
                   >
                     <Box
-                      w={'100%'}
+                      backgroundImage={backgroundScreenUrl}
+                      w={'100% !important'}
                       h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
                       alignItems={'center'}
                       justifyContent={'center'}
-                      position={'relative'}
-                      overflow={'visible'}
-                      style={{ perspective: '1000px' }}
-                      className="Main-Content"
+                      className="Game-Screen"
                     >
-                      <Box
-                        backgroundImage={backgroundScreenUrl}
-                        w={'100% !important'}
-                        h={'100vh'}
-                        backgroundRepeat={'no-repeat'}
-                        backgroundSize={'cover'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        className="Game-Screen"
-                      >
-                        <Box className="Images" h={'100vh !important'}>
-                          <Welcome
-                            intro={audio}
-                            setCurrentScreenId={setCurrentScreenId}
-                            formData={gameInfo?.gameData}
-                            imageSrc={Screen5}
-                            preview={true}
-                          />
-                        </Box>
+                      <Box className="Images" h={'100vh !important'}>
+                        <Welcome
+                          intro={audio}
+                          setCurrentScreenId={setCurrentScreenId}
+                          formData={gameInfo?.gameData}
+                          imageSrc={Screen5}
+                          preview={true}
+                        />
                       </Box>
                     </Box>
-                  </motion.div>
+                  </Box>
+                  {/* </motion.div> */}
                 </>
               );
             case 2:
@@ -817,7 +820,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   > */}
                   {data && type && (
                     <Story
-                      selectedNpc={gameInfo?.nonPlayer}
+                      selectedNpc={gameInfo?.gameNonPlayerUrl}
                       selectedPlayer={selectedPlayer}
                       formData={gameInfo?.gameData}
                       backGroundImg={backgroundScreenUrl}

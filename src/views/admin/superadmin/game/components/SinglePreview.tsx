@@ -783,7 +783,7 @@ useEffect(()=>{
                   backgroundImage={parch}
                   position={'fixed'}
                   w={{ sm: '350px', md: '500px' }}
-                  h={{ sm: '50vh', md: '76vh' }}
+                  h={{ sm: '50vh', md: '580px' }}
                   left={{ sm: '60px', md: '120px' }}
                   backgroundSize={'contain'}
                   backgroundRepeat={'no-repeat'}
@@ -850,7 +850,7 @@ useEffect(()=>{
                     display={'flex'}
                     position={'fixed'}
                     justifyContent={'space-between'}
-                    w={'500px'}
+                    w={'510px'}
                     left={'-10px'}
                   >
                     <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />

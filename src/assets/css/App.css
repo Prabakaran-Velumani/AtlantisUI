@@ -600,6 +600,14 @@ letter-spacing: 0.5px;
   justify-content: center;
   align-items: center;
 }
+.next-btn-welcome
+{    
+  transform: translate(0, 50px);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .AddScores .Main-Content .Game-Screen .Images .next-btn img {    
   width: 100px;
   height: 41px;
