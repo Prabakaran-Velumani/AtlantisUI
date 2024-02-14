@@ -84,7 +84,10 @@ const Welcome: React.FC<{
     );
     return matchedSkill ? matchedSkill.name : null;
   };
-console.log(formData?.gameAdditionalWelcomeNote,formData.gameIsShowAdditionalWelcomeNote);
+  console.log(
+    formData?.gameAdditionalWelcomeNote,
+    formData.gameIsShowAdditionalWelcomeNote,
+  );
   const renderContent = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
     const parts = formData?.gameAdditionalWelcomeNote?.split(linkRegex);
@@ -240,7 +243,12 @@ console.log(formData?.gameAdditionalWelcomeNote,formData.gameIsShowAdditionalWel
                               .filter((skillName) => skillName !== null)
                               .map((filteredSkillName, index) => (
                                 <Box display={'flex'} key={index}>
-                                  <Img src={write} w={'25px'} h={'25px'} />
+                                  <Img
+                                    src={write}
+                                    w={'25px'}
+                                    h={'25px'}
+                                    mt={index === 0 ? '10px' : ''}
+                                  />
                                   <Box>
                                     <Box
                                       display={'flex'}
@@ -249,6 +257,7 @@ console.log(formData?.gameAdditionalWelcomeNote,formData.gameIsShowAdditionalWel
                                       justifyContent={'space-between'}
                                       font-weight={'300'}
                                       margin-left={'5px'}
+                                      mt={index === 0 ? '10px' : ''}
                                     >
                                       <Text color={'#D9C7A2'}>
                                         {filteredSkillName}
@@ -294,7 +303,12 @@ console.log(formData?.gameAdditionalWelcomeNote,formData.gameIsShowAdditionalWel
                                     : it;
                                 return (
                                   <Box display={'flex'} key={ind}>
-                                    <Img src={write} w={'25px'} h={'25px'} />
+                                    <Img
+                                      src={write}
+                                      w={'25px'}
+                                      h={'25px'}
+                                      mt={ind === 0 ? '10px' : ''}
+                                    />
                                     <Box>
                                       <Box
                                         display={'flex'}
@@ -304,6 +318,7 @@ console.log(formData?.gameAdditionalWelcomeNote,formData.gameIsShowAdditionalWel
                                         font-weight={'300'}
                                         margin-left={'5px'}
                                         lineHeight={0.9}
+                                        mt={ind === 0 ? '10px' : ''}
                                       >
                                         <Text color={'#D9C7A2'}>
                                           {contentAfterBullet}
