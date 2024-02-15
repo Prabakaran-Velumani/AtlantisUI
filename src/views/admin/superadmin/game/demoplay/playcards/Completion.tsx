@@ -5,6 +5,7 @@ import point from 'assets/img/screens/points.png';
 import next from 'assets/img/screens/next.png';
 import { useEffect, useState } from 'react';
 import { getImages } from 'utils/game/gameService';
+import { motion } from 'framer-motion';
 const Completion: React.FC<{
   formData: any;
   imageSrc: any;
@@ -26,7 +27,7 @@ const Completion: React.FC<{
   setCompliData,
   CompKeyCount,
   getData,
-  data
+  data,
 }) => {
   const [imgb, setbImg] = useState<any>();
   const [showComplete, setShowComplete] = useState(false);
@@ -66,7 +67,13 @@ const Completion: React.FC<{
           transition: 'transform 0.5s ease-in-out',
         }}
       >
-        <Img src={imageSrc} className="bg-img" />
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 100, damping: 10 }}
+        >
+          <Img src={imageSrc} className="bg-img" />
+        </motion.div>
       </Box>
       {!showComplete && (
         <>
@@ -122,7 +129,7 @@ const Completion: React.FC<{
           <Box className="next-btn">
             <Img
               src={next}
-              onClick={()=>getData(data)}
+              onClick={() => getData(data)}
               // cursor={'pointer'}
             />
           </Box>

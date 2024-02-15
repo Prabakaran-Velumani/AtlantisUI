@@ -618,6 +618,7 @@ letter-spacing: 0.5px;
 }
 
 
+.chakra-toast__toast { z-index: 999999999999999999; }
 
 
 

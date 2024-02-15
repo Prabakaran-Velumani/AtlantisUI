@@ -117,6 +117,15 @@ export default function PlayInfo(props: {
             </Box>
             </Box>
           </Box>
+          <Box  width={'350px'}
+            h={'100px'}
+            display={'flex'}
+            justifyContent={'flex-end'}
+            alignItems={'flex-end'}
+            position={'fixed'}
+            >
+
+          </Box>
         </ModalBody>
       </ModalContent>
     </Modal>

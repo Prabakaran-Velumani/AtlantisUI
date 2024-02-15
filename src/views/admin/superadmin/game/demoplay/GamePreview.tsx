@@ -83,6 +83,30 @@ const GamePreview = () => {
     uuid && fetchGameData();
   }, [uuid]);
 
+
+  // useEffect(() => {
+    const element = document.getElementById('container');
+    
+    if (element) {
+      try {
+        if (!document?.fullscreenElement) {
+          element.requestFullscreen().catch(error => {
+            console.log('Error requesting fullscreen:', error);
+          });
+        }
+      } catch (error) {
+        console.log('Error requesting fullscreen:', error);
+      }
+    }
+
+  //   return () => {
+  //     if (document.fullscreenElement) {
+  //       document.exitFullscreen().catch(error => {
+  //         console.log('Error exiting fullscreen:', error);
+  //       });
+  //     }
+  //   };
+  // }, []); 
   // useEffect(() => {
   //   setTimeout(()=>{
   //     setCurrentScreenId(1);
@@ -153,16 +177,7 @@ const GamePreview = () => {
     });
   };
   
-  const element = document.getElementById('container');
-  if (element) {
-    try {
-      if (!document?.fullscreenElement) {
-        element?.requestFullscreen();
-      }
-    } catch (error) {
-      console.error('Error requesting fullscreen:', error);
-    }
-  }
+ 
 
   const handleSubmitReview = async (inputdata: any) => {
     /** Sample post data
@@ -176,6 +191,7 @@ const GamePreview = () => {
    }
 } 
    */
+
     if (!inputdata.reviewerId || !inputdata.reviewGameId) {
       toast({
         title: 'You are Unauthorized..!',

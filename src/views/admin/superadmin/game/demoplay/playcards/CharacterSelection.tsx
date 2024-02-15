@@ -77,7 +77,7 @@ const selectPlayerClick = () =>
   return (
     <>
       <Box className="Play-game CharacterScreen">
-        <Box onClick={() => console.log('hello')} h={'100vh'} w={'100%'}>
+        <Box h={'100vh'} w={'100%'}>
           <motion.div
             initial={{ opacity: 0, background: '#000' }}
             animate={{ opacity: 1, background: '#0000' }}
@@ -102,14 +102,14 @@ const selectPlayerClick = () =>
                     onClick={selectPlayerClick}
                   ></Box>
                 </Box>
-                <Box className="back-n-next-box">
+                <Box className="back-n-next-box" >
                   <Button
                     className="btns left-btn"
-                    onClick={() => setI(i === 0 ? i : i - 1)}
+                    onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
                   ></Button>
                   <Button
                     className="btns right-btn"
-                    onClick={() => setI(players.length - 1 === i ? i : i + 1)}
+                    onClick={() => setI(players.length - 1 === i ? 0 : i + 1)}
                   ></Button>
                 </Box>
                 {players[i] && (

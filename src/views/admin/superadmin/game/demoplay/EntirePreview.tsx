@@ -28,6 +28,7 @@ import {
   FormLabel,
   Textarea,
   MenuItem,
+  useToast,
 } from '@chakra-ui/react';
 import next from 'assets/img/screens/next.png';
 import Screen2 from 'assets/img/screens/screen2.png';
@@ -208,11 +209,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     language: '',
   });
 
-  const fetchDefaultBgMusic = async () => {
-    const res = await getTestAudios(); //default bg audio fetch
-    if (res?.status === 'success') setAudio(res?.url);
-  };
-
   useEffect(() => {
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
@@ -220,18 +216,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, []);
 
   useEffect(() => {
-    if (!gameInfo?.bgMusic) {
-      console.log('gameInfo.bgMusic Effct', gameInfo?.bgMusic);
-      fetchDefaultBgMusic();
+    if (gameInfo?.bgMusic) {
+      setAudio(gameInfo?.bgMusic);
     } else {
-      console.log('currentScreenId', currentScreenId);
-      console.log('gameInfo.bgMusic Else', gameInfo?.bgMusic);
       currentScreenId > 0 && setAudio(gameInfo.bgMusic);
     }
   }, [gameInfo]);
 
   useEffect(() => {
-    console.log('Audio Updated');
+  
     if (audio) {
       audioRef.current = new Audio(audio);
       audioRef.current.play();
@@ -271,7 +264,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   // old function
 
   const getData = (next: any) => {
-    const isPreference = gameInfo?.gameData?.gameIsShowInteractionFeedBack;
+    console.log(next);
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
@@ -290,7 +283,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
           )
           .map((key) => demoBlocks[quest]?.[key])
-      : ['completed'];
+      : [];
     if (nextBlock.length === 0) {
       if (demoBlocks.hasOwnProperty(nextLevel)) {
         setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -305,6 +298,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
     if (currentScreenId === 6) {
+      console.log('complete screen entered');
       if (
         next?.gameIsShowInteractionFeedBack &&
         next?.gameIsShowInteractionFeedBack === 'Complete'
@@ -489,9 +483,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       } else if (navi === 'Select Block') {
         setSelectedOption(null);
       } else if (navi === 'Complete') {
+        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+        setData(demoBlocks[nextLevel]['1']);
         setCurrentScreenId(6);
         return false;
       } else {
+        console.log('here is found')
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
@@ -603,7 +600,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ],
     },
   ];
-
+  useEffect(() => {
+    if (audioRef.current) {
+      if (currentScreenId === 2) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+    }
+  }, [currentScreenId]);
   useEffect(() => {
     if (reviewInput?.tabId) {
       if (reviewInput?.tabId === 5) {
@@ -705,7 +710,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setIsMenuOpen(true);
   };
 
+  // const toast = useToast();
   const handleReview = (e: any) => {
+    // console.log('toast before')
+    // toast({
+    //   title: 'Toast Title',
+    //   description: 'Toast Description',
+    //   status: 'success',
+    //   duration: 3000,
+    //   isClosable: true,
+    //   position: 'top-right',
+
+    // });
+    // console.log('toast after')
     setReviewInput((prev: Review) => ({ ...prev, review: e.target.value }));
   };
   const resetInputFields = () => {
@@ -735,9 +752,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     onClose: onClose1,
   } = useDisclosure();
   const startDemo = () => {
-    const aud = new Audio(audio);
-    aud.loop = true;
-    aud.play();
+    if (audioRef.current) {
+      audioRef.current.play();
+    }
+    // const aud = new Audio(audio);
+    // aud.loop = true;
+    // aud.play();
     onClose1();
     setCurrentScreenId(10);
   };
@@ -748,8 +768,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setCurrentScreenId(2);
   };
 
-  console.log('Audio', audio);
-  console.log('audioRef', audioRef);
   return (
     <ProfileContext.Provider value={profileData}>
       <Flex height="100vh" className={currentScreenId === 2 ? '' : 'AddScores'}>
@@ -1373,8 +1391,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         )}
       </Menu>
       {audio && (
-        <audio ref={audioRef} controls style={{ display: 'none' }}>
-          <source src={audio} type="audio/mpeg" />
+        <audio
+          ref={audioRef}
+          controls
+          style={{ display: 'none' }}
+          loop={currentScreenId !== 2}
+        >
+          <source src={gameInfo?.bgMusic || audio} type="audio/mpeg" />
           Your browser does not support the audio tag.
         </audio>
       )}

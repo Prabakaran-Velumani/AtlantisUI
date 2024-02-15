@@ -71,7 +71,7 @@ const Story: React.FC<{
   // const audioRef = useRef(null);
   // const {id} = useParams();
   const userProfile = useContext(ProfileContext);
-  console.log('userProfile', userProfile);
+
   useEffect(() => {
     getVoice(data, type);
     setShowNote(true);
@@ -116,7 +116,7 @@ const Story: React.FC<{
         data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
           resMsg =>responseObject[]  : responseemotionObject[]
         */
-      console.log('voiceIds', voiceIds);
+
       switch (blockType) {
         case 'Note':
           text = blockInfo.blockText;
@@ -532,6 +532,7 @@ const Story: React.FC<{
                     mb={'10px'}
                     w={'80%'}
                     lineHeight={1}
+                    key={ind}
                     color={option === ind ? 'purple' : ''}
                     textAlign={'center'}
                     cursor={'pointer'}
@@ -736,10 +737,6 @@ const Story: React.FC<{
               style={{
                 fontWeight: '900',
                 color: '#D9C7A2',
-                fontSize: '18px',
-
-                lineHeight: 1,
-                fontFamily: 'cont',
               }}
             >
               {feed}

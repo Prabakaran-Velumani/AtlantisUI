@@ -8,13 +8,14 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { getGameById, getSkills } from 'utils/game/gameService';
-
+import { motion } from 'framer-motion';
 import rew from 'assets/img/screens/Reward Bar.png';
 import back from 'assets/img/screens/back.png';
 import write from 'assets/img/screens/Writing.png';
 import next from 'assets/img/screens/next.png';
 import { useParams } from 'react-router-dom';
 import { FaClock } from 'react-icons/fa';
+import { MotionConfig } from 'framer-motion';
 // import AudioEffect from './Audio';
 interface Badge {
   gasId: number;
@@ -84,10 +85,7 @@ const Welcome: React.FC<{
     );
     return matchedSkill ? matchedSkill.name : null;
   };
-  console.log(
-    formData?.gameAdditionalWelcomeNote,
-    formData.gameIsShowAdditionalWelcomeNote,
-  );
+  
   const renderContent = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
     const parts = formData?.gameAdditionalWelcomeNote?.split(linkRegex);
@@ -125,12 +123,19 @@ const Welcome: React.FC<{
           <Box className="welcome-screen">
             <Box
               className="welcome-screen-box"
-              style={{
-                transform: `scale(${showComplete ? 0.2 : 1})`,
-                transition: 'transform 0.5s ease-in-out',
-              }}
+              // style={{
+              //   transform: `scale(${showComplete ? 0.2 : 1})`,
+              //   transition: 'transform 0.5s ease-in-out',
+              // }}
             >
-              <Img src={imageSrc} className="bg-welcome" />
+              {' '}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', stiffness: 100, damping: 10 }}
+              >
+                <Img src={imageSrc} className="bg-welcome" />
+              </motion.div>
             </Box>
             {!showComplete && (
               <Box className="content-box" fontFamily={'gametext'}>
@@ -153,7 +158,7 @@ const Welcome: React.FC<{
                       md: '13px',
                       lg: '15px',
                     }}
-                    mt={'2px'}
+                    // mt={'2px'}
                     fontFamily={'content'}
                     position={'absolute'}
                     display={'flex'}
@@ -176,6 +181,7 @@ const Welcome: React.FC<{
                   className="content"
                   width={'440px !important'}
                   overflowY={'scroll'}
+                  mt={'25px'}
                 >
                   {formData.gameIsShowStoryline === 'true' && (
                     <Text
