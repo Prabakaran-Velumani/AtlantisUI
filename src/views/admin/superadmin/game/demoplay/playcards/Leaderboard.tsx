@@ -9,6 +9,8 @@ import Label from 'assets/img/games/label.png';
 import Separator from 'assets/img/games/separator.png';
 import Close from 'assets/img/games/close.png';
 import Arrow from 'assets/img/games/arrow.png';
+import { useContext } from 'react';
+import { ProfileContext } from '../EntirePreview';
 const LeaderBoard: React.FC<{
   formData: any;
   imageSrc: any;
@@ -16,6 +18,37 @@ const LeaderBoard: React.FC<{
   data: any;
 }> = ({ imageSrc, formData, getData, data }) => {
   const content = [1, 2, 3, 4, 5, 6];
+  const names = [
+    'John', 'Jane', 'Michael', 'Emily', 'David', 'Sarah', 'Daniel', 'Jessica', 'Christopher', 'Amanda',
+    'Matthew', 'Ashley', 'Andrew', 'Jennifer', 'James', 'Elizabeth', 'Joseph', 'Lauren', 'Joshua', 'Megan',
+    'Robert', 'Kayla', 'William', 'Samantha', 'Daniel', 'Emily', 'Anthony', 'Nicole', 'Brandon', 'Amber',
+    'Ryan', 'Rachel', 'Tyler', 'Brittany', 'Alexander', 'Stephanie', 'Nicholas', 'Heather', 'Jacob', 'Michelle',
+    'Zachary', 'Tiffany', 'Kevin', 'Melissa', 'Steven', 'Rebecca', 'Justin', 'Chelsea', 'Brian', 'Katherine'
+  ];
+  const playerInfo = useContext(ProfileContext);
+  const namesWithScores = names.map(name => ({ name, score: (Math.floor(Math.random() * 101) *10)}));
+// Generate random scores for each name (0-100)
+
+const shuffledNamesWithScores = namesWithScores.sort(() => Math.random() - 0.5);
+// Shuffle the array of objects
+
+const selectedNamesWithScores = shuffledNamesWithScores.slice(0, 10);
+// Select the first 10 elements
+
+const sortedSelectedNamesWithScores = selectedNamesWithScores.sort((a, b) => b.score - a.score);
+// Sort the selected names based on score (descending order)
+
+
+const usersWithAllTimeScore = sortedSelectedNamesWithScores.map(user => {
+  const allTimeScore = (user.score + Math.floor(Math.random() * (2001 - user.score)*10));
+  // Generate a random allTimeScore between the user's current score and 2000
+  return { ...user, allTimeScore };
+});
+
+const randomPosition = Math.floor(Math.random() * 10);
+usersWithAllTimeScore[randomPosition] = {...usersWithAllTimeScore[randomPosition], name: playerInfo.name};
+
+
   return (
     <>
       {imageSrc && (
@@ -98,12 +131,14 @@ const LeaderBoard: React.FC<{
                     </Box>
                   </Box>
                 </Box>
-                {content &&
-                  content.map((it: any, ind: number) => (
+                {/* {content && content.map((it: any, ind: number) => ( */}
+                {usersWithAllTimeScore &&
+                  usersWithAllTimeScore.map((item: any, index: number) => (
                     <Box
                       className="content-lead"
                       fontFamily={'AtlantisText'}
                       // color={'#D9C7A2'}
+                      key = {index}
                     >
                       <>
                         <Img
@@ -123,7 +158,7 @@ const LeaderBoard: React.FC<{
                         >
                           <Box w={'30%'}>
                             <Text textAlign={'center'} color={'#D9C7A2'}>
-                              Cilian morphy
+                              {item.name}
                             </Text>
                           </Box>
                           <Box
@@ -132,10 +167,10 @@ const LeaderBoard: React.FC<{
                             justifyContent={'space-between'}
                           >
                             <Text textAlign={'center'} color={'#D9C7A2'}>
-                              1
+                              {index+1}
                             </Text>
                             <Text textAlign={'center'} color={'#D9C7A2'}>
-                              2525
+                            {item.score}
                             </Text>
                           </Box>
                           <Box
@@ -144,10 +179,10 @@ const LeaderBoard: React.FC<{
                             justifyContent={'space-between'}
                           >
                             <Text textAlign={'center'} color={'#D9C7A2'}>
-                              1
+                            {index+1}
                             </Text>
                             <Text textAlign={'center'} color={'#D9C7A2'}>
-                              2590
+                            {item.allTimeScore}
                             </Text>
                           </Box>
                         </Box>

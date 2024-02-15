@@ -40,9 +40,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('handlePlayGames success:');
+        // console.log('handlePlayGames success:');
 
-        console.log('hello');
+        // console.log('hello');
       } catch (error) {
         console.error('Error in handlePlayGames:', error);
       }

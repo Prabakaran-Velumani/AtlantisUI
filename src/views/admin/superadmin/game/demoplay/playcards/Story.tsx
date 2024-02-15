@@ -48,6 +48,8 @@ const Story: React.FC<{
   setCurrentScreenId: any;
   selectedPlayer: any;
   selectedNpc: any;
+  getAudioForText: any;
+  voiceIds: any;
 }> = ({
   data,
   type,
@@ -63,10 +65,12 @@ const Story: React.FC<{
   setAudio,
   selectedPlayer,
   selectedNpc,
+  getAudioForText,
+  voiceIds
 }) => {
   const [showNote, setShowNote] = useState(true),
     [first, setFirst] = useState(false);
-  const [voiceIds, setVoiceIds] = useState<any>();
+  
   const userProfile = useContext(ProfileContext);
   console.log('userProfile', userProfile);
   useEffect(() => {
@@ -85,16 +89,6 @@ const Story: React.FC<{
       setShowNote(false);
     }, 1000);
   }, []);
-
-  useEffect(() => {
-    setVoiceIds({
-      narrator: formData?.gameNarratorVoice ?? 'D38z5RcWu1voky8WS1ja',
-      playerMale: formData?.gamePlayerMaleVoice ?? '2EiwWnXFnvU5JabPnv8n',
-      playerFemale: formData?.gamePlayerFemaleVoice ?? '21m00Tcm4TlvDq8ikWAM',
-      NPC: formData?.gameNonPlayerVoice ?? '5Q0t7uMcjvnagumLfvZi',
-      Intro: '', //Get the intro music for the game.gameBadge(Primary Key)
-    });
-  }, [formData]);
 
   const getVoice = async (blockInfo: any, blockType: string) => {
    
@@ -130,7 +124,8 @@ const Story: React.FC<{
           break;
         case 'Interaction':
           let optionsText = '';
-          Object.entries(options).forEach((item: any) => {
+          console.log("options", options);
+          options.forEach((item: any) => {
             optionsText +=
               '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
           });
@@ -161,35 +156,9 @@ const Story: React.FC<{
               : voiceIds?.playerFemale;
           break;
       }
-
    
-
-      if (text && voiceId) {
-        const send = {
-          text: text,
-          model_id: 'eleven_multilingual_v2',
-          voice_settings: {
-            stability: 0.8,
-            similarity_boost: 0.5,
-          },
-        };
-
-        const data = JSON.stringify(send);
-        /** Working API for getting voice for the text */
-        const res = await getVoiceMessage(voiceId, data);
-        /** Working API for getting voice for the text */
-        const contentType = res.headers.get('Content-Type');
-        if (contentType && contentType.includes('audio/mpeg')) {
-          // const blob = new Blob([res], { type: 'audio/mpeg' });
-          let blob = await res.blob();
-          const audioUrl = URL.createObjectURL(blob);
-          setAudio(audioUrl);
-          blob = null;
-        } else {
-          return console.log('Audio file Missing');
-        }
-      }
-   
+      //** Handling text to voice convertion to global access  by getAudioForText()*/
+      getAudioForText(text, voiceId);
   };
 
   return (
@@ -535,6 +504,7 @@ const Story: React.FC<{
                     onClick={() => handleValidate(item, ind)}
                     fontFamily={'AtlantisText'}
                     fontSize={'20px'}
+                    key={ind}
                   >
                     <Img src={option === ind ? on : off} h={'30px'} w={'95%'} />
                     {item?.qpOptionText}

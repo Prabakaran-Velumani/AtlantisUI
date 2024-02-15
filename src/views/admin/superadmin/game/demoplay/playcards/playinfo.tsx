@@ -43,6 +43,7 @@ import { useParams } from 'react-router-dom';
 import { addReviewers } from 'utils/reviews/reviews';
 import ReplayBox from 'assets/img/screens/ReplayBox.png';
 import play from 'assets/img/games/Play.png';
+import ArcheryArrow from 'assets/img/games/archery-arrow.png';
 // Assets
 
 // type RowObj = {
@@ -62,8 +63,9 @@ export default function PlayInfo(props: {
   onClose: any;
   isOpen: any;
   startDemo:any;
+  setIsGetsPlayAudioConfirmation: any;
 }) {
-  const { onOpen, onClose, isOpen,startDemo } = props;
+  const { onOpen, onClose, isOpen,startDemo, setIsGetsPlayAudioConfirmation } = props;
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const iconColor = useColorModeValue('secondaryGray.500', 'white');
@@ -75,6 +77,7 @@ export default function PlayInfo(props: {
 
   const submitEmails = async () => {};
   return (
+    <>
     <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
       <ModalOverlay />
       <ModalContent>
@@ -83,17 +86,12 @@ export default function PlayInfo(props: {
           justifyContent={'center'}
           alignItems={'center'}
         >
-          {/* <Box w={'100%'} ></Box> */}
           <Box
             width={'100%'}
             h={'100%'}
             display={'flex'}
             justifyContent={'center'}
             alignItems={'flex-end'}
-            //   backgroundImage={ReplayBox}
-            //   backgroundRepeat={'no-repeat'}
-            //   backgroundSize={'contain'}
-            //   color={'none'}
           >
             <Box>
               <Text mt={'20px'} fontSize={'25px'} fontWeight={700} mb={'10px'} >Welcome To Atlantis..!</Text>
@@ -117,8 +115,11 @@ export default function PlayInfo(props: {
             </Box>
             </Box>
           </Box>
+         
         </ModalBody>
       </ModalContent>
     </Modal>
+     <Img src={ArcheryArrow} className={"intro-arraow"}/>
+     </>
   );
 }

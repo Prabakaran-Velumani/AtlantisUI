@@ -156,14 +156,31 @@ const GamePreview = () => {
   const element = document.getElementById('container');
   if (element) {
     try {
-      if (!document?.fullscreenElement) {
-        element?.requestFullscreen();
+      if (document.fullscreenEnabled) { // Check if fullscreen is supported
+        if (!document.fullscreenElement) { // Check if not already in fullscreen
+          // Request fullscreen
+          element.requestFullscreen()
+            .then(() => {
+              console.log('Entered fullscreen mode');
+              // Perform additional actions after entering fullscreen mode
+            })
+            .catch((error) => {
+              console.error('Error entering fullscreen mode:', error);
+              // Handle errors related to entering fullscreen mode
+            });
+        } else {
+          console.warn('Document is already in fullscreen mode');
+          // Handle scenario where document is already in fullscreen mode
+        }
+      } else {
+        console.error('Fullscreen mode is not supported');
+        // Handle scenario where fullscreen mode is not supported by the browser
       }
     } catch (error) {
       console.error('Error requesting fullscreen:', error);
+      // Handle other errors related to requesting fullscreen mode
     }
   }
-
   const handleSubmitReview = async (inputdata: any) => {
     /** Sample post data
    * {"data" :{
