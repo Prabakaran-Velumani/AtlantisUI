@@ -85,7 +85,6 @@ const Welcome: React.FC<{
     );
     return matchedSkill ? matchedSkill.name : null;
   };
-  
   const renderContent = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
     const parts = formData?.gameAdditionalWelcomeNote?.split(linkRegex);
@@ -261,7 +260,7 @@ const Welcome: React.FC<{
                                       w={'50px'}
                                       h={'20px'}
                                       justifyContent={'space-between'}
-                                      font-weight={'300'}
+                                      fontWeight={'300'}
                                       margin-left={'5px'}
                                       mt={index === 0 ? '10px' : ''}
                                     >
@@ -321,8 +320,8 @@ const Welcome: React.FC<{
                                         w={'50px'}
                                         h={'20px'}
                                         justifyContent={'space-between'}
-                                        font-weight={'300'}
-                                        margin-left={'5px'}
+                                        fontWeight={'300'}
+                                        marginLeft={'5px'}
                                         lineHeight={0.9}
                                         mt={ind === 0 ? '10px' : ''}
                                       >

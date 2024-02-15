@@ -1843,3 +1843,29 @@ letter-spacing: 0.5px;
 .non-caret {
   caret-color: transparent;
 }
+
+.intro-arraow{
+  width: 100px;
+  height: 100px;
+  z-index: 10;
+  position: absolute;
+  bottom: 160px;
+  right: 411px;
+  transform: rotate(338deg);
+  animation: tutorial 2s ease-in infinite;
+}
+
+@keyframes tutorial {
+ 0% {
+  bottom: 160px;
+  right: 411px;
+ } 
+ 90% {
+  bottom: 18px;
+  right: 60px;
+ } 
+ 100% {
+  bottom: 18px;
+  right: 60px;
+ } 
+}

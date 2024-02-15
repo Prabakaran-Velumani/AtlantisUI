@@ -48,7 +48,8 @@ const ChapterPage: React.FC<{ imageSrc: any; demoBlocks: any,setCurrentScreenId:
                 <Box className="content-box">
                   {Object.keys(demoBlocks).map((it, num) => (
                     <Box
-                      className="queue-box"
+                      className="queue-box" 
+                      key={num}
                       // onClick={() => useData?.Function?.handleNextTab()}
                       onClick={()=>setCurrentScreenId(1)}
                     >
