@@ -505,7 +505,6 @@ const Story: React.FC<{
                     onClick={() => handleValidate(item, ind)}
                     fontFamily={'AtlantisText'}
                     fontSize={'20px'}
-                    key={ind}
                   >
                     <Img src={option === ind ? on : off} h={'30px'} w={'95%'} />
                     {item?.qpOptionText}
