@@ -231,11 +231,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
     useState<boolean>(false);
 
-    const fetchDefaultBgMusic = async () => {
-      const res = await getTestAudios(); //default bg audio fetch
-      if (res?.status === 'success') setAudio(res?.url);
-    };
-  
+  const fetchDefaultBgMusic = async () => {
+    const res = await getTestAudios(); //default bg audio fetch
+    if (res?.status === 'success') setAudio(res?.url);
+  };
+
   useEffect(() => {
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
@@ -269,7 +269,7 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
   }, [gameInfo]);
 
   useEffect(() => {
-    console.log('Audio Updated');
+  
     setAudioObj({
       url: audio,
       type: 'api',
@@ -280,28 +280,26 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
   }, [audio]);
 
   useEffect(() => {
-    console.log("audioObj",audioObj);
-   // Check if audioRef exists and audioObj.url is not empty
-   if (audioRef.current && audioObj.url) {
-    // Pause the audio playback if it's currently playing
-    if (!audioRef.current.paused) {
-      audioRef.current.pause();
+    // Check if audioRef exists and audioObj.url is not empty
+    if (audioRef.current && audioObj.url !== '') {
+      // Pause the audio playback if it's currently playing
+      if (!audioRef.current.paused) {
+        audioRef.current.pause();
+      }
+      // Update the audio source and play if necessary
+      audioRef.current.src = audioObj.url;
+      if (audioObj.autoplay) {
+        audioRef.current.play();
+      }
+    } else {
+      // Stop the audio playback and set audioRef.current to null
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
     }
-    // Update the audio source and play if necessary
-    audioRef.current.src = audioObj.url;
-    if (audioObj.autoplay) {
-      audioRef.current.play();
-    }
-  } else {
-    // Stop the audio playback and set audioRef.current to null
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-  }
   }, [audioObj]);
 
-  console.log("audioRef.current",audioRef.current)
 
   useEffect(() => {
     if (gameInfo) {
@@ -338,7 +336,9 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
   }, [currentScreenId]);
 
   const getData = (next: any) => {
-    setAudioObj((prev)=>({...prev, url:'', type: 'api', loop: false}));
+    console.log('current', next?.blockPrimarySequence);
+   
+    setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
@@ -358,21 +358,9 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
           )
           .map((key) => demoBlocks[quest]?.[key])
       : [];
-    if (nextBlock.length === 0) {
-      if (demoBlocks.hasOwnProperty(nextLevel)) {
-        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        setData(demoBlocks[nextLevel]['1']);
-        setCurrentScreenId(6);
-        return false;
-      } else {
-        setType(null);
-        setData(null);
-        setCurrentScreenId(6);
-        return false;
-      }
-    }
+    console.log(navi);
+    console.log('check prefernce',next?.gameIsShowInteractionFeedBack);
     if (currentScreenId === 6) {
-      console.log('complete screen entered');
       if (
         next?.gameIsShowInteractionFeedBack &&
         next?.gameIsShowInteractionFeedBack === 'Complete'
@@ -496,6 +484,19 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
         return false;
       }
     }
+    if (nextBlock.length === 0) {
+      if (demoBlocks.hasOwnProperty(nextLevel)) {
+        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+        setData(demoBlocks[nextLevel]['1']);
+        setCurrentScreenId(6);
+        return false;
+      } else {
+        setType(null);
+        setData(null);
+        setCurrentScreenId(6);
+        return false;
+      }
+    }
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
         setType(next?.blockChoosen);
@@ -529,16 +530,18 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
       resMsg !== '' &&
       next?.gameIsShowInteractionFeedBack &&
       next?.gameIsShowInteractionFeedBack === 'Each'
-    )
+    ) {
       setType('response');
-    else if (
+      return false;
+    } else if (
       (type === 'Interaction' || type === 'response') &&
       feed !== '' &&
       next?.gameIsShowInteractionFeedBack &&
       next?.gameIsShowInteractionFeedBack === 'Each'
-    )
+    ) {
       setType('feedback');
-    else if (
+      return false;
+    } else if (
       type === 'Interaction' ||
       type === 'response' ||
       type === 'feedback'
@@ -557,12 +560,19 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
       } else if (navi === 'Select Block') {
         setSelectedOption(null);
       } else if (navi === 'Complete') {
-        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        setData(demoBlocks[nextLevel]['1']);
-        setCurrentScreenId(6);
-        return false;
+        if (demoBlocks.hasOwnProperty(nextLevel)) {
+          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+          setData(demoBlocks[nextLevel]['1']);
+          setCurrentScreenId(6);
+          return false;
+        } else {
+          setType(null);
+          setData(null);
+          setCurrentScreenId(6);
+          return false;
+        }
       } else {
-        console.log('here is found')
+       
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
@@ -588,7 +598,6 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
       setData(nextBlock[0]);
       setSelectedOption(null);
     }
-  
   };
 
   let menuBg = useColorModeValue('white', 'navy.800');
@@ -855,8 +864,7 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
   };
 
   const getAudioForText = async (text: string, voiceId: string) => {
-    console.log('text', text);
-    console.log('voiceId', voiceId);
+
     if (text && voiceId) {
       const send = {
         text: text,
@@ -883,7 +891,6 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
       }
     }
   };
-
 
   return (
     <ProfileContext.Provider value={profileData}>
