@@ -624,11 +624,7 @@ const GameCreation = () => {
     });
     onOpen();
   };
-  const fetchPreviewData = async () =>{
-    const prev = await getPreview(id);
-    if (prev && prev?.status !== 'Success') return console.log(prev.message);
-    setPrevdata(prev?.data);
-  } 
+  
   const fetchGameId = async () => {
     const reviews = await getAllReviews(id);
     if (reviews && reviews?.status !== 'Success')
@@ -642,7 +638,9 @@ const GameCreation = () => {
       setCblocks(images.data);
       setQuest(images.quest);
     }
-    fetchPreviewData();
+    const prev = await getPreview(id);
+    if (prev && prev?.status !== 'Success') return console.log(prev.message);
+    setPrevdata(prev?.data);
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
       // return console.log('error:' + gameById?.message);
@@ -890,10 +888,14 @@ const GameCreation = () => {
   }, [id, items]);
 
   console.log('navin testing :', formData);
-  const handleEntirePrev = () => {
-    fetchPreviewData();
-    setEntire(true);
-    onOpen();
+  const handleEntirePrev = async () => {
+    const prev = await getPreview(id);
+    if (prev && prev?.status === 'Success')
+    {
+      setPrevdata(prev?.data);
+      setEntire(true);
+      onOpen();
+    }
   };
   const handleShareReview = () => {
     setEntire(false);
