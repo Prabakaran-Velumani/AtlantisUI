@@ -15,10 +15,11 @@ import Lock from 'assets/img/games/lock.png';
 import { BiMoney } from 'react-icons/bi';
 import { GiCoins } from 'react-icons/gi';
 
-const ChapterPage: React.FC<{ imageSrc: any; demoBlocks: any,setCurrentScreenId:any; }> = ({
+const ChapterPage: React.FC<{ formData?:any,imageSrc: any; demoBlocks: any,setCurrentScreenId:any; }> = ({
   imageSrc,
   demoBlocks,
-  setCurrentScreenId
+  setCurrentScreenId,
+  formData
 }) => {
   return (
     <>
@@ -54,7 +55,7 @@ const ChapterPage: React.FC<{ imageSrc: any; demoBlocks: any,setCurrentScreenId:
                       onClick={()=>setCurrentScreenId(1)}
                     >
                       <Img className="queue-screen" src={QueueScreen} />
-                      <Text className="heading">Tritara Bridge</Text>
+                      <Text className="heading">{formData?.gameTitle}</Text>
                       <Box className="badge">
                         {it !== '1' ? (
                           <Img src={Lock} className="lock" />

@@ -1404,6 +1404,7 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
               return (
                 <>
                   <ChapterPage
+                  formData={gameInfo?.gameData}
                     imageSrc={backgroundScreenUrl}
                     demoBlocks={demoBlocks}
                     setCurrentScreenId={setCurrentScreenId}
