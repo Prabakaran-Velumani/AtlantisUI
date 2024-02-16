@@ -186,7 +186,6 @@ const Game: React.FC = () => {
     setDownloadId(id);
     try {
       const response = await getScormConfig(id);
-      // console.log('***'+response.scormEdition +'***'+ response.completionStatus +'***'+ response.scoringMethod +'***'+ response.masteryScore +'***'+ response.trackingTypes +'***'+ response.lmsApiVersion +'***'+ response.dataTransferFrequency +'***'+ response.launchBehavior +'***'+ response.navigation +'***'+ response.bookmarking +'***'+ response.reportLocation +'***'+ response.reportFormat +'***'+ response.debuggingMode +'***'+ response.sequencingRules +'***'+ response.checkCustomMetadata +'***'+ response.customMetadata +'***'+ response.checkCustomJsHooks +'***'+ response.preLaunchScript +'***'+ response.postLaunchScript +'***'+ response.checkAlternateContent +'***'+ response.alternateContent +'***'+ response.textToSpeech +'***'+ response.language +'***'+ response.encryption +'***'+ response.scormPackageVersion)
       if(response) {
         let completionStatusArray: string[] = [];
             if(response.completionStatus) {
@@ -227,6 +226,9 @@ const Game: React.FC = () => {
   }));
   setCompletionStatus(updatedCompletionStatus);
   console.log('updatedCompletionStatus', updatedCompletionStatus)
+  console.log('completionStatus', completionStatus)
+  setFormData(formData);
+  setDownloadDialogOpen(true);
   }else {
     const formData = {
     scormEdition: 'SCORM 1.2',
@@ -255,6 +257,8 @@ const Game: React.FC = () => {
       encryption: 'enable',
       scormPackageVersion: '',
   };
+  setFormData(formData);
+  setDownloadDialogOpen(true);
   }
 
 //   const updatedCompletionStatus = completionStatus.map(option => ({
@@ -262,9 +266,8 @@ const Game: React.FC = () => {
 //     isChecked: formData.completionStatus.includes(option.value),
 // }));
 
-      setFormData(formData);
-      // console.log('updatedCompletionStatus', updatedCompletionStatus)
-      setDownloadDialogOpen(true);
+      // setFormData(formData);
+      
     } catch (error) {
       console.error('Error fetching SCORM config:', error);
     }
@@ -898,6 +901,7 @@ const handleTextToSpeechChange = async (event:any) => {
         console.error('Error details:', error.message);
       }
     }
+    onCloseDownloadDialog();
   };
 
   const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
