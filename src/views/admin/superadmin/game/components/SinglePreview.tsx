@@ -283,13 +283,13 @@ useEffect(()=>{
       };
 
       const data = JSON.stringify(send);
-      {
+ 
         /** Working API for getting voice for the text */
-      }
+  
       const res = await getVoiceMessage(voiceId, data);
-      {
+
         /** Working API for getting voice for the text */
-      }
+ 
       const contentType = res.headers.get('Content-Type');
       if (contentType && contentType.includes('audio/mpeg')) {
         // const blob = new Blob([res], { type: 'audio/mpeg' });

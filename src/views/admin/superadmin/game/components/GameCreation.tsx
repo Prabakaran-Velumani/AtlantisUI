@@ -624,6 +624,11 @@ const GameCreation = () => {
     });
     onOpen();
   };
+  const fetchPreviewData = async () =>{
+    const prev = await getPreview(id);
+    if (prev && prev?.status !== 'Success') return console.log(prev.message);
+    setPrevdata(prev?.data);
+  } 
   const fetchGameId = async () => {
     const reviews = await getAllReviews(id);
     if (reviews && reviews?.status !== 'Success')
@@ -637,10 +642,7 @@ const GameCreation = () => {
       setCblocks(images.data);
       setQuest(images.quest);
     }
-
-    const prev = await getPreview(id);
-    if (prev && prev?.status !== 'Success') return console.log(prev.message);
-    setPrevdata(prev?.data);
+    fetchPreviewData();
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
       // return console.log('error:' + gameById?.message);
@@ -889,6 +891,7 @@ const GameCreation = () => {
 
   console.log('navin testing :', formData);
   const handleEntirePrev = () => {
+    fetchPreviewData();
     setEntire(true);
     onOpen();
   };
@@ -4183,7 +4186,7 @@ const GameCreation = () => {
                     color="#fff"
                     h={'46px'}
                     w={'128px'}
-                    display={tab === 7 ? 'none' : 'block'}
+                    display={tab === 7 || tab === 6 ? 'none' : 'block'}
                     mr={'17px'}
                     mt={'6px'}
                     ml={'11px'}
