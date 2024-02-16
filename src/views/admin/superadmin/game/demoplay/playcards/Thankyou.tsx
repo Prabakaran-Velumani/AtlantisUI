@@ -74,7 +74,7 @@ const ThankYou: React.FC<{
             >
               <Box
                 h={'100px'}
-                w={'80%'}
+                w={'40%'}
                 mt={{ base: '0px', sm: '0px', md: '20px', lg: '20px' }}
                 lineHeight={1}
                 textAlign={'center'}

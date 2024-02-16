@@ -245,6 +245,7 @@ const Story: React.FC<{
             <Box
               position={'fixed'}
               overflowY={'scroll'}
+              transform={'translate(0px, 45px)'}
               w={'50%'}
               mt={'10px'}
               display={'flex'}
@@ -441,8 +442,7 @@ const Story: React.FC<{
           <Box
             style={{
               transform: `translateX(${showNote ? -200 : 0}px) scale(1.2)`,
-              transition:
-                'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+              transition:'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
             }}
             backgroundImage={parch}
             position={'fixed'}
