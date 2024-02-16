@@ -72,7 +72,7 @@ const Story: React.FC<{
     [first, setFirst] = useState(false);
   
   const userProfile = useContext(ProfileContext);
-
+  console.log('userProfile', userProfile);
   useEffect(() => {
     getVoice(data, type);
     setShowNote(true);
@@ -88,6 +88,7 @@ const Story: React.FC<{
       setFirst(false);
       setShowNote(false);
     }, 1000);
+    data && type && getVoice(data, type);
   }, []);
 
   const getVoice = async (blockInfo: any, blockType: string) => {
@@ -107,7 +108,7 @@ const Story: React.FC<{
         data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
           resMsg =>responseObject[]  : responseemotionObject[]
         */
-
+      console.log('voiceIds', voiceIds);
       switch (blockType) {
         case 'Note':
           text = blockInfo.blockText;
@@ -156,9 +157,35 @@ const Story: React.FC<{
               : voiceIds?.playerFemale;
           break;
       }
+
    
-      //** Handling text to voice convertion to global access  by getAudioForText()*/
       getAudioForText(text, voiceId);
+      // if (text && voiceId) {
+      //   const send = {
+      //     text: text,
+      //     model_id: 'eleven_multilingual_v2',
+      //     voice_settings: {
+      //       stability: 0.8,
+      //       similarity_boost: 0.5,
+      //     },
+      //   };
+
+      //   const data = JSON.stringify(send);
+      //   /** Working API for getting voice for the text */
+      //   const res = await getVoiceMessage(voiceId, data);
+      //   /** Working API for getting voice for the text */
+      //   const contentType = res.headers.get('Content-Type');
+      //   if (contentType && contentType.includes('audio/mpeg')) {
+      //     // const blob = new Blob([res], { type: 'audio/mpeg' });
+      //     let blob = await res.blob();
+      //     const audioUrl = URL.createObjectURL(blob);
+      //     setAudio(audioUrl);
+      //     blob = null;
+      //   } else {
+      //     return console.log('Audio file Missing');
+      //   }
+      // }
+   
   };
 
   return (
@@ -498,7 +525,6 @@ const Story: React.FC<{
                     mb={'10px'}
                     w={'80%'}
                     lineHeight={1}
-                    key={ind}
                     color={option === ind ? 'purple' : ''}
                     textAlign={'center'}
                     cursor={'pointer'}
@@ -703,6 +729,10 @@ const Story: React.FC<{
               style={{
                 fontWeight: '900',
                 color: '#D9C7A2',
+                fontSize: '18px',
+
+                lineHeight: 1,
+                fontFamily: 'cont',
               }}
             >
               {feed}

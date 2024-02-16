@@ -1,4 +1,4 @@
-import { Img, Text, SimpleGrid, Box, Input, Textarea } from '@chakra-ui/react';
+import { Img, Text, SimpleGrid, Box } from '@chakra-ui/react';
 import React from 'react';
 
 /* for reflection question inside the image */
@@ -21,14 +21,9 @@ const Reflection: React.FC<{
         <>
           <Box className="reflection-screen">
             <Box className="reflection-screen-box">
-              {/* <Img src={imageSrc} className="bg-ref" /> */}
-            </Box>
-            <Box
-              w={'100%'}
-              display={'flex'}
-              justifyContent={'center'}
-              position={'relative'}
-            >
+            <Img src={imageSrc} className="bg-ref" />
+          </Box>
+            <Box w={'100%'} display={'flex'} justifyContent={'center'} position={'relative'}>
               <Img src={question} w={'320px'} h={'100px'} />
               <Text
                 fontFamily={'AtlantisText'}
@@ -75,35 +70,11 @@ const Reflection: React.FC<{
                         {item?.refQuestion}
                       </Text>
                     </Box>
-                    <Box position={'relative'}>
-                      <Img
-                        w={'350px'}
-                        h={{
-                          base: '20px',
-                          sm: '30px',
-                          md: '50px',
-                          lg: '100px',
-                        }}
-                        src={ref}
-                      />
-                      <Textarea
-                        bottom={0}
-                        outline={'none'}
-                        focusBorderColor="none"
-                        border={'none'}
-                        position={'absolute'}
-                        w={'350px'}
-                        color={'#D9C7A2'}
-                        h={{
-                          base: '20px',
-                          sm: '30px',
-                          md: '50px',
-                          lg: '100px',
-                        }}
-                        _focus={{ boxShadow: 'none', border: 'none' }}
-                        fontFamily={'AtlantisText'}
-                      />
-                    </Box>
+                    <Img
+                      w={'350px'}
+                      h={{ base: '20px', sm: '30px', md: '50px', lg: '100px' }}
+                      src={ref}
+                    />
                   </Box>
                 ))}
               </SimpleGrid>

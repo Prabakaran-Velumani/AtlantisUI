@@ -84,7 +84,6 @@ import ProfileScreen from './playcards/ProfileScreen';
 import Characterspage from './playcards/CharacterSelection';
 import ChapterPage from './playcards/Chapters';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
-import { EnumType } from 'typescript';
 
 interface Review {
   // reviewId: Number;
@@ -190,22 +189,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [backgroundScreenUrl, setBackgroundScreenUrl] = useState(null);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [audio, setAudio] = useState<string>('');
-  type EnumType = 'bgm' | 'api';
-  const [audioObj, setAudioObj] = useState<{
-    url: string;
-    type: EnumType;
-    volume: string;
-    loop: boolean;
-    autoplay: boolean;
-  }>({
-    url: '',
-    type: 'bgm',
-    volume: '0.5',
-    loop: true,
-    autoplay: true,
-  });
-  const [audioVolume, setAudioVolume] = useState<any>(0.5);
-  const [nextBlockAudioUrl, setNextBlockAudioUrl] = useState<string>('');
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [currentStoryBlockSeq, setCurrentStoryBlockSeq] =
     useState<string>(null);
@@ -226,88 +209,47 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     language: '',
   });
   const [voiceIds, setVoiceIds] = useState<any>();
-  const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
-    useState<boolean>(false);
+  const fetchDefaultBgMusic = async () => {
+    const res = await getTestAudios(); //default bg audio fetch
+    if (res?.status === 'success') setAudio(res?.url);
+  };
 
-    const fetchDefaultBgMusic = async () => {
-      const res = await getTestAudios(); //default bg audio fetch
-      if (res?.status === 'success') setAudio(res?.url);
-    };
-  
   useEffect(() => {
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
     setData(gameInfo?.blocks['1']['1']);
-    return () => {
-      if (audioRef.current?.src) {
-        audioRef.current.pause();
-      }
-    };
   }, []);
 
   useEffect(() => {
     if (!gameInfo?.bgMusic) {
       fetchDefaultBgMusic();
     } else {
-      console.log("gameInfo Changed....");
-      currentScreenId > 0 &&  setAudioObj({
-        url: gameInfo.bgMusic,
-        type: 'bgm',
-        volume: '0.5',
-        loop: true,
-        autoplay: true,
-      });
+      currentScreenId > 0 && setAudio(gameInfo.bgMusic);
     }
   }, [gameInfo]);
 
   useEffect(() => {
     console.log('Audio Updated');
-    setAudioObj({
-      url: audio,
-      type: 'api',
-      volume: '0.5',
-      loop: false,
-      autoplay: true,
-    });
+    if (audio) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      audioRef.current = new Audio(audio);
+      audioRef.current.play();
+    }
   }, [audio]);
 
   useEffect(() => {
-    console.log("audioObj",audioObj);
-   // Check if audioRef exists and audioObj.url is not empty
-   if (audioRef.current && audioObj.url !== '') {
-    // Pause the audio playback if it's currently playing
-    if (!audioRef.current.paused) {
-      audioRef.current.pause();
-    }
-    // Update the audio source and play if necessary
-    audioRef.current.src = audioObj.url;
-    if (audioObj.autoplay) {
-      audioRef.current.play();
-    }
-  } else {
-    // Stop the audio playback and set audioRef.current to null
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
+    if(gameInfo)
+    {
+    setVoiceIds({
+      narrator: gameInfo?.gameData?.gameNarratorVoice ?? 'D38z5RcWu1voky8WS1ja',
+      playerMale: gameInfo?.gameData?.gamePlayerMaleVoice ?? '2EiwWnXFnvU5JabPnv8n',
+      playerFemale: gameInfo?.gameData?.gamePlayerFemaleVoice ?? '21m00Tcm4TlvDq8ikWAM',
+      NPC: gameInfo?.gameData?.gameNonPlayerVoice ?? '5Q0t7uMcjvnagumLfvZi',
+      Intro: '', //Get the intro music for the game.gameBadge(Primary Key)
+    });
   }
-  }, [audioObj]);
-
-  console.log("audioRef.current",audioRef.current)
-
-  useEffect(() => {
-    if (gameInfo) {
-      setVoiceIds({
-        narrator:
-          gameInfo?.gameData?.gameNarratorVoice ?? 'D38z5RcWu1voky8WS1ja',
-        playerMale:
-          gameInfo?.gameData?.gamePlayerMaleVoice ?? '2EiwWnXFnvU5JabPnv8n',
-        playerFemale:
-          gameInfo?.gameData?.gamePlayerFemaleVoice ?? '21m00Tcm4TlvDq8ikWAM',
-        NPC: gameInfo?.gameData?.gameNonPlayerVoice ?? '5Q0t7uMcjvnagumLfvZi',
-        Intro: '', //Get the intro music for the game.gameBadge(Primary Key)
-      });
-    }
   }, [gameInfo?.gameData]);
 
   useEffect(() => {
@@ -330,7 +272,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [currentScreenId]);
 
   const getData = (next: any) => {
-    setAudioObj((prev)=>({...prev, url:'', type: 'api', loop: false}));
+    const isPreference = gameInfo?.gameData?.gameIsShowInteractionFeedBack;
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
@@ -349,7 +291,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
           )
           .map((key) => demoBlocks[quest]?.[key])
-      : [];
+      : ['completed'];
     if (nextBlock.length === 0) {
       if (demoBlocks.hasOwnProperty(nextLevel)) {
         setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -364,7 +306,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
     if (currentScreenId === 6) {
-      console.log('complete screen entered');
       if (
         next?.gameIsShowInteractionFeedBack &&
         next?.gameIsShowInteractionFeedBack === 'Complete'
@@ -549,12 +490,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       } else if (navi === 'Select Block') {
         setSelectedOption(null);
       } else if (navi === 'Complete') {
-        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        setData(demoBlocks[nextLevel]['1']);
         setCurrentScreenId(6);
         return false;
       } else {
-        console.log('here is found')
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
@@ -580,7 +518,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setData(nextBlock[0]);
       setSelectedOption(null);
     }
-  
   };
 
   let menuBg = useColorModeValue('white', 'navy.800');
@@ -595,15 +532,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
     setSelectedOption(ind === selectedOption ? null : ind);
-    // console.log('item', item);
-    // console.log('ind', ind);
-    const text = '..Option ' + item.qpOptions + ' -- ' + item.qpOptionText;
-    const voiceId =
-      data?.blockRoll == '999999'
-        ? voiceIds.NPC
-        : profileData?.gender === 'Male'
-        ? voiceIds?.playerMale
-        : voiceIds?.playerFemale;
+    console.log('item', item);
+    console.log('ind', ind);
+    const text = "..Option "+item.qpOptions +" -- "+ item.qpOptionText;
+    const voiceId = data?.blockRoll == '999999'
+    ? voiceIds.NPC
+    : profileData?.gender === 'Male'
+    ? voiceIds?.playerMale
+    : voiceIds?.playerFemale;
     getAudioForText(text, voiceId);
   };
   useEffect(() => {
@@ -678,18 +614,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ],
     },
   ];
-  useEffect(() => {
-    if (audioRef.current) {
-      if (currentScreenId === 2) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-    }
-  }, [currentScreenId]);
+
   useEffect(() => {
     if (reviewInput?.tabId) {
-      if (reviewInput?.tabId == 5) {
+      if (reviewInput?.tabId === 5) {
         setReviewSubTabOptions([]);
         setReviewInput((prev: Review) => ({
           ...prev,
@@ -698,7 +626,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             Number(currentScreenId),
           ).toString(),
         }));
-      } else if (reviewInput?.tabId == 4) {
+      } else if (reviewInput?.tabId === 4) {
         //for Story Tab
         const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
         setReviewSubTabOptions([]);
@@ -709,13 +637,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         }));
       } else {
         const subOptions = subTabOptionsForTabIds.find(
-          (item: any) => Object.keys(item)[0] == reviewInput?.tabId.toString(),
+          (item: any) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
         );
         setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
       }
       /** To hide the sub tab options and set the subtab selection based on the current screen it here */
     }
   }, [reviewInput.tabId]);
+
   useEffect(() => {
     /**Validate form */
     if (
@@ -751,6 +680,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   //no need for story
   const handleTabSelection = (e: any) => {
     e.preventDefault();
+
     if (e.target.value) {
       setReviewInput((prev: Review) => ({
         ...prev,
@@ -770,16 +700,16 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   };
 
-  const handleSubTabSelection = (e: any) => {
+  const handleSubTabSelection = (selectedOption: any) => {
     const selectedTabFileds = tabAttributeSets.find(
       (item) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
     );
     setReviewInput((prev: Review) => ({
       ...prev,
-      tabAttribute: e.target.value
+      tabAttribute: selectedOption?.value
         ? selectedTabFileds[reviewInput?.tabId.toString()].tabAttribute
         : null,
-      tabAttributeValue: e.target.value ?? null,
+      tabAttributeValue: selectedOption?.value ? selectedOption?.value : null,
     }));
   };
 
@@ -788,19 +718,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setIsMenuOpen(true);
   };
 
-  // const toast = useToast();
   const handleReview = (e: any) => {
-    // console.log('toast before')
-    // toast({
-    //   title: 'Toast Title',
-    //   description: 'Toast Description',
-    //   status: 'success',
-    //   duration: 3000,
-    //   isClosable: true,
-    //   position: 'top-right',
-
-    // });
-    // console.log('toast after')
     setReviewInput((prev: Review) => ({ ...prev, review: e.target.value }));
   };
   const resetInputFields = () => {
@@ -830,12 +748,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     onClose: onClose1,
   } = useDisclosure();
   const startDemo = () => {
-    // const aud = new Audio(audio);
-    // aud.loop = true;
-    // aud.play();
+    const aud = new Audio(audio);
+    aud.loop = true;
+    aud.play();
     onClose1();
     setCurrentScreenId(10);
-    setIsGetsPlayAudioConfirmation(true);
   };
 
   const replayGame = () => {
@@ -845,8 +762,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const getAudioForText = async (text: string, voiceId: string) => {
-    console.log('text', text);
-    console.log('voiceId', voiceId);
+    console.log("text", text)
+    console.log("voiceId", voiceId)
     if (text && voiceId) {
       const send = {
         text: text,
@@ -859,22 +776,23 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
       const data = JSON.stringify(send);
       /** Working API for getting voice for the text */
-      const res = await getVoiceMessage(voiceId, data);
-      /** Working API for getting voice for the text */
-      const contentType = res.headers.get('Content-Type');
-      if (contentType && contentType.includes('audio/mpeg')) {
-        // const blob = new Blob([res], { type: 'audio/mpeg' });
-        let blob = await res.blob();
-        const audioApiUrl = URL.createObjectURL(blob);
-        setAudio(audioApiUrl);
-        blob = null;
-      } else {
-        return console.log('Audio file Missing');
-      }
+      // const res = await getVoiceMessage(voiceId, data);
+      // /** Working API for getting voice for the text */
+      // const contentType = res.headers.get('Content-Type');
+      // if (contentType && contentType.includes('audio/mpeg')) {
+      //   // const blob = new Blob([res], { type: 'audio/mpeg' });
+      //   let blob = await res.blob();
+      //   const audioApiUrl = URL.createObjectURL(blob);
+      //   setAudio(audioApiUrl);
+      //   blob = null;
+      // } else {
+      //   return console.log('Audio file Missing');
+      // }
     }
   };
 
-
+  // console.log('Audio', audio);
+  // console.log('audioRef', audioRef);
   return (
     <ProfileContext.Provider value={profileData}>
       <Flex height="100vh" className={currentScreenId === 2 ? '' : 'AddScores'}>
@@ -889,9 +807,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       onClose={onClose1}
                       isOpen={true}
                       startDemo={startDemo}
-                      setIsGetsPlayAudioConfirmation={
-                        setIsGetsPlayAudioConfirmation
-                      }
                     />
                   }
                 </>
@@ -988,11 +903,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     className="Main-Content"
                   >
                     <Box
-                      backgroundImage={RefBg}
+                      // backgroundImage={backgroundScreenUrl}
                       w={'100% !important'}
                       h={'100vh'}
-                      backgroundRepeat={'no-repeat'}
-                      backgroundSize={'cover'}
+                      // backgroundRepeat={'no-repeat'}
+                      // backgroundSize={'cover'}
                       alignItems={'center'}
                       justifyContent={'center'}
                       className="Game-Screen"
@@ -1424,7 +1339,16 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             minW={{ base: '360px' }}
             maxW={{ base: '360px', md: 'unset' }}
           >
-            <FormLabel display="flex" ms="10px" fontSize="sm" fontWeight="bold">
+            <FormLabel
+              display="flex"
+              ms="10px"
+              // htmlFor={id}
+              fontSize="sm"
+              // color={textColorPrimary}
+              fontWeight="bold"
+            >
+              {/* // _hover={{ cursor: 'pointer' }}>
+				//  {label} */}
               <Text fontSize="sm" fontWeight="400" ms="2px">
                 {'Feedback Options'}
                 <Text as="span" color="red.500">
@@ -1462,46 +1386,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             {reviewInput?.tabId !== null &&
               reviewInput?.tabId !== undefined &&
               reviewSubTabOptions?.length > 0 && (
-                // <SelectField
-                //   mb="10px"
-                //   me="30px"
-                //   id="subtab"
-                //   name="subtab"
-                //   label="Secondary Options"
-                //   fontSize={'md'}
-                //   options={reviewSubTabOptions}
-                //   onChange={handleSubTabSelection}
-                //   isRequired={true}
-                // />
-                <>
-                  <FormLabel
-                    display="flex"
-                    ms="10px"
-                    fontSize="sm"
-                    fontWeight="bold"
-                  >
-                    <Text fontSize="sm" fontWeight="400" ms="2px">
-                      {'Secondary Options'}
-                      <Text as="span" color="red.500">
-                        *
-                      </Text>
-                    </Text>
-                  </FormLabel>
-                  <Select
-                    mb="10px"
-                    me="30px"
-                    id="subtab"
-                    name="subtab"
-                    onChange={handleSubTabSelection}
-                  >
-                    <option value={''}>Select</option>
-                    {reviewSubTabOptions.map((item) => (
-                      <option key={item.value} value={item.value}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </Select>
-                </>
+                <SelectField
+                  mb="10px"
+                  me="30px"
+                  id="subtab"
+                  name="subtab"
+                  label="Secondary Options"
+                  fontSize={'md'}
+                  options={reviewSubTabOptions}
+                  onChange={handleSubTabSelection}
+                  isRequired={true}
+                />
               )}
             <FormControl>
               <FormLabel fontSize={'sm'} fontWeight={700} pl="4">
@@ -1556,14 +1451,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           </MenuList>
         )}
       </Menu>
-      {audioObj.url && (
-        <audio
-          ref={audioRef}
-          controls
-          style={{ display: 'none' }}
-          loop={audioObj?.loop}
-        >
-          <source src={audioObj?.url} type="audio/mpeg" />
+      {audio && (
+        <audio ref={audioRef} controls style={{ display: 'none' }}>
+          <source src={audio} type="audio/mpeg" />
           Your browser does not support the audio tag.
         </audio>
       )}
