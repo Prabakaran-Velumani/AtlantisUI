@@ -3737,6 +3737,7 @@ const GameCreation = () => {
                                     handelAssign={formData}
                                     handelMakePublic={''}
                                     handelDelete={''}
+                                    handleDownload={''}
                                   />
                                 );
                               })}

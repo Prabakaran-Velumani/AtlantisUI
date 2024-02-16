@@ -128,7 +128,12 @@ export const urls = {
   completionscreen:'/game/completionscreen/',
   getTotalMinofWords:'/game/getTotalMinofWords/',
   Compliupdate:'/game/Compliupdate/',
-    /****************************upload Badge ********************************/
+  /****************************Scorm ********************************/
+  generateScorm:'/scorm/generateScorm/',
+  createScormConfig:'/scorm/createScormConfig/',
+  updateScormConfig:'/scorm/updateScormConfig/',
+  getScormConfig:'/scorm/getScormConfig/',
+  /****************************upload Badge ********************************/
   uploadBadge:'/game/uploadbadge/',
   uploadAudio:'/game/uploadaudio/',
   getBadge:'/game/getbadge/',

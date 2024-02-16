@@ -23,6 +23,7 @@ import {
 	MdOutlineSettings
 
 } from 'react-icons/md';
+import { LiaFileDownloadSolid } from "react-icons/lia";
 import { useState,useEffect } from 'react';
 // Draft:Duplicate,Launch,Delete
 // Internal: Duplicate,Assign,Make Public,Delete
@@ -64,7 +65,8 @@ interface MenuItem {
 		{ value: 'Duplicate', label: MdContentCopy,key: props.handelDuplicate },
 		{ value: 'Assign', label: MdOutlinePerson ,key: props.handelAssign },
 		{ value: 'Make Public', label: MdPublic ,key: props.handelMakePublic },
-		{ value: 'Delete', label: MdDelete , key: props.handelDelete }
+		{ value: 'Delete', label: MdDelete , key: props.handelDelete },
+		{ value: 'Download', label: LiaFileDownloadSolid , key: props.handleDownload }
 	  ],
 	  Launched: [
 		{ value: 'Duplicate', label: MdContentCopy ,key: props.handelDuplicate },

@@ -370,6 +370,7 @@ const SecondPage: React.FC = () => {
                     handelMakePublic={''}
                     handelDelete={''}
                     gameview={game?.gameview}
+                    handleDownload={''}
                   />
 
                 ))}
