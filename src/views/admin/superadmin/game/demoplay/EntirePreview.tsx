@@ -240,10 +240,22 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
     setData(gameInfo?.blocks['1']['1']);
-    return () => {
-      if (audioRef.current?.src) {
-        audioRef.current.pause();
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Pause the audio when the page is hidden
+        if (!audioRef.current.paused) {
+          audioRef.current.pause();
+        }
+      } else {
+        // Resume the audio when the page becomes visible again
+        if (audioRef.current.paused) {
+          audioRef.current.play();
+        }
       }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
