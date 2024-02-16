@@ -229,6 +229,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
     useState<boolean>(false);
 
+    const fetchDefaultBgMusic = async () => {
+      const res = await getTestAudios(); //default bg audio fetch
+      if (res?.status === 'success') setAudio(res?.url);
+    };
+  
   useEffect(() => {
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
