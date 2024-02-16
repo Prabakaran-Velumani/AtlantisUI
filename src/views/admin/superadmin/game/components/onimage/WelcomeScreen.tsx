@@ -67,10 +67,9 @@ if(text){
 }
 return null
 };
-const WelcomeScreen: React.FC<{ formData: any; imageSrc: any, }> = ({
+const WelcomeScreen: React.FC<{ formData: any; imageSrc: any }> = ({
   formData,
   imageSrc,
-
 }) => {
   const fetch = async () =>{
     const res = await getSkills();
