@@ -118,7 +118,7 @@ const Story: React.FC<{
           voiceId =
             blockInfo?.blockRoll == '999999'
               ? voiceIds.NPC
-              : userProfile?.gender === 'Male'
+              : userProfile?.gender == 'Male'
               ? voiceIds?.playerMale
               : voiceIds?.playerFemale;
           break;
@@ -130,10 +130,12 @@ const Story: React.FC<{
               '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
           });
           text = blockInfo.blockText + optionsText;
+          console.log("userProfile?.gender == 'Male'", userProfile?.gender == 'Male');
+          console.log("blockInfo?.blockRoll ", blockInfo?.blockRoll );
           voiceId =
             blockInfo?.blockRoll == '999999'
               ? voiceIds.NPC
-              : userProfile?.gender === 'Male'
+              : userProfile?.gender == 'Male'
               ? voiceIds?.playerMale
               : voiceIds?.playerFemale;
           break;

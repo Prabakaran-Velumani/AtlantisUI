@@ -1225,7 +1225,7 @@ useEffect(()=>{
                   </Box>
                 </Box>
               </Box>
-            )}
+            )} 
             {tab === 5 && currentTab === 4 && (
               <>
                 <Box

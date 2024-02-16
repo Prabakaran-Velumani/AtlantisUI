@@ -55,6 +55,7 @@ import React, {
   useRef,
   useState,
   createContext,
+  useContext,
 } from 'react';
 import SelectField from 'components/fields/SelectField';
 import InitialImg from 'assets/img/games/load.jpg';
@@ -211,6 +212,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     useState<string>(null);
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
+  const userProfile = useContext(ProfileContext);
 
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
@@ -238,27 +240,44 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
     setData(gameInfo?.blocks['1']['1']);
-    return () => {
-      if (audioRef.current?.src) {
-        audioRef.current.pause();
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Pause the audio when the page is hidden
+        if (!audioRef.current.paused) {
+          audioRef.current.pause();
+        }
+      } else {
+        // Resume the audio when the page becomes visible again
+        if (audioRef.current.paused) {
+          audioRef.current.play();
+        }
       }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
+  console.log("gameInfo",gameInfo);
   useEffect(() => {
+    console.log("gameInfo Changed....",gameInfo?.bgMusic);
+    console.log("if gameInfo....",!gameInfo?.bgMusic ? true : false);
+console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
+  console.log(gameInfo?.bgMusic ? "music" : "No music")
+
     if (!gameInfo?.bgMusic) {
       fetchDefaultBgMusic();
-    } else {
-     
-      currentScreenId > 0 &&
-        setAudioObj({
-          url: gameInfo.bgMusic,
-          type: 'bgm',
-          volume: '0.5',
-          loop: true,
-          autoplay: true,
-        });
-    }
+    } 
+    // else if(gameInfo){
+    //   currentScreenId > 0 &&  gameInfo?.bgMusic && setAudioObj({
+    //     url: gameInfo?.bgMusic,
+    //     type: 'bgm',
+    //     volume: '0.5',
+    //     loop: true,
+    //     autoplay: true,
+    //   });
+    // }
   }, [gameInfo]);
 
   useEffect(() => {
@@ -273,7 +292,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [audio]);
 
   useEffect(() => {
-    
     // Check if audioRef exists and audioObj.url is not empty
     if (audioRef.current && audioObj.url !== '') {
       // Pause the audio playback if it's currently playing
@@ -324,7 +342,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setBackgroundScreenUrl(
           API_SERVER + '/uploads/background/41524_1701765021527.jpg',
         );
-        currentScreenId > 0 && setAudio(gameInfo.bgMusic);
+        currentScreenId > 0 && setAudio(gameInfo?.bgMusic?? '');
         break;
     }
   }, [currentScreenId]);
@@ -608,11 +626,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setSelectedOption(ind === selectedOption ? null : ind);
     // console.log('item', item);
     // console.log('ind', ind);
-    const text = '..Option ' + item.qpOptions + ' -- ' + item.qpOptionText;
+    console.log('profileData?.gender', profileData?.gender);
+    
+       const text = '..Option ' + item.qpOptions + ' -- ' + item.qpOptionText;
     const voiceId =
-      data?.blockRoll == '999999'
-        ? voiceIds.NPC
-        : profileData?.gender === 'Male'
+      // data?.blockRoll == '999999'
+      //   ? voiceIds.NPC :
+         profileData?.gender == 'Male'
         ? voiceIds?.playerMale
         : voiceIds?.playerFemale;
     getAudioForText(text, voiceId);
@@ -899,7 +919,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       isOpen={true}
                       startDemo={startDemo}
                       setIsGetsPlayAudioConfirmation={
-                        setIsGetsPlayAudioConfirmation
+                      setIsGetsPlayAudioConfirmation
                       }
                     />
                   }

@@ -141,14 +141,15 @@ export const urls = {
   languages:'/languages/getlanguages',
    getCreatedLanguages:'/languages/getcreatedlanguages',
    updatelanguages:'/languages/updatelanguages',
-    /****************************Reviews ********************************/
-    addReviews:'/gamereview/addreviewers',
-    getAllReviews:'/gamereview/getblockreviewlist/',
- 
-   /******** Game Demo with review ******/
-   getGameDemoData : '/game/tryout/',
-   addGameReview : "/gamereview/addblockreview",
-   testAudios: '/game/audioTest',
+      /****************************Reviews ********************************/
+      addReviews:'/gamereview/addreviewers',
+      getAllReviews:'/gamereview/getblockreviewlist/',
+   
+     /******** Game Demo with review ******/
+     getGameDemoData : '/game/tryout/',
+     addGameReview : "/gamereview/addblockreview",
+     testAudios: '/game/audioTest',
+
 };
 
 const person = localStorage.getItem('user');
@@ -197,6 +198,7 @@ export const putMethod = (data) => {
   };
   return method;
 };
+
 export const postMethodVoice = (data) => {
   console.log("data", data)
   let method = {
@@ -224,12 +226,4 @@ export const postMethodGameReview = (data) => {
     body: data,
   };
   return method;
-};
-
-export const getMethodGameReview = {
-  method: 'GET',
-  mode: 'cors',
-  headers: {
-    'Content-Type': 'application/json',
-  },
 };

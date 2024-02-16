@@ -13,7 +13,7 @@ import initialTheme from './theme/theme'; //  { themeGreen }
 import { useState } from 'react';
 import EntirePreview from 'views/admin/superadmin/game/demoplay/EntirePreview';
 import GamePreview from 'views/admin/superadmin/game/demoplay/GamePreview';
-// Chakra imports
+
 
 export default function Main() {
   // eslint-disable-next-line
@@ -29,7 +29,7 @@ export default function Main() {
           element={
             <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
           }
-        />     
+        />
         <Route
           path="rtl/*"
           element={
