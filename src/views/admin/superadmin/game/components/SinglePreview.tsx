@@ -110,7 +110,7 @@ const SinglePreview: React.FC<{
   const { colorMode, toggleColorMode } = useColorMode();
   const [showFullText, setShowFullText] = useState(false);
   const maxTextLength = 80;
-  const find = show.find((it: any) => it.gasId === formData.gameBackgroundId);
+  const find = show.find((it: any) => it.gasId === formData?.gameBackgroundId);
   const img = find.gasAssetImage;
   const [option, setOption] = useState(null);
   const [item, setItem] = useState(null);
@@ -146,9 +146,9 @@ useEffect(()=>{
       setFirst(false);
       setShowNote(false);
     }, 1000);
-    setType(prevdata.items[0]?.type);
-    setItem(prevdata.items[0]);
-    const dataObj = findKeyByTex(prevdata.input, prevdata.items[0]);
+    setType(prevdata?.items[0]?.type);
+    setItem(prevdata?.items[0]);
+    const dataObj = findKeyByTex(prevdata?.input, prevdata?.items[0]);
     setData(dataObj);
     getVoice(dataObj, '', formData?.gameNarratorVoice);
     setVoiceIds({
@@ -168,7 +168,7 @@ useEffect(()=>{
     // console.log("resMsg", resMsg)
 
     switch (type) {
-      // type =="dialog" ? (voiceId = data.character voiceIds.player : (type =="interaction" || type =="response") ? voiceId =voiceIds.narrator : voiceId=voiceIds.narrator
+      // type =="dialog" ? (voiceId = data?.character voiceIds.player : (type =="interaction" || type =="response") ? voiceId =voiceIds.narrator : voiceId=voiceIds.narrator
       case 'Note':
         getVoice(null, data?.note, voiceIds.narrator);
         break;
@@ -178,7 +178,7 @@ useEffect(()=>{
         getVoice(null, data?.dialog, voiceDialog);
         break;
       case 'Interaction':
-        let InterText = data.interaction + ' ';
+        let InterText = data?.interaction + ' ';
         Object.entries(data?.optionsObject).forEach(([key, value]) => {
           InterText += `, Option ${key}, ${value}`;
         });
@@ -216,7 +216,7 @@ useEffect(()=>{
     return obj[key];
   }
   function findKeyByTex(obj: any, value: any) {
-    const dt = String(value.type + value.input);
+    const dt = String(value?.type + value?.input);
     return obj[dt];
   }
 
@@ -233,15 +233,15 @@ useEffect(()=>{
     let voiceId = '';
     /** 
            * For voice 
-          data.includes('note') =>  Game Narattor
-          data.includes('dialog') =>  data.character
-          data.includes('interaction') => data.blockRoll
-          resMsg => data.blockRoll
+          data?.includes('note') =>  Game Narattor
+          data?.includes('dialog') =>  data?.character
+          data?.includes('interaction') => data?.blockRoll
+          resMsg => data?.blockRoll
           
           *For Animations & Emotion & voice Modulation 
-          data.includes('dialog') => data.animation
-          data.includes('interaction') //For Question => data.QuestionsEmotion
-          data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
+          data?.includes('dialog') => data?.animation
+          data?.includes('interaction') //For Question => data?.QuestionsEmotion
+          data?.includes('interaction') //For Answers  => optionsObject[] : data?.optionsemotionObject[]
             resMsg =>responseObject[]  : responseemotionObject[]
           */
     console.log('voiceIds', voiceIds);
@@ -326,12 +326,12 @@ useEffect(()=>{
   const getData = (next: any) => {
     setCurrentAudio('');
     const handleInteractionType = (delay: any) => {
-      const mins = findKeyByTex(prevdata.input, delay);
+      const mins = findKeyByTex(prevdata?.input, delay);
       setType('Interaction');
       setItem(delay);
       setData(mins);
       const getOption = () => {
-        const alp = prevdata.alp;
+        const alp = prevdata?.alp;
         const matchedOptions = [];
         for (const key in alp) {
           if (alp[key]?.seqs === delay?.id) {
@@ -347,28 +347,28 @@ useEffect(()=>{
     else if (type === 'feedback') {
       if (navi === 'Repeat Question') setType('Interaction');
       else if (navi === 'New Block') {
-        const delay = findKeyByValue(prevdata.items, next.upNext);
+        const delay = findKeyByValue(prevdata?.items, next?.upNext);
         if (delay) {
-          if (delay.type === 'Interaction') handleInteractionType(delay);
+          if (delay?.type === 'Interaction') handleInteractionType(delay);
           else {
-            const mins = findKeyByTex(prevdata.input, delay);
-            setType(delay.type);
+            const mins = findKeyByTex(prevdata?.input, delay);
+            setType(delay?.type);
             setItem(delay);
             setData(mins);
           }
         }
       } else if (navi === 'Replay Point') {
-        setType(prevdata.items[0].type);
-        setItem(prevdata.items[0]);
-        setData(findKeyByTex(prevdata.input, prevdata.items[0]));
+        setType(prevdata?.items[0].type);
+        setItem(prevdata?.items[0]);
+        setData(findKeyByTex(prevdata?.input, prevdata?.items[0]));
         setOption(null);
       } else if (navi === 'Select Block') {
-        const delay = findKeyByValue(prevdata.items, next.upNext);
+        const delay = findKeyByValue(prevdata?.items, next?.upNext);
         if (delay) {
-          if (delay.type === 'Interaction') handleInteractionType(delay);
+          if (delay?.type === 'Interaction') handleInteractionType(delay);
           else {
-            const mins = findKeyByTex(prevdata.input, delay);
-            setType(delay.type);
+            const mins = findKeyByTex(prevdata?.input, delay);
+            setType(delay?.type);
             setItem(delay);
             setData(mins);
           }
@@ -377,28 +377,28 @@ useEffect(()=>{
     }
 
     if (type === 'Note' || type === 'Dialog') {
-      const delay = findKeyByValue(prevdata.items, next.upNext);
+      const delay = findKeyByValue(prevdata?.items, next?.upNext);
       if (delay) {
-        if (delay.type === 'Interaction') handleInteractionType(delay);
+        if (delay?.type === 'Interaction') handleInteractionType(delay);
         else {
-          const mins = findKeyByTex(prevdata.input, delay);
-          setType(delay.type);
+          const mins = findKeyByTex(prevdata?.input, delay);
+          setType(delay?.type);
           setItem(delay);
           setData(mins);
         }
       }
     }
-    const value = findKeyByValue(prevdata.items, next.upNext);
+    const value = findKeyByValue(prevdata?.items, next?.upNext);
   };
 
   const handleValidate = (item: any, ind: number) => {
-    console.log("ind", ind);
-    console.log("item", item);
-    setResMsg(data.responseObject[item]);
-    setFeed(data.feedbackObject[item]);
-    setNavi(data.navigateObjects[item]);
+    // console.log("ind", ind);
+    // console.log("item", item);
+    setResMsg(data?.responseObject[item]);
+    setFeed(data?.feedbackObject[item]);
+    setNavi(data?.navigateObjects[item]);
     setOption(ind === option ? null : ind);
-    getVoice(null, data.optionsObject[item], voiceIds.playerMale);
+    getVoice(null, data?.optionsObject[item], voiceIds?.playerMale);
     setCurrentAudio('');
   };
 
@@ -556,7 +556,7 @@ useEffect(()=>{
                       fontFamily: 'AtlantisText',
                     }}
                   >
-                    {data.note}
+                    {data?.note}
                     <Box
                       w={'100%'}
                       onClick={() => getData(item)}
@@ -623,11 +623,11 @@ useEffect(()=>{
                         textAlign={'center'}
                         fontFamily={'AtlantisText'}
                       >
-                        {data.character === '999999'
+                        {data?.character === '999999'
                           ? 'Player'
-                          : data.character === '99999'
+                          : data?.character === '99999'
                           ? 'Narrator'
-                          : formData.gameNonPlayerName}
+                          : formData?.gameNonPlayerName}
                       </Text>
                     </Box>
                     <Box
@@ -639,7 +639,7 @@ useEffect(()=>{
                       fontFamily={'AtlantisContent'}
                       fontSize={'21px'}
                     >
-                      <TypingEffect text={data.dialog} speed={50} />
+                      <TypingEffect text={data?.dialog} speed={50} />
                     </Box>
                     <Box
                       display={'flex'}
@@ -711,11 +711,11 @@ useEffect(()=>{
               //           textAlign={'center'}
               //           fontFamily={'AtlantisText'}
               //         >
-              //           {data.character === '999999'
+              //           {data?.character === '999999'
               //             ? 'Player'
-              //             : data.character === '99999'
+              //             : data?.character === '99999'
               //             ? 'Narrator'
-              //             : formData.gameNonPlayerName}
+              //             : formData?.gameNonPlayerName}
               //         </Text>
               //       </Box>
               //       <Box
@@ -726,7 +726,7 @@ useEffect(()=>{
               //         bottom={'55px'}
               //         fontFamily={'cont'}
               //       >
-              //         {data.dialog}
+              //         {data?.dialog}
               //       </Box>
               //       <Box
               //         display={'flex'}
@@ -814,7 +814,7 @@ useEffect(()=>{
                     w={'100%'}
                   >
                     <Box w={'60%'} fontSize={'18px'} letterSpacing={1}>
-                      {data.interaction}
+                      {data?.interaction}
                     </Box>
                   </Box>
                   <Box
@@ -825,7 +825,7 @@ useEffect(()=>{
                     h={'220px'}
                     overflowY={'scroll'}
                   >
-                    {Object.keys(data.optionsObject).map((item, ind) => (
+                    {Object.keys(data?.optionsObject).map((item, ind) => (
                       <Box
                         mb={'10px'}
                         w={'80%'}
@@ -841,7 +841,7 @@ useEffect(()=>{
                           h={'30px'}
                           w={'95%'}
                         />
-                        {data.optionsObject[item]}
+                        {data?.optionsObject[item]}
                       </Box>
                     ))}
                   </Box>
@@ -917,11 +917,11 @@ useEffect(()=>{
                       backgroundSize={'contain'}
                       fontFamily={'albuma'}
                     >
-                      {data.character === '999999'
+                      {data?.character === '999999'
                         ? 'Player'
-                        : data.character === '99999'
+                        : data?.character === '99999'
                         ? 'Narrator'
-                        : formData.gameNonPlayerName}
+                        : formData?.gameNonPlayerName}
                     </Box>
                     <Box
                       display={'flex'}
