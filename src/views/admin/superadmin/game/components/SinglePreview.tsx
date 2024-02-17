@@ -422,7 +422,8 @@ useEffect(()=>{
           color={'white'}
           // onClick={handlePreviewPanelClose}
         />
-        <ModalBody p={0} pointerEvents={allowPointerEvents? null : 'none'}>
+        {/*<ModalBody p={0} pointerEvents={allowPointerEvents? null : 'none'}>*/}
+        <ModalBody p={0}>
           <Flex height="100vh" className="AddScores">
             {tab === 3 && (
               <>
