@@ -1611,7 +1611,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           )}
         </Menu>
       )}
-      {audioObj?.url && audioRef.current?.src && (
+      {audioObj?.url && (
         <audio
           ref={audioRef}
           controls

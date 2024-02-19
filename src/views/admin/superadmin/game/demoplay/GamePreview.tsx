@@ -52,7 +52,11 @@ import React, {
 
 // import ModelViewer from "../three/ModelViewer";
 import { json, useParams } from 'react-router-dom';
-import { getGameDemoData, SubmitReview, getGameCreatorDemoData } from 'utils/game/gameService';
+import {
+  getGameDemoData,
+  SubmitReview,
+  getGameCreatorDemoData,
+} from 'utils/game/gameService';
 // import NoAuth from './NoAuth';
 // import NoAuth from './NoAuth';
 import EntirePreview from './EntirePreview';
@@ -74,10 +78,11 @@ const gameScreens = [
 
 const GamePreview = () => {
   const { uuid } = useParams();
-  const{id}=useParams();
+  const { id } = useParams();
   const InitialScreenId = id ? 10 : 0;
   const [gameInfo, setGameInfo] = useState<any | null>();
-  const [currentScreenId, setCurrentScreenId] = useState<number>(InitialScreenId);
+  const [currentScreenId, setCurrentScreenId] =
+    useState<number>(InitialScreenId);
   const toast = useToast();
   // const [toastObj, setToastObj] = useState<any>();
 
@@ -85,14 +90,12 @@ const GamePreview = () => {
   useEffect(() => {
     uuid && fetchGameData();
   }, [uuid]);
-  
+
   //for Creators demo play
   useEffect(() => {
     id && fetchCreatorDemoData();
   }, [id]);
 
-
- 
   /*** Collect details of a game based on uuid not gameId
    * This API took gameId based on uuid
    */
@@ -103,9 +106,9 @@ const GamePreview = () => {
       updateGameInfo(gamedata);
     }
   };
- 
-  /*** Collect details of a game based on gameid 
-   * This API took game data based on gameId 
+
+  /*** Collect details of a game based on gameid
+   * This API took game data based on gameId
    */
   const fetchCreatorDemoData = async () => {
     const gamedata = await getGameCreatorDemoData(id);
@@ -115,26 +118,18 @@ const GamePreview = () => {
     }
   };
 
-
-
   /** THis function used to update gameInfo state on initial render and after every submition of a review
    *
    * Should update game info after update, delete, new review submition using this function updateGameInfo
    */
-  console.log("gameInfo",gameInfo);
-  const updateCreatorGameInfo = (info: any) => {
-    console.log("info",info);
 
+  const updateCreatorGameInfo = (info: any) => {
     const { gameview, image, lmsblocks, lmsquestionsoptions, ...gameData } =
       info?.result;
-
-
     const sortBlockSequence = (blockArray: []) => {
       const transformedArray = blockArray.reduce((result: any, obj: any) => {
         const groupKey = obj?.blockQuestNo.toString();
-        // const seqKey = obj?.blockSecondaryId;
-        // const SplitArray = obj?.blockPrimarySequence.toString()?.split(".")[1];
-        const seqKey = obj?.blockPrimarySequence.toString()?.split(".")[1];
+        const seqKey = obj?.blockPrimarySequence.toString()?.split('.')[1];
         if (!result[groupKey]) {
           result[groupKey] = {};
         }
@@ -152,8 +147,10 @@ const GamePreview = () => {
       questOptions: lmsquestionsoptions,
       reflectionQuestions: info?.resultReflection,
       gamePlayers: info?.assets?.playerCharectorsUrl,
-      bgMusic: info?.assets?.bgMusicUrl && API_SERVER+"/"+info?.assets?.bgMusicUrl,
-      gameNonPlayerUrl: info?.assets?.npcUrl && API_SERVER+"/"+info?.assets?.npcUrl,
+      bgMusic:
+        info?.assets?.bgMusicUrl && API_SERVER + '/' + info?.assets?.bgMusicUrl,
+      gameNonPlayerUrl:
+        info?.assets?.npcUrl && API_SERVER + '/' + info?.assets?.npcUrl,
     });
   };
 
@@ -205,18 +202,21 @@ const GamePreview = () => {
       questOptions: lmsquestionsoptions,
       reflectionQuestions: info?.resultReflection,
       gamePlayers: info?.assets?.playerCharectorsUrl,
-      bgMusic: API_SERVER+"/"+info?.assets?.bgMusicUrl,
-      gameNonPlayerUrl: API_SERVER+"/"+info?.assets?.npcUrl,
+      bgMusic: info?.assets?.bgMusicUrl && API_SERVER + '/' + info?.assets?.bgMusicUrl,
+      gameNonPlayerUrl: info?.assets?.npcUrl && API_SERVER + '/' + info?.assets?.npcUrl,
     });
   };
-  
+
   const element = document.getElementById('container');
   if (element) {
     try {
-      if (document.fullscreenEnabled) { // Check if fullscreen is supported
-        if (!document.fullscreenElement) { // Check if not already in fullscreen
+      if (document.fullscreenEnabled) {
+        // Check if fullscreen is supported
+        if (!document.fullscreenElement) {
+          // Check if not already in fullscreen
           // Request fullscreen
-          element.requestFullscreen()
+          element
+            .requestFullscreen()
             .then(() => {
               console.log('Entered fullscreen mode');
               // Perform additional actions after entering fullscreen mode
@@ -283,7 +283,7 @@ const GamePreview = () => {
     const addReviewResponse = await SubmitReview(
       JSON.stringify({ data: inputdata, id: uuid }),
     );
-    console.log("addReviewResponse",addReviewResponse);
+
     if (addReviewResponse?.status === 'Failure') {
       toast({
         title: 'Failed to Add Review',
@@ -321,7 +321,7 @@ const GamePreview = () => {
               setCurrentScreenId={setCurrentScreenId}
               gameInfo={gameInfo}
               handleSubmitReview={handleSubmitReview}
-              isReviewDemo = {id ?false: true}
+              isReviewDemo={id ? false : true}
             />
           </Box>
         )
