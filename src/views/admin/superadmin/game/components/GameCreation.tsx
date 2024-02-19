@@ -620,11 +620,7 @@ const GameCreation = () => {
     onOpen();
     // console.log('BackgroundIndex--',backgroundIndex);
   };
-  const fetchPreviewData = async () =>{
-    const prev = await getPreview(id);
-    if (prev && prev?.status !== 'Success') return console.log(prev.message);
-    setPrevdata(prev?.data);
-  } 
+  
   const fetchGameId = async () => {
     const reviews = await getAllReviews(id);
     if (reviews && reviews?.status !== 'Success')
@@ -640,7 +636,9 @@ const GameCreation = () => {
       setQuest(images.quest)
 
     }
-    fetchPreviewData();
+    const prev = await getPreview(id);
+    if (prev && prev?.status !== 'Success') return console.log(prev.message);
+    setPrevdata(prev?.data);
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
       return console.log('error:' + gameById?.message);
@@ -920,11 +918,14 @@ const GameCreation = () => {
     }
   }, [id, items])
 
-  console.log('navin testing :', formData)
-  const handleEntirePrev = () => {
-    fetchPreviewData();
-    setEntire(true);
-    onOpen();
+  const handleEntirePrev = async () => {
+    const prev = await getPreview(id);
+    if (prev && prev?.status === 'Success')
+    {
+      setPrevdata(prev?.data);
+      setEntire(true);
+      onOpen();
+    }
   };
   const handleShareReview = () => {
     setEntire(false);
@@ -958,7 +959,6 @@ const GameCreation = () => {
 
 
     // console.log("formData.gameSkills", formData.gameSkills);//crSkillName
-    console.log('tab < tabs', tab > tabs);
     if (tab > tabs) {
 
       setTab(tabs);
@@ -4117,7 +4117,7 @@ const GameCreation = () => {
 
 
 
-                {tab !== 1 && tab !== 2 ? (
+                {/* {tab !== 1 && tab !== 2 ? (
                   <Button
                     bg="#11047a"
                     _hover={{ bg: '#190793' }}
@@ -4132,7 +4132,7 @@ const GameCreation = () => {
                   >
                     Preview
                   </Button>
-                ) : null}
+                ) : null} */}
                 {/* {tab <= 1 ? null : (
                   <Button
                     bg={'#f4f7fe'}

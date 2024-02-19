@@ -154,6 +154,7 @@ export const urls = {
      getGameDemoData : '/game/tryout/',
      addGameReview : "/gamereview/addblockreview",
      testAudios: '/game/audioTest',
+     getGameCreatorPreview: '/game/creator/demo/' 
 
 };
 

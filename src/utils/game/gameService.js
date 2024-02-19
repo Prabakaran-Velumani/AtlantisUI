@@ -531,3 +531,12 @@ export async function getGameDemoData(uuid) {
     console.log('getCreator Error:', err);
   }
 }
+export async function getGameCreatorDemoData(id) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getGameCreatorPreview}${id}`,getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getCreator Error:', err);
+  }
+}

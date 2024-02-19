@@ -125,7 +125,7 @@ const SinglePreview: React.FC<{
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(null);
   const [voiceIds, setVoiceIds] = useState<any>();
-  const [allowPointerEvents, setAllowPointerEvents] = useState<boolean>(false);
+  const [allowPointerEvents, setAllowPointerEvents] = useState<boolean>(true);
   const audioRef = useRef(null);
   const {id} = useParams();
 
@@ -324,6 +324,7 @@ useEffect(()=>{
   }, [currentAudio]);
 
   const getData = (next: any) => {
+  
     setCurrentAudio('');
     const handleInteractionType = (delay: any) => {
       const mins = findKeyByTex(prevdata?.input, delay);

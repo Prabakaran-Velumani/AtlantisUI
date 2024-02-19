@@ -22,6 +22,7 @@ export default function Main() {
     <ChakraProvider theme={currentTheme}>
       <Routes>
       <Route path='game/demoplay/:uuid' element={<GamePreview />} />
+      <Route path='game/creator/demoplay/:id' element={<GamePreview />} />
       <Route path='auth/sign-in/default' element={<SignInDefault />} />
         <Route path="auth/*" element={<AuthLayout />} />
         <Route

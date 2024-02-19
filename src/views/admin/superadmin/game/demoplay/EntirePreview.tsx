@@ -104,6 +104,7 @@ interface ShowPreviewProps {
   gameInfo: any;
   // setToastObj?: React.Dispatch<React.SetStateAction<any>>;
   handleSubmitReview: (data: any) => Promise<boolean>;
+  isReviewDemo: boolean;
 }
 
 type TabAttributeSet = {
@@ -147,6 +148,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   setCurrentScreenId,
   gameInfo,
   handleSubmitReview,
+  isReviewDemo
 }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -233,7 +235,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
-    if (res?.status === 'success') setAudio(res?.url);
+    if (res?.status === 'success' && res?.url) setAudioObj({
+      url: res?.url,
+      type: 'bgm',
+      volume: '0.5',
+      loop: true,
+      autoplay: true,
+    });
   };
 
   useEffect(() => {
@@ -243,13 +251,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const handleVisibilityChange = () => {
       if (document.hidden) {
         // Pause the audio when the page is hidden
-        if (!audioRef.current.paused) {
-          audioRef.current.pause();
+        if (!audioRef.current?.paused) {
+          audioRef.current?.pause();
         }
       } else {
         // Resume the audio when the page becomes visible again
-        if (audioRef.current.paused) {
-          audioRef.current.play();
+        if (audioRef.current?.paused) {
+          audioRef.current?.play();
         }
       }
     };
@@ -261,27 +269,32 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   console.log("gameInfo",gameInfo);
   useEffect(() => {
-    console.log("gameInfo Changed....",gameInfo?.bgMusic);
-    console.log("if gameInfo....",!gameInfo?.bgMusic ? true : false);
-console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
-  console.log(gameInfo?.bgMusic ? "music" : "No music")
-
     if (!gameInfo?.bgMusic) {
       fetchDefaultBgMusic();
     } 
-    // else if(gameInfo){
-    //   currentScreenId > 0 &&  gameInfo?.bgMusic && setAudioObj({
-    //     url: gameInfo?.bgMusic,
-    //     type: 'bgm',
-    //     volume: '0.5',
-    //     loop: true,
-    //     autoplay: true,
-    //   });
-    // }
+    else if(gameInfo?.bgMusic){
+      currentScreenId > 0 && currentScreenId==1 && isGetsPlayAudioConfirmation && setAudioObj({
+        url: gameInfo?.bgMusic,
+        type: 'bgm',
+        volume: '0.5',
+        loop: true,
+        autoplay: true,
+      });
+    }
   }, [gameInfo]);
 
+
+  useEffect(()=>{
+    setAudioObj({
+      url: gameInfo?.bgMusic,
+      type: 'bgm',
+      volume: '0.5',
+      loop: true,
+      autoplay: true,
+    });
+  },[isGetsPlayAudioConfirmation])
+
   useEffect(() => {
-  
     setAudioObj({
       url: audio,
       type: 'api',
@@ -342,7 +355,7 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
         setBackgroundScreenUrl(
           API_SERVER + '/uploads/background/41524_1701765021527.jpg',
         );
-        currentScreenId > 0 && setAudio(gameInfo?.bgMusic?? '');
+        currentScreenId > 0 && currentScreenId == 1 && isGetsPlayAudioConfirmation &&  setAudio(gameInfo?.bgMusic?? '');
         break;
     }
   }, [currentScreenId]);
@@ -370,8 +383,8 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
           )
           .map((key) => demoBlocks[quest]?.[key])
       : [];
-    console.log(navi);
-    console.log('check prefernce',next?.gameIsShowInteractionFeedBack);
+    // console.log(navi);
+    // console.log('check prefernce',next?.gameIsShowInteractionFeedBack);
     if (currentScreenId === 6) {
       if (
         next?.gameIsShowInteractionFeedBack &&
@@ -626,7 +639,7 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
     setSelectedOption(ind === selectedOption ? null : ind);
     // console.log('item', item);
     // console.log('ind', ind);
-    console.log('profileData?.gender', profileData?.gender);
+    
     
        const text = '..Option ' + item.qpOptions + ' -- ' + item.qpOptionText;
     const voiceId =
@@ -866,7 +879,7 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
     // aud.play();
     onClose1();
     setCurrentScreenId(10);
-    setIsGetsPlayAudioConfirmation(true);
+    // setIsGetsPlayAudioConfirmation(true);
   };
 
   const replayGame = () => {
@@ -903,6 +916,10 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
       }
     }
   };
+
+  const handleAudioError = () =>{
+    console.error('Failed to load video because no supported source was found.');
+  }
 
   return (
     <ProfileContext.Provider value={profileData}>
@@ -1362,7 +1379,7 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
                           </Text>
                           <Button
                             className="btn"
-                            onClick={() => setCurrentScreenId(11)}
+                            onClick={() =>{setCurrentScreenId(11);  setIsGetsPlayAudioConfirmation(true);}}
                           ></Button>
                         </Box>
                         {/* <Button
@@ -1404,6 +1421,7 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
               return (
                 <>
                   <ChapterPage
+                  formData={gameInfo?.gameData}
                     imageSrc={backgroundScreenUrl}
                     demoBlocks={demoBlocks}
                     setCurrentScreenId={setCurrentScreenId}
@@ -1420,7 +1438,7 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
           }
         })()}
       </Flex>
-
+{isReviewDemo &&
       <Menu isOpen={isMenuOpen}>
         <MenuButton
           p="0px"
@@ -1585,12 +1603,14 @@ console.log(currentScreenId > 0 ? "Gt 0" : "no gt 0");
           </MenuList>
         )}
       </Menu>
-      {audioObj.url && (
+}
+      {audioObj?.url &&  audioRef.current?.src && (
         <audio
           ref={audioRef}
           controls
           style={{ display: 'none' }}
           loop={audioObj?.loop}
+          onError={handleAudioError}
         >
           <source src={audioObj?.url} type="audio/mpeg" />
           Your browser does not support the audio tag.

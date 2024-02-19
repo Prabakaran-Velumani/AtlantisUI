@@ -50,16 +50,19 @@ import {
     };
     const playPerview = async () => {
      
-   
+  //  $$$$
         const result = await MaintainGameView(id);
         if (result?.status !== 'Success') {
           
           return console.log('getbackruond error:' + result?.message);
         }
        
+        console.log('playpreview', id)
+        const newTab = window.open('', '_blank');
     
-     
-  
+        // Navigate the new tab to the desired URL
+        // newTab.location.assign(`/admin/game/preview/${id}`);
+        newTab.location.assign(`/game/creator/demoplay/${id}`);   
      
     };
 
