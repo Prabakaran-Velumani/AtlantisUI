@@ -1,5 +1,5 @@
 // Chakra Imports
-import { Box, Flex, Img, Text,useToast } from '@chakra-ui/react';
+import { Box, Flex, Img, Text, useToast } from '@chakra-ui/react';
 
 import bk from 'assets/img/games/17.png';
 import note from 'assets/img/games/note.png';
@@ -30,12 +30,12 @@ import { useParams } from 'react-router-dom';
 import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
 import { API_SERVER } from 'config/constant';
+import { ScoreContext } from '../GamePreview';
 
 const Story: React.FC<{
+  currentScore:any;
   data: any;
   type: any;
-  // first?: any;
-  // showNote?: any;
   backGroundImg: any;
   getData: any;
   option: any;
@@ -66,13 +66,15 @@ const Story: React.FC<{
   selectedPlayer,
   selectedNpc,
   getAudioForText,
-  voiceIds
+  voiceIds,
+  currentScore,
 }) => {
   const [showNote, setShowNote] = useState(true),
     [first, setFirst] = useState(false);
-  
-  const userProfile = useContext(ProfileContext);
 
+  const userProfile = useContext(ProfileContext);
+ const { profile ,setProfile } = useContext(ScoreContext);
+ 
   useEffect(() => {
     getVoice(data, type);
     setShowNote(true);
@@ -90,11 +92,12 @@ const Story: React.FC<{
     }, 1000);
   }, []);
 
+
+
   const getVoice = async (blockInfo: any, blockType: string) => {
-   
-      let text = '';
-      let voiceId = '';
-      /** 
+    let text = '';
+    let voiceId = '';
+    /** 
          * For voice 
         data.includes('note') =>  Game Narattor
         data.includes('dialog') =>  data.character
@@ -108,61 +111,69 @@ const Story: React.FC<{
           resMsg =>responseObject[]  : responseemotionObject[]
         */
 
-      switch (blockType) {
-        case 'Note':
-          text = blockInfo.blockText;
-          voiceId = voiceIds?.narrator;
-          break;
-        case 'Dialog':
-          text = blockInfo.blockText;
-          voiceId =
-            blockInfo?.blockRoll == '999999'
-              ? voiceIds.NPC
-              : userProfile?.gender == 'Male'
-              ? voiceIds?.playerMale
-              : voiceIds?.playerFemale;
-          break;
-        case 'Interaction':
-          let optionsText = '';
-          console.log("options", options);
-          options.forEach((item: any) => {
-            optionsText +=
-              '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
-          });
-          text = blockInfo.blockText + optionsText;
-          console.log("userProfile?.gender == 'Male'", userProfile?.gender == 'Male');
-          console.log("blockInfo?.blockRoll ", blockInfo?.blockRoll );
-          voiceId =
-            blockInfo?.blockRoll == '999999'
-              ? voiceIds.NPC
-              : userProfile?.gender == 'Male'
-              ? voiceIds?.playerMale
-              : voiceIds?.playerFemale;
-          break;
-        case 'Response':
-          text = resMsg;
-          voiceId =
-            blockInfo?.blockRoll == '999999'
-              ? voiceIds.NPC
-              : userProfile?.gender === 'Male'
-              ? voiceIds?.playerMale
-              : voiceIds?.playerFemale;
-          break;
-        case 'Feedback':
-          text = feed;
-          voiceId =
-            blockInfo?.blockRoll == '999999'
-              ? voiceIds.NPC
-              : userProfile?.gender === 'Male'
-              ? voiceIds?.playerMale
-              : voiceIds?.playerFemale;
-          break;
-      }
-   
-      //** Handling text to voice convertion to global access  by getAudioForText()*/
-      getAudioForText(text, voiceId);
+    switch (blockType) {
+      case 'Note':
+        text = blockInfo.blockText;
+        voiceId = voiceIds?.narrator;
+        break;
+      case 'Dialog':
+        text = blockInfo.blockText;
+        voiceId =
+          blockInfo?.blockRoll == '999999'
+            ? voiceIds.NPC
+            : userProfile?.gender == 'Male'
+            ? voiceIds?.playerMale
+            : voiceIds?.playerFemale;
+        break;
+      case 'Interaction':
+        let optionsText = '';
+        console.log('options', options);
+        options.forEach((item: any) => {
+          optionsText +=
+            '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
+        });
+        text = blockInfo.blockText + optionsText;
+        console.log(
+          "userProfile?.gender == 'Male'",
+          userProfile?.gender == 'Male',
+        );
+        console.log('blockInfo?.blockRoll ', blockInfo?.blockRoll);
+        voiceId =
+          blockInfo?.blockRoll == '999999'
+            ? voiceIds.NPC
+            : userProfile?.gender == 'Male'
+            ? voiceIds?.playerMale
+            : voiceIds?.playerFemale;
+        break;
+      case 'Response':
+        text = resMsg;
+        voiceId =
+          blockInfo?.blockRoll == '999999'
+            ? voiceIds.NPC
+            : userProfile?.gender === 'Male'
+            ? voiceIds?.playerMale
+            : voiceIds?.playerFemale;
+        break;
+      case 'Feedback':
+        text = feed;
+        voiceId =
+          blockInfo?.blockRoll == '999999'
+            ? voiceIds.NPC
+            : userProfile?.gender === 'Male'
+            ? voiceIds?.playerMale
+            : voiceIds?.playerFemale;
+        break;
+    }
+    getAudioForText(text, voiceId);
   };
 
+  const InteractionFunction = () =>{
+    setProfile((prev: any) => ({
+      score: type === 'Interaction' ? prev.score : prev.score + currentScore,
+    }));
+    getData(data)
+  }
+  console.log(profile);
   return (
     <>
       {data && type === 'Note' && (
@@ -268,6 +279,7 @@ const Story: React.FC<{
                 h={'100px'}
                 display={'flex'}
                 alignItems={'center'}
+                justifyContent={'center'}
                 mt={'20px'}
               >
                 {data?.blockText}
@@ -444,7 +456,8 @@ const Story: React.FC<{
           <Box
             style={{
               transform: `translateX(${showNote ? -200 : 0}px) scale(1.2)`,
-              transition:'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+              transition:
+                'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
             }}
             backgroundImage={parch}
             position={'fixed'}
@@ -527,7 +540,7 @@ const Story: React.FC<{
                   w={'50px'}
                   h={'50px'}
                   cursor={'pointer'}
-                  onClick={() => getData(data)}
+                  onClick={() => InteractionFunction()}
                 />
               )}
             </Box>
@@ -552,6 +565,28 @@ const Story: React.FC<{
             transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
             transition={'transform 0.9s ease-in-out'}
           />
+          {selectedPlayer && (
+            <Img
+              src={`${API_SERVER}/${selectedPlayer}`}
+              position={'fixed'}
+              right={'300px'}
+              bottom={'100px'}
+              w={'200px'}
+              h={'324px'}
+              // transform={'translate(0px, 55px)'}
+            />
+          )}
+          {selectedNpc && (
+            <Img
+              src={selectedNpc}
+              position={'fixed'}
+              right={'500px'}
+              bottom={'100px'}
+              w={'200px'}
+              h={'324px'}
+              // transform={'translate(0px, 55px)'}
+            />
+          )}
           <Img
             style={{
               transform: `translateY(${showNote ? 200 : 0}px)`,
@@ -568,29 +603,28 @@ const Story: React.FC<{
           />
           {!showNote && (
             <>
-              <Box
-                backgroundImage={char}
-                position={'fixed'}
-                h={'70px'}
-                w={'25%'}
-                left={'13%'}
-                fontSize={'25'}
-                display={'flex'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                fontWeight={700}
-                textAlign={'center'}
-                bottom={'150px'}
-                backgroundRepeat={'no-repeat'}
-                backgroundSize={'contain'}
-                fontFamily={'albuma'}
-              >
-                Logan
-                {/* {data.character === '999999'
-                    ? 'Player'
-                    : data.character === '99999'
-                    ? 'Narrator'
-                    : formData.gameNonPlayerName} */}
+              <Box position={'relative'}>
+                <Img
+                  src={char}
+                  position={'fixed'}
+                  h={'70px'}
+                  w={'25%'}
+                  left={'13%'}
+                  bottom={'150px'}
+                />
+                <Text
+                  position={'fixed'}
+                  left={'24%'}
+                  bottom={'167px'}
+                  fontSize={'25'}
+                  fontWeight={700}
+                  textAlign={'center'}
+                  fontFamily={'AtlantisText'}
+                >
+                  {data.blockRoll === 'Narrator'
+                    ? data.blockRoll
+                    : formData.gameNonPlayerName}
+                </Text>
               </Box>
               <Box
                 display={'flex'}
@@ -598,9 +632,10 @@ const Story: React.FC<{
                 justifyContent={'space-between'}
                 w={'75%'}
                 bottom={'55px'}
-                fontFamily={'cont'}
+                fontFamily={'AtlantisContent'}
+                fontSize={'21px'}
               >
-                {resMsg}
+                <TypingEffect text={resMsg} speed={50} />
               </Box>
               <Box
                 display={'flex'}
@@ -621,6 +656,92 @@ const Story: React.FC<{
             </>
           )}
         </Box>
+        // <Box
+        //   w={'100%'}
+        //   h={'100vh'}
+        //   display={'flex'}
+        //   alignItems={'center'}
+        //   justifyContent={'center'}
+        //   position={'relative'}
+        // >
+        //   <Img
+        //     src={backGroundImg}
+        //     maxW={'100%'}
+        //     maxH={'100%'}
+        //     w={'100%'}
+        //     h={'100vh'}
+        //     transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
+        //     transition={'transform 0.9s ease-in-out'}
+        //   />
+        //   <Img
+        //     style={{
+        //       transform: `translateY(${showNote ? 200 : 0}px)`,
+        //       transition:
+        //         'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+        //     }}
+        //     position={'fixed'}
+        //     maxW={'100%'}
+        //     maxH={'100%'}
+        //     w={'100%'}
+        //     h={'240px'}
+        //     bottom={'0'}
+        //     src={dial}
+        //   />
+        //   {!showNote && (
+        //     <>
+        //       <Box
+        //         backgroundImage={char}
+        //         position={'fixed'}
+        //         h={'70px'}
+        //         w={'25%'}
+        //         left={'13%'}
+        //         fontSize={'25'}
+        //         display={'flex'}
+        //         alignItems={'center'}
+        //         justifyContent={'center'}
+        //         fontWeight={700}
+        //         textAlign={'center'}
+        //         bottom={'150px'}
+        //         backgroundRepeat={'no-repeat'}
+        //         backgroundSize={'contain'}
+        //         fontFamily={'albuma'}
+        //       >
+        //         Logan
+        //         {/* {data.character === '999999'
+        //             ? 'Player'
+        //             : data.character === '99999'
+        //             ? 'Narrator'
+        //             : formData.gameNonPlayerName} */}
+        //       </Box>
+        //       <Box
+        //         display={'flex'}
+        //         position={'fixed'}
+        //         justifyContent={'space-between'}
+        //         w={'75%'}
+        //         bottom={'55px'}
+        //         fontFamily={'cont'}
+        //       >
+        //         {resMsg}
+        //       </Box>
+        //       <Box
+        //         display={'flex'}
+        //         position={'fixed'}
+        //         justifyContent={'space-between'}
+        //         w={'80%'}
+        //         bottom={'0'}
+        //       >
+        //         <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+        //         <Img
+        //           src={right}
+        //           w={'50px'}
+        //           h={'50px'}
+        //           cursor={'pointer'}
+        //           onClick={() => getData(data)}
+        //         />
+        //       </Box>
+        //     </>
+        //   )}
+        // </Box>
       )}
       {data && type === 'feedback' && (
         <Box
@@ -693,7 +814,7 @@ const Story: React.FC<{
             justifyContent={'center'}
             alignItems={'center'}
           >
-            <Img w={'80%'} h={'80vh'} src={feedi} />
+            <Img w={'90%'} h={'80vh'} src={feedi} />
             <Box
               position={'fixed'}
               w={'50%'}
@@ -710,19 +831,12 @@ const Story: React.FC<{
               {feed}
               <Box
                 w={'100%'}
-                onClick={() =>
-                  formData?.gameReplayAllowed === 'false'
-                    ? setCurrentScreenId(8)
-                    : formData?.gameReflectionpageAllowed === 'true'
-                    ? setCurrentScreenId(3)
-                    : formData?.gameIsShowTakeaway === 'true'
-                    ? setCurrentScreenId(7)
-                    : setCurrentScreenId(6)
-                }
+                onClick={() => getData(data)}
                 mt={'20px'}
                 display={'flex'}
                 justifyContent={'center'}
                 cursor={'pointer'}
+                transform={'translate(0px, 100px)'}
               >
                 <Img src={next} w={'200px'} h={'60px'} />
               </Box>

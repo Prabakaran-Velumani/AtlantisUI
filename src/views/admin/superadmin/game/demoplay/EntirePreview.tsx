@@ -86,6 +86,7 @@ import Characterspage from './playcards/CharacterSelection';
 import ChapterPage from './playcards/Chapters';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
+import { ScoreContext } from './GamePreview';
 
 interface Review {
   // reviewId: Number;
@@ -105,6 +106,8 @@ interface ShowPreviewProps {
   // setToastObj?: React.Dispatch<React.SetStateAction<any>>;
   handleSubmitReview: (data: any) => Promise<boolean>;
   isReviewDemo: boolean;
+  currentScore: any;
+  setCurrentScore: any;
 }
 
 type TabAttributeSet = {
@@ -149,6 +152,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   gameInfo,
   handleSubmitReview,
   isReviewDemo,
+  currentScore,
+  setCurrentScore,
 }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -212,10 +217,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [currentStoryBlockSeq, setCurrentStoryBlockSeq] =
     useState<string>(null);
+
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
   const userProfile = useContext(ProfileContext);
-
+  const { profile, setProfile } = useContext(ScoreContext);
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
     { '2': { tabAttribute: null, tabAttributeValue: null } },
@@ -268,7 +274,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     };
   }, []);
 
-  console.log('gameInfo', gameInfo);
   useEffect(() => {
     if (!gameInfo?.bgMusic) {
       fetchDefaultBgMusic();
@@ -365,8 +370,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [currentScreenId]);
 
   const getData = (next: any) => {
-    console.log('current', next?.blockPrimarySequence);
-
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -387,10 +390,73 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           )
           .map((key) => demoBlocks[quest]?.[key])
       : [];
+    if (nextBlock[0]?.blockChoosen === 'Interaction') {
+      const optionsFiltered = gameInfo?.questOptions.filter(
+        (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
+      );
+      setOptions(optionsFiltered);
+    }
+  
+  
+    if (
+      type === 'Interaction' &&
+      resMsg !== '' &&
+      gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
+    ) {
+      setType('response');
+      return false;
+    } else if (
+      (type === 'Interaction' || type === 'response') &&
+      feed !== '' &&
+      gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
+    ) {
+      setType('feedback');
+      return false;
+    } else if (
+      type === 'Interaction' ||
+      type === 'response' ||
+      type === 'feedback'
+    ) {
+      if (navi === 'Repeat Question') {
+        setType('Interaction');
+        setSelectedOption(null);
+      } else if (navi === 'New Block') {
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
+        setSelectedOption(null);
+      } else if (navi === 'Replay Point') {
+        setType(demoBlocks['1']['1']?.blockChoosen);
+        setData(demoBlocks['1']['1']);
+        setSelectedOption(null);
+      } else if (navi === 'Select Block') {
+        setSelectedOption(null);
+      } else if (navi === 'Complete') {
+        if (demoBlocks.hasOwnProperty(nextLevel)) {
+          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+          setData(demoBlocks[nextLevel]['1']);
+          setCurrentScreenId(6);
+          return false;
+        } else {
+          setType(null);
+          setData(null);
+          setCurrentScreenId(6);
+          return false;
+        }
+      } else {
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
+        setSelectedOption(null);
+      }
+    }
+    // else {
+    //   setType(nextBlock[0]?.blockChoosen);
+    //   setData(nextBlock[0]);
+    //   setSelectedOption(null);
+    // }
     if (currentScreenId === 6) {
       if (
-        next?.gameIsShowInteractionFeedBack &&
-        next?.gameIsShowInteractionFeedBack === 'Complete'
+        gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
+        gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Complete'
       ) {
         setCurrentScreenId(9);
         return false;
@@ -546,84 +612,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         return false;
       }
     }
-    if (nextBlock[0]?.blockChoosen === 'Interaction') {
-      const optionsFiltered = gameInfo?.questOptions.filter(
-        (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
-      );
-      setOptions(optionsFiltered);
-    }
-    if (
-      type === 'Interaction' &&
-      resMsg !== '' &&
-      next?.gameIsShowInteractionFeedBack &&
-      next?.gameIsShowInteractionFeedBack === 'Each'
-    ) {
-      setType('response');
-      return false;
-    } else if (
-      (type === 'Interaction' || type === 'response') &&
-      feed !== '' &&
-      next?.gameIsShowInteractionFeedBack &&
-      next?.gameIsShowInteractionFeedBack === 'Each'
-    ) {
-      setType('feedback');
-      return false;
-    } else if (
-      type === 'Interaction' ||
-      type === 'response' ||
-      type === 'feedback'
-    ) {
-      if (navi === 'Repeat Question') {
-        setType('Interaction');
-        setSelectedOption(null);
-      } else if (navi === 'New Block') {
-        setType(nextBlock[0]?.blockChoosen);
-        setData(nextBlock[0]);
-        setSelectedOption(null);
-      } else if (navi === 'Replay Point') {
-        setType(demoBlocks['1']['1']?.blockChoosen);
-        setData(demoBlocks['1']['1']);
-        setSelectedOption(null);
-      } else if (navi === 'Select Block') {
-        setSelectedOption(null);
-      } else if (navi === 'Complete') {
-        if (demoBlocks.hasOwnProperty(nextLevel)) {
-          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-          setData(demoBlocks[nextLevel]['1']);
-          setCurrentScreenId(6);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(6);
-          return false;
-        }
-      } else {
-        setType(nextBlock[0]?.blockChoosen);
-        setData(nextBlock[0]);
-        setSelectedOption(null);
-        // setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        // setData(demoBlocks[nextLevel]['1']);
-        // if (demoBlocks[nextLevel]['1']?.blockChoosen === 'Interaction') {
-        //   const optionsFiltered = gameInfo?.questOptions.filter(
-        //     (key: any) =>
-        //       key.qpSequence ===
-        //       demoBlocks[nextLevel]['1']?.blockPrimarySequence,
-        //   );
-        //   setOptions(optionsFiltered);
-        // }
-        // setSelectedOption(null);
-        // if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        //   setCurrentScreenId(6);
-        // } else {
-        //   setCurrentScreenId(5);
-        // }
-      }
-    } else {
-      setType(nextBlock[0]?.blockChoosen);
-      setData(nextBlock[0]);
-      setSelectedOption(null);
-    }
+    setType(nextBlock[0]?.blockChoosen);
+    setData(nextBlock[0]);
+    setSelectedOption(null);
   };
 
   let menuBg = useColorModeValue('white', 'navy.800');
@@ -634,6 +625,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   // validate the choosed option
   const handleValidate = (item: any, ind: number) => {
+    setCurrentScore(parseInt(item?.qpScore));
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
@@ -991,6 +983,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   > */}
                   {data && type && (
                     <Story
+                      currentScore={currentScore}
                       selectedNpc={gameInfo?.gameNonPlayerUrl}
                       selectedPlayer={selectedPlayer}
                       formData={gameInfo?.gameData}

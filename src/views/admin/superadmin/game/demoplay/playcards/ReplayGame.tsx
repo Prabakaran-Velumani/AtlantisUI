@@ -1,7 +1,8 @@
 import { Box, Icon, Img, Text } from '@chakra-ui/react';
-import React from 'react';
+import React, { useContext } from 'react';
 import ReplayBtn from 'assets/img/games/ReplayBtn.png';
 import next from 'assets/img/screens/next.png';
+import { ScoreContext } from '../GamePreview';
 interface Badge {
   gasId: number;
   gasAssetImage: string;
@@ -23,6 +24,9 @@ const ReplayGame: React.FC<{
   getData,
   data,
 }) => {
+   const { profile } = useContext(ScoreContext);
+   console.log(profile.score)
+  //  console.log()
   return (
     <>
       {imageSrc && (
@@ -58,13 +62,15 @@ const ReplayGame: React.FC<{
                   cursor={'pointer'}
                   onClick={replayGame}
                 />
-                <Img
-                  src={next}
-                  w={'200px'}
-                  h={'60px'}
-                  cursor={'pointer'}
-                  onClick={()=>getData(data)}
-                />
+                {formData?.gameMinScore < profile?.score ? (
+                  <Img
+                    src={next}
+                    w={'200px'}
+                    h={'60px'}
+                    cursor={'pointer'}
+                    onClick={() => getData(data)}
+                  />
+                ) : null}
               </Box>
             </Box>
           </Box>
