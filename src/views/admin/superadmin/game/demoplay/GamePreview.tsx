@@ -43,6 +43,7 @@ import off from 'assets/img/games/off.png';
 import Screen6 from '../../../../../assets/img/screens/screen6.png';
 import React, {
   Suspense,
+  createContext,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -76,13 +77,19 @@ const gameScreens = [
 // const Tab5attribute = [{'attribute': 0,"currentScreenName": "Completion", "currentScreenId": 6} ];
 // const Tab5attribute = [6, 4,3, 7, 1,5 ];
 
+export const ScoreContext = createContext<any>(null);
+
 const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
   const InitialScreenId = id ? 10 : 0;
   const [gameInfo, setGameInfo] = useState<any | null>();
   const [currentScreenId, setCurrentScreenId] =
-    useState<number>(3);
+    useState<number>(InitialScreenId);
+  const [profile, setProfile] = useState({
+    score: 0,
+  });
+  const [currentScore, setCurrentScore] = useState(0);
   const toast = useToast();
   // const [toastObj, setToastObj] = useState<any>();
 
@@ -122,13 +129,15 @@ const GamePreview = () => {
    *
    * Should update game info after update, delete, new review submition using this function updateGameInfo
    */
-
+  console.log('gameInfo', gameInfo);
   const updateCreatorGameInfo = (info: any) => {
     const { gameview, image, lmsblocks, lmsquestionsoptions,gameQuest, ...gameData } =
       info?.result;
     const sortBlockSequence = (blockArray: []) => {
       const transformedArray = blockArray.reduce((result: any, obj: any) => {
         const groupKey = obj?.blockQuestNo.toString();
+        // const seqKey = obj?.blockSecondaryId;
+        // const SplitArray = obj?.blockPrimarySequence.toString()?.split(".")[1];
         const seqKey = obj?.blockPrimarySequence.toString()?.split('.')[1];
         if (!result[groupKey]) {
           result[groupKey] = {};
@@ -217,42 +226,44 @@ const GamePreview = () => {
       questOptions: lmsquestionsoptions,
       reflectionQuestions: info?.resultReflection,
       gamePlayers: info?.assets?.playerCharectorsUrl,
-      bgMusic: info?.assets?.bgMusicUrl && API_SERVER + '/' + info?.assets?.bgMusicUrl,
-      gameNonPlayerUrl: info?.assets?.npcUrl && API_SERVER + '/' + info?.assets?.npcUrl,
+      bgMusic:
+        info?.assets?.bgMusicUrl && API_SERVER + '/' + info?.assets?.bgMusicUrl,
+      gameNonPlayerUrl:
+        info?.assets?.npcUrl && API_SERVER + '/' + info?.assets?.npcUrl,
     });
   };
 
-  const element = document.getElementById('container');
-  if (element) {
-    try {
-      if (document.fullscreenEnabled) {
-        // Check if fullscreen is supported
-        if (!document.fullscreenElement) {
-          // Check if not already in fullscreen
-          // Request fullscreen
-          element
-            .requestFullscreen()
-            .then(() => {
-              console.log('Entered fullscreen mode');
-              // Perform additional actions after entering fullscreen mode
-            })
-            .catch((error) => {
-              console.error('Error entering fullscreen mode:', error);
-              // Handle errors related to entering fullscreen mode
-            });
-        } else {
-          console.warn('Document is already in fullscreen mode');
-          // Handle scenario where document is already in fullscreen mode
-        }
-      } else {
-        console.error('Fullscreen mode is not supported');
-        // Handle scenario where fullscreen mode is not supported by the browser
-      }
-    } catch (error) {
-      console.error('Error requesting fullscreen:', error);
-      // Handle other errors related to requesting fullscreen mode
-    }
-  }
+  // const element = document.getElementById('container');
+  // if (element) {
+  //   try {
+  //     if (document.fullscreenEnabled) {
+  //       // Check if fullscreen is supported
+  //       if (!document.fullscreenElement) {
+  //         // Check if not already in fullscreen
+  //         // Request fullscreen
+  //         element
+  //           .requestFullscreen()
+  //           .then(() => {
+  //             console.log('Entered fullscreen mode');
+  //             // Perform additional actions after entering fullscreen mode
+  //           })
+  //           .catch((error) => {
+  //             console.log('Error entering fullscreen mode:', error.message);
+  //             // Handle errors related to entering fullscreen mode
+  //           });
+  //       } else {
+  //         console.warn('Document is already in fullscreen mode');
+  //         // Handle scenario where document is already in fullscreen mode
+  //       }
+  //     } else {
+  //       console.error('Fullscreen mode is not supported');
+  //       // Handle scenario where fullscreen mode is not supported by the browser
+  //     }
+  //   } catch (error) {
+  //     console.error('Error requesting fullscreen:', error);
+  //     // Handle other errors related to requesting fullscreen mode
+  //   }
+  // }
   const handleSubmitReview = async (inputdata: any) => {
     /** Sample post data
    * {"data" :{
@@ -298,7 +309,6 @@ const GamePreview = () => {
     const addReviewResponse = await SubmitReview(
       JSON.stringify({ data: inputdata, id: uuid }),
     );
-
     if (addReviewResponse?.status === 'Failure') {
       toast({
         title: 'Failed to Add Review',
@@ -321,7 +331,9 @@ const GamePreview = () => {
       return true;
     }
   };
-
+  const updateScore = (newScore: any) => {
+    setProfile(newScore);
+  };
   return (
     <>
       {gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
@@ -329,16 +341,20 @@ const GamePreview = () => {
         <h1> {'Your are Not Authorized....'}</h1>
       ) : (
         gameInfo?.gameId && (
-          <Box id="container">
-            <EntirePreview
-              gameScreens={gameScreens}
-              currentScreenId={currentScreenId}
-              setCurrentScreenId={setCurrentScreenId}
-              gameInfo={gameInfo}
-              handleSubmitReview={handleSubmitReview}
-              isReviewDemo={id ? false : true}
-            />
-          </Box>
+          <ScoreContext.Provider value={{ profile, setProfile }}>
+            <Box id="container">
+              <EntirePreview
+                currentScore={currentScore}
+                setCurrentScore={setCurrentScore}
+                gameScreens={gameScreens}
+                currentScreenId={currentScreenId}
+                setCurrentScreenId={setCurrentScreenId}
+                gameInfo={gameInfo}
+                handleSubmitReview={handleSubmitReview}
+                isReviewDemo={id ? false : true}
+              />
+            </Box>
+          </ScoreContext.Provider>
         )
       )}
     </>
