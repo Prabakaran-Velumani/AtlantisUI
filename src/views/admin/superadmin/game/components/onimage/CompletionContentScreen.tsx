@@ -87,15 +87,17 @@ const CompletionContentScreen: React.FC<{
     const fetchDatass = async () => {
       if (compliData[CompKeyCount]?.gameBadge) {
         const result = await getImages(4);
-
+console.log("result", result)
         if (result?.status !== 'Success') {
           console.error('getbackground error:' + result?.message);
           return;
         }
         const selectedGasId = compliData[CompKeyCount]?.gameBadge;
+        console.log("selectedGasId",selectedGasId);
         const selectedGasImage = result?.data.find(
-          (gas: any) => gas.gasId === selectedGasId,
+          (gas: any) => gas.gasId == selectedGasId,
         );
+        console.log("selectedGasImage",selectedGasImage)
         const imageUrl =
           selectedGasImage?.gasAssetImage || 'defaultImageURL.jpg';
 
@@ -104,6 +106,9 @@ const CompletionContentScreen: React.FC<{
     };
     fetchDatass();
   }, [compliData]);
+
+console.log("CompKeyCount",CompKeyCount);
+console.log("compliData",compliData);
 
   return (
     <>
@@ -280,10 +285,11 @@ const CompletionContentScreen: React.FC<{
             <Text>{compliData[CompKeyCount]?.gameScreenTitle}</Text>
           </Box>
           <Box className="congratulations">
+          {!compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage && !compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage &&
             <Box className="content">
               {compliData[CompKeyCount]?.gameCompletedCongratsMessage}
-            </Box>
-            {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ===
+            </Box>}
+            {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ==
               'true' && (
               <>
                 {compliData[CompKeyCount]?.gameMinimumScoreCongratsMessage}

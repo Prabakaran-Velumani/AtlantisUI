@@ -82,7 +82,7 @@ const GamePreview = () => {
   const InitialScreenId = id ? 10 : 0;
   const [gameInfo, setGameInfo] = useState<any | null>();
   const [currentScreenId, setCurrentScreenId] =
-    useState<number>(InitialScreenId);
+    useState<number>(3);
   const toast = useToast();
   // const [toastObj, setToastObj] = useState<any>();
 
@@ -124,7 +124,7 @@ const GamePreview = () => {
    */
 
   const updateCreatorGameInfo = (info: any) => {
-    const { gameview, image, lmsblocks, lmsquestionsoptions, ...gameData } =
+    const { gameview, image, lmsblocks, lmsquestionsoptions,gameQuest, ...gameData } =
       info?.result;
     const sortBlockSequence = (blockArray: []) => {
       const transformedArray = blockArray.reduce((result: any, obj: any) => {
@@ -138,12 +138,19 @@ const GamePreview = () => {
       }, {});
       return transformedArray;
     };
+    const completionOptions = gameQuest.map((qst :any, i: number)=>{
+      const item = {gameId:qst.gameId,questNo:qst.gameQuestNo, gameIsSetMinPassScore : qst.gameIsSetMinPassScore, gameIsSetDistinctionScore : qst.gameIsSetDistinctionScore, gameDistinctionScore: qst.gameDistinctionScore, gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore, gameIsSetBadge: qst.gameIsSetBadge, gameBadge: qst.gameBadge, gameBadgeName: qst.gameBadgeName, gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge, gameAwardBadgeScore: qst.gameAwardBadgeScore, gameScreenTitle: qst.gameScreenTitle, gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage, gameIsSetCongratsScoreWiseMessage: qst.gameIsSetCongratsScoreWiseMessage, gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage, gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage, gameaboveMinimumScoreCongratsMessage: qst.gameaboveMinimumScoreCongratsMessage, gameLessthanDistinctionScoreCongratsMessage: qst.gameLessthanDistinctionScoreCongratsMessage, gameAboveDistinctionScoreCongratsMessage: qst.gameAboveDistinctionScoreCongratsMessage}
+     return item; 
+    });
+    console.log("completionOptions",completionOptions);
     setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,
       gameHistory: gameview,
       assets: image,
       blocks: sortBlockSequence(lmsblocks),
+      gameQuest: gameQuest, //used for completion screen
+      completionQuestOptions: completionOptions,
       questOptions: lmsquestionsoptions,
       reflectionQuestions: info?.resultReflection,
       gamePlayers: info?.assets?.playerCharectorsUrl,
@@ -167,12 +174,12 @@ const GamePreview = () => {
       reviews,
       ReviewingCreator,
     } = info?.result?.lmsgamereviewer;
-    const { gameview, image, lmsblocks, lmsquestionsoptions, ...gameData } =
+    const { gameview, image, lmsblocks, lmsquestionsoptions,gameQuest, ...gameData } =
       info?.result?.lmsgame;
     const sortBlockSequence = (blockArray: []) => {
       const transformedArray = blockArray.reduce((result: any, obj: any) => {
         const groupKey = obj?.blockQuestNo.toString();
-        const seqKey = obj?.blockSecondaryId;
+        const seqKey = obj?.blockPrimarySequence.toString()?.split('.')[1];
         if (!result[groupKey]) {
           result[groupKey] = {};
         }
@@ -181,6 +188,12 @@ const GamePreview = () => {
       }, {});
       return transformedArray;
     };
+
+    const completionOptions = gameQuest.map((qst :any, i: number)=>{
+      const item = {gameId:qst.gameId, questNo:qst.gameQuestNo, gameIsSetMinPassScore : qst.gameIsSetMinPassScore, gameIsSetDistinctionScore : qst.gameIsSetDistinctionScore, gameDistinctionScore: qst.gameDistinctionScore, gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore, gameIsSetBadge: qst.gameIsSetBadge, gameBadge: qst.gameBadge, gameBadgeName: qst.gameBadgeName, gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge, gameAwardBadgeScore: qst.gameAwardBadgeScore, gameScreenTitle: qst.gameScreenTitle, gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage, gameIsSetCongratsScoreWiseMessage: qst.gameIsSetCongratsScoreWiseMessage, gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage, gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage, gameaboveMinimumScoreCongratsMessage: qst.gameaboveMinimumScoreCongratsMessage, gameLessthanDistinctionScoreCongratsMessage: qst.gameLessthanDistinctionScoreCongratsMessage, gameAboveDistinctionScoreCongratsMessage: qst.gameAboveDistinctionScoreCongratsMessage}
+     return item; 
+    });
+
     setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,
@@ -194,6 +207,8 @@ const GamePreview = () => {
         ReviewerDeleteStatus: ReviewingCreator
           ? ReviewingCreator?.ctDeleteStatus
           : null,
+        gameQuest: gameQuest, //used for completion screen
+        completionQuestOptions: completionOptions,
       },
       reviews: reviews,
       gameHistory: gameview,

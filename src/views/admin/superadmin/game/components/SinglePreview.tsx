@@ -161,7 +161,6 @@ useEffect(()=>{
     console.log("prevdata",prevdata);
   }, [prevdata]);
  
-
   useEffect(() => {
     console.log("type", type)
     console.log("data", data)

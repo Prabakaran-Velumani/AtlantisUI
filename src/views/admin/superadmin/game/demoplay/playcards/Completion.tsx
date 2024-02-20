@@ -17,6 +17,8 @@ const Completion: React.FC<{
   setCurrentScreenId?: any;
   getData?: any;
   data?: any;
+  currentQuestNo: any;
+  completionScreenQuestOptions: any;
 }> = ({
   setCurrentScreenId,
   preview,
@@ -28,28 +30,37 @@ const Completion: React.FC<{
   CompKeyCount,
   getData,
   data,
+  currentQuestNo,
+  completionScreenQuestOptions
 }) => {
   const [imgb, setbImg] = useState<any>();
   const [showComplete, setShowComplete] = useState(false);
+  const [curretQuestOptions, setCurrentQuestOptions]= useState(completionScreenQuestOptions.find((quest:any)=> (quest.questNo == currentQuestNo)));
   useEffect(() => {
     setShowComplete(true);
     setTimeout(() => {
       setShowComplete(false);
     }, 1000);
+
   }, []);
   useEffect(() => {
     const fetchDatass = async () => {
-      if (formData?.gameBadge) {
+      if (curretQuestOptions?.gameBadge) {
+        /** here 4 is to refer gasAssetType at asset table */
         const result = await getImages(4);
 
         if (result?.status !== 'Success') {
           console.error('getbackground error:' + result?.message);
           return;
         }
-        const selectedGasId = formData?.gameBadge;
+        const selectedGasId = curretQuestOptions?.gameBadge;
         const selectedGasImage = result?.data.find(
-          (gas: any) => gas.gasId === selectedGasId,
+          (gas: any) => gas.gasId == selectedGasId,
         );
+        console.log("result", result)
+
+        console.log("selectedGasImage", selectedGasImage)
+
         const imageUrl =
           selectedGasImage?.gasAssetImage || 'defaultImageURL.jpg';
 
@@ -58,6 +69,10 @@ const Completion: React.FC<{
     };
     fetchDatass();
   }, []);
+console.log("***gameinfo", completionScreenQuestOptions)
+console.log("***currentQuestNo", currentQuestNo);
+console.log("****currnetQuest", completionScreenQuestOptions.find((quest:any)=> (quest.questNo == currentQuestNo)));
+
   return (
     <>
       <Box
@@ -79,18 +94,18 @@ const Completion: React.FC<{
         <>
           <Box className="title">
             <Text fontFamily={'AtlantisText'} textAlign={'center'}>
-              {formData?.gameScreenTitle}
+              {curretQuestOptions?.gameScreenTitle}
             </Text>
           </Box>
           <Box className="congratulations">
             <Box className="content">
-              {formData?.gameCompletedCongratsMessage}
+              {curretQuestOptions?.gameCompletedCongratsMessage}
             </Box>
-            {formData?.gameIsSetCongratsScoreWiseMessage === 'true' && (
+            {curretQuestOptions?.gameIsSetCongratsScoreWiseMessage === 'true' && (
               <>
-                {formData?.gameMinimumScoreCongratsMessage}
-                {formData?.gameLessthanDistinctionScoreCongratsMessage}
-                {formData?.gameAboveDistinctionScoreCongratsMessage}
+                {curretQuestOptions?.gameMinimumScoreCongratsMessage}
+                {curretQuestOptions?.gameLessthanDistinctionScoreCongratsMessage}
+                {curretQuestOptions?.gameAboveDistinctionScoreCongratsMessage}
               </>
             )}
           </Box>
@@ -106,21 +121,21 @@ const Completion: React.FC<{
               <Box className="inside-box-1">
                 <Img src={point} className="inside-box-1_img" />
                 <Text className="inside-points-text" fontFamily={'content'}>
-                  {(formData?.gameMinScore || 100) +
+                  {(curretQuestOptions?.gameMinScore || 100) +
                     '/' +
-                    (formData?.gameTotalScore
-                      ? formData?.gameTotalScore?.maxScore || 100
+                    (curretQuestOptions?.gameTotalScore
+                      ? curretQuestOptions?.gameTotalScore?.maxScore || 100
                       : '')}
                 </Text>
               </Box>
             </Box>
-            {formData?.gameIsSetBadge === 'true' && (
+            {curretQuestOptions?.gameIsSetBadge === 'true' && (
               <Box className="box-2">
                 <Img src={back} className="box-2_img" />
                 <Text className="points-text" fontFamily={'content'}>
-                  {formData?.gameBadgeName}
+                  {curretQuestOptions?.gameBadgeName}
                 </Text>
-                {formData?.gameBadge && (
+                {curretQuestOptions?.gameBadge && (
                   <Img className="inside-img" src={imgb} />
                 )}{' '}
               </Box>
