@@ -3,9 +3,10 @@ import rew from 'assets/img/screens/Reward Bar.png';
 import back from 'assets/img/screens/back.png';
 import point from 'assets/img/screens/points.png';
 import next from 'assets/img/screens/next.png';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { getImages } from 'utils/game/gameService';
 import { motion } from 'framer-motion';
+import { ScoreContext } from '../GamePreview';
 const Completion: React.FC<{
   formData: any;
   imageSrc: any;
@@ -31,17 +32,21 @@ const Completion: React.FC<{
   getData,
   data,
   currentQuestNo,
-  completionScreenQuestOptions
+  completionScreenQuestOptions,
 }) => {
   const [imgb, setbImg] = useState<any>();
   const [showComplete, setShowComplete] = useState(false);
-  const [curretQuestOptions, setCurrentQuestOptions]= useState(completionScreenQuestOptions.find((quest:any)=> (quest.questNo == currentQuestNo)));
+  const [curretQuestOptions, setCurrentQuestOptions] = useState(
+    completionScreenQuestOptions.find(
+      (quest: any) => quest.questNo == currentQuestNo,
+    ),
+  );
+  const { profile, setProfile } = useContext(ScoreContext);
   useEffect(() => {
     setShowComplete(true);
     setTimeout(() => {
       setShowComplete(false);
     }, 1000);
-
   }, []);
   useEffect(() => {
     const fetchDatass = async () => {
@@ -57,21 +62,17 @@ const Completion: React.FC<{
         const selectedGasImage = result?.data.find(
           (gas: any) => gas.gasId == selectedGasId,
         );
-        console.log("result", result)
-
-        console.log("selectedGasImage", selectedGasImage)
 
         const imageUrl =
           selectedGasImage?.gasAssetImage || 'defaultImageURL.jpg';
-
         setbImg(imageUrl);
       }
     };
     fetchDatass();
   }, []);
-console.log("***gameinfo", completionScreenQuestOptions)
-console.log("***currentQuestNo", currentQuestNo);
-console.log("****currnetQuest", completionScreenQuestOptions.find((quest:any)=> (quest.questNo == currentQuestNo)));
+
+console.log("compliData",compliData)
+console.log("CompKeyCount",CompKeyCount)
 
   return (
     <>
@@ -98,16 +99,38 @@ console.log("****currnetQuest", completionScreenQuestOptions.find((quest:any)=> 
             </Text>
           </Box>
           <Box className="congratulations">
-            <Box className="content">
+            {/* <Box className="content">
               {curretQuestOptions?.gameCompletedCongratsMessage}
+            </Box> */}
+            <Box className="content">
+              {completionScreenQuestOptions[currentQuestNo]?.gameIsSetCongratsSingleMessage !=
+                true &&
+              completionScreenQuestOptions[currentQuestNo]?.gameIsSetCongratsScoreWiseMessage !=
+                true
+                ? completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage
+                : completionScreenQuestOptions[currentQuestNo]?.gameIsSetCongratsScoreWiseMessage ==
+                  true
+                ? completionScreenQuestOptions[currentQuestNo]?.gameIsSetMinPassScore &&
+                  completionScreenQuestOptions[currentQuestNo]?.gameMinScore &&
+                  completionScreenQuestOptions[currentQuestNo]?.gameMinScore > 0
+                  ? profile?.score < completionScreenQuestOptions[currentQuestNo]?.gameMinScore
+                    ? completionScreenQuestOptions[currentQuestNo]?.gameMinimumScoreCongratsMessage
+                    : completionScreenQuestOptions[currentQuestNo]?.gameIsSetDistinctionScore &&
+                      profile?.score <
+                        completionScreenQuestOptions[currentQuestNo]?.gameDistinctionScore
+                    ? completionScreenQuestOptions[currentQuestNo]
+                        ?.gameaboveMinimumScoreCongratsMessage
+                    : completionScreenQuestOptions[currentQuestNo]?.gameIsSetDistinctionScore &&
+                      profile?.score >=
+                        completionScreenQuestOptions[currentQuestNo]?.gameDistinctionScore
+                    ? completionScreenQuestOptions[currentQuestNo]
+                        ?.gameAboveDistinctionScoreCongratsMessage
+                    : completionScreenQuestOptions[currentQuestNo]
+                        ?.gameIsSetCongratsSingleMessage == true &&
+                      completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage
+                  : completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage
+                : completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage}
             </Box>
-            {curretQuestOptions?.gameIsSetCongratsScoreWiseMessage === 'true' && (
-              <>
-                {curretQuestOptions?.gameMinimumScoreCongratsMessage}
-                {curretQuestOptions?.gameLessthanDistinctionScoreCongratsMessage}
-                {curretQuestOptions?.gameAboveDistinctionScoreCongratsMessage}
-              </>
-            )}
           </Box>
           <Box className="rewards-img-box">
             <Img className="rewards-arrow-img" src={rew} />
@@ -142,11 +165,7 @@ console.log("****currnetQuest", completionScreenQuestOptions.find((quest:any)=> 
             )}
           </Box>
           <Box className="next-btn">
-            <Img
-              src={next}
-              onClick={() => getData(data)}
-              cursor={'pointer'}
-            />
+            <Img src={next} onClick={() => getData(data)} cursor={'pointer'} />
           </Box>
         </>
       )}

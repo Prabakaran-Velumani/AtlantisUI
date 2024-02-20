@@ -409,7 +409,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setOptions(optionsFiltered);
     }
   
-  
+  console.log("***Navi", navi);
     if (
       type === 'Interaction' &&
       resMsg !== '' &&
@@ -429,19 +429,25 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       type === 'response' ||
       type === 'feedback'
     ) {
+      console.log("Above Replay Point")
       if (navi === 'Repeat Question') {
         setType('Interaction');
         setSelectedOption(null);
+        return false;
       } else if (navi === 'New Block') {
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
+        return false;
       } else if (navi === 'Replay Point') {
+        console.log("IN Replay Point");
         setType(demoBlocks['1']['1']?.blockChoosen);
         setData(demoBlocks['1']['1']);
         setSelectedOption(null);
+        return false;
       } else if (navi === 'Select Block') {
         setSelectedOption(null);
+        return false;
       } else if (navi === 'Complete') {
         if (demoBlocks.hasOwnProperty(nextLevel)) {
           setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -458,6 +464,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
+        return false;
       }
     }
     if (currentScreenId === 6) {

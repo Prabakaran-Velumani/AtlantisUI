@@ -70,7 +70,7 @@ const Reflection: React.FC<{
             <Box className="content-ref">
               <SimpleGrid columns={{ base: 2 }} spacing={2} className="grid">
                 {reflectionQuestions.map((item: any, index: number) => (
-                  <Box>
+                  <Box  key={index}>
                     <Box
                       w={{
                         base: '150px',
@@ -100,7 +100,7 @@ const Reflection: React.FC<{
                         {item?.refQuestion}
                       </Text>
                     </Box>
-                    <Box position={'relative'} key={index}>
+                    <Box position={'relative'}>
                       <Img
                         w={'350px'}
                         h={{
