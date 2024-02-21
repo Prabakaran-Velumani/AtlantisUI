@@ -83,9 +83,7 @@ const ReflectionScreen: React.FC<{
       {imageSrc && (
         // <SimpleGrid columns={1}>
         <Box className="reflection-screen">
-          <Box
-            className="reflection-screen-box"
-          >
+          <Box className="reflection-screen-box">
             {preview ? null : <Img src={imageSrc} className="bg-img" />}
           </Box>
           {preview ? (
@@ -105,11 +103,11 @@ const ReflectionScreen: React.FC<{
                 fontSize={'3rem'}
                 style={{ whiteSpace: 'break-spaces' }}
               >
-                {"REFLECTION"}
+                {'REFLECTION'}
               </Text>
             </Box>
           ) : null}
-          <Box className={preview ? "content-ref":"content-box"}>
+          <Box className={preview ? 'content-ref' : 'content-box'}>
             <SimpleGrid columns={{ base: 2 }} spacing={2} className="grid">
               {Array.from(
                 { length: formData.gameReflectionQuestion },
