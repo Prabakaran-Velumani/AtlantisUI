@@ -252,7 +252,7 @@ const GameCreation = () => {
         [refkey]: reflecation,
       };
     });
-    console.log('reflectionQuestions', reflectionQuestions);
+    // console.log('reflectionQuestions', reflectionQuestions);
   };
 
   const handlesaveReflection = async () => {
@@ -261,7 +261,7 @@ const GameCreation = () => {
       gameReflectionQuestion: formData.gameReflectionQuestion,
       gameId: id,
     };
-    console.log('handlesaveReflection', data);
+    // console.log('handlesaveReflection', data);
     const datas = JSON.stringify(data);
     const resu = await createReflection(datas);
 
@@ -513,7 +513,7 @@ const GameCreation = () => {
       return console.log('getSkills Error :', result?.error);
     // console.log('getSkills',result?.data)
     if (result?.data) {
-      console.log('result.data', result?.data);
+      // console.log('result.data', result?.data);
       setDefaultSkills(result?.data);
     } else {
       setDefaultSkills([]);
@@ -547,7 +547,7 @@ const GameCreation = () => {
     const setAudioInPage = async () => {
       const res = await getAudio(parseInt(id));
       if (res?.status === 'Success') {
-        console.log(res.data);
+        // console.log(res.data);
         setSelectedAud(res?.data);
       }
     };
@@ -701,7 +701,7 @@ const GameCreation = () => {
 
   const handleGet = async (quest: number) => {
     setAtuoSave(false);
-    console.log('handleGet');
+    // console.log('handleGet');
     // return false;
     try {
       const data = {
@@ -723,7 +723,7 @@ const GameCreation = () => {
           const itemsArray = Object.values(result.items);
           let sequance = itemsArray.map((it: any) => it.id);
           let upNext = itemsArray.map((it: any) => it.upNext);
-          console.log('sequancesequance', itemsArray);
+          // console.log('sequancesequance', itemsArray);
           setSequence(sequance);
           setUpNextCount(upNext);
           setDummySequence(sequance);
@@ -734,7 +734,7 @@ const GameCreation = () => {
           setInteractionBlock(result.intra);
           setBlockItems(result.items);
         } else {
-          console.log('else part');
+          // console.log('else part');
           setItems([]);
           setSequence([]);
           setUpNextCount([]);
@@ -780,15 +780,15 @@ const GameCreation = () => {
 
       if (result?.status !== 'Success') {
         setAtuoSave(true);
-        console.log('updateBackground error :' + result?.err);
+        // console.log('updateBackground error :' + result?.err);
         return false;
       } else {
         setCompletion(result?.data);
         setCompliData(result?.data);
-        console.log('Completion', Object.keys(result?.data).length);
+        // console.log('Completion', Object.keys(result?.data).length);
         setCompKeyCount(Object.keys(result?.data).length - 1);
         setCurrentTab(0);
-        console.log('handleGet');
+        // console.log('handleGet');
         setAtuoSave(true);
       }
     } catch (error) {
@@ -797,7 +797,7 @@ const GameCreation = () => {
     }
   };
   const handleCompliStore = async () => {
-    console.log('handleCompliStore', compliData);
+    // console.log('handleCompliStore', compliData);
     try {
       let data = JSON.stringify(compliData);
 
@@ -821,12 +821,12 @@ const GameCreation = () => {
         ...formData,
         gameDuration: result.totalMinutes,
       });
-      console.log('getDuration', formData.gameDuration);
+      // console.log('getDuration', formData.gameDuration);
     } catch (error) {
       console.error('An error occurred while sending the request:', error);
     }
   };
-  console.log('compliData', compliData);
+  // console.log('compliData', compliData);
   const fetchGameIdUpdate = async () => {
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
@@ -4208,7 +4208,7 @@ const GameCreation = () => {
                   </Box>
                 </Menu>
 
-                {/* {tab !== 1 && tab !== 2 ? (
+              {tab !== 1 && tab !== 2 ? (
                   <Button
                     bg="#11047a"
                     _hover={{ bg: '#190793' }}
@@ -4223,7 +4223,7 @@ const GameCreation = () => {
                   >
                     Preview
                   </Button>
-                ) : null} */}
+                ) : null} 
                 {/* {tab <= 1 ? null : (
                   <Button
                     bg={'#f4f7fe'}

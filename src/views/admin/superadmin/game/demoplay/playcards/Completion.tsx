@@ -3,9 +3,10 @@ import rew from 'assets/img/screens/Reward Bar.png';
 import back from 'assets/img/screens/back.png';
 import point from 'assets/img/screens/points.png';
 import next from 'assets/img/screens/next.png';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { getImages } from 'utils/game/gameService';
 import { motion } from 'framer-motion';
+import { ScoreContext } from '../GamePreview';
 const Completion: React.FC<{
   formData: any;
   imageSrc: any;
@@ -17,6 +18,8 @@ const Completion: React.FC<{
   setCurrentScreenId?: any;
   getData?: any;
   data?: any;
+  currentQuestNo: any;
+  completionScreenQuestOptions: any;
 }> = ({
   setCurrentScreenId,
   preview,
@@ -28,9 +31,17 @@ const Completion: React.FC<{
   CompKeyCount,
   getData,
   data,
+  currentQuestNo,
+  completionScreenQuestOptions,
 }) => {
   const [imgb, setbImg] = useState<any>();
   const [showComplete, setShowComplete] = useState(false);
+  const [curretQuestOptions, setCurrentQuestOptions] = useState(
+    completionScreenQuestOptions.find(
+      (quest: any) => quest.questNo == currentQuestNo,
+    ),
+  );
+  const { profile, setProfile } = useContext(ScoreContext);
   useEffect(() => {
     setShowComplete(true);
     setTimeout(() => {
@@ -39,25 +50,30 @@ const Completion: React.FC<{
   }, []);
   useEffect(() => {
     const fetchDatass = async () => {
-      if (formData?.gameBadge) {
+      if (curretQuestOptions?.gameBadge) {
+        /** here 4 is to refer gasAssetType at asset table */
         const result = await getImages(4);
 
         if (result?.status !== 'Success') {
           console.error('getbackground error:' + result?.message);
           return;
         }
-        const selectedGasId = formData?.gameBadge;
+        const selectedGasId = curretQuestOptions?.gameBadge;
         const selectedGasImage = result?.data.find(
-          (gas: any) => gas.gasId === selectedGasId,
+          (gas: any) => gas.gasId == selectedGasId,
         );
+
         const imageUrl =
           selectedGasImage?.gasAssetImage || 'defaultImageURL.jpg';
-
         setbImg(imageUrl);
       }
     };
     fetchDatass();
   }, []);
+
+console.log("compliData",compliData)
+console.log("CompKeyCount",CompKeyCount)
+
   return (
     <>
       <Box
@@ -79,20 +95,42 @@ const Completion: React.FC<{
         <>
           <Box className="title">
             <Text fontFamily={'AtlantisText'} textAlign={'center'}>
-              {formData?.gameScreenTitle}
+              {curretQuestOptions?.gameScreenTitle}
             </Text>
           </Box>
           <Box className="congratulations">
+            {/* <Box className="content">
+              {curretQuestOptions?.gameCompletedCongratsMessage}
+            </Box> */}
             <Box className="content">
-              {formData?.gameCompletedCongratsMessage}
+              {completionScreenQuestOptions[currentQuestNo]?.gameIsSetCongratsSingleMessage !=
+                true &&
+              completionScreenQuestOptions[currentQuestNo]?.gameIsSetCongratsScoreWiseMessage !=
+                true
+                ? completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage
+                : completionScreenQuestOptions[currentQuestNo]?.gameIsSetCongratsScoreWiseMessage ==
+                  true
+                ? completionScreenQuestOptions[currentQuestNo]?.gameIsSetMinPassScore &&
+                  completionScreenQuestOptions[currentQuestNo]?.gameMinScore &&
+                  completionScreenQuestOptions[currentQuestNo]?.gameMinScore > 0
+                  ? profile?.score < completionScreenQuestOptions[currentQuestNo]?.gameMinScore
+                    ? completionScreenQuestOptions[currentQuestNo]?.gameMinimumScoreCongratsMessage
+                    : completionScreenQuestOptions[currentQuestNo]?.gameIsSetDistinctionScore &&
+                      profile?.score <
+                        completionScreenQuestOptions[currentQuestNo]?.gameDistinctionScore
+                    ? completionScreenQuestOptions[currentQuestNo]
+                        ?.gameaboveMinimumScoreCongratsMessage
+                    : completionScreenQuestOptions[currentQuestNo]?.gameIsSetDistinctionScore &&
+                      profile?.score >=
+                        completionScreenQuestOptions[currentQuestNo]?.gameDistinctionScore
+                    ? completionScreenQuestOptions[currentQuestNo]
+                        ?.gameAboveDistinctionScoreCongratsMessage
+                    : completionScreenQuestOptions[currentQuestNo]
+                        ?.gameIsSetCongratsSingleMessage == true &&
+                      completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage
+                  : completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage
+                : completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage}
             </Box>
-            {formData?.gameIsSetCongratsScoreWiseMessage === 'true' && (
-              <>
-                {formData?.gameMinimumScoreCongratsMessage}
-                {formData?.gameLessthanDistinctionScoreCongratsMessage}
-                {formData?.gameAboveDistinctionScoreCongratsMessage}
-              </>
-            )}
           </Box>
           <Box className="rewards-img-box">
             <Img className="rewards-arrow-img" src={rew} />
@@ -106,32 +144,28 @@ const Completion: React.FC<{
               <Box className="inside-box-1">
                 <Img src={point} className="inside-box-1_img" />
                 <Text className="inside-points-text" fontFamily={'content'}>
-                  {(formData?.gameMinScore || 100) +
+                  {(curretQuestOptions?.gameMinScore || 100) +
                     '/' +
-                    (formData?.gameTotalScore
-                      ? formData?.gameTotalScore?.maxScore || 100
+                    (curretQuestOptions?.gameTotalScore
+                      ? curretQuestOptions?.gameTotalScore?.maxScore || 100
                       : '')}
                 </Text>
               </Box>
             </Box>
-            {formData?.gameIsSetBadge === 'true' && (
+            {curretQuestOptions?.gameIsSetBadge === 'true' && (
               <Box className="box-2">
                 <Img src={back} className="box-2_img" />
                 <Text className="points-text" fontFamily={'content'}>
-                  {formData?.gameBadgeName}
+                  {curretQuestOptions?.gameBadgeName}
                 </Text>
-                {formData?.gameBadge && (
+                {curretQuestOptions?.gameBadge && (
                   <Img className="inside-img" src={imgb} />
                 )}{' '}
               </Box>
             )}
           </Box>
           <Box className="next-btn">
-            <Img
-              src={next}
-              onClick={() => getData(data)}
-              cursor={'pointer'}
-            />
+            <Img src={next} onClick={() => getData(data)} cursor={'pointer'} />
           </Box>
         </>
       )}

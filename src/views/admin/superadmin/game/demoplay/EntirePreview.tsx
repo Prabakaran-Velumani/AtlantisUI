@@ -221,6 +221,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
   const userProfile = useContext(ProfileContext);
+  const [currentQuestNo, setCurrentQuestNo] =useState(1);;
   const { profile, setProfile } = useContext(ScoreContext);
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
@@ -238,6 +239,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [voiceIds, setVoiceIds] = useState<any>();
   const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
     useState<boolean>(false);
+  const [reflectionAnswers, setReflectionAnswers] =useState([]);
 
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
@@ -382,22 +384,32 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const currentQuest = next
       ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
+
+      setCurrentQuestNo(currentQuest);
+
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
             (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
           )
-          .map((key) => demoBlocks[quest]?.[key])
+          .map((key:any) => demoBlocks[quest]?.[key])
       : [];
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = gameInfo?.questOptions.filter(
         (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
       );
+      if(gameInfo?.gameData?.gameShuffle)
+      {
+        for (let i = optionsFiltered.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [optionsFiltered[i], optionsFiltered[j]] = [optionsFiltered[j], optionsFiltered[i]]; // Swap elements at indices i and j
+        }
+      }
       setOptions(optionsFiltered);
     }
   
-  
+  console.log("***Navi", navi);
     if (
       type === 'Interaction' &&
       resMsg !== '' &&
@@ -417,19 +429,25 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       type === 'response' ||
       type === 'feedback'
     ) {
+      console.log("Above Replay Point")
       if (navi === 'Repeat Question') {
         setType('Interaction');
         setSelectedOption(null);
+        return false;
       } else if (navi === 'New Block') {
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
+        return false;
       } else if (navi === 'Replay Point') {
+        console.log("IN Replay Point");
         setType(demoBlocks['1']['1']?.blockChoosen);
         setData(demoBlocks['1']['1']);
         setSelectedOption(null);
+        return false;
       } else if (navi === 'Select Block') {
         setSelectedOption(null);
+        return false;
       } else if (navi === 'Complete') {
         if (demoBlocks.hasOwnProperty(nextLevel)) {
           setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -446,13 +464,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
+        return false;
       }
     }
-    // else {
-    //   setType(nextBlock[0]?.blockChoosen);
-    //   setData(nextBlock[0]);
-    //   setSelectedOption(null);
-    // }
     if (currentScreenId === 6) {
       if (
         gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
@@ -565,6 +579,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           return false;
         }
       }
+    // }
     }
     if (currentScreenId === 7) {
       if (data && type) {
@@ -630,9 +645,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
     setSelectedOption(ind === selectedOption ? null : ind);
-    // console.log('item', item);
-    // console.log('ind', ind);
-
+ 
     const text = '..Option ' + item.qpOptions + ' -- ' + item.qpOptionText;
     const voiceId =
       // data?.blockRoll == '999999'
@@ -1161,6 +1174,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           setCurrentScreenId={setCurrentScreenId}
                           formData={gameInfo?.gameData}
                           imageSrc={Screen1}
+                          currentQuestNo={currentQuestNo}
+                          completionScreenQuestOptions={gameInfo.completionQuestOptions}
                         />
                       </Box>
                     </Box>
