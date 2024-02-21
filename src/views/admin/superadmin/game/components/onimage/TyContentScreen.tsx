@@ -575,7 +575,6 @@ const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview:any }> =
                         </div>
                       </div>
                     )}
-
                     {formData.gameOthers === 'true' && (
                       <div className="content-box">
                         <Text

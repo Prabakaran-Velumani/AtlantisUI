@@ -54,6 +54,9 @@ import TextField from 'components/fields/TextField';
 import ref from 'assets/img/screens/refquestions.png';
 import qs from 'assets/img/screens/QS.png';
 import question from 'assets/img/games/question.png';
+import right from 'assets/img/games/right.png';
+import left from 'assets/img/games/left.png';
+import refsep from 'assets/img/games/refseparate.png';
 interface Badge {
   gasId: number;
   gasAssetImage: string;
@@ -74,10 +77,32 @@ const ReflectionScreen: React.FC<{
   preview,
 }) => {
   console.log('reflectionQuestions-123', formData.gameReflectionQuestion);
-
+  const [answers, setAnswers] = useState<any>([]);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const arrayInfo = [1, 2, 3, 4];
   let i = 0;
+  useEffect(() => {
+    if (
+      formData?.gameIsLearnerMandatoryQuestion &&
+      formData?.gameReflectionQuestion &&
+      answers.length == formData?.gameReflectionQuestion
+    ) {
+      let validate = answers.some(
+        (obj: any) => obj.text == undefined || obj.text == '',
+      );
+      validate ? setIsFormValid(false) : setIsFormValid(true);
+    } else {
+      formData?.gameIsLearnerMandatoryQuestion
+        ? setIsFormValid(false)
+        : setIsFormValid(true);
+    }
+  }, [answers]);
 
+  const updateAnswer = (e: any, index: any) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[index] = { ...updatedAnswers[index], text: e.target.value };
+    setAnswers(updatedAnswers);
+  };
   return (
     <>
       {imageSrc && (
@@ -100,14 +125,17 @@ const ReflectionScreen: React.FC<{
                 // className="text drop"
                 position={'absolute'}
                 top={'20px'}
-                fontSize={'3rem'}
+                fontSize={'2.8rem'}
                 style={{ whiteSpace: 'break-spaces' }}
               >
-                {'REFLECTION'}
+                reflection
               </Text>
             </Box>
           ) : null}
-          <Box className={preview ? 'content-ref' : 'content-box'}>
+          <Box
+            className={preview ? 'content-ref' : 'content-box'}
+            position={'relative'}
+          >
             <SimpleGrid columns={{ base: 2 }} spacing={2} className="grid">
               {Array.from(
                 { length: formData.gameReflectionQuestion },
@@ -145,16 +173,75 @@ const ReflectionScreen: React.FC<{
                         }`}
                       </Text>
                     </Box>
-                    <Img
-                      w={'200px'}
-                      h={{ base: '20px', sm: '30px', md: '50px', lg: '50px' }}
-                      src={ref}
-                    />
+                    <Box position={'relative'}>
+                      <Img
+                        w={preview ? '350px' : '250px'}
+                        h={{
+                          base: '20px',
+                          sm: '30px',
+                          md: '50px',
+                          lg: '100px',
+                        }}
+                        src={ref}
+                      />
+                      {preview ? (
+                        <Textarea
+                          bottom={0}
+                          outline={'none'}
+                          focusBorderColor="none"
+                          border={'none'}
+                          position={'absolute'}
+                          w={'350px'}
+                          color={'#D9C7A2'}
+                          h={{
+                            base: '20px',
+                            sm: '30px',
+                            md: '50px',
+                            lg: '100px',
+                          }}
+                          _focus={{ boxShadow: 'none', border: 'none' }}
+                          fontFamily={'AtlantisText'}
+                          value={answers[index]?.text}
+                          onChange={(e: any) => updateAnswer(e, index)}
+                        />
+                      ) : null}
+                    </Box>
                   </Box>
                 ),
               )}
             </SimpleGrid>
+            {preview ? (
+              <Img
+                src={refsep}
+                w={'10px'}
+                h={'auto'}
+                position={'absolute'}
+                top={'0px'}
+              />
+            ) : null}
           </Box>
+          {preview ? (
+            <Box
+              w={'100%'}
+              display={'flex'}
+              justifyContent={'center'}
+              position={'absolute'}
+              bottom={'0'}
+            >
+              <Box w={'80%'} display={'flex'} justifyContent={'space-between'}>
+                <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+                {isFormValid && (
+                <Img
+                  src={right}
+                  w={'50px'}
+                  h={'50px'}
+                  cursor={'pointer'}
+                  // onClick={() => getData(data)}
+                />
+                 )} 
+              </Box>
+            </Box>
+          ) : null}
         </Box>
         // </SimpleGrid>
       )}
