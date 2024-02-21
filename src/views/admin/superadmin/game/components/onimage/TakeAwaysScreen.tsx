@@ -60,7 +60,7 @@ import {
 
     const TakewayScreen: React.FC<{formData: any;imageSrc:any; preview:any;}> = ({formData,imageSrc,preview}) => {
       const data = formData.gameTakeawayContent?.split('\n');
-      
+      console.log('takeaway',data);
   return (
     <>
       {imageSrc && (
@@ -79,7 +79,7 @@ import {
             // alignItems={'center'}
           >
             <Img src={imageSrc} className='bg-img' />         
-          <Box className='content-box' overflowY={'scroll'}>
+          <Box className='content-box' w={preview? '25%' : '76%'} overflowY={'scroll'}>
             {data && data.map((it: any, ind: number) => {
               const bulletIndex = it.indexOf('\u2022');
               const contentAfterBullet =
