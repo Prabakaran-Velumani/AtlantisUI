@@ -96,7 +96,6 @@ const GamePreview = () => {
   useEffect(() => {
     uuid && fetchGameData();
   }, [uuid]);
-
   //for Creators demo play
   useEffect(() => {
     id && fetchCreatorDemoData();

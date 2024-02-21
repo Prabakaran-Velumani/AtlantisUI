@@ -210,6 +210,7 @@ console.log("formData", formData);
             </Text>
             {formData.gameIsShowGameDuration == 'true' && (
               <Text
+                className='duration'
                 fontSize={{
                   base: '11px',
                   sm: '12px',
@@ -266,15 +267,7 @@ console.log("formData", formData);
                 {formData.gameIsShowSkill == 'true' && (
                   <>
                     <Box
-                      className="box-1"
-                      // width={'105px'}
-                      // backgroundImage={back}
-                      // backgroundSize={'contain'}
-                      // backgroundRepeat={'no-repeat'}
-                      // h={'95px'}
-                      // fontWeight={'600'}
-                      // fontSize={'13px'}
-                      // color={'#D9C7A2'}
+                      className="box-1"                     
                     >
                       <Img src={back} className="bg-img" />
                       <Text
@@ -493,6 +486,7 @@ console.log("formData", formData);
             </Text>
             {formData.gameIsShowGameDuration === 'true' && (
               <Text
+                className='duration'
                 fontSize={{
                   base: '11px',
                   sm: '12px',

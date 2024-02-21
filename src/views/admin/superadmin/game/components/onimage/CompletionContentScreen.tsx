@@ -87,17 +87,14 @@ const CompletionContentScreen: React.FC<{
     const fetchDatass = async () => {
       if (compliData[CompKeyCount]?.gameBadge) {
         const result = await getImages(4);
-        console.log('result', result);
         if (result?.status !== 'Success') {
           console.error('getbackground error:' + result?.message);
           return;
         }
         const selectedGasId = compliData[CompKeyCount]?.gameBadge;
-        console.log('selectedGasId', selectedGasId);
         const selectedGasImage = result?.data.find(
           (gas: any) => gas.gasId == selectedGasId,
         );
-        console.log('selectedGasImage', selectedGasImage);
         const imageUrl =
           selectedGasImage?.gasAssetImage || 'defaultImageURL.jpg';
 
@@ -106,9 +103,6 @@ const CompletionContentScreen: React.FC<{
     };
     fetchDatass();
   }, [compliData]);
-
-  console.log('CompKeyCount', CompKeyCount);
-  console.log('compliData', compliData);
 
   return (
     <>
@@ -213,160 +207,164 @@ const CompletionContentScreen: React.FC<{
             </Box>
           </Box> */}
           <Box className="comple-screen">
-            <Img src={imageSrc} className="bg-img" />
-          </Box>
-          <Box className="title">
-            <Text fontFamily={'AtlantisText'} textAlign={'center'}>
-              {compliData[CompKeyCount]?.gameScreenTitle}
-            </Text>
-          </Box>
-          <Box className="congratulations">
-            <Box className="content">
-            {compliData[CompKeyCount]?.gameCompletedCongratsMessage}
-              {/* {
-              compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage !=
-                true &&
-              compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage !=
-                true
-                ? compliData[CompKeyCount]?.gameCompletedCongratsMessage
-                : compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ==
-                  true
-                ? compliData[CompKeyCount]?.gameIsSetMinPassScore &&
-                  compliData[CompKeyCount]?.gameMinScore &&
-                  compliData[CompKeyCount]?.gameMinScore > 0
-                  ? profile?.score < compliData[CompKeyCount]?.gameMinScore
-                    ? compliData[CompKeyCount]?.gameMinimumScoreCongratsMessage
-                    : compliData[CompKeyCount]?.gameIsSetDistinctionScore &&
-                      profile?.score <
-                        compliData[CompKeyCount]?.gameDistinctionScore
-                    ? compliData[CompKeyCount]
-                        ?.gameaboveMinimumScoreCongratsMessage
-                    : compliData[CompKeyCount]?.gameIsSetDistinctionScore &&
-                      profile?.score >=
-                        compliData[CompKeyCount]?.gameDistinctionScore
-                    ? compliData[CompKeyCount]
-                        ?.gameAboveDistinctionScoreCongratsMessage
-                    : compliData[CompKeyCount]
-                        ?.gameIsSetCongratsSingleMessage == true &&
-                      compliData[CompKeyCount]?.gameCompletedCongratsMessage
-                  : compliData[CompKeyCount]?.gameCompletedCongratsMessage
-                : compliData[CompKeyCount]?.gameCompletedCongratsMessage} */}
-            </Box>
-          </Box>
-          <Box className="rewards-img-box">
-            <Img className="rewards-arrow-img" src={rew} />
-          </Box>
-          <Box className="points-box">
-            <Box className="box-1">
-              <Img src={back} className="box-1_img" />
-              <Text className="points-text" fontFamily={'content'}>
-                points
+            <Img src={imageSrc} className="bg-img" />          
+            <Box className="title">
+              <Text fontFamily={'AtlantisText'} textAlign={'center'}>
+                {compliData[CompKeyCount]?.gameScreenTitle}
               </Text>
-              <Box className="inside-box-1">
-                <Img src={point} className="inside-box-1_img" />
-                <Text className="inside-points-text" fontFamily={'content'}>
-                  {(compliData[CompKeyCount]?.gameMinScore || 100) +
-                    '/' +
-                    (compliData[CompKeyCount]?.gameTotalScore
-                      ? compliData[CompKeyCount]?.gameTotalScore?.maxScore ||
-                        100
-                      : '')}
-                </Text>
+            </Box>
+            <Box className='content-box'>
+              <Box className="congratulations">
+                <Box className="content" mt="0px">
+                {compliData[CompKeyCount]?.gameCompletedCongratsMessage}
+                  {/* {
+                  compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage !=
+                    true &&
+                  compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage !=
+                    true
+                    ? compliData[CompKeyCount]?.gameCompletedCongratsMessage
+                    : compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ==
+                      true
+                    ? compliData[CompKeyCount]?.gameIsSetMinPassScore &&
+                      compliData[CompKeyCount]?.gameMinScore &&
+                      compliData[CompKeyCount]?.gameMinScore > 0
+                      ? profile?.score < compliData[CompKeyCount]?.gameMinScore
+                        ? compliData[CompKeyCount]?.gameMinimumScoreCongratsMessage
+                        : compliData[CompKeyCount]?.gameIsSetDistinctionScore &&
+                          profile?.score <
+                            compliData[CompKeyCount]?.gameDistinctionScore
+                        ? compliData[CompKeyCount]
+                            ?.gameaboveMinimumScoreCongratsMessage
+                        : compliData[CompKeyCount]?.gameIsSetDistinctionScore &&
+                          profile?.score >=
+                            compliData[CompKeyCount]?.gameDistinctionScore
+                        ? compliData[CompKeyCount]
+                            ?.gameAboveDistinctionScoreCongratsMessage
+                        : compliData[CompKeyCount]
+                            ?.gameIsSetCongratsSingleMessage == true &&
+                          compliData[CompKeyCount]?.gameCompletedCongratsMessage
+                      : compliData[CompKeyCount]?.gameCompletedCongratsMessage
+                    : compliData[CompKeyCount]?.gameCompletedCongratsMessage} */}
+                </Box>
+              </Box>
+              <Box className="rewards-img-box">
+                <Img className="rewards-arrow-img" src={rew} />
+              </Box>
+              <Box className="points-box">
+                <Box className="box-1">
+                  <Img src={back} className="box-1_img" />
+                  <Text className="points-text" fontFamily={'content'}>
+                    points
+                  </Text>
+                  <Box className="inside-box-1">
+                    <Img src={point} className="inside-box-1_img" />
+                    <Text className="inside-points-text" fontFamily={'content'}>
+                      {(compliData[CompKeyCount]?.gameMinScore || 100) +
+                        '/' +
+                        (compliData[CompKeyCount]?.gameTotalScore
+                          ? compliData[CompKeyCount]?.gameTotalScore?.maxScore ||
+                            100
+                          : '')}
+                    </Text>
+                  </Box>
+                </Box>
+
+                {compliData[CompKeyCount]?.gameIsSetBadge === 'true' && (
+                  <Box className="box-2">
+                    <Img src={back} className="box-2_img" />
+                    <Text className="points-text" fontFamily={'content'}>
+                      {compliData[CompKeyCount]?.gameBadgeName}
+                    </Text>
+                    {compliData[CompKeyCount]?.gameBadge && (
+                      <Img className="inside-img" src={imgb} />
+                    )}{' '}
+                  </Box>
+                )}
               </Box>
             </Box>
-
-            {compliData[CompKeyCount]?.gameIsSetBadge === 'true' && (
-              <Box className="box-2">
-                <Img src={back} className="box-2_img" />
-                <Text className="points-text" fontFamily={'content'}>
-                  {compliData[CompKeyCount]?.gameBadgeName}
-                </Text>
-                {compliData[CompKeyCount]?.gameBadge && (
-                  <Img className="inside-img" src={imgb} />
-                )}{' '}
+              <Box className="next-btn">
+                <Img src={next} />
               </Box>
-            )}
-          </Box>
-          <Box className="next-btn">
-            <Img src={next} />
           </Box>
         </>
       ) : (
         <>
           <Box className="comple-screen">
-            <Img src={imageSrc} className="bg-img" />
-          </Box>
-          <Box className="title">
-            <Text>{compliData[CompKeyCount]?.gameScreenTitle}</Text>
-          </Box>
-          <Box className="congratulations">
-            {!compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage &&
-              !compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage && (
-                <Box className="content">
-                  {compliData[CompKeyCount]?.gameCompletedCongratsMessage}
+            <Img src={imageSrc} className="bg-img" />         
+            <Box className="title">
+              <Text>{compliData[CompKeyCount]?.gameScreenTitle}</Text>
+            </Box>
+            <Box className='content-box'>
+              <Box className="congratulations">
+                {!compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage &&
+                  !compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage && (
+                    <Box className="content" mt="0px">
+                      {compliData[CompKeyCount]?.gameCompletedCongratsMessage}
+                    </Box>
+                  )}
+                {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ==
+                  'true' && (
+                  <>
+                    {compliData[CompKeyCount]?.gameMinimumScoreCongratsMessage}
+                    {
+                      compliData[CompKeyCount]
+                        ?.gameLessthanDistinctionScoreCongratsMessage
+                    }
+                    {
+                      compliData[CompKeyCount]
+                        ?.gameAboveDistinctionScoreCongratsMessage
+                    }
+                  </>
+                )}
+              </Box>
+              <Box className="rewards-img-box">
+                <Img className="rewards-arrow-img" src={rew} />
+              </Box>
+              <Box className="points-box">
+                <Box className="box-1">
+                  <Img src={back} className="box-1_img" />
+                  <Text className="points-text" fontFamily={'content'}>
+                    points
+                  </Text>
+                  <Box className="inside-box-1">
+                    <Img src={point} className="inside-box-1_img" />
+                    <Text className="inside-points-text" fontFamily={'content'}>
+                      {(compliData[CompKeyCount]?.gameMinScore || 100) +
+                        '/' +
+                        (compliData[CompKeyCount]?.gameTotalScore
+                          ? compliData[CompKeyCount]?.gameTotalScore?.maxScore ||
+                            100
+                          : '')}
+                    </Text>
+                  </Box>
                 </Box>
-              )}
-            {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ==
-              'true' && (
-              <>
-                {compliData[CompKeyCount]?.gameMinimumScoreCongratsMessage}
-                {
-                  compliData[CompKeyCount]
-                    ?.gameLessthanDistinctionScoreCongratsMessage
-                }
-                {
-                  compliData[CompKeyCount]
-                    ?.gameAboveDistinctionScoreCongratsMessage
-                }
-              </>
-            )}
-          </Box>
-          <Box className="rewards-img-box">
-            <Img className="rewards-arrow-img" src={rew} />
-          </Box>
-          <Box className="points-box">
-            <Box className="box-1">
-              <Img src={back} className="box-1_img" />
-              <Text className="points-text" fontFamily={'content'}>
-                points
-              </Text>
-              <Box className="inside-box-1">
-                <Img src={point} className="inside-box-1_img" />
-                <Text className="inside-points-text" fontFamily={'content'}>
-                  {(compliData[CompKeyCount]?.gameMinScore || 100) +
-                    '/' +
-                    (compliData[CompKeyCount]?.gameTotalScore
-                      ? compliData[CompKeyCount]?.gameTotalScore?.maxScore ||
-                        100
-                      : '')}
-                </Text>
+                {/* {compliData[CompKeyCount]?.gameIsSetBadge === 'true' && (
+                  <Box className='box-2'>
+                    {compliData[CompKeyCount]?.gameBadgeName !== '' ? (
+                    <Img src={back} className='box-2_img' />
+                      ): null }
+                    <Text className='points-text' fontFamily={'content'} >
+                      {selectedBadge?.gasAssetName}
+                    </Text>
+                    <Img className='inside-img' src={selectedBadge?.gasAssetImage} />
+                  </Box>
+                )}  */}
+                {compliData[CompKeyCount]?.gameIsSetBadge === 'true' && (
+                  <Box className="box-2">
+                    <Img src={back} className="box-2_img" />
+                    <Text className="points-text" fontFamily={'content'}>
+                      {compliData[CompKeyCount]?.gameBadgeName}
+                    </Text>
+                    {compliData[CompKeyCount]?.gameBadge && (
+                      <Img className="inside-img" src={imgb} />
+                    )}{' '}
+                  </Box>
+                )}
               </Box>
             </Box>
-            {/* {compliData[CompKeyCount]?.gameIsSetBadge === 'true' && (
-              <Box className='box-2'>
-                {compliData[CompKeyCount]?.gameBadgeName !== '' ? (
-                <Img src={back} className='box-2_img' />
-                  ): null }
-                <Text className='points-text' fontFamily={'content'} >
-                  {selectedBadge?.gasAssetName}
-                </Text>
-                <Img className='inside-img' src={selectedBadge?.gasAssetImage} />
-              </Box>
-            )}  */}
-            {compliData[CompKeyCount]?.gameIsSetBadge === 'true' && (
-              <Box className="box-2">
-                <Img src={back} className="box-2_img" />
-                <Text className="points-text" fontFamily={'content'}>
-                  {compliData[CompKeyCount]?.gameBadgeName}
-                </Text>
-                {compliData[CompKeyCount]?.gameBadge && (
-                  <Img className="inside-img" src={imgb} />
-                )}{' '}
-              </Box>
-            )}
-          </Box>
-          <Box className="next-btn">
-            <Img src={next} />
+            <Box className="next-btn">
+              <Img src={next} />
+            </Box>
           </Box>
         </>
         // </SimpleGrid>
