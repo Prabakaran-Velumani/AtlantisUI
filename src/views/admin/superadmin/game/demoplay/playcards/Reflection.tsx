@@ -154,7 +154,6 @@ const Reflection: React.FC<{
                 )}
               </Box>
             </Box>
-          </Box>
         </>
       )}
     </>
