@@ -95,6 +95,8 @@ import {
   UpdateCompletionScreen,
   getTotalMinofWords,
   getStoryValidtion,
+  getGameDemoData,
+  getGameCreatorDemoData,
 } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
 import AboutStory from './AboutStory';
@@ -155,6 +157,7 @@ import tableDataCheck from 'views/admin/dashboards/rtl/variables/tableDataCheck'
 import SinglePreview from './SinglePreview';
 import { AiFillMessage } from 'react-icons/ai';
 import { getAllReviews } from 'utils/reviews/reviews';
+import { API_SERVER } from 'config/constant';
 
 const steps = [
   { title: 'BackGround' },
@@ -488,6 +491,7 @@ const GameCreation = () => {
   // const [selectedBadge, setSelectedBadge] = useState(null);
   const [CompKeyCount, setCompKeyCount] = useState<any>(0);
   const [prevdata, setPrevdata] = useState();
+  const [gameInfo, setGameInfo] = useState<any | null>();
   // const [gameId, setGameId] = useState();
   // const [reviewers, setReviewers] = useState<any[]>([]);
   const { id } = useParams();
@@ -627,6 +631,45 @@ const GameCreation = () => {
     onOpen();
     // console.log('BackgroundIndex--',backgroundIndex);
   };
+  const updateCreatorGameInfo = (info: any) => {
+    const { gameview, image, lmsblocks, lmsquestionsoptions,gameQuest, ...gameData } =
+      info?.result;
+    const sortBlockSequence = (blockArray: []) => {
+      const transformedArray = blockArray.reduce((result: any, obj: any) => {
+        const groupKey = obj?.blockQuestNo.toString();
+        // const seqKey = obj?.blockSecondaryId;
+        // const SplitArray = obj?.blockPrimarySequence.toString()?.split(".")[1];
+        const seqKey = obj?.blockPrimarySequence.toString()?.split('.')[1];
+        if (!result[groupKey]) {
+          result[groupKey] = {};
+        }
+        result[groupKey][seqKey] = obj;
+        return result;
+      }, {});
+      return transformedArray;
+    };
+    const completionOptions = gameQuest.map((qst :any, i: number)=>{
+      const item = {gameId:qst.gameId,questNo:qst.gameQuestNo, gameIsSetMinPassScore : qst.gameIsSetMinPassScore, gameIsSetDistinctionScore : qst.gameIsSetDistinctionScore, gameDistinctionScore: qst.gameDistinctionScore, gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore, gameIsSetBadge: qst.gameIsSetBadge, gameBadge: qst.gameBadge, gameBadgeName: qst.gameBadgeName, gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge, gameAwardBadgeScore: qst.gameAwardBadgeScore, gameScreenTitle: qst.gameScreenTitle, gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage, gameIsSetCongratsScoreWiseMessage: qst.gameIsSetCongratsScoreWiseMessage, gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage, gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage, gameaboveMinimumScoreCongratsMessage: qst.gameaboveMinimumScoreCongratsMessage, gameLessthanDistinctionScoreCongratsMessage: qst.gameLessthanDistinctionScoreCongratsMessage, gameAboveDistinctionScoreCongratsMessage: qst.gameAboveDistinctionScoreCongratsMessage}
+     return item; 
+    });
+    console.log("completionOptions",completionOptions);
+    setGameInfo({
+      gameId: info?.result?.gameId,
+      gameData: gameData,
+      gameHistory: gameview,
+      assets: image,
+      blocks: sortBlockSequence(lmsblocks),
+      gameQuest: gameQuest, //used for completion screen
+      completionQuestOptions: completionOptions,
+      questOptions: lmsquestionsoptions,
+      reflectionQuestions: info?.resultReflection,
+      gamePlayers: info?.assets?.playerCharectorsUrl,
+      bgMusic:
+        info?.assets?.bgMusicUrl && API_SERVER + '/' + info?.assets?.bgMusicUrl,
+      gameNonPlayerUrl:
+        info?.assets?.npcUrl && API_SERVER + '/' + info?.assets?.npcUrl,
+    });
+  };
 
   const fetchGameId = async () => {
     const reviews = await getAllReviews(id);
@@ -641,9 +684,10 @@ const GameCreation = () => {
       setCblocks(images.data);
       setQuest(images.quest);
     }
-    const prev = await getPreview(id);
-    if (prev && prev?.status !== 'Success') return console.log(prev.message);
-    setPrevdata(prev?.data);
+    const gamedata = await getGameCreatorDemoData(id);
+    if (!gamedata.error && gamedata) {
+      updateCreatorGameInfo(gamedata);
+    }
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
       return console.log('error:' + gameById?.message);
@@ -889,9 +933,10 @@ const GameCreation = () => {
   }, [id, items]);
 
   const handleEntirePrev = async () => {
-    const prev = await getPreview(id);
-    if (prev && prev?.status === 'Success') {
-      setPrevdata(prev?.data);
+    const gamedata = await getGameCreatorDemoData(id);
+
+    if (!gamedata.error && gamedata) {
+      updateCreatorGameInfo(gamedata);
       setEntire(true);
       onOpen();
     }
@@ -922,9 +967,6 @@ const GameCreation = () => {
       console.log('tabArray is empty');
     }
 
-    // console.log('formData.gameLastTabArray', formData.gameLastTabArray, '--tabs--', tabs);
-
-    // console.log("formData.gameSkills", formData.gameSkills);//crSkillName
     if (tab > tabs) {
       setTab(tabs);
     }
@@ -4315,6 +4357,7 @@ const GameCreation = () => {
                 handleChange={handleChange}
                 setBadge={setBadge}
                 compliData={compliData}
+                gameInfo={gameInfo}
                 setCompliData={setCompliData}
                 CompKeyCount={CompKeyCount}
                 handlecompletion={handlecompletion}
