@@ -67,6 +67,7 @@ const Reflection: React.FC<{
                 reflection
               </Text>
             </Box>
+            <Box className="content-ref">
               <SimpleGrid columns={{ base: 2 }} spacing={2} className="grid">
                 {reflectionQuestions.map((item: any, index: number) => (
                   <Box  key={index}>

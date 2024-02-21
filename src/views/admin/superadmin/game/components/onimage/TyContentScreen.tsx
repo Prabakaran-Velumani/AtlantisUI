@@ -135,7 +135,6 @@ const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview:any }> =
                 {renderContentTy()}
               </Box>
             </Box>
-
             {formData.gameIsCollectLearnerFeedback === 'true' && (
               <>
                 <Text
