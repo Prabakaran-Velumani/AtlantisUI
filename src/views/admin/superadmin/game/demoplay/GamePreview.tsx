@@ -128,7 +128,7 @@ const GamePreview = () => {
    *
    * Should update game info after update, delete, new review submition using this function updateGameInfo
    */
-  console.log('gameInfo', gameInfo);
+  // console.log('gameInfo', gameInfo);
   const updateCreatorGameInfo = (info: any) => {
     const { gameview, image, lmsblocks, lmsquestionsoptions,gameQuest, ...gameData } =
       info?.result;
