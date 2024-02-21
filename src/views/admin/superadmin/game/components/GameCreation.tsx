@@ -52,7 +52,12 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import CharacterPreview from './CharacterPreview';
 import { motion } from 'framer-motion';
 import { VscVerifiedFilled } from 'react-icons/vsc';
-import { GoVerified, GoUnverified, GoDotFill, GoCodeReview } from 'react-icons/go';
+import {
+  GoVerified,
+  GoUnverified,
+  GoDotFill,
+  GoCodeReview,
+} from 'react-icons/go';
 import Card from 'components/card/Card';
 import InputField from 'components/fields/InputField';
 import TextField from 'components/fields/TextField';
@@ -80,7 +85,8 @@ import {
   getVoices,
   getStory,
   getBlocks,
-  getListStory, getDefaultSkill,
+  getListStory,
+  getDefaultSkill,
   getReflection,
   setStory,
   getPreview,
@@ -89,6 +95,8 @@ import {
   UpdateCompletionScreen,
   getTotalMinofWords,
   getStoryValidtion,
+  getGameDemoData,
+  getGameCreatorDemoData,
 } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
 import AboutStory from './AboutStory';
@@ -103,7 +111,7 @@ import { FaCubes } from 'react-icons/fa';
 import { MdTune } from 'react-icons/md';
 import { MdRocketLaunch } from 'react-icons/md';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { IoArrowBackCircle } from "react-icons/io5";
+import { IoArrowBackCircle } from 'react-icons/io5';
 import {
   MdCheckCircle,
   MdSettings,
@@ -149,6 +157,7 @@ import tableDataCheck from 'views/admin/dashboards/rtl/variables/tableDataCheck'
 import SinglePreview from './SinglePreview';
 import { AiFillMessage } from 'react-icons/ai';
 import { getAllReviews } from 'utils/reviews/reviews';
+import { API_SERVER } from 'config/constant';
 
 const steps = [
   { title: 'BackGround' },
@@ -187,19 +196,22 @@ const GameCreation = () => {
   const [countalphabet, setAlphabetCount] = useState<any>(0);
   const [count, setCount] = useState<any>(1);
   const [sequence, setSequence] = useState<any>([]);
- 
   const [dummySequence, setDummySequence] = useState<any>([]);
   //////////////////navin/////////////////////////
   const [BlockItems, setBlockItems] = useState<any>(null);
   const [isDeleteSeq, setDeleteseq] = useState<any>(false);
-  const reflectionQuestionsdefault = ["What were your biggest learnings?", "How can you apply these learnings back at work?", "'What's one thing you learned about your mindset?",
-    "What's one thing you are committing to change?"];
+  const reflectionQuestionsdefault = [
+    'What were your biggest learnings?',
+    'How can you apply these learnings back at work?',
+    "'What's one thing you learned about your mindset?",
+    "What's one thing you are committing to change?",
+  ];
   const [reflectionQuestions, setReflectionQuestions] = useState({
     ref1: 'What were your biggest learnings?',
     ref2: 'How can you apply these learnings back at work?',
-    ref3: 'What\'s one thing you learned about your mindset?',
-    ref4: 'What\'s one thing you are committing to change?',
-  })
+    ref3: "What's one thing you learned about your mindset?",
+    ref4: "What's one thing you are committing to change?",
+  });
 
   const [Defaultstatus, setDefaultstatus] = useState(false);
   const [listBlockItems, setListBlockItems] = useState(null);
@@ -224,27 +236,25 @@ const GameCreation = () => {
   const [reflection, setReflection] = useState([]);
   const [showSelectBlock, setSelectBlock] = useState<any>([]);
 
-
-
   /** To stop load data after naviagte from another game based on Extension*/
-  const [extensiveNavigation, setExtensiveNavigation] =
-    useState<number | null>(null);
-
+  const [extensiveNavigation, setExtensiveNavigation] = useState<number | null>(
+    null,
+  );
 
   ///////reflectionQuestions///////////////
 
   const handleReflectionInput = (e: any, i?: any) => {
-
     setReflectionQuestions((prevref: any) => {
-      // const noteKey = `Note`;       
+      // const noteKey = `Note`;
       const refkey = `ref${i - 1}`;
-      const reflecation = e.target.id === `reflectionQuestion${i - 1}` ? e.target.value : null;
+      const reflecation =
+        e.target.id === `reflectionQuestion${i - 1}` ? e.target.value : null;
       return {
         ...prevref,
         [refkey]: reflecation,
       };
     });
-    console.log('reflectionQuestions', reflectionQuestions);
+    // console.log('reflectionQuestions', reflectionQuestions);
   };
 
   const handlesaveReflection = async () => {
@@ -252,8 +262,8 @@ const GameCreation = () => {
       reflectionQuestions: reflectionQuestions,
       gameReflectionQuestion: formData.gameReflectionQuestion,
       gameId: id,
-    }
-    console.log('handlesaveReflection', data)
+    };
+    // console.log('handlesaveReflection', data);
     const datas = JSON.stringify(data);
     const resu = await createReflection(datas);
 
@@ -265,14 +275,9 @@ const GameCreation = () => {
         isClosable: true,
       });
       return false;
+    } else {
     }
-    else {
-
-    }
-
-
-
-  }
+  };
 
   const textHover = useColorModeValue(
     { color: 'secondaryGray.900', bg: 'unset' },
@@ -294,10 +299,7 @@ const GameCreation = () => {
     { bg: 'whiteAlpha.100' },
   );
 
-
   ////////////////////////////////////////////
-
-
 
   const [show, setShow] = useState(null);
   enum SummaryState {
@@ -328,7 +330,7 @@ const GameCreation = () => {
   const [showBadge, setShowBadge] = useState(null);
   const [selectedAud, setSelectedAud] = useState(null);
   const [previewId, setPreviewId] = useState(null);
-  //navin  
+  //navin
   const [fetchImg, setFetchImg] = useState<any>(''),
     [upNextCount, setUpNextCount] = useState<any>([]),
     [upNext, setUpNext] = useState<any>(),
@@ -351,7 +353,6 @@ const GameCreation = () => {
       gameCategoryId: null,
       gameabstract: null,
       gameBibliography: null,
-
 
       gameMaxScore: null,
       gameBackgroundId: null,
@@ -489,6 +490,7 @@ const GameCreation = () => {
   // const [selectedBadge, setSelectedBadge] = useState(null);
   const [CompKeyCount, setCompKeyCount] = useState<any>(0);
   const [prevdata, setPrevdata] = useState();
+  const [gameInfo, setGameInfo] = useState<any | null>();
   // const [gameId, setGameId] = useState();
   // const [reviewers, setReviewers] = useState<any[]>([]);
   const { id } = useParams();
@@ -499,9 +501,9 @@ const GameCreation = () => {
     const result = await getVoices();
 
     if (result) {
-      setVoices(result?.voices)
-    };
-  }
+      setVoices(result?.voices);
+    }
+  };
   let menuBg = useColorModeValue('white', 'navy.800');
   const shadow = useColorModeValue(
     '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
@@ -509,30 +511,26 @@ const GameCreation = () => {
   );
   ////////////////Over view //////////////
   const fetchDefaultSkill = async () => {
-
     const result = await getDefaultSkill(id);
-    if (result?.status !== 'Success') return console.log('getSkills Error :', result?.error)
+    if (result?.status !== 'Success')
+      return console.log('getSkills Error :', result?.error);
     // console.log('getSkills',result?.data)
     if (result?.data) {
-      console.log('result.data', result?.data)
+      // console.log('result.data', result?.data);
       setDefaultSkills(result?.data);
     } else {
       setDefaultSkills([]);
     }
-
-  }
+  };
   useEffect(() => {
-
     if (defaultskills.length === 0 && id) {
-
       fetchDefaultSkill();
     }
-
-  }, [id])
+  }, [id]);
   /////////////////////////////////
   useEffect(() => {
     voic();
-  }, [])
+  }, []);
   const fetchData = async () => {
     const result = await getImages(1);
     if (result?.status !== 'Success')
@@ -549,14 +547,13 @@ const GameCreation = () => {
     label: string;
   }
   useEffect(() => {
-
     const setAudioInPage = async () => {
       const res = await getAudio(parseInt(id));
       if (res?.status === 'Success') {
-        console.log(res.data);
-        setSelectedAud(res?.data)
+        // console.log(res.data);
+        setSelectedAud(res?.data);
       }
-    }
+    };
     if (tab == 6) {
       setAudioInPage();
     }
@@ -572,38 +569,51 @@ const GameCreation = () => {
       gameWelcomepageBackground: e.target.id,
     }));
   };
-  {/**************Changes-14/12/23**********************/ }
+  {
+    /**************Changes-14/12/23**********************/
+  }
   const handleH = (i: any) => {
     setBackgroundIndex(i);
-  }
+  };
   const handleL = () => {
     // setIsHovered(false)
     setBackgroundIndex('');
+  };
+  {
+    /****************************************************/
   }
-  {/****************************************************/ }
   //////Changes-14/Dec/23//////////////////////
   const handlePreview = (img: any, backgroundIndex: any, i: any) => {
-
-    setPreview(true)
+    setPreview(true);
     setFetchImg((prev: any) => {
-      return { ...prev, gasId: img?.gasId, gasAssetImage: img?.gasAssetImage, gasAssetName: img?.gasAssetName, backgroundIndex, i, temp: { tempTitle: img.temp.tempTitle, tempStoryLine: img.temp.tempStoryLine } }
+      return {
+        ...prev,
+        gasId: img?.gasId,
+        gasAssetImage: img?.gasAssetImage,
+        gasAssetName: img?.gasAssetName,
+        backgroundIndex,
+        i,
+        temp: {
+          tempTitle: img.temp.tempTitle,
+          tempStoryLine: img.temp.tempStoryLine,
+        },
+      };
     });
     onOpen();
 
-
     // console.log('SavedSTATE--',savedState);
-  }
+  };
   ///////////////////////////////////////////////
   const fetch = async () => {
     const result = await getBadge(parseInt(id));
     if (result?.status === 'Success') {
-      setShowBadge(result?.data)
-    };
+      setShowBadge(result?.data);
+    }
     const res = await getAudio(parseInt(id));
     if (res?.status === 'Success') {
-      setSelectedAud(res?.data)
+      setSelectedAud(res?.data);
     }
-  }
+  };
   //////////////Changes - 12-Dec-23/////////////////////
   const handlePreviewPlayer = (player: any, backgroundIndex: any, i: any) => {
     setPreview(true);
@@ -620,7 +630,46 @@ const GameCreation = () => {
     onOpen();
     // console.log('BackgroundIndex--',backgroundIndex);
   };
-  
+  const updateCreatorGameInfo = (info: any) => {
+    const { gameview, image, lmsblocks, lmsquestionsoptions,gameQuest, ...gameData } =
+      info?.result;
+    const sortBlockSequence = (blockArray: []) => {
+      const transformedArray = blockArray.reduce((result: any, obj: any) => {
+        const groupKey = obj?.blockQuestNo.toString();
+        // const seqKey = obj?.blockSecondaryId;
+        // const SplitArray = obj?.blockPrimarySequence.toString()?.split(".")[1];
+        const seqKey = obj?.blockPrimarySequence.toString()?.split('.')[1];
+        if (!result[groupKey]) {
+          result[groupKey] = {};
+        }
+        result[groupKey][seqKey] = obj;
+        return result;
+      }, {});
+      return transformedArray;
+    };
+    const completionOptions = gameQuest.map((qst :any, i: number)=>{
+      const item = {gameId:qst.gameId,questNo:qst.gameQuestNo, gameIsSetMinPassScore : qst.gameIsSetMinPassScore, gameIsSetDistinctionScore : qst.gameIsSetDistinctionScore, gameDistinctionScore: qst.gameDistinctionScore, gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore, gameIsSetBadge: qst.gameIsSetBadge, gameBadge: qst.gameBadge, gameBadgeName: qst.gameBadgeName, gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge, gameAwardBadgeScore: qst.gameAwardBadgeScore, gameScreenTitle: qst.gameScreenTitle, gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage, gameIsSetCongratsScoreWiseMessage: qst.gameIsSetCongratsScoreWiseMessage, gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage, gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage, gameaboveMinimumScoreCongratsMessage: qst.gameaboveMinimumScoreCongratsMessage, gameLessthanDistinctionScoreCongratsMessage: qst.gameLessthanDistinctionScoreCongratsMessage, gameAboveDistinctionScoreCongratsMessage: qst.gameAboveDistinctionScoreCongratsMessage}
+     return item; 
+    });
+    console.log("completionOptions",completionOptions);
+    setGameInfo({
+      gameId: info?.result?.gameId,
+      gameData: gameData,
+      gameHistory: gameview,
+      assets: image,
+      blocks: sortBlockSequence(lmsblocks),
+      gameQuest: gameQuest, //used for completion screen
+      completionQuestOptions: completionOptions,
+      questOptions: lmsquestionsoptions,
+      reflectionQuestions: info?.resultReflection,
+      gamePlayers: info?.assets?.playerCharectorsUrl,
+      bgMusic:
+        info?.assets?.bgMusicUrl && API_SERVER + '/' + info?.assets?.bgMusicUrl,
+      gameNonPlayerUrl:
+        info?.assets?.npcUrl && API_SERVER + '/' + info?.assets?.npcUrl,
+    });
+  };
+
   const fetchGameId = async () => {
     const reviews = await getAllReviews(id);
     if (reviews && reviews?.status !== 'Success')
@@ -630,15 +679,14 @@ const GameCreation = () => {
     const images = await getCreatorBlocks(id);
     if (images?.status !== 'Success') {
       console.log(images.message);
-    }
-    else {
+    } else {
       setCblocks(images.data);
-      setQuest(images.quest)
-
+      setQuest(images.quest);
     }
-    const prev = await getPreview(id);
-    if (prev && prev?.status !== 'Success') return console.log(prev.message);
-    setPrevdata(prev?.data);
+    const gamedata = await getGameCreatorDemoData(id);
+    if (!gamedata.error && gamedata) {
+      updateCreatorGameInfo(gamedata);
+    }
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
       return console.log('error:' + gameById?.message);
@@ -649,44 +697,39 @@ const GameCreation = () => {
     const stringContainingNumbers = gameById?.data?.gameLastTabArray;
     const stringGameLastTab = gameById?.data?.gameLastTab;
     // alert(stringGameLastTab);
-    if (gameById?.data?.gameGameStage === null || gameById?.data?.gameGameStage === '') {
-      alert(gameById?.data?.gameGameStage)
+    if (
+      gameById?.data?.gameGameStage === null ||
+      gameById?.data?.gameGameStage === ''
+    ) {
+      alert(gameById?.data?.gameGameStage);
       setFormData((prev) => ({ ...prev, gameGameStage: 'Creation' }));
     }
     if (stringGameLastTab === 111) {
       setTab(1);
       setFormData((prev) => ({ ...prev, gameLastTab: 1 }));
-    }
-
-    else if (stringContainingNumbers) {
+    } else if (stringContainingNumbers) {
       const numbersArray = stringContainingNumbers?.match(/\d+/g);
       const lastValue = numbersArray[numbersArray?.length - 1];
       // console.log('parseInt(lastValue)', numbersArray?.length);
       if (numbersArray?.length === 1) {
-
-
         setTab(2);
         setFormData((prev) => ({ ...prev, gameLastTab: 2 }));
-
       } else {
         setTab(parseInt(lastValue));
       }
-
     }
-
 
     const storedSelectedIndex = localStorage.getItem('selectedCardIndex');
     if (storedSelectedIndex !== null) {
       setSelectedCardIndex(parseInt(storedSelectedIndex));
     }
 
-
     const storedReflection = await getReflection(id);
     if (storedReflection?.status !== 'Success')
       // return alert('error:' + gameById?.message);
       // console.log('storedReflection', storedReflection.data)
 
-    setReflectionQuestions(storedReflection.data);
+      setReflectionQuestions(storedReflection.data);
     setAtuoSave(true);
 
     // setTab(gameById?.data?.gameLastTab)
@@ -701,24 +744,21 @@ const GameCreation = () => {
 
   const handleGet = async (quest: number) => {
     setAtuoSave(false);
-    console.log('handleGet');
+    // console.log('handleGet');
     // return false;
     try {
       const data = {
         quest: quest,
-      }
+      };
       const result = await getStory(id, JSON.stringify(data));
 
       if (result?.status !== 'Success') {
         return console.log('updateBackground error :' + result?.err);
-
-      }
-      else {
-
-        setserias(result.serias)
+      } else {
+        setserias(result.serias);
         setCount(result.count);
         if (result.alpacount) {
-          setAlphabetCount(result.alpacount)
+          setAlphabetCount(result.alpacount);
         }
         if (result.maxInput) {
           // console.log('result.nextserios',result.nextserios);
@@ -726,7 +766,7 @@ const GameCreation = () => {
           const itemsArray = Object.values(result.items);
           let sequance = itemsArray.map((it: any) => it.id);
           let upNext = itemsArray.map((it: any) => it.upNext);
-          console.log('sequancesequance', itemsArray)
+          // console.log('sequancesequance', itemsArray);
           setSequence(sequance);
           setUpNextCount(upNext);
           setDummySequence(sequance);
@@ -737,7 +777,7 @@ const GameCreation = () => {
           setInteractionBlock(result.intra);
           setBlockItems(result.items);
         } else {
-          console.log('else part')
+          // console.log('else part');
           setItems([]);
           setSequence([]);
           setUpNextCount([]);
@@ -766,13 +806,11 @@ const GameCreation = () => {
         // console.log('data',  data);
         // console.log('getInput', result)
       }
-
     } catch (error) {
       setAtuoSave(true);
       console.error('An error occurred while sending the request:', error);
     }
-
-  }
+  };
   const handleCompletionScreen = async (quest: number) => {
     setAtuoSave(false);
 
@@ -780,60 +818,45 @@ const GameCreation = () => {
     try {
       const data = {
         quest: 1,
-      }
+      };
       const result = await getCompletionScreen(id, JSON.stringify(data));
 
       if (result?.status !== 'Success') {
         setAtuoSave(true);
-        console.log('updateBackground error :' + result?.err);
+        // console.log('updateBackground error :' + result?.err);
         return false;
-      }
-      else {
-
+      } else {
         setCompletion(result?.data);
         setCompliData(result?.data);
-        console.log('Completion', Object.keys(result?.data).length);
-        setCompKeyCount(Object.keys(result?.data).length - 1)
+        // console.log('Completion', Object.keys(result?.data).length);
+        setCompKeyCount(Object.keys(result?.data).length - 1);
         setCurrentTab(0);
-        console.log('handleGet');
+        // console.log('handleGet');
         setAtuoSave(true);
       }
-    }
-    catch (error) {
-
-
+    } catch (error) {
       setAtuoSave(true);
       console.error('An error occurred while sending the request:', error);
     }
-
-  }
+  };
   const handleCompliStore = async () => {
-
-    console.log('handleCompliStore', compliData);
+    // console.log('handleCompliStore', compliData);
     try {
       let data = JSON.stringify(compliData);
 
-
       const result = await UpdateCompletionScreen(id, data);
       if (result?.status !== 'Success') {
-        console.log('data not updated')
+        console.log('data not updated');
       }
-
-
     } catch (error) {
       console.error('An error occurred while sending the request:', error);
     }
-
-  }
+  };
   const getDuration = async () => {
-
     try {
-
-
-
       const result = await getTotalMinofWords(id);
       if (result?.status !== 'Success') {
-        console.log('data not updated')
+        console.log('data not updated');
         return false;
       }
 
@@ -841,18 +864,16 @@ const GameCreation = () => {
         ...formData,
         gameDuration: result.totalMinutes,
       });
-      console.log('getDuration', formData.gameDuration)
-
+      // console.log('getDuration', formData.gameDuration);
     } catch (error) {
       console.error('An error occurred while sending the request:', error);
     }
-  }
-  console.log('compliData', compliData);
+  };
+  // console.log('compliData', compliData);
   const fetchGameIdUpdate = async () => {
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
       console.log('error:' + gameById?.message);
-
 
     const storedSelectedIndex = localStorage.getItem('selectedCardIndex');
     if (storedSelectedIndex !== null) {
@@ -862,7 +883,6 @@ const GameCreation = () => {
   };
   const [intercount, setIntercount] = useState(0);
   const fetchBlockCount = async () => {
-
     const getblockcount = await getBlocks(id);
     //alert(id);
     if (getblockcount?.status === 'Success') {
@@ -870,13 +890,11 @@ const GameCreation = () => {
 
       //alert(getblockcount?.count);
     }
-  }
+  };
   const fetchBlocks = async () => {
-
     // const result1 = await getStory(id);
     // if (result1?.status !== 'Success') {de
     //   console.log(result1.message);
-
 
     // }
     // else {
@@ -887,17 +905,12 @@ const GameCreation = () => {
     const result2 = await getListStory(id);
 
     if (result2?.status !== 'Success') {
-
       console.log(result2?.message);
-    }
-    else {
-      setListBlockItems(result2.BlockObject)
+    } else {
+      setListBlockItems(result2.BlockObject);
       console.log('result2.gameIn', result2.gameIn);
-      setListQuest(result2.gameIn)
-
-
+      setListQuest(result2.gameIn);
     }
-
   };
 
   useEffect(() => {
@@ -909,20 +922,20 @@ const GameCreation = () => {
       handleGet(1);
       fetchBlockCount();
       setExtensiveNavigation(null);
-      handleCompletionScreen(1)
+      handleCompletionScreen(1);
     }
   }, [id]);
   useEffect(() => {
     if (id) {
       fetchBlocks();
     }
-  }, [id, items])
+  }, [id, items]);
 
   const handleEntirePrev = async () => {
-    const prev = await getPreview(id);
-    if (prev && prev?.status === 'Success')
-    {
-      setPrevdata(prev?.data);
+    const gamedata = await getGameCreatorDemoData(id);
+
+    if (!gamedata.error && gamedata) {
+      updateCreatorGameInfo(gamedata);
       setEntire(true);
       onOpen();
     }
@@ -935,7 +948,6 @@ const GameCreation = () => {
 
   const handleTrans = (tabs: number) => {
     let tabArray: number[] = [];
-
 
     if (!formData?.gameLastTabArray?.includes(tabs)) {
       const stringContainingNumbers = formData.gameLastTabArray;
@@ -954,22 +966,12 @@ const GameCreation = () => {
       console.log('tabArray is empty');
     }
 
-
-    // console.log('formData.gameLastTabArray', formData.gameLastTabArray, '--tabs--', tabs);
-
-
-    // console.log("formData.gameSkills", formData.gameSkills);//crSkillName
     if (tab > tabs) {
-
       setTab(tabs);
-
     }
 
-
     if (tab < tabs) {
-
       if (tabArray.includes(tabs) || tabs === lastValue + 1) {
-
         if (tab === 1) {
           if (!formData.gameBackgroundId) {
             toast({
@@ -1059,7 +1061,10 @@ const GameCreation = () => {
 
             return false;
           }
-          if (!formData.gameCategoryId || formData.gameCategoryId.length === 0) {
+          if (
+            !formData.gameCategoryId ||
+            formData.gameCategoryId.length === 0
+          ) {
             toast({
               title: 'Please Enter The Category',
               status: 'error',
@@ -1071,26 +1076,23 @@ const GameCreation = () => {
           }
         }
 
-
         if (tab === 4) {
-          console.log("inputDataitems", items, items.length);
+          console.log('inputDataitems', items, items.length);
           if (items.length !== 0) {
             if (typeof items === 'object' && items !== null) {
               var inputData = items;
-              console.log("inputData", inputData);
-
+              console.log('inputData', inputData);
 
               for (var i = 0; i < inputData.length; i++) {
                 var key = inputData[i];
                 var inputkey = key.type + key.input;
 
-                console.log("key", key);
+                console.log('key', key);
 
-                if (key.type === "Note") {
+                if (key.type === 'Note') {
                   var note = input[inputkey]?.note;
 
                   if (!note) {
-
                     toast({
                       title: `Note is Empty On This Sequence ${key.id} `,
                       status: 'error',
@@ -1098,18 +1100,15 @@ const GameCreation = () => {
                       isClosable: true,
                     });
                     return false;
-
                   }
-
                 }
-                if (key.type === "Dialog") {
+                if (key.type === 'Dialog') {
                   console.log('dialogue', input[inputkey]?.dialog);
                   var Dialog = input[inputkey]?.dialog;
                   var animation = input[inputkey]?.animation;
                   var voice = input[inputkey]?.voice;
 
                   if (!Dialog) {
-
                     toast({
                       title: `Dialogue is Empty On This Sequence ${key.id} `,
                       status: 'error',
@@ -1117,10 +1116,8 @@ const GameCreation = () => {
                       isClosable: true,
                     });
                     return false;
-
                   }
                   if (!animation) {
-
                     toast({
                       title: `Animation is Empty On This Sequence ${key.id} `,
                       status: 'error',
@@ -1128,20 +1125,16 @@ const GameCreation = () => {
                       isClosable: true,
                     });
                     return false;
-
                   }
-
-
                 }
-                if (key.type === "Interaction") {
-
-                  console.log("keyinput", key.type + key.input);
+                if (key.type === 'Interaction') {
+                  console.log('keyinput', key.type + key.input);
                   var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                   var blockRoll = input[inputkey]?.blockRoll;
                   var interaction = input[inputkey]?.interaction;
-                  console.log("QuestionsEmotion", QuestionsEmotion);
-                  console.log("blockRoll", blockRoll);
-                  console.log("interaction", interaction);
+                  console.log('QuestionsEmotion', QuestionsEmotion);
+                  console.log('blockRoll', blockRoll);
+                  console.log('interaction', interaction);
                   if (!interaction) {
                     toast({
                       title: `Interaction is Empty On This Sequence ${key.id} `,
@@ -1150,8 +1143,6 @@ const GameCreation = () => {
                       isClosable: true,
                     });
                     return false;
-
-
                   }
                   if (!QuestionsEmotion || QuestionsEmotion === undefined) {
                     toast({
@@ -1161,7 +1152,6 @@ const GameCreation = () => {
                       isClosable: true,
                     });
                     return false;
-
                   }
                   if (!blockRoll) {
                     toast({
@@ -1171,14 +1161,18 @@ const GameCreation = () => {
                       isClosable: true,
                     });
                     return false;
-
                   }
                   if (typeof alphabet === 'object' && alphabet !== null) {
                     var alphabetData = alphabet;
 
                     // alphabetData?.filter((alp: any) => key.id === alp.seqs).map((alp: any, i: number, arr: any[]) => {
-                    for (const alp of alphabetData?.filter((alp: any) => key.id === alp.seqs) || []) {
-                      console.log("alpha", input[inputkey]?.optionsObject[alp.option]);
+                    for (const alp of alphabetData?.filter(
+                      (alp: any) => key.id === alp.seqs,
+                    ) || []) {
+                      console.log(
+                        'alpha',
+                        input[inputkey]?.optionsObject[alp.option],
+                      );
                       if (!input[inputkey]?.optionsObject[alp.option]) {
                         var option = alp.option;
                         toast({
@@ -1198,18 +1192,22 @@ const GameCreation = () => {
                           isClosable: true,
                         });
                         return false;
-
                       }
                       let isAtLeastOneTrue = false;
 
-                      for (const option of alphabet.map((alp: any) => alp.option)) {
-                        if (input[inputkey]?.ansObject[option] === 'true' || input[inputkey]?.ansObject[option] === true) {
+                      for (const option of alphabet.map(
+                        (alp: any) => alp.option,
+                      )) {
+                        if (
+                          input[inputkey]?.ansObject[option] === 'true' ||
+                          input[inputkey]?.ansObject[option] === true
+                        ) {
                           const ansValue = input[inputkey]?.ansObject[option];
-                          console.log("ansValue", ansValue)
-                          console.log("hit2")
+                          console.log('ansValue', ansValue);
+                          console.log('hit2');
                           isAtLeastOneTrue = true;
                           if (!input[inputkey]?.scoreObject[option]) {
-                            console.log("hit3")
+                            console.log('hit3');
                             toast({
                               title: `${option} Score is Empty On This Sequence ${key.id}`,
                               status: 'error',
@@ -1221,7 +1219,7 @@ const GameCreation = () => {
                         }
                       }
                       if (!isAtLeastOneTrue) {
-                        console.log("hit1")
+                        console.log('hit1');
                         toast({
                           title: `At least one option must be selected on this sequence ${key.id}`,
                           status: 'error',
@@ -1231,21 +1229,11 @@ const GameCreation = () => {
                         return false;
                       }
                     }
-
-
-
                   }
-
-
                 }
-
               }
-
-
-
             }
-          }
-          else {
+          } else {
             toast({
               title: `Create Your Story !!`,
               status: 'error',
@@ -1253,20 +1241,12 @@ const GameCreation = () => {
               isClosable: true,
             });
             return false;
-
           }
-
         }
 
         setTab(tabs);
-
       }
-
-
-
     }
-
-
 
     // if (tab != tabs) {
     //   if (formData.gameLastTabArray.includes(tabs)) {
@@ -1283,7 +1263,7 @@ const GameCreation = () => {
     //     }
     //   }
     // }
-  }
+  };
   ///navin 15-12
 
   //navin
@@ -1296,24 +1276,33 @@ const GameCreation = () => {
       formData.gameBehaviour,
       formData.gameOthers,
     ];
-    const countSelectedOptions = selectedOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
-    if (formData.gameIsCollectLearnerFeedback === "true") {
+    const countSelectedOptions = selectedOptions.filter(
+      (option) =>
+        option !== '' &&
+        option !== 'false' &&
+        option !== undefined &&
+        option !== null,
+    ).length;
+    if (formData.gameIsCollectLearnerFeedback === 'true') {
       if (countSelectedOptions === 0 || countSelectedOptions > 4) {
         toast({
           title: 'Please select atleast one option and maximum 4 options',
           status: 'error',
           duration: 3000,
           isClosable: true,
-        })
+        });
         return false;
       }
-      if (formData.gameFeedBack === 'true' && formData.gameFeedBackLink === '') {
+      if (
+        formData.gameFeedBack === 'true' &&
+        formData.gameFeedBackLink === ''
+      ) {
         toast({
           title: 'Please Enter Feedback Link',
           status: 'error',
           duration: 3000,
           isClosable: true,
-        })
+        });
         return false;
       }
     }
@@ -1348,10 +1337,9 @@ const GameCreation = () => {
 
       setOpenQuest(true);
     }
-  }
-  console.log('formdata', formData.gameLastTabArray)
+  };
+  console.log('formdata', formData.gameLastTabArray);
   const commonNextFunction = async () => {
-
     if (tab === 1 && !formData.gameBackgroundId) {
       toast({
         title: 'Please Select a background image.',
@@ -1362,8 +1350,7 @@ const GameCreation = () => {
       return false;
     }
     if (tab === 2) {
-
-      console.log('formdata', formData.gameLastTabArray)
+      console.log('formdata', formData.gameLastTabArray);
       if (!formData.gameNonPlayerName) {
         toast({
           title: 'Please Enter a NonplayerName.',
@@ -1421,7 +1408,6 @@ const GameCreation = () => {
       // return false;
     }
     if (tab === 3) {
-
       if (!formData.gameTitle) {
         toast({
           title: 'Please Enter The Story Title',
@@ -1456,12 +1442,13 @@ const GameCreation = () => {
       let da = JSON.stringify(tags);
       const res = await createSkills(id, da);
       const cats = await createCategories(id, cate);
-      if (res?.status !== 'Success' && res?.data.length === 0) return toast({
-        title: 'Cannot Skills',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+      if (res?.status !== 'Success' && res?.data.length === 0)
+        return toast({
+          title: 'Cannot Skills',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       if (cats?.status !== 'Success' && cats?.data.length === 0)
         return toast({
           title: 'Cannot Skills',
@@ -1471,27 +1458,23 @@ const GameCreation = () => {
         });
     }
     if (tab === 4) {
-
       if (items.length !== 0) {
-        console.log("items567", items);
+        console.log('items567', items);
         if (items.some((item: any) => item.type === 'Interaction')) {
-
           if (typeof items === 'object' && items !== null) {
             var inputData = items;
-            console.log("inputData", inputData);
-
+            console.log('inputData', inputData);
 
             for (var i = 0; i < inputData.length; i++) {
               var key = inputData[i];
               var inputkey = key.type + key.input;
 
-              console.log("key", key);
+              console.log('key', key);
 
-              if (key.type === "Note") {
+              if (key.type === 'Note') {
                 var note = input[inputkey].note;
 
                 if (!note) {
-
                   toast({
                     title: `Note is Empty On This Sequence ${key.id} `,
                     status: 'error',
@@ -1499,18 +1482,15 @@ const GameCreation = () => {
                     isClosable: true,
                   });
                   return false;
-
                 }
-
               }
-              if (key.type === "Dialog") {
+              if (key.type === 'Dialog') {
                 console.log('dialogue', input[inputkey]?.dialog);
                 var Dialog = input[inputkey]?.dialog;
                 var animation = input[inputkey]?.animation;
                 var voice = input[inputkey]?.voice;
 
                 if (!Dialog) {
-
                   toast({
                     title: `Dialogue is Empty On This Sequence ${key.id} `,
                     status: 'error',
@@ -1518,10 +1498,8 @@ const GameCreation = () => {
                     isClosable: true,
                   });
                   return false;
-
                 }
                 if (!animation) {
-
                   toast({
                     title: `Animation is Empty On This Sequence ${key.id} `,
                     status: 'error',
@@ -1529,20 +1507,16 @@ const GameCreation = () => {
                     isClosable: true,
                   });
                   return false;
-
                 }
-
-
               }
-              if (key.type === "Interaction") {
-
-                console.log("keyinput", key.type + key.input);
+              if (key.type === 'Interaction') {
+                console.log('keyinput', key.type + key.input);
                 var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                 var blockRoll = input[inputkey]?.blockRoll;
                 var interaction = input[inputkey]?.interaction;
-                console.log("QuestionsEmotion", QuestionsEmotion);
-                console.log("blockRoll", blockRoll);
-                console.log("interaction", interaction);
+                console.log('QuestionsEmotion', QuestionsEmotion);
+                console.log('blockRoll', blockRoll);
+                console.log('interaction', interaction);
                 if (!interaction) {
                   toast({
                     title: `Interaction is Empty On This Sequence ${key.id} `,
@@ -1551,8 +1525,6 @@ const GameCreation = () => {
                     isClosable: true,
                   });
                   return false;
-
-
                 }
                 if (!QuestionsEmotion || QuestionsEmotion === undefined) {
                   toast({
@@ -1562,7 +1534,6 @@ const GameCreation = () => {
                     isClosable: true,
                   });
                   return false;
-
                 }
                 if (!blockRoll) {
                   toast({
@@ -1572,14 +1543,18 @@ const GameCreation = () => {
                     isClosable: true,
                   });
                   return false;
-
                 }
                 if (typeof alphabet === 'object' && alphabet !== null) {
                   var alphabetData = alphabet;
 
                   // alphabetData?.filter((alp: any) => key.id === alp.seqs).map((alp: any, i: number, arr: any[]) => {
-                  for (const alp of alphabetData?.filter((alp: any) => key.id === alp.seqs) || []) {
-                    console.log("alpha", input[inputkey]?.optionsObject[alp.option]);
+                  for (const alp of alphabetData?.filter(
+                    (alp: any) => key.id === alp.seqs,
+                  ) || []) {
+                    console.log(
+                      'alpha',
+                      input[inputkey]?.optionsObject[alp.option],
+                    );
                     if (!input[inputkey]?.optionsObject[alp.option]) {
                       var option = alp.option;
                       toast({
@@ -1599,18 +1574,22 @@ const GameCreation = () => {
                         isClosable: true,
                       });
                       return false;
-
                     }
                     let isAtLeastOneTrue = false;
 
-                    for (const option of alphabet.map((alp: any) => alp.option)) {
-                      if (input[inputkey]?.ansObject[option] === 'true' || input[inputkey]?.ansObject[option] === true) {
+                    for (const option of alphabet.map(
+                      (alp: any) => alp.option,
+                    )) {
+                      if (
+                        input[inputkey]?.ansObject[option] === 'true' ||
+                        input[inputkey]?.ansObject[option] === true
+                      ) {
                         const ansValue = input[inputkey]?.ansObject[option];
-                        console.log("ansValue", ansValue)
-                        console.log("hit2")
+                        console.log('ansValue', ansValue);
+                        console.log('hit2');
                         isAtLeastOneTrue = true;
                         if (!input[inputkey]?.scoreObject[option]) {
-                          console.log("hit3")
+                          console.log('hit3');
                           toast({
                             title: `${option} Score is Empty On This Sequence ${key.id}`,
                             status: 'error',
@@ -1622,7 +1601,7 @@ const GameCreation = () => {
                       }
                     }
                     if (!isAtLeastOneTrue) {
-                      console.log("hit1")
+                      console.log('hit1');
                       toast({
                         title: `At least one option must be selected on this sequence ${key.id}`,
                         status: 'error',
@@ -1631,23 +1610,16 @@ const GameCreation = () => {
                       });
                       return false;
                     }
-
                   }
-
-
-
                 }
-
-
               }
-
             }
 
             const apiValidationResult = await getStoryValidtion(id);
 
             console.log('apiValidationResult', apiValidationResult);
 
-            if (apiValidationResult?.status === "Failure") {
+            if (apiValidationResult?.status === 'Failure') {
               // There are empty fields, show an error message
               toast({
                 title: ` ${apiValidationResult?.message}`,
@@ -1657,13 +1629,10 @@ const GameCreation = () => {
               });
               return false;
             }
-
           }
-
-        }
-        else {
+        } else {
           toast({
-            title: "No Interaction in items.",
+            title: 'No Interaction in items.',
             status: 'error',
             duration: 3000,
             isClosable: true,
@@ -1671,8 +1640,6 @@ const GameCreation = () => {
           return false;
           // console.log("Success: No Interaction in items.");
         }
-
-
       } else {
         toast({
           title: `Create Your Story !!`,
@@ -1681,11 +1648,7 @@ const GameCreation = () => {
           isClosable: true,
         });
         return false;
-
       }
-
-
-
     }
     if (tab === 6) {
       setFormData({
@@ -1705,7 +1668,6 @@ const GameCreation = () => {
     // return false;
     if (tab === 1 && !id) {
       try {
-
         const result = await addgame(formData);
 
         if (result?.status !== 'Success') {
@@ -1717,8 +1679,6 @@ const GameCreation = () => {
           });
           return console.log('updateBackground error :' + result?.err);
         } else {
-
-
           if (tab === 1 && result.status === 'Success') {
             toast({
               title: 'Background Image Stored',
@@ -1728,8 +1688,10 @@ const GameCreation = () => {
               position: 'bottom-right',
             });
             setTab(tab + 1);
-            const parsedGameLastTabArray = JSON.parse(result.data.gameLastTabArray);
-            console.log('formdata', parsedGameLastTabArray)
+            const parsedGameLastTabArray = JSON.parse(
+              result.data.gameLastTabArray,
+            );
+            console.log('formdata', parsedGameLastTabArray);
 
             // Update formData with the parsed array
             setFormData({
@@ -1770,12 +1732,10 @@ const GameCreation = () => {
           setFormData(formDataWithoutLastTab);
           setTab(tab + 1);
 
-
           // setFormData((prev)=>({...prev,gameLastTab:formData.gameLastTab+1}));
         }
 
         if (tab === 2 && result.status === 'Success') {
-
           toast({
             title: 'Non-Playing Character Updated',
             status: 'success',
@@ -1787,7 +1747,6 @@ const GameCreation = () => {
 
           setFormData(formDataWithoutLastTab);
           setTab(tab + 1);
-
         }
 
         if (tab === 3 && result.status === 'Success') {
@@ -1865,7 +1824,6 @@ const GameCreation = () => {
           setFormData(formDataWithoutLastTab);
           setTab(7);
 
-
           // setFormData((prev)=>({...prev,gameLastTab:formData.gameLastTab+1}));
         }
       } catch (error) {
@@ -1880,14 +1838,17 @@ const GameCreation = () => {
       let truncatedText = text.slice(0, maxLength);
 
       // Break lines after maxLineLength characters
-      truncatedText = truncatedText.replace(new RegExp(`(.{${maxLineLength}})`, 'g'), '$1\n');
+      truncatedText = truncatedText.replace(
+        new RegExp(`(.{${maxLineLength}})`, 'g'),
+        '$1\n',
+      );
 
       return truncatedText + '........';
     }
   }
   ////////////////////////////Changes-11/01/2024//////////////////////
   const handleBackground = (img: any, i: any) => {
-    setDefaultstatus(false)
+    setDefaultstatus(false);
     // alert(i);
     // alert(img);
 
@@ -1895,23 +1856,30 @@ const GameCreation = () => {
     setBackgroundIndex((prevIndex: any) => (prevIndex === i ? null : i));
     // setFetchImg(img?.aniId);
     setFetchImg((prev: any) => {
-      return { ...prev, gasId: img?.gasId, gasAssetImage: img?.gasAssetImage, gasAssetName: img?.gasAssetName, i, title: img?.temp.tempTitle, stroyline: img.temp.tempStoryLine }
+      return {
+        ...prev,
+        gasId: img?.gasId,
+        gasAssetImage: img?.gasAssetImage,
+        gasAssetName: img?.gasAssetName,
+        i,
+        title: img?.temp.tempTitle,
+        stroyline: img.temp.tempStoryLine,
+      };
     });
 
     ///
-    console.log("selectedCardIndex", selectedCardIndex, i);
+    console.log('selectedCardIndex', selectedCardIndex, i);
 
     if (selectedCardIndex !== i) {
-      console.log("selectedCardIndex1", selectedCardIndex, i);
+      console.log('selectedCardIndex1', selectedCardIndex, i);
       // Select new card and deselect the previously selected one (if any)
       setSelectedCardIndex(i);
       setFormData((prev) => ({
         ...prev,
         gameBackgroundId: img.gasId,
         gameTitle: img?.temp.tempTitle,
-        gameStoryLine: img?.temp.tempStoryLine
+        gameStoryLine: img?.temp.tempStoryLine,
         // gameTitle:img?.gasAssetName
-
       }));
       localStorage.setItem('selectedCardIndex', i);
     }
@@ -1924,25 +1892,20 @@ const GameCreation = () => {
 
     onClose();
 
-
     console.log('Function3-', selectedCardIndex);
     if (selectedCardIndex === i) {
       return;
     } else {
-
       // setTimeout(() => {
-      //   
+      //
       // }, 1000);
-
     }
-
   };
   //1998
   useEffect(() => {
     if (!Defaultstatus) {
-
       if (formData.gameBackgroundId) {
-        setPreview(false)
+        setPreview(false);
         commonNextFunction();
       }
     }
@@ -1960,20 +1923,16 @@ const GameCreation = () => {
         name: player?.gasAssetName,
       };
     });
-
   };
   const handleChange = (e: any) => {
-
     const inputValue = e.target.value;
     const { name, value, checked } = e.target;
     if (name === 'gameDuration') {
-
       // let duration =
       //   parseInt(value.split(':')[0], 10) * 60 +
       //   parseInt(value.split(':')[1], 10);
       // setFormData((prev) => ({ ...prev, gameDuration: String(duration) }));
-    }
-    else if (
+    } else if (
       name === 'gameIsSetMinPassScore' ||
       name === 'gameIsSetDistinctionScore' ||
       name === 'gameIsSetSkillWiseScore' ||
@@ -1996,17 +1955,19 @@ const GameCreation = () => {
       name === 'gameShuffle' ||
       name === 'gameDisableOptionalReplays' ||
       name === 'gameTrackQuestionWiseAnswers' ||
-      name === 'gameDisableLearnerMailNotifications' || name === 'gameQuestion1' || name === 'gameQuestion2' ||
+      name === 'gameDisableLearnerMailNotifications' ||
+      name === 'gameQuestion1' ||
+      name === 'gameQuestion2' ||
       name === 'gameContent' ||
       name === 'gameRelevance' ||
       name === 'gameBehaviour' ||
       name === 'gameOthers' ||
       name === 'gameGamification' ||
       name === 'gameRecommendation' ||
-      name === 'gameFeedBack') {
-      setFormData((prev) => ({ ...prev, [name]: String(checked) }))
-    }
-    else if (e.target.id === 'gameLaunchedWithinPlatform') {
+      name === 'gameFeedBack'
+    ) {
+      setFormData((prev) => ({ ...prev, [name]: String(checked) }));
+    } else if (e.target.id === 'gameLaunchedWithinPlatform') {
       e.target.checked
         ? setFormData((prev) => ({ ...prev, [name]: value }))
         : setFormData((prev) => ({ ...prev, [name]: 0 }));
@@ -2045,20 +2006,18 @@ const GameCreation = () => {
     ///Completion Screen
     if (name === 'gameIsSetCongratsSingleMessage' && !checked) {
       // Reset the value when switch is turned off
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
-        gameCompletedCongratsMessage: '' // Set to an empty string or any default value
+        gameCompletedCongratsMessage: '', // Set to an empty string or any default value
       }));
-    }
-    else if (name === 'gameIsSetCongratsScoreWiseMessage' && !checked) {
+    } else if (name === 'gameIsSetCongratsScoreWiseMessage' && !checked) {
       // Reset the value when switch is turned off
-
     }
 
     ///TakeAway Screen
     else if (name === 'gameIsShowTakeaway' && !checked) {
       // Reset the value when switch is turned off
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         gameTakeawayContent: '',
         // Set to an empty string or any default value
@@ -2068,7 +2027,7 @@ const GameCreation = () => {
     ///Welcome Screen
     else if (name === 'gameIsShowAdditionalWelcomeNote' && !checked) {
       // Reset the value when switch is turned off
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         gameAdditionalWelcomeNote: '',
         // Set to an empty string or any default value
@@ -2078,7 +2037,6 @@ const GameCreation = () => {
 
     console.log('formdata', formData);
   };
-
 
   const handlecompletion = (e: any) => {
     const inputValue = e.target.value;
@@ -2099,37 +2057,25 @@ const GameCreation = () => {
       name === 'gameIsSetCongratsScoreWiseMessage' ||
       name === 'gameIsSetCongratsSingleMessage'
     ) {
-
       setCompliData((prevInput: any) => {
         return {
           ...prevInput,
           [CompKeyCount]: {
             ...prevInput[CompKeyCount],
             [name]: String(checked),
-
-          }
-        }
-      })
-
-
-
-
-
-
+          },
+        };
+      });
     } else {
-
       setCompliData((prevInput: any) => {
         return {
           ...prevInput,
           [CompKeyCount]: {
             ...prevInput[CompKeyCount],
-            [name]: value
-          }
-        }
-      })
-
-
-
+            [name]: value,
+          },
+        };
+      });
     }
     if (name === 'gameIsSetCongratsSingleMessage' && checked === true) {
       setCompliData((prevInput: any) => {
@@ -2138,10 +2084,9 @@ const GameCreation = () => {
           [CompKeyCount]: {
             ...prevInput[CompKeyCount],
             gameIsSetCongratsScoreWiseMessage: 'false',
-
-          }
-        }
-      })
+          },
+        };
+      });
     }
 
     if (name === 'gameIsSetCongratsScoreWiseMessage' && checked === true) {
@@ -2151,13 +2096,11 @@ const GameCreation = () => {
           [CompKeyCount]: {
             ...prevInput[CompKeyCount],
             gameIsSetCongratsSingleMessage: 'false',
-
-          }
-        }
-      })
+          },
+        };
+      });
     }
-
-  }
+  };
   // const handleMouse = (i: number) => {
   //   setEnter(true);
   //   setBgIndex(i);
@@ -2220,8 +2163,8 @@ const GameCreation = () => {
     'secondaryGray.600',
     'whiteAlpha.200',
   );
-  const completeShadow = "rgba(112, 144, 176, 0.1) 0px 18px 22px inset";
-  const incompleteShadow = "rgba(112, 144, 176, 0.12) 0px 18px 40px";
+  const completeShadow = 'rgba(112, 144, 176, 0.1) 0px 18px 22px inset';
+  const incompleteShadow = 'rgba(112, 144, 176, 0.12) 0px 18px 40px';
   // const incompleteShadow = useColorModeValue(
   //   'inset 0px 18px 22px rgba(112, 144, 176, 0.1)',
   //   'inset 0px 4px 4px #0B1437',
@@ -2232,14 +2175,34 @@ const GameCreation = () => {
   const stepImgActiveBorder = 'done';
   const stepImgBorder = '';
 
-
-  const tab1 = formData && formData?.gameLastTabArray?.includes(1) ? stepImgActiveBorder : stepImgBorder;
-  const tab2 = formData && formData?.gameLastTabArray?.includes(2) ? stepImgActiveBorder : stepImgBorder;
-  const tab3 = formData && formData?.gameLastTabArray?.includes(3) ? stepImgActiveBorder : stepImgBorder;
-  const tab4 = formData && formData?.gameLastTabArray?.includes(4) ? stepImgActiveBorder : stepImgBorder;
-  const tab5 = formData && formData?.gameLastTabArray?.includes(5) ? stepImgActiveBorder : stepImgBorder;
-  const tab6 = formData && formData?.gameLastTabArray?.includes(6) ? stepImgActiveBorder : stepImgBorder;
-  const tab7 = formData && formData?.gameLastTabArray?.includes(7) ? stepImgActiveBorder : stepImgBorder;
+  const tab1 =
+    formData && formData?.gameLastTabArray?.includes(1)
+      ? stepImgActiveBorder
+      : stepImgBorder;
+  const tab2 =
+    formData && formData?.gameLastTabArray?.includes(2)
+      ? stepImgActiveBorder
+      : stepImgBorder;
+  const tab3 =
+    formData && formData?.gameLastTabArray?.includes(3)
+      ? stepImgActiveBorder
+      : stepImgBorder;
+  const tab4 =
+    formData && formData?.gameLastTabArray?.includes(4)
+      ? stepImgActiveBorder
+      : stepImgBorder;
+  const tab5 =
+    formData && formData?.gameLastTabArray?.includes(5)
+      ? stepImgActiveBorder
+      : stepImgBorder;
+  const tab6 =
+    formData && formData?.gameLastTabArray?.includes(6)
+      ? stepImgActiveBorder
+      : stepImgBorder;
+  const tab7 =
+    formData && formData?.gameLastTabArray?.includes(7)
+      ? stepImgActiveBorder
+      : stepImgBorder;
 
   // set height and width for stepper image based on tab
   const stepImgActiveHeight = '110px';
@@ -2272,13 +2235,41 @@ const GameCreation = () => {
   // SET ACTIVE CHECK BASED ON TAB
   const stepCheckActiveColor = brandColor;
   const stepCheckColor = incompleteColor;
-  const stepbgCheck = formData?.gameLastTabArray?.includes(1) ? stepCheckActiveColor : (tab === 1 ? 'brand.500' : stepCheckColor);
-  const stepPoseCheck = formData?.gameLastTabArray?.includes(2) ? stepCheckActiveColor : (tab === 2 ? 'brand.500' : stepCheckColor);
-  const stepAboutStoryCheck = formData?.gameLastTabArray?.includes(3) ? stepCheckActiveColor : (tab === 3 ? 'brand.500' : stepCheckColor);
-  const stepBlockCheck = formData?.gameLastTabArray?.includes(4) ? stepCheckActiveColor : (tab === 4 ? 'brand.500' : stepCheckColor);
-  const stepScoreCheck = formData?.gameLastTabArray?.includes(5) ? stepCheckActiveColor : (tab === 5 ? 'brand.500' : stepCheckColor);
-  const stepSummariesCheck = formData?.gameLastTabArray?.includes(6) ? stepCheckActiveColor : (tab === 6 ? 'brand.500' : stepCheckColor);
-  const stepCompleteCheck = formData?.gameLastTabArray?.includes(7) ? stepCheckActiveColor : (tab === 7 ? 'brand.500' : stepCheckColor);
+  const stepbgCheck = formData?.gameLastTabArray?.includes(1)
+    ? stepCheckActiveColor
+    : tab === 1
+    ? 'brand.500'
+    : stepCheckColor;
+  const stepPoseCheck = formData?.gameLastTabArray?.includes(2)
+    ? stepCheckActiveColor
+    : tab === 2
+    ? 'brand.500'
+    : stepCheckColor;
+  const stepAboutStoryCheck = formData?.gameLastTabArray?.includes(3)
+    ? stepCheckActiveColor
+    : tab === 3
+    ? 'brand.500'
+    : stepCheckColor;
+  const stepBlockCheck = formData?.gameLastTabArray?.includes(4)
+    ? stepCheckActiveColor
+    : tab === 4
+    ? 'brand.500'
+    : stepCheckColor;
+  const stepScoreCheck = formData?.gameLastTabArray?.includes(5)
+    ? stepCheckActiveColor
+    : tab === 5
+    ? 'brand.500'
+    : stepCheckColor;
+  const stepSummariesCheck = formData?.gameLastTabArray?.includes(6)
+    ? stepCheckActiveColor
+    : tab === 6
+    ? 'brand.500'
+    : stepCheckColor;
+  const stepCompleteCheck = formData?.gameLastTabArray?.includes(7)
+    ? stepCheckActiveColor
+    : tab === 7
+    ? 'brand.500'
+    : stepCheckColor;
 
   const steps = [
     {
@@ -2318,7 +2309,6 @@ const GameCreation = () => {
     });
     setIsEditing(true);
     setIsSave(false);
-
   };
 
   console.log('input--', inputValue);
@@ -2330,17 +2320,14 @@ const GameCreation = () => {
   //navin 16-12
 
   useEffect(() => {
-
     if (formData.gameIsSetCongratsSingleMessage === 'true') {
-
       setFormData((prev) => ({
         ...prev,
         gameIsSetCongratsSingleMessage: 'true',
-        gameIsSetCongratsScoreWiseMessage: 'false'
+        gameIsSetCongratsScoreWiseMessage: 'false',
       }));
     }
   }, [formData.gameIsSetCongratsSingleMessage]);
-
 
   //navin 16-12
   //priyaDharshini
@@ -2371,7 +2358,6 @@ const GameCreation = () => {
   //              wordCount.push(words.length)
   //             }
 
-
   //           }
   //           if (key.type === "Interaction") {
   //             //  words = sentence.trim().split(/\s+/);
@@ -2381,15 +2367,9 @@ const GameCreation = () => {
   //         words = wordInteraction.trim().split(/\s+/);
   //         wordCount.push(words.length)
 
-
-
-
-
   //     for (const key in input[inputkey]?.optionsObject) {
 
   //       if (input[inputkey]?.optionsObject.hasOwnProperty(key)) {
-
-
 
   //         var wordOptionsObject = input[inputkey]?.optionsObject[key];
   //         if(wordOptionsObject){
@@ -2397,13 +2377,11 @@ const GameCreation = () => {
   //           wordCount.push(words.length)
   //         }
 
-
   //         var wordfeedbackObject = input[inputkey]?.feedbackObject[key];
   //         if(wordfeedbackObject){
   //           words = wordfeedbackObject?.trim().split(/\s+/);
   //           wordCount.push(words.length)
   //         }
-
 
   //        var wordresponseObject= input[inputkey]?.responseObject[key];
   //        if(wordresponseObject){
@@ -2411,20 +2389,14 @@ const GameCreation = () => {
   //         wordCount?.push(words.length)
   //        }
 
-
   //        var  wordoptionTitleObject = input[inputkey]?.optionTitleObject[key];
   //        if(wordoptionTitleObject){
   //         words = wordoptionTitleObject.trim().split(/\s+/);
   //         wordCount.push(words.length)
   //        }
 
-
-
   //       }
   //     }
-
-
-
 
   //   // if(input[inputkey]?.ansObject==='true'){
 
@@ -2442,7 +2414,6 @@ const GameCreation = () => {
   //           }
   //         }
 
-
   //         console.log("maxArray", maxArray);
   //         const numericValues = maxArray.map(Number);
   //         const numericWord=wordCount.map(Number);
@@ -2457,20 +2428,17 @@ const GameCreation = () => {
   //         }));
   //       }
 
-
   //     };
   //     if(input.length>0){
   //       getTotalScore();
   //     }
 
-
   // }, [input]);
   //navin
   const playerPerview = (id: any) => {
-
-    setPreview(true)
-    setPreviewId(id)
-  }
+    setPreview(true);
+    setPreviewId(id);
+  };
   const makeInputFiled = (id: any, name: any) => {
     if (formData.gameNonPlayingCharacterId !== id) {
       setFormData((prev) => ({
@@ -2480,8 +2448,7 @@ const GameCreation = () => {
         gameNonPlayerVoice: null,
         gamePlayerMaleVoice: null,
         gamePlayerFemaleVoice: null,
-        gameNarratorVoice: null
-
+        gameNarratorVoice: null,
       }));
       setPreview(true);
     } else {
@@ -2492,19 +2459,17 @@ const GameCreation = () => {
         gameNonPlayerVoice: null,
         gamePlayerMaleVoice: null,
         gamePlayerFemaleVoice: null,
-        gameNarratorVoice: null
+        gameNarratorVoice: null,
       }));
     }
-  }
+  };
   const reducePercentage = 16 * tab - 16;
   console.log(reducePercentage);
   // alert(reducePercentage)
   useEffect(() => {
     if (formData.gameNonPlayingCharacterId) {
-      playerPerview(formData.gameNonPlayingCharacterId)
-
+      playerPerview(formData.gameNonPlayingCharacterId);
     }
-
   }, [formData.gameNonPlayingCharacterId]);
   // navin
 
@@ -2525,13 +2490,8 @@ const GameCreation = () => {
         console.error('An error occurred while sending the request:', error);
       }
     }, 500),
-    [id] // Empty dependency array to ensure that the function is only created once
+    [id], // Empty dependency array to ensure that the function is only created once
   );
-
-
-
-
-
 
   useEffect(() => {
     if (id && autosave) {
@@ -2541,44 +2501,33 @@ const GameCreation = () => {
             reflectionQuestions: reflectionQuestions,
             gameReflectionQuestion: formData.gameReflectionQuestion,
             gameId: id,
-          }
-          console.log('datas', data)
+          };
+          console.log('datas', data);
           debouncedSubmit(data);
-
         }
       }
     }
+  }, [reflectionQuestions, formData.gameReflectionQuestion, id]);
 
-  }, [reflectionQuestions, formData.gameReflectionQuestion, id])
-
-
-  //// debounce for game table 
+  //// debounce for game table
   const debouncedSubmitGame = useCallback(
     debounce(async (data: any) => {
       try {
-
-        console.log('debouncedSubmitGame', data)
+        console.log('debouncedSubmitGame', data);
 
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
-          console.log('data not updated')
+          console.log('data not updated');
         }
-
-
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
       }
     }, 500),
-    [id] // Empty dependency array to ensure that the function is only created once
+    [id], // Empty dependency array to ensure that the function is only created once
   );
-
-
-
 
   useEffect(() => {
     if (id && autosave) {
-
-
       // if (formData) {
 
       //   let data = JSON.stringify(formData);
@@ -2597,59 +2546,42 @@ const GameCreation = () => {
         setExtensiveNavigation(null);
       }
     }
+  }, [formData]);
 
-  }, [formData])
-
-  //// debounced for auto upload when onchange 
+  //// debounced for auto upload when onchange
   const debouncedStorySubmit = useCallback(
     debounce(async (data: any) => {
-
-
       try {
-        console.log('debouncedSubmit', data)
+        console.log('debouncedSubmit', data);
         const result = await setStory(id, JSON.stringify(data));
         if (result?.status !== 'Success') {
-
           return console.log('updateBackground error :' + result?.err);
         } else {
           console.log('result data', result.data);
-
-
         }
-
-
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
       }
       console.log('save', JSON.stringify(input));
     }, 500),
-    [id] // Empty dependency array to ensure that the function is only created once
+    [id], // Empty dependency array to ensure that the function is only created once
   );
-
 
   const debouncedCompliSubmit = useCallback(
     debounce(async (data: any) => {
-
-
       try {
         let datas = JSON.stringify(data);
 
-
         const result = await UpdateCompletionScreen(id, datas);
         if (result?.status !== 'Success') {
-          console.log('data not updated')
+          console.log('data not updated');
         }
-
-
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
       }
-
     }, 500),
-    [id] // Empty dependency array to ensure that the function is only created once
+    [id], // Empty dependency array to ensure that the function is only created once
   );
-
-
 
   function debounce(func: any, wait: any) {
     let timeout: any;
@@ -2665,67 +2597,51 @@ const GameCreation = () => {
 
   useEffect(() => {
     if (id && autosave) {
-
       if (input.length !== 0 && items.length !== 0) {
         const data = {
           items: items,
           input: input,
           alphabet: alphabet,
-          interactionBlock: interactionBlock
-        }
+          interactionBlock: interactionBlock,
+        };
 
         debouncedStorySubmit(data);
       }
-      handleCompletionScreen(1)
+      handleCompletionScreen(1);
       getDuration();
     }
-
-
-
-  }, [input, items])
-
+  }, [input, items]);
 
   useEffect(() => {
     if (id && autosave) {
-
-
-      if (Object.keys(Completion).length)
-        debouncedCompliSubmit(compliData);
+      if (Object.keys(Completion).length) debouncedCompliSubmit(compliData);
 
       // handleCompletionScreen(1)
     }
-
-
-
-  }, [compliData])
-
-
+  }, [compliData]);
 
   ////handleCompliStore
 
-
-
   useEffect(() => {
-
     const selectBlockoptions = items.map((item: any) => ({
       value: item.input,
       label: item.id,
     }));
-    setSelectBlock(selectBlockoptions)
-  }, [items])
+    setSelectBlock(selectBlockoptions);
+  }, [items]);
 
   // onClick Func
   const duplicateSeq = (seq: any, i: any, name: any) => {
     // const id = `${Math.floor(count / 10) + 1}.${count % 10 || 1}`;
     // const upNext = `${Math.floor(count / 10) + 1}.${(count + 1) % 10 || 1}`;
     const sequencial = `${count / 10 + 1}`;
-    const upNextSequencial = `${(count + 1) / 10 + 1}`
+    const upNextSequencial = `${(count + 1) / 10 + 1}`;
     const floatRegex = /^[-+]?(\d*\.\d+|\.\d+)$/;
-    // const id = floatRegex.test(sequencial) ? sequencial : `${count / 10 + 1}.${0}`          
-    // const upNext = floatRegex.test(upNextSequencial) ? upNextSequencial : `${(count + 1) / 10 + 1}.${0}` 
-    const id = `${serias}.${count}`
-    const upNext = `${serias}.${count + 1}`
-    // setShowBox(true);       
+    // const id = floatRegex.test(sequencial) ? sequencial : `${count / 10 + 1}.${0}`
+    // const upNext = floatRegex.test(upNextSequencial) ? upNextSequencial : `${(count + 1) / 10 + 1}.${0}`
+    const id = `${serias}.${count}`;
+    const upNext = `${serias}.${count + 1}`;
+    // setShowBox(true);
     setUpNext(upNext);
     setCount(count + 1);
     const newArr = { id, type: name, upNext, input: count, questNo: serias };
@@ -2733,38 +2649,33 @@ const GameCreation = () => {
     setItems((prevArray: any) => {
       const nextIndex = i + 1;
       console.log('prevArray', newArr.input);
-      setNumber([...number, newArr.input])
+      setNumber([...number, newArr.input]);
       return [
         ...prevArray.slice(0, nextIndex),
         newArr,
-        ...prevArray.slice(nextIndex).map((item: any) => ({ ...item, upNext: id })),
+        ...prevArray
+          .slice(nextIndex)
+          .map((item: any) => ({ ...item, upNext: id })),
       ];
     });
 
     setSequence([...sequence, id]);
     setDummySequence([...dummySequence, id]);
-    setUpNextCount([...upNextCount, upNext])
+    setUpNextCount([...upNextCount, upNext]);
     if (name === 'Interaction') {
-
-
-
       const currentAlpha = alphabet
         .slice()
         //  .reverse() // Reverse the array to start searching from the end
         .find((item: any) => item.seqs === id);
       if (id !== currentAlpha?.seqs) {
-
         let secondaryArray: any = [];
         let makcount = countalphabet;
 
         for (let i = 0; i < 3; i++) {
           // Insert data into the array
           let inc = makcount + i + 1;
-          console.log('secondaryArray', countalphabet, '--', inc)
+          console.log('secondaryArray', countalphabet, '--', inc);
           secondaryArray.push(inc);
-
-
-
         }
         setAlphabetCount(secondaryArray[2]);
         console.log('secondaryArray', secondaryArray);
@@ -2772,7 +2683,7 @@ const GameCreation = () => {
           ...prev,
           { seqs: id, option: 'A', secondaryId: secondaryArray[0] },
           { seqs: id, option: 'B', secondaryId: secondaryArray[1] },
-          { seqs: id, option: 'C', secondaryId: secondaryArray[2] }
+          { seqs: id, option: 'C', secondaryId: secondaryArray[2] },
         ]);
       }
     }
@@ -2782,10 +2693,9 @@ const GameCreation = () => {
       const interactionKey = `Interaction${count}`;
 
       // Previous Data Object
-      const oldNoteKey = prevInput?.[`Note${seq.input}`]
-      const oldDialogKey = prevInput?.[`Dialog${seq.input}`]
-      const oldInteractionKey = prevInput?.[`Interaction${seq.input}`]
-
+      const oldNoteKey = prevInput?.[`Note${seq.input}`];
+      const oldDialogKey = prevInput?.[`Dialog${seq.input}`];
+      const oldInteractionKey = prevInput?.[`Interaction${seq.input}`];
 
       // Activate RFST
       if (oldInteractionKey?.responseObject?.A !== '' || null) {
@@ -2809,7 +2719,6 @@ const GameCreation = () => {
         });
       }
 
-
       if (seq.type === 'Note') {
         return {
           ...prevInput,
@@ -2817,8 +2726,8 @@ const GameCreation = () => {
             ...prevInput?.noteKey,
             id: id,
             note: oldNoteKey?.note,
-          }
-        }
+          },
+        };
       }
       if (seq.type === 'Dialog') {
         return {
@@ -2829,14 +2738,12 @@ const GameCreation = () => {
             dialog: oldDialogKey?.dialog,
             character: oldDialogKey?.character,
             animation: oldDialogKey?.animation,
-            voice: "",
-
-
-          }
-        }
+            voice: '',
+          },
+        };
       }
       if (seq.type === 'Interaction') {
-        console.log('prevInput', oldInteractionKey)
+        console.log('prevInput', oldInteractionKey);
         //Previous Object Data's
         const optionsObject = oldInteractionKey?.optionsObject;
         const ansObject = oldInteractionKey?.ansObject;
@@ -2847,8 +2754,12 @@ const GameCreation = () => {
         const optionsvoiceObject = oldInteractionKey?.optionsvoiceObject;
         const scoreObject = oldInteractionKey?.scoreObject;
         const navigateObjects = oldInteractionKey?.navigateObjects;
-        const filterNullFields = (obj: Record<string, any>): Record<string, any> => {
-          return Object.fromEntries(Object.entries(obj).filter(([key, value]) => value !== null));
+        const filterNullFields = (
+          obj: Record<string, any>,
+        ): Record<string, any> => {
+          return Object.fromEntries(
+            Object.entries(obj).filter(([key, value]) => value !== null),
+          );
         };
 
         return {
@@ -2859,10 +2770,14 @@ const GameCreation = () => {
             interaction: oldInteractionKey?.interaction,
             blockRoll: oldInteractionKey?.blockRoll,
             QuestionsEmotion: oldInteractionKey?.QuestionsEmotion,
-            QuestionsVoice: oldInteractionKey?.QuestionsVoice,      
-            SkillTag: (oldInteractionKey?.SkillTag),
-            quesionTitle: (oldInteractionKey?.quesionTitle),
-            optionsObject: { A: optionsObject?.A, B: optionsObject?.B, C: optionsObject?.C },
+            QuestionsVoice: oldInteractionKey?.QuestionsVoice,
+            SkillTag: oldInteractionKey?.SkillTag,
+            quesionTitle: oldInteractionKey?.quesionTitle,
+            optionsObject: {
+              A: optionsObject?.A,
+              B: optionsObject?.B,
+              C: optionsObject?.C,
+            },
             ansObject: { A: ansObject?.A, B: ansObject?.B, C: ansObject?.C },
             // feedbackObject:{A: feedbackObject?.A,   B: feedbackObject?.B,    C: feedbackObject?.C},
             feedbackObject: filterNullFields({
@@ -2876,45 +2791,67 @@ const GameCreation = () => {
               B: responseObject?.B,
               C: responseObject?.C,
             }),
-            optionTitleObject: { A: optionTitleObject?.A, B: optionTitleObject?.B, C: optionTitleObject?.C },
-            optionsemotionObject: { A: optionsemotionObject?.A, B: optionsemotionObject?.B, C: optionsemotionObject?.C },
-            optionsvoiceObject: { A: optionsvoiceObject?.A, B: optionsvoiceObject?.B, C: optionsvoiceObject?.C },
-            scoreObject: { A: scoreObject?.A ? scoreObject?.A : null, B: scoreObject?.B ? scoreObject?.B : null, C: scoreObject?.C ? scoreObject?.C : null },
-            navigateObjects: { A: navigateObjects?.A, B: navigateObjects?.B, C: navigateObjects?.C },
-          }
-        }
+            optionTitleObject: {
+              A: optionTitleObject?.A,
+              B: optionTitleObject?.B,
+              C: optionTitleObject?.C,
+            },
+            optionsemotionObject: {
+              A: optionsemotionObject?.A,
+              B: optionsemotionObject?.B,
+              C: optionsemotionObject?.C,
+            },
+            optionsvoiceObject: {
+              A: optionsvoiceObject?.A,
+              B: optionsvoiceObject?.B,
+              C: optionsvoiceObject?.C,
+            },
+            scoreObject: {
+              A: scoreObject?.A ? scoreObject?.A : null,
+              B: scoreObject?.B ? scoreObject?.B : null,
+              C: scoreObject?.C ? scoreObject?.C : null,
+            },
+            navigateObjects: {
+              A: navigateObjects?.A,
+              B: navigateObjects?.B,
+              C: navigateObjects?.C,
+            },
+          },
+        };
       }
-    })
+    });
   };
 
   const delSeq = (seq: any, i: any, name: any) => {
-
-    // removeDataBySeqs(seq.id);        
+    // removeDataBySeqs(seq.id);
     console.log('delSeq', seq);
 
     if (name === 'Interaction') {
       setAlphabet((prevAlphabet: any) => {
         // Use filter to create a new array without items that match the condition
-        const updatedAlphabet = prevAlphabet?.filter((item: any) => item.seqs !== seq.id);
+        const updatedAlphabet = prevAlphabet?.filter(
+          (item: any) => item.seqs !== seq.id,
+        );
         return updatedAlphabet;
       });
 
       console.log('roll', seq);
-
     }
     setItems((previtems: any) => {
       // Use filter to create a new array without items that match the condition
-      const updatedItems = previtems?.filter((item: any) => item.input !== seq.input);
+      const updatedItems = previtems?.filter(
+        (item: any) => item.input !== seq.input,
+      );
       return updatedItems;
     });
     // setItems(items.filter((_: any, index: any) => {
     //     console.log('datadata', _)
     //     return index !== i;
     // }));
-    // setItems((prevItem: any)=> 
+    // setItems((prevItem: any)=>
     //     prevItem.map((item: any) =>
     //     item.id === seq.id ? { ...item, status: 'no' } : item
-    // ))      
+    // ))
 
     // setSequence(sequence.filter((_: any, index: any) => { return index !== i }))
     // setTimeout(() => {
@@ -2923,45 +2860,42 @@ const GameCreation = () => {
     setDeleteseq(true);
   };
   const deleteQuest = async (gameid: any, questNo: any) => {
-    console.log()
+    console.log();
     const data = {
       quest: questNo,
       exid: id,
-    }
+    };
     const result = await QuestDeletion(gameid, JSON.stringify(data));
     if (result?.status !== 'Success') {
       return console.log('updateBackground error :' + result?.err);
-    }
-    else {
+    } else {
       fetchBlocks();
       handleGet(1);
       setQuestTabState(1);
-
     }
     // QuestDeletion
   };
 
-
   let tarSeqRef;
   const handleTargetQuest = (progressItem: any, progressIndex: number) => {
-
-    setTargetSequence(progressItem)
+    setTargetSequence(progressItem);
     tarSeqRef = document.getElementById(`tarSeqRef${progressItem?.id}`);
 
     if (tarSeqRef) {
-      tarSeqRef.scrollIntoView({ behavior: 'smooth', block: "center", inline: "nearest" });
+      tarSeqRef.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'nearest',
+      });
       console.log('progressBlockItems', tarSeqRef);
     }
-
-  }
-
+  };
 
   const {
     isOpen: isOpen1,
     onOpen: onOpen1,
     onClose: onClose1,
   } = useDisclosure();
-
 
   let arrowSeqRef: any;
   let focusSeqRef: any;
@@ -2972,10 +2906,9 @@ const GameCreation = () => {
   // setTargetSequence(seq);
   // console.log('event.code',targetSequence.id)
 
-
   // if(targetSequence){
   //   indexToFind = items.findIndex((item:any) => (
-  //     item.id === targetSequence.id 
+  //     item.id === targetSequence.id
   //   ));
   // }else{
   //   indexToFind=0;
@@ -2999,28 +2932,25 @@ const GameCreation = () => {
   //     setTargetSequence(null);
   //   }
 
-
-
   //   switch (event.code) {
 
   //     case 'ArrowUp':
   //       setTargetSequence(items[indexToFind===0? 0 : indexToFind-1])
-  //       arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind===0? 0 : indexToFind-1]?.id}`); 
-  //       if (arrowSeqRef) { 
+  //       arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind===0? 0 : indexToFind-1]?.id}`);
+  //       if (arrowSeqRef) {
   //         arrowSeqRef.scrollIntoView({ behavior: 'smooth', block: "center", inline: "nearest" });
   //         console.log('arrowSeqRef', arrowSeqRef);
-  //       }   
+  //       }
 
   //       break;
   //     case 'ArrowDown':
   //       setTargetSequence(items[indexToFind=== items.length-1 ? items.length :indexToFind+1])
-  //       arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind=== items.length ? 0 :indexToFind+1]?.id}`); 
-  //       if (arrowSeqRef) { 
+  //       arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind=== items.length ? 0 :indexToFind+1]?.id}`);
+  //       if (arrowSeqRef) {
   //         arrowSeqRef.scrollIntoView({ behavior: 'smooth', block: "center", inline: "nearest" });
   //         console.log('arrowSeqRef', arrowSeqRef);
-  //       }   
+  //       }
   //       break;
-
 
   //     default:
   //       // Handle other key presses if needed
@@ -3029,20 +2959,17 @@ const GameCreation = () => {
   // }
   // };
 
-
-
   const handleKeyDown = (event: any, i: any, seq: any) => {
-
-    console.log('event.code', event.code)
-    console.log('event.key', event.key)
-    console.log('event.type', event.type)
-    console.log('event.type', seq)
+    console.log('event.code', event.code);
+    console.log('event.key', event.key);
+    console.log('event.type', event.type);
+    console.log('event.type', seq);
     let indexToFind: any;
     setTargetSequence(seq);
     if (targetSequence) {
-      indexToFind = items.findIndex((item: any) => (
-        item.id === targetSequence.id
-      ));
+      indexToFind = items.findIndex(
+        (item: any) => item.id === targetSequence.id,
+      );
     } else {
       indexToFind = 0;
     }
@@ -3053,7 +2980,8 @@ const GameCreation = () => {
         (event.type === 'click' ||
           event.key !== 'Escape' ||
           event.key !== 'Delete' ||
-          event.key !== 'Backspace' || event.ctrlKey === true)
+          event.key !== 'Backspace' ||
+          event.ctrlKey === true)
       ) {
         if (seq) {
           setTargetSequence(seq);
@@ -3064,31 +2992,55 @@ const GameCreation = () => {
       }
       switch (event.code) {
         case 'ArrowUp':
-          setTargetSequence(items[indexToFind === 0 ? 0 : indexToFind - 1])
+          setTargetSequence(items[indexToFind === 0 ? 0 : indexToFind - 1]);
           setTimeout(() => {
-            arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`);
-            focusSeqRef = document.getElementsByClassName(`${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`);
+            arrowSeqRef = document.getElementById(
+              `tarSeqRef${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`,
+            );
+            focusSeqRef = document.getElementsByClassName(
+              `${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`,
+            );
             focusSeqRef?.[0].classList.add('non-caret');
             focusSeqRef?.[0].focus();
             focusSeqRef?.[0].setAttribute('readonly', 'true');
-          }, 200)
+          }, 200);
 
           if (arrowSeqRef) {
-            arrowSeqRef.scrollIntoView({ behavior: 'smooth', block: "center", inline: "nearest" });
+            arrowSeqRef.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+              inline: 'nearest',
+            });
             console.log('event.----------------', focusSeqRef?.[0]);
           }
           break;
         case 'ArrowDown':
-          setTargetSequence(items[indexToFind === items.length - 1 ? items.length : indexToFind + 1])
+          setTargetSequence(
+            items[
+              indexToFind === items.length - 1 ? items.length : indexToFind + 1
+            ],
+          );
           setTimeout(() => {
-            arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id}`);
-            focusSeqRef = document.getElementsByClassName(`${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id}`);
+            arrowSeqRef = document.getElementById(
+              `tarSeqRef${
+                items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
+              }`,
+            );
+            focusSeqRef = document.getElementsByClassName(
+              `${
+                items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
+              }`,
+            );
             focusSeqRef?.[0]?.classList?.add('non-caret');
             focusSeqRef?.[0]?.focus();
             focusSeqRef?.[0]?.setAttribute('readonly', 'true');
-          }, 200)
+          }, 200);
           if (arrowSeqRef) {
-            arrowSeqRef.scrollIntoView({ behavior: 'smooth', block: "center", inline: "nearest" });
+            arrowSeqRef.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+              inline: 'nearest',
+            });
             console.log('event.----------------', focusSeqRef?.[0]);
           }
           break;
@@ -3104,7 +3056,6 @@ const GameCreation = () => {
           focusSeqRef?.[0].focus();
           console.log('event.----------------Click', focusSeqRef?.[0]);
         }
-
       }
 
       if (event.code == 'Enter') {
@@ -3118,25 +3069,27 @@ const GameCreation = () => {
       if (event.key === 'Backspace' || event.key === 'Delete') {
         focusSeqRef = document.getElementsByClassName(seq.id);
         var isFieldFocused = document.activeElement.classList.contains(seq.id);
-        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(document.activeElement.tagName.toLowerCase());
+        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(
+          document.activeElement.tagName.toLowerCase(),
+        );
 
         console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
 
         if (focusSeqRef?.[0].readOnly) {
           delSeq(seq, Number(0), seq.type);
         }
-
       }
 
-      if (event.ctrlKey === true && event.code === 'KeyC'
-      ) {
+      if (event.ctrlKey === true && event.code === 'KeyC') {
         focusSeqRef = document.getElementsByClassName(seq.id);
         var isFieldFocused = document.activeElement.classList.contains(seq.id);
-        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(document.activeElement.tagName.toLowerCase());
+        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(
+          document.activeElement.tagName.toLowerCase(),
+        );
 
         console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
 
-        console.log("test45");
+        console.log('test45');
         if (focusSeqRef?.[0].readOnly) {
           setCopySequence(seq);
         }
@@ -3145,11 +3098,13 @@ const GameCreation = () => {
       if (event.code === 'KeyV' && event.ctrlKey === true) {
         focusSeqRef = document.getElementsByClassName(seq.id);
         var isFieldFocused = document.activeElement.classList.contains(seq.id);
-        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(document.activeElement.tagName.toLowerCase());
+        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(
+          document.activeElement.tagName.toLowerCase(),
+        );
 
         console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
 
-        console.log("test45");
+        console.log('test45');
         if (focusSeqRef?.[0].readOnly) {
           if (copySequence) {
             duplicateSeq(copySequence, i, copySequence.type);
@@ -3160,13 +3115,14 @@ const GameCreation = () => {
       if (event.ctrlKey === true && event.code === 'KeyD') {
         focusSeqRef = document.getElementsByClassName(seq.id);
         var isFieldFocused = document.activeElement.classList.contains(seq.id);
-        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(document.activeElement.tagName.toLowerCase());
+        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(
+          document.activeElement.tagName.toLowerCase(),
+        );
 
         console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
 
-        console.log("test45");
+        console.log('test45');
         if (focusSeqRef?.[0].readOnly) {
-
           duplicateSeq(seq, i, seq.type);
         }
       }
@@ -3174,24 +3130,28 @@ const GameCreation = () => {
       if (event.ctrlKey && event.shiftKey) {
         if (event.code === 'ArrowUp') {
           setTimeout(() => {
-            focusSeqRef = document.getElementsByClassName(`${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`);
+            focusSeqRef = document.getElementsByClassName(
+              `${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`,
+            );
             focusSeqRef?.[0]?.focus();
-          }, 200)
+          }, 200);
           console.log('event.----------------ShiftArrowUp', focusSeqRef?.[0]);
           moveItem(i, i - 1, seq);
         } else if (event.code === 'ArrowDown') {
           setTimeout(() => {
-            focusSeqRef = document.getElementsByClassName(`${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id}`);
+            focusSeqRef = document.getElementsByClassName(
+              `${
+                items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
+              }`,
+            );
             focusSeqRef?.[0]?.focus();
-          }, 200)
+          }, 200);
           console.log('event.----------------ShiftArrowDown', focusSeqRef?.[0]);
           moveItem(i, i + 1, seq);
         }
       }
-
     }
   };
- 
 
   const moveItem = (startIndex: number, endIndex: number, seq: any) => {
     // Ensure endIndex is within the bounds of the array
@@ -3205,32 +3165,40 @@ const GameCreation = () => {
     updatedItems.splice(endIndex, 0, movedItem);
 
     const updatedMovingItems = updatedItems.map((item: any, index) => {
-      return { ...item, id: dummySequence[index] || item.id, upNext: upNextCount[index] };
+      return {
+        ...item,
+        id: dummySequence[index] || item.id,
+        upNext: upNextCount[index],
+      };
     });
 
-    const updateInteraction = updatedItems.map((item, index) => {  
-      if (item?.type === 'Interaction') {
-        return { ...item, from: item.id, to: sequence[index] };
-      }
-      return null; // Return null for items that don't meet the condition
-    }).filter(item => item !== null);
-
-    const updatedAlphabet = alphabet.map((item: { seqs: string; }) => {
-        // Find the corresponding updateInteraction item
-        const correspondingUpdate = updateInteraction.find(updateItem => updateItem.from === item.seqs);
-      
-        // If a corresponding updateInteraction item is found, update the seqs value
-        if (correspondingUpdate) {
-          return { ...item, seqs: correspondingUpdate.to };
+    const updateInteraction = updatedItems
+      .map((item, index) => {
+        if (item?.type === 'Interaction') {
+          return { ...item, from: item.id, to: sequence[index] };
         }
-      
-        // If no corresponding updateInteraction item is found, return the original item
-        return item;
+        return null; // Return null for items that don't meet the condition
+      })
+      .filter((item) => item !== null);
+
+    const updatedAlphabet = alphabet.map((item: { seqs: string }) => {
+      // Find the corresponding updateInteraction item
+      const correspondingUpdate = updateInteraction.find(
+        (updateItem) => updateItem.from === item.seqs,
+      );
+
+      // If a corresponding updateInteraction item is found, update the seqs value
+      if (correspondingUpdate) {
+        return { ...item, seqs: correspondingUpdate.to };
+      }
+
+      // If no corresponding updateInteraction item is found, return the original item
+      return item;
     });
     // Update the state with the new order
     setItems(updatedMovingItems);
     setAlphabet(updatedAlphabet);
-    setBlockItems(updatedItems)
+    setBlockItems(updatedItems);
   };
 
   // COnsole's
@@ -3241,18 +3209,15 @@ const GameCreation = () => {
     setExtensiveNavigation(id);
   };
 
-
   return (
     <>
       <Grid templateColumns="repeat(5, 1fr)" gap={2}>
-        <GridItem colSpan={{ sm: 1, md: 1, lg: 1 }} display={{ base: 'none', lg: 'block' }}>
+        <GridItem
+          colSpan={{ sm: 1, md: 1, lg: 1 }}
+          display={{ base: 'none', lg: 'block' }}
+        >
           {/* <Card width={'290px'} h={'700px'} mt={{ base: '90px', xl: '90px' }} alignItems={'center'} bg={'linear-gradient(to bottom, #7551ff, #3311db)'}> */}
-          <HStack
-            borderRadius={'20px'}
-            width={'280px'}
-            overflow={'auto'}
-          >
-
+          <HStack borderRadius={'20px'} width={'280px'} overflow={'auto'}>
             <Card
               position="fixed"
               flexDirection="column"
@@ -3265,32 +3230,59 @@ const GameCreation = () => {
               border="3px solid #11047a"
               overflowX={'auto'}
               style={{
-                backgroundImage: 'linear-gradient(315deg, #f1f2f6 0%, #c9c6c6 74%)',
+                backgroundImage:
+                  'linear-gradient(315deg, #f1f2f6 0%, #c9c6c6 74%)',
               }}
             >
-
-              <Flex display={'flex'} justifyContent={'space-around'} alignItems={'center'}>
-
-                <Text color={'black'} fontSize={25} fontWeight={800} letterSpacing={'2px'} mr={'px'} ml={'0px'}>ATLANTIS</Text>
-                <Box ml={'10px'} transform={'scale(1.3)'} borderRadius={'50%'} >
+              <Flex
+                display={'flex'}
+                justifyContent={'space-around'}
+                alignItems={'center'}
+              >
+                <Text
+                  color={'black'}
+                  fontSize={25}
+                  fontWeight={800}
+                  letterSpacing={'2px'}
+                  mr={'px'}
+                  ml={'0px'}
+                >
+                  ATLANTIS
+                </Text>
+                <Box ml={'10px'} transform={'scale(1.3)'} borderRadius={'50%'}>
                   <SidebarResponsive routes={routes} />
                 </Box>
               </Flex>
-              <Flex><Box display="flex"
-                height="1px"
-                width="100%"
-                background="rgba(135, 140, 189, 0.3)"
-                marginTop="20px"></Box></Flex>
+              <Flex>
+                <Box
+                  display="flex"
+                  height="1px"
+                  width="100%"
+                  background="rgba(135, 140, 189, 0.3)"
+                  marginTop="20px"
+                ></Box>
+              </Flex>
               {/* <Box w={'100%'} borderBottom={'1px solid #e4e9ef'} mb={'10px'}></Box> */}
-              <Flex position="relative" mt={"49px"} direction="column" justifyContent="space-between">
+              <Flex
+                position="relative"
+                mt={'49px'}
+                direction="column"
+                justifyContent="space-between"
+              >
                 <Flex
                   position="absolute"
                   left="32.5px"
                   h="100%"
                   w="2px"
                   // bg={`url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='${lineColor}' stroke-width='4' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e")`}
-                  bg={stepbgCheck ? `linear-gradient(to top, white ${100 - reducePercentage}%,green 0%);
-` : 'white'}
+                  bg={
+                    stepbgCheck
+                      ? `linear-gradient(to top, white ${
+                          100 - reducePercentage
+                        }%,green 0%);
+`
+                      : 'white'
+                  }
                   zIndex={1}
                 />
                 <OrderStep
@@ -3311,7 +3303,7 @@ const GameCreation = () => {
                       icon={
                         <Icon
                           as={TbView360}
-                          color={tab === 1 ? 'brand.500' : stepbgCheck}//icon color
+                          color={tab === 1 ? 'brand.500' : stepbgCheck} //icon color
                           h="24px"
                           w="24px"
                         />
@@ -3338,7 +3330,7 @@ const GameCreation = () => {
                       icon={
                         <Icon
                           as={FaRobot}
-                          color={tab === 2 ? 'brand.500' : stepPoseCheck}//icon color{}
+                          color={tab === 2 ? 'brand.500' : stepPoseCheck} //icon color{}
                           h="24px"
                           w="24px"
                         />
@@ -3364,7 +3356,7 @@ const GameCreation = () => {
                       icon={
                         <Icon
                           as={MdOutlineSubtitles}
-                          color={tab === 3 ? 'brand.500' : stepAboutStoryCheck}//icon color{}{}
+                          color={tab === 3 ? 'brand.500' : stepAboutStoryCheck} //icon color{}{}
                           h="24px"
                           w="24px"
                         />
@@ -3381,7 +3373,9 @@ const GameCreation = () => {
                   name="Story"
                   status={tab4}
                   handleTargetQuest={handleTargetQuest}
-                  updateExtensiveNavigation={(id: number | null) => updateExtensiveNavigation(id)}
+                  updateExtensiveNavigation={(id: number | null) =>
+                    updateExtensiveNavigation(id)
+                  }
                   extensiveNavigation={extensiveNavigation}
                   icon={
                     <IconBox
@@ -3391,16 +3385,14 @@ const GameCreation = () => {
                       boxShadow={stepAboutStoryCheck}
                       bg="#FFFFFF"
                       transition="all 0.2s linear 0s"
-
                       icon={
                         <Icon
                           as={GiBlackBook}
-                          color={tab === 4 ? 'brand.500' : stepBlockCheck}//icon color{}{}{}
+                          color={tab === 4 ? 'brand.500' : stepBlockCheck} //icon color{}{}{}
                           h="24px"
                           w="24px"
                         />
                       }
-
                     />
                   }
                   BlockItems={BlockItems}
@@ -3432,7 +3424,7 @@ const GameCreation = () => {
                       icon={
                         <Icon
                           as={FaCubes}
-                          color={tab === 5 ? 'brand.500' : stepScoreCheck}//icon color{}{}{}{}
+                          color={tab === 5 ? 'brand.500' : stepScoreCheck} //icon color{}{}{}{}
                           h="24px"
                           w="24px"
                         />
@@ -3459,7 +3451,7 @@ const GameCreation = () => {
                       icon={
                         <Icon
                           as={MdTune}
-                          color={tab === 6 ? 'brand.500' : stepSummariesCheck}//icon color{}{}{}{}{}
+                          color={tab === 6 ? 'brand.500' : stepSummariesCheck} //icon color{}{}{}{}{}
                           h="24px"
                           w="24px"
                         />
@@ -3505,38 +3497,62 @@ const GameCreation = () => {
         <GridItem colSpan={{ sm: 5, md: 5, lg: 4 }}>
           <Box className="game-creation" mt={{ base: '100px', xl: '100px' }}>
             <Grid templateColumns="repeat(1, 1fr)" gap={6}>
-
               <GridItem w="100%" colSpan={2}>
-
                 {/*******************Changes-14/12/23*************************/}
-                {preview && <ImagePreview
-                  fetchImg={fetchImg}
-                  isOpen={isOpen}
-                  onOpen={onOpen}
-                  onClose={onClose}
-                  values={values}
-                  setValues={setValues}
-                  selectedCardIndex={selectedCardIndex}
-                  handleBackground={handleBackground} // Ensure this prop is included
-                />}
+                {preview && (
+                  <ImagePreview
+                    fetchImg={fetchImg}
+                    isOpen={isOpen}
+                    onOpen={onOpen}
+                    onClose={onClose}
+                    values={values}
+                    setValues={setValues}
+                    selectedCardIndex={selectedCardIndex}
+                    handleBackground={handleBackground} // Ensure this prop is included
+                  />
+                )}
 
                 {tab === 1 ? (
-                  <Box className='background-step' display={{ base: 'block', md: 'flex', lg: 'flex' }}>
-                    <Box className='bg-img-list' width={'100%'}>
-                      <Box display={'flex'} flexDir={'column'} justifyContent={'start'} alignItems={'start'}>
-                        <Text fontSize={'20px'} fontWeight={800} m={'10px 10px 10px 20px'}>
+                  <Box
+                    className="background-step"
+                    display={{ base: 'block', md: 'flex', lg: 'flex' }}
+                  >
+                    <Box className="bg-img-list" width={'100%'}>
+                      <Box
+                        display={'flex'}
+                        flexDir={'column'}
+                        justifyContent={'start'}
+                        alignItems={'start'}
+                      >
+                        <Text
+                          fontSize={'20px'}
+                          fontWeight={800}
+                          m={'10px 10px 10px 20px'}
+                        >
                           Select a Background
                         </Text>
                       </Box>
                       <Divider mb={'0px'} />
-                      <Box height={'700px'} overflowY={'auto'} borderRadius={'70px'} padding={'30px 0'}>
-                        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+                      <Box
+                        height={'700px'}
+                        overflowY={'auto'}
+                        borderRadius={'70px'}
+                        padding={'30px 0'}
+                      >
+                        <SimpleGrid
+                          columns={{ base: 1, md: 2, lg: 3 }}
+                          spacing={6}
+                        >
                           {img &&
                             img.map((img, i) => (
                               <Box key={i} position={'relative'}>
                                 <Card
                                   //  backgroundColor={selections[i] ? '#11047a' : 'white'}
-                                  backgroundColor={selectedCardIndex === i ? '#11047a' : 'white'}
+                                  backgroundColor={
+                                    selectedCardIndex === i
+                                      ? '#11047a'
+                                      : 'white'
+                                  }
                                   mb={{ base: '0px', xl: '10px', sm: '20px' }}
                                   padding={'13px'}
                                   key={i}
@@ -3547,120 +3563,154 @@ const GameCreation = () => {
                                   onMouseLeave={() => handleL()}
                                   // _hover={{opacity: 1}}
                                   boxShadow={
-                                    backgroundIndex === i ? '1px 4px 29px #44445429' : '1px 4px 29px #44445429'
+                                    backgroundIndex === i
+                                      ? '1px 4px 29px #44445429'
+                                      : '1px 4px 29px #44445429'
                                   }
                                   transition={'0.3s'}
                                   overflow="hidden"
                                 >
-                                  <Box position={'relative'} overflow={'hidden'} borderRadius={'10px'}>
-                                    <Img src={img?.gasAssetImage} w="100%" h={'250px'} borderRadius="20px" cursor="pointer" />
+                                  <Box
+                                    position={'relative'}
+                                    overflow={'hidden'}
+                                    borderRadius={'10px'}
+                                  >
+                                    <Img
+                                      src={img?.gasAssetImage}
+                                      w="100%"
+                                      h={'250px'}
+                                      borderRadius="20px"
+                                      cursor="pointer"
+                                    />
 
                                     {backgroundIndex === i ? (
                                       <Flex
-                                        position='absolute'
-                                        bottom='0px'
-
-                                        transform='translate(-50%, 0)'
-                                        flexDirection='row'
-                                        alignItems='center'
-                                        justifyContent='space-between'
-                                        width='100%'
+                                        position="absolute"
+                                        bottom="0px"
+                                        transform="translate(-50%, 0)"
+                                        flexDirection="row"
+                                        alignItems="center"
+                                        justifyContent="space-between"
+                                        width="100%"
                                         style={{
                                           opacity: '1',
                                           transform: 'translateY(0)',
-                                          transition: 'transform 0.5s ease, opacity 0.5s ease'
+                                          transition:
+                                            'transform 0.5s ease, opacity 0.5s ease',
                                         }}
                                       >
                                         <Box
-                                          bg='white'
-                                          width='50%'
-                                          height='35px'
-                                          borderBottomLeftRadius='10px'
-                                          display='flex'
-                                          alignItems='center'
-                                          justifyContent='center'
-                                          cursor='pointer'
+                                          bg="white"
+                                          width="50%"
+                                          height="35px"
+                                          borderBottomLeftRadius="10px"
+                                          display="flex"
+                                          alignItems="center"
+                                          justifyContent="center"
+                                          cursor="pointer"
                                           _hover={{
                                             bg: '#f0f0f0',
                                           }}
-                                        // onClick={() => handlePreview(img, backgroundIndex, i)}
-
+                                          // onClick={() => handlePreview(img, backgroundIndex, i)}
                                         >
-                                          <span style={{ color: 'black' }}>Preview</span>
+                                          <span style={{ color: 'black' }}>
+                                            Preview
+                                          </span>
                                         </Box>
                                         <Box
-                                          bg='#11047a'
-                                          width='50%'
-                                          height='35px'
-                                          borderBottomRightRadius='10px'
-                                          display='flex'
-                                          alignItems='center'
-                                          justifyContent='center'
-                                          cursor='pointer'
+                                          bg="#11047a"
+                                          width="50%"
+                                          height="35px"
+                                          borderBottomRightRadius="10px"
+                                          display="flex"
+                                          alignItems="center"
+                                          justifyContent="center"
+                                          cursor="pointer"
                                           _hover={{
                                             bg: '#11047ae3',
                                           }}
                                           // onClick={() => handleButtonTwo(id)}
-                                          onClick={() => handleBackground(img, i)}
+                                          onClick={() =>
+                                            handleBackground(img, i)
+                                          }
                                         >
-                                          <span style={{ color: 'white' }}>{selectedCardIndex === i ? 'Selected' : 'Select'}</span>
-
+                                          <span style={{ color: 'white' }}>
+                                            {selectedCardIndex === i
+                                              ? 'Selected'
+                                              : 'Select'}
+                                          </span>
                                         </Box>
-
                                       </Flex>
-
                                     ) : (
                                       <Flex
-                                        position='absolute'
-                                        bottom='0'
-
-                                        transform='translate(-50%, 0)'
-                                        flexDirection='row'
-                                        alignItems='center'
-                                        justifyContent='space-between'
-                                        width='100%'
+                                        position="absolute"
+                                        bottom="0"
+                                        transform="translate(-50%, 0)"
+                                        flexDirection="row"
+                                        alignItems="center"
+                                        justifyContent="space-between"
+                                        width="100%"
                                         style={{
                                           opacity: '0',
                                           transform: 'translateY(20px)',
-                                          transition: 'transform 0.5s ease, opacity 0.5s ease'
+                                          transition:
+                                            'transform 0.5s ease, opacity 0.5s ease',
                                         }}
                                       >
                                         <Box
-                                          bg='white'
-                                          width='50%'
-                                          height='35px'
-                                          borderBottomLeftRadius='10px'
-                                          display='flex'
-                                          alignItems='center'
-                                          justifyContent='center'
-                                          cursor='pointer'
+                                          bg="white"
+                                          width="50%"
+                                          height="35px"
+                                          borderBottomLeftRadius="10px"
+                                          display="flex"
+                                          alignItems="center"
+                                          justifyContent="center"
+                                          cursor="pointer"
                                         >
-                                          <span style={{ color: 'black' }}>Preview</span>
+                                          <span style={{ color: 'black' }}>
+                                            Preview
+                                          </span>
                                         </Box>
-                                        <Box bg='#11047a' width='50%' height='35px' borderBottomRightRadius='10px' display='flex'
-                                          alignItems='center'
-                                          justifyContent='center'
-                                          cursor='pointer'>
+                                        <Box
+                                          bg="#11047a"
+                                          width="50%"
+                                          height="35px"
+                                          borderBottomRightRadius="10px"
+                                          display="flex"
+                                          alignItems="center"
+                                          justifyContent="center"
+                                          cursor="pointer"
+                                        >
                                           {/* <span style={{ color: 'white' }}>{selections[i] ? 'Selected' : 'Select'}</span> */}
-                                          <span style={{ color: 'white' }}>{selectedCardIndex === i ? 'Selected' : 'Select'}</span>
+                                          <span style={{ color: 'white' }}>
+                                            {selectedCardIndex === i
+                                              ? 'Selected'
+                                              : 'Select'}
+                                          </span>
                                         </Box>
                                       </Flex>
                                     )}
-
                                   </Box>
-                                  <Flex justifyContent={'space-between'} margin={'10px 0'} flexDirection={'column'}>
+                                  <Flex
+                                    justifyContent={'space-between'}
+                                    margin={'10px 0'}
+                                    flexDirection={'column'}
+                                  >
                                     <Box>
                                       <Text
-                                        color={selectedCardIndex === i ? 'white' : 'black'}
-                                        // fontSize={'16px'} 
-                                        // fontWeight={'800'} 
+                                        color={
+                                          selectedCardIndex === i
+                                            ? 'white'
+                                            : 'black'
+                                        }
+                                        // fontSize={'16px'}
+                                        // fontWeight={'800'}
                                         textTransform={'capitalize'}
-                                        fontSize='md'
+                                        fontSize="md"
                                         // fontWeight={'200'}
-                                        fontWeight='bold'
+                                        fontWeight="bold"
                                         fontFamily="DM Sans, sans-serif"
                                       >
-
                                         {img?.temp.tempTitle}
                                       </Text>
                                     </Box>
@@ -3669,27 +3719,49 @@ const GameCreation = () => {
                                         Test Title
                                       </Text> */}
 
-                                      {backgroundIndex === i ? (<Text
-                                        fontSize={'12px'}
-                                        fontWeight={'500'}
-                                        color={selectedCardIndex === i ? 'white' : 'black'}
-                                        maxH={showFullTextStates[i] ? 'none' : '1.5em'} // Limit to one line (adjust height as needed)
-                                        overflow={'hidden'}
-                                        textOverflow={'ellipsis'}
-                                        whiteSpace={'nowrap'}
-                                      >  {truncateText(img.temp.tempStoryLine, 60, 10)}
-                                      </Text>
-                                      ) : ('')}
-
+                                      {backgroundIndex === i ? (
+                                        <Text
+                                          fontSize={'12px'}
+                                          fontWeight={'500'}
+                                          color={
+                                            selectedCardIndex === i
+                                              ? 'white'
+                                              : 'black'
+                                          }
+                                          maxH={
+                                            showFullTextStates[i]
+                                              ? 'none'
+                                              : '1.5em'
+                                          } // Limit to one line (adjust height as needed)
+                                          overflow={'hidden'}
+                                          textOverflow={'ellipsis'}
+                                          whiteSpace={'nowrap'}
+                                        >
+                                          {' '}
+                                          {truncateText(
+                                            img.temp.tempStoryLine,
+                                            60,
+                                            10,
+                                          )}
+                                        </Text>
+                                      ) : (
+                                        ''
+                                      )}
                                     </Box>
                                     <Flex
                                       justifyContent={'space-between'}
                                       margin={'0'}
                                       flexDirection={'column'}
-                                      style={{ opacity: hoveredStates[i] ? 1 : 0, height: hoveredStates[i] ? 'auto' : 0, overflow: 'hidden' }}
+                                      style={{
+                                        opacity: hoveredStates[i] ? 1 : 0,
+                                        height: hoveredStates[i] ? 'auto' : 0,
+                                        overflow: 'hidden',
+                                      }}
                                     >
-                                      <Box display={'flex'} alignItems={'flex-end'}>
-                                      </Box>
+                                      <Box
+                                        display={'flex'}
+                                        alignItems={'flex-end'}
+                                      ></Box>
                                       {/**TEXT**/}
                                       {/**TEXT**/}
                                     </Flex>
@@ -3702,32 +3774,73 @@ const GameCreation = () => {
                     </Box>
                   </Box>
                 ) : tab === 2 ? (
-
                   ///////////////////////Non-Player IMAGE/////////////////////////////////
                   <>
-                    {preview && <CharacterPreview voices={voices} prev={preview} show={img} players={players} setPreview={setPreview} makeInputFiled={makeInputFiled} onClose={onClose} values={values} setValues={setValues} previewId={previewId} setFormData={setFormData} formData={formData} commonNextFunction={commonNextFunction} />}
+                    {preview && (
+                      <CharacterPreview
+                        voices={voices}
+                        prev={preview}
+                        show={img}
+                        players={players}
+                        setPreview={setPreview}
+                        makeInputFiled={makeInputFiled}
+                        onClose={onClose}
+                        values={values}
+                        setValues={setValues}
+                        previewId={previewId}
+                        setFormData={setFormData}
+                        formData={formData}
+                        commonNextFunction={commonNextFunction}
+                      />
+                    )}
 
-                    <Box className='character-step' display={{ base: 'block', md: 'flex', lg: 'flex' }}>
-                      <Box className='character-img-list' width={'100%'}>
-                        <Box display={'flex'} flexDir={'column'} justifyContent={'start'} alignItems={'start'}>
+                    <Box
+                      className="character-step"
+                      display={{ base: 'block', md: 'flex', lg: 'flex' }}
+                    >
+                      <Box className="character-img-list" width={'100%'}>
+                        <Box
+                          display={'flex'}
+                          flexDir={'column'}
+                          justifyContent={'start'}
+                          alignItems={'start'}
+                        >
                           {/* brindha included 'select a' text */}
-                          <Text fontSize={'20px'} fontWeight={800} m={'10px 10px 10px 20px'}>Select a Non-Playing Character</Text>
+                          <Text
+                            fontSize={'20px'}
+                            fontWeight={800}
+                            m={'10px 10px 10px 20px'}
+                          >
+                            Select a Non-Playing Character
+                          </Text>
                           {/* <Text fontSize={'14px'} fontWeight={500} m={'0px 10px 20px 20px'} color={'#8b8b8bd9'} letterSpacing={'0.5px'}>Here is the Non-Playing Character from which you can choose any one</Text>                      */}
                         </Box>
                         <Divider mb={'0px'} />
-                        <Box height={'700px'} overflowY={'auto'} borderRadius={'70px'} padding={'30px 0'}>
-                          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+                        <Box
+                          height={'700px'}
+                          overflowY={'auto'}
+                          borderRadius={'70px'}
+                          padding={'30px 0'}
+                        >
+                          <SimpleGrid
+                            columns={{ base: 1, md: 2, lg: 3 }}
+                            spacing={6}
+                          >
                             {players &&
                               players.map((player, i) => {
                                 // Capitalize the name before passing it to the GameCard component
-                                const capitalizedPlayerName = player.gasAssetName.charAt(0).toUpperCase() + player.gasAssetName.slice(1).toLowerCase();
+                                const capitalizedPlayerName =
+                                  player.gasAssetName.charAt(0).toUpperCase() +
+                                  player.gasAssetName.slice(1).toLowerCase();
 
                                 return (
                                   <GameCard
                                     name={capitalizedPlayerName} // Use the capitalized name
                                     author={''}
                                     // image={game.gameBackgroundId && game?.image.gasAssetImage}
-                                    image={player.gasId && player?.gasAssetImage}
+                                    image={
+                                      player.gasId && player?.gasAssetImage
+                                    }
                                     tabState={'charater'}
                                     id={player.gasId}
                                     handleButtonOne={playerPerview}
@@ -3744,11 +3857,14 @@ const GameCreation = () => {
                           </SimpleGrid>
                         </Box>
                       </Box>
-                      <Box width={'1px'} background={'#dddddd87'} marginInline={'20px'} display={'flex'}></Box>
-
+                      <Box
+                        width={'1px'}
+                        background={'#dddddd87'}
+                        marginInline={'20px'}
+                        display={'flex'}
+                      ></Box>
                     </Box>
                   </>
-
                 ) : tab === 3 ? (
                   <>
                     <AboutStory
@@ -3764,10 +3880,22 @@ const GameCreation = () => {
                   </>
                 ) : tab === 4 ? (
                   <>
-                    <Customization reviewers={reviewers && reviewers}
-                      reviews={reviews && reviews[4]} id={id} formData={formData} setBlockItems={setBlockItems} serias={serias} setserias={setserias} setInput={setInput} input={input} setItems={setItems} items={items}
-                      alphabet={alphabet} setAlphabet={setAlphabet}
-                      interactionBlock={interactionBlock} setInteractionBlock={setInteractionBlock}
+                    <Customization
+                      reviewers={reviewers && reviewers}
+                      reviews={reviews && reviews[4]}
+                      id={id}
+                      formData={formData}
+                      setBlockItems={setBlockItems}
+                      serias={serias}
+                      setserias={setserias}
+                      setInput={setInput}
+                      input={input}
+                      setItems={setItems}
+                      items={items}
+                      alphabet={alphabet}
+                      setAlphabet={setAlphabet}
+                      interactionBlock={interactionBlock}
+                      setInteractionBlock={setInteractionBlock}
                       countalphabet={countalphabet}
                       setAlphabetCount={setAlphabetCount}
                       count={count}
@@ -3789,7 +3917,7 @@ const GameCreation = () => {
                       setQuestTabState={setQuestTabState}
                       deleteQuest={deleteQuest}
                       upNextCount={upNextCount}
-                       setUpNextCount={setUpNextCount}
+                      setUpNextCount={setUpNextCount}
                     />
                   </>
                 ) : tab === 5 ? (
@@ -3817,7 +3945,6 @@ const GameCreation = () => {
                       reflectionQuestionsdefault={reflectionQuestionsdefault}
                       setReflectionQuestions={setReflectionQuestions}
                       handleReflectionInput={handleReflectionInput}
-
                       handlesaveReflection={handlesaveReflection}
                       currentTab={currentTab}
                       setCurrentTab={setCurrentTab}
@@ -3825,12 +3952,10 @@ const GameCreation = () => {
                       setOpenQuest={setOpenQuest}
                       handleGet={handleGet}
                       fetchBlocks={fetchBlocks}
-
                       setQuestTabState={setQuestTabState}
                       listQuest={listQuest}
                       CompKeyCount={CompKeyCount}
                       setCompKeyCount={setCompKeyCount}
-
                       Completion={Completion}
                       compliData={compliData}
                       setCompliData={setCompliData}
@@ -3895,7 +4020,6 @@ const GameCreation = () => {
                   minW={{ base: '360px' }}
                   maxW={{ base: '360px', md: 'unset' }}
                 >
-                
                   <FormControl>
                     <FormLabel fontSize={18} fontWeight={700}>
                       Feedback For{' '}
@@ -3917,50 +4041,55 @@ const GameCreation = () => {
                               ? item?.tabAttributeValue === String(currentTab)
                               : true,
                           )
-                          .map((it: any, ind: number) =>{
-                              const reviewer = reviewers && reviewers.find((rev: any) => rev?.gameReviewerId === it?.gameReviewerId); 
-                              return (
-                                <React.Fragment key={ind}>
+                          .map((it: any, ind: number) => {
+                            const reviewer =
+                              reviewers &&
+                              reviewers.find(
+                                (rev: any) =>
+                                  rev?.gameReviewerId === it?.gameReviewerId,
+                              );
+                            return (
+                              <React.Fragment key={ind}>
+                                <Box
+                                  w={'100%'}
+                                  display={'flex'}
+                                  justifyContent={'space-between'}
+                                >
                                   <Box
                                     w={'100%'}
                                     display={'flex'}
-                                    justifyContent={'space-between'}
+                                    alignItems={'center'}
                                   >
-                                    <Box
-                                      w={'100%'}
-                                      display={'flex'}
-                                      alignItems={'center'}
-                                    >
-                                      <Img
-                                        src={pro}
-                                        w={'40px'}
-                                        h={'40px'}
-                                        alt="pro"
-                                        borderRadius={'50%'}
-                                      />
-                                      <Text ml={'15px'}>
-                                        {reviewer?.emailId === null
-                                          ? reviewer?.ReviewingCreator?.ctMail
-                                          : reviewer?.emailId}
-                                      </Text>
-                                    </Box>
-                                    <Box whiteSpace={'nowrap'}>
-                                      <Text fontSize={'14'}>
-                                        Posted On :{' '}
-                                        {it?.updatedAt
-                                          ? new Date(
-                                              it.updatedAt,
-                                            ).toLocaleDateString()
-                                          : ''}
-                                      </Text>
-                                    </Box>
+                                    <Img
+                                      src={pro}
+                                      w={'40px'}
+                                      h={'40px'}
+                                      alt="pro"
+                                      borderRadius={'50%'}
+                                    />
+                                    <Text ml={'15px'}>
+                                      {reviewer?.emailId === null
+                                        ? reviewer?.ReviewingCreator?.ctMail
+                                        : reviewer?.emailId}
+                                    </Text>
                                   </Box>
-                                  <Box mb={'10px'} mt={'10px'}>
-                                    {it?.review}
+                                  <Box whiteSpace={'nowrap'}>
+                                    <Text fontSize={'14'}>
+                                      Posted On :{' '}
+                                      {it?.updatedAt
+                                        ? new Date(
+                                            it.updatedAt,
+                                          ).toLocaleDateString()
+                                        : ''}
+                                    </Text>
                                   </Box>
-                                </React.Fragment>
-                              );}
-                          )
+                                </Box>
+                                <Box mb={'10px'} mt={'10px'}>
+                                  {it?.review}
+                                </Box>
+                              </React.Fragment>
+                            );
+                          })
                       ) : (
                         <Box mb={'10px'} mt={'10px'}>
                           No Feedback For{' '}
@@ -3995,7 +4124,7 @@ const GameCreation = () => {
                         Close
                       </Button>
                     </Box>
-                  </MenuItem> 
+                  </MenuItem>
                 </MenuList>
               </Menu>
             ) : null}
@@ -4013,9 +4142,8 @@ const GameCreation = () => {
                 right={'8px'}
                 zIndex={99}
                 background={'#0000 !important'}
-              // alignItems="flex-end"
+                // alignItems="flex-end"
               >
-
                 <Menu isOpen={isOpen1} onClose={onClose1}>
                   <MenuButton
                     alignItems="center"
@@ -4029,7 +4157,7 @@ const GameCreation = () => {
                     lineHeight="100%"
                     onClick={onOpen1}
                     borderRadius="10px"
-                  // {...rest}
+                    // {...rest}
                   >
                     <Icon
                       as={BsShareFill}
@@ -4055,18 +4183,19 @@ const GameCreation = () => {
                     bg="transparent"
                     p="15px"
                     zIndex="1000"
-                  ><MenuList
-                    w="150px"
-                    minW="unset"
-                    maxW="150px !important"
-                    border="transparent"
-                    backdropFilter="blur(63px)"
-                    boxShadow={bgShadow}
-                    borderRadius="20px"
-                    position="absolute"
-                    p="15px"
-                    zIndex="1000" // Set a higher z-index value
                   >
+                    <MenuList
+                      w="150px"
+                      minW="unset"
+                      maxW="150px !important"
+                      border="transparent"
+                      backdropFilter="blur(63px)"
+                      boxShadow={bgShadow}
+                      borderRadius="20px"
+                      position="absolute"
+                      p="15px"
+                      zIndex="1000" // Set a higher z-index value
+                    >
                       <MenuItem
                         transition="0.2s linear"
                         color={textColor}
@@ -4080,10 +4209,15 @@ const GameCreation = () => {
                           bg: 'transparent',
                         }}
                         mb="10px"
-                      // onClick={() => menu.key(props.id)}
+                        // onClick={() => menu.key(props.id)}
                       >
-                        <Flex align="center" >
-                          <Icon as={IoIosPersonAdd} h="16px" w="16px" me="8px" />
+                        <Flex align="center">
+                          <Icon
+                            as={IoIosPersonAdd}
+                            h="16px"
+                            w="16px"
+                            me="8px"
+                          />
                           <Text fontSize="sm" fontWeight="400">
                             Add Creator
                           </Text>
@@ -4102,7 +4236,7 @@ const GameCreation = () => {
                           bg: 'transparent',
                         }}
                         mb="10px"
-                      // onClick={() => menu.key(props.id)}
+                        // onClick={() => menu.key(props.id)}
                       >
                         <Flex align="center" onClick={handleShareReview}>
                           <Icon as={GoCodeReview} h="16px" w="16px" me="8px" />
@@ -4115,9 +4249,7 @@ const GameCreation = () => {
                   </Box>
                 </Menu>
 
-
-
-                {/* {tab !== 1 && tab !== 2 ? (
+              {tab !== 1 && tab !== 2 ? (
                   <Button
                     bg="#11047a"
                     _hover={{ bg: '#190793' }}
@@ -4132,7 +4264,7 @@ const GameCreation = () => {
                   >
                     Preview
                   </Button>
-                ) : null} */}
+                ) : null} 
                 {/* {tab <= 1 ? null : (
                   <Button
                     bg={'#f4f7fe'}
@@ -4151,27 +4283,28 @@ const GameCreation = () => {
                     bg="#11047a"
                     _hover={{ bg: '#190793' }}
                     color="#fff"
-                    h={"46px"}
-                    w={"128px"}
+                    h={'46px'}
+                    w={'128px'}
                     // onClick={() => handleButtonClick(showFunction)}
                     onClick={() => handleNext()}
-                    mr={"33px"}
-                    mt={"7px"}
-
+                    mr={'33px'}
+                    mt={'7px'}
                   >
                     Next
                   </Button>
                 ) : (
-                  tab !== 1 && tab !== 2 && tab !== 5 && (
+                  tab !== 1 &&
+                  tab !== 2 &&
+                  tab !== 5 && (
                     <Button
                       bg="#11047a"
                       _hover={{ bg: '#190793' }}
                       color="#fff"
-                      h={"46px"}
-                      w={"128px"}
+                      h={'46px'}
+                      w={'128px'}
                       onClick={commonNextFunction}
-                      mr={"33px"}
-                      mt={"7px"}
+                      mr={'33px'}
+                      mt={'7px'}
                     >
                       {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
                     </Button>
@@ -4182,7 +4315,7 @@ const GameCreation = () => {
               </Card>
             </Flex>
             {tab !== 1 && (
-              <Flex justify={"flex-start"}>
+              <Flex justify={'flex-start'}>
                 <IoArrowBackCircle
                   onClick={() => {
                     setTab(tab - 1);
@@ -4190,44 +4323,48 @@ const GameCreation = () => {
                   size={46} // Adjust the size as needed
                   color="#11047a"
                   style={{
-                    position: "fixed",
-                    top: "43px",
-                    left: "350px",
+                    position: 'fixed',
+                    top: '43px',
+                    left: '350px',
                     zIndex: 99,
-                    cursor: "pointer",
+                    cursor: 'pointer',
                   }}
                 />
               </Flex>
             )}
             {share && tableDataCheck && (
-              <ShareReviewTable isOpen={isOpen} onClose={onClose} onOpen={onOpen} tableData={tableDataCheck} />
+              <ShareReviewTable
+                isOpen={isOpen}
+                onClose={onClose}
+                onOpen={onOpen}
+                tableData={tableDataCheck}
+              />
             )}
             {entire && (
               <SinglePreview
-              tab={tab}
-              currentTab={currentTab}
-              prevdata={prevdata}
-              formData={formData}
-              show={img}
-              isOpen={isOpen}
-              onOpen={onOpen}
-              onClose={onClose}
-              selectedBadge={selectedBadge}
-              setSelectedBadge={setSelectedBadge}
-              setFormData={setFormData}
-              handleChange={handleChange}
-              setBadge={setBadge}
-              compliData={compliData}
-              setCompliData={setCompliData}
-              CompKeyCount={CompKeyCount}
-              handlecompletion={handlecompletion}
-              reflectionQuestions={reflectionQuestions}
-              reflectionQuestionsdefault={reflectionQuestionsdefault}
-              setPrevdata={setPrevdata}
-            />
+                tab={tab}
+                currentTab={currentTab}
+                prevdata={prevdata}
+                formData={formData}
+                show={img}
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
+                selectedBadge={selectedBadge}
+                setSelectedBadge={setSelectedBadge}
+                setFormData={setFormData}
+                handleChange={handleChange}
+                setBadge={setBadge}
+                compliData={compliData}
+                gameInfo={gameInfo}
+                setCompliData={setCompliData}
+                CompKeyCount={CompKeyCount}
+                handlecompletion={handlecompletion}
+                reflectionQuestions={reflectionQuestions}
+                reflectionQuestionsdefault={reflectionQuestionsdefault}
+                setPrevdata={setPrevdata}
+              />
             )}
-
-
           </Box>
         </GridItem>
       </Grid>

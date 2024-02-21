@@ -198,7 +198,7 @@ const WelcomeScreen: React.FC<{
               mt="10px"
             >
               <FormLabel htmlFor="email-" mb="5px" fontSize='sm' fontWeight='bold' color={textColorPrimary}>
-                <Text> Additional Welcome Note </Text>
+                <Text> Additional Welcome Note</Text>
 
               </FormLabel>
               
@@ -211,7 +211,6 @@ const WelcomeScreen: React.FC<{
                 id="gameIsShowAdditionalWelcomeNote"
                 name="gameIsShowAdditionalWelcomeNote"
                 onChange={handleChange}
-              // isRequired
               />
 
             </FormControl>

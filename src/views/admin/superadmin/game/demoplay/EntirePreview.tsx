@@ -86,6 +86,7 @@ import Characterspage from './playcards/CharacterSelection';
 import ChapterPage from './playcards/Chapters';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
+import { ScoreContext } from './GamePreview';
 
 interface Review {
   // reviewId: Number;
@@ -105,6 +106,8 @@ interface ShowPreviewProps {
   // setToastObj?: React.Dispatch<React.SetStateAction<any>>;
   handleSubmitReview: (data: any) => Promise<boolean>;
   isReviewDemo: boolean;
+  currentScore: any;
+  setCurrentScore: any;
 }
 
 type TabAttributeSet = {
@@ -148,7 +151,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   setCurrentScreenId,
   gameInfo,
   handleSubmitReview,
-  isReviewDemo
+  isReviewDemo,
+  currentScore,
+  setCurrentScore,
 }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -212,10 +217,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [currentStoryBlockSeq, setCurrentStoryBlockSeq] =
     useState<string>(null);
+
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
   const userProfile = useContext(ProfileContext);
-
+  const [currentQuestNo, setCurrentQuestNo] =useState(1);;
+  const { profile, setProfile } = useContext(ScoreContext);
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
     { '2': { tabAttribute: null, tabAttributeValue: null } },
@@ -232,16 +239,18 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [voiceIds, setVoiceIds] = useState<any>();
   const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
     useState<boolean>(false);
+  const [reflectionAnswers, setReflectionAnswers] =useState([]);
 
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
-    if (res?.status === 'success' && res?.url) setAudioObj({
-      url: res?.url,
-      type: 'bgm',
-      volume: '0.5',
-      loop: true,
-      autoplay: true,
-    });
+    if (res?.status === 'success' && res?.url)
+      setAudioObj({
+        url: res?.url,
+        type: 'bgm',
+        volume: '0.5',
+        loop: true,
+        autoplay: true,
+      });
   };
 
   useEffect(() => {
@@ -267,24 +276,24 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     };
   }, []);
 
-  console.log("gameInfo",gameInfo);
   useEffect(() => {
     if (!gameInfo?.bgMusic) {
       fetchDefaultBgMusic();
-    } 
-    else if(gameInfo?.bgMusic){
-      currentScreenId > 0 && currentScreenId==1 && isGetsPlayAudioConfirmation && setAudioObj({
-        url: gameInfo?.bgMusic,
-        type: 'bgm',
-        volume: '0.5',
-        loop: true,
-        autoplay: true,
-      });
+    } else if (gameInfo?.bgMusic) {
+      currentScreenId > 0 &&
+        currentScreenId == 1 &&
+        isGetsPlayAudioConfirmation &&
+        setAudioObj({
+          url: gameInfo?.bgMusic,
+          type: 'bgm',
+          volume: '0.5',
+          loop: true,
+          autoplay: true,
+        });
     }
   }, [gameInfo]);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     setAudioObj({
       url: gameInfo?.bgMusic,
       type: 'bgm',
@@ -292,7 +301,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       loop: true,
       autoplay: true,
     });
-  },[isGetsPlayAudioConfirmation])
+  }, [isGetsPlayAudioConfirmation]);
 
   useEffect(() => {
     setAudioObj({
@@ -325,7 +334,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   }, [audioObj]);
 
-
   useEffect(() => {
     if (gameInfo) {
       setVoiceIds({
@@ -355,14 +363,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setBackgroundScreenUrl(
           API_SERVER + '/uploads/background/41524_1701765021527.jpg',
         );
-        currentScreenId > 0 && currentScreenId == 1 && isGetsPlayAudioConfirmation &&  setAudio(gameInfo?.bgMusic?? '');
+        currentScreenId > 0 &&
+          currentScreenId == 1 &&
+          isGetsPlayAudioConfirmation &&
+          setAudio(gameInfo?.bgMusic ?? '');
         break;
     }
   }, [currentScreenId]);
 
   const getData = (next: any) => {
-    console.log('current', next?.blockPrimarySequence);
-   
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -375,20 +384,93 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const currentQuest = next
       ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
+
+      setCurrentQuestNo(currentQuest);
+
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
             (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
           )
-          .map((key) => demoBlocks[quest]?.[key])
+          .map((key:any) => demoBlocks[quest]?.[key])
       : [];
-    // console.log(navi);
-    // console.log('check prefernce',next?.gameIsShowInteractionFeedBack);
+    if (nextBlock[0]?.blockChoosen === 'Interaction') {
+      const optionsFiltered = gameInfo?.questOptions.filter(
+        (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
+      );
+      if(gameInfo?.gameData?.gameShuffle)
+      {
+        for (let i = optionsFiltered.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [optionsFiltered[i], optionsFiltered[j]] = [optionsFiltered[j], optionsFiltered[i]]; // Swap elements at indices i and j
+        }
+      }
+      setOptions(optionsFiltered);
+    }
+  
+  console.log("***Navi", navi);
+    if (
+      type === 'Interaction' &&
+      resMsg !== '' &&
+      gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
+    ) {
+      setType('response');
+      return false;
+    } else if (
+      (type === 'Interaction' || type === 'response') &&
+      feed !== '' &&
+      gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
+    ) {
+      setType('feedback');
+      return false;
+    } else if (
+      type === 'Interaction' ||
+      type === 'response' ||
+      type === 'feedback'
+    ) {
+      console.log("Above Replay Point")
+      if (navi === 'Repeat Question') {
+        setType('Interaction');
+        setSelectedOption(null);
+        return false;
+      } else if (navi === 'New Block') {
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
+        setSelectedOption(null);
+        return false;
+      } else if (navi === 'Replay Point') {
+        console.log("IN Replay Point");
+        setType(demoBlocks['1']['1']?.blockChoosen);
+        setData(demoBlocks['1']['1']);
+        setSelectedOption(null);
+        return false;
+      } else if (navi === 'Select Block') {
+        setSelectedOption(null);
+        return false;
+      } else if (navi === 'Complete') {
+        if (demoBlocks.hasOwnProperty(nextLevel)) {
+          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+          setData(demoBlocks[nextLevel]['1']);
+          setCurrentScreenId(6);
+          return false;
+        } else {
+          setType(null);
+          setData(null);
+          setCurrentScreenId(6);
+          return false;
+        }
+      } else {
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
+        setSelectedOption(null);
+        return false;
+      }
+    }
     if (currentScreenId === 6) {
       if (
-        next?.gameIsShowInteractionFeedBack &&
-        next?.gameIsShowInteractionFeedBack === 'Complete'
+        gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
+        gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Complete'
       ) {
         setCurrentScreenId(9);
         return false;
@@ -497,6 +579,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           return false;
         }
       }
+    // }
     }
     if (currentScreenId === 7) {
       if (data && type) {
@@ -544,85 +627,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         return false;
       }
     }
-    if (nextBlock[0]?.blockChoosen === 'Interaction') {
-      const optionsFiltered = gameInfo?.questOptions.filter(
-        (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
-      );
-      setOptions(optionsFiltered);
-    }
-    if (
-      type === 'Interaction' &&
-      resMsg !== '' &&
-      next?.gameIsShowInteractionFeedBack &&
-      next?.gameIsShowInteractionFeedBack === 'Each'
-    ) {
-      setType('response');
-      return false;
-    } else if (
-      (type === 'Interaction' || type === 'response') &&
-      feed !== '' &&
-      next?.gameIsShowInteractionFeedBack &&
-      next?.gameIsShowInteractionFeedBack === 'Each'
-    ) {
-      setType('feedback');
-      return false;
-    } else if (
-      type === 'Interaction' ||
-      type === 'response' ||
-      type === 'feedback'
-    ) {
-      if (navi === 'Repeat Question') {
-        setType('Interaction');
-        setSelectedOption(null);
-      } else if (navi === 'New Block') {
-        setType(nextBlock[0]?.blockChoosen);
-        setData(nextBlock[0]);
-        setSelectedOption(null);
-      } else if (navi === 'Replay Point') {
-        setType(demoBlocks['1']['1']?.blockChoosen);
-        setData(demoBlocks['1']['1']);
-        setSelectedOption(null);
-      } else if (navi === 'Select Block') {
-        setSelectedOption(null);
-      } else if (navi === 'Complete') {
-        if (demoBlocks.hasOwnProperty(nextLevel)) {
-          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-          setData(demoBlocks[nextLevel]['1']);
-          setCurrentScreenId(6);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(6);
-          return false;
-        }
-      } else {
-       
-        setType(nextBlock[0]?.blockChoosen);
-        setData(nextBlock[0]);
-        setSelectedOption(null);
-        // setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        // setData(demoBlocks[nextLevel]['1']);
-        // if (demoBlocks[nextLevel]['1']?.blockChoosen === 'Interaction') {
-        //   const optionsFiltered = gameInfo?.questOptions.filter(
-        //     (key: any) =>
-        //       key.qpSequence ===
-        //       demoBlocks[nextLevel]['1']?.blockPrimarySequence,
-        //   );
-        //   setOptions(optionsFiltered);
-        // }
-        // setSelectedOption(null);
-        // if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        //   setCurrentScreenId(6);
-        // } else {
-        //   setCurrentScreenId(5);
-        // }
-      }
-    } else {
-      setType(nextBlock[0]?.blockChoosen);
-      setData(nextBlock[0]);
-      setSelectedOption(null);
-    }
+    setType(nextBlock[0]?.blockChoosen);
+    setData(nextBlock[0]);
+    setSelectedOption(null);
   };
 
   let menuBg = useColorModeValue('white', 'navy.800');
@@ -633,19 +640,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   // validate the choosed option
   const handleValidate = (item: any, ind: number) => {
+    setCurrentScore(parseInt(item?.qpScore));
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
     setSelectedOption(ind === selectedOption ? null : ind);
-    // console.log('item', item);
-    // console.log('ind', ind);
-    
-    
-       const text = '..Option ' + item.qpOptions + ' -- ' + item.qpOptionText;
+ 
+    const text = '..Option ' + item.qpOptions + ' -- ' + item.qpOptionText;
     const voiceId =
       // data?.blockRoll == '999999'
       //   ? voiceIds.NPC :
-         profileData?.gender == 'Male'
+      profileData?.gender == 'Male'
         ? voiceIds?.playerMale
         : voiceIds?.playerFemale;
     getAudioForText(text, voiceId);
@@ -874,12 +879,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     onClose: onClose1,
   } = useDisclosure();
   const startDemo = () => {
-    // const aud = new Audio(audio);
-    // aud.loop = true;
-    // aud.play();
     onClose1();
     setCurrentScreenId(10);
-    // setIsGetsPlayAudioConfirmation(true);
   };
 
   const replayGame = () => {
@@ -889,7 +890,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const getAudioForText = async (text: string, voiceId: string) => {
-
     if (text && voiceId) {
       const send = {
         text: text,
@@ -917,9 +917,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   };
 
-  const handleAudioError = () =>{
-    console.error('Failed to load video because no supported source was found.');
-  }
+  const handleAudioError = () => {
+    console.error(
+      'Failed to load video because no supported source was found.',
+    );
+  };
 
   return (
     <ProfileContext.Provider value={profileData}>
@@ -936,7 +938,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       isOpen={true}
                       startDemo={startDemo}
                       setIsGetsPlayAudioConfirmation={
-                      setIsGetsPlayAudioConfirmation
+                        setIsGetsPlayAudioConfirmation
                       }
                     />
                   }
@@ -994,6 +996,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   > */}
                   {data && type && (
                     <Story
+                      currentScore={currentScore}
                       selectedNpc={gameInfo?.gameNonPlayerUrl}
                       selectedPlayer={selectedPlayer}
                       formData={gameInfo?.gameData}
@@ -1171,6 +1174,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           setCurrentScreenId={setCurrentScreenId}
                           formData={gameInfo?.gameData}
                           imageSrc={Screen1}
+                          currentQuestNo={currentQuestNo}
+                          completionScreenQuestOptions={gameInfo.completionQuestOptions}
                         />
                       </Box>
                     </Box>
@@ -1379,7 +1384,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           </Text>
                           <Button
                             className="btn"
-                            onClick={() =>{setCurrentScreenId(11);  setIsGetsPlayAudioConfirmation(true);}}
+                            onClick={() => {
+                              setCurrentScreenId(11);
+                              setIsGetsPlayAudioConfirmation(true);
+                            }}
                           ></Button>
                         </Box>
                         {/* <Button
@@ -1421,7 +1429,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return (
                 <>
                   <ChapterPage
-                  formData={gameInfo?.gameData}
+                    formData={gameInfo?.gameData}
                     imageSrc={backgroundScreenUrl}
                     demoBlocks={demoBlocks}
                     setCurrentScreenId={setCurrentScreenId}
@@ -1438,63 +1446,70 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           }
         })()}
       </Flex>
-{isReviewDemo &&
-      <Menu isOpen={isMenuOpen}>
-        <MenuButton
-          p="0px"
-          bg={'brandScheme'}
-          position={'fixed'}
-          bottom={'0'}
-          right={'5px'}
-          onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleMenubtn(e)}
-        >
-          <Icon
-            as={AiFillMessage}
-            bg={'#3311db'}
-            color={'#fff'}
-            w="70px"
-            h="70px"
-            borderRadius={'50%'}
-            p={'15px'}
-            me="10px"
-          />
-        </MenuButton>
-        {isMenuOpen && (
-          <MenuList
-            boxShadow={shadow}
-            p="20px"
-            me={{ base: '30px', md: 'unset' }}
-            borderRadius="20px"
-            bg={menuBg}
-            border="none"
-            mt="10px"
-            minW={{ base: '360px' }}
-            maxW={{ base: '360px', md: 'unset' }}
+      {isReviewDemo && (
+        <Menu isOpen={isMenuOpen}>
+          <MenuButton
+            p="0px"
+            bg={'brandScheme'}
+            position={'fixed'}
+            bottom={'0'}
+            right={'5px'}
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+              handleMenubtn(e)
+            }
           >
-            <FormLabel display="flex" ms="10px" fontSize="sm" fontWeight="bold">
-              <Text fontSize="sm" fontWeight="400" ms="2px">
-                {'Feedback Options'}
-                <Text as="span" color="red.500">
-                  *
-                </Text>
-              </Text>
-            </FormLabel>
-            <Select
-              mb="10px"
-              me="30px"
-              id="tab"
-              name="tab"
-              onChange={handleTabSelection}
+            <Icon
+              as={AiFillMessage}
+              bg={'#3311db'}
+              color={'#fff'}
+              w="70px"
+              h="70px"
+              borderRadius={'50%'}
+              p={'15px'}
+              me="10px"
+            />
+          </MenuButton>
+          {isMenuOpen && (
+            <MenuList
+              boxShadow={shadow}
+              p="20px"
+              me={{ base: '30px', md: 'unset' }}
+              borderRadius="20px"
+              bg={menuBg}
+              border="none"
+              mt="10px"
+              minW={{ base: '360px' }}
+              maxW={{ base: '360px', md: 'unset' }}
             >
-              <option value={''}>Select</option>
-              {filteredTabOptions.map((item) => (
-                <option key={item.value} value={item.value}>
-                  {item.label}
-                </option>
-              ))}
-            </Select>
+              <FormLabel
+                display="flex"
+                ms="10px"
+                fontSize="sm"
+                fontWeight="bold"
+              >
+                <Text fontSize="sm" fontWeight="400" ms="2px">
+                  {'Feedback Options'}
+                  <Text as="span" color="red.500">
+                    *
+                  </Text>
+                </Text>
+              </FormLabel>
+              <Select
+                mb="10px"
+                me="30px"
+                id="tab"
+                name="tab"
+                onChange={handleTabSelection}
+              >
+                <option value={''}>Select</option>
+                {filteredTabOptions.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </Select>
 
-            {/* <SelectField
+              {/* <SelectField
               mb="10px"
               me="30px"
               id="tab"
@@ -1506,105 +1521,105 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               style={{ fontSize: '18px' }}
               isRequired={true}
             /> */}
-            {reviewInput?.tabId !== null &&
-              reviewInput?.tabId !== undefined &&
-              reviewSubTabOptions?.length > 0 && (
-                // <SelectField
-                //   mb="10px"
-                //   me="30px"
-                //   id="subtab"
-                //   name="subtab"
-                //   label="Secondary Options"
-                //   fontSize={'md'}
-                //   options={reviewSubTabOptions}
-                //   onChange={handleSubTabSelection}
-                //   isRequired={true}
-                // />
-                <>
-                  <FormLabel
-                    display="flex"
-                    ms="10px"
-                    fontSize="sm"
-                    fontWeight="bold"
-                  >
-                    <Text fontSize="sm" fontWeight="400" ms="2px">
-                      {'Secondary Options'}
-                      <Text as="span" color="red.500">
-                        *
+              {reviewInput?.tabId !== null &&
+                reviewInput?.tabId !== undefined &&
+                reviewSubTabOptions?.length > 0 && (
+                  // <SelectField
+                  //   mb="10px"
+                  //   me="30px"
+                  //   id="subtab"
+                  //   name="subtab"
+                  //   label="Secondary Options"
+                  //   fontSize={'md'}
+                  //   options={reviewSubTabOptions}
+                  //   onChange={handleSubTabSelection}
+                  //   isRequired={true}
+                  // />
+                  <>
+                    <FormLabel
+                      display="flex"
+                      ms="10px"
+                      fontSize="sm"
+                      fontWeight="bold"
+                    >
+                      <Text fontSize="sm" fontWeight="400" ms="2px">
+                        {'Secondary Options'}
+                        <Text as="span" color="red.500">
+                          *
+                        </Text>
                       </Text>
-                    </Text>
-                  </FormLabel>
-                  <Select
-                    mb="10px"
-                    me="30px"
-                    id="subtab"
-                    name="subtab"
-                    onChange={handleSubTabSelection}
+                    </FormLabel>
+                    <Select
+                      mb="10px"
+                      me="30px"
+                      id="subtab"
+                      name="subtab"
+                      onChange={handleSubTabSelection}
+                    >
+                      <option value={''}>Select</option>
+                      {reviewSubTabOptions.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </Select>
+                  </>
+                )}
+              <FormControl>
+                <FormLabel fontSize={'sm'} fontWeight={700} pl="4">
+                  Feedback
+                </FormLabel>
+                <Textarea
+                  resize="none"
+                  w="100%"
+                  h="200px"
+                  border="1px solid #CBD5E0"
+                  borderRadius="20px"
+                  p="4"
+                  placeholder="Please Share your Thoughts..."
+                  onChange={handleReview}
+                />
+                <Text color="#CBD5E0" fontSize={{ base: 'sm', '2xl': 'md' }}>
+                  {'Maximum of 250 characters...'}
+                </Text>
+              </FormControl>
+              <MenuItem>
+                <Box w={'100%'} display={'flex'} justifyContent={'flex-start'}>
+                  <Button
+                    bg="#11047a"
+                    _hover={{ bg: '#190793' }}
+                    color="#fff"
+                    h={'46px'}
+                    w={'128px'}
+                    mr={'33px'}
+                    mt={'7px'}
+                    onClick={() => hanldeClose()}
                   >
-                    <option value={''}>Select</option>
-                    {reviewSubTabOptions.map((item) => (
-                      <option key={item.value} value={item.value}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </Select>
-                </>
-              )}
-            <FormControl>
-              <FormLabel fontSize={'sm'} fontWeight={700} pl="4">
-                Feedback
-              </FormLabel>
-              <Textarea
-                resize="none"
-                w="100%"
-                h="200px"
-                border="1px solid #CBD5E0"
-                borderRadius="20px"
-                p="4"
-                placeholder="Please Share your Thoughts..."
-                onChange={handleReview}
-              />
-              <Text color="#CBD5E0" fontSize={{ base: 'sm', '2xl': 'md' }}>
-                {'Maximum of 250 characters...'}
-              </Text>
-            </FormControl>
-            <MenuItem>
-              <Box w={'100%'} display={'flex'} justifyContent={'flex-start'}>
-                <Button
-                  bg="#11047a"
-                  _hover={{ bg: '#190793' }}
-                  color="#fff"
-                  h={'46px'}
-                  w={'128px'}
-                  mr={'33px'}
-                  mt={'7px'}
-                  onClick={() => hanldeClose()}
-                >
-                  close
-                </Button>
-              </Box>
+                    close
+                  </Button>
+                </Box>
 
-              <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
-                <Button
-                  bg="#11047a"
-                  _hover={{ bg: '#190793' }}
-                  color="#fff"
-                  h={'46px'}
-                  w={'128px'}
-                  mr={'33px'}
-                  mt={'7px'}
-                  onClick={() => hanldeSubmit(reviewInput)}
-                  isDisabled={!isFormValid}
-                >
-                  Submit
-                </Button>
-              </Box>
-            </MenuItem>
-          </MenuList>
-        )}
-      </Menu>
-}
-      {audioObj?.url &&  audioRef.current?.src && (
+                <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                  <Button
+                    bg="#11047a"
+                    _hover={{ bg: '#190793' }}
+                    color="#fff"
+                    h={'46px'}
+                    w={'128px'}
+                    mr={'33px'}
+                    mt={'7px'}
+                    onClick={() => hanldeSubmit(reviewInput)}
+                    isDisabled={!isFormValid}
+                  >
+                    Submit
+                  </Button>
+                </Box>
+              </MenuItem>
+            </MenuList>
+          )}
+        </Menu>
+      )}
+      {audioObj?.url && (
         <audio
           ref={audioRef}
           controls

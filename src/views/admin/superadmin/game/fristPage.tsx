@@ -26,7 +26,7 @@ import Rocket from 'assets/img/games/rocket1-removebg-preview.png'
 import { MdArrowCircleRight, MdMoreVert } from 'react-icons/md';
 import { VSeparator } from 'components/separator/Separator';
 import GameCard from './components/gameCard';
-import { SearchIcon,CloseIcon } from '@chakra-ui/icons';
+import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
 import Preview from './components/perview';
 import Popup from 'components/alerts/Popup';
 import OnToast from 'components/alerts/toast';
@@ -67,8 +67,15 @@ const Game: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openLearner, setOpenLearner] = useState(false);
   const [assignGameId, setAssignGameId] = useState<number>();
-  const [isConfirm, setIsConfirm] = useState(false); 
+  const [isConfirm, setIsConfirm] = useState(false);
   const [tabState, setTabState] = useState('Creation');
+  const [completionValue, setCompletionValue] = useState<any>([]);
+  const [completionStatus, setCompletionStatus] = useState([
+    { value: 'Passed/Failed', label: 'Passed/Failed', isChecked: false },
+    { value: 'Completed/Incomplete', label: 'Completed/Incomplete', isChecked: false },
+    { value: 'Passed/Incomplete', label: 'Passed/Incomplete', isChecked: false },
+  ]);
+
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const handleCourse = () => {
     navigate('/admin/superadmin/game/template');
@@ -77,7 +84,7 @@ const Game: React.FC = () => {
     const result = await getImages(1);
     if (result?.status !== 'Success')
       return console.log('getbackruond error:' + result?.message);
-     setImg(result?.data);
+    setImg(result?.data);
   };
   const fetchCount = async () => {
 
@@ -92,7 +99,6 @@ const Game: React.FC = () => {
       });
     }
     // setcount(result?.data[0]);
-      
 
 
 
@@ -114,7 +120,7 @@ const Game: React.FC = () => {
 
 
   useEffect(() => {
-    gameLists(tabState);  
+    gameLists(tabState);
   }, [tabState]);
 
   useEffect(() => {
@@ -181,93 +187,94 @@ const Game: React.FC = () => {
   const [isDownloadDialogOpen, setDownloadDialogOpen] = useState(false);
   const [downloadId, setDownloadId] = useState(null);
 
-  const handleDownload = async (id:any) => {
+  const handleDownload = async (id: any) => {
     console.log('handleDownload', id);
     setDownloadId(id);
     try {
       const response = await getScormConfig(id);
-      if(response) {
+      if (response) {
         let completionStatusArray: string[] = [];
-            if(response.completionStatus) {
-                completionStatusArray = response.completionStatus.split(',');
-            }
+        if (response.completionStatus) {
+          completionStatusArray = response.completionStatus.split(',');
+        }
         // const completionStatusArray = response.completionStatus.split(',');
-        console.log('completionstatus',completionStatusArray)
-      const formData = {
-        scormEdition: response?.scormEdition,
-        completionStatus: response?.completionStatus,
-        scoringMethod: response?.scoringMethod,
-        masteryScore: response?.masteryScore,
-        trackingTypes: response?.trackingTypes,
-        lmsApiVersion: response?.lmsApiVersion,
-        dataTransferFrequency: response?.dataTransferFrequency,
-        launchBehavior: response?.launchBehavior,
-        navigation: response?.navigation,
-        bookmarking: response?.bookmarking,
-        reportLocation: response?.reportLocation,
-        reportFormat: response?.reportFormat,
-        debuggingMode: response?.debuggingMode,
-        sequencingRules: response?.sequencingRules,
-        checkCustomMetadata: response?.checkCustomMetadata,
-        customMetadata: response?.customMetadata,
-        checkCustomJsHooks: response?.checkCustomJsHooks,
-        preLaunchScript: response?.preLaunchScript,
-        postLaunchScript: response?.postLaunchScript,
-        checkAlternateContent: response?.checkAlternateContent,
-        alternateContent: response?.alternateContent,
-        textToSpeech: response?.textToSpeech,
-        language: response?.language,
-        encryption: response?.encryption,
-        scormPackageVersion: response?.scormPackageVersion,
-    };
-    const updatedCompletionStatus = completionStatus.map(option => ({
-      ...option,
-      isChecked: completionStatusArray.includes(option.value),
-  }));
-  setCompletionStatus(updatedCompletionStatus);
-  console.log('updatedCompletionStatus', updatedCompletionStatus)
-  console.log('completionStatus', completionStatus)
-  setFormData(formData);
-  setDownloadDialogOpen(true);
-  }else {
-    const formData = {
-    scormEdition: 'SCORM 1.2',
-      completionStatus: '',
-      scoringMethod: 'rawScore',
-      masteryScore: '',
-      trackingTypes: '',
-      lmsApiVersion: 'SCORM 1.2',
-      dataTransferFrequency: '',
-      launchBehavior: 'newWindow',
-      navigation: 'sequential',
-      bookmarking: 'alwaysResume',
-      reportLocation: 'lmsDatabase',
-      reportFormat: '',
-      debuggingMode: 'enable',
-      sequencingRules: 'automatic',
-      checkCustomMetadata: false,
-      customMetadata: '',
-      checkCustomJsHooks: false,
-      preLaunchScript: '',
-      postLaunchScript: '',
-      checkAlternateContent: false,
-      alternateContent: '',
-      textToSpeech: 'enable',
-      language: 'english',
-      encryption: 'enable',
-      scormPackageVersion: '',
-  };
-  setFormData(formData);
-  setDownloadDialogOpen(true);
-  }
+        console.log('completionstatus', completionStatusArray)
+        const formData = {
+          scormEdition: response?.scormEdition,
+          completionStatus: response?.completionStatus,
+          scoringMethod: response?.scoringMethod,
+          masteryScore: response?.masteryScore,
+          trackingTypes: response?.trackingTypes,
+          lmsApiVersion: response?.lmsApiVersion,
+          dataTransferFrequency: response?.dataTransferFrequency,
+          launchBehavior: response?.launchBehavior,
+          navigation: response?.navigation,
+          bookmarking: response?.bookmarking,
+          reportLocation: response?.reportLocation,
+          reportFormat: response?.reportFormat,
+          debuggingMode: response?.debuggingMode,
+          sequencingRules: response?.sequencingRules,
+          checkCustomMetadata: response?.checkCustomMetadata,
+          customMetadata: response?.customMetadata,
+          checkCustomJsHooks: response?.checkCustomJsHooks,
+          preLaunchScript: response?.preLaunchScript,
+          postLaunchScript: response?.postLaunchScript,
+          checkAlternateContent: response?.checkAlternateContent,
+          alternateContent: response?.alternateContent,
+          textToSpeech: response?.textToSpeech,
+          language: response?.language,
+          encryption: response?.encryption,
+          scormPackageVersion: response?.scormPackageVersion,
+        };
+        const updatedCompletionStatus = completionStatus.map(option => ({
+          ...option,
+          isChecked: completionStatusArray.includes(option.value),
+        }));
+        setCompletionStatus(updatedCompletionStatus);
+        setCompletionValue(completionStatusArray);
+        console.log('updatedCompletionStatus', updatedCompletionStatus)
+        console.log('completionStatus', completionStatus)
+        setFormData(formData);
+        setDownloadDialogOpen(true);
+      } else {
+        const formData = {
+          scormEdition: 'SCORM 1.2',
+          completionStatus: '',
+          scoringMethod: 'rawScore',
+          masteryScore: '',
+          trackingTypes: '',
+          lmsApiVersion: 'SCORM 1.2',
+          dataTransferFrequency: '',
+          launchBehavior: 'newWindow',
+          navigation: 'sequential',
+          bookmarking: 'alwaysResume',
+          reportLocation: 'lmsDatabase',
+          reportFormat: '',
+          debuggingMode: 'enable',
+          sequencingRules: 'automatic',
+          checkCustomMetadata: false,
+          customMetadata: '',
+          checkCustomJsHooks: false,
+          preLaunchScript: '',
+          postLaunchScript: '',
+          checkAlternateContent: false,
+          alternateContent: '',
+          textToSpeech: 'enable',
+          language: 'english',
+          encryption: 'enable',
+          scormPackageVersion: '',
+        };
+        setFormData(formData);
+        setDownloadDialogOpen(true);
+      }
 
-//   const updatedCompletionStatus = completionStatus.map(option => ({
-//     ...option,
-//     isChecked: formData.completionStatus.includes(option.value),
-// }));
+      //   const updatedCompletionStatus = completionStatus.map(option => ({
+      //     ...option,
+      //     isChecked: formData.completionStatus.includes(option.value),
+      // }));
 
       // setFormData(formData);
-      
+
     } catch (error) {
       console.error('Error fetching SCORM config:', error);
     }
@@ -301,7 +308,7 @@ const Game: React.FC = () => {
       language: 'english',
       encryption: 'enable',
       scormPackageVersion: '',
-  };
+    };
     setFormData(formData);
     setDownloadDialogOpen(false);
   };
@@ -436,7 +443,7 @@ const Game: React.FC = () => {
             setIsOpen(false);
             setMsg('Game Duplicated Sucessfuly');
             setToastStatus('success');
-            setAlert(true);          
+            setAlert(true);
             setIsConfirm(false);
             setTabState("Creation");
             fetchCount();
@@ -455,34 +462,29 @@ const Game: React.FC = () => {
     if (result?.status !== 'Success') {
       setGameList([]);
       return console.log('getbackruond error:' + result?.message);
-    }else{
+    } else {
 
       setGameList(result.data);
     }
- 
-    
-   
+
+
+
   };
 
-const [scormEdition, setScormEdition] = useState('SCORM 1.2');
-    const handleScormEditionChange = async (event:any) => {
-      const updatedScormEdition = event.target.value;
-  
-      const id = downloadId;
-      const data = JSON.stringify({ ...formData, scormEdition: updatedScormEdition });
-      const result = await createScormConfig(id, data);
+  const [scormEdition, setScormEdition] = useState('SCORM 1.2');
+  const handleScormEditionChange = async (event: any) => {
+    const updatedScormEdition = event.target.value;
 
-      setScormEdition(updatedScormEdition);
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        scormEdition: updatedScormEdition,
-      }));
-    };
-  const [completionStatus, setCompletionStatus] = useState([
-    { value: 'Passed/Failed', label: 'Passed/Failed', isChecked: false },
-    { value: 'Completed/Incomplete', label: 'Completed/Incomplete', isChecked: false },
-    { value: 'Passed/Incomplete', label: 'Passed/Incomplete', isChecked: false },
-  ]);
+    const id = downloadId;
+    const data = JSON.stringify({ ...formData, scormEdition: updatedScormEdition });
+    const result = await createScormConfig(id, data);
+
+    setScormEdition(updatedScormEdition);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      scormEdition: updatedScormEdition,
+    }));
+  };
   const [scoringMethod, setScoringMethod] = useState('rawScore');
   const [masteryScore, setMasteryScore] = useState('');
   const [trackingTypes, setTrackingTypes] = useState([
@@ -491,77 +493,107 @@ const [scormEdition, setScormEdition] = useState('SCORM 1.2');
     { value: 'TimeSpent', label: 'Time Spent' },
     { value: 'Interactions', label: 'Interactions' },
   ]);
- 
-  const handleCompletionStatusChange = async (selectedStatus: any) => {
-    const updatedCompletionStatus: string[] = [selectedStatus];
+
+
+  const updatedCompletionStatus: any = [];
+  let currentStatus: any = [];
+
+  const handleCompletionStatusChange = async (e: any, selectedStatus: any[]) => {
+
+
+    if ((!completionValue.includes(selectedStatus)) && e.target.checked === true) {
+      setCompletionValue([...completionValue, selectedStatus])
+      currentStatus = [...completionValue, selectedStatus]
+    }
+    else if (completionValue.includes(selectedStatus) && e.target.checked === false) {
+
+      const currentStatusElse = [...completionValue]
+      //  console.log('selectedStatus',currentStatus)    
+      currentStatus = currentStatusElse.filter((item: any) => item !== selectedStatus)
+      setCompletionValue(currentStatus)
+
+    }
+
+
+    console.log('selectedStatus', currentStatus.join(','))
+
     const id = downloadId;
-    const data = JSON.stringify({ ...formData, completionStatus: updatedCompletionStatus.join(',') });
-  
+    const data = JSON.stringify({ ...formData, completionStatus: currentStatus.join(',') });
+
     try {
+      // Perform the asynchronous operation to get additional data
       const result = await createScormConfig(id, data);
-  
-      setCompletionStatus((prevOptions) =>
-        prevOptions.map((option) => ({
-          ...option,
-          isChecked: updatedCompletionStatus.includes(option.value),
-        }))
-      );
+
+      // Update the state with the resolved data
+      // setCompletionStatus((prevOptions) =>
+      //   prevOptions.map((option) => ({
+      //     ...option,
+      //     isChecked: updatedCompletionStatus.includes(option.value),
+      //   }))
+      // );  
+
+      setCompletionStatus(prevStatus => {
+        return prevStatus.map((option: any) => {
+          if (option.value === selectedStatus) {
+            return { ...option, isChecked: !option.isChecked };
+          }
+          return option;
+        });
+      });
       setFormData((prevFormData) => ({
         ...prevFormData,
-        completionStatus: updatedCompletionStatus.join(','),
+        completionStatus: updatedCompletionStatus,
+        // Update other fields if necessary based on the result
       }));
     } catch (error) {
+      // Handle errors if necessary
       console.error('Error updating completion status:', error);
     }
   };
-  
+
   const handleScoringMethodChange = async (event: any) => {
     const updatedScoringMethod = event.target.value;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, scoringMethod: updatedScoringMethod });
     const result = await createScormConfig(id, data);
-  
     setScoringMethod(updatedScoringMethod);
     setFormData((prevFormData) => ({
       ...prevFormData,
       scoringMethod: updatedScoringMethod,
     }));
   };
-  
   const handleMasteryScoreChange = async (value: any) => {
     const updatedMasteryScore = value;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, masteryScore: updatedMasteryScore });
     const result = await createScormConfig(id, data);
-  
     setMasteryScore(updatedMasteryScore);
     setFormData((prevFormData) => ({
       ...prevFormData,
       masteryScore: updatedMasteryScore,
     }));
   };
-  
   const handleTrackingTypesChange = async (selectedTypes: any) => {
     const updatedTrackingTypes: string[] = [selectedTypes];
     const id = downloadId;
     const data = JSON.stringify({ ...formData, trackingTypes: updatedTrackingTypes.join(',') });
     try {
-    const result = await createScormConfig(id, data);
+      const result = await createScormConfig(id, data);
       setTrackingTypes((prevOptions) =>
         prevOptions.map((option) => ({
           ...option,
           isChecked: updatedTrackingTypes.includes(option.value),
         }))
       );
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      trackingTypes: updatedTrackingTypes.join(','),
-    }));
-  } catch (error) {
-    console.error('Error updating completion status:', error);
-  }
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        trackingTypes: updatedTrackingTypes.join(','),
+      }));
+    } catch (error) {
+      console.error('Error updating completion status:', error);
+    }
   };
-  
+
 
   const [lmsApiVersion, setLMSApiVersion] = useState('SCORM 1.2');
   const [dataTransferFrequency, setDataTransferFrequency] = useState('');
@@ -570,27 +602,23 @@ const [scormEdition, setScormEdition] = useState('SCORM 1.2');
     const id = downloadId;
     const data = JSON.stringify({ ...formData, lmsApiVersion: updatedLMSApiVersion });
     const result = await createScormConfig(id, data);
-  
     setLMSApiVersion(updatedLMSApiVersion);
     setFormData((prevFormData) => ({
       ...prevFormData,
       lmsApiVersion: updatedLMSApiVersion,
     }));
   };
-  
   const handleDataTransferFrequencyChange = async (nextValue: any) => {
     const updatedDataTransferFrequency = nextValue;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, dataTransferFrequency: updatedDataTransferFrequency });
     const result = await createScormConfig(id, data);
-  
     setDataTransferFrequency(nextValue);
     setFormData((prevFormData) => ({
       ...prevFormData,
       dataTransferFrequency: nextValue,
     }));
   };
-  
 
   const [launchBehavior, setLaunchBehavior] = useState('rawScore');
   const [navigation, setNavigation] = useState('sequential');
@@ -600,40 +628,34 @@ const [scormEdition, setScormEdition] = useState('SCORM 1.2');
     const id = downloadId;
     const data = JSON.stringify({ ...formData, launchBehavior: updatedLaunchBehavior });
     const result = await createScormConfig(id, data);
-  
     setLaunchBehavior(updatedLaunchBehavior);
     setFormData((prevFormData) => ({
       ...prevFormData,
       launchBehavior: updatedLaunchBehavior,
     }));
   };
-  
   const handleNavigationChange = async (event: any) => {
     const updatedNavigation = event.target.value;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, navigation: updatedNavigation });
     const result = await createScormConfig(id, data);
-  
     setNavigation(updatedNavigation);
     setFormData((prevFormData) => ({
       ...prevFormData,
       navigation: updatedNavigation,
     }));
   };
-  
   const handleBookmarkingChange = async (event: any) => {
     const updatedBookmarking = event.target.value;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, bookmarking: updatedBookmarking });
     const result = await createScormConfig(id, data);
-  
     setBookmarking(updatedBookmarking);
     setFormData((prevFormData) => ({
       ...prevFormData,
       bookmarking: updatedBookmarking,
     }));
   };
-  
 
   const [reportLocation, setReportLocation] = useState('lmsDatabase');
   const [reportFormat, setReportFormat] = useState('');
@@ -642,27 +664,23 @@ const [scormEdition, setScormEdition] = useState('SCORM 1.2');
     const id = downloadId;
     const data = JSON.stringify({ ...formData, reportLocation: updatedReportLocation });
     const result = await createScormConfig(id, data);
-  
     setReportLocation(updatedReportLocation);
     setFormData((prevFormData) => ({
       ...prevFormData,
       reportLocation: updatedReportLocation,
     }));
   };
-  
   const handleReportFormatChange = async (nextValue: string) => {
     const updatedReportFormat = nextValue;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, reportFormat: updatedReportFormat });
     const result = await createScormConfig(id, data);
-  
     setReportFormat(updatedReportFormat);
     setFormData((prevFormData) => ({
       ...prevFormData,
       reportFormat: updatedReportFormat,
     }));
   };
-  
 
   const [debuggingMode, setDebuggingMode] = useState('enable');
   const [sequencingRules, setSequencingRules] = useState('automatic');
@@ -671,27 +689,23 @@ const [scormEdition, setScormEdition] = useState('SCORM 1.2');
     const id = downloadId;
     const data = JSON.stringify({ ...formData, debuggingMode: updatedDebuggingMode });
     const result = await createScormConfig(id, data);
-  
     setDebuggingMode(updatedDebuggingMode);
     setFormData((prevFormData) => ({
       ...prevFormData,
       debuggingMode: updatedDebuggingMode,
     }));
   };
-  
   const handleSequencingRulesChange = async (event: any) => {
     const updatedSequencingRules = event.target.value;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, sequencingRules: updatedSequencingRules });
     const result = await createScormConfig(id, data);
-  
     setSequencingRules(updatedSequencingRules);
     setFormData((prevFormData) => ({
       ...prevFormData,
       sequencingRules: updatedSequencingRules,
     }));
   };
-  
 
   const [checkCustomMetadata, setCheckCustomMetadata] = useState(false);
   const [checkCustomJsHooks, setCheckCustomJsHooks] = useState(false);
@@ -703,71 +717,61 @@ const [scormEdition, setScormEdition] = useState('SCORM 1.2');
     const id = downloadId;
     const data = JSON.stringify({ ...formData, checkCustomMetadata: updatedCheckCustomMetadata });
     const result = await createScormConfig(id, data);
-  
     setCheckCustomMetadata(updatedCheckCustomMetadata);
     setFormData((prevFormData) => ({
       ...prevFormData,
       checkCustomMetadata: updatedCheckCustomMetadata,
     }));
   };
-  
   const handleCheckCustomJsHooksChange = async (event: any) => {
     const updatedCheckCustomJsHooks = event.target.checked;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, checkCustomJsHooks: updatedCheckCustomJsHooks });
     const result = await createScormConfig(id, data);
-  
     setCheckCustomJsHooks(updatedCheckCustomJsHooks);
     setFormData((prevFormData) => ({
       ...prevFormData,
       checkCustomJsHooks: updatedCheckCustomJsHooks,
     }));
   };
-  
   const handleCustomMetadataChange = async (event: any) => {
     const updatedCustomMetadata = event.target.value;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, customMetadata: updatedCustomMetadata });
     const result = await createScormConfig(id, data);
-  
     setCustomMetadata(updatedCustomMetadata);
     setFormData((prevFormData) => ({
       ...prevFormData,
       customMetadata: updatedCustomMetadata,
     }));
   };
-  
   const handlePreLaunchScriptChange = async (event: any) => {
     const updatedPreLaunchScript = event.target.value;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, preLaunchScript: updatedPreLaunchScript });
     const result = await createScormConfig(id, data);
-  
     setPreLaunchScript(updatedPreLaunchScript);
     setFormData((prevFormData) => ({
       ...prevFormData,
       preLaunchScript: updatedPreLaunchScript,
     }));
   };
-  
   const handlePostLaunchScriptChange = async (event: any) => {
     const updatedPostLaunchScript = event.target.value;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, postLaunchScript: updatedPostLaunchScript });
     const result = await createScormConfig(id, data);
-  
     setPostLaunchScript(updatedPostLaunchScript);
     setFormData((prevFormData) => ({
       ...prevFormData,
       postLaunchScript: updatedPostLaunchScript,
     }));
   };
-  
 
   const [checkAlternateContent, setCheckAlternateContent] = useState(false);
   const [alternateContent, setAlternateContent] = useState('');
   const [textToSpeech, setTextToSpeech] = useState('enable');
-  const handleCheckAlternateContentChange = async (event:any) => {
+  const handleCheckAlternateContentChange = async (event: any) => {
     const updatedCheckAlternateContent = event.target.checked;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, checkAlternateContent: updatedCheckAlternateContent });
@@ -775,12 +779,12 @@ const [scormEdition, setScormEdition] = useState('SCORM 1.2');
 
     setCheckAlternateContent(updatedCheckAlternateContent);
     setFormData((prevFormData) => ({
-        ...prevFormData,
-        checkAlternateContent: updatedCheckAlternateContent,
+      ...prevFormData,
+      checkAlternateContent: updatedCheckAlternateContent,
     }));
-};
+  };
 
-const handleAlternateContentChange = async (event:any) => {
+  const handleAlternateContentChange = async (event: any) => {
     const updatedAlternateContent = event.target.value;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, alternateContent: updatedAlternateContent });
@@ -788,12 +792,12 @@ const handleAlternateContentChange = async (event:any) => {
 
     setAlternateContent(updatedAlternateContent);
     setFormData((prevFormData) => ({
-        ...prevFormData,
-        alternateContent: updatedAlternateContent,
+      ...prevFormData,
+      alternateContent: updatedAlternateContent,
     }));
-};
+  };
 
-const handleTextToSpeechChange = async (event:any) => {
+  const handleTextToSpeechChange = async (event: any) => {
     const updatedTextToSpeech = event.target.value;
     const id = downloadId;
     const data = JSON.stringify({ ...formData, textToSpeech: updatedTextToSpeech });
@@ -801,13 +805,13 @@ const handleTextToSpeechChange = async (event:any) => {
 
     setTextToSpeech(updatedTextToSpeech);
     setFormData((prevFormData) => ({
-        ...prevFormData,
-        textToSpeech: updatedTextToSpeech,
+      ...prevFormData,
+      textToSpeech: updatedTextToSpeech,
     }));
-};
+  };
 
   const [language, setLanguage] = useState('');
-  const handleLanguageChange = async (event:any) => {
+  const handleLanguageChange = async (event: any) => {
     const updatedLanguage = event.target.value;
     setLanguage(updatedLanguage);
 
@@ -816,11 +820,11 @@ const handleTextToSpeechChange = async (event:any) => {
     const data = JSON.stringify(updatedFormData);
 
     const result = await createScormConfig(id, data);
-};
+  };
 
 
   const [encryption, setEncryption] = useState('enable');
-  const handleEncryptionChange = async (event:any) => {
+  const handleEncryptionChange = async (event: any) => {
     const updatedEncryption = event.target.value;
     setEncryption(updatedEncryption);
 
@@ -829,11 +833,11 @@ const handleTextToSpeechChange = async (event:any) => {
     const data = JSON.stringify(updatedFormData);
 
     const result = await createScormConfig(id, data);
-};
+  };
 
 
   const [scormPackageVersion, setScormPackageVersion] = useState('');
-  const handleScormPackageVersionChange = async (event:any) => {
+  const handleScormPackageVersionChange = async (event: any) => {
     const updatedScormPackageVersion = event.target.value;
     setScormPackageVersion(updatedScormPackageVersion);
 
@@ -842,38 +846,38 @@ const handleTextToSpeechChange = async (event:any) => {
     const data = JSON.stringify(updatedFormData);
 
     const result = await createScormConfig(id, data);
-};
+  };
 
 
   const initialFormData = {
     scormEdition: 'SCORM 1.2',
-      completionStatus: '',
-      scoringMethod: 'rawScore',
-      masteryScore: '',
-      trackingTypes: '',
-      lmsApiVersion: 'SCORM 1.2',
-      dataTransferFrequency: '',
-      launchBehavior: 'newWindow',
-      navigation: 'sequential',
-      bookmarking: 'alwaysResume',
-      reportLocation: 'lmsDatabase',
-      reportFormat: '',
-      debuggingMode: 'enable',
-      sequencingRules: 'automatic',
-      checkCustomMetadata: false,
-      customMetadata: '',
-      checkCustomJsHooks: false,
-      preLaunchScript: '',
-      postLaunchScript: '',
-      checkAlternateContent: false,
-      alternateContent: '',
-      textToSpeech: 'enable',
-      language: 'english',
-      encryption: 'enable',
-      scormPackageVersion: '',
+    completionStatus: '',
+    scoringMethod: 'rawScore',
+    masteryScore: '',
+    trackingTypes: '',
+    lmsApiVersion: 'SCORM 1.2',
+    dataTransferFrequency: '',
+    launchBehavior: 'newWindow',
+    navigation: 'sequential',
+    bookmarking: 'alwaysResume',
+    reportLocation: 'lmsDatabase',
+    reportFormat: '',
+    debuggingMode: 'enable',
+    sequencingRules: 'automatic',
+    checkCustomMetadata: false,
+    customMetadata: '',
+    checkCustomJsHooks: false,
+    preLaunchScript: '',
+    postLaunchScript: '',
+    checkAlternateContent: false,
+    alternateContent: '',
+    textToSpeech: 'enable',
+    language: 'english',
+    encryption: 'enable',
+    scormPackageVersion: '',
   };
   const [formData, setFormData] = useState(initialFormData);
-  const handleFormSubmit = async (event:any) => {
+  const handleFormSubmit = async (event: any) => {
     event.preventDefault();
 
     try {
@@ -887,14 +891,14 @@ const handleTextToSpeechChange = async (event:any) => {
       downloadLink.href = window.URL.createObjectURL(blob);
       downloadLink.download = 'your-scorm-package.zip';
       downloadLink.click();
-    } catch (error:any) {
+    } catch (error: any) {
       console.error('Error generating or downloading SCORM package:', error);
-      
+
       if (error.response) {
         console.error('Response Data:', error.response.data);
         console.error('Response Status:', error.response.status);
         console.error('Response Headers:', error.response.headers);
-        console.error('error',error.response)
+        console.error('error', error.response)
       } else if (error.request) {
         console.error('No response received. Request details:', error.request);
       } else {
@@ -1040,63 +1044,63 @@ const handleTextToSpeechChange = async (event:any) => {
 
 
             <InputGroup w={{ base: '100%', md: '300px' }} ml="auto">
-  <InputLeftElement
-    children={
-      <IconButton
-        aria-label="search"
-        bg="inherit"
-        borderRadius="inherit"
-        _active={{
-          bg: 'inherit',
-          transform: 'none',
-          borderColor: 'transparent',
-        }}
-        _hover={{
-          background: 'none',
-        }}
-        _focus={{
-          background: 'none',
-          boxShadow: 'none',
-        }}
-        icon={<SearchIcon color={searchIconColor} w="15px" h="15px" />}
-      />
-    }
-  />
-  <Input
-    type="text"
-    placeholder="Search..."
-    value={fil || ''}
-    onChange={(e) => setFil(e.target.value)}
-    bg={'#f9f9f9'}
-    borderRadius={'14px'}
-    w={{ base: '200px', xl: '300px' }}
-  />
-  {fil && (
-    <InputRightElement
-      children={
-        <IconButton
-          aria-label="clear"
-          bg="inherit"
-          borderRadius="inherit"
-          _active={{
-            bg: 'inherit',
-            transform: 'none',
-            borderColor: 'transparent',
-          }}
-          _hover={{
-            background: 'none',
-          }}
-          _focus={{
-            background: 'none',
-            boxShadow: 'none',
-          }}
-          icon={<CloseIcon color="gray.500"  w="10px" h="10px"/>}
-          onClick={() => setFil('')} // Clear the input field
-        />
-      }
-    />
-  )}
-</InputGroup>
+              <InputLeftElement
+                children={
+                  <IconButton
+                    aria-label="search"
+                    bg="inherit"
+                    borderRadius="inherit"
+                    _active={{
+                      bg: 'inherit',
+                      transform: 'none',
+                      borderColor: 'transparent',
+                    }}
+                    _hover={{
+                      background: 'none',
+                    }}
+                    _focus={{
+                      background: 'none',
+                      boxShadow: 'none',
+                    }}
+                    icon={<SearchIcon color={searchIconColor} w="15px" h="15px" />}
+                  />
+                }
+              />
+              <Input
+                type="text"
+                placeholder="Search..."
+                value={fil || ''}
+                onChange={(e) => setFil(e.target.value)}
+                bg={'#f9f9f9'}
+                borderRadius={'14px'}
+                w={{ base: '200px', xl: '300px' }}
+              />
+              {fil && (
+                <InputRightElement
+                  children={
+                    <IconButton
+                      aria-label="clear"
+                      bg="inherit"
+                      borderRadius="inherit"
+                      _active={{
+                        bg: 'inherit',
+                        transform: 'none',
+                        borderColor: 'transparent',
+                      }}
+                      _hover={{
+                        background: 'none',
+                      }}
+                      _focus={{
+                        background: 'none',
+                        boxShadow: 'none',
+                      }}
+                      icon={<CloseIcon color="gray.500" w="10px" h="10px" />}
+                      onClick={() => setFil('')} // Clear the input field
+                    />
+                  }
+                />
+              )}
+            </InputGroup>
           </Flex>
         </Card>
         <Grid
@@ -1119,22 +1123,22 @@ const handleTextToSpeechChange = async (event:any) => {
 
             {gamelist &&
               gamelist
-              .filter((item) => {
-                const lowerCaseFilter = fil?.toLowerCase();
-                const lowerCaseGameTitle = item?.gameTitle?.toLowerCase();
-                
-                // Skip filter if gameTitle is null or empty
-                if (!lowerCaseGameTitle || lowerCaseGameTitle === '') {
-                 
-                  return true; // Include the item in the result
-                }
-              
-                return lowerCaseGameTitle.includes(lowerCaseFilter);
-              })
-              
-            .map((game, i) => (
-              // Your map logic here
-        
+                .filter((item) => {
+                  const lowerCaseFilter = fil?.toLowerCase();
+                  const lowerCaseGameTitle = item?.gameTitle?.toLowerCase();
+
+                  // Skip filter if gameTitle is null or empty
+                  if (!lowerCaseGameTitle || lowerCaseGameTitle === '') {
+
+                    return true; // Include the item in the result
+                  }
+
+                  return lowerCaseGameTitle.includes(lowerCaseFilter);
+                })
+
+                .map((game, i) => (
+                  // Your map logic here
+
                   <GameCard
                     name={game.gameTitle}
                     author={game.gameSkills}
@@ -1151,7 +1155,7 @@ const handleTextToSpeechChange = async (event:any) => {
                     handelMakePublic={handelMakePublic}
                     handelDelete={handelDelete}
                     handleDownload={handleDownload}
-                  /> 
+                  />
                 ))}
           </SimpleGrid>
         </Grid>
@@ -1165,243 +1169,243 @@ const handleTextToSpeechChange = async (event:any) => {
       <AlertDialog isOpen={isDownloadDialogOpen} onClose={onCloseDownloadDialog} leastDestructiveRef={leastDestructiveRef}>
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader display="flex" alignItems="center" justifyContent="space-between" fontSize='2xl' fontWeight='bold'  color={textColorPrimary} >
+            <AlertDialogHeader display="flex" alignItems="center" justifyContent="space-between" fontSize='2xl' fontWeight='bold' color={textColorPrimary} >
               Downloading Content
               <IconButton
-          aria-label="clear"
-          bg="inherit"
-          borderRadius="inherit"
-          _active={{
-            bg: 'inherit',
-            transform: 'none',
-            borderColor: 'transparent',
-          }}
-          _hover={{
-            background: 'none',
-          }}
-          _focus={{
-            background: 'none',
-            boxShadow: 'none',
-          }}
-          icon={<CloseIcon color="gray.500"  w="10px" h="10px"/>}
-          onClick={onCloseDownloadDialog}
-        />
+                aria-label="clear"
+                bg="inherit"
+                borderRadius="inherit"
+                _active={{
+                  bg: 'inherit',
+                  transform: 'none',
+                  borderColor: 'transparent',
+                }}
+                _hover={{
+                  background: 'none',
+                }}
+                _focus={{
+                  background: 'none',
+                  boxShadow: 'none',
+                }}
+                icon={<CloseIcon color="gray.500" w="10px" h="10px" />}
+                onClick={onCloseDownloadDialog}
+              />
             </AlertDialogHeader>
             <AlertDialogBody>
-            <form onSubmit={handleFormSubmit}>
-              <FormControl mb={4}>
-                <FormLabel fontSize='sm' fontWeight='bold'>SCORM Edition</FormLabel>
-                <Select value={formData?.scormEdition} onChange={handleScormEditionChange}>
-                  <option value="SCORM 1.2">SCORM 1.2</option>
-                  <option value="SCORM 2004 (2nd Edition)">SCORM 2004 (2nd Edition)</option>
-                  <option value="SCORM 2004 (3rd Edition)">SCORM 2004 (3rd Edition)</option>
-                  <option value="SCORM 2004 (4th Edition)">SCORM 2004 (4th Edition)</option>
-                </Select>
-              </FormControl>
-              <FormControl mb={4}>
-                <FormLabel fontSize='sm' fontWeight='bold'>Tracking Metrics</FormLabel>
-                <Stack spacing={4}>
-                  <FormLabel fontSize='sm'>Completion Status</FormLabel>
-                  <CheckboxGroup onChange={handleCompletionStatusChange}>
-                  {completionStatus.map((option:any) => (
-          <Checkbox
-            key={option.value}
-            value={option.value}
-            isChecked={option.isChecked}
-          >
-            {option.label}
-          </Checkbox>
-        ))}
-                  </CheckboxGroup>
-                  <FormLabel fontSize='sm'>Scoring Method</FormLabel>
-                  <Select value={formData?.scoringMethod} onChange={handleScoringMethodChange} >
-                    <option value="rawScore">Raw score</option>
-                    <option value="minimumScore">Minimum score</option>
-                    <option value="maximumScore">Maximum score</option>
-                    <option value="scaledScore">Scaled score</option>
-                  </Select>
-                  <FormLabel fontSize='sm'>Mastery Score</FormLabel>
-                  <NumberInput value={formData?.masteryScore || ''} onChange={handleMasteryScoreChange} precision={2} step={1} min={0} max={100}>
-                    <NumberInputField />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
-                  <FormLabel fontSize='sm'>Tracking Types</FormLabel>
-                  <CheckboxGroup onChange={handleTrackingTypesChange} >
-                    {trackingTypes.map((option:any) => (
-                      <Checkbox
-                      key={option.value}
-                      value={option.value}
-                      isChecked={option.isChecked}
-                    >
-                      {option.label}
-                    </Checkbox>
-                    ))}                    
-                  </CheckboxGroup>
-                </Stack>
-              </FormControl>
-              <FormControl mb={4}>
-                <FormLabel fontSize='sm' fontWeight='bold'>LMS Communication</FormLabel>
-                <Stack spacing={4}>
-                  <FormLabel fontSize='sm'>LMS API Version</FormLabel>
-                  <Select value={formData?.lmsApiVersion} onChange={handleLMSApiVersionChange} >
+              <form onSubmit={handleFormSubmit}>
+                <FormControl mb={4}>
+                  <FormLabel fontSize='sm' fontWeight='bold'>SCORM Edition</FormLabel>
+                  <Select value={formData?.scormEdition} onChange={handleScormEditionChange}>
                     <option value="SCORM 1.2">SCORM 1.2</option>
-                    <option value="SCORM 2004">SCORM 2004</option>
+                    <option value="SCORM 2004 (2nd Edition)">SCORM 2004 (2nd Edition)</option>
+                    <option value="SCORM 2004 (3rd Edition)">SCORM 2004 (3rd Edition)</option>
+                    <option value="SCORM 2004 (4th Edition)">SCORM 2004 (4th Edition)</option>
                   </Select>
-                  <FormLabel fontSize='sm'>Data Transfer Frequency</FormLabel>
-                  <RadioGroup value={formData?.dataTransferFrequency} onChange={handleDataTransferFrequencyChange} >
-                    <Stack direction="row">
-                      <Radio value="realTime">Real-time</Radio>
-                      <Radio value="sessionEnd">Session end</Radio>
-                      <Radio value="customIntervals">Custom intervals</Radio>
-                    </Stack>
-                  </RadioGroup>
-                </Stack>
-              </FormControl>
-              <FormControl mb={4}>
-                <FormLabel fontSize='sm' fontWeight='bold'>Content Packaging</FormLabel>
-                <Stack spacing={4}>
-                  <FormLabel fontSize='sm'>Launch Behavior</FormLabel>
-                  <Select value={formData?.launchBehavior} onChange={handleLaunchBehaviorChange} >
-                    <option value="newWindow">In a new window</option>
-                    <option value="sameWindow">In the same window</option>
-                  </Select>
-                  <FormLabel fontSize='sm'>Navigation</FormLabel>
-                  <Select value={formData?.navigation} onChange={handleNavigationChange} >
-                    <option value="sequential">Sequential</option>
-                    <option value="free">Free</option>
-                    <option value="restricted">Restricted</option>
-                  </Select>
-                  <FormLabel fontSize='sm'>Bookmarking</FormLabel>
-                  <Select value={formData?.bookmarking} onChange={handleBookmarkingChange} >
-                    <option value="alwaysResume">Always resume</option>
-                    <option value="neverResume">Never resume</option>
-                    <option value="promptToResume">Prompt to resume</option>
-                  </Select>
-                </Stack>
-              </FormControl>
-              <FormControl mb={4}>
-                <FormLabel fontSize='sm' fontWeight='bold'>Reporting Options</FormLabel>
-                <Stack spacing={4}>
-                  <FormLabel fontSize='sm'>Report Location</FormLabel>
-                  <Select value={formData?.reportLocation} onChange={handleReportLocationChange}>
-                    <option value="lmsDatabase">LMS database</option>
-                    <option value="externalServer">External server</option>
-                  </Select>
-                  <FormLabel fontSize='sm'>Report Format</FormLabel>
-                  <RadioGroup value={formData?.reportFormat} onChange={handleReportFormatChange}>
-                    <Stack direction="row">
-                      <Radio value="xml">XML</Radio>
-                      <Radio value="json">JSON</Radio>
-                      <Radio value="csv">CSV</Radio>
-                    </Stack>
-                  </RadioGroup>
-                </Stack>
-              </FormControl>
-              <FormControl mb={4}>
-                <FormLabel fontSize='sm' fontWeight='bold'>Advanced Options</FormLabel>
-                <Stack spacing={4}>
-                  <FormLabel fontSize='sm'>Debugging Mode</FormLabel>
-                  <Select value={formData?.debuggingMode} onChange={handleDebuggingModeChange} >
-                    <option value="Enable">Enable</option>
-                    <option value="Disable">Disable</option>
-                  </Select>
-                  <FormLabel fontSize='sm'>Sequencing Rules</FormLabel>
-                  <Select value={formData?.sequencingRules} onChange={handleSequencingRulesChange} >
-                    <option value="automatic">Automatic</option>
-                    <option value="manual">Manual</option>
-                  </Select>
-                </Stack>
-              </FormControl>
-              <FormControl mb={4}>
-                <FormLabel fontSize='sm' fontWeight='bold'>Customization</FormLabel>
-                <Stack spacing={4}>
-                  <Checkbox isChecked={formData?.checkCustomMetadata} onChange={handleCheckCustomMetadataChange} >
-                    Include Custom Metadata
-                  </Checkbox>
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel fontSize='sm' fontWeight='bold'>Tracking Metrics</FormLabel>
+                  <Stack spacing={4}>
+                    <FormLabel fontSize='sm'>Completion Status</FormLabel>
+                    <CheckboxGroup >
+                      {completionStatus.map((option: any) => {
+                        return (
+
+                          <label>
+                            <input type='checkbox' value={option.value} checked={option.isChecked} onChange={(e) => handleCompletionStatusChange(e, option.value)} />
+                            {'  '} {option.value}
+                          </label>
+                        )
+                      })}
+                    </CheckboxGroup>
+                    <FormLabel fontSize='sm'>Scoring Method</FormLabel>
+                    <Select value={formData?.scoringMethod} onChange={handleScoringMethodChange} >
+                      <option value="rawScore">Raw score</option>
+                      <option value="minimumScore">Minimum score</option>
+                      <option value="maximumScore">Maximum score</option>
+                      <option value="scaledScore">Scaled score</option>
+                    </Select>
+                    <FormLabel fontSize='sm'>Mastery Score</FormLabel>
+                    <NumberInput value={formData?.masteryScore || ''} onChange={handleMasteryScoreChange} precision={2} step={1} min={0} max={100}>
+                      <NumberInputField />
+                      <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                      </NumberInputStepper>
+                    </NumberInput>
+                    <FormLabel fontSize='sm'>Tracking Types</FormLabel>
+                    <CheckboxGroup onChange={handleTrackingTypesChange} >
+                      {trackingTypes.map((option: any) => (
+                        <Checkbox
+                          key={option.value}
+                          value={option.value}
+                          isChecked={option.isChecked}
+                        >
+                          {option.label}
+                        </Checkbox>
+                      ))}
+                    </CheckboxGroup>
+                  </Stack>
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel fontSize='sm' fontWeight='bold'>LMS Communication</FormLabel>
+                  <Stack spacing={4}>
+                    <FormLabel fontSize='sm'>LMS API Version</FormLabel>
+                    <Select value={formData?.lmsApiVersion} onChange={handleLMSApiVersionChange} >
+                      <option value="SCORM 1.2">SCORM 1.2</option>
+                      <option value="SCORM 2004">SCORM 2004</option>
+                    </Select>
+                    <FormLabel fontSize='sm'>Data Transfer Frequency</FormLabel>
+                    <RadioGroup value={formData?.dataTransferFrequency} onChange={handleDataTransferFrequencyChange} >
+                      <Stack direction="row">
+                        <Radio value="realTime">Real-time</Radio>
+                        <Radio value="sessionEnd">Session end</Radio>
+                        <Radio value="customIntervals">Custom intervals</Radio>
+                      </Stack>
+                    </RadioGroup>
+                  </Stack>
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel fontSize='sm' fontWeight='bold'>Content Packaging</FormLabel>
+                  <Stack spacing={4}>
+                    <FormLabel fontSize='sm'>Launch Behavior</FormLabel>
+                    <Select value={formData?.launchBehavior} onChange={handleLaunchBehaviorChange} >
+                      <option value="newWindow">In a new window</option>
+                      <option value="sameWindow">In the same window</option>
+                    </Select>
+                    <FormLabel fontSize='sm'>Navigation</FormLabel>
+                    <Select value={formData?.navigation} onChange={handleNavigationChange} >
+                      <option value="sequential">Sequential</option>
+                      <option value="free">Free</option>
+                      <option value="restricted">Restricted</option>
+                    </Select>
+                    <FormLabel fontSize='sm'>Bookmarking</FormLabel>
+                    <Select value={formData?.bookmarking} onChange={handleBookmarkingChange} >
+                      <option value="alwaysResume">Always resume</option>
+                      <option value="neverResume">Never resume</option>
+                      <option value="promptToResume">Prompt to resume</option>
+                    </Select>
+                  </Stack>
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel fontSize='sm' fontWeight='bold'>Reporting Options</FormLabel>
+                  <Stack spacing={4}>
+                    <FormLabel fontSize='sm'>Report Location</FormLabel>
+                    <Select value={formData?.reportLocation} onChange={handleReportLocationChange}>
+                      <option value="lmsDatabase">LMS database</option>
+                      <option value="externalServer">External server</option>
+                    </Select>
+                    <FormLabel fontSize='sm'>Report Format</FormLabel>
+                    <RadioGroup value={formData?.reportFormat} onChange={handleReportFormatChange}>
+                      <Stack direction="row">
+                        <Radio value="xml">XML</Radio>
+                        <Radio value="json">JSON</Radio>
+                        <Radio value="csv">CSV</Radio>
+                      </Stack>
+                    </RadioGroup>
+                  </Stack>
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel fontSize='sm' fontWeight='bold'>Advanced Options</FormLabel>
+                  <Stack spacing={4}>
+                    <FormLabel fontSize='sm'>Debugging Mode</FormLabel>
+                    <Select value={formData?.debuggingMode} onChange={handleDebuggingModeChange} >
+                      <option value="Enable">Enable</option>
+                      <option value="Disable">Disable</option>
+                    </Select>
+                    <FormLabel fontSize='sm'>Sequencing Rules</FormLabel>
+                    <Select value={formData?.sequencingRules} onChange={handleSequencingRulesChange} >
+                      <option value="automatic">Automatic</option>
+                      <option value="manual">Manual</option>
+                    </Select>
+                  </Stack>
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel fontSize='sm' fontWeight='bold'>Customization</FormLabel>
+                  <Stack spacing={4}>
+                    <Checkbox isChecked={formData?.checkCustomMetadata} onChange={handleCheckCustomMetadataChange} >
+                      Include Custom Metadata
+                    </Checkbox>
                     <FormControl>
                       <FormLabel fontSize='sm'>Custom Metadata Fields</FormLabel>
                       <Textarea value={formData?.customMetadata} onChange={handleCustomMetadataChange} />
                     </FormControl>
-                  <Checkbox isChecked={formData?.checkCustomJsHooks} onChange={handleCheckCustomJsHooksChange} >
-                    Include Custom JavaScript Hooks
-                  </Checkbox>
+                    <Checkbox isChecked={formData?.checkCustomJsHooks} onChange={handleCheckCustomJsHooksChange} >
+                      Include Custom JavaScript Hooks
+                    </Checkbox>
                     <>
                       <FormControl>
                         <FormLabel fontSize='sm'>Pre-launch Script</FormLabel>
-                        <Textarea value={formData?.preLaunchScript} onChange={handlePreLaunchScriptChange}  />
+                        <Textarea value={formData?.preLaunchScript} onChange={handlePreLaunchScriptChange} />
                       </FormControl>
                       <FormControl>
                         <FormLabel fontSize='sm'>Post-launch Script</FormLabel>
                         <Textarea value={formData?.postLaunchScript} onChange={handlePostLaunchScriptChange} />
                       </FormControl>
                     </>
-                </Stack>
-              </FormControl>
-              <FormControl mb={4}>
-                <FormLabel fontSize='sm' fontWeight='bold'>Accessibility</FormLabel>
-                <Stack spacing={4}>
-                  <Checkbox isChecked={formData?.checkAlternateContent} onChange={handleCheckAlternateContentChange} >
-                    Include Alternate Content for Users with Disabilities
-                  </Checkbox>
+                  </Stack>
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel fontSize='sm' fontWeight='bold'>Accessibility</FormLabel>
+                  <Stack spacing={4}>
+                    <Checkbox isChecked={formData?.checkAlternateContent} onChange={handleCheckAlternateContentChange} >
+                      Include Alternate Content for Users with Disabilities
+                    </Checkbox>
                     <FormControl>
                       <FormLabel fontSize='sm'>Alternate Content</FormLabel>
                       <Textarea value={formData?.alternateContent} onChange={handleAlternateContentChange} />
                     </FormControl>
-                  <FormLabel fontSize='sm'>Text-to-Speech</FormLabel>
-                  <Select value={formData?.textToSpeech} onChange={handleTextToSpeechChange} >
-                    <option value="enable">Enable</option>
-                    <option value="disable">Disable</option>
-                  </Select>
-                </Stack>
-              </FormControl>
-              <FormControl mb={4}>
-                <FormLabel fontSize='sm' fontWeight='bold'>Localization</FormLabel>
-                <Stack spacing={4}>
-                  <FormLabel fontSize='sm'>Language</FormLabel>
-                  <Select value={language} onChange={handleLanguageChange} >
-                    <option value="english">English</option>
-                    <option value="spanish">Spanish</option>
-                    <option value="french">French</option>
-                  </Select>
-                </Stack>
-              </FormControl>
-              <FormControl mb={4}>
-                <FormLabel fontSize='sm' fontWeight='bold'>Security</FormLabel>
-                <Stack spacing={4}>
-                  <FormLabel fontSize='sm'>Encryption</FormLabel>
-                  <Select value={encryption} onChange={handleEncryptionChange} >
-                    <option value="enable">Enable</option>
-                    <option value="disable">Disable</option>
-                  </Select>
-                </Stack>
-              </FormControl>
-              <FormControl mb={4}>
-                <FormLabel fontSize='sm' fontWeight='bold'>Versioning</FormLabel>
-                <Stack spacing={4}>
-                  <FormLabel fontSize='sm'>SCORM Package Version</FormLabel>
-                  <Input
-                    type="text"
-                    placeholder="Enter version number"
-                    value={scormPackageVersion}
-                    onChange={handleScormPackageVersionChange}
-                  />
-                </Stack>
-              </FormControl>
-              <Button type="submit" ml="auto" 
-                variant="darkBrand"
-                color="white"
-                fontSize="sm"
-                fontWeight="500"
-                borderRadius="70px"
-                px="24px"
-                py="5px"
-              >Generate SCORM Package</Button>
+                    <FormLabel fontSize='sm'>Text-to-Speech</FormLabel>
+                    <Select value={formData?.textToSpeech} onChange={handleTextToSpeechChange} >
+                      <option value="enable">Enable</option>
+                      <option value="disable">Disable</option>
+                    </Select>
+                  </Stack>
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel fontSize='sm' fontWeight='bold'>Localization</FormLabel>
+                  <Stack spacing={4}>
+                    <FormLabel fontSize='sm'>Language</FormLabel>
+                    <Select value={language} onChange={handleLanguageChange} >
+                      <option value="english">English</option>
+                      <option value="spanish">Spanish</option>
+                      <option value="french">French</option>
+                    </Select>
+                  </Stack>
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel fontSize='sm' fontWeight='bold'>Security</FormLabel>
+                  <Stack spacing={4}>
+                    <FormLabel fontSize='sm'>Encryption</FormLabel>
+                    <Select value={encryption} onChange={handleEncryptionChange} >
+                      <option value="enable">Enable</option>
+                      <option value="disable">Disable</option>
+                    </Select>
+                  </Stack>
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel fontSize='sm' fontWeight='bold'>Versioning</FormLabel>
+                  <Stack spacing={4}>
+                    <FormLabel fontSize='sm'>SCORM Package Version</FormLabel>
+                    <Input
+                      type="text"
+                      placeholder="Enter version number"
+                      value={scormPackageVersion}
+                      onChange={handleScormPackageVersionChange}
+                    />
+                  </Stack>
+                </FormControl>
+                <Button type="submit" ml="auto"
+                  variant="darkBrand"
+                  color="white"
+                  fontSize="sm"
+                  fontWeight="500"
+                  borderRadius="70px"
+                  px="24px"
+                  py="5px"
+                >Generate SCORM Package</Button>
               </form>
             </AlertDialogBody>
-            <AlertDialogFooter>          
+            <AlertDialogFooter>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialogOverlay>

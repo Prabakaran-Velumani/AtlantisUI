@@ -91,6 +91,7 @@ const SinglePreview: React.FC<{
   reflectionQuestions?: any;
   reflectionQuestionsdefault?: any;
   setPrevdata: any;
+  gameInfo?:any;
 }> = ({
   prevdata,
   show,
@@ -105,7 +106,8 @@ const SinglePreview: React.FC<{
   CompKeyCount,
   reflectionQuestions,
   reflectionQuestionsdefault,
-  setPrevdata
+  setPrevdata,
+  gameInfo
 }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const [showFullText, setShowFullText] = useState(false);
@@ -123,20 +125,29 @@ const SinglePreview: React.FC<{
   const [feed, setFeed] = useState<string>('');
   const [navi, setNavi] = useState<string>('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [currentAudio, setCurrentAudio] = useState(null);
+  // const [currentAudio, setCurrentAudio] = useState(null);
   const [voiceIds, setVoiceIds] = useState<any>();
   const [allowPointerEvents, setAllowPointerEvents] = useState<boolean>(true);
-  const audioRef = useRef(null);
+  // const audioRef = useRef(null);
+  const [demoBlocks, setDemoBlocks] = useState(null);
   const {id} = useParams();
+  const [options, setOptions] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [currentQuestNo, setCurrentQuestNo] =useState(1);
+
 
 useEffect(()=>{
-  const fetchPreviewData = async() =>{
-      const prev = await getPreview(id);
-      if (prev && prev?.status !== 'Success') return console.log(prev.message);
-      setPrevdata(prev?.data);
-      console.log("prevdata1",prev?.data);
-    }
-    fetchPreviewData();
+
+    setDemoBlocks(gameInfo?.blocks);
+    setType(gameInfo?.blocks['1']['1']?.blockChoosen);
+    setData(gameInfo?.blocks['1']['1']);
+  // const fetchPreviewData = async() =>{
+  //     const prev = await getPreview(id);
+  //     if (prev && prev?.status !== 'Success') return console.log(prev.message);
+  //     setPrevdata(prev?.data);
+  //     console.log("prevdata1",prev?.data);
+  //   }
+  //   fetchPreviewData();
   },[])
 
   useEffect(() => {
@@ -146,165 +157,160 @@ useEffect(()=>{
       setFirst(false);
       setShowNote(false);
     }, 1000);
-    setType(prevdata?.items[0]?.type);
-    setItem(prevdata?.items[0]);
-    const dataObj = findKeyByTex(prevdata?.input, prevdata?.items[0]);
-    setData(dataObj);
-    getVoice(dataObj, '', formData?.gameNarratorVoice);
-    setVoiceIds({
-      narrator: formData?.gameNarratorVoice ?? 'D38z5RcWu1voky8WS1ja',
-      playerMale: formData?.gamePlayerMaleVoice ?? '2EiwWnXFnvU5JabPnv8n',
-      playerFemale: formData?.gamePlayerFemaleVoice ?? '21m00Tcm4TlvDq8ikWAM',
-      NPC: formData?.gameNonPlayerVoice ?? '5Q0t7uMcjvnagumLfvZi',
-      Intro: '', //Get the intro music for the game.gameBadge(Primary Key)
-    });
+    // setType(prevdata?.items[0]?.type);
+    // setItem(prevdata?.items[0]);
+    // const dataObj = findKeyByTex(prevdata?.input, prevdata?.items[0]);
+    // setData(dataObj);
+    // getVoice(dataObj, '', formData?.gameNarratorVoice);
+    // setVoiceIds({
+    //   narrator: formData?.gameNarratorVoice ?? 'D38z5RcWu1voky8WS1ja',
+    //   playerMale: formData?.gamePlayerMaleVoice ?? '2EiwWnXFnvU5JabPnv8n',
+    //   playerFemale: formData?.gamePlayerFemaleVoice ?? '21m00Tcm4TlvDq8ikWAM',
+    //   NPC: formData?.gameNonPlayerVoice ?? '5Q0t7uMcjvnagumLfvZi',
+    //   Intro: '', //Get the intro music for the game.gameBadge(Primary Key)
+    // });
     console.log("prevdata",prevdata);
   }, [prevdata]);
  
+  // useEffect(() => {
 
-  useEffect(() => {
-    console.log("type", type)
-    console.log("data", data)
-    // console.log("resMsg", resMsg)
+  //   switch (type) {
+  //     // type =="dialog" ? (voiceId = data?.character voiceIds.player : (type =="interaction" || type =="response") ? voiceId =voiceIds.narrator : voiceId=voiceIds.narrator
+  //     case 'Note':
+  //       getVoice(null, data?.note, voiceIds.narrator);
+  //       break;
+  //     case 'Dialog':
+  //       let voiceDialog =
+  //         data?.character === '999999' ? voiceIds.NPC : voiceIds.playerMale;
+  //       getVoice(null, data?.dialog, voiceDialog);
+  //       break;
+  //     case 'Interaction':
+  //       let InterText = data?.interaction + ' ';
+  //       Object.entries(data?.optionsObject).forEach(([key, value]) => {
+  //         InterText += `, Option ${key}, ${value}`;
+  //       });
+  //       let voiceInteraction =
+  //         data?.blockRoll === '999999'
+  //           ? voiceIds.NPC
+  //           : data?.blockRoll === 'Narrator'
+  //           ? voiceIds.narrator
+  //           : voiceIds.playerMale;
+  //       getVoice(null, InterText, voiceInteraction);
+  //       break;
+  //     case 'response':
+  //       let voiceResponse =
+  //         data?.blockRoll === '999999'
+  //           ? voiceIds.NPC
+  //           : data?.blockRoll === 'Narrator'
+  //           ? voiceIds.narrator
+  //           : voiceIds.playerMale;
+  //       getVoice(null, resMsg, voiceResponse);
+  //       break;
+  //       case 'feedback':
+  //       let voiceFeedback =
+  //         data?.blockRoll === '999999'
+  //           ? voiceIds.NPC
+  //           : data?.blockRoll === 'Narrator'
+  //           ? voiceIds.narrator
+  //           : voiceIds.playerMale;
+  //       getVoice(null, feed, voiceFeedback);
+  //       break;
+  //   }
+  // }, [type]);
 
-    switch (type) {
-      // type =="dialog" ? (voiceId = data?.character voiceIds.player : (type =="interaction" || type =="response") ? voiceId =voiceIds.narrator : voiceId=voiceIds.narrator
-      case 'Note':
-        getVoice(null, data?.note, voiceIds.narrator);
-        break;
-      case 'Dialog':
-        let voiceDialog =
-          data?.character === '999999' ? voiceIds.NPC : voiceIds.playerMale;
-        getVoice(null, data?.dialog, voiceDialog);
-        break;
-      case 'Interaction':
-        let InterText = data?.interaction + ' ';
-        Object.entries(data?.optionsObject).forEach(([key, value]) => {
-          InterText += `, Option ${key}, ${value}`;
-        });
-        let voiceInteraction =
-          data?.blockRoll === '999999'
-            ? voiceIds.NPC
-            : data?.blockRoll === 'Narrator'
-            ? voiceIds.narrator
-            : voiceIds.playerMale;
-        getVoice(null, InterText, voiceInteraction);
-        break;
-      case 'response':
-        let voiceResponse =
-          data?.blockRoll === '999999'
-            ? voiceIds.NPC
-            : data?.blockRoll === 'Narrator'
-            ? voiceIds.narrator
-            : voiceIds.playerMale;
-        getVoice(null, resMsg, voiceResponse);
-        break;
-        case 'feedback':
-        let voiceFeedback =
-          data?.blockRoll === '999999'
-            ? voiceIds.NPC
-            : data?.blockRoll === 'Narrator'
-            ? voiceIds.narrator
-            : voiceIds.playerMale;
-        getVoice(null, feed, voiceFeedback);
-        break;
-    }
-  }, [type]);
-
-  function findKeyByValue(obj: any, value: any) {
-    const key = Object.keys(obj).find((key) => obj[key]['id'] === value);
-    return obj[key];
-  }
-  function findKeyByTex(obj: any, value: any) {
-    const dt = String(value?.type + value?.input);
-    return obj[dt];
-  }
-
+  // function findKeyByValue(obj: any, value: any) {
+  //   const key = Object.keys(obj).find((key) => obj[key]['id'] === value);
+  //   return obj[key];
+  // }
+  // function findKeyByTex(obj: any, value: any) {
+  //   const dt = String(value?.type + value?.input);
+  //   return obj[dt];
+  // }
+//  console.log(type)
+//  console.log(data)
   // const getVoice = async (info: any) => {
-  const getVoice = async (
-    info: any,
-    content: string | null,
-    voice: string | null,
-  ) => {
-    if(tab==4)
-    {
-    setAllowPointerEvents(false);
-    let text = '';
-    let voiceId = '';
-    /** 
-           * For voice 
-          data?.includes('note') =>  Game Narattor
-          data?.includes('dialog') =>  data?.character
-          data?.includes('interaction') => data?.blockRoll
-          resMsg => data?.blockRoll
+  // const getVoice = async (
+  //   info: any,
+  //   content: string | null,
+  //   voice: string | null,
+  // ) => {
+  //   if(tab==4)
+  //   {
+  //   setAllowPointerEvents(false);
+  //   let text = '';
+  //   let voiceId = '';
+  //   /** 
+  //          * For voice 
+  //         data?.includes('note') =>  Game Narattor
+  //         data?.includes('dialog') =>  data?.character
+  //         data?.includes('interaction') => data?.blockRoll
+  //         resMsg => data?.blockRoll
           
-          *For Animations & Emotion & voice Modulation 
-          data?.includes('dialog') => data?.animation
-          data?.includes('interaction') //For Question => data?.QuestionsEmotion
-          data?.includes('interaction') //For Answers  => optionsObject[] : data?.optionsemotionObject[]
-            resMsg =>responseObject[]  : responseemotionObject[]
-          */
-    console.log('voiceIds', voiceIds);
-    if (content) {
-      text = content;
-      voiceId = voice;
-    } else if (info?.note || info?.dialog) {
-      text = info?.note || info?.dialog;
-      voiceId = info?.note
-        ? voiceIds?.narrator
-        : info?.dialog && data?.character === '999999'
-        ? voiceIds.NPC
-        : voiceIds?.playerMale;
-    } else if (info?.interaction) {
-      text = info.interaction + '? ';
-      Object.entries(info?.optionsObject).forEach(([key, value]) => {
-        // console.log("Key:", key, "- Value:", value);
-        text += `, Option ${key}, ${value}`;
-      });
+  //         *For Animations & Emotion & voice Modulation 
+  //         data?.includes('dialog') => data?.animation
+  //         data?.includes('interaction') //For Question => data?.QuestionsEmotion
+  //         data?.includes('interaction') //For Answers  => optionsObject[] : data?.optionsemotionObject[]
+  //           resMsg =>responseObject[]  : responseemotionObject[]
+  //         */
 
-      voiceId =
-        data?.blockRoll === '999999'
-          ? voiceIds.NPC
-          : data?.blockRoll === 'Narrator'
-          ? voiceIds.narrator
-          : voiceIds.playerMale;
-    }
-    console.log('text', text);
-    console.log('data', data);
+  //   if (content) {
+  //     text = content;
+  //     voiceId = voice;
+  //   } else if (info?.note || info?.dialog) {
+  //     text = info?.note || info?.dialog;
+  //     voiceId = info?.note
+  //       ? voiceIds?.narrator
+  //       : info?.dialog && data?.character === '999999'
+  //       ? voiceIds.NPC
+  //       : voiceIds?.playerMale;
+  //   } else if (info?.interaction) {
+  //     text = info.interaction + '? ';
+  //     Object.entries(info?.optionsObject).forEach(([key, value]) => {
+  //       text += `, Option ${key}, ${value}`;
+  //     });
 
-    if (text) {
-      const send = {
-        text: text,
-        model_id: 'eleven_multilingual_v2',
-        voice_settings: {
-          stability: 0.8,
-          similarity_boost: 0.5,
-        },
-      };
+  //     voiceId =
+  //       data?.blockRoll === '999999'
+  //         ? voiceIds.NPC
+  //         : data?.blockRoll === 'Narrator'
+  //         ? voiceIds.narrator
+  //         : voiceIds.playerMale;
+  //   }
+    
 
-      const data = JSON.stringify(send);
+  //   if (text) {
+  //     const send = {
+  //       text: text,
+  //       model_id: 'eleven_multilingual_v2',
+  //       voice_settings: {
+  //         stability: 0.8,
+  //         similarity_boost: 0.5,
+  //       },
+  //     };
+
+  //     const data = JSON.stringify(send);
  
-        /** Working API for getting voice for the text */
+  //       /** Working API for getting voice for the text */
   
-      const res = await getVoiceMessage(voiceId, data);
+  //     const res = await getVoiceMessage(voiceId, data);
 
-        /** Working API for getting voice for the text */
+  //       /** Working API for getting voice for the text */
  
-      const contentType = res.headers.get('Content-Type');
-      if (contentType && contentType.includes('audio/mpeg')) {
-        // const blob = new Blob([res], { type: 'audio/mpeg' });
-        let blob = await res.blob();
-        const audioUrl = URL.createObjectURL(blob);
-        // const audio = new Audio(audioUrl);
-        // audio.play();
-        setCurrentAudio(audioUrl);
-        blob = null;
-      } else {
-        return console.log('missing audio for the block');
-      }
-    }
-  }
-  };
+  //     const contentType = res.headers.get('Content-Type');
+  //     if (contentType && contentType.includes('audio/mpeg')) {
+  //       // const blob = new Blob([res], { type: 'audio/mpeg' });
+  //       let blob = await res.blob();
+  //       const audioUrl = URL.createObjectURL(blob);
+  //       // const audio = new Audio(audioUrl);
+  //       // audio.play();
+  //       setCurrentAudio(audioUrl);
+  //       blob = null;
+  //     } else {
+  //       return console.log('missing audio for the block');
+  //     }
+  //   }
+  // }
+  // };
   useEffect(() => {
     setShowNote(true);
     setTimeout(() => {
@@ -312,95 +318,287 @@ useEffect(()=>{
     }, 1000);
   }, [item, type]);
 
-  useEffect(() => {   
-    if (audioRef.current && currentAudio) {
-      audioRef.current.src = currentAudio;
-      audioRef.current.play();
-      setAllowPointerEvents(true);
-    }
-    else{
-     audioRef.current = '';
-    }
-  }, [currentAudio]);
+  // useEffect(() => {   
+  //   if (audioRef.current && currentAudio) {
+  //     audioRef.current.src = currentAudio;
+  //     audioRef.current.play();
+  //     setAllowPointerEvents(true);
+  //   }
+  //   else{
+  //    audioRef.current = '';
+  //   }
+  // }, [currentAudio]);
+
 
   const getData = (next: any) => {
-  
-    setCurrentAudio('');
-    const handleInteractionType = (delay: any) => {
-      const mins = findKeyByTex(prevdata?.input, delay);
-      setType('Interaction');
-      setItem(delay);
-      setData(mins);
-      const getOption = () => {
-        const alp = prevdata?.alp;
-        const matchedOptions = [];
-        for (const key in alp) {
-          if (alp[key]?.seqs === delay?.id) {
-            matchedOptions.push(alp[key]?.option);
-          }
-        }
-        setIntOpt(matchedOptions);
-      };
-      getOption();
-    };
-    if (type === 'Interaction') setType('response');
-    else if (type === 'response') setType('feedback');
-    else if (type === 'feedback') {
-      if (navi === 'Repeat Question') setType('Interaction');
-      else if (navi === 'New Block') {
-        const delay = findKeyByValue(prevdata?.items, next?.upNext);
-        if (delay) {
-          if (delay?.type === 'Interaction') handleInteractionType(delay);
-          else {
-            const mins = findKeyByTex(prevdata?.input, delay);
-            setType(delay?.type);
-            setItem(delay);
-            setData(mins);
-          }
-        }
-      } else if (navi === 'Replay Point') {
-        setType(prevdata?.items[0].type);
-        setItem(prevdata?.items[0]);
-        setData(findKeyByTex(prevdata?.input, prevdata?.items[0]));
-        setOption(null);
-      } else if (navi === 'Select Block') {
-        const delay = findKeyByValue(prevdata?.items, next?.upNext);
-        if (delay) {
-          if (delay?.type === 'Interaction') handleInteractionType(delay);
-          else {
-            const mins = findKeyByTex(prevdata?.input, delay);
-            setType(delay?.type);
-            setItem(delay);
-            setData(mins);
-          }
-        }
-      } else setType('ThankYou');
-    }
+    // setCurrentAudio('');
+    // setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
+    const currentBlock = next
+      ? parseInt(next?.blockPrimarySequence.split('.')[1])
+      : null;
+    const NextItem = currentBlock != null ? currentBlock + 1 : null;
+    const nextSeq = next
+      ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
+      : '';
+    const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
+    const currentQuest = next
+      ? parseInt(next?.blockPrimarySequence.split('.')[0])
+      : null;
 
-    if (type === 'Note' || type === 'Dialog') {
-      const delay = findKeyByValue(prevdata?.items, next?.upNext);
-      if (delay) {
-        if (delay?.type === 'Interaction') handleInteractionType(delay);
-        else {
-          const mins = findKeyByTex(prevdata?.input, delay);
-          setType(delay?.type);
-          setItem(delay);
-          setData(mins);
+      setCurrentQuestNo(currentQuest);
+
+    const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    const nextBlock = next
+      ? Object.keys(demoBlocks[quest] || {})
+          .filter(
+            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+          )
+          .map((key:any) => demoBlocks[quest]?.[key])
+      : [];
+    if (nextBlock[0]?.blockChoosen === 'Interaction') {
+      const optionsFiltered = gameInfo?.questOptions.filter(
+        (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
+      );
+      if(gameInfo?.gameData?.gameShuffle)
+      {
+        for (let i = optionsFiltered.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [optionsFiltered[i], optionsFiltered[j]] = [optionsFiltered[j], optionsFiltered[i]]; // Swap elements at indices i and j
         }
       }
+      setOptions(optionsFiltered);
     }
-    const value = findKeyByValue(prevdata?.items, next?.upNext);
+  
+  console.log("***Navi", navi);
+    if (
+      type === 'Interaction' &&
+      resMsg !== '' &&
+      gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
+    ) {
+      setType('response');
+      return false;
+    } else if (
+      (type === 'Interaction' || type === 'response') &&
+      feed !== '' &&
+      gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
+    ) {
+      setType('feedback');
+      return false;
+    } else if (
+      type === 'Interaction' ||
+      type === 'response' ||
+      type === 'feedback'
+    ) {
+      console.log("Above Replay Point")
+      if (navi === 'Repeat Question') {
+        setType('Interaction');
+        setSelectedOption(null);
+        return false;
+      } else if (navi === 'New Block') {
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
+        setSelectedOption(null);
+        return false;
+      } else if (navi === 'Replay Point') {
+        console.log("IN Replay Point");
+        setType(demoBlocks['1']['1']?.blockChoosen);
+        setData(demoBlocks['1']['1']);
+        setSelectedOption(null);
+        return false;
+      } else if (navi === 'Select Block') {
+        setSelectedOption(null);
+        return false;
+      } else if (navi === 'Complete') {
+        if (demoBlocks.hasOwnProperty(nextLevel)) {
+          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+          setData(demoBlocks[nextLevel]['1']);
+          // setCurrentScreenId(6);
+          return false;
+        } else {
+          setType(null);
+          setData(null);
+          // setCurrentScreenId(6);
+          return false;
+        }
+      } else {
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
+        setSelectedOption(null);
+        return false;
+      }
+    }
+    // if (currentScreenId === 6) {
+    //   if (
+    //     gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
+    //     gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Complete'
+    //   ) {
+    //     setCurrentScreenId(9);
+    //     return false;
+    //   } else if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
+    //     setCurrentScreenId(8);
+    //     return false;
+    //   } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+    //     setCurrentScreenId(4);
+    //     return false;
+    //   } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+    //     setCurrentScreenId(3);
+    //     return false;
+    //   } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+    //     setCurrentScreenId(7);
+    //     return false;
+    //   } else {
+    //     if (data && type) {
+    //       setCurrentScreenId(2);
+    //       return false;
+    //     } else {
+    //       setType(null);
+    //       setData(null);
+    //       setCurrentScreenId(5);
+    //       return false;
+    //     }
+    //   }
+    // }
+    // if (currentScreenId === 9) {
+    //   if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
+    //     setCurrentScreenId(8);
+    //     return false;
+    //   } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+    //     setCurrentScreenId(4);
+    //     return false;
+    //   } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+    //     setCurrentScreenId(3);
+    //     return false;
+    //   } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+    //     setCurrentScreenId(7);
+    //     return false;
+    //   } else {
+    //     if (data && type) {
+    //       setCurrentScreenId(2);
+    //       return false;
+    //     } else {
+    //       setType(null);
+    //       setData(null);
+    //       setCurrentScreenId(5);
+    //       return false;
+    //     }
+    //   }
+    // }
+    // if (currentScreenId === 8) {
+    //   if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+    //     setCurrentScreenId(4);
+    //     return false;
+    //   } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+    //     setCurrentScreenId(3);
+    //     return false;
+    //   } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+    //     setCurrentScreenId(7);
+    //     return false;
+    //   } else {
+    //     if (data && type) {
+    //       setCurrentScreenId(2);
+    //       return false;
+    //     } else {
+    //       setType(null);
+    //       setData(null);
+    //       setCurrentScreenId(5);
+    //       return false;
+    //     }
+    //   }
+    // }
+    // if (currentScreenId === 4) {
+    //   if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+    //     setCurrentScreenId(3);
+    //     return false;
+    //   } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+    //     setCurrentScreenId(7);
+    //     return false;
+    //   } else {
+    //     if (data && type) {
+    //       setCurrentScreenId(2);
+    //       return false;
+    //     } else {
+    //       setType(null);
+    //       setData(null);
+    //       setCurrentScreenId(5);
+    //       return false;
+    //     }
+    //   }
+    // }
+    // if (currentScreenId === 3) {
+    //   if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+    //     setCurrentScreenId(7);
+    //     return false;
+    //   } else {
+    //     if (data && type) {
+    //       setCurrentScreenId(2);
+    //       return false;
+    //     } else {
+    //       setType(null);
+    //       setData(null);
+    //       setCurrentScreenId(5);
+    //       return false;
+    //     }
+    //   }
+    // // }
+    // }
+    // if (currentScreenId === 7) {
+    //   if (data && type) {
+    //     setCurrentScreenId(2);
+    //     return false;
+    //   } else {
+    //     setType(null);
+    //     setData(null);
+    //     setCurrentScreenId(5);
+    //     return false;
+    //   }
+    // }
+    if (nextBlock.length === 0) {
+      if (demoBlocks.hasOwnProperty(nextLevel)) {
+        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+        setData(demoBlocks[nextLevel]['1']);
+        // setCurrentScreenId(6);
+        return false;
+      } else {
+        setType(null);
+        setData(null);
+        // setCurrentScreenId(6);
+        return false;
+      }
+    }
+    if (next?.blockShowNavigate) {
+      if (next?.blockShowNavigate === 'Repeat Question') {
+        setType(next?.blockChoosen);
+        setData(next);
+        return false;
+      } else if (next?.blockShowNavigate === 'New Block') {
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
+        setSelectedOption(null);
+        return false;
+      } else if (next?.blockShowNavigate === 'Replay Point') {
+        setType(demoBlocks['1']['1']?.blockChoosen);
+        setData(demoBlocks['1']['1']);
+        setSelectedOption(null);
+        return false;
+      } else if (next?.blockShowNavigate === 'Select Block') {
+        setSelectedOption(null);
+      } else if (next?.blockShowNavigate === 'Complete') {
+        // setCurrentScreenId(6);
+        return false;
+      }
+    }
+    setType(nextBlock[0]?.blockChoosen);
+    setData(nextBlock[0]);
+    setSelectedOption(null);
   };
 
   const handleValidate = (item: any, ind: number) => {
-    // console.log("ind", ind);
-    // console.log("item", item);
-    setResMsg(data?.responseObject[item]);
-    setFeed(data?.feedbackObject[item]);
-    setNavi(data?.navigateObjects[item]);
-    setOption(ind === option ? null : ind);
-    getVoice(null, data?.optionsObject[item], voiceIds?.playerMale);
-    setCurrentAudio('');
+    setResMsg(item?.qpResponse);
+    setFeed(item?.qpFeedback);
+    setNavi(item?.qpNavigateShow);
+    setSelectedOption(ind === selectedOption ? null : ind);
+    // getVoice(null, data?.optionsObject[item], voiceIds?.playerMale);
+    // setCurrentAudio('');
   };
 
   const handlePreviewPanelClose = () => {
@@ -408,8 +606,8 @@ useEffect(()=>{
     setFeed('');
     setNavi('');
     setOption(null);
-    setCurrentAudio('');
-    setAllowPointerEvents(true);
+    // setCurrentAudio('');
+    // setAllowPointerEvents(true);
     onClose();
   };
 
@@ -459,7 +657,7 @@ useEffect(()=>{
                 </Box>
               </>
             )}
-            {tab === 4 && item && data && type === 'Note' && (
+            {tab === 4 && data && type === 'Note' && (
               <Box
                 w={'100%'}
                 h={'100vh'}
@@ -471,6 +669,7 @@ useEffect(()=>{
                 style={{ perspective: '1000px' }}
               >
                 <Box
+                  color={'rgba(0, 0, 0, 0.5)'}
                   backgroundImage={img}
                   w={'100%'}
                   h={'100vh'}
@@ -490,44 +689,39 @@ useEffect(()=>{
                     zIndex={999}
                     w={'300px'}
                   >
-                    {/* <Canvas camera={{ position: [3, 3, 10] }}>
-                        <directionalLight
-                          position={[5, 5, 5]}
-                          intensity={0.8}
-                          color={0xffccaa}
-                          castShadow
-                        />
-                        <ambientLight intensity={5.5} />
-                        <pointLight
-                          position={[5, 5, 5]}
-                          color={0xff0000}
-                          intensity={1}
-                        />
-                        <Model />
-                        <mesh
-                          rotation={[-Math.PI / 2, 0, 0]}
-                          position={[0, -5, 0]}
-                          receiveShadow
-                        >
-                          <planeGeometry args={[100, 100]} />
-                          <shadowMaterial opacity={0.5} />
-                        </mesh>
-                      </Canvas> */}
+                    {/* <Canvas
+                camera={{ position: [3, 3, 10] }}
+                
+              >
+                <directionalLight
+                  position={[5, 5, 5]}
+                  intensity={0.8}
+                  color={0xffccaa}
+                  castShadow
+                />
+                <ambientLight intensity={5.5} />
+                <pointLight
+                  position={[5, 5, 5]}
+                  color={0xff0000}
+                  intensity={1}
+                />
+              
+                <mesh
+                  rotation={[-Math.PI / 2, 0, 0]}
+                  position={[0, -5, 0]}
+                  receiveShadow
+                >
+                  <planeGeometry args={[100, 100]} />
+                  <shadowMaterial opacity={0.5} />
+                </mesh>
+              </Canvas> */}
                   </Box>
                 </Box>
-                {/* <Img
-                        src={bk}
-                        maxW={'100%'}
-                        maxH={'100%'}
-                        w={'100%'}
-                        h={'100vh'}
-                        objectFit={'cover'}
-                        transform={`scale(${first ? 1 : 1.3}) translateY(${
-                            first ? 0 : -10
-                        }%) translateX(${first ? 0 : -10}%) `}
-                        transition={'transform 0.9s ease-in-out'}
-                          /> */}
-                {/* </Box> */}
+                {/* <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 100, damping: 10 }}
+          > */}
                 <Box
                   style={{
                     transform: `scale(${showNote ? 0.2 : 1})`,
@@ -541,9 +735,11 @@ useEffect(()=>{
                   justifyContent={'center'}
                   alignItems={'center'}
                 >
-                  <Img w={'80%'} h={'80vh'} src={note} />
+                  <Img w={'100%'} h={'80vh'} src={note} />
                   <Box
                     position={'fixed'}
+                    overflowY={'scroll'}
+                    transform={'translate(0px, 45px)'}
                     w={'50%'}
                     mt={'10px'}
                     display={'flex'}
@@ -554,14 +750,24 @@ useEffect(()=>{
                       fontWeight: '900',
                       color: '#D9C7A2',
                       fontSize: '18px',
+                      fontFamily: 'AtlantisContent',
                       lineHeight: 1,
-                      fontFamily: 'AtlantisText',
                     }}
                   >
-                    {data?.note}
                     <Box
                       w={'100%'}
-                      onClick={() => getData(item)}
+                      overflowY={'scroll'}
+                      h={'100px'}
+                      display={'flex'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      mt={'20px'}
+                    >
+                      {data?.blockText}
+                    </Box>
+                    <Box
+                      w={'100%'}
+                      onClick={() => getData(data)}
                       mt={'20px'}
                       display={'flex'}
                       justifyContent={'center'}
@@ -571,10 +777,11 @@ useEffect(()=>{
                     </Box>
                   </Box>
                 </Box>
+                {/* </motion.div> */}
               </Box>
             )}
-            {tab === 4 && item && data && type === 'Dialog' && (
-                <Box
+            {tab === 4 && data && type === 'Dialog' && (
+              <Box
                 w={'100%'}
                 h={'100vh'}
                 display={'flex'}
@@ -625,11 +832,9 @@ useEffect(()=>{
                         textAlign={'center'}
                         fontFamily={'AtlantisText'}
                       >
-                        {data?.character === '999999'
-                          ? 'Player'
-                          : data?.character === '99999'
-                          ? 'Narrator'
-                          : formData?.gameNonPlayerName}
+                        {data.blockRoll === 'Narrator'
+                          ? data.blockRoll
+                          : formData.gameNonPlayerName}
                       </Text>
                     </Box>
                     <Box
@@ -641,7 +846,7 @@ useEffect(()=>{
                       fontFamily={'AtlantisContent'}
                       fontSize={'21px'}
                     >
-                      <TypingEffect text={data?.dialog} speed={50} />
+                      <TypingEffect text={data?.blockText} speed={50} />
                     </Box>
                     <Box
                       display={'flex'}
@@ -650,112 +855,25 @@ useEffect(()=>{
                       w={'80%'}
                       bottom={'0'}
                     >
-                      <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+                      <Img
+                        src={left}
+                        w={'50px'}
+                        h={'50px'}
+                        cursor={'pointer'}
+                      />
                       <Img
                         src={right}
                         w={'50px'}
                         h={'50px'}
                         cursor={'pointer'}
-                        onClick={() => getData(item)}
+                        onClick={() => getData(data)}
                       />
                     </Box>
                   </>
                 )}
               </Box>
-              // <Box
-              //   w={'100%'}
-              //   h={'100vh'}
-              //   display={'flex'}
-              //   alignItems={'center'}
-              //   justifyContent={'center'}
-              //   position={'relative'}
-              // >
-              //   <Img
-              //     src={img}
-              //     maxW={'100%'}
-              //     maxH={'100%'}
-              //     w={'100%'}
-              //     h={'100vh'}
-              //     transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
-              //     transition={'transform 0.9s ease-in-out'}
-              //   />
-              //   <Img
-              //     style={{
-              //       transform: `translateY(${showNote ? 200 : 0}px)`,
-              //       transition:
-              //         'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-              //     }}
-              //     position={'fixed'}
-              //     maxW={'100%'}
-              //     maxH={'100%'}
-              //     w={'100%'}
-              //     h={'240px'}
-              //     bottom={'0'}
-              //     src={dial}
-              //   />
-              //   {!showNote && (
-              //     <>
-              //       <Box position={'relative'}>
-              //         <Img
-              //           src={char}
-              //           position={'fixed'}
-              //           h={'70px'}
-              //           w={'25%'}
-              //           left={'13%'}
-              //           bottom={'150px'}
-              //         />
-              //         <Text
-              //           position={'fixed'}
-              //           left={'25%'}
-              //           bottom={'167px'}
-              //           fontSize={'25'}
-              //           fontWeight={700}
-              //           textAlign={'center'}
-              //           fontFamily={'AtlantisText'}
-              //         >
-              //           {data?.character === '999999'
-              //             ? 'Player'
-              //             : data?.character === '99999'
-              //             ? 'Narrator'
-              //             : formData?.gameNonPlayerName}
-              //         </Text>
-              //       </Box>
-              //       <Box
-              //         display={'flex'}
-              //         position={'fixed'}
-              //         justifyContent={'space-between'}
-              //         w={'75%'}
-              //         bottom={'55px'}
-              //         fontFamily={'cont'}
-              //       >
-              //         {data?.dialog}
-              //       </Box>
-              //       <Box
-              //         display={'flex'}
-              //         position={'fixed'}
-              //         justifyContent={'space-between'}
-              //         w={'80%'}
-              //         bottom={'0'}
-              //       >
-              //         <Img
-              //           src={left}
-              //           w={'50px'}
-              //           h={'50px'}
-              //           cursor={'pointer'}
-              //         />
-              //         <Img
-              //           src={right}
-              //           w={'50px'}
-              //           h={'50px'}
-              //           cursor={'pointer'}
-              //           onClick={() => getData(item)}
-              //         />
-              //       </Box>
-              //     </>
-              //   )}
-              // </Box>
             )}
-            {tab === 4 && item && data && type === 'Interaction' && (
+            {tab === 4 && data && type === 'Interaction' && (
               <Box
                 w={'100%'}
                 h={'100vh'}
@@ -777,15 +895,18 @@ useEffect(()=>{
                 />
                 <Box
                   style={{
-                    transform: `translateX(${showNote ? -200 : 0}px)`,
+                    transform: `translateX(${
+                      showNote ? -200 : 0
+                    }px) scale(1.2)`,
                     transition:
                       'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
                   }}
                   backgroundImage={parch}
                   position={'fixed'}
                   w={{ sm: '350px', md: '500px' }}
-                  h={{ sm: '50vh', md: '580px' }}
-                  left={{ sm: '60px', md: '120px' }}
+                  h={{ sm: '50vh', md: ' 550px' }}
+                  // top={'4vh'}
+                  left={{ sm: '60px', md: '180px' }}
                   backgroundSize={'contain'}
                   backgroundRepeat={'no-repeat'}
                 >
@@ -813,10 +934,11 @@ useEffect(()=>{
                     fontWeight={500}
                     fontFamily={'AtlantisText'}
                     lineHeight={1}
-                    w={'100%'}
+                    w={'96%'}
+                    overflowY={'scroll'}
                   >
-                    <Box w={'60%'} fontSize={'18px'} letterSpacing={1}>
-                      {data?.interaction}
+                    <Box w={'60%'} fontSize={'20px'} letterSpacing={1}>
+                      {data?.blockText}
                     </Box>
                   </Box>
                   <Box
@@ -827,48 +949,51 @@ useEffect(()=>{
                     h={'220px'}
                     overflowY={'scroll'}
                   >
-                    {Object.keys(data?.optionsObject).map((item, ind) => (
-                      <Box
-                        mb={'10px'}
-                        w={'80%'}
-                        lineHeight={1}
-                        color={option === ind ? 'purple' : ''}
-                        textAlign={'center'}
-                        cursor={'pointer'}
-                        onClick={() => handleValidate(item, ind)}
-                        fontFamily={'AtlantisText'}
-                      >
-                        <Img
-                          src={option === ind ? on : off}
-                          h={'30px'}
-                          w={'95%'}
-                        />
-                        {data?.optionsObject[item]}
-                      </Box>
-                    ))}
+                    {options &&
+                      options.map((item: any, ind: number) => (
+                        <Box
+                          mb={'10px'}
+                          w={'80%'}
+                          lineHeight={1}
+                          key={ind}
+                          color={selectedOption === ind ? 'purple' : ''}
+                          textAlign={'center'}
+                          cursor={'pointer'}
+                          onClick={() => handleValidate(item, ind)}
+                          fontFamily={'AtlantisText'}
+                          fontSize={'20px'}
+                        >
+                          <Img
+                            src={selectedOption === ind ? on : off}
+                            h={'30px'}
+                            w={'95%'}
+                          />
+                          {item?.qpOptionText}
+                        </Box>
+                      ))}
                   </Box>
                   <Box
                     display={'flex'}
                     position={'fixed'}
                     justifyContent={'space-between'}
-                    w={'510px'}
+                    w={'508px'}
                     left={'-10px'}
                   >
                     <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
-                    {option !== null && (
+                    {selectedOption !== null && (
                       <Img
                         src={right}
                         w={'50px'}
                         h={'50px'}
                         cursor={'pointer'}
-                        onClick={() => getData(item)}
+                        onClick={() => getData(data)}
                       />
                     )}
                   </Box>
                 </Box>
               </Box>
             )}
-            {tab === 4 && item && data && type === 'response' && (
+            {tab === 4 && data && type === 'response' && (
               <Box
                 w={'100%'}
                 h={'100vh'}
@@ -902,28 +1027,28 @@ useEffect(()=>{
                 />
                 {!showNote && (
                   <>
-                    <Box
-                      backgroundImage={char}
-                      position={'fixed'}
-                      h={'70px'}
-                      w={'25%'}
-                      left={'13%'}
-                      fontSize={'25'}
-                      display={'flex'}
-                      alignItems={'center'}
-                      justifyContent={'center'}
-                      fontWeight={700}
-                      textAlign={'center'}
-                      bottom={'150px'}
-                      backgroundRepeat={'no-repeat'}
-                      backgroundSize={'contain'}
-                      fontFamily={'albuma'}
-                    >
-                      {data?.character === '999999'
-                        ? 'Player'
-                        : data?.character === '99999'
-                        ? 'Narrator'
-                        : formData?.gameNonPlayerName}
+                    <Box position={'relative'}>
+                      <Img
+                        src={char}
+                        position={'fixed'}
+                        h={'70px'}
+                        w={'25%'}
+                        left={'13%'}
+                        bottom={'150px'}
+                      />
+                      <Text
+                        position={'fixed'}
+                        left={'24%'}
+                        bottom={'167px'}
+                        fontSize={'25'}
+                        fontWeight={700}
+                        textAlign={'center'}
+                        fontFamily={'AtlantisText'}
+                      >
+                        {data.blockRoll === 'Narrator'
+                          ? data.blockRoll
+                          : formData.gameNonPlayerName}
+                      </Text>
                     </Box>
                     <Box
                       display={'flex'}
@@ -931,9 +1056,10 @@ useEffect(()=>{
                       justifyContent={'space-between'}
                       w={'75%'}
                       bottom={'55px'}
-                      fontFamily={'cont'}
+                      fontFamily={'AtlantisContent'}
+                      fontSize={'21px'}
                     >
-                      {resMsg}
+                      <TypingEffect text={resMsg} speed={50} />
                     </Box>
                     <Box
                       display={'flex'}
@@ -953,14 +1079,100 @@ useEffect(()=>{
                         w={'50px'}
                         h={'50px'}
                         cursor={'pointer'}
-                        onClick={() => getData(item)}
+                        onClick={() => getData(data)}
                       />
                     </Box>
                   </>
                 )}
               </Box>
+              // <Box
+              //   w={'100%'}
+              //   h={'100vh'}
+              //   display={'flex'}
+              //   alignItems={'center'}
+              //   justifyContent={'center'}
+              //   position={'relative'}
+              // >
+              //   <Img
+              //     src={backGroundImg}
+              //     maxW={'100%'}
+              //     maxH={'100%'}
+              //     w={'100%'}
+              //     h={'100vh'}
+              //     transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
+              //     transition={'transform 0.9s ease-in-out'}
+              //   />
+              //   <Img
+              //     style={{
+              //       transform: `translateY(${showNote ? 200 : 0}px)`,
+              //       transition:
+              //         'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+              //     }}
+              //     position={'fixed'}
+              //     maxW={'100%'}
+              //     maxH={'100%'}
+              //     w={'100%'}
+              //     h={'240px'}
+              //     bottom={'0'}
+              //     src={dial}
+              //   />
+              //   {!showNote && (
+              //     <>
+              //       <Box
+              //         backgroundImage={char}
+              //         position={'fixed'}
+              //         h={'70px'}
+              //         w={'25%'}
+              //         left={'13%'}
+              //         fontSize={'25'}
+              //         display={'flex'}
+              //         alignItems={'center'}
+              //         justifyContent={'center'}
+              //         fontWeight={700}
+              //         textAlign={'center'}
+              //         bottom={'150px'}
+              //         backgroundRepeat={'no-repeat'}
+              //         backgroundSize={'contain'}
+              //         fontFamily={'albuma'}
+              //       >
+              //         Logan
+              //         {/* {data.character === '999999'
+              //             ? 'Player'
+              //             : data.character === '99999'
+              //             ? 'Narrator'
+              //             : formData.gameNonPlayerName} */}
+              //       </Box>
+              //       <Box
+              //         display={'flex'}
+              //         position={'fixed'}
+              //         justifyContent={'space-between'}
+              //         w={'75%'}
+              //         bottom={'55px'}
+              //         fontFamily={'cont'}
+              //       >
+              //         {resMsg}
+              //       </Box>
+              //       <Box
+              //         display={'flex'}
+              //         position={'fixed'}
+              //         justifyContent={'space-between'}
+              //         w={'80%'}
+              //         bottom={'0'}
+              //       >
+              //         <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+              //         <Img
+              //           src={right}
+              //           w={'50px'}
+              //           h={'50px'}
+              //           cursor={'pointer'}
+              //           onClick={() => getData(data)}
+              //         />
+              //       </Box>
+              //     </>
+              //   )}
+              // </Box>
             )}
-            {tab === 4 && item && data && type === 'feedback' && (
+            {tab === 4 && data && type === 'feedback' && (
               <Box
                 w={'100%'}
                 h={'100vh'}
@@ -971,7 +1183,6 @@ useEffect(()=>{
                 overflow={'visible'}
                 style={{ perspective: '1000px' }}
               >
-                {/* <Box w={'80%'}> */}
                 <Box
                   backgroundImage={img}
                   w={'100%'}
@@ -986,41 +1197,40 @@ useEffect(()=>{
                   <Box
                     position={'fixed'}
                     top={'200px'}
-                    // left={0}
                     right={'0px'}
                     bottom={0}
                     zIndex={999}
                     w={'300px'}
                   >
                     {/* <Canvas
-                        camera={{ position: [3, 3, 10] }}
-                      >
-                        <directionalLight
-                          position={[5, 5, 5]}
-                          intensity={0.8}
-                          color={0xffccaa}
-                          castShadow
-                        />
-                        <ambientLight intensity={5.5} />
-                        <pointLight
-                          position={[5, 5, 5]}
-                          color={0xff0000}
-                          intensity={1}
-                        />
-                        <Model />
-                        <mesh
-                          rotation={[-Math.PI / 2, 0, 0]}
-                          position={[0, -5, 0]}
-                          receiveShadow
-                        >
-                          <planeGeometry args={[100, 100]} />
-                          <shadowMaterial opacity={0.5} />
-                        </mesh>
-                      </Canvas> */}
+                camera={{ position: [3, 3, 10] }}
+                
+              >
+                <directionalLight
+                  position={[5, 5, 5]}
+                  intensity={0.8}
+                  color={0xffccaa}
+                  castShadow
+                />
+                <ambientLight intensity={5.5} />
+                <pointLight
+                  position={[5, 5, 5]}
+                  color={0xff0000}
+                  intensity={1}
+                />
+              
+                <mesh
+                  rotation={[-Math.PI / 2, 0, 0]}
+                  position={[0, -5, 0]}
+                  receiveShadow
+                >
+                  <planeGeometry args={[100, 100]} />
+                  <shadowMaterial opacity={0.5} />
+                </mesh>
+              </Canvas> */}
                   </Box>
                 </Box>
                 <Box
-                  // backgroundImage={note}
                   style={{
                     transform: `scale(${showNote ? 0.2 : 1})`,
                     transition: 'transform 0.5s ease-in-out',
@@ -1028,17 +1238,14 @@ useEffect(()=>{
                   position={'fixed'}
                   w={'40%'}
                   h={'80vh'}
-                  // backgroundRepeat={'no-repeat'}
-                  // backgroundSize={'contain'}
                   display={'flex'}
                   flexDirection={'column'}
                   justifyContent={'center'}
                   alignItems={'center'}
                 >
-                  <Img w={'80%'} h={'80vh'} src={feedi} />
+                  <Img w={'90%'} h={'80vh'} src={feedi} />
                   <Box
                     position={'fixed'}
-                    // mr={'110px'}
                     w={'50%'}
                     mt={'10px'}
                     display={'flex'}
@@ -1048,23 +1255,17 @@ useEffect(()=>{
                     style={{
                       fontWeight: '900',
                       color: '#D9C7A2',
-                      fontSize: '18px',
-                      // fontFamily: 'serif, georgia',
-                      lineHeight: 1,
-                      fontFamily: 'cont',
                     }}
                   >
                     {feed}
                     <Box
                       w={'100%'}
-                      // backgroundImage={next}
-                      onClick={() => getData(item)}
+                      onClick={() => getData(data)}
                       mt={'20px'}
                       display={'flex'}
                       justifyContent={'center'}
-                      // backgroundRepeat={'no-repeat'}
-                      // backgroundSize={'contain'}
                       cursor={'pointer'}
+                      transform={'translate(0px, 100px)'}
                     >
                       <Img src={next} w={'200px'} h={'60px'} />
                     </Box>
@@ -1227,7 +1428,7 @@ useEffect(()=>{
                   </Box>
                 </Box>
               </Box>
-            )} 
+            )}
             {tab === 5 && currentTab === 4 && (
               <>
                 <Box
@@ -1304,12 +1505,12 @@ useEffect(()=>{
                 </Box>
               </Box>
             )}
-            {currentAudio && (
+            {/* {currentAudio && (
               <audio ref={audioRef} controls style={{ display: 'none' }}>
                 <source src={currentAudio} type="audio/mpeg" />
                 Your browser does not support the audio tag.
               </audio>
-            )}
+            )} */}
           </Flex>
           {/* <Menu closeOnSelect={false}>
             <MenuButton

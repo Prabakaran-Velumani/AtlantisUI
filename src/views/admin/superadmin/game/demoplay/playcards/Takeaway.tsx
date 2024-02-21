@@ -45,6 +45,7 @@ const Takeway: React.FC<{
                         className="content"
                         fontFamily={'AtlantisText'}
                         color={'#D9C7A2'}
+                        key={ind}
                       >
                         <>
                           <Img
