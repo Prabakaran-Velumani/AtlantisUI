@@ -64,7 +64,7 @@ const Reflection: React.FC<{
                 fontSize={'3rem'}
                 style={{ whiteSpace: 'break-spaces' }}
               >
-                reflection
+                {'REFLECTION'}
               </Text>
             </Box>
             <Box className="content-ref">
