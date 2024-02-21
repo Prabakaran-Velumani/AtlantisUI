@@ -235,6 +235,7 @@ const GameCreation = () => {
     [players, setPlayers] = useState<any[]>([]);
   const [reflection, setReflection] = useState([]);
   const [showSelectBlock, setSelectBlock] = useState<any>([]);
+  const [heightOfTab, setHeightOfTab] = useState<any>();
 
   /** To stop load data after naviagte from another game based on Extension*/
   const [extensiveNavigation, setExtensiveNavigation] = useState<number | null>(
@@ -949,6 +950,49 @@ const GameCreation = () => {
   const handleTrans = (tabs: number) => {
     let tabArray: number[] = [];
 
+    // Watching Stepper Height for Green Progress
+    const tab1 = document.getElementById(`tab1`)
+    const getfirstElementHgt = tab1.clientHeight;
+    //tab2
+    const tab2 = document.getElementById(`tab2`)
+    const getsecondElementHgt = tab2.clientHeight;
+    //tab3
+    const tab3 = document.getElementById(`tab3`)
+    const getThirdElementHgt = tab3.clientHeight;
+    //tab4
+    const tab4 = document.getElementById(`tab4`)
+    const getFourElementHgt = tab4.clientHeight + getfirstElementHgt;
+    const tab4Height = tabs == 4 && (getFourElementHgt + getfirstElementHgt)
+    //tab5
+    const tab5 = document.getElementById(`tab5`)
+    const getFifthElementHgt = tab5.clientHeight;
+    //tab6
+    const tab6 = document.getElementById(`tab6`)
+    const getSixthElementHgt = tab6.clientHeight;
+    
+        
+    const Element = document.getElementById(`tab${tabs}`)
+    const getHeight = Element.clientHeight;
+
+    if(tabs == 1 && tab == 1) {
+      setHeightOfTab(getfirstElementHgt);
+    }
+    if(tabs == 2 && tab == 2) {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
+    }
+    if(tabs == 3 && tab == 3) {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
+    }
+    if(tabs == 4 && tab == 4) {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getfirstElementHgt + 90 );
+    }
+    if(tabs == 5 && tab == 5) {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+    }
+    if(tabs == 6 && tab == 6) {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
+    }   
+
     if (!formData?.gameLastTabArray?.includes(tabs)) {
       const stringContainingNumbers = formData.gameLastTabArray;
       if (typeof stringContainingNumbers === 'string') {
@@ -1265,6 +1309,48 @@ const GameCreation = () => {
     // }
   };
   ///navin 15-12
+
+  useEffect(()=> { // Watching Stepper Height
+    const tab1 = document.getElementById(`tab1`)
+    const getfirstElementHgt = tab1.clientHeight;
+    //tab2
+    const tab2 = document.getElementById(`tab2`)
+    const getsecondElementHgt = tab2.clientHeight;
+    //tab3
+    const tab3 = document.getElementById(`tab3`)
+    const getThirdElementHgt = tab3.clientHeight;
+    //tab4
+    const tab4 = document.getElementById(`tab4`)
+    const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
+    const tab4Height = tab == 4 && (getFourElementHgt + getfirstElementHgt)
+    //tab5
+    const tab5 = document.getElementById(`tab5`)
+    const getFifthElementHgt = tab5.clientHeight;
+    //tab6
+    const tab6 = document.getElementById(`tab6`)
+    const getSixthElementHgt = tab6.clientHeight;
+    
+         
+
+    if(tab == 1) {
+      setHeightOfTab(getfirstElementHgt);
+    }
+    if(tab == 2) {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
+    }
+    if(tab == 3) {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
+    }
+    if(tab == 4) {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getfirstElementHgt + 90 );
+    }
+    if(tab == 5) {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+    }
+    if(tab == 6) {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
+    }
+  },[tab])
 
   //navin
   const handleNext = async () => {
@@ -3269,20 +3355,17 @@ const GameCreation = () => {
                 direction="column"
                 justifyContent="space-between"
               >
-                <Flex
+                <Flex                  
+                  _after={{ content: '""', position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, height: `${heightOfTab ? heightOfTab : '0px'}`, bg: 'green', transition: '0.5s linear', zIndex: -1, opacity: 1}}                 
                   position="absolute"
                   left="32.5px"
                   h="100%"
                   w="2px"
                   // bg={`url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='${lineColor}' stroke-width='4' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e")`}
-                  bg={
-                    stepbgCheck
-                      ? `linear-gradient(to top, white ${
-                          100 - reducePercentage
-                        }%,green 0%);
-`
-                      : 'white'
-                  }
+                  // bg={stepbgCheck ? `linear-gradient(to top, white ${100 - reducePercentage}%,green 0%);                               not working
+                  // bg={stepbgCheck ? `linear-gradient(to bottom, green ${heightOfTab ? heightOfTab : '0'}px, white 0%);` : 'white'}              working
+                  bg={'white'}                 
+                  transition={'background 2.5s ease !important'}                                          
                   zIndex={1}
                 />
                 <OrderStep
@@ -3290,6 +3373,7 @@ const GameCreation = () => {
                   onClick={() => handleTrans(1)}
                   mb="30px"
                   name="BackGround"
+                  tabNo={1}
                   status={tab1}
                   BlockItems={BlockItems}
                   icon={
@@ -3316,6 +3400,7 @@ const GameCreation = () => {
                   onClick={() => handleTrans(2)}
                   mb="30px"
                   name="Character"
+                  tabNo={2}
                   status={tab2}
                   BlockItems={BlockItems}
                   icon={
@@ -3343,6 +3428,7 @@ const GameCreation = () => {
                   onClick={() => handleTrans(3)}
                   mb="30px"
                   name="Overview"
+                  tabNo={3}
                   status={tab3}
                   BlockItems={BlockItems}
                   icon={
@@ -3371,6 +3457,7 @@ const GameCreation = () => {
                   onClick={() => handleTrans(4)}
                   mb="30px"
                   name="Story"
+                  tabNo={4}
                   status={tab4}
                   handleTargetQuest={handleTargetQuest}
                   updateExtensiveNavigation={(id: number | null) =>
@@ -3411,6 +3498,7 @@ const GameCreation = () => {
                   onClick={() => handleTrans(5)}
                   mb="30px"
                   name="Design"
+                  tabNo={5}
                   status={tab5}
                   BlockItems={BlockItems}
                   icon={
@@ -3437,6 +3525,7 @@ const GameCreation = () => {
                   onClick={() => handleTrans(6)}
                   // mb="30px"
                   name="Preferences"
+                  tabNo={6}
                   status={tab6}
                   BlockItems={BlockItems}
                   icon={

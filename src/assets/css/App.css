@@ -178,194 +178,245 @@ option {
 
 
 .AddScores{
-    cursor: url("data:image/cur;base64,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"), default;
+  cursor: url("data:image/cur;base64,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"), default;
+}
+
+.AddScores .Main-Content {
+margin-bottom: 100px;
 }
 
 
 
 .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content::-webkit-scrollbar {
-  width: 16px;
-  height: 18px;
-  border-radius: 30px;  
-  background-size: contain;  
+width: 16px;
+height: 18px;
+border-radius: 30px;  
+background-size: contain;  
 }
 .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content::-webkit-scrollbar-track {
-  background: url('../img/games/scroll.png');
-  background-repeat: no-repeat;
-  background-size: contain;
+background: url('../img/games/scroll.png');
+background-repeat: no-repeat;
+background-size: contain;
 
 }
 .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content::-webkit-scrollbar-thumb {  
-  background: url('../img/games/cross.png');
-  background-repeat: no-repeat;
-  border-radius: 30px;
-  cursor: pointer;
-  background-size: contain;
-  height: 30px;
+background: url('../img/games/cross.png');
+background-repeat: no-repeat;
+border-radius: 30px;
+cursor: pointer;
+background-size: contain;
+height: 30px;
 }
 /*  */
-.AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid::-webkit-scrollbar {
-  width: 16px;
-  height: 18px;
-  border-radius: 30px;  
-  background-size: contain;  
+.AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback::-webkit-scrollbar {
+width: 18px;
+height: 18px;
+border-radius: 30px;  
+background-size: contain;  
 }
-.AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid::-webkit-scrollbar-track {
-  background: url('../img/games/scroll.png');
-  background-repeat: no-repeat;
-  background-size: contain;
+.AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback::-webkit-scrollbar-track {
+background: url('../img/games/scroll.png');
+background-repeat: no-repeat;
+background-size: contain;
 }
-.AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid::-webkit-scrollbar-thumb {
-  background: url('../img/games/cross.png');
-  background-repeat: no-repeat;
-  border-radius: 30px;
-  cursor: pointer;
-  background-size: contain;
-  height: 30px;
+.AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback::-webkit-scrollbar-thumb {
+background: url('../img/games/cross.png');
+background-repeat: no-repeat;
+border-radius: 30px;
+cursor: pointer;
+background-size: contain;
+height: 30px;
 }
 
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box::-webkit-scrollbar {
-  width: 16px;
-  /*height: 300px;*/
-  border-radius: 30px;  
-  background-size: contain;  
+width: 16px;
+/*height: 300px;*/
+border-radius: 30px;  
+background-size: contain;  
 }
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box::-webkit-scrollbar-track {
-  background: url('../img/games/scroll.png');
-  background-repeat: no-repeat;
-  background-size: contain;
+background: url('../img/games/scroll.png');
+background-repeat: no-repeat;
+background-size: contain;
 }
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box::-webkit-scrollbar-thumb {
-  background: url('../img/games/cross.png');
-  background-repeat: no-repeat;
-  border-radius: 30px;
-  cursor: pointer;
-  background-size: contain;
-  /*height: 300px;*/
+background: url('../img/games/cross.png');
+background-repeat: no-repeat;
+border-radius: 30px;
+cursor: pointer;
+background-size: contain;
+/*height: 300px;*/
 }
 /******************************************************preview css *****************************************************/
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box::-webkit-scrollbar {
-  width: 16px;
-  /*height: 300px;*/
-  border-radius: 30px;  
-  background-size: contain;  
+width: 16px;
+/*height: 300px;*/
+border-radius: 30px;  
+background-size: contain;  
 }
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box::-webkit-scrollbar-track {
-  background: url('../img/games/scroll.png');
-  background-repeat: no-repeat;
-  background-size: contain;
+background: url('../img/games/scroll.png');
+background-repeat: no-repeat;
+background-size: contain;
 }
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box::-webkit-scrollbar-thumb {
-  background: url('../img/games/cross.png');
-  background-repeat: no-repeat;
-  border-radius: 30px;
-  cursor: pointer;
-  background-size: contain;
-  /*height: 300px;*/
+background: url('../img/games/cross.png');
+background-repeat: no-repeat;
+border-radius: 30px;
+cursor: pointer;
+background-size: contain;
+/*height: 300px;*/
 }
 
 @font-face {
-  font-family: 'AtlantisText';  
-  src: url(../fonts/DESIGN.JASONWALCOTT.FAIRYTALEJF.TTF);  
+font-family: 'AtlantisText';  
+src: url(../fonts/DESIGN.JASONWALCOTT.FAIRYTALEJF.TTF);  
 }
 @font-face {
-  font-family: 'AtlantisContent';  
-  src: url(../fonts/AGENCYB.TTF);  
+font-family: 'AtlantisContent';  
+src: url(../fonts/AGENCYB.TTF);  
 }
 
 /* AddScores */
 
 .AddScores .Main-Content .Game-Screen {
-  position: relative;
-  width: 50%;  
+position: relative;
+/* width: 65%;  modify */
+width: 65%;  
+/* new */
+/* height: 800px; */
+border-radius: 20px;
+/* background: #fff; */
+/* box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08); */
+padding: 20px;
 }
 
 .AddScores .Main-Content .Game-Screen .Images {   
-  position: relative;
-  /* height: 100vh; */
-  height: 620px;
-  /* box-shadow: inset 2px 2px 16px #80808082;
-  background: beige; */
-  /* box-shadow: 1px 3px 16px #8080803d; */
-  border-radius: 12px;
+position: relative;
+/* height: 100vh; */
+height: 620px;
+/* box-shadow: inset 2px 2px 16px #80808082;
+background: beige; */
+/* box-shadow: 1px 3px 16px #8080803d; */
+border-radius: 12px;
 }
 .Game-Screen .welcome-game {   
-  position: relative;
-  height: 100vh;
-  /* height: 620px; */
-  /* box-shadow: inset 2px 2px 16px #80808082;
-  background: beige; */
-  /* box-shadow: 1px 3px 16px #8080803d; */
-  border-radius: 12px;
+position: relative;
+height: 100vh;
+/* height: 620px; */
+/* box-shadow: inset 2px 2px 16px #80808082;
+background: beige; */
+/* box-shadow: 1px 3px 16px #8080803d; */
+border-radius: 12px;
 }
 
 /* LEARDERBOARD */
 .AddScores .Main-Content .Game-Screen .Images .LearderBoards {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
- }
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+}
 .AddScores .Main-Content .Game-Screen .Images .LearderBoards-Img {
-  height: 600px;  
-  background-position: center;
- }
+/* height: 600px;  modify */
+height: 620px;  
+background-position: center;
+}
 
 
- /* COMPLETION SCREEN */
+/* COMPLETION SCREEN */
 .AddScores .Main-Content .Game-Screen .Images .comple-screen {  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  position: absolute;
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+position: absolute;
 }
 .comple-screen {  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  position: absolute;
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+position: absolute;
 }
 .AddScores .Main-Content .Game-Screen .Images .comple-screen .bg-img{  
-  height: 600px;
-  width: 700px;
-  filter: drop-shadow(33px 29px 10px #8080807d);
+/* height: 600px; modify */
+height: 700px;
+width: 700px;
+filter: drop-shadow(33px 29px 10px #8080807d);
 }
 .comple-screen .bg-img{  
-  height: 600px;
-  width: 700px;
-  filter: drop-shadow(33px 29px 10px #8080807d);
+height: 600px;
+width: 700px;
+filter: drop-shadow(33px 29px 10px #8080807d);
 }
 .AddScores .Main-Content .Game-Screen .Images .title {   
-  text-align: center;
-  transform: translate(0px, 71px);  
-  font-size: 28px;
+text-align: center;
+/* transform: translate(0px, 71px);  modify */
+top: 0;
+transform: translate(0px, 84px);  
+font-size: 28px;
+position: absolute;
 }
 
 .AddScores .Main-Content .Game-Screen .Images .title p{   
-  font-family: 'AtlantisText';
-  letter-spacing: 2px;
+font-family: 'AtlantisText';
+letter-spacing: 2px;
 }
+.AddScores .Main-Content .Game-Screen .Images .comple-screen .content-box {
+display: flex;
+flex-direction: column;
+position: absolute;
+height: 382px;
+width: 400px;
+transform: translate(0, 13px);
+overflow: hidden;  
 
+}
 .AddScores .Main-Content .Game-Screen .Images .congratulations {   
-  /* position: absolute;
-  top: 72px;
-  left: 260px; */
-  text-align: center;
-  transform: translate(0px, 113px);
-  font-family: 'game';  
-  color: #D9C7A2;
-  text-transform : uppercase;
-  font-family: content;
-  font-size: 15px;
-  font-weight: 600;  
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* position: absolute;
+top: 72px;
+left: 260px; */
+text-align: center;
+/* transform: translate(0px, 113px); modify */
+font-family: 'game';  
+color: #D9C7A2;
+text-transform : uppercase;
+font-family: content;
+font-size: 15px;
+font-weight: 600;  
+display: flex;
+justify-content: center;
+align-items: center;
 }
 /*  */
 .AddScores .Main-Content .Game-Screen .Images .congratulations .content {     
+/*  width: 165px;
+font-family: 'AtlantisText';
+/*letter-spacing: 2px;*/
+/*font-family: 'AtlantisText';*/
+  /*letter-spacing: 2px;*/
+/*   color: var(--atlantis-text-color);
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.5px;
+  font-weight: 400;
+  color: #bdac88;*/
+/*font-family: 'AtlantisText'; */
+  /* letter-spacing: 2px; */
+  /* width: 185px; modify */
+  width: 250px;
+  font-family: 'AtlantisText';
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  background: linear-gradient(45deg, #d2c19d, #d2c09b);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: 22px;
+}
+.congratulations .content {     
 /*  width: 165px;
   font-family: 'AtlantisText';
 /*letter-spacing: 2px;*/
@@ -390,338 +441,358 @@ option {
     color: transparent;
     font-size: 19px;
 }
-.congratulations .content {     
-  /*  width: 165px;
-    font-family: 'AtlantisText';
-  /*letter-spacing: 2px;*/
-   /*font-family: 'AtlantisText';*/
-      /*letter-spacing: 2px;*/
-   /*   color: var(--atlantis-text-color);
-      display: flex;
-      align-items: center;
-      letter-spacing: 0.5px;
-      font-weight: 400;
-      color: #bdac88;*/
-    /*font-family: 'AtlantisText'; */
-      /* letter-spacing: 2px; */
-      width: 185px;
-      font-family: 'AtlantisText';
-      display: flex;
-      align-items: center;
-      letter-spacing: 0.5px;
-      font-weight: 500;
-      background: linear-gradient(45deg, #d2c19d, #d2c09b);
-      -webkit-background-clip: text;
-      color: transparent;
-      font-size: 19px;
-  }
-  
+
 .AddScores .Main-Content .Game-Screen .Images .rewards-img-box {  
-  width: 100%;  
-  display: flex;
-  justify-content: center;
-  transform: translate(0, 135px);
+width: 100%;  
+display: flex;
+justify-content: center;
+margin-top: 10px;
+/* transform: translate(0, 135px); modify */
 }
 .rewards-img-box {  
-  width: 100%;  
-  display: flex;
-  justify-content: center;
-  transform: translate(0, 135px);
+width: 100%;  
+display: flex;
+justify-content: center;
+/* transform: translate(0, 135px); modify */
 }
 .AddScores .Main-Content .Game-Screen .Images .rewards-img-box .rewards-arrow-img {  
-  /* width: 47%;  */
-  width: 250px;
+/* width: 47%;  */
+/* width: 250px; modify */
+width: 335px;
 }
 .rewards-img-box .rewards-arrow-img {  
-  /* width: 47%;  */
-  width: 250px;
+/* width: 47%;  */
+width: 250px;
 }
 .AddScores .Main-Content .Game-Screen .Images .points-box {    
-    transform: translate(0, 155px);
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    height: 93px;
-}
-.points-box {    
-  transform: translate(0, 155px);
+  /* transform: translate(0, 155px);  modify */
   width: 100%;
   display: flex;
   justify-content: center;
   height: 93px;
 }
+.points-box {    
+/* transform: translate(0, 155px); */
+width: 100%;
+display: flex;
+justify-content: center;
+height: 93px;
+}
 .AddScores .Main-Content .Game-Screen .Images .points-box .box-1 .box-1_img{    
-  width: 130px;
-  background-size: contain;
-  background-repeat: no-repeat;  
+/* width: 130px; modify */
+width: 185px;
+background-size: contain;
+background-repeat: no-repeat;  
 }
 .points-box .box-1 .box-1_img{    
-  width: 130px;
-  background-size: contain;
-  background-repeat: no-repeat;  
+width: 130px;
+background-size: contain;
+background-repeat: no-repeat;  
 }
 .AddScores .Main-Content .Game-Screen .Images .points-box .box-2 .box-2_img{    
-  width: 130px;
-  background-size: contain;
-  background-repeat: no-repeat;  
+/* width: 130px; modify */
+width: 185px;
+background-size: contain;
+background-repeat: no-repeat;  
 }
 .points-box .box-2 .box-2_img{    
-  width: 130px;
-  background-size: contain;
-  background-repeat: no-repeat;  
+width: 130px;
+background-size: contain;
+background-repeat: no-repeat;  
 }
 .AddScores .Main-Content .Game-Screen .Images .points-box .box-1 .points-text{    
-  font-weight: 300;
-  font-size: 17px;
-  position: absolute;  
-  transform: translate(47px, -117px);  
-  font-family: 'AtlantisText';
+font-weight: 300;
+font-size: 17px;
+position: absolute;  
+top: 0;
+/* transform: translate(47px, -117px);  modify */
+transform: translate(0, 8px);  
+font-family: 'AtlantisText';
 letter-spacing: 0.5px;
+text-align: center;
+width: 100%;
 }
 .points-box .box-1 .points-text{    
-  font-weight: 300;
-  font-size: 17px;
-  position: absolute;  
-  transform: translate(47px, -117px);  
-  font-family: 'AtlantisText';
+font-weight: 300;
+font-size: 17px;
+position: absolute;  
+/* transform: translate(47px, -117px);   */
+font-family: 'AtlantisText';
 letter-spacing: 0.5px;
 }
 .AddScores .Main-Content .Game-Screen .Images .points-box .box-1 .inside-box-1{    
-  display : flex;
-  align-items: center;
-  justify-content: center;   
-  transform: translate(17px, -75px);
-  position: absolute;               
+display : flex;
+align-items: center;
+justify-content: center;   
+position: absolute;
+transform: translate(-50%, -50%);
+top: 50%;
+left: 50%;               
+}
+.AddScores .Main-Content .Game-Screen .Images .points-box .box-1{    
+position: relative;
+width: 185px;
+height: 165px;
+display: flex;
+justify-content: center;
 }
 .points-box .box-1 .inside-box-1{    
-  display : flex;
-  align-items: center;
-  justify-content: center;   
-  transform: translate(17px, -75px);
-  position: absolute;               
+display : flex;
+align-items: center;
+justify-content: center;   
+width: 100%;
+          
 }
 .AddScores .Main-Content .Game-Screen .Images .points-box .box-1 .inside-box-1 .inside-box-1_img{  
-  background-size: auto;  
-  background-repeat: no-repeat;
-  width: 100px;
-  height: 40px;  
-  position: relative;                                  
+background-size: auto;  
+background-repeat: no-repeat;
+width: 100px;
+height: 40px;  
+position: relative;                                  
 }
 .points-box .box-1 .inside-box-1 .inside-box-1_img{  
-  background-size: auto;  
-  background-repeat: no-repeat;
-  width: 100px;
-  height: 40px;  
-  position: relative;                                  
+background-size: auto;  
+background-repeat: no-repeat;
+width: 100px;
+height: 40px;  
+position: relative;                                  
 }
 .AddScores .Main-Content .Game-Screen .Images .points-box .box-1 .inside-box-1 .inside-points-text{  
-  color: #D9C7A2;
-  font-size: 15px;
-  text-align: center;
-  /* font-family: content;   */
-  position: absolute;
-  transform: translate(0px, 1px);  
-  font-family: 'AtlantisText';
+color: #D9C7A2;
+font-size: 15px;
+text-align: center;
+/* font-family: content;   */
+position: absolute;
+transform: translate(0px, 1px);  
+font-family: 'AtlantisText';
 letter-spacing: 2px;                            
 }
 .points-box .box-1 .inside-box-1 .inside-points-text{  
-  color: #D9C7A2;
-  font-size: 15px;
-  text-align: center;
-  /* font-family: content;   */
-  position: absolute;
-  transform: translate(0px, 1px);  
-  font-family: 'AtlantisText';
+color: #D9C7A2;
+font-size: 15px;
+text-align: center;
+/* font-family: content;   */
+position: absolute;
+transform: translate(0px, 1px);  
+font-family: 'AtlantisText';
 letter-spacing: 2px;                            
 }
 
 
-
+.AddScores .Main-Content .Game-Screen .Images .points-box .box-2 {    
+position: relative;
+width: 185px;
+height: 165px;
+display: flex;
+justify-content: center;
+}
 .AddScores .Main-Content .Game-Screen .Images .points-box .box-2 .points-text{    
-  font-weight: 300;
-  font-size: 17px;
-  position: absolute; 
-   /*font-size: clamp(17px, 2vw, 17px);*/
-  transform: translate(42px, -117px);  
-  font-family: 'AtlantisText';
+font-weight: 300;
+font-size: 13px;
+position: absolute; 
+/*font-size: clamp(17px, 2vw, 17px);*/
+top: 0;
+/* transform: translate(47px, -117px);  modify */
+transform: translate(0, 13px);  
+width: 67%;
+text-align: center;
+font-family: 'AtlantisText';
 letter-spacing: 0.5px;
- text-transform: capitalize;
- 
+text-transform: capitalize;
+
 }
 .points-box .box-2 .points-text{    
-  font-weight: 300;
-  font-size: 17px;
-  position: absolute; 
-   /*font-size: clamp(17px, 2vw, 17px);*/
-  transform: translate(42px, -117px);  
-  font-family: 'AtlantisText';
+font-weight: 300;
+font-size: 17px;
+position: absolute; 
+ /*font-size: clamp(17px, 2vw, 17px);*/
+transform: translate(42px, -117px);  
+font-family: 'AtlantisText';
 letter-spacing: 0.5px;
- text-transform: capitalize;
- 
+text-transform: capitalize;
+
 }
 .AddScores .Main-Content .Game-Screen .Images .points-box .box-2 .points-text:first-letter{
-  text-transform: capitalize; 
+text-transform: capitalize; 
 }    
 .points-box .box-2 .points-text:first-letter{
-  text-transform: capitalize; 
+text-transform: capitalize; 
 }    
 .AddScores .Main-Content .Game-Screen .Images .points-box .box-2 .inside-img{    
-  display : flex;
-  align-items: center;
-  justify-content: center;   
-  transform: translate(40px, -80px);
-  position: absolute;  
-  height: 50px;               
-  width: 50px;
-  border-radius: 10px;
+display : flex;
+align-items: center;
+justify-content: center;     
+height: 80px;               
+width: 80px;
+position: absolute;  
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+border-radius: 10px;
+margin-top: 10px;
 }
 .points-box .box-2 .inside-img{    
-  display : flex;
-  align-items: center;
-  justify-content: center;   
-  transform: translate(40px, -80px);
-  position: absolute;  
-  height: 50px;               
-  width: 50px;
-  border-radius: 10px;
+display : flex;
+align-items: center;
+justify-content: center;   
+transform: translate(40px, -80px);
+position: absolute;  
+height: 50px;               
+width: 50px;
+border-radius: 10px;
 }
 
 .AddScores .Main-Content .Game-Screen .Images .next-btn {    
-  transform: translate(0, 215px);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+transform: translate(0, 215px);
+/* transform: translate(0, 165px); */
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+position: absolute;
 }
 .next-btn {    
-  transform: translate(0, 215px);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+transform: translate(0, 215px);
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
 }
 .next-btn-welcome
 {    
-  transform: translate(0, 50px);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+transform: translate(0, 50px);
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
 }
 .AddScores .Main-Content .Game-Screen .Images .next-btn img {    
-  width: 100px;
-  height: 41px;
+width: 130px;
+height: 55px;
 }
 .next-btn img {    
-  width: 100px;
-  height: 41px;
+width: 100px;
+height: 41px;
 }
 
 
-.chakra-toast__toast { z-index: 999999999999999999; }
 
 
 
 /* REFLECTION SCREEN */
 .AddScores .Main-Content .Game-Screen .Images .reflection-screen .reflection-screen-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  position: absolute;
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+height: 100%;
+position: absolute;
 }
 .AddScores .Main-Content .Game-Screen .Images .reflection-screen .bg-img {
-  height: 600px; 
-  width: 500px; 
-  background-position: center;
+height: 600px; 
+/* width: 500px;  */
+background-position: center;
 }
 .reflection-screen .bg-ref {
-  height: 700px; 
-  width: 800px; 
-  background-position: center;
+height: 700px; 
+width: 800px; 
+background-position: center;
 }
 .AddScores .Main-Content .Game-Screen .Images .reflection-screen .content-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  position: absolute;
-  transform: translate(0px, 216px);
-  }
-  .reflection-screen .content-ref {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    position: absolute;
-    transform: translate(0px, 100px);
-    }
-  .AddScores .Main-Content .Game-Screen .Images .reflection-screen .content-box .grid .text{
-    font-family: 'AtlantisText';
-    letter-spacing: 0.4px; 
-  }
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+position: absolute;
+transform: translate(0px, 260px);
+}
+.reflection-screen .content-ref {
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+position: absolute;
+transform: translate(0px, 100px);
+}
+.AddScores .Main-Content .Game-Screen .Images .reflection-screen .content-box .grid { 
+row-gap: 30px;
+}
+.AddScores .Main-Content .Game-Screen .Images .reflection-screen .content-box .grid .box{
+width: 260px;
+}
+.AddScores .Main-Content .Game-Screen .Images .reflection-screen .content-box .grid .box div{
+width: 260px; 
+}
+.AddScores .Main-Content .Game-Screen .Images .reflection-screen .content-box .grid .box .input-img{
+width: 260px; 
+}
+
+.AddScores .Main-Content .Game-Screen .Images .reflection-screen .content-box .grid .text{
+font-family: 'AtlantisText';
+letter-spacing: 0.4px; 
+}
 
 
 
 
-  /* TAKE AWAY SCREEN */
+/* TAKE AWAY SCREEN */
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .takeaway-screen-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  position: absolute;
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+height: 100%;
+position: absolute;
 }
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .bg-img {
-  height: 600px; 
-  width: 500px; 
-  background-position: center;
+height: 620px; 
+/* width: 500px;  */
+background-position: center;
 }
 .takeaway-screen .bg-take {
-  height: 700px; 
-  width: 800px; 
-  background-position: center;
+height: 700px; 
+width: 800px; 
+background-position: center;
 }
 .takeaway-screen .bg-lead {
-  height: 600px; 
-  width: 800px; 
-  background-position: center;
+height: 600px; 
+width: 800px; 
+background-position: center;
 }
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box {
-  display: flex;
-  /* justify-content: center; */
-  /* align-items: center; */
-  width: 76%;
-  height: 265px;
-  position: absolute;
-  flex-direction: column;
-  transform: translate(-3px, 33px);
-  overflow-y: scroll;
-   /*scrollbar-width: thin; /* For Firefox */
-  /*scrollbar-color: #333 #f0f0f0; /* For Firefox */
+display: flex;
+/* justify-content: center; */
+/* align-items: center; */
+/* width: 76%; modify */
+width: 570px;
+height: 265px;
+position: absolute;
+flex-direction: column;
+transform: translate(-3px, 33px);
+overflow-y: auto;
+ /*scrollbar-width: thin; /* For Firefox */
+/*scrollbar-color: #333 #f0f0f0; /* For Firefox */
 }
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box  .content {  
-  width: 334px;
-  display: flex;
-  
+width: 334px;
+display: flex;
+
 } 
 .content-box  .content-lead {  
-  width: 100%;
-  display: flex;
+width: 100%;
+display: flex;
 }
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box  .content p  {  
-  width: 334px;  
-  color: #D9C7A2
+width: 334px;  
+color: #D9C7A2
 } 
 /* .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box .dot-img { 
-  position: absolute;
-  transform: translate(-167px, -84px);
+position: absolute;
+transform: translate(-167px, -84px);
 }
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box p { 
-  position: absolute;
-  transform: translate(-167px, -84px);
+position: absolute;
+transform: translate(-167px, -84px);
 } */
 
 
@@ -1087,8 +1158,9 @@ letter-spacing: 0.5px;
     position: absolute;
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .welcome-screen-box .bg-img {
-    height: 600px; 
-    width: 580px; 
+    /* height: 600px; modify  */
+    height: 620px;
+    /* width: 580px; modify */
     background-position: center;
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .welcome-screen-box .bg-welcome {
@@ -1101,15 +1173,18 @@ letter-spacing: 0.5px;
     justify-content: center;
     /* align-items: center; */
     width: 100%;
-    height: 236px;
+    /* height: 236px; modify */
+    height: 310px;
     position: absolute;
-    transform:translate(0px, 35vh);
+    /* transform:translate(0px, 35vh); modify */
+    transform: translate(0px, 195px);
     
     color: #D9C7A2;     
     /* overflow: hidden;                */
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content {
-    width: 380px;
+    /* width: 380px; modify */
+    width: 448px;
     overflow-y: scroll;        
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .renderContent{
@@ -1149,9 +1224,13 @@ letter-spacing: 0.5px;
     background-color: currentColor;
 }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .title{
-   transform: translateY(-44px); 
-   position: absolute;
-   font-family: 'AtlantisText';
+    /* transform: translateY(-44px); modify */
+    transform: translateY(-60px);
+    position: absolute;
+    font-family: 'AtlantisText';
+  }
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .duration { 
+    transform: translateY(-20px);
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .rewards-box {
     height: 128px; 
@@ -1184,16 +1263,37 @@ letter-spacing: 0.5px;
 
 
    /* THANK YOU SCREEN */   
+  .AddScores .Main-Content .Game-Screen .Images .section-thankyou-screen{
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .section-thankyou-screen .thankyou-screen-box {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .section-thankyou-screen .thankyou-screen-box .bg-img {
+    height: 800px;
+    width: 715px;
+  }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen{
     font-family: 'AtlantisText';
     letter-spacing: 0.4px; 
     color: var(--atlantis-text-color);
+    transform: translate(0, 239px);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 531px;
+    height: 415px;
+    overflow-y: scroll;
   }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .tq-msg{
     font-family: 'AtlantisText';
     letter-spacing: 0.4px; 
     color: var(--atlantis-text-color);
-    transform: translate(0, 155px);
+    /* transform: translate(0, 155px); modify */
     font-size: 18px;
   }
    .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .thankyou-screen-box {
@@ -1206,7 +1306,7 @@ letter-spacing: 0.5px;
   }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .thankyou-screen-box .bg-img {
     height: 800px; 
-    width: 600px; 
+    width: 700px; 
     background-position: center;
   }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .thankyou-screen-box .bg-thankyou {
@@ -1220,7 +1320,7 @@ letter-spacing: 0.5px;
     flex-direction: column;
     /* align-items: center; */
     justify-content: center;
-    transform: translate(0px, 109px);
+    /* transform: translate(0px, 109px); modify */
     flex-flow: wrap;    
   }
   .collect-learner-feedback {
@@ -1228,10 +1328,10 @@ letter-spacing: 0.5px;
   }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .about-experience { 
     font-size: 21px;     
-    transform: translate(0px, 97px);
+    /* transform: translate(0px, 97px); modify */
     color: #bdac88;
      font-family: 'AtlantisText';
-     margin-top: 30px;
+     margin-top: 8px;
      font-weight: 300;
   }
   .buttonfeel{
@@ -1288,9 +1388,9 @@ letter-spacing: 0.5px;
     display: grid;
     grid-gap: 1.3rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 465px;  
-    overflow-y: scroll;
-    height: 280px;  
+    width: 515px;  
+    /* overflow-y: scroll; modify
+    height: 280px;   */
 
   }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .last-item {
@@ -1339,12 +1439,17 @@ letter-spacing: 0.5px;
     font-family: 'AtlantisText';
     /*letter-spacing: 2px;*/
     /*color: var(--atlantis-text-color);*/
+    word-break: break-all;
     display: flex;
     align-items: center;
     letter-spacing: 0.5px;
     font-weight: 400;
-    color: #bdac88;
-
+    color: #bdac88;    
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box .content img {
+    margin-right: 5px;
   }
 
 
