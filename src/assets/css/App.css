@@ -693,7 +693,7 @@ letter-spacing: 0.5px;
   display: flex;
   /* justify-content: center; */
   /* align-items: center; */
-  width: 76%;
+  /* width: 76%; */
   height: 265px;
   position: absolute;
   flex-direction: column;
