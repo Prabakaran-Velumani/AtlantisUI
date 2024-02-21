@@ -91,7 +91,6 @@ const GamePreview = () => {
   });
   const [currentScore, setCurrentScore] = useState(0);
   const toast = useToast();
-  // const [toastObj, setToastObj] = useState<any>();
 
   //for Reviewers
   useEffect(() => {
@@ -199,8 +198,8 @@ const GamePreview = () => {
     };
 
     const completionOptions = gameQuest.map((qst :any, i: number)=>{
-      const item = {gameId:qst.gameId, questNo:qst.gameQuestNo, gameIsSetMinPassScore : qst.gameIsSetMinPassScore, gameIsSetDistinctionScore : qst.gameIsSetDistinctionScore, gameDistinctionScore: qst.gameDistinctionScore, gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore, gameIsSetBadge: qst.gameIsSetBadge, gameBadge: qst.gameBadge, gameBadgeName: qst.gameBadgeName, gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge, gameAwardBadgeScore: qst.gameAwardBadgeScore, gameScreenTitle: qst.gameScreenTitle, gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage, gameIsSetCongratsScoreWiseMessage: qst.gameIsSetCongratsScoreWiseMessage, gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage, gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage, gameaboveMinimumScoreCongratsMessage: qst.gameaboveMinimumScoreCongratsMessage, gameLessthanDistinctionScoreCongratsMessage: qst.gameLessthanDistinctionScoreCongratsMessage, gameAboveDistinctionScoreCongratsMessage: qst.gameAboveDistinctionScoreCongratsMessage}
-     return item; 
+        const item = {gameId:qst.gameId, questNo:qst.gameQuestNo, gameIsSetMinPassScore : qst.gameIsSetMinPassScore, gameIsSetDistinctionScore : qst.gameIsSetDistinctionScore, gameDistinctionScore: qst.gameDistinctionScore, gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore, gameIsSetBadge: qst.gameIsSetBadge, gameBadge: qst.gameBadge, gameBadgeName: qst.gameBadgeName, gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge, gameAwardBadgeScore: qst.gameAwardBadgeScore, gameScreenTitle: qst.gameScreenTitle, gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage, gameIsSetCongratsScoreWiseMessage: qst.gameIsSetCongratsScoreWiseMessage, gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage, gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage, gameaboveMinimumScoreCongratsMessage: qst.gameaboveMinimumScoreCongratsMessage, gameLessthanDistinctionScoreCongratsMessage: qst.gameLessthanDistinctionScoreCongratsMessage, gameAboveDistinctionScoreCongratsMessage: qst.gameAboveDistinctionScoreCongratsMessage}
+       return item; 
     });
 
     setGameInfo({

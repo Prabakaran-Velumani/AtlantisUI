@@ -83,18 +83,7 @@ const ReflectionScreen: React.FC<{
       {imageSrc && (
         // <SimpleGrid columns={1}>
         <Box className="reflection-screen">
-          <Box
-            className="reflection-screen-box"
-            // w={{base:'100%',sm:'100%',md:'100%',lg:'90%'}}
-            // ml={{base:'10px',sm:'10px',md:'20px',lg:'28px'}}
-            // h={{base:'250px',sm:'450px',md:'550px',lg:'450px'}}
-            // backgroundImage={imageSrc}
-            // backgroundRepeat={'no-repeat'}
-            // backgroundSize={'contain'}
-            // display={'flex'}
-            // justifyContent={'center'}
-            // alignItems={'center'}
-          >
+          <Box className="reflection-screen-box">
             {preview ? null : <Img src={imageSrc} className="bg-img" />}
           </Box>
           {preview ? (
@@ -114,11 +103,11 @@ const ReflectionScreen: React.FC<{
                 fontSize={'3rem'}
                 style={{ whiteSpace: 'break-spaces' }}
               >
-                reflection
+                {'REFLECTION'}
               </Text>
             </Box>
           ) : null}
-          <Box className={preview ? "content-ref":"content-box"}>
+          <Box className={preview ? 'content-ref' : 'content-box'}>
             <SimpleGrid columns={{ base: 2 }} spacing={2} className="grid">
               {Array.from(
                 { length: formData.gameReflectionQuestion },
