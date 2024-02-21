@@ -73,6 +73,7 @@ import {
             // backgroundRepeat={'no-repeat'}
             // backgroundSize={'contain'}
             // fontFamily={'content'}
+            
             // color="#D9C7A2"
             // display={'flex'}
             // justifyContent={'center'}
