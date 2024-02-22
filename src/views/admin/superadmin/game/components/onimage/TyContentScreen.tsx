@@ -124,7 +124,6 @@ const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview:any }> =
                 className="tq-msg"
               >
                 <Box
-                  // h={'100px'}
                   w={'80%'}
                   mt={{ base: '0px', sm: '0px', md: '20px', lg: '20px' }}
                   lineHeight={1}
