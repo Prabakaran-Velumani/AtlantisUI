@@ -64,13 +64,13 @@ const Reflection: React.FC<{
                 fontSize={'3rem'}
                 style={{ whiteSpace: 'break-spaces' }}
               >
-                {'REFLECTION'}
+                reflection
               </Text>
             </Box>
             <Box className="content-ref">
               <SimpleGrid columns={{ base: 2 }} spacing={2} className="grid">
                 {reflectionQuestions.map((item: any, index: number) => (
-                  <Box  key={index}>
+                  <Box key={index}>
                     <Box
                       w={{
                         base: '150px',

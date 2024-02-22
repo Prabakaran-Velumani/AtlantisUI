@@ -70,6 +70,8 @@ import TyContentScreen from './onimage/TyContentScreen';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
 import TypingEffect from '../demoplay/playcards/Typing';
+import RefBg from 'assets/img/games/refbg.png';
+
 const SinglePreview: React.FC<{
   prevdata?: any;
   isOpen?: any;
@@ -134,7 +136,6 @@ const SinglePreview: React.FC<{
   const [options, setOptions] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestNo, setCurrentQuestNo] =useState(1);
-
 
 useEffect(()=>{
 
@@ -417,6 +418,7 @@ useEffect(()=>{
         } else {
           setType(null);
           setData(null);
+          onClose()
           // setCurrentScreenId(6);
           return false;
         }
@@ -561,6 +563,7 @@ useEffect(()=>{
       } else {
         setType(null);
         setData(null);
+        onClose();
         // setCurrentScreenId(6);
         return false;
       }
@@ -1366,7 +1369,7 @@ useEffect(()=>{
                 className="Main-Content"
               >
                 <Box
-                  backgroundImage={img}
+                  backgroundImage={RefBg}
                   w={'100% !important'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}

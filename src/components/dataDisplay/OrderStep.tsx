@@ -14,6 +14,7 @@ export default function OrderStep(props: {
 	icon: JSX.Element;
 	status?: string;
 	name: string;
+	tabNo?: any;
 	BlockItems?: any;
 	listBlockItems?: any;
 	listQuest?: any;
@@ -34,7 +35,7 @@ export default function OrderStep(props: {
 	const [progressBlockItems, setProgressBlockItems] = useState(null);
 	const [questDelete, setQestDelete] = useState(false);
 
-	const { date, sum, icon, status, name, quest, data, BlockItems, listBlockItems, listQuest, id, handleTargetQuest, handleGet, fetchBlocks, setQuestTabState, questTabState, deleteQuest, delSeq, ...rest } = props;
+	const { date, sum, icon, status, name, quest, data, tabNo, BlockItems, listBlockItems, listQuest, id, handleTargetQuest, handleGet, fetchBlocks, setQuestTabState, questTabState, deleteQuest, delSeq, ...rest } = props;
 
 	const navigate = useNavigate();
 
@@ -82,7 +83,7 @@ export default function OrderStep(props: {
 
 	return (
 		<>
-			<Flex justifyContent='center' alignItems='center' w='100%' zIndex='2' {...rest} className='OrderStep'>
+			<Flex justifyContent='center' alignItems='center' w='100%' zIndex='2' {...rest} className='OrderStep' id={tabNo === 4 ? 'taby4' : `tab${tabNo}`}>
 				{icon}
 				<Flex direction='column' align='start' ms='20px' mr='auto'>
 					<Text color={textColor} fontSize='lg' me='6px' fontWeight='600'>
@@ -123,7 +124,7 @@ export default function OrderStep(props: {
 			</Flex>
 
 			{progressBlockItems && name === 'Story' ? (
-				<>
+				<Box className='for-tab4' id={`tab${tabNo}`}>
 					{listQuest ? (
 						listQuest.map((item: any, index: number) => (
 							<Flex justifyContent='center' alignItems='center' w='100%' zIndex='2' {...rest} mt={'0px'} key={index}>
@@ -200,7 +201,7 @@ export default function OrderStep(props: {
 					)}
 
 
-				</>
+				</Box>
 
 			) : null}
 

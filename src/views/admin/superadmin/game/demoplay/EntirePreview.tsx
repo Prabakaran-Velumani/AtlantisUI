@@ -221,7 +221,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
   const userProfile = useContext(ProfileContext);
-  const [currentQuestNo, setCurrentQuestNo] =useState(1);;
+  const [currentQuestNo, setCurrentQuestNo] =useState(1);
   const { profile, setProfile } = useContext(ScoreContext);
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
@@ -408,8 +408,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
       setOptions(optionsFiltered);
     }
-  
-  console.log("***Navi", navi);
+
     if (
       type === 'Interaction' &&
       resMsg !== '' &&
