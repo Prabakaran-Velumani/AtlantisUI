@@ -13,6 +13,7 @@ import initialTheme from './theme/theme'; //  { themeGreen }
 import { useState } from 'react';
 import EntirePreview from 'views/admin/superadmin/game/demoplay/EntirePreview';
 import GamePreview from 'views/admin/superadmin/game/demoplay/GamePreview';
+import GlbPractise from 'views/admin/games/game/components/GlbPractise';
 
 export default function Main() {
   // eslint-disable-next-line
@@ -20,6 +21,7 @@ export default function Main() {
   return (
     <ChakraProvider theme={currentTheme}>
       <Routes>
+        <Route path={'game/glbpractise'} element={<GlbPractise />} />
         <Route path="game/demoplay/:uuid" element={<GamePreview />} />
         <Route path="game/creator/demoplay/:id" element={<GamePreview />} />
         <Route path="auth/sign-in/default" element={<SignInDefault />} />
