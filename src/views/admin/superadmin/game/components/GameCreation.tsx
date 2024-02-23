@@ -952,27 +952,27 @@ const GameCreation = () => {
 
     // Watching Stepper Height for Green Progress
     const tab1 = document.getElementById(`tab1`)
-    const getfirstElementHgt = tab1.clientHeight;
+    const getfirstElementHgt = tab1?.clientHeight;
     //tab2
     const tab2 = document.getElementById(`tab2`)
-    const getsecondElementHgt = tab2.clientHeight;
+    const getsecondElementHgt = tab2?.clientHeight;
     //tab3
     const tab3 = document.getElementById(`tab3`)
-    const getThirdElementHgt = tab3.clientHeight;
+    const getThirdElementHgt = tab3?.clientHeight;
     //tab4
     const tab4 = document.getElementById(`tab4`)
-    const getFourElementHgt = tab4.clientHeight + getfirstElementHgt;
+    const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
     const tab4Height = tabs == 4 && (getFourElementHgt + getfirstElementHgt)
     //tab5
     const tab5 = document.getElementById(`tab5`)
-    const getFifthElementHgt = tab5.clientHeight;
+    const getFifthElementHgt = tab5?.clientHeight;
     //tab6
     const tab6 = document.getElementById(`tab6`)
-    const getSixthElementHgt = tab6.clientHeight;
+    const getSixthElementHgt = tab6?.clientHeight;
     
         
-    const Element = document.getElementById(`tab${tabs}`)
-    const getHeight = Element.clientHeight;
+    // const Element = document.getElementById(`tab${tabs}`)
+    // const getHeight = Element.clientHeight;
 
     if(tabs == 1 && tab == 1) {
       setHeightOfTab(getfirstElementHgt);
