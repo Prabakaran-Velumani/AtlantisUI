@@ -16,38 +16,108 @@ const LeaderBoard: React.FC<{
   imageSrc: any;
   getData: any;
   data: any;
-}> = ({ imageSrc, formData, getData, data }) => {
+  homeLeaderBoard: any;
+  setHomeLeaderBoard: any;
+  setCurrentScreenId?:any;
+}> = ({
+  imageSrc,
+  formData,
+  getData,
+  data,
+  setCurrentScreenId,
+  homeLeaderBoard,
+  setHomeLeaderBoard,
+}) => {
   const content = [1, 2, 3, 4, 5, 6];
   const names = [
-    'John', 'Jane', 'Michael', 'Emily', 'David', 'Sarah', 'Daniel', 'Jessica', 'Christopher', 'Amanda',
-    'Matthew', 'Ashley', 'Andrew', 'Jennifer', 'James', 'Elizabeth', 'Joseph', 'Lauren', 'Joshua', 'Megan',
-    'Robert', 'Kayla', 'William', 'Samantha', 'Daniel', 'Emily', 'Anthony', 'Nicole', 'Brandon', 'Amber',
-    'Ryan', 'Rachel', 'Tyler', 'Brittany', 'Alexander', 'Stephanie', 'Nicholas', 'Heather', 'Jacob', 'Michelle',
-    'Zachary', 'Tiffany', 'Kevin', 'Melissa', 'Steven', 'Rebecca', 'Justin', 'Chelsea', 'Brian', 'Katherine'
+    'John',
+    'Jane',
+    'Michael',
+    'Emily',
+    'David',
+    'Sarah',
+    'Daniel',
+    'Jessica',
+    'Christopher',
+    'Amanda',
+    'Matthew',
+    'Ashley',
+    'Andrew',
+    'Jennifer',
+    'James',
+    'Elizabeth',
+    'Joseph',
+    'Lauren',
+    'Joshua',
+    'Megan',
+    'Robert',
+    'Kayla',
+    'William',
+    'Samantha',
+    'Daniel',
+    'Emily',
+    'Anthony',
+    'Nicole',
+    'Brandon',
+    'Amber',
+    'Ryan',
+    'Rachel',
+    'Tyler',
+    'Brittany',
+    'Alexander',
+    'Stephanie',
+    'Nicholas',
+    'Heather',
+    'Jacob',
+    'Michelle',
+    'Zachary',
+    'Tiffany',
+    'Kevin',
+    'Melissa',
+    'Steven',
+    'Rebecca',
+    'Justin',
+    'Chelsea',
+    'Brian',
+    'Katherine',
   ];
   const playerInfo = useContext(ProfileContext);
-  const namesWithScores = names.map(name => ({ name, score: (Math.floor(Math.random() * 101) *10)}));
-// Generate random scores for each name (0-100)
+  const namesWithScores = names.map((name) => ({
+    name,
+    score: Math.floor(Math.random() * 101) * 10,
+  }));
+  // Generate random scores for each name (0-100)
 
-const shuffledNamesWithScores = namesWithScores.sort(() => Math.random() - 0.5);
-// Shuffle the array of objects
+  const shuffledNamesWithScores = namesWithScores.sort(
+    () => Math.random() - 0.5,
+  );
+  // Shuffle the array of objects
 
-const selectedNamesWithScores = shuffledNamesWithScores.slice(0, 10);
-// Select the first 10 elements
+  const selectedNamesWithScores = shuffledNamesWithScores.slice(0, 10);
+  // Select the first 10 elements
 
-const sortedSelectedNamesWithScores = selectedNamesWithScores.sort((a, b) => b.score - a.score);
-// Sort the selected names based on score (descending order)
+  const sortedSelectedNamesWithScores = selectedNamesWithScores.sort(
+    (a, b) => b.score - a.score,
+  );
+  // Sort the selected names based on score (descending order)
 
+  const usersWithAllTimeScore = sortedSelectedNamesWithScores.map((user) => {
+    const allTimeScore =
+      user.score + Math.floor(Math.random() * (2001 - user.score) * 10);
+    // Generate a random allTimeScore between the user's current score and 2000
+    return { ...user, allTimeScore };
+  });
 
-const usersWithAllTimeScore = sortedSelectedNamesWithScores.map(user => {
-  const allTimeScore = (user.score + Math.floor(Math.random() * (2001 - user.score)*10));
-  // Generate a random allTimeScore between the user's current score and 2000
-  return { ...user, allTimeScore };
-});
+  const randomPosition = Math.floor(Math.random() * 10);
+  usersWithAllTimeScore[randomPosition] = {
+    ...usersWithAllTimeScore[randomPosition],
+    name: playerInfo.name,
+  };
 
-const randomPosition = Math.floor(Math.random() * 10);
-usersWithAllTimeScore[randomPosition] = {...usersWithAllTimeScore[randomPosition], name: playerInfo.name};
-
+  const handleHome = () =>{
+    setHomeLeaderBoard(false);
+    setCurrentScreenId(10)
+  }
 
   return (
     <>
@@ -137,27 +207,41 @@ usersWithAllTimeScore[randomPosition] = {...usersWithAllTimeScore[randomPosition
                     <Box
                       className="content-lead"
                       fontFamily={'AtlantisText'}
+                      translateX={'30px'}
                       // color={'#D9C7A2'}
-                      key = {index}
+                      key={index}
+                      _hover={{
+                        filter: 'grayscale(50%)',
+                        transform: 'scale(1.02)',
+                        transition: 'transform 0.3s ease-in-out',
+                        opacity: '0.8',
+                      }}
                     >
                       <>
                         <Img
                           src={Entry}
                           className="dot-img"
-                          w={'98%'}
+                          w={'95%'}
                           h={'50px'}
-                          ml={'10px'}
+                          ml={'25px'}
                           position={'relative'}
+                          _hover={{ filter: 'grayscale(50%)' }}
                         />
                         <Box
                           position={'absolute'}
                           left={'25px'}
-                          w={'93%'}
+                          w={'90%'}
+                          ml={'10px'}
                           display={'flex'}
                           justifyContent={'space-between'}
+                          _hover={{ filter: 'grayscale(50%)' }}
                         >
                           <Box w={'30%'}>
-                            <Text textAlign={'center'} color={'#D9C7A2'}>
+                            <Text
+                              textAlign={'center'}
+                              fontSize={'x-large'}
+                              color={'#D9C7A2'}
+                            >
                               {item.name}
                             </Text>
                           </Box>
@@ -167,10 +251,10 @@ usersWithAllTimeScore[randomPosition] = {...usersWithAllTimeScore[randomPosition
                             justifyContent={'space-between'}
                           >
                             <Text textAlign={'center'} color={'#D9C7A2'}>
-                              {index+1}
+                              {index + 1}
                             </Text>
                             <Text textAlign={'center'} color={'#D9C7A2'}>
-                            {item.score}
+                              {item.score}
                             </Text>
                           </Box>
                           <Box
@@ -179,10 +263,10 @@ usersWithAllTimeScore[randomPosition] = {...usersWithAllTimeScore[randomPosition
                             justifyContent={'space-between'}
                           >
                             <Text textAlign={'center'} color={'#D9C7A2'}>
-                            {index+1}
+                              {index + 1}
                             </Text>
                             <Text textAlign={'center'} color={'#D9C7A2'}>
-                            {item.allTimeScore}
+                              {item.allTimeScore}
                             </Text>
                           </Box>
                         </Box>
@@ -314,7 +398,7 @@ usersWithAllTimeScore[randomPosition] = {...usersWithAllTimeScore[randomPosition
                   top={'-55px'}
                   right={'-40px'}
                   cursor={'pointer'}
-                  onClick={() => getData(data)}
+                  onClick={() =>homeLeaderBoard ? handleHome() : getData(data)}
                 />
               </Box>
             </Box>

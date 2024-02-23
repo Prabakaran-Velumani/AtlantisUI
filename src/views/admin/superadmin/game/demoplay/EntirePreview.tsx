@@ -29,6 +29,10 @@ import {
   Textarea,
   MenuItem,
   Select,
+  Slider,
+  SliderTrack,
+  SliderThumb,
+  SliderFilledTrack,
 } from '@chakra-ui/react';
 import next from 'assets/img/screens/next.png';
 import Screen2 from 'assets/img/screens/screen2.png';
@@ -37,6 +41,15 @@ import Screen1 from 'assets/img/screens/screen1.png';
 import Replay from 'assets/img/screens/Replay.png';
 import Lead from 'assets/img/screens/Leaderboard.png';
 import Login from 'assets/img/games/log_non.png';
+import TopMenu from 'assets/img/games/top-menu.png';
+import Overview from 'assets/img/games/game-overview.png';
+import Setting from 'assets/img/games/settings.png';
+import SettingPad from 'assets/img/games/setting-pad.png';
+import SliderPointer from 'assets/img/games/slider-pointer.png';
+import Okay from 'assets/img/games/OKAY button.png';
+// import back from 'assets/img/games/back.jpg';
+// import Back from 'assets/img/games/back.jpg';
+// import Okay from 'assets/img/games/o'
 // import bk from 'assets/img/games/17.png';
 // import note from 'assets/img/games/note.png';
 // import next from 'assets/img/screens/next.png';
@@ -196,6 +209,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     tabAttributeValue: '',
   });
   const [backgroundScreenUrl, setBackgroundScreenUrl] = useState(null);
+  const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [audio, setAudio] = useState<string>('');
   type EnumType = 'bgm' | 'api';
@@ -221,7 +235,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
   const userProfile = useContext(ProfileContext);
-  const [currentQuestNo, setCurrentQuestNo] =useState(1);
+  const [currentQuestNo, setCurrentQuestNo] = useState(1);
+  const [homeLeaderBoard,setHomeLeaderBoard] = useState(false); 
   const { profile, setProfile } = useContext(ScoreContext);
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
@@ -239,7 +254,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [voiceIds, setVoiceIds] = useState<any>();
   const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
     useState<boolean>(false);
-  const [reflectionAnswers, setReflectionAnswers] =useState([]);
+  const [reflectionAnswers, setReflectionAnswers] = useState([]);
 
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
@@ -385,7 +400,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
 
-      setCurrentQuestNo(currentQuest);
+    setCurrentQuestNo(currentQuest);
 
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
@@ -393,17 +408,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           .filter(
             (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
           )
-          .map((key:any) => demoBlocks[quest]?.[key])
+          .map((key: any) => demoBlocks[quest]?.[key])
       : [];
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = gameInfo?.questOptions.filter(
         (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
       );
-      if(gameInfo?.gameData?.gameShuffle)
-      {
+      if (gameInfo?.gameData?.gameShuffle) {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
-          [optionsFiltered[i], optionsFiltered[j]] = [optionsFiltered[j], optionsFiltered[i]]; // Swap elements at indices i and j
+          [optionsFiltered[i], optionsFiltered[j]] = [
+            optionsFiltered[j],
+            optionsFiltered[i],
+          ]; // Swap elements at indices i and j
         }
       }
       setOptions(optionsFiltered);
@@ -428,7 +445,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       type === 'response' ||
       type === 'feedback'
     ) {
-      console.log("Above Replay Point")
+      console.log('Above Replay Point');
       if (navi === 'Repeat Question') {
         setType('Interaction');
         setSelectedOption(null);
@@ -439,7 +456,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
-        console.log("IN Replay Point");
+        console.log('IN Replay Point');
         setType(demoBlocks['1']['1']?.blockChoosen);
         setData(demoBlocks['1']['1']);
         setSelectedOption(null);
@@ -578,7 +595,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           return false;
         }
       }
-    // }
+      // }
     }
     if (currentScreenId === 7) {
       if (data && type) {
@@ -644,7 +661,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
     setSelectedOption(ind === selectedOption ? null : ind);
- 
+
     const text = '..Option ' + item.qpOptions + ' -- ' + item.qpOptionText;
     const voiceId =
       // data?.blockRoll == '999999'
@@ -921,9 +938,113 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       'Failed to load video because no supported source was found.',
     );
   };
+const  handleOverView = () =>{
+  setHomeLeaderBoard(true);
+  setCurrentScreenId(4)
+}
 
   return (
     <ProfileContext.Provider value={profileData}>
+      <Box id="container" className="Play-station">
+        <Box className="top-menu-home-section">
+          {/* {currentTab !== 0 && informationScreen == '' ?  */}
+          <>
+            <Img src={TopMenu} className="top-menu-img" />
+            <Img
+              src={Overview}
+              className="overview-img"
+              onClick={handleOverView}
+            />
+            <Img
+              src={Setting}
+              className="setting-img"
+              onClick={() => setIsSettingOpen(true)}
+            />
+            <Box className="score-box">
+              <Text className="text">{profile?.score}</Text>
+            </Box>
+          </>
+          {/* /  : null}     */}
+
+          {/* {permission.setting ? */}
+          {isSettingOpen ? (
+            <Box className="Setting-box">
+              <Img src={SettingPad} className="setting-pad" />
+              <Box className="music-volume volumes">
+                <Slider
+                  aria-label="slider-ex-4"
+                  defaultValue={30}
+                  name="musicVolume"
+                  //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
+                >
+                  <SliderTrack
+                    className="slider-track"
+                    height="15px"
+                    borderRadius="80px"
+                  >
+                    {/* <Img src={VolumeTrack} /> */}
+                    <SliderFilledTrack
+                      className="filled-volume"
+                      bg="pink.500"
+                    />
+                  </SliderTrack>
+                  <SliderThumb
+                    boxSize={9}
+                    background={'transparent'}
+                    left={'calc(100% - 30%)'}
+                  >
+                    {/* <Box color='tomato' as={MdCall} /> */}
+                    <Img src={SliderPointer} />
+                  </SliderThumb>
+                </Slider>
+              </Box>
+              <Box className="voice-volume volumes">
+                <Slider
+                  aria-label="slider-ex-4"
+                  defaultValue={30}
+                  name="voiceVolume"
+                  // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
+                >
+                  <SliderTrack
+                    className="slider-track"
+                    height="15px"
+                    borderRadius="80px"
+                  >
+                    <SliderFilledTrack
+                      className="filled-volume"
+                      bg="pink.500"
+                    />
+                  </SliderTrack>
+                  <SliderThumb boxSize={9} background={'transparent'}>
+                    <Img src={SliderPointer} />
+                  </SliderThumb>
+                </Slider>
+              </Box>
+              <Box className="btns">
+                {/* <Button className='back-btn btn'><Img src={Back} 
+                // onClick={()=> setPermission({...permission, setting: false})}
+                 /></Button> */}
+                <Button
+                  className="okay-btn btn"
+                  onClick={() => setIsSettingOpen(false)}
+                >
+                  <Img src={Okay} />
+                </Button>
+              </Box>
+            </Box>
+          ) : (
+            null
+            // <Box className="Setting-box off"></Box>
+          )}
+        </Box>
+        {/* <DataContext.Provider value={{
+          "Function": { handleClose: handleClose, dispatch: dispatch, handlePlayGames: handlePlayGames, handleNextTab: handleNextTab, handlePlayQuest: handlePlayQuest, handleCloseInfoScrn },
+          "Response": assignedData,
+          "State": { state, showQuestList, showStartScreen, showWelcomeScreen, showCompletionScreen, showGamePlay, showScreens, showBgImage, setCurrentTab, completedQuest, leanerProfile, countries, setLeanerProfile, PlayQuestNo }
+        }}>          
+          {informationScreen !== '' ? <InformationCompo /> : <DynamicComponent />}
+        </DataContext.Provider>*/}
+      </Box>
       <Flex height="100vh" className={currentScreenId === 2 ? '' : 'AddScores'}>
         {(() => {
           switch (currentScreenId) {
@@ -1087,8 +1208,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     justifyContent={'center'}
                     className="Game-Screen"
                   >
-                    <Box className="Images">
+                    <Box className="Images" zIndex={99}>
                       <LeaderBoard
+                      homeLeaderBoard={homeLeaderBoard}
+                      setHomeLeaderBoard={setHomeLeaderBoard}
+                      setCurrentScreenId={setCurrentScreenId}
                         formData={gameInfo?.gameData}
                         imageSrc={Lead}
                         getData={getData}
@@ -1152,8 +1276,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     alignItems={'center'}
                     justifyContent={'center'}
                     position={'relative'}
-                    overflow={'visible'}
-                    style={{ perspective: '1000px' }}
+                    // overflow={'visible'}
+                    // style={{ perspective: '1000px' }}
                     className="Main-Content"
                   >
                     <Box
@@ -1162,8 +1286,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       h={'100vh'}
                       backgroundRepeat={'no-repeat'}
                       backgroundSize={'cover'}
-                      alignItems={'center'}
-                      justifyContent={'center'}
+                      // alignItems={'center'}
+                      // justifyContent={'center'}
                       className="Game-Screen"
                     >
                       <Box className="Images">
@@ -1174,7 +1298,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           formData={gameInfo?.gameData}
                           imageSrc={Screen1}
                           currentQuestNo={currentQuestNo}
-                          completionScreenQuestOptions={gameInfo.completionQuestOptions}
+                          completionScreenQuestOptions={
+                            gameInfo.completionQuestOptions
+                          }
                         />
                       </Box>
                     </Box>
@@ -1330,7 +1456,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           fontWeight: '900',
                           color: '#D9C7A2',
                           fontSize: '18px',
-
                           lineHeight: 1,
                           fontFamily: 'cont',
                         }}

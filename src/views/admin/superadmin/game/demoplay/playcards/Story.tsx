@@ -84,7 +84,7 @@ const Story: React.FC<{
   }, [data, type]);
 
   useEffect(() => {
-    setShowNote(true);
+    // setShowNote(true);
     setFirst(true);
     setTimeout(() => {
       setFirst(false);

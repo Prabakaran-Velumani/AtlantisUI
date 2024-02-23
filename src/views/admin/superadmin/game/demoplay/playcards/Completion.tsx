@@ -71,17 +71,14 @@ const Completion: React.FC<{
     fetchDatass();
   }, []);
 
-console.log("compliData",compliData)
-console.log("CompKeyCount",CompKeyCount)
-
   return (
     <>
       <Box
         className="comple-screen"
-        style={{
-          transform: `scale(${showComplete ? 0.5 : 1})`,
-          transition: 'transform 0.5s ease-in-out',
-        }}
+        // style={{
+        //   transform: `scale(${showComplete ? 0.5 : 1})`,
+        //   transition: 'transform 0.5s ease-in-out',
+        // }}
       >
         <motion.div
           initial={{ scale: 0 }}
@@ -93,49 +90,68 @@ console.log("CompKeyCount",CompKeyCount)
       </Box>
       {!showComplete && (
         <>
-          <Box className="title">
+          {/* <Box w={'500px'}> */}
+          <Box className="title" transform="translate(650px,84px) !important">
             <Text fontFamily={'AtlantisText'} textAlign={'center'}>
               {curretQuestOptions?.gameScreenTitle}
             </Text>
           </Box>
-          <Box className="congratulations">
+          <Box className="content-box">
+            {/* <Box className="congratulations"> */}
             {/* <Box className="content">
               {curretQuestOptions?.gameCompletedCongratsMessage}
             </Box> */}
-            <Box className="content">
-              {completionScreenQuestOptions[currentQuestNo]?.gameIsSetCongratsSingleMessage !=
-                true &&
-              completionScreenQuestOptions[currentQuestNo]?.gameIsSetCongratsScoreWiseMessage !=
-                true
-                ? completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage
-                : completionScreenQuestOptions[currentQuestNo]?.gameIsSetCongratsScoreWiseMessage ==
-                  true
-                ? completionScreenQuestOptions[currentQuestNo]?.gameIsSetMinPassScore &&
+            <Box
+              className="content"
+              transform="translate(0px,100px) !important"
+            >
+              {completionScreenQuestOptions[currentQuestNo]
+                ?.gameIsSetCongratsSingleMessage != true &&
+              completionScreenQuestOptions[currentQuestNo]
+                ?.gameIsSetCongratsScoreWiseMessage != true
+                ? completionScreenQuestOptions[currentQuestNo]
+                    ?.gameCompletedCongratsMessage
+                : completionScreenQuestOptions[currentQuestNo]
+                    ?.gameIsSetCongratsScoreWiseMessage == true
+                ? completionScreenQuestOptions[currentQuestNo]
+                    ?.gameIsSetMinPassScore &&
                   completionScreenQuestOptions[currentQuestNo]?.gameMinScore &&
                   completionScreenQuestOptions[currentQuestNo]?.gameMinScore > 0
-                  ? profile?.score < completionScreenQuestOptions[currentQuestNo]?.gameMinScore
-                    ? completionScreenQuestOptions[currentQuestNo]?.gameMinimumScoreCongratsMessage
-                    : completionScreenQuestOptions[currentQuestNo]?.gameIsSetDistinctionScore &&
+                  ? profile?.score <
+                    completionScreenQuestOptions[currentQuestNo]?.gameMinScore
+                    ? completionScreenQuestOptions[currentQuestNo]
+                        ?.gameMinimumScoreCongratsMessage
+                    : completionScreenQuestOptions[currentQuestNo]
+                        ?.gameIsSetDistinctionScore &&
                       profile?.score <
-                        completionScreenQuestOptions[currentQuestNo]?.gameDistinctionScore
+                        completionScreenQuestOptions[currentQuestNo]
+                          ?.gameDistinctionScore
                     ? completionScreenQuestOptions[currentQuestNo]
                         ?.gameaboveMinimumScoreCongratsMessage
-                    : completionScreenQuestOptions[currentQuestNo]?.gameIsSetDistinctionScore &&
+                    : completionScreenQuestOptions[currentQuestNo]
+                        ?.gameIsSetDistinctionScore &&
                       profile?.score >=
-                        completionScreenQuestOptions[currentQuestNo]?.gameDistinctionScore
+                        completionScreenQuestOptions[currentQuestNo]
+                          ?.gameDistinctionScore
                     ? completionScreenQuestOptions[currentQuestNo]
                         ?.gameAboveDistinctionScoreCongratsMessage
                     : completionScreenQuestOptions[currentQuestNo]
                         ?.gameIsSetCongratsSingleMessage == true &&
-                      completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage
-                  : completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage
-                : completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage}
+                      completionScreenQuestOptions[currentQuestNo]
+                        ?.gameCompletedCongratsMessage
+                  : completionScreenQuestOptions[currentQuestNo]
+                      ?.gameCompletedCongratsMessage
+                : completionScreenQuestOptions[currentQuestNo]
+                    ?.gameCompletedCongratsMessage}
             </Box>
           </Box>
-          <Box className="rewards-img-box">
+          <Box
+            className="rewards-img-box"
+            transform="translate(0px,200px) !important"
+          >
             <Img className="rewards-arrow-img" src={rew} />
           </Box>
-          <Box className="points-box">
+          <Box className="points-box" transform="translate(0px,200px) !important">
             <Box className="box-1">
               <Img src={back} className="box-1_img" />
               <Text className="points-text" fontFamily={'content'}>
@@ -164,9 +180,11 @@ console.log("CompKeyCount",CompKeyCount)
               </Box>
             )}
           </Box>
-          <Box className="next-btn">
+          {/* </Box> */}
+          <Box className="next-btn" transform="translate(0px,400px) !important">
             <Img src={next} onClick={() => getData(data)} cursor={'pointer'} />
           </Box>
+          {/* </Box> */}
         </>
       )}
     </>
