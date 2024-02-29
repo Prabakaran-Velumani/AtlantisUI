@@ -386,39 +386,38 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   }, [currentScreenId]);
 
-   const prevData = (current :any) =>{
-     const currentBlock = current
-       ? parseInt(current?.blockPrimarySequence.split('.')[1])
-       : null;
-     const PrevItem = currentBlock != null ? currentBlock - 1 : null;
-     const prevSeq = current
-       ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
-       : '';
-     const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
-     const currentQuest = current
-       ? parseInt(current?.blockPrimarySequence.split('.')[0])
-       : null;
+  const prevData = (current: any) => {
+    const currentBlock = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[1])
+      : null;
+    const PrevItem = currentBlock != null ? currentBlock - 1 : null;
+    const prevSeq = current
+      ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
+      : '';
+    const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
+    const currentQuest = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[0])
+      : null;
 
-     setCurrentQuestNo(currentQuest);
+    setCurrentQuestNo(currentQuest);
 
-     const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
-     const prevBlock = current
-       ? Object.keys(demoBlocks[quest] || {})
-           .filter(
-             (key) =>
-               demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
-           )
-           .map((key: any) => demoBlocks[quest]?.[key])
-       : [];
-     if (
-       prevBlock.length !== 0 &&
-       prevBlock[0]?.blockChoosen !== 'Interaction'
-     ) {
-       setType(prevBlock[0]?.blockChoosen);
-       setData(prevBlock[0]);
-     }
-     console.log(prevBlock[0]);
-   }
+    const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    const prevBlock = current
+      ? Object.keys(demoBlocks[quest] || {})
+          .filter(
+            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
+      : [];
+    if (
+      prevBlock.length !== 0 &&
+      prevBlock[0]?.blockChoosen !== 'Interaction'
+    ) {
+      setType(prevBlock[0]?.blockChoosen);
+      setData(prevBlock[0]);
+    }
+    console.log(prevBlock[0]);
+  };
 
   const getData = (next: any) => {
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
@@ -976,7 +975,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setHomeLeaderBoard(true);
     setCurrentScreenId(4);
   };
-
+  console.log(profile?.score);
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="container" className="Play-station">
@@ -995,79 +994,91 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               onClick={() => setIsSettingOpen(true)}
             />
             <Box className="score-box">
-              <Text className="text">{profile?.score}</Text>
+              <Text className="text">
+                {(profile &&
+                  profile.score &&
+                  profile.score.length > 0 &&
+                  profile.score.reduce(
+                    (accumulator: number, currentValue: any) => {
+                      return accumulator + currentValue.score;
+                    },
+                    0,
+                  )) ||
+                  0}
+              </Text>
             </Box>
           </>
           {/* /  : null}     */}
 
           {/* {permission.setting ? */}
-          {isSettingOpen ? (
-            <Box className="Setting-box">
-              <Img src={SettingPad} className="setting-pad" />
-              <Box className="music-volume volumes">
-                <Slider
-                  aria-label="slider-ex-4"
-                  defaultValue={30}
-                  name="musicVolume"
-                  //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
-                >
-                  <SliderTrack
-                    className="slider-track"
-                    height="15px"
-                    borderRadius="80px"
+          {
+            isSettingOpen ? (
+              <Box className="Setting-box">
+                <Img src={SettingPad} className="setting-pad" />
+                <Box className="music-volume volumes">
+                  <Slider
+                    aria-label="slider-ex-4"
+                    defaultValue={30}
+                    name="musicVolume"
+                    //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
                   >
-                    {/* <Img src={VolumeTrack} /> */}
-                    <SliderFilledTrack
-                      className="filled-volume"
-                      bg="pink.500"
-                    />
-                  </SliderTrack>
-                  <SliderThumb
-                    boxSize={9}
-                    background={'transparent'}
-                    left={'calc(100% - 30%)'}
+                    <SliderTrack
+                      className="slider-track"
+                      height="15px"
+                      borderRadius="80px"
+                    >
+                      {/* <Img src={VolumeTrack} /> */}
+                      <SliderFilledTrack
+                        className="filled-volume"
+                        bg="pink.500"
+                      />
+                    </SliderTrack>
+                    <SliderThumb
+                      boxSize={9}
+                      background={'transparent'}
+                      left={'calc(100% - 30%)'}
+                    >
+                      {/* <Box color='tomato' as={MdCall} /> */}
+                      <Img src={SliderPointer} />
+                    </SliderThumb>
+                  </Slider>
+                </Box>
+                <Box className="voice-volume volumes">
+                  <Slider
+                    aria-label="slider-ex-4"
+                    defaultValue={30}
+                    name="voiceVolume"
+                    // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
                   >
-                    {/* <Box color='tomato' as={MdCall} /> */}
-                    <Img src={SliderPointer} />
-                  </SliderThumb>
-                </Slider>
-              </Box>
-              <Box className="voice-volume volumes">
-                <Slider
-                  aria-label="slider-ex-4"
-                  defaultValue={30}
-                  name="voiceVolume"
-                  // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
-                >
-                  <SliderTrack
-                    className="slider-track"
-                    height="15px"
-                    borderRadius="80px"
-                  >
-                    <SliderFilledTrack
-                      className="filled-volume"
-                      bg="pink.500"
-                    />
-                  </SliderTrack>
-                  <SliderThumb boxSize={9} background={'transparent'}>
-                    <Img src={SliderPointer} />
-                  </SliderThumb>
-                </Slider>
-              </Box>
-              <Box className="btns">
-                {/* <Button className='back-btn btn'><Img src={Back} 
+                    <SliderTrack
+                      className="slider-track"
+                      height="15px"
+                      borderRadius="80px"
+                    >
+                      <SliderFilledTrack
+                        className="filled-volume"
+                        bg="pink.500"
+                      />
+                    </SliderTrack>
+                    <SliderThumb boxSize={9} background={'transparent'}>
+                      <Img src={SliderPointer} />
+                    </SliderThumb>
+                  </Slider>
+                </Box>
+                <Box className="btns">
+                  {/* <Button className='back-btn btn'><Img src={Back} 
                 // onClick={()=> setPermission({...permission, setting: false})}
                  /></Button> */}
-                <Button
-                  className="okay-btn btn"
-                  onClick={() => setIsSettingOpen(false)}
-                >
-                  <Img src={Okay} />
-                </Button>
+                  <Button
+                    className="okay-btn btn"
+                    onClick={() => setIsSettingOpen(false)}
+                  >
+                    <Img src={Okay} />
+                  </Button>
+                </Box>
               </Box>
-            </Box>
-          ) : null
-          // <Box className="Setting-box off"></Box>
+            ) : null
+            // <Box className="Setting-box off"></Box>
           }
         </Box>
         {/* <DataContext.Provider value={{
@@ -1326,6 +1337,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     >
                       <Box className="Images">
                         <Completion
+                        
+                         questOptions={gameInfo?.questOptions}
                           getData={getData}
                           data={data}
                           setCurrentScreenId={setCurrentScreenId}
@@ -1576,8 +1589,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return (
                 <>
                   <Characterspage
-                   profileData={profileData}
-                   setProfileData={setProfileData}
+                    profileData={profileData}
+                    setProfileData={setProfileData}
                     setSelectedPlayer={setSelectedPlayer}
                     players={gameInfo?.gamePlayers}
                     imageSrc={backgroundScreenUrl}
@@ -1590,14 +1603,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return (
                 <>
                   {/* <SimpleGrid columns={{ base: 1 }}> */}
-                    <ChapterPage
-                       
-                      formData={gameInfo?.gameData}
-                      imageSrc={backgroundScreenUrl}
-                      demoBlocks={demoBlocks}
-                      questOptions={gameInfo?.questOptions}
-                      setCurrentScreenId={setCurrentScreenId}
-                    />
+                  <ChapterPage
+                    formData={gameInfo?.gameData}
+                    imageSrc={backgroundScreenUrl}
+                    demoBlocks={demoBlocks}
+                    questOptions={gameInfo?.questOptions}
+                    setCurrentScreenId={setCurrentScreenId}
+                  />
                   {/* </SimpleGrid> */}
                 </>
               );

@@ -18,8 +18,10 @@ const Completion: React.FC<{
   setCurrentScreenId?: any;
   getData?: any;
   data?: any;
-  currentQuestNo: any;
+  // currentQuestNo: any;
   completionScreenQuestOptions: any;
+  questOptions: any;
+  currentQuestNo: any;
 }> = ({
   setCurrentScreenId,
   preview,
@@ -31,8 +33,10 @@ const Completion: React.FC<{
   CompKeyCount,
   getData,
   data,
-  currentQuestNo,
+  // currentQuestNo,
   completionScreenQuestOptions,
+  questOptions,
+  currentQuestNo,
 }) => {
   const [imgb, setbImg] = useState<any>();
   const [showComplete, setShowComplete] = useState(false);
@@ -41,12 +45,45 @@ const Completion: React.FC<{
       (quest: any) => quest.questNo == currentQuestNo,
     ),
   );
+  const [questScores, setQuestScores] = useState(null);
   const { profile, setProfile } = useContext(ScoreContext);
   useEffect(() => {
     setShowComplete(true);
     setTimeout(() => {
       setShowComplete(false);
     }, 1000);
+  }, []);
+  useEffect(() => {
+    const groupedByQuest: any = {};
+    questOptions.forEach((item: any) => {
+      const questNo = item.qpQuestNo;
+      if (!groupedByQuest[questNo]) {
+        groupedByQuest[questNo] = [];
+      }
+      groupedByQuest[questNo].push(item);
+    });
+    const maxScoresByQuest: any = {};
+    for (const questNo in groupedByQuest) {
+      const questData = groupedByQuest[questNo];
+      const maxScoresBySequence: any = {};
+
+      questData.forEach((item: any) => {
+        const sequence = item.qpSequence;
+        const score = parseInt(item.qpScore);
+        if (
+          !maxScoresBySequence[sequence] ||
+          score > maxScoresBySequence[sequence]
+        ) {
+          maxScoresBySequence[sequence] = score;
+        }
+      });
+      const maxScoreForQuest = Object.values(maxScoresBySequence).reduce(
+        (acc: any, score: any) => acc + score,
+        0,
+      );
+      maxScoresByQuest[questNo] = maxScoreForQuest;
+    }
+    setQuestScores(maxScoresByQuest);
   }, []);
   useEffect(() => {
     const fetchDatass = async () => {
@@ -71,6 +108,8 @@ const Completion: React.FC<{
     fetchDatass();
   }, []);
 
+
+  console.log(questScores);
   return (
     <>
       <Box
@@ -151,7 +190,10 @@ const Completion: React.FC<{
           >
             <Img className="rewards-arrow-img" src={rew} />
           </Box>
-          <Box className="points-box" transform="translate(0px,200px) !important">
+          <Box
+            className="points-box"
+            transform="translate(0px,200px) !important"
+          >
             <Box className="box-1">
               <Img src={back} className="box-1_img" />
               <Text className="points-text" fontFamily={'content'}>
@@ -160,11 +202,17 @@ const Completion: React.FC<{
               <Box className="inside-box-1">
                 <Img src={point} className="inside-box-1_img" />
                 <Text className="inside-points-text" fontFamily={'content'}>
-                  {(curretQuestOptions?.gameMinScore || 100) +
-                    '/' +
-                    (curretQuestOptions?.gameTotalScore
-                      ? curretQuestOptions?.gameTotalScore?.maxScore || 100
-                      : '')}
+                  {(profile &&
+                    profile.score &&
+                    profile.score.length > 0 &&
+                    profile.score.reduce(
+                      (accumulator: number, currentValue: any) => {
+                        return currentQuestNo === currentValue.quest ?  accumulator + currentValue.score : accumulator;
+                      },
+                      0,
+                    )) ||
+                    0}
+                  /{questScores && questScores[currentQuestNo]}
                 </Text>
               </Box>
             </Box>

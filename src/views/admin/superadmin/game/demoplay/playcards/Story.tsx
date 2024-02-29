@@ -80,7 +80,7 @@ const Story: React.FC<{
 
   const userProfile = useContext(ProfileContext);
   const { profile, setProfile } = useContext(ScoreContext);
-  const [score, setScore] = useState(null);
+  const [score, setScore] = useState<any>({ seqId: '', score: null });
   useEffect(() => {
     getVoice(data, type);
     setShowNote(true);
@@ -172,11 +172,33 @@ const Story: React.FC<{
   };
 
   const InteractionFunction = () => {
-    setProfile((prev: any) => ({ ...prev, score: prev.score + score }));
+    setProfile((prev: any) => {
+      const { seqId, score: newScore } = score;
+      const index = prev.score.findIndex((item: any) => item.seqId === seqId);
+      if (index !== -1) {
+        // If the ID exists, update the corresponding object's score
+        const updatedScore = [...prev.score];
+        updatedScore[index] = { ...updatedScore[index], score: newScore };
+        return { ...prev, score: updatedScore };
+      } else {
+        // If the ID doesn't exist, add a new object with the score to the score array
+        return {
+          ...prev,
+          score: [
+            ...prev.score,
+            {
+              seqId: seqId,
+              score: newScore,
+              quest: parseInt(seqId.split('.')[0]),
+            },
+          ],
+        };
+      }
+    });
     getData(data);
   };
   const optionClick = (item: any, ind: any) => {
-    setScore(parseInt(item?.qpScore));
+    setScore({ seqId: item?.qpSequence, score: parseInt(item?.qpScore) });
     handleValidate(item, ind);
   };
 
@@ -204,9 +226,7 @@ const Story: React.FC<{
               first ? 0 : -10
             }%) translateX(${first ? 0 : -10}%)`}
             transition={'transform 0.9s ease-in-out'}
-          >
-
-          </Box>
+          ></Box>
           <Box
             style={{
               transform: `scale(${showNote ? 0.2 : 1})`,
@@ -220,7 +240,12 @@ const Story: React.FC<{
             justifyContent={'center'}
             alignItems={'center'}
           >
-            <Img className={'gamenote'} w={{base:'350px',sm:'600px',md:'700px',lg:'900px'}} h={{base:'300px',sm:'450px',md:'700px',lg:'900px'}} src={note} />
+            <Img
+              className={'gamenote'}
+              w={{ base: '350px', sm: '600px', md: '700px', lg: '900px' }}
+              h={{ base: '300px', sm: '450px', md: '700px', lg: '900px' }}
+              src={note}
+            />
             <Box
               position={'fixed'}
               overflowY={'scroll'}
@@ -293,18 +318,18 @@ const Story: React.FC<{
               />
               <ambientLight intensity={5.5} />
               {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
-              {/* <Background /> */}
-              {/* <Model /> */}
-              {/* <mesh 
+          {/* <Background /> */}
+          {/* <Model /> */}
+          {/* <mesh 
           rotation={[-Math.PI / 2, 0, 0]}
           position={[0, -5, 0]}
           receiveShadow 
         > */}
-              {/* <planeGeometry args={[100, 100]} />
+          {/* <planeGeometry args={[100, 100]} />
           <shadowMaterial opacity={0.5} />
         </mesh> */}
-            {/* </Canvas>
-          </Box> */} 
+          {/* </Canvas>
+          </Box> */}
           {selectedPlayer && (
             <Img
               src={`${API_SERVER}/${selectedPlayer}`}
@@ -351,7 +376,6 @@ const Story: React.FC<{
                   w={'30%'}
                   left={'5%'}
                   bottom={'140px'}
-                  
                 />
                 <Text
                   position={'fixed'}
@@ -388,7 +412,13 @@ const Story: React.FC<{
                 w={'92%'}
                 bottom={'0'}
               >
-                <Img src={left} w={'80px'} h={'50px'} cursor={'pointer'} onClick={() => prevData(data)} />
+                <Img
+                  src={left}
+                  w={'80px'}
+                  h={'50px'}
+                  cursor={'pointer'}
+                  onClick={() => prevData(data)}
+                />
                 <Img
                   src={right}
                   w={'80px'}
@@ -431,18 +461,18 @@ const Story: React.FC<{
               />
               <ambientLight intensity={5.5} />
               {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
-              {/* <Background /> */}
-              {/* <Model /> */}
-              {/* <mesh
+          {/* <Background /> */}
+          {/* <Model /> */}
+          {/* <mesh
           rotation={[-Math.PI / 2, 0, 0]}
           position={[0, -5, 0]}
           receiveShadow 
         > */}
-              {/* <planeGeometry args={[100, 100]} />
+          {/* <planeGeometry args={[100, 100]} />
           <shadowMaterial opacity={0.5} />
         </mesh> */}
-            {/* </Canvas>
-          </Box> */} 
+          {/* </Canvas>
+          </Box> */}
           {/* {selectedPlayer && (
             <Img
               src={`${API_SERVER}/${selectedPlayer}`}
@@ -547,7 +577,13 @@ const Story: React.FC<{
               w={'508px'}
               left={'-10px'}
             >
-              <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} onClick={() => prevData(data)} />
+              <Img
+                src={left}
+                w={'50px'}
+                h={'50px'}
+                cursor={'pointer'}
+                onClick={() => prevData(data)}
+              />
               {option !== null && (
                 <Img
                   src={right}

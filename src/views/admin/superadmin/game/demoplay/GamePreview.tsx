@@ -87,7 +87,7 @@ const GamePreview = () => {
   const [currentScreenId, setCurrentScreenId] =
     useState<number>(InitialScreenId);
   const [profile, setProfile] = useState({
-    score: 0,
+    score: [],
   });
   const [currentScore, setCurrentScore] = useState(0);
   const toast = useToast();
@@ -329,9 +329,7 @@ const GamePreview = () => {
       return true;
     }
   };
-  const updateScore = (newScore: any) => {
-    setProfile(newScore);
-  };
+
   return (
     <>
       {gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||

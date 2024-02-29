@@ -11,46 +11,50 @@ import Demo from 'assets/img/games/1700.jpg';
 import Lock from 'assets/img/games/lock.png';
 import { BiMoney } from 'react-icons/bi';
 import { GiCoins } from 'react-icons/gi';
+import { ScoreContext } from '../GamePreview';
 
-const ChapterPage: React.FC<{ formData?:any,imageSrc: any; demoBlocks: any,setCurrentScreenId:any;questOptions?:any }> = ({
-  imageSrc,
-  demoBlocks,
-  setCurrentScreenId,
-  formData,
-  questOptions
-}) => {
-const [questScores,setQuestScores] = useState(null);
-useEffect(()=>{
- const groupedByQuest:any = {};
- questOptions.forEach((item:any) => {
+const ChapterPage: React.FC<{
+  formData?: any;
+  imageSrc: any;
+  demoBlocks: any;
+  setCurrentScreenId: any;
+  questOptions?: any;
+}> = ({ imageSrc, demoBlocks, setCurrentScreenId, formData, questOptions }) => {
+  const [questScores, setQuestScores] = useState(null);
+  useEffect(() => {
+    const groupedByQuest: any = {};
+    questOptions.forEach((item: any) => {
       const questNo = item.qpQuestNo;
       if (!groupedByQuest[questNo]) {
-          groupedByQuest[questNo] = [];
+        groupedByQuest[questNo] = [];
       }
       groupedByQuest[questNo].push(item);
-  });
-  const maxScoresByQuest:any = {};
-  for (const questNo in groupedByQuest) {
+    });
+    const maxScoresByQuest: any = {};
+    for (const questNo in groupedByQuest) {
       const questData = groupedByQuest[questNo];
-      const maxScoresBySequence:any = {};
-  
-      questData.forEach((item:any) => {
-          const sequence = item.qpSequence;
-          const score = parseInt(item.qpScore);
-  
-          if (!maxScoresBySequence[sequence] || score > maxScoresBySequence[sequence]) {
-              maxScoresBySequence[sequence] = score;
-          }
+      const maxScoresBySequence: any = {};
+
+      questData.forEach((item: any) => {
+        const sequence = item.qpSequence;
+        const score = parseInt(item.qpScore);
+
+        if (
+          !maxScoresBySequence[sequence] ||
+          score > maxScoresBySequence[sequence]
+        ) {
+          maxScoresBySequence[sequence] = score;
+        }
       });
-      const maxScoreForQuest = Object.values(maxScoresBySequence).reduce((acc:any, score:any) => acc + score, 0);
+      const maxScoreForQuest = Object.values(maxScoresBySequence).reduce(
+        (acc: any, score: any) => acc + score,
+        0,
+      );
       maxScoresByQuest[questNo] = maxScoreForQuest;
-
-  }
-setQuestScores(maxScoresByQuest)
- 
-},[]);
-
-
+    }
+    setQuestScores(maxScoresByQuest);
+  }, []);
+  const { profile } = useContext(ScoreContext);
   return (
     <>
       <Box className="Play-game NoOfQueue">
@@ -78,33 +82,43 @@ setQuestScores(maxScoresByQuest)
                 <Text className="title">{'Level 1'}</Text>
                 <Box className="content-box" overflowY={'scroll'}>
                   <SimpleGrid columns={{ base: 1, sm: 1, md: 3 }}>
-                    {  demoBlocks && Object.keys(demoBlocks).map((it, num) => (
-                      <Box
-                        className="queue-box"
-                        key={num}                        
-                        onClick={() => setCurrentScreenId(1)}
-                      >
-                        <Img className="queue-screen" src={QueueScreen} />
-                        <Text className="heading">Quest {num+1}</Text>
-                        <Box className="badge">
-                          {it !== '1' ? (
-                            <Img src={Lock} className="lock" />
-                          ) : null}
-                          <Img src={Demo} />
+                    {demoBlocks &&
+                      Object.keys(demoBlocks).map((it, num) => (
+                        <Box
+                          className="queue-box"
+                          key={num}
+                          onClick={() => setCurrentScreenId(1)}
+                        >
+                          <Img className="queue-screen" src={QueueScreen} />
+                          <Text className="heading">Quest {num + 1}</Text>
+                          <Box className="badge">
+                            {it !== '1' ? (
+                              <Img src={Lock} className="lock" />
+                            ) : null}
+                            <Img src={Demo} />
+                          </Box>
+                          <Text className="text"></Text>
+                          <Box className="bottom-box">
+                            <Text className="amount-score">
+                              {(profile &&
+                                profile.score &&
+                                profile.score.length > 0 &&
+                                profile.score.reduce(
+                                  (accumulator: number, currentValue: any) => {
+                                    return currentValue.quest === it
+                                      ? accumulator + currentValue.score
+                                      : accumulator;
+                                  },
+                                  0,
+                                )) ||
+                                0}
+                              /{questScores && questScores[it]}{' '}
+                              <Icon as={BiMoney} />
+                            </Text>
+                          </Box>
                         </Box>
-                        <Text className="text"></Text>
-                        <Box className="bottom-box">
-                          <Text className="amount-score">
-                            0/{questScores && questScores[it]} <Icon as={BiMoney} />
-                          </Text>
-                          {/* <Text className="coin">
-                            100/100 <Icon as={GiCoins} />
-                          </Text> */}
-                        </Box>
-                      </Box>
-                    ))}
+                      ))}
                   </SimpleGrid>
-                 
                 </Box>
               </Box>
             </Box>
