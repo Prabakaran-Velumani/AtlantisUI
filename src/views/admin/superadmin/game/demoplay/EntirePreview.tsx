@@ -296,7 +296,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       fetchDefaultBgMusic();
     } else if (gameInfo?.bgMusic) {
       currentScreenId > 0 &&
-        currentScreenId == 1 &&
+        currentScreenId === 1 &&
         isGetsPlayAudioConfirmation &&
         setAudioObj({
           url: gameInfo?.bgMusic,
@@ -385,6 +385,40 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         break;
     }
   }, [currentScreenId]);
+
+   const prevData = (current :any) =>{
+     const currentBlock = current
+       ? parseInt(current?.blockPrimarySequence.split('.')[1])
+       : null;
+     const PrevItem = currentBlock != null ? currentBlock - 1 : null;
+     const prevSeq = current
+       ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
+       : '';
+     const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
+     const currentQuest = current
+       ? parseInt(current?.blockPrimarySequence.split('.')[0])
+       : null;
+
+     setCurrentQuestNo(currentQuest);
+
+     const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
+     const prevBlock = current
+       ? Object.keys(demoBlocks[quest] || {})
+           .filter(
+             (key) =>
+               demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+           )
+           .map((key: any) => demoBlocks[quest]?.[key])
+       : [];
+     if (
+       prevBlock.length !== 0 &&
+       prevBlock[0]?.blockChoosen !== 'Interaction'
+     ) {
+       setType(prevBlock[0]?.blockChoosen);
+       setData(prevBlock[0]);
+     }
+     console.log(prevBlock[0]);
+   }
 
   const getData = (next: any) => {
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
@@ -1115,6 +1149,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   > */}
                   {data && type && (
                     <Story
+                      prevData={prevData}
                       currentScore={currentScore}
                       selectedNpc={gameInfo?.gameNonPlayerUrl}
                       selectedPlayer={selectedPlayer}

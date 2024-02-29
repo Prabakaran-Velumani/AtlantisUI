@@ -37,6 +37,7 @@ import { useLayoutEffect, useRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 const Story: React.FC<{
+  prevData?: any;
   currentScore: any;
   data: any;
   type: any;
@@ -72,6 +73,7 @@ const Story: React.FC<{
   getAudioForText,
   voiceIds,
   currentScore,
+  prevData,
 }) => {
   const [showNote, setShowNote] = useState(true),
     [first, setFirst] = useState(false);
@@ -386,7 +388,7 @@ const Story: React.FC<{
                 w={'92%'}
                 bottom={'0'}
               >
-                <Img src={left} w={'80px'} h={'50px'} cursor={'pointer'} />
+                <Img src={left} w={'80px'} h={'50px'} cursor={'pointer'} onClick={() => prevData(data)} />
                 <Img
                   src={right}
                   w={'80px'}
@@ -545,7 +547,7 @@ const Story: React.FC<{
               w={'508px'}
               left={'-10px'}
             >
-              <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+              <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} onClick={() => prevData(data)} />
               {option !== null && (
                 <Img
                   src={right}

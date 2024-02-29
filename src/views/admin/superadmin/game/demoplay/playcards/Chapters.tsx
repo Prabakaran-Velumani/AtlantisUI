@@ -42,8 +42,6 @@ useEffect(()=>{
               maxScoresBySequence[sequence] = score;
           }
       });
-  
-     
       const maxScoreForQuest = Object.values(maxScoresBySequence).reduce((acc:any, score:any) => acc + score, 0);
       maxScoresByQuest[questNo] = maxScoreForQuest;
 
@@ -99,9 +97,9 @@ setQuestScores(maxScoresByQuest)
                           <Text className="amount-score">
                             0/{questScores && questScores[it]} <Icon as={BiMoney} />
                           </Text>
-                          <Text className="coin">
+                          {/* <Text className="coin">
                             100/100 <Icon as={GiCoins} />
-                          </Text>
+                          </Text> */}
                         </Box>
                       </Box>
                     ))}

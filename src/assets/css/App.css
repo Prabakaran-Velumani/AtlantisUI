@@ -1339,7 +1339,7 @@ transform: translate(-167px, -84px);
   transform: translate(0, 75px);
   width: 230px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   font-size: 18px;
   font-family: 'AtlantisText';
   color: #c5c5c5;
