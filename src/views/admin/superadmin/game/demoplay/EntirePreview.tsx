@@ -1556,10 +1556,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 <>
                   {/* <SimpleGrid columns={{ base: 1 }}> */}
                     <ChapterPage
-                    
+                       
                       formData={gameInfo?.gameData}
                       imageSrc={backgroundScreenUrl}
                       demoBlocks={demoBlocks}
+                      questOptions={gameInfo?.questOptions}
                       setCurrentScreenId={setCurrentScreenId}
                     />
                   {/* </SimpleGrid> */}
