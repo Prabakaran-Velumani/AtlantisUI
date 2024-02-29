@@ -975,6 +975,7 @@ transform: translate(-167px, -84px);
   align-items: center;
   height: 100vh;  
 }
+
 .Play-game .img-box .img-bg{
   height: 100vh;
   /* width: 700px; */
@@ -1087,11 +1088,24 @@ transform: translate(-167px, -84px);
   height: 30px;
   width: 300px;
 }
+.formfield {  
+
+  position: absolute;
+  transform: translate(0, 0);   
+  height: 30px;
+  width: 300px;
+}
 .ProfileScreen .img-box .img-section .selectField {
   position: absolute;
   height: 20px;
   width: 20px;
   transform: translate(250px, 10px);  
+}
+.selectField {
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  transform: translate(213px, 10px);  
 }
 .ProfileScreen .img-box .img-section .dropdown
 {
@@ -1099,9 +1113,20 @@ transform: translate(-167px, -84px);
   max-width: 280px;
   max-height: 120px;
   overflow-y: scroll;
+ 
   background-color:#062c42;
 }
 
+.dropdown
+{
+  transform: translate(8px, 30px); 
+  max-width: 280px;
+  max-height: 120px;
+  overflow-y: scroll;
+  font-family: 'AtlantisText';
+  color: #D9C7A2;
+  background-color:#062c42;
+}
 .ProfileScreen .img-box .img-section .img {    
   height: 870px;
   width: 1600px;
@@ -1124,6 +1149,15 @@ transform: translate(-167px, -84px);
   text-transform: uppercase;
   font-size: 24px;
   margin-right: 0;
+  font-family: 'AtlantisText';
+}
+.gender label{   
+  text-align: center; 
+  text-transform: uppercase;
+  font-size: 24px;
+  margin-right: 0;
+  font-family: 'AtlantisText';
+  color: #D9C7A2;
 }
 .ProfileScreen .img-box .img-section .profile-box .nick-name input{   
   text-align: center; 
@@ -1143,10 +1177,22 @@ transform: translate(-167px, -84px);
   height: 30px;
   width: 300px;
 }
+.gender input{   
+  text-align: center; 
+  text-transform: capitalize;
+  font-size: 22px;
+  color: #b4b2be;    
+  border: none;
+  height: 30px;
+  width: 300px;
+}
 .ProfileScreen .img-box .img-section .profile-box .nick-name input:focus-visible{
   box-shadow: unset;
 } 
 .ProfileScreen .img-box .img-section .profile-box .gender input:focus-visible{
+  box-shadow: unset;
+} 
+.gender input:focus-visible{
   box-shadow: unset;
 } 
 .ProfileScreen .next-btn {
@@ -1205,7 +1251,7 @@ transform: translate(-167px, -84px);
  .CharacterScreen .img-box .img-section .back-n-next-box .left-btn {  
    position: absolute;  
    transform: translate(53px, 283px);
-   background: transparent;
+   background: transparent; 
    z-index: 9;  
    /* cursor: var(--cursor);   */
  }
@@ -1317,8 +1363,8 @@ transform: translate(-167px, -84px);
     background-position: center;
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .welcome-screen-box .bg-welcome {
-    height: 650px; 
-    width: 800px; 
+    height: 715px; 
+    width: 1000px; 
     background-position: center;
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box {
@@ -1329,17 +1375,18 @@ transform: translate(-167px, -84px);
     /* height: 236px; modify */
     height: 260px;
     position: absolute;
-    /* transform:translate(0px, 35vh); modify */
-    transform: translate(0px, 270px);
-    
+    transform:translate(0px, 35vh); 
+    /* transform: translate(0px, 270px);modify */
     color: #D9C7A2;     
-    /* overflow: hidden;                */
+    /* overflow: hidden;*/
   }
+
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content {
     /* width: 380px; modify */
     width: 448px;
     overflow-y: scroll;        
   }
+
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .renderContent{
     display: flex;            
     justify-content: center;
@@ -1647,6 +1694,89 @@ transform: translate(-167px, -84px);
 
 
 @media screen and (max-width: 480px) {
+  .NoOfQueue .img-box .img-section .title {
+  position: absolute;
+  /* transform: translate(100px, 0); */
+  font-size: 25px;
+  font-family: 'AtlantisText';
+  color: #000;
+  top: 20px;
+}
+  .ProfileScreen .img-box .img-section .selectField {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    transform: translate(130px, 10px);  
+  }
+  .selectField {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    transform: translate(130px, 10px);  
+  }
+  .ProfileScreen .img-box .img-section .profile-box .nick-name input{   
+    text-align: center; 
+    text-transform: capitalize;
+    font-size: 22px;
+    color: #b4b2be;    
+    border: none;
+    height: 30px;
+    width: 150px;
+  }
+  .First-Screen .img-box .welcome-text {  
+    position: absolute;  
+    /* width: 233px; */
+    transform: translate(0px, 50px);
+    /* padding-right: 31px;     */
+    color: #ffe797;
+    letter-spacing: 2px;
+    font-size: 24px;
+    text-align: center;
+    font-family: 'AtlantisText';
+    /* margin-bottom: 10px; */
+  }
+  .First-Screen .img-box .welcome-text-name {  
+    position: absolute;  
+    /* width: 233px; */
+    transform: translate(0px, 107px);
+    /* padding-right: 31px;     */
+    color: #ffe797;
+    letter-spacing: 2px;
+    font-size: 24px;
+    text-align: center;
+    font-family: 'AtlantisText';
+  }
+  .Play-game .img-box .img{
+    height: 800px;
+    width: 500px ;
+    transition-delay: 2s;
+    transition: 1s ease;
+    position: absolute;
+    background-position: center;
+    background-origin: content-box;
+    background-size: contain;
+  }
+  .First-Screen .img-box .heading {  
+    position: absolute;  
+    width: 233px;
+    transform: translate(0px, -158px);      
+    color: #c1c1c1;
+    letter-spacing: 2.5px;
+    font-size: 24px;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'AtlantisText';
+  }
+  .CharacterScreen .img-box .img-section .select-pad {  
+    position: absolute;  
+    height: 200px;  
+    width: 400px;
+  }
+  .bg-welcome {
+    height: 250px; 
+    width: 350px; 
+    background-position: center;
+  }
   .AddScores .Main-Content .Game-Screen {    
     width: 100%;
   }
@@ -1666,7 +1796,7 @@ transform: translate(-167px, -84px);
     width: 100%;
   }
   .AddScores .Main-Content .Game-Screen .Images .title{  
-    transform: translate(0px, 52px) !important;
+    transform: translate(0px, -50px) !important;
     font-size: 18px;
   }
   .title{  
@@ -1764,6 +1894,22 @@ transform: translate(-167px, -84px);
 
 
 @media screen and (max-width: 768px) {
+
+  /* .NoOfQueue .img-box .img-section .content-box {
+    position: absolute;
+    transform: translate(0, 60px);
+    height: 485px;
+    width: 650px;
+    display: flex;  
+    justify-content: center;
+    overflow-y: auto;
+    flex-wrap: wrap;
+  } */
+  .CharacterScreen .img-box .img-section .select-pad {  
+    position: absolute;  
+    height: 350px;  
+    width: 600px;
+  }
   .AddScores .Main-Content .Game-Screen {    
     width: 100%;
   }
@@ -1802,6 +1948,16 @@ transform: translate(-167px, -84px);
 
 
 @media screen and (max-width: 990px) {
+  .bg-welcome {
+    height: 615px; 
+    width: 850px; 
+    background-position: center;
+  }
+  .CharacterScreen .img-box .img-section .select-pad {  
+    position: absolute;  
+    height: 625px;  
+    width: 900px;
+  }
   .AddScores .Main-Content .Game-Screen .Images .congratulations .content {     
     width: 155px;
   }
@@ -1813,6 +1969,7 @@ transform: translate(-167px, -84px);
   }
 }
 @media screen and (max-width: 1440px) {  
+  
   .AddScores .Main-Content .Game-Screen .Images .title {   
     font-size: 18px;
    }
@@ -1929,7 +2086,7 @@ transform: translate(-167px, -84px);
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box {       
     height: 252px;
-    transform: translate(0px, 35vh);              
+    transform: translate(0px, 35vh) !important;              
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content {       
     width: 250px;
@@ -1953,6 +2110,10 @@ transform: translate(-167px, -84px);
   }
 }
 @media screen and (max-width: 1200px) {  
+  .gamenote{
+    height: 700px;
+    width: 700px ;
+  }
   .AddScores .Main-Content .Game-Screen .Images .title {   
     font-size: 14px;
    }

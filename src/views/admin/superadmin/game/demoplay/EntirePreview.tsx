@@ -236,7 +236,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
   const userProfile = useContext(ProfileContext);
   const [currentQuestNo, setCurrentQuestNo] = useState(1);
-  const [homeLeaderBoard,setHomeLeaderBoard] = useState(false); 
+  const [homeLeaderBoard, setHomeLeaderBoard] = useState(false);
   const { profile, setProfile } = useContext(ScoreContext);
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
@@ -938,10 +938,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       'Failed to load video because no supported source was found.',
     );
   };
-const  handleOverView = () =>{
-  setHomeLeaderBoard(true);
-  setCurrentScreenId(4)
-}
+  const handleOverView = () => {
+    setHomeLeaderBoard(true);
+    setCurrentScreenId(4);
+  };
 
   return (
     <ProfileContext.Provider value={profileData}>
@@ -1032,10 +1032,9 @@ const  handleOverView = () =>{
                 </Button>
               </Box>
             </Box>
-          ) : (
-            null
-            // <Box className="Setting-box off"></Box>
-          )}
+          ) : null
+          // <Box className="Setting-box off"></Box>
+          }
         </Box>
         {/* <DataContext.Provider value={{
           "Function": { handleClose: handleClose, dispatch: dispatch, handlePlayGames: handlePlayGames, handleNextTab: handleNextTab, handlePlayQuest: handlePlayQuest, handleCloseInfoScrn },
@@ -1210,9 +1209,9 @@ const  handleOverView = () =>{
                   >
                     <Box className="Images" zIndex={99}>
                       <LeaderBoard
-                      homeLeaderBoard={homeLeaderBoard}
-                      setHomeLeaderBoard={setHomeLeaderBoard}
-                      setCurrentScreenId={setCurrentScreenId}
+                        homeLeaderBoard={homeLeaderBoard}
+                        setHomeLeaderBoard={setHomeLeaderBoard}
+                        setCurrentScreenId={setCurrentScreenId}
                         formData={gameInfo?.gameData}
                         imageSrc={Lead}
                         getData={getData}
@@ -1509,7 +1508,7 @@ const  handleOverView = () =>{
                           <Button
                             className="btn"
                             onClick={() => {
-                              setCurrentScreenId(11);
+                              setCurrentScreenId(12);
                               setIsGetsPlayAudioConfirmation(true);
                             }}
                           ></Button>
@@ -1542,22 +1541,28 @@ const  handleOverView = () =>{
               return (
                 <>
                   <Characterspage
+                   profileData={profileData}
+                   setProfileData={setProfileData}
                     setSelectedPlayer={setSelectedPlayer}
                     players={gameInfo?.gamePlayers}
                     imageSrc={backgroundScreenUrl}
                     setCurrentScreenId={setCurrentScreenId}
+                    demoBlocks={demoBlocks}
                   />
                 </>
               );
             case 13:
               return (
                 <>
-                  <ChapterPage
-                    formData={gameInfo?.gameData}
-                    imageSrc={backgroundScreenUrl}
-                    demoBlocks={demoBlocks}
-                    setCurrentScreenId={setCurrentScreenId}
-                  />
+                  {/* <SimpleGrid columns={{ base: 1 }}> */}
+                    <ChapterPage
+                    
+                      formData={gameInfo?.gameData}
+                      imageSrc={backgroundScreenUrl}
+                      demoBlocks={demoBlocks}
+                      setCurrentScreenId={setCurrentScreenId}
+                    />
+                  {/* </SimpleGrid> */}
                 </>
               );
             default:

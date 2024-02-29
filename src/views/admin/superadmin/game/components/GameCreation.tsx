@@ -158,6 +158,7 @@ import SinglePreview from './SinglePreview';
 import { AiFillMessage } from 'react-icons/ai';
 import { getAllReviews } from 'utils/reviews/reviews';
 import { API_SERVER } from 'config/constant';
+// import { useHistory } from 'react-router-dom';
 
 const steps = [
   { title: 'BackGround' },
@@ -184,6 +185,8 @@ interface MyObject {
 const GameCreation = () => {
   ///////////////////Navin 15-12///////////////////////////////////
   //stroy//
+
+  // const history = useHistory();
   const [questTabState, setQuestTabState] = useState<number>(1);
   const [currentTab, setCurrentTab] = useState(0);
   const [openQuest, setOpenQuest] = useState(false);
@@ -360,15 +363,13 @@ const GameCreation = () => {
       gameCourseType: 'Public',
       gameNonPlayingCharacterId: null,
 
-      //navin
+
       gameNonPlayerName: null,
       gameNonPlayerVoice: null,
       gamePlayerMaleVoice: null,
       gamePlayerFemaleVoice: null,
       gameNarratorVoice: null,
 
-      //navin
-      ///Afrith
       gameStoryLine: '',
       gameReflectionQuestion: 4,
       gameRefQuestion1: '',
@@ -378,7 +379,7 @@ const GameCreation = () => {
       ///
       gameAnimationId: null,
       gameTitle: '',
-      // gameStoryLine: '',
+
       gameSkills: '',
       gameLearningOutcome: '',
       gameDuration: null,
@@ -391,9 +392,6 @@ const GameCreation = () => {
       gameIsCollectLearnerFeedback: 'false',
       gameIsFeedbackMandatory: 'false',
       gameIsLearnerMandatoryQuestion: 'false',
-      // gameIsAddanotherQuestions:'',
-
-      // gameScreenTitle: 'Quest Complete',
       gameIsSetCongratsSingleMessage: 'false',
 
       gameIsShowTakeaway: 'false',
@@ -570,9 +568,7 @@ const GameCreation = () => {
       gameWelcomepageBackground: e.target.id,
     }));
   };
-  {
-    /**************Changes-14/12/23**********************/
-  }
+ 
   const handleH = (i: any) => {
     setBackgroundIndex(i);
   };
@@ -580,10 +576,7 @@ const GameCreation = () => {
     // setIsHovered(false)
     setBackgroundIndex('');
   };
-  {
-    /****************************************************/
-  }
-  //////Changes-14/Dec/23//////////////////////
+
   const handlePreview = (img: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchImg((prev: any) => {
@@ -602,9 +595,9 @@ const GameCreation = () => {
     });
     onOpen();
 
-    // console.log('SavedSTATE--',savedState);
+   
   };
-  ///////////////////////////////////////////////
+
   const fetch = async () => {
     const result = await getBadge(parseInt(id));
     if (result?.status === 'Success') {
@@ -615,7 +608,7 @@ const GameCreation = () => {
       setSelectedAud(res?.data);
     }
   };
-  //////////////Changes - 12-Dec-23/////////////////////
+ 
   const handlePreviewPlayer = (player: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchPlayerImg((prev: any) => {
@@ -652,7 +645,7 @@ const GameCreation = () => {
       const item = {gameId:qst.gameId,questNo:qst.gameQuestNo, gameIsSetMinPassScore : qst.gameIsSetMinPassScore, gameIsSetDistinctionScore : qst.gameIsSetDistinctionScore, gameDistinctionScore: qst.gameDistinctionScore, gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore, gameIsSetBadge: qst.gameIsSetBadge, gameBadge: qst.gameBadge, gameBadgeName: qst.gameBadgeName, gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge, gameAwardBadgeScore: qst.gameAwardBadgeScore, gameScreenTitle: qst.gameScreenTitle, gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage, gameIsSetCongratsScoreWiseMessage: qst.gameIsSetCongratsScoreWiseMessage, gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage, gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage, gameaboveMinimumScoreCongratsMessage: qst.gameaboveMinimumScoreCongratsMessage, gameLessthanDistinctionScoreCongratsMessage: qst.gameLessthanDistinctionScoreCongratsMessage, gameAboveDistinctionScoreCongratsMessage: qst.gameAboveDistinctionScoreCongratsMessage}
      return item; 
     });
-    console.log("completionOptions",completionOptions);
+  
     setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,
@@ -896,15 +889,12 @@ const GameCreation = () => {
     // const result1 = await getStory(id);
     // if (result1?.status !== 'Success') {de
     //   console.log(result1.message);
-
     // }
     // else {
-
     //   setBlockItems(result1.items);
     //   setserias(result1.serias);
     // }
     const result2 = await getListStory(id);
-
     if (result2?.status !== 'Success') {
       console.log(result2?.message);
     } else {
@@ -933,13 +923,23 @@ const GameCreation = () => {
   }, [id, items]);
 
   const handleEntirePrev = async () => {
-    const gamedata = await getGameCreatorDemoData(id);
 
-    if (!gamedata.error && gamedata) {
-      updateCreatorGameInfo(gamedata);
-      setEntire(true);
-      onOpen();
-    }
+    const pack = {
+      id:id,
+      tab:tab,
+      currentTab:currentTab,
+      // prevdata:prevdata,
+      // formData:formData,
+      show:img,
+      selectedBadge:selectedBadge,
+      compliData:compliData,
+      // gameInfo:gameInfo,
+      CompKeyCount:CompKeyCount,
+      reflectionQuestions:reflectionQuestions,
+      reflectionQuestionsdefault:reflectionQuestionsdefault,
+    } 
+    const data = encodeURIComponent(JSON.stringify(pack));
+    window.open(`/preview?data=${data}`, '_blank');
   };
   const handleShareReview = () => {
     setEntire(false);
@@ -4429,7 +4429,7 @@ const GameCreation = () => {
                 tableData={tableDataCheck}
               />
             )}
-            {entire && (
+            {/* {entire && (
               <SinglePreview
                 tab={tab}
                 currentTab={currentTab}
@@ -4440,20 +4440,20 @@ const GameCreation = () => {
                 onOpen={onOpen}
                 onClose={onClose}
                 selectedBadge={selectedBadge}
-                setSelectedBadge={setSelectedBadge}
-                setFormData={setFormData}
-                handleChange={handleChange}
-                setBadge={setBadge}
+                // setSelectedBadge={setSelectedBadge}
+                // setFormData={setFormData}
+                // handleChange={handleChange}
+                // setBadge={setBadge}
                 compliData={compliData}
                 gameInfo={gameInfo}
-                setCompliData={setCompliData}
+                // setCompliData={setCompliData}
                 CompKeyCount={CompKeyCount}
-                handlecompletion={handlecompletion}
+                // handlecompletion={handlecompletion}
                 reflectionQuestions={reflectionQuestions}
                 reflectionQuestionsdefault={reflectionQuestionsdefault}
                 setPrevdata={setPrevdata}
               />
-            )}
+            )} */}
           </Box>
         </GridItem>
       </Grid>

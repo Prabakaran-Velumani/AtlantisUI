@@ -177,7 +177,7 @@ const Welcome: React.FC<{
                   <Box
                     w={'60%'}
                     className="content"
-                    width={'440px !important'}
+                    width={{sm:"214px !important",md:'440px !important'}}
                     overflowY={'scroll'}
                     mt={'25px'}
                   >

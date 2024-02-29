@@ -70,7 +70,7 @@ const CompletionContentScreen: React.FC<{
   imageSrc: any;
   selectedBadge: any;
   compliData: any;
-  setCompliData: any;
+  // setCompliData: any/;
   CompKeyCount: any;
   preview: any;
 }> = ({
@@ -79,7 +79,7 @@ const CompletionContentScreen: React.FC<{
   formData,
   imageSrc,
   compliData,
-  setCompliData,
+  // setCompliData,
   CompKeyCount,
 }) => {
   const [imgb, setbImg] = useState<any>();

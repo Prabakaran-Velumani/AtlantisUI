@@ -34,7 +34,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
   profileData,
   setProfileData
 }) => {
-
+  
+  
   const [select, setSelect] = useState(false);
   const [isGender, setIsGender] = useState(false);
   useEffect(() => {
@@ -49,7 +50,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
     };
     fetchData(); 
   }, []);
-
   const handleProfile = (e: any, lang?: any) => {
     const { id, value } = e.target;
     setSelect(false);
@@ -140,7 +140,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
                       </Box>
                     )}
                   </Box>
-                  <Box className="gender">
+                  {/* <Box className="gender">
                     <FormLabel mt={'40px'}>Gender</FormLabel>
                     <Text transform={'translate(0px,25px)'} textAlign={'center'}  onClick={() => setIsGender(!isGender)} position={'relative'} zIndex={9999999}>
                       {profileData?.gender}
@@ -167,7 +167,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
                           ))}
                       </Box>
                     )}
-                  </Box>
+                  </Box> */}
                 </Box>
               </Box>
               {/* <Box className='pinewood' onClick={()=>dispatch({ type: 'level_3'})}></Box> */}
