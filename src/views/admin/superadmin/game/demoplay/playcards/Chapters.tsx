@@ -19,7 +19,8 @@ const ChapterPage: React.FC<{
   demoBlocks: any;
   setCurrentScreenId: any;
   questOptions?: any;
-}> = ({ imageSrc, demoBlocks, setCurrentScreenId, formData, questOptions }) => {
+  currentQuestNo?:any;
+}> = ({ imageSrc, demoBlocks, setCurrentScreenId, formData, questOptions,currentQuestNo }) => {
   const [questScores, setQuestScores] = useState(null);
   useEffect(() => {
     const groupedByQuest: any = {};
@@ -92,7 +93,7 @@ const ChapterPage: React.FC<{
                           <Img className="queue-screen" src={QueueScreen} />
                           <Text className="heading">Quest {num + 1}</Text>
                           <Box className="badge">
-                            {it !== '1' ? (
+                            {parseInt(it) >= currentQuestNo ? (
                               <Img src={Lock} className="lock" />
                             ) : null}
                             <Img src={Demo} />
