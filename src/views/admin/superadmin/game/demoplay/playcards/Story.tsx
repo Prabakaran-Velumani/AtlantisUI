@@ -690,14 +690,14 @@ const Story: React.FC<{
               <Box
                 display={'flex'}
                 position={'fixed'}
-                justifyContent={'space-between'}
+                justifyContent={'flex-end'}
                 w={'80%'}
                 bottom={'0'}
               >
-                <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+                {/* <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} /> */}
                 <Img
                   src={right}
-                  w={'50px'}
+                  w={'60px'}
                   h={'50px'}
                   cursor={'pointer'}
                   onClick={() => getData(data)}

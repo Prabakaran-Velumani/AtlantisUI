@@ -234,6 +234,11 @@ const SinglePreview: React.FC<{
       gameNonPlayerUrl:
         info?.assets?.npcUrl && API_SERVER + '/' + info?.assets?.npcUrl,
     });
+    const firstBlock = sortBlockSequence(lmsblocks);
+    console.log(firstBlock);
+    setDemoBlocks(firstBlock);
+    setType(firstBlock['1']['1']?.blockChoosen);
+    setData(firstBlock['1']['1']);
   };
   useEffect(() => {
     const name = async () => {
@@ -247,9 +252,6 @@ const SinglePreview: React.FC<{
       setFormData(gameById?.data);
     };
     name();
-    setDemoBlocks(gameInfo?.blocks);
-    setType(gameInfo?.blocks['1']['1']?.blockChoosen);
-    setData(gameInfo?.blocks['1']['1']);
     // const fetchPreviewData = async() =>{
     //     const prev = await getPreview(id);
     //     if (prev && prev?.status !== 'Success') return console.log(prev.message);
@@ -436,7 +438,38 @@ const SinglePreview: React.FC<{
   //    audioRef.current = '';
   //   }
   // }, [currentAudio]);
+  const prevData = (current: any) => {
+    const currentBlock = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[1])
+      : null;
+    const PrevItem = currentBlock != null ? currentBlock - 1 : null;
+    const prevSeq = current
+      ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
+      : '';
+    const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
+    const currentQuest = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[0])
+      : null;
 
+    setCurrentQuestNo(currentQuest);
+
+    const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    const prevBlock = current
+      ? Object.keys(demoBlocks[quest] || {})
+          .filter(
+            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
+      : [];
+    if (
+      prevBlock.length !== 0 &&
+      prevBlock[0]?.blockChoosen !== 'Interaction'
+    ) {
+      setType(prevBlock[0]?.blockChoosen);
+      setData(prevBlock[0]);
+    }
+    console.log(prevBlock[0]);
+  };
   const getData = (next: any) => {
     // setCurrentAudio('');
     // setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
@@ -722,6 +755,7 @@ const SinglePreview: React.FC<{
     // onClose();
   };
 
+  console.log(type,data,tab)
   return (
     <Modal isOpen={true} onClose={handlePreviewPanelClose} size="full">
       <ModalOverlay />
@@ -970,6 +1004,7 @@ const SinglePreview: React.FC<{
                         w={'50px'}
                         h={'50px'}
                         cursor={'pointer'}
+                        onClick={()=>prevData(data)}
                       />
                       <Img
                         src={right}
@@ -1089,7 +1124,7 @@ const SinglePreview: React.FC<{
                     w={'508px'}
                     left={'-10px'}
                   >
-                    <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+                    <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'}  onClick={()=>prevData(data)} />
                     {selectedOption !== null && (
                       <Img
                         src={right}
@@ -1174,16 +1209,16 @@ const SinglePreview: React.FC<{
                     <Box
                       display={'flex'}
                       position={'fixed'}
-                      justifyContent={'space-between'}
+                      justifyContent={'flex-end'}
                       w={'80%'}
                       bottom={'0'}
                     >
-                      <Img
+                      {/* <Img
                         src={left}
                         w={'50px'}
                         h={'50px'}
                         cursor={'pointer'}
-                      />
+                      /> */}
                       <Img
                         src={right}
                         w={'50px'}

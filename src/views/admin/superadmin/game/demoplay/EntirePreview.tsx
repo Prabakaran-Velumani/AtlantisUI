@@ -379,7 +379,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           API_SERVER + '/uploads/background/41524_1701765021527.jpg',
         );
         currentScreenId > 0 &&
-          currentScreenId == 1 &&
+          currentScreenId === 1 &&
           isGetsPlayAudioConfirmation &&
           setAudio(gameInfo?.bgMusic ?? '');
         break;
@@ -416,7 +416,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setType(prevBlock[0]?.blockChoosen);
       setData(prevBlock[0]);
     }
-    console.log(prevBlock[0]);
   };
 
   const getData = (next: any) => {
@@ -1604,6 +1603,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 <>
                   {/* <SimpleGrid columns={{ base: 1 }}> */}
                   <ChapterPage
+                  currentQuestNo={currentQuestNo}
                     formData={gameInfo?.gameData}
                     imageSrc={backgroundScreenUrl}
                     demoBlocks={demoBlocks}
