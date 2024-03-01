@@ -52,6 +52,9 @@ import { useAuth } from 'contexts/auth.context';
 import { useNavigate } from 'react-router-dom';
 import { adminLogin } from 'utils/admin/adminService';
 import OnToast from 'components/alerts/toast';
+import { useDispatch} from 'react-redux';
+import {login} from 'store/user/userSlice';
+
 function SignIn() {
   // Chakra color mode
   const textColor = useColorModeValue('navy.700', 'white');
@@ -81,6 +84,7 @@ function SignIn() {
   const [toastStatus, setToastStatus] = useState<string>('');
   const token = localStorage.getItem('user');
   const { user, setUser } = useAuth();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleClick = () => setShow(!show);
@@ -108,9 +112,9 @@ function SignIn() {
     } 
     let valid = {data:result?.data,token:result?.token,role:result?.role};
     let user = JSON.stringify(valid);
-    setUser(user);
-    localStorage.setItem('user',user);
     
+    setUser(user);
+    localStorage.setItem('user',user);    
     navigate('/admin/dashboards');
     window.location.reload();
   };

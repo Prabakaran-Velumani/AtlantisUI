@@ -62,6 +62,7 @@ import batch from 'assets/img/screens/upback.png';
 import TextField from 'components/fields/TextField';
 import { useParams } from 'react-router-dom';
 import { FaClock } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 interface Badge {
   gasId: number;
   gasAssetImage: string;
@@ -165,37 +166,18 @@ console.log("formData", formData);
 
   return (
     <>
+
       {imageSrc && preview ? (
-       
+      
         <Box className="welcome-screen">
           <Box
             className="welcome-screen-box"
-            // w={{ base: '100%', sm: '100%', md: '100%', lg: '90%' }}
-            // ml={{ base: '10px', sm: '10px', md: '20px', lg: '28px' }}
-            // h={{ base: '150px', sm: '450px', md: '550px', lg: '450px' }}
-            // backgroundImage={imageSrc}
-            // backgroundRepeat={'no-repeat'}
-            // backgroundSize={'contain'}
-            // fontFamily={'content'}
-            // // color="#D9C7A2"
-            // display={'flex'}
-            // justifyContent={'center'}
-            // alignItems={'center'}
           >
             <Img src={imageSrc} className="bg-img" />
           </Box>
           <Box
             className="content-box"
-            // h={'250px'}
-            // color="#D9C7A2"
             fontFamily={'gametext'}
-            // w={'100%'}
-            // mt={{ base: '0px', sm: '0px', md: '10px', lg: '20px' }}
-            // lineHeight={1}
-            // display={'flex'}
-            // justifyContent={'center'}
-            // alignItems={'flex-start'}
-            // textAlign={'center'}
           >
             <Text
               className="title"
@@ -699,7 +681,8 @@ console.log("formData", formData);
             </Box>
           </Box>
         </Box>
-      )}
+      )
+    }
     </>
   );
 };
