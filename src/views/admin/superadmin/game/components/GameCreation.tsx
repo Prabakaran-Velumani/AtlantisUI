@@ -529,12 +529,13 @@ const GameCreation = () => {
       setDefaultSkills([]);
     }
   };
+
+ 
   useEffect(() => {
     if (defaultskills.length === 0 && id) {
       fetchDefaultSkill();
     }
-    
-      console.log(`******useEffect previewStateDate --`,previewStoreData);
+
       if (id) {
         let previewData: { [key: string]: any } = {
             gameId: parseInt(id),
@@ -992,8 +993,11 @@ const GameCreation = () => {
     }
   }, [id, items]);
 
-  useEffect(() => {
-    
+useEffect(()=>{
+  dispatch(updatePreviewData({isDispatched:true, CompKeyCount: CompKeyCount}))
+},[CompKeyCount])
+
+  useEffect(() => {    
     if (id) {
       const previewData = {
         gameId: parseInt(id),
@@ -1006,8 +1010,7 @@ const GameCreation = () => {
   }, [id, tab, currentTab, questTabState]);
 
   const handleEntirePrev = async () => {
-    const gamedata = await getGameCreatorDemoData(id);
-    if (!gamedata.error && gamedata) {
+ 
       const previewData = {
         gameId: parseInt(id),
         currentTab: tab,
@@ -1015,27 +1018,10 @@ const GameCreation = () => {
         currentQuest: questTabState,
       };
       dispatch(updatePreviewData(previewData));
-      console.log("*******dispatch function");
-      console.log("*******previewStoreData",previewStoreData);
-
-      const url = `/screen/preview/${id}/${tab}/${currentTab}`;
+      const url = `/screen/preview/${id}`;
       window.open(url, '_blank');
-      
-      // setTimeout(() => {
-      //   const isdispatched: { [key: string]: boolean } = { isDispatched: true };
-      //   console.log("*******Timeout function")
-      //   dispatch(updatePreviewData(isdispatched));
-      // }, 2000);
     }
-  };
 
-//   useEffect(() => {
-// console.log("******previewData", previewData)
-//     if (previewData?.isDispatched) {
-//       const url = `/screen/preview/${id}/${tab}/${currentTab}`;
-//       window.open(url, '_blank');
-//     }
-//   }, [previewData]);
   const handleShareReview = () => {
     setEntire(false);
     setShare(true);
@@ -1556,14 +1542,12 @@ const GameCreation = () => {
 
       const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
       setFormData(formDataWithoutLastTab);
-
-      // setTab(tab + 1);
-      // setTimeout(() => {
-
+      dispatch(updatePreviewData({isDispatched: true}));
       setOpenQuest(true);
     }
   };
-  //console.log('formdata', formData.gameLastTabArray);
+  
+
   const commonNextFunction = async () => {
     if (tab === 1 && !formData.gameBackgroundId) {
       toast({
@@ -2340,6 +2324,8 @@ const GameCreation = () => {
     newHoveredStates[index] = isHovered;
     setHoveredStates(newHoveredStates);
   };
+
+  console.log("handleHover",hoveredStates)
   const handleSummaryState = (isOpen: any) => {
     setIsOpenSummary(isOpen);
     setFormData((prev) => ({
@@ -2769,6 +2755,7 @@ const GameCreation = () => {
         //alert("de"+tab);
         debouncedSubmitGame(data);
         setExtensiveNavigation(null);
+        dispatch(updatePreviewData({isDispatched: true}));
       }
     }
   }, [formData]);
@@ -2791,6 +2778,8 @@ const GameCreation = () => {
     }, 500),
     [id], // Empty dependency array to ensure that the function is only created once
   );
+
+
 
   const debouncedCompliSubmit = useCallback(
     debounce(async (data: any) => {
@@ -2843,6 +2832,7 @@ const GameCreation = () => {
 
       // handleCompletionScreen(1)
     }
+    dispatch(updatePreviewData({isDispatched: true}));
   }, [compliData]);
 
   ////handleCompliStore
@@ -3312,6 +3302,7 @@ const GameCreation = () => {
         }
       }
     }
+    dispatch(updatePreviewData({activeBlockSeq: parseInt(seq.id.split('.')[1])}));
   };
 
   const moveItem = (startIndex: number, endIndex: number, seq: any) => {
@@ -3362,13 +3353,16 @@ const GameCreation = () => {
     setBlockItems(updatedItems);
   };
 
-  // COnsole's
-  //console.log('Copied sequence:', copySequence);
-  //console.log('Pasted sequence:', copySequence);
-
   const updateExtensiveNavigation = (id: number) => {
     setExtensiveNavigation(id);
   };
+
+
+
+console.log(`#####formData`);
+console.log(formData);
+console.log(`#####compliData`);
+console.log(compliData);     
 
   return (
     <>

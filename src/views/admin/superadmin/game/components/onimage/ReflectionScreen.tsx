@@ -67,7 +67,7 @@ const ReflectionScreen: React.FC<{
   formData: any;
   reflectionQuestions: any;
   imageSrc: any;
-  reflectionQuestionsdefault: any;
+  reflectionQuestionsdefault?: any;
   preview: any;
 }> = ({
   formData,

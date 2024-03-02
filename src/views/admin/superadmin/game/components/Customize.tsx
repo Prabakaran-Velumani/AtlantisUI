@@ -42,11 +42,13 @@ interface PropsInteraction {
     upNextCount?:any;
     setUpNextCount?:any;                
   reviews?:any;
-  reviewers?:any
+  reviewers?:any;
 }
 
 const Customize: React.FC<PropsInteraction> = ({ id, formData, setBlockItems, serias, setserias, setInput, input, setItems, items, alphabet, setAlphabet, interactionBlock, setInteractionBlock, countalphabet, setAlphabetCount, count, setCount, sequence, setSequence, dummySequence, setDummySequence,showSelectBlock,setSelectBlock,targetSequence,handleKeyDown,isDeleteSeq, setDeleteseq,handleGet,fetchBlocks,listQuest,questTabState,setQuestTabState,deleteQuest,setUpNextCount,upNextCount,reviewers,
-  reviews }) => {
+  reviews,
+  //  onMouseOver 
+  }) => {
 
   const [showComponent, setComponent] = useState('CustomList');
   const navigate = useNavigate();
@@ -58,9 +60,6 @@ const Customize: React.FC<PropsInteraction> = ({ id, formData, setBlockItems, se
   return (
     <>
       {showComponent === 'CustomList' &&
-
-
-
         <CustomList handleShowComponent={handleShowComponent} id={id} formData={formData} setBlockItems={setBlockItems} serias={serias} setserias={setserias} setInput={setInput} input={input} setItems={setItems} items={items} alphabet={alphabet} setAlphabet={setAlphabet} interactionBlock={interactionBlock} setInteractionBlock={setInteractionBlock}
           countalphabet={countalphabet}
           setAlphabetCount={setAlphabetCount}

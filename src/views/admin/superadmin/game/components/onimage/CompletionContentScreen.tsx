@@ -68,9 +68,9 @@ interface Badge {
 const CompletionContentScreen: React.FC<{
   formData: any;
   imageSrc: any;
-  selectedBadge: any;
+  selectedBadge?: any;
   compliData: any;
-  setCompliData: any;
+  setCompliData?: any;
   CompKeyCount: any;
   preview: any;
 }> = ({

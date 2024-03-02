@@ -34,7 +34,7 @@ export default function Main() {
         <Route path={'game/glbpractise'} element={<GlbPractise />} />
         <Route path="game/demoplay/:uuid" element={<GamePreview />} />
         <Route path="game/creator/demoplay/:id" element={<GamePreview />} />
-        <Route path="/screen/preview/:id/:currentTab/:currentSubTab" element={<ScreenPreview />} />
+        <Route path="/screen/preview/:id" element={<ScreenPreview />} />
         <Route path="auth/sign-in/default" element={<SignInDefault />} />
         <Route path="auth/*" element={<AuthLayout />} />
         <Route

@@ -10,11 +10,9 @@ export async function preloadedImages(imageList) {
     });
   }
 
-  // Preload images
  await Promise.all(
     imageList.map(async (item) => {
       try {
-        console.log('$$$$$$item  ---',item);
         const preloadedUrl = await preloadImage(item.src);
         preloadedImages[item.assetType] = preloadedUrl;
       } catch (error) {

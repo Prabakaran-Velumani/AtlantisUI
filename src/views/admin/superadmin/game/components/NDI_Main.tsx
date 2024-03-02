@@ -99,7 +99,9 @@ type ItemType = {
 };
 const NDIMain: React.FC<NDIMainProps> = ({ id, formData,setBlockItems,serias,setserias,setInput,input,setItems,items,alphabet,setAlphabet,interactionBlock,setInteractionBlock,countalphabet,setAlphabetCount,count,setCount,sequence,setSequence,dummySequence,setDummySequence,showSelectBlock,setSelectBlock,targetSequence,handleKeyDown,isDeleteSeq, setDeleteseq, handleGet,fetchBlocks,listQuest, questTabState,
     setQuestTabState,deleteQuest,upNextCount,setUpNextCount,reviews,
-  reviewers}) => {
+  reviewers, 
+//   onMouseOver
+}) => {
     const dragRef = useRef<any>();
     const bodyRef = useRef<any>();
     const toast = useToast();
@@ -1549,6 +1551,7 @@ console.log('setDialogNavigation',menuvalue)
         })
     }
     const handleFieldBlock = (e: ChangeEvent<HTMLInputElement>) => {
+        
         const getValue = e.target.value
         setBlockInput(e.target.value);
         if (getValue === '/') {
@@ -1777,10 +1780,6 @@ console.log('setDialogNavigation',menuvalue)
     };
     // Console's 
     // console.log('dummySequence', dummySequence);                     
-    console.log('sequence', sequence);
-    console.log('items', items);
-    console.log('count', count);
-
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
 
@@ -1788,8 +1787,7 @@ console.log('setDialogNavigation',menuvalue)
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-  
-  
+
  const textColor = useColorModeValue('secondaryGray.900', 'white');
 
     return (
@@ -1822,7 +1820,7 @@ console.log('setDialogNavigation',menuvalue)
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}
                                             >
-                                                <Box    key={i} >
+                                                <Box  key={i} >
                                                     {seq.type == 'Note' ?
 (
                                                             <Box id={`tarSeqRef${seq.id}`}  position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} 
@@ -1961,7 +1959,7 @@ console.log('setDialogNavigation',menuvalue)
 <Box id={`tarSeqRef${seq.id}`}  position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} background={seq.input === lastInputName || dragData.isDragging === true ? '#c7c7c724' : 'unset'} _hover={{background: '#c7c7c724'}} zIndex={seq.input === lastInputName ? '9' : 'unset'}
                                                                 tabIndex={0}
                                                                 onClick={(e) => handleKeyDown(e,i, seq)}
-                                                                onKeyDown={(e) => handleKeyDown(e,i, seq)}                                                                
+                                                                onKeyDown={(e) => handleKeyDown(e,i, seq)} 
                                                                 >
                                                            
                                                                 
@@ -1991,6 +1989,7 @@ console.log('setDialogNavigation',menuvalue)
                                                                         handleDialogBlockRoll={handleDialogBlockRoll}
                                                                         showSelectBlock={showSelectBlock}
                                                                         setSelectBlock={setSelectBlock}
+                                                                       
    />
 {/* Accordian For Dialog Blocks */}
                                   <Accordion allowToggle>
@@ -2102,7 +2101,7 @@ console.log('setDialogNavigation',menuvalue)
 								) :seq.type == 'Interaction' ? (
 <Box id={`tarSeqRef${seq.id}`}  position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} background={seq.input === lastInputName || dragData.isDragging === true ? '#c7c7c724' : 'unset'} _hover={{background: '#c7c7c724'}} zIndex={seq.input === lastInputName ? '9' : 'unset'} 
                                                                     tabIndex={0}
-                                                                    onClick={(e) => handleKeyDown(e,i, seq)}
+                                                                    onClick={(e) => {handleKeyDown(e,i, seq) }}
                                                                     onKeyDown={(e) => handleKeyDown(e,i, seq)}
                                                                     >
                                                             
