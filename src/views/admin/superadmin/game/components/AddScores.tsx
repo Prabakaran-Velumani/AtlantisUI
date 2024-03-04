@@ -333,7 +333,6 @@ const AddScores: React.FC<{
     ];
     const handleFileChange = (e: any) => {
       const file = e.target.files[0];
-      console.log('Selected file:', file);
     };
     const addReflection = () => {
       setReflection([...reflection, '']);
@@ -350,7 +349,6 @@ const AddScores: React.FC<{
 
     useEffect(() => {
       fetchData();
-      console.log('formData', formData);
     }, [backgroundIndex]);
 
     const handleAdd = () => {
@@ -360,29 +358,8 @@ const AddScores: React.FC<{
       }, 500);
     };
 
-
-
-
-
-    // console.log('FD--',formData);
-
-    // const toast = useToast();
-    // const showToast = () => {
-    //   if (!formData.gameMinScore) {
-    //     toast({
-    //       title: 'Please Enter Min Score',
-    //       status: 'error',
-    //       duration: 3000,
-    //       isClosable: true,
-    //     });
-
-    //     return false;
-    //   }
-    // };
-
     //Rajesh
     const handleBadge = (e: any) => {
-      console.log('welcome');
       e.preventDefault();
       let selectedFile;
       if (e.target.files) {
@@ -391,12 +368,10 @@ const AddScores: React.FC<{
       else if (e.dataTransfer && e.dataTransfer.files) {
         selectedFile = e.dataTransfer.files[0];
       }
-      console.log('selectedFile', selectedFile);
       if (selectedFile) {
         setBadge(selectedFile);
         const reader = new FileReader();
         reader.onload = () => {
-          // setShowBadge(reader.result);
         };
         reader.readAsDataURL(selectedFile);
       }
@@ -721,10 +696,7 @@ const AddScores: React.FC<{
       }
         } 
 if(Object.keys(Completion).length-1 !==CompKeyCount){
-  
-  // setCompliData(Completion[CompKeyCount+1]);
-  console.log('compliDatas',Completion[CompKeyCount+1],Completion,'CompKeyCount',CompKeyCount);
-  setCompKeyCount(CompKeyCount+1)
+    setCompKeyCount(CompKeyCount+1)
   return false
 
 }
@@ -736,9 +708,7 @@ if(Object.keys(Completion).length-1 !==CompKeyCount){
       if(currentTab === 2){
            
       if(formData.gameIsShowReflectionScreen === 'true')
-      { 
-        console.log("form length"+ formData.gameReflectionQuestion);
-      
+      {       
         if (typeof reflectionQuestions === 'object' && reflectionQuestions !== null) {
          
           var keys = Object.keys(reflectionQuestions);
@@ -835,7 +805,7 @@ if(Object.keys(Completion).length-1 !==CompKeyCount){
       
              setCurrentTab((prevTab:any) => Math.min(prevTab + 1, 5)); // Limit tabs to 6 (0 to 5)
           };
-          console.log('compliDatas',compliData,Completion,'CompKeyCount',CompKeyCount);
+  
     const handleBack = () => {
 
 if(currentTab===0 ){

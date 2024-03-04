@@ -14,6 +14,7 @@ import { useState } from 'react';
 import EntirePreview from 'views/admin/superadmin/game/demoplay/EntirePreview';
 import GamePreview from 'views/admin/superadmin/game/demoplay/GamePreview';
 import GlbPractise from 'views/admin/games/game/components/GlbPractise';
+// import ScreenPreview from 'views/admin/superadmin/game/components/ScreenPreview';
 import ScreenPreview from 'views/admin/superadmin/game/components/ScreenPreview';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
@@ -31,7 +32,7 @@ export default function Main() {
   return (
     <ChakraProvider theme={currentTheme}>
       <Routes>
-        <Route path={'game/glbpractise'} element={<GlbPractise />} />
+        {/* <Route path={'game/glbpractise'} element={<GlbPractise />} /> */}
         <Route path="game/demoplay/:uuid" element={<GamePreview />} />
         <Route path="game/creator/demoplay/:id" element={<GamePreview />} />
         <Route path="/screen/preview/:id" element={<ScreenPreview />} />

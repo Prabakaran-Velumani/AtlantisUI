@@ -73,6 +73,7 @@ const CompletionContentScreen: React.FC<{
   setCompliData?: any;
   CompKeyCount: any;
   preview: any;
+  preloadedAssets?:any;
 }> = ({
   preview,
   selectedBadge,
@@ -81,6 +82,7 @@ const CompletionContentScreen: React.FC<{
   compliData,
   setCompliData,
   CompKeyCount,
+  preloadedAssets
 }) => {
   const [imgb, setbImg] = useState<any>();
   useEffect(() => {

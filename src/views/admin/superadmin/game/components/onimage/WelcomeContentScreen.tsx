@@ -64,7 +64,8 @@ const WelcomeContentScreen: React.FC<{
   formData: any;
   imageSrc: any;
   preview: any;
-}> = ({ formData, imageSrc, preview }) => {
+  preloadedAssets?: any;
+}> = ({ formData, imageSrc, preview, preloadedAssets}) => {
   const { id } = useParams();
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);
@@ -75,7 +76,6 @@ const WelcomeContentScreen: React.FC<{
       setProfile([]);
       return console.log('getbackruond error:' + result?.message);
     } else {
-      console.log('****result', result);
       setProfile(result.data);
     }
 
@@ -140,7 +140,6 @@ const WelcomeContentScreen: React.FC<{
       ? formData.gameLearningOutcome?.split('\n')
       : '';
 
-  console.log('formData', formData);
 
   return (
     <>

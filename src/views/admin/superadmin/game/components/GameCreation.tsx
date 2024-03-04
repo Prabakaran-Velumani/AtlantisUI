@@ -885,15 +885,12 @@ const GameCreation = () => {
 
       if (result?.status !== 'Success') {
         setAtuoSave(true);
-        // console.log('updateBackground error :' + result?.err);
         return false;
       } else {
         setCompletion(result?.data);
         setCompliData(result?.data);
-        // console.log('Completion', Object.keys(result?.data).length);
         setCompKeyCount(Object.keys(result?.data).length - 1);
         setCurrentTab(0);
-        // console.log('handleGet');
         setAtuoSave(true);
       }
     } catch (error) {
@@ -902,7 +899,6 @@ const GameCreation = () => {
     }
   };
   const handleCompliStore = async () => {
-    // console.log('handleCompliStore', compliData);
     try {
       let data = JSON.stringify(compliData);
 
@@ -931,7 +927,6 @@ const GameCreation = () => {
       console.error('An error occurred while sending the request:', error);
     }
   };
-  // console.log('compliData', compliData);
   const fetchGameIdUpdate = async () => {
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
@@ -2251,13 +2246,6 @@ useEffect(()=>{
     const inputValue = e.target.value;
     const { name, value, checked } = e.target;
     if (
-      //       gameIsSetMinPassScore
-      // gameIsSetDistinctionScore
-      // gameIsSetBadge
-      // gameIsSetCriteriaForBadge
-      // gameIsSetCongratsSingleMessage
-      // gameIsSetCongratsScoreWiseMessage
-
       name === 'gameIsSetMinPassScore' ||
       name === 'gameIsSetDistinctionScore' ||
       name === 'gameIsSetSkillWiseScore' ||
@@ -2325,7 +2313,6 @@ useEffect(()=>{
     setHoveredStates(newHoveredStates);
   };
 
-  console.log("handleHover",hoveredStates)
   const handleSummaryState = (isOpen: any) => {
     setIsOpenSummary(isOpen);
     setFormData((prev) => ({
@@ -2697,6 +2684,11 @@ useEffect(()=>{
         if (resu.status !== 'Success') {
           return false;
         }
+        console.log("*****debouncedSubmit");
+        if(resu.status == 'Success')
+        {
+          dispatch(updatePreviewData({isDispatched: true, reflectionPageUpdated: true}));
+        }
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
       }
@@ -2715,6 +2707,7 @@ useEffect(()=>{
           };
           //console.log('datas', data);
           debouncedSubmit(data);
+          
         }
       }
     }
@@ -2729,6 +2722,9 @@ useEffect(()=>{
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
           //console.log('data not updated');
+        }
+        else{
+          dispatch(updatePreviewData({isDispatched: true}));
         }
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
@@ -2755,7 +2751,9 @@ useEffect(()=>{
         //alert("de"+tab);
         debouncedSubmitGame(data);
         setExtensiveNavigation(null);
-        dispatch(updatePreviewData({isDispatched: true}));
+        // if(tab==5 && currentTab == )
+        // dispatch(updatePreviewData({isDispatched: true}));
+
       }
     }
   }, [formData]);
@@ -2789,6 +2787,10 @@ useEffect(()=>{
         const result = await UpdateCompletionScreen(id, datas);
         if (result?.status !== 'Success') {
           console.log('data not updated');
+        }
+        else{
+          console.log('********debounce')
+          dispatch(updatePreviewData({isDispatched: true}));
         }
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
@@ -2832,7 +2834,6 @@ useEffect(()=>{
 
       // handleCompletionScreen(1)
     }
-    dispatch(updatePreviewData({isDispatched: true}));
   }, [compliData]);
 
   ////handleCompliStore
@@ -3356,13 +3357,6 @@ useEffect(()=>{
   const updateExtensiveNavigation = (id: number) => {
     setExtensiveNavigation(id);
   };
-
-
-
-console.log(`#####formData`);
-console.log(formData);
-console.log(`#####compliData`);
-console.log(compliData);     
 
   return (
     <>

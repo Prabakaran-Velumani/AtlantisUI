@@ -74,7 +74,8 @@ const ScreenPreview = () => {
     currentQuest: currentQuest,
     activeBlockSeq: activeBlockSeq,
     isDispatched: isDispatched,
-    CompKeyCount: CompKeyCount
+    CompKeyCount: CompKeyCount,
+    reflectionPageUpdated: reflectionPageUpdated
   } = useSelector((state: RootState) => state.preview);
   const dispatch = useDispatch();
   const [gameInfo, setGameInfo] = useState<any>();
@@ -89,12 +90,23 @@ const ScreenPreview = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [showNote, setShowNote] = useState(false),
     [first, setFirst] = useState(false);  /** Need to Handle this state for texture transition */
-  // const [item, setItem] = useState(null);
   const [data, setData] = useState(null);
   const [type, setType] = useState<string>('');
   const [resMsg, setResMsg] = useState<string>('');
   const [feed, setFeed] = useState<string>('');
-  
+  const reflectionQuestionsdefault = [
+    'What were your biggest learnings?',
+    'How can you apply these learnings back at work?',
+    "'What's one thing you learned about your mindset?",
+    "What's one thing you are committing to change?",
+  ];
+  const [reflectionQuestions, setReflectionQuestions] = useState({
+    ref1: 'What were your biggest learnings?',
+    ref2: 'How can you apply these learnings back at work?',
+    ref3: "What's one thing you learned about your mindset?",
+    ref4: "What's one thing you are committing to change?",
+  });
+
   useEffect(() => {
     const fetchData = async () => {
       const resolvedResult: any = await preloadedImages(assetImageSrc);
@@ -173,6 +185,19 @@ const ScreenPreview = () => {
           };
           return item;
         });
+
+        let reflectionData : any = [];
+        for (let i = 0; i < gamedata?.resultReflection?.length ; i++)
+        {
+          let filteredValue = gamedata?.resultReflection.find((refRow:any) =>refRow?.refKey == `ref${i+1}`);
+          // {
+          //   if(refRow?.refKey == `ref${i+1}`)
+          //   {
+          //     return ({[refRow?.refKey] : [refRow?.refQuestion]});
+          //   }
+          // });
+          reflectionData[filteredValue?.refKey]=filteredValue?.refQuestion;
+        }
         setGameInfo({
           gameId: id,
           gameData: gameData,
@@ -182,7 +207,7 @@ const ScreenPreview = () => {
           gameQuest: gameQuest, //used for completion screen
           completionQuestOptions: completionOptions,
           questOptions: lmsquestionsoptions,
-          reflectionQuestions: gamedata?.resultReflection,
+          reflectionQuestions: gamedata?.resultReflection.length > 0 ? reflectionData : reflectionQuestions,
           gamePlayers: gamedata?.assets?.playerCharectorsUrl,
           bgMusic:
             gamedata?.assets?.bgMusicUrl &&
@@ -194,6 +219,7 @@ const ScreenPreview = () => {
             (path: string) => API_SERVER + '/' + path,
           ),
         });
+
         const apiImageSetArr: any = [
           { assetType: 'backgroundImage', src: image?.gasAssetImage },
           {
@@ -243,7 +269,7 @@ const ScreenPreview = () => {
   }
 
   useEffect(() => {
-    if (id) {
+    if (id && isDispatched) {
       fetchDataFromApi();
       dispatch(updatePreviewData({isDispatched: false}));
     }
@@ -273,8 +299,7 @@ const ScreenPreview = () => {
 
   useEffect(()=>{
     dispatch(updatePreviewData({isDispatched: false}));
-  },[CompKeyCount])
-
+  },[CompKeyCount ])
   const getData = (next: any) => {
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -389,7 +414,6 @@ const ScreenPreview = () => {
     setData(nextBlock[0]);
     setSelectedOption(null);
   };
-
   const handleValidate = (item: any, ind: number) => {
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
@@ -397,11 +421,6 @@ const ScreenPreview = () => {
     setSelectedOption(ind === selectedOption ? null : ind);
 
   };
-
-  console.log("currentSubTab",currentSubTab)
-  console.log("CompKeyCount",CompKeyCount)
-  console.log("currentQuest",currentQuest)
-  console.log("isDispatched",isDispatched)
 
   return (
     <Box id="container">
@@ -959,6 +978,7 @@ const ScreenPreview = () => {
                       imageSrc={preloadAssets.Screen1}
                       compliData={gameInfo.completionQuestOptions}
                       CompKeyCount={CompKeyCount}
+                      preloadedAssets ={preloadAssets}
                     />
                   </Box>
                 </Box>
@@ -1025,7 +1045,8 @@ const ScreenPreview = () => {
                       formData={gameInfo.gameData}
                       imageSrc={preloadAssets?.RefScreen1}
                       reflectionQuestions={gameInfo?.reflectionQuestions}
-                      // reflectionQuestionsdefault={reflectionQuestionsdefault}
+                      reflectionQuestionsdefault={reflectionQuestionsdefault}
+                      preloadedAssets ={preloadAssets}
                     />
                   </Box>
                 </Box>
@@ -1057,6 +1078,7 @@ const ScreenPreview = () => {
                       preview={true}
                       formData={gameInfo.gameData}
                       imageSrc={preloadAssets?.Screen4}
+                      preloadedAssets ={preloadAssets}
                     />
                   </Box>
                 </Box>
@@ -1089,6 +1111,7 @@ const ScreenPreview = () => {
                         formData={gameInfo.gameData}
                         imageSrc={preloadAssets?.Screen5}
                         preview={true}
+                        preloadedAssets ={preloadAssets}
                       />
                     </Box>
                   </Box>
@@ -1121,6 +1144,7 @@ const ScreenPreview = () => {
                       formData={gameInfo.gameData}
                       imageSrc={preloadAssets?.Screen6}
                       preview={true}
+                      preloadedAssets ={preloadAssets}
                     />
                   </Box>
                 </Box>

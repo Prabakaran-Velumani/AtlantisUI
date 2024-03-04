@@ -7,7 +7,8 @@ const initialState = {
     currentQuest: 1,
     isDispatched: false,
     activeBlockSeq: 1,
-    CompKeyCount:3
+    CompKeyCount:0,
+    reflectionPageUpdated: false,
 };
 
 export const previewSlice = createSlice({
