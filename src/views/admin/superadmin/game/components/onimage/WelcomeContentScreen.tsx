@@ -166,7 +166,7 @@ const WelcomeContentScreen: React.FC<{
               >
                 {formData?.gameTitle}
               </Text>
-              {formData.gameIsShowGameDuration == 'true' && (
+              {/* // {formData.gameIsShowGameDuration == 'true' && ( */}
                 <Text
                   className="duration"
                   fontSize={{
@@ -191,9 +191,9 @@ const WelcomeContentScreen: React.FC<{
                     </span>
                   </>
                 </Text>
-              )}
+              {/* // )} */}
               <Box w={'60%'} className="content">
-                {formData.gameIsShowStoryline == 'true' && (
+                {/* {formData.gameIsShowStoryline == 'true' && ( */}
                   <Text
                     mt={'20px'}
                     fontSize={{
@@ -206,23 +206,24 @@ const WelcomeContentScreen: React.FC<{
                   >
                     {formData.gameStoryLine}
                   </Text>
-                )}
-                {formData.gameIsShowSkill == 'true' ||
-                formData.gameIsShowLearningOutcome == 'true' ? (
+                {/* // )} */}
+                {/* {formData.gameIsShowSkill == 'true' ||
+                formData.gameIsShowLearningOutcome == 'true' ? ( */}
                   <Img src={rew} mt={'25px'} alt="rew" w={'100%'} h={'20px'} />
-                ) : (
+                {/* ) : (
                   ''
-                )}
+                )} */}
                 <Box
                   display={'flex'}
                   className={
-                    formData.gameIsShowSkill == 'true' ||
-                    formData.gameIsShowLearningOutcome === 'true'
-                      ? 'rewards-box'
-                      : 'empty-rewards-box'
+                    // formData.gameIsShowSkill == 'true' ||
+                    // formData.gameIsShowLearningOutcome === 'true'
+                      // ?
+                       'rewards-box'
+                      // : 'empty-rewards-box'
                   }
                 >
-                  {formData.gameIsShowSkill == 'true' && (
+                  {/* {formData.gameIsShowSkill == 'true' && ( */}
                     <>
                       <Box className="box-1">
                         <Img src={back} className="bg-img" />
@@ -316,8 +317,8 @@ const WelcomeContentScreen: React.FC<{
                         </Box>
                       </Box>
                     </>
-                  )}
-                  {formData.gameIsShowLearningOutcome == 'true' && (
+                  {/* )} */}
+                  {/* {formData.gameIsShowLearningOutcome == 'true' && ( */}
                     <>
                       <Box className="box-1">
                         <Img src={back} className="bg-img" />
@@ -371,10 +372,10 @@ const WelcomeContentScreen: React.FC<{
                         </Box>
                       </Box>
                     </>
-                  )}
+                  {/* )} */}
                 </Box>
 
-                {formData.gameIsShowAuhorName === 'true' && (
+                {/* {formData.gameIsShowAuhorName === 'true' && ( */}
                   <Box
                     w={'100%'}
                     h={'50px'}
@@ -399,8 +400,8 @@ const WelcomeContentScreen: React.FC<{
                       *Author* <br /> {formData.gameAuthorName}
                     </Text>
                   </Box>
-                )}
-                {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
+                {/* )} */}
+                {/* {formData.gameIsShowAdditionalWelcomeNote === 'true' && ( */}
                   <Box
                     w={'100%'}
                     h={'50px'}
@@ -419,7 +420,7 @@ const WelcomeContentScreen: React.FC<{
                       {renderContent()}
                     </Text>
                   </Box>
-                )}
+                {/* )} */}
               </Box>
             </Box>
           </Box>
