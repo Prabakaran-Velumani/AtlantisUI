@@ -44,6 +44,8 @@ import TextField from 'components/fields/TextField';
 import { useParams } from 'react-router-dom';
 import { FaClock } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/reducers';
 
 interface Badge {
   gasId: number;
@@ -70,6 +72,8 @@ const WelcomeContentScreen: React.FC<{
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);
   const [authorArray, setauthorArray] = useState<any[]>([]);
+  const {currentTab } = useSelector((state: RootState) => state.preview);
+
   const fetch = async () => {
     const result = await getGameById(id);
     if (result?.status !== 'Success') {
@@ -148,7 +152,8 @@ const WelcomeContentScreen: React.FC<{
           animate={{ opacity: 1, background: '#0000' }}
           transition={{ duration: .5, delay: 0.5 }}
         >
-      {imageSrc && preview ? (
+     
+     {imageSrc && preview && currentTab == 3 ? (
           <Box className="welcome-screen">
             <Box className="welcome-screen-box">
               <Img src={imageSrc} className="bg-img" />
