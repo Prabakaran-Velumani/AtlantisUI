@@ -62,6 +62,7 @@ import {
 // import NoAuth from './NoAuth';
 import EntirePreview from './EntirePreview';
 import { API_SERVER } from 'config/constant';
+import { IoIosRefresh } from "react-icons/io";
 
 // const gameScreens = ['GameIntro','Welcome','Story','Reflection',"Leaderboard", "ThanksScreen", "Completion","TakeAway"];
 const gameScreens = [
@@ -84,10 +85,13 @@ const GamePreview = () => {
   const { id } = useParams();
   const InitialScreenId = id ? 10 : 0;
   const [gameInfo, setGameInfo] = useState<any | null>();
+  const [timeout, setTimer] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
   const [currentScreenId, setCurrentScreenId] =
     useState<number>(InitialScreenId);
   const [profile, setProfile] = useState({
     score: [],
+    completedLevels:['1']
   });
   const [currentScore, setCurrentScore] = useState(0);
   const toast = useToast();
@@ -129,8 +133,14 @@ const GamePreview = () => {
    */
   // console.log('gameInfo', gameInfo);
   const updateCreatorGameInfo = (info: any) => {
-    const { gameview, image, lmsblocks, lmsquestionsoptions,gameQuest, ...gameData } =
-      info?.result;
+    const {
+      gameview,
+      image,
+      lmsblocks,
+      lmsquestionsoptions,
+      gameQuest,
+      ...gameData
+    } = info?.result;
     const sortBlockSequence = (blockArray: []) => {
       const transformedArray = blockArray.reduce((result: any, obj: any) => {
         const groupKey = obj?.blockQuestNo.toString();
@@ -145,11 +155,35 @@ const GamePreview = () => {
       }, {});
       return transformedArray;
     };
-    const completionOptions = gameQuest.map((qst :any, i: number)=>{
-      const item = {gameId:qst.gameId,questNo:qst.gameQuestNo, gameIsSetMinPassScore : qst.gameIsSetMinPassScore, gameIsSetDistinctionScore : qst.gameIsSetDistinctionScore, gameDistinctionScore: qst.gameDistinctionScore, gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore, gameIsSetBadge: qst.gameIsSetBadge, gameBadge: qst.gameBadge, gameBadgeName: qst.gameBadgeName, gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge, gameAwardBadgeScore: qst.gameAwardBadgeScore, gameScreenTitle: qst.gameScreenTitle, gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage, gameIsSetCongratsScoreWiseMessage: qst.gameIsSetCongratsScoreWiseMessage, gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage, gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage, gameaboveMinimumScoreCongratsMessage: qst.gameaboveMinimumScoreCongratsMessage, gameLessthanDistinctionScoreCongratsMessage: qst.gameLessthanDistinctionScoreCongratsMessage, gameAboveDistinctionScoreCongratsMessage: qst.gameAboveDistinctionScoreCongratsMessage}
-     return item; 
+    const completionOptions = gameQuest.map((qst: any, i: number) => {
+      const item = {
+        gameId: qst.gameId,
+        questNo: qst.gameQuestNo,
+        gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
+        gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
+        gameDistinctionScore: qst.gameDistinctionScore,
+        gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
+        gameIsSetBadge: qst.gameIsSetBadge,
+        gameBadge: qst.gameBadge,
+        gameBadgeName: qst.gameBadgeName,
+        gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
+        gameAwardBadgeScore: qst.gameAwardBadgeScore,
+        gameScreenTitle: qst.gameScreenTitle,
+        gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage,
+        gameIsSetCongratsScoreWiseMessage:
+          qst.gameIsSetCongratsScoreWiseMessage,
+        gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
+        gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage,
+        gameaboveMinimumScoreCongratsMessage:
+          qst.gameaboveMinimumScoreCongratsMessage,
+        gameLessthanDistinctionScoreCongratsMessage:
+          qst.gameLessthanDistinctionScoreCongratsMessage,
+        gameAboveDistinctionScoreCongratsMessage:
+          qst.gameAboveDistinctionScoreCongratsMessage,
+      };
+      return item;
     });
-    console.log("completionOptions",completionOptions);
+    console.log('completionOptions', completionOptions);
     setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,
@@ -181,8 +215,14 @@ const GamePreview = () => {
       reviews,
       ReviewingCreator,
     } = info?.result?.lmsgamereviewer;
-    const { gameview, image, lmsblocks, lmsquestionsoptions,gameQuest, ...gameData } =
-      info?.result?.lmsgame;
+    const {
+      gameview,
+      image,
+      lmsblocks,
+      lmsquestionsoptions,
+      gameQuest,
+      ...gameData
+    } = info?.result?.lmsgame;
     const sortBlockSequence = (blockArray: []) => {
       const transformedArray = blockArray.reduce((result: any, obj: any) => {
         const groupKey = obj?.blockQuestNo.toString();
@@ -196,9 +236,33 @@ const GamePreview = () => {
       return transformedArray;
     };
 
-    const completionOptions = gameQuest.map((qst :any, i: number)=>{
-        const item = {gameId:qst.gameId, questNo:qst.gameQuestNo, gameIsSetMinPassScore : qst.gameIsSetMinPassScore, gameIsSetDistinctionScore : qst.gameIsSetDistinctionScore, gameDistinctionScore: qst.gameDistinctionScore, gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore, gameIsSetBadge: qst.gameIsSetBadge, gameBadge: qst.gameBadge, gameBadgeName: qst.gameBadgeName, gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge, gameAwardBadgeScore: qst.gameAwardBadgeScore, gameScreenTitle: qst.gameScreenTitle, gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage, gameIsSetCongratsScoreWiseMessage: qst.gameIsSetCongratsScoreWiseMessage, gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage, gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage, gameaboveMinimumScoreCongratsMessage: qst.gameaboveMinimumScoreCongratsMessage, gameLessthanDistinctionScoreCongratsMessage: qst.gameLessthanDistinctionScoreCongratsMessage, gameAboveDistinctionScoreCongratsMessage: qst.gameAboveDistinctionScoreCongratsMessage}
-       return item; 
+    const completionOptions = gameQuest.map((qst: any, i: number) => {
+      const item = {
+        gameId: qst.gameId,
+        questNo: qst.gameQuestNo,
+        gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
+        gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
+        gameDistinctionScore: qst.gameDistinctionScore,
+        gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
+        gameIsSetBadge: qst.gameIsSetBadge,
+        gameBadge: qst.gameBadge,
+        gameBadgeName: qst.gameBadgeName,
+        gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
+        gameAwardBadgeScore: qst.gameAwardBadgeScore,
+        gameScreenTitle: qst.gameScreenTitle,
+        gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage,
+        gameIsSetCongratsScoreWiseMessage:
+          qst.gameIsSetCongratsScoreWiseMessage,
+        gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
+        gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage,
+        gameaboveMinimumScoreCongratsMessage:
+          qst.gameaboveMinimumScoreCongratsMessage,
+        gameLessthanDistinctionScoreCongratsMessage:
+          qst.gameLessthanDistinctionScoreCongratsMessage,
+        gameAboveDistinctionScoreCongratsMessage:
+          qst.gameAboveDistinctionScoreCongratsMessage,
+      };
+      return item;
     });
 
     setGameInfo({
@@ -329,7 +393,15 @@ const GamePreview = () => {
       return true;
     }
   };
+  const handleMouseMove = () => {
+    setIsHovered(true);
+    clearTimeout(timeout);
+    setTimer(setTimeout(() => setIsHovered(false), 2000)); // Adjust the timeout duration as needed
+  };
 
+  useEffect(() => {
+    return () => clearTimeout(timeout); // Cleanup the timer on component unmount
+  }, [timeout]);
   return (
     <>
       {gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
@@ -338,7 +410,24 @@ const GamePreview = () => {
       ) : (
         gameInfo?.gameId && (
           <ScoreContext.Provider value={{ profile, setProfile }}>
-            <Box id="container">
+            <Box id="container" onMouseMove={handleMouseMove}>
+              {isHovered && (
+                <Icon
+                  as={IoIosRefresh}
+                  position={'fixed'}
+                  top={'20px'}
+                  left={'48%'}
+                  color={'white'}
+                  zIndex={999999}
+                  width={'60px'}
+                  height={'60px'} 
+                  padding={'20px'}
+                  borderRadius={'50%'}
+                  bg={'grey'}
+                  cursor={'pointer'}
+                  onClick={()=>window.location.reload()}
+                />
+               )} 
               <EntirePreview
                 currentScore={currentScore}
                 setCurrentScore={setCurrentScore}

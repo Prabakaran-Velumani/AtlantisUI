@@ -278,6 +278,22 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
     setData(gameInfo?.blocks['1']['1']);
+    if (gameInfo?.blocks['1']['1']?.blockChoosen === 'Interaction') {
+      const optionsFiltered = gameInfo?.questOptions.filter(
+        (key: any) => key?.qpSequence === gameInfo?.blocks['1']['1']?.blockPrimarySequence,
+      );
+
+      if (gameInfo?.gameData?.gameShuffle) {
+        for (let i = optionsFiltered.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [optionsFiltered[i], optionsFiltered[j]] = [
+            optionsFiltered[j],
+            optionsFiltered[i],
+          ]; // Swap elements at indices i and j
+        }
+      }
+      setOptions(optionsFiltered);
+    }
     const handleVisibilityChange = () => {
       if (document.hidden) {
         // Pause the audio when the page is hidden
@@ -408,7 +424,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ? parseInt(current?.blockPrimarySequence.split('.')[0])
       : null;
 
-    setCurrentQuestNo(currentQuest);
+   
 
     const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const prevBlock = current
@@ -426,8 +442,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setData(prevBlock[0]);
     }
   };
-
+ 
   const getData = (next: any) => {
+
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -440,8 +457,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const currentQuest = next
       ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
-
-    setCurrentQuestNo(currentQuest);
     setGame3Position((prev: any) => ({
       ...prev,
       previousBlock: next?.blockPrimarySequence,
@@ -460,7 +475,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const optionsFiltered = gameInfo?.questOptions.filter(
         (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
       );
-      console.log('wala', optionsFiltered);
+
       if (gameInfo?.gameData?.gameShuffle) {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -492,7 +507,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       type === 'response' ||
       type === 'feedback'
     ) {
-      console.log('Above Replay Point');
       if (navi === 'Repeat Question') {
         setType('Interaction');
         setSelectedOption(null);
@@ -531,9 +545,35 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         if (demoBlocks.hasOwnProperty(nextLevel)) {
           setType(demoBlocks[nextLevel]['1']?.blockChoosen);
           setData(demoBlocks[nextLevel]['1']);
+          setProfile((prev: any) => {
+            if (!prev.completedLevels.includes(String(nextLevel))) {
+              const updatedCompletedLevels = [
+                ...prev.completedLevels,
+                String(nextLevel),
+              ];
+              return {
+                ...prev,
+                completedLevels: updatedCompletedLevels,
+              };
+            }
+            return prev;
+          });
           setCurrentScreenId(6);
           return false;
         } else {
+          setProfile((prev: any) => {
+            if (!prev.completedLevels.includes(String(nextLevel))) {
+              const updatedCompletedLevels = [
+                ...prev.completedLevels,
+                String(nextLevel),
+              ];
+              return {
+                ...prev,
+                completedLevels: updatedCompletedLevels,
+              };
+            }
+            return prev;
+          });
           setType(null);
           setData(null);
           setCurrentScreenId(6);
@@ -567,7 +607,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         return false;
       } else {
         if (data && type) {
-          setCurrentScreenId(2);
+          setCurrentScreenId(13);
           return false;
         } else {
           setType(null);
@@ -662,7 +702,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (currentScreenId === 7) {
       if (data && type) {
-        setCurrentScreenId(2);
+        setCurrentScreenId(13);
         return false;
       } else {
         setType(null);
@@ -673,6 +713,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (nextBlock.length === 0) {
       if (demoBlocks.hasOwnProperty(nextLevel)) {
+        setProfile((prev: any) => {
+          if (!prev.completedLevels.includes(String(nextLevel))) {
+            const updatedCompletedLevels = [
+              ...prev.completedLevels,
+              String(nextLevel),
+            ];
+            return {
+              ...prev,
+              completedLevels: updatedCompletedLevels,
+            };
+          }
+          return prev;
+        });
         setType(demoBlocks[nextLevel]['1']?.blockChoosen);
         setData(demoBlocks[nextLevel]['1']);
         setCurrentScreenId(6);
@@ -721,7 +774,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               [optionsFiltered[i], optionsFiltered[j]] = [
                 optionsFiltered[j],
                 optionsFiltered[i],
-              ]; 
+              ];
             }
           }
           setOptions(optionsFiltered);
@@ -735,6 +788,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
+        setProfile((prev: any) => {
+          if (!prev.completedLevels.includes(String(nextLevel))) {
+            const updatedCompletedLevels = [
+              ...prev.completedLevels,
+              String(nextLevel),
+            ];
+            return {
+              ...prev,
+              completedLevels: updatedCompletedLevels,
+            };
+          }
+          return prev;
+        });
         setCurrentScreenId(6);
         return false;
       }
@@ -808,7 +874,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const filterTabOptionsList = tabOptions.filter((tabOption) =>
         reviewTabOptions.includes(tabOption.value),
       );
-
       setFilteredTabOptions(filterTabOptionsList);
     }
   }, [reviewTabOptions]);
@@ -1039,7 +1104,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setHomeLeaderBoard(true);
     setCurrentScreenId(4);
   };
-  console.log(profile?.score);
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="container" className="Play-station">
@@ -1669,6 +1733,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 <>
                   {/* <SimpleGrid columns={{ base: 1 }}> */}
                   <ChapterPage
+                    setCurrentQuestNo={setCurrentQuestNo}
                     currentQuestNo={currentQuestNo}
                     formData={gameInfo?.gameData}
                     imageSrc={backgroundScreenUrl}

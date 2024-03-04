@@ -176,12 +176,10 @@ const Story: React.FC<{
       const { seqId, score: newScore } = score;
       const index = prev.score.findIndex((item: any) => item.seqId === seqId);
       if (index !== -1) {
-        // If the ID exists, update the corresponding object's score
         const updatedScore = [...prev.score];
         updatedScore[index] = { ...updatedScore[index], score: newScore };
         return { ...prev, score: updatedScore };
       } else {
-        // If the ID doesn't exist, add a new object with the score to the score array
         return {
           ...prev,
           score: [

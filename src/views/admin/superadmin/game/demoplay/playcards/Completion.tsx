@@ -109,7 +109,7 @@ const Completion: React.FC<{
   }, []);
 
 
-  console.log(questScores);
+
   return (
     <>
       <Box

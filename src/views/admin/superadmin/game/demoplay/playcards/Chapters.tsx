@@ -19,9 +19,19 @@ const ChapterPage: React.FC<{
   demoBlocks: any;
   setCurrentScreenId: any;
   questOptions?: any;
-  currentQuestNo?:any;
-}> = ({ imageSrc, demoBlocks, setCurrentScreenId, formData, questOptions,currentQuestNo }) => {
+  currentQuestNo?: any;
+  setCurrentQuestNo?: any;
+}> = ({
+  imageSrc,
+  demoBlocks,
+  setCurrentScreenId,
+  formData,
+  questOptions,
+  currentQuestNo,
+  setCurrentQuestNo,
+}) => {
   const [questScores, setQuestScores] = useState(null);
+  // const [completed, setCompleted] = useState(['1']);
   useEffect(() => {
     const groupedByQuest: any = {};
     questOptions.forEach((item: any) => {
@@ -54,16 +64,25 @@ const ChapterPage: React.FC<{
       maxScoresByQuest[questNo] = maxScoreForQuest;
     }
     setQuestScores(maxScoresByQuest);
-
   }, []);
   const { profile } = useContext(ScoreContext);
-  useEffect(()=>{
-      if(profile.score.length !== 0) 
-      {
-        const completedLevels = profile.score.map((item:any)=> parseInt(item?.quest));
-        console.log(completedLevels);
-      } 
-    },[profile])
+  // useEffect(() => {
+  //   if (profile.completedLevels.length !== 0) {
+  //     const completedLevels = profile.completedLevels.map(
+  //       (item: any) => item,
+  //     );
+  //     setCompleted(completedLevels);
+  //   }
+  // }, [profile]);
+  const handleChapter = (it: any) => {
+    if (profile.completedLevels.includes(it)) {
+      setCurrentScreenId(1);
+      setCurrentQuestNo(it);
+    }
+  };
+
+  console.log(profile.score);
+  console.log(profile.completedLevels)
   return (
     <>
       <Box className="Play-game NoOfQueue">
@@ -92,41 +111,46 @@ const ChapterPage: React.FC<{
                 <Box className="content-box" overflowY={'scroll'}>
                   <SimpleGrid columns={{ base: 1, sm: 1, md: 3 }}>
                     {demoBlocks &&
-                      Object.keys(demoBlocks).map((it, num) => (
-                        <Box
-                          className="queue-box"
-                          key={num}
-                          onClick={() => setCurrentScreenId(1)}
-                        >
-                          <Img className="queue-screen" src={QueueScreen} />
-                          <Text className="heading">Quest {num + 1}</Text>
-                          <Box className="badge">
-                            {parseInt(it) >= currentQuestNo ? (
-                              <Img src={Lock} className="lock" />
-                            ) : null}
-                            <Img src={Demo} />
+                      Object.keys(demoBlocks).map((it, num) => {
+                        return (
+                          <Box
+                            className="queue-box"
+                            key={num}
+                            onClick={() => handleChapter(it)}
+                          >
+                            <Img className="queue-screen" src={QueueScreen} />
+                            <Text className="heading">Quest {num + 1}</Text>
+                            <Box className="badge">
+                              {profile.completedLevels.includes(it) ? null : (
+                                <Img src={Lock} className="lock" />
+                              )}
+                              <Img src={Demo} />
+                            </Box>
+                            <Text className="text"></Text>
+                            <Box className="bottom-box">
+                              <Text className="amount-score">
+                                {(profile &&
+                                  profile.score &&
+                                  profile.score.length > 0 &&
+                                  profile.score.reduce(
+                                    (
+                                      accumulator: number,
+                                      currentValue: any,
+                                    ) => {
+                                      return currentValue.quest === it
+                                        ? accumulator + currentValue.score
+                                        : accumulator;
+                                    },
+                                    0,
+                                  )) ||
+                                  0}
+                                /{questScores && questScores[it]}{' '}
+                                <Icon as={BiMoney} />
+                              </Text>
+                            </Box>
                           </Box>
-                          <Text className="text"></Text>
-                          <Box className="bottom-box">
-                            <Text className="amount-score">
-                              {(profile &&
-                                profile.score &&
-                                profile.score.length > 0 &&
-                                profile.score.reduce(
-                                  (accumulator: number, currentValue: any) => {
-                                    return currentValue.quest === it
-                                      ? accumulator + currentValue.score
-                                      : accumulator;
-                                  },
-                                  0,
-                                )) ||
-                                0}
-                              /{questScores && questScores[it]}{' '}
-                              <Icon as={BiMoney} />
-                            </Text>
-                          </Box>
-                        </Box>
-                      ))}
+                        );
+                      })}
                   </SimpleGrid>
                 </Box>
               </Box>
