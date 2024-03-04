@@ -1,5 +1,14 @@
 // Chakra imports
-import { Box, Flex, Icon, Text, useColorModeValue } from '@chakra-ui/react';
+import {
+	Box, Button, Flex, Icon, Text, useColorModeValue, Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalCloseButton,
+	ModalBody,
+	ModalFooter,
+	useDisclosure,
+} from '@chakra-ui/react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { MdCheck, MdClose, MdTimer, MdDelete } from 'react-icons/md';
 import React, { useEffect, useRef, useState } from 'react';
@@ -14,7 +23,6 @@ export default function OrderStep(props: {
 	icon: JSX.Element;
 	status?: string;
 	name: string;
-	tabNo?: any;
 	BlockItems?: any;
 	listBlockItems?: any;
 	listQuest?: any;
@@ -30,12 +38,13 @@ export default function OrderStep(props: {
 	questTabState?: any;
 	deleteQuest?: any;
 	delSeq?: any;
+	tabNo?: any;
 }) {
 
 	const [progressBlockItems, setProgressBlockItems] = useState(null);
 	const [questDelete, setQestDelete] = useState(false);
 
-	const { date, sum, icon, status, name, quest, data, tabNo, BlockItems, listBlockItems, listQuest, id, handleTargetQuest, handleGet, fetchBlocks, setQuestTabState, questTabState, deleteQuest, delSeq, ...rest } = props;
+	const { date, sum, icon, status, name, quest, data, BlockItems, listBlockItems, listQuest, id, handleTargetQuest, handleGet, fetchBlocks, setQuestTabState, questTabState, deleteQuest, delSeq, tabNo, ...rest } = props;
 
 	const navigate = useNavigate();
 
@@ -77,13 +86,20 @@ export default function OrderStep(props: {
 		e.currentTarget.style.boxShadow = 'none';
 	};
 
-
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	// console.log('progressBlockItems',progressBlockItems)
 	// console.log('listQuest',listQuest)	
+	const handleDeleteClick = (item: any) => {
 
+		onOpen();
+	};
+	const handleCancelDelete = () => {
+		// Close the modal without deleting
+		onClose();
+	};
 	return (
 		<>
-			<Flex justifyContent='center' alignItems='center' w='100%' zIndex='2' {...rest} className='OrderStep' id={tabNo === 4 ? 'taby4' : `tab${tabNo}`}>
+			<Flex justifyContent='center' alignItems='center' w='100%' zIndex='2' {...rest} className='OrderStep'id={tabNo === 4 ? 'taby4' : `tab${tabNo}`} title={status}>
 				{icon}
 				<Flex direction='column' align='start' ms='20px' mr='auto'>
 					<Text color={textColor} fontSize='lg' me='6px' fontWeight='600'>
@@ -103,8 +119,8 @@ export default function OrderStep(props: {
 						borderRadius='50%'
 					>
 
-<Icon  borderRadius={'50%'} border='1px solid' h='27px' borderColor={'green.500'} w='29px' bgColor={'transparent'} as={MdCheck} color='green.500' />
-		
+						<Icon borderRadius={'50%'} border='1px solid' h='27px' borderColor={'green.500'} w='29px' bgColor={'transparent'} as={MdCheck} color='green.500' />
+
 
 					</Flex>
 				) : status === 'error' ? (
@@ -130,7 +146,34 @@ export default function OrderStep(props: {
 							<Flex justifyContent='center' alignItems='center' w='100%' zIndex='2' {...rest} mt={'0px'} key={index}>
 								<Box>
 									<Flex className='QuestList'>
-										<Icon as={MdDelete} fontSize={'md'} color={'grey'} cursor={'pointer'} onClick={() => deleteQuest(item.gameId, item.gameQuestNo)} className='del-icon' />
+										{/* indu modified on 06-02-2024 for ask confirmation for delete */}
+										<Icon as={MdDelete} fontSize={'md'} color={'grey'} cursor={'pointer'} onClick={handleDeleteClick} className='del-icon' />
+										<Modal isOpen={isOpen} onClose={onClose} size="md">
+											<ModalOverlay />
+											<ModalContent>
+												<ModalHeader>
+													Confirm Deletion</ModalHeader>
+												<ModalBody>
+													<Text color={textColor} fontSize="18px" fontWeight="600"
+													>
+														Are you sure you want to delete Quest {item.gameQuestNo}?
+													</Text>
+
+												</ModalBody>
+												<ModalFooter>
+													<Button color={'#fff'}
+														bg={'#11047a'}
+														_hover={{ color: '#fff', bg: '#11047a' }}
+														mr={'10px'} onClick={() => { deleteQuest(item.gameId, item.gameQuestNo); onClose(); }} >
+														Delete
+													</Button>
+													<Button color={'#fff'}
+														bg={'#11047a'}
+														_hover={{ color: '#fff', bg: '#11047a' }}
+														mr={'10px'} onClick={handleCancelDelete}>Cancel</Button>
+												</ModalFooter>
+											</ModalContent>
+										</Modal>
 										<Text
 											fontSize='md'
 											me='6px'

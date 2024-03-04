@@ -96,8 +96,9 @@ import {
   getTotalMinofWords,
   getStoryValidtion,
   getGameDemoData,
-  getGameCreatorDemoData,
+  getGameCreatorDemoData,getMaxBlockQuestNo,getSelectedLanguages
 } from 'utils/game/gameService';
+import Select from 'react-select';
 import { useParams } from 'react-router-dom';
 import AboutStory from './AboutStory';
 import GreetingsForm from './GreetingsForm';
@@ -158,7 +159,8 @@ import SinglePreview from './SinglePreview';
 import { AiFillMessage } from 'react-icons/ai';
 import { getAllReviews } from 'utils/reviews/reviews';
 import { API_SERVER } from 'config/constant';
-
+// @ts-ignore
+import loadingImage from 'assets/img/games/loading.gif';
 const steps = [
   { title: 'BackGround' },
   { title: 'Non Playing Charater' },
@@ -180,7 +182,14 @@ interface MyObject {
   option: any;
   secondaryId: any;
 }
-
+interface SelectedLanguageEntry {
+  translationId: number;
+  lmsMultiLanguageSupport: {
+    language_name: string;
+  };
+  'lmsMultiLanguageSupport.language_name': string;
+  // 'lmsMultiLanguageSupport.language_code': string;
+}
 const GameCreation = () => {
   ///////////////////Navin 15-12///////////////////////////////////
   //stroy//
@@ -236,6 +245,13 @@ const GameCreation = () => {
   const [reflection, setReflection] = useState([]);
   const [showSelectBlock, setSelectBlock] = useState<any>([]);
   const [heightOfTab, setHeightOfTab] = useState<any>();
+  const [validation, setValidation] = useState<any>({
+    note: false,
+    dialog: false,
+    dialogAnimation: false,
+    interaction: false,
+    options: false,
+  });
 
   /** To stop load data after naviagte from another game based on Extension*/
   const [extensiveNavigation, setExtensiveNavigation] = useState<number | null>(
@@ -321,7 +337,7 @@ const GameCreation = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [autosave, setAtuoSave] = useState(false);
   const [inputValue, setInputValue] = useState('');
-
+  const [loading, setLoading] = useState(false);
   const [isSave, setIsSave] = useState(false);
   //////////////////////Changes-14/12/23///////////////////////////////////////
   const [selections, setSelections] = useState(Array(img.length).fill(false));
@@ -436,6 +452,7 @@ const GameCreation = () => {
       gameTakeawayScreenId: null,
       gameWelcomepageBackgroundScreenId: null,
       gameThankYouScreenId: null,
+      gamelanguageCode: '',
       //navin 16-12
 
       // gameCompletionScreenId:null,
@@ -458,6 +475,14 @@ const GameCreation = () => {
       gameRecommendation: 'false',
       gameFeedBack: 'false',
       gameFeedBackLink: '',
+      gameIsShowAdditionalWelcomeNoteInvalid: 'false',
+      isCategoryIdInvalid: false,
+      //newlyadded start 
+      isStoryTitleInvalid: false,
+      isSkillsInvalid: false,
+      isfeedbackthankyou:false,
+      //newlyadded end 
+
     });
   const [compliData, setCompliData] = useState({
     0: {
@@ -481,6 +506,8 @@ const GameCreation = () => {
       gameaboveMinimumScoreCongratsMessage: null,
       gameLessthanDistinctionScoreCongratsMessage: null,
       gameAboveDistinctionScoreCongratsMessage: null,
+      gameIsSetCongratsSingleMessage: 'false',
+
     },
   });
   const [reviews, setReviews] = useState<any[]>([]);
@@ -564,6 +591,55 @@ const GameCreation = () => {
       handleCompletionScreen(1);
     }
   }, [tab]);
+  let borderColor = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
+  const [languageOptions, setLanguageOptions] = useState([]);
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [languages, setLanguage] = useState('');
+  const defaultLanguageOption = { label: 'English', value: '' };
+  useEffect(() => {
+    const fetchLanguages = async () => {
+      try {
+        const selectedLanguagesResult = await getSelectedLanguages(id);
+
+        if (
+          selectedLanguagesResult &&
+          selectedLanguagesResult.data &&
+          selectedLanguagesResult.data.selectedLanguages
+        ) {
+          const options = selectedLanguagesResult.data.selectedLanguages.map(
+            (language: SelectedLanguageEntry) => ({
+              value: language['translationId'],
+              label: language['lmsMultiLanguageSupport.language_name'],
+            })
+          );
+
+          setLanguageOptions(options);
+        } else {
+          console.error('Error: Selected languages data is missing or in unexpected format.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    if (isMenuOpen && (tab !== 1 )) {
+      fetchLanguages();
+      setMenuOpen(false); // Close the menu after fetching
+    }
+  }, [id, isMenuOpen, tab]);
+  const handleSelectChange = (selectedOption: { value: any; label: string }) => {
+    // Do something with the selected option
+    console.log('Selected Option:', selectedOption);
+
+    // Update the state and access the updated value inside a useEffect hook
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      gamelanguageCode: selectedOption.value, // Replace 'gamelanguageId' with the appropriate property name
+    }));
+
+    setLanguage(selectedOption.value);
+  };
+
   const handleBackGroundImage = (e: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -672,6 +748,7 @@ const GameCreation = () => {
   };
 
   const fetchGameId = async () => {
+    setLoading(true);
     const reviews = await getAllReviews(id);
     if (reviews && reviews?.status !== 'Success')
       return console.log(reviews?.message);
@@ -716,7 +793,18 @@ const GameCreation = () => {
         setTab(2);
         setFormData((prev) => ({ ...prev, gameLastTab: 2 }));
       } else {
-        setTab(parseInt(lastValue));
+        // setTab(parseInt(lastValue));
+        // if(tab === 6)
+        // {setTab(6);}
+        // else{setTab(parseInt(lastValue)+1);}
+        if(tab === 6)
+        {setTab(6);console.log('parseinthi');}
+        else{
+          if((parseInt(lastValue)+1)>=6){
+            setTab(6);
+          }else{
+            setTab(parseInt(lastValue)+1);
+          };console.log('parseinthi1',tab);}
       }
     }
 
@@ -741,6 +829,7 @@ const GameCreation = () => {
     setReviewers(review?.reviewerDetails);
     setReviews(review?.reviewlist);
     // console.log('you should read this reviews', review?.reviewlist[4]);
+    setLoading(false);
   };
 
   const handleGet = async (quest: number) => {
@@ -831,7 +920,22 @@ const GameCreation = () => {
         setCompliData(result?.data);
         // console.log('Completion', Object.keys(result?.data).length);
         setCompKeyCount(Object.keys(result?.data).length - 1);
-        setCurrentTab(0);
+        // setCurrentTab(0);
+        if (formData && formData.gameLastTabArray) {
+          const tabformArray = formData.gameLastTabArray;
+          const findArrayValue = tabformArray.includes(5);
+          console.log('findArrayValue0',findArrayValue);
+          if (findArrayValue) {
+            console.log('findArrayValue1',findArrayValue);
+            setCurrentTab(5);
+          }
+          else{
+            setCurrentTab(0);
+          }
+        }
+        else{
+          setCurrentTab(0);
+        }
         // console.log('handleGet');
         setAtuoSave(true);
       }
@@ -952,46 +1056,71 @@ const GameCreation = () => {
 
     // Watching Stepper Height for Green Progress
     const tab1 = document.getElementById(`tab1`)
+    const title1 = tab1?.getAttribute('title');
     const getfirstElementHgt = tab1?.clientHeight;
+
     //tab2
     const tab2 = document.getElementById(`tab2`)
+    const title2 = tab2?.getAttribute('title');
     const getsecondElementHgt = tab2?.clientHeight;
     //tab3
     const tab3 = document.getElementById(`tab3`)
+    const title3 = tab3?.getAttribute('title');
     const getThirdElementHgt = tab3?.clientHeight;
     //tab4
-    const tab4 = document.getElementById(`tab4`)
+    
+    const tab4 = document.getElementById(`tab4`)    
+    const title4 = tab4?.getAttribute('title');
     const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
     const tab4Height = tabs == 4 && (getFourElementHgt + getfirstElementHgt)
+    console.log('getFourElementHgt123',getFourElementHgt)
+    console.log('getFourElementHgttab123',questTabState)
     //tab5
     const tab5 = document.getElementById(`tab5`)
+    const title5 = tab5?.getAttribute('title');
     const getFifthElementHgt = tab5?.clientHeight;
     //tab6
     const tab6 = document.getElementById(`tab6`)
+    const title6 = tab6?.getAttribute('title');
     const getSixthElementHgt = tab6?.clientHeight;
     
-        
-    // const Element = document.getElementById(`tab${tabs}`)
-    // const getHeight = Element?.clientHeight;
-
-    if(tabs == 1 && tab == 1) {
+    if(title6 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
+    } else if (title5 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+    } else if (title4 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + 90 );
+    } else if (title3 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
+    } else if (title2 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
+    } else if (title1 === 'done') {
       setHeightOfTab(getfirstElementHgt);
     }
-    if(tabs == 2 && tab == 2) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
-    }
-    if(tabs == 3 && tab == 3) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
-    }
-    if(tabs == 4 && tab == 4) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getfirstElementHgt + 90 );
-    }
-    if(tabs == 5 && tab == 5) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
-    }
-    if(tabs == 6 && tab == 6) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
-    }   
+        
+    // const Element = document.getElementById(`tab${tabs}`)
+    // const getHeight = Element.clientHeight;
+
+    // if(tabs == 1 && tab == 1) {
+    //   setHeightOfTab(getfirstElementHgt);
+    // }
+    // if(tabs == 2 && tab == 2) {
+    //   setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
+    // }
+    // if(tabs == 3 && tab == 3) {
+    //   setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
+    // }
+    // if(tabs == 4 && tab == 4) {
+    //   setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getfirstElementHgt + 90 );
+    // }
+    // if(tabs == 5 && tab == 5) {
+    //   setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+    // }
+    // if(tabs == 6 && tab == 6) {
+    //   setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
+    // }   
+
+    // setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
 
     if (!formData?.gameLastTabArray?.includes(tabs)) {
       const stringContainingNumbers = formData.gameLastTabArray;
@@ -1092,7 +1221,10 @@ const GameCreation = () => {
               duration: 3000,
               isClosable: true,
             });
-
+            setFormData({
+              ...formData,
+              isStoryTitleInvalid: true,
+            });
             return false;
           }
           if (!formData.gameSkills || formData.gameSkills.length === 0) {
@@ -1102,7 +1234,10 @@ const GameCreation = () => {
               duration: 3000,
               isClosable: true,
             });
-
+            setFormData({
+              ...formData,
+              isSkillsInvalid: true,
+            });
             return false;
           }
           if (
@@ -1311,46 +1446,69 @@ const GameCreation = () => {
   ///navin 15-12
 
   useEffect(()=> { // Watching Stepper Height
+
     const tab1 = document.getElementById(`tab1`)
-    const getfirstElementHgt = tab1.clientHeight;
+    const title1 = tab1?.getAttribute('title');
+    const getfirstElementHgt = tab1?.clientHeight;
     //tab2
     const tab2 = document.getElementById(`tab2`)
-    const getsecondElementHgt = tab2.clientHeight;
+    const title2 = tab2?.getAttribute('title');
+    const getsecondElementHgt = tab2?.clientHeight;
     //tab3
     const tab3 = document.getElementById(`tab3`)
-    const getThirdElementHgt = tab3.clientHeight;
+    const title3 = tab3?.getAttribute('title');
+    const getThirdElementHgt = tab3?.clientHeight;
     //tab4
     const tab4 = document.getElementById(`tab4`)
+    const taby4 = document.getElementById(`taby4`)
+    const title4 = taby4?.getAttribute('title');
     const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
     const tab4Height = tab == 4 && (getFourElementHgt + getfirstElementHgt)
+    console.log('getFourElementHgttab',questTabState);
+    console.log('getFourElementHgt',getFourElementHgt)
     //tab5
     const tab5 = document.getElementById(`tab5`)
-    const getFifthElementHgt = tab5.clientHeight;
+    const title5 = tab5?.getAttribute('title');
+    const getFifthElementHgt = tab5?.clientHeight;
     //tab6
     const tab6 = document.getElementById(`tab6`)
-    const getSixthElementHgt = tab6.clientHeight;
+    const title6 = tab6?.getAttribute('title');
+    const getSixthElementHgt = tab6?.clientHeight;
     
-         
-
-    if(tab == 1) {
-      setHeightOfTab(getfirstElementHgt);
-    }
-    if(tab == 2) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
-    }
-    if(tab == 3) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
-    }
-    if(tab == 4) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getfirstElementHgt + 90 );
-    }
-    if(tab == 5) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
-    }
-    if(tab == 6) {
+    if(title6 === 'done') {
       setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
-    }
-  },[tab])
+    } else if (title5 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+    } else if (title4 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + 90 );
+    } else if (title3 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
+    } else if (title2 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
+    } else if (title1 === 'done') {
+      setHeightOfTab(getfirstElementHgt);
+    }     
+
+    // if(tab == 1) {
+    //   setHeightOfTab(getfirstElementHgt);
+    // }
+    // if(tab == 2) {
+    //   setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
+    // }
+    // if(tab == 3) {
+    //   setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
+    // }
+    // if(tab == 4) {
+    //   setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getfirstElementHgt + 90 );
+    // }
+    // if(tab == 5) {
+    //   setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+    // }
+    // if(tab == 6) {
+    //   setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
+    // }
+    // setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+  },[tab,listQuest?.length])
 
   //navin
   const handleNext = async () => {
@@ -1362,6 +1520,323 @@ const GameCreation = () => {
       formData.gameBehaviour,
       formData.gameOthers,
     ];
+     // Completion Screen Validation
+const complidatalength = Object.keys(compliData).length;
+const getcompliData = Object.keys(compliData);
+console.log('getcompliData',getcompliData);
+
+if (complidatalength !== 0) {
+  for (let i = 0; i < complidatalength; i++) {
+    const compkey = getcompliData[i] as unknown as keyof typeof compliData; 
+    const compkeyNumber = Number(compkey);
+    console.log('formDatagameThankYouMessage123Key for entry', i, ':', compkey);
+    const getgameTotalScore = compliData[compkey].gameTotalScore;
+    if (Array.isArray(getgameTotalScore) && getgameTotalScore.length > 0) {
+      const maxScore = getgameTotalScore[0].maxScore;
+      if (!maxScore) {
+        toast({
+          title: 'Please Enter Total Score.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        return false
+      }
+    }
+    if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
+      if (!compliData[compkey]?.gameMinScore) {
+        toast({
+          title: 'Please Enter Minimum Score.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompliData((prevInput: any) => ({
+          ...prevInput,
+          [CompKeyCount]: {
+            ...prevInput[CompKeyCount],
+            redBorderForMinScore: true,
+          },
+        }));
+        setCompKeyCount(compkeyNumber);
+        return false;
+      }
+
+      // Reset the red border style for the InputField
+      setCompliData((prevInput: any) => ({
+        ...prevInput,
+        [CompKeyCount]: {
+          ...prevInput[CompKeyCount],
+          redBorderForMinScore: false,
+        },
+      }))
+    }
+    if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
+      if (!compliData[compkey]?.gameDistinctionScore) {
+        toast({
+          title: 'Please Enter Distinction  Score.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        return false
+
+      }
+
+    }
+    if (compliData[compkey]?.gameIsSetBadge === 'true') {
+      if (!compliData[compkey]?.gameBadge) {
+        toast({
+          title: 'Please Select Badge.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        return false
+
+      }
+      if (!compliData[compkey]?.gameBadgeName) {
+        toast({
+          title: 'Please Fill Badge Name.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        return false
+
+      }
+      if (compliData[compkey]?.gameIsSetCriteriaForBadge === 'true') {
+        if (!compliData[compkey]?.gameAwardBadgeScore) {
+          toast({
+            title: 'Please Set Criteria for Badge .',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+          setCompKeyCount(compkeyNumber);
+          return false
+        }
+
+      }
+      if (!compliData[compkey]?.gameScreenTitle) {
+        toast({
+          title: 'Please Screen Title.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        return false
+      }
+      if (compliData[compkey]?.gameIsSetCongratsSingleMessage === 'true') {
+        if (!compliData[compkey]?.gameCompletedCongratsMessage) {
+
+          toast({
+            title: 'Please Set CongratsMessage.',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+          setCompKeyCount(compkeyNumber);
+          return false
+
+        }
+      }
+      if (compliData[compkey]?.gameIsSetCongratsScoreWiseMessage === 'true') {
+
+        if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
+          if (!compliData[compkey]?.gameMinimumScoreCongratsMessage) {
+            toast({
+              title: 'Please Enter Minium Score Congrats Message.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            return false
+
+          }
+          if (!compliData[compkey]?.gameaboveMinimumScoreCongratsMessage) {
+            toast({
+              title: 'Please Enter Above Minimum Score CongratsMessage.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            return false
+
+          }
+        }
+        if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
+          if (!compliData[compkey]?.gameLessthanDistinctionScoreCongratsMessage) {
+            toast({
+              title: 'Please Enter Distinction  Score.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            return false
+
+          }
+          if (!compliData[compkey]?.gameAboveDistinctionScoreCongratsMessage) {
+            toast({
+              title: 'Please Enter Above Distinction Score CongratsMessage.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            return false
+
+          }
+
+        }
+
+
+      }
+    }
+    // setCurrentTab(compkey);
+    // setCurrentTab(CompKeyCount);
+    setCompKeyCount(compkeyNumber);
+    setCurrentTab(0);
+    setCompliData((prevInput: any) => ({
+      ...prevInput,
+      [CompKeyCount]: {
+        ...prevInput[CompKeyCount],
+    
+      },
+    }))
+  }
+}
+// refelection Screen Validation
+if (formData.gameIsShowReflectionScreen === 'true') {
+  console.log("form length" + formData.gameReflectionQuestion);
+console.log('reflectionQuestions1pri',reflectionQuestions);
+  if (typeof reflectionQuestions === 'object' && reflectionQuestions !== null) {
+
+    var keys = Object.keys(reflectionQuestions);
+
+    //newlyadded start
+    if (!keys) {
+      var keys1 = Object.keys(reflectionQuestions);
+    }
+    else {
+      var keys1 = ['ref1', 'ref2', 'ref3', 'ref4'];
+    }
+
+    console.log('keysref', keys1);
+    //newlyadded end
+    // Assuming formData.gameReflectionQuestion is the number of questions to check
+    for (var i = 0; i < formData.gameReflectionQuestion; i++) {
+      var key = keys1[i] as unknown as keyof typeof reflectionQuestions; //changes keys1[i] instead of keys[i]
+      var value = reflectionQuestions[key];
+      if (key == 'ref1') {
+        var question = "Question1";
+      }
+      if (key == 'ref2') {
+        var question = "Question2";
+      }
+      if (key == 'ref3') {
+        var question = "Question3";
+      }
+      if (key == 'ref4') {
+        var question = "Question4";
+      }
+
+
+      if (!value) {
+        toast({
+          title: `${question} is empty. Please fill in the ${question} question.`,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCurrentTab(2);
+        return false;
+      }
+    }
+
+  }
+}
+// Takeaway Screen Validation
+if (formData.gameIsShowTakeaway === "true" && (formData.gameTakeawayContent === null || formData.gameTakeawayContent === undefined || formData.gameTakeawayContent === '')) {
+  toast({
+    title: 'Please Enter TakeAway Content',
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  });
+  setCurrentTab(3);
+  return false;
+}
+// Welcome  Screen Validation
+if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAdditionalWelcomeNote === null || formData.gameAdditionalWelcomeNote === undefined || formData.gameAdditionalWelcomeNote === '')) {
+  toast({
+    title: 'Please Add Welcome Note',
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  });
+  //newlyadded start 
+  setFormData({
+    ...formData,
+    gameIsShowAdditionalWelcomeNoteInvalid: 'true',
+  });
+  setCurrentTab(4);
+  //newlyadded End 
+  return false;
+}
+// Thankyou Screen Validation
+if(formData.gameThankYouMessage ==='' || formData.gameThankYouMessage ===null ||formData.gameThankYouMessage ===undefined)
+{
+  toast({
+    title: 'Please Fill The ThankYou Box',
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  })
+  setFormData({
+    ...formData,
+    isfeedbackthankyou: true,
+  });
+  setCurrentTab(5)
+return false;
+}
+// Feedback Screen Validation
+
+if (formData.gameIsFeedbackMandatory === "true") {
+  if (formData.gameQuestion1 === 'true' && formData.gameQuestionValue1 === '') {
+    toast({
+      title: 'Please Enter Question 1',
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    })
+    return false;
+  } else if (formData.gameQuestion2 === 'true' && formData.gameQuestionValue2 === '') {
+    toast({
+      title: 'Please Enter Question 2',
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    })
+    return false;
+  } else if (formData.gameQuestionValue3 === '' || formData.gameQuestionValue4 === '') {
+    toast({
+      title: 'Please Enter Rating Questions',
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    });
+    return false;
+  }
+}
     const countSelectedOptions = selectedOptions.filter(
       (option) =>
         option !== '' &&
@@ -1421,7 +1896,21 @@ const GameCreation = () => {
       // setTab(tab + 1);
       // setTimeout(() => {
 
-      setOpenQuest(true);
+      // setOpenQuest(true);
+      const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
+      console.log('idddddddd',MaxBlockQuestNumber)
+      if (result.status === 'Success') {
+        const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
+        console.log('Max QuestNo:', maxQuestNo);
+        if (maxQuestNo < 5) {
+          setOpenQuest(true);
+        } else {
+          setOpenQuest(false);
+          setTab(6);
+        }
+      } else {
+        console.error('Error:', result.message);
+      }
     }
   };
   console.log('formdata', formData.gameLastTabArray);
@@ -1501,7 +1990,10 @@ const GameCreation = () => {
           duration: 3000,
           isClosable: true,
         });
-
+        setFormData({
+          ...formData,
+          isStoryTitleInvalid: true,
+        });
         return false;
       }
       if (!formData.gameSkills || formData.gameSkills.length === 0) {
@@ -1511,7 +2003,10 @@ const GameCreation = () => {
           duration: 3000,
           isClosable: true,
         });
-
+        setFormData({
+          ...formData,
+          isSkillsInvalid: true,
+        });
         return false;
       }
       if (!formData.gameCategoryId || formData.gameCategoryId.length === 0) {
@@ -1521,7 +2016,10 @@ const GameCreation = () => {
           duration: 3000,
           isClosable: true,
         });
-
+        setFormData({
+          ...formData,
+          isCategoryIdInvalid: true,
+        });
         return false;
       }
       let cate = JSON.stringify(cat);
@@ -1554,13 +2052,15 @@ const GameCreation = () => {
             for (var i = 0; i < inputData.length; i++) {
               var key = inputData[i];
               var inputkey = key.type + key.input;
-
+              var inputget = input;
+              var inputdataget = Object.values(inputget);
               console.log('key', key);
 
               if (key.type === 'Note') {
                 var note = input[inputkey].note;
 
                 if (!note) {
+                  setValidation({ ...validation, [`Note${key.input}`]: true })
                   toast({
                     title: `Note is Empty On This Sequence ${key.id} `,
                     status: 'error',
@@ -1577,6 +2077,7 @@ const GameCreation = () => {
                 var voice = input[inputkey]?.voice;
 
                 if (!Dialog) {
+                  setValidation({ ...validation, [`Dialog${key.input}`]: true })
                   toast({
                     title: `Dialogue is Empty On This Sequence ${key.id} `,
                     status: 'error',
@@ -1604,6 +2105,7 @@ const GameCreation = () => {
                 console.log('blockRoll', blockRoll);
                 console.log('interaction', interaction);
                 if (!interaction) {
+                  setValidation({ ...validation, [`Interaction${key.input}`]: true })
                   toast({
                     title: `Interaction is Empty On This Sequence ${key.id} `,
                     status: 'error',
@@ -1643,6 +2145,7 @@ const GameCreation = () => {
                     );
                     if (!input[inputkey]?.optionsObject[alp.option]) {
                       var option = alp.option;
+                      setValidation({ ...validation, [`options${key.input}${option}`]: true })
                       toast({
                         title: `${option} is Empty On This Sequence ${key.id} `,
                         status: 'error',
@@ -1653,6 +2156,7 @@ const GameCreation = () => {
                     }
                     if (!input[inputkey]?.optionsemotionObject[alp.option]) {
                       var option = alp.option;
+                      setValidation({ ...validation, [`optionsEmotion${key.input}${option}`]: true })
                       toast({
                         title: `${option} is Empty On This Sequence ${key.id} Please Select`,
                         status: 'error',
@@ -1676,6 +2180,7 @@ const GameCreation = () => {
                         isAtLeastOneTrue = true;
                         if (!input[inputkey]?.scoreObject[option]) {
                           console.log('hit3');
+                          setValidation({ ...validation, [`score${key.input}`]: true })
                           toast({
                             title: `${option} Score is Empty On This Sequence ${key.id}`,
                             status: 'error',
@@ -1688,6 +2193,7 @@ const GameCreation = () => {
                     }
                     if (!isAtLeastOneTrue) {
                       console.log('hit1');
+                      setValidation({ ...validation, [`checkbox${key.input}`]: true })
                       toast({
                         title: `At least one option must be selected on this sequence ${key.id}`,
                         status: 'error',
@@ -1699,6 +2205,21 @@ const GameCreation = () => {
                   }
                 }
               }
+              var hasComplete = inputdataget.some((item: any) => {
+                console.log("hasComplete", hasComplete);
+                return (
+                  item &&(item.Notenavigate === 'Complete' || item.Dialognavigate === 'Complete' || (item.navigateObjects && Object.values(item.navigateObjects).includes('Complete')))
+                );
+              });
+                if (!hasComplete) {
+                  toast({
+                    title:`At least Any One of the  Select Block as Complete`,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                  });
+                  return false;
+                }
             }
 
             const apiValidationResult = await getStoryValidtion(id);
@@ -1737,11 +2258,16 @@ const GameCreation = () => {
       }
     }
     if (tab === 6) {
-      setFormData({
-        ...formData,
-        gameGameStage: 'Review',
-      });
+      console.log('tabstage',tab);
+      setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }))
+      localStorage.setItem('gameGameStage','Review');
     }
+    // if (tab === 6) {
+    //   setFormData({
+    //     ...formData,
+    //     gameGameStage: 'Review',
+    //   });
+    // }
     // if(tab<tab)
     // {
     //   arrange.gameLastTab = tab;
@@ -2013,6 +2539,20 @@ const GameCreation = () => {
   const handleChange = (e: any) => {
     const inputValue = e.target.value;
     const { name, value, checked } = e.target;
+    const feedbackselectedOptions = [
+      formData.gameContent,
+      formData.gameRecommendation,
+      formData.gameRelevance,
+      formData.gameGamification,
+      formData.gameBehaviour,
+      formData.gameOthers,
+    ];
+    const countfbSelectedOptions = feedbackselectedOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
+    console.log('countfbSelectedOptions',countfbSelectedOptions);
+
+    if (checked && countfbSelectedOptions >= 4) {
+      return ;
+    } 
     if (name === 'gameDuration') {
       // let duration =
       //   parseInt(value.split(':')[0], 10) * 60 +
@@ -2127,6 +2667,17 @@ const GameCreation = () => {
   const handlecompletion = (e: any) => {
     const inputValue = e.target.value;
     const { name, value, checked } = e.target;
+    if((name === 'gameIsSetMinPassScore'  && checked === true) || (name === 'gameIsSetDistinctionScore' && checked === true)){
+      setCompliData((prevInput: any) => {
+        return {
+          ...prevInput,
+          [CompKeyCount]: {
+            ...prevInput[CompKeyCount],
+            gameIsSetCongratsSingleMessage: 'true',
+          },
+        };
+      });
+    }
     if (
       //       gameIsSetMinPassScore
       // gameIsSetDistinctionScore
@@ -2531,10 +3082,10 @@ const GameCreation = () => {
         ...prev,
         gameNonPlayingCharacterId: id,
         gameNonPlayerName: name,
-        gameNonPlayerVoice: null,
-        gamePlayerMaleVoice: null,
-        gamePlayerFemaleVoice: null,
-        gameNarratorVoice: null,
+        // gameNonPlayerVoice: null,
+        // gamePlayerMaleVoice: null,
+        // gamePlayerFemaleVoice: null,
+        // gameNarratorVoice: null,
       }));
       setPreview(true);
     } else {
@@ -2542,10 +3093,10 @@ const GameCreation = () => {
         ...prev,
         gameNonPlayingCharacterId: '',
         gameNonPlayerName: name,
-        gameNonPlayerVoice: null,
-        gamePlayerMaleVoice: null,
-        gamePlayerFemaleVoice: null,
-        gameNarratorVoice: null,
+        // gameNonPlayerVoice: null,
+        // gamePlayerMaleVoice: null,
+        // gamePlayerFemaleVoice: null,
+        // gameNarratorVoice: null,
       }));
     }
   };
@@ -2911,7 +3462,37 @@ const GameCreation = () => {
   const delSeq = (seq: any, i: any, name: any) => {
     // removeDataBySeqs(seq.id);
     console.log('delSeq', seq);
-
+    console.log('delSeq', seq, i, name, items, input);
+    const filteredNotes = Object.keys(input)
+        .filter(noteKey => input[noteKey].Notenavigate === seq.input)
+        .map(noteKey => {
+            input[noteKey].Notenavigate = null;
+            input[noteKey].NoteleadShow = null;
+            return input[noteKey];
+        });
+        console.log('delseqfilteredNotes', filteredNotes);
+    const filteredDialog = Object.keys(input)
+        .filter(dialogKey => input[dialogKey].Dialognavigate === seq.input)
+        .map(dialogKey => {
+            input[dialogKey].Dialognavigate = null;
+            input[dialogKey].DialogleadShow = null;
+            return input[dialogKey];
+        });
+        console.log('delseqfilteredDialog', filteredDialog);
+        const filteredInteraction = Object.keys(input)
+        .filter(interactionkey => input[interactionkey].navigateObjects && Object.values(input[interactionkey].navigateObjects).includes(seq.input))
+        .map(interactionkey => {
+            Object.keys(input[interactionkey].navigateObjects).forEach(option => {
+                console.log('delseqinterkeycheck',input[interactionkey].navigateObjects[option]);
+                if (input[interactionkey].navigateObjects[option] === seq.input) {
+                  input[interactionkey].navigateObjects[option] = null;
+                  input[interactionkey].navigateshowObjects[option] = null;
+                  
+                }
+              });
+            return input[interactionkey];
+        });
+       console.log('delseqfilteredInteraction', filteredInteraction);
     if (name === 'Interaction') {
       setAlphabet((prevAlphabet: any) => {
         // Use filter to create a new array without items that match the condition
@@ -3060,13 +3641,13 @@ const GameCreation = () => {
       indexToFind = 0;
     }
     if (indexToFind >= 0 && indexToFind < items.length) {
-      console.log('Index:', indexToFind);
+      console.log('Index:', indexToFind);    
+      // event.key !== 'Delete' ||
+      // event.key !== 'Backspace' ||
       if (
         event.key &&
         (event.type === 'click' ||
           event.key !== 'Escape' ||
-          event.key !== 'Delete' ||
-          event.key !== 'Backspace' ||
           event.ctrlKey === true)
       ) {
         if (seq) {
@@ -3148,23 +3729,23 @@ const GameCreation = () => {
         focusSeqRef = document.getElementsByClassName(seq.id);
         focusSeqRef?.[0].removeAttribute('readonly');
         focusSeqRef?.[0].classList.remove('non-caret');
-        focusSeqRef?.[0].focus();
+        // focusSeqRef?.[0].focus();
         console.log('event.----------------Enter', focusSeqRef?.[0]);
       }
 
-      if (event.key === 'Backspace' || event.key === 'Delete') {
-        focusSeqRef = document.getElementsByClassName(seq.id);
-        var isFieldFocused = document.activeElement.classList.contains(seq.id);
-        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(
-          document.activeElement.tagName.toLowerCase(),
-        );
+      // if (event.key === 'Backspace' || event.key === 'Delete') {
+      //   focusSeqRef = document.getElementsByClassName(seq.id);
+      //   var isFieldFocused = document.activeElement.classList.contains(seq.id);
+      //   var isFormFieldFocused = ['input', 'textarea', 'select'].includes(
+      //     document.activeElement.tagName.toLowerCase(),
+      //   );
 
-        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
+      //   console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
 
-        if (focusSeqRef?.[0].readOnly) {
-          delSeq(seq, Number(0), seq.type);
-        }
-      }
+      //   if (focusSeqRef?.[0].readOnly) {
+      //     delSeq(seq, Number(0), seq.type);
+      //   }
+      // }
 
       if (event.ctrlKey === true && event.code === 'KeyC') {
         focusSeqRef = document.getElementsByClassName(seq.id);
@@ -3297,6 +3878,12 @@ const GameCreation = () => {
 
   return (
     <>
+      {loading && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(10px)' }}>
+          <img src={loadingImage} alt="Loading" style={{ width: '25%', maxWidth: '200px', backgroundColor: 'transparent' }}/>
+        </div>
+      )}
+
       <Grid templateColumns="repeat(5, 1fr)" gap={2}>
         <GridItem
           colSpan={{ sm: 1, md: 1, lg: 1 }}
@@ -3304,21 +3891,22 @@ const GameCreation = () => {
         >
           {/* <Card width={'290px'} h={'700px'} mt={{ base: '90px', xl: '90px' }} alignItems={'center'} bg={'linear-gradient(to bottom, #7551ff, #3311db)'}> */}
           <HStack borderRadius={'20px'} width={'280px'} overflow={'auto'}>
-            <Card
+          <Card
               position="fixed"
               flexDirection="column"
-              bg={'linear-gradient(315deg, #f1f2f6 0%, #c9c6c6 74%)'}
+              bg={'#E2E8F0'}
               w="18%"
               top={'2%'}
               mb={'20px'}
               h="95vh"
               borderColor="#11047a"
-              border="3px solid #11047a"
+              boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)"
+              // border="3px solid #11047a"
               overflowX={'auto'}
-              style={{
-                backgroundImage:
-                  'linear-gradient(315deg, #f1f2f6 0%, #c9c6c6 74%)',
-              }}
+            // style={{
+            //   backgroundImage: 'linear-gradient(315deg, #f1f2f6 0%, #c9c6c6 74%)',
+
+            // }}
             >
               <Flex
                 display={'flex'}
@@ -3867,6 +4455,8 @@ const GameCreation = () => {
                   <>
                     {preview && (
                       <CharacterPreview
+                      id={id}
+                      languages={languages}
                         voices={voices}
                         prev={preview}
                         show={img}
@@ -3957,6 +4547,7 @@ const GameCreation = () => {
                 ) : tab === 3 ? (
                   <>
                     <AboutStory
+                    languages={languages}
                       defaultskills={defaultskills}
                       setDefaultSkills={setDefaultSkills}
                       setCat={setCat}
@@ -4007,11 +4598,14 @@ const GameCreation = () => {
                       deleteQuest={deleteQuest}
                       upNextCount={upNextCount}
                       setUpNextCount={setUpNextCount}
+                      validation={validation}
+                      setValidation={setValidation}
                     />
                   </>
                 ) : tab === 5 ? (
                   <>
                     <AddScores
+                    languages={languages}
                       defaultskills={defaultskills}
                       setShowFunction={setShowFunction}
                       showBadge={showBadge}
@@ -4262,9 +4856,9 @@ const GameCreation = () => {
                     position="absolute"
                     left="0"
                     top="0"
-                    w="150px"
+                    w="170px"
                     minW="unset"
-                    maxW="150px !important"
+                    maxW="170px !important"
                     border="transparent"
                     // backdropFilter="blur(63px)"
                     // boxShadow={bgShadow}
@@ -4274,9 +4868,9 @@ const GameCreation = () => {
                     zIndex="1000"
                   >
                     <MenuList
-                      w="150px"
+                      w="170px"
                       minW="unset"
-                      maxW="150px !important"
+                      maxW="170px !important"
                       border="transparent"
                       backdropFilter="blur(63px)"
                       boxShadow={bgShadow}
@@ -4284,6 +4878,7 @@ const GameCreation = () => {
                       position="absolute"
                       p="15px"
                       zIndex="1000" // Set a higher z-index value
+                      right="0"
                     >
                       <MenuItem
                         transition="0.2s linear"
@@ -4330,13 +4925,38 @@ const GameCreation = () => {
                         <Flex align="center" onClick={handleShareReview}>
                           <Icon as={GoCodeReview} h="16px" w="16px" me="8px" />
                           <Text fontSize="sm" fontWeight="400">
-                            share review
+                            Share for Review
                           </Text>
                         </Flex>
                       </MenuItem>
                     </MenuList>
                   </Box>
                 </Menu>
+                {tab !== 1 && tab !== 6 ? (
+                  <Select
+                    options={[defaultLanguageOption, ...languageOptions]}
+                    // options={languageOptions}
+                    isSearchable
+                    placeholder="Language.."
+                    onChange={handleSelectChange}
+                    onMenuOpen={() => setMenuOpen(true)}
+                    styles={{
+                      control: (base) => ({
+                        ...base,
+                        borderRadius: '12px',
+                        // borderColor: formData.isCategoryIdInvalid ? 'red' : '#ccc',
+                        _focus: { borderColor: 'teal.300' },
+                        minHeight: '42px',
+                        cursor: 'pointer',
+                        fontSize: 'sm',
+                        marginRight: '17px',
+                        marginTop: '6px',
+                        marginLeft: '11px',
+                        width: '150px'
+                      }),
+                    }}
+                  />
+                ) : null}
 
               {tab !== 1 && tab !== 2 ? (
                   <Button
@@ -4367,7 +4987,7 @@ const GameCreation = () => {
                   </Button>
                 )} */}
                 {/* navin 15-12 */}
-                {tab === 5 && currentTab === 5 ? (
+                {/* {tab === 5 ? (
                   <Button
                     bg="#11047a"
                     _hover={{ bg: '#190793' }}
@@ -4375,7 +4995,20 @@ const GameCreation = () => {
                     h={'46px'}
                     w={'128px'}
                     // onClick={() => handleButtonClick(showFunction)}
-                    onClick={() => handleNext()}
+                    // onClick={() => handleNext()}
+                    onClick={() => {
+                      if (currentTab === 5) {
+                        handleNext();
+                      } else {
+                        toast({
+                          title: 'Please complete all the screens before proceeding',
+                          status: 'error',
+                          duration: 3000,
+                          isClosable: true,
+                        });
+                      }
+                    }}
+
                     mr={'33px'}
                     mt={'7px'}
                   >
@@ -4398,7 +5031,52 @@ const GameCreation = () => {
                       {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
                     </Button>
                   )
-                )}
+                )} */}
+                {tab === 5  ? (
+                  <Button
+                    bg="#11047a"
+                    _hover={{ bg: '#190793' }}
+                    color="#fff"
+                    h={"46px"}
+                    w={"128px"}
+                    // onClick={() => handleButtonClick(showFunction)}
+                    onClick={() => handleNext()}
+                    // onClick={() => {
+                    //   if (currentTab === 5) {
+                    //     handleNext();
+                    //   } else {
+                    //     toast({
+                    //       title: 'Please complete all the screens before proceeding',
+                    //       status: 'error',
+                    //       duration: 3000,
+                    //       isClosable: true,
+                    //     });
+                    //   }
+                    // }}
+                    mr={"33px"}
+                    mt={"7px"}
+
+                  >
+                    Next
+                  </Button>
+):(
+  tab !== 1 &&
+  tab !== 2 &&
+  tab !== 5 && (
+    <Button
+      bg="#11047a"
+      _hover={{ bg: '#190793' }}
+      color="#fff"
+      h={'46px'}
+      w={'128px'}
+      onClick={commonNextFunction}
+      mr={'33px'}
+      mt={'7px'}
+    >
+      {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
+    </Button>
+  )
+)}
 
                 {/* navin */}
               </Card>

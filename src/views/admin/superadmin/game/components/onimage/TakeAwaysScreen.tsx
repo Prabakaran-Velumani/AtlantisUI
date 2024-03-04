@@ -80,7 +80,7 @@ import {
             // alignItems={'center'}
           >
             <Img src={imageSrc} className='bg-img' />         
-          <Box className='content-box' w={preview? '25%' : '76%'} overflowY={'scroll'}>
+          <Box className='content-box' w={preview? '25%' : '76%'}>
             {data && data.map((it: any, ind: number) => {
               const bulletIndex = it.indexOf('\u2022');
               const contentAfterBullet =
@@ -94,7 +94,7 @@ import {
                 >
                   <>
                     <Img src={bull} className='dot-img' w={'16px'} h={'16px'} />
-                    {contentAfterBullet}
+                    <Box className='bullet-content-box'>{contentAfterBullet}</Box>
                   </>
                 </Box>
               );

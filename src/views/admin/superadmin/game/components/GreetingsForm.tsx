@@ -31,25 +31,27 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import React, { ChangeEvent, useEffect, useState, useRef } from 'react';
-import { useNavigate ,useParams} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Card from 'components/card/Card';
 import InputField from 'components/fields/InputField';
 import TextField from 'components/fields/TextField';
 import SelectField from 'components/fields/SelectField';
-import { Switch, Modal,
+import {
+  Switch, Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Input } from '@chakra-ui/react';
-  import Select from 'react-select';
+  Input
+} from '@chakra-ui/react';
+import Select from 'react-select';
 import logo from 'assets/img/games/log.png';
 import badge from 'assets/img/games/new-level-final.png';
-import { getImages, getAudio,getLanguages,getCreatedLanguages,updatelanguages,getVoices } from 'utils/game/gameService';
+import { getImages, getAudio, getLanguages, getCreatedLanguages, updatelanguages, getVoices } from 'utils/game/gameService';
 import Dropzone from 'views/admin/main/ecommerce/settingsProduct/components/Dropzone';
-import { MdClose, MdOutlineCloudUpload,MdOutlineCheck } from 'react-icons/md';
+import { MdClose, MdOutlineCloudUpload, MdOutlineCheck } from 'react-icons/md';
 import BadgeImages from './BadgeImages';
 import PreferenceAudio from './PreferenceAudio';
 import { FaMusic, FaPause, FaPlay, FaStop } from "react-icons/fa6";
@@ -71,10 +73,10 @@ const GreetingsForm: React.FC<{
   updateLanguage: (selectedOption: OptionType | null) => void;
   updateImageBackGround: (e: any) => void;
   setFormData: any;
-  setSentAud:any;
+  setSentAud: any;
   setBadge: any;
-  selectedAud:any;
-  setSelectedAud:any;
+  selectedAud: any;
+  setSelectedAud: any;
 }> = ({
   selectedAud,
   setSelectedAud,
@@ -96,10 +98,10 @@ const GreetingsForm: React.FC<{
     const [languageOptions, setLanguageOptions] = useState([]);
     const [selectedLanguages, setSelectedLanguages] = useState([]);
     const [defaultLang, setDefaultLang] = useState('');
- const [mappedlanguageOptions, setMappedlanguageOptions] = useState([]);
-const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
-const textColorTertiary = useColorModeValue('secondaryGray.600', 'secondaryGray.500');
- const [languageOptions2, setLanguageOptions2] = useState([]);
+    const [mappedlanguageOptions, setMappedlanguageOptions] = useState([]);
+    const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
+    const textColorTertiary = useColorModeValue('secondaryGray.600', 'secondaryGray.500');
+    const [languageOptions2, setLanguageOptions2] = useState([]);
     // const languageOptions = [
     //   {
     //     value: '1',
@@ -111,11 +113,11 @@ const textColorTertiary = useColorModeValue('secondaryGray.600', 'secondaryGray.
     //   },
     // ];
     const { id } = useParams();
-  // alert(id);
-  const isEmptyObject = (obj:any) => {
-  return Object.keys(obj).length === 0;
-};
-  const [updateData, setUpdateData] = useState({});
+    // alert(id);
+    const isEmptyObject = (obj: any) => {
+      return Object.keys(obj).length === 0;
+    };
+    const [updateData, setUpdateData] = useState({});
     const toast = useToast()
     // const mappedlanguageOptions = Array.isArray(languageOptions)
     //   ? languageOptions.map((language) => ({
@@ -145,32 +147,32 @@ const textColorTertiary = useColorModeValue('secondaryGray.600', 'secondaryGray.
     const [isModalOpen, setIsModalOpen] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
-    const [isPlaying, setIsPlaying] = useState<boolean|null>(null);
-    const [isPaused, setIsPaused] = useState<boolean|null>(null);
-    
+    const [isPlaying, setIsPlaying] = useState<boolean | null>(null);
+    const [isPaused, setIsPaused] = useState<boolean | null>(null);
+
 
     const navigate = useNavigate();
-    
+
 
     useEffect(() => {
       if (selectedAud) {
         updateAudioUrl(selectedAud);
       }
     }, [selectedAud]);
-  
+
     useEffect(() => {
       const audioElement = audioRef.current;
       console.log("audioElement", audioElement);
       if (audioElement) {
         audioElement.addEventListener('ended', handleEndedBtnClick);
-        
+
         return () => {
           audioElement.removeEventListener('ended', handleEndedBtnClick);
         };
       }
     }, [audioRef.current]);
 
-    
+
     const handleSummary = () => {
       setIsOpenSummary(!isOpenSummary);
       updateSummaryState(!isOpenSummary);
@@ -189,7 +191,7 @@ const textColorTertiary = useColorModeValue('secondaryGray.600', 'secondaryGray.
       // }));
     };
     // const fetchData2 = async () => {
-   
+
     //   const result = await getLanguages();
     //   if (result?.status !== 'Success') return console.log('getLanguages Error :', result?.message);
     //   setLanguageOptions(result?.data);
@@ -200,46 +202,45 @@ const textColorTertiary = useColorModeValue('secondaryGray.600', 'secondaryGray.
       padding: '16px', // Adjust the padding as needed
       width: '50%',
     };
-      const fetchData3 = async () => {
-        // alert(id);
-          let data = JSON.stringify({gameId:id});
-          // alert(data);
+    const fetchData3 = async () => {
+      // alert(id);
+      let data = JSON.stringify({ gameId: id });
+      // alert(data);
       const result = await getCreatedLanguages(data);
       if (result?.status !== 'Success') return console.log('getCreatedLanguages Error :', result?.message);
       setDefaultLang(result?.lngchoosen);
       setSelectedLanguages(result?.data);
-      
+
       // console.log(result);
-      };
-      // const isEnglish = (selectedLanguages.length == 0) || (selectedLanguages.length == 1 && defaultLang === selectedLanguages[0]?.translationId);
-      const defaultLanguage = { value: 1, label: 'English' };
-      const getLanguageLabel = (translationId:any) => {
-          const selectedLanguage = languageOptions.find(lang => lang.value === translationId);
-          return selectedLanguage ? selectedLanguage.label : defaultLanguage.label;
-        };
-        const fetchData4 =async (updataData:any) =>{
+    };
+    // const isEnglish = (selectedLanguages.length == 0) || (selectedLanguages.length == 1 && defaultLang === selectedLanguages[0]?.translationId);
+    const defaultLanguage = { value: 1, label: 'English' };
+    const getLanguageLabel = (translationId: any) => {
+      const selectedLanguage = languageOptions.find(lang => lang.value === translationId);
+      return selectedLanguage ? selectedLanguage.label : defaultLanguage.label;
+    };
+    const fetchData4 = async (updataData: any) => {
       // alert(id);
-      if(isEmptyObject(updateData))
-      {
+      if (isEmptyObject(updateData)) {
         console.log(updateData);
       }
-      else{
-          let data = JSON.stringify(updateData);
-          // alert(data);
-      const result = await updatelanguages(data);
-      if (result?.status !== 'Success') return console.log('updatelanguages Error :', result?.message);
-      if(result?.status == 'Success'){
-        // alert("success");
-      setDefaultLang(result?.lngchoosen);
-      setSelectedLanguages(result?.data);      
+      else {
+        let data = JSON.stringify(updateData);
+        // alert(data);
+        const result = await updatelanguages(data);
+        if (result?.status !== 'Success') return console.log('updatelanguages Error :', result?.message);
+        if (result?.status == 'Success') {
+          // alert("success");
+          setDefaultLang(result?.lngchoosen);
+          setSelectedLanguages(result?.data);
+        }
+        if (result?.status == 'AlreadyExist') {
+          setDefaultLang(result?.lngchoosen);
+          setSelectedLanguages(result?.data);
+        }
       }
-      if(result?.status == 'AlreadyExist'){
-        setDefaultLang(result?.lngchoosen);
-        setSelectedLanguages(result?.data); 
-      }
-      }
-        };
-            useEffect(() => {
+    };
+    useEffect(() => {
       const fetchData2 = async () => {
         try {
           const result = await getLanguages();
@@ -247,17 +248,17 @@ const textColorTertiary = useColorModeValue('secondaryGray.600', 'secondaryGray.
             console.log('getLanguages Error:', result?.message);
             return;
           }
-    
+
           setLanguageOptions(result?.data);
-    
+
           const filteredLanguages = result?.data?.filter(
-            (language:any) =>
+            (language: any) =>
               !selectedLanguages.some(
                 (selectedLanguage) =>
                   selectedLanguage.translationId === language.value || language.value === 1
               )
           );
-    
+
           if (filteredLanguages.length === 0) {
             setLanguageOptions2(result?.data);
             setMappedlanguageOptions(result?.data);
@@ -265,7 +266,7 @@ const textColorTertiary = useColorModeValue('secondaryGray.600', 'secondaryGray.
             setLanguageOptions2(filteredLanguages);
             setMappedlanguageOptions(filteredLanguages);
           }
-    
+
           console.log("asdasdasdasdasdasdasdasd");
           console.log(selectedLanguages);
           console.log(filteredLanguages);
@@ -274,19 +275,19 @@ const textColorTertiary = useColorModeValue('secondaryGray.600', 'secondaryGray.
           console.error('Error in fetchData2:', error);
         }
       };
-    
+
       fetchData2();
     }, [selectedLanguages]);
-          useEffect(() => {
-            fetchData();
-            // fetchData2();
-            fetchData3();
-            fetchData4(updateData);
-            console.log('formData', formData);
-            console.log(updateData);
-      
-      
-          }, [backgroundIndex,updateData]);
+    useEffect(() => {
+      fetchData();
+      // fetchData2();
+      fetchData3();
+      fetchData4(updateData);
+      console.log('formData', formData);
+      console.log(updateData);
+
+
+    }, [backgroundIndex, updateData]);
 
     const handleChan = (e: any) => {
       setFormData((prev: any) => ({ ...prev, gameIsShowInteractionFeedBack: e }))
@@ -329,71 +330,69 @@ const textColorTertiary = useColorModeValue('secondaryGray.600', 'secondaryGray.
       }
       setImg(result?.data);
     }
-    
-    const handleBadgeSelection = (badge: Badge) => {    
+
+    const handleBadgeSelection = (badge: Badge) => {
       setFormData((prev: any) => ({
         ...prev,
         gameIntroMusic: badge.gasId,
-        gameIntroMusicName:badge.gasAssetImage,
+        gameIntroMusicName: badge.gasAssetImage,
         // gameBadgeName: badge.gasAssetName
       }))
-console.log("gameIntroMusic",FormData);
-console.log("gasAssetImage",badge.gasAssetImage);
+      console.log("gameIntroMusic", FormData);
+      console.log("gasAssetImage", badge.gasAssetImage);
 
       setSelectedBadge(badge);
       setIsModalOpen(false);
       updateAudioUrl(badge.gasAssetImage);
     };
- 
-    const updateAudioUrl = (url: string)=>{
-      console.log("url",url);
-      if(url)
-      {
+
+    const updateAudioUrl = (url: string) => {
+      console.log("url", url);
+      if (url) {
         const audio = new Audio(url);
         audioRef.current = audio;
         setAudioUrl(url);
       }
-      else{
+      else {
         setAudioUrl(null);
         audioRef.current = null;
       }
     }
 
-    const playAudio = ()=>{
+    const playAudio = () => {
       if (audioUrl) {
         if (audioRef.current?.paused) {
           audioRef.current.play();
           setIsPlaying(true);
           setIsPaused(false);
         }
-      else{
-        audioRef.current.pause();
-        setIsPaused(true);
-        setIsPlaying(false);
+        else {
+          audioRef.current.pause();
+          setIsPaused(true);
+          setIsPlaying(false);
+        }
       }
     }
-  }
 
 
 
-const handlePlay= ()=>{
-  // if(audioUrl){
-  //   audioRef.current.play();
-    setIsPlaying(true);
-  // }
-  playAudio();
-}
-const handlePause= ()=>{
-  if (audioRef.current) {
-    audioRef.current.pause();
-    setIsPlaying(false);
-    setIsPaused(true);
-  }
-}
+    const handlePlay = () => {
+      // if(audioUrl){
+      //   audioRef.current.play();
+      setIsPlaying(true);
+      // }
+      playAudio();
+    }
+    const handlePause = () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+        setIsPaused(true);
+      }
+    }
 
-    useEffect(()=>{
-      if(audioUrl && isPlaying)
-      {
+    useEffect(() => {
+      if (audioUrl && isPlaying) {
         audioRef.current.play();
       }
       // else if(isPaused){
@@ -401,20 +400,18 @@ const handlePause= ()=>{
       //   setIsPaused(true);
       //   !audioUrl && setAudioUrl(null);//url
       // }
-    },[isPlaying])
+    }, [isPlaying])
 
-  useEffect(()=>{
-    console.log("isPaused", isPaused)
-    // console.log("isPaused", isPaused)
-    if(isPaused)
-    {
-      audioRef.current.pause();
-    }      
-  },[isPaused]) 
+    useEffect(() => {
+      console.log("isPaused", isPaused)
+      // console.log("isPaused", isPaused)
+      if (isPaused) {
+        audioRef.current.pause();
+      }
+    }, [isPaused])
 
-    const handleEndedBtnClick = ()=>{
-      if(audioRef?.current && audioRef.current?.currentTime !=0)
-      {
+    const handleEndedBtnClick = () => {
+      if (audioRef?.current && audioRef.current?.currentTime != 0) {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
       }
@@ -423,649 +420,799 @@ const handlePause= ()=>{
     }
 
 
-// const handleLanguageChangeGPT = (selectedOption: OptionType) => {
-      
-//   setUpdateData({ gameId:id, translationId: selectedOption.value, lng: selectedOption.label}); // Update both gameId and selectedOption in state
-//    // alert(updatedata);
-//   };
+    // const handleLanguageChangeGPT = (selectedOption: OptionType) => {
+
+    //   setUpdateData({ gameId:id, translationId: selectedOption.value, lng: selectedOption.label}); // Update both gameId and selectedOption in state
+    //    // alert(updatedata);
+    //   };
     /////////////////////////changes on 20-01-2024/////////////////////////////////////
-     const [isModalOpen2, setIsModalOpen2] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [voiceValues, setVoiceValues] = useState({
-    gameNonPlayerVoice: '',
-    gamePlayerMaleVoice: '',
-    gamePlayerFemaleVoice: '',
-    gameNarratorVoice: '',
-  });
- const [voices, setVoices] = useState([]);
-  // console.log('gameSkills',formData.gameSkills)
-  const voic = async () => {
-    const result = await getVoices();
-console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCcc");
-console.log(result);
-    if (result) {
-      setVoices(result?.voices)
+    const [isModalOpen2, setIsModalOpen2] = useState(false);
+    const [isModalOpen1, setIsModalOpen1] = useState(false);
+    const [isModalOpen3, setIsModalOpen3] = useState(false);
+
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [voiceValues, setVoiceValues] = useState({
+      gameNonPlayerVoice: formData.gameNonPlayerVoice,
+      gamePlayerMaleVoice: formData.gamePlayerMaleVoice,
+      gamePlayerFemaleVoice: formData.gamePlayerFemaleVoice,
+      gameNarratorVoice: formData.gameNarratorVoice,
+    });
+    const [voices, setVoices] = useState([]);
+    // console.log('gameSkills',formData.gameSkills)
+    const voic = async () => {
+      const result = await getVoices();
+      console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCcc");
+      console.log(result);
+      if (result) {
+        setVoices(result?.voices)
+      };
+    }
+    const handleLanguageChangeGPT = (selectedOption: any) => {
+      setSelectedOption(selectedOption);
+      setIsModalOpen1(true);
     };
-  }
-  const handleLanguageChangeGPT = (selectedOption:any) => {
-    setSelectedOption(selectedOption);
-    setIsModalOpen2(true);
-  };
-  const handleLanguageChangeGPTdata = (translationId:any, sellanguage:any,otherProperties:any) => {
-    // alert(translationId+sellanguage+gameNonPlayerVoice);
-  
-  // console.log(translationId, sellanguage, otherProperties);
-    const selectedoptionfromcard={
+    const handleLanguageChangeGPTdata = (translationId: any, sellanguage: any, otherProperties: any) => {
+      // alert(translationId+sellanguage+gameNonPlayerVoice);
+
+      // console.log(translationId, sellanguage, otherProperties);
+      const selectedoptionfromcard = {
         value: translationId,
         label: sellanguage,
       };
-       setVoiceValues({
-      gameNonPlayerVoice: otherProperties.gameNonPlayerVoice,
-      gamePlayerMaleVoice: otherProperties.gamePlayerMaleVoice,
-      gamePlayerFemaleVoice: otherProperties.gamePlayerFemaleVoice,
-      gameNarratorVoice: otherProperties.gameNarratorVoice,
-    });
-    setSelectedOption(selectedoptionfromcard);
-    setIsModalOpen2(true);
-  }
- useEffect(() => {
-    voic();
-  }, [])
-  const handleInputChange2 = (fieldName:any, value:any) => {
-    setVoiceValues((prev) => ({
-      ...prev,
-      [fieldName]: value,
-    }));
-  };
+      setVoiceValues({
+        gameNonPlayerVoice: otherProperties.gameNonPlayerVoice,
+        gamePlayerMaleVoice: otherProperties.gamePlayerMaleVoice,
+        gamePlayerFemaleVoice: otherProperties.gamePlayerFemaleVoice,
+        gameNarratorVoice: otherProperties.gameNarratorVoice,
+      });
+      setSelectedOption(selectedoptionfromcard);
+      setIsModalOpen2(true);
+    }
+    useEffect(() => {
+      voic();
+    }, [])
+    const handleInputChange2 = (fieldName: any, value: any) => {
+      setVoiceValues((prev) => ({
+        ...prev,
+        [fieldName]: value,
+      }));
+    };
 
-  const handleModalClose = () => {
-    setIsModalOpen2(false);
-    // Reset values after closing the modal
-    setVoiceValues({
-      gameNonPlayerVoice: '',
-      gamePlayerMaleVoice: '',
-      gamePlayerFemaleVoice: '',
-      gameNarratorVoice: '',
-    });
-  };
+    const handleModalClose = () => {
+      setIsModalOpen2(false);
+      // Reset values after closing the modal
+      setVoiceValues({
+        gameNonPlayerVoice: formData.gameNonPlayerVoice,
+        gamePlayerMaleVoice: formData.gamePlayerMaleVoice,
+        gamePlayerFemaleVoice: formData.gamePlayerFemaleVoice,
+        gameNarratorVoice: formData.gameNarratorVoice,
+      });
+    };
+    // Example using useEffect
+    useEffect(() => {
+      // Your logic that depends on the updated voiceValues
+      console.log("voiceValues", voiceValues);
+    }, [voiceValues]);
 
-  const handleSave = () => {
-    // Send selectedOption and voiceValues to setUpdateData
-    setUpdateData({
-      gameId: id,
-      translationId: selectedOption.value,
-      lng: selectedOption.label,
-      ...voiceValues,
-    });
+    const handleSavefromCharacterVoice = () => {
+      console.log("voiceValues", voiceValues);
+      // Send selectedOption and voiceValues to setUpdateData
+      setUpdateData({
+        gameId: id,
+        translationId: selectedOption.value,
+        lng: selectedOption.label,
+        ...voiceValues,
+      });
 
-    // Close the modal after saving
-    handleModalClose();
-  };
+      // Close the modal after saving
+      handleModalClose1();
+      setIsModalOpen3(true)
+    };
+    const handleSave = () => {
+      console.log("voiceValues", voiceValues);
+      // Send selectedOption and voiceValues to setUpdateData
+      setUpdateData({
+        gameId: id,
+        translationId: selectedOption.value,
+        lng: selectedOption.label,
+        ...voiceValues,
+      });
 
+      // Close the modal after saving
+      handleModalClose();
+      setIsModalOpen3(true)
+    };
+    const handleConfirmModal = () => {
+      // setIsModalOpen1(false); // Close the confirmation modal
+
+      setIsModalOpen2(true);
+      // setTimeout(() => {
+      setIsModalOpen1(false);
+      // }, 500); // 2000 milliseconds (2 seconds)
+    };
+    const handleModalClose1 = () => {
+      setIsModalOpen1(false);
+      // Reset values after closing the modal
+      setVoiceValues({
+        gameNonPlayerVoice: formData.gameNonPlayerVoice,
+        gamePlayerMaleVoice: formData.gamePlayerMaleVoice,
+        gamePlayerFemaleVoice: formData.gamePlayerFemaleVoice,
+        gameNarratorVoice: formData.gameNarratorVoice,
+      });
+    };
+    const handleModalClose3 = () => {
+      setIsModalOpen3(false);
+      // Reset values after closing the modal
+      setVoiceValues({
+        gameNonPlayerVoice: formData.gameNonPlayerVoice,
+        gamePlayerMaleVoice: formData.gamePlayerMaleVoice,
+        gamePlayerFemaleVoice: formData.gamePlayerFemaleVoice,
+        gameNarratorVoice: formData.gameNarratorVoice,
+      });
+    };
     return (
       <>
-       <Card mt='20px' p={{ base: '20px', md: '20px 40px' }}>
-     <Box w='100%' mb='40px'>
-        <Flex direction={{ base: 'column', '3xl': 'row' }}>
-        <Box me={{ md: '40px', '3xl': '40px' }}>
-            <Tabs variant='soft-rounded' colorScheme='brandTabs' mb='60px'>
-              <TabList overflowX={{ sm: 'scroll', lg: 'unset' }}>
-              <Flex>
-      
-                <Tab
-                    pb='0px'
-                    flexDirection='column'
-                    onClick={function() {
-                      setTabState('Preferences');
-                    }}
-                    bg='unset'
-                    _selected={{
-                      bg: 'none'
-                    }}
-                    _focus={{ border: 'none' }}
-                    minW='max-content'><Flex align='center'>
-                      <Text
-                        color={tabState === 'Preferences' ? textColor : textColorTertiary}
-                        fontSize='lg'
-                        fontWeight='500'>Preferences</Text>
+      <Modal isOpen={isModalOpen3} onClose={() => handleModalClose3()}>
+          <ModalOverlay />
+          <ModalContent position="fixed" overflowY="auto" m={0}>
+            <ModalHeader>
+              <Text
+                color={textColor}
+                fontSize="2xl"
+                fontWeight="700"
+                mb="20px"
+              >Confirmation
+              </Text>
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody p={0} pl={'25px'}>
+              <Text color={textColor} fontSize="18px" fontWeight="600"
+              >
+                A (language) version of your game has been saved to your drafts. The translations are AI-generated; hence we strongly recommend reviewing them before launch. Would you like to review the (language) version right now?
+              </Text>
+            </ModalBody>
+            <ModalFooter>
+              <Flex justify="space-between" w="50%" marginTop="15px" p="0 15px" display="flex" >
+
+                <Button
+                  color={'#fff'}
+                  bg={'#11047a'}
+                  _hover={{ color: '#fff', bg: '#11047a' }}
+                  mr={'10px'}
+                  onClick={() => handleModalClose3()}
+                >
+                  Yes
+                </Button>
+                <Button
+                  color={'#fff'}
+                  bg={'#11047a'}
+                  _hover={{ color: '#fff', bg: '#11047a' }}
+                  onClick={() => handleModalClose3()}                  >
+                  No
+                </Button>
+              </Flex>
+              {/* <Button onClick={() => handleSavefromCharacterVoice()} >No</Button>
+
+              <Button colorScheme="blue" onClick={() => handleConfirmModal()}>
+                Yes
+              </Button> */}
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+        <Modal isOpen={isModalOpen1} onClose={() => handleModalClose1()}>
+          <ModalOverlay />
+          <ModalContent position="fixed" overflowY="auto" m={0}>
+            <ModalHeader>
+              <Text
+                color={textColor}
+                fontSize="2xl"
+                fontWeight="700"
+                mb="20px"
+              >Confirmation
+              </Text>
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody p={0} pl={'25px'}>
+              <Text color={textColor} fontSize="18px" fontWeight="600"
+              >
+                Would you like to change character voices for the translated version?
+              </Text>
+
+            </ModalBody>
+            <ModalFooter>
+              <Flex justify="space-between" w="50%" marginTop="15px" p="0 15px" display="flex" >
+
+                <Button
+                  color={'#fff'}
+                  bg={'#11047a'}
+                  _hover={{ color: '#fff', bg: '#11047a' }}
+                  mr={'10px'}
+                  onClick={() => handleConfirmModal()}
+                >
+                  Yes
+                </Button>
+                <Button
+                  color={'#fff'}
+                  bg={'#11047a'}
+                  _hover={{ color: '#fff', bg: '#11047a' }}
+                  onClick={() => handleSavefromCharacterVoice()}                  >
+                  No
+                </Button>
+              </Flex>
+              {/* <Button onClick={() => handleSavefromCharacterVoice()} >No</Button>
+
+              <Button colorScheme="blue" onClick={() => handleConfirmModal()}>
+                Yes
+              </Button> */}
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+        <Card mt='20px' p={{ base: '20px', md: '20px 40px' }}>
+          <Box w='100%' mb='40px'>
+            <Flex direction={{ base: 'column', '3xl': 'row' }}>
+              <Box me={{ md: '40px', '3xl': '40px' }}>
+                <Tabs variant='soft-rounded' colorScheme='brandTabs' mb='60px'>
+                  <TabList overflowX={{ sm: 'scroll', lg: 'unset' }}>
+                    <Flex>
+
+                      <Tab
+                        pb='0px'
+                        flexDirection='column'
+                        onClick={function () {
+                          setTabState('Preferences');
+                        }}
+                        bg='unset'
+                        _selected={{
+                          bg: 'none'
+                        }}
+                        _focus={{ border: 'none' }}
+                        minW='max-content'><Flex align='center'>
+                          <Text
+                            color={tabState === 'Preferences' ? textColor : textColorTertiary}
+                            fontSize='lg'
+                            fontWeight='500'>Preferences</Text>
+                        </Flex>
+                        <Box
+                          height='4px'
+                          w='100%'
+                          transition='0.1s linear'
+                          bg={tabState === 'Preferences' ? 'brand.500' : 'transparent'}
+                          mt='15px'
+                          borderRadius='30px'
+                        />
+                      </Tab>
+                      <Tab
+                        onClick={function () {
+                          setTabState('Translations');
+                        }}
+                        pb='0px'
+                        me='10px'
+                        bg='unset'
+                        _selected={{
+                          bg: 'none'
+                        }}
+                        _focus={{ border: 'none' }}
+                        minW='max-content'
+                        flexDirection='column'>
+                        <Flex align='center'>
+                          <Text
+                            color={tabState === 'Translations' ? textColor : textColorTertiary}
+                            fontSize='lg'
+                            fontWeight='500'>
+                            Translations
+                          </Text>
+                        </Flex>
+                        <Box
+                          height='4px'
+                          w='100%'
+                          transition='0.1s linear'
+                          bg={tabState === 'Translations' ? 'brand.500' : 'transparent'}
+                          mt='15px'
+                          borderRadius='30px'
+                        />
+                      </Tab>
                     </Flex>
-<Box
-                      height='4px'
-                      w='100%'
-                      transition='0.1s linear'
-                      bg={tabState === 'Preferences' ? 'brand.500' : 'transparent'}
-                      mt='15px'
-                      borderRadius='30px'
-                    />
-                    </Tab>
-                    <Tab
-                    onClick={function() {
-                      setTabState('Translations');
-                    }}
-                    pb='0px'
-                    me='10px'
-                    bg='unset'
-                    _selected={{
-                      bg: 'none'
-                    }}
-                    _focus={{ border: 'none' }}
-                    minW='max-content'
-                    flexDirection='column'>
-                    <Flex align='center'>
-                      <Text
-                        color={tabState === 'Translations' ? textColor : textColorTertiary}
-                        fontSize='lg'
-                        fontWeight='500'>
-                        Translations
-                      </Text>
-                    </Flex>
-                    <Box
-                      height='4px'
-                      w='100%'
-                      transition='0.1s linear'
-                      bg={tabState === 'Translations' ? 'brand.500' : 'transparent'}
-                      mt='15px'
-                      borderRadius='30px'
-                    />
-                  </Tab>
-               </Flex>
-              </TabList>
-              <TabPanels pt='30px'>
-                <TabPanel>
-                  
-                  <Box w={'65%'} >
-                    <SimpleGrid
-                      columns={{ sm: 1, md: 1, xl: 1 }}
-                      spacing={{ base: '20px', xl: '20px' }}
-                    >
-                      <FormControl mt="20px">
-                        <FormLabel
-                          htmlFor="alerts"
-                          mb="0"
-                          fontSize="sm"
-                          fontWeight="bold"
-                          color={textColorPrimary}
-                          mr="2"
+                  </TabList>
+                  <TabPanels pt='30px'>
+                    <TabPanel>
+
+                      <Box w={'65%'} >
+                        <SimpleGrid
+                          columns={{ sm: 1, md: 1, xl: 1 }}
+                          spacing={{ base: '20px', xl: '20px' }}
                         >
-                          Show Interaction Feedback
-                        </FormLabel>
-                        <RadioGroup
-                          name="gameIsShowInteractionFeedBack"
-                          id="alerts"
-                          onChange={handleChan}
-                        value={formData?.gameIsShowInteractionFeedBack ? formData?.gameIsShowInteractionFeedBack :''}
-                        >
-                          <Stack direction="row" spacing={5}>
-                            {options.map((option) => (
-                              <Radio
-                                key={option?.value}
-                                value={option?.value}
-                                color="#422afb"
-                               
+                          <FormControl mt="20px">
+                            <FormLabel
+                              htmlFor="alerts"
+                              mb="0"
+                              fontSize="sm"
+                              fontWeight="bold"
+                              color={textColorPrimary}
+                              mr="2"
+                            >
+                              Show Interaction Feedback
+                            </FormLabel>
+                            <RadioGroup
+                              name="gameIsShowInteractionFeedBack"
+                              id="alerts"
+                              onChange={handleChan}
+                              value={formData?.gameIsShowInteractionFeedBack ? formData?.gameIsShowInteractionFeedBack : ''}
+                            >
+                              <Stack direction="row" spacing={5}>
+                                {options.map((option) => (
+                                  <Radio
+                                    key={option?.value}
+                                    value={option?.value}
+                                    color="#422afb"
+
+                                  >
+                                    <Text fontSize="0.875rem"> {option?.name}</Text>
+                                  </Radio>
+                                ))}
+                              </Stack>
+                            </RadioGroup>
+                          </FormControl>
+                          <FormControl
+                            display="flex"
+                            alignItems="center"
+                            justifyContent={'space-between'}
+                            mt={'20px'}
+                          >
+                            <FormLabel
+                              htmlFor="summaryScreen"
+                              fontSize="sm"
+                              fontWeight="bold"
+                              color={textColorPrimary}
+                              mr="2"
+                            >
+                              Shuffle option
+                            </FormLabel>
+                            <Switch
+                              id="gameShuffle"
+                              name="gameShuffle"
+                              colorScheme={'brandScheme'}
+                              onChange={handleChange}
+                              defaultChecked={formData.gameShuffle === 'true' ? true : false}
+
+                            />
+                          </FormControl>
+                          <FormControl
+                            display="flex"
+                            alignItems="center"
+                            justifyContent={'space-between'}
+                            mt={'20px'}
+                          >
+                            <FormLabel
+                              htmlFor="summaryScreen"
+                              fontSize="sm"
+                              fontWeight="bold"
+                              color={textColorPrimary}
+                              mr="2"
+                            >
+                              Disable optional replays
+                            </FormLabel>
+                            <Switch
+                              id="gameDisableOptionalReplays"
+                              name="gameDisableOptionalReplays"
+                              colorScheme={'brandScheme'}
+                              onChange={handleChange}
+                              defaultChecked={formData.gameDisableOptionalReplays === 'true' ? true : false}
+                            />
+                          </FormControl>
+
+
+                          <FormControl
+                            display="flex"
+                            alignItems="center"
+                            justifyContent={'space-between'}
+                            mt={'20px'}
+                          >
+                            <FormLabel
+                              htmlFor="summaryScreen"
+                              fontSize="sm"
+                              fontWeight="bold"
+                              color={textColorPrimary}
+                              mr="2"
+                            >
+                              Change introductory music <span style={{ color: 'red' }}>*</span>
+                            </FormLabel>
+                            <PreferenceAudio
+                              isModalOpen={isModalOpen}
+                              onClose={() => setIsModalOpen(false)}
+                              badgeData={badgeData}
+                              handleBadgeSelection={handleBadgeSelection}
+                              textColorPrimary={textColorPrimary}
+                            />
+
+
+
+
+                            {!formData.gameIntroMusic || formData.gameIntroMusic === '' || formData.gameIntroMusic === null ?
+                              <>
+                                <input type='file' style={{ display: 'none' }} />
+                                <Box position={'relative'} mb={'30px'} left='-36px' cursor={'pointer'} onClick={() => handleBadgeImages()}>
+                                  <input type="file" style={{
+                                    width: '100px',
+                                    position: 'absolute',
+                                    display: 'none',
+                                    textAlign: 'right',
+
+                                    opacity: 0,
+                                    zIndex: 2,
+                                    height: '100px'
+                                  }} />
+                                  <Box position={'absolute'} className={'choosebadge'} top={0} left={0} zIndex={1} backgroundColor={'#422AFB'}
+                                    p={'2px'}
+                                    borderRadius={'15px'}
+                                    pr={'8px'}
+                                    pl={'8px'} display={'flex'} alignItems="center"
+                                    justifyContent={'flex-start'} >
+                                    <SearchIcon color={'#fff'} w="15px" h="15px" />
+                                    <Text fontSize="sm"
+                                      //fontWeight="bold"
+                                      //color={textColorPrimary}
+                                      color={'#fff'}
+                                      whiteSpace={'nowrap'} textAlign={'left'}>
+                                      Choose Audio
+                                    </Text>
+                                  </Box>
+                                </Box>
+                              </>
+                              :
+                              <Box position={'relative'} display={'flex'} alignItems={"center"} className={"Box12"} justifyContent={'end'} w={'100%'} ml={"10px"} mb={"10px"}>
+                                <Box>
+
+                                  <Text color={'#3311db'} textAlign={'center'} verticalAlign={'center'} fontSize="md" overflow="hidden"
+                                    textOverflow="ellipsis" whiteSpace="nowrap" onClick={handleBadgeImages} cursor="pointer">{formData.gameIntroMusicName
+                                      ?.split('/')
+                                      ?.pop()
+                                      ?.split('.')
+                                      ?.slice(0, -1)
+                                      ?.join('.')}.mp3</Text>
+                                  <Icon
+                                    as={MdClose}
+                                    bg={'#fff'}
+                                    color={"red"}
+                                    position={'absolute'}
+                                    borderRadius={'50%'}
+                                    top={'-0'}
+                                    right={'0'}
+                                    cursor="pointer"
+                                    onClick={() => { handleClear(); handleEndedBtnClick() }}
+                                  />{ }
+                                </Box>
+                                {(isPlaying === null || (!isPlaying && isPaused)) ?
+                                  <>
+                                    <Box
+                                      w={'30px'}
+                                      h={'30px'}
+                                      borderRadius={'50%'}
+                                      bg={'#3311db'}
+                                      display={'flex'}
+                                      alignItems={'center'}
+                                      justifyContent={'center'}
+                                      mr={'10px'}
+                                      ml={'10px'}
+                                      onClick={() => handlePlay()}
+                                    >
+                                      (<FaPlay size={15} color={'#fff'} />)
+                                    </Box>
+                                    {(isPaused || isPlaying) &&
+                                      <Box
+                                        w={'30px'}
+                                        h={'30px'}
+                                        borderRadius={'50%'}
+                                        bg={'#3311db'}
+                                        display={'flex'}
+                                        alignItems={'center'}
+                                        justifyContent={'center'}
+                                        mr={'10px'}
+                                        onClick={() => handleEndedBtnClick()}
+                                      >
+                                        <FaStop size={15} color='#fff' />
+                                      </Box>}
+                                  </>
+                                  :
+                                  <>
+                                    <Box
+                                      w={'30px'}
+                                      h={'30px'}
+                                      borderRadius={'50%'}
+                                      bg={'#3311db'}
+                                      display={'flex'}
+                                      alignItems={'center'}
+                                      justifyContent={'center'}
+                                      mr={'10px'}
+                                      ml={'10px'}
+                                      onClick={() => handlePause()}
+                                    >
+                                      <FaPause size={15} color='#fff' />
+                                    </Box>
+
+                                    <Box
+                                      w={'30px'}
+                                      h={'30px'}
+                                      borderRadius={'50%'}
+                                      bg={'#3311db'}
+                                      display={'flex'}
+                                      alignItems={'center'}
+                                      justifyContent={'center'}
+                                      mr={'10px'}
+                                      onClick={() => handleEndedBtnClick()}
+                                    >
+                                      <FaStop size={15} color='#fff' />
+                                    </Box>
+                                  </>
+                                }
+                              </Box>
+                            }
+                          </FormControl>
+
+
+
+                          <FormControl
+                            display="flex"
+                            alignItems="center"
+                            justifyContent={'space-between'}
+                            mt={'20px'}
+                          >
+                            <FormLabel
+                              htmlFor="summaryScreen"
+                              fontSize="sm"
+                              fontWeight="bold"
+                              color={textColorPrimary}
+                              mr="2"
+                            >
+                              Track Question Wise Answers
+                            </FormLabel>
+                            <Switch
+                              id="gameTrackQuestionWiseAnswers"
+                              name="gameTrackQuestionWiseAnswers"
+                              colorScheme={'brandScheme'}
+                              onChange={handleChange}
+                              defaultChecked={formData.gameTrackQuestionWiseAnswers === 'true' ? true : false}
+                            />
+                          </FormControl>
+                          <FormControl
+                            display="flex"
+                            alignItems="center"
+                            justifyContent={'space-between'}
+                            mt={'20px'}
+                          >
+                            <FormLabel
+                              htmlFor="summaryScreen"
+                              fontSize="sm"
+                              fontWeight="bold"
+                              color={textColorPrimary}
+                              mr="2"
+                            >
+                              Disable Learner Email Notifications
+                            </FormLabel>
+                            <Switch
+                              id="gameDisableLearnerMailNotifications"
+                              name="gameDisableLearnerMailNotifications"
+                              colorScheme={'brandScheme'}
+                              onChange={handleChange}
+                              defaultChecked={formData.gameDisableLearnerMailNotifications === 'true' ? true : false}
+                            />
+                          </FormControl>
+                        </SimpleGrid>
+                      </Box>
+                    </TabPanel>
+                    <TabPanel>
+
+
+                      <Box w={'100%'} >
+                        <div style={boxStyles}>
+                          <SimpleGrid
+                            columns={{ sm: 1, md: 1, xl: 1 }}
+                            spacing={{ base: '20px', xl: '20px' }}
+                          >
+
+                            <FormControl
+                              display="flex"
+                              alignItems="center"
+                              justifyContent={'space-between'}
+                              mt={'20px'}
+                            >
+                              <FormLabel
+                                htmlFor="summaryScreen"
+                                fontSize="sm"
+                                fontWeight="bold"
+                                color={textColorPrimary}
+                                m="0"
+
                               >
-                                 <Text  fontSize="0.875rem"> {option?.name}</Text>
-                              </Radio>
-                            ))}
-                          </Stack>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormControl
-                        display="flex"
-                        alignItems="center"
-                        justifyContent={'space-between'}
-                        mt={'20px'}
-                      >
-                        <FormLabel
-                          htmlFor="summaryScreen"
-                          fontSize="sm"
-                          fontWeight="bold"
-                          color={textColorPrimary}
-                          mr="2"
+                                Select Languages for Game Translation</FormLabel>
+
+                              <Select
+
+
+                                name="gameLanguageId"
+                                options={mappedlanguageOptions}
+                                value={
+                                  mappedlanguageOptions.find(
+                                    (option) => option.value === defaultLang,
+                                  ) || null
+                                }
+                                onChange={handleLanguageChangeGPT}
+                                styles={{
+                                  menuPortal: base => ({ ...base, zIndex: 9999, }), control: (provided: any, state: any) => ({
+                                    ...provided,
+                                    borderRadius: '15px',
+                                    height: 'auto',
+                                    padding: '0 !important',
+                                    width: '150px',
+                                  }),
+                                }}
+                              />
+                            </FormControl>
+                            {/* changs on 20-01-2024 */}
+                            <>
+
+                              {isModalOpen2 && <CharacterPreviewTranslate handleSave={handleSave} selectedOption={selectedOption} setVoiceValues={setVoiceValues} voiceValues={voiceValues} isModalOpen2={isModalOpen2} setIsModalOpen2={setIsModalOpen2} voices={voices} handleInputChange2={handleInputChange2} handleModalClose={handleModalClose} />}
+                            </>
+                            {/* changs on 20-01-2024 */}
+                          </SimpleGrid>
+                        </div>
+                      </Box>
+                      <Box w={'100%'} mt="20px" p="20px">
+                        <SimpleGrid
+                          columns={{ sm: 1, md: 2, xl: 4 }}
+                          spacing={{ base: '20px', xl: '20px' }}
                         >
-                          Shuffle option
-                        </FormLabel>
-                        <Switch
-                          id="gameShuffle"
-                          name="gameShuffle"
-                          colorScheme={'brandScheme'}
-                          onChange={handleChange}
-                          defaultChecked={formData.gameShuffle==='true' ? true : false}
 
-                        />
-                      </FormControl>
-                      <FormControl
-                        display="flex"
-                        alignItems="center"
-                        justifyContent={'space-between'}
-                        mt={'20px'}
-                      >
-                        <FormLabel
-                          htmlFor="summaryScreen"
-                          fontSize="sm"
-                          fontWeight="bold"
-                          color={textColorPrimary}
-                          mr="2"
-                        >
-                          Disable optional replays
-                        </FormLabel>
-                        <Switch
-                          id="gameDisableOptionalReplays"
-                          name="gameDisableOptionalReplays"
-                          colorScheme={'brandScheme'}
-                          onChange={handleChange}
-                          defaultChecked={formData.gameDisableOptionalReplays==='true' ? true : false}
-                        />
-                      </FormControl>
-                      
-                     
-                      <FormControl
-                        display="flex"
-                        alignItems="center"
-                        justifyContent={'space-between'}
-                        mt={'20px'}
-                      >
-        <FormLabel
-                          htmlFor="summaryScreen"
-                          fontSize="sm"
-                          fontWeight="bold"
-                          color={textColorPrimary}
-                          mr="2"
-                        >
-                            Change introductory music <span style={{ color: 'red' }}>*</span>
-                        </FormLabel>
-        <PreferenceAudio
-        isModalOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        badgeData={badgeData}
-        handleBadgeSelection={handleBadgeSelection}
-        textColorPrimary={textColorPrimary}
-      />
-    
-     
+                          {selectedLanguages.length === 0 ? (
+                            <Flex
+                              key={defaultLanguage.value}
+                              direction="column"
+                              bg={parseInt(defaultLang) === defaultLanguage.value ? boxBg : 'transparent'}
+                              p="16px 20px"
+                              position="relative"
+                              borderRadius="14px"
+                              mb="38px"
+                              border={parseInt(defaultLang) === defaultLanguage.value ? "2px solid #11047a" : 'none'}
+                              boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
 
-    
-    {!formData.gameIntroMusic || formData.gameIntroMusic === '' || formData.gameIntroMusic === null ?
-      <>
-        <input type='file' style={{ display: 'none' }} />
-        <Box   position={'relative'} mb={'30px'} left='-36px' cursor={'pointer'} onClick={() =>handleBadgeImages()}>
-  <input type="file" style={{ width:'100px',
-                      position:'absolute',
-                      display:'none',
-                      textAlign:'right',
-                      
-                      opacity:0,
-                      zIndex:2,
-                      height:'100px' }}/>
-  <Box  position={'absolute'} className={'choosebadge'} top={0} left={0} zIndex={1} backgroundColor= {'#422AFB'}
-    p= {'2px'}
-    borderRadius= {'15px'}
-    pr={'8px'} 
-    pl= {'8px'} display={'flex'}  alignItems="center"
-                  justifyContent={'flex-start'} >
-    <SearchIcon color={'#fff'} w="15px" h="15px"/>
-    <Text fontSize="sm"
-                    //fontWeight="bold"
-                    //color={textColorPrimary}
-                    color={'#fff'}
-                    whiteSpace={'nowrap'} textAlign={'left'}>
-                          Choose Audio
-                        </Text>
-  </Box>
-</Box> 
-      </>
-      :
-      <Box position={'relative'} display={'flex'} alignItems={"center"} className={"Box12"} justifyContent={'end'} w={'100%'} ml={"10px"} mb={"10px"}>
-        <Box>   
-           
-          <Text  color={'#3311db'} textAlign={'center'} verticalAlign={'center'} fontSize="md" overflow="hidden"
-      textOverflow="ellipsis" whiteSpace="nowrap"   onClick={handleBadgeImages} cursor="pointer">{formData.gameIntroMusicName
-        ?.split('/') 
-        ?.pop()
-        ?.split('.')
-        ?.slice(0, -1)
-        ?.join('.')}.mp3</Text>
-          <Icon
-            as={MdClose}
-            bg={'#fff'}
-            color={"red"}
-            position={'absolute'}
-            borderRadius={'50%'}
-            top={'-0'}    
-            right={'0'}
-            cursor="pointer" 
-            onClick={()=>{handleClear(); handleEndedBtnClick()}}
-          />{}
-        </Box>
-        {(isPlaying === null || (!isPlaying && isPaused)) ?
-        <>
-        <Box
-          w={'30px'}
-          h={'30px'}
-          borderRadius={'50%'}
-          bg={'#3311db'}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          mr={'10px'} 
-          ml={'10px'} 
-          onClick={() => handlePlay()}
-        >
-         (<FaPlay size={15} color={'#fff'} />)
-        </Box> 
-        {(isPaused || isPlaying) &&
-        <Box
-        w={'30px'}
-        h={'30px'}
-        borderRadius={'50%'}
-        bg={'#3311db'}
-        display={'flex'}
-        alignItems={'center'}
-        justifyContent={'center'}
-        mr={'10px'} 
-        onClick={() => handleEndedBtnClick()}
-      >
-        <FaStop size={15} color='#fff' />
-      </Box>}
-        </>
-        :
-          <>
-          <Box
-          w={'30px'}
-          h={'30px'}
-          borderRadius={'50%'}
-          bg={'#3311db'}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          mr={'10px'} 
-          ml={'10px'} 
-          onClick={() => handlePause()}
-          >
-          <FaPause size={15} color='#fff' />
-          </Box>
-        
-        <Box
-          w={'30px'}
-          h={'30px'}
-          borderRadius={'50%'}
-          bg={'#3311db'}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          mr={'10px'} 
-          onClick={() => handleEndedBtnClick()}
-        >
-          <FaStop size={15} color='#fff' />
-        </Box>
-        </>
-        }
-        </Box>
-    }
-    </FormControl>
+                            >
+                              {parseInt(defaultLang) === defaultLanguage.value && (
+                                <Flex
+                                  position="absolute"
+                                  top="-10px"
+                                  right="-10px"
+                                  width="20px"
+                                  height="20px"
+                                  borderRadius="50%"
+                                  bg={parseInt(defaultLang) === defaultLanguage.value ? '#11047a' : 'transparent'}
+                                  alignItems="center"
+                                  justifyContent="center"
+                                  zIndex="1"
+                                  overflow="hidden"
+                                >
+                                  <Icon
+                                    as={MdOutlineCheck}
+                                    w="15px"
+                                    h="15px"
+
+                                    color="white"
+
+                                  />
+                                </Flex>
+                              )}
+                              <Text fontSize="sm" fontWeight="700" color={'black'}>
+                                {defaultLanguage.label}
+                              </Text>
+                              <Text fontSize="sm" fontWeight="500" color="secondaryGray.600">
+                                Your Content Now in {defaultLanguage.label} Language
+                              </Text>
+                            </Flex>
+                          ) : (
+                            <>
+                              <Flex
+                                key={defaultLanguage.value}
+                                direction="column"
+                                bg={parseInt(defaultLang) === defaultLanguage.value ? boxBg : 'transparent'}
+                                p="16px 20px"
+                                position="relative"
+                                borderRadius="14px"
+                                mb="38px"
+                                border={parseInt(defaultLang) === defaultLanguage.value ? "2px solid #11047a" : 'none'}
+                                boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
+
+                              >
+                                {parseInt(defaultLang) === defaultLanguage.value && (
+                                  <Flex
+                                    position="absolute"
+                                    top="-10px"
+                                    right="-10px"
+                                    width="20px"
+                                    height="20px"
+                                    borderRadius="50%"
+                                    bg={parseInt(defaultLang) === defaultLanguage.value ? '#11047a' : 'transparent'}
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    zIndex="1"
+                                    overflow="hidden"
+
+                                  >
+                                    <Icon
+                                      as={MdOutlineCheck}
+                                      w="15px"
+                                      h="15px"
+
+                                      color="white"
+
+                                    />
+                                  </Flex>
+                                )}
+                                <Text fontSize="sm" fontWeight="700" color={'black'}>
+                                  {defaultLanguage.label}
+                                </Text>
+                                <Text fontSize="sm" fontWeight="500" color="secondaryGray.600">
+                                  Your Content Now in {defaultLanguage.label} Language
+                                </Text>
+                              </Flex>
+
+                              {selectedLanguages.map(({ translationId, gamechoosenId, ...otherProperties }) => (
 
 
-                      
-                      <FormControl
-                        display="flex"
-                        alignItems="center"
-                        justifyContent={'space-between'}
-                        mt={'20px'}
-                      >
-                        <FormLabel
-                          htmlFor="summaryScreen"
-                          fontSize="sm"
-                          fontWeight="bold"
-                          color={textColorPrimary}
-                          mr="2"
-                        >
-                          Track Question Wise Answers
-                        </FormLabel>
-                        <Switch
-                          id="gameTrackQuestionWiseAnswers"
-                          name="gameTrackQuestionWiseAnswers"
-                          colorScheme={'brandScheme'}
-                          onChange={handleChange}
-                          defaultChecked={formData.gameTrackQuestionWiseAnswers==='true' ? true : false}
-                        />
-                      </FormControl>
-                      <FormControl
-                        display="flex"
-                        alignItems="center"
-                        justifyContent={'space-between'}
-                        mt={'20px'}
-                      >
-                        <FormLabel
-                          htmlFor="summaryScreen"
-                          fontSize="sm"
-                          fontWeight="bold"
-                          color={textColorPrimary}
-                          mr="2"
-                        >
-                          Disable Learner Email Notifications
-                        </FormLabel>
-                        <Switch
-                          id="gameDisableLearnerMailNotifications"
-                          name="gameDisableLearnerMailNotifications"
-                          colorScheme={'brandScheme'}
-                          onChange={handleChange}
-                          defaultChecked={formData.gameDisableLearnerMailNotifications==='true' ? true : false}
-                        />
-                      </FormControl>
-                    </SimpleGrid>
-                  </Box>
-                </TabPanel>
-                <TabPanel>
-                  
-                      
-                  <Box w={'100%'} >
-                  <div style={boxStyles}>
-                   <SimpleGrid
-                     columns={{ sm: 1, md: 1, xl: 1 }}
-                     spacing={{ base: '20px', xl: '20px' }}
-                   >
-                   
-                     <FormControl
-                       display="flex"
-                       alignItems="center"
-                       justifyContent={'space-between'}
-                       mt={'20px'}
-                     >
-                       <FormLabel
-                         htmlFor="summaryScreen"
-                         fontSize="sm"
-                         fontWeight="bold"
-                         color={textColorPrimary}
-                         m="0"
-                         
-                       >
-               Select Languages for Game Translation</FormLabel>
-           
-               <Select
-                           
-                          
-                           name="gameLanguageId"
-                           options={mappedlanguageOptions}
-                           value={
-                               mappedlanguageOptions.find(
-                                 (option) => option.value === defaultLang,
-                               ) || null
-                             }
-                           onChange={handleLanguageChangeGPT}
-                           styles={{ menuPortal: base => ({ ...base, zIndex: 9999, }), control: (provided: any, state: any) => ({
-                            ...provided,
-                            borderRadius: '15px',
-                            height: 'auto',
-                            padding: '0 !important',
-                            width:'150px',
-                          }), }}
-                        />
-                     </FormControl>
-                   {/* changs on 20-01-2024 */}
-                     <>
-                   
-       {isModalOpen2 && <CharacterPreviewTranslate handleSave={handleSave} selectedOption={selectedOption} setVoiceValues={setVoiceValues} voiceValues={voiceValues} isModalOpen2={isModalOpen2} setIsModalOpen2={setIsModalOpen2} voices={voices} handleInputChange2={handleInputChange2}/>}
-    </>
-    {/* changs on 20-01-2024 */}
-                   </SimpleGrid>
-                   </div>
-             </Box>
-                 <Box w={'100%'} mt="20px" p="20px">
-                   <SimpleGrid
-                     columns={{ sm: 1, md: 2, xl: 4 }}
-                     spacing={{ base: '20px', xl: '20px' }}
-                   >
+                                <Flex
+                                  key={gamechoosenId}
+                                  direction="column"
+                                  bg={parseInt(defaultLang) === translationId ? boxBg : 'transparent'}
+                                  p="16px 20px"
+                                  borderRadius="14px"
+                                  mb="38px"
+                                  border={parseInt(defaultLang) === translationId ? "2px solid #11047a" : 'none'}
+                                  position="relative" // Position relative for pseudo-element
+                                  cursor="pointer"
+                                  onClick={() => handleLanguageChangeGPTdata(translationId, getLanguageLabel(translationId), otherProperties)}
+                                  boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
+                                >
 
-              {selectedLanguages.length === 0 ? (
-         <Flex
-           key={defaultLanguage.value}
-           direction="column"
-          bg={parseInt(defaultLang)===defaultLanguage.value ? boxBg : 'transparent'}
-           p="16px 20px"
-position="relative"
-           borderRadius="14px"
-           mb="38px"
-           border={parseInt(defaultLang)===defaultLanguage.value ? "2px solid #11047a" : 'none'}
-           boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
-           
-         >
-         {parseInt(defaultLang) === defaultLanguage.value && (
-       <Flex
-         position="absolute"
-         top="-10px"
-         right="-10px"
-         width="20px"
-         height="20px"
-         borderRadius="50%"
-         bg={parseInt(defaultLang) === defaultLanguage.value ? '#11047a' : 'transparent'}
-         alignItems="center"
-         justifyContent="center"
-         zIndex="1"
-         overflow="hidden"
-       >
-        <Icon
-                                   as={MdOutlineCheck}
-                                   w="15px"
-                                   h="15px"
+                                  {parseInt(defaultLang) === translationId && (
+                                    <Flex
+                                      position="absolute"
+                                      top="-10px"
+                                      right="-10px"
+                                      width="20px"
+                                      height="20px"
+                                      borderRadius="50%"
+                                      bg={parseInt(defaultLang) === translationId ? '#11047a' : 'transparent'}
+                                      alignItems="center"
+                                      justifyContent="center"
+                                      zIndex="1"
+                                      overflow="hidden"
 
-                                   color="white"
+                                    >
+                                      <Icon
+                                        as={MdOutlineCheck}
+                                        w="15px"
+                                        h="15px"
 
-                                 />
-       </Flex>
-     )}
-           <Text fontSize="sm" fontWeight="700" color={'black'}>
-             {defaultLanguage.label}
-           </Text>
-           <Text fontSize="sm" fontWeight="500" color="secondaryGray.600">
-             Your Content Now in {defaultLanguage.label} Language
-           </Text>
-         </Flex>
-       ) : (
-       <>
-       <Flex
-           key={defaultLanguage.value}
-           direction="column"
-          bg={parseInt(defaultLang)===defaultLanguage.value ? boxBg : 'transparent'}
-           p="16px 20px"
-           position="relative"
-           borderRadius="14px"
-           mb="38px"
-           border={parseInt(defaultLang)===defaultLanguage.value ? "2px solid #11047a" : 'none'}
-           boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
-           
-         >
-         {parseInt(defaultLang) === defaultLanguage.value && (
-       <Flex
-         position="absolute"
-         top="-10px"
-         right="-10px"
-         width="20px"
-         height="20px"
-         borderRadius="50%"
-         bg={parseInt(defaultLang) === defaultLanguage.value ? '#11047a' : 'transparent'}
-         alignItems="center"
-         justifyContent="center"
-         zIndex="1"
-         overflow="hidden"
-         
-       >
-        <Icon
-                                   as={MdOutlineCheck}
-                                   w="15px"
-                                   h="15px"
+                                        color="white"
 
-                                   color="white"
+                                      />
+                                    </Flex>
+                                  )}
+                                  <Text fontSize="sm" fontWeight="700" color={'black'}>
+                                    {getLanguageLabel(translationId)}
+                                  </Text>
+                                  <Text fontSize="sm" fontWeight="500" color="secondaryGray.600">
+                                    Your Content Now in {getLanguageLabel(translationId)} Language
+                                  </Text>
+                                </Flex>
 
-                                 />
-       </Flex>
-     )}
-           <Text fontSize="sm" fontWeight="700" color={'black'}>
-             {defaultLanguage.label}
-           </Text>
-           <Text fontSize="sm" fontWeight="500" color="secondaryGray.600">
-             Your Content Now in {defaultLanguage.label} Language
-           </Text>
-         </Flex>
+                              )
+                              )}</>
+                          )}
+                        </SimpleGrid>
 
-         {selectedLanguages.map(({ translationId,gamechoosenId,...otherProperties}) => (
+                      </Box>                </TabPanel>
+                  </TabPanels>
+                </Tabs>
 
-
-           <Flex
-             key={gamechoosenId}
-             direction="column"
-             bg={parseInt(defaultLang)===translationId ? boxBg: 'transparent'}
-             p="16px 20px"
-             borderRadius="14px"
-             mb="38px"
-             border={parseInt(defaultLang)===translationId ? "2px solid #11047a" : 'none'}
-             position="relative" // Position relative for pseudo-element
-             cursor="pointer"
-             onClick={() => handleLanguageChangeGPTdata(translationId,getLanguageLabel(translationId),otherProperties)}  
-             boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
-           >
-
-           {parseInt(defaultLang) === translationId && (
-       <Flex
-         position="absolute"
-         top="-10px"
-         right="-10px"
-         width="20px"
-         height="20px"
-         borderRadius="50%"
-         bg={parseInt(defaultLang) === translationId ? '#11047a' : 'transparent'}
-         alignItems="center"
-         justifyContent="center"
-         zIndex="1"
-         overflow="hidden"
-
-       >
-        <Icon
-                                   as={MdOutlineCheck}
-                                   w="15px"
-                                   h="15px"
-
-                                   color="white"
-
-                                 />
-       </Flex>
-     )}
-             <Text fontSize="sm" fontWeight="700" color={'black'}>
-               {getLanguageLabel(translationId)}
-             </Text>
-             <Text fontSize="sm" fontWeight="500" color="secondaryGray.600">
-               Your Content Now in {getLanguageLabel(translationId)} Language
-             </Text>
-           </Flex>
-
-         )
-         )}</>
-       )}
-     </SimpleGrid>
-     
-</Box>                </TabPanel>
-             </TabPanels>
-           </Tabs>
-         
-         {/* <Card>
+                {/* <Card>
          <Flex gridArea='1 / 1 / 2 / 2' display={{ base: 'block', lg: 'flex' }}>
            <Tabs variant='soft-rounded' colorScheme='brandTabs'>
              <TabList mx={{ base: '10px', lg: '30px' }} overflowX={{ sm: 'scroll', lg: 'unset' }}>
@@ -1123,7 +1270,7 @@ position="relative"
              </Tabs>
           </Flex>
              </Card> */}
-         {/* <Flex mb={'30px'} flexDirection={{sm: 'column', md:'column', xl:'row'}}>          
+                {/* <Flex mb={'30px'} flexDirection={{sm: 'column', md:'column', xl:'row'}}>          
            <Box display={'flex'} flexDirection={'column'} width={{sm: '100%',xl:'100%'}}>
                <Box display={'flex'} flexDirection={{sm: 'column-reverse', md:'row', xl:'row'}} mb={'20px'}>
                    <Card width={{sm: '100%', md:'60%', xl:'60%'}} mr={'30px'}>
@@ -1234,12 +1381,12 @@ position="relative"
                </Box>
            </Box>                       
        </Flex>            */}
-       </Box>
-       </Flex>
-      </Box>
-   </Card>
-     </>
-   );
- };
+              </Box>
+            </Flex>
+          </Box>
+        </Card>
+      </>
+    );
+  };
 
 export default GreetingsForm;

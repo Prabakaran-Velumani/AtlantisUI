@@ -47,7 +47,7 @@ import Card from 'components/card/Card';
 import SelectField from 'components/fields/SelectField';
 // brindha start 
 // included updategame
-import { gameDuplicateQuestionEntirely, getImages, updateGame } from 'utils/game/gameService';
+import { gameDuplicateQuestionEntirely, getImages, updateGame,getGameStoryLine } from 'utils/game/gameService';
 // brindha end
 import Dropzone from 'views/admin/main/ecommerce/settingsProduct/components/Dropzone';
 import { MdClose, MdOutlineCloudUpload } from 'react-icons/md';
@@ -103,6 +103,7 @@ interface OptionType {
 /********navin */
 const AddScores: React.FC<{
   handleChange: (e: any) => void;
+  languages:any;
   formData: any;
   inputRef: any;
   updateHandleIntroMusic: (selectedOption: OptionType | null) => void;
@@ -141,6 +142,7 @@ const AddScores: React.FC<{
   handleCompletionScreen?:any;
   handlecompletion?:any;
 }> = ({
+  languages,
   setShowFunction,
   setShowBadge,
   showBadge,
@@ -229,6 +231,7 @@ const AddScores: React.FC<{
     //   React.useRef() as React.MutableRefObject<HTMLInputElement>;
     const comScreen = React.useRef(null) as React.MutableRefObject<HTMLInputElement>;
     const theme = useTheme();
+    const { id } = useParams();
     //eslint-disable-next-line
     const [lineColor, setLineColor] = useState(theme.colors.brand[500]);
     //eslint-disable-next-line
@@ -430,7 +433,30 @@ const AddScores: React.FC<{
     const [textRef2, setTextRef2] = React.useState('');
     const [textRef3, setTextRef3] = React.useState('');
     const [textRef4, setTextRef4] = React.useState('');
+    const [storyLine, setStoryline] = useState<String>();
+    const [gameTitle, setGameTitle] = useState<String>();
+    const [thankyouMsg, setThankyouMsg] = useState<String>();
 
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          // Call getBlockData with both game ID and translation ID
+          if (languages) {
+            const blockData = await getGameStoryLine(id, languages);
+
+            console.log("updatedBlockData", blockData.gameStoryLine);
+            setStoryline(blockData.gameStoryLine)
+            setGameTitle(blockData.gameScreenTitle)
+            setThankyouMsg(blockData.gameCompletedCongratsMessage)
+          }
+
+          // textareaRef.current.value = blockData.content;
+        } catch (error) {
+          console.error("getBlockData Error:", error);
+        }
+      };
+      fetchData();
+    }, [languages, id]);
 
     const handleTextRefChange = (i: any, value: any) => {
       setFormData((prev: any) => ({
@@ -490,7 +516,7 @@ const AddScores: React.FC<{
       return links;
     };
 
-    const { id } = useParams();
+    // 
     useEffect(() => {
       setFormData((prev: any) => ({
         ...prev,
@@ -592,7 +618,7 @@ const AddScores: React.FC<{
         if(compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true'){
           if(!compliData[CompKeyCount]?.gameMinScore){
             toast({
-              title: 'Please Enter Minium Score.',
+              title: 'Please Enter Minimum Score.',
               status: 'error',
               duration: 3000,
               isClosable: true,
@@ -674,7 +700,7 @@ const AddScores: React.FC<{
         if(compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true'){
           if(!compliData[CompKeyCount]?.gameMinimumScoreCongratsMessage){
             toast({
-              title: 'Please Enter Minium Score Congrats Message.',
+              title: 'Please Enter Minimum Score Congrats Message.',
               status: 'error',
               duration: 3000,
               isClosable: true,
@@ -682,7 +708,7 @@ const AddScores: React.FC<{
             return false
       
           }
-          if(!formData?.gameaboveMinimumScoreCongratsMessage){
+          if(!compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage){
             toast({
               title: 'Please Enter Above Minimum Score CongratsMessage.',
               status: 'error',
@@ -694,16 +720,16 @@ const AddScores: React.FC<{
           }
         }
         if(compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true'){
-          if(!compliData[CompKeyCount]?.gameLessthanDistinctionScoreCongratsMessage){
-            toast({
-              title: 'Please Enter Distinction  Score.',
-              status: 'error',
-              duration: 3000,
-              isClosable: true,
-            });
-            return false
+          // if(!compliData[CompKeyCount]?.gameLessthanDistinctionScoreCongratsMessage){
+          //   toast({
+          //     title: 'Please Enter Distinction  Score.',
+          //     status: 'error',
+          //     duration: 3000,
+          //     isClosable: true,
+          //   });
+          //   return false
       
-          }
+          // }
           if(!compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage){
             toast({
               title: 'Please Enter Above Distinction Score CongratsMessage.',
@@ -725,6 +751,13 @@ if(Object.keys(Completion).length-1 !==CompKeyCount){
   // setCompliData(Completion[CompKeyCount+1]);
   console.log('compliDatas',Completion[CompKeyCount+1],Completion,'CompKeyCount',CompKeyCount);
   setCompKeyCount(CompKeyCount+1)
+  setCompliData((prevInput: any) => ({
+    ...prevInput,
+    [CompKeyCount]: {
+      ...prevInput[CompKeyCount],
+
+    },
+  }))
   return false
 
 }
@@ -797,7 +830,10 @@ if(Object.keys(Completion).length-1 !==CompKeyCount){
             duration: 3000,
             isClosable: true,
           });
-      
+          setFormData({
+            ...formData,
+            gameIsShowAdditionalWelcomeNoteInvalid: 'true',
+          });
           return false;
         }
       }
@@ -843,6 +879,13 @@ if(currentTab===0 ){
   if(CompKeyCount!==0){
    
     setCompKeyCount(CompKeyCount-1)
+    setCompliData((prevInput: any) => ({
+      ...prevInput,
+      [CompKeyCount]: {
+        ...prevInput[CompKeyCount],
+  
+      },
+    }))
     // setCompliData(Completion[CompKeyCount-1]);
     
   }
@@ -873,7 +916,7 @@ if(currentTab===0 ){
               e.preventDefault();
             }
         };
-        const maxCharacters = 15;
+        const maxCharacters = 16;
         const maxCharacters2 = 80;
   const handledropquest = (name:any) => {
     if(name==='Entire'){
@@ -1097,7 +1140,7 @@ const handleQuestNo = (selectedOption: any) => {
               </Flex>
               {currentTab === 0 && (
                 <Card boxShadow={'0px 0px 100px #e2e8f0'}>
-                <SimpleGrid columns={{ base: 1, md: 4 }} gap="20px" mt={'10px'}>
+                <SimpleGrid columns={{ base: 1, md: (compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true') ? 5 : (compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' || compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true') ? 4 : 5 }} gap="20px" mt={'10px'}>
                     <Flex direction="column">
                       <Text fontSize={18} fontWeight={700}>
                         Screen Title
@@ -1110,9 +1153,10 @@ const handleQuestNo = (selectedOption: any) => {
                         // width="480px"
                         id="gameScreenTitle"
                         name="gameScreenTitle"
-                        value={compliData[CompKeyCount]?.gameScreenTitle}
+                        // value={compliData[CompKeyCount]?.gameScreenTitle}
+                        value={languages ? gameTitle : compliData[CompKeyCount]?.gameScreenTitle}
                         onChange={handlecompletion}
-                        maxLength="15"
+                        maxLength="16"
                         // label="Screen Title"
                       />
                        <Text fontSize={14} ml="2.5px" color={compliData[CompKeyCount]?.gameScreenTitle?.length > maxCharacters ? 'red' : 'gray'}>
@@ -1158,7 +1202,10 @@ const handleQuestNo = (selectedOption: any) => {
                             // }
                             isChecked={(compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' &&
                             compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') || compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ===
-                            'false') ? true : false}
+                            'false' || ((compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' ||
+                            compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true') && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ===
+                            'false')) ? true : false}
+                            // isChecked={(compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' || compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true') ? (compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ==='false') ? true : false : false}
                             color="#fff"
                             colorScheme="brandScheme"
                             size="md"
@@ -1208,6 +1255,9 @@ const handleQuestNo = (selectedOption: any) => {
                       <>
                       
                       <FormControl>
+                      <Text fontSize={18} fontWeight={700}>
+                          Congratulatory Message
+                        </Text>
                         <TextField
                           // mb="30px"
                           // me="30px"
@@ -1217,7 +1267,9 @@ const handleQuestNo = (selectedOption: any) => {
                           mt="30px"
                           id="gameCompletedCongratsMessage"
                           name="gameCompletedCongratsMessage"
-                          value={compliData[CompKeyCount]?.gameCompletedCongratsMessage}
+                          // value={compliData[CompKeyCount]?.gameCompletedCongratsMessage}
+                          value={languages ? thankyouMsg : compliData[CompKeyCount]?.gameCompletedCongratsMessage}
+
                           onChange={handlecompletion}
                           maxlength="80"
                           mb="0px"
@@ -1252,17 +1304,27 @@ const handleQuestNo = (selectedOption: any) => {
                               <TextField
                                 me="30px"
                                 // label=""
-                                placeholder="eg. You can do bette..."
+                                placeholder="eg. You can do better..."
                                 id="gameMinimumScoreCongratsMessage"
                                 name="gameMinimumScoreCongratsMessage"
                                 value={compliData[CompKeyCount]?.gameMinimumScoreCongratsMessage}
                                 onChange={handlecompletion}
                                  maxlength="80"
+                                 style={{
+                                  border: compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' && !compliData[CompKeyCount]?.gameMinimumScoreCongratsMessage ? '1px solid red' : '1px solid #ced4da',
+                                  // Add other styles as needed
+                                }}
                               />
                                <Text fontSize={14} ml="2.5px" color={compliData[CompKeyCount]?.gameMinimumScoreCongratsMessage?.length > maxCharacters2 ? 'red' : 'gray'}>
                               {maxCharacters2 - (compliData[CompKeyCount]?.gameMinimumScoreCongratsMessage?.length || 0)} Character left
                               </Text>
                             </FormControl>
+                            </Box>
+                            </>
+                          )}
+                          {(compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' || compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true') && (
+                          <>
+                          <Box>
                             <FormControl>
                               <FormLabel
                                 mt="30px"
@@ -1273,7 +1335,7 @@ const handleQuestNo = (selectedOption: any) => {
                                 color={textColorPrimary}
                                  whiteSpace="pre"
                               >
-                                For above than minimum score:
+                                For more than minimum score:
                               </FormLabel>
                               <TextField
                                 me="30px"
@@ -1284,6 +1346,11 @@ const handleQuestNo = (selectedOption: any) => {
                                 value={compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage}
                                 onChange={handlecompletion}
                                  maxlength="80"
+                                 style={{
+                                  border: (compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' || compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true') && !compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage ? '1px solid red' : '1px solid #ced4da',
+                                  // border: compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' && !compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage ? '1px solid red' : '1px solid #ced4da',
+                                  // Add other styles as needed
+                                }}
                               />
                                 <Text fontSize={14} ml="2.5px" color={compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage?.length > maxCharacters2 ? 'red' : 'gray'}>
                               {maxCharacters2 - (compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage?.length || 0)} Character left
@@ -1291,11 +1358,11 @@ const handleQuestNo = (selectedOption: any) => {
                             </FormControl>
                             </Box>
                             </>
-                          )}
+                           )} 
                           {compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && (
                             <>
                             <Box>
-                              <FormControl>
+                              {/* <FormControl>
                                 <FormLabel
                                   mt="30px"
                                   htmlFor="email-"
@@ -1322,7 +1389,7 @@ const handleQuestNo = (selectedOption: any) => {
                                  <Text fontSize={14} ml="2.5px" color={compliData[CompKeyCount]?.gameLessthanDistinctionScoreCongratsMessage?.length > maxCharacters2 ? 'red' : 'gray'}>
                                 {maxCharacters2 - (compliData[CompKeyCount]?.gameLessthanDistinctionScoreCongratsMessage?.length || 0)} Character left
                                 </Text>
-                              </FormControl>
+                              </FormControl> */}
                               <FormControl>
                                 <FormLabel
                                   mt="30px"
@@ -1346,6 +1413,10 @@ const handleQuestNo = (selectedOption: any) => {
                                   }
                                   maxlength="80"
                                   onChange={handlecompletion}
+                                  style={{
+                                    border: compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && !compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage ? '1px solid red' : '1px solid #ced4da',
+                                    // Add other styles as needed
+                                  }}
                                 />
                                  <Text fontSize={14} ml="2.5px" color={compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage?.length > maxCharacters2 ? 'red' : 'gray'}>
                                  {maxCharacters2 - (compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage?.length || 0)} Character left
@@ -1421,7 +1492,7 @@ const handleQuestNo = (selectedOption: any) => {
                     </Text>
 
 
-                    <Text color="#888" fontSize="18px" fontWeight="600"
+                    <Text color="#888" fontSize="sm" fontWeight="600"
                       mb="20px" fontStyle="italic" >
 
                       Adding a quest will enable you to add another chapter to the story of this game, while keeping the same backgrounds, characters and overview
@@ -1523,9 +1594,9 @@ const handleQuestNo = (selectedOption: any) => {
                     <Text color={textColor}>
                       How would you like to create another quest?
                     </Text>
-                    <RadioGroup onChange={setValue} value={value} mt={'10px'}>
+                    <RadioGroup color={textColor} onChange={setValue} value={value} mt={'10px'}>
                       <Stack direction="column" spacing={5}>
-                        <Radio value="Entire" onClick={() => handledropquest('Entire')}>
+                        <Radio value="Entire" onChange={() => handledropquest('Entire')}>
 
                           By creating a copy of the existing story and
                           modifying it
@@ -1536,10 +1607,10 @@ const handleQuestNo = (selectedOption: any) => {
                                 {'(Same backgrounds, characters, overview)'}
                               </Text>
                             </Radio> */}
-                        <Radio value="Scratch" onClick={() => handledropquest('Scratch')}>
+                        <Radio value="Scratch" onChange={() => handledropquest('Scratch')}>
                           By creating a new story{' '}
                         </Radio>
-                        <Text color="#888" fontSize="18px" fontWeight="600"
+                        <Text color="#888" fontSize="sm" fontWeight="600"
                       mb="20px" fontStyle="italic" >
 Please note changes on account of additional quests will happen only from story onwards—backgrounds, characters and overview are common for the entire game and any modifications to them will apply to all quests.
                     </Text>
@@ -1584,7 +1655,7 @@ Please note changes on account of additional quests will happen only from story 
                       _hover={{ color: '#fff', bg: '#11047a' }}
                       onClick={handleCopy}
                     >
-                      Add Question?
+                      Add Quest
                     </Button>
                   </Flex>
                 </Card>

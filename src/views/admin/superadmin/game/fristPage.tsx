@@ -117,11 +117,21 @@ const Game: React.FC = () => {
   // };
 
 
+useEffect(() => {
+  const gameGameStage = localStorage.getItem('gameGameStage');
+  if(gameGameStage == 'Review')
+  {
+    setTabState('Review');
+    localStorage.removeItem('gameGameStage');
+  }
+  
+  console.log('gameGameStage',gameGameStage);
+  gameLists(tabState);
+}, [tabState]);
 
-
-  useEffect(() => {
-    gameLists(tabState);
-  }, [tabState]);
+  // useEffect(() => {
+  //   gameLists(tabState);
+  // }, [tabState]);
 
   useEffect(() => {
     fetchData();
@@ -183,6 +193,15 @@ const Game: React.FC = () => {
     setIsOpen(true);
 
   }
+  const containerRef = useRef(null);
+  useEffect(() => {
+    // Your code to fetch data or handle tab change
+
+    // Scroll to top when tab changes
+    if (containerRef.current) {
+      containerRef.current.scrollTop = 0;
+    }
+  }, [tabState]);
 
   const [isDownloadDialogOpen, setDownloadDialogOpen] = useState(false);
   const [downloadId, setDownloadId] = useState(null);
@@ -915,6 +934,7 @@ const Game: React.FC = () => {
   return (
     <>
       <Box className='Game' position={'relative'}>
+      <div  ref={containerRef} style={{ overflowY: 'auto', maxHeight: '1600px' }}>
         <Box mb={{ base: '130px', md: '100px', xl: '100px' }} className='box'></Box>
         <Card backgroundImage={NFTBanner} backgroundRepeat={'no-repeat'} backgroundSize={'cover'} height={'150px'} width={'100%'} overflow={{ sm: 'auto', xl: 'unset' }}>
           <Box display={{ base: 'block', xl: 'flex' }} justifyContent="space-between" alignItems={'end'} padding={'20px'}>
@@ -1160,6 +1180,7 @@ const Game: React.FC = () => {
           </SimpleGrid>
         </Grid>
         {openCourse ? <AddCourse setOpenCourse={setOpenCourse} /> : null}
+        </div>
       </Box>
       {isOpen ? <Popup setIsConfirm={setIsConfirm} setIsOpen={setIsOpen} msg={msgtwo} setmsg={setMsgtwo} /> : null}
       {alert ? <OnToast msg={msg} status={toastStatus} setAlert={setAlert}

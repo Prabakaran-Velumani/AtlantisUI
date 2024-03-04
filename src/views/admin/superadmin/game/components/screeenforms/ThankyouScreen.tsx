@@ -80,6 +80,12 @@ interface Badge {
       const [characterCountQ4, setCharacterCountQ4] = useState(100);
       const handleTextChange = (e: any, maxChars: number, setCharCount: React.Dispatch<React.SetStateAction<number>>) => {
         const inputText = e.target.value;
+        if (inputText !== '') {
+          setFormData({
+            ...formData,
+            isfeedbackthankyou: false,
+          });
+        }
         const remainingCharacters = maxChars - inputText.length;
         setCharCount(remainingCharacters);
         handleChange(e);
@@ -103,6 +109,9 @@ return (
           // label="Thank You Message"
           value={formData.gameThankYouMessage}
           maxLength={200}
+          style={{
+            border: formData.isfeedbackthankyou ? '1px solid red' : '1px solid #ccc',
+          }}
         />
         <p>{msgCharacterCount} characters left</p>
       </SimpleGrid>
