@@ -139,11 +139,11 @@ const SinglePreview: React.FC<{
   } = myObject;
   const { colorMode, toggleColorMode } = useColorMode();
   const [showFullText, setShowFullText] = useState(false);
-  const [formData,setFormData] = useState<any>(null);
+  const [formData, setFormData] = useState<any>(null);
   const maxTextLength = 80;
-  console.log('myobject',myObject);
-  const find = show && show.find((it: any) => it.gasId === formData?.gameBackgroundId);
-  const img = find && find.gasAssetImage ;
+  const find =
+    show && show.find((it: any) => it.gasId === formData?.gameBackgroundId);
+  const img = find && find.gasAssetImage;
   const [option, setOption] = useState(null);
   const [item, setItem] = useState(null);
   const [data, setData] = useState(null);
@@ -165,7 +165,12 @@ const SinglePreview: React.FC<{
   const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestNo, setCurrentQuestNo] = useState(1);
   const [gameInfo, setGameInfo] = useState<any | null>();
-
+  const [optionNavigation,setOptionNavigation] = useState(null);
+  const [game3Position, setGame3Position] = useState({
+    previousBlock: '',
+    currentBlock: '',
+    nextBlock: '',
+  });
   const updateCreatorGameInfo = (info: any) => {
     const {
       gameview,
@@ -217,7 +222,6 @@ const SinglePreview: React.FC<{
       };
       return item;
     });
-    console.log('completionOptions', completionOptions);
     setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,
@@ -235,7 +239,6 @@ const SinglePreview: React.FC<{
         info?.assets?.npcUrl && API_SERVER + '/' + info?.assets?.npcUrl,
     });
     const firstBlock = sortBlockSequence(lmsblocks);
-    console.log(firstBlock);
     setDemoBlocks(firstBlock);
     setType(firstBlock['1']['1']?.blockChoosen);
     setData(firstBlock['1']['1']);
@@ -252,175 +255,10 @@ const SinglePreview: React.FC<{
       setFormData(gameById?.data);
     };
     name();
-    // const fetchPreviewData = async() =>{
-    //     const prev = await getPreview(id);
-    //     if (prev && prev?.status !== 'Success') return console.log(prev.message);
-    //     setPrevdata(prev?.data);
-    //     console.log("prevdata1",prev?.data);
-    //   }
-    //   fetchPreviewData();
-  }, []);
 
-  // useEffect(() => {
-  //   setShowNote(true);
-  //   setFirst(true);
-  //   setTimeout(() => {
-  //     setFirst(false);
-  //     setShowNote(false);
-  //   }, 1000);
-  //   // setType(prevdata?.items[0]?.type);
-    // setItem(prevdata?.items[0]);
-    // const dataObj = findKeyByTex(prevdata?.input, prevdata?.items[0]);
-    // setData(dataObj);
-    // getVoice(dataObj, '', formData?.gameNarratorVoice);
-    // setVoiceIds({
-    //   narrator: formData?.gameNarratorVoice ?? 'D38z5RcWu1voky8WS1ja',
-    //   playerMale: formData?.gamePlayerMaleVoice ?? '2EiwWnXFnvU5JabPnv8n',
-    //   playerFemale: formData?.gamePlayerFemaleVoice ?? '21m00Tcm4TlvDq8ikWAM',
-    //   NPC: formData?.gameNonPlayerVoice ?? '5Q0t7uMcjvnagumLfvZi',
-    //   Intro: '', //Get the intro music for the game.gameBadge(Primary Key)
-    // });
-    // console.log('prevdata', prevdata);
-  // }, []);
+  }, [id]);
 
-  // useEffect(() => {
-
-  //   switch (type) {
-  //     // type =="dialog" ? (voiceId = data?.character voiceIds.player : (type =="interaction" || type =="response") ? voiceId =voiceIds.narrator : voiceId=voiceIds.narrator
-  //     case 'Note':
-  //       getVoice(null, data?.note, voiceIds.narrator);
-  //       break;
-  //     case 'Dialog':
-  //       let voiceDialog =
-  //         data?.character === '999999' ? voiceIds.NPC : voiceIds.playerMale;
-  //       getVoice(null, data?.dialog, voiceDialog);
-  //       break;
-  //     case 'Interaction':
-  //       let InterText = data?.interaction + ' ';
-  //       Object.entries(data?.optionsObject).forEach(([key, value]) => {
-  //         InterText += `, Option ${key}, ${value}`;
-  //       });
-  //       let voiceInteraction =
-  //         data?.blockRoll === '999999'
-  //           ? voiceIds.NPC
-  //           : data?.blockRoll === 'Narrator'
-  //           ? voiceIds.narrator
-  //           : voiceIds.playerMale;
-  //       getVoice(null, InterText, voiceInteraction);
-  //       break;
-  //     case 'response':
-  //       let voiceResponse =
-  //         data?.blockRoll === '999999'
-  //           ? voiceIds.NPC
-  //           : data?.blockRoll === 'Narrator'
-  //           ? voiceIds.narrator
-  //           : voiceIds.playerMale;
-  //       getVoice(null, resMsg, voiceResponse);
-  //       break;
-  //       case 'feedback':
-  //       let voiceFeedback =
-  //         data?.blockRoll === '999999'
-  //           ? voiceIds.NPC
-  //           : data?.blockRoll === 'Narrator'
-  //           ? voiceIds.narrator
-  //           : voiceIds.playerMale;
-  //       getVoice(null, feed, voiceFeedback);
-  //       break;
-  //   }
-  // }, [type]);
-
-  // function findKeyByValue(obj: any, value: any) {
-  //   const key = Object.keys(obj).find((key) => obj[key]['id'] === value);
-  //   return obj[key];
-  // }
-  // function findKeyByTex(obj: any, value: any) {
-  //   const dt = String(value?.type + value?.input);
-  //   return obj[dt];
-  // }
-  //  console.log(type)
-  //  console.log(data)
-  // const getVoice = async (info: any) => {
-  // const getVoice = async (
-  //   info: any,
-  //   content: string | null,
-  //   voice: string | null,
-  // ) => {
-  //   if(tab==4)
-  //   {
-  //   setAllowPointerEvents(false);
-  //   let text = '';
-  //   let voiceId = '';
-  //   /**
-  //          * For voice
-  //         data?.includes('note') =>  Game Narattor
-  //         data?.includes('dialog') =>  data?.character
-  //         data?.includes('interaction') => data?.blockRoll
-  //         resMsg => data?.blockRoll
-
-  //         *For Animations & Emotion & voice Modulation
-  //         data?.includes('dialog') => data?.animation
-  //         data?.includes('interaction') //For Question => data?.QuestionsEmotion
-  //         data?.includes('interaction') //For Answers  => optionsObject[] : data?.optionsemotionObject[]
-  //           resMsg =>responseObject[]  : responseemotionObject[]
-  //         */
-
-  //   if (content) {
-  //     text = content;
-  //     voiceId = voice;
-  //   } else if (info?.note || info?.dialog) {
-  //     text = info?.note || info?.dialog;
-  //     voiceId = info?.note
-  //       ? voiceIds?.narrator
-  //       : info?.dialog && data?.character === '999999'
-  //       ? voiceIds.NPC
-  //       : voiceIds?.playerMale;
-  //   } else if (info?.interaction) {
-  //     text = info.interaction + '? ';
-  //     Object.entries(info?.optionsObject).forEach(([key, value]) => {
-  //       text += `, Option ${key}, ${value}`;
-  //     });
-
-  //     voiceId =
-  //       data?.blockRoll === '999999'
-  //         ? voiceIds.NPC
-  //         : data?.blockRoll === 'Narrator'
-  //         ? voiceIds.narrator
-  //         : voiceIds.playerMale;
-  //   }
-
-  //   if (text) {
-  //     const send = {
-  //       text: text,
-  //       model_id: 'eleven_multilingual_v2',
-  //       voice_settings: {
-  //         stability: 0.8,
-  //         similarity_boost: 0.5,
-  //       },
-  //     };
-
-  //     const data = JSON.stringify(send);
-
-  //       /** Working API for getting voice for the text */
-
-  //     const res = await getVoiceMessage(voiceId, data);
-
-  //       /** Working API for getting voice for the text */
-
-  //     const contentType = res.headers.get('Content-Type');
-  //     if (contentType && contentType.includes('audio/mpeg')) {
-  //       // const blob = new Blob([res], { type: 'audio/mpeg' });
-  //       let blob = await res.blob();
-  //       const audioUrl = URL.createObjectURL(blob);
-  //       // const audio = new Audio(audioUrl);
-  //       // audio.play();
-  //       setCurrentAudio(audioUrl);
-  //       blob = null;
-  //     } else {
-  //       return console.log('missing audio for the block');
-  //     }
-  //   }
-  // }
-  // };
+  
   useEffect(() => {
     setShowNote(true);
     setTimeout(() => {
@@ -428,22 +266,12 @@ const SinglePreview: React.FC<{
     }, 1000);
   }, [item, type]);
 
-  // useEffect(() => {
-  //   if (audioRef.current && currentAudio) {
-  //     audioRef.current.src = currentAudio;
-  //     audioRef.current.play();
-  //     setAllowPointerEvents(true);
-  //   }
-  //   else{
-  //    audioRef.current = '';
-  //   }
-  // }, [currentAudio]);
   const prevData = (current: any) => {
     const currentBlock = current
       ? parseInt(current?.blockPrimarySequence.split('.')[1])
       : null;
     const PrevItem = currentBlock != null ? currentBlock - 1 : null;
-    const prevSeq = current
+    const prevSeq = game3Position.previousBlock !== '' ? game3Position.previousBlock : current
       ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
       : '';
     const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
@@ -468,15 +296,16 @@ const SinglePreview: React.FC<{
       setType(prevBlock[0]?.blockChoosen);
       setData(prevBlock[0]);
     }
-    console.log(prevBlock[0]);
   };
   const getData = (next: any) => {
-    // setCurrentAudio('');
-    // setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
     const NextItem = currentBlock != null ? currentBlock + 1 : null;
+    const PreviousItem = currentBlock != null ? currentBlock - 1 : null;
+    const previousSeq = next
+      ? `${next?.blockPrimarySequence.split('.')[0]}.${PreviousItem}`
+      : '';
     const nextSeq = next
       ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
       : '';
@@ -486,7 +315,11 @@ const SinglePreview: React.FC<{
       : null;
 
     setCurrentQuestNo(currentQuest);
-
+    setGame3Position((prev: any) => ({
+      ...prev,
+      previousBlock: next?.blockPrimarySequence,
+      currentBlock: nextSeq,
+    }));
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
@@ -510,8 +343,6 @@ const SinglePreview: React.FC<{
       }
       setOptions(optionsFiltered);
     }
-
-    console.log('***Navi', navi);
     if (
       type === 'Interaction' &&
       resMsg !== '' &&
@@ -531,7 +362,6 @@ const SinglePreview: React.FC<{
       type === 'response' ||
       type === 'feedback'
     ) {
-      console.log('Above Replay Point');
       if (navi === 'Repeat Question') {
         setType('Interaction');
         setSelectedOption(null);
@@ -542,27 +372,32 @@ const SinglePreview: React.FC<{
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
-        console.log('IN Replay Point');
         setType(demoBlocks['1']['1']?.blockChoosen);
         setData(demoBlocks['1']['1']);
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+        .filter((item: any) => {
+          return (
+            demoBlocks[currentQuest][item].blockSecondaryId ===
+            parseInt(optionNavigation)
+          );
+        })
+        .map((item: any) => {
+          return demoBlocks[currentQuest][item];
+        });
+        setType(selectedNext && selectedNext[0].blockChoosen);
+        setData(selectedNext && selectedNext[0]);
+        console.log(selectedNext);
+        setGame3Position((prev:any)=>({...prev,nextBlock: selectedNext[0].blockPrimarySequence}))
+      setSelectedOption(null);
+      return false;
+      } else if (navi === 'Complete') {
+        setType(demoBlocks['1']['1']?.blockChoosen);
+        setData(demoBlocks['1']['1']);
         setSelectedOption(null);
         return false;
-      } else if (navi === 'Complete') {
-        if (demoBlocks.hasOwnProperty(nextLevel)) {
-          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-          setData(demoBlocks[nextLevel]['1']);
-          // setCurrentScreenId(6);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          // onClose();
-          // setCurrentScreenId(6);
-          return false;
-        }
       } else {
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
@@ -570,144 +405,11 @@ const SinglePreview: React.FC<{
         return false;
       }
     }
-    // if (currentScreenId === 6) {
-    //   if (
-    //     gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
-    //     gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Complete'
-    //   ) {
-    //     setCurrentScreenId(9);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
-    //     setCurrentScreenId(8);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-    //     setCurrentScreenId(4);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-    //     setCurrentScreenId(3);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-    //     setCurrentScreenId(7);
-    //     return false;
-    //   } else {
-    //     if (data && type) {
-    //       setCurrentScreenId(2);
-    //       return false;
-    //     } else {
-    //       setType(null);
-    //       setData(null);
-    //       setCurrentScreenId(5);
-    //       return false;
-    //     }
-    //   }
-    // }
-    // if (currentScreenId === 9) {
-    //   if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
-    //     setCurrentScreenId(8);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-    //     setCurrentScreenId(4);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-    //     setCurrentScreenId(3);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-    //     setCurrentScreenId(7);
-    //     return false;
-    //   } else {
-    //     if (data && type) {
-    //       setCurrentScreenId(2);
-    //       return false;
-    //     } else {
-    //       setType(null);
-    //       setData(null);
-    //       setCurrentScreenId(5);
-    //       return false;
-    //     }
-    //   }
-    // }
-    // if (currentScreenId === 8) {
-    //   if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-    //     setCurrentScreenId(4);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-    //     setCurrentScreenId(3);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-    //     setCurrentScreenId(7);
-    //     return false;
-    //   } else {
-    //     if (data && type) {
-    //       setCurrentScreenId(2);
-    //       return false;
-    //     } else {
-    //       setType(null);
-    //       setData(null);
-    //       setCurrentScreenId(5);
-    //       return false;
-    //     }
-    //   }
-    // }
-    // if (currentScreenId === 4) {
-    //   if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-    //     setCurrentScreenId(3);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-    //     setCurrentScreenId(7);
-    //     return false;
-    //   } else {
-    //     if (data && type) {
-    //       setCurrentScreenId(2);
-    //       return false;
-    //     } else {
-    //       setType(null);
-    //       setData(null);
-    //       setCurrentScreenId(5);
-    //       return false;
-    //     }
-    //   }
-    // }
-    // if (currentScreenId === 3) {
-    //   if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-    //     setCurrentScreenId(7);
-    //     return false;
-    //   } else {
-    //     if (data && type) {
-    //       setCurrentScreenId(2);
-    //       return false;
-    //     } else {
-    //       setType(null);
-    //       setData(null);
-    //       setCurrentScreenId(5);
-    //       return false;
-    //     }
-    //   }
-    // // }
-    // }
-    // if (currentScreenId === 7) {
-    //   if (data && type) {
-    //     setCurrentScreenId(2);
-    //     return false;
-    //   } else {
-    //     setType(null);
-    //     setData(null);
-    //     setCurrentScreenId(5);
-    //     return false;
-    //   }
-    // }
     if (nextBlock.length === 0) {
-      if (demoBlocks.hasOwnProperty(nextLevel)) {
-        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        setData(demoBlocks[nextLevel]['1']);
-        // setCurrentScreenId(6);
-        return false;
-      } else {
-        setType(null);
-        setData(null);
-        // onClose();
-        // setCurrentScreenId(6);
-        return false;
-      }
+      setType(demoBlocks['1']['1']?.blockChoosen);
+      setData(demoBlocks['1']['1']);
+      setSelectedOption(null);
+      return false;
     }
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
@@ -725,9 +427,26 @@ const SinglePreview: React.FC<{
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Select Block') {
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+          .filter((item: any) => {
+            return (
+              demoBlocks[currentQuest][item].blockSecondaryId ===
+              parseInt(next?.blockLeadTo)
+            );
+          })
+          .map((item: any) => {
+            return demoBlocks[currentQuest][item];
+          });
+          setType(selectedNext && selectedNext[0].blockChoosen);
+          setData(selectedNext && selectedNext[0]);
+          setGame3Position((prev:any)=>({...prev,nextBlock: selectedNext[0].blockPrimarySequence}))
         setSelectedOption(null);
+        return false;
       } else if (next?.blockShowNavigate === 'Complete') {
         // setCurrentScreenId(6);
+        setType(demoBlocks['1']['1']?.blockChoosen);
+        setData(demoBlocks['1']['1']);
+        setSelectedOption(null);
         return false;
       }
     }
@@ -740,6 +459,7 @@ const SinglePreview: React.FC<{
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
+    setOptionNavigation(item?.qpNextOption)
     setSelectedOption(ind === selectedOption ? null : ind);
     // getVoice(null, data?.optionsObject[item], voiceIds?.playerMale);
     // setCurrentAudio('');
@@ -755,7 +475,6 @@ const SinglePreview: React.FC<{
     // onClose();
   };
 
-  console.log(type,data,tab)
   return (
     <Modal isOpen={true} onClose={handlePreviewPanelClose} size="full">
       <ModalOverlay />
@@ -1004,7 +723,7 @@ const SinglePreview: React.FC<{
                         w={'50px'}
                         h={'50px'}
                         cursor={'pointer'}
-                        onClick={()=>prevData(data)}
+                        onClick={() => prevData(data)}
                       />
                       <Img
                         src={right}
@@ -1124,7 +843,13 @@ const SinglePreview: React.FC<{
                     w={'508px'}
                     left={'-10px'}
                   >
-                    <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'}  onClick={()=>prevData(data)} />
+                    <Img
+                      src={left}
+                      w={'50px'}
+                      h={'50px'}
+                      cursor={'pointer'}
+                      onClick={() => prevData(data)}
+                    />
                     {selectedOption !== null && (
                       <Img
                         src={right}

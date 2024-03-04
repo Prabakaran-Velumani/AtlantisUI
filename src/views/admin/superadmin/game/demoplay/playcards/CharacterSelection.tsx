@@ -51,7 +51,10 @@ import Selected from 'assets/img/games/selected.png';
 
 // Import ProfileContext from EntirePreview
 import { ProfileContext } from '../EntirePreview';
+import { getGameLanguages, getLanguages } from 'utils/game/gameService';
+import { useParams } from 'react-router-dom';
 interface PlayGamesProps {
+  formData?: any;
   state?: any;
   dispatch?: any;
   setDatas?: any;
@@ -95,23 +98,35 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   setSelectedPlayer,
   profileData,
   setProfileData,
-  demoBlocks
+  demoBlocks,
+  formData,
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
   const [isLanguage, setIsLanguage] = useState(false);
   const [select, setSelect] = useState(false);
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLanguage(true);
-    }, 1500);
+  const [lanuages,setLanguages] = useState<any[]>(null)
+  const {id} = useParams();
+  useEffect(() => { 
+    const fetch = async () => {
+      const resLang = await getGameLanguages(id);
+      if(resLang.status === 'Success')
+      {
+        setLanguages(resLang?.data);
+        if(resLang?.data.length !== 0)
+        {
+          setTimeout(() => {
+            setIsLanguage(true);
+          }, 1500);
+        }
+      }
+    }
+    fetch();
+
+    setProfileData((prev:any) => ({ ...prev,language:'English'}));
   }, []);
 
-  //   const [playerName,setPlayerName] = useState('')
-  //   const handleClick = () => {
-  //     console.log('Click"s');
-  //   };
-  // console.log(playerName);
+
   const playerInfo = useContext(ProfileContext);
 
   const selectPlayerClick = () => {
@@ -133,7 +148,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   };
   return (
     <>
-      <Box id="container" className="Play-station">
+     { formData && formData?.gameLanguageId !== null ? <Box id="container" className="Play-station">
         <Box className="top-menu-home-section">
           {
             isLanguage ? (
@@ -191,18 +206,18 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                             <Img className="selectField" src={Selected} />
                             {select && (
                               <Box className="dropdown">
-                                {spokenLanguages &&
-                                  spokenLanguages.map((lang, num) => (
+                                {lanuages &&
+                                  lanuages.map((lang:any, num:any) => (
                                     <Text
                                       ml={'5px'}
                                       key={num}
                                       _hover={{ bgColor: '#377498' }}
                                       id={'language'}
                                       onClick={(e: any) =>
-                                        handleProfile(e, lang)
+                                        handleProfile(e, lang.label)
                                       }
                                     >
-                                      {lang}
+                                      {lang.label}
                                     </Text>
                                   ))}
                               </Box>
@@ -251,7 +266,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
             // <Box className="Setting-box off"></Box>
           }
         </Box>
-      </Box>
+      </Box> : null}
       <Box className="Play-game CharacterScreen">
         <Box h={'100vh'} w={'100%'}>
           <motion.div

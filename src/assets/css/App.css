@@ -356,6 +356,7 @@ filter: drop-shadow(33px 29px 10px #8080807d);
 text-align: center;
 /* transform: translate(0px, 71px);  modify */
 top: 0;
+width: 100%;
 transform: translate(0px, 84px);  
 font-size: 28px;
 position: absolute;
@@ -371,7 +372,8 @@ flex-direction: column;
 position: absolute;
 height: 382px;
 width: 400px;
-transform: translate(0, 13px);
+top: 0px;
+/* transform: translate(0, 13px); */
 overflow: hidden;  
 
 }

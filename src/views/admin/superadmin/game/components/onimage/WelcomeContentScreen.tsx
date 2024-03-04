@@ -90,13 +90,13 @@ const WelcomeContentScreen: React.FC<{ formData: any; imageSrc: any, preview: an
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);
   const [authorArray, setauthorArray] = useState<any[]>([]);
+  const [data,setData] = useState<any[]>([]);
   const fetch = async () => {
     const result = await getGameById(id);
     if (result?.status !== 'Success') {
       setProfile([]);
       return console.log('getbackruond error:' + result?.message);
     } else {
-      console.log("****result",result);
       setProfile(result.data);
     }
     
@@ -113,6 +113,12 @@ const WelcomeContentScreen: React.FC<{ formData: any; imageSrc: any, preview: an
   
   useEffect(() => {
     fetch();
+    const dataLearn =
+    formData?.gameLearningOutcome !== null
+      ? formData?.gameLearningOutcome?.split('\n')
+      : [];
+      setData(dataLearn);
+      console.log(formData?.gameLearningOutcome)
   }, []);
 
   useEffect(() => {
@@ -132,7 +138,7 @@ const WelcomeContentScreen: React.FC<{ formData: any; imageSrc: any, preview: an
   const renderContent = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
 
-    const parts = formData.gameAdditionalWelcomeNote?.split(linkRegex);
+    const parts = formData?.gameAdditionalWelcomeNote?.split(linkRegex);
 
     const contentWithLinks = parts?.map((part: any, index: any) => {
       if (linkRegex.test(part)) {
@@ -156,12 +162,9 @@ const WelcomeContentScreen: React.FC<{ formData: any; imageSrc: any, preview: an
   };
   // const link = extractLink(formData.gameAdditionalWelcomeNote);
 
-  const data =
-    formData.gameLearningOutcome !== ''
-      ? formData.gameLearningOutcome?.split('\n')
-      : '';
+ 
 
-console.log("formData", formData);
+
 
   return (
     <>
@@ -208,7 +211,7 @@ console.log("formData", formData);
             >
               {formData?.gameTitle}
             </Text>
-            {formData.gameIsShowGameDuration == 'true' && (
+            {formData?.gameIsShowGameDuration == 'true' && (
               <Text
                 className='duration'
                 fontSize={{
@@ -227,15 +230,15 @@ console.log("formData", formData);
                   {' '}
                   <Icon as={FaClock} style={customStylesicon} />{' '}
                   <span style={customStylesicon}>
-                    {formData.gameDuration > 1
-                      ? formData.gameDuration + ' mins'
+                    {formData?.gameDuration > 1
+                      ? formData?.gameDuration + ' mins'
                       : 'Few mins'}
                   </span>
                 </>
               </Text>
             )}
             <Box w={'60%'} className="content">
-              {formData.gameIsShowStoryline == 'true' && (
+              {formData?.gameIsShowStoryline == 'true' && (
                 <Text
                   mt={'20px'}
                   fontSize={{
@@ -246,11 +249,11 @@ console.log("formData", formData);
                   }}
                   fontFamily={'content'}
                 >
-                  {formData.gameStoryLine}
+                  {formData?.gameStoryLine}
                 </Text>
               )}
-              {formData.gameIsShowSkill == 'true' ||
-              formData.gameIsShowLearningOutcome == 'true' ? (
+              {formData?.gameIsShowSkill == 'true' ||
+              formData?.gameIsShowLearningOutcome == 'true' ? (
                 <Img src={rew} mt={'25px'} alt="rew" w={'100%'} h={'20px'} />
               ) : (
                 ''
@@ -258,13 +261,13 @@ console.log("formData", formData);
               <Box
                 display={'flex'}
                 className={
-                  formData.gameIsShowSkill == 'true' ||
-                  formData.gameIsShowLearningOutcome === 'true'
+                  formData?.gameIsShowSkill == 'true' ||
+                  formData?.gameIsShowLearningOutcome === 'true'
                     ? 'rewards-box'
                     : 'empty-rewards-box'
                 }
               >
-                {formData.gameIsShowSkill == 'true' && (
+                {formData?.gameIsShowSkill == 'true' && (
                   <>
                     <Box
                       className="box-1"                     
@@ -361,7 +364,7 @@ console.log("formData", formData);
                     </Box>
                   </>
                 )}
-                {formData.gameIsShowLearningOutcome == 'true' && (
+                {formData?.gameIsShowLearningOutcome == 'true' && (
                   <>
                     <Box className="box-1">
                       <Img src={back} className="bg-img" />
@@ -418,7 +421,7 @@ console.log("formData", formData);
                 )}
               </Box>
 
-              {formData.gameIsShowAuhorName === 'true' && (
+              {formData?.gameIsShowAuhorName === 'true' && (
                 <Box
                   w={'100%'}
                   h={'50px'}
@@ -440,11 +443,11 @@ console.log("formData", formData);
                     fontFamily={'content'}
                     color={'black'}
                   >
-                    *Author* <br /> {formData.gameAuthorName}
+                    *Author* <br /> {formData?.gameAuthorName}
                   </Text>
                 </Box>
               )}
-              {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
+              {formData?.gameIsShowAdditionalWelcomeNote === 'true' && (
                 <Box
                   w={'100%'}
                   h={'50px'}
@@ -482,9 +485,9 @@ console.log("formData", formData);
                 lg: '20px',
               }}
             >
-              {formData.gameTitle}
+              {formData?.gameTitle}
             </Text>
-            {formData.gameIsShowGameDuration === 'true' && (
+            {formData?.gameIsShowGameDuration === 'true' && (
               <Text
                 className='duration'
                 fontSize={{
@@ -503,15 +506,15 @@ console.log("formData", formData);
                   {' '}
                   <Icon as={FaClock} style={customStylesicon} />{' '}
                   <span style={customStylesicon}>
-                    {formData.gameDuration > 1
-                      ? formData.gameDuration + ' mins'
+                    {formData?.gameDuration > 1
+                      ? formData?.gameDuration + ' mins'
                       : 'Few mins'}
                   </span>
                 </>
               </Text>
             )}
             <Box w={'60%'} className="content">
-              {formData.gameIsShowStoryline === 'true' && (
+              {formData?.gameIsShowStoryline === 'true' && (
                 <Text
                   mt={'20px'}
                   fontSize={{
@@ -522,11 +525,11 @@ console.log("formData", formData);
                   }}
                   fontFamily={'content'}
                 >
-                  {formData.gameStoryLine}
+                  {formData?.gameStoryLine}
                 </Text>
               )}
-              {formData.gameIsShowSkill === 'true' ||
-              formData.gameIsShowLearningOutcome === 'true' ? (
+              {formData?.gameIsShowSkill === 'true' ||
+              formData?.gameIsShowLearningOutcome === 'true' ? (
                 <Img src={rew} mt={'25px'} alt="rew" w={'100%'} h={'20px'} />
               ) : (
                 ''
@@ -534,13 +537,13 @@ console.log("formData", formData);
               <Box
                 display={'flex'}
                 className={
-                  formData.gameIsShowSkill == 'true' ||
-                  formData.gameIsShowLearningOutcome === 'true'
+                  formData?.gameIsShowSkill == 'true' ||
+                  formData?.gameIsShowLearningOutcome === 'true'
                     ? 'rewards-box'
                     : 'empty-rewards-box'
                 }
               >
-                {formData.gameIsShowSkill === 'true' && (
+                {formData?.gameIsShowSkill === 'true' && (
                   <>
                     <Box className="box-1">
                       <Img src={back} className="bg-img" />
@@ -593,7 +596,7 @@ console.log("formData", formData);
                     </Box>
                   </>
                 )}
-                {formData.gameIsShowLearningOutcome === 'true' && (
+                {formData?.gameIsShowLearningOutcome === 'true' && (
                   <>
                     <Box className="box-1">
                       <Img src={back} className="bg-img" />
@@ -650,7 +653,7 @@ console.log("formData", formData);
                 )}
               </Box>
 
-              {formData.gameIsShowAuhorName === 'true' && (
+              {formData?.gameIsShowAuhorName === 'true' && (
                 <Box
                   w={'100%'}
                   h={'50px'}
@@ -672,11 +675,11 @@ console.log("formData", formData);
                     fontFamily={'content'}
                     color={'black'}
                   >
-                    *Author* <br /> {formData.gameAuthorName}
+                    *Author* <br /> {formData?.gameAuthorName}
                   </Text>
                 </Box>
               )}
-              {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
+              {formData?.gameIsShowAdditionalWelcomeNote === 'true' && (
                 <Box
                   w={'100%'}
                   h={'50px'}

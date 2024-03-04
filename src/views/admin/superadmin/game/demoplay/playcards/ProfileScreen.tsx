@@ -39,16 +39,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
   const [select, setSelect] = useState(false);
   const [isGender, setIsGender] = useState(false);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // console.log('handlePlayGames success:');
-
-        // console.log('hello');
-      } catch (error) {
-        console.error('Error in handlePlayGames:', error);
-      }
-    };
-    fetchData(); 
+    
   }, []);
   const handleProfile = (e: any, lang?: any) => {
     const { id, value } = e.target;

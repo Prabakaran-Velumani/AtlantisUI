@@ -54,8 +54,16 @@ const ChapterPage: React.FC<{
       maxScoresByQuest[questNo] = maxScoreForQuest;
     }
     setQuestScores(maxScoresByQuest);
+
   }, []);
   const { profile } = useContext(ScoreContext);
+  useEffect(()=>{
+      if(profile.score.length !== 0) 
+      {
+        const completedLevels = profile.score.map((item:any)=> parseInt(item?.quest));
+        console.log(completedLevels);
+      } 
+    },[profile])
   return (
     <>
       <Box className="Play-game NoOfQueue">

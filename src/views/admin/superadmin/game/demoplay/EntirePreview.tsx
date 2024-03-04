@@ -193,6 +193,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [navi, setNavi] = useState<string>('');
   const [options, setOptions] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [optionNavigation, setOptionNavigation] = useState(null);
   /** This state handles the Review Form Tab and Sub Tab options */
   const [reviewTabOptions, setReviewTabOptions] = useState([]);
   const [filteredTabOptions, setFilteredTabOptions] = useState([]);
@@ -229,6 +230,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [audioVolume, setAudioVolume] = useState<any>(0.5);
   const [nextBlockAudioUrl, setNextBlockAudioUrl] = useState<string>('');
   const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [game3Position, setGame3Position] = useState({
+    previousBlock: '',
+    currentBlock: '',
+    nextBlock: '',
+  });
   const [currentStoryBlockSeq, setCurrentStoryBlockSeq] =
     useState<string>(null);
 
@@ -391,9 +397,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ? parseInt(current?.blockPrimarySequence.split('.')[1])
       : null;
     const PrevItem = currentBlock != null ? currentBlock - 1 : null;
-    const prevSeq = current
-      ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
-      : '';
+    const prevSeq =
+      game3Position.previousBlock !== ''
+        ? game3Position.previousBlock
+        : current
+        ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
+        : '';
     const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
     const currentQuest = current
       ? parseInt(current?.blockPrimarySequence.split('.')[0])
@@ -433,7 +442,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       : null;
 
     setCurrentQuestNo(currentQuest);
-
+    setGame3Position((prev: any) => ({
+      ...prev,
+      previousBlock: next?.blockPrimarySequence,
+      currentBlock: nextSeq,
+    }));
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
@@ -442,10 +455,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           )
           .map((key: any) => demoBlocks[quest]?.[key])
       : [];
+
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = gameInfo?.questOptions.filter(
         (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
       );
+      console.log('wala', optionsFiltered);
       if (gameInfo?.gameData?.gameShuffle) {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -494,6 +509,22 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+          .filter((item: any) => {
+            return (
+              demoBlocks[currentQuest][item].blockSecondaryId ===
+              parseInt(optionNavigation)
+            );
+          })
+          .map((item: any) => {
+            return demoBlocks[currentQuest][item];
+          });
+        setType(selectedNext && selectedNext[0].blockChoosen);
+        setData(selectedNext && selectedNext[0]);
+        setGame3Position((prev: any) => ({
+          ...prev,
+          nextBlock: selectedNext[0].blockPrimarySequence,
+        }));
         setSelectedOption(null);
         return false;
       } else if (navi === 'Complete') {
@@ -669,7 +700,40 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Select Block') {
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+          .filter((item: any) => {
+            return (
+              demoBlocks[currentQuest][item].blockSecondaryId ===
+              parseInt(next?.blockLeadTo)
+            );
+          })
+          .map((item: any) => {
+            return demoBlocks[currentQuest][item];
+          });
+        if (selectedNext[0]?.blockChoosen === 'Interaction') {
+          const optionsFiltered = gameInfo?.questOptions.filter(
+            (key: any) =>
+              key?.qpSequence === selectedNext[0]?.blockPrimarySequence,
+          );
+          if (gameInfo?.gameData?.gameShuffle) {
+            for (let i = optionsFiltered.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [optionsFiltered[i], optionsFiltered[j]] = [
+                optionsFiltered[j],
+                optionsFiltered[i],
+              ]; 
+            }
+          }
+          setOptions(optionsFiltered);
+        }
+        setType(selectedNext && selectedNext[0].blockChoosen);
+        setData(selectedNext && selectedNext[0]);
+        setGame3Position((prev: any) => ({
+          ...prev,
+          nextBlock: selectedNext[0].blockPrimarySequence,
+        }));
         setSelectedOption(null);
+        return false;
       } else if (next?.blockShowNavigate === 'Complete') {
         setCurrentScreenId(6);
         return false;
@@ -692,6 +756,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
+    setOptionNavigation(item?.qpNextOption);
     setSelectedOption(ind === selectedOption ? null : ind);
 
     const text = '..Option ' + item.qpOptions + ' -- ' + item.qpOptionText;
@@ -1336,8 +1401,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     >
                       <Box className="Images">
                         <Completion
-                        
-                         questOptions={gameInfo?.questOptions}
+                          questOptions={gameInfo?.questOptions}
                           getData={getData}
                           data={data}
                           setCurrentScreenId={setCurrentScreenId}
@@ -1580,6 +1644,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     imageSrc={backgroundScreenUrl}
                     setCurrentScreenId={setCurrentScreenId}
                     profileData={profileData}
+                    formData={gameInfo?.gameData}
                     setProfileData={setProfileData}
                   />
                 </>
@@ -1592,6 +1657,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     setProfileData={setProfileData}
                     setSelectedPlayer={setSelectedPlayer}
                     players={gameInfo?.gamePlayers}
+                    formData={gameInfo?.gameData}
                     imageSrc={backgroundScreenUrl}
                     setCurrentScreenId={setCurrentScreenId}
                     demoBlocks={demoBlocks}
@@ -1603,7 +1669,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 <>
                   {/* <SimpleGrid columns={{ base: 1 }}> */}
                   <ChapterPage
-                  currentQuestNo={currentQuestNo}
+                    currentQuestNo={currentQuestNo}
                     formData={gameInfo?.gameData}
                     imageSrc={backgroundScreenUrl}
                     demoBlocks={demoBlocks}

@@ -130,7 +130,9 @@ const Completion: React.FC<{
       {!showComplete && (
         <>
           {/* <Box w={'500px'}> */}
-          <Box className="title" transform="translate(650px,84px) !important">
+          <Box className="title" 
+          // transform="translate(600px,84px) !important"
+          >
             <Text fontFamily={'AtlantisText'} textAlign={'center'}>
               {curretQuestOptions?.gameScreenTitle}
             </Text>
