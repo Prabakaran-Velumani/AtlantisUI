@@ -1,19 +1,9 @@
 import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogCloseButton,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   Box,
   Button,
   Flex,
   FormControl,
   FormLabel,
-  Grid,
-  GridItem,
-  HStack,
   Icon,
   Img,
   Radio,
@@ -21,36 +11,20 @@ import {
   SimpleGrid,
   Stack,
   Switch,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   Text,
   useColorModeValue,
-  useDisclosure,
   useTheme,
-  useToast,
-  // brindha start
-Textarea,
-  Link,
-  Slider,
-  Image,
-  IconButton
-  // brindha end
+  useToast  // brindha end
 } from '@chakra-ui/react';
 import Select from 'react-select';
 import InputField from 'components/fields/InputField';
 import TextField from 'components/fields/TextField';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from 'components/card/Card';
-import SelectField from 'components/fields/SelectField';
 // brindha start 
 // included updategame
-import { gameDuplicateQuestionEntirely, getImages, updateGame } from 'utils/game/gameService';
+import { gameDuplicateQuestionEntirely, getImages } from 'utils/game/gameService';
 // brindha end
-import Dropzone from 'views/admin/main/ecommerce/settingsProduct/components/Dropzone';
-import { MdClose, MdOutlineCloudUpload } from 'react-icons/md';
 
 import { FaChevronCircleLeft, FaChevronCircleRight } from "react-icons/fa";
 
@@ -66,19 +40,9 @@ import Screen6 from "../../../../../assets/img/screens/screen6.png";
 
 import { useNavigate, useParams } from 'react-router-dom';
 
-import rew from '../../../../../assets/img/screens/Reward Bar.png';
-import skill from '../../../../../assets/img/screens/skill.png';
-import point from '../../../../../assets/img/screens/points.png';
-import back from '../../../../../assets/img/screens/back.png';
-import frag from '../../../../../assets/img/screens/frag.png';
-import bar from '../../../../../assets/img/screens/Bar.png';
-import fill from '../../../../../assets/img/screens/Fill.png';
-import next from '../../../../../assets/img/screens/next.png';
-import chapcomp from '../../../../../assets/img/screens/Chapter Complete Background.png';
 import RefScreen1 from "../../../../../assets/img/screens/refscreen1.png";
 
 import RefScreen2 from "../../../../../assets/img/screens/refquestions.png";
-import upback from "../../../../../assets/img/screens/upback.png";
 //new
 import CompletionScreenRight from './screeenforms/CompletionScreenRight';
 import ReflectionScreen from './screeenforms/ReflectionScreen';

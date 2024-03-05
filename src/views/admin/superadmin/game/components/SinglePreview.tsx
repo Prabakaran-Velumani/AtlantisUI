@@ -67,55 +67,83 @@ import ReflectionContentScreen from './onimage/ReflectionScreen';
 import RefScreen1 from '../../../../../assets/img/screens/refscreen1.png';
 import Screen4 from '../../../../../assets/img/screens/screen4.png';
 import TyContentScreen from './onimage/TyContentScreen';
-import { getVoiceMessage, getPreview } from 'utils/game/gameService';
-import { useParams } from 'react-router-dom';
+import {
+  getVoiceMessage,
+  getPreview,
+  getGameCreatorDemoData,
+  getGameById,
+} from 'utils/game/gameService';
+import { useLocation, useParams } from 'react-router-dom';
 import TypingEffect from '../demoplay/playcards/Typing';
 import RefBg from 'assets/img/games/refbg.png';
+import { API_SERVER } from 'config/constant';
 
 const SinglePreview: React.FC<{
-  prevdata?: any;
-  isOpen?: any;
-  onOpen?: any;
-  onClose?: any;
-  show?: any;
-  tab?: any;
-  formData?: any;
-  currentTab?: any;
-  setSelectedBadge?: any;
-  setFormData?: any;
-  handleChange?: any;
-  setBadge?: any;
-  compliData?: any;
-  setCompliData?: any;
-  CompKeyCount?: any;
-  handlecompletion?: any;
-  selectedBadge?: any;
-  reflectionQuestions?: any;
-  reflectionQuestionsdefault?: any;
-  setPrevdata: any;
-  gameInfo?:any;
-}> = ({
-  prevdata,
-  show,
-  isOpen,
-  onClose,
-  formData,
-  tab,
-  currentTab,
-  selectedBadge,
-  compliData,
-  setCompliData,
-  CompKeyCount,
-  reflectionQuestions,
-  reflectionQuestionsdefault,
-  setPrevdata,
-  gameInfo
-}) => {
+  // prevdata?: any;
+  // isOpen?: any;
+  // onOpen?: any;
+  // onClose?: any;
+  // show?: any;
+  // tab?: any;
+  // formData?: any;
+  // currentTab?: any;
+  // setSelectedBadge?: any;
+  // setFormData?: any;
+  // handleChange?: any;
+  // setBadge?: any;
+  // compliData?: any;
+  // setCompliData?: any;
+  // CompKeyCount?: any;
+  // handlecompletion?: any;
+  // selectedBadge?: any;
+  // reflectionQuestions?: any;
+  // reflectionQuestionsdefault?: any;
+  //  / setPrevdata: any;
+  // gameInfo?:any;
+}> = (
+  {
+    // prevdata,
+    // show,
+    // isOpen,
+    // onClose,
+    // formData,
+    // tab,
+    // currentTab,
+    // selectedBadge,
+    // compliData,
+    // setCompliData,
+    // CompKeyCount,
+    // reflectionQuestions,
+    // reflectionQuestionsdefault,
+    // setPrevdata,
+    // gameInfo
+  },
+) => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const serializedObject = queryParams.get('data');
+  const myObject = JSON.parse(decodeURIComponent(serializedObject));
+  const {
+    id,
+    tab,
+    currentTab,
+    // prevdata,
+    // formData,
+    show,
+    selectedBadge,
+    compliData,
+    CompKeyCount,
+    reflectionQuestions,
+    reflectionQuestionsdefault,
+    ...gameIn
+  } = myObject;
   const { colorMode, toggleColorMode } = useColorMode();
   const [showFullText, setShowFullText] = useState(false);
+  const [formData, setFormData] = useState<any>(null);
   const maxTextLength = 80;
-  const find = show.find((it: any) => it.gasId === formData?.gameBackgroundId);
-  const img = find.gasAssetImage;
+  const find =
+    show && show.find((it: any) => it.gasId === formData?.gameBackgroundId);
+  const img = find && find.gasAssetImage;
   const [option, setOption] = useState(null);
   const [item, setItem] = useState(null);
   const [data, setData] = useState(null);
@@ -132,34 +160,105 @@ const SinglePreview: React.FC<{
   const [allowPointerEvents, setAllowPointerEvents] = useState<boolean>(true);
   // const audioRef = useRef(null);
   const [demoBlocks, setDemoBlocks] = useState(null);
-  const {id} = useParams();
+  // const { id } = useParams();
   const [options, setOptions] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [currentQuestNo, setCurrentQuestNo] =useState(1);
-
-useEffect(()=>{
-    setDemoBlocks(gameInfo?.blocks);
-    setType(gameInfo?.blocks['1']['1']?.blockChoosen);
-    setData(gameInfo?.blocks['1']['1']);
-  // const fetchPreviewData = async() =>{
-  //     const prev = await getPreview(id);
-  //     if (prev && prev?.status !== 'Success') return console.log(prev.message);
-  //     setPrevdata(prev?.data);
-  //     console.log("prevdata1",prev?.data);
-  //   }
-  //   fetchPreviewData();
-  },[])
-
+  const [currentQuestNo, setCurrentQuestNo] = useState(1);
+  const [gameInfo, setGameInfo] = useState<any | null>();
+  const [optionNavigation,setOptionNavigation] = useState(null);
+  const [game3Position, setGame3Position] = useState({
+    previousBlock: '',
+    currentBlock: '',
+    nextBlock: '',
+  });
+  const updateCreatorGameInfo = (info: any) => {
+    const {
+      gameview,
+      image,
+      lmsblocks,
+      lmsquestionsoptions,
+      gameQuest,
+      ...gameData
+    } = info?.result;
+    const sortBlockSequence = (blockArray: []) => {
+      const transformedArray = blockArray.reduce((result: any, obj: any) => {
+        const groupKey = obj?.blockQuestNo.toString();
+        // const seqKey = obj?.blockSecondaryId;
+        // const SplitArray = obj?.blockPrimarySequence.toString()?.split(".")[1];
+        const seqKey = obj?.blockPrimarySequence.toString()?.split('.')[1];
+        if (!result[groupKey]) {
+          result[groupKey] = {};
+        }
+        result[groupKey][seqKey] = obj;
+        return result;
+      }, {});
+      return transformedArray;
+    };
+    const completionOptions = gameQuest.map((qst: any, i: number) => {
+      const item = {
+        gameId: qst.gameId,
+        questNo: qst.gameQuestNo,
+        gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
+        gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
+        gameDistinctionScore: qst.gameDistinctionScore,
+        gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
+        gameIsSetBadge: qst.gameIsSetBadge,
+        gameBadge: qst.gameBadge,
+        gameBadgeName: qst.gameBadgeName,
+        gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
+        gameAwardBadgeScore: qst.gameAwardBadgeScore,
+        gameScreenTitle: qst.gameScreenTitle,
+        gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage,
+        gameIsSetCongratsScoreWiseMessage:
+          qst.gameIsSetCongratsScoreWiseMessage,
+        gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
+        gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage,
+        gameaboveMinimumScoreCongratsMessage:
+          qst.gameaboveMinimumScoreCongratsMessage,
+        gameLessthanDistinctionScoreCongratsMessage:
+          qst.gameLessthanDistinctionScoreCongratsMessage,
+        gameAboveDistinctionScoreCongratsMessage:
+          qst.gameAboveDistinctionScoreCongratsMessage,
+      };
+      return item;
+    });
+    setGameInfo({
+      gameId: info?.result?.gameId,
+      gameData: gameData,
+      gameHistory: gameview,
+      assets: image,
+      blocks: sortBlockSequence(lmsblocks),
+      gameQuest: gameQuest, //used for completion screen
+      completionQuestOptions: completionOptions,
+      questOptions: lmsquestionsoptions,
+      reflectionQuestions: info?.resultReflection,
+      gamePlayers: info?.assets?.playerCharectorsUrl,
+      bgMusic:
+        info?.assets?.bgMusicUrl && API_SERVER + '/' + info?.assets?.bgMusicUrl,
+      gameNonPlayerUrl:
+        info?.assets?.npcUrl && API_SERVER + '/' + info?.assets?.npcUrl,
+    });
+    const firstBlock = sortBlockSequence(lmsblocks);
+    setDemoBlocks(firstBlock);
+    setType(firstBlock['1']['1']?.blockChoosen);
+    setData(firstBlock['1']['1']);
+  };
   useEffect(() => {
-    setShowNote(true);
-    setFirst(true);
-    setTimeout(() => {
-      setFirst(false);
-      setShowNote(false);
-    }, 1000);
+    const name = async () => {
+      const gamedata = await getGameCreatorDemoData(id);
+      if (!gamedata.error && gamedata) {
+        updateCreatorGameInfo(gamedata);
+      }
+      const gameById = await getGameById(id);
+      if (gameById?.status !== 'Success')
+        return console.log('error:' + gameById?.message);
+      setFormData(gameById?.data);
+    };
+    name();
 
-  }, [prevdata]);
- 
+  }, [id]);
+
+  
   useEffect(() => {
     setShowNote(true);
     setTimeout(() => {
@@ -167,11 +266,46 @@ useEffect(()=>{
     }, 1000);
   }, [item, type]);
 
+  const prevData = (current: any) => {
+    const currentBlock = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[1])
+      : null;
+    const PrevItem = currentBlock != null ? currentBlock - 1 : null;
+    const prevSeq = game3Position.previousBlock !== '' ? game3Position.previousBlock : current
+      ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
+      : '';
+    const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
+    const currentQuest = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[0])
+      : null;
+
+    setCurrentQuestNo(currentQuest);
+
+    const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    const prevBlock = current
+      ? Object.keys(demoBlocks[quest] || {})
+          .filter(
+            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
+      : [];
+    if (
+      prevBlock.length !== 0 &&
+      prevBlock[0]?.blockChoosen !== 'Interaction'
+    ) {
+      setType(prevBlock[0]?.blockChoosen);
+      setData(prevBlock[0]);
+    }
+  };
   const getData = (next: any) => {
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
     const NextItem = currentBlock != null ? currentBlock + 1 : null;
+    const PreviousItem = currentBlock != null ? currentBlock - 1 : null;
+    const previousSeq = next
+      ? `${next?.blockPrimarySequence.split('.')[0]}.${PreviousItem}`
+      : '';
     const nextSeq = next
       ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
       : '';
@@ -180,31 +314,35 @@ useEffect(()=>{
       ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
 
-      setCurrentQuestNo(currentQuest);
-
+    setCurrentQuestNo(currentQuest);
+    setGame3Position((prev: any) => ({
+      ...prev,
+      previousBlock: next?.blockPrimarySequence,
+      currentBlock: nextSeq,
+    }));
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
             (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
           )
-          .map((key:any) => demoBlocks[quest]?.[key])
+          .map((key: any) => demoBlocks[quest]?.[key])
       : [];
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = gameInfo?.questOptions.filter(
         (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
       );
-      if(gameInfo?.gameData?.gameShuffle)
-      {
+      if (gameInfo?.gameData?.gameShuffle) {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
-          [optionsFiltered[i], optionsFiltered[j]] = [optionsFiltered[j], optionsFiltered[i]]; // Swap elements at indices i and j
+          [optionsFiltered[i], optionsFiltered[j]] = [
+            optionsFiltered[j],
+            optionsFiltered[i],
+          ]; // Swap elements at indices i and j
         }
       }
       setOptions(optionsFiltered);
     }
-  
-  // console.log("***Navi", navi);
     if (
       type === 'Interaction' &&
       resMsg !== '' &&
@@ -239,19 +377,27 @@ useEffect(()=>{
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+        .filter((item: any) => {
+          return (
+            demoBlocks[currentQuest][item].blockSecondaryId ===
+            parseInt(optionNavigation)
+          );
+        })
+        .map((item: any) => {
+          return demoBlocks[currentQuest][item];
+        });
+        setType(selectedNext && selectedNext[0].blockChoosen);
+        setData(selectedNext && selectedNext[0]);
+        console.log(selectedNext);
+        setGame3Position((prev:any)=>({...prev,nextBlock: selectedNext[0].blockPrimarySequence}))
+      setSelectedOption(null);
+      return false;
+      } else if (navi === 'Complete') {
+        setType(demoBlocks['1']['1']?.blockChoosen);
+        setData(demoBlocks['1']['1']);
         setSelectedOption(null);
         return false;
-      } else if (navi === 'Complete') {
-        if (demoBlocks.hasOwnProperty(nextLevel)) {
-          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-          setData(demoBlocks[nextLevel]['1']);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          onClose()
-          return false;
-        }
       } else {
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
@@ -259,18 +405,11 @@ useEffect(()=>{
         return false;
       }
     }
-   
     if (nextBlock.length === 0) {
-      if (demoBlocks.hasOwnProperty(nextLevel)) {
-        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        setData(demoBlocks[nextLevel]['1']);
-        return false;
-      } else {
-        setType(null);
-        setData(null);
-        onClose();
-        return false;
-      }
+      setType(demoBlocks['1']['1']?.blockChoosen);
+      setData(demoBlocks['1']['1']);
+      setSelectedOption(null);
+      return false;
     }
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
@@ -288,8 +427,26 @@ useEffect(()=>{
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Select Block') {
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+          .filter((item: any) => {
+            return (
+              demoBlocks[currentQuest][item].blockSecondaryId ===
+              parseInt(next?.blockLeadTo)
+            );
+          })
+          .map((item: any) => {
+            return demoBlocks[currentQuest][item];
+          });
+          setType(selectedNext && selectedNext[0].blockChoosen);
+          setData(selectedNext && selectedNext[0]);
+          setGame3Position((prev:any)=>({...prev,nextBlock: selectedNext[0].blockPrimarySequence}))
         setSelectedOption(null);
+        return false;
       } else if (next?.blockShowNavigate === 'Complete') {
+        // setCurrentScreenId(6);
+        setType(demoBlocks['1']['1']?.blockChoosen);
+        setData(demoBlocks['1']['1']);
+        setSelectedOption(null);
         return false;
       }
     }
@@ -302,6 +459,7 @@ useEffect(()=>{
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
+    setOptionNavigation(item?.qpNextOption)
     setSelectedOption(ind === selectedOption ? null : ind);
 
   };
@@ -311,12 +469,13 @@ useEffect(()=>{
     setFeed('');
     setNavi('');
     setOption(null);
-    onClose();
+    // setCurrentAudio('');
+    // setAllowPointerEvents(true);
+    // onClose();
   };
 
-
   return (
-    <Modal isOpen={isOpen} onClose={handlePreviewPanelClose} size="full">
+    <Modal isOpen={true} onClose={handlePreviewPanelClose} size="full">
       <ModalOverlay />
       <ModalContent backgroundColor="rgba(0, 0, 0, 0.9)">
         <ModalCloseButton
@@ -563,6 +722,7 @@ useEffect(()=>{
                         w={'50px'}
                         h={'50px'}
                         cursor={'pointer'}
+                        onClick={() => prevData(data)}
                       />
                       <Img
                         src={right}
@@ -682,7 +842,13 @@ useEffect(()=>{
                     w={'508px'}
                     left={'-10px'}
                   >
-                    <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+                    <Img
+                      src={left}
+                      w={'50px'}
+                      h={'50px'}
+                      cursor={'pointer'}
+                      onClick={() => prevData(data)}
+                    />
                     {selectedOption !== null && (
                       <Img
                         src={right}
@@ -767,16 +933,16 @@ useEffect(()=>{
                     <Box
                       display={'flex'}
                       position={'fixed'}
-                      justifyContent={'space-between'}
+                      justifyContent={'flex-end'}
                       w={'80%'}
                       bottom={'0'}
                     >
-                      <Img
+                      {/* <Img
                         src={left}
                         w={'50px'}
                         h={'50px'}
                         cursor={'pointer'}
-                      />
+                      /> */}
                       <Img
                         src={right}
                         w={'50px'}
@@ -1010,7 +1176,7 @@ useEffect(()=>{
                       formData={formData}
                       imageSrc={Screen1}
                       compliData={compliData}
-                      setCompliData={setCompliData}
+                      // setCompliData={setCompliData}
                       CompKeyCount={CompKeyCount}
                     />
                   </Box>

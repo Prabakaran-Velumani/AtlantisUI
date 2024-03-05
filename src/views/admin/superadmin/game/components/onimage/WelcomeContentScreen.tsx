@@ -2,45 +2,17 @@ import {
   Box,
   Img,
   Icon,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   Text,
-  useColorModeValue,
-  useDisclosure,
-  useTheme,
-  useToast,
-  // brindha start
-  Select,
-  Textarea,
-  Link,
-  Slider,
-  Image,
-  IconButton,
   // brindha end
 } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  gameDuplicateQuestionEntirely,
   getGameById,
-  getImages,
   getSkills,
-  updateGame,
 } from 'utils/game/gameService';
-import Card from 'components/card/Card';
-import InputField from 'components/fields/InputField';
-import BadgeImages from '../BadgeImages';
-import { MdClose, MdOutlineCloudUpload } from 'react-icons/md';
 import rew from 'assets/img/screens/Reward Bar.png';
 import back from 'assets/img/screens/back.png';
 import write from 'assets/img/screens/Writing.png';
-import bar from 'assets/img/screens/Bar.png';
-import fill from 'assets/img/screens/Fill.png';
-import bull from 'assets/img/screens/bullet.png';
-import batch from 'assets/img/screens/upback.png';
-import TextField from 'components/fields/TextField';
 import { useParams } from 'react-router-dom';
 import { FaClock } from 'react-icons/fa';
 import { motion } from 'framer-motion';
@@ -74,6 +46,7 @@ const WelcomeContentScreen: React.FC<{
   const [authorArray, setauthorArray] = useState<any[]>([]);
   const {currentTab } = useSelector((state: RootState) => state.preview);
 
+  const [data,setData] = useState<any[]>([]);
   const fetch = async () => {
     const result = await getGameById(id);
     if (result?.status !== 'Success') {
@@ -96,6 +69,12 @@ const WelcomeContentScreen: React.FC<{
 
   useEffect(() => {
     fetch();
+    const dataLearn =
+    formData?.gameLearningOutcome !== null
+      ? formData?.gameLearningOutcome?.split('\n')
+      : [];
+      setData(dataLearn);
+      console.log(formData?.gameLearningOutcome)
   }, []);
 
   useEffect(() => {
@@ -115,7 +94,7 @@ const WelcomeContentScreen: React.FC<{
   const renderContent = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
 
-    const parts = formData.gameAdditionalWelcomeNote?.split(linkRegex);
+    const parts = formData?.gameAdditionalWelcomeNote?.split(linkRegex);
 
     const contentWithLinks = parts?.map((part: any, index: any) => {
       if (linkRegex.test(part)) {
@@ -137,14 +116,7 @@ const WelcomeContentScreen: React.FC<{
 
     return <React.Fragment>{contentWithLinks}</React.Fragment>;
   };
-  // const link = extractLink(formData.gameAdditionalWelcomeNote);
-
-  const data =
-    formData.gameLearningOutcome !== ''
-      ? formData.gameLearningOutcome?.split('\n')
-      : '';
-
-
+  
   return (
     <>
         <motion.div
@@ -170,7 +142,8 @@ const WelcomeContentScreen: React.FC<{
               >
                 {formData?.gameTitle}
               </Text>
-              {/* // {formData.gameIsShowGameDuration == 'true' && ( */}
+              {/* </Box>
+            <Box w={'60%'} className="content"> */}
                 <Text
                   className="duration"
                   fontSize={{
@@ -195,9 +168,7 @@ const WelcomeContentScreen: React.FC<{
                     </span>
                   </>
                 </Text>
-              {/* // )} */}
               <Box w={'60%'} className="content">
-                {/* {formData.gameIsShowStoryline == 'true' && ( */}
                   <Text
                     mt={'20px'}
                     fontSize={{
@@ -210,24 +181,15 @@ const WelcomeContentScreen: React.FC<{
                   >
                     {formData.gameStoryLine}
                   </Text>
-                {/* // )} */}
-                {/* {formData.gameIsShowSkill == 'true' ||
-                formData.gameIsShowLearningOutcome == 'true' ? ( */}
+                </Box>
                   <Img src={rew} mt={'25px'} alt="rew" w={'100%'} h={'20px'} />
-                {/* ) : (
-                  ''
-                )} */}
+                
                 <Box
                   display={'flex'}
                   className={
-                    // formData.gameIsShowSkill == 'true' ||
-                    // formData.gameIsShowLearningOutcome === 'true'
-                      // ?
                        'rewards-box'
-                      // : 'empty-rewards-box'
                   }
                 >
-                  {/* {formData.gameIsShowSkill == 'true' && ( */}
                     <>
                       <Box className="box-1">
                         <Img src={back} className="bg-img" />
@@ -273,56 +235,12 @@ const WelcomeContentScreen: React.FC<{
                                     </Text>
                                     <Text></Text>
                                   </Box>
-                                  {/*<Box
-                                  backgroundImage={bar}
-                                  w={'50px'}
-                                  h={'20px'}
-                                  backgroundSize={'cover'}
-                                  backgroundRepeat={'no-repeat'}
-                                >
-                                 <Img
-                                    src={fill}
-                                    w={'20%'}
-                                    h={'10px'}
-                                    alt="fill"
-                                  />
-                                </Box>*/}
                                 </Box>
                               </Box>
                             ))}
-                          {/*<Box display={'flex'}>
-                          <Img src={write} w={'25px'} h={'25px'} />
-                          <Box>
-                            <Box
-                              display={'flex'}
-                              w={'50px'}
-                              h={'20px'}
-                              justifyContent={'space-between'}
-                            >
-                              <Text color={'#D9C7A2'}>tested</Text>
-                              <Text>20%</Text>
-                            </Box>
-                            <Box
-                              backgroundImage={bar}
-                              w={'50px'}
-                              h={'20px'}
-                              backgroundSize={'cover'}
-                              backgroundRepeat={'no-repeat'}
-                            >
-                              <Img
-                                src={fill}
-                                w={'20%'}
-                                h={'20px'}
-                                alt="fill"
-                              />
-                            </Box>
-                          </Box>
-                        </Box>*/}
                         </Box>
                       </Box>
                     </>
-                  {/* )} */}
-                  {/* {formData.gameIsShowLearningOutcome == 'true' && ( */}
                     <>
                       <Box className="box-1">
                         <Img src={back} className="bg-img" />
@@ -376,10 +294,8 @@ const WelcomeContentScreen: React.FC<{
                         </Box>
                       </Box>
                     </>
-                  {/* )} */}
                 </Box>
 
-                {/* {formData.gameIsShowAuhorName === 'true' && ( */}
                   <Box
                     w={'100%'}
                     h={'50px'}
@@ -404,8 +320,6 @@ const WelcomeContentScreen: React.FC<{
                       *Author* <br /> {formData.gameAuthorName}
                     </Text>
                   </Box>
-                {/* )} */}
-                {/* {formData.gameIsShowAdditionalWelcomeNote === 'true' && ( */}
                   <Box
                     w={'100%'}
                     h={'50px'}
@@ -424,10 +338,8 @@ const WelcomeContentScreen: React.FC<{
                       {renderContent()}
                     </Text>
                   </Box>
-                {/* )} */}
               </Box>
             </Box>
-          </Box>
        
       ) : (
           <Box className="welcome-screen">

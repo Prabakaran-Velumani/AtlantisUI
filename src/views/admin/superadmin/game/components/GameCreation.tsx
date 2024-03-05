@@ -188,6 +188,8 @@ interface MyObject {
 const GameCreation = () => {
   ///////////////////Navin 15-12///////////////////////////////////
   //stroy//
+
+  // const history = useHistory();
   const [questTabState, setQuestTabState] = useState<number>(1);
   const [currentTab, setCurrentTab] = useState(0);
   const [openQuest, setOpenQuest] = useState(false);
@@ -365,15 +367,13 @@ const GameCreation = () => {
       gameCourseType: 'Public',
       gameNonPlayingCharacterId: null,
 
-      //navin
+
       gameNonPlayerName: null,
       gameNonPlayerVoice: null,
       gamePlayerMaleVoice: null,
       gamePlayerFemaleVoice: null,
       gameNarratorVoice: null,
 
-      //navin
-      ///Afrith
       gameStoryLine: '',
       gameReflectionQuestion: 4,
       gameRefQuestion1: '',
@@ -383,7 +383,7 @@ const GameCreation = () => {
       ///
       gameAnimationId: null,
       gameTitle: '',
-      // gameStoryLine: '',
+
       gameSkills: '',
       gameLearningOutcome: '',
       gameDuration: null,
@@ -396,9 +396,6 @@ const GameCreation = () => {
       gameIsCollectLearnerFeedback: 'false',
       gameIsFeedbackMandatory: 'false',
       gameIsLearnerMandatoryQuestion: 'false',
-      // gameIsAddanotherQuestions:'',
-
-      // gameScreenTitle: 'Quest Complete',
       gameIsSetCongratsSingleMessage: 'false',
 
       gameIsShowTakeaway: 'false',
@@ -601,9 +598,7 @@ const GameCreation = () => {
       gameWelcomepageBackground: e.target.id,
     }));
   };
-  {
-    /**************Changes-14/12/23**********************/
-  }
+ 
   const handleH = (i: any) => {
     setBackgroundIndex(i);
   };
@@ -611,10 +606,7 @@ const GameCreation = () => {
     // setIsHovered(false)
     setBackgroundIndex('');
   };
-  {
-    /****************************************************/
-  }
-  //////Changes-14/Dec/23//////////////////////
+
   const handlePreview = (img: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchImg((prev: any) => {
@@ -633,9 +625,9 @@ const GameCreation = () => {
     });
     onOpen();
 
-    // console.log('SavedSTATE--',savedState);
+   
   };
-  ///////////////////////////////////////////////
+
   const fetch = async () => {
     const result = await getBadge(parseInt(id));
     if (result?.status === 'Success') {
@@ -646,7 +638,7 @@ const GameCreation = () => {
       setSelectedAud(res?.data);
     }
   };
-  //////////////Changes - 12-Dec-23/////////////////////
+ 
   const handlePreviewPlayer = (player: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchPlayerImg((prev: any) => {
@@ -713,7 +705,7 @@ const GameCreation = () => {
       };
       return item;
     });
-    console.log('completionOptions', completionOptions);
+  
     setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,
@@ -952,15 +944,12 @@ const GameCreation = () => {
     // const result1 = await getStory(id);
     // if (result1?.status !== 'Success') {de
     //   console.log(result1.message);
-
     // }
     // else {
-
     //   setBlockItems(result1.items);
     //   setserias(result1.serias);
     // }
     const result2 = await getListStory(id);
-
     if (result2?.status !== 'Success') {
       console.log(result2?.message);
     } else {

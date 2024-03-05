@@ -6,7 +6,16 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Box, Button, Icon, Img, Input, position, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  FormLabel,
+  Icon,
+  Img,
+  Input,
+  position,
+  Text,
+} from '@chakra-ui/react';
 import { MdClose } from 'react-icons/md';
 import { motion, useAnimation } from 'framer-motion';
 import { API_SERVER } from 'config/constant';
@@ -14,7 +23,7 @@ import { API_SERVER } from 'config/constant';
 
 // Games Image
 import InitialImg from 'assets/img/games/load.jpg';
-import Sample from 'assets/img/games/Merlin.glb';
+import Sample from 'assets/img/games/Character_sample.glb';
 // import Victor from '../../../../assets/img/games/victoria.glb';
 // import Sample from '../../../../assets/img/games/Source_file.glb';
 import Background from 'assets/img/games/fristscreenBackground.jpg';
@@ -26,7 +35,10 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import SelectButton from 'assets/img/games/selectbtn.png';
-
+import Lang from 'assets/img/games/lang.png';
+import Okay from 'assets/img/games/OKAY button.png';
+import FormField from 'assets/img/games/formfield.png';
+import Selected from 'assets/img/games/selected.png';
 // import { useGLTF } from '@react-three/drei';
 // import { Environment, OrbitControls } from '@react-three/drei';
 // import { FBXLoader } from 'three/addons/loaders/FBXLoader';
@@ -39,16 +51,43 @@ import SelectButton from 'assets/img/games/selectbtn.png';
 
 // Import ProfileContext from EntirePreview
 import { ProfileContext } from '../EntirePreview';
+import { getGameLanguages, getLanguages } from 'utils/game/gameService';
+import { useParams } from 'react-router-dom';
 interface PlayGamesProps {
+  formData?: any;
   state?: any;
   dispatch?: any;
   setDatas?: any;
   imageSrc?: any;
   setCurrentScreenId?: any;
   players?: any;
-  setSelectedPlayer?:any;
+  setSelectedPlayer?: any;
+  profileData?: any;
+  setProfileData?: any;
+  demoBlocks?: any ;
 }
-
+const spokenLanguages = [
+  'English',
+  'Spanish',
+  'Mandarin Chinese',
+  'Hindi',
+  'French',
+  'Arabic',
+  'Bengali',
+  'Russian',
+  'Portuguese',
+  'Urdu',
+  'Indonesian',
+  'German',
+  'Japanese',
+  'Swahili',
+  'Turkish',
+  'Italian',
+  'Thai',
+  'Dutch',
+  'Korean',
+  'Vietnamese',
+];
 const Characterspage: React.FC<PlayGamesProps> = ({
   state,
   dispatch,
@@ -56,26 +95,178 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   imageSrc,
   setCurrentScreenId,
   players,
-  setSelectedPlayer
+  setSelectedPlayer,
+  profileData,
+  setProfileData,
+  demoBlocks,
+  formData,
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
+  const [isLanguage, setIsLanguage] = useState(false);
+  const [select, setSelect] = useState(false);
+  const [lanuages,setLanguages] = useState<any[]>(null)
+  const {id} = useParams();
+  useEffect(() => { 
+    const fetch = async () => {
+      const resLang = await getGameLanguages(id);
+      if(resLang.status === 'Success')
+      {
+        setLanguages(resLang?.data);
+        if(resLang?.data.length !== 0)
+        {
+          setTimeout(() => {
+            setIsLanguage(true);
+          }, 1500);
+        }
+      }
+    }
+    fetch();
 
-//   const [playerName,setPlayerName] = useState('')
-//   const handleClick = () => {
-//     console.log('Click"s');
-//   };
-// console.log(playerName);
-const playerInfo = useContext(ProfileContext);
- 
-const selectPlayerClick = () =>
-{
-  setSelectedPlayer(players[i]);
-  setCurrentScreenId(13)
-}
+    setProfileData((prev:any) => ({ ...prev,language:'English'}));
+  }, []);
 
+
+  const playerInfo = useContext(ProfileContext);
+
+  const selectPlayerClick = () => {
+    setSelectedPlayer(players[i]);
+    if(Object.keys(demoBlocks).length > 1)
+    {
+      setCurrentScreenId(13);
+    }
+    else{
+      setCurrentScreenId(2);
+    }
+  };
+
+  const handleProfile = (e: any, lang?: any) => {
+    const { id, value } = e.target;
+    setSelect(false);
+    // setIsGender(false);
+    setProfileData((prev:any) => ({ ...prev, [id]: id === 'name' ? value : lang }));
+  };
   return (
     <>
+     { formData && formData?.gameLanguageId !== null ? <Box id="container" className="Play-station">
+        <Box className="top-menu-home-section">
+          {
+            isLanguage ? (
+              <Box className="Setting-box">
+                <Img src={Lang} className="setting-pad" />
+                <Box className="music-volume volumes">
+                  {/* <Slider
+                  aria-label="slider-ex-4"
+                  defaultValue={30}
+                  name="musicVolume"
+                
+                >
+                  <SliderTrack
+                    className="slider-track"
+                    height="15px"
+                    borderRadius="80px"
+                  >
+                    <Img src={VolumeTrack} />
+                    <SliderFilledTrack
+                      className="filled-volume"
+                      bg="pink.500"
+                    />
+                  </SliderTrack>
+                  <SliderThumb
+                    boxSize={9}
+                    background={'transparent'}
+                    left={'calc(100% - 30%)'}
+                  >
+                    <Box color='tomato' as={MdCall} />
+                    <Img src={SliderPointer} />
+                  </SliderThumb>
+                </Slider> */}
+                  {/* <Box className="Play-game ProfileScreen">
+                    <Box className="img-box" position={'relative'}>
+                      <Box className="img-section">
+                        <Box className="profile-box"> */}
+                          <Box className="gender">
+                            <FormLabel>Language</FormLabel>
+                            <Text
+                              transform={'translate(0px,25px)'}
+                              textAlign={'center'}
+                              onClick={() => setSelect(!select)}
+                              position={'relative'}
+                              zIndex={9999999}
+                              fontFamily={'AtlantisText'}
+                              color={'#D9C7A2'}
+                            >
+                              {profileData?.language}
+                            </Text>
+                            <Img
+                              className="formfield"
+                              src={FormField}
+                              onClick={() => setSelect(!select)}
+                            />
+                            <Img className="selectField" src={Selected} />
+                            {select && (
+                              <Box className="dropdown">
+                                {lanuages &&
+                                  lanuages.map((lang:any, num:any) => (
+                                    <Text
+                                      ml={'5px'}
+                                      key={num}
+                                      _hover={{ bgColor: '#377498' }}
+                                      id={'language'}
+                                      onClick={(e: any) =>
+                                        handleProfile(e, lang.label)
+                                      }
+                                    >
+                                      {lang.label}
+                                    </Text>
+                                  ))}
+                              </Box>
+                            )}
+                          </Box>
+                        {/* </Box>
+                      </Box>
+                    </Box>
+                  </Box> */}
+                </Box>
+                <Box className="voice-volume volumes">
+                  {/* <Slider
+                  aria-label="slider-ex-4"
+                  defaultValue={30}
+                  name="voiceVolume"
+                  
+                >
+                  <SliderTrack
+                    className="slider-track"
+                    height="15px"
+                    borderRadius="80px"
+                  >
+                    <SliderFilledTrack
+                      className="filled-volume"
+                      bg="pink.500"
+                    />
+                  </SliderTrack>
+                  <SliderThumb boxSize={9} background={'transparent'}>
+                    <Img src={SliderPointer} />
+                  </SliderThumb>
+                </Slider> */}
+                </Box>
+                <Box className="btns">
+                  {/* <Button className='back-btn btn'><Img src={Back} 
+                // onClick={()=> setPermission({...permission, setting: false})}
+                 /></Button> */}
+                  <Button
+                    className="okay-btn btn"
+                    onClick={() => setIsLanguage(false)}
+                  >
+                    <Img src={Okay} />
+                  </Button>
+                </Box>
+              </Box>
+            ) : null
+            // <Box className="Setting-box off"></Box>
+          }
+        </Box>
+      </Box> : null}
       <Box className="Play-game CharacterScreen">
         <Box h={'100vh'} w={'100%'}>
           <motion.div
@@ -99,10 +290,12 @@ const selectPlayerClick = () =>
                     h={'50px'}
                     transform={'translate(475px, 250px)'}
                     cursor={'pointer'}
+                    position={'relative'}
+                    zIndex={9999999}
                     onClick={selectPlayerClick}
                   ></Box>
                 </Box>
-                <Box className="back-n-next-box" >
+                <Box className="back-n-next-box">
                   <Button
                     className="btns left-btn"
                     onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
@@ -112,7 +305,7 @@ const selectPlayerClick = () =>
                     onClick={() => setI(players.length - 1 === i ? 0 : i + 1)}
                   ></Button>
                 </Box>
-                {players[i] && (
+                {/* {players[i] && (
                   <Img
                     src={`${API_SERVER}/${players[i]}`}
                     position={'relative'}
@@ -121,8 +314,21 @@ const selectPlayerClick = () =>
                     h={'324px'}
                     transform={'translate(0px, 55px)'}
                   />
-                )}
-
+                )} */}
+                {/* <Box w={'100%'} h={'100vh'}>
+                  <Canvas camera={{ position: [0, 0, 10] }}>
+                    <directionalLight
+                      position={[5, 5, 5]}
+                      intensity={0.8}
+                      color={0xffccaa}
+                      castShadow
+                    />
+                    <ambientLight intensity={5.5} />
+                    
+                    <Model />
+                  
+                  </Canvas>
+                </Box> */}
                 {/* <Canvas camera={{ position: [0, 1, 9] }}>
                   <directionalLight
                     position={[2.0, 78.0, 100]}
@@ -157,7 +363,7 @@ const Model: React.FC = () => {
   const gltf = useLoader(GLTFLoader, Sample);
 
   const mixer = new THREE.AnimationMixer(gltf.scene);
-  const action = mixer.clipAction(gltf.animations[0]);
+  const action = mixer.clipAction(gltf.animations[1]);
 
   useFrame((state, delta) => {
     // Rotate the model on the Y-axis
@@ -190,7 +396,7 @@ const Model: React.FC = () => {
 
   return (
     <group ref={groupRef}>
-      <primitive object={gltf.scene} />
+      <primitive object={gltf.scene} scale={[1, 1, 1]} position={[0, -3, 10]} />
     </group>
   );
 };

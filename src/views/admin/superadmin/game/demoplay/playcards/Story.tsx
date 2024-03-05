@@ -15,12 +15,12 @@ import React, {
   Suspense,
   useContext,
   useEffect,
-  useLayoutEffect,
-  useRef,
+  // useLayoutEffect,
+  // useRef,
   useState,
 } from 'react';
 
-import { Canvas, useLoader, useFrame } from 'react-three-fiber';
+// import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 
 import feedi from 'assets/img/screens/feed.png';
 import TypingEffect from './Typing';
@@ -31,8 +31,13 @@ import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
 import { API_SERVER } from 'config/constant';
 import { ScoreContext } from '../GamePreview';
-
+import { Canvas, useFrame, useLoader } from 'react-three-fiber';
+import Sample from 'assets/img/games/collector.glb';
+import { useLayoutEffect, useRef } from 'react';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import * as THREE from 'three';
 const Story: React.FC<{
+  prevData?: any;
   currentScore: any;
   data: any;
   type: any;
@@ -68,13 +73,14 @@ const Story: React.FC<{
   getAudioForText,
   voiceIds,
   currentScore,
+  prevData,
 }) => {
   const [showNote, setShowNote] = useState(true),
     [first, setFirst] = useState(false);
 
   const userProfile = useContext(ProfileContext);
   const { profile, setProfile } = useContext(ScoreContext);
-  const [score, setScore] = useState(null);
+  const [score, setScore] = useState<any>({ seqId: '', score: null });
   useEffect(() => {
     getVoice(data, type);
     setShowNote(true);
@@ -84,7 +90,7 @@ const Story: React.FC<{
   }, [data, type]);
 
   useEffect(() => {
-    setShowNote(true);
+    // setShowNote(true);
     setFirst(true);
     setTimeout(() => {
       setFirst(false);
@@ -155,7 +161,7 @@ const Story: React.FC<{
       case 'Feedback':
         text = feed;
         voiceId =
-          blockInfo?.blockRoll == '999999'
+          blockInfo?.blockRoll === '999999'
             ? voiceIds.NPC
             : userProfile?.gender === 'Male'
             ? voiceIds?.playerMale
@@ -166,16 +172,34 @@ const Story: React.FC<{
   };
 
   const InteractionFunction = () => {
-    setProfile((prev: any) => ({...prev,
-      score:prev.score + score,
-    }));
+    setProfile((prev: any) => {
+      const { seqId, score: newScore } = score;
+      const index = prev.score.findIndex((item: any) => item.seqId === seqId);
+      if (index !== -1) {
+        const updatedScore = [...prev.score];
+        updatedScore[index] = { ...updatedScore[index], score: newScore };
+        return { ...prev, score: updatedScore };
+      } else {
+        return {
+          ...prev,
+          score: [
+            ...prev.score,
+            {
+              seqId: seqId,
+              score: newScore,
+              quest: parseInt(seqId.split('.')[0]),
+            },
+          ],
+        };
+      }
+    });
     getData(data);
   };
   const optionClick = (item: any, ind: any) => {
-    setScore(parseInt(item?.qpScore));
+    setScore({ seqId: item?.qpSequence, score: parseInt(item?.qpScore) });
     handleValidate(item, ind);
   };
-  console.log(profile);
+
   return (
     <>
       {data && type === 'Note' && (
@@ -200,49 +224,7 @@ const Story: React.FC<{
               first ? 0 : -10
             }%) translateX(${first ? 0 : -10}%)`}
             transition={'transform 0.9s ease-in-out'}
-          >
-            <Box
-              position={'fixed'}
-              top={'200px'}
-              // left={0}
-              right={'0px'}
-              bottom={0}
-              zIndex={999}
-              w={'300px'}
-            >
-              {/* <Canvas
-                camera={{ position: [3, 3, 10] }}
-                
-              >
-                <directionalLight
-                  position={[5, 5, 5]}
-                  intensity={0.8}
-                  color={0xffccaa}
-                  castShadow
-                />
-                <ambientLight intensity={5.5} />
-                <pointLight
-                  position={[5, 5, 5]}
-                  color={0xff0000}
-                  intensity={1}
-                />
-              
-                <mesh
-                  rotation={[-Math.PI / 2, 0, 0]}
-                  position={[0, -5, 0]}
-                  receiveShadow
-                >
-                  <planeGeometry args={[100, 100]} />
-                  <shadowMaterial opacity={0.5} />
-                </mesh>
-              </Canvas> */}
-            </Box>
-          </Box>
-          {/* <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 100, damping: 10 }}
-          > */}
+          ></Box>
           <Box
             style={{
               transform: `scale(${showNote ? 0.2 : 1})`,
@@ -256,7 +238,12 @@ const Story: React.FC<{
             justifyContent={'center'}
             alignItems={'center'}
           >
-            <Img w={'100%'} h={'80vh'} src={note} />
+            <Img
+              className={'gamenote'}
+              w={{ base: '350px', sm: '600px', md: '700px', lg: '900px' }}
+              h={{ base: '300px', sm: '450px', md: '700px', lg: '900px' }}
+              src={note}
+            />
             <Box
               position={'fixed'}
               overflowY={'scroll'}
@@ -319,6 +306,28 @@ const Story: React.FC<{
             transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
             transition={'transform 0.9s ease-in-out'}
           />
+          {/* <Box w={'100%'} h={'100vh'}>
+            <Canvas camera={{ position: [30, 0, 10] }}>
+              <directionalLight
+                position={[5, 5, 5]}
+                intensity={0.8}
+                color={0xffccaa}
+                castShadow
+              />
+              <ambientLight intensity={5.5} />
+              {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
+          {/* <Background /> */}
+          {/* <Model /> */}
+          {/* <mesh 
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, -5, 0]}
+          receiveShadow 
+        > */}
+          {/* <planeGeometry args={[100, 100]} />
+          <shadowMaterial opacity={0.5} />
+        </mesh> */}
+          {/* </Canvas>
+          </Box> */}
           {selectedPlayer && (
             <Img
               src={`${API_SERVER}/${selectedPlayer}`}
@@ -361,14 +370,14 @@ const Story: React.FC<{
                 <Img
                   src={char}
                   position={'fixed'}
-                  h={'70px'}
-                  w={'25%'}
-                  left={'13%'}
-                  bottom={'150px'}
+                  h={'100px'}
+                  w={'30%'}
+                  left={'5%'}
+                  bottom={'140px'}
                 />
                 <Text
                   position={'fixed'}
-                  left={'24%'}
+                  left={'19%'}
                   bottom={'167px'}
                   fontSize={'25'}
                   fontWeight={700}
@@ -383,8 +392,11 @@ const Story: React.FC<{
               <Box
                 display={'flex'}
                 position={'fixed'}
+                alignItems={'center'}
                 justifyContent={'space-between'}
-                w={'75%'}
+                h={'80px'}
+                overflowY={'scroll'}
+                w={'85%'}
                 bottom={'55px'}
                 fontFamily={'AtlantisContent'}
                 fontSize={'21px'}
@@ -395,13 +407,19 @@ const Story: React.FC<{
                 display={'flex'}
                 position={'fixed'}
                 justifyContent={'space-between'}
-                w={'80%'}
+                w={'92%'}
                 bottom={'0'}
               >
-                <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+                <Img
+                  src={left}
+                  w={'80px'}
+                  h={'50px'}
+                  cursor={'pointer'}
+                  onClick={() => prevData(data)}
+                />
                 <Img
                   src={right}
-                  w={'50px'}
+                  w={'80px'}
                   h={'50px'}
                   cursor={'pointer'}
                   onClick={() => getData(data)}
@@ -431,7 +449,29 @@ const Story: React.FC<{
             }px)`}
             transition={'transform 0.9s ease-in-out'}
           />
-          {selectedPlayer && (
+          {/* <Box w={'100%'} h={'100vh'} position={'absolute'} top={'0'}>
+            <Canvas camera={{ position: [0, 0, 10] }}>
+              <directionalLight
+                position={[5, 5, 5]}
+                intensity={0.8}
+                color={0xffccaa}
+                castShadow
+              />
+              <ambientLight intensity={5.5} />
+              {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
+          {/* <Background /> */}
+          {/* <Model /> */}
+          {/* <mesh
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, -5, 0]}
+          receiveShadow 
+        > */}
+          {/* <planeGeometry args={[100, 100]} />
+          <shadowMaterial opacity={0.5} />
+        </mesh> */}
+          {/* </Canvas>
+          </Box> */}
+          {/* {selectedPlayer && (
             <Img
               src={`${API_SERVER}/${selectedPlayer}`}
               position={'fixed'}
@@ -442,8 +482,8 @@ const Story: React.FC<{
               transform={'translate(100px, 0px)'}
               transition={'transform 2s ease-in-out'}
             />
-          )}
-          {selectedNpc && (
+          )} */}
+          {/* {selectedNpc && (
             <Img
               src={selectedNpc}
               position={'fixed'}
@@ -454,7 +494,7 @@ const Story: React.FC<{
               transform={'translate(100px, 0px)'}
               transition={'transform 2s ease-in-out'}
             />
-          )}
+          )} */}
           <Box
             style={{
               transform: `translateX(${showNote ? -200 : 0}px) scale(1.2)`,
@@ -535,7 +575,13 @@ const Story: React.FC<{
               w={'508px'}
               left={'-10px'}
             >
-              <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+              <Img
+                src={left}
+                w={'50px'}
+                h={'50px'}
+                cursor={'pointer'}
+                onClick={() => prevData(data)}
+              />
               {option !== null && (
                 <Img
                   src={right}
@@ -642,14 +688,14 @@ const Story: React.FC<{
               <Box
                 display={'flex'}
                 position={'fixed'}
-                justifyContent={'space-between'}
+                justifyContent={'flex-end'}
                 w={'80%'}
                 bottom={'0'}
               >
-                <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+                {/* <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} /> */}
                 <Img
                   src={right}
-                  w={'50px'}
+                  w={'60px'}
                   h={'50px'}
                   cursor={'pointer'}
                   onClick={() => getData(data)}
@@ -658,7 +704,6 @@ const Story: React.FC<{
             </>
           )}
         </Box>
-       
       )}
       {data && type === 'feedback' && (
         <Box
@@ -764,4 +809,66 @@ const Story: React.FC<{
     </>
   );
 };
+const Model: React.FC = () => {
+  const groupRef = useRef<any>();
+  const gltf = useLoader(GLTFLoader, Sample);
+
+  const mixer = new THREE.AnimationMixer(gltf.scene);
+  const action = mixer.clipAction(gltf.animations[3]);
+
+  useFrame((state, delta) => {
+    if (groupRef.current) {
+      groupRef.current.castShadow = true;
+    }
+    mixer.update(delta);
+  });
+  action.play();
+
+  useLayoutEffect(() => {
+    if (groupRef.current) {
+      groupRef.current.traverse((obj: any) => {
+        if (obj.isMesh) {
+          obj.castShadow = true;
+          obj.receiveShadow = true;
+        }
+      });
+    }
+  }, []);
+
+  gltf.scene.traverse((child) => {
+    if (child instanceof THREE.Mesh) {
+      child.material.color.set(0xffccaaf0); // Set your desired color
+      child.material.roughness = 0.4; // Adjust roughness as needed
+      child.material.metalness = 0.8; // Adjust metalness as needed
+    }
+  });
+
+  return (
+    <group ref={groupRef}>
+      <primitive object={gltf.scene} scale={[1, 1, 1]} position={[0, 20, -2]} />
+    </group>
+  );
+};
+
+// const Background: React.FC = () => {
+//   const textureLoader = new THREE.TextureLoader();
+//   const texture = textureLoader.load(bg);
+
+//   const sphereRef = useRef<THREE.Mesh>();
+
+//   // useFrame(() => {
+//   //   // Rotate the background sphere
+//   //   if (sphereRef.current) {
+//   //     // sphereRef.current.rotation.x += 0.005;
+//   //     sphereRef.current.rotation.y += 0.001;
+//   //   }
+//   // });
+
+//   return (
+//     <mesh ref={sphereRef}>
+//       <sphereGeometry args={[500, 60, 30]} />
+//       <meshBasicMaterial map={texture} side={THREE.BackSide} />
+//     </mesh>
+//   );
+// };
 export default Story;

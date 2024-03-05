@@ -29,6 +29,10 @@ import {
   Textarea,
   MenuItem,
   Select,
+  Slider,
+  SliderTrack,
+  SliderThumb,
+  SliderFilledTrack,
 } from '@chakra-ui/react';
 import next from 'assets/img/screens/next.png';
 import Screen2 from 'assets/img/screens/screen2.png';
@@ -37,6 +41,15 @@ import Screen1 from 'assets/img/screens/screen1.png';
 import Replay from 'assets/img/screens/Replay.png';
 import Lead from 'assets/img/screens/Leaderboard.png';
 import Login from 'assets/img/games/log_non.png';
+import TopMenu from 'assets/img/games/top-menu.png';
+import Overview from 'assets/img/games/game-overview.png';
+import Setting from 'assets/img/games/settings.png';
+import SettingPad from 'assets/img/games/setting-pad.png';
+import SliderPointer from 'assets/img/games/slider-pointer.png';
+import Okay from 'assets/img/games/OKAY button.png';
+// import back from 'assets/img/games/back.jpg';
+// import Back from 'assets/img/games/back.jpg';
+// import Okay from 'assets/img/games/o'
 // import bk from 'assets/img/games/17.png';
 // import note from 'assets/img/games/note.png';
 // import next from 'assets/img/screens/next.png';
@@ -180,6 +193,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [navi, setNavi] = useState<string>('');
   const [options, setOptions] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [optionNavigation, setOptionNavigation] = useState(null);
   /** This state handles the Review Form Tab and Sub Tab options */
   const [reviewTabOptions, setReviewTabOptions] = useState([]);
   const [filteredTabOptions, setFilteredTabOptions] = useState([]);
@@ -196,6 +210,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     tabAttributeValue: '',
   });
   const [backgroundScreenUrl, setBackgroundScreenUrl] = useState(null);
+  const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [audio, setAudio] = useState<string>('');
   type EnumType = 'bgm' | 'api';
@@ -215,13 +230,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [audioVolume, setAudioVolume] = useState<any>(0.5);
   const [nextBlockAudioUrl, setNextBlockAudioUrl] = useState<string>('');
   const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [game3Position, setGame3Position] = useState({
+    previousBlock: '',
+    currentBlock: '',
+    nextBlock: '',
+  });
   const [currentStoryBlockSeq, setCurrentStoryBlockSeq] =
     useState<string>(null);
 
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
   const userProfile = useContext(ProfileContext);
-  const [currentQuestNo, setCurrentQuestNo] =useState(1);
+  const [currentQuestNo, setCurrentQuestNo] = useState(1);
+  const [homeLeaderBoard, setHomeLeaderBoard] = useState(false);
   const { profile, setProfile } = useContext(ScoreContext);
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
@@ -239,7 +260,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [voiceIds, setVoiceIds] = useState<any>();
   const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
     useState<boolean>(false);
-  const [reflectionAnswers, setReflectionAnswers] =useState([]);
+  const [reflectionAnswers, setReflectionAnswers] = useState([]);
 
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
@@ -257,6 +278,22 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks['1']['1']?.blockChoosen);
     setData(gameInfo?.blocks['1']['1']);
+    if (gameInfo?.blocks['1']['1']?.blockChoosen === 'Interaction') {
+      const optionsFiltered = gameInfo?.questOptions.filter(
+        (key: any) => key?.qpSequence === gameInfo?.blocks['1']['1']?.blockPrimarySequence,
+      );
+
+      if (gameInfo?.gameData?.gameShuffle) {
+        for (let i = optionsFiltered.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [optionsFiltered[i], optionsFiltered[j]] = [
+            optionsFiltered[j],
+            optionsFiltered[i],
+          ]; // Swap elements at indices i and j
+        }
+      }
+      setOptions(optionsFiltered);
+    }
     const handleVisibilityChange = () => {
       if (document.hidden) {
         // Pause the audio when the page is hidden
@@ -281,7 +318,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       fetchDefaultBgMusic();
     } else if (gameInfo?.bgMusic) {
       currentScreenId > 0 &&
-        currentScreenId == 1 &&
+        currentScreenId === 1 &&
         isGetsPlayAudioConfirmation &&
         setAudioObj({
           url: gameInfo?.bgMusic,
@@ -364,14 +401,50 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           API_SERVER + '/uploads/background/41524_1701765021527.jpg',
         );
         currentScreenId > 0 &&
-          currentScreenId == 1 &&
+          currentScreenId === 1 &&
           isGetsPlayAudioConfirmation &&
           setAudio(gameInfo?.bgMusic ?? '');
         break;
     }
   }, [currentScreenId]);
 
+  const prevData = (current: any) => {
+    const currentBlock = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[1])
+      : null;
+    const PrevItem = currentBlock != null ? currentBlock - 1 : null;
+    const prevSeq =
+      game3Position.previousBlock !== ''
+        ? game3Position.previousBlock
+        : current
+        ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
+        : '';
+    const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
+    const currentQuest = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[0])
+      : null;
+
+   
+
+    const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    const prevBlock = current
+      ? Object.keys(demoBlocks[quest] || {})
+          .filter(
+            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
+      : [];
+    if (
+      prevBlock.length !== 0 &&
+      prevBlock[0]?.blockChoosen !== 'Interaction'
+    ) {
+      setType(prevBlock[0]?.blockChoosen);
+      setData(prevBlock[0]);
+    }
+  };
+ 
   const getData = (next: any) => {
+
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -384,26 +457,32 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const currentQuest = next
       ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
-
-      setCurrentQuestNo(currentQuest);
-
+    setGame3Position((prev: any) => ({
+      ...prev,
+      previousBlock: next?.blockPrimarySequence,
+      currentBlock: nextSeq,
+    }));
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
             (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
           )
-          .map((key:any) => demoBlocks[quest]?.[key])
+          .map((key: any) => demoBlocks[quest]?.[key])
       : [];
+
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = gameInfo?.questOptions.filter(
         (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
       );
-      if(gameInfo?.gameData?.gameShuffle)
-      {
+
+      if (gameInfo?.gameData?.gameShuffle) {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
-          [optionsFiltered[i], optionsFiltered[j]] = [optionsFiltered[j], optionsFiltered[i]]; // Swap elements at indices i and j
+          [optionsFiltered[i], optionsFiltered[j]] = [
+            optionsFiltered[j],
+            optionsFiltered[i],
+          ]; // Swap elements at indices i and j
         }
       }
       setOptions(optionsFiltered);
@@ -428,7 +507,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       type === 'response' ||
       type === 'feedback'
     ) {
-      console.log("Above Replay Point")
       if (navi === 'Repeat Question') {
         setType('Interaction');
         setSelectedOption(null);
@@ -439,21 +517,63 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
-        console.log("IN Replay Point");
+        console.log('IN Replay Point');
         setType(demoBlocks['1']['1']?.blockChoosen);
         setData(demoBlocks['1']['1']);
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+          .filter((item: any) => {
+            return (
+              demoBlocks[currentQuest][item].blockSecondaryId ===
+              parseInt(optionNavigation)
+            );
+          })
+          .map((item: any) => {
+            return demoBlocks[currentQuest][item];
+          });
+        setType(selectedNext && selectedNext[0].blockChoosen);
+        setData(selectedNext && selectedNext[0]);
+        setGame3Position((prev: any) => ({
+          ...prev,
+          nextBlock: selectedNext[0].blockPrimarySequence,
+        }));
         setSelectedOption(null);
         return false;
       } else if (navi === 'Complete') {
         if (demoBlocks.hasOwnProperty(nextLevel)) {
           setType(demoBlocks[nextLevel]['1']?.blockChoosen);
           setData(demoBlocks[nextLevel]['1']);
+          setProfile((prev: any) => {
+            if (!prev.completedLevels.includes(String(nextLevel))) {
+              const updatedCompletedLevels = [
+                ...prev.completedLevels,
+                String(nextLevel),
+              ];
+              return {
+                ...prev,
+                completedLevels: updatedCompletedLevels,
+              };
+            }
+            return prev;
+          });
           setCurrentScreenId(6);
           return false;
         } else {
+          setProfile((prev: any) => {
+            if (!prev.completedLevels.includes(String(nextLevel))) {
+              const updatedCompletedLevels = [
+                ...prev.completedLevels,
+                String(nextLevel),
+              ];
+              return {
+                ...prev,
+                completedLevels: updatedCompletedLevels,
+              };
+            }
+            return prev;
+          });
           setType(null);
           setData(null);
           setCurrentScreenId(6);
@@ -487,7 +607,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         return false;
       } else {
         if (data && type) {
-          setCurrentScreenId(2);
+          setCurrentScreenId(13);
           return false;
         } else {
           setType(null);
@@ -578,11 +698,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           return false;
         }
       }
-    // }
+      // }
     }
     if (currentScreenId === 7) {
       if (data && type) {
-        setCurrentScreenId(2);
+        setCurrentScreenId(13);
         return false;
       } else {
         setType(null);
@@ -593,6 +713,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (nextBlock.length === 0) {
       if (demoBlocks.hasOwnProperty(nextLevel)) {
+        setProfile((prev: any) => {
+          if (!prev.completedLevels.includes(String(nextLevel))) {
+            const updatedCompletedLevels = [
+              ...prev.completedLevels,
+              String(nextLevel),
+            ];
+            return {
+              ...prev,
+              completedLevels: updatedCompletedLevels,
+            };
+          }
+          return prev;
+        });
         setType(demoBlocks[nextLevel]['1']?.blockChoosen);
         setData(demoBlocks[nextLevel]['1']);
         setCurrentScreenId(6);
@@ -620,8 +753,54 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Select Block') {
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+          .filter((item: any) => {
+            return (
+              demoBlocks[currentQuest][item].blockSecondaryId ===
+              parseInt(next?.blockLeadTo)
+            );
+          })
+          .map((item: any) => {
+            return demoBlocks[currentQuest][item];
+          });
+        if (selectedNext[0]?.blockChoosen === 'Interaction') {
+          const optionsFiltered = gameInfo?.questOptions.filter(
+            (key: any) =>
+              key?.qpSequence === selectedNext[0]?.blockPrimarySequence,
+          );
+          if (gameInfo?.gameData?.gameShuffle) {
+            for (let i = optionsFiltered.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [optionsFiltered[i], optionsFiltered[j]] = [
+                optionsFiltered[j],
+                optionsFiltered[i],
+              ];
+            }
+          }
+          setOptions(optionsFiltered);
+        }
+        setType(selectedNext && selectedNext[0].blockChoosen);
+        setData(selectedNext && selectedNext[0]);
+        setGame3Position((prev: any) => ({
+          ...prev,
+          nextBlock: selectedNext[0].blockPrimarySequence,
+        }));
         setSelectedOption(null);
+        return false;
       } else if (next?.blockShowNavigate === 'Complete') {
+        setProfile((prev: any) => {
+          if (!prev.completedLevels.includes(String(nextLevel))) {
+            const updatedCompletedLevels = [
+              ...prev.completedLevels,
+              String(nextLevel),
+            ];
+            return {
+              ...prev,
+              completedLevels: updatedCompletedLevels,
+            };
+          }
+          return prev;
+        });
         setCurrentScreenId(6);
         return false;
       }
@@ -643,8 +822,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
+    setOptionNavigation(item?.qpNextOption);
     setSelectedOption(ind === selectedOption ? null : ind);
- 
+
     const text = '..Option ' + item.qpOptions + ' -- ' + item.qpOptionText;
     const voiceId =
       // data?.blockRoll == '999999'
@@ -694,7 +874,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const filterTabOptionsList = tabOptions.filter((tabOption) =>
         reviewTabOptions.includes(tabOption.value),
       );
-
       setFilteredTabOptions(filterTabOptionsList);
     }
   }, [reviewTabOptions]);
@@ -921,9 +1100,123 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       'Failed to load video because no supported source was found.',
     );
   };
-
+  const handleOverView = () => {
+    setHomeLeaderBoard(true);
+    setCurrentScreenId(4);
+  };
   return (
     <ProfileContext.Provider value={profileData}>
+      <Box id="container" className="Play-station">
+        <Box className="top-menu-home-section">
+          {/* {currentTab !== 0 && informationScreen == '' ?  */}
+          <>
+            <Img src={TopMenu} className="top-menu-img" />
+            <Img
+              src={Overview}
+              className="overview-img"
+              onClick={handleOverView}
+            />
+            <Img
+              src={Setting}
+              className="setting-img"
+              onClick={() => setIsSettingOpen(true)}
+            />
+            <Box className="score-box">
+              <Text className="text">
+                {(profile &&
+                  profile.score &&
+                  profile.score.length > 0 &&
+                  profile.score.reduce(
+                    (accumulator: number, currentValue: any) => {
+                      return accumulator + currentValue.score;
+                    },
+                    0,
+                  )) ||
+                  0}
+              </Text>
+            </Box>
+          </>
+          {/* /  : null}     */}
+
+          {/* {permission.setting ? */}
+          {
+            isSettingOpen ? (
+              <Box className="Setting-box">
+                <Img src={SettingPad} className="setting-pad" />
+                <Box className="music-volume volumes">
+                  <Slider
+                    aria-label="slider-ex-4"
+                    defaultValue={30}
+                    name="musicVolume"
+                    //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
+                  >
+                    <SliderTrack
+                      className="slider-track"
+                      height="15px"
+                      borderRadius="80px"
+                    >
+                      {/* <Img src={VolumeTrack} /> */}
+                      <SliderFilledTrack
+                        className="filled-volume"
+                        bg="pink.500"
+                      />
+                    </SliderTrack>
+                    <SliderThumb
+                      boxSize={9}
+                      background={'transparent'}
+                      left={'calc(100% - 30%)'}
+                    >
+                      {/* <Box color='tomato' as={MdCall} /> */}
+                      <Img src={SliderPointer} />
+                    </SliderThumb>
+                  </Slider>
+                </Box>
+                <Box className="voice-volume volumes">
+                  <Slider
+                    aria-label="slider-ex-4"
+                    defaultValue={30}
+                    name="voiceVolume"
+                    // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
+                  >
+                    <SliderTrack
+                      className="slider-track"
+                      height="15px"
+                      borderRadius="80px"
+                    >
+                      <SliderFilledTrack
+                        className="filled-volume"
+                        bg="pink.500"
+                      />
+                    </SliderTrack>
+                    <SliderThumb boxSize={9} background={'transparent'}>
+                      <Img src={SliderPointer} />
+                    </SliderThumb>
+                  </Slider>
+                </Box>
+                <Box className="btns">
+                  {/* <Button className='back-btn btn'><Img src={Back} 
+                // onClick={()=> setPermission({...permission, setting: false})}
+                 /></Button> */}
+                  <Button
+                    className="okay-btn btn"
+                    onClick={() => setIsSettingOpen(false)}
+                  >
+                    <Img src={Okay} />
+                  </Button>
+                </Box>
+              </Box>
+            ) : null
+            // <Box className="Setting-box off"></Box>
+          }
+        </Box>
+        {/* <DataContext.Provider value={{
+          "Function": { handleClose: handleClose, dispatch: dispatch, handlePlayGames: handlePlayGames, handleNextTab: handleNextTab, handlePlayQuest: handlePlayQuest, handleCloseInfoScrn },
+          "Response": assignedData,
+          "State": { state, showQuestList, showStartScreen, showWelcomeScreen, showCompletionScreen, showGamePlay, showScreens, showBgImage, setCurrentTab, completedQuest, leanerProfile, countries, setLeanerProfile, PlayQuestNo }
+        }}>          
+          {informationScreen !== '' ? <InformationCompo /> : <DynamicComponent />}
+        </DataContext.Provider>*/}
+      </Box>
       <Flex height="100vh" className={currentScreenId === 2 ? '' : 'AddScores'}>
         {(() => {
           switch (currentScreenId) {
@@ -995,6 +1288,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   > */}
                   {data && type && (
                     <Story
+                      prevData={prevData}
                       currentScore={currentScore}
                       selectedNpc={gameInfo?.gameNonPlayerUrl}
                       selectedPlayer={selectedPlayer}
@@ -1087,8 +1381,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     justifyContent={'center'}
                     className="Game-Screen"
                   >
-                    <Box className="Images">
+                    <Box className="Images" zIndex={99}>
                       <LeaderBoard
+                        homeLeaderBoard={homeLeaderBoard}
+                        setHomeLeaderBoard={setHomeLeaderBoard}
+                        setCurrentScreenId={setCurrentScreenId}
                         formData={gameInfo?.gameData}
                         imageSrc={Lead}
                         getData={getData}
@@ -1152,8 +1449,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     alignItems={'center'}
                     justifyContent={'center'}
                     position={'relative'}
-                    overflow={'visible'}
-                    style={{ perspective: '1000px' }}
+                    // overflow={'visible'}
+                    // style={{ perspective: '1000px' }}
                     className="Main-Content"
                   >
                     <Box
@@ -1162,19 +1459,22 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       h={'100vh'}
                       backgroundRepeat={'no-repeat'}
                       backgroundSize={'cover'}
-                      alignItems={'center'}
-                      justifyContent={'center'}
+                      // alignItems={'center'}
+                      // justifyContent={'center'}
                       className="Game-Screen"
                     >
                       <Box className="Images">
                         <Completion
+                          questOptions={gameInfo?.questOptions}
                           getData={getData}
                           data={data}
                           setCurrentScreenId={setCurrentScreenId}
                           formData={gameInfo?.gameData}
                           imageSrc={Screen1}
                           currentQuestNo={currentQuestNo}
-                          completionScreenQuestOptions={gameInfo.completionQuestOptions}
+                          completionScreenQuestOptions={
+                            gameInfo.completionQuestOptions
+                          }
                         />
                       </Box>
                     </Box>
@@ -1330,7 +1630,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           fontWeight: '900',
                           color: '#D9C7A2',
                           fontSize: '18px',
-
                           lineHeight: 1,
                           fontFamily: 'cont',
                         }}
@@ -1384,7 +1683,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           <Button
                             className="btn"
                             onClick={() => {
-                              setCurrentScreenId(11);
+                              setCurrentScreenId(12);
                               setIsGetsPlayAudioConfirmation(true);
                             }}
                           ></Button>
@@ -1409,6 +1708,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     imageSrc={backgroundScreenUrl}
                     setCurrentScreenId={setCurrentScreenId}
                     profileData={profileData}
+                    formData={gameInfo?.gameData}
                     setProfileData={setProfileData}
                   />
                 </>
@@ -1417,22 +1717,31 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return (
                 <>
                   <Characterspage
+                    profileData={profileData}
+                    setProfileData={setProfileData}
                     setSelectedPlayer={setSelectedPlayer}
                     players={gameInfo?.gamePlayers}
+                    formData={gameInfo?.gameData}
                     imageSrc={backgroundScreenUrl}
                     setCurrentScreenId={setCurrentScreenId}
+                    demoBlocks={demoBlocks}
                   />
                 </>
               );
             case 13:
               return (
                 <>
+                  {/* <SimpleGrid columns={{ base: 1 }}> */}
                   <ChapterPage
+                    setCurrentQuestNo={setCurrentQuestNo}
+                    currentQuestNo={currentQuestNo}
                     formData={gameInfo?.gameData}
                     imageSrc={backgroundScreenUrl}
                     demoBlocks={demoBlocks}
+                    questOptions={gameInfo?.questOptions}
                     setCurrentScreenId={setCurrentScreenId}
                   />
+                  {/* </SimpleGrid> */}
                 </>
               );
             default:

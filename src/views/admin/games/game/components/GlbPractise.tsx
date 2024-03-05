@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useLoader } from 'react-three-fiber';
-import Sample from 'assets/img/games/Merlin.glb';
+import Sample from 'assets/img/games/collector.glb';
 import { useLayoutEffect, useRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
