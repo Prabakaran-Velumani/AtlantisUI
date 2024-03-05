@@ -2258,10 +2258,28 @@ if (formData.gameIsFeedbackMandatory === "true") {
       }
     }
     if (tab === 6) {
-      console.log('tabstage',tab);
-      setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }))
-      localStorage.setItem('gameGameStage','Review');
+      if(formData.gameIntroMusic ==='' || formData.gameIntroMusic ===null ||formData.gameIntroMusic ===undefined)
+{
+  toast({
+    title: 'Please Select Intro music Audio',
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  })
+ 
+  setCurrentTab(6)
+return false;
+} else{
+  console.log('tabstage',tab);
+  setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }))
+  localStorage.setItem('gameGameStage','Review');
+}
     }
+    // if (tab === 6) {
+    //   console.log('tabstage',tab);
+    //   setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }))
+    //   localStorage.setItem('gameGameStage','Review');
+    // }
     // if (tab === 6) {
     //   setFormData({
     //     ...formData,
@@ -2674,6 +2692,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
           [CompKeyCount]: {
             ...prevInput[CompKeyCount],
             gameIsSetCongratsSingleMessage: 'true',
+            gameIsSetCongratsScoreWiseMessage: 'false',
           },
         };
       });

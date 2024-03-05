@@ -1200,11 +1200,12 @@ const handleQuestNo = (selectedOption: any) => {
                             //     ? true
                             //     : false
                             // }
-                            isChecked={(compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' &&
-                            compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') || compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ===
-                            'false' || ((compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' ||
-                            compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true') && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ===
-                            'false')) ? true : false}
+                            isChecked={ ((compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ==='false')  || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === undefined && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ==='false' )) ? true : false}
+                            // isChecked={(compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' &&
+                            // compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') || compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ===
+                            // 'false' || ((compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' ||
+                            // compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true') && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ===
+                            // 'false')) ? true : false}
                             // isChecked={(compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' || compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true') ? (compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ==='false') ? true : false : false}
                             color="#fff"
                             colorScheme="brandScheme"
@@ -1249,9 +1250,13 @@ const handleQuestNo = (selectedOption: any) => {
                         </FormControl>
                       </Flex>
                     )}
-                      {(compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' &&
+                      {/* {(compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' &&
                     compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') || compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ===
-                    'false') ? (
+                    'false') ? ( */}
+
+{(compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' &&
+                    compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') ||(compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ==='false')||(compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === undefined && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage ==='false') ? (
+
                       <>
                       
                       <FormControl>
@@ -1513,7 +1518,7 @@ const handleQuestNo = (selectedOption: any) => {
                           options={isQuestDrop}
                           isSearchable={true}
                           className="react-select"
-                          value={isQuestDrop.find((option: any) => option.value === getQuest) || null}
+                          value={isQuestDrop?.find((option: any) => option?.value === getQuest) || null}
                           onChange={(selectedOption: any) => handleQuestNo(selectedOption)}
                         />
                       </Flex>
