@@ -52,6 +52,8 @@ import InputField from 'components/fields/InputField';
 import BadgeImages from '../BadgeImages';
 import { MdClose, MdOutlineCloudUpload } from 'react-icons/md';
 import TextField from 'components/fields/TextField';
+import next from 'assets/img/screens/next.png';
+
 interface Badge {
   gasId: number;
   gasAssetImage: string;
@@ -209,7 +211,9 @@ const WelcomeScreen: React.FC<{ formData: any; imageSrc: any }> = ({
                 </Text>
               )}
             </Box>
+           
           </Box>
+          
         </Box>        
       )}
 

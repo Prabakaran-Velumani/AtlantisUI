@@ -51,6 +51,8 @@ import {
   import TextField from 'components/fields/TextField';
   import take from 'assets/img/screens/takeaway.png';
   import bull from 'assets/img/screens/bullet.png';
+  import next from 'assets/img/screens/next.png';
+
   interface Badge {
     gasId: number;
     gasAssetImage: string;
@@ -82,7 +84,11 @@ import {
               );
             })}
             </Box>
+            <Box className='next-btn'>
+              <Img src={next}  />
+            </Box>
           </Box>
+          
         </Box>
       )}
     </>

@@ -18,6 +18,7 @@ import { FaClock } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
+import next from 'assets/img/screens/next.png';
 
 interface Badge {
   gasId: number;
@@ -568,7 +569,11 @@ const WelcomeContentScreen: React.FC<{
                   </Box>
                 )}
               </Box>
+              <Box className='next-btn'>
+              <Img src={next}  />
             </Box>
+            </Box>
+           
           </Box>
       )}
       </motion.div>

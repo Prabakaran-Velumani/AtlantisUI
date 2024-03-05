@@ -61,6 +61,8 @@ import { BsQuestionSquare } from 'react-icons/bs';
 import { BsEmojiNeutral } from 'react-icons/bs';
 import { RiEmotionHappyLine } from 'react-icons/ri';
 import { FaRegTired } from 'react-icons/fa';
+import next from 'assets/img/screens/next.png';
+
 import {
   FaComment,
   FaHatCowboy,
@@ -372,10 +374,18 @@ const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview:any , pr
                         </>
                       )}
                     </Box>
+                    {/* <Box className='next-btn'>
+              <Img src={next}  />
+            </Box> */}
                   </Box>
                 </>
               )}
             </Box>
+            <Box  className='next-btn' style={{ position: 'fixed', bottom: '0', right: '0' }}>
+  <Img src={next} />
+</Box>
+
+        
           </Box>
         </>
       ) : (
@@ -641,6 +651,10 @@ const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview:any , pr
               </>
             )}
           </Box>
+          <Box  className='next-btn' style={{ position: 'fixed', bottom: '100', right: '100' }}>
+  <Img src={next} />
+</Box>
+
         </Box>
       )}
     </>
