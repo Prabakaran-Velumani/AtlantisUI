@@ -1,9 +1,4 @@
-import React, {
-  ChangeEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Card from 'components/card/Card';
 import {
   Box,
@@ -20,9 +15,7 @@ import {
   AccordionPanel,
   useColorModeValue,
 } from '@chakra-ui/react';
-import {
-  MdOutlineStickyNote2,
-} from 'react-icons/md';
+import { MdOutlineStickyNote2 } from 'react-icons/md';
 import { Draggable } from 'react-beautiful-dnd';
 import CustomAccordion from './dragNdrop/CustomAccordion';
 import NoteCompo from '../blocksCompo/NoteCompo';
@@ -174,18 +167,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
     { value: 'sad', label: 'Sad' },
   ];
 
-  console.log('sequence', sequence);
   // onClick Function
   const handleNDI = (NDI: any) => {
-    // const sequencial = `${count / 10 + 1}`;
-    // const upNextSequencial = `${(count + 1) / 10 + 1}`
-
     const id = `${serias}.${count}`;
     const upNext = `${serias}.${count + 1}`;
-    // const floatRegex = /^[-+]?(\d*\.\d+|\.\d+)$/;
-    // const id = floatRegex.test(sequencial) ? sequencial : `${count / 10 + 1}.${0}`
-    // const upNext = floatRegex.test(upNextSequencial) ? upNextSequencial : `${(count + 1) / 10 + 1}.${0}`
-    // const upNext = `${Math.floor(count / 10) + 1}.${(count + 1) % 10 || 1}`;
     setUpNext(upNext);
     setType(NDI);
     setShowBox(false);
@@ -291,9 +276,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     const sequencial = `${count / 10 + 1}`;
     const upNextSequencial = `${(count + 1) / 10 + 1}`;
     const floatRegex = /^[-+]?(\d*\.\d+|\.\d+)$/;
-    // const id = floatRegex.test(sequencial) ? sequencial : `${count / 10 + 1}.${0}`
-    // const upNext = floatRegex.test(upNextSequencial) ? upNextSequencial : `${(count + 1) / 10 + 1}.${0}`
-    // const upNext = `${Math.floor(count / 10) + 1}.${(count + 1) % 10 || 1}`;
 
     const id = `${serias}.${count}`;
     const upNext = `${serias}.${count + 1}`;
@@ -401,16 +383,11 @@ const NDIMain: React.FC<NDIMainProps> = ({
   };
 
   const duplicateSeq = (seq: any, i: any, name: any) => {
-    // const id = `${Math.floor(count / 10) + 1}.${count % 10 || 1}`;
-    // const upNext = `${Math.floor(count / 10) + 1}.${(count + 1) % 10 || 1}`;
     const sequencial = `${count / 10 + 1}`;
     const upNextSequencial = `${(count + 1) / 10 + 1}`;
     const floatRegex = /^[-+]?(\d*\.\d+|\.\d+)$/;
-    // const id = floatRegex.test(sequencial) ? sequencial : `${count / 10 + 1}.${0}`
-    // const upNext = floatRegex.test(upNextSequencial) ? upNextSequencial : `${(count + 1) / 10 + 1}.${0}`
     const id = `${serias}.${count}`;
     const upNext = `${serias}.${count + 1}`;
-    // setShowBox(true);
     setUpNext(upNext);
     setCount(count + 1);
     const newArr = { id, type: name, upNext, input: count, questNo: serias };
@@ -642,30 +619,12 @@ const NDIMain: React.FC<NDIMainProps> = ({
       );
       return updatedItems;
     });
-    // setItems(items.filter((_: any, index: any) => {
-    //     console.log('datadata', _)
-    //     return index !== i;
-    // }));
-    // setItems((prevItem: any)=>
-    //     prevItem.map((item: any) =>
-    //     item.id === seq.id ? { ...item, status: 'no' } : item
-    // ))
-
-    // setSequence(sequence.filter((_: any, index: any) => { return index !== i }))
-    // setTimeout(() => {
-    //     handleGet();
-    // }, 3000);
     setDeleteseq(true);
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const sequencial = `${count / 10 + 1}`;
     const floatRegex = /^[-+]?(\d*\.\d+|\.\d+)$/;
-    // const id = floatRegex.test(sequencial) ? sequencial : `${count / 10 + 1}.${0}`
-    // const upNextSequencial = `${(count + 1) / 10 + 1}`;
-    // const id = `${Math.floor(count / 10) + 1}.${count % 10 || 1}`;
-    // const upNext = `${Math.floor(count / 10) + 1}.${(count + 1) % 10 || 1}`;
-    // const upNext = floatRegex.test(upNextSequencial) ? upNextSequencial : `${(count + 1) / 10 + 1}.${0}`;
 
     const id = `${serias}.${count}`;
     const upNext = `${serias}.${count + 1}`;
@@ -806,10 +765,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     const sequencial = `${count / 10 + 1}`;
     const upNextSequencial = `${(count + 1) / 10 + 1}`;
     const floatRegex = /^[-+]?(\d*\.\d+|\.\d+)$/;
-    // const id = floatRegex.test(sequencial) ? sequencial : `${count / 10 + 1}.${0}`
-    // const upNext = floatRegex.test(upNextSequencial) ? upNextSequencial : `${(count + 1) / 10 + 1}.${0}`
-    // const upNext = `${Math.floor(count / 10) + 1}.${(count + 1) % 10 || 1}`;
-
     const id = `${serias}.${count}`;
     console.log('id+++', id);
     const upNext = `${serias}.${count + 1}`;
@@ -929,16 +884,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
     // console.log('Saved data');
   };
 
-  //navin-start
-
-  // useEffect(() => {
-
-  //     handleGet();
-  //      console.log('hipe')
-  // }, [id])
   const handleBlockRoll = (selectedOption: any, i: any, keyvalue: any) => {
-    // console.log('blockroll', items[key].input + '---' + i + '-------' + items);
-
     setInput((prevInput: any) => {
       const interactionKey = keyvalue;
       const blockroll = selectedOption.value;
@@ -955,8 +901,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
   };
   const handleDialogBlockRoll = (selectedOption: any, i: any) => {
     let key = i - 1;
-    // console.log('blockroll', items[key].input + '---' + i + '-------' + items);
-
     setInput((prevInput: any) => {
       const interactionKey = `Dialog${items[key]?.input}`;
       const blockroll = selectedOption.value;
@@ -1042,27 +986,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
       });
     }
   };
-  // const handleDialogEmotion = (selectedOption: any, i: any) => {
-  //     let key = i - 1;
-  //     const selectedValues = selectedOption.map((option:any) => option.value);
 
-  //     // Use the array of strings as needed, for example, join them into a single string
-  //     const resultString = selectedValues.join(', ');
-  //     setInput((prevInput: any) => {
-  //         const interactionKey = `Dialog${items[key]?.input}`;
-  //         const DialogEmotion = resultString;
-  //         console.log('handleDialogEmotion', typeof selectedOption);
-
-  //         return {
-  //             ...prevInput,
-  //             [interactionKey]: {
-  //                 ...prevInput[interactionKey],
-  //                 id: items[i]?.id,
-  //                 animation: DialogEmotion,
-  //             },
-  //         };
-  //     });
-  // };
   const handleDialogEmotion = (selectedOption: any, i: any) => {
     const selectedValues = selectedOption.map((option: any) => option.value);
 
@@ -1710,8 +1634,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
             e.target.id === `OptionTitle${item.option}`
               ? optionTitleValue
               : prevInput[interactionKey]?.optionTitleObject?.[item.option];
-
-          // optionsObject[item] = e.target.id === `Option${item}` ? optValue : prevInput[interactionKey]?.optionsObject?.[e.target.title];
         });
         setValidation({
           ...validation,
@@ -1753,7 +1675,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
             });
           }
         }
-        console.log('optionsObject', optionsObject);
+
         return {
           ...prevInput,
           [interactionKey]: {
@@ -1763,16 +1685,11 @@ const NDIMain: React.FC<NDIMainProps> = ({
             interaction: interaction,
             quesionTitle: questionTitle,
             optionTitleObject: optionTitleObject,
-
-            // [`Resp${items[i]?.input}`]: responseValue ? responseValue : '' ,
             responseObject,
             feedbackObject,
             optionsObject,
             scoreObject,
             ansObject,
-            // [`opt${alpha[i]}`] : optValue ? optValue : ''
-            // [`opt${items[i]?.input}`] : optValue ? optValue : ''
-            // options: { ...prevInput.options,  ...optionsObject}
           },
         };
       }
@@ -1782,8 +1699,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     const getLastDigit = e.name.slice(-1);
     const match = e.name.match(/([a-zA-Z]+)(\d+)/);
     setLastInputName(Number(match[2]));
-    console.log('e.name', selectedOption);
-
     const value = selectedOption ? selectedOption : '';
     setInput((prevInput: any) => {
       return {
@@ -1816,12 +1731,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
 
   // Items will change based on sequence state
   useEffect(() => {
-    console.log('well123', sequence);
-    console.log('well899', dummySequence);
-
-    // const datas = Array.from(new Set(sequence))
-    // const dummySeq = Array.from(new Set(dummySequence))
-
     const updatedSeq = sequence.map(
       (item: any, index: number) => dummySequence[index] || item.id,
     );
@@ -1873,12 +1782,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
 
   useEffect(() => {
     if (isDeleteSeq) {
-      console.log('well123', sequence);
-      console.log('well899', dummySequence);
-
-      // const datas = Array.from(new Set(sequence))
-      // const dummySeq = Array.from(new Set(dummySequence))
-
       const updatedSeq = sequence.map(
         (item: any, index: number) => dummySequence[index] || item.id,
       );
@@ -1900,7 +1803,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
         const correspondingUpdate = updateInteraction.find(
           (updateItem: any) => updateItem?.from === item.seqs,
         );
-        console.log('correspondingUpdate', correspondingUpdate);
         // If a corresponding updateInteraction item is found, update the seqs value
         if (correspondingUpdate) {
           return { ...item, seqs: correspondingUpdate.to };
@@ -1909,15 +1811,11 @@ const NDIMain: React.FC<NDIMainProps> = ({
         // If no corresponding updateInteraction item is found, return the original item
         return item;
       });
-
-      console.log('sequencial', 'alp', alphabet);
       setAlphabet(updatedAlphabet);
 
       setItems(updatedItems);
       setBlockItems(updatedItems);
-      // dummySequence(updatedSeq)
-      console.log('updatedSeq', updatedSeq);
-      console.log('updatedItems', updatedItems);
+
       setDeleteseq(false);
     }
   }, [isDeleteSeq]);
