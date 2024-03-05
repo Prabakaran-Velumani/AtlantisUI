@@ -98,7 +98,7 @@ import {
   getGameDemoData,
   getGameCreatorDemoData,
 } from 'utils/game/gameService';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import AboutStory from './AboutStory';
 import GreetingsForm from './GreetingsForm';
 import Customization from './Customize';
@@ -110,7 +110,6 @@ import { GiBlackBook } from 'react-icons/gi';
 import { FaCubes } from 'react-icons/fa';
 import { MdTune } from 'react-icons/md';
 import { MdRocketLaunch } from 'react-icons/md';
-import { Navigate, useNavigate } from 'react-router-dom';
 import { IoArrowBackCircle } from 'react-icons/io5';
 import {
   MdCheckCircle,
@@ -158,6 +157,11 @@ import SinglePreview from './SinglePreview';
 import { AiFillMessage } from 'react-icons/ai';
 import { getAllReviews } from 'utils/reviews/reviews';
 import { API_SERVER } from 'config/constant';
+import { useDispatch } from 'react-redux';
+import { updatePreviewData } from '../../../../../store/preview/previewSlice';
+import { Dispatch } from '@reduxjs/toolkit'; // Import Dispatch type from @reduxjs/toolkit
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/reducers';
 
 const steps = [
   { title: 'BackGround' },
@@ -184,6 +188,8 @@ interface MyObject {
 const GameCreation = () => {
   ///////////////////Navin 15-12///////////////////////////////////
   //stroy//
+
+  // const history = useHistory();
   const [questTabState, setQuestTabState] = useState<number>(1);
   const [currentTab, setCurrentTab] = useState(0);
   const [openQuest, setOpenQuest] = useState(false);
@@ -236,6 +242,7 @@ const GameCreation = () => {
   const [reflection, setReflection] = useState([]);
   const [showSelectBlock, setSelectBlock] = useState<any>([]);
   const [heightOfTab, setHeightOfTab] = useState<any>();
+  const previewStoreData = useSelector((state: RootState) => state.preview);
 
   /** To stop load data after naviagte from another game based on Extension*/
   const [extensiveNavigation, setExtensiveNavigation] = useState<number | null>(
@@ -360,15 +367,13 @@ const GameCreation = () => {
       gameCourseType: 'Public',
       gameNonPlayingCharacterId: null,
 
-      //navin
+
       gameNonPlayerName: null,
       gameNonPlayerVoice: null,
       gamePlayerMaleVoice: null,
       gamePlayerFemaleVoice: null,
       gameNarratorVoice: null,
 
-      //navin
-      ///Afrith
       gameStoryLine: '',
       gameReflectionQuestion: 4,
       gameRefQuestion1: '',
@@ -378,7 +383,7 @@ const GameCreation = () => {
       ///
       gameAnimationId: null,
       gameTitle: '',
-      // gameStoryLine: '',
+
       gameSkills: '',
       gameLearningOutcome: '',
       gameDuration: null,
@@ -391,9 +396,6 @@ const GameCreation = () => {
       gameIsCollectLearnerFeedback: 'false',
       gameIsFeedbackMandatory: 'false',
       gameIsLearnerMandatoryQuestion: 'false',
-      // gameIsAddanotherQuestions:'',
-
-      // gameScreenTitle: 'Quest Complete',
       gameIsSetCongratsSingleMessage: 'false',
 
       gameIsShowTakeaway: 'false',
@@ -497,7 +499,8 @@ const GameCreation = () => {
   const { id } = useParams();
   const inputRef = useRef<HTMLButtonElement>(null);
   const [voices, setVoices] = useState([]);
-  // console.log('gameSkills',formData.gameSkills)
+  const dispatch: Dispatch<any> = useDispatch();
+  const [dispatched, setDispatched] = useState(false);
   const voic = async () => {
     const result = await getVoices();
 
@@ -523,9 +526,34 @@ const GameCreation = () => {
       setDefaultSkills([]);
     }
   };
+
+ 
   useEffect(() => {
     if (defaultskills.length === 0 && id) {
       fetchDefaultSkill();
+    }
+
+      if (id) {
+        let previewData: { [key: string]: any } = {
+            gameId: parseInt(id),
+        };
+    
+        if (tab) {
+            previewData = { ...previewData, currentTab: tab };
+        }
+    
+        if (currentTab) {
+            previewData = { ...previewData, currentSubTab: currentTab };
+        }
+    
+        if (questTabState) {
+            previewData = { ...previewData, currentQuest: questTabState };
+        }
+    
+        dispatch(updatePreviewData(previewData));
+    }
+    else{
+      dispatch(updatePreviewData(null));
     }
   }, [id]);
   /////////////////////////////////
@@ -570,9 +598,7 @@ const GameCreation = () => {
       gameWelcomepageBackground: e.target.id,
     }));
   };
-  {
-    /**************Changes-14/12/23**********************/
-  }
+ 
   const handleH = (i: any) => {
     setBackgroundIndex(i);
   };
@@ -580,10 +606,7 @@ const GameCreation = () => {
     // setIsHovered(false)
     setBackgroundIndex('');
   };
-  {
-    /****************************************************/
-  }
-  //////Changes-14/Dec/23//////////////////////
+
   const handlePreview = (img: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchImg((prev: any) => {
@@ -602,9 +625,9 @@ const GameCreation = () => {
     });
     onOpen();
 
-    // console.log('SavedSTATE--',savedState);
+   
   };
-  ///////////////////////////////////////////////
+
   const fetch = async () => {
     const result = await getBadge(parseInt(id));
     if (result?.status === 'Success') {
@@ -615,7 +638,7 @@ const GameCreation = () => {
       setSelectedAud(res?.data);
     }
   };
-  //////////////Changes - 12-Dec-23/////////////////////
+ 
   const handlePreviewPlayer = (player: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchPlayerImg((prev: any) => {
@@ -632,8 +655,14 @@ const GameCreation = () => {
     // console.log('BackgroundIndex--',backgroundIndex);
   };
   const updateCreatorGameInfo = (info: any) => {
-    const { gameview, image, lmsblocks, lmsquestionsoptions,gameQuest, ...gameData } =
-      info?.result;
+    const {
+      gameview,
+      image,
+      lmsblocks,
+      lmsquestionsoptions,
+      gameQuest,
+      ...gameData
+    } = info?.result;
     const sortBlockSequence = (blockArray: []) => {
       const transformedArray = blockArray.reduce((result: any, obj: any) => {
         const groupKey = obj?.blockQuestNo.toString();
@@ -648,11 +677,35 @@ const GameCreation = () => {
       }, {});
       return transformedArray;
     };
-    const completionOptions = gameQuest.map((qst :any, i: number)=>{
-      const item = {gameId:qst.gameId,questNo:qst.gameQuestNo, gameIsSetMinPassScore : qst.gameIsSetMinPassScore, gameIsSetDistinctionScore : qst.gameIsSetDistinctionScore, gameDistinctionScore: qst.gameDistinctionScore, gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore, gameIsSetBadge: qst.gameIsSetBadge, gameBadge: qst.gameBadge, gameBadgeName: qst.gameBadgeName, gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge, gameAwardBadgeScore: qst.gameAwardBadgeScore, gameScreenTitle: qst.gameScreenTitle, gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage, gameIsSetCongratsScoreWiseMessage: qst.gameIsSetCongratsScoreWiseMessage, gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage, gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage, gameaboveMinimumScoreCongratsMessage: qst.gameaboveMinimumScoreCongratsMessage, gameLessthanDistinctionScoreCongratsMessage: qst.gameLessthanDistinctionScoreCongratsMessage, gameAboveDistinctionScoreCongratsMessage: qst.gameAboveDistinctionScoreCongratsMessage}
-     return item; 
+    const completionOptions = gameQuest.map((qst: any, i: number) => {
+      const item = {
+        gameId: qst.gameId,
+        questNo: qst.gameQuestNo,
+        gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
+        gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
+        gameDistinctionScore: qst.gameDistinctionScore,
+        gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
+        gameIsSetBadge: qst.gameIsSetBadge,
+        gameBadge: qst.gameBadge,
+        gameBadgeName: qst.gameBadgeName,
+        gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
+        gameAwardBadgeScore: qst.gameAwardBadgeScore,
+        gameScreenTitle: qst.gameScreenTitle,
+        gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage,
+        gameIsSetCongratsScoreWiseMessage:
+          qst.gameIsSetCongratsScoreWiseMessage,
+        gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
+        gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage,
+        gameaboveMinimumScoreCongratsMessage:
+          qst.gameaboveMinimumScoreCongratsMessage,
+        gameLessthanDistinctionScoreCongratsMessage:
+          qst.gameLessthanDistinctionScoreCongratsMessage,
+        gameAboveDistinctionScoreCongratsMessage:
+          qst.gameAboveDistinctionScoreCongratsMessage,
+      };
+      return item;
     });
-    console.log("completionOptions",completionOptions);
+  
     setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,
@@ -824,15 +877,12 @@ const GameCreation = () => {
 
       if (result?.status !== 'Success') {
         setAtuoSave(true);
-        // console.log('updateBackground error :' + result?.err);
         return false;
       } else {
         setCompletion(result?.data);
         setCompliData(result?.data);
-        // console.log('Completion', Object.keys(result?.data).length);
         setCompKeyCount(Object.keys(result?.data).length - 1);
         setCurrentTab(0);
-        // console.log('handleGet');
         setAtuoSave(true);
       }
     } catch (error) {
@@ -841,7 +891,6 @@ const GameCreation = () => {
     }
   };
   const handleCompliStore = async () => {
-    // console.log('handleCompliStore', compliData);
     try {
       let data = JSON.stringify(compliData);
 
@@ -870,7 +919,6 @@ const GameCreation = () => {
       console.error('An error occurred while sending the request:', error);
     }
   };
-  // console.log('compliData', compliData);
   const fetchGameIdUpdate = async () => {
     const gameById = await getGameById(id);
     if (gameById?.status !== 'Success')
@@ -896,15 +944,12 @@ const GameCreation = () => {
     // const result1 = await getStory(id);
     // if (result1?.status !== 'Success') {de
     //   console.log(result1.message);
-
     // }
     // else {
-
     //   setBlockItems(result1.items);
     //   setserias(result1.serias);
     // }
     const result2 = await getListStory(id);
-
     if (result2?.status !== 'Success') {
       console.log(result2?.message);
     } else {
@@ -932,15 +977,36 @@ const GameCreation = () => {
     }
   }, [id, items]);
 
-  const handleEntirePrev = async () => {
-    const gamedata = await getGameCreatorDemoData(id);
+useEffect(()=>{
+  dispatch(updatePreviewData({isDispatched:true, CompKeyCount: CompKeyCount}))
+},[CompKeyCount])
 
-    if (!gamedata.error && gamedata) {
-      updateCreatorGameInfo(gamedata);
-      setEntire(true);
-      onOpen();
+  useEffect(() => {    
+    if (id) {
+      const previewData = {
+        gameId: parseInt(id),
+        currentTab: tab,
+        currentSubTab: currentTab,
+        currentQuest: questTabState,
+      };
+      dispatch(updatePreviewData(previewData));
     }
-  };
+  }, [id, tab, currentTab, questTabState]);
+
+  const handleEntirePrev = async () => {
+ 
+      const previewData = {
+        gameId: parseInt(id),
+        currentTab: tab,
+        currentSubTab: currentTab,
+        currentQuest: questTabState,
+        isDispatched: true,
+      };
+      dispatch(updatePreviewData(previewData));
+      const url = `/screen/preview/${id}`;
+      window.open(url, '_blank');
+    }
+
   const handleShareReview = () => {
     setEntire(false);
     setShare(true);
@@ -951,47 +1017,66 @@ const GameCreation = () => {
     let tabArray: number[] = [];
 
     // Watching Stepper Height for Green Progress
-    const tab1 = document.getElementById(`tab1`)
+    const tab1 = document.getElementById(`tab1`);
     const getfirstElementHgt = tab1?.clientHeight;
     //tab2
-    const tab2 = document.getElementById(`tab2`)
+    const tab2 = document.getElementById(`tab2`);
     const getsecondElementHgt = tab2?.clientHeight;
     //tab3
-    const tab3 = document.getElementById(`tab3`)
+    const tab3 = document.getElementById(`tab3`);
     const getThirdElementHgt = tab3?.clientHeight;
     //tab4
-    const tab4 = document.getElementById(`tab4`)
+    const tab4 = document.getElementById(`tab4`);
     const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
-    const tab4Height = tabs == 4 && (getFourElementHgt + getfirstElementHgt)
+    const tab4Height = tabs == 4 && getFourElementHgt + getfirstElementHgt;
     //tab5
-    const tab5 = document.getElementById(`tab5`)
+    const tab5 = document.getElementById(`tab5`);
     const getFifthElementHgt = tab5?.clientHeight;
     //tab6
-    const tab6 = document.getElementById(`tab6`)
+    const tab6 = document.getElementById(`tab6`);
     const getSixthElementHgt = tab6?.clientHeight;
-    
-        
-    // const Element = document.getElementById(`tab${tabs}`)
-    // const getHeight = Element?.clientHeight;
 
-    if(tabs == 1 && tab == 1) {
+    if (tabs == 1 && tab == 1) {
       setHeightOfTab(getfirstElementHgt);
     }
-    if(tabs == 2 && tab == 2) {
+    if (tabs == 2 && tab == 2) {
       setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
     }
-    if(tabs == 3 && tab == 3) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
+    if (tabs == 3 && tab == 3) {
+      setHeightOfTab(
+        getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60,
+      );
     }
-    if(tabs == 4 && tab == 4) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getfirstElementHgt + 90 );
+    if (tabs == 4 && tab == 4) {
+      setHeightOfTab(
+        getfirstElementHgt +
+          getsecondElementHgt +
+          getThirdElementHgt +
+          getfirstElementHgt +
+          90,
+      );
     }
-    if(tabs == 5 && tab == 5) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+    if (tabs == 5 && tab == 5) {
+      setHeightOfTab(
+        getfirstElementHgt +
+          getsecondElementHgt +
+          getThirdElementHgt +
+          getFourElementHgt +
+          getFifthElementHgt +
+          120,
+      );
     }
-    if(tabs == 6 && tab == 6) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
-    }   
+    if (tabs == 6 && tab == 6) {
+      setHeightOfTab(
+        getfirstElementHgt +
+          getsecondElementHgt +
+          getThirdElementHgt +
+          getFourElementHgt +
+          getFifthElementHgt +
+          getSixthElementHgt +
+          150,
+      );
+    }
 
     if (!formData?.gameLastTabArray?.includes(tabs)) {
       const stringContainingNumbers = formData.gameLastTabArray;
@@ -1005,9 +1090,9 @@ const GameCreation = () => {
     let lastValue: number;
     if (tabArray.length > 0) {
       lastValue = tabArray[tabArray.length - 1];
-      console.log('Last value in tabArray:', lastValue);
+      // console.log('Last value in tabArray:', lastValue);
     } else {
-      console.log('tabArray is empty');
+      // console.log('tabArray is empty');
     }
 
     if (tab > tabs) {
@@ -1121,17 +1206,17 @@ const GameCreation = () => {
         }
 
         if (tab === 4) {
-          console.log('inputDataitems', items, items.length);
+          // console.log('inputDataitems', items, items.length);
           if (items.length !== 0) {
             if (typeof items === 'object' && items !== null) {
               var inputData = items;
-              console.log('inputData', inputData);
+              // console.log('inputData', inputData);
 
               for (var i = 0; i < inputData.length; i++) {
                 var key = inputData[i];
                 var inputkey = key.type + key.input;
 
-                console.log('key', key);
+                // console.log('key', key);
 
                 if (key.type === 'Note') {
                   var note = input[inputkey]?.note;
@@ -1147,7 +1232,7 @@ const GameCreation = () => {
                   }
                 }
                 if (key.type === 'Dialog') {
-                  console.log('dialogue', input[inputkey]?.dialog);
+                  // console.log('dialogue', input[inputkey]?.dialog);
                   var Dialog = input[inputkey]?.dialog;
                   var animation = input[inputkey]?.animation;
                   var voice = input[inputkey]?.voice;
@@ -1172,13 +1257,13 @@ const GameCreation = () => {
                   }
                 }
                 if (key.type === 'Interaction') {
-                  console.log('keyinput', key.type + key.input);
+                  // console.log('keyinput', key.type + key.input);
                   var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                   var blockRoll = input[inputkey]?.blockRoll;
                   var interaction = input[inputkey]?.interaction;
-                  console.log('QuestionsEmotion', QuestionsEmotion);
-                  console.log('blockRoll', blockRoll);
-                  console.log('interaction', interaction);
+                  //console.log('QuestionsEmotion', QuestionsEmotion);
+                  //console.log('blockRoll', blockRoll);
+                  //console.log('interaction', interaction);
                   if (!interaction) {
                     toast({
                       title: `Interaction is Empty On This Sequence ${key.id} `,
@@ -1247,11 +1332,11 @@ const GameCreation = () => {
                           input[inputkey]?.ansObject[option] === true
                         ) {
                           const ansValue = input[inputkey]?.ansObject[option];
-                          console.log('ansValue', ansValue);
-                          console.log('hit2');
+                          //console.log('ansValue', ansValue);
+                          //console.log('hit2');
                           isAtLeastOneTrue = true;
                           if (!input[inputkey]?.scoreObject[option]) {
-                            console.log('hit3');
+                            //console.log('hit3');
                             toast({
                               title: `${option} Score is Empty On This Sequence ${key.id}`,
                               status: 'error',
@@ -1263,7 +1348,7 @@ const GameCreation = () => {
                         }
                       }
                       if (!isAtLeastOneTrue) {
-                        console.log('hit1');
+                        //console.log('hit1');
                         toast({
                           title: `At least one option must be selected on this sequence ${key.id}`,
                           status: 'error',
@@ -1310,47 +1395,69 @@ const GameCreation = () => {
   };
   ///navin 15-12
 
-  useEffect(()=> { // Watching Stepper Height
-    const tab1 = document.getElementById(`tab1`)
+  useEffect(() => {
+    // Watching Stepper Height
+    const tab1 = document.getElementById(`tab1`);
     const getfirstElementHgt = tab1.clientHeight;
     //tab2
-    const tab2 = document.getElementById(`tab2`)
+    const tab2 = document.getElementById(`tab2`);
     const getsecondElementHgt = tab2.clientHeight;
     //tab3
-    const tab3 = document.getElementById(`tab3`)
+    const tab3 = document.getElementById(`tab3`);
     const getThirdElementHgt = tab3.clientHeight;
     //tab4
-    const tab4 = document.getElementById(`tab4`)
+    const tab4 = document.getElementById(`tab4`);
     const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
-    const tab4Height = tab == 4 && (getFourElementHgt + getfirstElementHgt)
+    const tab4Height = tab == 4 && getFourElementHgt + getfirstElementHgt;
     //tab5
-    const tab5 = document.getElementById(`tab5`)
+    const tab5 = document.getElementById(`tab5`);
     const getFifthElementHgt = tab5.clientHeight;
     //tab6
-    const tab6 = document.getElementById(`tab6`)
+    const tab6 = document.getElementById(`tab6`);
     const getSixthElementHgt = tab6.clientHeight;
-    
-         
 
-    if(tab == 1) {
+    if (tab == 1) {
       setHeightOfTab(getfirstElementHgt);
     }
-    if(tab == 2) {
+    if (tab == 2) {
       setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
     }
-    if(tab == 3) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
+    if (tab == 3) {
+      setHeightOfTab(
+        getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60,
+      );
     }
-    if(tab == 4) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getfirstElementHgt + 90 );
+    if (tab == 4) {
+      setHeightOfTab(
+        getfirstElementHgt +
+          getsecondElementHgt +
+          getThirdElementHgt +
+          getfirstElementHgt +
+          90,
+      );
     }
-    if(tab == 5) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+    if (tab == 5) {
+      setHeightOfTab(
+        getfirstElementHgt +
+          getsecondElementHgt +
+          getThirdElementHgt +
+          getFourElementHgt +
+          getFifthElementHgt +
+          120,
+      );
     }
-    if(tab == 6) {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
+    if (tab == 6) {
+      setHeightOfTab(
+        getfirstElementHgt +
+          getsecondElementHgt +
+          getThirdElementHgt +
+          getFourElementHgt +
+          getFifthElementHgt +
+          getSixthElementHgt +
+          150,
+      );
     }
-  },[tab])
+  }, [tab]);
 
   //navin
   const handleNext = async () => {
@@ -1417,14 +1524,12 @@ const GameCreation = () => {
 
       const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
       setFormData(formDataWithoutLastTab);
-
-      // setTab(tab + 1);
-      // setTimeout(() => {
-
+      dispatch(updatePreviewData({isDispatched: true}));
       setOpenQuest(true);
     }
   };
-  console.log('formdata', formData.gameLastTabArray);
+  
+
   const commonNextFunction = async () => {
     if (tab === 1 && !formData.gameBackgroundId) {
       toast({
@@ -1436,7 +1541,7 @@ const GameCreation = () => {
       return false;
     }
     if (tab === 2) {
-      console.log('formdata', formData.gameLastTabArray);
+      //console.log('formdata', formData.gameLastTabArray);
       if (!formData.gameNonPlayerName) {
         toast({
           title: 'Please Enter a NonplayerName.',
@@ -1545,17 +1650,17 @@ const GameCreation = () => {
     }
     if (tab === 4) {
       if (items.length !== 0) {
-        console.log('items567', items);
+        //console.log('items567', items);
         if (items.some((item: any) => item.type === 'Interaction')) {
           if (typeof items === 'object' && items !== null) {
             var inputData = items;
-            console.log('inputData', inputData);
+            //console.log('inputData', inputData);
 
             for (var i = 0; i < inputData.length; i++) {
               var key = inputData[i];
               var inputkey = key.type + key.input;
 
-              console.log('key', key);
+              //console.log('key', key);
 
               if (key.type === 'Note') {
                 var note = input[inputkey].note;
@@ -1571,7 +1676,7 @@ const GameCreation = () => {
                 }
               }
               if (key.type === 'Dialog') {
-                console.log('dialogue', input[inputkey]?.dialog);
+                //console.log('dialogue', input[inputkey]?.dialog);
                 var Dialog = input[inputkey]?.dialog;
                 var animation = input[inputkey]?.animation;
                 var voice = input[inputkey]?.voice;
@@ -1596,13 +1701,13 @@ const GameCreation = () => {
                 }
               }
               if (key.type === 'Interaction') {
-                console.log('keyinput', key.type + key.input);
+                //console.log('keyinput', key.type + key.input);
                 var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                 var blockRoll = input[inputkey]?.blockRoll;
                 var interaction = input[inputkey]?.interaction;
-                console.log('QuestionsEmotion', QuestionsEmotion);
-                console.log('blockRoll', blockRoll);
-                console.log('interaction', interaction);
+                //console.log('QuestionsEmotion', QuestionsEmotion);
+                //console.log('blockRoll', blockRoll);
+                //console.log('interaction', interaction);
                 if (!interaction) {
                   toast({
                     title: `Interaction is Empty On This Sequence ${key.id} `,
@@ -1671,11 +1776,11 @@ const GameCreation = () => {
                         input[inputkey]?.ansObject[option] === true
                       ) {
                         const ansValue = input[inputkey]?.ansObject[option];
-                        console.log('ansValue', ansValue);
-                        console.log('hit2');
+                        //console.log('ansValue', ansValue);
+                        //console.log('hit2');
                         isAtLeastOneTrue = true;
                         if (!input[inputkey]?.scoreObject[option]) {
-                          console.log('hit3');
+                          //console.log('hit3');
                           toast({
                             title: `${option} Score is Empty On This Sequence ${key.id}`,
                             status: 'error',
@@ -1687,7 +1792,7 @@ const GameCreation = () => {
                       }
                     }
                     if (!isAtLeastOneTrue) {
-                      console.log('hit1');
+                      //console.log('hit1');
                       toast({
                         title: `At least one option must be selected on this sequence ${key.id}`,
                         status: 'error',
@@ -1703,7 +1808,7 @@ const GameCreation = () => {
 
             const apiValidationResult = await getStoryValidtion(id);
 
-            console.log('apiValidationResult', apiValidationResult);
+            //console.log('apiValidationResult', apiValidationResult);
 
             if (apiValidationResult?.status === 'Failure') {
               // There are empty fields, show an error message
@@ -1777,7 +1882,7 @@ const GameCreation = () => {
             const parsedGameLastTabArray = JSON.parse(
               result.data.gameLastTabArray,
             );
-            console.log('formdata', parsedGameLastTabArray);
+            //console.log('formdata', parsedGameLastTabArray);
 
             // Update formData with the parsed array
             setFormData({
@@ -1812,7 +1917,7 @@ const GameCreation = () => {
             isClosable: true,
             position: 'bottom-right',
           });
-          console.log('result?.data', result?.data);
+          //console.log('result?.data', result?.data);
           const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
 
           setFormData(formDataWithoutLastTab);
@@ -1954,10 +2059,10 @@ const GameCreation = () => {
     });
 
     ///
-    console.log('selectedCardIndex', selectedCardIndex, i);
+    //console.log('selectedCardIndex', selectedCardIndex, i);
 
     if (selectedCardIndex !== i) {
-      console.log('selectedCardIndex1', selectedCardIndex, i);
+      //console.log('selectedCardIndex1', selectedCardIndex, i);
       // Select new card and deselect the previously selected one (if any)
       setSelectedCardIndex(i);
       setFormData((prev) => ({
@@ -1978,7 +2083,7 @@ const GameCreation = () => {
 
     onClose();
 
-    console.log('Function3-', selectedCardIndex);
+    //console.log('Function3-', selectedCardIndex);
     if (selectedCardIndex === i) {
       return;
     } else {
@@ -2059,31 +2164,31 @@ const GameCreation = () => {
         : setFormData((prev) => ({ ...prev, [name]: 0 }));
     } else if (name === 'gameDownloadedAsScorm') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 1 : 0 }));
-      console.log('gameDownloadedAsScorm', formData.gameDownloadedAsScorm);
+      //console.log('gameDownloadedAsScorm', formData.gameDownloadedAsScorm);
     } else if (name === 'gameDefaultFeedbackForm') {
       setFormData((prev) => ({
         ...prev,
         [name]: checked ? feedBackForm.Yes : feedBackForm.No,
       }));
-      console.log('gameDefaultFeedbackForm', formData.gameDefaultFeedbackForm);
+      //console.log('gameDefaultFeedbackForm', formData.gameDefaultFeedbackForm);
     } else if (name === 'gameReplayAllowed') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      console.log('gameReplayAllowed', formData.gameReplayAllowed);
+      //console.log('gameReplayAllowed', formData.gameReplayAllowed);
     } else if (name === 'gameLeaderboardAllowed') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      console.log('gameLeaderboardAllowed', formData.gameLeaderboardAllowed);
+      //console.log('gameLeaderboardAllowed', formData.gameLeaderboardAllowed);
     } else if (name === 'gameReflectionpageAllowed') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      console.log(
-        'gameReflectionpageAllowed',
-        formData.gameReflectionpageAllowed,
-      );
+      // console.log(
+      //   'gameReflectionpageAllowed',
+      //   formData.gameReflectionpageAllowed,
+      // );
     } else if (name === 'gameFeedbackQuestion') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      console.log('gameFeedbackQuestion', formData.gameFeedbackQuestion);
+      //console.log('gameFeedbackQuestion', formData.gameFeedbackQuestion);
     } else if (name === 'gameShuffle') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      console.log('gameShuffle', formData.gameShuffle);
+      //console.log('gameShuffle', formData.gameShuffle);
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -2121,20 +2226,13 @@ const GameCreation = () => {
     }
     ////////////////////////////////////
 
-    console.log('formdata', formData);
+    //console.log('formdata', formData);
   };
 
   const handlecompletion = (e: any) => {
     const inputValue = e.target.value;
     const { name, value, checked } = e.target;
     if (
-      //       gameIsSetMinPassScore
-      // gameIsSetDistinctionScore
-      // gameIsSetBadge
-      // gameIsSetCriteriaForBadge
-      // gameIsSetCongratsSingleMessage
-      // gameIsSetCongratsScoreWiseMessage
-
       name === 'gameIsSetMinPassScore' ||
       name === 'gameIsSetDistinctionScore' ||
       name === 'gameIsSetSkillWiseScore' ||
@@ -2201,6 +2299,7 @@ const GameCreation = () => {
     newHoveredStates[index] = isHovered;
     setHoveredStates(newHoveredStates);
   };
+
   const handleSummaryState = (isOpen: any) => {
     setIsOpenSummary(isOpen);
     setFormData((prev) => ({
@@ -2214,11 +2313,11 @@ const GameCreation = () => {
 
   const handleLanguageChange = (selectedOption: OptionType | null) => {
     setFormData({ ...formData, gameLanguageId: selectedOption.value });
-    console.log('formData', selectedOption.value);
+    //console.log('formData', selectedOption.value);
   };
   const handleIntroMusic = (selectedOption: OptionType | null) => {
     setFormData({ ...formData, gameIntroMusic: selectedOption.value });
-    console.log('formData', selectedOption.value);
+    //console.log('formData', selectedOption.value);
   };
 
   const myBlink = keyframes`
@@ -2256,7 +2355,7 @@ const GameCreation = () => {
   //   'inset 0px 4px 4px #0B1437',
   // );
   const lineColor = useColorModeValue('%23a3aed0', '%23FFFFFF1A');
-  console.log(formData.gameLastTabArray);
+  //console.log(formData.gameLastTabArray);
   // SET BORDER IN IMAGE
   const stepImgActiveBorder = 'done';
   const stepImgBorder = '';
@@ -2397,7 +2496,7 @@ const GameCreation = () => {
     setIsSave(false);
   };
 
-  console.log('input--', inputValue);
+  //console.log('input--', inputValue);
 
   const handleSave = () => {
     setIsSave(true);
@@ -2550,7 +2649,7 @@ const GameCreation = () => {
     }
   };
   const reducePercentage = 16 * tab - 16;
-  console.log(reducePercentage);
+  //console.log(reducePercentage);
   // alert(reducePercentage)
   useEffect(() => {
     if (formData.gameNonPlayingCharacterId) {
@@ -2566,11 +2665,16 @@ const GameCreation = () => {
   const debouncedSubmit = useCallback(
     debounce(async (data: any) => {
       try {
-        console.log('handlesaveReflection', data);
+        //console.log('handlesaveReflection', data);
         const datas = JSON.stringify(data);
         const resu = await createReflection(datas);
         if (resu.status !== 'Success') {
           return false;
+        }
+        console.log("*****debouncedSubmit");
+        if(resu.status == 'Success')
+        {
+          dispatch(updatePreviewData({isDispatched: true, reflectionPageUpdated: true}));
         }
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
@@ -2588,8 +2692,9 @@ const GameCreation = () => {
             gameReflectionQuestion: formData.gameReflectionQuestion,
             gameId: id,
           };
-          console.log('datas', data);
+          //console.log('datas', data);
           debouncedSubmit(data);
+          
         }
       }
     }
@@ -2599,11 +2704,14 @@ const GameCreation = () => {
   const debouncedSubmitGame = useCallback(
     debounce(async (data: any) => {
       try {
-        console.log('debouncedSubmitGame', data);
+        //console.log('debouncedSubmitGame', data);
 
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
-          console.log('data not updated');
+          //console.log('data not updated');
+        }
+        else{
+          dispatch(updatePreviewData({isDispatched: true}));
         }
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
@@ -2630,6 +2738,9 @@ const GameCreation = () => {
         //alert("de"+tab);
         debouncedSubmitGame(data);
         setExtensiveNavigation(null);
+        // if(tab==5 && currentTab == )
+        // dispatch(updatePreviewData({isDispatched: true}));
+
       }
     }
   }, [formData]);
@@ -2638,7 +2749,7 @@ const GameCreation = () => {
   const debouncedStorySubmit = useCallback(
     debounce(async (data: any) => {
       try {
-        console.log('debouncedSubmit', data);
+        //console.log('debouncedSubmit', data);
         const result = await setStory(id, JSON.stringify(data));
         if (result?.status !== 'Success') {
           return console.log('updateBackground error :' + result?.err);
@@ -2648,10 +2759,12 @@ const GameCreation = () => {
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
       }
-      console.log('save', JSON.stringify(input));
+      //console.log('save', JSON.stringify(input));
     }, 500),
     [id], // Empty dependency array to ensure that the function is only created once
   );
+
+
 
   const debouncedCompliSubmit = useCallback(
     debounce(async (data: any) => {
@@ -2661,6 +2774,10 @@ const GameCreation = () => {
         const result = await UpdateCompletionScreen(id, datas);
         if (result?.status !== 'Success') {
           console.log('data not updated');
+        }
+        else{
+          console.log('********debounce')
+          dispatch(updatePreviewData({isDispatched: true}));
         }
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
@@ -2734,7 +2851,7 @@ const GameCreation = () => {
 
     setItems((prevArray: any) => {
       const nextIndex = i + 1;
-      console.log('prevArray', newArr.input);
+      //console.log('prevArray', newArr.input);
       setNumber([...number, newArr.input]);
       return [
         ...prevArray.slice(0, nextIndex),
@@ -2760,11 +2877,11 @@ const GameCreation = () => {
         for (let i = 0; i < 3; i++) {
           // Insert data into the array
           let inc = makcount + i + 1;
-          console.log('secondaryArray', countalphabet, '--', inc);
+          //console.log('secondaryArray', countalphabet, '--', inc);
           secondaryArray.push(inc);
         }
         setAlphabetCount(secondaryArray[2]);
-        console.log('secondaryArray', secondaryArray);
+        //console.log('secondaryArray', secondaryArray);
         setAlphabet((prev: any) => [
           ...prev,
           { seqs: id, option: 'A', secondaryId: secondaryArray[0] },
@@ -2829,7 +2946,7 @@ const GameCreation = () => {
         };
       }
       if (seq.type === 'Interaction') {
-        console.log('prevInput', oldInteractionKey);
+        //console.log('prevInput', oldInteractionKey);
         //Previous Object Data's
         const optionsObject = oldInteractionKey?.optionsObject;
         const ansObject = oldInteractionKey?.ansObject;
@@ -2910,7 +3027,7 @@ const GameCreation = () => {
 
   const delSeq = (seq: any, i: any, name: any) => {
     // removeDataBySeqs(seq.id);
-    console.log('delSeq', seq);
+    //console.log('delSeq', seq);
 
     if (name === 'Interaction') {
       setAlphabet((prevAlphabet: any) => {
@@ -2921,7 +3038,7 @@ const GameCreation = () => {
         return updatedAlphabet;
       });
 
-      console.log('roll', seq);
+      //console.log('roll', seq);
     }
     setItems((previtems: any) => {
       // Use filter to create a new array without items that match the condition
@@ -2946,7 +3063,7 @@ const GameCreation = () => {
     setDeleteseq(true);
   };
   const deleteQuest = async (gameid: any, questNo: any) => {
-    console.log();
+    //console.log();
     const data = {
       quest: questNo,
       exid: id,
@@ -2973,7 +3090,7 @@ const GameCreation = () => {
         block: 'center',
         inline: 'nearest',
       });
-      console.log('progressBlockItems', tarSeqRef);
+      //console.log('progressBlockItems', tarSeqRef);
     }
   };
 
@@ -2985,71 +3102,8 @@ const GameCreation = () => {
 
   let arrowSeqRef: any;
   let focusSeqRef: any;
-  // const handleKeyDown = (event:any, seq:any) => {
-
-  //   let indexToFind;
-
-  // setTargetSequence(seq);
-  // console.log('event.code',targetSequence.id)
-
-  // if(targetSequence){
-  //   indexToFind = items.findIndex((item:any) => (
-  //     item.id === targetSequence.id
-  //   ));
-  // }else{
-  //   indexToFind=0;
-  // }
-
-  //   if (indexToFind >= 0 && indexToFind < items.length) {
-  //     console.log('Index:', indexToFind);
-  //     if (
-  //       event.key &&
-  //       (event.type === 'click' ||
-  //         event.key !== 'Escape' ||
-  //         event.key !== 'Delete' ||
-  //         event.key !== 'Backspace')
-  //     ){
-  //       console.log('event.code',event)
-  //       if(seq){
-  //         setTargetSequence(seq);
-  //       }
-  //     }
-  //   if(event.key ==='Escape'){
-  //     setTargetSequence(null);
-  //   }
-
-  //   switch (event.code) {
-
-  //     case 'ArrowUp':
-  //       setTargetSequence(items[indexToFind===0? 0 : indexToFind-1])
-  //       arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind===0? 0 : indexToFind-1]?.id}`);
-  //       if (arrowSeqRef) {
-  //         arrowSeqRef.scrollIntoView({ behavior: 'smooth', block: "center", inline: "nearest" });
-  //         console.log('arrowSeqRef', arrowSeqRef);
-  //       }
-
-  //       break;
-  //     case 'ArrowDown':
-  //       setTargetSequence(items[indexToFind=== items.length-1 ? items.length :indexToFind+1])
-  //       arrowSeqRef = document.getElementById(`tarSeqRef${items[indexToFind=== items.length ? 0 :indexToFind+1]?.id}`);
-  //       if (arrowSeqRef) {
-  //         arrowSeqRef.scrollIntoView({ behavior: 'smooth', block: "center", inline: "nearest" });
-  //         console.log('arrowSeqRef', arrowSeqRef);
-  //       }
-  //       break;
-
-  //     default:
-  //       // Handle other key presses if needed
-  //       break;
-  //   }
-  // }
-  // };
 
   const handleKeyDown = (event: any, i: any, seq: any) => {
-    console.log('event.code', event.code);
-    console.log('event.key', event.key);
-    console.log('event.type', event.type);
-    console.log('event.type', seq);
     let indexToFind: any;
     setTargetSequence(seq);
     if (targetSequence) {
@@ -3060,7 +3114,7 @@ const GameCreation = () => {
       indexToFind = 0;
     }
     if (indexToFind >= 0 && indexToFind < items.length) {
-      console.log('Index:', indexToFind);
+      //console.log('Index:', indexToFind);
       if (
         event.key &&
         (event.type === 'click' ||
@@ -3097,7 +3151,6 @@ const GameCreation = () => {
               block: 'center',
               inline: 'nearest',
             });
-            console.log('event.----------------', focusSeqRef?.[0]);
           }
           break;
         case 'ArrowDown':
@@ -3127,7 +3180,7 @@ const GameCreation = () => {
               block: 'center',
               inline: 'nearest',
             });
-            console.log('event.----------------', focusSeqRef?.[0]);
+            //console.log('event.----------------', focusSeqRef?.[0]);
           }
           break;
 
@@ -3140,7 +3193,7 @@ const GameCreation = () => {
           focusSeqRef = document.getElementsByClassName(seq.id);
           focusSeqRef?.[0].classList.remove('non-caret');
           focusSeqRef?.[0].focus();
-          console.log('event.----------------Click', focusSeqRef?.[0]);
+          //console.log('event.----------------Click', focusSeqRef?.[0]);
         }
       }
 
@@ -3149,7 +3202,7 @@ const GameCreation = () => {
         focusSeqRef?.[0].removeAttribute('readonly');
         focusSeqRef?.[0].classList.remove('non-caret');
         focusSeqRef?.[0].focus();
-        console.log('event.----------------Enter', focusSeqRef?.[0]);
+        //console.log('event.----------------Enter', focusSeqRef?.[0]);
       }
 
       if (event.key === 'Backspace' || event.key === 'Delete') {
@@ -3159,7 +3212,7 @@ const GameCreation = () => {
           document.activeElement.tagName.toLowerCase(),
         );
 
-        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
+        //console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
 
         if (focusSeqRef?.[0].readOnly) {
           delSeq(seq, Number(0), seq.type);
@@ -3173,9 +3226,9 @@ const GameCreation = () => {
           document.activeElement.tagName.toLowerCase(),
         );
 
-        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
+        //console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
 
-        console.log('test45');
+        //console.log('test45');
         if (focusSeqRef?.[0].readOnly) {
           setCopySequence(seq);
         }
@@ -3188,9 +3241,9 @@ const GameCreation = () => {
           document.activeElement.tagName.toLowerCase(),
         );
 
-        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
+        //console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
 
-        console.log('test45');
+        //console.log('test45');
         if (focusSeqRef?.[0].readOnly) {
           if (copySequence) {
             duplicateSeq(copySequence, i, copySequence.type);
@@ -3205,9 +3258,9 @@ const GameCreation = () => {
           document.activeElement.tagName.toLowerCase(),
         );
 
-        console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
+        //console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
 
-        console.log('test45');
+        //console.log('test45');
         if (focusSeqRef?.[0].readOnly) {
           duplicateSeq(seq, i, seq.type);
         }
@@ -3221,7 +3274,7 @@ const GameCreation = () => {
             );
             focusSeqRef?.[0]?.focus();
           }, 200);
-          console.log('event.----------------ShiftArrowUp', focusSeqRef?.[0]);
+          //console.log('event.----------------ShiftArrowUp', focusSeqRef?.[0]);
           moveItem(i, i - 1, seq);
         } else if (event.code === 'ArrowDown') {
           setTimeout(() => {
@@ -3232,11 +3285,12 @@ const GameCreation = () => {
             );
             focusSeqRef?.[0]?.focus();
           }, 200);
-          console.log('event.----------------ShiftArrowDown', focusSeqRef?.[0]);
+          //console.log('event.----------------ShiftArrowDown', focusSeqRef?.[0]);
           moveItem(i, i + 1, seq);
         }
       }
     }
+    dispatch(updatePreviewData({activeBlockSeq: parseInt(seq.id.split('.')[1])}));
   };
 
   const moveItem = (startIndex: number, endIndex: number, seq: any) => {
@@ -3286,10 +3340,6 @@ const GameCreation = () => {
     setAlphabet(updatedAlphabet);
     setBlockItems(updatedItems);
   };
-
-  // COnsole's
-  console.log('Copied sequence:', copySequence);
-  console.log('Pasted sequence:', copySequence);
 
   const updateExtensiveNavigation = (id: number) => {
     setExtensiveNavigation(id);
@@ -3355,8 +3405,20 @@ const GameCreation = () => {
                 direction="column"
                 justifyContent="space-between"
               >
-                <Flex                  
-                  _after={{ content: '""', position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, height: `${heightOfTab ? heightOfTab : '0px'}`, bg: 'green', transition: '0.5s linear', zIndex: -1, opacity: 1}}                 
+                <Flex
+                  _after={{
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    left: 0,
+                    bottom: 0,
+                    height: `${heightOfTab ? heightOfTab : '0px'}`,
+                    bg: 'green',
+                    transition: '0.5s linear',
+                    zIndex: -1,
+                    opacity: 1,
+                  }}
                   position="absolute"
                   left="32.5px"
                   h="100%"
@@ -3364,8 +3426,8 @@ const GameCreation = () => {
                   // bg={`url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='${lineColor}' stroke-width='4' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e")`}
                   // bg={stepbgCheck ? `linear-gradient(to top, white ${100 - reducePercentage}%,green 0%);                               not working
                   // bg={stepbgCheck ? `linear-gradient(to bottom, green ${heightOfTab ? heightOfTab : '0'}px, white 0%);` : 'white'}              working
-                  bg={'white'}                 
-                  transition={'background 2.5s ease !important'}                                          
+                  bg={'white'}
+                  transition={'background 2.5s ease !important'}
                   zIndex={1}
                 />
                 <OrderStep
@@ -4338,7 +4400,7 @@ const GameCreation = () => {
                   </Box>
                 </Menu>
 
-              {tab !== 1 && tab !== 2 ? (
+                {tab !== 1 && tab !== 2 ? (
                   <Button
                     bg="#11047a"
                     _hover={{ bg: '#190793' }}
@@ -4353,7 +4415,7 @@ const GameCreation = () => {
                   >
                     Preview
                   </Button>
-                ) : null} 
+                ) : null}
                 {/* {tab <= 1 ? null : (
                   <Button
                     bg={'#f4f7fe'}
@@ -4429,31 +4491,7 @@ const GameCreation = () => {
                 tableData={tableDataCheck}
               />
             )}
-            {entire && (
-              <SinglePreview
-                tab={tab}
-                currentTab={currentTab}
-                prevdata={prevdata}
-                formData={formData}
-                show={img}
-                isOpen={isOpen}
-                onOpen={onOpen}
-                onClose={onClose}
-                selectedBadge={selectedBadge}
-                setSelectedBadge={setSelectedBadge}
-                setFormData={setFormData}
-                handleChange={handleChange}
-                setBadge={setBadge}
-                compliData={compliData}
-                gameInfo={gameInfo}
-                setCompliData={setCompliData}
-                CompKeyCount={CompKeyCount}
-                handlecompletion={handlecompletion}
-                reflectionQuestions={reflectionQuestions}
-                reflectionQuestionsdefault={reflectionQuestionsdefault}
-                setPrevdata={setPrevdata}
-              />
-            )}
+         
           </Box>
         </GridItem>
       </Grid>

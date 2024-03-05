@@ -337,8 +337,6 @@ const textColorTertiary = useColorModeValue('secondaryGray.600', 'secondaryGray.
         gameIntroMusicName:badge.gasAssetImage,
         // gameBadgeName: badge.gasAssetName
       }))
-console.log("gameIntroMusic",FormData);
-console.log("gasAssetImage",badge.gasAssetImage);
 
       setSelectedBadge(badge);
       setIsModalOpen(false);
@@ -346,7 +344,7 @@ console.log("gasAssetImage",badge.gasAssetImage);
     };
  
     const updateAudioUrl = (url: string)=>{
-      console.log("url",url);
+      // console.log("url",url);
       if(url)
       {
         const audio = new Audio(url);

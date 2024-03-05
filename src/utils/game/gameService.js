@@ -414,6 +414,18 @@ export async function getLanguages(){
     }
 }
 
+export async function getGameLanguages(id){
+  try{
+      const response = await fetch(`${API_SERVER}${urls.gameLanguages}${id}`,getMethod);
+      const result = await response.json();
+      return result;
+  }
+  catch (err) {
+      console.log('editLanguage Error:', err.message);
+    }
+}
+
+
 export async function getCreatedLanguages(data){
   try{
 

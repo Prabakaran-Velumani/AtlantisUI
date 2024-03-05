@@ -1,19 +1,9 @@
 import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogCloseButton,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   Box,
   Button,
   Flex,
   FormControl,
   FormLabel,
-  Grid,
-  GridItem,
-  HStack,
   Icon,
   Img,
   Radio,
@@ -21,36 +11,20 @@ import {
   SimpleGrid,
   Stack,
   Switch,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   Text,
   useColorModeValue,
-  useDisclosure,
   useTheme,
-  useToast,
-  // brindha start
-Textarea,
-  Link,
-  Slider,
-  Image,
-  IconButton
-  // brindha end
+  useToast  // brindha end
 } from '@chakra-ui/react';
 import Select from 'react-select';
 import InputField from 'components/fields/InputField';
 import TextField from 'components/fields/TextField';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from 'components/card/Card';
-import SelectField from 'components/fields/SelectField';
 // brindha start 
 // included updategame
-import { gameDuplicateQuestionEntirely, getImages, updateGame } from 'utils/game/gameService';
+import { gameDuplicateQuestionEntirely, getImages } from 'utils/game/gameService';
 // brindha end
-import Dropzone from 'views/admin/main/ecommerce/settingsProduct/components/Dropzone';
-import { MdClose, MdOutlineCloudUpload } from 'react-icons/md';
 
 import { FaChevronCircleLeft, FaChevronCircleRight } from "react-icons/fa";
 
@@ -66,19 +40,9 @@ import Screen6 from "../../../../../assets/img/screens/screen6.png";
 
 import { useNavigate, useParams } from 'react-router-dom';
 
-import rew from '../../../../../assets/img/screens/Reward Bar.png';
-import skill from '../../../../../assets/img/screens/skill.png';
-import point from '../../../../../assets/img/screens/points.png';
-import back from '../../../../../assets/img/screens/back.png';
-import frag from '../../../../../assets/img/screens/frag.png';
-import bar from '../../../../../assets/img/screens/Bar.png';
-import fill from '../../../../../assets/img/screens/Fill.png';
-import next from '../../../../../assets/img/screens/next.png';
-import chapcomp from '../../../../../assets/img/screens/Chapter Complete Background.png';
 import RefScreen1 from "../../../../../assets/img/screens/refscreen1.png";
 
 import RefScreen2 from "../../../../../assets/img/screens/refquestions.png";
-import upback from "../../../../../assets/img/screens/upback.png";
 //new
 import CompletionScreenRight from './screeenforms/CompletionScreenRight';
 import ReflectionScreen from './screeenforms/ReflectionScreen';
@@ -333,7 +297,6 @@ const AddScores: React.FC<{
     ];
     const handleFileChange = (e: any) => {
       const file = e.target.files[0];
-      console.log('Selected file:', file);
     };
     const addReflection = () => {
       setReflection([...reflection, '']);
@@ -350,7 +313,6 @@ const AddScores: React.FC<{
 
     useEffect(() => {
       fetchData();
-      console.log('formData', formData);
     }, [backgroundIndex]);
 
     const handleAdd = () => {
@@ -360,29 +322,8 @@ const AddScores: React.FC<{
       }, 500);
     };
 
-
-
-
-
-    // console.log('FD--',formData);
-
-    // const toast = useToast();
-    // const showToast = () => {
-    //   if (!formData.gameMinScore) {
-    //     toast({
-    //       title: 'Please Enter Min Score',
-    //       status: 'error',
-    //       duration: 3000,
-    //       isClosable: true,
-    //     });
-
-    //     return false;
-    //   }
-    // };
-
     //Rajesh
     const handleBadge = (e: any) => {
-      console.log('welcome');
       e.preventDefault();
       let selectedFile;
       if (e.target.files) {
@@ -391,12 +332,10 @@ const AddScores: React.FC<{
       else if (e.dataTransfer && e.dataTransfer.files) {
         selectedFile = e.dataTransfer.files[0];
       }
-      console.log('selectedFile', selectedFile);
       if (selectedFile) {
         setBadge(selectedFile);
         const reader = new FileReader();
         reader.onload = () => {
-          // setShowBadge(reader.result);
         };
         reader.readAsDataURL(selectedFile);
       }
@@ -721,10 +660,7 @@ const AddScores: React.FC<{
       }
         } 
 if(Object.keys(Completion).length-1 !==CompKeyCount){
-  
-  // setCompliData(Completion[CompKeyCount+1]);
-  console.log('compliDatas',Completion[CompKeyCount+1],Completion,'CompKeyCount',CompKeyCount);
-  setCompKeyCount(CompKeyCount+1)
+    setCompKeyCount(CompKeyCount+1)
   return false
 
 }
@@ -736,9 +672,7 @@ if(Object.keys(Completion).length-1 !==CompKeyCount){
       if(currentTab === 2){
            
       if(formData.gameIsShowReflectionScreen === 'true')
-      { 
-        console.log("form length"+ formData.gameReflectionQuestion);
-      
+      {       
         if (typeof reflectionQuestions === 'object' && reflectionQuestions !== null) {
          
           var keys = Object.keys(reflectionQuestions);
@@ -835,7 +769,7 @@ if(Object.keys(Completion).length-1 !==CompKeyCount){
       
              setCurrentTab((prevTab:any) => Math.min(prevTab + 1, 5)); // Limit tabs to 6 (0 to 5)
           };
-          console.log('compliDatas',compliData,Completion,'CompKeyCount',CompKeyCount);
+  
     const handleBack = () => {
 
 if(currentTab===0 ){

@@ -146,6 +146,8 @@ export const urls = {
   languages:'/languages/getlanguages',
    getCreatedLanguages:'/languages/getcreatedlanguages',
    updatelanguages:'/languages/updatelanguages',
+/* gamelanuages rajesh kanna */
+     gameLanguages:'/languages/getGameLanguages/',
       /****************************Reviews ********************************/
       addReviews:'/gamereview/addreviewers',
       getAllReviews:'/gamereview/getblockreviewlist/',
@@ -155,6 +157,8 @@ export const urls = {
      addGameReview : "/gamereview/addblockreview",
      testAudios: '/game/audioTest',
      getGameCreatorPreview: '/game/creator/demo/' 
+
+
 
 };
 

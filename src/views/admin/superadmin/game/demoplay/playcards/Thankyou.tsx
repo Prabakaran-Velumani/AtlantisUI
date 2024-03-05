@@ -1,9 +1,4 @@
-import {
-  Box,
-  Icon,
-  Img,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Icon, Img, Text } from '@chakra-ui/react';
 import React from 'react';
 import { ImHappy } from 'react-icons/im';
 import { TfiFaceSad } from 'react-icons/tfi';
@@ -19,7 +14,6 @@ import {
   FaRegThumbsDown,
 } from 'react-icons/fa';
 
-
 interface Badge {
   gasId: number;
   gasAssetImage: string;
@@ -29,13 +23,10 @@ interface Badge {
 const ThankYou: React.FC<{
   formData: any;
   imageSrc: any;
-
 }> = ({ formData, imageSrc }) => {
   const renderContentTy = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
-
     const parts = formData.gameThankYouMessage?.split(linkRegex);
-
     const contentWithLinks = parts?.map((part: any, index: any) => {
       if (linkRegex.test(part)) {
         return (
@@ -53,7 +44,6 @@ const ThankYou: React.FC<{
         return <React.Fragment key={index}>{part}</React.Fragment>;
       }
     });
-
     return <React.Fragment>{contentWithLinks}</React.Fragment>;
   };
   return (
@@ -84,7 +74,6 @@ const ThankYou: React.FC<{
                 {renderContentTy()}
               </Box>
             </Box>
-
             {formData.gameIsCollectLearnerFeedback === 'true' && (
               <>
                 <Text
@@ -258,7 +247,6 @@ const ThankYou: React.FC<{
                         </div>
                       </div>
                     )}
-
                     {formData.gameOthers === 'true' && (
                       <div className="content-box">
                         <Text

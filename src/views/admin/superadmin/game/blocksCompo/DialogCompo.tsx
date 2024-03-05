@@ -137,7 +137,7 @@ const DialogCompo: React.FC<PropsDialog> = ({ seq, index, name, handleInput, han
         <>
             {/* {seq.status == 'no' ? 
             (null) :               */}
-            <Flex className='block-compo' mb={'20px'} padding={'10px 0'} alignItems={'start'} overflowX={'auto'}>
+            <Flex className='block-compo' mb={'20px'} padding={'10px 0'} alignItems={'start'} overflowX={'auto'} >
                 <Box className='block-action-icons'>
                     <Icon as={MdAdd} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => getSeq(seq, index, name)} />
                     <Icon as={BiSolidDuplicate} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => duplicateSeq(seq, index, name)} />
@@ -146,7 +146,6 @@ const DialogCompo: React.FC<PropsDialog> = ({ seq, index, name, handleInput, han
                 <Box className='box-block' display={'flex'} w={'100%'} alignItems={'start'}>
                     <Box mr={'10px'} w={'50px'} fontSize={'17px'} color={'#1b2559'} fontWeight={'700'}>{seq.id}</Box>
                     <Box m={'0 10px 10px 0'} w={'150px'}>
-                        {/* <Select placeholder={'Character...'} name={`Dialog${seq.input}`} options={characterOption} onChange={(selectedOption, e) => handleSelect(selectedOption, e, 'character')} value={input?.[`Dialog${seq.input}`]?.character} styles={customStyles} /> */}
                         <Select
                             placeholder={'Character...'}
                             id='blockRoll'
@@ -170,8 +169,6 @@ const DialogCompo: React.FC<PropsDialog> = ({ seq, index, name, handleInput, han
 
                     </Box>
                     <Box m={'0 10px 0px 0'} w={'550px'}>
-                        {/* <Select name={`Dialog${seq.input}`} options={dialogOption} onChange={(selectedOption, e) => handleSelect(selectedOption, e, 'animation')} value={input?.[`Dialog${seq.input}`]?.dialog} isMulti={true} /> */}
-                        {/* <Textarea placeholder='Dialog' id='Dialog' name={`Dialog${seq.input}`} onChange={handleInput} value={input?.[`Dialog${seq.input}`]?.dialog} borderRadius={'18px'} /> */}
                         <Textarea
                             placeholder='Dialog'
                             id='Dialog'
@@ -191,7 +188,6 @@ const DialogCompo: React.FC<PropsDialog> = ({ seq, index, name, handleInput, han
                     </Box>
                     {parseInt(input?.[`Dialog${seq.input}`]?.character, 10)!==99999 &&( 
                         <Box mr={'10px'} w={'250px'}>
-                            {/* <Select placeholder={'Animate...'} name={`Dialog${seq.input}`} options={dialogOption} onChange={(selectedOption, e) => handleSelect(selectedOption, e, 'animation')} value={input?.[`Dialog${seq.input}`]?.animation} isMulti={true} styles={customStyles} /> */}
                             <Select
                                 placeholder={'Animate...'}
                                 id='Dialog'
@@ -296,8 +292,6 @@ const DialogCompo: React.FC<PropsDialog> = ({ seq, index, name, handleInput, han
                         </Box>
                     )}
                    
-                    {/* <Button mr={'10px'}  w={'10%'} onClick={()=>setAnimateBtn(!animateBtn)}>Animate</Button> */}
-                    {/* <Button onClick={onOpen}>Animate</Button> */}
                     {animateBtn && <Img src='' alt='animate' h={'30px'} w={'30px'} />}
                     <Text w={'40px'} mr={'10px'} color={'#c4c4c4'}>{seq.upNext}</Text>
                 </Box>

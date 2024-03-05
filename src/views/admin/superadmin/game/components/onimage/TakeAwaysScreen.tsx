@@ -58,27 +58,14 @@ import {
   }
 
 
-    const TakewayScreen: React.FC<{formData: any;imageSrc:any; preview:any;}> = ({formData,imageSrc,preview}) => {
+    const TakewayScreen: React.FC<{formData: any;imageSrc:any; preview:any; preloadedAssets?:any}> = ({formData,imageSrc,preview, preloadedAssets}) => {
       const data = formData.gameTakeawayContent?.split('\n');
-      console.log('takeaway',data);
+  
   return (
     <>
       {imageSrc && (
         <Box className='takeaway-screen'>
-          <Box className='takeaway-screen-box'
-            // w={{base:'100%',sm:'100%',md:'100%',lg:'90%'}}
-            // ml={{base:'10px',sm:'10px',md:'20px',lg:'28px'}} 
-            // h={{base:'150px',sm:'450px',md:'550px',lg:'450px'}}
-            // backgroundImage={imageSrc}
-            // backgroundRepeat={'no-repeat'}
-            // backgroundSize={'contain'}
-            // fontFamily={'content'}
-            
-            // color="#D9C7A2"
-            // display={'flex'}
-            // justifyContent={'center'}
-            // alignItems={'center'}
-          >
+          <Box className='takeaway-screen-box'>
             <Img src={imageSrc} className='bg-img' />         
           <Box className='content-box' w={preview? '25%' : '76%'} overflowY={'scroll'}>
             {data && data.map((it: any, ind: number) => {
@@ -86,12 +73,7 @@ import {
               const contentAfterBullet =
                 bulletIndex !== -1 ? it.slice(bulletIndex + 1).trim() : it;
               return (
-                <Box   className='content'             
-                  // mt={{ base: '0px', sm: '0px', md: '10px', lg: '50px' }}
-                  // lineHeight={1}
-                  // display={'flex'}
-                  // listStyleType={'none'}
-                >
+                <Box   className='content'>
                   <>
                     <Img src={bull} className='dot-img' w={'16px'} h={'16px'} />
                     {contentAfterBullet}

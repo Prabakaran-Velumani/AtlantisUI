@@ -18,8 +18,10 @@ const Completion: React.FC<{
   setCurrentScreenId?: any;
   getData?: any;
   data?: any;
-  currentQuestNo: any;
+  // currentQuestNo: any;
   completionScreenQuestOptions: any;
+  questOptions: any;
+  currentQuestNo: any;
 }> = ({
   setCurrentScreenId,
   preview,
@@ -31,8 +33,10 @@ const Completion: React.FC<{
   CompKeyCount,
   getData,
   data,
-  currentQuestNo,
+  // currentQuestNo,
   completionScreenQuestOptions,
+  questOptions,
+  currentQuestNo,
 }) => {
   const [imgb, setbImg] = useState<any>();
   const [showComplete, setShowComplete] = useState(false);
@@ -41,12 +45,45 @@ const Completion: React.FC<{
       (quest: any) => quest.questNo == currentQuestNo,
     ),
   );
+  const [questScores, setQuestScores] = useState(null);
   const { profile, setProfile } = useContext(ScoreContext);
   useEffect(() => {
     setShowComplete(true);
     setTimeout(() => {
       setShowComplete(false);
     }, 1000);
+  }, []);
+  useEffect(() => {
+    const groupedByQuest: any = {};
+    questOptions.forEach((item: any) => {
+      const questNo = item.qpQuestNo;
+      if (!groupedByQuest[questNo]) {
+        groupedByQuest[questNo] = [];
+      }
+      groupedByQuest[questNo].push(item);
+    });
+    const maxScoresByQuest: any = {};
+    for (const questNo in groupedByQuest) {
+      const questData = groupedByQuest[questNo];
+      const maxScoresBySequence: any = {};
+
+      questData.forEach((item: any) => {
+        const sequence = item.qpSequence;
+        const score = parseInt(item.qpScore);
+        if (
+          !maxScoresBySequence[sequence] ||
+          score > maxScoresBySequence[sequence]
+        ) {
+          maxScoresBySequence[sequence] = score;
+        }
+      });
+      const maxScoreForQuest = Object.values(maxScoresBySequence).reduce(
+        (acc: any, score: any) => acc + score,
+        0,
+      );
+      maxScoresByQuest[questNo] = maxScoreForQuest;
+    }
+    setQuestScores(maxScoresByQuest);
   }, []);
   useEffect(() => {
     const fetchDatass = async () => {
@@ -71,17 +108,16 @@ const Completion: React.FC<{
     fetchDatass();
   }, []);
 
-console.log("compliData",compliData)
-console.log("CompKeyCount",CompKeyCount)
+
 
   return (
     <>
       <Box
         className="comple-screen"
-        style={{
-          transform: `scale(${showComplete ? 0.5 : 1})`,
-          transition: 'transform 0.5s ease-in-out',
-        }}
+        // style={{
+        //   transform: `scale(${showComplete ? 0.5 : 1})`,
+        //   transition: 'transform 0.5s ease-in-out',
+        // }}
       >
         <motion.div
           initial={{ scale: 0 }}
@@ -93,49 +129,73 @@ console.log("CompKeyCount",CompKeyCount)
       </Box>
       {!showComplete && (
         <>
-          <Box className="title">
+          {/* <Box w={'500px'}> */}
+          <Box className="title" 
+          // transform="translate(600px,84px) !important"
+          >
             <Text fontFamily={'AtlantisText'} textAlign={'center'}>
               {curretQuestOptions?.gameScreenTitle}
             </Text>
           </Box>
-          <Box className="congratulations">
+          <Box className="content-box">
+            {/* <Box className="congratulations"> */}
             {/* <Box className="content">
               {curretQuestOptions?.gameCompletedCongratsMessage}
             </Box> */}
-            <Box className="content">
-              {completionScreenQuestOptions[currentQuestNo]?.gameIsSetCongratsSingleMessage !=
-                true &&
-              completionScreenQuestOptions[currentQuestNo]?.gameIsSetCongratsScoreWiseMessage !=
-                true
-                ? completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage
-                : completionScreenQuestOptions[currentQuestNo]?.gameIsSetCongratsScoreWiseMessage ==
-                  true
-                ? completionScreenQuestOptions[currentQuestNo]?.gameIsSetMinPassScore &&
+            <Box
+              className="content"
+              transform="translate(0px,100px) !important"
+            >
+              {completionScreenQuestOptions[currentQuestNo]
+                ?.gameIsSetCongratsSingleMessage != true &&
+              completionScreenQuestOptions[currentQuestNo]
+                ?.gameIsSetCongratsScoreWiseMessage != true
+                ? completionScreenQuestOptions[currentQuestNo]
+                    ?.gameCompletedCongratsMessage
+                : completionScreenQuestOptions[currentQuestNo]
+                    ?.gameIsSetCongratsScoreWiseMessage == true
+                ? completionScreenQuestOptions[currentQuestNo]
+                    ?.gameIsSetMinPassScore &&
                   completionScreenQuestOptions[currentQuestNo]?.gameMinScore &&
                   completionScreenQuestOptions[currentQuestNo]?.gameMinScore > 0
-                  ? profile?.score < completionScreenQuestOptions[currentQuestNo]?.gameMinScore
-                    ? completionScreenQuestOptions[currentQuestNo]?.gameMinimumScoreCongratsMessage
-                    : completionScreenQuestOptions[currentQuestNo]?.gameIsSetDistinctionScore &&
+                  ? profile?.score <
+                    completionScreenQuestOptions[currentQuestNo]?.gameMinScore
+                    ? completionScreenQuestOptions[currentQuestNo]
+                        ?.gameMinimumScoreCongratsMessage
+                    : completionScreenQuestOptions[currentQuestNo]
+                        ?.gameIsSetDistinctionScore &&
                       profile?.score <
-                        completionScreenQuestOptions[currentQuestNo]?.gameDistinctionScore
+                        completionScreenQuestOptions[currentQuestNo]
+                          ?.gameDistinctionScore
                     ? completionScreenQuestOptions[currentQuestNo]
                         ?.gameaboveMinimumScoreCongratsMessage
-                    : completionScreenQuestOptions[currentQuestNo]?.gameIsSetDistinctionScore &&
+                    : completionScreenQuestOptions[currentQuestNo]
+                        ?.gameIsSetDistinctionScore &&
                       profile?.score >=
-                        completionScreenQuestOptions[currentQuestNo]?.gameDistinctionScore
+                        completionScreenQuestOptions[currentQuestNo]
+                          ?.gameDistinctionScore
                     ? completionScreenQuestOptions[currentQuestNo]
                         ?.gameAboveDistinctionScoreCongratsMessage
                     : completionScreenQuestOptions[currentQuestNo]
                         ?.gameIsSetCongratsSingleMessage == true &&
-                      completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage
-                  : completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage
-                : completionScreenQuestOptions[currentQuestNo]?.gameCompletedCongratsMessage}
+                      completionScreenQuestOptions[currentQuestNo]
+                        ?.gameCompletedCongratsMessage
+                  : completionScreenQuestOptions[currentQuestNo]
+                      ?.gameCompletedCongratsMessage
+                : completionScreenQuestOptions[currentQuestNo]
+                    ?.gameCompletedCongratsMessage}
             </Box>
           </Box>
-          <Box className="rewards-img-box">
+          <Box
+            className="rewards-img-box"
+            transform="translate(0px,200px) !important"
+          >
             <Img className="rewards-arrow-img" src={rew} />
           </Box>
-          <Box className="points-box">
+          <Box
+            className="points-box"
+            transform="translate(0px,200px) !important"
+          >
             <Box className="box-1">
               <Img src={back} className="box-1_img" />
               <Text className="points-text" fontFamily={'content'}>
@@ -144,11 +204,17 @@ console.log("CompKeyCount",CompKeyCount)
               <Box className="inside-box-1">
                 <Img src={point} className="inside-box-1_img" />
                 <Text className="inside-points-text" fontFamily={'content'}>
-                  {(curretQuestOptions?.gameMinScore || 100) +
-                    '/' +
-                    (curretQuestOptions?.gameTotalScore
-                      ? curretQuestOptions?.gameTotalScore?.maxScore || 100
-                      : '')}
+                  {(profile &&
+                    profile.score &&
+                    profile.score.length > 0 &&
+                    profile.score.reduce(
+                      (accumulator: number, currentValue: any) => {
+                        return currentQuestNo === currentValue.quest ?  accumulator + currentValue.score : accumulator;
+                      },
+                      0,
+                    )) ||
+                    0}
+                  /{questScores && questScores[currentQuestNo]}
                 </Text>
               </Box>
             </Box>
@@ -164,9 +230,11 @@ console.log("CompKeyCount",CompKeyCount)
               </Box>
             )}
           </Box>
-          <Box className="next-btn">
+          {/* </Box> */}
+          <Box className="next-btn" transform="translate(0px,400px) !important">
             <Img src={next} onClick={() => getData(data)} cursor={'pointer'} />
           </Box>
+          {/* </Box> */}
         </>
       )}
     </>

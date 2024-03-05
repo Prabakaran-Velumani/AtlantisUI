@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Button,
   Box,
@@ -12,23 +12,18 @@ import {
   ModalBody,
   ModalFooter,
   FormControl,
-  FormLabel,
   Text,
   SimpleGrid,
   useColorModeValue,
-  ChakraProvider, CSSReset, Img, Icon, Spinner
+  Img, Icon, Spinner
 } from '@chakra-ui/react';
 import InputField from 'components/fields/InputField';
 import Card from 'components/card/Card';
 
 import { MdOutlineAdd, MdOutlineCheck } from 'react-icons/md';
-import Select, { components } from 'react-select';
+import Select from 'react-select';
 import { FaVolumeUp, FaPlusCircle, FaSlidersH, FaWindowClose,  FaChevronLeft, FaChevronRight } from "react-icons/fa";
-// import OptionWithSubcategories from './options';
 import { motion } from "framer-motion";
-
-
-
 
 const customStyles = {
   option: (provided: any, state: any) => ({
@@ -42,10 +37,8 @@ const customStyles = {
     },
   }),
 };
-//
 
 const customStylesselect = {
-
   marginRight: '20px',
   position: 'absolute',
   zIndex: 101,
@@ -54,7 +47,6 @@ const customStylesicon = {
   cursor: 'pointer',
   color: 'grey',
   marginRight: '4px',
-
 };
 const customStylesBtn = {
   padding: '0px',
@@ -69,7 +61,6 @@ const customStylesBtn = {
   alignContent: 'center',
   display: 'flex',
   justifyContent: 'center',
-
 };
 
 const CharacterPreview: React.FC<{
