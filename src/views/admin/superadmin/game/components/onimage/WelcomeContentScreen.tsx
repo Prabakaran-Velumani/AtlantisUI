@@ -18,6 +18,12 @@ import { FaClock } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
+import Author from 'assets/img/screens/Author.png';
+import LearningOutcome from 'assets/img/screens/Learning Outcome.png';
+import Note from 'assets/img/screens/Note.png';
+import Skills from 'assets/img/screens/Skills.png';
+import Story from 'assets/img/screens/Story.png';
+import SkillsLearningOutcome from 'assets/img/screens/Skills & Learning outcome.png';
 
 interface Badge {
   gasId: number;
@@ -131,6 +137,7 @@ const WelcomeContentScreen: React.FC<{
               <Img src={imageSrc} className="bg-img" />
             </Box>
             <Box className="content-box" fontFamily={'gametext'}>
+            <Box className="title" style={{marginTop:"20px"}}>
               <Text
                 className="title"
                 fontSize={{
@@ -141,7 +148,7 @@ const WelcomeContentScreen: React.FC<{
                 }}
               >
                 {formData?.gameTitle}
-              </Text>
+     
                 <Text
                   className="duration"
                   fontSize={{
@@ -166,7 +173,8 @@ const WelcomeContentScreen: React.FC<{
                     </span>
                   </>
                 </Text>
-              <Box w={'60%'} className="content">
+                </Text></Box>
+                <Box w={'60%'} className="content" style={{marginTop: '40px'}}>
                   <Text
                     mt={'20px'}
                     fontSize={{

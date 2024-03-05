@@ -83,7 +83,7 @@ const CompletionScreen: React.FC<{ formData: any; imageSrc: any; selectedBadge: 
         }
         const selectedGasId = compliData[CompKeyCount]?.gameBadge;
         const selectedGasImage = result?.data.find(
-          (gas: any) => gas.gasId === selectedGasId,
+          (gas: any) => gas.gasId == selectedGasId,
         );
         const imageUrl =
           selectedGasImage?.gasAssetImage || 'defaultImageURL.jpg';
@@ -116,14 +116,18 @@ const CompletionScreen: React.FC<{ formData: any; imageSrc: any; selectedBadge: 
                 {/* {compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false' ? (
                   <>{compliData[CompKeyCount]?.gameCompletedCongratsMessage}</>
                 ): <></>}  */}
-    {(compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') ? (
+    {/* {(compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') ? ( */}
+    {((compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' || compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === undefined ) && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') ? (
                 <>{compliData[CompKeyCount]?.gameCompletedCongratsMessage || "Congratulations! You have Completed..."}</>
                 ): <></>} 
     {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false' ? (
                   <>{compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage}</>
                 ): <></>} 
-    {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' ? (
+    {/* {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' ? (
                   <>{compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage} {compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage === '' || compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage === '' ? '' : '&'} {compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage}</>
+                ): <></>}  */}
+                {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' ? (
+                  <>{compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage} </>
                 ): <></>} 
     {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' ? (
                   <>{compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage}</>

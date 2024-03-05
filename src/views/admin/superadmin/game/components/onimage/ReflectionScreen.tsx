@@ -4,18 +4,9 @@ import {
   SimpleGrid,
   Text,
   Textarea,
+  GridItem
 } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  gameDuplicateQuestionEntirely,
-  getImages,
-  updateGame,
-} from 'utils/game/gameService';
-import Card from 'components/card/Card';
-import InputField from 'components/fields/InputField';
-import BadgeImages from '../BadgeImages';
-import { MdClose, MdOutlineCloudUpload } from 'react-icons/md';
-import TextField from 'components/fields/TextField';
+import React, { useEffect, useState } from 'react';
 import ref from 'assets/img/screens/refquestions.png';
 import qs from 'assets/img/screens/QS.png';
 import question from 'assets/img/games/question.png';
@@ -48,10 +39,6 @@ const ReflectionScreen: React.FC<{
   const arrayInfo = [1, 2, 3, 4];
   let i = 0;
   useEffect(() => {
-
-    console.log('formData.gameIsLearnerMandatoryQuestion ',formData.gameIsLearnerMandatoryQuestion);
-    console.log('answers.length ',answers.length);
-    console.log('formData?.gameReflectionQuestion ',formData?.gameReflectionQuestion);
     if (formData?.gameIsLearnerMandatoryQuestion == 'false') {
       setIsFormValid(true);
     } else if (formData.gameIsLearnerMandatoryQuestion == 'true'){
@@ -73,11 +60,27 @@ const ReflectionScreen: React.FC<{
     updatedAnswers[index] = { ...updatedAnswers[index], text: e.target.value };
     setAnswers(updatedAnswers);
   };
+  const arrayInfoQn = formData.gameReflectionQuestion;
+  const styleflex = {};
+
+if (arrayInfoQn === 1) {
+Object.assign(styleflex, {
+ display: 'flex',
+ justifyContent: 'center',
+});
+} else if (arrayInfoQn === 3) {
+// Apply your styling for arrayInfo 3, for example:
+Object.assign(styleflex, {
+ display: 'grid',
+ gridTemplateColumns: 'repeat(2, 1fr)', // Two columns
+ gap: '2px',
+ placeItems: 'center',
+});
+}
 
   return (
     <>
       {imageSrc && (
-        // <SimpleGrid columns={1}>
         <Box className="reflection-screen">
           <Box className="reflection-screen-box">
             {preview ? null : <Img src={imageSrc} className="bg-img" />}
@@ -93,7 +96,6 @@ const ReflectionScreen: React.FC<{
               <Text
                 fontFamily={'AtlantisText'}
                 color={'##D9C7A2'}
-                // className="text drop"
                 position={'absolute'}
                 top={'20px'}
                 fontSize={'2.8rem'}
@@ -116,14 +118,9 @@ const ReflectionScreen: React.FC<{
               {Array.from(
                 { length: formData.gameReflectionQuestion },
                 (_, index) => (
-                  <Box>
+                  <GridItem key={index} colSpan={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? { base: 2 } : {}}>
                     <Box
-                      w={{
-                        base: '150px',
-                        sm: '100px',
-                        md: '150px',
-                        lg: '180px',
-                      }}
+                      w={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? {base:'150px',sm:'300px',md:'350px',lg:'380px'} : {base:'150px',sm:'100px',md:'150px',lg:'180px'}} 
                       lineHeight={1}
                       display={'flex'}
                       wordBreak="break-all"
@@ -166,7 +163,7 @@ const ReflectionScreen: React.FC<{
                     </Box>
                     <Box position={'relative'}>
                       <Img
-                        w={preview ? '550px' : '250px'}
+                        w={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ?  '420px'  : '200px'} 
                         h={{
                           base: '20px',
                           sm: '40px',
@@ -198,8 +195,8 @@ const ReflectionScreen: React.FC<{
                           onChange={(e: any) => updateAnswer(e, index)}
                         />
                       ) : null}
-                    </Box>
                   </Box>
+                  </GridItem>
                 ),
               )}
             </SimpleGrid>
@@ -229,14 +226,12 @@ const ReflectionScreen: React.FC<{
                     w={'50px'}
                     h={'50px'}
                     cursor={'pointer'}
-                    // onClick={() => getData(data)}
                   />
                 )}
               </Box>
             </Box>
           ) : null}
         </Box>
-        // </SimpleGrid>
       )}
     </>
   );

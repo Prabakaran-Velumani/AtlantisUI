@@ -33,6 +33,8 @@ import OnToast from 'components/alerts/toast';
 import LeanerList from './components/LeanersList'
 import TexttoVoice from './components/SpeeachKit'
 import { createScormConfig, getScormConfig, generateScorm } from 'utils/scorm/scorm';
+// @ts-ignore
+import loadingImage from 'assets/img/games/loading.gif';
 interface Counting {
   draftCount: any;
   internalCount: any;
@@ -75,7 +77,7 @@ const Game: React.FC = () => {
     { value: 'Completed/Incomplete', label: 'Completed/Incomplete', isChecked: false },
     { value: 'Passed/Incomplete', label: 'Passed/Incomplete', isChecked: false },
   ]);
-
+  const [loadingdata, setLoadingdata] = useState(false);
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const handleCourse = () => {
     navigate('/admin/superadmin/game/template');
@@ -117,11 +119,22 @@ const Game: React.FC = () => {
   // };
 
 
+useEffect(() => {
+  const gameGameStage = localStorage.getItem('gameGameStage');
+  if(gameGameStage == 'Review')
+  {
+    setTabState('Review');
+    setLoadingdata(true);
+    localStorage.removeItem('gameGameStage');
+  }
+  
+  console.log('gameGameStage',gameGameStage);
+  gameLists(tabState);
+}, [tabState]);
 
-
-  useEffect(() => {
-    gameLists(tabState);
-  }, [tabState]);
+  // useEffect(() => {
+  //   gameLists(tabState);
+  // }, [tabState]);
 
   useEffect(() => {
     fetchData();
@@ -183,6 +196,15 @@ const Game: React.FC = () => {
     setIsOpen(true);
 
   }
+  const containerRef = useRef(null);
+  useEffect(() => {
+    // Your code to fetch data or handle tab change
+
+    // Scroll to top when tab changes
+    if (containerRef.current) {
+      containerRef.current.scrollTop = 0;
+    }
+  }, [tabState]);
 
   const [isDownloadDialogOpen, setDownloadDialogOpen] = useState(false);
   const [downloadId, setDownloadId] = useState(null);
@@ -457,6 +479,7 @@ const Game: React.FC = () => {
   }, [isConfirm, duplicateId]);
 
   const gameLists = async (type: string) => {
+    setLoadingdata(true);
     const data = '';
     const result = await getAllGame(data, type);
     if (result?.status !== 'Success') {
@@ -467,7 +490,7 @@ const Game: React.FC = () => {
       setGameList(result.data);
     }
 
-
+    setLoadingdata(false);
 
   };
 
@@ -915,6 +938,7 @@ const Game: React.FC = () => {
   return (
     <>
       <Box className='Game' position={'relative'}>
+      <div  ref={containerRef} style={{ overflowY: 'auto', maxHeight: '800px' }}>
         <Box mb={{ base: '130px', md: '100px', xl: '100px' }} className='box'></Box>
         <Card backgroundImage={NFTBanner} backgroundRepeat={'no-repeat'} backgroundSize={'cover'} height={'150px'} width={'100%'} overflow={{ sm: 'auto', xl: 'unset' }}>
           <Box display={{ base: 'block', xl: 'flex' }} justifyContent="space-between" alignItems={'end'} padding={'20px'}>
@@ -1120,7 +1144,11 @@ const Game: React.FC = () => {
           Games
         </Text> */}
           <SimpleGrid columns={{ base: 1, md: 3 }} gap='40px'>
-
+          {loadingdata && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(10px)' }}>
+          <img src={loadingImage} alt="Loading" style={{ width: '10%', maxWidth: '100px', backgroundColor: 'transparent' }}/>
+        </div>
+      )}
             {gamelist &&
               gamelist
                 .filter((item) => {
@@ -1160,6 +1188,7 @@ const Game: React.FC = () => {
           </SimpleGrid>
         </Grid>
         {openCourse ? <AddCourse setOpenCourse={setOpenCourse} /> : null}
+        </div>
       </Box>
       {isOpen ? <Popup setIsConfirm={setIsConfirm} setIsOpen={setIsOpen} msg={msgtwo} setmsg={setMsgtwo} /> : null}
       {alert ? <OnToast msg={msg} status={toastStatus} setAlert={setAlert}

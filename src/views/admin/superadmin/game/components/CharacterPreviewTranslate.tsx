@@ -81,6 +81,7 @@ const CharacterPreviewTranslate: React.FC<{
   setIsModalOpen2?: any;
   handleInputChange2?: any;
   voices: any;
+  handleModalClose:any;
 
 }> = ({
   handleSave,
@@ -91,6 +92,7 @@ const CharacterPreviewTranslate: React.FC<{
   setIsModalOpen2,
  handleInputChange2,
   voices,
+  handleModalClose,
  
 }) => {
     const textContent =
@@ -111,6 +113,10 @@ const CharacterPreviewTranslate: React.FC<{
     const [iconColor, setIconColor] = useState('grey');
     const handleMouseEnter = () => {
       setIconColor('black');
+    };
+    const handleCloseModal = () => {
+      // Additional logic if needed
+      handleModalClose(); // Call the function from the prop
     };
 
     const handleMouseLeave = () => {
@@ -571,7 +577,7 @@ const CharacterPreviewTranslate: React.FC<{
   };
     return (
       <>
-        <Modal isOpen={isModalOpen2} onClose={setIsModalOpen2} >
+        <Modal isOpen={isModalOpen2} onClose={handleCloseModal} >
           <ModalOverlay />
           <ModalContent position="fixed" overflowY="auto" m={0}>
           <ModalHeader>Voices</ModalHeader>

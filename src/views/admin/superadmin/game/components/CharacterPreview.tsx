@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react';
 import InputField from 'components/fields/InputField';
 import Card from 'components/card/Card';
+import { getGameStoryLine } from "utils/game/gameService"
 
 import { MdOutlineAdd, MdOutlineCheck } from 'react-icons/md';
 import Select from 'react-select';
@@ -64,6 +65,8 @@ const customStylesBtn = {
 };
 
 const CharacterPreview: React.FC<{
+  id?:any;
+  languages?:any;
   players?: any;
   setPreview?: any;
   makeInputFiled?: any;
@@ -78,6 +81,8 @@ const CharacterPreview: React.FC<{
   show: any,
   prev: any,
 }> = ({
+  id,
+  languages,
   prev,
   players,
   setPreview,
@@ -235,6 +240,7 @@ const CharacterPreview: React.FC<{
     const handleMaleMenuOpen = () => {
       setMenuMaleIsOpen(true);
     };
+    const [nonplayerName, setNonplayerName] = useState<String>();
 
     const handleMaleMenuClose = () => {
       setMenuMaleIsOpen(false);
@@ -314,7 +320,25 @@ const CharacterPreview: React.FC<{
           index: ind,
         };
       });
-
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            // Call getBlockData with both game ID and translation ID
+            if(languages){
+              const blockData = await getGameStoryLine(id, languages);
+    
+            console.log("updatedBlockData", blockData.gameStoryLine);
+            
+            setNonplayerName(blockData.gameNonPlayerName)
+            }
+            
+            // textareaRef.current.value = blockData.content;
+          } catch (error) {
+            console.error("getBlockData Error:", error);
+          }
+        };
+        fetchData();
+      }, [languages, id]);
 
     const handleSelectChange = (selectedOption: any, type: string) => {
       setDemo(selectedOption?.audio)
@@ -640,8 +664,18 @@ const CharacterPreview: React.FC<{
                           isRequired={true}
                           label='Non-Player Name'
                           name="gameTitle"
-                          value={formData.gameNonPlayerName ?? selectedPlayer.gasAssetName}
-                          onChange={handleChange}
+                          // value={formData.gameNonPlayerName ?? selectedPlayer.gasAssetName}
+                          // onChange={handleChange}
+                          value={(languages !== undefined && languages !== null && languages !== '') ? String(nonplayerName) : formData?.gameNonPlayerName ?? selectedPlayer.gasAssetName}
+
+                          // value={languages !== undefined && languages !== null && languages !== '' ? String(nonplayerName) : formData?.gameNonPlayerName}
+                          onChange={(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+                            // Check if languages is empty
+                            if (languages === undefined || languages === null || languages === '') {
+                              // Call the handleChange function
+                              handleChange(e as React.ChangeEvent<HTMLSelectElement>);
+                            }
+                          }}
                           w="100%"
                           mb="0px"
                         />
