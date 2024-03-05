@@ -49,8 +49,9 @@ import refsep from '../../assets/img/games/refseparate.png';
 import Login from '../../assets/img/games/log_non.png';
 import on from '../../assets/img/games/on.png';
 import off from '../../assets/img/games/off.png';
-import replay from '../../assets/img/games/ReplayBtn.png';
+import replayBtn from '../../assets/img/games/ReplayBtn.png';
 import SelectButton from '../../assets/img/games/selectbtn.png';
+import Okay from '../../assets/img/games/Okay.png'
 
 
 /*file not available but used list
@@ -112,8 +113,9 @@ export const assetImageSrc = [
   { assetType: 'on', src: on },
   { assetType: 'off', src: off },
   { assetType: 'play', src: play },
-  { assetType: 'replay', src: replay },
+  { assetType: 'replayBtn', src: replayBtn },
   { assetType: 'SelectButton', src: SelectButton },
+  { assetType: 'OkayBtn', src: Okay },
   
   
   /*file not available but used list

@@ -1000,6 +1000,7 @@ useEffect(()=>{
         currentTab: tab,
         currentSubTab: currentTab,
         currentQuest: questTabState,
+        isDispatched: true,
       };
       dispatch(updatePreviewData(previewData));
       const url = `/screen/preview/${id}`;

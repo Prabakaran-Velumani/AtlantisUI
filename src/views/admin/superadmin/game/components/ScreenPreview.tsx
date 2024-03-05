@@ -5,18 +5,6 @@ import {
   Text,
   Img,
 } from '@chakra-ui/react';
-
-import bk from 'assets/img/games/17.png';
-import note from 'assets/img/games/note.png';
-import next from 'assets/img/screens/next.png';
-import dial from 'assets/img/games/Dialogue.png';
-import char from 'assets/img/games/charbox.png';
-import right from 'assets/img/games/right.png';
-import left from 'assets/img/games/left.png';
-import parch from 'assets/img/games/parch.png';
-import on from 'assets/img/games/on.png';
-import off from 'assets/img/games/off.png';
-import Screen6 from '../../../../../assets/img/screens/screen6.png';
 import React, {
   Suspense,
   useEffect,
@@ -65,7 +53,7 @@ import { updatePreviewData } from 'store/preview/previewSlice';
 
 const WelcomeContentScreen = lazy(() => import('./onimage/WelcomeContentScreen'));
 const CompletionContentScreen = lazy(() => import ('./onimage/CompletionContentScreen'));
-
+const PreviewEndOfStory = lazy(()=>import ('./onimage/PreviewEndOfStory'));
 const ScreenPreview = () => {
   const {
     gameId: id,
@@ -94,6 +82,7 @@ const ScreenPreview = () => {
   const [type, setType] = useState<string>('');
   const [resMsg, setResMsg] = useState<string>('');
   const [feed, setFeed] = useState<string>('');
+  const [endOfQuest, setEndOfQuest] = useState<boolean>(false);
   const reflectionQuestionsdefault = [
     'What were your biggest learnings?',
     'How can you apply these learnings back at work?',
@@ -106,6 +95,7 @@ const ScreenPreview = () => {
     ref3: "What's one thing you learned about your mindset?",
     ref4: "What's one thing you are committing to change?",
   });
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -311,6 +301,7 @@ const ScreenPreview = () => {
     const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
 
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
@@ -318,6 +309,15 @@ const ScreenPreview = () => {
           )
           .map((key: any) => demoBlocks[quest]?.[key])
       : [];
+     
+    {/* Check wheather has next block or not, if not then show End of Current Quest.
+          Want to play next quest, then switch the current quest in game creation screen */}
+    if(nextBlock.length == 0 ){
+      setEndOfQuest(true);
+    }
+    else{
+      setEndOfQuest(false);
+    }
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       setInteractionOptions(gameInfo, nextBlock[0]);
@@ -366,7 +366,6 @@ const ScreenPreview = () => {
         } else {
           setType(null);
           setData(null);
-          // onClose();
           return false;
         }
       } else {
@@ -484,8 +483,8 @@ const ScreenPreview = () => {
                       h={'100vh'}
                       backgroundRepeat={'no-repeat'}
                       backgroundSize={'cover'}
-                      transform={`scale(${first ? 1 : 1.3}) translateY(${
-                        first ? 0 : -10
+                      transform={`scale(${first ? 1 : 0.9}) translateY(${
+                        first ? 0 : -0
                       }%) translateX(${first ? 0 : -10}%)`}
                       transition={'transform 0.9s ease-in-out'}
                     >
@@ -504,7 +503,7 @@ const ScreenPreview = () => {
                           }}
                           position={'fixed'}
                           w={'40%'}
-                          h={'80vh'}
+                          h={'60vh'}
                           display={'flex'}
                           flexDirection={'column'}
                           justifyContent={'center'}
@@ -518,7 +517,7 @@ const ScreenPreview = () => {
                           <Box
                             position={'fixed'}
                             overflowY={'scroll'}
-                            transform={'translate(0px, 45px)'}
+                            transform={'translate(0px, 0px)'}
                             w={'50%'}
                             mt={'10px'}
                             display={'flex'}
@@ -552,7 +551,7 @@ const ScreenPreview = () => {
                               justifyContent={'center'}
                               cursor={'pointer'}
                             >
-                              <Img src={next} w={'200px'} h={'60px'} />
+                              <Img src={preloadAssets.next} w={'200px'} h={'60px'} />
                             </Box>
                           </Box>
                         </Box>
@@ -1150,7 +1149,7 @@ const ScreenPreview = () => {
                 </Box>
               </Box>
             )}
-
+            {/* {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadAssets ={preloadAssets}/>} */}
               </Flex>
             </Box>
           </motion.div>

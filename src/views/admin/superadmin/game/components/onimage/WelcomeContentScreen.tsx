@@ -142,8 +142,6 @@ const WelcomeContentScreen: React.FC<{
               >
                 {formData?.gameTitle}
               </Text>
-              {/* </Box>
-            <Box w={'60%'} className="content"> */}
                 <Text
                   className="duration"
                   fontSize={{
@@ -181,7 +179,6 @@ const WelcomeContentScreen: React.FC<{
                   >
                     {formData.gameStoryLine}
                   </Text>
-                </Box>
                   <Img src={rew} mt={'25px'} alt="rew" w={'100%'} h={'20px'} />
                 
                 <Box
@@ -340,7 +337,7 @@ const WelcomeContentScreen: React.FC<{
                   </Box>
               </Box>
             </Box>
-       
+       </Box>
       ) : (
           <Box className="welcome-screen">
             <Box className="welcome-screen-box">

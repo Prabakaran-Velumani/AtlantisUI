@@ -48,15 +48,23 @@ const ReflectionScreen: React.FC<{
   const arrayInfo = [1, 2, 3, 4];
   let i = 0;
   useEffect(() => {
+
+    console.log('formData.gameIsLearnerMandatoryQuestion ',formData.gameIsLearnerMandatoryQuestion);
+    console.log('answers.length ',answers.length);
+    console.log('formData?.gameReflectionQuestion ',formData?.gameReflectionQuestion);
     if (formData?.gameIsLearnerMandatoryQuestion == 'false') {
       setIsFormValid(true);
-    } else if (
-      formData?.gameReflectionQuestion &&
+    } else if (formData.gameIsLearnerMandatoryQuestion == 'true'){
+      if(formData?.gameReflectionQuestion &&
       answers.length == formData?.gameReflectionQuestion
     ) {
       setIsFormValid(true);
     } else {
       setIsFormValid(false);
+    }
+    }
+    else{
+      setIsFormValid(true);
     }
   }, [answers, formData.gameIsLearnerMandatoryQuestion]);
 

@@ -257,8 +257,7 @@ const SinglePreview: React.FC<{
     name();
 
   }, [id]);
-
-  
+ 
   useEffect(() => {
     setShowNote(true);
     setTimeout(() => {
