@@ -10,11 +10,15 @@ import {
   Box,
   Button,
   FormLabel,
+  Grid,
+  GridItem,
   Icon,
   Img,
   Input,
   position,
+  SimpleGrid,
   Text,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { MdClose } from 'react-icons/md';
 import { motion, useAnimation } from 'framer-motion';
@@ -64,7 +68,7 @@ interface PlayGamesProps {
   setSelectedPlayer?: any;
   profileData?: any;
   setProfileData?: any;
-  demoBlocks?: any ;
+  demoBlocks?: any;
 }
 const spokenLanguages = [
   'English',
@@ -105,37 +109,36 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const [i, setI] = useState(0);
   const [isLanguage, setIsLanguage] = useState(false);
   const [select, setSelect] = useState(false);
-  const [lanuages,setLanguages] = useState<any[]>(null)
-  const {id} = useParams();
-  useEffect(() => { 
+  const [lanuages, setLanguages] = useState<any[]>(null);
+  const { id } = useParams();
+  useEffect(() => {
     const fetch = async () => {
       const resLang = await getGameLanguages(id);
-      if(resLang.status === 'Success')
-      {
-        setLanguages(resLang?.data);
-        if(resLang?.data.length !== 0)
-        {
+      if (resLang.status === 'Success') {
+        if (resLang?.data.length !== 0) {
+          const data = resLang?.data;
+          data.unshift({ value: 0, label: 'English' });
+          setLanguages(data);
+          setProfileData((prev: any) => ({
+            ...prev,
+            language: data[0]?.label,
+          }));
           setTimeout(() => {
             setIsLanguage(true);
           }, 1500);
         }
       }
-    }
+    };
     fetch();
-
-    setProfileData((prev:any) => ({ ...prev,language:'English'}));
   }, []);
-
 
   const playerInfo = useContext(ProfileContext);
 
   const selectPlayerClick = () => {
     setSelectedPlayer(players[i]);
-    if(Object.keys(demoBlocks).length > 1)
-    {
+    if (Object.keys(demoBlocks).length > 1) {
       setCurrentScreenId(13);
-    }
-    else{
+    } else {
       setCurrentScreenId(2);
     }
   };
@@ -144,92 +147,78 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     const { id, value } = e.target;
     setSelect(false);
     // setIsGender(false);
-    setProfileData((prev:any) => ({ ...prev, [id]: id === 'name' ? value : lang }));
+    setProfileData((prev: any) => ({
+      ...prev,
+      [id]: id === 'name' ? value : lang,
+    }));
   };
+  const bottomMargin = useBreakpointValue({
+    base: '10px',
+    lg: '40px',
+    xl: '60px',
+    xxl: '80px',
+  });
+  const innerBoxWidth = useBreakpointValue({
+    base: '95%',
+    lg: '95%',
+    xl: '90%',
+    xxl: '90%',
+  });
   return (
     <>
-     { formData && formData?.gameLanguageId !== null ? <Box id="container" className="Play-station">
-        <Box className="top-menu-home-section">
-          {
-            isLanguage ? (
-              <Box className="Setting-box">
-                <Img src={Lang} className="setting-pad" />
-                <Box className="music-volume volumes">
-                  {/* <Slider
-                  aria-label="slider-ex-4"
-                  defaultValue={30}
-                  name="musicVolume"
-                
-                >
-                  <SliderTrack
-                    className="slider-track"
-                    height="15px"
-                    borderRadius="80px"
-                  >
-                    <Img src={VolumeTrack} />
-                    <SliderFilledTrack
-                      className="filled-volume"
-                      bg="pink.500"
-                    />
-                  </SliderTrack>
-                  <SliderThumb
-                    boxSize={9}
-                    background={'transparent'}
-                    left={'calc(100% - 30%)'}
-                  >
-                    <Box color='tomato' as={MdCall} />
-                    <Img src={SliderPointer} />
-                  </SliderThumb>
-                </Slider> */}
-                  {/* <Box className="Play-game ProfileScreen">
-                    <Box className="img-box" position={'relative'}>
-                      <Box className="img-section">
-                        <Box className="profile-box"> */}
-                          <Box className="gender">
-                            <FormLabel>Language</FormLabel>
-                            <Text
-                              transform={'translate(0px,25px)'}
-                              textAlign={'center'}
-                              onClick={() => setSelect(!select)}
-                              position={'relative'}
-                              zIndex={9999999}
-                              fontFamily={'AtlantisText'}
-                              color={'#D9C7A2'}
-                            >
-                              {profileData?.language}
-                            </Text>
-                            <Img
-                              className="formfield"
-                              src={FormField}
-                              onClick={() => setSelect(!select)}
-                            />
-                            <Img className="selectField" src={Selected} />
-                            {select && (
-                              <Box className="dropdown">
-                                {lanuages &&
-                                  lanuages.map((lang:any, num:any) => (
-                                    <Text
-                                      ml={'5px'}
-                                      key={num}
-                                      _hover={{ bgColor: '#377498' }}
-                                      id={'language'}
-                                      onClick={(e: any) =>
-                                        handleProfile(e, lang.label)
-                                      }
-                                    >
-                                      {lang.label}
-                                    </Text>
-                                  ))}
-                              </Box>
-                            )}
-                          </Box>
-                        {/* </Box>
+      {formData && formData?.gameLanguageId !== null ? (
+        <Box id="container" className="Play-station">
+          <Box className="top-menu-home-section">
+            {
+              isLanguage ? (
+                <Box className="Setting-box">
+                  <Img src={Lang} className="setting-pad" />
+                  <Box className="music-volume volumes">
+                    <Box className="gender">
+                      <FormLabel>Language</FormLabel>
+                      <Text
+                        transform={'translate(0px,25px)'}
+                        textAlign={'center'}
+                        onClick={() => setSelect(!select)}
+                        position={'relative'}
+                        zIndex={9999999}
+                        fontFamily={'AtlantisText'}
+                        color={'#D9C7A2'}
+                      >
+                        {profileData?.language}
+                      </Text>
+                      <Img
+                        className="formfield"
+                        src={FormField}
+                        onClick={() => setSelect(!select)}
+                      />
+                      <Img className="selectField" src={Selected} />
+                      {select && (
+                        <Box className="dropdown">
+                          {lanuages &&
+                            lanuages.map((lang: any, num: any) => (
+                              <Text
+                                ml={'5px'}
+                                key={num}
+                                _hover={{ bgColor: '#377498' }}
+                                id={'language'}
+                                onClick={(e: any) =>
+                                  handleProfile(e, lang.label)
+                                }
+                              >
+                                {lang.label}
+                              </Text>
+                            ))}
+                        </Box>
+                      )}
+                    </Box>
+                    {/* </Box>
                       </Box>
                     </Box>
                   </Box> */}
-                </Box>
-                <Box className="voice-volume volumes">
-                  {/* <Slider
+                  </Box>
+                  <Box className="voice-volume volumes">
+                    {/* <Slider
                   aria-label="slider-ex-4"
                   defaultValue={30}
                   name="voiceVolume"
@@ -249,25 +238,26 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     <Img src={SliderPointer} />
                   </SliderThumb>
                 </Slider> */}
-                </Box>
-                <Box className="btns">
-                  {/* <Button className='back-btn btn'><Img src={Back} 
+                  </Box>
+                  <Box className="btns">
+                    {/* <Button className='back-btn btn'><Img src={Back} 
                 // onClick={()=> setPermission({...permission, setting: false})}
                  /></Button> */}
-                  <Button
-                    className="okay-btn btn"
-                    onClick={() => setIsLanguage(false)}
-                  >
-                    <Img src={Okay} />
-                  </Button>
+                    <Button
+                      className="okay-btn btn"
+                      onClick={() => setIsLanguage(false)}
+                    >
+                      <Img src={Okay} />
+                    </Button>
+                  </Box>
                 </Box>
-              </Box>
-            ) : null
-            // <Box className="Setting-box off"></Box>
-          }
+              ) : null
+              // <Box className="Setting-box off"></Box>
+            }
+          </Box>
         </Box>
-      </Box> : null}
-      <Box className="Play-game CharacterScreen">
+      ) : null}
+      {/* <Box className="Play-game CharacterScreen">
         <Box h={'100vh'} w={'100%'}>
           <motion.div
             initial={{ opacity: 0, background: '#000' }}
@@ -275,84 +265,113 @@ const Characterspage: React.FC<PlayGamesProps> = ({
             transition={{ duration: 0.5, delay: 0.5 }}
           >
             <Box className="img-box">
-              <Img className="img-bg" src={imageSrc} />
-              <Box className="img-section">
-                <Img className="select-pad" src={Select} loading="lazy" />
-                {/* <Input
-                  className="enter-name"
-                  placeholder="Enter Character Name"
-                  onChange={(e: any) => setPlayerName(e.target.value)}
-                /> */}
-                <Text className="enter-name">{playerInfo.name}</Text>
-                <Box className="back-n-next-box">
-                  <Box
-                    w={'230px'}
-                    h={'50px'}
-                    transform={'translate(475px, 250px)'}
-                    cursor={'pointer'}
-                    position={'relative'}
-                    zIndex={9999999}
-                    onClick={selectPlayerClick}
-                  ></Box>
+              <Img className="img-bg" src={imageSrc} />   
+                <Box className="img-section">
+                  <Img 
+                  className="select-pad" 
+                  src={Select} loading="lazy" />
+                
+                  <Text className="enter-name">{playerInfo.name}</Text>
+                  <Box className="back-n-next-box">
+                    <Box
+                      w={'230px'}
+                      h={'50px'}
+                      transform={'translate(475px, 250px)'}
+                      cursor={'pointer'}
+                      position={'relative'}
+                      zIndex={9999999}
+                     
+                    ></Box>
+                  </Box>
+                  <Box className="back-n-next-box">
+                    <Button
+                      className="btns left-btn"
+                      onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
+                    ></Button>
+                    <Button
+                      className="btns right-btn"
+                      onClick={() => setI(players.length - 1 === i ? 0 : i + 1)}
+                    ></Button>
+                  </Box>
+                
                 </Box>
-                <Box className="back-n-next-box">
-                  <Button
-                    className="btns left-btn"
-                    onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
-                  ></Button>
-                  <Button
-                    className="btns right-btn"
-                    onClick={() => setI(players.length - 1 === i ? 0 : i + 1)}
-                  ></Button>
-                </Box>
-                {/* {players[i] && (
-                  <Img
-                    src={`${API_SERVER}/${players[i]}`}
-                    position={'relative'}
-                    zIndex={9999999}
-                    w={'200px'}
-                    h={'324px'}
-                    transform={'translate(0px, 55px)'}
-                  />
-                )} */}
-                {/* <Box w={'100%'} h={'100vh'}>
-                  <Canvas camera={{ position: [0, 0, 10] }}>
-                    <directionalLight
-                      position={[5, 5, 5]}
-                      intensity={0.8}
-                      color={0xffccaa}
-                      castShadow
-                    />
-                    <ambientLight intensity={5.5} />
-                    
-                    <Model />
-                  
-                  </Canvas>
-                </Box> */}
-                {/* <Canvas camera={{ position: [0, 1, 9] }}>
-                  <directionalLight
-                    position={[2.0, 78.0, 100]}
-                    intensity={0.8}
-                    color={'ffffff'}
-                    castShadow
-                  />
-                  <ambientLight intensity={0.5} />
-                  <OrbitControls />
-                  <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
-                  <Model />
-                </Canvas> */}
-              </Box>
             </Box>
           </motion.div>
         </Box>
-        {/* <Button
-          position={'absolute'}
-          top={0}
-          right={0}
-          // onClick={useData?.Function?.handleClose}
+      </Box> */}
+      <Box
+        position="relative"
+        maxW="100%"
+        w={'100vw'}
+        height="100vh"
+        backgroundImage={imageSrc}
+        backgroundSize={'cover'}
+        backgroundRepeat={'no-repeat'}
+      >
+        <Grid
+          templateColumns="repeat(1, 1fr)"
+          gap={4}
+          position="absolute"
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+          width="65%"
         >
-          <Icon as={MdClose} />
-        </Button> */}
+          <GridItem colSpan={1} position={'relative'}>
+            <Img src={Select} h={'auto'} maxW={'100%'} loading="lazy" />
+            <Box
+              position={'absolute'}
+              top={{ base: '100px', lg: '150px', xl: '200px', '2xl': '295px' }}
+              w={'100%'}
+              h={'42%'}
+              display={'flex'}
+              justifyContent={'center'}
+            >
+              <Box w={'30%'} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+                <Img src={Selected} w='10px' h='15px' transform={'rotate(90deg)'}/>
+                <Img src={Selected} w='10px' h='15px' transform={'rotate(-90deg)'}/>
+              </Box>
+            </Box>
+            <Box
+              position={'absolute'}
+              bottom={{ base: '40px', lg: '70px', xl: '90px', '2xl': '135px' }}
+              w={'100%'}
+              display={'flex'}
+              justifyContent={'center'}
+            >
+              <Button w={'15%'} bg={'none'} _hover={{bg:'none'}} onClick={selectPlayerClick}></Button>
+            </Box>
+            <Box
+              position={'absolute'}
+              bottom={bottomMargin}
+              w={'100%'}
+              display={'flex'}
+              justifyContent={'center'}
+            >
+              <Box
+                w={innerBoxWidth}
+                display={'flex'}
+                justifyContent={'space-between'}
+              >
+                <Button
+                  className="btns left-btn"
+                  bg={'none'}
+                  _hover={{bg:'none'}}
+                  onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
+                ></Button>
+                <Box w={'30%'} position={'relative'}>
+                <Text className="enter-name" textAlign={'center'} position={'absolute'} bottom={{ base: '-5px', lg: '-10px', xl: '-30px', '2xl': '-5px' }}  fontSize={{ base: '15px', lg: '20px', xl: '25px', '2xl': '30px' }} fontFamily={'AtlantisText'}>{playerInfo.name}Leo Dasssdfsdfaf WRWRAWD </Text>
+                </Box>
+                <Button
+                  className="btns right-btn"
+                  bg={'none'}
+                  _hover={{bg:'none'}}
+                  onClick={() => setI(players.length - 1 === i ? 0 : i + 1)}
+                ></Button>
+              </Box>
+            </Box>
+          </GridItem>
+        </Grid>
       </Box>
     </>
   );

@@ -680,6 +680,23 @@ height: 41px;
 }
 
 /* TOP MENU */
+/* .Play-station {
+  cursor: var(--cursor-new);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none; 
+} */
+
+
+
+
+/* TOP MENU */
 
 .top-menu-home-section {
   position: absolute;
@@ -700,6 +717,14 @@ height: 41px;
   height: 63px;
   transform: translate(-110px, 2px);
 }
+.top-menu-home-section .profile-img{
+  position: absolute;
+  top: 0;
+  left: 2%;
+  z-index: 999;
+  height: 63px;
+  transform: translate(0, 11%);
+}
 .top-menu-home-section .setting-img{
   position: absolute;
   top: 0;
@@ -716,18 +741,46 @@ height: 41px;
   height: 45px;
   width: 9%;
   transform: translate(8%, 34%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .top-menu-home-section .score-box .text {
   font-size: 36px;
   font-family: 'Score';
-  color: var(--text-color);
+  color: var(--text-color);  
+  transform: translateY(-4px);
+}
+.top-menu-home-section .progress-box {
+  position: absolute;
+  top: 0;
+  right: 38%;
+  z-index: 999;
+  height: 45px;
+  width: 3%;
+  transform: translate(-2%, 25%);
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(-7px);
 }
-
-
+.top-menu-home-section .progress-box .text {
+  font-size: 27px;
+  font-family: 'Atlantis';
+  color: var(--dialog-title-color);    
+}
+.top-menu-home-section .progress-box .progressing { 
+  display: flex;  
+  width: 316%;
+  position: absolute;
+  transform: translate(70%, 1%);
+}
+.top-menu-home-section .progress-box .progressing .level {
+  background: linear-gradient(to bottom, #009400, #00000000);      
+  height: 32px;
+  width: 8.3%;
+  border-radius: 2px;  
+  margin-right: 3px;
+}
 .top-menu-home-section .Setting-box {
   display: flex;
   justify-content: center;
@@ -802,6 +855,79 @@ height: 41px;
 .top-menu-home-section .Setting-box .btns .btn img{
   height: 40px;
   width: 146px;
+}
+
+
+.top-menu-home-section .tooltip-img { 
+  height: 60px;
+  width: 150px;
+  background-size: contain;
+}
+.top-menu-home-section .overview-box:hover .tooltip-img{
+  position: absolute;
+  top: 50px;
+  right: 78px;
+  z-index: 999;   
+}
+.overview-box .tooltip-box {   
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.overview-box .tooltip-box p{   
+  position: absolute;
+}
+.overview-box:hover p{  
+  position: absolute;
+  top: 50px;
+  right: 78px;
+  z-index: 9999;
+}
+
+
+
+
+
+
+.top-menu-home-section .NDI.home-img{
+  position: absolute;
+  top: 0;
+  left: 2%;
+  z-index: 999;
+  height: 65px;
+  transform: translate(2%, 10%);
+}
+.top-menu-home-section .NDI.replay-img {
+  position: absolute;
+  top: 0;
+  left: 2%;
+  z-index: 999;
+  height: 65px;
+  transform: translate(135%, 10%);
+}
+.top-menu-home-section .NDI.progress-box {
+  position: absolute;
+  top: 0;
+  right: 27%;
+  z-index: 999;
+  height: 45px;
+  width: 3%;
+  transform: translate(10%, 20%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.top-menu-home-section .NDI.score-box {
+  position: absolute;
+  top: 0;
+  right: 3%;
+  z-index: 999;
+  height: 45px;
+  width: 9%;
+  transform: translate(7%, 34%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* LEADERBOARD SCREEN */
@@ -1512,8 +1638,8 @@ transform: translate(-167px, -84px);
     background-position: center;
   }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .thankyou-screen-box .bg-thankyou {
-    height: 800px; 
-    width: 800px; 
+    /* height: 800px; 
+    width: 800px;  */
     background-position: center;
   }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback {   

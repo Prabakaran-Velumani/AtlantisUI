@@ -180,17 +180,15 @@ const Story: React.FC<{
         updatedScore[index] = { ...updatedScore[index], score: newScore };
         return { ...prev, score: updatedScore };
       } else {
-        return {
-          ...prev,
-          score: [
-            ...prev.score,
-            {
-              seqId: seqId,
-              score: newScore,
-              quest: parseInt(seqId.split('.')[0]),
-            },
-          ],
-        };
+        const newScoreArray = [
+          ...prev.score,
+          {
+            seqId: seqId,
+            score: newScore,
+            quest: parseInt(seqId.split('.')[0]),
+          },
+        ];
+        return { ...prev, score: newScoreArray };
       }
     });
     getData(data);

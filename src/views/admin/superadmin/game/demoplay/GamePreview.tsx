@@ -51,7 +51,6 @@ import React, {
   useState,
 } from 'react';
 
-// import ModelViewer from "../three/ModelViewer";
 import { json, useParams } from 'react-router-dom';
 import {
   getGameDemoData,
@@ -64,7 +63,7 @@ import EntirePreview from './EntirePreview';
 import { API_SERVER } from 'config/constant';
 import { IoIosRefresh } from "react-icons/io";
 
-// const gameScreens = ['GameIntro','Welcome','Story','Reflection',"Leaderboard", "ThanksScreen", "Completion","TakeAway"];
+
 const gameScreens = [
   'Completion',
   'Leaderboard',
@@ -91,7 +90,8 @@ const GamePreview = () => {
     useState<number>(InitialScreenId);
   const [profile, setProfile] = useState({
     score: [],
-    completedLevels:['1']
+    completedLevels:['1'],
+    currentQuest: 1,
   });
   const [currentScore, setCurrentScore] = useState(0);
   const toast = useToast();
