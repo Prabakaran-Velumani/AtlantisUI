@@ -799,6 +799,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   //no need for story
   const handleTabSelection = (e: any) => {
     e.preventDefault();
+    console.log('etargetvalue',e.target.value, currentScreenId);
+    
     if (e.target.value) {
       setReviewInput((prev: Review) => ({
         ...prev,
@@ -817,7 +819,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setReviewSubTabOptions([]);
     }
   };
+  let selectedvalue: any;
+    if(currentScreenId === 1)
+    {
+       selectedvalue = 5;
+    }
+    if(currentScreenId === 2)
+    {
+      selectedvalue = 4;
+    }
 
+  
   const handleSubTabSelection = (e: any) => {
     const selectedTabFileds = tabAttributeSets.find(
       (item) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
@@ -1502,7 +1514,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               >
                 <option value={''}>Select</option>
                 {filteredTabOptions.map((item) => (
-                  <option key={item.value} value={item.value}>
+                  <option key={item.value} value={item.value} selected={item.value === selectedvalue ? true : false}>
                     {item.label}
                   </option>
                 ))}
