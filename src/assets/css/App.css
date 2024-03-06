@@ -98,8 +98,16 @@ option {
 }
 
 
-
-
+/* MenuReviewShow */
+.menureviewshow
+{
+  z-index: 100000000;
+}
+.menulistreviewshow
+{
+  z-index: 100000000;
+ 
+}
 
 /* Game Story */
 .block-compo { 

@@ -291,6 +291,9 @@ const GameCreation = () => {
   );
   const iconColor = useColorModeValue('brand.500', 'white');
   const bgList = useColorModeValue('white', 'whiteAlpha.100');
+  const Menupreview = { 
+    zIndex: 100000000 
+  };
   const bgShadow = useColorModeValue(
     '14px 17px 40px 4px rgba(112, 144, 176, 0.08)',
     'unset',
@@ -4159,6 +4162,7 @@ useEffect(()=>{
                   position={'fixed'}
                   bottom={'0'}
                   right={'5px'}
+                  className='menureviewshow'
                   // onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                   {/* $$$$$$$$ */}
@@ -4171,6 +4175,7 @@ useEffect(()=>{
                     borderRadius={'50%'}
                     p={'15px'}
                     me="10px"
+                  
                   />
                 </MenuButton>
                 <MenuList
@@ -4183,8 +4188,9 @@ useEffect(()=>{
                   mt="10px"
                   minW={{ base: '360px' }}
                   maxW={{ base: '360px', md: 'unset' }}
+                  zIndex={'100000000'}
                 >
-                  <FormControl>
+                  <FormControl >
                     <FormLabel fontSize={18} fontWeight={700}>
                       Feedback For{' '}
                       {tab === 1
