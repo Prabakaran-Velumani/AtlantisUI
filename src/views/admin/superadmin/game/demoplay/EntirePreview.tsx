@@ -767,7 +767,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [reviewInput.tabId]);
   useEffect(() => {
     /**Validate form */
-    if (currentScreenId === 1) {
+  console.log('reviewInputtabId',reviewInput.tabId);
+  if(reviewInput.tabId === null)
+    {if (currentScreenId === 1) {
       setDefaultSelectedValue(5);
       setReviewInput((prev: any) => ({
         ...prev,
@@ -779,7 +781,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         ...prev,
         tabId: 4,
       }));
-    }
+    }}
     if (
       reviewInput.reviewGameId &&
       reviewInput.reviewerId &&
@@ -1538,11 +1540,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 id="tab"
                 name="tab"
                 onChange={handleTabSelection}
-                value={defaultSelectedValue ?? ''}
+               
               >
                 <option value={''}>Select</option>
                 {filteredTabOptions.map((item) => (
-                  <option key={item.value} value={item.value}>
+                  <option key={item.value} value={item.value} selected={item.value===defaultSelectedValue}>
                     {item.label}
                   </option>
                 ))}
