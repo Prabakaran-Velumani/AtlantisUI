@@ -394,7 +394,7 @@ const Welcome: React.FC<{
                     alignItems={'flex-start'}
                   >
                     <Img
-                      // transform={'scale(1.3)'} 
+                      // transform={'scale(1.3)'}
                       w={'100px'}
                       h={'41px'}
                       src={next}
