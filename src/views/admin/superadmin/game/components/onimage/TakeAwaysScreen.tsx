@@ -81,15 +81,12 @@ import {
                     {contentAfterBullet}
                   </>
                 </Box>
-                
               );
-              
             })}
-              <Box className='next-btn'>
+            </Box>
+            <Box className='next-btn'>
               <Img src={next}  />
             </Box>
-            </Box>
-          
           </Box>
           
         </Box>
