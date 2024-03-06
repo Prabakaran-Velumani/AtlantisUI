@@ -78,7 +78,7 @@ interface Badge {
   gasAssetName: string;
 }
 
-const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview:any , preloadedAssets?: any}> = ({
+const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview: any, preloadedAssets?: any }> = ({
   formData,
   imageSrc,
   preview,
@@ -113,7 +113,7 @@ const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview:any , pr
     <>
       {imageSrc && preview ? (
         <>
-         <Box className='section-thankyou-screen'>    
+          <Box className='section-thankyou-screen'>
             <Box className="thankyou-screen-box">
               <Img src={imageSrc} className="bg-img" />
             </Box>
@@ -371,21 +371,26 @@ const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview:any , pr
                               </a>
                             </Text>
                           </div>
+                          <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'167px', right:'0' , justifyContent:'center', zIndex:'9999'}}>
+              <Img src={next} />
+            </Box>
                         </>
                       )}
                     </Box>
-                    {/* <Box className='next-btn'>
-              <Img src={next}  />
-            </Box> */}
+                   
                   </Box>
+                  
                 </>
               )}
             </Box>
-            <Box  className='next-btn' style={{ position: 'fixed', bottom: '0', right: '0' }}>
-  <Img src={next} />
-</Box>
+            {/* <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'100px', right:'0' , justifyContent:'center'}}>
+              <Img src={next} />
+            </Box> */}
+            {/* <Box className='next-btn' style={{ position: 'fixed', bottom: '-1', right: '100' }}>
+              <Img src={next} />
+            </Box> */}
 
-        
+
           </Box>
         </>
       ) : (
@@ -644,16 +649,20 @@ const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview:any , pr
                             </a>
                           </Text>
                         </div>
+                      
                       </>
                     )}
+                      <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'167px', right:'0' , justifyContent:'center', zIndex:'9999'}}>
+              <Img src={next} />
+            </Box>
                   </Box>
                 </Box>
               </>
             )}
           </Box>
-          <Box  className='next-btn' style={{ position: 'fixed', bottom: '100', right: '100' }}>
-  <Img src={next} />
-</Box>
+          {/* <Box className='next-btn' style={{ position: 'absolute', top: '10', right: '100' }}>
+            <Img src={next} />
+          </Box> */}
 
         </Box>
       )}

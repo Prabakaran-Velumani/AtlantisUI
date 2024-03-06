@@ -238,9 +238,9 @@ const ReflectionScreen: React.FC<{
             </Box>
             
           ) : null}
-           <Box className='next-btn'>
+           {/* <Box className='next-btn'>
               <Img src={next}  />
-            </Box> 
+            </Box>  */}
         </Box>
         
         // </SimpleGrid>
