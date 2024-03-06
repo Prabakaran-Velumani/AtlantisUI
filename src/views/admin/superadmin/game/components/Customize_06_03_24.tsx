@@ -43,12 +43,10 @@ interface PropsInteraction {
     setUpNextCount?:any;                
   reviews?:any;
   reviewers?:any;
-  ShowReview?:any;
-				  
 }
 
 const Customize: React.FC<PropsInteraction> = ({ id, formData, setBlockItems, serias, setserias, setInput, input, setItems, items, alphabet, setAlphabet, interactionBlock, setInteractionBlock, countalphabet, setAlphabetCount, count, setCount, sequence, setSequence, dummySequence, setDummySequence,showSelectBlock,setSelectBlock,targetSequence,handleKeyDown,isDeleteSeq, setDeleteseq,handleGet,fetchBlocks,listQuest,questTabState,setQuestTabState,deleteQuest,setUpNextCount,upNextCount,reviewers,
-  reviews,ShowReview,
+  reviews,
   //  onMouseOver 
   }) => {
 
@@ -87,7 +85,6 @@ const Customize: React.FC<PropsInteraction> = ({ id, formData, setBlockItems, se
          setUpNextCount={setUpNextCount}       
          reviews={reviews} 
          reviewers={reviewers}
-		ShowReview={ShowReview}						
         />
 
 

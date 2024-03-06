@@ -57,6 +57,8 @@ import {
   GoUnverified,
   GoDotFill,
   GoCodeReview,
+GoEye,
+  GoEyeClosed		
 } from 'react-icons/go';
 import Card from 'components/card/Card';
 import InputField from 'components/fields/InputField';
@@ -162,6 +164,7 @@ import { updatePreviewData } from '../../../../../store/preview/previewSlice';
 import { Dispatch } from '@reduxjs/toolkit'; // Import Dispatch type from @reduxjs/toolkit
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
+import { AiOutlineEye,AiOutlineEyeInvisible } from "react-icons/ai";
 
 const steps = [
   { title: 'BackGround' },
@@ -354,6 +357,7 @@ const GameCreation = () => {
     [cat, setCat] = useState([]),
     [enter, setEnter] = useState(false),
     [entire, setEntire] = useState(false),
+	[ShowReview, setShowReview] = useState(false),											  
     [share, setShare] = useState(false),
     [bgIndex, setBgIndex] = useState<number>(),
     [formData, setFormData] = useState({
@@ -374,6 +378,8 @@ const GameCreation = () => {
       gamePlayerFemaleVoice: null,
       gameNarratorVoice: null,
 
+			 
+			   
       gameStoryLine: '',
       gameReflectionQuestion: 4,
       gameRefQuestion1: '',
@@ -396,6 +402,9 @@ const GameCreation = () => {
       gameIsCollectLearnerFeedback: 'false',
       gameIsFeedbackMandatory: 'false',
       gameIsLearnerMandatoryQuestion: 'false',
+									  
+
+										   
       gameIsSetCongratsSingleMessage: 'false',
 
       gameIsShowTakeaway: 'false',
@@ -599,6 +608,8 @@ const GameCreation = () => {
     }));
   };
  
+														  
+   
   const handleH = (i: any) => {
     setBackgroundIndex(i);
   };
@@ -607,6 +618,9 @@ const GameCreation = () => {
     setBackgroundIndex('');
   };
 
+														  
+   
+											   
   const handlePreview = (img: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchImg((prev: any) => {
@@ -797,6 +811,7 @@ const GameCreation = () => {
   };
 
   const handleGet = async (quest: number) => {
+				 
     setAtuoSave(false);
     // console.log('handleGet');
     // return false;
@@ -944,12 +959,15 @@ const GameCreation = () => {
     // const result1 = await getStory(id);
     // if (result1?.status !== 'Success') {de
     //   console.log(result1.message);
+
     // }
     // else {
+
     //   setBlockItems(result1.items);
     //   setserias(result1.serias);
     // }
     const result2 = await getListStory(id);
+
     if (result2?.status !== 'Success') {
       console.log(result2?.message);
     } else {
@@ -1012,7 +1030,12 @@ useEffect(()=>{
     setShare(true);
     onOpen();
   };
+	 const handleShowReview = () => {
+    setShowReview(!ShowReview);
+   
+  };							  
 
+  
   const handleTrans = (tabs: number) => {
     let tabArray: number[] = [];
 
@@ -1035,6 +1058,9 @@ useEffect(()=>{
     //tab6
     const tab6 = document.getElementById(`tab6`);
     const getSixthElementHgt = tab6?.clientHeight;
+
+															
+											  
 
     if (tabs == 1 && tab == 1) {
       setHeightOfTab(getfirstElementHgt);
@@ -2821,6 +2847,8 @@ useEffect(()=>{
 
       // handleCompletionScreen(1)
     }
+											   
+														 
   }, [compliData]);
 
   ////handleCompliStore
@@ -4069,6 +4097,7 @@ useEffect(()=>{
                       deleteQuest={deleteQuest}
                       upNextCount={upNextCount}
                       setUpNextCount={setUpNextCount}
+					ShowReview={ShowReview}						 
                     />
                   </>
                 ) : tab === 5 ? (
@@ -4138,7 +4167,8 @@ useEffect(()=>{
                 ) : null}
               </GridItem>
             </Grid>
-            {tab !== 4 ? (
+             {(tab !== 4 && tab !== 6) && ShowReview && (
+			   
               <Menu>
                 <MenuButton
                   p="0px"
@@ -4278,7 +4308,7 @@ useEffect(()=>{
                   </MenuItem>
                 </MenuList>
               </Menu>
-            ) : null}
+            )}
             <Flex justify="center">
               <Card
                 display={'flex'}
@@ -4395,7 +4425,31 @@ useEffect(()=>{
                             share review
                           </Text>
                         </Flex>
+					   
                       </MenuItem>
+						<MenuItem	   
+                        transition="0.2s linear"
+                        color={textColor}
+                        _hover={textHover}
+                        p="0px"
+                        borderRadius="8px"
+                        _active={{
+                          bg: 'transparent',
+                        }}
+                        _focus={{
+                          bg: 'transparent',
+                        }}
+                        mb="10px"
+                        // onClick={() => menu.key(props.id)}
+                      >
+                        <Flex align="center" onClick={handleShowReview}>
+                          <Icon as={ShowReview ?AiOutlineEyeInvisible:AiOutlineEye} h="16px" w="16px" me="8px" />
+                          <Text fontSize="sm" fontWeight="400">
+                            {ShowReview ? "Hide Review" : "Show Review"}
+                          </Text>
+                        </Flex>
+                       
+                      </MenuItem>		   
                     </MenuList>
                   </Box>
                 </Menu>

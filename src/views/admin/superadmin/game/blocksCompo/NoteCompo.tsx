@@ -22,6 +22,7 @@ import InputField from 'components/fields/InputField'
 import StrightConector from '../components/dragNdrop/strightConector'
  
 interface PropsNote {
+  reviews?:any,
     seq?: any,
     index?: number,
     name?: any,
@@ -38,7 +39,7 @@ interface PropsNote {
     showSelectBlock?:any,
      setSelectBlock?:any,
 }
-const NoteCompo: React.FC<PropsNote> = ({ seq, index, name, handleInput, input, getSeq, duplicateSeq, delSeq, alphabet, setNavigation, handleBlock, handleSelectBlock, items,showSelectBlock,setSelectBlock }) => {
+const NoteCompo: React.FC<PropsNote> = ({ reviews, seq, index, name, handleInput, input, getSeq, duplicateSeq, delSeq, alphabet, setNavigation, handleBlock, handleSelectBlock, items,showSelectBlock,setSelectBlock }) => {
     const textareaRef = useRef(null);
     
 
@@ -111,7 +112,29 @@ const NoteCompo: React.FC<PropsNote> = ({ seq, index, name, handleInput, input, 
 
     console.log('off',alphabet.filter((alp: any) => alp.seqs === seq.id ));
     return (
-        <Flex className='block-compo' mb={'20px'} padding={'10px 0'} alignItems={'start'}>
+        <Flex className='block-compo' mb={'20px'} padding={'10px 0'} alignItems={'start'}  
+        // style={{
+        //   backgroundColor:
+        //     reviews &&
+        //     reviews.filter (
+        //       (item: any) => item?.tabAttributeValue === `${seq?.questNo}@${seq?.input}`
+        //     )
+        //       ? 'unset'
+        //       : '#E2E8F0'
+        // }} 
+        style={{
+          backgroundColor:
+            reviews &&
+            reviews.find((item: any) => {
+              const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+              const isMatched = item?.tabAttributeValue === tabAttributeValue;
+              console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+              return isMatched;
+            })
+              ? '#E2E8F0'
+              : ''
+        }}
+       >
             <Box className='block-action-icons'>
                 <Icon as={MdAdd} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => getSeq(seq, index, name)} />
                 <Icon as={BiSolidDuplicate} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => duplicateSeq(seq, index, name)} />

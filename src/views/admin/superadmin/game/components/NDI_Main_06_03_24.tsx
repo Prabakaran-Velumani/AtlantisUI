@@ -77,7 +77,6 @@ interface NDIMainProps {
              setUpNextCount?:any;
    reviews?: any ;
   reviewers?: any;
-	ShowReview?:any;			  
 }
 
 const initial = {
@@ -100,7 +99,7 @@ type ItemType = {
 };
 const NDIMain: React.FC<NDIMainProps> = ({ id, formData,setBlockItems,serias,setserias,setInput,input,setItems,items,alphabet,setAlphabet,interactionBlock,setInteractionBlock,countalphabet,setAlphabetCount,count,setCount,sequence,setSequence,dummySequence,setDummySequence,showSelectBlock,setSelectBlock,targetSequence,handleKeyDown,isDeleteSeq, setDeleteseq, handleGet,fetchBlocks,listQuest, questTabState,
     setQuestTabState,deleteQuest,upNextCount,setUpNextCount,reviews,
-  reviewers,ShowReview, 
+  reviewers, 
 //   onMouseOver
 }) => {
     const dragRef = useRef<any>();
@@ -1832,7 +1831,6 @@ console.log('setDialogNavigation',menuvalue)
                                                             >  
                                                         
                                                                 <NoteCompo
-                                                                reviews={reviews}
                                                                     seq={seq}
                                                                     index={i}
                                                                     name={'Note'}
@@ -1850,7 +1848,6 @@ console.log('setDialogNavigation',menuvalue)
                                                                     handleInput={(e: any) => handleInput(e, i)} 
 />
 {/* Review Preview Accordian for Note*/}
-{ShowReview ? (			   
                                   <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
@@ -1953,10 +1950,6 @@ console.log('setDialogNavigation',menuvalue)
                                       </AccordionPanel>
                                     </AccordionItem>
                                   </Accordion>
- ):(
-    ''
-)}  
-								 
  {seq.id == showMiniBox ? (
                                     <MiniBox seq={seq} i={i} name={'Note'} />
                                   ) : null}
@@ -1971,7 +1964,6 @@ console.log('setDialogNavigation',menuvalue)
                                                            
                                                                 
                                                                     <DialogCompo
-                                                                     reviews={reviews}
                                                                         seq={seq}
                                                                         index={i}
                                                                         name={'Dialog'}
@@ -2000,7 +1992,7 @@ console.log('setDialogNavigation',menuvalue)
                                                                        
    />
 {/* Accordian For Dialog Blocks */}
-{ShowReview ? ( <Accordion allowToggle>
+                                  <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
                                         <AccordionButton>
@@ -2101,8 +2093,7 @@ console.log('setDialogNavigation',menuvalue)
                                         )}
                                       </AccordionPanel>
                                     </AccordionItem>
-                                   </Accordion>):''}
-								 
+                                  </Accordion>
                                   {seq.id == showMiniBox ? (
                                     <MiniBox seq={seq} i={i} name={'Dialog'} />
                                   ) : null}
@@ -2118,7 +2109,6 @@ console.log('setDialogNavigation',menuvalue)
                                                                 
                                                                     
                                                                         <InteractionCompo
-                                                                         reviews={reviews}
                                                                             seq={seq}
                                                                             index={i}
                                                                             name={'Interaction'}
@@ -2158,7 +2148,7 @@ console.log('setDialogNavigation',menuvalue)
                                                                         setSelectBlock={setSelectBlock}
 />
  {/* Accordian for Interaction Blocks */}
- {ShowReview ? (<Accordion allowToggle>
+                                 <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
                                         <AccordionButton>
@@ -2252,8 +2242,7 @@ console.log('setDialogNavigation',menuvalue)
                                         )}
                                       </AccordionPanel>
                                     </AccordionItem>
-                                   </Accordion>) : ''}
-								 
+                                  </Accordion>
 {seq.id == showMiniBox ? (
                                     <MiniBox
                                       seq={seq}
