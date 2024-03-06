@@ -74,6 +74,8 @@ const Story: React.FC<{
 
   const userProfile = useContext(ProfileContext);
   const { profile, setProfile } = useContext(ScoreContext);
+  const [currentPosition, setCurrentPosition] = useState(0);
+  const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
   const [score, setScore] = useState(null);
   useEffect(() => {
     getVoice(data, type);
@@ -176,6 +178,33 @@ const Story: React.FC<{
     handleValidate(item, ind);
   };
   console.log(profile);
+  
+  
+
+const getData1 = (data: any) => {
+  const content = data?.blockText || '';
+  const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
+  const newRemainingSentences = sentences.slice(currentPosition);
+  console.log('No more sentences1',content,newRemainingSentences.length )
+  setRemainingSentences(newRemainingSentences);
+  if (newRemainingSentences.length >= 1) {
+    console.log('No more sentencesif',content)
+    setCurrentPosition(currentPosition + 1);
+  } else {
+    console.log('No more sentenceselse',content);
+    if(data && type === 'Note')
+    {
+       getData(data);
+    }
+   
+  }
+};
+useEffect(() => {
+  if(data && type === 'Note')
+    {
+       getData1(data);
+    }
+}, [data]);
   return (
     <>
       {data && type === 'Note' && (
@@ -277,18 +306,21 @@ const Story: React.FC<{
             >
               <Box
                 w={'100%'}
-                overflowY={'scroll'}
+                // overflowY={'scroll'}
                 h={'100px'}
                 display={'flex'}
                 alignItems={'center'}
                 justifyContent={'center'}
                 mt={'20px'}
+               
               >
-                {data?.blockText}
+                {/* Show content based on the current position */}
+            {/* {data?.blockText.split('. ')[currentPosition]} */}
+            {remainingSentences[0]}
               </Box>
               <Box
                 w={'100%'}
-                onClick={() => getData(data)}
+                onClick={() => getData1(data)}
                 mt={'20px'}
                 display={'flex'}
                 justifyContent={'center'}

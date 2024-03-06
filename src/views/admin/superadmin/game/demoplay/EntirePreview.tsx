@@ -239,7 +239,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [voiceIds, setVoiceIds] = useState<any>();
   const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
     useState<boolean>(false);
-    const [defaultSelectedValue, setDefaultSelectedValue] = useState<any>(null);
   const [reflectionAnswers, setReflectionAnswers] =useState([]);
 
   const fetchDefaultBgMusic = async () => {
@@ -637,7 +636,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
     '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
   );
-  
+
   // validate the choosed option
   const handleValidate = (item: any, ind: number) => {
     setCurrentScore(parseInt(item?.qpScore));
@@ -767,21 +766,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [reviewInput.tabId]);
   useEffect(() => {
     /**Validate form */
-  console.log('reviewInputtabId',reviewInput.tabId);
-  if(reviewInput.tabId === null)
-    {if (currentScreenId === 1) {
-      setDefaultSelectedValue(5);
-      setReviewInput((prev: any) => ({
-        ...prev,
-        tabId:5,
-      }));
-    } else if (currentScreenId === 2) {
-      setDefaultSelectedValue(4);
-      setReviewInput((prev: any) => ({
-        ...prev,
-        tabId: 4,
-      }));
-    }}
     if (
       reviewInput.reviewGameId &&
       reviewInput.reviewerId &&
@@ -813,32 +797,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   };
   //no need for story
-  
-  useEffect(() => {
-    
-
-    if (currentScreenId === 1) {
-      setDefaultSelectedValue(5);
-      setReviewInput((prev: any) => ({
-        ...prev,
-        tabId:5,
-      }));
-    } else if (currentScreenId === 2) {
-      setDefaultSelectedValue(4);
-      setReviewInput((prev: any) => ({
-        ...prev,
-        tabId: 4,
-      }));
-    }
-
-   
-  }, [currentScreenId]);
-    
- 
   const handleTabSelection = (e: any) => {
     e.preventDefault();
-    console.log('etargetvalue',e.target.value, currentScreenId);
-    
     if (e.target.value) {
       setReviewInput((prev: Review) => ({
         ...prev,
@@ -857,8 +817,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setReviewSubTabOptions([]);
     }
   };
- 
- 
+
   const handleSubTabSelection = (e: any) => {
     const selectedTabFileds = tabAttributeSets.find(
       (item) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
@@ -1540,11 +1499,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 id="tab"
                 name="tab"
                 onChange={handleTabSelection}
-               
               >
                 <option value={''}>Select</option>
                 {filteredTabOptions.map((item) => (
-                  <option key={item.value} value={item.value} selected={item.value===defaultSelectedValue}>
+                  <option key={item.value} value={item.value}>
                     {item.label}
                   </option>
                 ))}
