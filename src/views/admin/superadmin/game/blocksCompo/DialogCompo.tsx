@@ -144,7 +144,6 @@ const DialogCompo: React.FC<PropsDialog> = ({ reviews,seq, index, name, handleIn
             ? reviews && reviews.find((item: any) => {
                 const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
                 const isMatched = item?.tabAttributeValue === tabAttributeValue;
-                console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
                 return isMatched;
               })
                 ? '#E2E8F0'

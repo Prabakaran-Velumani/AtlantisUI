@@ -577,7 +577,6 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ reviews,seq, index, numb
               ? reviews && reviews.find((item: any) => {
                   const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
                   const isMatched = item?.tabAttributeValue === tabAttributeValue;
-                  console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
                   return isMatched;
                 })
                   ? '#E2E8F0'

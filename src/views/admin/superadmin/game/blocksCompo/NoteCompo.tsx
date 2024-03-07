@@ -115,21 +115,12 @@ const NoteCompo: React.FC<PropsNote> = ({ reviews, seq, index, name, handleInput
   return (
     <Flex className='block-compo' mb={'20px'} padding={'10px 0'} alignItems={'start'}
     borderRadius={'12px'} marginBottom={'0px'}
-      // style={{
-      //   backgroundColor:
-      //     reviews &&
-      //     reviews.filter (
-      //       (item: any) => item?.tabAttributeValue === `${seq?.questNo}@${seq?.input}`
-      //     )
-      //       ? 'unset'
-      //       : '#E2E8F0'
-      // }} 
+      
       style={{
         backgroundColor: ShowReview
           ? reviews && reviews.find((item: any) => {
             const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
             const isMatched = item?.tabAttributeValue === tabAttributeValue;
-            console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
             return isMatched;
           })
             ? '#E2E8F0'
