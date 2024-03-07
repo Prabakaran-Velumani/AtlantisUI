@@ -53,11 +53,12 @@ interface PropsDialog {
     items?: any,
     showSelectBlock?:any,
      setSelectBlock?:any,
+     ShowReview?:any,
 }
 
 
 
-const DialogCompo: React.FC<PropsDialog> = ({ reviews,seq, index, name, handleInput, handleSelect, input, getSeq, duplicateSeq, delSeq, characterOption, dialogOption, voicePoseOption, animateBtn, setAnimateBtn, handleDialogEmotion, handleDialogVoice, formData, handleDialogBlockRoll, alphabet, setNavigation, handleBlock, handleSelectBlock , items,showSelectBlock,setSelectBlock}) => {
+const DialogCompo: React.FC<PropsDialog> = ({ reviews,seq, index, name, handleInput, handleSelect, input, getSeq, duplicateSeq, delSeq, characterOption, dialogOption, voicePoseOption, animateBtn, setAnimateBtn, handleDialogEmotion, handleDialogVoice, formData, handleDialogBlockRoll, alphabet, setNavigation, handleBlock, handleSelectBlock , items,showSelectBlock,setSelectBlock,ShowReview}) => {
     const textareaRef = useRef(null);
     const selectValue = `Char${[seq.input]}`;
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -138,18 +139,18 @@ const DialogCompo: React.FC<PropsDialog> = ({ reviews,seq, index, name, handleIn
         <>
             {/* {seq.status == 'no' ? 
             (null) :               */}
-            <Flex className='block-compo' mb={'20px'} padding={'10px 0'} alignItems={'start'} overflowX={'auto'}  style={{
-          backgroundColor:
-            reviews &&
-            reviews.find((item: any) => {
-              const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
-              const isMatched = item?.tabAttributeValue === tabAttributeValue;
-              console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
-              return isMatched;
-            })
-              ? '#E2E8F0'
-              : ''
-        }} >
+            <Flex className='block-compo' borderRadius={'12px'} mb={'20px'} padding={'10px 0'} alignItems={'start'} overflowX={'auto'} marginBottom={'0px'}   style={{
+          backgroundColor: ShowReview
+            ? reviews && reviews.find((item: any) => {
+                const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+                return isMatched;
+              })
+                ? '#E2E8F0'
+                : ''
+            : ''
+        }}>
                 <Box className='block-action-icons'>
                     <Icon as={MdAdd} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => getSeq(seq, index, name)} />
                     <Icon as={BiSolidDuplicate} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => duplicateSeq(seq, index, name)} />

@@ -68,6 +68,7 @@ interface PropsInteraction {
     handleTagsChange: any,
     showSelectBlock?:any,
     setSelectBlock?:any,
+    ShowReview?:any,
 }
 const customButtonStyles = {
     display: 'flex',
@@ -85,7 +86,7 @@ const customButtonStyles = {
   };
 
 
-const InteractionCompo: React.FC<PropsInteraction> = ({ reviews,seq, index, number, dummySequence, name, handleInput, handleSelect, input, getSeq, duplicateSeq, delSeq, characterOption, alphabet, setAlphabet, animateBtn, setAnimateBtn, interactionBlock, setInteractionBlock, formData, handleBlockRoll, handleQuestionEmotion, handleOptionEmotion, handleResponseEmotion, handleCheckBox, setNavigation, handleBlock, handleOptionVoice, handleQuestionVoice, countalphabet, setAlphabetCount, items, handleSelectBlock, handleResponseRoll, handleTagsChange,showSelectBlock, setSelectBlock }) => {
+const InteractionCompo: React.FC<PropsInteraction> = ({ reviews,seq, index, number, dummySequence, name, handleInput, handleSelect, input, getSeq, duplicateSeq, delSeq, characterOption, alphabet, setAlphabet, animateBtn, setAnimateBtn, interactionBlock, setInteractionBlock, formData, handleBlockRoll, handleQuestionEmotion, handleOptionEmotion, handleResponseEmotion, handleCheckBox, setNavigation, handleBlock, handleOptionVoice, handleQuestionVoice, countalphabet, setAlphabetCount, items, handleSelectBlock, handleResponseRoll, handleTagsChange,showSelectBlock, setSelectBlock,ShowReview }) => {
     const initial = {
         [`block${index}`]: ['']
     };
@@ -569,17 +570,19 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ reviews,seq, index, numb
     
 
     return (
-        <Flex className='block-compo' overflowX={'auto'} scrollBehavior={'smooth'} id={`${seq.id}`}  style={{
-            backgroundColor:
-              reviews &&
-              reviews.find((item: any) => {
-                const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
-                const isMatched = item?.tabAttributeValue === tabAttributeValue;
-                console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
-                return isMatched;
-              })
-                ? '#E2E8F0'
-                : ''
+        <Flex className='block-compo' overflowX={'auto'} scrollBehavior={'smooth'} id={`${seq.id}`}
+        borderRadius={'12px'} marginBottom={'0px'}  style={{
+            
+            backgroundColor: ShowReview
+              ? reviews && reviews.find((item: any) => {
+                  const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                  const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                  console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+                  return isMatched;
+                })
+                  ? '#E2E8F0'
+                  : ''
+              : ''
           }}>
               {showLeftButton && (
             <Box className='goLeft' display={'flex'} alignItems={'center'} height={'100%'} position={'absolute'} left={0}>

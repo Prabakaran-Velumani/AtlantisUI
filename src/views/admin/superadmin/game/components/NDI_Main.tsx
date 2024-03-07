@@ -11,15 +11,15 @@ import {
     Icon,
     List,
     ListItem,
-    Img, 
+    Img,
     useToast,
     Divider,
     Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
-  useColorModeValue,
+    AccordionItem,
+    AccordionButton,
+    AccordionIcon,
+    AccordionPanel,
+    useColorModeValue,
 } from '@chakra-ui/react'
 import { MdAdd, MdDelete, MdInbox, MdNote, MdNoteAdd, MdOutlineStickyNote2, MdTextsms } from 'react-icons/md';
 import { AiFillInteraction, AiOutlineInteraction } from 'react-icons/ai';
@@ -42,42 +42,42 @@ interface NDIMainProps {
     handleShowComponent?: (componentName: string) => void;
     id?: any;
     formData: any;
-    setBlockItems:any;
-    serias:any;
-    setserias:any;
-    setInput?:any;
-    input?:any;
-    setItems?:any;
-    items?:any;
-    alphabet?:any;
-    setAlphabet?:any;
-    interactionBlock?:any;
-    setInteractionBlock?:any;
-    countalphabet?:any;
-     setAlphabetCount?:any;
-      count?:any;
-       setCount?:any;
-        sequence?:any;
-         setSequence?:any;
-          dummySequence?:any;
-           setDummySequence?:any;
-           showSelectBlock?:any;
-            setSelectBlock?:any;
-            targetSequence?:any;
-            handleKeyDown?:any;
-            isDeleteSeq?:any, 
-            setDeleteseq?:any
-            handleGet?:any;
-            fetchBlocks:any;
-            listQuest?:any;
-            questTabState?:any;
-             setQuestTabState?:any;
-             deleteQuest?:any;
-             upNextCount?:any;
-             setUpNextCount?:any;
-   reviews?: any ;
-  reviewers?: any;
-	ShowReview?:any;			  
+    setBlockItems: any;
+    serias: any;
+    setserias: any;
+    setInput?: any;
+    input?: any;
+    setItems?: any;
+    items?: any;
+    alphabet?: any;
+    setAlphabet?: any;
+    interactionBlock?: any;
+    setInteractionBlock?: any;
+    countalphabet?: any;
+    setAlphabetCount?: any;
+    count?: any;
+    setCount?: any;
+    sequence?: any;
+    setSequence?: any;
+    dummySequence?: any;
+    setDummySequence?: any;
+    showSelectBlock?: any;
+    setSelectBlock?: any;
+    targetSequence?: any;
+    handleKeyDown?: any;
+    isDeleteSeq?: any,
+    setDeleteseq?: any
+    handleGet?: any;
+    fetchBlocks: any;
+    listQuest?: any;
+    questTabState?: any;
+    setQuestTabState?: any;
+    deleteQuest?: any;
+    upNextCount?: any;
+    setUpNextCount?: any;
+    reviews?: any;
+    reviewers?: any;
+    ShowReview?: any;
 }
 
 const initial = {
@@ -98,35 +98,35 @@ type ItemType = {
     content: string;
     type: string;
 };
-const NDIMain: React.FC<NDIMainProps> = ({ id, formData,setBlockItems,serias,setserias,setInput,input,setItems,items,alphabet,setAlphabet,interactionBlock,setInteractionBlock,countalphabet,setAlphabetCount,count,setCount,sequence,setSequence,dummySequence,setDummySequence,showSelectBlock,setSelectBlock,targetSequence,handleKeyDown,isDeleteSeq, setDeleteseq, handleGet,fetchBlocks,listQuest, questTabState,
-    setQuestTabState,deleteQuest,upNextCount,setUpNextCount,reviews,
-  reviewers,ShowReview, 
-//   onMouseOver
+const NDIMain: React.FC<NDIMainProps> = ({ id, formData, setBlockItems, serias, setserias, setInput, input, setItems, items, alphabet, setAlphabet, interactionBlock, setInteractionBlock, countalphabet, setAlphabetCount, count, setCount, sequence, setSequence, dummySequence, setDummySequence, showSelectBlock, setSelectBlock, targetSequence, handleKeyDown, isDeleteSeq, setDeleteseq, handleGet, fetchBlocks, listQuest, questTabState,
+    setQuestTabState, deleteQuest, upNextCount, setUpNextCount, reviews,
+    reviewers, ShowReview,
+    //   onMouseOver
 }) => {
     const dragRef = useRef<any>();
     const bodyRef = useRef<any>();
     const toast = useToast();
     const [showBox, setShowBox] = useState(false),
         [showMiniBox, setShowMiniBox] = useState<any>(),
-         
+
         [type, setType] = useState<any>(),
-        
-        
+
+
         [alert, setAlert] = useState(false),
-        
+
         [upNext, setUpNext] = useState<any>(),
         [blockInput, setBlockInput] = useState<any>(),
-        
-       
+
+
         [animateBtn, setAnimateBtn] = useState<any>(),
-       
+
         [number, setNumber] = useState<any>([]),
         [notify, setNotify] = useState<any>(''),
-        
-        
+
+
         [lastInputName, setLastInputName] = useState<any>();
-        
-console.log('upNextCount',sequence)
+
+    console.log('upNextCount', sequence)
     // For Character Options
     const characterOption = [
         { value: 'player', label: 'Player' },
@@ -146,12 +146,12 @@ console.log('upNextCount',sequence)
         { value: 'sad', label: 'Sad' },
     ]
 
-console.log('sequence',sequence)
+    console.log('sequence', sequence)
     // onClick Function
     const handleNDI = (NDI: any) => {
         // const sequencial = `${count / 10 + 1}`;
         // const upNextSequencial = `${(count + 1) / 10 + 1}`
-        
+
         const id = `${serias}.${count}`
         const upNext = `${serias}.${count + 1}`
         // const floatRegex = /^[-+]?(\d*\.\d+|\.\d+)$/;
@@ -168,11 +168,11 @@ console.log('sequence',sequence)
                 type: NDI,
                 upNext,
                 input: count,
-                questNo:serias,
-                
+                questNo: serias,
+
             },
         ]);
-        
+
         setSequence([...sequence, id]);
         setDummySequence([...dummySequence, id]);
         setUpNextCount([...upNextCount, upNext])
@@ -189,7 +189,7 @@ console.log('sequence',sequence)
                         ...prevInput[noteKey],
                         id: id,
                         note: "",
-                        dtime:null,
+                        dtime: null,
                         status: "yes",
                     }
                 }
@@ -201,10 +201,10 @@ console.log('sequence',sequence)
                         ...prevInput[dialogKey],
                         id: id,
                         dialog: "",
-                        character:formData.gameNonPlayingCharacterId,
+                        character: formData.gameNonPlayingCharacterId,
                         animation: "",
                         voice: "",
-                        dtime:null,
+                        dtime: null,
                         // status: "yes",                       
                     }
                 }
@@ -218,18 +218,18 @@ console.log('sequence',sequence)
                         interaction: "",
                         status: "yes",
                         blockRoll: formData.gameNonPlayingCharacterId,
-                        optionsObject:{A: null,B: null ,C: null},
-                        ansObject:{A: null,B: null ,C: null},
-                        feedbackObject:{A: null,B: null ,C: null},
-                        responseObject:{A: null,B: null ,C: null},
-                        optionTitleObject:{A: null,B: null ,C: null},
-                        optionsemotionObject:{A: null,B: null ,C: null},
-                        optionsvoiceObject:{A: null,B: null ,C: null},
-                        scoreObject:{A: null,B: null ,C: null},
-                        navigateObjects:{A: null,B: null ,C: null},
-                            
-                          
-                        
+                        optionsObject: { A: null, B: null, C: null },
+                        ansObject: { A: null, B: null, C: null },
+                        feedbackObject: { A: null, B: null, C: null },
+                        responseObject: { A: null, B: null, C: null },
+                        optionTitleObject: { A: null, B: null, C: null },
+                        optionsemotionObject: { A: null, B: null, C: null },
+                        optionsvoiceObject: { A: null, B: null, C: null },
+                        scoreObject: { A: null, B: null, C: null },
+                        navigateObjects: { A: null, B: null, C: null },
+
+
+
                     }
                 }
             }
@@ -266,25 +266,25 @@ console.log('sequence',sequence)
                 ]);
             }
             // handleNDI
-        
-        
-        
-        
-        
+
+
+
+
+
         }
 
         console.log('upNext123', upNext);
 
     };
     const handleMiniNDI = (seq?: any, i?: any, name?: any) => {
-        
+
         const sequencial = `${count / 10 + 1}`;
         const upNextSequencial = `${(count + 1) / 10 + 1}`
         const floatRegex = /^[-+]?(\d*\.\d+|\.\d+)$/;
         // const id = floatRegex.test(sequencial) ? sequencial : `${count / 10 + 1}.${0}`          
         // const upNext = floatRegex.test(upNextSequencial) ? upNextSequencial : `${(count + 1) / 10 + 1}.${0}` 
         // const upNext = `${Math.floor(count / 10) + 1}.${(count + 1) % 10 || 1}`;          
-       
+
         const id = `${serias}.${count}`
         const upNext = `${serias}.${count + 1}`
         setUpNext(upNext);
@@ -348,7 +348,7 @@ console.log('sequence',sequence)
                         ...prevInput[noteKey],
                         id: id,
                         note: "",
-                        dtime:null,
+                        dtime: null,
                     }
                 }
             }
@@ -359,10 +359,10 @@ console.log('sequence',sequence)
                         ...prevInput[dialogKey],
                         id: id,
                         dialog: "",
-                        character:formData.gameNonPlayingCharacterId,
+                        character: formData.gameNonPlayingCharacterId,
                         animation: "",
                         voice: "",
-                        dtime:null,
+                        dtime: null,
                     }
                 }
             }
@@ -374,15 +374,15 @@ console.log('sequence',sequence)
                         id: id,
                         interaction: "",
                         blockRoll: formData.gameNonPlayingCharacterId,
-                        optionsObject:{A: null,B: null ,C: null},
-                        ansObject:{A: null,B: null ,C: null},
-                        feedbackObject:{A: null,B: null ,C: null},
-                        responseObject:{A: null,B: null ,C: null},
-                        optionTitleObject:{A: null,B: null ,C: null},
-                        optionsemotionObject:{A: null,B: null ,C: null},
-                        optionsvoiceObject:{A: null,B: null ,C: null},
-                        scoreObject:{A: null,B: null ,C: null},
-                        navigateObjects:{A: null,B: null ,C: null},
+                        optionsObject: { A: null, B: null, C: null },
+                        ansObject: { A: null, B: null, C: null },
+                        feedbackObject: { A: null, B: null, C: null },
+                        responseObject: { A: null, B: null, C: null },
+                        optionTitleObject: { A: null, B: null, C: null },
+                        optionsemotionObject: { A: null, B: null, C: null },
+                        optionsvoiceObject: { A: null, B: null, C: null },
+                        scoreObject: { A: null, B: null, C: null },
+                        navigateObjects: { A: null, B: null, C: null },
                     }
                 }
             }
@@ -393,8 +393,8 @@ console.log('sequence',sequence)
     const getSeq = (seq: any, i: any, name: any) => {
         setShowMiniBox((prev: any) => seq.id == prev ? null : seq.id);
     };
-    
-    
+
+
     const duplicateSeq = (seq: any, i: any, name: any) => {
         // const id = `${Math.floor(count / 10) + 1}.${count % 10 || 1}`;
         // const upNext = `${Math.floor(count / 10) + 1}.${(count + 1) % 10 || 1}`;
@@ -408,7 +408,7 @@ console.log('sequence',sequence)
         // setShowBox(true);       
         setUpNext(upNext);
         setCount(count + 1);
-        const newArr = { id, type: name, upNext, input: count ,questNo:serias };
+        const newArr = { id, type: name, upNext, input: count, questNo: serias };
 
         setItems((prevArray: any) => {
             const nextIndex = i + 1;
@@ -455,42 +455,42 @@ console.log('sequence',sequence)
                     { seqs: id, option: 'C', secondaryId: secondaryArray[2] }
                 ]);
             }
-        }              
+        }
         setInput((prevInput: any) => {
             const noteKey = `Note${count}`;
             const dialogKey = `Dialog${count}`;
-            const interactionKey = `Interaction${count}`;                             
-            
+            const interactionKey = `Interaction${count}`;
+
             // Previous Data Object
-            const oldNoteKey =  prevInput?.[`Note${seq.input}`]
-            const oldDialogKey =  prevInput?.[`Dialog${seq.input}`]
-            const oldInteractionKey =  prevInput?.[`Interaction${seq.input}`]
+            const oldNoteKey = prevInput?.[`Note${seq.input}`]
+            const oldDialogKey = prevInput?.[`Dialog${seq.input}`]
+            const oldInteractionKey = prevInput?.[`Interaction${seq.input}`]
 
 
             // Activate RFST
             if (oldInteractionKey?.responseObject?.A !== '' || null) {
                 setInteractionBlock((prev: any) => {
-                    return { ...prev, [`Resp${[count]}`]: count  };
-                  });
+                    return { ...prev, [`Resp${[count]}`]: count };
+                });
             }
             if (oldInteractionKey?.feedbackObject?.A !== '' || null) {
                 setInteractionBlock((prev: any) => {
-                    return { ...prev, [`Feedbk${[count]}`]: count  };
-                  });
+                    return { ...prev, [`Feedbk${[count]}`]: count };
+                });
             }
             if (oldInteractionKey?.SkillTag !== '' || null) {
                 setInteractionBlock((prev: any) => {
-                    return { ...prev, [`Skills${[count]}`]: count  };
-                  });
+                    return { ...prev, [`Skills${[count]}`]: count };
+                });
             }
             if (oldInteractionKey?.optionTitleObject?.A !== '' || null) {
                 setInteractionBlock((prev: any) => {
-                    return { ...prev, [`Title${[count]}`]: count  };
-                  });
+                    return { ...prev, [`Title${[count]}`]: count };
+                });
             }
 
 
-            if (seq.type == 'Note') {                                                
+            if (seq.type == 'Note') {
                 return {
                     ...prevInput,
                     [noteKey]: {
@@ -500,7 +500,7 @@ console.log('sequence',sequence)
                     }
                 }
             }
-            if (seq.type == 'Dialog') {                                
+            if (seq.type == 'Dialog') {
                 return {
                     ...prevInput,
                     [dialogKey]: {
@@ -510,8 +510,8 @@ console.log('sequence',sequence)
                         character: oldDialogKey?.character,
                         animation: oldDialogKey?.animation,
                         voice: "",
-                        
-                        
+
+
                     }
                 }
             }
@@ -540,15 +540,15 @@ console.log('sequence',sequence)
                         QuestionsVoice: oldInteractionKey?.QuestionsVoice,
                         SkillTag: oldInteractionKey?.SkillTag,
                         quesionTitle: oldInteractionKey?.quesionTitle,
-                        optionsObject:{A: optionsObject?.A,  B: optionsObject?.B,   C: optionsObject?.C},
-                        ansObject:{A: ansObject?.A,   B: ansObject?.B,   C: ansObject?.C},
-                        feedbackObject:{A: feedbackObject?.A,   B: feedbackObject?.B,    C: feedbackObject?.C},
-                        responseObject:{A: responseObject?.A,    B: responseObject?.B,    C: responseObject?.C},
-                        optionTitleObject:{A: optionTitleObject?.A,   B: optionTitleObject?.B,   C: optionTitleObject?.C},
-                        optionsemotionObject:{A: optionsemotionObject?.A,   B: optionsemotionObject?.B,   C: optionsemotionObject?.C},
-                        optionsvoiceObject:{A: optionsvoiceObject?.A,   B: optionsvoiceObject?.B,   C: optionsvoiceObject?.C},
-                        scoreObject:{A: scoreObject?.A?scoreObject?.A:null,    B: scoreObject?.B?scoreObject?.B:null,    C: scoreObject?.C?scoreObject?.C:null},
-                        navigateObjects:{A: navigateObjects?.A,    B: navigateObjects?.B,    C: navigateObjects?.C},
+                        optionsObject: { A: optionsObject?.A, B: optionsObject?.B, C: optionsObject?.C },
+                        ansObject: { A: ansObject?.A, B: ansObject?.B, C: ansObject?.C },
+                        feedbackObject: { A: feedbackObject?.A, B: feedbackObject?.B, C: feedbackObject?.C },
+                        responseObject: { A: responseObject?.A, B: responseObject?.B, C: responseObject?.C },
+                        optionTitleObject: { A: optionTitleObject?.A, B: optionTitleObject?.B, C: optionTitleObject?.C },
+                        optionsemotionObject: { A: optionsemotionObject?.A, B: optionsemotionObject?.B, C: optionsemotionObject?.C },
+                        optionsvoiceObject: { A: optionsvoiceObject?.A, B: optionsvoiceObject?.B, C: optionsvoiceObject?.C },
+                        scoreObject: { A: scoreObject?.A ? scoreObject?.A : null, B: scoreObject?.B ? scoreObject?.B : null, C: scoreObject?.C ? scoreObject?.C : null },
+                        navigateObjects: { A: navigateObjects?.A, B: navigateObjects?.B, C: navigateObjects?.C },
                     }
                 }
             }
@@ -557,21 +557,21 @@ console.log('sequence',sequence)
     const delSeq = (seq: any, i: any, name: any) => {
 
         // removeDataBySeqs(seq.id);        
-console.log('delSeq',seq);
+        console.log('delSeq', seq);
 
         if (name === 'Interaction') {
-            setAlphabet((prevAlphabet:any) => {
+            setAlphabet((prevAlphabet: any) => {
                 // Use filter to create a new array without items that match the condition
-                const updatedAlphabet = prevAlphabet?.filter((item:any) => item.seqs !== seq.id);
+                const updatedAlphabet = prevAlphabet?.filter((item: any) => item.seqs !== seq.id);
                 return updatedAlphabet;
             });
 
             console.log('roll', seq);
 
         }
-        setItems((previtems:any) => {
+        setItems((previtems: any) => {
             // Use filter to create a new array without items that match the condition
-            const updatedItems = previtems?.filter((item:any) => item.input !== seq.input);
+            const updatedItems = previtems?.filter((item: any) => item.input !== seq.input);
             return updatedItems;
         });
         // setItems(items.filter((_: any, index: any) => {
@@ -615,7 +615,7 @@ console.log('delSeq',seq);
                     type: 'Note',
                     upNext,
                     input: count,
-                    questNo:serias,
+                    questNo: serias,
                 },
             ]);
         }
@@ -633,13 +633,13 @@ console.log('delSeq',seq);
                     type: 'Dialog',
                     upNext,
                     input: count,
-                    questNo:serias,
+                    questNo: serias,
                 },
             ]);
         }
         else if (blockInput === 'I') {
             setType('Interaction')
-            
+
             const currentAlpha = alphabet
                 .slice()
                 //  .reverse() // Reverse the array to start searching from the end
@@ -679,7 +679,7 @@ console.log('delSeq',seq);
                     type: 'Interaction',
                     upNext,
                     input: count,
-                    questNo:serias,
+                    questNo: serias,
                 },
             ]);
         }
@@ -698,7 +698,7 @@ console.log('delSeq',seq);
                         ...prevInput[noteKey],
                         id: id,
                         note: "",
-                        dtime:null,
+                        dtime: null,
                     }
                 }
             }
@@ -709,10 +709,10 @@ console.log('delSeq',seq);
                         ...prevInput[dialogKey],
                         id: id,
                         dialog: "",
-                        character:formData.gameNonPlayingCharacterId,
+                        character: formData.gameNonPlayingCharacterId,
                         animation: "",
                         voice: "",
-                        dtime:null,
+                        dtime: null,
                     }
                 }
             }
@@ -723,15 +723,15 @@ console.log('delSeq',seq);
                         ...prevInput[interactionKey],
                         id: id,
                         interaction: "",
-                        optionsObject:{A: null,B: null ,C: null},
-                        ansObject:{A: null,B: null ,C: null},
-                        feedbackObject:{A: null,B: null ,C: null},
-                        responseObject:{A: null,B: null ,C: null},
-                        optionTitleObject:{A: null,B: null ,C: null},
-                        optionsemotionObject:{A: null,B: null ,C: null},
-                        optionsvoiceObject:{A: null,B: null ,C: null},
-                        scoreObject:{A: null,B: null ,C: null},
-                        navigateObjects:{A: null,B: null ,C: null},
+                        optionsObject: { A: null, B: null, C: null },
+                        ansObject: { A: null, B: null, C: null },
+                        feedbackObject: { A: null, B: null, C: null },
+                        responseObject: { A: null, B: null, C: null },
+                        optionTitleObject: { A: null, B: null, C: null },
+                        optionsemotionObject: { A: null, B: null, C: null },
+                        optionsvoiceObject: { A: null, B: null, C: null },
+                        scoreObject: { A: null, B: null, C: null },
+                        navigateObjects: { A: null, B: null, C: null },
                     }
                 }
             }
@@ -764,7 +764,7 @@ console.log('delSeq',seq);
                     type: NDI,
                     upNext: upNext,
                     input: count,
-                    questNo:serias,
+                    questNo: serias,
                 },
             ]
         });
@@ -816,7 +816,7 @@ console.log('delSeq',seq);
                         ...prevInput[noteKey],
                         id: id,
                         note: "",
-                        dtime:null,
+                        dtime: null,
                     }
                 }
             }
@@ -827,10 +827,10 @@ console.log('delSeq',seq);
                         ...prevInput[dialogKey],
                         id: id,
                         dialog: "",
-                        character:formData.gameNonPlayingCharacterId,
+                        character: formData.gameNonPlayingCharacterId,
                         animation: "",
                         voice: "",
-                        dtime:null,
+                        dtime: null,
                     }
                 }
             }
@@ -842,15 +842,15 @@ console.log('delSeq',seq);
                         id: id,
                         interaction: "",
                         blockRoll: formData.gameNonPlayingCharacterId,
-                        optionsObject:{A: null,B: null ,C: null},
-                        ansObject:{A: null,B: null ,C: null},
-                        feedbackObject:{A: null,B: null ,C: null},
-                        responseObject:{A: null,B: null ,C: null},
-                        optionTitleObject:{A: null,B: null ,C: null},
-                        optionsemotionObject:{A: null,B: null ,C: null},
-                        optionsvoiceObject:{A: null,B: null ,C: null},
-                        scoreObject:{A: null,B: null ,C: null},
-                        navigateObjects:{A: null,B: null ,C: null},
+                        optionsObject: { A: null, B: null, C: null },
+                        ansObject: { A: null, B: null, C: null },
+                        feedbackObject: { A: null, B: null, C: null },
+                        responseObject: { A: null, B: null, C: null },
+                        optionTitleObject: { A: null, B: null, C: null },
+                        optionsemotionObject: { A: null, B: null, C: null },
+                        optionsvoiceObject: { A: null, B: null, C: null },
+                        scoreObject: { A: null, B: null, C: null },
+                        navigateObjects: { A: null, B: null, C: null },
                     }
                 }
             }
@@ -884,14 +884,14 @@ console.log('delSeq',seq);
 
 
     //navin-start
-    
+
     // useEffect(() => {
-        
+
     //     handleGet();   
     //      console.log('hipe')     
     // }, [id])
-    const handleBlockRoll = (selectedOption: any, i: any,keyvalue:any) => {
-        
+    const handleBlockRoll = (selectedOption: any, i: any, keyvalue: any) => {
+
         // console.log('blockroll', items[key].input + '---' + i + '-------' + items);
 
         setInput((prevInput: any) => {
@@ -926,10 +926,10 @@ console.log('delSeq',seq);
             };
         });
     };
-    const handleResponseRoll = (selectedOption: any, i: any,keyvalue:any) => {
+    const handleResponseRoll = (selectedOption: any, i: any, keyvalue: any) => {
         let key = i - 1;
         // console.log('blockroll', items[key].input + '---' + i + '-------' + items);
-console.log('keyvalue',keyvalue);
+        console.log('keyvalue', keyvalue);
         setInput((prevInput: any) => {
             const interactionKey = keyvalue;
             const responseRoll = selectedOption.value;
@@ -944,30 +944,30 @@ console.log('keyvalue',keyvalue);
             };
         });
     };
-    const handleTagsChange = (tags:any, interaction:any) => {
-       
+    const handleTagsChange = (tags: any, interaction: any) => {
+
         const tagNames = tags.map((tag: any) => tag.name);
 
-  // Convert the array of tag names into a string
-  const tagsString = tagNames.join(', ');
-  console.log('tags',interaction)
+        // Convert the array of tag names into a string
+        const tagsString = tagNames.join(', ');
+        console.log('tags', interaction)
 
 
-  setInput((prevInput: any) => {
-    const interactionKey = `${interaction}`;
-    const SkillTag = tagsString;
-    console.log('handleQuestionEmotion', SkillTag);
+        setInput((prevInput: any) => {
+            const interactionKey = `${interaction}`;
+            const SkillTag = tagsString;
+            console.log('handleQuestionEmotion', SkillTag);
 
-    return {
-        ...prevInput,
-        [interactionKey]: {
-            ...prevInput[interactionKey],
-            SkillTag: SkillTag,
-        },
+            return {
+                ...prevInput,
+                [interactionKey]: {
+                    ...prevInput[interactionKey],
+                    SkillTag: SkillTag,
+                },
+            };
+        });
     };
-});
-      };
-    const handleQuestionEmotion = (selectedOption: any, i: any,keyvalue:any) => {
+    const handleQuestionEmotion = (selectedOption: any, i: any, keyvalue: any) => {
 
         const selectedValues = selectedOption.map((option: any) => option.value);
 
@@ -976,24 +976,24 @@ console.log('keyvalue',keyvalue);
         const arrayLength = resultArray.length;
 
         console.log('handleQuestionEmotion', resultString);
-if(arrayLength<=2){
-    setInput((prevInput: any) => {
-        const interactionKey = keyvalue;
-        const QuestionsEmotion = resultString;
+        if (arrayLength <= 2) {
+            setInput((prevInput: any) => {
+                const interactionKey = keyvalue;
+                const QuestionsEmotion = resultString;
 
-      
 
-        return {
-            ...prevInput,
-            [interactionKey]: {
-                ...prevInput[interactionKey],
-                id: items[i]?.id,
-                QuestionsEmotion: QuestionsEmotion,
-            },
-        };
-    });
-}
-       
+
+                return {
+                    ...prevInput,
+                    [interactionKey]: {
+                        ...prevInput[interactionKey],
+                        id: items[i]?.id,
+                        QuestionsEmotion: QuestionsEmotion,
+                    },
+                };
+            });
+        }
+
     };
     // const handleDialogEmotion = (selectedOption: any, i: any) => {
     //     let key = i - 1;
@@ -1018,16 +1018,16 @@ if(arrayLength<=2){
     // };
     const handleDialogEmotion = (selectedOption: any, i: any) => {
         const selectedValues = selectedOption.map((option: any) => option.value);
-    
+
         // Use the array of strings as needed, for example, join them into a single string
         const resultString = selectedValues.join(', ');
         const resultArray = resultString.split(', ');
         const arrayLength = resultArray.length;
-        if(arrayLength<=2){
+        if (arrayLength <= 2) {
             setInput((prevInput: any) => {
                 const interactionKey = `Dialog${i}`;
                 const DialogEmotion = resultString;
-        
+
                 return {
                     ...prevInput,
                     [interactionKey]: {
@@ -1039,18 +1039,18 @@ if(arrayLength<=2){
             });
 
         }
-       
+
     };
-    
-    
+
+
 
     const handleDialogVoice = (selectedOption: any, i: any) => {
         let key = i - 1;
-   
+
         setInput((prevInput: any) => {
             const interactionKey = `Dialog${items[key]?.input}`;
             const Dialogvoice = selectedOption.value;
-           
+
             return {
                 ...prevInput,
                 [interactionKey]: {
@@ -1062,8 +1062,8 @@ if(arrayLength<=2){
         });
     };
 
-    
-    const handleQuestionVoice = (selectedOption: any, i: any,keyvalue:any) => {
+
+    const handleQuestionVoice = (selectedOption: any, i: any, keyvalue: any) => {
         let key = i - 1;
 
         setInput((prevInput: any) => {
@@ -1082,7 +1082,7 @@ if(arrayLength<=2){
         });
     };
 
-    const handleOptionEmotion = (selectedOption: any, i: any, optionemotion: any,keyvalue:any) => {
+    const handleOptionEmotion = (selectedOption: any, i: any, optionemotion: any, keyvalue: any) => {
         const key = i - 1;
         // console.log(`handleOptionEmotion - ${items[key]?.input} --- ${i} --- ${selectedOption.value}`);
         const selectedValues = selectedOption.map((option: any) => option.value);
@@ -1090,43 +1090,43 @@ if(arrayLength<=2){
         const resultString = selectedValues.join(', ');
         const resultArray = resultString.split(', ');
         const arrayLength = resultArray.length;
-if(arrayLength<=2){
-        setInput((prevInput: any) => {
-            const interactionKey = keyvalue;
-            const OptionEmotion = selectedOption.value;
-            const optionsemotionObject: any = {};
+        if (arrayLength <= 2) {
+            setInput((prevInput: any) => {
+                const interactionKey = keyvalue;
+                const OptionEmotion = selectedOption.value;
+                const optionsemotionObject: any = {};
 
-            alphabet.forEach((item:any) => {
-                const optValue =
-                    optionemotion === `Option${item.option}`
-                        ? resultString
-                        : prevInput[interactionKey]?.optionsemotionObject?.[item.option];
-                console.log('optValue', optionemotion)
-                optionsemotionObject[item.option] = optValue;
+                alphabet.forEach((item: any) => {
+                    const optValue =
+                        optionemotion === `Option${item.option}`
+                            ? resultString
+                            : prevInput[interactionKey]?.optionsemotionObject?.[item.option];
+                    console.log('optValue', optionemotion)
+                    optionsemotionObject[item.option] = optValue;
+                });
+                console.log('optionsemotionObject', optionsemotionObject)
+                return {
+                    ...prevInput,
+                    [interactionKey]: {
+                        ...prevInput[interactionKey],
+                        id: items[i]?.id,
+                        optionsemotionObject: optionsemotionObject,
+                    },
+                };
             });
-            console.log('optionsemotionObject', optionsemotionObject)
-            return {
-                ...prevInput,
-                [interactionKey]: {
-                    ...prevInput[interactionKey],
-                    id: items[i]?.id,
-                    optionsemotionObject: optionsemotionObject,
-                },
-            };
-        });
-    }
+        }
     };
 
-    const handleOptionVoice = (selectedOption: any, i: any, optionvoice: any,keyvalue:any) => {
+    const handleOptionVoice = (selectedOption: any, i: any, optionvoice: any, keyvalue: any) => {
         const key = i - 1;
         // console.log(`handle,OptionEmotion - ${items[key]?.input} --- ${i} --- ${selectedOption.value}`);
-console.log('handleOptionVoice',i);
+        console.log('handleOptionVoice', i);
         setInput((prevInput: any) => {
             const interactionKey = keyvalue;
             const OptionVoice = selectedOption.value;
             const optionsvoiceObject: any = {};
 
-            alphabet.forEach((item:any) => {
+            alphabet.forEach((item: any) => {
                 const optValue =
                     optionvoice === `Option${item.option}`
                         ? selectedOption.value
@@ -1146,7 +1146,7 @@ console.log('handleOptionVoice',i);
         });
     };
 
-    const handleResponseEmotion = (selectedOption: any, i: any, responseemotion: any,keyvalue:any) => {
+    const handleResponseEmotion = (selectedOption: any, i: any, responseemotion: any, keyvalue: any) => {
         const key = i - 1;
         // console.log(`handleOptionEmotion - ${items[key]?.input} --- ${i} --- ${selectedOption.value}`);
         const selectedValues = selectedOption.map((option: any) => option.value);
@@ -1156,13 +1156,13 @@ console.log('handleOptionVoice',i);
         const arrayLength = resultArray.length;
 
         console.log('handleQuestionEmotion', resultString);
-        if(arrayLength<=2){
+        if (arrayLength <= 2) {
             setInput((prevInput: any) => {
                 const interactionKey = keyvalue;
                 const OptionEmotion = selectedOption.value;
                 const responseemotionObject: any = {};
-    
-                alphabet.forEach((item:any) => {
+
+                alphabet.forEach((item: any) => {
                     const optValue =
                         responseemotion === `Option${item.option}`
                             ? resultString
@@ -1181,10 +1181,10 @@ console.log('handleOptionVoice',i);
                 };
             });
         }
-       
+
     };
 
-    const handleCheckBox = (checked: any, i: any, optionright: any,keyvalue:any) => {
+    const handleCheckBox = (checked: any, i: any, optionright: any, keyvalue: any) => {
         const isChecked = checked.target.checked;
         const key = i - 1;
         console.log(`handleCheckBox - ${items[key]?.input} --- ${checked.target}`);
@@ -1193,7 +1193,7 @@ console.log('handleOptionVoice',i);
             const interactionKey = keyvalue;
             const ansObject: any = {};
 
-            alphabet.forEach((item:any) => {
+            alphabet.forEach((item: any) => {
                 const optValue =
                     optionright === `Option${item.option}`
                         ? checked.target.checked
@@ -1212,8 +1212,8 @@ console.log('handleOptionVoice',i);
             };
         });
     };
-    
-    const setNavigation = (menuvalue: any, i: any, foroption: any,keyvalue:any) => {
+
+    const setNavigation = (menuvalue: any, i: any, foroption: any, keyvalue: any) => {
         console.log('menuvalue', menuvalue + '-----------' + i + '------' + foroption)
         const key = i - 1;
 
@@ -1221,92 +1221,92 @@ console.log('handleOptionVoice',i);
             const interactionKey = keyvalue;
             const navigateObjects: any = {};
             const navigateshowObjects: any = {};
-            alphabet.forEach((item:any) => {
+            alphabet.forEach((item: any) => {
                 const optValue = foroption === `Option${item.option}` ? menuvalue : prevInput[interactionKey]?.navigateObjects?.[item.option];
 
                 const optValueS = foroption === `Option${item.option}` ? menuvalue : prevInput[interactionKey]?.navigateshowObjects?.[item.option];
 
                 console.log('optValue', navigateObjects)
                 navigateObjects[item.option] = optValue;
-                navigateshowObjects[item.option]=optValueS;
+                navigateshowObjects[item.option] = optValueS;
                 console.log('navigateshowObjects', navigateshowObjects)
             });
-           
+
             return {
                 ...prevInput,
                 [interactionKey]: {
                     ...prevInput[interactionKey],
                     id: items[i]?.id,
                     navigateObjects: navigateObjects,
-                    navigateshowObjects:navigateshowObjects
+                    navigateshowObjects: navigateshowObjects
                 },
             };
         });
     }
-    const handleNoteNavigation = (menuvalue: any, i: any, foroption: any,keyvalue:any) => {
-        console.log('handleNoteNavigation',menuvalue)
+    const handleNoteNavigation = (menuvalue: any, i: any, foroption: any, keyvalue: any) => {
+        console.log('handleNoteNavigation', menuvalue)
         let key = i - 1;
-      
+
         setInput((prevInput: any) => {
             const interactionKey = keyvalue;
             const navigate = menuvalue.value;
-    
+
             return {
                 ...prevInput,
                 [interactionKey]: {
                     ...prevInput[interactionKey],
                     id: items[i]?.id,
                     Notenavigate: navigate,
-                   
+
                 },
             };
         });
     }
-    
-    const setNoteNavigation = (menuvalue: any, i: any, foroption: any,keyvalue:any) => {
-    console.log('setDialogNavigation',menuvalue)
+
+    const setNoteNavigation = (menuvalue: any, i: any, foroption: any, keyvalue: any) => {
+        console.log('setDialogNavigation', menuvalue)
         let key = i - 1;
         // console.log('blockroll', items[key].input + '---' + i + '-------' + items)
         setInput((prevInput: any) => {
             const interactionKey = keyvalue;
             const navigate = menuvalue;
-    
+
             return {
                 ...prevInput,
                 [interactionKey]: {
                     ...prevInput[interactionKey],
                     id: items[i]?.id,
                     Notenavigate: navigate,
-                    NoteleadShow:navigate
+                    NoteleadShow: navigate
                 },
             };
         });
     }
-    const setNotelead = (menuvalue: any, i: any, foroption: any,keyvalue:any) => {
-        console.log('setDialoglead',keyvalue)
+    const setNotelead = (menuvalue: any, i: any, foroption: any, keyvalue: any) => {
+        console.log('setDialoglead', keyvalue)
         let key = i - 1;
         //  console.log('blockroll', items[key].input + '---' + i + '-------' + items)
         setInput((prevInput: any) => {
             const interactionKey = keyvalue;
             const navigate = menuvalue;
-    
+
             return {
                 ...prevInput,
                 [interactionKey]: {
                     ...prevInput[interactionKey],
                     id: items[i]?.id,
                     NoteleadShow: navigate,
-                    Notenavigate:null,
+                    Notenavigate: null,
                 },
             };
         });
     }
 
 
-    const handleDialogNavigation = (menuvalue: any, i: any, foroption: any,keyvalue:any) => {
-        console.log('setDialogNavigation',menuvalue)
+    const handleDialogNavigation = (menuvalue: any, i: any, foroption: any, keyvalue: any) => {
+        console.log('setDialogNavigation', menuvalue)
         let key = i - 1;
-      
+
         setInput((prevInput: any) => {
             const interactionKey = keyvalue;
             const navigate = menuvalue.value;
@@ -1317,14 +1317,14 @@ console.log('handleOptionVoice',i);
                     ...prevInput[interactionKey],
                     id: items[i]?.id,
                     Dialognavigate: navigate,
-                   
+
                 },
             };
         });
     }
-    
-    const setDialogNavigation = (menuvalue: any, i: any, foroption: any,keyvalue:any) => {
-console.log('setDialogNavigation',menuvalue)
+
+    const setDialogNavigation = (menuvalue: any, i: any, foroption: any, keyvalue: any) => {
+        console.log('setDialogNavigation', menuvalue)
         let key = i - 1;
         // console.log('blockroll', items[key].input + '---' + i + '-------' + items)
         setInput((prevInput: any) => {
@@ -1337,13 +1337,13 @@ console.log('setDialogNavigation',menuvalue)
                     ...prevInput[interactionKey],
                     id: items[i]?.id,
                     Dialognavigate: navigate,
-                    DialogleadShow:navigate
+                    DialogleadShow: navigate
                 },
             };
         });
     }
-    const setDialoglead = (menuvalue: any, i: any, foroption: any,keyvalue:any) => {
-        console.log('setDialoglead',keyvalue)
+    const setDialoglead = (menuvalue: any, i: any, foroption: any, keyvalue: any) => {
+        console.log('setDialoglead', keyvalue)
         let key = i - 1;
         //  console.log('blockroll', items[key].input + '---' + i + '-------' + items)
         setInput((prevInput: any) => {
@@ -1356,13 +1356,13 @@ console.log('setDialogNavigation',menuvalue)
                     ...prevInput[interactionKey],
                     id: items[i]?.id,
                     DialogleadShow: navigate,
-                    Dialognavigate:null,
+                    Dialognavigate: null,
                 },
             };
         });
     }
 
-    const handleBlock = (menuvalue: any, i: any, foroption: any,keyvalue:any) => {
+    const handleBlock = (menuvalue: any, i: any, foroption: any, keyvalue: any) => {
         console.log('clicked', keyvalue)
 
         // console.log('setBlock', menuvalue + '-----------' + i + '------' + foroption)
@@ -1373,7 +1373,7 @@ console.log('setDialogNavigation',menuvalue)
             const navigateshowObjects: any = {};
             const navigateObjects: any = {};
 
-            alphabet.forEach((item:any) => {
+            alphabet.forEach((item: any) => {
                 const optValue = foroption === `Option${item.option}` ? menuvalue : prevInput[interactionKey]?.navigateshowObjects?.[item.option];
                 console.log('optValue', navigateshowObjects)
                 navigateshowObjects[item.option] = optValue;
@@ -1387,7 +1387,7 @@ console.log('setDialogNavigation',menuvalue)
                     ...prevInput[interactionKey],
                     id: items[i]?.id,
                     navigateshowObjects: navigateshowObjects,
-                    navigateObjects:navigateObjects,
+                    navigateObjects: navigateObjects,
                 },
             };
         });
@@ -1401,7 +1401,7 @@ console.log('setDialogNavigation',menuvalue)
     };
     console.log('roll', input)
 
-    const handleSelectBlock = (menuvalue: any, i: any, foroption: any,keyvalue:any) => {
+    const handleSelectBlock = (menuvalue: any, i: any, foroption: any, keyvalue: any) => {
         console.log('menuvalue', menuvalue + '-----------' + i + '------' + foroption)
         const key = i - 1;
 
@@ -1409,7 +1409,7 @@ console.log('setDialogNavigation',menuvalue)
             const interactionKey = keyvalue;
             const navigateObjects: any = {};
 
-            alphabet.forEach((item:any) => {
+            alphabet.forEach((item: any) => {
                 const optValue = foroption === `Option${item.option}` ? menuvalue.value : prevInput[interactionKey]?.navigateObjects?.[item.option];
                 console.log('optValue', navigateObjects)
                 navigateObjects[item.option] = optValue;
@@ -1438,10 +1438,10 @@ console.log('setDialogNavigation',menuvalue)
         const match = e.target.name.match(/([a-zA-Z]+)(\d+)/);
         if (match) {
             const textPart = match[1];
-            const numberPart = match[2];            
-          } else {
+            const numberPart = match[2];
+        } else {
             console.log('No match found');
-          }        
+        }
         setLastInputName(Number(match[2]));
         setInput((prevInput: any) => {
             // const noteKey = `Note`;       
@@ -1459,7 +1459,7 @@ console.log('setDialogNavigation',menuvalue)
                         note: note,
                     }
                 }
-            } 
+            }
             if (e.target.name == dialogKey) {
                 const dialog = e.target.id === 'Dialog' ? e.target.value : prevInput[dialogKey]?.dialog;
                 return {
@@ -1468,7 +1468,7 @@ console.log('setDialogNavigation',menuvalue)
                         ...prevInput[dialogKey],
                         id: items[i]?.id,
                         dialog: dialog,
-                        
+
                     }
                 }
             }
@@ -1534,9 +1534,9 @@ console.log('setDialogNavigation',menuvalue)
     }
     const handleSelect = (selectedOption: any, e: any, data: string) => {
         const getLastDigit = e.name.slice(-1)
-        const match = e.name.match(/([a-zA-Z]+)(\d+)/);        
-        setLastInputName(Number(match[2]));      
-        console.log('e.name',selectedOption);  
+        const match = e.name.match(/([a-zA-Z]+)(\d+)/);
+        setLastInputName(Number(match[2]));
+        console.log('e.name', selectedOption);
 
         const value = selectedOption ? selectedOption : '';
         setInput((prevInput: any) => {
@@ -1552,7 +1552,7 @@ console.log('setDialogNavigation',menuvalue)
         })
     }
     const handleFieldBlock = (e: ChangeEvent<HTMLInputElement>) => {
-        
+
         const getValue = e.target.value
         setBlockInput(e.target.value);
         if (getValue === '/') {
@@ -1587,7 +1587,7 @@ console.log('setDialogNavigation',menuvalue)
         const updatedItems = items.map((item: any, index: number) => ({
             ...item, id: updatedSeq[index] || item.id, upNext: upNextCount[index]
         }))
-       
+
 
         const updateInteraction = items.map((item: any, index: number) => {
 
@@ -1628,51 +1628,51 @@ console.log('setDialogNavigation',menuvalue)
     }, [items])
 
     useEffect(() => {
-       if(isDeleteSeq){
-        console.log('well123', sequence);
-        console.log('well899', dummySequence);
+        if (isDeleteSeq) {
+            console.log('well123', sequence);
+            console.log('well899', dummySequence);
 
-        // const datas = Array.from(new Set(sequence))
-        // const dummySeq = Array.from(new Set(dummySequence))            
+            // const datas = Array.from(new Set(sequence))
+            // const dummySeq = Array.from(new Set(dummySequence))            
 
-        const updatedSeq = sequence.map((item: any, index: number) => (
-            dummySequence[index] || item.id
-        ))
+            const updatedSeq = sequence.map((item: any, index: number) => (
+                dummySequence[index] || item.id
+            ))
 
-        const updatedItems = items.map((item: any, index: number) => ({
-            ...item, id: updatedSeq[index] || item.id, upNext: upNextCount[index]
-        }))
-        const updateInteraction = items.map((item: any, index: number) => {
+            const updatedItems = items.map((item: any, index: number) => ({
+                ...item, id: updatedSeq[index] || item.id, upNext: upNextCount[index]
+            }))
+            const updateInteraction = items.map((item: any, index: number) => {
 
-            if (item?.type === 'Interaction') {
-                return { ...item, from: item.id, to: updatedSeq[index] || item.id };
-            }
-            return null; // Return null for items that don't meet the condition
-        });
+                if (item?.type === 'Interaction') {
+                    return { ...item, from: item.id, to: updatedSeq[index] || item.id };
+                }
+                return null; // Return null for items that don't meet the condition
+            });
 
-        const updatedAlphabet = alphabet.map((item: MyObject) => {
-            // Find the corresponding updateInteraction item
-            const correspondingUpdate = updateInteraction.find((updateItem: any) => updateItem?.from === item.seqs);
-            console.log('correspondingUpdate', correspondingUpdate);
-            // If a corresponding updateInteraction item is found, update the seqs value
-            if (correspondingUpdate) {
-                return { ...item, seqs: correspondingUpdate.to };
-            }
+            const updatedAlphabet = alphabet.map((item: MyObject) => {
+                // Find the corresponding updateInteraction item
+                const correspondingUpdate = updateInteraction.find((updateItem: any) => updateItem?.from === item.seqs);
+                console.log('correspondingUpdate', correspondingUpdate);
+                // If a corresponding updateInteraction item is found, update the seqs value
+                if (correspondingUpdate) {
+                    return { ...item, seqs: correspondingUpdate.to };
+                }
 
-            // If no corresponding updateInteraction item is found, return the original item
-            return item;
-        });
+                // If no corresponding updateInteraction item is found, return the original item
+                return item;
+            });
 
-        console.log('sequencial', 'alp', alphabet)
-        setAlphabet(updatedAlphabet);
+            console.log('sequencial', 'alp', alphabet)
+            setAlphabet(updatedAlphabet);
 
-        setItems(updatedItems);
-        setBlockItems(updatedItems);
-        // dummySequence(updatedSeq)                  
-        console.log('updatedSeq', updatedSeq)
-        console.log('updatedItems', updatedItems)
-        setDeleteseq(false);
-    }
+            setItems(updatedItems);
+            setBlockItems(updatedItems);
+            // dummySequence(updatedSeq)                  
+            console.log('updatedSeq', updatedSeq)
+            console.log('updatedItems', updatedItems)
+            setDeleteseq(false);
+        }
     }, [isDeleteSeq])
 
     const handleClickOutside = (event: any) => {
@@ -1680,13 +1680,13 @@ console.log('setDialogNavigation',menuvalue)
         const concernedElementshowBox = document.querySelector(".showBox");
         if (concernedElement && !concernedElement.contains(event.target)) {
             setShowMiniBox(false);
-           
+
         }
         if (concernedElementshowBox && !concernedElementshowBox.contains(event.target)) {
             setShowBox(false);
         }
     };
-    
+
     // components
     const MiniBox = (props: { seq?: any, i?: number, name?: any, bodyRef?: any }) => {
         const { seq, i, name, bodyRef } = props;
@@ -1703,78 +1703,75 @@ console.log('setDialogNavigation',menuvalue)
 
     const handleSubmit1 = () => {
         // Assuming seq.input is the data value to be validated
-        if (typeof  items === 'object' &&  items !== null) {
+        if (typeof items === 'object' && items !== null) {
             var inputData = items;
-       console.log("inputData",inputData);
-       for (var i = 0; i < inputData.length; i++) {
-           var key = inputData[i];
-           var inputkey = key.type+key.input;
-           
-           console.log("key",key);
-          
-           console.log("key1",input[inputkey].note);
-           if(key.type==="Note")
-           {
-            var note = input[inputkey].note;
-          
-                if(note===""){
-                  
-                   toast({
-                        title: `Note is Empty On This Sequence ${key.id} `,
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                      });
-                    return false;
+            console.log("inputData", inputData);
+            for (var i = 0; i < inputData.length; i++) {
+                var key = inputData[i];
+                var inputkey = key.type + key.input;
+
+                console.log("key", key);
+
+                console.log("key1", input[inputkey].note);
+                if (key.type === "Note") {
+                    var note = input[inputkey].note;
+
+                    if (note === "") {
+
+                        toast({
+                            title: `Note is Empty On This Sequence ${key.id} `,
+                            status: 'error',
+                            duration: 3000,
+                            isClosable: true,
+                        });
+                        return false;
+                    }
                 }
-           }
-           if(key.type==="Dialog")
-           {
-            var Dialog = input[inputkey].Dialog;
-            var animation = input[inputkey].animation;
-            var voice = input[inputkey].voice;
-          
-                if(Dialog===""){
-                  
-                   toast({
-                        title: `Dialogue is Empty On This Sequence ${key.id} `,
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                      });
-                    return false;
+                if (key.type === "Dialog") {
+                    var Dialog = input[inputkey].Dialog;
+                    var animation = input[inputkey].animation;
+                    var voice = input[inputkey].voice;
+
+                    if (Dialog === "") {
+
+                        toast({
+                            title: `Dialogue is Empty On This Sequence ${key.id} `,
+                            status: 'error',
+                            duration: 3000,
+                            isClosable: true,
+                        });
+                        return false;
+                    }
+                    if (animation === "") {
+
+                        toast({
+                            title: `Animation is Empty On This Sequence ${key.id} `,
+                            status: 'error',
+                            duration: 3000,
+                            isClosable: true,
+                        });
+                        return false;
+                    }
+                    if (voice === "") {
+
+                        toast({
+                            title: `Voice is Empty On This Sequence ${key.id} `,
+                            status: 'error',
+                            duration: 3000,
+                            isClosable: true,
+                        });
+                        return false;
+                    }
                 }
-                if(animation===""){
-                  
-                    toast({
-                         title: `Animation is Empty On This Sequence ${key.id} `,
-                         status: 'error',
-                         duration: 3000,
-                         isClosable: true,
-                       });
-                     return false;
-                 }
-                 if(voice===""){
-                  
-                    toast({
-                         title: `Voice is Empty On This Sequence ${key.id} `,
-                         status: 'error',
-                         duration: 3000,
-                         isClosable: true,
-                       });
-                     return false;
-                 }
-           }
-           if(key.type==="Interaction")
-           {
-            console.log("keyinput",key.type+key.input);
-            var QuestionsEmotion = input[inputkey].QuestionsEmotion;
-            console.log("QuestionsEmotion",input[inputkey].QuestionsEmotion);
-           }
-        
-        
-          
-      }
+                if (key.type === "Interaction") {
+                    console.log("keyinput", key.type + key.input);
+                    var QuestionsEmotion = input[inputkey].QuestionsEmotion;
+                    console.log("QuestionsEmotion", input[inputkey].QuestionsEmotion);
+                }
+
+
+
+            }
         }
         // Continue with the submission logic if validation passes
         // ...
@@ -1789,7 +1786,7 @@ console.log('setDialogNavigation',menuvalue)
         };
     }, []);
 
- const textColor = useColorModeValue('secondaryGray.900', 'white');
+    const textColor = useColorModeValue('secondaryGray.900', 'white');
 
     return (
         <>
@@ -1798,180 +1795,215 @@ console.log('setDialogNavigation',menuvalue)
 
                     <Text fontSize={22} fontWeight={800} mb={'20px'}>Story</Text>
                     <NDITabs
-                    handleGet={handleGet}
-                    fetchBlocks={fetchBlocks}
-                    listQuest={listQuest}
-                    questTabState={questTabState}
-    setQuestTabState={setQuestTabState}
-    deleteQuest={deleteQuest}
-                    
+                        handleGet={handleGet}
+                        fetchBlocks={fetchBlocks}
+                        listQuest={listQuest}
+                        questTabState={questTabState}
+                        setQuestTabState={setQuestTabState}
+                        deleteQuest={deleteQuest}
+
                     />
                     <Box className='sequence-lists' mt={'40px'} w={'100%'}>
                         <CustomAccordion items={items} setItems={setItems} sequence={sequence} dummySequence={dummySequence} upNextCount={upNextCount} setAlphabet={setAlphabet} alphabet={alphabet} setBlockItems={setBlockItems}>
                             {(type || items) && items.map((seq: any, i: number) => {
 
                                 console.log('off', seq);
-                                
+
                                 return (
                                     <Draggable key={seq.id} draggableId={seq.id} index={i}>
-                                        {(provided, dragData) => {                                             
+                                        {(provided, dragData) => {
                                             return (
-                                             <div
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
-                                            >
-                                                <Box  key={i} >
-                                                    {seq.type == 'Note' ?
-(
-                                                            <Box id={`tarSeqRef${seq.id}`}  position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} 
-                                                            background={seq.input === lastInputName || dragData.isDragging === true ||seq.id === targetSequence?.id  ? '#c7c7c724' : 'unset'} _hover={{background: '#c7c7c724'}} zIndex={seq.input === lastInputName ? '9' : 'unset'}
-                                                            tabIndex={0}
-                                                            onClick={(e) => handleKeyDown(e,i, seq)}
-                                                            onKeyDown={(e) => handleKeyDown(e,i, seq)}
-                                                            >  
-                                                        
-                                                                <NoteCompo
-                                                                reviews={reviews}
-                                                                    seq={seq}
-                                                                    index={i}
-                                                                    name={'Note'}
-                                                                    getSeq={getSeq}
-                                                                    duplicateSeq={duplicateSeq}
-                                                                    delSeq={delSeq}
-                                                                    alphabet={alphabet}
-                                                                    input={input}
-                                                                    setNavigation={setNoteNavigation} 
-                                                                    showSelectBlock={showSelectBlock}
-                                                                    handleBlock={setNotelead}
-                                                                    handleSelectBlock={handleNoteNavigation}
-                                                                    items={items}                                                                    
-                                                                    setSelectBlock={setNotelead}                                                           
-                                                                    handleInput={(e: any) => handleInput(e, i)} 
-/>
-{/* Review Preview Accordian for Note*/}
-{ShowReview ? (			   
-                                  <Accordion allowToggle>
-                                    <AccordionItem>
-                                      <h2>
-                                        <AccordionButton>
-                                          <Box
-                                            as="span"
-                                            flex="1"
-                                            textAlign="left"
-                                            fontSize={'14'}
-                                            color={textColor}
-                                          >
-                                            See All Reviews
-                                          </Box>
-                                          <AccordionIcon />
-                                        </AccordionButton>
-                                      </h2>
+                                                <div
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                >
+                                                    <Box key={i} >
+                                                        {seq.type == 'Note' ?
+                                                            (
+                                                                <Box 
+                                                                id={`tarSeqRef${seq.id}`} 
+                                                                position={'relative'}
+                                                                 boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} 
+                                                                 borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'}
+                                                                 style={{
+                                                                    backgroundColor: ShowReview
+                                                                      ? reviews && reviews.find((item: any) => {
+                                                                        const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                                                                        const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                                                                        console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+                                                                        return isMatched;
+                                                                      })
+                                                                        ? '#E2E8F0'
+                                                                        : ''
+                                                                      : '' ,    marginBottom: '10px', // Adjust the value as per your requirement
 
-                                      <AccordionPanel pb={4}>
-                                        {reviews &&
-                                          reviews
-                                            .filter(
-                                              (item: any) =>
-                                                item?.tabAttributeValue ===
-                                                `${seq?.questNo}@${seq?.input}`,
-                                            )
-                                            .map((value: any, ind: number) => {
-                                              const reviewer =
-                                                reviewers &&
-                                                reviewers.find(
-                                                  (rev: any) =>
-                                                    rev?.gameReviewerId ===
-                                                    value?.gameReviewerId,
-                                                );
-                                              return (
-                                                <>
-                                                  <Box
-                                                    w={'100%'}
-                                                    display={'flex'}
-                                                    justifyContent={
-                                                      'space-between'
-                                                    }
-                                                    key={ind}
-                                                  >
-                                                    <Box
-                                                      w={'100%'}
-                                                      display={'flex'}
-                                                      alignItems={'center'}
-                                                    >
-                                                      <Img
-                                                        src={pro}
-                                                        w={'40px'}
-                                                        h={'40px'}
-                                                        alt="pro"
-                                                        borderRadius={'50%'}
-                                                      />
-                                                      <Text ml={'15px'}>
-                                                        {reviewer?.emailId ===
-                                                        null
-                                                          ? reviewer
-                                                              ?.ReviewingCreator
-                                                              ?.ctMail
-                                                          : reviewer?.emailId}
-                                                      </Text>
-                                                    </Box>
-                                                    <Box whiteSpace={'nowrap'}>
-                                                      <Text fontSize={'14'}>
-                                                        Posted On :
-                                                        {value?.updatedAt
-                                                          ? new Date(
-                                                              value.updatedAt,
-                                                            ).toLocaleDateString()
-                                                          : ''}
-                                                      </Text>
-                                                    </Box>
-                                                  </Box>
-                                                  <Box mb={'10px'} mt={'10px'}>
-                                                    {value?.review}
-                                                  </Box>
-                                                </>
-                                              );
-                                            })}
-                                        {(!reviews ||
-                                          reviews.length === 0 ||
-                                          reviews.filter(
-                                            (item: any) =>
-                                              item?.tabAttributeValue ===
-                                              `${seq?.questNo}@${seq?.input}`,
-                                          ).length === 0) && (
-                                          <Box
-                                            w={'100%'}
-                                            display={'flex'}
-                                            alignItems={'center'}
-                                            justifyContent={'center'}
-                                          >
-                                            <Text>
-                                              No Reviews For This Block
-                                            </Text>
-                                          </Box>
-                                        )}
-                                      </AccordionPanel>
-                                    </AccordionItem>
-                                  </Accordion>
- ):(
-    ''
-)}  
-								 
- {seq.id == showMiniBox ? (
-                                    <MiniBox seq={seq} i={i} name={'Note'} />
-                                  ) : null}
-                                                            </Box>
-                                                        ) :
-                                                        seq.type == 'Dialog' ? (
-<Box id={`tarSeqRef${seq.id}`}  position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} background={seq.input === lastInputName || dragData.isDragging === true ? '#c7c7c724' : 'unset'} _hover={{background: '#c7c7c724'}} zIndex={seq.input === lastInputName ? '9' : 'unset'}
+                                                                  }}
+                                                                borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'}
+                                                                background={seq.input === lastInputName || dragData.isDragging === true || seq.id === targetSequence?.id ? '#c7c7c724' : 'unset'} _hover={{ background: '#c7c7c724' }} zIndex={seq.input === lastInputName ? '9' : 'unset'}
                                                                 tabIndex={0}
-                                                                onClick={(e) => handleKeyDown(e,i, seq)}
-                                                                onKeyDown={(e) => handleKeyDown(e,i, seq)} 
+                                                                onClick={(e) => handleKeyDown(e, i, seq)}
+                                                                onKeyDown={(e) => handleKeyDown(e, i, seq)}
                                                                 >
-                                                           
-                                                                
+
+                                                                    <NoteCompo
+                                                                        ShowReview={ShowReview}
+                                                                        reviews={reviews}
+                                                                        seq={seq}
+                                                                        index={i}
+                                                                        name={'Note'}
+                                                                        getSeq={getSeq}
+                                                                        duplicateSeq={duplicateSeq}
+                                                                        delSeq={delSeq}
+                                                                        alphabet={alphabet}
+                                                                        input={input}
+                                                                        setNavigation={setNoteNavigation}
+                                                                        showSelectBlock={showSelectBlock}
+                                                                        handleBlock={setNotelead}
+                                                                        handleSelectBlock={handleNoteNavigation}
+                                                                        items={items}
+                                                                        setSelectBlock={setNotelead}
+                                                                        handleInput={(e: any) => handleInput(e, i)}
+                                                                    />
+                                                                    {/* Review Preview Accordian for Note*/}
+                                                                    {ShowReview ? (
+                                                                        <Accordion allowToggle>
+                                                                            <AccordionItem>
+                                                                                <h2>
+                                                                                    <AccordionButton>
+                                                                                        <Box
+                                                                                        
+                                                                                            as="span"
+                                                                                            flex="1"
+                                                                                            textAlign="left"
+                                                                                            fontSize={'14'}
+                                                                                            color={textColor}
+                                                                                        >
+                                                                                            See All Reviews
+                                                                                        </Box>
+                                                                                        <AccordionIcon />
+                                                                                    </AccordionButton>
+                                                                                </h2>
+
+                                                                                <AccordionPanel pb={4}>
+                                                                                    {reviews &&
+                                                                                        reviews
+                                                                                            .filter(
+                                                                                                (item: any) =>
+                                                                                                    item?.tabAttributeValue ===
+                                                                                                    `${seq?.questNo}@${seq?.input}`,
+                                                                                            )
+                                                                                            .map((value: any, ind: number) => {
+                                                                                                const reviewer =
+                                                                                                    reviewers &&
+                                                                                                    reviewers.find(
+                                                                                                        (rev: any) =>
+                                                                                                            rev?.gameReviewerId ===
+                                                                                                            value?.gameReviewerId,
+                                                                                                    );
+                                                                                                return (
+                                                                                                    <>
+                                                                                                        <Box
+                                                                                                            w={'100%'}
+                                                                                                            display={'flex'}
+                                                                                                            justifyContent={
+                                                                                                                'space-between'
+                                                                                                            }
+                                                                                                            key={ind}
+                                                                                                        >
+                                                                                                            <Box
+                                                                                                                w={'100%'}
+                                                                                                                display={'flex'}
+                                                                                                                alignItems={'center'}
+                                                                                                            >
+                                                                                                                <Img
+                                                                                                                    src={pro}
+                                                                                                                    w={'40px'}
+                                                                                                                    h={'40px'}
+                                                                                                                    alt="pro"
+                                                                                                                    borderRadius={'50%'}
+                                                                                                                />
+                                                                                                                <Text ml={'15px'}>
+                                                                                                                    {reviewer?.emailId ===
+                                                                                                                        null
+                                                                                                                        ? reviewer
+                                                                                                                            ?.ReviewingCreator
+                                                                                                                            ?.ctMail
+                                                                                                                        : reviewer?.emailId}
+                                                                                                                </Text>
+                                                                                                            </Box>
+                                                                                                            <Box whiteSpace={'nowrap'}>
+                                                                                                                <Text fontSize={'14'}>
+                                                                                                                    Posted On :
+                                                                                                                    {value?.updatedAt
+                                                                                                                        ? new Date(
+                                                                                                                            value.updatedAt,
+                                                                                                                        ).toLocaleDateString()
+                                                                                                                        : ''}
+                                                                                                                </Text>
+                                                                                                            </Box>
+                                                                                                        </Box>
+                                                                                                        <Box mb={'10px'} mt={'10px'}>
+                                                                                                            {value?.review}
+                                                                                                        </Box>
+                                                                                                    </>
+                                                                                                );
+                                                                                            })}
+                                                                                    {(!reviews ||
+                                                                                        reviews.length === 0 ||
+                                                                                        reviews.filter(
+                                                                                            (item: any) =>
+                                                                                                item?.tabAttributeValue ===
+                                                                                                `${seq?.questNo}@${seq?.input}`,
+                                                                                        ).length === 0) && (
+                                                                                            <Box
+                                                                                                w={'100%'}
+                                                                                                display={'flex'}
+                                                                                                alignItems={'center'}
+                                                                                                justifyContent={'center'}
+                                                                                            >
+                                                                                                <Text>
+                                                                                                    No Reviews For This Block
+                                                                                                </Text>
+                                                                                            </Box>
+                                                                                        )}
+                                                                                </AccordionPanel>
+                                                                            </AccordionItem>
+                                                                        </Accordion>
+                                                                    ) : (
+                                                                        ''
+                                                                    )}
+
+                                                                    {seq.id == showMiniBox ? (
+                                                                        <MiniBox seq={seq} i={i} name={'Note'} />
+                                                                    ) : null}
+                                                                </Box>
+                                                            ) :
+                                                            seq.type == 'Dialog' ? (
+                                                                <Box id={`tarSeqRef${seq.id}`} position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} background={seq.input === lastInputName || dragData.isDragging === true ? '#c7c7c724' : 'unset'} _hover={{ background: '#c7c7c724' }} zIndex={seq.input === lastInputName ? '9' : 'unset'}
+                                                                    tabIndex={0}
+                                                                    onClick={(e) => handleKeyDown(e, i, seq)}
+                                                                    onKeyDown={(e) => handleKeyDown(e, i, seq)}
+                                                                    style={{
+                                                                        backgroundColor: ShowReview
+                                                                          ? reviews && reviews.find((item: any) => {
+                                                                            const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                                                                            const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                                                                            console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+                                                                            return isMatched;
+                                                                          })
+                                                                            ? '#E2E8F0'
+                                                                            : ''
+                                                                          : '',    marginBottom: '10px', // Adjust the value as per your requirement
+
+                                                                      }}
+                                                                >
+
+
                                                                     <DialogCompo
-                                                                     reviews={reviews}
+
+                                                                        ShowReview={ShowReview}
+                                                                        reviews={reviews}
                                                                         seq={seq}
                                                                         index={i}
                                                                         name={'Dialog'}
@@ -1991,281 +2023,292 @@ console.log('setDialogNavigation',menuvalue)
                                                                         formData={formData}
                                                                         alphabet={alphabet}
                                                                         handleBlock={setDialoglead}
-                                                                        setNavigation={setDialogNavigation} 
+                                                                        setNavigation={setDialogNavigation}
                                                                         handleSelectBlock={handleDialogNavigation}
                                                                         items={items}
                                                                         handleDialogBlockRoll={handleDialogBlockRoll}
                                                                         showSelectBlock={showSelectBlock}
                                                                         setSelectBlock={setSelectBlock}
-                                                                       
-   />
-{/* Accordian For Dialog Blocks */}
-{ShowReview ? ( <Accordion allowToggle>
-                                    <AccordionItem>
-                                      <h2>
-                                        <AccordionButton>
-                                          <Box
-                                            as="span"
-                                            flex="1"
-                                            textAlign="left"
-                                            fontSize={'14'}
-                                            color={textColor}
-                                          >
-                                            See All Reviews
-                                          </Box>
-                                          <AccordionIcon />
-                                        </AccordionButton>
-                                      </h2>
 
-                                      <AccordionPanel pb={4}>
-                                        {reviews &&
-                                          reviews
-                                            .filter(
-                                              (item: any) =>
-                                                item?.tabAttributeValue ===
-                                                `${seq?.questNo}@${seq?.input}`,
-                                            )
-                                            .map((value: any, ind: number) => {
-                                              const reviewer =
-                                                reviewers &&
-                                                reviewers.find(
-                                                  (rev: any) =>
-                                                    rev?.gameReviewerId ===
-                                                    value?.gameReviewerId,
-                                                );
-                                              return (
-                                                <>
-                                                  <Box
-                                                    w={'100%'}
-                                                    display={'flex'}
-                                                    justifyContent={
-                                                      'space-between'
-                                                    }
-                                                    key={ind}
-                                                  >
-                                                    <Box
-                                                      w={'100%'}
-                                                      display={'flex'}
-                                                      alignItems={'center'}
-                                                    >
-                                                      <Img
-                                                        src={pro}
-                                                        w={'40px'}
-                                                        h={'40px'}
-                                                        alt="pro"
-                                                        borderRadius={'50%'}
-                                                      />
-                                                      <Text ml={'15px'}>
-                                                        {reviewer?.emailId ===
-                                                        null
-                                                          ? reviewer
-                                                              ?.ReviewingCreator
-                                                              ?.ctMail
-                                                          : reviewer?.emailId}
-                                                      </Text>
-                                                    </Box>
-                                                    <Box whiteSpace={'nowrap'}>
-                                                      <Text fontSize={'14'}>
-                                                        Posted On :
-                                                        {value?.updatedAt
-                                                          ? new Date(
-                                                              value.updatedAt,
-                                                            ).toLocaleDateString()
-                                                          : ''}
-                                                      </Text>
-                                                    </Box>
-                                                  </Box>
-                                                  <Box mb={'10px'} mt={'10px'}>
-                                                    {value?.review}
-                                                  </Box>
-                                                </>
-                                              );
-                                            })}
-                                        {(!reviews ||
-                                          reviews.length === 0 ||
-                                          reviews.filter(
-                                            (item: any) =>
-                                              item?.tabAttributeValue ===
-                                              `${seq?.questNo}@${seq?.input}`,
-                                          ).length === 0) && (
-                                          <Box
-                                            w={'100%'}
-                                            display={'flex'}
-                                            alignItems={'center'}
-                                            justifyContent={'center'}
-                                          >
-                                            <Text>
-                                              No Reviews For This Block
-                                            </Text>
-                                          </Box>
-                                        )}
-                                      </AccordionPanel>
-                                    </AccordionItem>
-                                   </Accordion>):''}
-								 
-                                  {seq.id == showMiniBox ? (
-                                    <MiniBox seq={seq} i={i} name={'Dialog'} />
-                                  ) : null}
+                                                                    />
+                                                                    {/* Accordian For Dialog Blocks */}
+                                                                    {ShowReview ? (<Accordion allowToggle>
+                                                                        <AccordionItem>
+                                                                            <h2>
+                                                                                <AccordionButton>
+                                                                                    <Box
+                                                                                        as="span"
+                                                                                        flex="1"
+                                                                                        textAlign="left"
+                                                                                        fontSize={'14'}
+                                                                                        color={textColor}
+                                                                                    >
+                                                                                        See All Reviews
+                                                                                    </Box>
+                                                                                    <AccordionIcon />
+                                                                                </AccordionButton>
+                                                                            </h2>
+
+                                                                            <AccordionPanel pb={4}>
+                                                                                {reviews &&
+                                                                                    reviews
+                                                                                        .filter(
+                                                                                            (item: any) =>
+                                                                                                item?.tabAttributeValue ===
+                                                                                                `${seq?.questNo}@${seq?.input}`,
+                                                                                        )
+                                                                                        .map((value: any, ind: number) => {
+                                                                                            const reviewer =
+                                                                                                reviewers &&
+                                                                                                reviewers.find(
+                                                                                                    (rev: any) =>
+                                                                                                        rev?.gameReviewerId ===
+                                                                                                        value?.gameReviewerId,
+                                                                                                );
+                                                                                            return (
+                                                                                                <>
+                                                                                                    <Box
+                                                                                                        w={'100%'}
+                                                                                                        display={'flex'}
+                                                                                                        justifyContent={
+                                                                                                            'space-between'
+                                                                                                        }
+                                                                                                        key={ind}
+                                                                                                    >
+                                                                                                        <Box
+                                                                                                            w={'100%'}
+                                                                                                            display={'flex'}
+                                                                                                            alignItems={'center'}
+                                                                                                        >
+                                                                                                            <Img
+                                                                                                                src={pro}
+                                                                                                                w={'40px'}
+                                                                                                                h={'40px'}
+                                                                                                                alt="pro"
+                                                                                                                borderRadius={'50%'}
+                                                                                                            />
+                                                                                                            <Text ml={'15px'}>
+                                                                                                                {reviewer?.emailId ===
+                                                                                                                    null
+                                                                                                                    ? reviewer
+                                                                                                                        ?.ReviewingCreator
+                                                                                                                        ?.ctMail
+                                                                                                                    : reviewer?.emailId}
+                                                                                                            </Text>
+                                                                                                        </Box>
+                                                                                                        <Box whiteSpace={'nowrap'}>
+                                                                                                            <Text fontSize={'14'}>
+                                                                                                                Posted On :
+                                                                                                                {value?.updatedAt
+                                                                                                                    ? new Date(
+                                                                                                                        value.updatedAt,
+                                                                                                                    ).toLocaleDateString()
+                                                                                                                    : ''}
+                                                                                                            </Text>
+                                                                                                        </Box>
+                                                                                                    </Box>
+                                                                                                    <Box mb={'10px'} mt={'10px'}>
+                                                                                                        {value?.review}
+                                                                                                    </Box>
+                                                                                                </>
+                                                                                            );
+                                                                                        })}
+                                                                                {(!reviews ||
+                                                                                    reviews.length === 0 ||
+                                                                                    reviews.filter(
+                                                                                        (item: any) =>
+                                                                                            item?.tabAttributeValue ===
+                                                                                            `${seq?.questNo}@${seq?.input}`,
+                                                                                    ).length === 0) && (
+                                                                                        <Box
+                                                                                            w={'100%'}
+                                                                                            display={'flex'}
+                                                                                            alignItems={'center'}
+                                                                                            justifyContent={'center'}
+                                                                                        >
+                                                                                            <Text>
+                                                                                                No Reviews For This Block
+                                                                                            </Text>
+                                                                                        </Box>
+                                                                                    )}
+                                                                            </AccordionPanel>
+                                                                        </AccordionItem>
+                                                                    </Accordion>) : ''}
+
+                                                                    {seq.id == showMiniBox ? (
+                                                                        <MiniBox seq={seq} i={i} name={'Dialog'} />
+                                                                    ) : null}
                                                                 </Box>
-								) :seq.type == 'Interaction' ? (
-<Box id={`tarSeqRef${seq.id}`}  position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} background={seq.input === lastInputName || dragData.isDragging === true ? '#c7c7c724' : 'unset'} _hover={{background: '#c7c7c724'}} zIndex={seq.input === lastInputName ? '9' : 'unset'} 
+                                                            ) : seq.type == 'Interaction' ? (
+                                                                <Box id={`tarSeqRef${seq.id}`} position={'relative'} boxShadow={seq.input === lastInputName ? '1px 2px 13px #a2a1b00a' : 'unset'} borderRadius={'12px'} transform={seq.input === lastInputName ? 'scale(1.030)' : 'unset'} transition={'0.1s linear'} borderLeft={seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'} background={seq.input === lastInputName || dragData.isDragging === true ? '#c7c7c724' : 'unset'} _hover={{ background: '#c7c7c724' }} zIndex={seq.input === lastInputName ? '9' : 'unset'}
                                                                     tabIndex={0}
-                                                                    onClick={(e) => {handleKeyDown(e,i, seq) }}
-                                                                    onKeyDown={(e) => handleKeyDown(e,i, seq)}
-                                                                    >
-                                                            
-                                                            
-                                                                
-                                                                    
-                                                                        <InteractionCompo
-                                                                         reviews={reviews}
-                                                                            seq={seq}
-                                                                            index={i}
-                                                                            name={'Interaction'}
-                                                                            number={number}
-                                                                            dummySequence={dummySequence}
-                                                                            getSeq={getSeq}
-                                                                            duplicateSeq={duplicateSeq}
-                                                                            delSeq={delSeq}
-                                                                            input={input}
-                                                                            handleInput={(e: any) => handleInput(e, i)}
-                                                                            handleSelect={handleSelect}
-                                                                            characterOption={characterOption}
-                                                                            alphabet={alphabet}
-                                                                            setAlphabet={setAlphabet}
-                                                                            animateBtn={animateBtn}
-                                                                            setAnimateBtn={setAnimateBtn}
-                                                                            interactionBlock={interactionBlock}
-                                                                            setInteractionBlock={setInteractionBlock}
-                                                                            formData={formData}
-                                                                            handleBlockRoll={handleBlockRoll}
+                                                                    onClick={(e) => { handleKeyDown(e, i, seq) }}
+                                                                    onKeyDown={(e) => handleKeyDown(e, i, seq)}
+                                                                    style={{
+                                                                        backgroundColor: ShowReview
+                                                                          ? reviews && reviews.find((item: any) => {
+                                                                            const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                                                                            const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                                                                            console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+                                                                            return isMatched;
+                                                                          })
+                                                                            ? '#E2E8F0'
+                                                                            : ''
+                                                                          : '',    marginBottom: '10px', // Adjust the value as per your requirement
 
-                                                                            handleResponseRoll={handleResponseRoll}
-                                                                            handleQuestionEmotion={handleQuestionEmotion} handleOptionEmotion={handleOptionEmotion}
-                                                                            handleResponseEmotion={handleResponseEmotion}
-                                                                            handleCheckBox={handleCheckBox}
-                                                                            handleOptionVoice={handleOptionVoice}
-                                                                            handleQuestionVoice={handleQuestionVoice}
-                                                                            setNavigation={setNavigation}
-                                                                            handleSelectBlock={handleSelectBlock}
+                                                                      }}
+                                                                >
+                                                                    <InteractionCompo
+                                                                        ShowReview={ShowReview}
+                                                                        reviews={reviews}
+                                                                        seq={seq}
+                                                                        index={i}
+                                                                        name={'Interaction'}
+                                                                        number={number}
+                                                                        dummySequence={dummySequence}
+                                                                        getSeq={getSeq}
+                                                                        duplicateSeq={duplicateSeq}
+                                                                        delSeq={delSeq}
+                                                                        input={input}
+                                                                        handleInput={(e: any) => handleInput(e, i)}
+                                                                        handleSelect={handleSelect}
+                                                                        characterOption={characterOption}
+                                                                        alphabet={alphabet}
+                                                                        setAlphabet={setAlphabet}
+                                                                        animateBtn={animateBtn}
+                                                                        setAnimateBtn={setAnimateBtn}
+                                                                        interactionBlock={interactionBlock}
+                                                                        setInteractionBlock={setInteractionBlock}
+                                                                        formData={formData}
+                                                                        handleBlockRoll={handleBlockRoll}
 
-                                                                            handleBlock={handleBlock}
-                                                                            countalphabet={countalphabet}
-                                                                            setAlphabetCount={setAlphabetCount}
-                                                                            items={items}
-                                                                            handleTagsChange={handleTagsChange}
-                                                                    showSelectBlock={showSelectBlock}
+                                                                        handleResponseRoll={handleResponseRoll}
+                                                                        handleQuestionEmotion={handleQuestionEmotion} handleOptionEmotion={handleOptionEmotion}
+                                                                        handleResponseEmotion={handleResponseEmotion}
+                                                                        handleCheckBox={handleCheckBox}
+                                                                        handleOptionVoice={handleOptionVoice}
+                                                                        handleQuestionVoice={handleQuestionVoice}
+                                                                        setNavigation={setNavigation}
+                                                                        handleSelectBlock={handleSelectBlock}
+
+                                                                        handleBlock={handleBlock}
+                                                                        countalphabet={countalphabet}
+                                                                        setAlphabetCount={setAlphabetCount}
+                                                                        items={items}
+                                                                        handleTagsChange={handleTagsChange}
+                                                                        showSelectBlock={showSelectBlock}
                                                                         setSelectBlock={setSelectBlock}
-/>
- {/* Accordian for Interaction Blocks */}
- {ShowReview ? (<Accordion allowToggle>
-                                    <AccordionItem>
-                                      <h2>
-                                        <AccordionButton>
-                                          <Box
-                                            as="span"
-                                            flex="1"
-                                            textAlign="left"
-                                            fontSize={'14'}
-                                            color={textColor}
-                                          >
-                                            See All Reviews
-                                          </Box>
-                                          <AccordionIcon />
-                                        </AccordionButton>
-                                      </h2>
+                                                                    />
+                                                                    {/* Accordian for Interaction Blocks */}
+                                                                    {ShowReview ? (<Accordion allowToggle>
+                                                                        <AccordionItem>
+                                                                            <h2>
+                                                                                <AccordionButton>
+                                                                                    <Box
+                                                                                        as="span"
+                                                                                        flex="1"
+                                                                                        textAlign="left"
+                                                                                        fontSize={'14'}
+                                                                                        color={textColor}
+                                                                                    >
+                                                                                        See All Reviews
+                                                                                    </Box>
+                                                                                    <AccordionIcon />
+                                                                                </AccordionButton>
+                                                                            </h2>
 
-                                      <AccordionPanel pb={4}>
-                                        {reviews &&
-                                          reviews
-                                            .filter(
-                                              (item: any) =>
-                                                item?.tabAttributeValue ===
-                                                `${seq?.questNo}@${seq?.input}`,
+                                                                            <AccordionPanel pb={4}>
+                                                                                {reviews &&
+                                                                                    reviews
+                                                                                        .filter(
+                                                                                            (item: any) =>
+                                                                                                item?.tabAttributeValue ===
+                                                                                                `${seq?.questNo}@${seq?.input}`,
+                                                                                        )
+                                                                                        .map((value: any, ind: number) => {
+                                                                                            const reviewer = reviewers && reviewers.find((rev: any) => rev?.gameReviewerId === value?.gameReviewerId);
+                                                                                            return (
+                                                                                                <>
+                                                                                                    <Box
+                                                                                                        w={'100%'}
+                                                                                                        display={'flex'}
+                                                                                                        justifyContent={
+                                                                                                            'space-between'
+                                                                                                        }
+                                                                                                        key={ind}
+                                                                                                    ><Box
+                                                                                                            w={'100%'}
+                                                                                                            display={'flex'}
+                                                                                                            alignItems={'center'}
+                                                                                                        >
+                                                                                                            <Img
+                                                                                                             src={pro}
+                                                                                                                w={'40px'}
+                                                                                                                h={'40px'}
+                                                                                                                alt="pro"
+                                                                                                                borderRadius={'50%'}
+                                                                                                            />
+                                                                                                            <Text ml={'15px'}>
+                                                                                                                {reviewer?.emailId ===
+                                                                                                                    null
+                                                                                                                    ? reviewer
+                                                                                                                        ?.ReviewingCreator
+                                                                                                                        ?.ctMail
+                                                                                                                    : reviewer?.emailId}
+                                                                                                            </Text>
+                                                                                                        </Box>
+                                                                                                        <Box whiteSpace={'nowrap'}>
+                                                                                                            <Text fontSize={'14'}>
+                                                                                                                Posted On :
+                                                                                                                {value?.updatedAt
+                                                                                                                    ? new Date(
+                                                                                                                        value.updatedAt,
+                                                                                                                    ).toLocaleDateString()
+                                                                                                                    : ''}
+                                                                                                            </Text>
+                                                                                                        </Box>
+                                                                                                    </Box>
+                                                                                                    <Box mb={'10px'} mt={'10px'}>
+                                                                                                        {value?.review}
+                                                                                                    </Box>
+                                                                                                </>
+                                                                                            );
+                                                                                        })}
+                                                                                {(!reviews ||
+                                                                                    reviews.length === 0 ||
+                                                                                    reviews.filter(
+                                                                                        (item: any) =>
+                                                                                            item?.tabAttributeValue ===
+                                                                                            `${seq?.questNo}@${seq?.input}`,
+                                                                                    ).length === 0) && (
+                                                                                        <Box
+                                                                                            w={'100%'}
+                                                                                            display={'flex'}
+                                                                                            alignItems={'center'}
+                                                                                            justifyContent={'center'}
+                                                                                        >
+                                                                                            <Text>
+                                                                                                No Reviews For This Block
+                                                                                            </Text>
+                                                                                        </Box>
+                                                                                    )}
+                                                                            </AccordionPanel>
+                                                                        </AccordionItem>
+                                                                    </Accordion>) : ''}
+
+                                                                    {seq.id == showMiniBox ? (
+                                                                        <MiniBox
+                                                                            seq={seq}
+                                                                            i={i}
+                                                                            name={'Interaction'}
+                                                                        />
+                                                                    ) : null}
+                                                                </Box>
+                                                            ) : null}
+                                                    </Box>
+                                                </div>
                                             )
-                                            .map((value: any, ind: number) => {
-                                              const reviewer = reviewers && reviewers.find((rev: any) => rev?.gameReviewerId === value?.gameReviewerId); 
-                                              return (
-                                                <>
-                                                  <Box
-                                                    w={'100%'}
-                                                    display={'flex'}
-                                                    justifyContent={
-                                                      'space-between'
-                                                    }
-                                                    key={ind}
-                                                  >
-                                                    <Box
-                                                      w={'100%'}
-                                                      display={'flex'}
-                                                      alignItems={'center'}
-                                                    >
-                                                      <Img
-                                                        src={pro}
-                                                        w={'40px'}
-                                                        h={'40px'}
-                                                        alt="pro"
-                                                        borderRadius={'50%'}
-                                                      />
-                                                      <Text ml={'15px'}>
-                                                        {reviewer?.emailId ===
-                                                        null
-                                                          ? reviewer
-                                                              ?.ReviewingCreator
-                                                              ?.ctMail
-                                                          : reviewer?.emailId}
-                                                      </Text>
-                                                    </Box>
-                                                    <Box whiteSpace={'nowrap'}>
-                                                      <Text fontSize={'14'}>
-                                                        Posted On :
-                                                        {value?.updatedAt
-                                                          ? new Date(
-                                                              value.updatedAt,
-                                                            ).toLocaleDateString()
-                                                          : ''}
-                                                      </Text>
-                                                    </Box>
-                                                  </Box>
-                                                  <Box mb={'10px'} mt={'10px'}>
-                                                    {value?.review}
-                                                  </Box>
-                                                </>
-                                              );})}
-                                        {(!reviews ||
-                                          reviews.length === 0 ||
-                                          reviews.filter(
-                                            (item: any) =>
-                                              item?.tabAttributeValue ===
-                                              `${seq?.questNo}@${seq?.input}`,
-                                          ).length === 0) && (
-                                          <Box
-                                            w={'100%'}
-                                            display={'flex'}
-                                            alignItems={'center'}
-                                            justifyContent={'center'}
-                                          >
-                                            <Text>
-                                              No Reviews For This Block
-                                            </Text>
-                                          </Box>
-                                        )}
-                                      </AccordionPanel>
-                                    </AccordionItem>
-                                   </Accordion>) : ''}
-								 
-{seq.id == showMiniBox ? (
-                                    <MiniBox
-                                      seq={seq}
-                                      i={i}
-                                      name={'Interaction'}
-                                    />
-                                  ) : null}
-                                </Box>
- ) : null}
-                            </Box>
-                                            </div>
-                                        )}}
+                                        }}
                                     </Draggable>
                                 )
                             })}
@@ -2326,7 +2369,7 @@ console.log('setDialogNavigation',menuvalue)
                     </Box>
                 </Card>
             </Box>
-           
+
             {/* <OnToast msg={'Drag Your Accordion'} status={'info'} setAlert={setAlert} position={'top-right'} /> */}
         </>
     )
