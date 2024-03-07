@@ -46,13 +46,11 @@ import Selected from 'assets/img/games/selected.png';
 // import { useGLTF } from '@react-three/drei';
 // import { Environment, OrbitControls } from '@react-three/drei';
 // import { FBXLoader } from 'three/addons/loaders/FBXLoader';
-
 // Components
 // import PlayingCharacter from '../three/PlayingCharacter';
 // import Sphere from '../three/Sphere';
 // import Trex from '../three/Trex';
 // import { Parrot } from '../three/Parrot';
-
 // Import ProfileContext from EntirePreview
 import { ProfileContext } from '../EntirePreview';
 import { getGameLanguages, getLanguages } from 'utils/game/gameService';
@@ -70,6 +68,7 @@ interface PlayGamesProps {
   setProfileData?: any;
   demoBlocks?: any;
 }
+
 const spokenLanguages = [
   'English',
   'Spanish',
@@ -92,6 +91,7 @@ const spokenLanguages = [
   'Korean',
   'Vietnamese',
 ];
+
 const Characterspage: React.FC<PlayGamesProps> = ({
   state,
   dispatch,
@@ -152,12 +152,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       [id]: id === 'name' ? value : lang,
     }));
   };
-  const bottomMargin = useBreakpointValue({
-    base: '10px',
-    lg: '40px',
-    xl: '60px',
-    xxl: '80px',
-  });
+ 
   const innerBoxWidth = useBreakpointValue({
     base: '95%',
     lg: '95%',
@@ -319,34 +314,23 @@ const Characterspage: React.FC<PlayGamesProps> = ({
         >
           <GridItem colSpan={1} position={'relative'}>
             <Img src={Select} h={'auto'} maxW={'100%'} loading="lazy" />
-            <Box
-              position={'absolute'}
-              top={{ base: '100px', lg: '150px', xl: '200px', '2xl': '295px' }}
-              w={'100%'}
-              h={'42%'}
-              display={'flex'}
-              justifyContent={'center'}
+            <Box   
+              className={'character_select_area'}
             >
               <Box w={'30%'} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                <Img src={Selected} w='10px' h='15px' transform={'rotate(90deg)'}/>
-                <Img src={Selected} w='10px' h='15px' transform={'rotate(-90deg)'}/>
+                <Img src={Selected} w='40px' h='45px' transform={'rotate(90deg)'}/>
+                <Img src={Selected} w='40px' h='45px' transform={'rotate(-90deg)'}/>
               </Box>
             </Box>
             <Box
-              position={'absolute'}
-              bottom={{ base: '40px', lg: '70px', xl: '90px', '2xl': '135px' }}
-              w={'100%'}
-              display={'flex'}
-              justifyContent={'center'}
+            className={'select_player'}
+            
             >
               <Button w={'15%'} bg={'none'} _hover={{bg:'none'}} onClick={selectPlayerClick}></Button>
             </Box>
             <Box
-              position={'absolute'}
-              bottom={bottomMargin}
-              w={'100%'}
-              display={'flex'}
-              justifyContent={'center'}
+              className={'character_next'}
+
             >
               <Box
                 w={innerBoxWidth}
@@ -360,7 +344,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                   onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
                 ></Button>
                 <Box w={'30%'} position={'relative'}>
-                <Text className="enter-name" textAlign={'center'} position={'absolute'} bottom={{ base: '-5px', lg: '-10px', xl: '-30px', '2xl': '-5px' }}  fontSize={{ base: '15px', lg: '20px', xl: '25px', '2xl': '30px' }} fontFamily={'AtlantisText'}>{playerInfo.name}Leo Dasssdfsdfaf WRWRAWD </Text>
+                <Text className="player_name" >{playerInfo.name}Leo Dasssdfsdfaf WRWRAWD </Text>
                 </Box>
                 <Button
                   className="btns right-btn"

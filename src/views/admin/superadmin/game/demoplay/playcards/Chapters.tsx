@@ -215,13 +215,8 @@ const ChapterPage: React.FC<{
               loading="lazy"
             />
             <Box
-              position={'absolute'}
-              top={{ base: '80px', lg: '120px', xl: '168px', '2xl': '295px' }}
-              w={'100%'}
-              h={'65%'}
-              display={'flex'}
-              overflowY={'scroll'}
-              justifyContent={'center'}
+              className={'chapters_list_box'}
+             
             >
               <Box w={'90%'}>
                 <motion.div

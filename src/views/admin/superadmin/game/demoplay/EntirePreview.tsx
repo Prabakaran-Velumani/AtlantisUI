@@ -1523,11 +1523,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             </Box>
           : <Box className='Setting-box off'></Box> } */}
 
-        </Box></Box>
-      <Flex height="100vh" className={currentScreenId === 2 || currentScreenId === 12 || currentScreenId === 13? '' : 'AddScores'}>
+        </Box>
+      </Box>
+      {/* <Flex height="100vh" className={currentScreenId === 2 || currentScreenId === 12 || currentScreenId === 13? '' : 'AddScores'}> */}
         {(() => {
           switch (currentScreenId) {
-            case 0:
+            case 0: 
               return (
                 <>
                   {
@@ -1551,7 +1552,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     animate={{ opacity: 1, background: '#0000' }}
                     transition={{ duration: 0.3, delay: 0.5 }}
                   > */}
-                  <Box
+                  {/* <Box
                     w={'100%'}
                     h={'100vh'}
                     alignItems={'center'}
@@ -1571,17 +1572,18 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       justifyContent={'center'}
                       className="Game-Screen"
                     >
-                      <Box className="Images" h={'100vh !important'}>
+                      <Box className="Images" h={'100vh !important'}> */}
                         <Welcome
                           intro={audio}
                           setCurrentScreenId={setCurrentScreenId}
                           formData={gameInfo?.gameData}
-                          imageSrc={Screen5}
+                          imageSrc={backgroundScreenUrl}
+                          screen={Screen5}
                           preview={true}
                         />
-                      </Box>
+                      {/* </Box>
                     </Box>
-                  </Box>
+                  </Box> */}
                   {/* </motion.div> */}
                 </>
               );
@@ -1595,6 +1597,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   > */}
                   {data && type && (
                     <Story
+                      windowWidth={windowWidth}
+                      windowHeight={windowHeight}
                       prevData={prevData}
                       currentScore={currentScore}
                       selectedNpc={gameInfo?.gameNonPlayerUrl}
@@ -2060,7 +2064,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return <h1>Loading Screen </h1>;
           }
         })()}
-      </Flex>
+      {/* </Flex> */}
       {isReviewDemo && (
         <Menu isOpen={isMenuOpen}>
           <MenuButton
