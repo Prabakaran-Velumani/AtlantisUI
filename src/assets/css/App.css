@@ -419,6 +419,7 @@ font-family: 'AtlantisText';
   -webkit-background-clip: text;
   color: transparent;
   font-size: 22px;
+  justify-content: center;
 }
 .congratulations .content {     
 /*  width: 165px;
@@ -843,7 +844,7 @@ height: 100%;
 position: absolute;
 }
 .AddScores .Main-Content .Game-Screen .Images .reflection-screen .bg-img {
-height: 600px; 
+height: 800px; 
 /* width: 500px;  */
 background-position: center;
 }
@@ -923,12 +924,12 @@ height: 265px;
 position: absolute;
 flex-direction: column;
 transform: translate(-3px, 33px);
-overflow-y: auto;
+/* overflow-y: auto; */
  /*scrollbar-width: thin; /* For Firefox */
 /*scrollbar-color: #333 #f0f0f0; /* For Firefox */
 }
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box  .content {  
-width: 334px;
+width: 100%;
 display: flex;
 
 } 
@@ -937,8 +938,13 @@ width: 100%;
 display: flex;
 justify-content: 'center';
 }
+.AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box .content .bullet-content-box {
+  width: 100%; /* Set your desired width 124% or 100%*/
+  color: #D9C7A2;
+  overflow-wrap: break-word; /* Break the word if it exceeds the width */
+}
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box  .content p  {  
-width: 334px;  
+width: 100%;  
 color: #D9C7A2
 } 
 /* .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box .dot-img { 
@@ -1393,7 +1399,7 @@ transform: translate(-167px, -84px);
     display: flex;            
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 10px;
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .renderContent p{
     width: 350px;
@@ -1409,21 +1415,21 @@ transform: translate(-167px, -84px);
    text-align: center;   
    font-family: 'AtlantisText';
    letter-spacing: 1px;
-   color: #D9C7A2;  
-   font-size: 22px;
+   /* color: #D9C7A2;   */
+   /* font-size: 22px; */
    /*margin-bottom: 10px;*/
    /*font-size: 2rem;*/
-    display: grid;
-    grid-template-columns: 1fr max-content 1fr;
-    grid-column-gap: 1.2rem;
+    /* display: grid; */
+    /* grid-template-columns: 1fr max-content 1fr; */
+    /* grid-column-gap: 1.2rem; */
     align-items: center;
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .author p::before,
 .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .author p::after {
     content: "";
-    display: block;
+    /* display: block;
     height: 1px;
-    background-color: currentColor;
+    background-color: currentColor; */
 }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .title{
     /* transform: translateY(-44px); modify */
@@ -1435,7 +1441,7 @@ transform: translate(-167px, -84px);
     transform: translateY(-20px);
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .rewards-box {
-    height: 128px; 
+    height: 30%; 
     justify-content: center;
   }
   .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 {
@@ -1525,9 +1531,9 @@ transform: translate(-167px, -84px);
     /* transform: translate(0px, 109px); modify */
     flex-flow: wrap;    
   }
-  .collect-learner-feedback {
+  /* .collect-learner-feedback {
     overflow-y: scroll;
-  }
+  } */
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .about-experience { 
     font-size: 21px;     
     /* transform: translate(0px, 97px); modify */
@@ -1621,6 +1627,7 @@ transform: translate(-167px, -84px);
 
   }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div div p{
+    font-size: small;
     text-align: left;
   }
   
@@ -1674,7 +1681,7 @@ transform: translate(-167px, -84px);
   height: 100%;
   display: flex;
   align-items: center;
-  margin-left: 12px;
+  margin-left: -15px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1683,7 +1690,7 @@ transform: translate(-167px, -84px);
   height: 100%;
   display: flex;
   align-items: center;
-  margin-right: 12px;
+  margin-right: -15px;
   position: absolute;
   top: 0;
   right: 0;

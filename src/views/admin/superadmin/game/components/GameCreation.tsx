@@ -1,11 +1,5 @@
 // ALTER TABLE `lmsgame` ADD `gameQuestNo` INT(100) NULL AFTER `gameId`;
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Avatar,
   Box,
   Button,
   Divider,
@@ -14,28 +8,10 @@ import {
   GridItem,
   Icon,
   Img,
-  Input,
-  List,
-  ListIcon,
-  ListItem,
-  Progress,
   SimpleGrid,
-  Step,
-  StepIcon,
-  StepIndicator,
-  StepNumber,
-  StepSeparator,
-  StepStatus,
-  StepTitle,
-  Stepper,
   Text,
-  VStack,
-  useSteps,
   keyframes,
   useToast,
-  Heading,
-  Collapse,
-  StepDescription,
   useColorModeValue,
   HStack,
   useDisclosure,
@@ -45,41 +21,24 @@ import {
   MenuItem,
   FormControl,
   FormLabel,
-  Textarea,
 } from '@chakra-ui/react';
 import { MdOutlineSubtitles } from 'react-icons/md';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import CharacterPreview from './CharacterPreview';
-import { motion } from 'framer-motion';
-import { VscVerifiedFilled } from 'react-icons/vsc';
 import {
-  GoVerified,
-  GoUnverified,
-  GoDotFill,
   GoCodeReview,
 GoEye,
   GoEyeClosed		
 } from 'react-icons/go';
 import Card from 'components/card/Card';
-import InputField from 'components/fields/InputField';
-import TextField from 'components/fields/TextField';
-import Log from 'assets/img/games/log.png';
-import Level from 'assets/img/games/new-level-final.png';
-import Character from 'assets/img/games/select-character-final.png';
-import Badges from 'assets/img/games/badges-game-read-format.png';
 import GameCard from './gameCard';
-import StepperBar from './StepperBar';
 import {
   getImages,
-  getNonPlayer,
-  getPlayer,
   updateGame,
   getGameById,
   addgame,
   createSkills,
   createCategories,
-  uploadAudio,
-  uploadBadge,
   createReflection,
   getCreatorBlocks,
   getBadge,
@@ -91,71 +50,40 @@ import {
   getDefaultSkill,
   getReflection,
   setStory,
-  getPreview,
   QuestDeletion,
   getCompletionScreen,
   UpdateCompletionScreen,
   getTotalMinofWords,
   getStoryValidtion,
-  getGameDemoData,
   getGameCreatorDemoData,
+  getSelectedLanguages,
 } from 'utils/game/gameService';
 import { useNavigate, useParams } from 'react-router-dom';
+import Select from 'react-select';
 import AboutStory from './AboutStory';
 import GreetingsForm from './GreetingsForm';
 import Customization from './Customize';
 import IconBox from 'components/icons/IconBox';
 import { TbView360 } from 'react-icons/tb';
 import { FaRobot } from 'react-icons/fa';
-import { MdPageview } from 'react-icons/md';
 import { GiBlackBook } from 'react-icons/gi';
 import { FaCubes } from 'react-icons/fa';
 import { MdTune } from 'react-icons/md';
-import { MdRocketLaunch } from 'react-icons/md';
 import { IoArrowBackCircle } from 'react-icons/io5';
-import {
-  MdCheckCircle,
-  MdSettings,
-  MdMyLocation,
-  MdImage,
-  MdIncompleteCircle,
-  MdArrowCircleRight,
-  MdArrowCircleLeft,
-  MdEdit,
-  MdPointOfSale,
-  MdShoppingBasket,
-  MdArchive,
-  MdLocalShipping,
-} from 'react-icons/md';
-import { TfiRulerPencil } from 'react-icons/tfi';
 import { BsShareFill } from 'react-icons/bs';
 import AddScores from './AddScores';
 import CompletionScreen from './Completion';
 
 import pro from 'assets/img/crm/pro.png';
-import Background from 'assets/img/stepper/background.png';
-import Block from 'assets/img/stepper/blocks.png';
-import pose from 'assets/img/stepper/pose.png';
-import stroy from 'assets/img/stepper/stroy.png';
-import scores from 'assets/img/stepper/scores.png';
 // import endflag from 'assets/img/stepper/endflag.png'
-import endflag from 'assets/img/stepper/reached.png';
-import summary from 'assets/img/stepper/summary.png';
-import NftStepper from 'assets/img/nfts/NftStepper.png';
-import Stepbg from 'assets/img/product/product-footer.png';
-import Stepbg1 from 'assets/img/product/OverviewBanner.png';
-import Stepbg2 from 'assets/img/ecommerce/Details.png';
 import OrderStep from 'components/dataDisplay/OrderStep';
-import { TbProgress } from 'react-icons/tb';
 import ImagePreview from './ImagePreview';
 import { SidebarResponsive } from 'components/sidebar/Sidebar';
 import routes from 'routes';
-import { error } from 'console';
 import { IoIosPersonAdd } from 'react-icons/io';
 import ShareReviewTable from './ShareReview';
 import tableDataCheck from 'views/admin/dashboards/rtl/variables/tableDataCheck';
 // import EntirePreview from './EntirePreview';
-import SinglePreview from './SinglePreview';
 import { AiFillMessage } from 'react-icons/ai';
 import { getAllReviews } from 'utils/reviews/reviews';
 import { API_SERVER } from 'config/constant';
@@ -166,6 +94,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
 import { AiOutlineEye,AiOutlineEyeInvisible } from "react-icons/ai";
 
+// @ts-ignore
+import loadingImage from 'assets/img/games/loading.gif';
 const steps = [
   { title: 'BackGround' },
   { title: 'Non Playing Charater' },
@@ -187,7 +117,14 @@ interface MyObject {
   option: any;
   secondaryId: any;
 }
-
+interface SelectedLanguageEntry {
+  translationId: number;
+  lmsMultiLanguageSupport: {
+    language_name: string;
+  };
+  'lmsMultiLanguageSupport.language_name': string;
+  // 'lmsMultiLanguageSupport.language_code': string;
+}
 const GameCreation = () => {
   ///////////////////Navin 15-12///////////////////////////////////
   //stroy//
@@ -246,6 +183,13 @@ const GameCreation = () => {
   const [showSelectBlock, setSelectBlock] = useState<any>([]);
   const [heightOfTab, setHeightOfTab] = useState<any>();
   const previewStoreData = useSelector((state: RootState) => state.preview);
+  const [validation, setValidation] = useState<any>({
+    note: false,
+    dialog: false,
+    dialogAnimation: false,
+    interaction: false,
+    options: false,
+  });
 
   /** To stop load data after naviagte from another game based on Extension*/
   const [extensiveNavigation, setExtensiveNavigation] = useState<number | null>(
@@ -265,7 +209,6 @@ const GameCreation = () => {
         [refkey]: reflecation,
       };
     });
-    // console.log('reflectionQuestions', reflectionQuestions);
   };
 
   const handlesaveReflection = async () => {
@@ -274,7 +217,6 @@ const GameCreation = () => {
       gameReflectionQuestion: formData.gameReflectionQuestion,
       gameId: id,
     };
-    // console.log('handlesaveReflection', data);
     const datas = JSON.stringify(data);
     const resu = await createReflection(datas);
 
@@ -331,7 +273,7 @@ const GameCreation = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [autosave, setAtuoSave] = useState(false);
   const [inputValue, setInputValue] = useState('');
-
+  const [loading, setLoading] = useState(false);
   const [isSave, setIsSave] = useState(false);
   //////////////////////Changes-14/12/23///////////////////////////////////////
   const [selections, setSelections] = useState(Array(img.length).fill(false));
@@ -447,6 +389,7 @@ const GameCreation = () => {
       gameTakeawayScreenId: null,
       gameWelcomepageBackgroundScreenId: null,
       gameThankYouScreenId: null,
+      gamelanguageCode: '',
       //navin 16-12
 
       // gameCompletionScreenId:null,
@@ -469,6 +412,14 @@ const GameCreation = () => {
       gameRecommendation: 'false',
       gameFeedBack: 'false',
       gameFeedBackLink: '',
+      gameIsShowAdditionalWelcomeNoteInvalid: 'false',
+      isCategoryIdInvalid: false,
+      //newlyadded start 
+      isStoryTitleInvalid: false,
+      isSkillsInvalid: false,
+      isfeedbackthankyou:false,
+      //newlyadded end 
+
     });
   const [compliData, setCompliData] = useState({
     0: {
@@ -492,6 +443,8 @@ const GameCreation = () => {
       gameaboveMinimumScoreCongratsMessage: null,
       gameLessthanDistinctionScoreCongratsMessage: null,
       gameAboveDistinctionScoreCongratsMessage: null,
+      gameIsSetCongratsSingleMessage: 'false',
+
     },
   });
   const [reviews, setReviews] = useState<any[]>([]);
@@ -601,6 +554,55 @@ const GameCreation = () => {
       handleCompletionScreen(1);
     }
   }, [tab]);
+  let borderColor = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
+  const [languageOptions, setLanguageOptions] = useState([]);
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [languages, setLanguage] = useState('');
+  const defaultLanguageOption = { label: 'English', value: '' };
+  useEffect(() => {
+    const fetchLanguages = async () => {
+      try {
+        const selectedLanguagesResult = await getSelectedLanguages(id);
+
+        if (
+          selectedLanguagesResult &&
+          selectedLanguagesResult.data &&
+          selectedLanguagesResult.data.selectedLanguages
+        ) {
+          const options = selectedLanguagesResult.data.selectedLanguages.map(
+            (language: SelectedLanguageEntry) => ({
+              value: language['translationId'],
+              label: language['lmsMultiLanguageSupport.language_name'],
+            })
+          );
+
+          setLanguageOptions(options);
+        } else {
+          console.error('Error: Selected languages data is missing or in unexpected format.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    if (isMenuOpen && (tab !== 1 )) {
+      fetchLanguages();
+      setMenuOpen(false); // Close the menu after fetching
+    }
+  }, [id, isMenuOpen, tab]);
+  const handleSelectChange = (selectedOption: { value: any; label: string }) => {
+    // Do something with the selected option
+    console.log('Selected Option:', selectedOption);
+
+    // Update the state and access the updated value inside a useEffect hook
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      gamelanguageCode: selectedOption.value, // Replace 'gamelanguageId' with the appropriate property name
+    }));
+
+    setLanguage(selectedOption.value);
+  };
+
   const handleBackGroundImage = (e: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -739,6 +741,7 @@ const GameCreation = () => {
   };
 
   const fetchGameId = async () => {
+    setLoading(true);
     const reviews = await getAllReviews(id);
     if (reviews && reviews?.status !== 'Success')
       return console.log(reviews?.message);
@@ -783,7 +786,18 @@ const GameCreation = () => {
         setTab(2);
         setFormData((prev) => ({ ...prev, gameLastTab: 2 }));
       } else {
-        setTab(parseInt(lastValue));
+        // setTab(parseInt(lastValue));
+        // if(tab === 6)
+        // {setTab(6);}
+        // else{setTab(parseInt(lastValue)+1);}
+        if(tab === 6)
+        {setTab(6);console.log('parseinthi');}
+        else{
+          if((parseInt(lastValue)+1)>=6){
+            setTab(6);
+          }else{
+            setTab(parseInt(lastValue)+1);
+          };console.log('parseinthi1',tab);}
       }
     }
 
@@ -808,6 +822,7 @@ const GameCreation = () => {
     setReviewers(review?.reviewerDetails);
     setReviews(review?.reviewlist);
     // console.log('you should read this reviews', review?.reviewlist[4]);
+    setLoading(false);
   };
 
   const handleGet = async (quest: number) => {
@@ -897,7 +912,19 @@ const GameCreation = () => {
         setCompletion(result?.data);
         setCompliData(result?.data);
         setCompKeyCount(Object.keys(result?.data).length - 1);
-        setCurrentTab(0);
+        if (formData && formData.gameLastTabArray) {
+          const tabformArray = formData.gameLastTabArray;
+          const findArrayValue = tabformArray.includes(5);
+          if (findArrayValue) {
+            setCurrentTab(5);
+          }
+          else{
+            setCurrentTab(0);
+          }
+        }
+        else{
+          setCurrentTab(0);
+        }
         setAtuoSave(true);
       }
     } catch (error) {
@@ -1040,68 +1067,46 @@ useEffect(()=>{
     let tabArray: number[] = [];
 
     // Watching Stepper Height for Green Progress
-    const tab1 = document.getElementById(`tab1`);
+    const tab1 = document.getElementById(`tab1`)
+    const title1 = tab1?.getAttribute('title');
     const getfirstElementHgt = tab1?.clientHeight;
+
     //tab2
-    const tab2 = document.getElementById(`tab2`);
+    const tab2 = document.getElementById(`tab2`)
+    const title2 = tab2?.getAttribute('title');
     const getsecondElementHgt = tab2?.clientHeight;
     //tab3
-    const tab3 = document.getElementById(`tab3`);
+    const tab3 = document.getElementById(`tab3`)
+    const title3 = tab3?.getAttribute('title');
     const getThirdElementHgt = tab3?.clientHeight;
     //tab4
-    const tab4 = document.getElementById(`tab4`);
+    
+    const tab4 = document.getElementById(`tab4`)    
+    const title4 = tab4?.getAttribute('title');
     const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
-    const tab4Height = tabs == 4 && getFourElementHgt + getfirstElementHgt;
+    const tab4Height = tabs == 4 && (getFourElementHgt + getfirstElementHgt)
+    
     //tab5
-    const tab5 = document.getElementById(`tab5`);
+    const tab5 = document.getElementById(`tab5`)
+    const title5 = tab5?.getAttribute('title');
     const getFifthElementHgt = tab5?.clientHeight;
     //tab6
-    const tab6 = document.getElementById(`tab6`);
+    const tab6 = document.getElementById(`tab6`)
+    const title6 = tab6?.getAttribute('title');
     const getSixthElementHgt = tab6?.clientHeight;
-
-															
-											  
-
-    if (tabs == 1 && tab == 1) {
-      setHeightOfTab(getfirstElementHgt);
-    }
-    if (tabs == 2 && tab == 2) {
+    
+    if(title6 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
+    } else if (title5 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+    } else if (title4 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + 90 );
+    } else if (title3 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
+    } else if (title2 === 'done') {
       setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
-    }
-    if (tabs == 3 && tab == 3) {
-      setHeightOfTab(
-        getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60,
-      );
-    }
-    if (tabs == 4 && tab == 4) {
-      setHeightOfTab(
-        getfirstElementHgt +
-          getsecondElementHgt +
-          getThirdElementHgt +
-          getfirstElementHgt +
-          90,
-      );
-    }
-    if (tabs == 5 && tab == 5) {
-      setHeightOfTab(
-        getfirstElementHgt +
-          getsecondElementHgt +
-          getThirdElementHgt +
-          getFourElementHgt +
-          getFifthElementHgt +
-          120,
-      );
-    }
-    if (tabs == 6 && tab == 6) {
-      setHeightOfTab(
-        getfirstElementHgt +
-          getsecondElementHgt +
-          getThirdElementHgt +
-          getFourElementHgt +
-          getFifthElementHgt +
-          getSixthElementHgt +
-          150,
-      );
+    } else if (title1 === 'done') {
+      setHeightOfTab(getfirstElementHgt);
     }
 
     if (!formData?.gameLastTabArray?.includes(tabs)) {
@@ -1116,7 +1121,6 @@ useEffect(()=>{
     let lastValue: number;
     if (tabArray.length > 0) {
       lastValue = tabArray[tabArray.length - 1];
-      // console.log('Last value in tabArray:', lastValue);
     } else {
       // console.log('tabArray is empty');
     }
@@ -1203,7 +1207,10 @@ useEffect(()=>{
               duration: 3000,
               isClosable: true,
             });
-
+            setFormData({
+              ...formData,
+              isStoryTitleInvalid: true,
+            });
             return false;
           }
           if (!formData.gameSkills || formData.gameSkills.length === 0) {
@@ -1213,7 +1220,10 @@ useEffect(()=>{
               duration: 3000,
               isClosable: true,
             });
-
+            setFormData({
+              ...formData,
+              isSkillsInvalid: true,
+            });
             return false;
           }
           if (
@@ -1320,14 +1330,9 @@ useEffect(()=>{
                   if (typeof alphabet === 'object' && alphabet !== null) {
                     var alphabetData = alphabet;
 
-                    // alphabetData?.filter((alp: any) => key.id === alp.seqs).map((alp: any, i: number, arr: any[]) => {
                     for (const alp of alphabetData?.filter(
                       (alp: any) => key.id === alp.seqs,
                     ) || []) {
-                      console.log(
-                        'alpha',
-                        input[inputkey]?.optionsObject[alp.option],
-                      );
                       if (!input[inputkey]?.optionsObject[alp.option]) {
                         var option = alp.option;
                         toast({
@@ -1421,69 +1426,50 @@ useEffect(()=>{
   };
   ///navin 15-12
 
-  useEffect(() => {
-    // Watching Stepper Height
-    const tab1 = document.getElementById(`tab1`);
-    const getfirstElementHgt = tab1.clientHeight;
-    //tab2
-    const tab2 = document.getElementById(`tab2`);
-    const getsecondElementHgt = tab2.clientHeight;
-    //tab3
-    const tab3 = document.getElementById(`tab3`);
-    const getThirdElementHgt = tab3.clientHeight;
-    //tab4
-    const tab4 = document.getElementById(`tab4`);
-    const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
-    const tab4Height = tab == 4 && getFourElementHgt + getfirstElementHgt;
-    //tab5
-    const tab5 = document.getElementById(`tab5`);
-    const getFifthElementHgt = tab5.clientHeight;
-    //tab6
-    const tab6 = document.getElementById(`tab6`);
-    const getSixthElementHgt = tab6.clientHeight;
+  useEffect(()=> { // Watching Stepper Height
 
-    if (tab == 1) {
-      setHeightOfTab(getfirstElementHgt);
-    }
-    if (tab == 2) {
+    const tab1 = document.getElementById(`tab1`)
+    const title1 = tab1?.getAttribute('title');
+    const getfirstElementHgt = tab1?.clientHeight;
+    //tab2
+    const tab2 = document.getElementById(`tab2`)
+    const title2 = tab2?.getAttribute('title');
+    const getsecondElementHgt = tab2?.clientHeight;
+    //tab3
+    const tab3 = document.getElementById(`tab3`)
+    const title3 = tab3?.getAttribute('title');
+    const getThirdElementHgt = tab3?.clientHeight;
+    //tab4
+    const tab4 = document.getElementById(`tab4`)
+    const taby4 = document.getElementById(`taby4`)
+    const title4 = taby4?.getAttribute('title');
+    const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
+    const tab4Height = tab == 4 && (getFourElementHgt + getfirstElementHgt)
+    console.log('getFourElementHgttab',questTabState);
+    console.log('getFourElementHgt',getFourElementHgt)
+    //tab5
+    const tab5 = document.getElementById(`tab5`)
+    const title5 = tab5?.getAttribute('title');
+    const getFifthElementHgt = tab5?.clientHeight;
+    //tab6
+    const tab6 = document.getElementById(`tab6`)
+    const title6 = tab6?.getAttribute('title');
+    const getSixthElementHgt = tab6?.clientHeight;
+    
+    if(title6 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
+    } else if (title5 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+    } else if (title4 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + 90 );
+    } else if (title3 === 'done') {
+      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
+    } else if (title2 === 'done') {
       setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
-    }
-    if (tab == 3) {
-      setHeightOfTab(
-        getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60,
-      );
-    }
-    if (tab == 4) {
-      setHeightOfTab(
-        getfirstElementHgt +
-          getsecondElementHgt +
-          getThirdElementHgt +
-          getfirstElementHgt +
-          90,
-      );
-    }
-    if (tab == 5) {
-      setHeightOfTab(
-        getfirstElementHgt +
-          getsecondElementHgt +
-          getThirdElementHgt +
-          getFourElementHgt +
-          getFifthElementHgt +
-          120,
-      );
-    }
-    if (tab == 6) {
-      setHeightOfTab(
-        getfirstElementHgt +
-          getsecondElementHgt +
-          getThirdElementHgt +
-          getFourElementHgt +
-          getFifthElementHgt +
-          getSixthElementHgt +
-          150,
-      );
-    }
-  }, [tab]);
+    } else if (title1 === 'done') {
+      setHeightOfTab(getfirstElementHgt);
+    }     
+  },[tab,listQuest?.length])
 
   //navin
   const handleNext = async () => {
@@ -1495,6 +1481,323 @@ useEffect(()=>{
       formData.gameBehaviour,
       formData.gameOthers,
     ];
+     // Completion Screen Validation
+const complidatalength = Object.keys(compliData).length;
+const getcompliData = Object.keys(compliData);
+console.log('getcompliData',getcompliData);
+
+if (complidatalength !== 0) {
+  for (let i = 0; i < complidatalength; i++) {
+    const compkey = getcompliData[i] as unknown as keyof typeof compliData; 
+    const compkeyNumber = Number(compkey);
+    console.log('formDatagameThankYouMessage123Key for entry', i, ':', compkey);
+    const getgameTotalScore = compliData[compkey].gameTotalScore;
+    if (Array.isArray(getgameTotalScore) && getgameTotalScore.length > 0) {
+      const maxScore = getgameTotalScore[0].maxScore;
+      if (!maxScore) {
+        toast({
+          title: 'Please Enter Total Score.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        return false
+      }
+    }
+    if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
+      if (!compliData[compkey]?.gameMinScore) {
+        toast({
+          title: 'Please Enter Minimum Score.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompliData((prevInput: any) => ({
+          ...prevInput,
+          [CompKeyCount]: {
+            ...prevInput[CompKeyCount],
+            redBorderForMinScore: true,
+          },
+        }));
+        setCompKeyCount(compkeyNumber);
+        return false;
+      }
+
+      // Reset the red border style for the InputField
+      setCompliData((prevInput: any) => ({
+        ...prevInput,
+        [CompKeyCount]: {
+          ...prevInput[CompKeyCount],
+          redBorderForMinScore: false,
+        },
+      }))
+    }
+    if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
+      if (!compliData[compkey]?.gameDistinctionScore) {
+        toast({
+          title: 'Please Enter Distinction  Score.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        return false
+
+      }
+
+    }
+    if (compliData[compkey]?.gameIsSetBadge === 'true') {
+      if (!compliData[compkey]?.gameBadge) {
+        toast({
+          title: 'Please Select Badge.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        return false
+
+      }
+      if (!compliData[compkey]?.gameBadgeName) {
+        toast({
+          title: 'Please Fill Badge Name.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        return false
+
+      }
+      if (compliData[compkey]?.gameIsSetCriteriaForBadge === 'true') {
+        if (!compliData[compkey]?.gameAwardBadgeScore) {
+          toast({
+            title: 'Please Set Criteria for Badge .',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+          setCompKeyCount(compkeyNumber);
+          return false
+        }
+
+      }
+      if (!compliData[compkey]?.gameScreenTitle) {
+        toast({
+          title: 'Please Screen Title.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        return false
+      }
+      if (compliData[compkey]?.gameIsSetCongratsSingleMessage === 'true') {
+        if (!compliData[compkey]?.gameCompletedCongratsMessage) {
+
+          toast({
+            title: 'Please Set CongratsMessage.',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+          setCompKeyCount(compkeyNumber);
+          return false
+
+        }
+      }
+      if (compliData[compkey]?.gameIsSetCongratsScoreWiseMessage === 'true') {
+
+        if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
+          if (!compliData[compkey]?.gameMinimumScoreCongratsMessage) {
+            toast({
+              title: 'Please Enter Minium Score Congrats Message.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            return false
+
+          }
+          if (!compliData[compkey]?.gameaboveMinimumScoreCongratsMessage) {
+            toast({
+              title: 'Please Enter Above Minimum Score CongratsMessage.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            return false
+
+          }
+        }
+        if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
+          if (!compliData[compkey]?.gameLessthanDistinctionScoreCongratsMessage) {
+            toast({
+              title: 'Please Enter Distinction  Score.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            return false
+
+          }
+          if (!compliData[compkey]?.gameAboveDistinctionScoreCongratsMessage) {
+            toast({
+              title: 'Please Enter Above Distinction Score CongratsMessage.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            return false
+
+          }
+
+        }
+
+
+      }
+    }
+    // setCurrentTab(compkey);
+    // setCurrentTab(CompKeyCount);
+    setCompKeyCount(compkeyNumber);
+    setCurrentTab(0);
+    setCompliData((prevInput: any) => ({
+      ...prevInput,
+      [CompKeyCount]: {
+        ...prevInput[CompKeyCount],
+    
+      },
+    }))
+  }
+}
+// refelection Screen Validation
+if (formData.gameIsShowReflectionScreen === 'true') {
+  console.log("form length" + formData.gameReflectionQuestion);
+console.log('reflectionQuestions1pri',reflectionQuestions);
+  if (typeof reflectionQuestions === 'object' && reflectionQuestions !== null) {
+
+    var keys = Object.keys(reflectionQuestions);
+
+    //newlyadded start
+    if (!keys) {
+      var keys1 = Object.keys(reflectionQuestions);
+    }
+    else {
+      var keys1 = ['ref1', 'ref2', 'ref3', 'ref4'];
+    }
+
+    console.log('keysref', keys1);
+    //newlyadded end
+    // Assuming formData.gameReflectionQuestion is the number of questions to check
+    for (var i = 0; i < formData.gameReflectionQuestion; i++) {
+      var key = keys1[i] as unknown as keyof typeof reflectionQuestions; //changes keys1[i] instead of keys[i]
+      var value = reflectionQuestions[key];
+      if (key == 'ref1') {
+        var question = "Question1";
+      }
+      if (key == 'ref2') {
+        var question = "Question2";
+      }
+      if (key == 'ref3') {
+        var question = "Question3";
+      }
+      if (key == 'ref4') {
+        var question = "Question4";
+      }
+
+
+      if (!value) {
+        toast({
+          title: `${question} is empty. Please fill in the ${question} question.`,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCurrentTab(2);
+        return false;
+      }
+    }
+
+  }
+}
+// Takeaway Screen Validation
+if (formData.gameIsShowTakeaway === "true" && (formData.gameTakeawayContent === null || formData.gameTakeawayContent === undefined || formData.gameTakeawayContent === '')) {
+  toast({
+    title: 'Please Enter TakeAway Content',
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  });
+  setCurrentTab(3);
+  return false;
+}
+// Welcome  Screen Validation
+if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAdditionalWelcomeNote === null || formData.gameAdditionalWelcomeNote === undefined || formData.gameAdditionalWelcomeNote === '')) {
+  toast({
+    title: 'Please Add Welcome Note',
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  });
+  //newlyadded start 
+  setFormData({
+    ...formData,
+    gameIsShowAdditionalWelcomeNoteInvalid: 'true',
+  });
+  setCurrentTab(4);
+  //newlyadded End 
+  return false;
+}
+// Thankyou Screen Validation
+if(formData.gameThankYouMessage ==='' || formData.gameThankYouMessage ===null ||formData.gameThankYouMessage ===undefined)
+{
+  toast({
+    title: 'Please Fill The ThankYou Box',
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  })
+  setFormData({
+    ...formData,
+    isfeedbackthankyou: true,
+  });
+  setCurrentTab(5)
+return false;
+}
+// Feedback Screen Validation
+
+if (formData.gameIsFeedbackMandatory === "true") {
+  if (formData.gameQuestion1 === 'true' && formData.gameQuestionValue1 === '') {
+    toast({
+      title: 'Please Enter Question 1',
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    })
+    return false;
+  } else if (formData.gameQuestion2 === 'true' && formData.gameQuestionValue2 === '') {
+    toast({
+      title: 'Please Enter Question 2',
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    })
+    return false;
+  } else if (formData.gameQuestionValue3 === '' || formData.gameQuestionValue4 === '') {
+    toast({
+      title: 'Please Enter Rating Questions',
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    });
+    return false;
+  }
+}
     const countSelectedOptions = selectedOptions.filter(
       (option) =>
         option !== '' &&
@@ -1552,6 +1855,19 @@ useEffect(()=>{
       setFormData(formDataWithoutLastTab);
       dispatch(updatePreviewData({isDispatched: true}));
       setOpenQuest(true);
+      const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
+      if (result.status === 'Success') {
+        const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
+        console.log('Max QuestNo:', maxQuestNo);
+        if (maxQuestNo < 5) {
+          setOpenQuest(true);
+        } else {
+          setOpenQuest(false);
+          setTab(6);
+        }
+      } else {
+        console.error('Error:', result.message);
+      }
     }
   };
   
@@ -1632,7 +1948,10 @@ useEffect(()=>{
           duration: 3000,
           isClosable: true,
         });
-
+        setFormData({
+          ...formData,
+          isStoryTitleInvalid: true,
+        });
         return false;
       }
       if (!formData.gameSkills || formData.gameSkills.length === 0) {
@@ -1642,7 +1961,10 @@ useEffect(()=>{
           duration: 3000,
           isClosable: true,
         });
-
+        setFormData({
+          ...formData,
+          isSkillsInvalid: true,
+        });
         return false;
       }
       if (!formData.gameCategoryId || formData.gameCategoryId.length === 0) {
@@ -1652,7 +1974,10 @@ useEffect(()=>{
           duration: 3000,
           isClosable: true,
         });
-
+        setFormData({
+          ...formData,
+          isCategoryIdInvalid: true,
+        });
         return false;
       }
       let cate = JSON.stringify(cat);
@@ -1676,22 +2001,21 @@ useEffect(()=>{
     }
     if (tab === 4) {
       if (items.length !== 0) {
-        //console.log('items567', items);
         if (items.some((item: any) => item.type === 'Interaction')) {
           if (typeof items === 'object' && items !== null) {
             var inputData = items;
-            //console.log('inputData', inputData);
 
             for (var i = 0; i < inputData.length; i++) {
               var key = inputData[i];
               var inputkey = key.type + key.input;
-
-              //console.log('key', key);
+              var inputget = input;
+              var inputdataget = Object.values(inputget);
 
               if (key.type === 'Note') {
                 var note = input[inputkey].note;
 
                 if (!note) {
+                  setValidation({ ...validation, [`Note${key.input}`]: true })
                   toast({
                     title: `Note is Empty On This Sequence ${key.id} `,
                     status: 'error',
@@ -1702,12 +2026,12 @@ useEffect(()=>{
                 }
               }
               if (key.type === 'Dialog') {
-                //console.log('dialogue', input[inputkey]?.dialog);
                 var Dialog = input[inputkey]?.dialog;
                 var animation = input[inputkey]?.animation;
                 var voice = input[inputkey]?.voice;
 
                 if (!Dialog) {
+                  setValidation({ ...validation, [`Dialog${key.input}`]: true })
                   toast({
                     title: `Dialogue is Empty On This Sequence ${key.id} `,
                     status: 'error',
@@ -1735,6 +2059,7 @@ useEffect(()=>{
                 //console.log('blockRoll', blockRoll);
                 //console.log('interaction', interaction);
                 if (!interaction) {
+                  setValidation({ ...validation, [`Interaction${key.input}`]: true })
                   toast({
                     title: `Interaction is Empty On This Sequence ${key.id} `,
                     status: 'error',
@@ -1768,12 +2093,9 @@ useEffect(()=>{
                   for (const alp of alphabetData?.filter(
                     (alp: any) => key.id === alp.seqs,
                   ) || []) {
-                    console.log(
-                      'alpha',
-                      input[inputkey]?.optionsObject[alp.option],
-                    );
                     if (!input[inputkey]?.optionsObject[alp.option]) {
                       var option = alp.option;
+                      setValidation({ ...validation, [`options${key.input}${option}`]: true })
                       toast({
                         title: `${option} is Empty On This Sequence ${key.id} `,
                         status: 'error',
@@ -1784,6 +2106,7 @@ useEffect(()=>{
                     }
                     if (!input[inputkey]?.optionsemotionObject[alp.option]) {
                       var option = alp.option;
+                      setValidation({ ...validation, [`optionsEmotion${key.input}${option}`]: true })
                       toast({
                         title: `${option} is Empty On This Sequence ${key.id} Please Select`,
                         status: 'error',
@@ -1802,11 +2125,9 @@ useEffect(()=>{
                         input[inputkey]?.ansObject[option] === true
                       ) {
                         const ansValue = input[inputkey]?.ansObject[option];
-                        //console.log('ansValue', ansValue);
-                        //console.log('hit2');
                         isAtLeastOneTrue = true;
                         if (!input[inputkey]?.scoreObject[option]) {
-                          //console.log('hit3');
+                          setValidation({ ...validation, [`score${key.input}`]: true })
                           toast({
                             title: `${option} Score is Empty On This Sequence ${key.id}`,
                             status: 'error',
@@ -1818,7 +2139,7 @@ useEffect(()=>{
                       }
                     }
                     if (!isAtLeastOneTrue) {
-                      //console.log('hit1');
+                      setValidation({ ...validation, [`checkbox${key.input}`]: true })
                       toast({
                         title: `At least one option must be selected on this sequence ${key.id}`,
                         status: 'error',
@@ -1830,6 +2151,21 @@ useEffect(()=>{
                   }
                 }
               }
+              var hasComplete = inputdataget.some((item: any) => {
+                console.log("hasComplete", hasComplete);
+                return (
+                  item &&(item.Notenavigate === 'Complete' || item.Dialognavigate === 'Complete' || (item.navigateObjects && Object.values(item.navigateObjects).includes('Complete')))
+                );
+              });
+                if (!hasComplete) {
+                  toast({
+                    title:`At least Any One of the  Select Block as Complete`,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                  });
+                  return false;
+                }
             }
 
             const apiValidationResult = await getStoryValidtion(id);
@@ -1868,11 +2204,34 @@ useEffect(()=>{
       }
     }
     if (tab === 6) {
-      setFormData({
-        ...formData,
-        gameGameStage: 'Review',
-      });
+      if(formData.gameIntroMusic ==='' || formData.gameIntroMusic ===null ||formData.gameIntroMusic ===undefined)
+{
+  toast({
+    title: 'Please Select Intro music Audio',
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  })
+ 
+  setCurrentTab(6)
+return false;
+} else{
+  console.log('tabstage',tab);
+  setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }))
+  localStorage.setItem('gameGameStage','Review');
+}
     }
+    // if (tab === 6) {
+    //   console.log('tabstage',tab);
+    //   setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }))
+    //   localStorage.setItem('gameGameStage','Review');
+    // }
+    // if (tab === 6) {
+    //   setFormData({
+    //     ...formData,
+    //     gameGameStage: 'Review',
+    //   });
+    // }
     // if(tab<tab)
     // {
     //   arrange.gameLastTab = tab;
@@ -2144,6 +2503,20 @@ useEffect(()=>{
   const handleChange = (e: any) => {
     const inputValue = e.target.value;
     const { name, value, checked } = e.target;
+    const feedbackselectedOptions = [
+      formData.gameContent,
+      formData.gameRecommendation,
+      formData.gameRelevance,
+      formData.gameGamification,
+      formData.gameBehaviour,
+      formData.gameOthers,
+    ];
+    const countfbSelectedOptions = feedbackselectedOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
+    console.log('countfbSelectedOptions',countfbSelectedOptions);
+
+    if (checked && countfbSelectedOptions >= 4) {
+      return ;
+    } 
     if (name === 'gameDuration') {
       // let duration =
       //   parseInt(value.split(':')[0], 10) * 60 +
@@ -2258,6 +2631,18 @@ useEffect(()=>{
   const handlecompletion = (e: any) => {
     const inputValue = e.target.value;
     const { name, value, checked } = e.target;
+    if((name === 'gameIsSetMinPassScore'  && checked === true) || (name === 'gameIsSetDistinctionScore' && checked === true)){
+      setCompliData((prevInput: any) => {
+        return {
+          ...prevInput,
+          [CompKeyCount]: {
+            ...prevInput[CompKeyCount],
+            gameIsSetCongratsSingleMessage: 'true',
+            gameIsSetCongratsScoreWiseMessage: 'false',
+          },
+        };
+      });
+    }
     if (
       name === 'gameIsSetMinPassScore' ||
       name === 'gameIsSetDistinctionScore' ||
@@ -2540,111 +2925,7 @@ useEffect(()=>{
     }
   }, [formData.gameIsSetCongratsSingleMessage]);
 
-  //navin 16-12
-  //priyaDharshini
-  //   useEffect(() => {
-  //     const getTotalScore = () => {
-  //       let wordCount=[];
-  //       if (typeof items === 'object' && items !== null) {
-  //         var inputData = items;
-  //         console.log("inputData", inputData);
-  //         let maxArray = [];
-
-  //   let words;
-  //         for (var i = 0; i < inputData.length; i++) {
-  //           var key = inputData[i];
-  //           var inputkey = key.type + key.input;
-
-  //           if(key.type === 'Note'){
-  //   if(input[inputkey]?.note){
-  //     words =input[inputkey]?.note.trim().split(/\s+/);
-  //     wordCount.push(words.length)
-  //   }
-
-  //           }
-  //           if(key.type === 'Dialog'){
-  //             if(input[inputkey]?.dialog){
-  //              words = input[inputkey].dialog.trim().split(/\s+/);
-
-  //              wordCount.push(words.length)
-  //             }
-
-  //           }
-  //           if (key.type === "Interaction") {
-  //             //  words = sentence.trim().split(/\s+/);
-  //             console.log("scoreObject", input[inputkey]?.scoreObject);
-  //              //{ A: "2355", B: "22", C: "1000" }
-  //         var wordInteraction= input[inputkey]?.interaction
-  //         words = wordInteraction.trim().split(/\s+/);
-  //         wordCount.push(words.length)
-
-  //     for (const key in input[inputkey]?.optionsObject) {
-
-  //       if (input[inputkey]?.optionsObject.hasOwnProperty(key)) {
-
-  //         var wordOptionsObject = input[inputkey]?.optionsObject[key];
-  //         if(wordOptionsObject){
-  //           words = wordOptionsObject?.trim().split(/\s+/);
-  //           wordCount.push(words.length)
-  //         }
-
-  //         var wordfeedbackObject = input[inputkey]?.feedbackObject[key];
-  //         if(wordfeedbackObject){
-  //           words = wordfeedbackObject?.trim().split(/\s+/);
-  //           wordCount.push(words.length)
-  //         }
-
-  //        var wordresponseObject= input[inputkey]?.responseObject[key];
-  //        if(wordresponseObject){
-  //         words = wordresponseObject?.trim().split(/\s+/);
-  //         wordCount?.push(words.length)
-  //        }
-
-  //        var  wordoptionTitleObject = input[inputkey]?.optionTitleObject[key];
-  //        if(wordoptionTitleObject){
-  //         words = wordoptionTitleObject.trim().split(/\s+/);
-  //         wordCount.push(words.length)
-  //        }
-
-  //       }
-  //     }
-
-  //   // if(input[inputkey]?.ansObject==='true'){
-
-  //     var scoreObject = input[inputkey]?.scoreObject;
-
-  //     const objArray = scoreObject;
-
-  //     // Find the max value across all keys (A, B, C)
-  //     const maxValue = Math.max.apply(null, Object.values(objArray));
-
-  //     console.log("Max value:", maxValue);
-  //     maxArray.push(maxValue);
-  //   // }
-
-  //           }
-  //         }
-
-  //         console.log("maxArray", maxArray);
-  //         const numericValues = maxArray.map(Number);
-  //         const numericWord=wordCount.map(Number);
-  //         const sum = numericValues.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-  //   const sumWordLength=numericWord.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-  //   const totalmintues =sumWordLength/100
-  //         console.log("Sum of array values:", totalmintues);
-  //         setFormData((prev) => ({
-  //           ...prev,
-  //           gameTotalScore: sum,
-  //           gameDuration:totalmintues,
-  //         }));
-  //       }
-
-  //     };
-  //     if(input.length>0){
-  //       getTotalScore();
-  //     }
-
-  // }, [input]);
+  
   //navin
   const playerPerview = (id: any) => {
     setPreview(true);
@@ -2656,10 +2937,6 @@ useEffect(()=>{
         ...prev,
         gameNonPlayingCharacterId: id,
         gameNonPlayerName: name,
-        gameNonPlayerVoice: null,
-        gamePlayerMaleVoice: null,
-        gamePlayerFemaleVoice: null,
-        gameNarratorVoice: null,
       }));
       setPreview(true);
     } else {
@@ -2667,16 +2944,11 @@ useEffect(()=>{
         ...prev,
         gameNonPlayingCharacterId: '',
         gameNonPlayerName: name,
-        gameNonPlayerVoice: null,
-        gamePlayerMaleVoice: null,
-        gamePlayerFemaleVoice: null,
-        gameNarratorVoice: null,
       }));
     }
   };
   const reducePercentage = 16 * tab - 16;
-  //console.log(reducePercentage);
-  // alert(reducePercentage)
+  
   useEffect(() => {
     if (formData.gameNonPlayingCharacterId) {
       playerPerview(formData.gameNonPlayingCharacterId);
@@ -2691,13 +2963,11 @@ useEffect(()=>{
   const debouncedSubmit = useCallback(
     debounce(async (data: any) => {
       try {
-        //console.log('handlesaveReflection', data);
         const datas = JSON.stringify(data);
         const resu = await createReflection(datas);
         if (resu.status !== 'Success') {
           return false;
         }
-        console.log("*****debouncedSubmit");
         if(resu.status == 'Success')
         {
           dispatch(updatePreviewData({isDispatched: true, reflectionPageUpdated: true}));
@@ -2718,7 +2988,6 @@ useEffect(()=>{
             gameReflectionQuestion: formData.gameReflectionQuestion,
             gameId: id,
           };
-          //console.log('datas', data);
           debouncedSubmit(data);
           
         }
@@ -2730,11 +2999,8 @@ useEffect(()=>{
   const debouncedSubmitGame = useCallback(
     debounce(async (data: any) => {
       try {
-        //console.log('debouncedSubmitGame', data);
-
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
-          //console.log('data not updated');
         }
         else{
           dispatch(updatePreviewData({isDispatched: true}));
@@ -2748,25 +3014,13 @@ useEffect(()=>{
 
   useEffect(() => {
     if (id && autosave) {
-      // if (formData) {
-
-      //   let data = JSON.stringify(formData);
-
-      //   debouncedSubmitGame(data);
-      //   setExtensiveNavigation(null);
-      // }
       if (formData && formData.gameQuestNo) {
         const newFormData = { ...formData };
         delete newFormData['gameLastTabArray'];
         delete newFormData['gameLastTab'];
         let data = JSON.stringify(newFormData);
-        // let data = JSON.stringify(formData);
-        //alert("de"+tab);
         debouncedSubmitGame(data);
         setExtensiveNavigation(null);
-        // if(tab==5 && currentTab == )
-        // dispatch(updatePreviewData({isDispatched: true}));
-
       }
     }
   }, [formData]);
@@ -2775,7 +3029,6 @@ useEffect(()=>{
   const debouncedStorySubmit = useCallback(
     debounce(async (data: any) => {
       try {
-        //console.log('debouncedSubmit', data);
         const result = await setStory(id, JSON.stringify(data));
         if (result?.status !== 'Success') {
           return console.log('updateBackground error :' + result?.err);
@@ -2785,7 +3038,6 @@ useEffect(()=>{
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
       }
-      //console.log('save', JSON.stringify(input));
     }, 500),
     [id], // Empty dependency array to ensure that the function is only created once
   );
@@ -2802,7 +3054,7 @@ useEffect(()=>{
           console.log('data not updated');
         }
         else{
-          console.log('********debounce')
+
           dispatch(updatePreviewData({isDispatched: true}));
         }
       } catch (error) {
@@ -2844,8 +3096,6 @@ useEffect(()=>{
   useEffect(() => {
     if (id && autosave) {
       if (Object.keys(Completion).length) debouncedCompliSubmit(compliData);
-
-      // handleCompletionScreen(1)
     }
 											   
 														 
@@ -2863,23 +3113,17 @@ useEffect(()=>{
 
   // onClick Func
   const duplicateSeq = (seq: any, i: any, name: any) => {
-    // const id = `${Math.floor(count / 10) + 1}.${count % 10 || 1}`;
-    // const upNext = `${Math.floor(count / 10) + 1}.${(count + 1) % 10 || 1}`;
     const sequencial = `${count / 10 + 1}`;
     const upNextSequencial = `${(count + 1) / 10 + 1}`;
     const floatRegex = /^[-+]?(\d*\.\d+|\.\d+)$/;
-    // const id = floatRegex.test(sequencial) ? sequencial : `${count / 10 + 1}.${0}`
-    // const upNext = floatRegex.test(upNextSequencial) ? upNextSequencial : `${(count + 1) / 10 + 1}.${0}`
     const id = `${serias}.${count}`;
     const upNext = `${serias}.${count + 1}`;
-    // setShowBox(true);
     setUpNext(upNext);
     setCount(count + 1);
     const newArr = { id, type: name, upNext, input: count, questNo: serias };
 
     setItems((prevArray: any) => {
       const nextIndex = i + 1;
-      //console.log('prevArray', newArr.input);
       setNumber([...number, newArr.input]);
       return [
         ...prevArray.slice(0, nextIndex),
@@ -2896,7 +3140,6 @@ useEffect(()=>{
     if (name === 'Interaction') {
       const currentAlpha = alphabet
         .slice()
-        //  .reverse() // Reverse the array to start searching from the end
         .find((item: any) => item.seqs === id);
       if (id !== currentAlpha?.seqs) {
         let secondaryArray: any = [];
@@ -2905,11 +3148,9 @@ useEffect(()=>{
         for (let i = 0; i < 3; i++) {
           // Insert data into the array
           let inc = makcount + i + 1;
-          //console.log('secondaryArray', countalphabet, '--', inc);
           secondaryArray.push(inc);
         }
         setAlphabetCount(secondaryArray[2]);
-        //console.log('secondaryArray', secondaryArray);
         setAlphabet((prev: any) => [
           ...prev,
           { seqs: id, option: 'A', secondaryId: secondaryArray[0] },
@@ -2974,7 +3215,6 @@ useEffect(()=>{
         };
       }
       if (seq.type === 'Interaction') {
-        //console.log('prevInput', oldInteractionKey);
         //Previous Object Data's
         const optionsObject = oldInteractionKey?.optionsObject;
         const ansObject = oldInteractionKey?.ansObject;
@@ -3054,9 +3294,32 @@ useEffect(()=>{
   };
 
   const delSeq = (seq: any, i: any, name: any) => {
-    // removeDataBySeqs(seq.id);
-    //console.log('delSeq', seq);
-
+    const filteredNotes = Object.keys(input)
+        .filter(noteKey => input[noteKey].Notenavigate === seq.input)
+        .map(noteKey => {
+            input[noteKey].Notenavigate = null;
+            input[noteKey].NoteleadShow = null;
+            return input[noteKey];
+        });
+    const filteredDialog = Object.keys(input)
+        .filter(dialogKey => input[dialogKey].Dialognavigate === seq.input)
+        .map(dialogKey => {
+            input[dialogKey].Dialognavigate = null;
+            input[dialogKey].DialogleadShow = null;
+            return input[dialogKey];
+        });
+        const filteredInteraction = Object.keys(input)
+        .filter(interactionkey => input[interactionkey].navigateObjects && Object.values(input[interactionkey].navigateObjects).includes(seq.input))
+        .map(interactionkey => {
+            Object.keys(input[interactionkey].navigateObjects).forEach(option => {
+                if (input[interactionkey].navigateObjects[option] === seq.input) {
+                  input[interactionkey].navigateObjects[option] = null;
+                  input[interactionkey].navigateshowObjects[option] = null;
+                  
+                }
+              });
+            return input[interactionkey];
+        });
     if (name === 'Interaction') {
       setAlphabet((prevAlphabet: any) => {
         // Use filter to create a new array without items that match the condition
@@ -3065,8 +3328,6 @@ useEffect(()=>{
         );
         return updatedAlphabet;
       });
-
-      //console.log('roll', seq);
     }
     setItems((previtems: any) => {
       // Use filter to create a new array without items that match the condition
@@ -3075,23 +3336,9 @@ useEffect(()=>{
       );
       return updatedItems;
     });
-    // setItems(items.filter((_: any, index: any) => {
-    //     console.log('datadata', _)
-    //     return index !== i;
-    // }));
-    // setItems((prevItem: any)=>
-    //     prevItem.map((item: any) =>
-    //     item.id === seq.id ? { ...item, status: 'no' } : item
-    // ))
-
-    // setSequence(sequence.filter((_: any, index: any) => { return index !== i }))
-    // setTimeout(() => {
-    //     handleGet();
-    // }, 3000);
     setDeleteseq(true);
   };
   const deleteQuest = async (gameid: any, questNo: any) => {
-    //console.log();
     const data = {
       quest: questNo,
       exid: id,
@@ -3104,7 +3351,6 @@ useEffect(()=>{
       handleGet(1);
       setQuestTabState(1);
     }
-    // QuestDeletion
   };
 
   let tarSeqRef;
@@ -3118,7 +3364,6 @@ useEffect(()=>{
         block: 'center',
         inline: 'nearest',
       });
-      //console.log('progressBlockItems', tarSeqRef);
     }
   };
 
@@ -3142,13 +3387,10 @@ useEffect(()=>{
       indexToFind = 0;
     }
     if (indexToFind >= 0 && indexToFind < items.length) {
-      //console.log('Index:', indexToFind);
       if (
         event.key &&
         (event.type === 'click' ||
           event.key !== 'Escape' ||
-          event.key !== 'Delete' ||
-          event.key !== 'Backspace' ||
           event.ctrlKey === true)
       ) {
         if (seq) {
@@ -3208,10 +3450,8 @@ useEffect(()=>{
               block: 'center',
               inline: 'nearest',
             });
-            //console.log('event.----------------', focusSeqRef?.[0]);
           }
           break;
-
         default:
           break;
       }
@@ -3221,7 +3461,6 @@ useEffect(()=>{
           focusSeqRef = document.getElementsByClassName(seq.id);
           focusSeqRef?.[0].classList.remove('non-caret');
           focusSeqRef?.[0].focus();
-          //console.log('event.----------------Click', focusSeqRef?.[0]);
         }
       }
 
@@ -3229,22 +3468,7 @@ useEffect(()=>{
         focusSeqRef = document.getElementsByClassName(seq.id);
         focusSeqRef?.[0].removeAttribute('readonly');
         focusSeqRef?.[0].classList.remove('non-caret');
-        focusSeqRef?.[0].focus();
-        //console.log('event.----------------Enter', focusSeqRef?.[0]);
-      }
-
-      if (event.key === 'Backspace' || event.key === 'Delete') {
-        focusSeqRef = document.getElementsByClassName(seq.id);
-        var isFieldFocused = document.activeElement.classList.contains(seq.id);
-        var isFormFieldFocused = ['input', 'textarea', 'select'].includes(
-          document.activeElement.tagName.toLowerCase(),
-        );
-
-        //console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
-
-        if (focusSeqRef?.[0].readOnly) {
-          delSeq(seq, Number(0), seq.type);
-        }
+        // focusSeqRef?.[0].focus();
       }
 
       if (event.ctrlKey === true && event.code === 'KeyC') {
@@ -3253,10 +3477,6 @@ useEffect(()=>{
         var isFormFieldFocused = ['input', 'textarea', 'select'].includes(
           document.activeElement.tagName.toLowerCase(),
         );
-
-        //console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
-
-        //console.log('test45');
         if (focusSeqRef?.[0].readOnly) {
           setCopySequence(seq);
         }
@@ -3269,9 +3489,6 @@ useEffect(()=>{
           document.activeElement.tagName.toLowerCase(),
         );
 
-        //console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
-
-        //console.log('test45');
         if (focusSeqRef?.[0].readOnly) {
           if (copySequence) {
             duplicateSeq(copySequence, i, copySequence.type);
@@ -3286,9 +3503,6 @@ useEffect(()=>{
           document.activeElement.tagName.toLowerCase(),
         );
 
-        //console.log('focusSeqRef?.[0].focus()', focusSeqRef?.[0].readOnly);
-
-        //console.log('test45');
         if (focusSeqRef?.[0].readOnly) {
           duplicateSeq(seq, i, seq.type);
         }
@@ -3302,7 +3516,6 @@ useEffect(()=>{
             );
             focusSeqRef?.[0]?.focus();
           }, 200);
-          //console.log('event.----------------ShiftArrowUp', focusSeqRef?.[0]);
           moveItem(i, i - 1, seq);
         } else if (event.code === 'ArrowDown') {
           setTimeout(() => {
@@ -3313,7 +3526,6 @@ useEffect(()=>{
             );
             focusSeqRef?.[0]?.focus();
           }, 200);
-          //console.log('event.----------------ShiftArrowDown', focusSeqRef?.[0]);
           moveItem(i, i + 1, seq);
         }
       }
@@ -3375,28 +3587,29 @@ useEffect(()=>{
 
   return (
     <>
+      {loading && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(10px)' }}>
+          <img src={loadingImage} alt="Loading" style={{ width: '25%', maxWidth: '200px', backgroundColor: 'transparent' }}/>
+        </div>
+      )}
+
       <Grid templateColumns="repeat(5, 1fr)" gap={2}>
         <GridItem
           colSpan={{ sm: 1, md: 1, lg: 1 }}
           display={{ base: 'none', lg: 'block' }}
         >
-          {/* <Card width={'290px'} h={'700px'} mt={{ base: '90px', xl: '90px' }} alignItems={'center'} bg={'linear-gradient(to bottom, #7551ff, #3311db)'}> */}
           <HStack borderRadius={'20px'} width={'280px'} overflow={'auto'}>
-            <Card
+          <Card
               position="fixed"
               flexDirection="column"
-              bg={'linear-gradient(315deg, #f1f2f6 0%, #c9c6c6 74%)'}
+              bg={'#E2E8F0'}
               w="18%"
               top={'2%'}
               mb={'20px'}
               h="95vh"
               borderColor="#11047a"
-              border="3px solid #11047a"
+              boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)"
               overflowX={'auto'}
-              style={{
-                backgroundImage:
-                  'linear-gradient(315deg, #f1f2f6 0%, #c9c6c6 74%)',
-              }}
             >
               <Flex
                 display={'flex'}
@@ -3426,7 +3639,6 @@ useEffect(()=>{
                   marginTop="20px"
                 ></Box>
               </Flex>
-              {/* <Box w={'100%'} borderBottom={'1px solid #e4e9ef'} mb={'10px'}></Box> */}
               <Flex
                 position="relative"
                 mt={'49px'}
@@ -3451,9 +3663,6 @@ useEffect(()=>{
                   left="32.5px"
                   h="100%"
                   w="2px"
-                  // bg={`url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='${lineColor}' stroke-width='4' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e")`}
-                  // bg={stepbgCheck ? `linear-gradient(to top, white ${100 - reducePercentage}%,green 0%);                               not working
-                  // bg={stepbgCheck ? `linear-gradient(to bottom, green ${heightOfTab ? heightOfTab : '0'}px, white 0%);` : 'white'}              working
                   bg={'white'}
                   transition={'background 2.5s ease !important'}
                   zIndex={1}
@@ -3623,7 +3832,6 @@ useEffect(()=>{
                       h="46px"
                       w="46px"
                       ml="8px"
-                      // bg="radial-gradient(circle at 50% 40%, #fcfcfc, #efeff1 66%, #422afb 100%)"
                       boxShadow={stepSummariesIcon}
                       bg="#FFFFFF"
                       transition="all 0.2s linear 0s"
@@ -3638,40 +3846,9 @@ useEffect(()=>{
                     />
                   }
                 />
-                {/* <OrderStep
-                  cursor={'pointer'}
-                  onClick={() => handleTrans(7)}
-                  name="Launch"
-                  status={tab7}
-                  BlockItems={BlockItems}
-                  icon={
-                    <IconBox
-                      h="46px"
-                      w="46px"
-                      ml="8px"
-                      bg="radial-gradient(circle at 50% 40%, #fcfcfc, #efeff1 66%, #422afb 100%)"
-                      boxShadow={stepCompleteIcon}
-                      icon={
-                        <Icon
-                          as={MdRocketLaunch}
-                          color={stepCompleteCheck}
-                          h="30px"
-                          w="30px"
-                        />
-                      }
-                    />
-                  }
-                /> */}
               </Flex>
             </Card>
           </HStack>
-          {/* { options.map((it,i)=>(
-           <Box key={i} p={'20px'}>
-            <Text fontSize={20} fontWeight={700} color={'#fff'}><Icon mt={'10px'} as={MdEdit}/>{it}</Text>
-            </Box>
-           ))
-           }  */}
-          {/* </Card> */}
         </GridItem>
         <GridItem colSpan={{ sm: 5, md: 5, lg: 4 }}>
           <Box className="game-creation" mt={{ base: '100px', xl: '100px' }}>
@@ -3726,7 +3903,6 @@ useEffect(()=>{
                             img.map((img, i) => (
                               <Box key={i} position={'relative'}>
                                 <Card
-                                  //  backgroundColor={selections[i] ? '#11047a' : 'white'}
                                   backgroundColor={
                                     selectedCardIndex === i
                                       ? '#11047a'
@@ -3736,11 +3912,8 @@ useEffect(()=>{
                                   padding={'13px'}
                                   key={i}
                                   position="relative"
-                                  // onMouseEnter={() => handleMouseEnter(i)}
-                                  // onMouseLeave={() => handleMouseLeaves(i)}
                                   onMouseEnter={() => handleH(i)}
                                   onMouseLeave={() => handleL()}
-                                  // _hover={{opacity: 1}}
                                   boxShadow={
                                     backgroundIndex === i
                                       ? '1px 4px 29px #44445429'
@@ -3790,7 +3963,6 @@ useEffect(()=>{
                                           _hover={{
                                             bg: '#f0f0f0',
                                           }}
-                                          // onClick={() => handlePreview(img, backgroundIndex, i)}
                                         >
                                           <span style={{ color: 'black' }}>
                                             Preview
@@ -3808,7 +3980,6 @@ useEffect(()=>{
                                           _hover={{
                                             bg: '#11047ae3',
                                           }}
-                                          // onClick={() => handleButtonTwo(id)}
                                           onClick={() =>
                                             handleBackground(img, i)
                                           }
@@ -3860,7 +4031,6 @@ useEffect(()=>{
                                           justifyContent="center"
                                           cursor="pointer"
                                         >
-                                          {/* <span style={{ color: 'white' }}>{selections[i] ? 'Selected' : 'Select'}</span> */}
                                           <span style={{ color: 'white' }}>
                                             {selectedCardIndex === i
                                               ? 'Selected'
@@ -3882,11 +4052,8 @@ useEffect(()=>{
                                             ? 'white'
                                             : 'black'
                                         }
-                                        // fontSize={'16px'}
-                                        // fontWeight={'800'}
                                         textTransform={'capitalize'}
                                         fontSize="md"
-                                        // fontWeight={'200'}
                                         fontWeight="bold"
                                         fontFamily="DM Sans, sans-serif"
                                       >
@@ -3894,10 +4061,6 @@ useEffect(()=>{
                                       </Text>
                                     </Box>
                                     <Box mt={2}>
-                                      {/* <Text fontSize={'12px'} fontWeight={'800'} color={'#555'}>
-                                        Test Title
-                                      </Text> */}
-
                                       {backgroundIndex === i ? (
                                         <Text
                                           fontSize={'12px'}
@@ -3941,8 +4104,6 @@ useEffect(()=>{
                                         display={'flex'}
                                         alignItems={'flex-end'}
                                       ></Box>
-                                      {/**TEXT**/}
-                                      {/**TEXT**/}
                                     </Flex>
                                   </Flex>
                                 </Card>
@@ -3957,6 +4118,8 @@ useEffect(()=>{
                   <>
                     {preview && (
                       <CharacterPreview
+                      id={id}
+                      languages={languages}
                         voices={voices}
                         prev={preview}
                         show={img}
@@ -3992,7 +4155,6 @@ useEffect(()=>{
                           >
                             Select a Non-Playing Character
                           </Text>
-                          {/* <Text fontSize={'14px'} fontWeight={500} m={'0px 10px 20px 20px'} color={'#8b8b8bd9'} letterSpacing={'0.5px'}>Here is the Non-Playing Character from which you can choose any one</Text>                      */}
                         </Box>
                         <Divider mb={'0px'} />
                         <Box
@@ -4016,7 +4178,6 @@ useEffect(()=>{
                                   <GameCard
                                     name={capitalizedPlayerName} // Use the capitalized name
                                     author={''}
-                                    // image={game.gameBackgroundId && game?.image.gasAssetImage}
                                     image={
                                       player.gasId && player?.gasAssetImage
                                     }
@@ -4047,6 +4208,7 @@ useEffect(()=>{
                 ) : tab === 3 ? (
                   <>
                     <AboutStory
+                    languages={languages}
                       defaultskills={defaultskills}
                       setDefaultSkills={setDefaultSkills}
                       setCat={setCat}
@@ -4097,12 +4259,15 @@ useEffect(()=>{
                       deleteQuest={deleteQuest}
                       upNextCount={upNextCount}
                       setUpNextCount={setUpNextCount}
-					ShowReview={ShowReview}						 
+					            ShowReview={ShowReview}						 
+                      validation={validation}
+                      setValidation={setValidation}
                     />
                   </>
                 ) : tab === 5 ? (
                   <>
                     <AddScores
+                    languages={languages}
                       defaultskills={defaultskills}
                       setShowFunction={setShowFunction}
                       showBadge={showBadge}
@@ -4176,9 +4341,7 @@ useEffect(()=>{
                   position={'fixed'}
                   bottom={'0'}
                   right={'5px'}
-                  // onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
-                  {/* $$$$$$$$ */}
                   <Icon
                     as={AiFillMessage}
                     bg={'#3311db'}
@@ -4313,7 +4476,6 @@ useEffect(()=>{
               <Card
                 display={'flex'}
                 justifyContent={tab === 1 || tab === 2 ? 'end' : 'flex-end'}
-                // w="350px"
                 flexDirection="row"
                 h="95px"
                 w="500px"
@@ -4323,22 +4485,16 @@ useEffect(()=>{
                 right={'8px'}
                 zIndex={99}
                 background={'#0000 !important'}
-                // alignItems="flex-end"
               >
                 <Menu isOpen={isOpen1} onClose={onClose1}>
                   <MenuButton
                     alignItems="center"
                     justifyContent="center"
-                    // bg={bgButton}
-                    // _hover={bgHover}
-                    // _focus={bgFocus}
-                    // _active={bgFocus}
                     w="37px"
                     h="37px"
                     lineHeight="100%"
                     onClick={onOpen1}
                     borderRadius="10px"
-                    // {...rest}
                   >
                     <Icon
                       as={BsShareFill}
@@ -4354,21 +4510,19 @@ useEffect(()=>{
                     position="absolute"
                     left="0"
                     top="0"
-                    w="150px"
+                    w="170px"
                     minW="unset"
-                    maxW="150px !important"
+                    maxW="170px !important"
                     border="transparent"
-                    // backdropFilter="blur(63px)"
-                    // boxShadow={bgShadow}
                     borderRadius="20px"
                     bg="transparent"
                     p="15px"
                     zIndex="1000"
                   >
                     <MenuList
-                      w="150px"
+                      w="170px"
                       minW="unset"
-                      maxW="150px !important"
+                      maxW="170px !important"
                       border="transparent"
                       backdropFilter="blur(63px)"
                       boxShadow={bgShadow}
@@ -4376,6 +4530,7 @@ useEffect(()=>{
                       position="absolute"
                       p="15px"
                       zIndex="1000" // Set a higher z-index value
+                      right="0"
                     >
                       <MenuItem
                         transition="0.2s linear"
@@ -4390,7 +4545,6 @@ useEffect(()=>{
                           bg: 'transparent',
                         }}
                         mb="10px"
-                        // onClick={() => menu.key(props.id)}
                       >
                         <Flex align="center">
                           <Icon
@@ -4417,12 +4571,11 @@ useEffect(()=>{
                           bg: 'transparent',
                         }}
                         mb="10px"
-                        // onClick={() => menu.key(props.id)}
                       >
                         <Flex align="center" onClick={handleShareReview}>
                           <Icon as={GoCodeReview} h="16px" w="16px" me="8px" />
                           <Text fontSize="sm" fontWeight="400">
-                            share review
+                            Share for Review
                           </Text>
                         </Flex>
 					   
@@ -4440,7 +4593,6 @@ useEffect(()=>{
                           bg: 'transparent',
                         }}
                         mb="10px"
-                        // onClick={() => menu.key(props.id)}
                       >
                         <Flex align="center" onClick={handleShowReview}>
                           <Icon as={ShowReview ?AiOutlineEyeInvisible:AiOutlineEye} h="16px" w="16px" me="8px" />
@@ -4453,6 +4605,31 @@ useEffect(()=>{
                     </MenuList>
                   </Box>
                 </Menu>
+                {tab !== 1 && tab !== 6 ? (
+                  <Select
+                    options={[defaultLanguageOption, ...languageOptions]}
+                    // options={languageOptions}
+                    isSearchable
+                    placeholder="Language.."
+                    onChange={handleSelectChange}
+                    onMenuOpen={() => setMenuOpen(true)}
+                    styles={{
+                      control: (base) => ({
+                        ...base,
+                        borderRadius: '12px',
+                        // borderColor: formData.isCategoryIdInvalid ? 'red' : '#ccc',
+                        _focus: { borderColor: 'teal.300' },
+                        minHeight: '42px',
+                        cursor: 'pointer',
+                        fontSize: 'sm',
+                        marginRight: '17px',
+                        marginTop: '6px',
+                        marginLeft: '11px',
+                        width: '150px'
+                      }),
+                    }}
+                  />
+                ) : null}
 
                 {tab !== 1 && tab !== 2 ? (
                   <Button
@@ -4470,51 +4647,37 @@ useEffect(()=>{
                     Preview
                   </Button>
                 ) : null}
-                {/* {tab <= 1 ? null : (
-                  <Button
-                    bg={'#f4f7fe'}
-                    color={'#000'}
-                    _hover={{ bg: '#e9edf7' }}
-                    w="80px"
-                    mr="10px"
-                    onClick={() => setTab(tab - 1)}
-                  >
-                    Back
-                  </Button>
-                )} */}
-                {/* navin 15-12 */}
-                {tab === 5 && currentTab === 5 ? (
+                {tab === 5  ? (
                   <Button
                     bg="#11047a"
                     _hover={{ bg: '#190793' }}
                     color="#fff"
-                    h={'46px'}
-                    w={'128px'}
-                    // onClick={() => handleButtonClick(showFunction)}
+                    h={"46px"}
+                    w={"128px"}
                     onClick={() => handleNext()}
-                    mr={'33px'}
-                    mt={'7px'}
+                    mr={"33px"}
+                    mt={"7px"}
                   >
                     Next
                   </Button>
-                ) : (
-                  tab !== 1 &&
-                  tab !== 2 &&
-                  tab !== 5 && (
-                    <Button
-                      bg="#11047a"
-                      _hover={{ bg: '#190793' }}
-                      color="#fff"
-                      h={'46px'}
-                      w={'128px'}
-                      onClick={commonNextFunction}
-                      mr={'33px'}
-                      mt={'7px'}
-                    >
-                      {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
-                    </Button>
-                  )
-                )}
+):(
+  tab !== 1 &&
+  tab !== 2 &&
+  tab !== 5 && (
+    <Button
+      bg="#11047a"
+      _hover={{ bg: '#190793' }}
+      color="#fff"
+      h={'46px'}
+      w={'128px'}
+      onClick={commonNextFunction}
+      mr={'33px'}
+      mt={'7px'}
+    >
+      {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
+    </Button>
+  )
+)}
 
                 {/* navin */}
               </Card>

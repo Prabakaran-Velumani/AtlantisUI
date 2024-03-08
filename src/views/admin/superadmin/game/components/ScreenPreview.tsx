@@ -1149,7 +1149,7 @@ const ScreenPreview = () => {
                 </Box>
               </Box>
             )}
-            {/* {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadAssets ={preloadAssets}/>} */}
+            {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadAssets ={preloadAssets}/>}
               </Flex>
             </Box>
           </motion.div>

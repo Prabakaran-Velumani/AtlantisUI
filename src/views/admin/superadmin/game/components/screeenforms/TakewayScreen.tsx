@@ -174,8 +174,7 @@ import {
             rows="5"
             wrap="hard"
              resize="none" // Prevent manual resizing
-        style={{ minHeight: "350px" }}
-
+            style={{ border: formData.gameIsShowTakeaway === 'true' && !formData?.gameTakeawayContent ? '1px solid red' : '1px solid #ced4da',minHeight: "350px" }}
           />
           <p>{formData?.gameTakeawayContent?.length?( `${250 - formData?.gameTakeawayContent?.length}  characters left` ): ( '250 characters left')}</p>
           </div>

@@ -142,7 +142,7 @@ const CompletionScreenRight: React.FC<{
         }
         const selectedGasId = compliData[CompKeyCount]?.gameBadge;
         const selectedGasImage = result?.data.find(
-          (gas: any) => gas.gasId === selectedGasId,
+          (gas: any) => gas.gasId == selectedGasId,
         );
         const imageUrl =
           selectedGasImage?.gasAssetImage || 'defaultImageURL.jpg';
@@ -177,14 +177,14 @@ const CompletionScreenRight: React.FC<{
   return (
     <>
       <Stack direction="column" gap="20px">
-        <Card h={'500px'}>
+        <Card>
           <Text fontSize={18} fontWeight={700}>
             Score
           </Text>
           <SimpleGrid columns={{ base: 1, md: 1 }} gap="20px">
             <Flex align="center">
               <FormControl
-                w={'50%'}
+                w={'100%'}
                 display="flex"
                 alignItems="center"
                 justifyContent={'space-between'}
@@ -198,7 +198,7 @@ const CompletionScreenRight: React.FC<{
                   type="text"
                   placeholder="eg. 1000"
                   name="gameTotalScore"
-                  w="100px"
+                  w="220px"
                   value={compliData[CompKeyCount]?.gameTotalScore?compliData[CompKeyCount]?.gameTotalScore[0]?.maxScore :''}
                   // onChange={handlecompletion}
                   onKeyPress={handleKeyPresss}
@@ -208,12 +208,13 @@ const CompletionScreenRight: React.FC<{
             </Flex>
           </SimpleGrid>
           {/***Afrith-Modified-20-12-23*****/}
-          <Flex>
+          <Flex mt={'10px'}>
             <FormControl
               display="flex"
               alignItems="center"
               justifyContent={'space-between'}
-              width={'40%'}
+              width={'50%'}
+              
               // mt={'10px'}
             >
               <FormLabel
@@ -236,14 +237,17 @@ const CompletionScreenRight: React.FC<{
               />
             </FormControl>
             {/***********Spacer*****************/}
-            <div style={{ width: '20px' }} />
+          </Flex><Flex mt={'10px'}>
+            {/* <div style={{ width: '20px' }} /> */}
             {compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' && (
               <FormControl
                 display="flex"
                 alignItems="center"
                 justifyContent={'space-between'}
-                width={'50%'}
+                width={'100%'}
                 h={'40px'}
+                mt={'10px'}
+                mb="10px"
                 // mt={'5px'}
               >
                 <FormLabel
@@ -264,10 +268,14 @@ const CompletionScreenRight: React.FC<{
                   type="text"
                   disabled={compliData[CompKeyCount]?.gameIsSetMinPassScore !== 'true'}
                   placeholder="eg. 1000"
-                  w="100px"
+                  w="220px"
                   value={compliData[CompKeyCount]?.gameMinScore}
                   onChange={handlecompletion}
                   onKeyPress={handleKeyPress}
+                  style={{
+                    border: compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' && !compliData[CompKeyCount]?.gameMinScore ? '1px solid red' : '1px solid #ced4da',
+                    // Add other styles as needed
+                  }}
                 />
               </FormControl>
             )}
@@ -277,7 +285,9 @@ const CompletionScreenRight: React.FC<{
               display="flex"
               alignItems="center"
               justifyContent={'space-between'}
-              width={'40%'}
+              width={'50%'}
+              mt={'10px'}
+              mb="10px"
               // mt={'10px'}
             >
               <FormLabel
@@ -302,16 +312,19 @@ const CompletionScreenRight: React.FC<{
                 mb="10px"
               />
             </FormControl>
+            </Flex><Flex mt={'10px'} >
             {/***********Spacer*****************/}
-            <div style={{ width: '20px' }} />
+            {/* <div style={{ width: '20px' }} /> */}
 
             {compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && (
               <FormControl
                 display="flex"
                 alignItems="center"
                 justifyContent={'space-between'}
-                width={'50%'}
+                width={'100%'}
                 h={'40px'}
+                mt={'10px'}
+                mb="10px"
                 // mt={'5px'}
               >
                 <FormLabel
@@ -327,7 +340,7 @@ const CompletionScreenRight: React.FC<{
                 </FormLabel>
                 <InputField
                   mt={'10px'}
-                  w="100px"
+                  w="220px"
                   disabled={
                     compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true'
                       ? false
@@ -340,6 +353,10 @@ const CompletionScreenRight: React.FC<{
                   value={compliData[CompKeyCount]?.gameDistinctionScore}
                   onChange={handlecompletion}
                   onKeyPress={handleKeyPress}
+                  style={{
+                    border: compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && !compliData[CompKeyCount]?.gameDistinctionScore ? '1px solid red' : '1px solid #ced4da',
+                    // Add other styles as needed
+                  }}
                 />
               </FormControl>
             )}
@@ -347,7 +364,7 @@ const CompletionScreenRight: React.FC<{
 
           {/*************SkillWise**********************/}
 
-          <FormControl
+          {/* <FormControl
             display="flex"
             alignItems="center"
             justifyContent={'space-between'}
@@ -375,7 +392,7 @@ const CompletionScreenRight: React.FC<{
               name="gameIsSetSkillWiseScore"
               onChange={handlecompletion}
             />
-          </FormControl>
+          </FormControl> */}
 
           {/**********************BADGE*********************/}
 
@@ -383,7 +400,7 @@ const CompletionScreenRight: React.FC<{
             display="flex"
             alignItems="center"
             justifyContent={'space-between'}
-            width={'40%'}
+            width={'50%'}
             mt={'20px'}
             // ml="150px"
           >
@@ -415,7 +432,7 @@ const CompletionScreenRight: React.FC<{
                   display="flex"
                   alignItems="center"
                   justifyContent={'space-between'}
-                  width={'33%'}
+                  width={'38%'}
                   mt={'10px'}
                   mb="10px"
                 >
@@ -439,7 +456,7 @@ const CompletionScreenRight: React.FC<{
                     handleBadgeSelection={handleBadgeSelection}
                   />
                 </FormControl>
-                {!imgb ? (
+                {compliData[CompKeyCount]?.gameBadge === 0 || compliData[CompKeyCount]?.gameBadge == null ||compliData[CompKeyCount]?.gameBadge == '' ? (
                   <>
                     {/*<input type="file" style={{ display: 'none' }} />
                     <Box
@@ -520,7 +537,7 @@ const CompletionScreenRight: React.FC<{
                 display="flex"
                 alignItems="center"
                 justifyContent={'space-between'}
-                width={'60%'}
+                width={'100%'}
                 //mt={'10px'}
               >
                 <FormLabel
@@ -543,10 +560,14 @@ const CompletionScreenRight: React.FC<{
                   name="gameBadgeName"
                   disabled={compliData[CompKeyCount]?.gameIsSetBadge === 'true' ? false : true}
                   placeholder="eg. Bronze"
-                  w="150px" // Adjust the width as needed
+                  w="220px" // Adjust the width as needed
                   value={compliData[CompKeyCount]?.gameBadgeName}
                   onChange={handlecompletion}
-                  maxlength="9"
+                  maxlength="20"
+                  style={{
+                    border: compliData[CompKeyCount]?.gameIsSetBadge === 'true' && !compliData[CompKeyCount]?.gameBadgeName ? '1px solid red' : '1px solid #ced4da',
+                    // Add other styles as needed
+                  }}
                 />
               </FormControl>
             </>
@@ -556,12 +577,12 @@ const CompletionScreenRight: React.FC<{
 
           {compliData[CompKeyCount]?.gameIsSetBadge === 'true' && (
             <>
-              <Flex>
+              <Box>
                 <FormControl
                   display="flex"
                   alignItems="center"
                   justifyContent={'space-between'}
-                  width={'40%'}
+                  width={'50%'}
                   // mt={'10px'}
                 >
                   <FormLabel
@@ -599,7 +620,7 @@ const CompletionScreenRight: React.FC<{
                       display="flex"
                       alignItems="center"
                       justifyContent={'space-between'}
-                      width={'50%'}
+                      width={'100%'}
                       // mt={'10px'}
                     >
                       <FormLabel>
@@ -618,7 +639,7 @@ const CompletionScreenRight: React.FC<{
                       <InputField
                         mb="0px"
                         id="gameAwardBadgeScore"
-                        w={'100px'}
+                        w={'220px'}
                         name="gameAwardBadgeScore"
                         disabled={
                           compliData[CompKeyCount]?.gameIsSetCriteriaForBadge === 'true'
@@ -630,11 +651,15 @@ const CompletionScreenRight: React.FC<{
                         value={compliData[CompKeyCount]?.gameAwardBadgeScore}
                         onChange={handlecompletion}
                         onKeyPress={handleKeyPress}
+                        style={{
+                          border: compliData[CompKeyCount]?.gameIsSetCriteriaForBadge === 'true' && !compliData[CompKeyCount]?.gameAwardBadgeScore ? '1px solid red' : '1px solid #ced4da',
+                          // Add other styles as needed
+                        }}
                       />
                     </FormControl>
                   </>
                 )}
-              </Flex>
+              </Box>
             </>
           )}
         </Card>

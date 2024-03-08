@@ -8,7 +8,7 @@ interface PropsNote {
 const StrightConnector: React.FC<PropsNote> = ({ name }) => {
     return (
         <Flex direction="row" align="center">
-            <Divider orientation="horizontal" borderColor="lightgrey" borderWidth="1px" width="50px" my={4} />
+            <Divider orientation="horizontal" borderColor="grey" borderWidth="1px" width="50px" my={4} />
   {/* Dot at the end */}
   <div style={{ position: 'relative', width: '100%' }}>
     <div
@@ -20,11 +20,11 @@ const StrightConnector: React.FC<PropsNote> = ({ name }) => {
         width: '10px',
         height: '10px',
         borderRadius: '50%',
-        backgroundColor: 'lightgrey',
+        backgroundColor: 'grey',
         zIndex: 1, // Set a higher zIndex to make the dot overlap the line
       }}
     />
-    <span style={{ marginLeft: '22px', textAlign: 'right', fontSize: '14px', top: '5px',color:'lightgrey' }}>
+    <span style={{ marginLeft: '22px', textAlign: 'right', fontSize: '14px', top: '5px',color:'grey' }}>
       {name}
     </span>
   </div>
