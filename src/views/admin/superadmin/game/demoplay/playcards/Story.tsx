@@ -250,31 +250,40 @@ const Story: React.FC<{
           >
             <GridItem colSpan={1} position={'relative'}>
               <Img src={note} className="story_note_image" loading="lazy" />
-              <Box className={'story_note_content'} justifyContent={'center'}>
+              <Box
+                className={'story_note_content'}
+                // bg={'blue.300'}
+              >
+                <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                  <Box
+                    w={'65%'}
+                    fontSize={{ base: '3.8vw', sm: '2.8vw', md: '1.8vw' }}
+                    height={'20vh'}
+                    overflowY={'auto'}
+                    // bg={'blue.300'}
+                    fontFamily={'AtlantisContent'}
+                    color={'#D9C7A2'}
+                    display={'flex'}
+                    justifyContent={'center'}
+                  >
+                    {data?.blockText} sdgi bibi aberi ahrh awhroi howiahro
+                    ihwaorh owharoh oawhosfoofocohhr oiwharoh oawir owaor oawiro
+                    iwaori oiwoair oorowairh oiawhro ihwoarih owihro ihwoarih
+                    owiharo hwaorhi owihrowha hos ghsokdhfo harhohrowiahroajfoj
+                  </Box>
+                </Box>
                 <Box
-                  w={'65%'}
-                  fontSize={'1.8vw'}
-                  height={'35%'}
-                  overflow-y={'scroll'}
-                  fontFamily={'AtlantisContent'}
-                  color={'#D9C7A2'}
+                  w={'100%'}
+                  onClick={() => getData(data)}
+                  mt={'20px'}
                   display={'flex'}
                   justifyContent={'center'}
+                  cursor={'pointer'}
+                  position={'fixed'}
+                  top={'70%'}
                 >
-                  {data?.blockText}
+                  <Img src={next} w={'100px'} />
                 </Box>
-              </Box>
-              <Box
-                w={'100%'}
-                onClick={() => getData(data)}
-                mt={'20px'}
-                display={'flex'}
-                justifyContent={'center'}
-                cursor={'pointer'}
-                position={'absolute'}
-                bottom={{ base:'60px',sm:'50px',md: '150px', '2xl': '200px' }}
-              >
-                <Img src={next} w={'200px'} h={'60px'} />
               </Box>
             </GridItem>
           </Grid>
@@ -593,7 +602,7 @@ const Story: React.FC<{
                 />
                 <Box
                   position={'absolute'}
-                  top={{sm:'18px',md:'42px'}}
+                  top={{ sm: '18px', md: '42px' }}
                   h={'80% !important'}
                   className="story_interaction_image"
                 >
@@ -603,7 +612,7 @@ const Story: React.FC<{
                     justifyContent={'center'}
                     alignItems={'center'}
                     fontWeight={700}
-                    fontSize={{ sm:'1vw',md: '1.5vw', lg: '1.9vw' }}
+                    fontSize={{ sm: '1vw', md: '1.5vw', lg: '1.9vw' }}
                     fontFamily={'AtlantisText'}
                     lineHeight={1}
                     w={'100%'}
@@ -665,7 +674,11 @@ const Story: React.FC<{
                               w={'100%'}
                               display={'flex'}
                               justifyContent={'center'}
-                              fontSize={{ sm:'1.3vw',md: '1.5vw', lg: '1.9vw' }}
+                              fontSize={{
+                                sm: '1.3vw',
+                                md: '1.5vw',
+                                lg: '1.9vw',
+                              }}
                             >
                               {item?.qpOptionText}
                             </Box>

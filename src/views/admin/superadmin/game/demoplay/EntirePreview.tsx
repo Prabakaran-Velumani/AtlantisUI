@@ -234,6 +234,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [nextBlockAudioUrl, setNextBlockAudioUrl] = useState<string>('');
   const [windowWidth,setWindowWidth ] = useState(null);
   const [windowHeight,setWindowHeight] = useState(null);
+ 
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [game3Position, setGame3Position] = useState({
     previousBlock: '',

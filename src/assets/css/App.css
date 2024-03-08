@@ -2775,7 +2775,7 @@ transform: translate(-167px, -84px);
 /* welcome screen image */
 
 .welcome_screen_image {
-  height: 800px;
+  height: 400px;
   width: 700px;
   max-width: 100%;
 }
@@ -2801,7 +2801,7 @@ transform: translate(-167px, -84px);
 /* welcome inside skill content  */
 
 .skill_content {
-  height: 100px;
+  height: 57px;
   overflow-y: scroll;
 }
 
@@ -2821,11 +2821,13 @@ transform: translate(-167px, -84px);
 
 .story_note_content {
   width: 100%;
-  position: absolute;
-  top: 100px;
+  height: 35vh;
+  position: fixed;
+  top: 36%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-
+  /* left: -25px; */
 }
 
 .story_interaction_content {
@@ -2875,19 +2877,17 @@ transform: translate(-167px, -84px);
     top: 100px;
   }
 
-
   .story_note_image {
+    width: 500px;
     height: 90vh;
   }
 
-  .story_note_content {
-    top: 170px;
-  }
 
-  .skill_content {
+
+  /* .skill_content {
     height: 60px;
 
-  }
+  } */
 
   .story_interaction_content {
     top: 30px;
@@ -2923,11 +2923,12 @@ transform: translate(-167px, -84px);
   }
 
   .welcome_screen_image {
-    height: 530px;
+    height: 365px;
     width: 700px;
   }
 
   .story_note_image {
+    width: 500px;
     height: 90vh;
   }
 
@@ -2943,14 +2944,12 @@ transform: translate(-167px, -84px);
     top: 100px;
   }
 
-  .story_note_content {
-    top: 191px;
-  }
-
+  
+/* 
   .skill_content {
     height: 80px;
 
-  }
+  } */
 
   .story_interaction_content {
     top: 30px;
@@ -2986,11 +2985,12 @@ transform: translate(-167px, -84px);
   }
 
   .welcome_screen_image {
-    height: 645px;
+    height: 485px;
     width: 700px;
   }
 
   .story_note_image {
+    width: 500px;
     height: 90vh;
   }
 
@@ -3006,13 +3006,10 @@ transform: translate(-167px, -84px);
     top: 145px;
   }
 
-  .story_note_content {
-    top: 250px;
-  }
-
-  .skill_content {
+  
+  /* .skill_content {
     height: 100px;
-  }
+  } */
 
   .story_interaction_content {
     top: 30px;
@@ -3048,11 +3045,12 @@ transform: translate(-167px, -84px);
   }
 
   .welcome_screen_image {
-    height: 650px;
+    height: 520px;
     width: 700px;
   }
 
   .story_note_image {
+    width: 500px;
     height: 90vh;
   }
 
@@ -3068,13 +3066,11 @@ transform: translate(-167px, -84px);
     top: 166px;
   }
 
-  .story_note_content {
-    top: 252px;
-  }
-
+ 
+/* 
   .skill_content {
     height: 120px;
-  }
+  } */
 
   .story_interaction_content {
     top: 30px;
@@ -3110,11 +3106,12 @@ transform: translate(-167px, -84px);
   }
 
   .welcome_screen_image {
-    height: 650px;
+    height: 600px;
     width: 800px;
   }
 
   .story_note_image {
+    width: 500px;
     height: 90vh;
   }
 
@@ -3130,13 +3127,11 @@ transform: translate(-167px, -84px);
     top: 198px;
   }
 
-  .story_note_content {
-    top: 277px;
-  }
+ 
 
-  .skill_content {
+  /* .skill_content {
     height: 150px;
-  }
+  } */
 
   .story_interaction_content {
     top: 55px;
@@ -3172,11 +3167,12 @@ transform: translate(-167px, -84px);
   }
 
   .welcome_screen_image {
-    height: 800px;
+    height: 600px;
     width: 900px;
   }
 
   .story_note_image {
+    width: 500px;
     height: 90vh;
   }
 
@@ -3191,14 +3187,11 @@ transform: translate(-167px, -84px);
   .welcome_screen_content {
     top: 210px;
   }
-
-  .story_note_content {
-    top: 313px;
-  }
+/* 
 
   .skill_content {
     height: 200px;
-  }
+  } */
 
   .story_interaction_content {
     top: 70px;
@@ -3234,12 +3227,13 @@ transform: translate(-167px, -84px);
   }
 
   .welcome_screen_image {
-    height: 880px;
+    height: 680px;
     width: 900px;
   }
 
 
   .story_note_image {
+    width: 625px;
     height: 90vh;
   }
 
@@ -3255,13 +3249,9 @@ transform: translate(-167px, -84px);
     top: 233px;
   }
 
-  .story_note_content {
-    top: 375px;
-  }
-
-  .skill_content {
+  /* .skill_content {
     height: 250px;
-  }
+  } */
 
   .story_interaction_content {
     top: 75px;
@@ -3269,7 +3259,7 @@ transform: translate(-167px, -84px);
   }
 
   .story_interaction_image {
-    height: 850px;
+    height: 800px;
     width: 700px;
   }
 }
@@ -3297,11 +3287,12 @@ transform: translate(-167px, -84px);
   }
 
   .welcome_screen_image {
-    height: 1024px;
+    height: 750px;
     width: 1125px;
   }
 
   .story_note_image {
+    width: 660px;
     height: 90vh;
   }
 
@@ -3317,12 +3308,8 @@ transform: translate(-167px, -84px);
     top: 255px;
   }
 
-  .story_note_content {
-    top: 392px;
-  }
-
   .skill_content {
-    height: 280px;
+    height: 135px;
   }
 
   .story_interaction_content {
@@ -3359,11 +3346,12 @@ transform: translate(-167px, -84px);
   }
 
   .welcome_screen_image {
-    height: 1200px;
+    height: 910px;
     width: 1200px;
   }
 
   .story_note_image {
+    width: 850px;
     height: 90vh;
   }
 
@@ -3379,13 +3367,9 @@ transform: translate(-167px, -84px);
     top: 285px;
   }
 
-  .story_note_content {
-    top: 438px;
-  }
-
-  .skill_content {
+  /* .skill_content {
     height: 300px;
-  }
+  } */
 
   .story_interaction_content {
     top: 100px;
@@ -3421,11 +3405,12 @@ transform: translate(-167px, -84px);
   }
 
   .welcome_screen_image {
-    height: 1400px;
+    height: 1075px;
     width: 1660px;
   }
 
   .story_note_image {
+    width: 1120px;
     height: 90vh;
   }
 
@@ -3441,13 +3426,11 @@ transform: translate(-167px, -84px);
     top: 366px;
   }
 
-  .story_note_content {
-    top: 446px;
-  }
 
-  .skill_content {
+
+  /* .skill_content {
     height: 320px;
-  }
+  } */
 
   .story_interaction_content {
     top: 104px;
@@ -3483,41 +3466,38 @@ transform: translate(-167px, -84px);
   }
 
   .welcome_screen_image {
-    height: 1400px;
+    height: 950px;
     width: 1700px;
   }
 
-    .story_note_image {
-      height: 90vh;
-    }
-
-    .welcome_screen_grid {
-      width: 75%;
-    }
-
-    .story_note_grid {
-      width: 45%;
-    }
-
-    .welcome_screen_content {
-      top: 400px;
-    }
-
-    .story_note_content {
-      top: 458px;
-    }
-
-    .skill_content {
-      height: 300px;
-    }
-
-    .story_interaction_image {
-      height: 1150px;
-      width: 960px;
-    }
-
-    .story_interaction_content {
-      top: 100px;
-      left: 180px;
-    }
+  .story_note_image {
+    width: 1300px;
+    height: 90vh;
   }
+
+  .welcome_screen_grid {
+    width: 75%;
+  }
+
+  .story_note_grid {
+    width: 45%;
+  }
+
+  .welcome_screen_content {
+    top: 400px;
+  }
+
+  /* .skill_content {
+    height: 300px;
+  } */
+
+  .story_interaction_image {
+    height: 1150px;
+    width: 960px;
+  }
+
+  .story_interaction_content {
+    top: 100px;
+    left: 180px;
+  }
+}

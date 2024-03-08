@@ -155,11 +155,11 @@ const Welcome: React.FC<{
                   <Box
                     className={'welcome_screen_image'}
                     position={'absolute'}
-                    top={{base:'70px',sm:'100px',md:'200px','2xl':'375px'}}
+                    top={'22%'}
                     display={'flex'}
                     justifyContent={'center'}
-                    h={{sm:'69% !important',md:'80% !important'}}
-                  >
+                    h={{base:'49% !important',sm:'69% !important',md:'77% !important','2xl':'50% !important'}}
+                    >
                     <Box w={'65%'}>
                       <Box
                         w={'100%'}
@@ -215,7 +215,9 @@ const Welcome: React.FC<{
                           {/* )} */}
                         </Box>
                       </Box>
-                      <Box w={'100%'} overflowY={'scroll'} h={'50%'}>
+                      <Box w={'100%'} 
+                      // overflowY={'scroll'} 
+                      h={'auto'}>
                         {formData.gameIsShowStoryline === 'true' && (
                           <Text
                             fontSize={{
@@ -237,7 +239,7 @@ const Welcome: React.FC<{
                         >
                           <Img
                             src={rew}
-                            mt={'25px'}
+                            mt={{base:'',sm:'10px',md:'25px'}}
                             alt="rew"
                             w={'100%'}
                             h={'20px'}
@@ -254,7 +256,7 @@ const Welcome: React.FC<{
                           }
                         >
                           {/* {formData.gameIsShowSkill === 'true' && ( */}
-                          <Box w={'45%'} h={'auto'} position={'relative'}>
+                          <Box w={'38%'} h={'auto'} position={'relative'}>
                             <motion.div
                               initial={{ opacity: 0, scale: 0.5 }}
                               animate={{ opacity: 1, scale: 1 }}
@@ -276,7 +278,7 @@ const Welcome: React.FC<{
                                 >
                                   Skills
                                 </Text>
-                                <Box w={'100%'} className={'skill_content'}>
+                                <Box w={'100%'} className={'skill_content'} mt={'10px'}>
                                   {authorArray
                                     .map((authorItem, index) => {
                                       const skillName =
@@ -323,7 +325,7 @@ const Welcome: React.FC<{
                                               color={'#D9C7A2'}
                                               fontFamily={'AtlantisContent'}
                                             >
-                                              {filteredSkillName}
+                                              {filteredSkillName} 
                                             </Text>
                                           </Box>
                                         </Box>
@@ -336,7 +338,7 @@ const Welcome: React.FC<{
                           {/* )}  */}
                           {/* {formData.gameIsShowLearningOutcome === 'true' && ( */}
 
-                          <Box w={'45%'} h={'auto'} position={'relative'}>
+                          <Box w={'38%'} h={'auto'} position={'relative'}>
                             <motion.div
                               initial={{ opacity: 0, scale: 0.5 }}
                               animate={{ opacity: 1, scale: 1 }}
@@ -357,7 +359,7 @@ const Welcome: React.FC<{
                                 >
                                   Learning Outcomes
                                 </Text>
-                                <Box w={'100%'}>
+                                <Box w={'100%'} className={'skill_content'} ml={'20px'} mt={'10px'} display={'flex'} justifyContent={'center'} flexDirection={'column'}>
                                   {data &&
                                     data.map((it: any, ind: number) => {
                                       const bulletIndex = it.indexOf('\u2022');
@@ -369,8 +371,8 @@ const Welcome: React.FC<{
                                         <Box
                                           display={'flex'}
                                           key={ind}
-                                          w={'100%'}
-                                          justifyContent={'center'}
+                                          w={'78%'}
+                                          justifyContent={'space-between'}
                                         >
                                           <Img
                                             src={write}
@@ -388,7 +390,14 @@ const Welcome: React.FC<{
                                             }}
                                             mt={ind === 0 ? '10px' : ''}
                                           />
-                                          <Box>
+                                              <Text
+                                                color={'#D9C7A2'}
+                                                fontFamily={'AtlantisContent'}
+                                                fontSize={'1.5vw'}
+                                              >
+                                                {contentAfterBullet} dfgfdg e e  this dsjfpj  jwrj ojwprp wrwrwh oirhwoahaw wrhiwug riwbao
+                                              </Text>
+                                          {/* <Box>
                                             <Box
                                               display={'flex'}
                                               w={'50px'}
@@ -399,15 +408,8 @@ const Welcome: React.FC<{
                                               lineHeight={0.9}
                                               mt={ind === 0 ? '10px' : ''}
                                             >
-                                              <Text
-                                                color={'#D9C7A2'}
-                                                fontFamily={'AtlantisContent'}
-                                                fontSize={'1.5vw'}
-                                              >
-                                                {contentAfterBullet}
-                                              </Text>
                                             </Box>
-                                          </Box>
+                                          </Box> */}
                                         </Box>
                                       );
                                     })}
