@@ -181,24 +181,40 @@ const Story: React.FC<{
   
   
 
+
 const getData1 = (data: any) => {
   const content = data?.blockText || '';
   const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
   const newRemainingSentences = sentences.slice(currentPosition);
-  console.log('No more sentences1',content,newRemainingSentences.length )
-  setRemainingSentences(newRemainingSentences);
-  if (newRemainingSentences.length >= 1) {
-    console.log('No more sentencesif',content)
-    setCurrentPosition(currentPosition + 1);
-  } else {
-    console.log('No more sentenceselse',content);
-    if(data && type === 'Note')
-    {
-       getData(data);
+  console.log('Content:', content);
+  console.log('Remaining Sentences:', newRemainingSentences.length);
+
+  const concatenatedSentences = [];
+  let totalLength = 0;
+
+  for (let i = 0; i < newRemainingSentences.length; i++) {
+    const sentence = newRemainingSentences[i];
+
+    console.log(`Sentence ${i + 1}:`, sentence.length,totalLength);
+    if (totalLength + sentence.length <= 100) {
+      concatenatedSentences.push(sentence);
+      totalLength += sentence.length;
+    } else {
+      concatenatedSentences.push(sentence);
+      break;
     }
-   
+  }
+  setRemainingSentences(concatenatedSentences);
+
+  if (newRemainingSentences.length >= 1) {
+    setCurrentPosition(currentPosition + concatenatedSentences.length);
+  } else {
+    if (data && type === 'Note') {
+      getData(data);
+    }
   }
 };
+
 useEffect(() => {
   if(data && type === 'Note')
     {
@@ -306,7 +322,6 @@ useEffect(() => {
             >
               <Box
                 w={'100%'}
-                // overflowY={'scroll'}
                 h={'100px'}
                 display={'flex'}
                 alignItems={'center'}
@@ -314,9 +329,12 @@ useEffect(() => {
                 mt={'20px'}
                
               >
-                {/* Show content based on the current position */}
-            {/* {data?.blockText.split('. ')[currentPosition]} */}
-            {remainingSentences[0]}
+               
+            {remainingSentences.map((sentence, index) => (
+    <React.Fragment key={index}>
+       {sentence}
+    </React.Fragment>
+  ))}
               </Box>
               <Box
                 w={'100%'}
