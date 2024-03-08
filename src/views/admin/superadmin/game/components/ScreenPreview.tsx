@@ -4,6 +4,7 @@ import {
   Flex,
   Text,
   Img,
+  Button,
 } from '@chakra-ui/react';
 import React, {
   Suspense,
@@ -420,6 +421,12 @@ const ScreenPreview = () => {
     setSelectedOption(ind === selectedOption ? null : ind);
 
   };
+  const handleEntirePrev = async () => {
+ 
+    const url = ` /game/creator/demoplay/${id}`;
+    // const url = `/screen/preview/${id}`;
+    window.open(url, '_blank');
+  }
 
   return (
     <Box id="container">
@@ -430,8 +437,34 @@ const ScreenPreview = () => {
             animate={{ opacity: 1, background: '#0000' }}
             transition={{ duration: 1, delay: 0.5 }}
           >
-            <Box h={'100vh !important'} className="Images">
+           
+            <Box h={'100vh !important'} className="Images"  style={{ overflow: 'visible' }}>
+            <Button
+  bg="#11047a"
+  _hover={{ bg: '#190793' }}
+  color="#fff"
+  style={{
+    position: 'fixed', 
+    top: '50px',
+    left: '85%',
+    // boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)', // Adjust the shadow properties
+
+    pointerEvents: 'auto',
+    zIndex: 99999999999999, // High z-index value
+        // mixBlendMode: 'overlay', // or 'overlay', 'color-dodge', etc.
+        visibility: 'visible', 
+  }}
+  mr={'17px'}
+  mt={'6px'}
+  ml={'11px'}
+  onClick={handleEntirePrev}
+>
+  Demo Play
+</Button>
+
+
               <Flex height="100vh" className="AddScores">
+             
                 {currentTab == 3 && (
                     <Box
                       w={'100%'}
@@ -453,6 +486,8 @@ const ScreenPreview = () => {
                         justifyContent={'center'}
                         className="Game-Screen"
                       >
+                        
+
                         <Box className="Images">
                           {gameInfo && (
                             <WelcomeContentScreen
@@ -488,6 +523,7 @@ const ScreenPreview = () => {
                       }%) translateX(${first ? 0 : -10}%)`}
                       transition={'transform 0.9s ease-in-out'}
                     >
+                      
                       <Box
                         position={'fixed'}
                         top={'200px'}
@@ -593,6 +629,7 @@ const ScreenPreview = () => {
                       bottom={'0'}
                       src={preloadAssets?.dial}
                     />
+                    
                     {!showNote && (
                       <>
                         <Box position={'relative'}>
@@ -691,6 +728,7 @@ const ScreenPreview = () => {
                       backgroundSize={'contain'}
                       backgroundRepeat={'no-repeat'}
                     >
+                      
                       <Box
                         textAlign={'center'}
                         h={'100px'}
@@ -970,6 +1008,7 @@ const ScreenPreview = () => {
                   justifyContent={'center'}
                   className="Game-Screen"
                 >
+                 
                   <Box className="Images">
                     <CompletionContentScreen
                       preview={true}
@@ -1005,6 +1044,7 @@ const ScreenPreview = () => {
                   justifyContent={'center'}
                   className="Game-Screen"
                 >
+                 
                   <Box className="Images">
                     <Box className="LearderBoards">
                       <Img
@@ -1038,6 +1078,7 @@ const ScreenPreview = () => {
                   justifyContent={'center'}
                   className="Game-Screen"
                 >
+                  
                   <Box className="Images">
                     <ReflectionContentScreen
                       preview={true}
@@ -1072,6 +1113,7 @@ const ScreenPreview = () => {
                   justifyContent={'center'}
                   className="Game-Screen"
                 >
+                 
                   <Box className="Images">
                     <TakeAwaysContentScreen
                       preview={true}
@@ -1095,6 +1137,7 @@ const ScreenPreview = () => {
                   style={{ perspective: '1000px' }}
                   className="Main-Content"
                 >
+                
                   <Box
                    backgroundImage={preloadAssets?.backgroundImage}
                     w={'100% !important'}
@@ -1105,6 +1148,8 @@ const ScreenPreview = () => {
                     justifyContent={'center'}
                     className="Game-Screen"
                   >
+                    
+
                     <Box className="Images">
                       <WelcomeContentScreen
                         formData={gameInfo.gameData}
@@ -1138,6 +1183,7 @@ const ScreenPreview = () => {
                   justifyContent={'center'}
                   className="Game-Screen"
                 >
+                 
                   <Box className="Images">
                     <TyContentScreen
                       formData={gameInfo.gameData}
