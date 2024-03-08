@@ -10,7 +10,6 @@ import {
   ListItem,
   Img,
   useToast,
-  Divider,
   Accordion,
   AccordionItem,
   AccordionButton,
