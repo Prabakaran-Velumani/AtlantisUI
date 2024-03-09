@@ -1224,6 +1224,7 @@ transform: translate(-3px, 33px);
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box  .content {  
 width: 100%;
 display: flex;
+}
 
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .bg-img {
   height: 620px;
@@ -2198,7 +2199,7 @@ transform: translate(-167px, -84px);
   font-weight: 300;
 }
 
-.buttonfeel {
+/* .buttonfeel { */
   /* margin-left: 5px;
    /* THANK YOU SCREEN */   
   .AddScores .Main-Content .Game-Screen .Images .section-thankyou-screen{

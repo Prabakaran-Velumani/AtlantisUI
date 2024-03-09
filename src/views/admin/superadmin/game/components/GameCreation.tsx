@@ -1301,7 +1301,7 @@ useEffect(()=>{
                   var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                   var blockRoll = input[inputkey]?.blockRoll;
                   var interaction = input[inputkey]?.interaction;
-                  //console.log('QuestionsEmotion', QuestionsEmotion);
+                  console.log('QuestionsEmotion1', QuestionsEmotion);
                   //console.log('blockRoll', blockRoll);
                   //console.log('interaction', interaction);
                   if (!interaction) {
@@ -2059,7 +2059,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
                 var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                 var blockRoll = input[inputkey]?.blockRoll;
                 var interaction = input[inputkey]?.interaction;
-                //console.log('QuestionsEmotion', QuestionsEmotion);
+                console.log('QuestionsEmotion', QuestionsEmotion);
                 //console.log('blockRoll', blockRoll);
                 //console.log('interaction', interaction);
                 if (!interaction) {
@@ -2156,11 +2156,12 @@ if (formData.gameIsFeedbackMandatory === "true") {
                 }
               }
               var hasComplete = inputdataget.some((item: any) => {
-                console.log("hasComplete", hasComplete);
+                // console.log("hasComplete", hasComplete);
                 return (
                   item &&(item.Notenavigate === 'Complete' || item.Dialognavigate === 'Complete' || (item.navigateObjects && Object.values(item.navigateObjects).includes('Complete')))
                 );
               });
+              console.log("hasComplete", hasComplete);
                 if (!hasComplete) {
                   toast({
                     title:`At least Any One of the  Select Block as Complete`,
