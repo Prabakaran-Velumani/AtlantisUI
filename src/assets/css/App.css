@@ -2819,6 +2819,9 @@ transform: translate(-167px, -84px);
   width: 100%;
 }
 
+.story_complete_grid {
+  width: 100%;
+}
 .story_note_content {
   width: 100%;
   height: 35vh;
@@ -2872,7 +2875,9 @@ transform: translate(-167px, -84px);
   .story_note_grid {
     width: 39%;
   }
-
+  .story_complete_grid {
+    width: 60%;
+  }
   .welcome_screen_content {
     top: 100px;
   }
@@ -2882,11 +2887,13 @@ transform: translate(-167px, -84px);
     height: 90vh;
   }
 
-
+  .story_completion_image {
+    width: 500px;
+    height: 90vh;
+  }
 
   /* .skill_content {
     height: 60px;
-
   } */
 
   .story_interaction_content {
@@ -2931,7 +2938,10 @@ transform: translate(-167px, -84px);
     width: 500px;
     height: 90vh;
   }
-
+  .story_completion_image {
+    width: 500px;
+    height: 90vh;
+  }
   .welcome_screen_grid {
     width: 54%;
   }
@@ -2939,7 +2949,9 @@ transform: translate(-167px, -84px);
   .story_note_grid {
     width: 32%;
   }
-
+  .story_complete_grid {
+    width: 56%;
+  }
   .welcome_screen_content {
     top: 100px;
   }
@@ -2993,15 +3005,20 @@ transform: translate(-167px, -84px);
     width: 500px;
     height: 90vh;
   }
-
+  .story_completion_image {
+    width: 500px;
+    height: 90vh;
+  }
   .welcome_screen_grid {
     width: 53%;
   }
 
   .story_note_grid {
+    width: 52%;
+  }
+  .story_complete_grid {
     width: 32%;
   }
-
   .welcome_screen_content {
     top: 145px;
   }
@@ -3053,15 +3070,20 @@ transform: translate(-167px, -84px);
     width: 500px;
     height: 90vh;
   }
-
+  .story_completion_image {
+    width: 600px;
+    height: 90vh;
+  }
   .welcome_screen_grid {
     width: 52%;
   }
 
   .story_note_grid {
-    width: 35%;
+    width: 42%;
   }
-
+  .story_complete_grid {
+    width: 40%;
+  }
   .welcome_screen_content {
     top: 166px;
   }
@@ -3114,12 +3136,18 @@ transform: translate(-167px, -84px);
     width: 500px;
     height: 90vh;
   }
-
+  .story_completion_image {
+    width: 650px;
+    height: 90vh;
+  }
   .welcome_screen_grid {
     width: 56%;
   }
 
   .story_note_grid {
+    width: 30%;
+  }
+  .story_complete_grid {
     width: 30%;
   }
 
@@ -3175,7 +3203,10 @@ transform: translate(-167px, -84px);
     width: 500px;
     height: 90vh;
   }
-
+  .story_completion_image {
+    width: 700px;
+    height: 90vh;
+  }
   .welcome_screen_grid {
     width: 48%;
   }
@@ -3183,7 +3214,9 @@ transform: translate(-167px, -84px);
   .story_note_grid {
     width: 32%;
   }
-
+  .story_complete_grid {
+    width: 32%;
+  }
   .welcome_screen_content {
     top: 210px;
   }
@@ -3236,7 +3269,10 @@ transform: translate(-167px, -84px);
     width: 625px;
     height: 90vh;
   }
-
+  .story_completion_image {
+    width: 750px;
+    height: 90vh;
+  }
   .welcome_screen_grid {
     width: 55%;
   }
@@ -3244,7 +3280,9 @@ transform: translate(-167px, -84px);
   .story_note_grid {
     width: 35%;
   }
-
+  .story_complete_grid {
+    width: 35%;
+  }
   .welcome_screen_content {
     top: 233px;
   }
@@ -3295,7 +3333,10 @@ transform: translate(-167px, -84px);
     width: 660px;
     height: 90vh;
   }
-
+  .story_completion_image {
+    width: 800px;
+    height: 90vh;
+  }
   .welcome_screen_grid {
     width: 55%;
   }
@@ -3303,7 +3344,9 @@ transform: translate(-167px, -84px);
   .story_note_grid {
     width: 32%;
   }
-
+  .story_complete_grid {
+    width: 32%;
+  }
   .welcome_screen_content {
     top: 255px;
   }
@@ -3354,7 +3397,10 @@ transform: translate(-167px, -84px);
     width: 850px;
     height: 90vh;
   }
-
+  .story_completion_image {
+    width: 850px;
+    height: 90vh;
+  }
   .welcome_screen_grid {
     width: 59%;
   }
@@ -3362,7 +3408,9 @@ transform: translate(-167px, -84px);
   .story_note_grid {
     width: 37%;
   }
-
+  .story_complete_grid {
+    width: 37%;
+  }
   .welcome_screen_content {
     top: 285px;
   }
@@ -3413,7 +3461,10 @@ transform: translate(-167px, -84px);
     width: 1120px;
     height: 90vh;
   }
-
+  .story_completion_image {
+    width: 900px;
+    height: 90vh;
+  }
   .welcome_screen_grid {
     width: 65%;
   }
@@ -3421,12 +3472,12 @@ transform: translate(-167px, -84px);
   .story_note_grid {
     width: 43%;
   }
-
+  .story_complete_grid {
+    width: 43%;
+  }
   .welcome_screen_content {
     top: 366px;
   }
-
-
 
   /* .skill_content {
     height: 320px;
@@ -3474,7 +3525,10 @@ transform: translate(-167px, -84px);
     width: 1300px;
     height: 90vh;
   }
-
+  .story_completion_image {
+    width: 1000px;
+    height: 90vh;
+  }
   .welcome_screen_grid {
     width: 75%;
   }
@@ -3482,7 +3536,9 @@ transform: translate(-167px, -84px);
   .story_note_grid {
     width: 45%;
   }
-
+  .story_complete_grid {
+    width: 45%;
+  }
   .welcome_screen_content {
     top: 400px;
   }

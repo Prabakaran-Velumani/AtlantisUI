@@ -1,4 +1,4 @@
-import { Box, Img, Text } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Img, Text } from '@chakra-ui/react';
 import rew from 'assets/img/screens/Reward Bar.png';
 import back from 'assets/img/screens/back.png';
 import point from 'assets/img/screens/points.png';
@@ -18,6 +18,7 @@ const Completion: React.FC<{
   setCurrentScreenId?: any;
   getData?: any;
   data?: any;
+  screen?: any;
   // currentQuestNo: any;
   completionScreenQuestOptions: any;
   questOptions: any;
@@ -33,6 +34,7 @@ const Completion: React.FC<{
   CompKeyCount,
   getData,
   data,
+  screen,
   // currentQuestNo,
   completionScreenQuestOptions,
   questOptions,
@@ -108,16 +110,11 @@ const Completion: React.FC<{
     fetchDatass();
   }, []);
 
-
-
   return (
     <>
-      <Box
+      {/* <Box
         className="comple-screen"
-        // style={{
-        //   transform: `scale(${showComplete ? 0.5 : 1})`,
-        //   transition: 'transform 0.5s ease-in-out',
-        // }}
+        
       >
         <motion.div
           initial={{ scale: 0 }}
@@ -129,19 +126,16 @@ const Completion: React.FC<{
       </Box>
       {!showComplete && (
         <>
-          {/* <Box w={'500px'}> */}
+         
           <Box className="title" 
-          // transform="translate(600px,84px) !important"
+        
           >
             <Text fontFamily={'AtlantisText'} textAlign={'center'}>
               {curretQuestOptions?.gameScreenTitle}
             </Text>
           </Box>
           <Box className="content-box">
-            {/* <Box className="congratulations"> */}
-            {/* <Box className="content">
-              {curretQuestOptions?.gameCompletedCongratsMessage}
-            </Box> */}
+          
             <Box
               className="content"
               transform="translate(0px,100px) !important"
@@ -230,13 +224,40 @@ const Completion: React.FC<{
               </Box>
             )}
           </Box>
-          {/* </Box> */}
+        
           <Box className="next-btn" transform="translate(0px,400px) !important">
             <Img src={next} onClick={() => getData(data)} cursor={'pointer'} />
           </Box>
-          {/* </Box> */}
+          
         </>
-      )}
+      )} */}
+
+      <Box
+        position="relative"
+        maxW="100%"
+        w={'100vw'}
+        height="100vh"
+        backgroundImage={imageSrc}
+        backgroundSize={'cover'}
+        backgroundRepeat={'no-repeat'}
+      >
+        <Grid
+          templateColumns="repeat(1, 1fr)"
+          gap={4}
+          position="absolute"
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+          w={'100%'}
+          // className="story_complete_grid"
+        >
+          <GridItem colSpan={1} position={'relative'}>
+            <Box position={'relative'} w={'100%'} display={'flex'} justifyContent={'center'}>
+              <Img src={screen} className="story_completion_image" loading="lazy" />
+            </Box>
+          </GridItem>
+        </Grid>
+      </Box>
     </>
   );
 };

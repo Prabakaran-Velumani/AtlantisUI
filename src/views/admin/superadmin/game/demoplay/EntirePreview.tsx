@@ -1782,7 +1782,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           data={data}
                           setCurrentScreenId={setCurrentScreenId}
                           formData={gameInfo?.gameData}
-                          imageSrc={Screen1}
+                          imageSrc={backgroundScreenUrl}
+                          screen={Screen1}
                           currentQuestNo={currentQuestNo}
                           completionScreenQuestOptions={
                             gameInfo.completionQuestOptions

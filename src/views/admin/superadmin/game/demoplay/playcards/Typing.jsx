@@ -15,7 +15,7 @@ function TypingEffect({ text, speed }) {
       }
     }, [currentIndex, text, speed]);
   
-    return <div>{displayText}</div>;
+    return <div style={{color:'#312821'}}>{displayText}</div>;
   }
 
   export default TypingEffect;

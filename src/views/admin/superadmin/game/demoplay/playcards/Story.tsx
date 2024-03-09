@@ -361,7 +361,7 @@ const Story: React.FC<{
             maxW={'100%'}
             maxH={'100%'}
             w={'100%'}
-            h={'240px'}
+            h={'180px'}
             bottom={'0'}
             src={dial}
           />
@@ -374,16 +374,17 @@ const Story: React.FC<{
                   h={'100px'}
                   w={'30%'}
                   left={'5%'}
-                  bottom={'140px'}
+                  bottom={'93px'}
                 />
                 <Text
                   position={'fixed'}
-                  left={'19%'}
-                  bottom={'167px'}
-                  fontSize={'25'}
-                  fontWeight={700}
+                  left={'18%'}
+                  bottom={'118px'}
+                  fontSize={'2.8vw'}
+                  fontWeight={500}
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
+                  color={'#312821'}
                 >
                   {data.blockRoll === 'Narrator'
                     ? data.blockRoll
@@ -395,12 +396,13 @@ const Story: React.FC<{
                 position={'fixed'}
                 alignItems={'center'}
                 justifyContent={'space-between'}
-                h={'80px'}
+                h={'61px'}
                 overflowY={'scroll'}
                 w={'85%'}
-                bottom={'55px'}
+                fontSize={'2vw'}
+                bottom={'38px'}
                 fontFamily={'AtlantisContent'}
-                fontSize={'21px'}
+                // fontSize={'21px'}
               >
                 <TypingEffect text={data?.blockText} speed={50} />
               </Box>
@@ -411,13 +413,13 @@ const Story: React.FC<{
                 w={'95%'}
                 bottom={'0'}
               >
-                <Img
+                {/* <Img
                   src={left}
                   w={'70px'}
                   h={'50px'}
                   cursor={'pointer'}
                   onClick={() => prevData(data)}
-                />
+                /> */}
                 <Img
                   src={right}
                   w={'70px'}
@@ -431,147 +433,6 @@ const Story: React.FC<{
         </Box>
       )}
       {data && type === 'Interaction' && (
-        // <Box
-        //   w={'100%'}
-        //   h={'100vh'}
-        //   display={'flex'}
-        //   alignItems={'center'}
-        //   justifyContent={'center'}
-        //   position={'relative'}
-        // >
-        //   <Img
-        //     src={backGroundImg}
-        //     maxW={'100%'}
-        //     maxH={'100%'}
-        //     w={'100%'}
-        //     h={'100vh'}
-        //     transform={`scale(1.5}) translateY(-10%) translateX(${
-        //       showNote ? -200 : 0
-        //     }px)`}
-        //     transition={'transform 0.9s ease-in-out'}
-        //   />
-        //   {/* <Box w={'100%'} h={'100vh'} position={'absolute'} top={'0'}>
-        //     <Canvas camera={{ position: [0, 0, 10] }}>
-        //       <directionalLight
-        //         position={[5, 5, 5]}
-        //         intensity={0.8}
-        //         color={0xffccaa}
-        //         castShadow
-        //       />
-        //       <ambientLight intensity={5.5} />
-        //       {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
-        //   {/* <Background /> */}
-        //   {/* <Model /> */}
-        //   {/* <mesh
-        //   rotation={[-Math.PI / 2, 0, 0]}
-        //   position={[0, -5, 0]}
-        //   receiveShadow
-        // > */}
-        //   {/* <planeGeometry args={[100, 100]} />
-        //   <shadowMaterial opacity={0.5} />
-        // </mesh> */}
-        //   {/* </Canvas>
-        //   </Box> */}
-        //   {/* {selectedPlayer && (
-        //     <Img
-        //       src={`${API_SERVER}/${selectedPlayer}`}
-        //       position={'fixed'}
-        //       right={'300px'}
-        //       bottom={'100px'}
-        //       w={'200px'}
-        //       h={'auto'}
-        //       transform={'translate(100px, 0px)'}
-        //       transition={'transform 2s ease-in-out'}
-        //     />
-        //   )} */}
-        //   {/* {selectedNpc && (
-        //     <Img
-        //       src={selectedNpc}
-        //       position={'fixed'}
-        //       right={'500px'}
-        //       bottom={'100px'}
-        //       w={'200px'}
-        //       h={'auto'}
-        //       transform={'translate(100px, 0px)'}
-        //       transition={'transform 2s ease-in-out'}
-        //     />
-        //   )} */}
-        //   <Box
-        //     style={{
-        //       transform: `translateX(${showNote ? -200 : 0}px) scale(1.2)`,
-        //       transition:
-        //         'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-        //     }}
-        //     backgroundImage={parch}
-        //     position={'fixed'}
-        //     w={{ sm: '350px', md: '500px' }}
-        //     h={{ sm: '50vh', md: ' 550px' }}
-        //     // top={'4vh'}
-        //     left={{ sm: '60px', md: '180px' }}
-        //     backgroundSize={'contain'}
-        //     backgroundRepeat={'no-repeat'}
-        //   >
-        //     <Box
-        //       textAlign={'center'}
-        //       h={'100px'}
-        //       display={'flex'}
-        //       justifyContent={'center'}
-        //       alignItems={'center'}
-        //       fontWeight={700}
-        //       fontFamily={'AtlantisText'}
-        //       lineHeight={1}
-        //       w={'100%'}
-        //     >
-        //       <Box w={'50%'} fontSize={'21px'}>
-        //         Here You Can Answer the Interactions...!{' '}
-        //       </Box>
-        //     </Box>
-        //     <Box
-        //       textAlign={'center'}
-        //       h={'100px'}
-        //       display={'flex'}
-        //       justifyContent={'center'}
-        //       alignItems={'center'}
-        //       fontWeight={500}
-        //       fontFamily={'AtlantisText'}
-        //       lineHeight={1}
-        //       w={'96%'}
-        //       overflowY={'scroll'}
-        //     >
-        //       <Box w={'60%'} fontSize={'20px'} letterSpacing={1}>
-        //         {data?.blockText}
-        //       </Box>
-        //     </Box>
-        //     <Box
-        //       mt={'10px'}
-        //       w={{ sm: '200px', md: '400px' }}
-        //       fontWeight={500}
-        //       ml={'17%'}
-        //       h={'220px'}
-        //       overflowY={'scroll'}
-        //     >
-        //       {options &&
-        //         options.map((item: any, ind: number) => (
-        //           <Box
-        //             mb={'10px'}
-        //             w={'80%'}
-        //             lineHeight={1}
-        //             key={ind}
-        //             color={option === ind ? 'purple' : ''}
-        //             textAlign={'center'}
-        //             cursor={'pointer'}
-        //             onClick={() => optionClick(item, ind)}
-        //             fontFamily={'AtlantisText'}
-        //             fontSize={'20px'}
-        //           >
-        //             <Img src={option === ind ? on : off} h={'30px'} w={'95%'} />
-        //             {item?.qpOptionText}
-        //           </Box>
-        //         ))}
-        //     </Box>
-
-        //   </Box>
-        // </Box>
         <Box
           position="relative"
           maxW="100%"
@@ -589,13 +450,12 @@ const Story: React.FC<{
             left="50%"
             transform="translate(-50%, -50%)"
             w={'90%'}
-            // className="story_note_grid"
           >
             <GridItem colSpan={1} position={'relative'}>
               <Box position={'relative'} className="story_interaction_image">
                 <Img
                   src={parch}
-                  // className=""
+
                   w={'100%'}
                   h={'100%'}
                   loading="lazy"
@@ -639,7 +499,9 @@ const Story: React.FC<{
                       fontSize={{ md: '1.5vw', lg: '1.9vw' }}
                       letterSpacing={1}
                     >
-                      {data?.blockText}
+                      {data?.blockText} fohfoihfoihoihf oihoaih ohiwoeiho
+                      iwhoihwqoibo bohiwge gigeguf fufuef uwfueyfwue fuweu
+                      ywfeuywhbhbckz
                     </Box>
                   </Box>
                   <Box
@@ -732,6 +594,28 @@ const Story: React.FC<{
             transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
             transition={'transform 0.9s ease-in-out'}
           />
+          {/* <Box w={'100%'} h={'100vh'}>
+        <Canvas camera={{ position: [30, 0, 10] }}>
+          <directionalLight
+            position={[5, 5, 5]}
+            intensity={0.8}
+            color={0xffccaa}
+            castShadow
+          />
+          <ambientLight intensity={5.5} />
+          {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
+          {/* <Background /> */}
+          {/* <Model /> */}
+          {/* <mesh 
+      rotation={[-Math.PI / 2, 0, 0]}
+      position={[0, -5, 0]}
+      receiveShadow 
+    > */}
+          {/* <planeGeometry args={[100, 100]} />
+      <shadowMaterial opacity={0.5} />
+    </mesh> */}
+          {/* </Canvas>
+      </Box> */}
           {selectedPlayer && (
             <Img
               src={`${API_SERVER}/${selectedPlayer}`}
@@ -764,7 +648,7 @@ const Story: React.FC<{
             maxW={'100%'}
             maxH={'100%'}
             w={'100%'}
-            h={'240px'}
+            h={'180px'}
             bottom={'0'}
             src={dial}
           />
@@ -774,19 +658,20 @@ const Story: React.FC<{
                 <Img
                   src={char}
                   position={'fixed'}
-                  h={'70px'}
-                  w={'25%'}
-                  left={'13%'}
-                  bottom={'150px'}
+                  h={'100px'}
+                  w={'30%'}
+                  left={'5%'}
+                  bottom={'93px'}
                 />
                 <Text
                   position={'fixed'}
-                  left={'24%'}
-                  bottom={'167px'}
-                  fontSize={'25'}
-                  fontWeight={700}
+                  left={'18%'}
+                  bottom={'118px'}
+                  fontSize={'2.8vw'}
+                  fontWeight={500}
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
+                  color={'#312821'}
                 >
                   {data.blockRoll === 'Narrator'
                     ? data.blockRoll
@@ -796,11 +681,14 @@ const Story: React.FC<{
               <Box
                 display={'flex'}
                 position={'fixed'}
+                alignItems={'center'}
                 justifyContent={'space-between'}
-                w={'75%'}
-                bottom={'55px'}
+                h={'61px'}
+                overflowY={'scroll'}
+                w={'85%'}
+                fontSize={'2vw'}
+                bottom={'38px'}
                 fontFamily={'AtlantisContent'}
-                fontSize={'21px'}
               >
                 <TypingEffect text={resMsg} speed={50} />
               </Box>
@@ -808,13 +696,19 @@ const Story: React.FC<{
                 display={'flex'}
                 position={'fixed'}
                 justifyContent={'flex-end'}
-                w={'80%'}
+                w={'95%'}
                 bottom={'0'}
               >
-                {/* <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} /> */}
+                {/* <Img
+              src={left}
+              w={'70px'}
+              h={'50px'}
+              cursor={'pointer'}
+              onClick={() => prevData(data)}
+            /> */}
                 <Img
                   src={right}
-                  w={'60px'}
+                  w={'70px'}
                   h={'50px'}
                   cursor={'pointer'}
                   onClick={() => getData(data)}
