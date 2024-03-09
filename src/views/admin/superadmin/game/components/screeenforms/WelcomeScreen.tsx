@@ -79,7 +79,15 @@ const WelcomeScreen: React.FC<{
       setCharacterCount(remainingCharacters);
       handleChange(e); // Pass the event to the handleChange function to update form data
     };
-
+    const checkvalue = (e: any) => {
+      const trimmedValue1 = e.currentTarget.value.trim(); // Use currentTarget instead of target
+      if (trimmedValue1 !== '') {
+        setFormData((prev: any) => ({
+          ...prev,
+          gameIsShowAdditionalWelcomeNoteInvalid: false,
+        }));
+      }
+    };
     return (
       <Stack direction="column" gap="20px">
         <Card>
@@ -245,6 +253,11 @@ const WelcomeScreen: React.FC<{
                   onChange={handleTextWelcomeChange}
                   value={formData.gameAdditionalWelcomeNote}
                   maxLength={100}
+                  onKeyPress={checkvalue}
+                  style={{
+                    border: formData.gameIsShowAdditionalWelcomeNoteInvalid ? '1px solid red' : '1px solid #ccc',
+                    
+                  }}
                 />
                 <p>{characterCount} characters left</p>
               </div>

@@ -19,7 +19,7 @@ import { MdAdd, MdAddCircle } from "react-icons/md"
 import AddCourse from "./AddCourse"
 import narrator from 'assets/img/games/meeting_room.png';
 import back from 'assets/img/games/narrator.png';
-import { getSkills, getDefaultCat, getDefaultSkill } from "utils/game/gameService"
+import { getSkills, getDefaultCat, getDefaultSkill , getGameStoryLine} from "utils/game/gameService"
 import { useParams } from "react-router-dom"
 // import ResizeTextarea from "react-textarea-autosize";
 // import {autosize} from "autosize";
@@ -27,7 +27,7 @@ import { useParams } from "react-router-dom"
 
 
 // const AboutStory : React.FC<{handleChange:(e:any)=>void,formData:any,setTags:any,setFormData:any,setCat:any,id:any}>= ({handleChange,formData,setTags,setFormData,setCat,id}) => {
-const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any, setDefaultSkills: any, formData: any, setTags: any, setFormData: any, setCat: any, id: any }> = ({ handleChange, setDefaultSkills, defaultskills, formData, setTags, setFormData, setCat, id }) => {
+const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any, setDefaultSkills: any, formData: any, setTags: any, setFormData: any, setCat: any, id: any,languages:any }> = ({ handleChange, setDefaultSkills, defaultskills, formData, setTags, setFormData, setCat, id,languages }) => {
   //navin 16-12
   const [openCourse, setOpenCourse] = useState(false),
     // [defaultskills,setDefaultSkills] = useState([]),
@@ -43,6 +43,9 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
 
       },
     ]);
+    const [storyLine, setStoryline] = useState<String>();
+    const [title, setTitle] = useState<String>();
+    const [nonplayerName, setNonplayerName] = useState<String>();
   
   // const fetchDefaultcat = async () =>{
   //   setDefaultCat([]);
@@ -137,6 +140,10 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
             crSkillId: defaultskills.length === 0 ? 1 : defaultskills[defaultskills.length - 1].crSkillId + 1
           }
         ]);
+        setFormData((prev: any) => ({
+          ...prev,
+          isSkillsInvalid: false, // Include the new property in the state
+        }));
       }
   
       e.target.value = '';
@@ -213,10 +220,19 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
   const selectHandler = (e: any) => {
 
     setFormData((prev: any) => ({
-      ...prev, gameCategoryId: e.target.value
+      ...prev, gameCategoryId: e.target.value,
+      isCategoryIdInvalid: false, 
     }))
   }
-
+  const checkvalue = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const trimmedValue1 = e.currentTarget.value.trim(); // Use currentTarget instead of target
+    if (trimmedValue1 !== '') {
+      setFormData((prev: any) => ({
+        ...prev,
+        isStoryTitleInvalid: false,
+      }));
+    }
+  };
   const defaultCat = [
     { catId: 1, catName: 'Cat1' },
     { catId: 2, catName: 'Cat2' },
@@ -296,7 +312,26 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
     setValue(event.target.value);
     setFormData((prev: any) => ({ ...prev, gameStoryLine: event.target.value }))
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Call getBlockData with both game ID and translation ID
+        if(languages){
+          const blockData = await getGameStoryLine(id, languages);
 
+        console.log("updatedBlockData", blockData.gameStoryLine);
+        setStoryline(blockData.gameStoryLine)
+        setTitle(blockData.gameTitle)
+        setNonplayerName(blockData.gameNonPlayerName)
+        }
+        
+        // textareaRef.current.value = blockData.content;
+      } catch (error) {
+        console.error("getBlockData Error:", error);
+      }
+    };
+    fetchData();
+  }, [languages, id]);
   useEffect(() => {
     if (textareaRef && textareaRef.current) {
       textareaRef.current.style.height = "0px";
@@ -367,11 +402,22 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
               //placeholder="eg. Admin"
               //name="gameAuthorName"
               width="500px"
-              value={formData?.gameTitle}
-              onChange={handleChange}
-
+              // value={formData?.gameTitle}
+              // onChange={handleChange}
+              value={languages !== undefined && languages !== null && languages !== '' ? String(title) : formData?.gameTitle}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                // Check if languages is empty
+                if (languages === undefined || languages === null || languages === '') {
+                  // Call the handleChange function
+                  handleChange(e);
+                }
+              }}
    placeholder="eg. Marketing Strategy"
     name="gameTitle"
+    onKeyPress={checkvalue}
+    style={{
+      border: formData.isStoryTitleInvalid ? '1px solid red' : '1px solid #ccc',
+    }}
   >
     
   </InputField>
@@ -396,7 +442,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                 maxH='300px !important' 
                 h='stretch'
                 cursor='text'
-                style={{ overflowY: 'auto' }}  
+                style={{ overflowY: 'auto', border: formData.isSkillsInvalid ? '1px solid red' : '1px solid #ccc', }} 
               >
                 { defaultskills && defaultskills?.map((tag: any, index: any) => {
                   return (
@@ -432,6 +478,10 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                   p='0px'
                   onKeyDown={(e: any) => keyPressSkill(e)}
                   fontSize='sm'
+                  style={{
+                    resize: 'none', // This property prevents the textarea from being resized by the user
+                    height: '100%', // Set the initial height of the textarea
+                  }}
                 />
               </Flex>
               <Text fontSize='xs' color='gray.500' mt='2px' style={{ textAlign: 'left' }}>
@@ -469,17 +519,26 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
               <textarea
                 ref={textareaRef}
                 style={styles.textareaDefaultStyle}
-                onChange={textAreaChange}
+                // onChange={textAreaChange}
+                onChange={(e) => {
+                  // Check if languages is empty
+                  if (languages === undefined || languages === null || languages === '') {
+                    // Call the textAreaChange function
+                    textAreaChange(e);
+                  }
+                }}
                 // mb="10px"
                 id="storyline"
                 // label="Storyline"
                 placeholder="eg. Embark on the 'Market Mastery Quest' where entrepreneur Alex navigates a virtual realm, mastering marketing strategy through dynamic challenges, rivalries, and ethical choices, aiming to emerge as the ultimate market master. Transforming learning into a thrilling adventure, this game blends strategy and innovation for real-world business success."
                 name="gameStoryLine"
+                value={languages !== undefined && languages !== null && languages !== '' ? String(storyLine) : formData?.gameStoryLine}
+
               // value={formData?.gameStoryLine}
               // onChange={handleChange}
 
               >
-                {formData?.gameStoryLine}
+                {/* {formData?.gameStoryLine} */}
               </textarea>
 
             </Box>
@@ -553,6 +612,9 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                   minH='30px'
                   cursor='pointer'
                   fontSize='sm'
+                  style={{
+                    border: formData.isCategoryIdInvalid ? '1px solid red' : '1px solid #ccc',
+                  }} 
                 >
                   {defaultCat.map((tag) => (
                     <option key={tag.catId} value={tag.catId}>

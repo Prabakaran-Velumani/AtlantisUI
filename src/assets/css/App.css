@@ -467,6 +467,7 @@ font-family: 'AtlantisText';
   -webkit-background-clip: text;
   color: transparent;
   font-size: 22px;
+  justify-content: center;
 }
 
 .congratulations .content {
@@ -1099,7 +1100,6 @@ font-family: 'AtlantisText';
 
 .AddScores .Main-Content .Game-Screen .Images .reflection-screen .bg-img {
   height: 600px;
-  /* width: 500px;  */
   background-position: center;
 }
 
@@ -1198,6 +1198,32 @@ font-family: 'AtlantisText';
   height: 100%;
   position: absolute;
 }
+.AddScores .Main-Content .Game-Screen .Images .takeaway-screen .bg-img {
+height: 620px; 
+/* width: 500px;  */
+background-position: center;
+}
+.takeaway-screen .bg-take {
+height: 700px; 
+width: 800px; 
+background-position: center;
+}
+.takeaway-screen .bg-lead {
+height: 600px; 
+width: 800px; 
+background-position: center;
+}
+.AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box {
+display: flex;
+width: 570px;
+height: 265px;
+position: absolute;
+flex-direction: column;
+transform: translate(-3px, 33px);
+}
+.AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box  .content {  
+width: 100%;
+display: flex;
 
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .bg-img {
   height: 620px;
@@ -1228,8 +1254,6 @@ font-family: 'AtlantisText';
   flex-direction: column;
   transform: translate(-3px, 33px);
   overflow-y: auto;
-  /*scrollbar-width: thin; /* For Firefox */
-  /*scrollbar-color: #333 #f0f0f0; /* For Firefox */
 }
 
 .AddScores
@@ -1261,6 +1285,15 @@ font-family: 'AtlantisText';
   color: #d9c7a2;
 }
 
+.AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box .content .bullet-content-box {
+  width: 100%; /* Set your desired width 124% or 100%*/
+  color: #D9C7A2;
+  overflow-wrap: break-word; /* Break the word if it exceeds the width */
+}
+.AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box  .content p  {  
+width: 100%;  
+color: #D9C7A2
+} 
 /* .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box .dot-img { 
 position: absolute;
 transform: translate(-167px, -84px);
@@ -1716,6 +1749,103 @@ transform: translate(-167px, -84px);
   position: absolute;
 }
 
+
+  /* WELCOME SCREEN */
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .welcome-screen-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .welcome-screen-box .bg-img {
+    /* height: 600px; modify  */
+    height: 620px;
+    /* width: 580px; modify */
+    background-position: center;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .welcome-screen-box .bg-welcome {
+    height: 715px; 
+    width: 1000px; 
+    background-position: center;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    width: 100%;
+    /* height: 236px; modify */
+    height: 260px;
+    position: absolute;
+    transform:translate(0px, 35vh); 
+    /* transform: translate(0px, 270px);modify */
+    color: #D9C7A2;     
+    /* overflow: hidden;*/
+  }
+
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content {
+    /* width: 380px; modify */
+    width: 448px;
+    overflow-y: scroll;        
+  }
+
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .renderContent{
+    display: flex;            
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .renderContent p{
+    width: 350px;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content p{
+   text-align: center;   
+   font-family: 'AtlantisText'; 
+   letter-spacing: 0.4px;   
+   padding-left: 3px;
+    font-weight: 300;   
+  }
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .author p{
+   text-align: center;   
+   font-family: 'AtlantisText';
+   letter-spacing: 1px;
+   /* color: #D9C7A2;   */
+   /* font-size: 22px; */
+   /*margin-bottom: 10px;*/
+   /*font-size: 2rem;*/
+    /* display: grid; */
+    /* grid-template-columns: 1fr max-content 1fr; */
+    /* grid-column-gap: 1.2rem; */
+    align-items: center;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .author p::before,
+.AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .author p::after {
+    content: "";
+    /* display: block;
+    height: 1px;
+    background-color: currentColor; */
+}
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .title{
+    /* transform: translateY(-44px); modify */
+    transform: translateY(-60px);
+    position: absolute;
+    font-family: 'AtlantisText';
+  }
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .duration { 
+    transform: translateY(-20px);
+  }
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .rewards-box {
+    height: 30%; 
+    justify-content: center;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 {
+    font-weight: 600;
+    font-size: 13px;
+    color: #D9C7A2;   
+    /* margin-right: 30px; */
+  }
+
 .AddScores
   .Main-Content
   .Game-Screen
@@ -2070,6 +2200,81 @@ transform: translate(-167px, -84px);
 
 .buttonfeel {
   /* margin-left: 5px;
+   /* THANK YOU SCREEN */   
+  .AddScores .Main-Content .Game-Screen .Images .section-thankyou-screen{
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .section-thankyou-screen .thankyou-screen-box {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .section-thankyou-screen .thankyou-screen-box .bg-img {
+    height: 800px;
+    width: 715px;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen{
+    font-family: 'AtlantisText';
+    letter-spacing: 0.4px; 
+    color: var(--atlantis-text-color);
+    transform: translate(0, 239px);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 531px;
+    height: 415px;
+    overflow-y: scroll;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .tq-msg{
+    font-family: 'AtlantisText';
+    letter-spacing: 0.4px; 
+    color: var(--atlantis-text-color);
+    /* transform: translate(0, 155px); modify */
+    font-size: 18px;
+  }
+   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .thankyou-screen-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .thankyou-screen-box .bg-img {
+    height: 800px; 
+    width: 700px; 
+    background-position: center;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .thankyou-screen-box .bg-thankyou {
+    height: 800px; 
+    width: 800px; 
+    background-position: center;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback {   
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
+    /* transform: translate(0px, 109px); modify */
+    flex-flow: wrap;    
+  }
+  /* .collect-learner-feedback {
+    overflow-y: scroll;
+  } */
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .about-experience { 
+    font-size: 21px;     
+    /* transform: translate(0px, 97px); modify */
+    color: #bdac88;
+     font-family: 'AtlantisText';
+     margin-top: 8px;
+     font-weight: 300;
+  }
+  .buttonfeel{
+  
+     /* margin-left: 5px;
     margin-right: 5px;*/
   /*background-color: #b3a484;*/
   background: linear-gradient(to bottom right, #e4d2b5, #aa7f4d);
@@ -2171,7 +2376,45 @@ transform: translate(-167px, -84px);
   justify-content: center;
   flex-direction: column;
   width: 100%;
-}
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div div{
+   width: 110px;
+    display: flex;
+    align-items: center;
+  
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div div svg{
+    margin-right: 10px;
+
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div div p{
+    font-size: small;
+    text-align: left;
+  }
+  
+  .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box .content  {
+    font-family: 'AtlantisText';
+    /*letter-spacing: 2px;*/
+    /*color: var(--atlantis-text-color);*/
+    word-break: break-all;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.5px;
+    font-weight: 400;
+    color: #bdac88;    
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box .content img {
+    margin-right: 5px;
+  }
+
+  .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .learner-outcomes {
+    width: 121px;
+    transform: translate(-14px, 1px);
+    font-size: 19px;
+  }
+
 
 .AddScores
   .Main-Content
@@ -2265,7 +2508,7 @@ transform: translate(-167px, -84px);
   height: 100%;
   display: flex;
   align-items: center;
-  margin-left: 12px;
+  margin-left: -15px;
   position: absolute;
   top: 0;
   left: 0;
@@ -2275,7 +2518,7 @@ transform: translate(-167px, -84px);
   height: 100%;
   display: flex;
   align-items: center;
-  margin-right: 12px;
+  margin-right: -15px;
   position: absolute;
   top: 0;
   right: 0;
@@ -2284,7 +2527,6 @@ transform: translate(-167px, -84px);
 @media screen and (max-width: 480px) {
   .NoOfQueue .img-box .img-section .title {
     position: absolute;
-    /* transform: translate(100px, 0); */
     font-size: 25px;
     font-family: 'AtlantisText';
     color: #000;
