@@ -608,3 +608,12 @@ export async function getMaxBlockQuestNo(id) {
     console.log('getMaxBlockQuestNo Error:', err);
   }
 }
+export async function getQuestionOptionsText(id, translationId) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getQuestionOptionsText}${id}/${translationId}`, getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getQuestionOptionsText Error:', err);
+  }
+}
