@@ -71,7 +71,7 @@ const ScreenPreview = () => {
   const [apiImageSet, setApiImageSet] = useState<any>();
   const [staticAssetImageUrls, setStaticAssetImageUrls] = useState<any>(null);
   const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
-  const [preloadAssets, setPreloadAssets] = useState<any>();
+  const [preloadedAssets , setPreloadedAssets ] = useState<any>();
   const [demoBlocks, setDemoBlocks] = useState(null);
   const [navi, setNavi] = useState<string>('');
   const [options, setOptions] = useState(null);
@@ -275,17 +275,17 @@ const ScreenPreview = () => {
 
   useEffect(() => {
     if (apiUrlAssetImageUrls && staticAssetImageUrls) {
-      setPreloadAssets({ ...apiUrlAssetImageUrls, ...staticAssetImageUrls });
+      setPreloadedAssets ({ ...apiUrlAssetImageUrls, ...staticAssetImageUrls });
     }
   }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
 
   useEffect(() => {
-    if (gameInfo && preloadAssets) {
+    if (gameInfo && preloadedAssets ) {
       setContentReady(true);
     } else {
       setContentReady(false);
     }
-  }, [gameInfo, preloadAssets]);
+  }, [gameInfo, preloadedAssets ]);
 
   useEffect(()=>{
     dispatch(updatePreviewData({isDispatched: false}));
@@ -444,7 +444,7 @@ const ScreenPreview = () => {
                       className="Main-Content"
                     >
                       <Box
-                        backgroundImage={preloadAssets.backgroundImage}
+                        backgroundImage={preloadedAssets .backgroundImage}
                         w={'100% !important'}
                         h={'100vh'}
                         backgroundRepeat={'no-repeat'}
@@ -457,7 +457,7 @@ const ScreenPreview = () => {
                           {gameInfo && (
                             <WelcomeContentScreen
                               formData={gameInfo.gameData}
-                              imageSrc={preloadAssets?.Screen5}
+                              imageSrc={preloadedAssets?.Screen5}
                               preview={true}
                             />
                           )}
@@ -478,7 +478,7 @@ const ScreenPreview = () => {
                   >
                     <Box
                       color={'rgba(0, 0, 0, 0.5)'}
-                      backgroundImage={preloadAssets?.backgroundImage}
+                      backgroundImage={preloadedAssets?.backgroundImage}
                       w={'100%'}
                       h={'100vh'}
                       backgroundRepeat={'no-repeat'}
@@ -512,7 +512,7 @@ const ScreenPreview = () => {
                           <Img
                             w={'100%'}
                             h={'80vh'}
-                            src={preloadAssets?.note}
+                            src={preloadedAssets?.note}
                           />
                           <Box
                             position={'fixed'}
@@ -551,7 +551,7 @@ const ScreenPreview = () => {
                               justifyContent={'center'}
                               cursor={'pointer'}
                             >
-                              <Img src={preloadAssets.next} w={'200px'} h={'60px'} />
+                              <Img src={preloadedAssets .next} w={'200px'} h={'60px'} />
                             </Box>
                           </Box>
                         </Box>
@@ -569,7 +569,7 @@ const ScreenPreview = () => {
                     position={'relative'}
                   >
                     <Img
-                      src={preloadAssets?.backgroundImage}
+                      src={preloadedAssets?.backgroundImage}
                       maxW={'100%'}
                       maxH={'100%'}
                       w={'100%'}
@@ -591,13 +591,13 @@ const ScreenPreview = () => {
                       w={'100%'}
                       h={'240px'}
                       bottom={'0'}
-                      src={preloadAssets?.dial}
+                      src={preloadedAssets?.dial}
                     />
                     {!showNote && (
                       <>
                         <Box position={'relative'}>
                           <Img
-                            src={preloadAssets?.char}
+                            src={preloadedAssets?.char}
                             position={'fixed'}
                             h={'70px'}
                             w={'25%'}
@@ -637,13 +637,13 @@ const ScreenPreview = () => {
                           bottom={'0'}
                         >
                           <Img
-                            src={preloadAssets?.left}
+                            src={preloadedAssets?.left}
                             w={'50px'}
                             h={'50px'}
                             cursor={'pointer'}
                           />
                           <Img
-                            src={preloadAssets?.right}
+                            src={preloadedAssets?.right}
                             w={'50px'}
                             h={'50px'}
                             cursor={'pointer'}
@@ -664,7 +664,7 @@ const ScreenPreview = () => {
                     position={'relative'}
                   >
                     <Img
-                      src={preloadAssets?.backgroundImage}
+                      src={preloadedAssets?.backgroundImage}
                       maxW={'100%'}
                       maxH={'100%'}
                       w={'100%'}
@@ -682,7 +682,7 @@ const ScreenPreview = () => {
                         transition:
                           'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
                       }}
-                      backgroundImage={preloadAssets?.parch}
+                      backgroundImage={preloadedAssets?.parch}
                       position={'fixed'}
                       w={{ sm: '350px', md: '500px' }}
                       h={{ sm: '50vh', md: ' 550px' }}
@@ -745,7 +745,7 @@ const ScreenPreview = () => {
                               fontSize={'20px'}
                             >
                               <Img
-                                src={selectedOption === ind ? preloadAssets?.on : preloadAssets?.off}
+                                src={selectedOption === ind ? preloadedAssets?.on : preloadedAssets?.off}
                                 h={'30px'}
                                 w={'95%'}
                               />
@@ -761,14 +761,14 @@ const ScreenPreview = () => {
                         left={'-10px'}
                       >
                         <Img
-                          src={preloadAssets?.left}
+                          src={preloadedAssets?.left}
                           w={'50px'}
                           h={'50px'}
                           cursor={'pointer'}
                         />
                         {selectedOption !== null && (
                           <Img
-                            src={preloadAssets?.right}
+                            src={preloadedAssets?.right}
                             w={'50px'}
                             h={'50px'}
                             cursor={'pointer'}
@@ -789,7 +789,7 @@ const ScreenPreview = () => {
                     position={'relative'}
                   >
                     <Img
-                      src={preloadAssets?.backgroundImage}
+                      src={preloadedAssets?.backgroundImage}
                       maxW={'100%'}
                       maxH={'100%'}
                       w={'100%'}
@@ -811,13 +811,13 @@ const ScreenPreview = () => {
                       w={'100%'}
                       h={'240px'}
                       bottom={'0'}
-                      src={preloadAssets?.dial}
+                      src={preloadedAssets?.dial}
                     />
                     {!showNote && (
                       <>
                         <Box position={'relative'}>
                           <Img
-                            src={preloadAssets?.char}
+                            src={preloadedAssets?.char}
                             position={'fixed'}
                             h={'70px'}
                             w={'25%'}
@@ -857,13 +857,13 @@ const ScreenPreview = () => {
                           bottom={'0'}
                         >
                           <Img
-                            src={preloadAssets?.left}
+                            src={preloadedAssets?.left}
                             w={'50px'}
                             h={'50px'}
                             cursor={'pointer'}
                           />
                           <Img
-                            src={preloadAssets?.right}
+                            src={preloadedAssets?.right}
                             w={'50px'}
                             h={'50px'}
                             cursor={'pointer'}
@@ -886,7 +886,7 @@ const ScreenPreview = () => {
                 style={{ perspective: '1000px' }}
               >
                 <Box
-                  backgroundImage={preloadAssets?.backgroundImage}
+                  backgroundImage={preloadedAssets?.backgroundImage}
                   w={'100%'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}
@@ -919,7 +919,7 @@ const ScreenPreview = () => {
                   justifyContent={'center'}
                   alignItems={'center'}
                 >
-                  <Img w={'90%'} h={'80vh'} src={preloadAssets?.feedi} />
+                  <Img w={'90%'} h={'80vh'} src={preloadedAssets?.feedi} />
                   <Box
                     position={'fixed'}
                     w={'50%'}
@@ -943,7 +943,7 @@ const ScreenPreview = () => {
                       cursor={'pointer'}
                       transform={'translate(0px, 100px)'}
                     >
-                      <Img src={preloadAssets?.next} w={'200px'} h={'60px'} />
+                      <Img src={preloadedAssets?.next} w={'200px'} h={'60px'} />
                     </Box>
                   </Box>
                 </Box>
@@ -961,7 +961,7 @@ const ScreenPreview = () => {
                 className="Main-Content"
               >
                 <Box
-                  backgroundImage={preloadAssets?.backgroundImage}
+                  backgroundImage={preloadedAssets?.backgroundImage}
                   w={'100% !important'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}
@@ -974,10 +974,10 @@ const ScreenPreview = () => {
                     <CompletionContentScreen
                       preview={true}
                       formData={gameInfo.gameData}
-                      imageSrc={preloadAssets.Screen1}
+                      imageSrc={preloadedAssets.Screen1}
                       compliData={gameInfo.completionQuestOptions}
                       CompKeyCount={CompKeyCount}
-                      preloadedAssets ={preloadAssets}
+                      preloadedAssets ={preloadedAssets}
                     />
                   </Box>
                 </Box>
@@ -995,7 +995,7 @@ const ScreenPreview = () => {
                 className="Main-Content"
               >
                 <Box
-                 backgroundImage={preloadAssets?.backgroundImage}
+                 backgroundImage={preloadedAssets?.backgroundImage}
                   w={'100% !important'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}
@@ -1008,7 +1008,7 @@ const ScreenPreview = () => {
                   <Box className="Images">
                     <Box className="LearderBoards">
                       <Img
-                        src={preloadAssets?.Screen2}
+                        src={preloadedAssets?.Screen2}
                         alt="Your Image"
                         className="LearderBoards-Img"
                       />
@@ -1029,7 +1029,7 @@ const ScreenPreview = () => {
                 className="Main-Content"
               >
                 <Box
-                  backgroundImage={preloadAssets?.RefBg}
+                  backgroundImage={preloadedAssets?.RefBg}
                   w={'100% !important'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}
@@ -1042,10 +1042,10 @@ const ScreenPreview = () => {
                     <ReflectionContentScreen
                       preview={true}
                       formData={gameInfo.gameData}
-                      imageSrc={preloadAssets?.RefScreen1}
+                      imageSrc={preloadedAssets?.RefScreen1}
                       reflectionQuestions={gameInfo?.reflectionQuestions}
                       reflectionQuestionsdefault={reflectionQuestionsdefault}
-                      preloadedAssets ={preloadAssets}
+                      preloadedAssets ={preloadedAssets}
                     />
                   </Box>
                 </Box>
@@ -1063,7 +1063,7 @@ const ScreenPreview = () => {
                 className="Main-Content"
               >
                 <Box
-                 backgroundImage={preloadAssets?.backgroundImage}
+                 backgroundImage={preloadedAssets?.backgroundImage}
                   w={'100% !important'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}
@@ -1076,8 +1076,8 @@ const ScreenPreview = () => {
                     <TakeAwaysContentScreen
                       preview={true}
                       formData={gameInfo.gameData}
-                      imageSrc={preloadAssets?.Screen4}
-                      preloadedAssets ={preloadAssets}
+                      imageSrc={preloadedAssets?.Screen4}
+                      preloadedAssets={preloadedAssets}
                     />
                   </Box>
                 </Box>
@@ -1096,7 +1096,7 @@ const ScreenPreview = () => {
                   className="Main-Content"
                 >
                   <Box
-                   backgroundImage={preloadAssets?.backgroundImage}
+                   backgroundImage={preloadedAssets?.backgroundImage}
                     w={'100% !important'}
                     h={'100vh'}
                     backgroundRepeat={'no-repeat'}
@@ -1108,9 +1108,9 @@ const ScreenPreview = () => {
                     <Box className="Images">
                       <WelcomeContentScreen
                         formData={gameInfo.gameData}
-                        imageSrc={preloadAssets?.Screen5}
+                        imageSrc={preloadedAssets?.Screen5}
                         preview={true}
-                        preloadedAssets ={preloadAssets}
+                        preloadedAssets ={preloadedAssets}
                       />
                     </Box>
                   </Box>
@@ -1129,7 +1129,7 @@ const ScreenPreview = () => {
                 className="Main-Content"
               >
                 <Box
-                 backgroundImage={preloadAssets?.backgroundImage}
+                 backgroundImage={preloadedAssets?.backgroundImage}
                   w={'100% !important'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}
@@ -1141,15 +1141,15 @@ const ScreenPreview = () => {
                   <Box className="Images">
                     <TyContentScreen
                       formData={gameInfo.gameData}
-                      imageSrc={preloadAssets?.Screen6}
+                      imageSrc={preloadedAssets?.Screen6}
                       preview={true}
-                      preloadedAssets ={preloadAssets}
+                      preloadedAssets ={preloadedAssets}
                     />
                   </Box>
                 </Box>
               </Box>
             )}
-            {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadAssets ={preloadAssets}/>}
+            {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadedAssets  ={preloadedAssets }/>}
               </Flex>
             </Box>
           </motion.div>

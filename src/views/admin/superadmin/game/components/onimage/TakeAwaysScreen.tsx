@@ -12,8 +12,8 @@ const TakewayScreen: React.FC<{
   formData: any;
   imageSrc: any;
   preview: any;
-  preloadssets?: any;
-}> = ({ formData, imageSrc, preview, preloadAssets }) => {
+  preloadedAssets?: any;
+}> = ({ formData, imageSrc, preview, preloadedAssets }) => {
   const data = formData.gameTakeawayContent?.split('\n');
 
   return (
@@ -32,7 +32,7 @@ const TakewayScreen: React.FC<{
                     <Box className="content">
                       <>
                         <Img
-                          src={preloadAssets?.bull ?? bull}
+                          src={preloadedAssets?.bull ?? bull}
                           className="dot-img"
                           w={'16px'}
                           h={'16px'}
@@ -46,7 +46,7 @@ const TakewayScreen: React.FC<{
                 })}
             </Box>
             <Box className='next-btn'>
-              <Img src={preloadAssets?.next ?? next}  />
+              <Img src={preloadedAssets?.next ?? next}  />
             </Box>
           </Box>
           

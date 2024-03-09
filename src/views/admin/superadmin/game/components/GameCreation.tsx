@@ -57,6 +57,7 @@ import {
   getStoryValidtion,
   getGameCreatorDemoData,
   getSelectedLanguages,
+  getMaxBlockQuestNo
 } from 'utils/game/gameService';
 import { useNavigate, useParams } from 'react-router-dom';
 import Select from 'react-select';
@@ -1857,7 +1858,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
       setOpenQuest(true);
       const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
       if (result.status === 'Success') {
-        const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
+        const maxQuestNo = MaxBlockQuestNumber?.data?.maxBlockQuestNo;
         console.log('Max QuestNo:', maxQuestNo);
         if (maxQuestNo < 5) {
           setOpenQuest(true);
