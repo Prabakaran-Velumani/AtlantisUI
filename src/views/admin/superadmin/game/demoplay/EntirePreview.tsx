@@ -33,6 +33,7 @@ import {
   SliderTrack,
   SliderThumb,
   SliderFilledTrack,
+  Tooltip,
 } from '@chakra-ui/react';
 import next from 'assets/img/screens/next.png';
 import Screen2 from 'assets/img/screens/screen2.png';
@@ -47,6 +48,8 @@ import Setting from 'assets/img/games/settings.png';
 import SettingPad from 'assets/img/games/setting-pad.png';
 import SliderPointer from 'assets/img/games/slider-pointer.png';
 import Okay from 'assets/img/games/OKAY button.png';
+import TooltipImg from 'assets/img/games/tooltip-1.png';
+import TopMenuNDI from 'assets/img/games/top-menu-parts/top-menu-NDI.png'
 // import back from 'assets/img/games/back.jpg';
 // import Back from 'assets/img/games/back.jpg';
 // import Okay from 'assets/img/games/o'
@@ -100,7 +103,7 @@ import ChapterPage from './playcards/Chapters';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
 import { ScoreContext } from './GamePreview';
-
+import Profile from 'assets/img/games/profile.png';
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
@@ -229,6 +232,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   });
   const [audioVolume, setAudioVolume] = useState<any>(0.5);
   const [nextBlockAudioUrl, setNextBlockAudioUrl] = useState<string>('');
+  const [windowWidth,setWindowWidth ] = useState(null);
+  const [windowHeight,setWindowHeight] = useState(null);
+ 
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [game3Position, setGame3Position] = useState({
     previousBlock: '',
@@ -276,13 +282,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   useEffect(() => {
     setDemoBlocks(gameInfo?.blocks);
-    setType(gameInfo?.blocks['1']['1']?.blockChoosen);
-    setData(gameInfo?.blocks['1']['1']);
-    if (gameInfo?.blocks['1']['1']?.blockChoosen === 'Interaction') {
+    setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
+    setData(gameInfo?.blocks[profile?.currentQuest]['1']);
+    if (
+      gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen ===
+      'Interaction'
+    ) {
       const optionsFiltered = gameInfo?.questOptions.filter(
-        (key: any) => key?.qpSequence === gameInfo?.blocks['1']['1']?.blockPrimarySequence,
+        (key: any) =>
+          key?.qpSequence ===
+          gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,
       );
-
       if (gameInfo?.gameData?.gameShuffle) {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -294,6 +304,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
       setOptions(optionsFiltered);
     }
+
     const handleVisibilityChange = () => {
       if (document.hidden) {
         // Pause the audio when the page is hidden
@@ -311,7 +322,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, []);
+  }, [profile?.currentQuest]);
 
   useEffect(() => {
     if (!gameInfo?.bgMusic) {
@@ -424,7 +435,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ? parseInt(current?.blockPrimarySequence.split('.')[0])
       : null;
 
-   
+    setCurrentQuestNo(currentQuest);
 
     const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const prevBlock = current
@@ -442,9 +453,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setData(prevBlock[0]);
     }
   };
- 
-  const getData = (next: any) => {
 
+  const getData = (next: any) => {
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -457,6 +467,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const currentQuest = next
       ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
+    setCurrentQuestNo(currentQuest);
     setGame3Position((prev: any) => ({
       ...prev,
       previousBlock: next?.blockPrimarySequence,
@@ -470,19 +481,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           )
           .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = gameInfo?.questOptions.filter(
         (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
       );
-
       if (gameInfo?.gameData?.gameShuffle) {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [optionsFiltered[i], optionsFiltered[j]] = [
             optionsFiltered[j],
             optionsFiltered[i],
-          ]; // Swap elements at indices i and j
+          ];
         }
       }
       setOptions(optionsFiltered);
@@ -543,37 +552,16 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         return false;
       } else if (navi === 'Complete') {
         if (demoBlocks.hasOwnProperty(nextLevel)) {
+          setProfile((prev: any) => {
+            const data = { ...prev };
+            data.completedLevels = [...data.completedLevels, nextLevel];
+            return data;
+          });
           setType(demoBlocks[nextLevel]['1']?.blockChoosen);
           setData(demoBlocks[nextLevel]['1']);
-          setProfile((prev: any) => {
-            if (!prev.completedLevels.includes(String(nextLevel))) {
-              const updatedCompletedLevels = [
-                ...prev.completedLevels,
-                String(nextLevel),
-              ];
-              return {
-                ...prev,
-                completedLevels: updatedCompletedLevels,
-              };
-            }
-            return prev;
-          });
           setCurrentScreenId(6);
           return false;
         } else {
-          setProfile((prev: any) => {
-            if (!prev.completedLevels.includes(String(nextLevel))) {
-              const updatedCompletedLevels = [
-                ...prev.completedLevels,
-                String(nextLevel),
-              ];
-              return {
-                ...prev,
-                completedLevels: updatedCompletedLevels,
-              };
-            }
-            return prev;
-          });
           setType(null);
           setData(null);
           setCurrentScreenId(6);
@@ -702,7 +690,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (currentScreenId === 7) {
       if (data && type) {
-        setCurrentScreenId(13);
+        setCurrentScreenId(2);
         return false;
       } else {
         setType(null);
@@ -714,17 +702,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     if (nextBlock.length === 0) {
       if (demoBlocks.hasOwnProperty(nextLevel)) {
         setProfile((prev: any) => {
-          if (!prev.completedLevels.includes(String(nextLevel))) {
-            const updatedCompletedLevels = [
-              ...prev.completedLevels,
-              String(nextLevel),
-            ];
-            return {
-              ...prev,
-              completedLevels: updatedCompletedLevels,
-            };
-          }
-          return prev;
+          const data = { ...prev };
+          data.completedLevels = [...data.completedLevels, nextLevel];
+          return data;
         });
         setType(demoBlocks[nextLevel]['1']?.blockChoosen);
         setData(demoBlocks[nextLevel]['1']);
@@ -763,22 +743,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           .map((item: any) => {
             return demoBlocks[currentQuest][item];
           });
-        if (selectedNext[0]?.blockChoosen === 'Interaction') {
-          const optionsFiltered = gameInfo?.questOptions.filter(
-            (key: any) =>
-              key?.qpSequence === selectedNext[0]?.blockPrimarySequence,
-          );
-          if (gameInfo?.gameData?.gameShuffle) {
-            for (let i = optionsFiltered.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [optionsFiltered[i], optionsFiltered[j]] = [
-                optionsFiltered[j],
-                optionsFiltered[i],
-              ];
-            }
-          }
-          setOptions(optionsFiltered);
-        }
         setType(selectedNext && selectedNext[0].blockChoosen);
         setData(selectedNext && selectedNext[0]);
         setGame3Position((prev: any) => ({
@@ -789,19 +753,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
         setProfile((prev: any) => {
-          if (!prev.completedLevels.includes(String(nextLevel))) {
-            const updatedCompletedLevels = [
-              ...prev.completedLevels,
-              String(nextLevel),
-            ];
-            return {
-              ...prev,
-              completedLevels: updatedCompletedLevels,
-            };
-          }
-          return prev;
+          const data = { ...prev };
+          data.completedLevels = [...data.completedLevels, nextLevel];
+          return data;
         });
-        setCurrentScreenId(6);
+        setCurrentScreenId(13);
         return false;
       }
     }
@@ -874,6 +830,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const filterTabOptionsList = tabOptions.filter((tabOption) =>
         reviewTabOptions.includes(tabOption.value),
       );
+
       setFilteredTabOptions(filterTabOptionsList);
     }
   }, [reviewTabOptions]);
@@ -1104,11 +1061,23 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setHomeLeaderBoard(true);
     setCurrentScreenId(4);
   };
+
+  useEffect(() => {
+    const handleResizeWidth = () => setWindowWidth(window.innerWidth);
+    const handleResizeHeight = () => setWindowHeight(window.innerHeight);
+    window.addEventListener('resize', handleResizeWidth);
+    window.addEventListener('resize', handleResizeHeight);
+    return () => {
+        window.removeEventListener('resize', handleResizeWidth);
+        window.removeEventListener('resize', handleResizeHeight);
+    };
+  }, []);
+
   return (
     <ProfileContext.Provider value={profileData}>
-      <Box id="container" className="Play-station">
+      {/* <Box id="container" className="Play-station">
         <Box className="top-menu-home-section">
-          {/* {currentTab !== 0 && informationScreen == '' ?  */}
+         
           <>
             <Img src={TopMenu} className="top-menu-img" />
             <Img
@@ -1136,9 +1105,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               </Text>
             </Box>
           </>
-          {/* /  : null}     */}
-
-          {/* {permission.setting ? */}
+          
           {
             isSettingOpen ? (
               <Box className="Setting-box">
@@ -1148,14 +1115,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     aria-label="slider-ex-4"
                     defaultValue={30}
                     name="musicVolume"
-                    //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
+                   
                   >
                     <SliderTrack
                       className="slider-track"
                       height="15px"
                       borderRadius="80px"
                     >
-                      {/* <Img src={VolumeTrack} /> */}
+                     
                       <SliderFilledTrack
                         className="filled-volume"
                         bg="pink.500"
@@ -1166,7 +1133,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       background={'transparent'}
                       left={'calc(100% - 30%)'}
                     >
-                      {/* <Box color='tomato' as={MdCall} /> */}
+                     
                       <Img src={SliderPointer} />
                     </SliderThumb>
                   </Slider>
@@ -1176,7 +1143,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     aria-label="slider-ex-4"
                     defaultValue={30}
                     name="voiceVolume"
-                    // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
+                    
                   >
                     <SliderTrack
                       className="slider-track"
@@ -1194,9 +1161,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   </Slider>
                 </Box>
                 <Box className="btns">
-                  {/* <Button className='back-btn btn'><Img src={Back} 
-                // onClick={()=> setPermission({...permission, setting: false})}
-                 /></Button> */}
+                  
                   <Button
                     className="okay-btn btn"
                     onClick={() => setIsSettingOpen(false)}
@@ -1206,21 +1171,365 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 </Box>
               </Box>
             ) : null
-            // <Box className="Setting-box off"></Box>
+           
           }
         </Box>
-        {/* <DataContext.Provider value={{
-          "Function": { handleClose: handleClose, dispatch: dispatch, handlePlayGames: handlePlayGames, handleNextTab: handleNextTab, handlePlayQuest: handlePlayQuest, handleCloseInfoScrn },
-          "Response": assignedData,
-          "State": { state, showQuestList, showStartScreen, showWelcomeScreen, showCompletionScreen, showGamePlay, showScreens, showBgImage, setCurrentTab, completedQuest, leanerProfile, countries, setLeanerProfile, PlayQuestNo }
-        }}>          
-          {informationScreen !== '' ? <InformationCompo /> : <DynamicComponent />}
-        </DataContext.Provider>*/}
+      </Box> */}
+      <Box id='container' className='Play-station'>
+        <Box className='top-menu-home-section'>
+          {/* {ShowTopMenu ?  */}
+            <>
+              <Img src={TopMenu} className='top-menu-img' /> 
+              <Tooltip label="Profile" 
+                 display={'flex'} 
+                 justifyContent={'center'} 
+                 alignItems={'center'}                
+                 background={'transparent'} 
+                 boxShadow={'unset'} 
+                 backgroundImage={TooltipImg} 
+                 backgroundRepeat={'no-repeat'} 
+                 backgroundSize={'contain'} 
+                 backgroundPosition={'center'}
+                 filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}                                                 
+                 padding={'10px'}
+                 height={'70px'}
+                 w={'150px'}                 
+                 fontSize={'29px'}                  
+                 fontFamily={'Atlantis'}
+                 color={'#000'}
+                 overflow={'hidden'}
+                 lineHeight={'25px'}
+              >
+                  <Img src={Profile} className='profile-img' 
+                  // onClick={handleProfile} 
+                  />
+              </Tooltip>
+              <Tooltip label="Progress" 
+                display={'flex'} 
+                justifyContent={'center'} 
+                alignItems={'center'} 
+                background={'transparent'} 
+                boxShadow={'unset'} 
+                backgroundImage={TooltipImg} 
+                backgroundRepeat={'no-repeat'} 
+                backgroundSize={'contain'} 
+                backgroundPosition={'center'}
+                filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}                 
+                padding={'10px'}
+                height={'70px'}
+                w={'150px'}
+                fontSize={'29px'}
+                fontFamily={'Atlantis'}
+                color={'#000'}
+                overflow={'hidden'}
+                lineHeight={'25px'}
+              >
+                
+                <Box className='progress-box'>
+                  <Text className='text'>{profile.CurrentQuest ? Math.floor(5) : 0}%</Text>
+                  <Box className='progressing'>
+                    {Array.from({ length: Math.floor(5 / 10)}, (_, index) => (
+                      <Box key={index} className='level'></Box>
+                    ))}
+                  </Box>
+                </Box>
+              </Tooltip>
+              <Tooltip label="Score" 
+                display={'flex'} 
+                justifyContent={'center'} 
+                alignItems={'center'} 
+                background={'transparent'} 
+                boxShadow={'unset'} 
+                backgroundImage={TooltipImg} 
+                backgroundRepeat={'no-repeat'} 
+                backgroundSize={'contain'} 
+                backgroundPosition={'center'}
+                filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}                 
+                padding={'10px'}
+                height={'70px'}
+                w={'150px'}
+                fontSize={'29px'}
+                fontFamily={'Atlantis'}
+                color={'#000'}
+                overflow={'hidden'}
+                lineHeight={'25px'}
+              >
+                <Box className='score-box'>
+                  <Text className='text'>
+                  {(profile &&
+                  profile.score &&
+                  profile.score.length > 0 &&
+                  profile.score.reduce(
+                    (accumulator: number, currentValue: any) => {
+                      return accumulator + currentValue.score;
+                    },
+                    0,
+                  )) ||
+                  0}
+                  </Text>
+                </Box>
+              </Tooltip>   
+              <Tooltip label="Game Overview" 
+                 display={'flex'} 
+                 justifyContent={'center'} 
+                 alignItems={'center'} 
+                 background={'transparent'} 
+                 boxShadow={'unset'} 
+                 backgroundImage={TooltipImg} 
+                 backgroundRepeat={'no-repeat'} 
+                 backgroundSize={'contain'} 
+                 backgroundPosition={'center'}
+                 filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}                                                
+                 padding={'10px'}
+                 height={'70px'}
+                 w={'150px'}
+                 fontSize={'29px'}
+                 fontFamily={'Atlantis'}
+                 color={'#000'}
+                 overflow={'hidden'}
+                 lineHeight={'25px'}
+              >               
+                  <Img src={Overview} className='overview-img' 
+                 
+                  />               
+              </Tooltip>              
+              <Tooltip label="Setting" 
+                display={'flex'} 
+                justifyContent={'center'} 
+                alignItems={'center'} 
+                background={'transparent'} 
+                boxShadow={'unset'} 
+                backgroundImage={TooltipImg} 
+                backgroundRepeat={'no-repeat'} 
+                backgroundSize={'contain'} 
+                backgroundPosition={'center'}
+                filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}                 
+                padding={'10px'}
+                height={'70px'}
+                w={'150px'}
+                fontSize={'29px'}
+                fontFamily={'Atlantis'}
+                color={'#000'}
+                overflow={'hidden'}
+                lineHeight={'25px'}
+              >
+                <Img src={Setting} className='setting-img' 
+                
+                />
+              </Tooltip>                         
+            </>
+          {/* : ShowTopMenuInNDI ?
+            <>
+              <Img src={TopMenuNDI} className='NDI top-menu-img' /> 
+              <Tooltip label="Home Page" 
+                display={'flex'} 
+                justifyContent={'center'} 
+                alignItems={'center'} 
+                background={'transparent'} 
+                boxShadow={'unset'} 
+                backgroundImage={TooltipImg} 
+                backgroundRepeat={'no-repeat'} 
+                backgroundSize={'contain'} 
+                backgroundPosition={'center'}
+                filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}                                                
+                padding={'10px'}
+                height={'70px'}
+                w={'150px'}
+                fontSize={'29px'}
+                fontFamily={'Atlantis'}
+                color={'#000'}
+                overflow={'hidden'}
+                lineHeight={'25px'}
+              >               
+                  <Img src={HomePage} className='NDI home-img' onClick={handleHome} />               
+              </Tooltip>
+              <Tooltip label="Replay" 
+                display={'flex'} 
+                justifyContent={'center'} 
+                alignItems={'center'}                
+                background={'transparent'} 
+                boxShadow={'unset'} 
+                backgroundImage={TooltipImg} 
+                backgroundRepeat={'no-repeat'} 
+                backgroundSize={'contain'} 
+                backgroundPosition={'center'}
+                filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}                                                 
+                padding={'10px'}
+                height={'70px'}
+                w={'150px'}                 
+                fontSize={'29px'}                  
+                fontFamily={'Atlantis'}
+                color={'#000'}
+                overflow={'hidden'}
+                lineHeight={'25px'}
+              >
+                  <Img src={Replay} className='NDI replay-img' onClick={handleReplay} />
+              </Tooltip>     
+              <Tooltip label="Progress" 
+                display={'flex'} 
+                justifyContent={'center'} 
+                alignItems={'center'} 
+                background={'transparent'} 
+                boxShadow={'unset'} 
+                backgroundImage={TooltipImg} 
+                backgroundRepeat={'no-repeat'} 
+                backgroundSize={'contain'} 
+                backgroundPosition={'center'}
+                filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}                 
+                padding={'10px'}
+                height={'70px'}
+                w={'150px'}
+                fontSize={'29px'}
+                fontFamily={'Atlantis'}
+                color={'#000'}
+                overflow={'hidden'}
+                lineHeight={'25px'}
+              >
+                 <Box className='NDI progress-box'>
+                  <Text className='text'>{BlockNo ? Math.floor(progressPercentage) : 0}%</Text>
+                  <Box className='progressing'>
+                    {Array.from({ length: Math.floor(progressPercentage / 10)}, (_, index) => (
+                      <Box key={index} className='level'></Box>
+                    ))}
+                  </Box>
+                </Box>
+              </Tooltip>        
+              <Tooltip label="Score" 
+                display={'flex'} 
+                justifyContent={'center'} 
+                alignItems={'center'} 
+                background={'transparent'} 
+                boxShadow={'unset'} 
+                backgroundImage={TooltipImg} 
+                backgroundRepeat={'no-repeat'} 
+                backgroundSize={'contain'} 
+                backgroundPosition={'center'}
+                filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}                 
+                padding={'10px'}
+                height={'70px'}
+                w={'150px'}
+                fontSize={'29px'}
+                fontFamily={'Atlantis'}
+                color={'#000'}
+                overflow={'hidden'}
+                lineHeight={'25px'}
+              >             
+                <Box className='NDI score-box'>
+                  <Text className='text'>{totalScore == 0 ? 100 : totalScore }</Text>
+                </Box>
+              </Tooltip>              
+            </>
+          : null 
+          } */}   
+
+{
+            isSettingOpen ? (
+              <Box className="Setting-box">
+                <Img src={SettingPad} className="setting-pad" />
+                <Box className="music-volume volumes">
+                  <Slider
+                    aria-label="slider-ex-4"
+                    defaultValue={30}
+                    name="musicVolume"
+                   
+                  >
+                    <SliderTrack
+                      className="slider-track"
+                      height="15px"
+                      borderRadius="80px"
+                    >
+                     
+                      <SliderFilledTrack
+                        className="filled-volume"
+                        bg="pink.500"
+                      />
+                    </SliderTrack>
+                    <SliderThumb
+                      boxSize={9}
+                      background={'transparent'}
+                      left={'calc(100% - 30%)'}
+                    >
+                     
+                      <Img src={SliderPointer} />
+                    </SliderThumb>
+                  </Slider>
+                </Box>
+                <Box className="voice-volume volumes">
+                  <Slider
+                    aria-label="slider-ex-4"
+                    defaultValue={30}
+                    name="voiceVolume"
+                    
+                  >
+                    <SliderTrack
+                      className="slider-track"
+                      height="15px"
+                      borderRadius="80px"
+                    >
+                      <SliderFilledTrack
+                        className="filled-volume"
+                        bg="pink.500"
+                      />
+                    </SliderTrack>
+                    <SliderThumb boxSize={9} background={'transparent'}>
+                      <Img src={SliderPointer} />
+                    </SliderThumb>
+                  </Slider>
+                </Box>
+                <Box className="btns">
+                  
+                  <Button
+                    className="okay-btn btn"
+                    onClick={() => setIsSettingOpen(false)}
+                  >
+                    <Img src={Okay} />
+                  </Button>
+                </Box>
+              </Box>
+            ) : null
+           
+          }
+
+
+  {/* ashiq code  */}
+          {/* {permission.setting ?
+            <Box className='Setting-box'>
+              <Img src={SettingPad} className='setting-pad' />
+              <Box className='music-volume volumes'>
+                <Slider aria-label='slider-ex-4' defaultValue={30} name='musicVolume' onChange={handleMusicVolume} value={rangeValue?.musicVolume}>
+                  <SliderTrack className='slider-track'  height='15px' borderRadius='80px'>
+                   
+                    <SliderFilledTrack className='filled-volume' bg='pink.500' />
+                  </SliderTrack>
+                  <SliderThumb boxSize={9} background={'transparent'} left={'calc(100% - 30%)'}>
+                  
+                    <Img src={SliderPointer} />
+                  </SliderThumb>
+                </Slider>
+              </Box>
+              <Box className='voice-volume volumes'>
+                <Slider aria-label='slider-ex-4' defaultValue={30} name='voiceVolume' onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}>
+                  <SliderTrack className='slider-track' height='15px' borderRadius='80px'>
+                    <SliderFilledTrack className='filled-volume' bg='pink.500' />
+                  </SliderTrack>
+                  <SliderThumb boxSize={9} background={'transparent'}>
+                    <Img src={SliderPointer} />
+                  </SliderThumb>
+                </Slider>
+              </Box>
+              <Box className='btns'>
+                <Button className='back-btn btn'><Img src={Back} onClick={()=> setPermission({...permission, setting: false})} /></Button>
+                <Button className='okay-btn btn'><Img src={Okay} /></Button>
+              </Box>
+            </Box>
+          : <Box className='Setting-box off'></Box> } */}
+
+        </Box>
       </Box>
-      <Flex height="100vh" className={currentScreenId === 2 ? '' : 'AddScores'}>
+      {/* <Flex height="100vh" className={currentScreenId === 2 || currentScreenId === 12 || currentScreenId === 13? '' : 'AddScores'}> */}
         {(() => {
           switch (currentScreenId) {
-            case 0:
+            case 0: 
               return (
                 <>
                   {
@@ -1244,7 +1553,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     animate={{ opacity: 1, background: '#0000' }}
                     transition={{ duration: 0.3, delay: 0.5 }}
                   > */}
-                  <Box
+                  {/* <Box
                     w={'100%'}
                     h={'100vh'}
                     alignItems={'center'}
@@ -1264,17 +1573,18 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       justifyContent={'center'}
                       className="Game-Screen"
                     >
-                      <Box className="Images" h={'100vh !important'}>
+                      <Box className="Images" h={'100vh !important'}> */}
                         <Welcome
                           intro={audio}
                           setCurrentScreenId={setCurrentScreenId}
                           formData={gameInfo?.gameData}
-                          imageSrc={Screen5}
+                          imageSrc={backgroundScreenUrl}
+                          screen={Screen5}
                           preview={true}
                         />
-                      </Box>
+                      {/* </Box>
                     </Box>
-                  </Box>
+                  </Box> */}
                   {/* </motion.div> */}
                 </>
               );
@@ -1288,6 +1598,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   > */}
                   {data && type && (
                     <Story
+                      windowWidth={windowWidth}
+                      windowHeight={windowHeight}
                       prevData={prevData}
                       currentScore={currentScore}
                       selectedNpc={gameInfo?.gameNonPlayerUrl}
@@ -1733,12 +2045,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 <>
                   {/* <SimpleGrid columns={{ base: 1 }}> */}
                   <ChapterPage
-                    setCurrentQuestNo={setCurrentQuestNo}
                     currentQuestNo={currentQuestNo}
                     formData={gameInfo?.gameData}
                     imageSrc={backgroundScreenUrl}
                     demoBlocks={demoBlocks}
                     questOptions={gameInfo?.questOptions}
+                    setCurrentQuestNo={setCurrentQuestNo}
                     setCurrentScreenId={setCurrentScreenId}
                   />
                   {/* </SimpleGrid> */}
@@ -1753,7 +2065,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return <h1>Loading Screen </h1>;
           }
         })()}
-      </Flex>
+      {/* </Flex> */}
       {isReviewDemo && (
         <Menu isOpen={isMenuOpen}>
           <MenuButton

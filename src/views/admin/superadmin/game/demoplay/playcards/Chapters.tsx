@@ -1,4 +1,13 @@
-import { Box, Button, Icon, Img, SimpleGrid, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Icon,
+  Img,
+  SimpleGrid,
+  Text,
+} from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MdClose } from 'react-icons/md';
@@ -32,6 +41,7 @@ const ChapterPage: React.FC<{
 }) => {
   const [questScores, setQuestScores] = useState(null);
   // const [completed, setCompleted] = useState(['1']);
+
   useEffect(() => {
     const groupedByQuest: any = {};
     questOptions.forEach((item: any) => {
@@ -65,7 +75,7 @@ const ChapterPage: React.FC<{
     }
     setQuestScores(maxScoresByQuest);
   }, []);
-  const { profile } = useContext(ScoreContext);
+  const { profile, setProfile } = useContext(ScoreContext);
   // useEffect(() => {
   //   if (profile.completedLevels.length !== 0) {
   //     const completedLevels = profile.completedLevels.map(
@@ -77,15 +87,36 @@ const ChapterPage: React.FC<{
   const handleChapter = (it: any) => {
     if (profile.completedLevels.includes(it)) {
       setCurrentScreenId(1);
-      setCurrentQuestNo(it);
+      setProfile((prev: any) => ({
+        ...prev,
+        currentQuest: it,
+      }));
     }
   };
 
-  console.log(profile.score);
-  console.log(profile.completedLevels)
+  const container = {
+    hidden: { opacity: 1, scale: 0 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        delayChildren: 0.5,
+        staggerChildren: 1,
+      },
+    },
+  };
+
+  const item = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+    },
+  };
+
   return (
     <>
-      <Box className="Play-game NoOfQueue">
+      {/* <Box className="Play-game NoOfQueue">
         <Box
           position={'fixed'}
           top={0}
@@ -111,7 +142,7 @@ const ChapterPage: React.FC<{
                 <Box className="content-box" overflowY={'scroll'}>
                   <SimpleGrid columns={{ base: 1, sm: 1, md: 3 }}>
                     {demoBlocks &&
-                      Object.keys(demoBlocks).map((it, num) => {
+                      Object.keys(demoBlocks).map((it:any, num:number) => {
                         return (
                           <Box
                             className="queue-box"
@@ -137,7 +168,7 @@ const ChapterPage: React.FC<{
                                       accumulator: number,
                                       currentValue: any,
                                     ) => {
-                                      return currentValue.quest === it
+                                      return currentValue.quest === parseInt(it)
                                         ? accumulator + currentValue.score
                                         : accumulator;
                                     },
@@ -157,6 +188,129 @@ const ChapterPage: React.FC<{
             </Box>
           </motion.div>
         </Box>
+      </Box> */}
+      <Box
+        position="relative"
+        maxW="100%"
+        w={'100vw'}
+        height="100vh"
+        backgroundImage={imageSrc}
+        backgroundSize={'cover'}
+        backgroundRepeat={'no-repeat'}
+      >
+        <Grid
+          templateColumns="repeat(1, 1fr)"
+          gap={4}
+          position="absolute"
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+          width="75%"
+        >
+          <GridItem colSpan={1} position={'relative'}>
+            <Img
+              src={QueueBackground}
+              h={'auto'}
+              maxW={'100%'}
+              loading="lazy"
+            />
+            <Box
+              className={'chapters_list_box'}
+             
+            >
+              <Box w={'90%'}>
+                <motion.div
+                  className="container"
+                  variants={container}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={2}>
+                    {demoBlocks &&
+                      Object.keys(demoBlocks).map((it: any, num: number) => {
+                        return (
+                          <motion.div
+                            key={num}
+                            className="item"
+                            variants={item}
+                          >
+                            <Box
+                              position={'relative'}
+                              onClick={() => handleChapter(it)}
+                            >
+                              <Img src={Demo} width={'98%'} />
+                              <Img
+                                className="queue-screen"
+                                position={'absolute'}
+                                left={'-2px'}
+                                top={'-2px'}
+                                src={QueueScreen}
+                                zIndex={999}
+                              />
+                              <Box w={'100%'} position={'absolute'} top={'0'}>
+                                <Text
+                                  textAlign={'center'}
+                                  right={'65px'}
+                                  fontFamily={'AtlantisText'}
+                                  color={'#D9C7A2'}
+                                  zIndex={999999}
+                                >
+                                  Quest {num + 1}
+                                </Text>
+                              </Box>
+                              <Box
+                                w={'100%'}
+                                position={'absolute'}
+                                bottom={'0'}
+                                color={'#D9C7A2'}
+                                fontFamily={'AtlantisText'}
+                                zIndex={999999}
+                              >
+                                <Text
+                                  className="amount-score"
+                                  textAlign={'center'}  
+                                >
+                                  {(profile &&
+                                    profile.score &&
+                                    profile.score.length > 0 &&
+                                    profile.score.reduce(
+                                      (
+                                        accumulator: number,
+                                        currentValue: any,
+                                      ) => {
+                                        return currentValue.quest ===
+                                          parseInt(it)
+                                          ? accumulator + currentValue.score
+                                          : accumulator;
+                                      },
+                                      0,
+                                    )) ||
+                                    0}
+                                  /{questScores && questScores[it]}{' '}
+                                  <Icon as={BiMoney}/>
+                                </Text>
+                              </Box>
+                              {profile.completedLevels.includes(it) ? null : (
+                                <Img
+                                  src={Lock}
+                                  className="lock"
+                                  width={'97%'}
+                                  position={'absolute'}
+                                  bg={'#2b2828d6'}
+                                  top={'0'}
+                                />
+                              )}
+                            
+                            </Box>
+                          </motion.div>
+                        );
+                      })}
+                  </SimpleGrid>
+                </motion.div>
+              </Box>
+            </Box>
+          </GridItem>
+        </Grid>
       </Box>
     </>
   );

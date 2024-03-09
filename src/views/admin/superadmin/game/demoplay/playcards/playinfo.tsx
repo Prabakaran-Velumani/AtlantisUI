@@ -59,11 +59,11 @@ import ArcheryArrow from 'assets/img/games/archery-arrow.png';
 // const columns = columnsDataCheck;
 export default function PlayInfo(props: {
   // tableData: any;
-  onOpen: any;
-  onClose: any;
-  isOpen: any;
-  startDemo:any;
-  setIsGetsPlayAudioConfirmation: any;
+  onOpen?: any;
+  onClose?: any;
+  isOpen?: any;
+  startDemo?:any;
+  setIsGetsPlayAudioConfirmation?: any;
 }) {
   const { onOpen, onClose, isOpen,startDemo, setIsGetsPlayAudioConfirmation } = props;
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -78,7 +78,7 @@ export default function PlayInfo(props: {
   const submitEmails = async () => {};
   return (
     <>
-    <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
+    <Modal isOpen={true} onClose={onClose} size="lg" isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalBody
@@ -96,7 +96,7 @@ export default function PlayInfo(props: {
             <Box>
               <Text mt={'20px'} fontSize={'25px'} fontWeight={700} mb={'10px'} >Welcome To Atlantis..!</Text>
               <Box ml={'20px'} color={textColor} fontSize={'sm'}>
-              Reviewers, kindly assess the game thoroughly. Provide feedback for each screen by clicking the option in the bottom right corner. Select the screen and add your comments. Your input is invaluable.<br/> <span style={{textAlign: 'center'}}>Thank you.</span>
+                Please play in landscape for Better quality<br/> <span style={{textAlign: 'center'}}>Thank you.</span>
               </Box>
               
               {/* <Text mt={'20px'} mb={'10px'} fontSize={'25px'} fontWeight={700}>Thank You...!</Text> */}
@@ -108,9 +108,9 @@ export default function PlayInfo(props: {
                 h={'46px'}
                 w={'128px'}
                 mb={'10px'}
-                onClick={startDemo}
+                onClick={()=>window.location.reload()}
               >
-                Go
+                Refresh
               </Button>
             </Box>
             </Box>
@@ -119,7 +119,7 @@ export default function PlayInfo(props: {
         </ModalBody>
       </ModalContent>
     </Modal>
-     <Img src={ArcheryArrow} className={"intro-arraow"}/>
+     {/* <Img src={ArcheryArrow} className={"intro-arraow"}/> */}
      </>
   );
 }
