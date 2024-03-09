@@ -50,6 +50,7 @@ import { RootState } from 'store/reducers';
 import { preloadedImages } from 'utils/hooks/function';
 import { FaLeaf } from 'react-icons/fa';
 import { updatePreviewData } from 'store/preview/previewSlice';
+import OrientationLock from 'views/admin/superadmin/game/components/onimage/LockOrientationComp';
 
 // const WelcomeContentScreen = lazy(() => import('./onimage/WelcomeContentScreen'));
 const WelcomeContentScreen = lazy(() => import('./onimage/PreviewWelcomeScreen'));
@@ -113,12 +114,6 @@ const ScreenPreview = () => {
     };
   }, []);
 
-   useEffect(() => {
-    previewScreenRef.current.style.setProperty('--viewport-width', `${viewportWidth}px`);
-    previewScreenRef.current.style.setProperty('--viewport-height', `${viewportHeight}px`);
-  }, [viewportWidth, viewportHeight]);
-  console.log("viewportWidth",viewportWidth)
-  console.log("viewportHeight",viewportHeight)
   useEffect(() => {
     const fetchData = async () => {
       const resolvedResult: any = await preloadedImages(assetImageSrc);
@@ -444,7 +439,7 @@ const ScreenPreview = () => {
   };
 
   return (
-    <Box id="container" ref={previewScreenRef}>
+    <Box id="container">
       <Suspense fallback={<h1>Component1 are loading please wait...</h1>}>
         {contentReady && (
           <motion.div
@@ -452,42 +447,27 @@ const ScreenPreview = () => {
             animate={{ opacity: 1, background: '#0000' }}
             transition={{ duration: 1, delay: 0.5 }}
           >
-            <Box h={'100vh !important'} className="Images">
-              <Flex height="100vh" className="AddScores">
+            <Box className='screen-preview-pagewarpper'>
+              {/* <Flex> */}
                 {currentTab == 3 && (
-                    <Box
-                      w={'100%'}
-                      h={'100vh'}
-                      alignItems={'center'}
-                      justifyContent={'center'}
-                      position={'relative'}
-                      overflow={'visible'}
-                      style={{ perspective: '1000px' }}
-                      className="Main-Content"
-                    >
-                      <Box
+                    
+                      <Box className="screen-preview-bgimg"
                         backgroundImage={preloadAssets.backgroundImage}
-                        w={'100% !important'}
-                        h={'100vh'}
-                        backgroundRepeat={'no-repeat'}
-                        backgroundSize={'cover'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        // className="Game-Screen"
                       >
                         {/* <Box className="Images"> */}
-                          {gameInfo && (
+                          {/* {gameInfo && (*/
                             <WelcomeContentScreen
                               formData={gameInfo.gameData}
                               imageSrc={preloadAssets?.Screen5}
                               preview={true}
+                              preloadAssets={preloadAssets}
                             />
-                          )}
+                        /*  )} */}
                         {/* </Box> */}
                       </Box>
-                    </Box>
-                )}
-                {currentTab === 4 && data && type === 'Note' && (
+
+                 )}
+                {/* {currentTab === 4 && data && type === 'Note' && ( 
                   <Box
                     w={'100%'}
                     h={'100vh'}
@@ -1132,7 +1112,7 @@ const ScreenPreview = () => {
                         formData={gameInfo.gameData}
                         imageSrc={preloadAssets?.Screen5}
                         preview={true}
-                        preloadAssets ={preloadAssets}
+                        preloadedAssets ={preloadAssets}
                       />
                     </Box>
                   </Box>
@@ -1171,8 +1151,8 @@ const ScreenPreview = () => {
                 </Box>
               </Box>
             )}
-            {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadAssets ={preloadAssets}/>}
-              </Flex>
+            {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadAssets ={preloadAssets}/>} */}
+              {/* </Flex> */}
             </Box>
           </motion.div>
         )}

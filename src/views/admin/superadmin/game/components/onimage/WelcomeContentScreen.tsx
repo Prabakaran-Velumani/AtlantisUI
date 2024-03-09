@@ -80,7 +80,7 @@ const WelcomeContentScreen: React.FC<{
       ? formData?.gameLearningOutcome?.split('\n')
       : [];
       setData(dataLearn);
-      console.log(formData?.gameLearningOutcome)
+      // console.log(formData?.gameLearningOutcome)
   }, []);
 
   useEffect(() => {
@@ -137,7 +137,6 @@ const WelcomeContentScreen: React.FC<{
               <Img src={imageSrc} className="bg-img" />
             </Box>
             <Box className="content-box" fontFamily={'gametext'}>
-            <Box className="title" style={{marginTop:"20px"}}>
               <Text
                 className="title"
                 fontSize={{
@@ -148,7 +147,7 @@ const WelcomeContentScreen: React.FC<{
                 }}
               >
                 {formData?.gameTitle}
-     
+                </Text>
                 <Text
                   className="duration"
                   fontSize={{
@@ -173,8 +172,8 @@ const WelcomeContentScreen: React.FC<{
                     </span>
                   </>
                 </Text>
-                </Text></Box>
-                <Box w={'60%'} className="content" style={{marginTop: '40px'}}>
+
+                <Box w={'60%'} className="content">
                   <Text
                     mt={'20px'}
                     fontSize={{
