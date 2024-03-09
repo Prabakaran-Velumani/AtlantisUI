@@ -18,6 +18,7 @@ import GlbPractise from 'views/admin/games/game/components/GlbPractise';
 import ScreenPreview from 'views/admin/superadmin/game/components/ScreenPreview';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
+import { Box } from '@chakra-ui/react';
 
 export default function Main() {
   // eslint-disable-next-line
@@ -34,7 +35,7 @@ export default function Main() {
       <Routes>
         {/* <Route path={'game/glbpractise'} element={<GlbPractise />} /> */}
         <Route path="game/demoplay/:uuid" element={<GamePreview />} />
-        <Route path="game/creator/demoplay/:id" element={<GamePreview />} />
+        <Route path="/game/creator/demoplay/:id" element={<GamePreview />} />
         <Route path="/screen/preview/:id" element={<ScreenPreview />} />
         <Route path="auth/sign-in/default" element={<SignInDefault />} />
         <Route path="auth/*" element={<AuthLayout />} />
@@ -51,7 +52,7 @@ export default function Main() {
           }
         />
         <Route path="/" element={<Navigate to="/admin" replace />} />
-      </Routes>
+      </Routes>      
     </ChakraProvider>
   );
 }

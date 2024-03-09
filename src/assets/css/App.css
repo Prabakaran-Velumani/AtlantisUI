@@ -283,32 +283,22 @@ src: url(../fonts/AGENCYB.TTF);
 
 .AddScores .Main-Content .Game-Screen {
 position: relative;
-/* width: 65%;  modify */
 width: 65%;  
-/* new */
-/* height: 800px; */
-border-radius: 20px;
-/* background: #fff; */
-/* box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08); */
-padding: 20px;
+/* border-radius: 20px; */
 }
 
 .AddScores .Main-Content .Game-Screen .Images {   
 position: relative;
-/* height: 100vh; */
-height: 620px;
-/* box-shadow: inset 2px 2px 16px #80808082;
-background: beige; */
-/* box-shadow: 1px 3px 16px #8080803d; */
+height: 100vh;
+width: 100vw;
 border-radius: 12px;
+/* display: flex;
+justify-content: center;
+align-items: center; */
 }
 .Game-Screen .welcome-game {   
 position: relative;
 height: 100vh;
-/* height: 620px; */
-/* box-shadow: inset 2px 2px 16px #80808082;
-background: beige; */
-/* box-shadow: 1px 3px 16px #8080803d; */
 border-radius: 12px;
 }
 
@@ -1479,17 +1469,28 @@ transform: translate(-167px, -84px);
     height: 800px;
     width: 715px;
   }
+  .AddScores .Main-Content .Game-Screen .Images .Thankyou-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .bg-thankyou {
+    height: 80vh;
+    width: 80vw;
+  }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen{
     font-family: 'AtlantisText';
     letter-spacing: 0.4px; 
     color: var(--atlantis-text-color);
-    transform: translate(0, 239px);
-    position: absolute;
+    /* transform: translate(0, 239px);
+    position: absolute; */
     display: flex;
     flex-direction: column;
-    width: 531px;
-    height: 415px;
-    overflow-y: scroll;
+    width: 65vw;
+    height: 48vh;
+    transform: translate(0, 14%);
+    position: absolute;
   }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .tq-msg{
     font-family: 'AtlantisText';
@@ -1519,11 +1520,12 @@ transform: translate(-167px, -84px);
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback {   
     width: 100%;
     display: flex;
-    flex-direction: column;
-    /* align-items: center; */
+    flex-direction: column;    
     justify-content: center;
     /* transform: translate(0px, 109px); modify */
     flex-flow: wrap;    
+    margin-top: 10px;
+    z-index: 9;
   }
   .collect-learner-feedback {
     overflow-y: scroll;
@@ -1590,7 +1592,7 @@ transform: translate(-167px, -84px);
     display: grid;
     grid-gap: 1.3rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 515px;  
+    width: 60vw;  
     /* overflow-y: scroll; modify
     height: 280px;   */
 
@@ -1611,7 +1613,7 @@ transform: translate(-167px, -84px);
   width: 100%;
   }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div div{
-   width: 110px;
+   width: 100%;
     display: flex;
     align-items: center;
   
@@ -1622,6 +1624,7 @@ transform: translate(-167px, -84px);
   }
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div div p{
     text-align: left;
+    font-size: 14px;
   }
   
 
@@ -2019,15 +2022,10 @@ transform: translate(-167px, -84px);
   }
   .next-btn {
     transform: translate(0, 219px);
-  }
-  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid {
-    width: 383px;
-  }
+  }  
 }
 @media screen and (max-width: 1500px) {
-  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid {
-    width: 383px;
-  }
+  
 }
 @media screen and (max-width: 1300px) {  
   .AddScores .Main-Content .Game-Screen .Images .title {   
@@ -2099,13 +2097,7 @@ transform: translate(-167px, -84px);
   }
   .next-btn {
     transform: translate(0, 220px);
-  }
-  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid {
-    width: 323px !important; 
-  }
-  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div {
-    flex-direction: column;
-  }
+  }   
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div div {
     width: 100%;
 
@@ -2131,7 +2123,14 @@ transform: translate(-167px, -84px);
     transform: translate(0px, 121px);
   }  
   .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid {
-    width: 323px !important; 
+    /* width: 323px !important;  */
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div {
+    flex-direction: column;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div .buttonfeel2{
+    margin-top: 5px;
+    margin-left: 0;
   }
 }
 
@@ -2368,4 +2367,63 @@ transform: translate(-167px, -84px);
 
 .eoq-replay-img{
   z-index: 2;
+}
+
+
+
+
+
+
+
+
+
+/* RESPONSIVE *********************************************** */
+
+@media screen and (orientation: portrait) {
+  #EntirePreview-wrapper {
+    height: 100vh;
+    width: 100vw;
+    position: fixed !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .EntirePreview-content {
+    height: 100vw;
+    width: 100vh;
+    transform: rotate(90deg);
+  }
+
+  .AddScores .Main-Content .Game-Screen {
+    height: 100vw;
+    width: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .AddScores .Main-Content .Game-Screen .Images {
+    height: 100vh;
+    width: 100%;
+  }
+
+  .AddScores .Main-Content .Game-Screen .Images .Thankyou-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vw;
+    width: 100vh;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .bg-thankyou {
+    height: 80vw;
+    width: 80vh;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen {
+    width: 65vh;
+    height: 48vw;
+  }
+  .AddScores .Main-Content .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid {
+    width: 60vh;
+  }
 }
