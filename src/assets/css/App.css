@@ -69,12 +69,20 @@ option {
   background-repeat: no-repeat;
   background-size: cover;
 }
+/* MenuReviewShow */
+.menureviewshow
+{
+  z-index: 100000000;
+}
+.menulistreviewshow
+{
+  z-index: 100000000;
+}
 
 /* Game Story */
 .block-compo {
   display: flex;
   align-items: start;
-  /* border-bottom: 1px solid #e9edf7; */
   border-bottom: 2px solid #f9f9f9;
   padding: 25px 0 !important;
 }
