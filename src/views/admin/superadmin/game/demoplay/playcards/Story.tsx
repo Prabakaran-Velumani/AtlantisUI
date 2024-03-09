@@ -453,13 +453,7 @@ const Story: React.FC<{
           >
             <GridItem colSpan={1} position={'relative'}>
               <Box position={'relative'} className="story_interaction_image">
-                <Img
-                  src={parch}
-
-                  w={'100%'}
-                  h={'100%'}
-                  loading="lazy"
-                />
+                <Img src={parch} w={'100%'} h={'100%'} loading="lazy" />
                 <Box
                   position={'absolute'}
                   top={{ sm: '18px', md: '42px' }}

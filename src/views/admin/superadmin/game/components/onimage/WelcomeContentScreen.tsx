@@ -1,67 +1,31 @@
 import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogCloseButton,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   Box,
-  Button,
-  Flex,
-  FormControl,
-  FormLabel,
-  Grid,
-  GridItem,
-  HStack,
-  Icon,
   Img,
-  Radio,
-  RadioGroup,
-  SimpleGrid,
-  Stack,
-  Switch,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
+  Icon,
   Text,
-  useColorModeValue,
-  useDisclosure,
-  useTheme,
-  useToast,
-  // brindha start
-  Select,
-  Textarea,
-  Link,
-  Slider,
-  Image,
-  IconButton,
   // brindha end
 } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  gameDuplicateQuestionEntirely,
   getGameById,
-  getImages,
   getSkills,
-  updateGame,
 } from 'utils/game/gameService';
-import Card from 'components/card/Card';
-import InputField from 'components/fields/InputField';
-import BadgeImages from '../BadgeImages';
-import { MdClose, MdOutlineCloudUpload } from 'react-icons/md';
 import rew from 'assets/img/screens/Reward Bar.png';
 import back from 'assets/img/screens/back.png';
 import write from 'assets/img/screens/Writing.png';
-import bar from 'assets/img/screens/Bar.png';
-import fill from 'assets/img/screens/Fill.png';
-import bull from 'assets/img/screens/bullet.png';
-import batch from 'assets/img/screens/upback.png';
-import TextField from 'components/fields/TextField';
 import { useParams } from 'react-router-dom';
 import { FaClock } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/reducers';
+import next from 'assets/img/screens/next.png';
+import Author from 'assets/img/screens/Author.png';
+import LearningOutcome from 'assets/img/screens/Learning Outcome.png';
+import Note from 'assets/img/screens/Note.png';
+import Skills from 'assets/img/screens/Skills.png';
+import Story from 'assets/img/screens/Story.png';
+import SkillsLearningOutcome from 'assets/img/screens/Skills & Learning outcome.png';
+
 interface Badge {
   gasId: number;
   gasAssetImage: string;
@@ -77,19 +41,18 @@ const extractLink = (text: any) => {
   }
   return null;
 };
-const WelcomeContentScreen: React.FC<{ formData: any; imageSrc: any, preview: any }> = ({
-  formData,
-  imageSrc,
-  preview
-}) => {
-// const WelcomeContentScreen: React.FC<{ imageSrc: any, preview: any }> = ({
-//   imageSrc,
-//   preview
-// }) => {
+const WelcomeContentScreen: React.FC<{
+  formData: any;
+  imageSrc: any;
+  preview: any;
+  preloadedAssets?: any;
+}> = ({ formData, imageSrc, preview, preloadedAssets}) => {
   const { id } = useParams();
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);
   const [authorArray, setauthorArray] = useState<any[]>([]);
+  const {currentTab } = useSelector((state: RootState) => state.preview);
+
   const [data,setData] = useState<any[]>([]);
   const fetch = async () => {
     const result = await getGameById(id);
@@ -99,7 +62,7 @@ const WelcomeContentScreen: React.FC<{ formData: any; imageSrc: any, preview: an
     } else {
       setProfile(result.data);
     }
-    
+
     const res = await getSkills();
     if (res?.status === 'Success') {
       setApSkl(res?.data);
@@ -110,7 +73,7 @@ const WelcomeContentScreen: React.FC<{ formData: any; imageSrc: any, preview: an
     color: '#D9C7A2',
     marginRight: '4px',
   };
-  
+
   useEffect(() => {
     fetch();
     const dataLearn =
@@ -160,474 +123,334 @@ const WelcomeContentScreen: React.FC<{ formData: any; imageSrc: any, preview: an
 
     return <React.Fragment>{contentWithLinks}</React.Fragment>;
   };
-  // const link = extractLink(formData.gameAdditionalWelcomeNote);
-
- 
-
-
-
+  
   return (
     <>
-      {imageSrc && preview ? (
-       
-        <Box className="welcome-screen">
-          <Box
-            className="welcome-screen-box"
-            // w={{ base: '100%', sm: '100%', md: '100%', lg: '90%' }}
-            // ml={{ base: '10px', sm: '10px', md: '20px', lg: '28px' }}
-            // h={{ base: '150px', sm: '450px', md: '550px', lg: '450px' }}
-            // backgroundImage={imageSrc}
-            // backgroundRepeat={'no-repeat'}
-            // backgroundSize={'contain'}
-            // fontFamily={'content'}
-            // // color="#D9C7A2"
-            // display={'flex'}
-            // justifyContent={'center'}
-            // alignItems={'center'}
-          >
-            <Img src={imageSrc} className="bg-img" />
-          </Box>
-          <Box
-            className="content-box"
-            // h={'250px'}
-            // color="#D9C7A2"
-            fontFamily={'gametext'}
-            // w={'100%'}
-            // mt={{ base: '0px', sm: '0px', md: '10px', lg: '20px' }}
-            // lineHeight={1}
-            // display={'flex'}
-            // justifyContent={'center'}
-            // alignItems={'flex-start'}
-            // textAlign={'center'}
-          >
-            <Text
-              className="title"
-              fontSize={{
-                base: '13px',
-                sm: '13px',
-                md: '15px',
-                lg: '20px',
-              }}
-            >
-              {formData?.gameTitle}
-            </Text>
-            {formData?.gameIsShowGameDuration == 'true' && (
+        <motion.div
+          initial={{ opacity: 0, background: '#000' }}
+          animate={{ opacity: 1, background: '#0000' }}
+          transition={{ duration: .5, delay: 0.5 }}
+        >
+     
+     {imageSrc && preview && currentTab == 3 ? (
+          <Box className="welcome-screen">
+            <Box className="welcome-screen-box">
+              <Img src={imageSrc} className="bg-img" />
+            </Box>
+            <Box className="content-box" fontFamily={'gametext'}>
+            <Box className="title" style={{marginTop:"20px"}}>
               <Text
-                className='duration'
+                className="title"
                 fontSize={{
-                  base: '11px',
-                  sm: '12px',
-                  md: '13px',
-                  lg: '15px',
+                  base: '13px',
+                  sm: '13px',
+                  md: '15px',
+                  lg: '20px',
                 }}
-                mt={'2px'}
-                fontFamily={'content'}
-                position={'absolute'}
-                display={'flex'}
-                alignItems={'center'}
               >
-                <>
-                  {' '}
-                  <Icon as={FaClock} style={customStylesicon} />{' '}
-                  <span style={customStylesicon}>
-                    {formData?.gameDuration > 1
-                      ? formData?.gameDuration + ' mins'
-                      : 'Few mins'}
-                  </span>
-                </>
-              </Text>
-            )}
-            <Box w={'60%'} className="content">
-              {formData?.gameIsShowStoryline == 'true' && (
+                {formData?.gameTitle}
+     
                 <Text
-                  mt={'20px'}
+                  className="duration"
                   fontSize={{
                     base: '11px',
                     sm: '12px',
                     md: '13px',
                     lg: '15px',
                   }}
+                  mt={'2px'}
                   fontFamily={'content'}
+                  position={'absolute'}
+                  display={'flex'}
+                  alignItems={'center'}
                 >
-                  {formData?.gameStoryLine}
-                </Text>
-              )}
-              {formData?.gameIsShowSkill == 'true' ||
-              formData?.gameIsShowLearningOutcome == 'true' ? (
-                <Img src={rew} mt={'25px'} alt="rew" w={'100%'} h={'20px'} />
-              ) : (
-                ''
-              )}
-              <Box
-                display={'flex'}
-                className={
-                  formData?.gameIsShowSkill == 'true' ||
-                  formData?.gameIsShowLearningOutcome === 'true'
-                    ? 'rewards-box'
-                    : 'empty-rewards-box'
-                }
-              >
-                {formData?.gameIsShowSkill == 'true' && (
                   <>
-                    <Box
-                      className="box-1"                     
+                    {' '}
+                    <Icon as={FaClock} style={customStylesicon} />{' '}
+                    <span style={customStylesicon}>
+                      {formData.gameDuration > 1
+                        ? formData.gameDuration + ' mins'
+                        : 'Few mins'}
+                    </span>
+                  </>
+                </Text>
+                </Text></Box>
+                <Box w={'60%'} className="content" style={{marginTop: '40px'}}>
+                  <Text
+                    mt={'20px'}
+                    fontSize={{
+                      base: '11px',
+                      sm: '12px',
+                      md: '13px',
+                      lg: '15px',
+                    }}
+                    fontFamily={'content'}
+                  >
+                    {formData.gameStoryLine}
+                  </Text>
+                  <Img src={rew} mt={'25px'} alt="rew" w={'100%'} h={'20px'} />
+                
+                <Box
+                  display={'flex'}
+                  className={
+                       'rewards-box'
+                  }
+                >
+                    <>
+                      <Box className="box-1">
+                        <Img src={back} className="bg-img" />
+                        <Text
+                          className="skill-text"
+                          style={{ textAlign: 'center' }}
+                          fontFamily={'content'}
+                          color={'black'}
+                        >
+                          Skills
+                        </Text>
+                        <Box
+                          transform={'translate(-2px, -125px)'}
+                          mt={'10px'}
+                          w={'100%'}
+                          h={'60px'}
+                          overflowY={'scroll'}
+                          display={'flex'}
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                          flexDirection={'column'}
+                        >
+                          {authorArray
+                            .map((authorItem, index) => {
+                              const skillName = findSkillName(authorItem);
+                              return skillName;
+                            })
+                            .filter((skillName) => skillName !== null)
+                            .map((filteredSkillName, index) => (
+                              <Box display={'flex'} key={index}>
+                                <Img src={write} w={'25px'} h={'25px'} />
+                                <Box>
+                                  <Box
+                                    display={'flex'}
+                                    w={'50px'}
+                                    h={'20px'}
+                                    justifyContent={'space-between'}
+                                    font-weight={'300'}
+                                    margin-left={'5px'}
+                                  >
+                                    <Text color={'#D9C7A2'}>
+                                      {filteredSkillName}
+                                    </Text>
+                                    <Text></Text>
+                                  </Box>
+                                </Box>
+                              </Box>
+                            ))}
+                        </Box>
+                      </Box>
+                    </>
+                    <>
+                      <Box className="box-1">
+                        <Img src={back} className="bg-img" />
+                        <Text
+                          className="skill-text"
+                          style={{ textAlign: 'center' }}
+                          fontFamily={'content'}
+                          color={'black'}
+                        >
+                          Learning Outcomes
+                        </Text>
+                        <Box
+                          transform={'translate(-2px, -125px)'}
+                          mt={'10px'}
+                          w={'100%'}
+                          h={'60px'}
+                          overflowY={'scroll'}
+                          display={'flex'}
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                          flexDirection={'column'}
+                        >
+                          {data &&
+                            data.map((it: any, ind: number) => {
+                              const bulletIndex = it.indexOf('\u2022');
+                              const contentAfterBullet =
+                                bulletIndex !== -1
+                                  ? it.slice(bulletIndex + 1).trim()
+                                  : it;
+                              return (
+                                <Box display={'flex'} key={ind}>
+                                  <Img src={write} w={'25px'} h={'25px'} />
+                                  <Box>
+                                    <Box
+                                      display={'flex'}
+                                      w={'50px'}
+                                      h={'20px'}
+                                      justifyContent={'space-between'}
+                                      font-weight={'300'}
+                                      margin-left={'5px'}
+                                    >
+                                      <Text color={'#D9C7A2'}>
+                                        {contentAfterBullet}
+                                      </Text>
+                                      <Text></Text>
+                                    </Box>
+                                  </Box>
+                                </Box>
+                              );
+                            })}
+                        </Box>
+                      </Box>
+                    </>
+                </Box>
+
+                  <Box
+                    w={'100%'}
+                    h={'50px'}
+                    position={'relative'}
+                    className="author"
+                  >
+                    <Text
+                      position={'absolute'}
+                      right={'0px'}
+                      left={'0px'}
+                      bottom={'0px'}
+                      top={'20px'}
+                      fontSize={{
+                        base: '11px',
+                        sm: '12px',
+                        md: '13px',
+                        lg: '15px',
+                      }}
+                      fontFamily={'content'}
+                      color={'black'}
                     >
-                      <Img src={back} className="bg-img" />
-                      <Text
-                        className="skill-text"
-                        style={{ textAlign: 'center' }}
-                        fontFamily={'content'}
-                        color={'black'}
-                      >
-                        Skills
-                      </Text>
-                      <Box
-                        transform={'translate(-2px, -125px)'}
-                        mt={'10px'}
-                        w={'100%'}
-                        h={'60px'}
-                        overflowY={'scroll'}
-                        display={'flex'}
-                        justifyContent={'center'}
-                        alignItems={'center'}
-                        flexDirection={'column'}
-                      >
-                        {authorArray
-                          .map((authorItem, index) => {
-                            const skillName = findSkillName(authorItem);
-                            return skillName;
-                          })
-                          .filter((skillName) => skillName !== null)
-                          .map((filteredSkillName, index) => (
-                            <Box display={'flex'} key={index}>
-                              <Img src={write} w={'25px'} h={'25px'} />
-                              <Box>
-                                <Box
-                                  display={'flex'}
-                                  w={'50px'}
-                                  h={'20px'}
-                                  justifyContent={'space-between'}
-                                  font-weight={'300'}
-                                  margin-left={'5px'}
-                                >
-                                  <Text color={'#D9C7A2'}>
-                                    {filteredSkillName}
-                                  </Text>
-                                  <Text></Text>
-                                </Box>
-                                {/*<Box
-                                  backgroundImage={bar}
-                                  w={'50px'}
-                                  h={'20px'}
-                                  backgroundSize={'cover'}
-                                  backgroundRepeat={'no-repeat'}
-                                >
-                                 <Img
-                                    src={fill}
-                                    w={'20%'}
-                                    h={'10px'}
-                                    alt="fill"
-                                  />
-                                </Box>*/}
-                              </Box>
-                            </Box>
-                          ))}
-                        {/*<Box display={'flex'}>
-                          <Img src={write} w={'25px'} h={'25px'} />
-                          <Box>
-                            <Box
-                              display={'flex'}
-                              w={'50px'}
-                              h={'20px'}
-                              justifyContent={'space-between'}
-                            >
-                              <Text color={'#D9C7A2'}>tested</Text>
-                              <Text>20%</Text>
-                            </Box>
-                            <Box
-                              backgroundImage={bar}
-                              w={'50px'}
-                              h={'20px'}
-                              backgroundSize={'cover'}
-                              backgroundRepeat={'no-repeat'}
-                            >
-                              <Img
-                                src={fill}
-                                w={'20%'}
-                                h={'20px'}
-                                alt="fill"
-                              />
-                            </Box>
-                          </Box>
-                        </Box>*/}
-                      </Box>
-                    </Box>
-                  </>
-                )}
-                {formData?.gameIsShowLearningOutcome == 'true' && (
-                  <>
-                    <Box className="box-1">
-                      <Img src={back} className="bg-img" />
-                      <Text
-                        className="skill-text"
-                        style={{ textAlign: 'center' }}
-                        fontFamily={'content'}
-                        color={'black'}
-                      >
-                        Learning Outcomes
-                      </Text>
-                      <Box
-                        transform={'translate(-2px, -125px)'}
-                        mt={'10px'}
-                        w={'100%'}
-                        h={'60px'}
-                        overflowY={'scroll'}
-                        display={'flex'}
-                        justifyContent={'center'}
-                        alignItems={'center'}
-                        flexDirection={'column'}
-                      >
-                        {data &&
-                          data.map((it: any, ind: number) => {
-                            const bulletIndex = it.indexOf('\u2022');
-                            const contentAfterBullet =
-                              bulletIndex !== -1
-                                ? it.slice(bulletIndex + 1).trim()
-                                : it;
-                            return (
-                              <Box display={'flex'} key={ind}>
-                                <Img src={write} w={'25px'} h={'25px'} />
-                                <Box>
-                                  <Box
-                                    display={'flex'}
-                                    w={'50px'}
-                                    h={'20px'}
-                                    justifyContent={'space-between'}
-                                    font-weight={'300'}
-                                    margin-left={'5px'}
-                                  >
-                                    <Text color={'#D9C7A2'}>
-                                      {contentAfterBullet}
-                                    </Text>
-                                    <Text></Text>
-                                  </Box>
-                                </Box>
-                              </Box>
-                            );
-                          })}
-                      </Box>
-                    </Box>
-                  </>
-                )}
+                      *Author* <br /> {formData.gameAuthorName}
+                    </Text>
+                  </Box>
+                  <Box
+                    w={'100%'}
+                    h={'50px'}
+                    position={'relative'}
+                    className="renderContent"
+                  >
+                    <Text
+                      fontSize={{
+                        base: '11px',
+                        sm: '12px',
+                        md: '13px',
+                        lg: '15px',
+                      }}
+                      fontFamily={'content'}
+                    >
+                      {renderContent()}
+                    </Text>
+                  </Box>
               </Box>
-
-              {formData?.gameIsShowAuhorName === 'true' && (
-                <Box
-                  w={'100%'}
-                  h={'50px'}
-                  position={'relative'}
-                  className="author"
-                >
-                  <Text
-                    position={'absolute'}
-                    right={'0px'}
-                    left={'0px'}
-                    bottom={'0px'}
-                    top={'20px'}
-                    fontSize={{
-                      base: '11px',
-                      sm: '12px',
-                      md: '13px',
-                      lg: '15px',
-                    }}
-                    fontFamily={'content'}
-                    color={'black'}
-                  >
-                    *Author* <br /> {formData?.gameAuthorName}
-                  </Text>
-                </Box>
-              )}
-              {formData?.gameIsShowAdditionalWelcomeNote === 'true' && (
-                <Box
-                  w={'100%'}
-                  h={'50px'}
-                  position={'relative'}
-                  className="renderContent"
-                >
-                  <Text
-                    fontSize={{
-                      base: '11px',
-                      sm: '12px',
-                      md: '13px',
-                      lg: '15px',
-                    }}
-                    fontFamily={'content'}
-                  >
-                    {renderContent()}
-                  </Text>
-                </Box>
-              )}
             </Box>
-          </Box>
-        </Box>
+       </Box>
       ) : (
-        <Box className="welcome-screen">
-          <Box className="welcome-screen-box">
-            <Img src={imageSrc} className="bg-img" />
-          </Box>
-          <Box className="content-box" fontFamily={'gametext'}>
-            <Text
-              className="title"
-              fontSize={{
-                base: '13px',
-                sm: '13px',
-                md: '15px',
-                lg: '20px',
-              }}
-            >
-              {formData?.gameTitle}
-            </Text>
-            {formData?.gameIsShowGameDuration === 'true' && (
+          <Box className="welcome-screen">
+            <Box className="welcome-screen-box">
+              <Img src={imageSrc} className="bg-img" />
+            </Box>
+            <Box className="content-box" fontFamily={'gametext'}>
               <Text
-                className='duration'
+                className="title"
                 fontSize={{
-                  base: '11px',
-                  sm: '12px',
-                  md: '13px',
-                  lg: '15px',
+                  base: '13px',
+                  sm: '13px',
+                  md: '15px',
+                  lg: '20px',
                 }}
-                mt={'2px'}
-                fontFamily={'content'}
-                position={'absolute'}
-                display={'flex'}
-                alignItems={'center'}
               >
-                <>
-                  {' '}
-                  <Icon as={FaClock} style={customStylesicon} />{' '}
-                  <span style={customStylesicon}>
-                    {formData?.gameDuration > 1
-                      ? formData?.gameDuration + ' mins'
-                      : 'Few mins'}
-                  </span>
-                </>
+                {formData.gameTitle}
               </Text>
-            )}
-            <Box w={'60%'} className="content">
-              {formData?.gameIsShowStoryline === 'true' && (
+              {formData.gameIsShowGameDuration === 'true' && (
                 <Text
-                  mt={'20px'}
+                  className="duration"
                   fontSize={{
                     base: '11px',
                     sm: '12px',
                     md: '13px',
                     lg: '15px',
                   }}
+                  mt={'2px'}
                   fontFamily={'content'}
+                  position={'absolute'}
+                  display={'flex'}
+                  alignItems={'center'}
                 >
-                  {formData?.gameStoryLine}
+                  <>
+                    {' '}
+                    <Icon as={FaClock} style={customStylesicon} />{' '}
+                    <span style={customStylesicon}>
+                      {formData.gameDuration > 1
+                        ? formData.gameDuration + ' mins'
+                        : 'Few mins'}
+                    </span>
+                  </>
                 </Text>
               )}
-              {formData?.gameIsShowSkill === 'true' ||
-              formData?.gameIsShowLearningOutcome === 'true' ? (
-                <Img src={rew} mt={'25px'} alt="rew" w={'100%'} h={'20px'} />
-              ) : (
-                ''
-              )}
-              <Box
-                display={'flex'}
-                className={
-                  formData?.gameIsShowSkill == 'true' ||
-                  formData?.gameIsShowLearningOutcome === 'true'
-                    ? 'rewards-box'
-                    : 'empty-rewards-box'
-                }
-              >
-                {formData?.gameIsShowSkill === 'true' && (
-                  <>
-                    <Box className="box-1">
-                      <Img src={back} className="bg-img" />
-                      <Text
-                        className="skill-text"
-                        style={{ textAlign: 'center' }}
-                        fontFamily={'content'}
-                        color={'black'}
-                      >
-                        Skills
-                      </Text>
-                      <Box
-                        transform={'translate(-2px, -125px)'}
-                        mt={'10px'}
-                        w={'100%'}
-                        h={'60px'}
-                        overflowY={'scroll'}
-                        display={'flex'}
-                        justifyContent={'center'}
-                        alignItems={'center'}
-                        flexDirection={'column'}
-                      >
-                        {authorArray
-                          .map((authorItem, index) => {
-                            const skillName = findSkillName(authorItem);
-                            return skillName;
-                          })
-                          .filter((skillName) => skillName !== null)
-                          .map((filteredSkillName, index) => (
-                            <Box display={'flex'} key={index}>
-                              <Img src={write} w={'25px'} h={'25px'} />
-                              <Box>
-                                <Box
-                                  display={'flex'}
-                                  w={'50px'}
-                                  h={'20px'}
-                                  justifyContent={'space-between'}
-                                  font-weight={'300'}
-                                  margin-left={'5px'}
-                                >
-                                  <Text color={'#D9C7A2'}>
-                                    {filteredSkillName}
-                                  </Text>
-                                  <Text></Text>
-                                </Box>
-                              </Box>
-                            </Box>
-                          ))}
-                      </Box>
-                    </Box>
-                  </>
+              <Box w={'60%'} className="content">
+                {formData.gameIsShowStoryline === 'true' && (
+                  <Text
+                    mt={'20px'}
+                    fontSize={{
+                      base: '11px',
+                      sm: '12px',
+                      md: '13px',
+                      lg: '15px',
+                    }}
+                    fontFamily={'content'}
+                  >
+                    {formData.gameStoryLine}
+                  </Text>
                 )}
-                {formData?.gameIsShowLearningOutcome === 'true' && (
-                  <>
-                    <Box className="box-1">
-                      <Img src={back} className="bg-img" />
-                      <Text
-                        className="skill-text"
-                        style={{ textAlign: 'center' }}
-                        fontFamily={'content'}
-                        color={'black'}
-                      >
-                        Learning Outcomes
-                      </Text>
-                      <Box
-                        transform={'translate(-2px, -125px)'}
-                        mt={'10px'}
-                        w={'100%'}
-                        h={'60px'}
-                        overflowY={'scroll'}
-                        display={'flex'}
-                        justifyContent={'center'}
-                        alignItems={'center'}
-                        flexDirection={'column'}
-                      >
-                        {data &&
-                          data.map((it: any, ind: number) => {
-                            const bulletIndex = it.indexOf('\u2022');
-                            const contentAfterBullet =
-                              bulletIndex !== -1
-                                ? it.slice(bulletIndex + 1).trim()
-                                : it;
-                            return (
-                              <Box display={'flex'} key={ind}>
+                {formData.gameIsShowSkill === 'true' ||
+                formData.gameIsShowLearningOutcome === 'true' ? (
+                  <Img src={rew} mt={'25px'} alt="rew" w={'100%'} h={'20px'} />
+                ) : (
+                  ''
+                )}
+                <Box
+                  display={'flex'}
+                  className={
+                    formData.gameIsShowSkill == 'true' ||
+                    formData.gameIsShowLearningOutcome === 'true'
+                      ? 'rewards-box'
+                      : 'empty-rewards-box'
+                  }
+                >
+                  {formData.gameIsShowSkill === 'true' && (
+                    <>
+                      <Box className="box-1">
+                        <Img src={back} className="bg-img" />
+                        <Text
+                          className="skill-text"
+                          style={{ textAlign: 'center' }}
+                          fontFamily={'content'}
+                          color={'black'}
+                        >
+                          Skills
+                        </Text>
+                        <Box
+                          transform={'translate(-2px, -125px)'}
+                          mt={'10px'}
+                          w={'100%'}
+                          h={'60px'}
+                          overflowY={'scroll'}
+                          display={'flex'}
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                          flexDirection={'column'}
+                        >
+                          {authorArray
+                            .map((authorItem, index) => {
+                              const skillName = findSkillName(authorItem);
+                              return skillName;
+                            })
+                            .filter((skillName) => skillName !== null)
+                            .map((filteredSkillName, index) => (
+                              <Box display={'flex'} key={index}>
                                 <Img src={write} w={'25px'} h={'25px'} />
                                 <Box>
                                   <Box
@@ -639,70 +462,129 @@ const WelcomeContentScreen: React.FC<{ formData: any; imageSrc: any, preview: an
                                     margin-left={'5px'}
                                   >
                                     <Text color={'#D9C7A2'}>
-                                      {contentAfterBullet}
+                                      {filteredSkillName}
                                     </Text>
                                     <Text></Text>
                                   </Box>
                                 </Box>
                               </Box>
-                            );
-                          })}
+                            ))}
+                        </Box>
                       </Box>
-                    </Box>
-                  </>
+                    </>
+                  )}
+                  {formData.gameIsShowLearningOutcome === 'true' && (
+                    <>
+                      <Box className="box-1">
+                        <Img src={back} className="bg-img" />
+                        <Text
+                          className="skill-text"
+                          style={{ textAlign: 'center' }}
+                          fontFamily={'content'}
+                          color={'black'}
+                        >
+                          Learning Outcomes
+                        </Text>
+                        <Box
+                          transform={'translate(-2px, -125px)'}
+                          mt={'10px'}
+                          w={'100%'}
+                          h={'60px'}
+                          overflowY={'scroll'}
+                          display={'flex'}
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                          flexDirection={'column'}
+                        >
+                          {data &&
+                            data.map((it: any, ind: number) => {
+                              const bulletIndex = it.indexOf('\u2022');
+                              const contentAfterBullet =
+                                bulletIndex !== -1
+                                  ? it.slice(bulletIndex + 1).trim()
+                                  : it;
+                              return (
+                                <Box display={'flex'} key={ind}>
+                                  <Img src={write} w={'25px'} h={'25px'} />
+                                  <Box>
+                                    <Box
+                                      display={'flex'}
+                                      w={'50px'}
+                                      h={'20px'}
+                                      justifyContent={'space-between'}
+                                      font-weight={'300'}
+                                      margin-left={'5px'}
+                                    >
+                                      <Text color={'#D9C7A2'}>
+                                        {contentAfterBullet}
+                                      </Text>
+                                      <Text></Text>
+                                    </Box>
+                                  </Box>
+                                </Box>
+                              );
+                            })}
+                        </Box>
+                      </Box>
+                    </>
+                  )}
+                </Box>
+
+                {formData.gameIsShowAuhorName === 'true' && (
+                  <Box
+                    w={'100%'}
+                    h={'50px'}
+                    position={'relative'}
+                    className="author"
+                  >
+                    <Text
+                      position={'absolute'}
+                      right={'0px'}
+                      left={'0px'}
+                      bottom={'0px'}
+                      top={'20px'}
+                      fontSize={{
+                        base: '11px',
+                        sm: '12px',
+                        md: '13px',
+                        lg: '15px',
+                      }}
+                      fontFamily={'content'}
+                      color={'black'}
+                    >
+                      *Author* <br /> {formData.gameAuthorName}
+                    </Text>
+                  </Box>
+                )}
+                {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
+                  <Box
+                    w={'100%'}
+                    h={'50px'}
+                    position={'relative'}
+                    className="renderContent"
+                  >
+                    <Text
+                      fontSize={{
+                        base: '11px',
+                        sm: '12px',
+                        md: '13px',
+                        lg: '15px',
+                      }}
+                      fontFamily={'content'}
+                    >
+                      {renderContent()}
+                    </Text>
+                  </Box>
                 )}
               </Box>
-
-              {formData?.gameIsShowAuhorName === 'true' && (
-                <Box
-                  w={'100%'}
-                  h={'50px'}
-                  position={'relative'}
-                  className="author"
-                >
-                  <Text
-                    position={'absolute'}
-                    right={'0px'}
-                    left={'0px'}
-                    bottom={'0px'}
-                    top={'20px'}
-                    fontSize={{
-                      base: '11px',
-                      sm: '12px',
-                      md: '13px',
-                      lg: '15px',
-                    }}
-                    fontFamily={'content'}
-                    color={'black'}
-                  >
-                    *Author* <br /> {formData?.gameAuthorName}
-                  </Text>
-                </Box>
-              )}
-              {formData?.gameIsShowAdditionalWelcomeNote === 'true' && (
-                <Box
-                  w={'100%'}
-                  h={'50px'}
-                  position={'relative'}
-                  className="renderContent"
-                >
-                  <Text
-                    fontSize={{
-                      base: '11px',
-                      sm: '12px',
-                      md: '13px',
-                      lg: '15px',
-                    }}
-                    fontFamily={'content'}
-                  >
-                    {renderContent()}
-                  </Text>
-                </Box>
-              )}
+              <Box className='next-btn'>
+              <Img src={next}  />
             </Box>
+            </Box>
+           
           </Box>
-        </Box>
       )}
+      </motion.div>
     </>
   );
 };

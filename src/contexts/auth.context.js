@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const AuthContext = React.createContext(null);
+export const AuthContext = React.createContext(null);
 
 export const AuthProvider = ({ userData, children }) => {
   let [user, setUser] = React.useState(userData);
@@ -16,3 +16,5 @@ AuthProvider.propTypes = {
 };
 
 export const useAuth = () => React.useContext(AuthContext);
+
+

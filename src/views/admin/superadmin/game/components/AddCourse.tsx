@@ -2,33 +2,23 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import {
   Box,
   Button,
-  Card,
   Flex,
-  FormControl,
   Text,
   Icon,
-  Spinner,
-  Select,
   useToast,
-  Tooltip,
   useColorModeValue,
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalCloseButton,
   ModalBody,
   ModalFooter,
-  useDisclosure,
 } from '@chakra-ui/react';
-import { MdAdd, MdInfo } from 'react-icons/md';
+import { MdInfo } from 'react-icons/md';
 import InputField from 'components/fields/InputField';
 import { addgame } from 'utils/game/gameService';
 import { getCategoryList, createCategory } from 'utils/category/category';
-import { Navigate } from 'react-router-dom';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import OnToast from 'components/alerts/toast';
-import NFT from 'assets/img/nfts/Nft1.png';
 
 interface Course {
   name: string;

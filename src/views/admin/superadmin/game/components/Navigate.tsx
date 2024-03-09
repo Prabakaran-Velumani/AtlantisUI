@@ -65,32 +65,51 @@ interface MenuItem {
 
   
   useEffect(() => {
+	// const maxIdItem = rest?.items?.reduce((max: any, item: any) => (item.id > max.id ? item : max), rest?.items[0]);
+	const maxIdItem = rest?.items?.reduce((max: any, item: any) => {
+		const itemIdParts = item.id.split('.').map(Number); // Split and convert to numbers
+		const maxIdParts = max.id.split('.').map(Number); // Split and convert to numbers
+	  
+		if (itemIdParts[0] === maxIdParts[0]) {
+		  // If the whole part is the same, compare the decimal part
+		  return itemIdParts[1] > maxIdParts[1] ? item : max;
+		} else {
+		  // If the whole part is different, compare the whole part
+		  return itemIdParts[0] > maxIdParts[0] ? item : max;
+		}
+	  }, rest?.items[0]);
+	  
+	// Now maxIdItem contains the object with the maximum id value
+	console.log('maxIdItem', maxIdItem);
+  console.log("props.seq.id",props.seq)
+	// Get the maximum id value from the items array, ensuring rest?.items is not undefined or null
+	const maxId = rest?.items ? Math.max(...rest?.items.map((item: any) => item.id || 0)) : 0;
+  console.log("maxIdItem === props.seq.id",maxIdItem === props.seq.id)
 	// Define your menu options
 	const menus: Record<string, MenuItem[]> = {
 	  navigation: [
-		{ value: 'Select Block',  key:props.handleBlock },
-		{ value: 'New Block', key: props.setNavigation },
+		{ value: 'Select Block', key: props.handleBlock },
+		...(props.seq && (maxIdItem && maxIdItem.id === props.seq.id) ? [{ value: 'New Block', key: props.handleBlock }] : []),
 		{ value: 'Repeat Question', key: props.setNavigation },
-        { value: 'Replay Point', key: props.setNavigation },
-        { value: 'Complete', key: props.setNavigation },
+		{ value: 'Replay Point', key: props.setNavigation },
+		{ value: 'Complete', key: props.setNavigation },
 	  ],
 	  leadDialog: [
-		{ value: 'Select Block',  key:props.handleBlock },
-		{ value: 'New Block', key: props.setNavigation },
+		{ value: 'Select Block', key: props.handleBlock },
+		...(props.seq && (maxIdItem && maxIdItem.id === props.seq.id) ? [{ value: 'New Block', key: props.handleBlock }] : []),
 		{ value: 'Repeat Question', key: props.setNavigation },
-        { value: 'Replay Point', key: props.setNavigation },
-        { value: 'Complete', key: props.setNavigation },
+		{ value: 'Replay Point', key: props.setNavigation },
+		{ value: 'Complete', key: props.setNavigation },
 	  ],
-      
 	};
-	
+  
 	// Use the received string to set the menu
 	const selectedMenu = menus[rest.tabState] || [];
   
 	// Update the state with the selected menu
 	setMenu(selectedMenu);
-  }, [rest.tabState]);
-  
+  }, [rest.tabState, rest.items]);
+
   // ...
   
 

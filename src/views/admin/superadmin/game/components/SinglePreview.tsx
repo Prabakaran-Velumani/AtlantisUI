@@ -257,8 +257,7 @@ const SinglePreview: React.FC<{
     name();
 
   }, [id]);
-
-  
+ 
   useEffect(() => {
     setShowNote(true);
     setTimeout(() => {
@@ -461,8 +460,7 @@ const SinglePreview: React.FC<{
     setNavi(item?.qpNavigateShow);
     setOptionNavigation(item?.qpNextOption)
     setSelectedOption(ind === selectedOption ? null : ind);
-    // getVoice(null, data?.optionsObject[item], voiceIds?.playerMale);
-    // setCurrentAudio('');
+
   };
 
   const handlePreviewPanelClose = () => {

@@ -254,6 +254,9 @@ const Completion: React.FC<{
           <GridItem colSpan={1} position={'relative'}>
             <Box position={'relative'} w={'100%'} display={'flex'} justifyContent={'center'}>
               <Img src={screen} className="story_completion_image" loading="lazy" />
+              <Box className={'story_completion_image'}>
+
+              </Box>
             </Box>
           </GridItem>
         </Grid>

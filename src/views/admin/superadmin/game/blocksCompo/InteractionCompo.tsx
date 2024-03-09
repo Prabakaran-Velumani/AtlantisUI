@@ -17,30 +17,36 @@ import {
     Tbody,
     Th,
     TableContainer,
-    Checkbox,
+    Checkbox, 
     Textarea,
 } from '@chakra-ui/react'
 import Select from 'react-select';
-import { MdAdd, MdArrowBack, MdArrowForward, MdArrowRight, MdCloudUpload, MdDelete } from 'react-icons/md';
+import { MdAdd, MdArrowBack, MdArrowForward,MdOutlineStickyNote2, MdArrowRight, MdCloudUpload, MdDelete } from 'react-icons/md';
 
 import InputField from 'components/fields/InputField';
 import SelectField from 'components/fields/SelectField';
 import Avatar14 from 'assets/img/avatars/avatar14.png';
 import { BiSolidDuplicate } from 'react-icons/bi';
+import { getBlockData, getQuestionOptionsText, getQuestionResponse } from 'utils/game/gameService';
 import Menu from '../components/Navigate'
 import TagsField from './interactionSkills';
+import {TbHandClick, TbMessages } from 'react-icons/tb';
 import StrightConector from '../components/dragNdrop/strightConector'
 interface PropsInteraction {
+    reviews?:any,
+    id?: number,
+    language?: any,
     seq?: any,
     index?: number,
     name?: any,
     number?: any,
+    handleNDI?:any,
     dummySequence?: any,
     getSeq?: any,
     duplicateSeq?: any,
     delSeq?: any,
     input?: any,
-    handleInput?: any, 
+    handleInput?: any,
     handleSelect?: any,
     characterOption?: any,
     alphabet?: any,
@@ -56,6 +62,7 @@ interface PropsInteraction {
     handleOptionEmotion: any,
     handleResponseEmotion: any,
     handleCheckBox: any,
+    inputtextValue: any,
     setNavigation: any,
     handleBlock: any,
     handleOptionVoice: any,
@@ -65,8 +72,12 @@ interface PropsInteraction {
     items: any,
     handleSelectBlock: any,
     handleTagsChange: any,
-    showSelectBlock?:any,
-    setSelectBlock?:any,
+    showSelectBlock?: any,
+    setSelectBlock?: any,
+    validation?: any,
+    handleMiniNDI?: any,
+    currentseq?:any,
+    ShowReview?:any,
 }
 const customButtonStyles = {
     display: 'flex',
@@ -79,29 +90,90 @@ const customButtonStyles = {
     padding: '5px 10px',
     width: '144px',
     // textAlign: "left",
-    outerWidth:'10px',
+    outerWidth: '10px',
     outline: 'none',
-  };
+};
+interface Option {
+    qpOptionId: number;
+    qpSequence: string;
+    qpQuestNo: number;
+    qpOptions: string;
+    qpResponse: string;
+    contentOptionTextData: { textId: number; content: string }[];
+}
 
-
-const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dummySequence, name, handleInput, handleSelect, input, getSeq, duplicateSeq, delSeq, characterOption, alphabet, setAlphabet, animateBtn, setAnimateBtn, interactionBlock, setInteractionBlock, formData, handleBlockRoll, handleQuestionEmotion, handleOptionEmotion, handleResponseEmotion, handleCheckBox, setNavigation, handleBlock, handleOptionVoice, handleQuestionVoice, countalphabet, setAlphabetCount, items, handleSelectBlock, handleResponseRoll, handleTagsChange,showSelectBlock, setSelectBlock }) => {
+const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index, number, dummySequence, name, handleInput, handleSelect, input, getSeq, duplicateSeq, delSeq, characterOption, alphabet, setAlphabet, animateBtn, setAnimateBtn, interactionBlock, setInteractionBlock, formData, handleBlockRoll, handleQuestionEmotion, handleOptionEmotion, handleResponseEmotion, handleCheckBox, setNavigation, handleBlock, inputtextValue, handleOptionVoice, handleQuestionVoice, countalphabet, setAlphabetCount, items, handleSelectBlock, handleResponseRoll,handleNDI, handleMiniNDI, handleTagsChange, showSelectBlock, setSelectBlock, validation,currentseq, reviews, ShowReview }) => {
     const initial = {
         [`block${index}`]: ['']
     };
     const textareaRef = useRef(null);
     const targetRef = useRef(null);
     const [textareaHeight, setTextareaHeight] = useState<number>(0);
-
     const [keyUp, setKeyUp] = useState<any>(),
         [upComing, setUpComing] = useState<any>([]),
-       
+
         [showAlpha, setShowAlpha] = useState<any>(['A']),
         [isdelHovered, setdelHovered] = useState<any>(false),
         [state, setState] = useState<any>(initial);
     const alphaText = ['A'];
     const borderColor = '#f1e9e9'
 
+    const [matchingBlockContent, setMatchingBlockContent] = useState('');
+    const [filteredOptions, setFilteredOptions] = useState<Option[] | null>(null);   
+     const [ResponseOptions, setResponseOptions] = useState<Option[] | null>(null);
 
+
+    useEffect(() => {
+        console.log('language', language);
+        // Assume you have a function to get the translation ID dynamicallyz
+
+        const fetchData = async () => {
+            try {
+                // Call getBlockData with both game ID and translation ID
+                const fetchedBlockData = await getBlockData(id, language);
+                console.log("fetchedBlockData", fetchedBlockData.data.blockData);
+
+                // Find the block with matching blockPrimarySequence and seq.id
+                const matchingBlock = fetchedBlockData.data.blockData.find((block: any) => block.blockPrimarySequence === seq.id);
+                console.log("Matching Block Updated1:", matchingBlock);
+
+                // Update the state variable with the matching block content
+                if (matchingBlock) {
+                    setMatchingBlockContent(matchingBlock.content);
+                }
+
+                // Set the block data in the state
+                // setBlockData(updatedBlockData);
+            } catch (error) {
+                console.error("getBlockData Error:", error);
+            }
+        };
+
+        fetchData();
+
+        const fetchDataOptionText = async () => {
+            try {
+                const fetchedBlockData = await getQuestionOptionsText(id, language);
+                const filteredOptionsData = fetchedBlockData.optionText.filter((option: Option) => option.qpSequence === seq.id);
+                setFilteredOptions(filteredOptionsData);
+            } catch (error) {
+                console.error("getQuestionOptionsText Error:", error);
+            }
+
+        };
+        fetchDataOptionText();
+        const fetchDataResponse = async () => {
+            try {
+                const fetchedBlockData = await getQuestionResponse(id, language);
+                const filteredOptionsData = fetchedBlockData.optionText.filter((option: Option) => option.qpSequence === seq.id);
+                setResponseOptions(filteredOptionsData);
+            } catch (error) {
+                console.error("getQuestionResponse Error:", error);
+            }
+
+        };
+        fetchDataResponse();
+    }, [language, id, seq.id]);
 
     useEffect(() => {
         // const alphabet = alphaText.map((item: any)=> `${seq.input}${item}`);
@@ -151,7 +223,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
         // }
     }, [alphabet])
 
-   
+
     const handleSubmit1 = (e: any) => {
         e.preventDefault();
 
@@ -234,6 +306,8 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
             [iconId]: isHovered,
         }));
     };
+
+
     const options = [
         { value: 99999, label: 'Narrator' },
         { value: formData.gameNonPlayingCharacterId, label: formData.gameNonPlayerName }
@@ -439,54 +513,54 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
     }
 
     const [showLeftButton, setShowLeftButton] = useState(false);
-  
+
     const [showcount, setShowcount] = useState<any>('');
 
-  const handleLeft = () => {
-    
-    const container = document.getElementById(seq.id);
-    if (container) {
-        container.scrollLeft -= 200;
-        
-        
-        if(container.scrollLeft <= 0 ){
-          setShowLeftButton(false);
-        }
-        
-      }
-  };
+    const handleLeft = () => {
 
-  const handleRight = () => {
-    const container = document.getElementById(seq.id);
-    
-    if (container) {
-      container.scrollLeft += 200;
-      setShowcount(container.scrollLeft+300)
-      if(container.scrollLeft > 0){
-        setShowLeftButton(true);
-      }
-      
-    }
-  };
-  const scrollToElement1 = (id:any) => {
-    const element = document.getElementById(id);
-  if (element) {
-    element.scrollLeft = 0;
-    element.scrollTo({
-      left: 0,
-      behavior: 'auto' // Optionally, use 'auto' or 'smooth' for smooth scrolling
-    });
-  }
-  };
-  const scrollToElement = (inputId:any) => {
-    const inputElement = document.getElementById(inputId);
-    // if (inputElement) {
+        const container = document.getElementById(seq.id);
+        if (container) {
+            container.scrollLeft -= 200;
+
+
+            if (container.scrollLeft <= 0) {
+                setShowLeftButton(false);
+            }
+
+        }
+    };
+
+    const handleRight = () => {
+        const container = document.getElementById(seq.id);
+
+        if (container) {
+            container.scrollLeft += 200;
+            setShowcount(container.scrollLeft + 300)
+            if (container.scrollLeft > 0) {
+                setShowLeftButton(true);
+            }
+
+        }
+    };
+    const scrollToElement1 = (id: any) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollLeft = 0;
+            element.scrollTo({
+                left: 0,
+                behavior: 'auto' // Optionally, use 'auto' or 'smooth' for smooth scrolling
+            });
+        }
+    };
+    const scrollToElement = (inputId: any) => {
+        const inputElement = document.getElementById(inputId);
+        // if (inputElement) {
         //   inputElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
         // }
-    if (targetRef.current) {        
-        targetRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });        
-    }
-  };
+        if (targetRef.current) {
+            targetRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+        }
+    };
     // Styles for Select
     const customStyles = {
         menuPortal: (base: any) => ({ ...base, zIndex: 9999, }), control: (provided: any, state: any) => ({
@@ -495,8 +569,22 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
             borderColor: 'inherit',
             background: 'transparent',
             // height: '45px',
-            width: '180px',
+            width: '130px',
             padding: '0 !important',
+        }),
+    }
+
+    // Styles for Select QuestionEmotionStyles                
+    const questionEmotionStyles = {
+        menuPortal: (base: any) => ({ ...base, zIndex: 9999, }), control: (provided: any, state: any) => ({
+            ...provided,
+            borderRadius: '15px',
+            borderColor: 'inherit',
+            background: 'transparent',
+            // height: '45px',
+            width: '150px',
+            padding: '0 !important',
+            border: validation?.[`QuestionsEmotion${seq.input}`] && '2px solid red'
         }),
     }
     useEffect(() => {
@@ -504,7 +592,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
             // Adjust the height of the textarea based on its content
             textareaRef.current.style.height = 'auto';
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    
+
             // Set the textarea height to adjust the marginTop of the block-score
             setTextareaHeight(textareaRef.current.scrollHeight);
         }
@@ -514,13 +602,13 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
     //         // Adjust the height of the textarea based on its content
     //         textareaRef.current.style.height = 'auto';
     //         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    
+
     //         const titlesBox = document.querySelector('.titles') as HTMLElement | null;
     //         if (titlesBox) {
     //             // Set the margin-top of titlesABC based on the current height of the textarea
     //             titlesBox.style.marginTop = `${textareaRef.current.scrollHeight - 10}px`; // Adjust this value as needed
     //         }
-    
+
     //         // Iterate over the interaction boxes and set margin-top based on seq.id
     //         ['Response', 'Feedback', 'Skills', 'Title'].forEach((interactionType) => {
     //             const interactionBox = document.querySelector(`.${interactionType}`) as HTMLElement | null;
@@ -532,11 +620,11 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
     //         });
     //     }
     // }, [input?.[`Interaction${seq.input}`]?.interaction, input?.[`Note${seq.input}`]?.note, seq.input]);
-    
-    
-    
-    
-    
+
+
+
+
+
 
     // console.log('tempo1', input?.[`Interaction${seq.input}`]?.blockroll)
     // console.log('dummySequence', dummySequence)
@@ -546,29 +634,64 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
 
 
     let focusSeqRef: any;
-    const justClick = (event: any, seq: any) => {        
-      
+    const justClick = (event: any, seq: any) => {
+
         if (event.type === 'click') {
-          focusSeqRef = document.getElementsByClassName(seq.id);
-          const element = focusSeqRef?.[0];
-      
-          if (element) {
-            element.classList.remove('non-caret');
-            element.removeAttribute('readonly');            
-            element.focus();
-            // console.log('event.----------------', element);
-          }
+            focusSeqRef = document.getElementsByClassName(seq.id);
+            const element = focusSeqRef?.[0];
+
+            if (element) {
+                element.classList.remove('non-caret');
+                element.removeAttribute('readonly');
+                element.focus();
+                // console.log('event.----------------', element);
+            }
         }
-      };
+    };
+    const handleMiniNDInewblock = (value?: any,seq?: any, i?: any, option?: any) => {
+
+        console.log('seqoption', seq, 'i', i, 'value', value, 'alp', option);
+        
+        handleNDI(value);
+
+        if (value != '') {
+            console.log('seqoption', seq, 'i', i, 'value', value, 'option', alphabet);
+            // handleSelectBlock({ value: seq.input + 1 }, seq.input + 1, `Option${alp.option}`, `Interaction${seq.input}`);
+            handleSelectBlock({ value: currentseq}, currentseq, option, `Interaction${seq.input}`);
+        }
+    }
+    const MiniBox2 = (props: { seq?: any, i?: number, name?: any, bodyRef?: any }) => {
+        const { seq, i, name, bodyRef } = props;
+        console.log('minibox1',name);
+        return (
+            <Box position={'absolute'} background={'#fff'} p={'10px'} ml={'-300px'} boxShadow={'1px 1px 17px #69627914'} borderRadius={'8px'} zIndex={99} className='MiniShowBox'>
+                <List>
+                    <ListItem onClick={() => handleMiniNDInewblock('Note',seq, i, name)} p={'10px'} display={'flex'} alignItems={'center'} borderBottom={'2px solid #f1f1f170'}><Icon as={MdOutlineStickyNote2} mr={'10px'} color={'#3311db'} />Note</ListItem>
+                    <ListItem onClick={() => handleMiniNDInewblock('Dialog',seq, i, name)} p={'10px'} display={'flex'} alignItems={'center'} borderBottom={'2px solid #f1f1f170'}><Icon as={TbMessages} mr={'10px'} color={'#3311db'} />Dialog</ListItem>
+                    <ListItem onClick={() => handleMiniNDInewblock('Interaction',seq, i, name)} p={'10px'} display={'flex'} alignItems={'center'}><Icon as={TbHandClick} mr={'10px'} color={'#3311db'} />Interaction</ListItem>
+                </List>
+            </Box>
+        )
+      }
+
+    console.log('seq', alphabet);
 
 
-
-
-    console.log('seq',alphabet);
-    
 
     return (
-        <Flex className='block-compo' overflowX={'auto'} scrollBehavior={'smooth'} id={`${seq.id}`}>
+        <Flex className='block-compo' overflowX={'auto'} scrollBehavior={'smooth'} id={`${seq.id}`}
+        borderRadius={'12px'} marginBottom={'0px'}  style={{
+            
+            backgroundColor: ShowReview
+              ? reviews && reviews.find((item: any) => {
+                  const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                  const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                  return isMatched;
+                })
+                  ? '#E2E8F0'
+                  : ''
+              : ''
+          }}>
               {showLeftButton && (
             <Box className='goLeft' display={'flex'} alignItems={'center'} height={'100%'} position={'absolute'} left={0}>
                 <Button onClick={handleLeft} position={'absolute'} left={0} zIndex={9} background={'#0000'} _hover={{background: '#0000'}} boxShadow={'unset'}>
@@ -582,55 +705,55 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                 <Icon as={BiSolidDuplicate} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => duplicateSeq(seq, index, name)} />
                 <Icon as={MdDelete} fontSize={'18px'} color={'grey'} cursor={'pointer'} onClick={() => delSeq(seq, index, name)} />
             </Box>
-            <Box className='box-block' display={'flex'} mr={'8px'} mb={'30px'} >                                           
-                    <Box mr={'10px'} fontWeight={'700'} w={'50px'}>{seq.id}</Box>
-                    <Box mr={'10px'} w={'150px'}>
-                        <Select
-                            placeholder={'Character...'}
-                            id='blockRoll'
-                            name={`Interaction${seq.input}`}
-                            menuPortalTarget={document.body}
-                            styles={{
-                                menuPortal: (base: any) => ({ ...base, zIndex: 9999 }),
-                                control: (provided: any, state: any) => ({
-                                    ...provided,
-                                    borderRadius: '15px',
-                                    height: '40px',
-                                    borderColor: 'inherit',
-                                    background: 'transparent',
-                                    padding: '0 !important',
-                                    width: '150px',
-                                }),
-                            }}
-                            options={options}
-                            value={
-                                options.find(
-                                    (option) =>
-                                        parseInt(input?.[`Interaction${seq.input}`]?.blockRoll, 10)
-                                            ? option.value === parseInt(input?.[`Interaction${seq.input}`]?.blockRoll, 10)
-                                            : ''
-                                ) || null
-                            }
+            <Box className='box-block' display={'flex'} mr={'8px'} mb={'30px'} >
+                <Box mr={'10px'} fontWeight={'700'} w={'50px'}>{seq.id}</Box>
+                <Box mr={'10px'} w={'150px'}>
+                    <Select
+                        placeholder={'Character...'}
+                        id='blockRoll'
+                        name={`Interaction${seq.input}`}
+                        menuPortalTarget={document.body}
+                        styles={{
+                            menuPortal: (base: any) => ({ ...base, zIndex: 9999 }),
+                            control: (provided: any, state: any) => ({
+                                ...provided,
+                                borderRadius: '15px',
+                                height: '40px',
+                                borderColor: 'inherit',
+                                background: 'transparent',
+                                padding: '0 !important',
+                                width: '150px',
+                            }),
+                        }}
+                        options={options}
+                        value={
+                            options.find(
+                                (option) =>
+                                    parseInt(input?.[`Interaction${seq.input}`]?.blockRoll, 10)
+                                        ? option.value === parseInt(input?.[`Interaction${seq.input}`]?.blockRoll, 10)
+                                        : ''
+                            ) || null
+                        }
 
-                            isSearchable={true}
-                            className='react-select'
-                            onChange={(selectedOption: any) => handleBlockRoll(selectedOption, seq.input, `Interaction${seq.input}`)}
-                        />
-                        {/*  // onChange={(selectedOption) => handleCompanyChange(selectedOption)}
+                        isSearchable={true}
+                        className='react-select'
+                        onChange={(selectedOption: any) => handleBlockRoll(selectedOption, seq.input, `Interaction${seq.input}`)}
+                    />
+                    {/*  // onChange={(selectedOption) => handleCompanyChange(selectedOption)}
                             // isClearable={true} // Optional: allow clearing the selection */
 
-                            // value={
-                            //   Category.find(
-                            // (option) => option.value === selected.gameCategoryId,
-                            //  / ) || null
-                            // }
+                        // value={
+                        //   Category.find(
+                        // (option) => option.value === selected.gameCategoryId,
+                        //  / ) || null
+                        // }
 
-                            // styles={customStyle}  
-                        }
-                    </Box>
-                    <Box mr={'10px'}>
-                        <Flex justifyContent={'space-between'}>
-                            {/* <Input
+                        // styles={customStyle}  
+                    }
+                </Box>
+                <Box mr={'10px'}>
+                    <Flex justifyContent={'space-between'}>
+                        {/* <Input
                                 placeholder='Interaction - Type your Question'
                                 id='interaction'
                                 name={`Interaction${seq.input}`}
@@ -640,35 +763,38 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                 w={'260px'}                            
                                 mr={'10px'}
                             /> */}
-                            <Box m={'0 10px 0px 0'} w={'400px'} marginBottom="24px">
-                                <Textarea
-                                    placeholder='Interaction - Type your Question'
-                                    id='interaction'
-                                    className={`${seq.id}`}
-                                    name={`Interaction${seq.input}`}
-                                    onChange={handleInput}
-                                    onClick={(e)=>justClick(e, seq)}
-                                    value={input?.[`Interaction${seq.input}`]?.interaction}
-                                    borderRadius={'15px'}
-                                    // w={'260px'}
-                                    style={{ overflow: 'hidden' }}
-                                    minHeight="45px"
-                                    height={`auto`}
-                                    ref={textareaRef}
-                                    _focusVisible={{borderColor: '#0000', border: '1px solid #e5e5e5', boxShadow: 'unset'}}
-                                    tabIndex={0}
-                                    readOnly={true}
-                                /></Box>
+                        <Box m={'0 10px 0px 0'} w={'400px'} marginBottom="24px">
+                            <Textarea
+                                placeholder='Interaction - Type your Question'
+                                id='interaction'
+                                className={`${seq.id}`}
+                                name={`Interaction${seq.input}`}
+                                onChange={handleInput}
+                                onClick={(e) => justClick(e, seq)}
+                                value={(language ? matchingBlockContent : input?.[`Interaction${seq.input}`]?.interaction)}
+
+                                // value={input?.[`Interaction${seq.input}`]?.interaction}
+                                borderRadius={'15px'}
+                                // w={'260px'}
+                                style={{ overflow: 'hidden', border: validation?.[`Interaction${seq.input}`] && '2px solid red' }}
+                                minHeight="45px"
+                                height={`auto`}
+                                ref={textareaRef}
+                                _focusVisible={{ borderColor: '#0000', border: '1px solid #e5e5e5', boxShadow: 'unset' }}
+                                tabIndex={0}
+                                readOnly={true}
+                            /></Box>
+                        {parseInt(input?.[`Interaction${seq.input}`]?.blockRoll, 10) !== 99999 && (
                             <Box mr={'10px'}>
                                 <Select
                                     placeholder={'Animate...'}
                                     id='interaction'
                                     name={`Interaction${seq.input}`}
                                     menuPortalTarget={document.body}
-                                    styles={customStyles}
+                                    styles={questionEmotionStyles}
                                     options={emotionsOptions}
                                     isSearchable={true}
-                                    
+
                                     isMulti={true}
                                     className='react-select'
                                     // value={
@@ -678,17 +804,36 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                     // }
 
                                     value={input?.[`Interaction${seq.input}`]?.QuestionsEmotion
-                                    ? input?.[`Interaction${seq.input}`]?.QuestionsEmotion.split(',').map((value: string) => ({ // Explicitly specify the type as string
-                                        value,
-                                        label: value,
-                                    }))
-                                    : []}
+                                        ? input?.[`Interaction${seq.input}`]?.QuestionsEmotion.split(',').map((value: string) => ({ // Explicitly specify the type as string
+                                            value,
+                                            label: value,
+                                        }))
+                                        : []}
 
                                     onChange={(selectedOption: any) => handleQuestionEmotion(selectedOption, seq.input, `Interaction${seq.input}`)}
                                 />
                             </Box>
-                            <Box>
-                                {/* <Select
+                        )}
+                                                {interactionBlock?.[`Title${[seq.input]}`] == seq.input ?
+                        <>
+                         <Box mr={'10px'}>
+                                    {/* <Text fontWeight={'800'} fontSize={'16px'} m={'5px 10px 0 0'} textAlign={'center'}>Title</Text> */}
+                                    <Textarea placeholder='Question Title...' name={`Interaction${seq.input}`} onChange={handleInput} value={input?.[`Interaction${[seq.input]}`].quesionTitle} id={`QuestionTitle${seq.input}`} w={'200px'} borderRadius={'15px'} style={{
+                                                            resize: 'none',
+                                                            overflowY: 'hidden',
+                                                            height:  inputtextValue,
+                                                        }}/>
+                         </Box>
+                         <Box w={'5px'} textAlign={'center'} cursor={'pointer'} onClick={handleDelTitles}>
+                         <Icon as={MdDelete} color={'grey'} />
+                         </Box>
+                        </>
+                         : null
+
+                        }
+
+                        <Box>
+                            {/* <Select
                                     placeholder={'Voice...'}
                                     id='interaction'
                                     name={`Interaction${seq.input}`}
@@ -704,81 +849,132 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                     }
                                     onChange={(selectedOption: any) => handleQuestionVoice(selectedOption, seq.input,`Interaction${seq.input}`)}
                                 /> */}
-                            </Box>
-                        </Flex>
-                        <form onSubmit={handleSubmit} style={{ margin: '10px 0' }}>
-                            {alphabet?.filter((alp: any) => alp.seqs === seq.id).map((alp: any, i: number, arr: any[]) => {
-                                const isLastElement = i === arr.length - 1;
-                                // console.log('alp',i)     
-                                const iconId = `deleteIcon_${alp.option}`;
-                                return (
-                                    <Box className='interaction-option' display={'flex'} alignItems={'center'} mb={'10px'}>
-                                        <Box className='interaction-option-del-icon' ml={'2px'} mr={'4px'} cursor={'pointer'} onClick={() => deleteAndRearrange(alp.seqs, alp.option)}>
-                                            <Icon as={MdDelete} color={'grey'} />
+                        </Box>
+                    </Flex>
+                    <form onSubmit={handleSubmit} style={{ margin: '10px 0' }}>
+                        {alphabet?.filter((alp: any) => alp.seqs === seq.id).map((alp: any, i: number, arr: any[]) => {
+                            const isLastElement = i === arr.length - 1;
+                            // console.log('alp',i)     
+                            const iconId = `deleteIcon_${alp.option}`;
+                            return (
+                                <Box className='interaction-option' display={'flex'} alignItems={'center'} mb={'10px'}>
+                                    <Box className='interaction-option-del-icon' ml={'-17px'} mr={'4px'} cursor={'pointer'} onClick={() => deleteAndRearrange(alp.seqs, alp.option)}>
+                                        <Icon as={MdDelete} color={'grey'} />
+                                    </Box>
+                                    <Box key={alp.option} position={'relative'} display={'flex'} >
+                                        {/* Your existing content */}
+                                        <Textarea
+                                            placeholder={`Option${alp.option}`}
+                                            id={`Option${alp.option}`}
+                                            name={`Interaction${seq.input}`}
+                                            onChange={handleInput}
+                                            pl={'25px'}
+                                            onKeyDown={handleKeyDown}
+                                            onBlur={handleFocusOut}
+                                            borderRadius={'15px'}
+                                            border={validation?.[`options${seq.input}${alp.option}`] ? '2px solid red' : '1px solid #e5e5e5'}
+                                            title={alp.option}
+                                            value={language ? (filteredOptions && filteredOptions.find((option: Option) => option.qpOptions === alp.option)?.contentOptionTextData[0]?.content || '') : input?.[`Interaction${seq.input}`]?.optionsObject?.[alp.option]}
+
+                                            // value={language ? option.qpOptions : option.contentOptionTextData[0]?.content}
+                                            // value={input?.[`Interaction${seq.input}`]?.optionsObject?.[alp.option]}
+                                            w={'400px'}
+                                            mr={'10px'}
+                                            style={{
+                                                resize: 'none',
+                                                overflowY: 'hidden',
+                                                height:  inputtextValue,
+                                                border: validation?.[`options${seq.input}${alp.option}`] ? '2px solid red' : '1px solid #e5e5e5'
+                                            }}
+                                        />
+                                        <Box >
+                                            <Text
+                                                position={'absolute'}
+                                                top={'13px'}
+                                                left={'5px'}
+                                                display={'flex'}
+                                                justifyContent={'center'}
+                                                alignItems={'center'}
+                                                h={'11px'}
+                                                w={'11px'}
+                                                bg={'#000'}
+                                                color={'#fff'}
+                                                p={'7px'}
+                                                borderRadius={'30px'}
+                                                fontSize={'10px'}
+                                            >
+                                                {alp.option}
+                                            </Text>
                                         </Box>
-                                        <Box key={alp.option} position={'relative'} display={'flex'} >
-                                            {/* Your existing content */}
-                                            <Input
-                                                placeholder={`Option${alp.option}`}
+
+                                        <Box mr={'10px'}>
+                                            <Select
+                                                placeholder={'Animate...'}
                                                 id={`Option${alp.option}`}
                                                 name={`Interaction${seq.input}`}
-                                                onChange={handleInput}
-                                                pl={'25px'}
-                                                onKeyDown={handleKeyDown}
-                                                onBlur={handleFocusOut}
-                                                borderRadius={'15px'}
-                                                title={alp.option}
-                                                value={input?.[`Interaction${seq.input}`]?.optionsObject?.[alp.option]}
-                                                w={'240px'}
-                                                mr={'10px'}
-                                            />
-                                            <Box >
-                                                <Text
-                                                    position={'absolute'}
-                                                    top={'13px'}
-                                                    left={'5px'}
-                                                    display={'flex'}
-                                                    justifyContent={'center'}
-                                                    alignItems={'center'}
-                                                    h={'11px'}
-                                                    w={'11px'}
-                                                    bg={'#000'}
-                                                    color={'#fff'}
-                                                    p={'7px'}
-                                                    borderRadius={'30px'}
-                                                    fontSize={'10px'}
-                                                >
-                                                    {alp.option}
-                                                </Text>
-                                            </Box>
-                                            <Box mr={'10px'}>
-                                                <Select
-                                                    placeholder={'Animate...'}
-                                                    id={`Option${alp.option}`}
-                                                    name={`Interaction${seq.input}`}
-                                                    menuPortalTarget={document.body}
-                                                    styles={customStyles}
-                                                    options={emotionsOptions}
-                                                    isSearchable={true}
-                                                    className='react-select'
-                                                    isMulti={true}
-                                                    // value={
-                                                    //     emotionsOptions.find(
-                                                    //         (option) => option.value === input?.[`Interaction${seq.input}`]?.optionsemotionObject?.[alp.option]
-                                                    //     ) || null
-                                                    // }
-                                                    value=
-                                                    {input?.[`Interaction${seq.input}`]?.optionsemotionObject?.[alp.option]
+                                                menuPortalTarget={document.body}
+                                                styles={{
+                                                    menuPortal: (base: any) => ({ ...base, zIndex: 9999, }), control: (provided: any, state: any) => ({
+                                                        ...provided,
+                                                        borderRadius: '15px',
+                                                        borderColor: 'inherit',
+                                                        background: 'transparent',
+                                                        // height: '45px',
+                                                        width: '150px',
+                                                        padding: '0 !important',
+                                                        border: validation?.[`optionsEmotion${seq.input}${alp.option}`] && '2px solid red'
+                                                    })
+                                                }}
+                                                options={emotionsOptions}
+                                                isSearchable={true}
+                                                className='react-select'
+                                                isMulti={true}
+                                                // value={
+                                                //     emotionsOptions.find(
+                                                //         (option) => option.value === input?.[`Interaction${seq.input}`]?.optionsemotionObject?.[alp.option]
+                                                //     ) || null
+                                                // }
+                                                value=
+                                                {input?.[`Interaction${seq.input}`]?.optionsemotionObject?.[alp.option]
                                                     ? input?.[`Interaction${seq.input}`]?.optionsemotionObject?.[alp.option].split(',').map((value: string) => ({ // Explicitly specify the type as string
                                                         value,
                                                         label: value,
                                                     }))
                                                     : []}
 
-                                                    onChange={(e: any) => handleOptionEmotion(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)}
-                                                />
-                                            </Box>
-                                            {/* <Box>
+                                                onChange={(e: any) => handleOptionEmotion(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)}
+                                            />
+                                        </Box>
+                                        {interactionBlock?.[`Title${[seq.input]}`] == seq.input ?
+<Box mr={'10px'}> 
+{/* {alphabet.filter((alp: any) => alp.seqs === seq.id).map((alp: any, i: number) => ( */}
+                                        <Box>
+                                            <Textarea
+                                                placeholder={`Title${alp.option}`}
+                                                id={`OptionTitle${alp.option}`}
+                                                name={`Interaction${seq.input}`}
+                                                onChange={handleInput}
+                                                onKeyDown={handleKeyDown}
+                                                onBlur={handleFocusOut}
+                                                title={alp.option}
+                                                value={input?.[`Interaction${seq.input}`]?.optionTitleObject?.[alp.option]}
+                                                pl={'25px'}
+                                                mb={'10px'}
+                                                borderRadius={'15px'}
+                                                w={'200px'}
+                                                style={{
+                                                    resize: 'none',
+                                                    overflowY: 'hidden',
+                                                    height:  inputtextValue,
+                                                }}
+                                            />
+                                        </Box>
+                                 
+                                    </Box>
+                                    : null
+
+                                }
+                                        {/* <Box>
                                                 <Select
                                                     placeholder={'Voice...'}
                                                     id={`Option${alp.option}`}
@@ -796,239 +992,73 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                                     onChange={(e: any) => handleOptionVoice(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)}
                                                 />
                                             </Box> */}
-                                        </Box>
                                     </Box>
-                                )
-                            })}
-                            {/* {keyUp ?  */}
+                                </Box>
+                            )
+                        })}
+                        {/* {keyUp ?  */}
 
-                            <Box position={'relative'} opacity={0.6} cursor={'pointer'} onClick={handleSubmit} display={'flex'}>
-                                <Box visibility={'hidden'} w={'20px'}><Icon as={MdDelete} /></Box>
-                                <Input
-                                    placeholder={'Add Option'}
-                                    name={alphabet}
-                                    pl={'25px'}
-                                    borderRadius={'10px'}
-                                    tabIndex={1}
-                                    style={{ pointerEvents: 'none' }}
-                                    w={'240px'}
-                                />
-                                <Text
-                                    position={'absolute'}
-                                    top={'13px'}
-                                    left={'25px'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                    alignItems={'center'}
-                                    h={'11px'}
-                                    w={'11px'}
-                                    bg={'#000'}
-                                    color={'#fff'}
-                                    p={'7px'}
-                                    borderRadius={'30px'}
-                                    fontSize={'10px'}
-                                >
-                                    {/* {upComing} */}
-                                </Text>
-                            </Box>
-                            {/* // : null  } */}
-                            <Button type='submit' hidden>Save</Button>
-                        </form>
-                    </Box>
-                    {/* <Text  w={'40px'} mr={'0px'} color={'#c4c4c4'}>{seq.upNext}</Text> border={'1px solid #8080807d'} */}
+                        <Box position={'relative'} opacity={0.6} cursor={'pointer'} onClick={handleSubmit} display={'flex'}>
+                            <Box visibility={'hidden'} w={'20px'}><Icon as={MdDelete} /></Box>
+                            <Input
+                                placeholder={'Add Option'}
+                                name={alphabet}
+                                pl={'25px'}
+                                borderRadius={'10px'}
+                                tabIndex={1}
+                                style={{ pointerEvents: 'none' }}
+                                w={'240px'}
+                            />
+                            <Text
+                                position={'absolute'}
+                                top={'13px'}
+                                left={'25px'}
+                                display={'flex'}
+                                justifyContent={'center'}
+                                alignItems={'center'}
+                                h={'11px'}
+                                w={'11px'}
+                                bg={'#000'}
+                                color={'#fff'}
+                                p={'7px'}
+                                borderRadius={'30px'}
+                                fontSize={'10px'}
+                            >
+                                {/* {upComing} */}
+                            </Text>
+                        </Box>
+                        {/* // : null  } */}
+                        <Button type='submit' hidden>Save</Button>
+                    </form>
+                </Box>
+                {/* <Text  w={'40px'} mr={'0px'} color={'#c4c4c4'}>{seq.upNext}</Text> border={'1px solid #8080807d'} */}
                 {/* <Button onClick={handleRight} position={'absolute'} right={0} zIndex={9} height={'100%'} alignItems={'center'} background={'#fff'} _hover={{background: '#fff'}} boxShadow={'unset'}>
                     <Icon as={MdArrowForward} color={'#000'}/>
                     <Box content='""' height={'30px'} width={'30px'} borderRadius={'30px'} zIndex={-9} background={'grey'} position={'absolute'}></Box>
                 </Button> */}
-            </Box>
-            <div ref={targetRef} id="targetRef"></div>
-            <Box className='Skill-Title' display={'flex'}>
-                <Box className='skills'>
-                    {interactionBlock?.[`Skills${[seq.input]}`] == seq.input ?
-                        <Box display={'flex'} flexDir={'column'}>
-                            {/* <Box w={'100%'} borderBottom={`1px solid ${borderColor}`}>
-                                <Text fontWeight={'800'} fontSize={'16px'} m={'5px 0'} textAlign={'center'}>Skills</Text>
-                            </Box> */}
-                            <Box display={'flex'}>
-                                {/* <TagsField placeholder='Skills...' name={`Interaction${seq.input}`} w={'200px'} m={'15px 0 15px 10px'} onTagsChange={handleTagsChange}
-                                    interaction={`Interaction${seq.input}`}
-                                    inputskill={input?.[`Interaction${seq.input}`]?.SkillTag}
-                                /> */}
-                                <Textarea
-                                    id={`skills`}
-                                    placeholder='Skills...'           
-                                    name={`Interaction${seq.input}`}
-                                    w={'160px'}
-                                    m={'0px 0 15px 10px'}
-                                    minHeight="40px"
-                                    borderRadius={'18px'}
-                                    onChange={handleInput} // Adjust the event handler accordingly
-                                    value={input?.[`Interaction${seq.input}`]?.SkillTag} />
-
-                                <Box  m={'10px 0 0px -30px'} w={'100px'} textAlign={'center'} cursor={'pointer'} onClick={handleDelSkills} >
-                                    <Icon as={MdDelete} color={'grey'} />
-                                </Box>
-                            </Box>
-                        </Box>
-                        : null
-                    }
-                </Box>
-                <Box className='titles'   style={{ marginTop: `${textareaHeight - 10}px`, transition: 'margin-top 0.3s ease-out' }}  >
+            </Box>        
+            {/* <Box className='titles' style={{ marginTop: `${textareaHeight - 10}px`, transition: 'margin-top 0.3s ease-out' }}  >
                     {interactionBlock?.[`Title${[seq.input]}`] == seq.input ?
                         <Box display={'flex'} alignItems={'center'} borderRight={`1px solid ${borderColor}`} borderLeft={`1px solid ${borderColor}`} mr={'20px'}>
                             <Box display={'flex'} flexDir={'column'} p={'0px 10px'}>
-                                <Box w={'100%'} display={'flex'} p={'0px'}>                                    
+                                <Box w={'100%'} display={'flex'} p={'0px'}> */}
                                     {/* <Text fontWeight={'800'} fontSize={'16px'} m={'5px 10px 0 0'} textAlign={'center'}>Title</Text> */}
-                                    <Input placeholder='Question Title...' name={`Interaction${seq.input}`} onChange={handleInput} value={input?.[`Interaction${[seq.input]}`].quesionTitle} id={`QuestionTitle${seq.input}`} w={'200px'} borderRadius={'15px'}  />
+                                    
+                                {/* </Box>
+                                <Box m={'10px 0'}>
+                                   
                                 </Box>
-                                <Box m={'10px 0'}>                                
-                                    {alphabet.filter((alp: any) => alp.seqs === seq.id).map((alp: any, i: number) => (
-                                        <Box>                                        
-                                            <Input
-                                                placeholder={`Title${alp.option}`}
-                                                id={`OptionTitle${alp.option}`}
-                                                name={`Interaction${seq.input}`}
-                                                onChange={handleInput}
-                                                onKeyDown={handleKeyDown}
-                                                onBlur={handleFocusOut}
-                                                title={alp.option}
-                                                value={input?.[`Interaction${seq.input}`]?.optionTitleObject?.[alp.option]}
-                                                pl={'25px'}
-                                                mb={'10px'}                                                                                       
-                                                borderRadius={'15px'}
-                                                w={'200px'}
-                                            />                                
-                                        </Box>
-                                        ))}
-                                </Box>
-                            </Box>   
+                            </Box>
                             <Box w={'100px'} textAlign={'center'} cursor={'pointer'} onClick={handleDelTitles}>
                                 <Icon as={MdDelete} color={'grey'} />
-                            </Box>                         
-                        </Box>
-                        : null
-
-                    }
-                </Box>
-                
-                {/* <Box className='titles'>
-                    {interactionBlock?.[`Title${[seq.input]}`] == seq.input ?
-                        <Box display={'flex'} alignItems={'center'} borderRight={`1px solid ${borderColor}`} borderLeft={`1px solid ${borderColor}`} mr={'20px'}>
-                            <Box display={'flex'} flexDir={'column'} p={'0px 10px'}>
-                                <Box w={'100%'} display={'flex'} p={'0px'}>
-                                    {/* <Text fontWeight={'800'} fontSize={'16px'} m={'5px 10px 0 0'} textAlign={'center'}>Title</Text> */}
-                                    {/* <Input placeholder='Question Title...' name={`Interaction${seq.input}`} onChange={handleInput} value={input?.[`Interaction${[seq.input]}`].quesionTitle} id='QuestionTitles' w={'200px'} borderRadius={'15px'} />
-                                </Box>
-                                <Box m={'0px 0'} className='titlesABC'>
-                                    {alphabet.filter((alp: any) => alp.seqs === seq.id).map((alp: any, i: number) => (
-                                        <Box m={'-2px 0'}>
-                                            <Input
-                                                placeholder={`Title${alp.option}`}
-                                                id={`OptionTitle${alp.option}`}
-                                                name={`Interaction${seq.input}`}
-                                                onChange={handleInput}
-                                                onKeyDown={handleKeyDown}
-                                                onBlur={handleFocusOut}
-                                                title={alp.option}
-                                                value={input?.[`Interaction${seq.input}`]?.optionTitleObject?.[alp.option]}
-                                                pl={'25px'}
-                                                mb={'10px'}
-                                                borderRadius={'15px'}
-                                                w={'200px'}
-                                            />
-                                        </Box>
-                                    ))}
-
-                                </Box>
-                                <Box w={'100px'} textAlign={'center'} cursor={'pointer'} onClick={handleDelTitles}>
-                                    <Icon as={MdDelete} color={'grey'} />
-                                </Box>
                             </Box>
                         </Box>
                         : null
 
                     }
-                </Box> */} 
-            </Box>
-            <Box className='block-score' mr={'20px'}  style={{ marginTop: `${textareaHeight - 10}px`, transition: 'margin-top 0.3s ease-out' }}  >
-                <TableContainer>
-                    <Table  >
-                        <Thead >
-                            <Tr>
-                                <Th >Right</Th>
-                                <Th >Score</Th>                                
-                            </Tr>
-                        </Thead>
-                       
-                        <Tbody >
-                            {alphabet
-                                .filter((alp: any) => alp.seqs === seq.id)
-                                .map((alp: any, i: number) => (
-                                    <Tr key={i}>
-                                        <Td>
-                                            <Box>
-                                            <Checkbox size='md' colorScheme='green' id={`Ans${alp.option}`} title={alp.option} name={`Interaction${seq.input}`} onChange={(e: any) => handleCheckBox(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)} isChecked={
-                                                input?.[`Interaction${seq.input}`]?.ansObject?.[alp.option] === true ||
-                                                input?.[`Interaction${seq.input}`]?.ansObject?.[alp.option] === 'true'
-                                            }>
-
-                                            </Checkbox></Box>
-                                        </Td>
-                                        <Td p={0} alignItems={'center'}>
-                                        <Box>
-                                            <Input type='text' borderRadius={'15px'}   placeholder='00'  id={`Score${alp.option}`} title={alp.option} name={`Interaction${seq.input}`} onChange={handleInput}
-                                            onKeyPress={(e) => {
-                                                // Allow only numeric characters and some special keys
-                                                const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
-                                            
-                                                if (!allowedKeys.includes(e.key)) {
-                                                  e.preventDefault();
-                                                }
-                                              }}
-                                               value={input?.[`Interaction${seq.input}`]?.scoreObject?.[alp.option]} /><span hidden>{alp.option}</span>
-
-                                            </Box>
-                                        </Td>
-                                        {/* <Td p={0}> <Box>
-                                                    <Menu
-                                                        tabState={'navigation'}
-                                                        option={`Option${alp.option}`}
-                                                        id={seq.input}
-                                                        for={`Interaction${seq.input}`}
-                                                        setNavigation={setNavigation}
-                                                        handleBlock={handleBlock}
-
-                                                    />
-                                                </Box>
-                                                </Td><Td p={0}><Box ml={'4px'} cursor={'pointer'} display={input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'Select Block' ? 'block' : 'none'} >
-                                                    <Select
-                                                        placeholder={'Blocks...'}
-                                                        id='interaction'
-                                                        name={`Interaction${seq.input}`}
-                                                        menuPortalTarget={document.body}
-                                                        styles={customStyles}
-                                                        options={showSelectBlock}
-                                                        isSearchable={true}
-                                                        className='react-select'
-                                                        value={
-                                                            showSelectBlock.find(
-                                                                (option: any) => option.value === parseInt(input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option], 10)
-                                                            ) || null
-                                                        }
-                                                        onChange={(e: any) => handleSelectBlock(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)}
-                                                    />
-
-                                                </Box> </Td> */}
-                                    </Tr>
-                                ))}
-                        </Tbody>
-                    </Table>
-
-                </TableContainer>
-
-            </Box>
-            <Box className='block-btns-based-input' display={'flex'}  style={{ marginTop: `${textareaHeight - 10}px`, transition: 'margin-top 0.3s ease-out' }}  >
-                <Box className='Response' mr={interactionBlock?.[`Resp${[seq.input]}`] == seq?.input ? '20px' : '0px'} display={'flex'} flexDir={'column' } style={{ marginTop: '10px !important' }}>
+                </Box> */}
+                <Box className='block-btns-based-input' display={'flex'} style={{ marginTop: `${textareaHeight - 10}px`, transition: 'margin-top 0.3s ease-out' }}  >
+                <Box className='Response' mr={interactionBlock?.[`Resp${[seq.input]}`] == seq?.input ? '20px' : '0px'} display={'flex'} flexDir={'column'} style={{ marginTop: '10px !important' }}>
                     {interactionBlock?.[`Resp${[seq.input]}`] == seq?.input ?
                         <Box border={`1px solid ${borderColor}`} >
                             <Box w={'100%'} borderBottom={`1px solid ${borderColor}`}>
@@ -1069,45 +1099,66 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                         onChange={(selectedOption: any) => handleResponseRoll(selectedOption, seq.input, `Interaction${seq.input}`)}
                                     />
                                 </Box>
-                                        <Box m={'15px 0'}>
-                                            {alphabet
-                                                .filter((alp: any) => alp.seqs === seq.id)
-                                                .map((alp: any, i: number) => (
-                                                    <Box key={i} position={'relative'} display={'flex'} mb={'10px'} >
-                                                        <Box mr={'10px'}>
-                                                            <Input placeholder={'Response'}  id={`Response${alp.option}`} title={alp.option} name={`Interaction${seq.input}`} onChange={handleInput} pl={'25px'} borderRadius={'15px'} value={input?.[`Interaction${seq.input}`]?.responseObject?.[alp.option]} w={'200px'} />
-                                                            <Text position={'absolute'} top={'13px'} left={'5px'} display={'flex'} justifyContent={'center'} alignItems={'center'} h={'11px'} w={'11px'} bg={'#000'} color={'#fff'} p={'7px'} borderRadius={'30px'} fontSize={'10px'}  >{alp.option}</Text>
-                                                        </Box>
-                                                        {input?.[`Interaction${seq.input}`]?.responseRoll!==99999 &&(
-                                                <Box>
-                                                <Select
-                                                    placeholder={'Animate...'}
-                                                    id={`Option${alp.option}`}
-                                                    name={`Interaction${seq.input}`}
-                                                    menuPortalTarget={document.body}
-                                                    styles={customStyles}
-                                                    options={emotionsOptions}
-                                                    isSearchable={true}
-                                                    isMulti={true}
-                                                    className='react-select'
-                                                    value=
-                                                    {input?.[`Interaction${seq.input}`]?.responseemotionObject?.[alp.option]
-                                                    ? input?.[`Interaction${seq.input}`]?.responseemotionObject?.[alp.option].split(',').map((value: string) => ({ // Explicitly specify the type as string
-                                                        value,
-                                                        label: value,
-                                                    }))
-                                                    : []}
-
-                                                    // value={
-                                                    //     emotionsOptions.find(
-                                                    //         (option) => option.value === input?.[`Interaction${seq.input}`]?.responseemotionObject?.[alp.option]
-                                                    //     ) || null
+                                <Box m={'15px 0'}>
+                                    {alphabet
+                                        .filter((alp: any) => alp.seqs === seq.id)
+                                        .map((alp: any, i: number) => (
+                                            <Box key={i} position={'relative'} display={'flex'} mb={'10px'} >
+                                                <Box mr={'10px'}>
+                                                    <Textarea placeholder={'Response'} id={`Response${alp.option}`} title={alp.option} name={`Interaction${seq.input}`} onChange={handleInput} pl={'25px'} borderRadius={'15px'}
+                                                     value={language ? (ResponseOptions && ResponseOptions.find((option: Option) => option.qpOptions === alp.option)?.contentOptionTextData[0]?.content || '') : input?.[`Interaction${seq.input}`]?.responseObject?.[alp.option]}
+                                                    // value={input?.[`Interaction${seq.input}`]?.responseObject?.[alp.option]} 
+                                                    //  value ={language ?
+                                                    //     (ResponseOptions && ResponseOptions.find((resOption: Options) => resOption.qpOptions === options.qpOptions)?.contentOptionTextData[0]?.content || '')
+                                                    //     : input?.[`Interaction${seq.input}`]?.optionsObject?.[options.qpOptions] ||
+                                                    //     (
+                                                    //         options.find(
+                                                    //             (opt) =>
+                                                    //                 parseInt(input?.[`Interaction${seq.input}`]?.responseRoll, 10)
+                                                    //                     ? opt.value === parseInt(input?.[`Interaction${seq.input}`]?.responseRoll, 10)
+                                                    //                     : ''
+                                                    //         ) || null
+                                                    //     )
                                                     // }
-                                                    onChange={(e: any) => handleResponseEmotion(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)}
-                                                />
+
+                                                     w={'200px'} style={{
+                                                        resize: 'none',
+                                                        overflowY: 'hidden',
+                                                        height:  inputtextValue,
+                                                        
+                                                    }} />
+                                                    <Text position={'absolute'} top={'13px'} left={'5px'} display={'flex'} justifyContent={'center'} alignItems={'center'} h={'11px'} w={'11px'} bg={'#000'} color={'#fff'} p={'7px'} borderRadius={'30px'} fontSize={'10px'}  >{alp.option}</Text>
                                                 </Box>
+                                                {input?.[`Interaction${seq.input}`]?.responseRoll !== 99999 && (
+                                                    <Box>
+                                                        <Select
+                                                            placeholder={'Animate...'}
+                                                            id={`Option${alp.option}`}
+                                                            name={`Interaction${seq.input}`}
+                                                            menuPortalTarget={document.body}
+                                                            styles={customStyles}
+                                                            options={emotionsOptions}
+                                                            isSearchable={true}
+                                                            isMulti={true}
+                                                            className='react-select'
+                                                            value=
+                                                            {input?.[`Interaction${seq.input}`]?.responseemotionObject?.[alp.option]
+                                                                ? input?.[`Interaction${seq.input}`]?.responseemotionObject?.[alp.option].split(',').map((value: string) => ({ // Explicitly specify the type as string
+                                                                    value,
+                                                                    label: value,
+                                                                }))
+                                                                : []}
+
+                                                            // value={
+                                                            //     emotionsOptions.find(
+                                                            //         (option) => option.value === input?.[`Interaction${seq.input}`]?.responseemotionObject?.[alp.option]
+                                                            //     ) || null
+                                                            // }
+                                                            onChange={(e: any) => handleResponseEmotion(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)}
+                                                        />
+                                                    </Box>
                                                 )}
-                                               
+
                                             </Box>
                                         ))}
                                 </Box>
@@ -1132,7 +1183,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                             <Box display={'flex'} mb={'10px'}>
                                                 {/* First Box */}
                                                 <Box key={i} position={'relative'} display={'flex'}>
-                                                    <Input
+                                                    <Textarea
                                                         placeholder={'Feedback'}
                                                         id={`FeedBack${alp.option}`}
                                                         title={alp.option}
@@ -1143,6 +1194,11 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                                         value={input?.[`Interaction${seq.input}`]?.feedbackObject?.[alp.option]}
                                                         mb={'3px'}
                                                         w={'200px'}
+                                                        style={{
+                                                            resize: 'none',
+                                                            overflowY: 'hidden',
+                                                            height:  inputtextValue
+                                                        }}
                                                     />
                                                     <Text
                                                         position={'absolute'}
@@ -1181,7 +1237,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                                         name={`Interaction${seq.input}`}
                                                         menuPortalTarget={document.body}
                                                         styles={customStyles}
-                                                        options={showSelectBlock}
+                                                        options={showSelectBlock.filter((option: any) => option.value !== seq.input)}
                                                         isSearchable={true}
                                                         className='react-select'
                                                         value={
@@ -1205,13 +1261,63 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                         : null
                     }
                 </Box>
-            </Box>
-            <Box className='navigation-icon' mt={'98px'} mr={'40px'}>
-                {alphabet
+                <Box className='block-score' mr={'20px'} style={{ transition: 'margin-top 0.3s ease-out' }}  >
+                <TableContainer>
+                    <Table  >
+                        <Thead >
+                            <Tr>
+                                <Th >Right</Th>
+                                <Th >Score</Th>
+                            </Tr>
+                        </Thead>
+
+                        <Tbody >
+                            {alphabet
+                                .filter((alp: any) => alp.seqs === seq.id)
+                                .map((alp: any, i: number) => (
+                                    <Tr key={i} >
+                                        <Td>
+                                            <Box>
+                                                <Checkbox size='md' border={validation?.[`checkbox${seq.input}`] && '2px solid red'} colorScheme='green' id={`Ans${alp.option}`} title={alp.option} name={`Interaction${seq.input}`} onChange={(e: any) => handleCheckBox(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)} isChecked={
+                                                    input?.[`Interaction${seq.input}`]?.ansObject?.[alp.option] === true ||
+                                                    input?.[`Interaction${seq.input}`]?.ansObject?.[alp.option] === 'true'
+                                                }>
+
+                                                </Checkbox></Box>
+                                        </Td>
+                                        <Td p={0} alignItems={'center'} >
+                                            <Box>
+                                                <Input type='text' borderRadius={'15px'} border={validation?.[`score${seq.input}`] && '2px solid red'} placeholder='00' id={`Score${alp.option}`} title={alp.option} name={`Interaction${seq.input}`} onChange={handleInput}
+                                                    onKeyPress={(e) => {
+                                                        // Allow only numeric characters and some special keys
+                                                        const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+
+                                                        if (!allowedKeys.includes(e.key)) {
+                                                            e.preventDefault();
+                                                        }
+                                                    }}
+                                                    autoComplete="off"
+                                                    value={input?.[`Interaction${seq.input}`]?.scoreObject?.[alp.option]}
+                                                    style={{ height: '30px' }} /><span hidden>{alp.option}</span>
+
+                                            </Box>
+                                        </Td>
+                                        <Td>
+                                        <Box style={{ marginBottom: '-20px' }}>
+                {/* {alphabet
                     .filter((alp: any) => alp.seqs === seq.id)
-                    .map((alp: any, i: number) => (
+                    .map((alp: any, i: number) => ( */}
                         <Flex mb={'13px'}>
                             <Box>
+                                {/* <Menu
+                                                    tabState={'leadDialog'}
+                                                    id={seq.input}
+                                                    for={`Dialog${seq.input}`}
+                                                    setNavigation={setNavigation}
+                                                    handleBlock={handleBlock}
+                                                    items={items}
+                                                    seq={seq}
+                                                />   */}
                                 <Menu
                                     tabState={'navigation'}
                                     option={`Option${alp.option}`}
@@ -1219,67 +1325,224 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                                     for={`Interaction${seq.input}`}
                                     setNavigation={setNavigation}
                                     handleBlock={handleBlock}
-                                />            
-                            </Box>      
-                           
-                            <Box ml={'4px'} cursor={'pointer'}  display={input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] ? 'block' : 'none'} >               
-                            {input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'Select Block' && !input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option] ?(
-
-
-
-
-
-
-                                <Select
-                                    placeholder={'Blocks...'}
-                                    id='interaction'
-                                    name={`Interaction${seq.input}`}
-                                    menuPortalTarget={document.body}
-                                    styles={customStyles}
-                                    options={showSelectBlock}
-                                    isSearchable={true}
-                                    className='react-select'
-                                    value={
-                                        showSelectBlock.find(
-                                            (option: any) => option.value === parseInt(input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option], 10)
-                                        ) || null
-                                    }
-                                    onChange={(e: any) => handleSelectBlock(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)}
+                                    items={items}
+                                    seq={seq}
                                 />
-                            ):(
-<>
-  <div style={{ display: 'flex', alignItems: 'center',width:'164px' }}>
+                            </Box>
 
-  <StrightConector
-  name={
-    input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'Select Block'
-      ? (
-        showSelectBlock.find(
-          (option: any) => option.value === input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
-        )?.label
-      )
-      : input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
-  }
-/>
+                            <Box ml={'4px'} cursor={'pointer'} display={input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] ? 'block' : 'none'} >
+                                <>
+                                    {console.log('NoteinterleadShowinput', input, 'seq', seq.input)}
+                                    {console.log('noteinter1', input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'Select Block')}
+                                    {console.log('noteinter2', !input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option])}
+                                </>
 
-    
-   
+                                {input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'New Block' && !input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]  ? (
 
-  </div>
-</>
+                                    // Render content for New Block
+                                    <>
+                                    <MiniBox2 seq={seq} i={index} name ={`Option${alp.option}`}/>
+                                        {/* <Select
+                                            placeholder={'New Blocks...'}
+                                            id='interaction'
+                                            name={`interaction${seq.input}`}
+                                            menuPortalTarget={document.body}
+                                            styles={customStyles}
+                                            options={optionsnewblock}
+                                            isSearchable={true}
+                                            className='react-select'
+                                            value={
+                                                showSelectBlock.find(
+                                                    (option: any) => option.value === parseInt(input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option], 10)
+                                                ) || null
+                                            }
+                                            onChange={(selectedOptions: any) => {
+                                                handleMiniNDInewblock(seq, index, selectedOptions.value, `Option${alp.option}`);
 
-                               
-                            )}
-                            </Box> 
+                                            }}
+                                        /> */}
+                                    </>
+                                ) : input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'Select Block' && !input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option] ?
+                                    (
+                                        <Select
+                                            placeholder={'Blocks...'}
+                                            id='interaction'
+                                            name={`Interaction${seq.input}`}
+                                            menuPortalTarget={document.body}
+                                            styles={customStyles}
+                                            options={showSelectBlock.filter((option: any) => option.value !== seq.input)}
+                                            isSearchable={true}
+                                            className='react-select'
+                                            value={
+                                                showSelectBlock.find(
+                                                    (option: any) => option.value === parseInt(input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option], 10)
+                                                ) || null
+                                            }
+                                            onChange={(e: any) => handleSelectBlock(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)}
+                                        />
+                                    ) : (
+                                        <>
+                                            <div style={{ display: 'flex', alignItems: 'center', width: '164px' }}>
+
+                                                <StrightConector
+                                                    name={
+                                                        // input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'New Block'
+                                                        //     ? (
+                                                        //         showSelectBlock.find(
+                                                        //             (option: any) => option.value === input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
+                                                        //         )?.label
+                                                        //     ) :
+                                                        input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'New Block' ? (
+                                                            (showSelectBlock.find(
+                                                              (option: any) => option.value === input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
+                                                            )?.label ) === undefined  ? `${(parseFloat(seq.id) + 0.1).toFixed(1)}` : showSelectBlock.find(
+                                                              (option: any) => option.value === input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
+                                                            )?.label
+                                                          ) :
+                                                            input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'Select Block'
+                                                                ? (
+                                                                    showSelectBlock.find(
+                                                                        (option: any) => option.value === input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
+                                                                    )?.label
+                                                                )
+                                                                : input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
+                                                    }
+                                                />
+
+
+
+
+                                            </div>
+                                        </>
+
+
+                                    )}
+                            </Box>
                         </Flex>
-                ))}
+                   
             </Box>
+                                        </Td>
+                                        {/* <Td p={0}> <Box>
+                                                    <Menu
+                                                        tabState={'navigation'}
+                                                        option={`Option${alp.option}`}
+                                                        id={seq.input}
+                                                        for={`Interaction${seq.input}`}
+                                                        setNavigation={setNavigation}
+                                                        handleBlock={handleBlock}
+
+                                                    />
+                                                </Box>
+                                                </Td><Td p={0}><Box ml={'4px'} cursor={'pointer'} display={input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'Select Block' ? 'block' : 'none'} >
+                                                    <Select
+                                                        placeholder={'Blocks...'}
+                                                        id='interaction'
+                                                        name={`Interaction${seq.input}`}
+                                                        menuPortalTarget={document.body}
+                                                        styles={customStyles}
+                                                        options={showSelectBlock}
+                                                        isSearchable={true}
+                                                        className='react-select'
+                                                        value={
+                                                            showSelectBlock.find(
+                                                                (option: any) => option.value === parseInt(input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option], 10)
+                                                            ) || null
+                                                        }
+                                                        onChange={(e: any) => handleSelectBlock(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)}
+                                                    />
+
+                                                </Box> </Td> */}
+                                    </Tr>
+                                ))}
+                        </Tbody>
+                    </Table>
+
+                </TableContainer>
+
+            </Box>
+            </Box>
+            <div ref={targetRef} id="targetRef"></div>
+            
+            
+            <Box className='Skill-Title' display={'flex'}>
+                <Box className='skills'>
+                    {interactionBlock?.[`Skills${[seq.input]}`] == seq.input ?
+                        <Box display={'flex'} flexDir={'column'}>
+                            {/* <Box w={'100%'} borderBottom={`1px solid ${borderColor}`}>
+                                <Text fontWeight={'800'} fontSize={'16px'} m={'5px 0'} textAlign={'center'}>Skills</Text>
+                            </Box> */}
+                            <Box display={'flex'}>
+                                {/* <TagsField placeholder='Skills...' name={`Interaction${seq.input}`} w={'200px'} m={'15px 0 15px 10px'} onTagsChange={handleTagsChange}
+                                    interaction={`Interaction${seq.input}`}
+                                    inputskill={input?.[`Interaction${seq.input}`]?.SkillTag}
+                                /> */}
+                                <Textarea
+                                    id={`skills`}
+                                    placeholder='Skills...'
+                                    name={`Interaction${seq.input}`}
+                                    w={'160px'}
+                                    m={'0px 0 15px 10px'}
+                                    minHeight="40px"
+                                    borderRadius={'18px'}
+                                    onChange={handleInput} // Adjust the event handler accordingly
+                                    value={input?.[`Interaction${seq.input}`]?.SkillTag} />
+
+                                <Box m={'10px 0 0px -30px'} w={'100px'} textAlign={'center'} cursor={'pointer'} onClick={handleDelSkills} >
+                                    <Icon as={MdDelete} color={'grey'} />
+                                </Box>
+                            </Box>
+                        </Box>
+                        : null
+                    }
+                </Box>
+                
+
+                {/* <Box className='titles'>
+                    {interactionBlock?.[`Title${[seq.input]}`] == seq.input ?
+                        <Box display={'flex'} alignItems={'center'} borderRight={`1px solid ${borderColor}`} borderLeft={`1px solid ${borderColor}`} mr={'20px'}>
+                            <Box display={'flex'} flexDir={'column'} p={'0px 10px'}>
+                                <Box w={'100%'} display={'flex'} p={'0px'}>
+                                    {/* <Text fontWeight={'800'} fontSize={'16px'} m={'5px 10px 0 0'} textAlign={'center'}>Title</Text> */}
+                {/* <Input placeholder='Question Title...' name={`Interaction${seq.input}`} onChange={handleInput} value={input?.[`Interaction${[seq.input]}`].quesionTitle} id='QuestionTitles' w={'200px'} borderRadius={'15px'} />
+                                </Box>
+                                <Box m={'0px 0'} className='titlesABC'>
+                                    {alphabet.filter((alp: any) => alp.seqs === seq.id).map((alp: any, i: number) => (
+                                        <Box m={'-2px 0'}>
+                                            <Input
+                                                placeholder={`Title${alp.option}`}
+                                                id={`OptionTitle${alp.option}`}
+                                                name={`Interaction${seq.input}`}
+                                                onChange={handleInput}
+                                                onKeyDown={handleKeyDown}
+                                                onBlur={handleFocusOut}
+                                                title={alp.option}
+                                                value={input?.[`Interaction${seq.input}`]?.optionTitleObject?.[alp.option]}
+                                                pl={'25px'}
+                                                mb={'10px'}
+                                                borderRadius={'15px'}
+                                                w={'200px'}
+                                            />
+                                        </Box>
+                                    ))}
+
+                                </Box>
+                                <Box w={'100px'} textAlign={'center'} cursor={'pointer'} onClick={handleDelTitles}>
+                                    <Icon as={MdDelete} color={'grey'} />
+                                </Box>
+                            </Box>
+                        </Box>
+                        : null
+
+                    }
+                </Box> */}
+            </Box>
+            
             <Box className='block-btns'>
                 <Box display={'flex'} flexDir={'column'}>
                     <Flex>
                         {interactionBlock?.[`Resp${seq.input}`] !== seq?.input ?
                             <Button mr={'10px'} w={'130px'} p={5} justifyContent={'start'} onClick={() => setInteractionBlock((prev: any) => { return { ...prev, [`Resp${[seq.input]}`]: seq.input } })
-                            
+
                             }>
                                 <Icon as={MdAdd} bg={'blue'} color={'#fff'} borderRadius={'888px'} mr={'5px'} /> <Text>Response</Text>
                             </Button> : null}
@@ -1293,29 +1556,29 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
                         {interactionBlock?.[`Skills${seq.input}`] !== seq?.input ?
                             <Button mr={'10px'} w={'130px'} p={5} justifyContent={'start'} onClick={() => {
                                 setInteractionBlock((prev: any) => {
-                                  return { ...prev, [`Skills${[seq.input]}`]: seq.input  };
+                                    return { ...prev, [`Skills${[seq.input]}`]: seq.input };
                                 });
                                 scrollToElement(`skill${seq.input}`); // Replace 'yourElementId' with the ID of the element you want to scroll to
-                              }}>
+                            }}>
                                 <Icon as={MdAdd} bg={'blue'} color={'#fff'} borderRadius={'888px'} mr={'5px'} /> <Text>Skills</Text>
                             </Button> : null}
                         {interactionBlock?.[`Title${seq.input}`] !== seq?.input ?
                             <Button mr={'10px'} w={'130px'} p={5} justifyContent={'start'} onClick={() => {
                                 setInteractionBlock((prev: any) => {
-                                  return { ...prev, [`Title${[seq.input]}`]: seq.input  };
+                                    return { ...prev, [`Title${[seq.input]}`]: seq.input };
                                 });
                                 scrollToElement(`QuestionTitle${seq.input}`); // Replace 'yourElementId' with the ID of the element you want to scroll to
-                              }}>
+                            }}>
 
 
                                 <Icon as={MdAdd} bg={'blue'} color={'#fff'} borderRadius={'888px'} mr={'5px'} /> <Text>Title</Text>
                             </Button> : null}
                     </Flex>
                 </Box>
-            </Box>                                             
+            </Box>
             <Box className='goRight' display={'flex'} alignItems={'center'} height={'100%'} position={'absolute'} right={0}>
-                <Button onClick={handleRight} position={'absolute'} right={0} zIndex={9} background={'#0000'} _hover={{background: '#0000'}} boxShadow={'unset'}>   
-                    <Icon as={MdArrowForward} color={'#fff'}/>
+                <Button onClick={handleRight} position={'absolute'} right={0} zIndex={9} background={'#0000'} _hover={{ background: '#0000' }} boxShadow={'unset'}>
+                    <Icon as={MdArrowForward} color={'#fff'} />
                     <Box content='""' height={'30px'} width={'30px'} borderRadius={'30px'} zIndex={-9} background={'#11047a'} position={'absolute'}></Box>
                 </Button>
             </Box>
@@ -1324,4 +1587,3 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ seq, index, number, dumm
 }
 
 export default InteractionCompo
- 

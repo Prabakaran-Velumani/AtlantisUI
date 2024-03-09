@@ -18,7 +18,9 @@ import { MdLogout } from 'react-icons/md';
 import { AiOutlineLogout } from "react-icons/ai";
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-
+import {logout} from 'store/user/userSlice';
+import { useDispatch } from 'react-redux';
+import { updatePreviewData } from 'store/preview/previewSlice';
 
 // FUNCTIONS
 
@@ -31,9 +33,12 @@ function SidebarContent(props: {
   const textColor = useColorModeValue('navy.700', 'white');
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleLogout = () => {
     // AuthApi.Logout(user).then((response: any) => {
       setUser(null);
+      dispatch(logout());
+      dispatch(updatePreviewData(null))
       localStorage.removeItem('user')
       navigate('/auth/sign-in/default')
     // })

@@ -1,62 +1,20 @@
 import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogCloseButton,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   Box,
-  Button,
-  Flex,
-  FormControl,
-  FormLabel,
-  Grid,
-  GridItem,
-  HStack,
-  Icon,
   Img,
-  Radio,
-  RadioGroup,
   SimpleGrid,
-  Stack,
-  Switch,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   Text,
-  useColorModeValue,
-  useDisclosure,
-  useTheme,
-  useToast,
-  // brindha start
-  Select,
   Textarea,
-  Link,
-  Slider,
-  Image,
-  IconButton,
-  // brindha end
+  GridItem
 } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  gameDuplicateQuestionEntirely,
-  getImages,
-  updateGame,
-} from 'utils/game/gameService';
-import Card from 'components/card/Card';
-import InputField from 'components/fields/InputField';
-import BadgeImages from '../BadgeImages';
-import { MdClose, MdOutlineCloudUpload } from 'react-icons/md';
-import TextField from 'components/fields/TextField';
+import React, { useEffect, useState } from 'react';
 import ref from 'assets/img/screens/refquestions.png';
 import qs from 'assets/img/screens/QS.png';
 import question from 'assets/img/games/question.png';
 import right from 'assets/img/games/right.png';
 import left from 'assets/img/games/left.png';
 import refsep from 'assets/img/games/refseparate.png';
+import next from 'assets/img/screens/next.png';
+
 interface Badge {
   gasId: number;
   gasAssetImage: string;
@@ -69,44 +27,62 @@ const ReflectionScreen: React.FC<{
   imageSrc: any;
   reflectionQuestionsdefault: any;
   preview: any;
+  preloadedAssets?: any;
 }> = ({
   formData,
   reflectionQuestions,
   imageSrc,
   reflectionQuestionsdefault,
   preview,
+  preloadedAssets,
 }) => {
-  console.log('reflectionQuestions-123', formData.gameReflectionQuestion);
   const [answers, setAnswers] = useState<any>([]);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const arrayInfo = [1, 2, 3, 4];
   let i = 0;
   useEffect(() => {
-    if (
-      formData?.gameIsLearnerMandatoryQuestion &&
-      formData?.gameReflectionQuestion &&
+    if (formData?.gameIsLearnerMandatoryQuestion == 'false') {
+      setIsFormValid(true);
+    } else if (formData.gameIsLearnerMandatoryQuestion == 'true'){
+      if(formData?.gameReflectionQuestion &&
       answers.length == formData?.gameReflectionQuestion
     ) {
-      let validate = answers.some(
-        (obj: any) => obj.text == undefined || obj.text == '',
-      );
-      validate ? setIsFormValid(false) : setIsFormValid(true);
+      setIsFormValid(true);
     } else {
-      formData?.gameIsLearnerMandatoryQuestion
-        ? setIsFormValid(false)
-        : setIsFormValid(true);
+      setIsFormValid(false);
     }
-  }, [answers]);
+    }
+    else{
+      setIsFormValid(true);
+    }
+  }, [answers, formData.gameIsLearnerMandatoryQuestion]);
 
   const updateAnswer = (e: any, index: any) => {
     const updatedAnswers = [...answers];
     updatedAnswers[index] = { ...updatedAnswers[index], text: e.target.value };
     setAnswers(updatedAnswers);
   };
+  const arrayInfoQn = formData.gameReflectionQuestion;
+  const styleflex = {};
+
+if (arrayInfoQn === 1) {
+Object.assign(styleflex, {
+ display: 'flex',
+ justifyContent: 'center',
+});
+} else if (arrayInfoQn === 3) {
+// Apply your styling for arrayInfo 3, for example:
+Object.assign(styleflex, {
+ display: 'grid',
+ gridTemplateColumns: 'repeat(2, 1fr)', // Two columns
+ gap: '2px',
+ placeItems: 'center',
+});
+}
+
   return (
     <>
       {imageSrc && (
-        // <SimpleGrid columns={1}>
         <Box className="reflection-screen">
           <Box className="reflection-screen-box">
             {preview ? null : <Img src={imageSrc} className="bg-img" />}
@@ -122,13 +98,12 @@ const ReflectionScreen: React.FC<{
               <Text
                 fontFamily={'AtlantisText'}
                 color={'##D9C7A2'}
-                // className="text drop"
                 position={'absolute'}
                 top={'20px'}
                 fontSize={'2.8rem'}
                 style={{ whiteSpace: 'break-spaces' }}
               >
-                reflection
+                REFLECTION
               </Text>
             </Box>
           ) : null}
@@ -136,18 +111,18 @@ const ReflectionScreen: React.FC<{
             className={preview ? 'content-ref' : 'content-box'}
             position={'relative'}
           >
-            <SimpleGrid columns={{ base: 2 }} spacing={2} className="grid">
+            <SimpleGrid
+              columns={{ base: 2 }}
+              spacing={2}
+              className="grid"
+              gap="20"
+            >
               {Array.from(
                 { length: formData.gameReflectionQuestion },
                 (_, index) => (
-                  <Box>
+                  <GridItem key={index} colSpan={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? { base: 2 } : {}}>
                     <Box
-                      w={{
-                        base: '150px',
-                        sm: '100px',
-                        md: '150px',
-                        lg: '180px',
-                      }}
+                      w={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? {base:'150px',sm:'300px',md:'350px',lg:'380px'} : {base:'150px',sm:'100px',md:'150px',lg:'180px'}} 
                       lineHeight={1}
                       display={'flex'}
                       wordBreak="break-all"
@@ -160,32 +135,49 @@ const ReflectionScreen: React.FC<{
                       }}
                     >
                       <Img src={qs} alt="ref" w={'20px'} h={'20px'} />
-                      <Text
-                        className="text drop"
-                        style={{ whiteSpace: 'break-spaces' }}
-                      >
-                        {` ${
-                          reflectionQuestions[`ref${index + 1}`]?.padEnd(
-                            90,
-                            ' ',
-                          ) ||
-                          reflectionQuestionsdefault[index]?.padEnd(90, ' ')
-                        }`}
-                      </Text>
+                      {preview ? (
+                        <Text
+                          className="text drop"
+                          style={{ whiteSpace: 'break-spaces' }}
+                        >
+                          {` ${
+                            reflectionQuestions[`ref${index + 1}`]?.padEnd(
+                              90,
+                              ' ',
+                            ) ||
+                            reflectionQuestionsdefault[index]?.padEnd(90, ' ')
+                          }`}
+                        </Text>
+                      ) : (
+                        <Text
+                          className="text drop"
+                          style={{ whiteSpace: 'break-spaces' }}
+                        >
+                          {` ${
+                            reflectionQuestions[`ref${index + 1}`]?.padEnd(
+                              90,
+                              ' ',
+                            ) ||
+                            reflectionQuestionsdefault[index]?.padEnd(90, ' ')
+                          }`}
+                        </Text>
+                      )}
                     </Box>
                     <Box position={'relative'}>
                       <Img
-                        w={preview ? '350px' : '250px'}
+                        w={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ?  '420px'  : '200px'} 
                         h={{
                           base: '20px',
-                          sm: '30px',
-                          md: '50px',
-                          lg: '100px',
+                          sm: '40px',
+                          md: '70px',
+                          lg: '150px',
                         }}
+                        padding-top={'20px'}
                         src={ref}
                       />
                       {preview ? (
                         <Textarea
+                          padding-top={'20px'}
                           bottom={0}
                           outline={'none'}
                           focusBorderColor="none"
@@ -205,8 +197,8 @@ const ReflectionScreen: React.FC<{
                           onChange={(e: any) => updateAnswer(e, index)}
                         />
                       ) : null}
-                    </Box>
                   </Box>
+                  </GridItem>
                 ),
               )}
             </SimpleGrid>
@@ -231,19 +223,18 @@ const ReflectionScreen: React.FC<{
               <Box w={'80%'} display={'flex'} justifyContent={'space-between'}>
                 <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
                 {isFormValid && (
-                <Img
-                  src={right}
-                  w={'50px'}
-                  h={'50px'}
-                  cursor={'pointer'}
-                  // onClick={() => getData(data)}
-                />
-                 )} 
+                  <Img
+                    src={right}
+                    w={'50px'}
+                    h={'50px'}
+                    cursor={'pointer'}
+                  />
+                )}
               </Box>
             </Box>
+            
           ) : null}
         </Box>
-        // </SimpleGrid>
       )}
     </>
   );
