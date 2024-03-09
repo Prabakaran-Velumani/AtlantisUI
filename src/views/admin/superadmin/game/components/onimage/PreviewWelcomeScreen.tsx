@@ -37,8 +37,8 @@ const PreviewWelcomeScreen: React.FC<{
   formData: any;
   imageSrc: any;
   preview: any;
-  preloadAssets?: any;
-}> = ({ formData, imageSrc, preview, preloadAssets }) => {
+  preloadedAssets?: any;
+}> = ({ formData, imageSrc, preview, preloadedAssets }) => {
   const { id } = useParams();
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);
@@ -169,7 +169,7 @@ const PreviewWelcomeScreen: React.FC<{
             <Box className="screen-preview-outcome screen-preview-grid-items">
               Outcome
               <Box>
-                <LearningOutComes data={data} preloadAssets={preloadAssets} />
+                <LearningOutComes data={data} preloadedAssets={preloadedAssets} />
               </Box>
             </Box>
             </Box> */}

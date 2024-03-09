@@ -11,6 +11,7 @@ import React, {
   Suspense,
   useEffect,
   useState,
+  useRef
 } from 'react';
 import TakeAwaysContentScreen from './onimage/TakeAwaysScreen';
 // import Sample from '../../../../assets/img/games/Character_sample.glb';
