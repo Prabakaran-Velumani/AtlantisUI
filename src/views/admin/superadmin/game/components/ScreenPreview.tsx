@@ -53,8 +53,8 @@ import { FaLeaf } from 'react-icons/fa';
 import { updatePreviewData } from 'store/preview/previewSlice';
 
 const WelcomeContentScreen = lazy(() => import('./onimage/WelcomeContentScreen'));
-const CompletionContentScreen = lazy(() => import ('./onimage/CompletionContentScreen'));
-const PreviewEndOfStory = lazy(()=>import ('./onimage/PreviewEndOfStory'));
+const CompletionContentScreen = lazy(() => import('./onimage/CompletionContentScreen'));
+const PreviewEndOfStory = lazy(() => import('./onimage/PreviewEndOfStory'));
 const ScreenPreview = () => {
   const {
     gameId: id,
@@ -177,17 +177,16 @@ const ScreenPreview = () => {
           return item;
         });
 
-        let reflectionData : any = [];
-        for (let i = 0; i < gamedata?.resultReflection?.length ; i++)
-        {
-          let filteredValue = gamedata?.resultReflection.find((refRow:any) =>refRow?.refKey == `ref${i+1}`);
+        let reflectionData: any = [];
+        for (let i = 0; i < gamedata?.resultReflection?.length; i++) {
+          let filteredValue = gamedata?.resultReflection.find((refRow: any) => refRow?.refKey == `ref${i + 1}`);
           // {
           //   if(refRow?.refKey == `ref${i+1}`)
           //   {
           //     return ({[refRow?.refKey] : [refRow?.refQuestion]});
           //   }
           // });
-          reflectionData[filteredValue?.refKey]=filteredValue?.refQuestion;
+          reflectionData[filteredValue?.refKey] = filteredValue?.refQuestion;
         }
         setGameInfo({
           gameId: id,
@@ -243,18 +242,18 @@ const ScreenPreview = () => {
       console.error('Error fetching data:', error);
     }
   };
-  const setInteractionOptions = (gameInfo :any, currentBlock: any) =>{
-      const optionsFiltered = gameInfo?.questOptions.filter(
-        (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
-      );
-      if (gameInfo?.gameData?.gameShuffle) {
-        for (let i = optionsFiltered.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [optionsFiltered[i], optionsFiltered[j]] = [
-            optionsFiltered[j],
-            optionsFiltered[i],
-          ]; 
-        }
+  const setInteractionOptions = (gameInfo: any, currentBlock: any) => {
+    const optionsFiltered = gameInfo?.questOptions.filter(
+      (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
+    );
+    if (gameInfo?.gameData?.gameShuffle) {
+      for (let i = optionsFiltered.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optionsFiltered[i], optionsFiltered[j]] = [
+          optionsFiltered[j],
+          optionsFiltered[i],
+        ];
+      }
       setOptions(optionsFiltered);
     }
   }
@@ -262,7 +261,7 @@ const ScreenPreview = () => {
   useEffect(() => {
     if (id && isDispatched) {
       fetchDataFromApi();
-      dispatch(updatePreviewData({isDispatched: false}));
+      dispatch(updatePreviewData({ isDispatched: false }));
     }
   }, [id, isDispatched]);
 
@@ -288,9 +287,9 @@ const ScreenPreview = () => {
     }
   }, [gameInfo, preloadAssets]);
 
-  useEffect(()=>{
-    dispatch(updatePreviewData({isDispatched: false}));
-  },[CompKeyCount ])
+  useEffect(() => {
+    dispatch(updatePreviewData({ isDispatched: false }));
+  }, [CompKeyCount])
   const getData = (next: any) => {
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -302,21 +301,21 @@ const ScreenPreview = () => {
     const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
 
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-    
+
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
+        .filter(
+          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+        )
+        .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-     
+
     {/* Check wheather has next block or not, if not then show End of Current Quest.
           Want to play next quest, then switch the current quest in game creation screen */}
-    if(nextBlock.length == 0 ){
+    if (nextBlock.length == 0) {
       setEndOfQuest(true);
     }
-    else{
+    else {
       setEndOfQuest(false);
     }
 
@@ -325,7 +324,7 @@ const ScreenPreview = () => {
     }
     if (
       type === 'Interaction' &&
-      resMsg !== '' 
+      resMsg !== ''
       //&& gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
       setType('response');
@@ -422,7 +421,7 @@ const ScreenPreview = () => {
 
   };
   const handleEntirePrev = async () => {
- 
+
     const url = ` /game/creator/demoplay/${id}`;
     // const url = `/screen/preview/${id}`;
     window.open(url, '_blank');
@@ -437,68 +436,59 @@ const ScreenPreview = () => {
             animate={{ opacity: 1, background: '#0000' }}
             transition={{ duration: 1, delay: 0.5 }}
           >
-           
-            <Box h={'100vh !important'} className="Images"  style={{ overflow: 'visible' }}>
-            <Button
-  bg="#11047a"
-  _hover={{ bg: '#190793' }}
-  color="#fff"
-  style={{
-    position: 'fixed', 
-    top: '50px',
-    left: '85%',
-    // boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)', // Adjust the shadow properties
-
-    pointerEvents: 'auto',
-    zIndex: 99999999999999, // High z-index value
-        // mixBlendMode: 'overlay', // or 'overlay', 'color-dodge', etc.
-        visibility: 'visible', 
-  }}
-  mr={'17px'}
-  mt={'6px'}
-  ml={'11px'}
-  onClick={handleEntirePrev}
->
-  Demo Play
-</Button>
-
-
-              <Flex height="100vh" className="AddScores">
-             
+            <Box h={'100vh !important'} className="Images" style={{ overflow: 'visible' }}>
+              <Button
+                bg="#11047a"
+                _hover={{ bg: '#190793' }}
+                color="#fff"
+                style={{
+                  position: 'absolute',
+                  top: '2vh',
+                  right: '0vw',
+                  pointerEvents: 'auto',
+                  zIndex: 99999999999999, // High z-index value
+                  // mixBlendMode: 'overlay', // or 'overlay', 'color-dodge', etc.
+                  visibility: 'visible',
+                }}
+                mr={'17px'}
+                mt={'6px'}
+                ml={'11px'}
+                onClick={handleEntirePrev}>Demo Play</Button>
+               <Flex height="100vh" className="AddScores">
                 {currentTab == 3 && (
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
                     <Box
-                      w={'100%'}
+                      backgroundImage={preloadAssets.backgroundImage}
+                      w={'100% !important'}
                       h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
                       alignItems={'center'}
                       justifyContent={'center'}
-                      position={'relative'}
-                      overflow={'visible'}
-                      style={{ perspective: '1000px' }}
-                      className="Main-Content"
+                      className="Game-Screen"
                     >
-                      <Box
-                        backgroundImage={preloadAssets.backgroundImage}
-                        w={'100% !important'}
-                        h={'100vh'}
-                        backgroundRepeat={'no-repeat'}
-                        backgroundSize={'cover'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        className="Game-Screen"
-                      >
-                        
 
-                        <Box className="Images">
-                          {gameInfo && (
-                            <WelcomeContentScreen
-                              formData={gameInfo.gameData}
-                              imageSrc={preloadAssets?.Screen5}
-                              preview={true}
-                            />
-                          )}
-                        </Box>
+
+                      <Box className="Images">
+                        {gameInfo && (
+                          <WelcomeContentScreen
+                            formData={gameInfo.gameData}
+                            imageSrc={preloadAssets?.Screen5}
+                            preview={true}
+                          />
+                        )}
                       </Box>
                     </Box>
+                  </Box>
                 )}
                 {currentTab === 4 && data && type === 'Note' && (
                   <Box
@@ -518,12 +508,11 @@ const ScreenPreview = () => {
                       h={'100vh'}
                       backgroundRepeat={'no-repeat'}
                       backgroundSize={'cover'}
-                      transform={`scale(${first ? 1 : 0.9}) translateY(${
-                        first ? 0 : -0
-                      }%) translateX(${first ? 0 : -10}%)`}
+                      transform={`scale(${first ? 1 : 0.9}) translateY(${first ? 0 : -0
+                        }%) translateX(${first ? 0 : -10}%)`}
                       transition={'transform 0.9s ease-in-out'}
                     >
-                      
+
                       <Box
                         position={'fixed'}
                         top={'200px'}
@@ -629,7 +618,7 @@ const ScreenPreview = () => {
                       bottom={'0'}
                       src={preloadAssets?.dial}
                     />
-                    
+
                     {!showNote && (
                       <>
                         <Box position={'relative'}>
@@ -706,16 +695,14 @@ const ScreenPreview = () => {
                       maxH={'100%'}
                       w={'100%'}
                       h={'100vh'}
-                      transform={`scale(1.5}) translateY(-10%) translateX(${
-                        showNote ? -200 : 0
-                      }px)`}
+                      transform={`scale(1.5}) translateY(-10%) translateX(${showNote ? -200 : 0
+                        }px)`}
                       transition={'transform 0.9s ease-in-out'}
                     />
                     <Box
                       style={{
-                        transform: `translateX(${
-                          showNote ? -200 : 0
-                        }px) scale(1.2)`,
+                        transform: `translateX(${showNote ? -200 : 0
+                          }px) scale(1.2)`,
                         transition:
                           'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
                       }}
@@ -728,7 +715,7 @@ const ScreenPreview = () => {
                       backgroundSize={'contain'}
                       backgroundRepeat={'no-repeat'}
                     >
-                      
+
                       <Box
                         textAlign={'center'}
                         h={'100px'}
@@ -913,289 +900,288 @@ const ScreenPreview = () => {
                   </Box>
                 )}
                 {currentTab === 4 && data && type === 'feedback' && (
-              <Box
-                w={'100%'}
-                h={'100vh'}
-                display={'flex'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-              >
-                <Box
-                  backgroundImage={preloadAssets?.backgroundImage}
-                  w={'100%'}
-                  h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-                  transform={`scale(${first ? 1 : 1.3}) translateY(${
-                    first ? 0 : -10
-                  }%) translateX(${first ? 0 : -10}%)`}
-                  transition={'transform 0.9s ease-in-out'}
-                >
                   <Box
-                    position={'fixed'}
-                    top={'200px'}
-                    right={'0px'}
-                    bottom={0}
-                    zIndex={999}
-                    w={'300px'}
-                  >
-                  </Box>
-                </Box>
-                <Box
-                  style={{
-                    transform: `scale(${showNote ? 0.2 : 1})`,
-                    transition: 'transform 0.5s ease-in-out',
-                  }}
-                  position={'fixed'}
-                  w={'40%'}
-                  h={'80vh'}
-                  display={'flex'}
-                  flexDirection={'column'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                >
-                  <Img w={'90%'} h={'80vh'} src={preloadAssets?.feedi} />
-                  <Box
-                    position={'fixed'}
-                    w={'50%'}
-                    mt={'10px'}
-                    display={'flex'}
-                    flexDirection={'column'}
-                    textAlign={'center'}
-                    justifyContent={'center'}
-                    style={{
-                      fontWeight: '900',
-                      color: '#D9C7A2',
-                    }}
-                  >
-                    {feed}
-                    <Box
-                      w={'100%'}
-                      onClick={() => getData(data)}
-                      mt={'20px'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                      cursor={'pointer'}
-                      transform={'translate(0px, 100px)'}
-                    >
-                      <Img src={preloadAssets?.next} w={'200px'} h={'60px'} />
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-                )}
-           {currentTab === 5 && currentSubTab === 0 && (
-              <Box
-                w={'100%'}
-                h={'100vh'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-                className="Main-Content"
-              >
-                <Box
-                  backgroundImage={preloadAssets?.backgroundImage}
-                  w={'100% !important'}
-                  h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  className="Game-Screen"
-                >
-                 
-                  <Box className="Images">
-                    <CompletionContentScreen
-                      preview={true}
-                      formData={gameInfo.gameData}
-                      imageSrc={preloadAssets.Screen1}
-                      compliData={gameInfo.completionQuestOptions}
-                      CompKeyCount={CompKeyCount}
-                      preloadedAssets ={preloadAssets}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            )}
-            {currentTab === 5 && currentSubTab === 1 && (
-              <Box
-                w={'100%'}
-                h={'100vh'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-                className="Main-Content"
-              >
-                <Box
-                 backgroundImage={preloadAssets?.backgroundImage}
-                  w={'100% !important'}
-                  h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-        
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  className="Game-Screen"
-                >
-                 
-                  <Box className="Images">
-                    <Box className="LearderBoards">
-                      <Img
-                        src={preloadAssets?.Screen2}
-                        alt="Your Image"
-                        className="LearderBoards-Img"
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-            )}
-            {currentTab === 5 && currentSubTab === 2 && (
-              <Box
-                w={'100%'}
-                h={'100vh'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-                className="Main-Content"
-              >
-                <Box
-                  backgroundImage={preloadAssets?.RefBg}
-                  w={'100% !important'}
-                  h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  className="Game-Screen"
-                >
-                  
-                  <Box className="Images">
-                    <ReflectionContentScreen
-                      preview={true}
-                      formData={gameInfo.gameData}
-                      imageSrc={preloadAssets?.RefScreen1}
-                      reflectionQuestions={gameInfo?.reflectionQuestions}
-                      reflectionQuestionsdefault={reflectionQuestionsdefault}
-                      preloadedAssets ={preloadAssets}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            )}
-            {currentTab === 5 && currentSubTab === 3 && (
-              <Box
-                w={'100%'}
-                h={'100vh'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-                className="Main-Content"
-              >
-                <Box
-                 backgroundImage={preloadAssets?.backgroundImage}
-                  w={'100% !important'}
-                  h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  className="Game-Screen"
-                >
-                 
-                  <Box className="Images">
-                    <TakeAwaysContentScreen
-                      preview={true}
-                      formData={gameInfo.gameData}
-                      imageSrc={preloadAssets?.Screen4}
-                      preloadedAssets ={preloadAssets}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            )}
-            {currentTab === 5 && currentSubTab === 4 && (
-              <>
-                <Box
-                  w={'100%'}
-                  h={'100vh'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                  overflow={'visible'}
-                  style={{ perspective: '1000px' }}
-                  className="Main-Content"
-                >
-                
-                  <Box
-                   backgroundImage={preloadAssets?.backgroundImage}
-                    w={'100% !important'}
+                    w={'100%'}
                     h={'100vh'}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'cover'}
+                    display={'flex'}
                     alignItems={'center'}
                     justifyContent={'center'}
-                    className="Game-Screen"
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
                   >
-                    
-
-                    <Box className="Images">
-                      <WelcomeContentScreen
-                        formData={gameInfo.gameData}
-                        imageSrc={preloadAssets?.Screen5}
-                        preview={true}
-                        preloadedAssets ={preloadAssets}
-                      />
+                    <Box
+                      backgroundImage={preloadAssets?.backgroundImage}
+                      w={'100%'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      transform={`scale(${first ? 1 : 1.3}) translateY(${first ? 0 : -10
+                        }%) translateX(${first ? 0 : -10}%)`}
+                      transition={'transform 0.9s ease-in-out'}
+                    >
+                      <Box
+                        position={'fixed'}
+                        top={'200px'}
+                        right={'0px'}
+                        bottom={0}
+                        zIndex={999}
+                        w={'300px'}
+                      >
+                      </Box>
+                    </Box>
+                    <Box
+                      style={{
+                        transform: `scale(${showNote ? 0.2 : 1})`,
+                        transition: 'transform 0.5s ease-in-out',
+                      }}
+                      position={'fixed'}
+                      w={'40%'}
+                      h={'80vh'}
+                      display={'flex'}
+                      flexDirection={'column'}
+                      justifyContent={'center'}
+                      alignItems={'center'}
+                    >
+                      <Img w={'90%'} h={'80vh'} src={preloadAssets?.feedi} />
+                      <Box
+                        position={'fixed'}
+                        w={'50%'}
+                        mt={'10px'}
+                        display={'flex'}
+                        flexDirection={'column'}
+                        textAlign={'center'}
+                        justifyContent={'center'}
+                        style={{
+                          fontWeight: '900',
+                          color: '#D9C7A2',
+                        }}
+                      >
+                        {feed}
+                        <Box
+                          w={'100%'}
+                          onClick={() => getData(data)}
+                          mt={'20px'}
+                          display={'flex'}
+                          justifyContent={'center'}
+                          cursor={'pointer'}
+                          transform={'translate(0px, 100px)'}
+                        >
+                          <Img src={preloadAssets?.next} w={'200px'} h={'60px'} />
+                        </Box>
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              </>
-            )}
-            {currentTab === 5 && currentSubTab === 5 && (
-              <Box
-                w={'100%'}
-                h={'100vh'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-                className="Main-Content"
-              >
-                <Box
-                 backgroundImage={preloadAssets?.backgroundImage}
-                  w={'100% !important'}
-                  h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  className="Game-Screen"
-                >
-                 
-                  <Box className="Images">
-                    <TyContentScreen
-                      formData={gameInfo.gameData}
-                      imageSrc={preloadAssets?.Screen6}
-                      preview={true}
-                      preloadedAssets ={preloadAssets}
-                    />
+                )}
+                {currentTab === 5 && currentSubTab === 0 && (
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={preloadAssets?.backgroundImage}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+
+                      <Box className="Images">
+                        <CompletionContentScreen
+                          preview={true}
+                          formData={gameInfo.gameData}
+                          imageSrc={preloadAssets.Screen1}
+                          compliData={gameInfo.completionQuestOptions}
+                          CompKeyCount={CompKeyCount}
+                          preloadedAssets={preloadAssets}
+                        />
+                      </Box>
+                    </Box>
                   </Box>
-                </Box>
-              </Box>
-            )}
-            {/* {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadAssets ={preloadAssets}/>} */}
+                )}
+                {currentTab === 5 && currentSubTab === 1 && (
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={preloadAssets?.backgroundImage}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+
+                      <Box className="Images">
+                        <Box className="LearderBoards">
+                          <Img
+                            src={preloadAssets?.Screen2}
+                            alt="Your Image"
+                            className="LearderBoards-Img"
+                          />
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+                {currentTab === 5 && currentSubTab === 2 && (
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={preloadAssets?.RefBg}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+
+                      <Box className="Images">
+                        <ReflectionContentScreen
+                          preview={true}
+                          formData={gameInfo.gameData}
+                          imageSrc={preloadAssets?.RefScreen1}
+                          reflectionQuestions={gameInfo?.reflectionQuestions}
+                          reflectionQuestionsdefault={reflectionQuestionsdefault}
+                          preloadedAssets={preloadAssets}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+                {currentTab === 5 && currentSubTab === 3 && (
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={preloadAssets?.backgroundImage}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+
+                      <Box className="Images">
+                        <TakeAwaysContentScreen
+                          preview={true}
+                          formData={gameInfo.gameData}
+                          imageSrc={preloadAssets?.Screen4}
+                          preloadedAssets={preloadAssets}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+                {currentTab === 5 && currentSubTab === 4 && (
+                  <>
+                    <Box
+                      w={'100%'}
+                      h={'100vh'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      position={'relative'}
+                      overflow={'visible'}
+                      style={{ perspective: '1000px' }}
+                      className="Main-Content"
+                    >
+
+                      <Box
+                        backgroundImage={preloadAssets?.backgroundImage}
+                        w={'100% !important'}
+                        h={'100vh'}
+                        backgroundRepeat={'no-repeat'}
+                        backgroundSize={'cover'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        className="Game-Screen"
+                      >
+
+
+                        <Box className="Images">
+                          <WelcomeContentScreen
+                            formData={gameInfo.gameData}
+                            imageSrc={preloadAssets?.Screen5}
+                            preview={true}
+                            preloadedAssets={preloadAssets}
+                          />
+                        </Box>
+                      </Box>
+                    </Box>
+                  </>
+                )}
+                {currentTab === 5 && currentSubTab === 5 && (
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={preloadAssets?.backgroundImage}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+
+                      <Box className="Images">
+                        <TyContentScreen
+                          formData={gameInfo.gameData}
+                          imageSrc={preloadAssets?.Screen6}
+                          preview={true}
+                          preloadedAssets={preloadAssets}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+                {endOfQuest &&  <PreviewEndOfStory  imageSrc={preloadAssets?.Screen6}  formData={gameInfo.gameData} setEndOfQuest= {setEndOfQuest} preloadAssets ={preloadAssets}/>}
               </Flex>
             </Box>
           </motion.div>
