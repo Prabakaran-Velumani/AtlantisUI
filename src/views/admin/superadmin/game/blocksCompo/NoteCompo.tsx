@@ -11,7 +11,7 @@ import {
   Img,
   Textarea,
   Input,
-  Divider 
+  Divider
 } from '@chakra-ui/react'
 import Select from 'react-select';
 import { MdAdd, MdCloudUpload,MdInbox, MdNote, MdNoteAdd, MdTextsms, MdDelete, MdOutlineStickyNote2 } from 'react-icons/md';
@@ -26,6 +26,7 @@ import { getBlockData } from 'utils/game/gameService';
 import { TbHandClick, TbMessages } from 'react-icons/tb';
 
 interface PropsNote {
+  reviews?: any,
   id?: number,
   language?: any,
   seq?: any,
@@ -48,13 +49,14 @@ interface PropsNote {
   setSelectBlock?: any,
   validation?: any,
   currentseq?:any,
+  ShowReview?: any,
 }
 interface Block {
   blockPrimarySequence: string;
   // Add other properties as needed
   content: string | undefined; // Adjust the type according to your data structure
 }
-const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handleInput, input, getSeq, duplicateSeq, delSeq, alphabet, setNavigation, handleBlock, handleSelectBlock, items, formDataGamelanguageCode, showSelectBlock,handleNDI, handleMiniNDI, setSelectBlock, validation,currentseq }) => {
+const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handleInput, input, getSeq, duplicateSeq, delSeq, alphabet, setNavigation, handleBlock, handleSelectBlock, items, formDataGamelanguageCode, showSelectBlock,handleNDI, handleMiniNDI, setSelectBlock, validation,currentseq,reviews, ShowReview }) => {
   const textareaRef = useRef(null);
   const [blockData, setBlockData] = useState<Block[]>([]);
   const [matchingBlockContent, setMatchingBlockContent] = useState('');
@@ -103,20 +105,6 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
     }
   }, [input?.[`Note${seq.input}`]?.note]);
 
-
-
-
-  // const customButtonStyles = {
-  //     borderRadius: '15px',
-  //     borderColor: '#ccc', // Optional: Change border color for disabled state
-  //     borderWidth: '1px', // Add this line to set the border width
-  //     borderStyle: 'solid', // Add this line to set the border style
-  //     cursor: 'not-allowed', // Optional: Change cursor for disabled state
-  //     padding: '10px 20px', // Adjust padding as needed
-  //     outline: 'none',
-  //     width: '140px', // Adjust width as needed
-  //     // textAlign: 'left' as TextAlign, // Align content to the left
-  //   };
   const customButtonStyles = {
     display: 'flex',
     alignItems: 'center',
@@ -166,16 +154,7 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
         </Box>
     )
   }
-  // const handleMiniNDInewblock = (seq?: any, i?: any, value?: any) => {
-
-
-  //   handleMiniNDI(seq, i, value);
-  //   if (value != '') {
-  //     console.log('seq', seq, 'i', i, 'value', value);
-  //     handleSelectBlock({ value: seq.input + 1 }, seq.input + 1, `Note${seq.input}`, `Note${seq.input}`);
-  //   }
-
-  // }
+  
   // const optionsnewblock = [
   //   { value: 'Note', label: 'Note' },
   //   { value: 'Dialog', label: 'Dialog' },
@@ -192,13 +171,10 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
         element.classList.remove('non-caret');
         element.removeAttribute('readonly');
         element.focus();
-        // console.log('event.----------------', element);
       }
     }
   };
-  console.log('NoteleadShowinput', input);
-  console.log('note1', input?.[`Note${seq.input}`]?.NoteleadShow === 'New Block');
-  console.log('note2', !input?.[`Note${seq.input}`]?.Notenavigate);
+
   return (
     <Flex className='block-compo' mb={'20px'} padding={'10px 0'} alignItems={'start'} >
       <Box className='block-action-icons'>
@@ -212,48 +188,12 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
           <button
             style={customButtonStyles}
             disabled={true}
-            onClick={() => { }}
-          >
-            {/* <span style={{ textAlign: 'left' }}>{t('Narrator')}</span> */}
-
+            onClick={() => { }} >
             <span style={{ textAlign: 'left' }}>Narrator</span>
           </button>
-          {/* <InputField
-                    placeholder={'Character...'}
-                    
-                    value="Narrator"
-                    style={customStyles.inputField}
-                    /> */}
-          {/* <InputField
-                    
-                        
-                    
-                        value="Narrator"
-                        style={{
-                            padding: '5px',
-                            borderRadius: '15px',
-                            border: '1px solid #ccc',
-                            width: '140px', // Adjust the width as needed
-                            textAlign: 'left', // Align the text to the right
-                            outline: 'none',
-                        }}
-                    /> */}
 
         </Box>
         <Box mr={'10px'} w={'400px'} >
-
-          {/* <Textarea
-                        ref={textareaRef}
-                        placeholder='Note'
-                        id='Note'
-                        name={`Note${seq.input}`}
-                        onChange={handleInput}
-                        value={input?.[`Note${seq.input}`]?.note}
-                        isRequired={true}
-                        // minHeight="45px"
-                        borderRadius={'18px'}
-                        // style={{ overflowY: 'hidden' }}
-                    /> */}
           <Textarea
             ref={textareaRef}
             placeholder='Note'
@@ -263,8 +203,6 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
             onChange={handleInput}
             onClick={(e) => justClick(e, seq)}
             value={(formDataGamelanguageCode ? matchingBlockContent : input?.[`Note${seq.input}`]?.note)}
-
-            // value={input?.[`Note${seq.input}`]?.note}
             isRequired={true}
             minHeight="45px"
             borderRadius={'18px'}
@@ -274,17 +212,8 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
             tabIndex={0}
             readOnly={true}
           />
-          {/* <Textarea 
-                        placeholder='Note' 
-                        id='Note'                        
-                        name={`Note${seq.input}`}                         
-                        onChange={handleInput} 
-                        value={input?.[`Note${seq.input}`]?.note}                         
-                        isRequired={true}
-                        borderRadius={'18px'}                        
-                    /> */}
+         
         </Box>
-        {/* <Text w={'40px'} mr={'10px'} color={'#999797'}>{seq.upNext}</Text> */}
       </Box>
 
       <Box className='navigation-icon' mr={'40px'} width={'100%'}>
@@ -306,23 +235,6 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
               // Render content for New Block
               <>
               <MiniBox1 seq={seq} i={index}  />
-                {/* <Select
-                  placeholder={'New Blocks...'}
-                  id='Dialog'
-                  name={`Note${seq.input}`}
-                  menuPortalTarget={document.body}
-                  styles={customStyles}
-                  options={optionsnewblock}
-                  isSearchable={true}
-                  className='react-select'
-                  value={
-                    showSelectBlock.find((option: any) => option.value === parseInt(input?.[`Note${seq.input}`]?.Notenavigate, 10)) ||
-                    null
-                  }
-                  onChange={(selectedOptions: any) => {
-                    handleMiniNDInewblock(seq, index, selectedOptions.value);
-                  }}
-                /> */}
               </>
             ) : input?.[`Note${seq.input}`]?.NoteleadShow === 'Select Block' && !input?.[`Note${seq.input}`]?.Notenavigate ? (
               // Render select tag for Select Block
@@ -347,11 +259,6 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <StrightConector
                     name={
-                      // input?.[`Note${seq.input}`]?.NoteleadShow === 'New Block' ? (
-                      //   showSelectBlock.find(
-                      //     (option: any) => option.value == input?.[`Note${seq.input}`]?.Notenavigate
-                      //   )?.label
-                      // ) :
                       input?.[`Note${seq.input}`]?.NoteleadShow === 'New Block' ?  (
                         (showSelectBlock.find(
                           (option: any) => option.value === input?.[`Note${seq.input}`]?.Notenavigate
@@ -373,7 +280,6 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
             )}
           </Box>
         </Flex>
-
       </Box>
     </Flex>
   )

@@ -33,6 +33,7 @@ import TagsField from './interactionSkills';
 import {TbHandClick, TbMessages } from 'react-icons/tb';
 import StrightConector from '../components/dragNdrop/strightConector'
 interface PropsInteraction {
+    reviews?:any,
     id?: number,
     language?: any,
     seq?: any,
@@ -76,6 +77,7 @@ interface PropsInteraction {
     validation?: any,
     handleMiniNDI?: any,
     currentseq?:any,
+    ShowReview?:any,
 }
 const customButtonStyles = {
     display: 'flex',
@@ -100,7 +102,7 @@ interface Option {
     contentOptionTextData: { textId: number; content: string }[];
 }
 
-const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index, number, dummySequence, name, handleInput, handleSelect, input, getSeq, duplicateSeq, delSeq, characterOption, alphabet, setAlphabet, animateBtn, setAnimateBtn, interactionBlock, setInteractionBlock, formData, handleBlockRoll, handleQuestionEmotion, handleOptionEmotion, handleResponseEmotion, handleCheckBox, setNavigation, handleBlock, inputtextValue, handleOptionVoice, handleQuestionVoice, countalphabet, setAlphabetCount, items, handleSelectBlock, handleResponseRoll,handleNDI, handleMiniNDI, handleTagsChange, showSelectBlock, setSelectBlock, validation,currentseq }) => {
+const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index, number, dummySequence, name, handleInput, handleSelect, input, getSeq, duplicateSeq, delSeq, characterOption, alphabet, setAlphabet, animateBtn, setAnimateBtn, interactionBlock, setInteractionBlock, formData, handleBlockRoll, handleQuestionEmotion, handleOptionEmotion, handleResponseEmotion, handleCheckBox, setNavigation, handleBlock, inputtextValue, handleOptionVoice, handleQuestionVoice, countalphabet, setAlphabetCount, items, handleSelectBlock, handleResponseRoll,handleNDI, handleMiniNDI, handleTagsChange, showSelectBlock, setSelectBlock, validation,currentseq, reviews, ShowReview }) => {
     const initial = {
         [`block${index}`]: ['']
     };
@@ -677,15 +679,27 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index
 
 
     return (
-        <Flex className='block-compo' overflowX={'auto'} scrollBehavior={'smooth'} id={`${seq.id}`}>
-            {showLeftButton && (
-                <Box className='goLeft' display={'flex'} alignItems={'center'} height={'100%'} position={'absolute'} left={0}>
-                    <Button onClick={handleLeft} position={'absolute'} left={0} zIndex={9} background={'#0000'} _hover={{ background: '#0000' }} boxShadow={'unset'}>
-                        <Icon as={MdArrowBack} color={'#fff'} />
-                        <Box content='""' height={'30px'} width={'30px'} borderRadius={'30px'} zIndex={-9} background={'#11047a'} position={'absolute'}></Box>
-                    </Button>
-                </Box>
-            )}
+        <Flex className='block-compo' overflowX={'auto'} scrollBehavior={'smooth'} id={`${seq.id}`}
+        borderRadius={'12px'} marginBottom={'0px'}  style={{
+            
+            backgroundColor: ShowReview
+              ? reviews && reviews.find((item: any) => {
+                  const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                  const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                  return isMatched;
+                })
+                  ? '#E2E8F0'
+                  : ''
+              : ''
+          }}>
+              {showLeftButton && (
+            <Box className='goLeft' display={'flex'} alignItems={'center'} height={'100%'} position={'absolute'} left={0}>
+                <Button onClick={handleLeft} position={'absolute'} left={0} zIndex={9} background={'#0000'} _hover={{background: '#0000'}} boxShadow={'unset'}>
+                    <Icon as={MdArrowBack} color={'#fff'} />
+                    <Box content='""' height={'30px'} width={'30px'} borderRadius={'30px'} zIndex={-9} background={'#11047a'} position={'absolute'}></Box>
+                </Button>   
+            </Box>
+              )}
             <Box className='block-action-icons'>
                 <Icon as={MdAdd} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => getSeq(seq, index, name)} />
                 <Icon as={BiSolidDuplicate} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => duplicateSeq(seq, index, name)} />

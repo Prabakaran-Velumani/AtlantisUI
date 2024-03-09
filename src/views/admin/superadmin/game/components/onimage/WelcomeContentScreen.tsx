@@ -18,6 +18,7 @@ import { FaClock } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
+import next from 'assets/img/screens/next.png';
 import Author from 'assets/img/screens/Author.png';
 import LearningOutcome from 'assets/img/screens/Learning Outcome.png';
 import Note from 'assets/img/screens/Note.png';
@@ -575,7 +576,11 @@ const WelcomeContentScreen: React.FC<{
                   </Box>
                 )}
               </Box>
+              <Box className='next-btn'>
+              <Img src={next}  />
             </Box>
+            </Box>
+           
           </Box>
       )}
       </motion.div>

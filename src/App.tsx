@@ -21,14 +21,9 @@ import { RootState } from 'store/reducers';
 import OrientationLock from 'views/admin/superadmin/game/components/onimage/LockOrientationComp';
 
 export default function Main() {
-  // eslint-disable-next-line
   const [currentTheme, setCurrentTheme] = useState(initialTheme);
 //   const previewData = useSelector((state : RootState) => state.preview); // Assuming 'preview' is the key for your slice in the store
 //   const userData = useSelector((state : RootState) => state.user); 
-
-
-// console.log("userData",userData)
-// console.log("previewData",previewData)
 
   return (
     <ChakraProvider theme={currentTheme}>

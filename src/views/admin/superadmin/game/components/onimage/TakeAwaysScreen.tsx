@@ -1,6 +1,7 @@
 import { Box, Img } from '@chakra-ui/react';
 import React from 'react';
 import bull from 'assets/img/screens/bullet.png';
+import next from 'assets/img/screens/next.png';
 interface Badge {
   gasId: number;
   gasAssetImage: string;
@@ -31,7 +32,7 @@ const TakewayScreen: React.FC<{
                     <Box className="content">
                       <>
                         <Img
-                          src={bull}
+                          src={preloadedAssets?.bull ?? bull}
                           className="dot-img"
                           w={'16px'}
                           h={'16px'}
@@ -44,7 +45,11 @@ const TakewayScreen: React.FC<{
                   );
                 })}
             </Box>
+            <Box className='next-btn'>
+              <Img src={preloadedAssets?.next ?? next}  />
+            </Box>
           </Box>
+          
         </Box>
       )}
     </>

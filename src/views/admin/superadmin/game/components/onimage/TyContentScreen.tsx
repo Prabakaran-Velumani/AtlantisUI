@@ -61,6 +61,8 @@ import { BsQuestionSquare } from 'react-icons/bs';
 import { BsEmojiNeutral } from 'react-icons/bs';
 import { RiEmotionHappyLine } from 'react-icons/ri';
 import { FaRegTired } from 'react-icons/fa';
+import next from 'assets/img/screens/next.png';
+
 import {
   FaComment,
   FaHatCowboy,
@@ -76,7 +78,7 @@ interface Badge {
   gasAssetName: string;
 }
 
-const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview:any , preloadedAssets?: any}> = ({
+const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview: any, preloadedAssets?: any }> = ({
   formData,
   imageSrc,
   preview,
@@ -152,7 +154,7 @@ const styleflex = {};
     <>
       {imageSrc && preview ? (
         <>
-         <Box className='section-thankyou-screen'>    
+          <Box className='section-thankyou-screen'>
             <Box className="thankyou-screen-box">
               <Img src={imageSrc} className="bg-img" />
             </Box>
@@ -418,13 +420,27 @@ const styleflex = {};
                               </a>
                             </Text>
                           </div>
+                        
                         </>
                       )}
                     </Box>
+                   
                   </Box>
+                  
                 </>
               )}
+                <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'167px', right:'0' , justifyContent:'center', zIndex:'9999'}}>
+              <Img src={next} />
             </Box>
+            </Box>
+            {/* <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'100px', right:'0' , justifyContent:'center'}}>
+              <Img src={next} />
+            </Box> */}
+            {/* <Box className='next-btn' style={{ position: 'fixed', bottom: '-1', right: '100' }}>
+              <Img src={next} />
+            </Box> */}
+
+
           </Box>
         </>
       ) : (
@@ -685,13 +701,22 @@ const styleflex = {};
                             </a>
                           </Text>
                         </div>
+                      
                       </>
                     )}
+                     
                   </Box>
                 </Box>
               </>
             )}
+             <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'167px', right:'0' , justifyContent:'center', zIndex:'9999'}}>
+              <Img src={next} />
+            </Box>
           </Box>
+          {/* <Box className='next-btn' style={{ position: 'absolute', top: '10', right: '100' }}>
+            <Img src={next} />
+          </Box> */}
+
         </Box>
       )}
     </>

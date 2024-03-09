@@ -2,10 +2,10 @@ import React from 'react'
 import {Box, Flex,Text,Img} from '@chakra-ui/react'
 import { useDispatch } from 'react-redux';
 import { updatePreviewData } from 'store/preview/previewSlice';
-const PreviewEndOfStory : React.FC<{preloadAssets: any, setEndOfQuest:any}>= ({preloadAssets, setEndOfQuest}) => {
+const PreviewEndOfStory : React.FC<{preloadedAssets: any, setEndOfQuest:any}>= ({preloadedAssets, setEndOfQuest}) => {
 const dispatch = useDispatch();
-  console.log("preloadAssets");
-console.log(preloadAssets);
+  console.log("preloadedAssets");
+console.log(preloadedAssets);
 
 const replayQuest = ()=>{
   dispatch(updatePreviewData({activeBlockSeq: 1}));
@@ -14,7 +14,7 @@ const replayQuest = ()=>{
 
   return (
     <Flex className="end-of-quest" >
-      <Img src={preloadAssets?.backgroundImage} className='eoq-bg-img' />
+      <Img src={preloadedAssets?.backgroundImage} className='eoq-bg-img' />
       <Box
               w={'100%'}
               display={'flex'}
@@ -40,7 +40,7 @@ const replayQuest = ()=>{
                 className='eoq-replay-img'
               >
                 <Img
-                  src={preloadAssets.replayBtn}
+                  src={preloadedAssets.replayBtn}
                   w={'200px'}
                   h={'60px'}
                   cursor={'pointer'}

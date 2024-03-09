@@ -4,51 +4,31 @@ import {
   Flex,
   Text,
   Img,
+  Grid,
+  GridItem
 } from '@chakra-ui/react';
 import React, {
   Suspense,
   useEffect,
-  useLayoutEffect,
-  useRef,
   useState,
-  useCallback,
 } from 'react';
-import SelectField from 'components/fields/SelectField';
 import TakeAwaysContentScreen from './onimage/TakeAwaysScreen';
-import InitialImg from 'assets/img/games/load.jpg';
-import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 // import Sample from '../../../../assets/img/games/Character_sample.glb';
-import Sample from 'assets/img/games/Character_sample.glb';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import feedi from 'assets/img/screens/feed.png';
-import Screen5 from '../../../../../assets/img/screens/screen5.png';
-import { AiFillMessage } from 'react-icons/ai';
 // import WelcomeContentScreen from './onimage/WelcomeContentScreen';
-import Screen1 from '../../../../../assets/img/screens/screen1.png';
 
-import Screen2 from '../../../../../assets/img/screens/screen2.png';
 import ReflectionContentScreen from './onimage/ReflectionScreen';
-import RefScreen1 from '../../../../../assets/img/screens/refscreen1.png';
-import Screen4 from '../../../../../assets/img/screens/screen4.png';
 import TyContentScreen from './onimage/TyContentScreen';
 import {
-  getVoiceMessage,
-  getPreview,
   getGameCreatorDemoData,
 } from 'utils/game/gameService';
-import { useParams } from 'react-router-dom';
 import TypingEffect from '../demoplay/playcards/Typing';
-import RefBg from 'assets/img/games/refbg.png';
 import { API_SERVER } from 'config/constant';
-import useImagePreloader from 'utils/hooks/useImagePreLoader';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { lazy } from 'react';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
 import { preloadedImages } from 'utils/hooks/function';
-import { FaLeaf } from 'react-icons/fa';
 import { updatePreviewData } from 'store/preview/previewSlice';
 
 // const WelcomeContentScreen = lazy(() => import('./onimage/WelcomeContentScreen'));
@@ -72,7 +52,7 @@ const ScreenPreview = () => {
   const [apiImageSet, setApiImageSet] = useState<any>();
   const [staticAssetImageUrls, setStaticAssetImageUrls] = useState<any>(null);
   const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
-  const [preloadAssets, setPreloadAssets] = useState<any>();
+  const [preloadedAssets , setPreloadedAssets ] = useState<any>();
   const [demoBlocks, setDemoBlocks] = useState(null);
   const [navi, setNavi] = useState<string>('');
   const [options, setOptions] = useState(null);
@@ -84,6 +64,8 @@ const ScreenPreview = () => {
   const [resMsg, setResMsg] = useState<string>('');
   const [feed, setFeed] = useState<string>('');
   const [endOfQuest, setEndOfQuest] = useState<boolean>(false);
+  const [currentPosition, setCurrentPosition] = useState(0);
+  const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
   const reflectionQuestionsdefault = [
     'What were your biggest learnings?',
     'How can you apply these learnings back at work?',
@@ -297,17 +279,17 @@ const ScreenPreview = () => {
 
   useEffect(() => {
     if (apiUrlAssetImageUrls && staticAssetImageUrls) {
-      setPreloadAssets({ ...apiUrlAssetImageUrls, ...staticAssetImageUrls });
+      setPreloadedAssets ({ ...apiUrlAssetImageUrls, ...staticAssetImageUrls });
     }
   }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
 
   useEffect(() => {
-    if (gameInfo && preloadAssets) {
+    if (gameInfo && preloadedAssets ) {
       setContentReady(true);
     } else {
       setContentReady(false);
     }
-  }, [gameInfo, preloadAssets]);
+  }, [gameInfo, preloadedAssets ]);
 
   useEffect(()=>{
     dispatch(updatePreviewData({isDispatched: false}));
@@ -443,6 +425,42 @@ const ScreenPreview = () => {
 
   };
 
+
+  const getData1 = (data: any) => {
+    const content = data?.blockText || '';
+    const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
+    const newRemainingSentences = sentences.slice(currentPosition);
+   
+    const concatenatedSentences = [];
+    let totalLength = 0;
+  
+    for (let i = 0; i < newRemainingSentences.length; i++) {
+      const sentence = newRemainingSentences[i];
+      if (totalLength + sentence.length <= 100) {
+        concatenatedSentences.push(sentence);
+        totalLength += sentence.length;
+      } else {
+        concatenatedSentences.push(sentence);
+        break;
+      }
+    }
+    setRemainingSentences(concatenatedSentences);
+  
+    if (newRemainingSentences.length >= 1) {
+      setCurrentPosition(currentPosition + concatenatedSentences.length);
+    } else {
+      if (data && type === 'Note') {
+        getData(data);
+      }
+    }
+  };
+  
+  useEffect(() => {
+    if(data && type === 'Note')
+      {
+         getData1(data);
+      }
+  }, [data]);
   return (
     <Box id="container" ref={previewScreenRef}>
       <Suspense fallback={<h1>Component1 are loading please wait...</h1>}>
@@ -466,7 +484,7 @@ const ScreenPreview = () => {
                       className="Main-Content"
                     >
                       <Box
-                        backgroundImage={preloadAssets.backgroundImage}
+                        backgroundImage={preloadedAssets .backgroundImage}
                         w={'100% !important'}
                         h={'100vh'}
                         backgroundRepeat={'no-repeat'}
@@ -479,7 +497,7 @@ const ScreenPreview = () => {
                           {gameInfo && (
                             <WelcomeContentScreen
                               formData={gameInfo.gameData}
-                              imageSrc={preloadAssets?.Screen5}
+                              imageSrc={preloadedAssets?.Screen5}
                               preview={true}
                             />
                           )}
@@ -488,98 +506,155 @@ const ScreenPreview = () => {
                     </Box>
                 )}
                 {currentTab === 4 && data && type === 'Note' && (
+                  // <Box
+                  //   w={'100%'}
+                  //   h={'100vh'}
+                  //   display={'flex'}
+                  //   alignItems={'center'}
+                  //   justifyContent={'center'}
+                  //   position={'relative'}
+                  //   overflow={'visible'}
+                  //   // style={{ perspective: '1000px' }}
+                  // >
+                  //   <Box
+                  //     color={'rgba(0, 0, 0, 0.5)'}
+                  //     backgroundImage={preloadedAssets?.backgroundImage}
+                  //     w={'100%'}
+                  //     h={'100vh'}
+                  //     backgroundRepeat={'no-repeat'}
+                  //     backgroundSize={'cover'}
+                  //     transform={`scale(${first ? 1 : 0.9}) translateY(${
+                  //       first ? 0 : -0
+                  //     }%) translateX(${first ? 0 : -10}%)`}
+                  //     transition={'transform 0.9s ease-in-out'}
+                  //   >
+                  //     <Box
+                  //       position={'fixed'}
+                  //       top={'200px'}
+                  //       right={'0px'}
+                  //       bottom={0}
+                  //       zIndex={999}
+                  //       w={'300px'}
+                  //     >
+                  //       <Box
+                  //         style={{
+                  //           transform: `scale(${showNote ? 0.2 : 1})`,
+                  //           transition: 'transform 0.5s ease-in-out',
+                  //         }}
+                  //         position={'fixed'}
+                  //         w={'40%'}
+                  //         h={'60vh'}
+                  //         display={'flex'}
+                  //         flexDirection={'column'}
+                  //         justifyContent={'center'}
+                  //         alignItems={'center'}
+                  //       >
+                  //         <Img
+                  //           w={'100%'}
+                  //           h={'80vh'}
+                  //           src={preloadedAssets?.note}
+                  //         />
+                  //         <Box
+                  //           position={'fixed'}
+                  //           overflowY={'scroll'}
+                  //           transform={'translate(0px, 0px)'}
+                  //           w={'50%'}
+                  //           mt={'10px'}
+                  //           display={'flex'}
+                  //           flexDirection={'column'}
+                  //           textAlign={'center'}
+                  //           justifyContent={'center'}
+                  //           style={{
+                  //             fontWeight: '900',
+                  //             color: '#D9C7A2',
+                  //             fontSize: '18px',
+                  //             fontFamily: 'AtlantisContent',
+                  //             lineHeight: 1,
+                  //           }}
+                  //         >
+                  //           <Box
+                  //             w={'100%'}
+                  //             overflowY={'scroll'}
+                  //             h={'100px'}
+                  //             display={'flex'}
+                  //             alignItems={'center'}
+                  //             justifyContent={'center'}
+                  //             mt={'20px'}
+                  //           >
+                  //             {data?.blockText}
+                  //           </Box>
+                  //           <Box
+                  //             w={'100%'}
+                  //             onClick={() => getData(data)}
+                  //             mt={'20px'}
+                  //             display={'flex'}
+                  //             justifyContent={'center'}
+                  //             cursor={'pointer'}
+                  //           >
+                  //             <Img src={preloadedAssets .next} w={'200px'} h={'60px'} />
+                  //           </Box>
+                  //         </Box>
+                  //       </Box>
+                  //     </Box>
+                  //   </Box>
+                  // </Box>
                   <Box
-                    w={'100%'}
-                    h={'100vh'}
-                    display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                    overflow={'visible'}
-                    style={{ perspective: '1000px' }}
-                  >
-                    <Box
-                      color={'rgba(0, 0, 0, 0.5)'}
-                      backgroundImage={preloadAssets?.backgroundImage}
-                      w={'100%'}
-                      h={'100vh'}
-                      backgroundRepeat={'no-repeat'}
-                      backgroundSize={'cover'}
-                      transform={`scale(${first ? 1 : 0.9}) translateY(${
-                        first ? 0 : -0
-                      }%) translateX(${first ? 0 : -10}%)`}
-                      transition={'transform 0.9s ease-in-out'}
-                    >
-                      <Box
-                        position={'fixed'}
-                        top={'200px'}
-                        right={'0px'}
-                        bottom={0}
-                        zIndex={999}
-                        w={'300px'}
-                      >
-                        <Box
-                          style={{
-                            transform: `scale(${showNote ? 0.2 : 1})`,
-                            transition: 'transform 0.5s ease-in-out',
-                          }}
-                          position={'fixed'}
-                          w={'40%'}
-                          h={'60vh'}
-                          display={'flex'}
-                          flexDirection={'column'}
-                          justifyContent={'center'}
-                          alignItems={'center'}
-                        >
-                          <Img
-                            w={'100%'}
-                            h={'80vh'}
-                            src={preloadAssets?.note}
-                          />
-                          <Box
-                            position={'fixed'}
-                            overflowY={'scroll'}
-                            transform={'translate(0px, 0px)'}
-                            w={'50%'}
-                            mt={'10px'}
-                            display={'flex'}
-                            flexDirection={'column'}
-                            textAlign={'center'}
-                            justifyContent={'center'}
-                            style={{
-                              fontWeight: '900',
-                              color: '#D9C7A2',
-                              fontSize: '18px',
-                              fontFamily: 'AtlantisContent',
-                              lineHeight: 1,
-                            }}
-                          >
-                            <Box
-                              w={'100%'}
-                              overflowY={'scroll'}
-                              h={'100px'}
-                              display={'flex'}
-                              alignItems={'center'}
-                              justifyContent={'center'}
-                              mt={'20px'}
-                            >
-                              {data?.blockText}
-                            </Box>
-                            <Box
-                              w={'100%'}
-                              onClick={() => getData(data)}
-                              mt={'20px'}
-                              display={'flex'}
-                              justifyContent={'center'}
-                              cursor={'pointer'}
-                            >
-                              <Img src={preloadAssets.next} w={'200px'} h={'60px'} />
-                            </Box>
-                          </Box>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Box>
+        position="relative"
+        maxW="100%"
+        w={'100vw'}
+        height="100vh"
+        backgroundImage={preloadedAssets.backgroundImage}
+        backgroundSize={'cover'}
+        backgroundRepeat={'no-repeat'}
+      >
+        <Grid
+          templateColumns="repeat(1, 1fr)"
+          gap={4}
+          position="absolute"
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+          className="story_note_grid"
+        >
+          <GridItem colSpan={1} position={'relative'}>
+            <Img src={preloadedAssets.note} className="story_note_image" loading="lazy" />
+            <Box
+              className={'story_note_content'}
+            >
+              <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                <Box
+                  w={'65%'}
+                  fontSize={{ base: '3.8vw', sm: '2.8vw', md: '1.8vw' }}
+                  height={'20vh'}
+                  overflowY={'auto'}
+                  fontFamily={'AtlantisContent'}
+                  color={'#D9C7A2'}
+                  display={'flex'}
+                  justifyContent={'center'}
+                >
+                 {remainingSentences.map((sentence, index) => (
+                    <React.Fragment key={index}>
+                      {sentence}
+                    </React.Fragment>
+                  ))}
+                </Box>
+              </Box>
+              <Box
+                w={'100%'}
+                onClick={() => getData1(data)}
+                mt={'20px'}
+                display={'flex'}
+                justifyContent={'center'}
+                cursor={'pointer'}
+                position={'fixed'}
+                top={'70%'}
+              >
+                <Img src={preloadedAssets.next} w={'100px'} />
+              </Box>
+            </Box>
+          </GridItem>
+        </Grid>
+      </Box>
                 )}
                 {currentTab === 4 && data && type === 'Dialog' && (
                   <Box
@@ -591,7 +666,7 @@ const ScreenPreview = () => {
                     position={'relative'}
                   >
                     <Img
-                      src={preloadAssets?.backgroundImage}
+                      src={preloadedAssets?.backgroundImage}
                       maxW={'100%'}
                       maxH={'100%'}
                       w={'100%'}
@@ -613,13 +688,13 @@ const ScreenPreview = () => {
                       w={'100%'}
                       h={'240px'}
                       bottom={'0'}
-                      src={preloadAssets?.dial}
+                      src={preloadedAssets?.dial}
                     />
                     {!showNote && (
                       <>
                         <Box position={'relative'}>
                           <Img
-                            src={preloadAssets?.char}
+                            src={preloadedAssets?.char}
                             position={'fixed'}
                             h={'70px'}
                             w={'25%'}
@@ -659,17 +734,17 @@ const ScreenPreview = () => {
                           bottom={'0'}
                         >
                           <Img
-                            src={preloadAssets?.left}
+                            src={preloadedAssets?.left}
                             w={'50px'}
                             h={'50px'}
                             cursor={'pointer'}
                           />
                           <Img
-                            src={preloadAssets?.right}
+                            src={preloadedAssets?.right}
                             w={'50px'}
                             h={'50px'}
                             cursor={'pointer'}
-                            onClick={() => getData(data)}
+                            onClick={() => getData1(data)}
                           />
                         </Box>
                       </>
@@ -686,7 +761,7 @@ const ScreenPreview = () => {
                     position={'relative'}
                   >
                     <Img
-                      src={preloadAssets?.backgroundImage}
+                      src={preloadedAssets?.backgroundImage}
                       maxW={'100%'}
                       maxH={'100%'}
                       w={'100%'}
@@ -704,7 +779,7 @@ const ScreenPreview = () => {
                         transition:
                           'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
                       }}
-                      backgroundImage={preloadAssets?.parch}
+                      backgroundImage={preloadedAssets?.parch}
                       position={'fixed'}
                       w={{ sm: '350px', md: '500px' }}
                       h={{ sm: '50vh', md: ' 550px' }}
@@ -767,7 +842,7 @@ const ScreenPreview = () => {
                               fontSize={'20px'}
                             >
                               <Img
-                                src={selectedOption === ind ? preloadAssets?.on : preloadAssets?.off}
+                                src={selectedOption === ind ? preloadedAssets?.on : preloadedAssets?.off}
                                 h={'30px'}
                                 w={'95%'}
                               />
@@ -783,18 +858,18 @@ const ScreenPreview = () => {
                         left={'-10px'}
                       >
                         <Img
-                          src={preloadAssets?.left}
+                          src={preloadedAssets?.left}
                           w={'50px'}
                           h={'50px'}
                           cursor={'pointer'}
                         />
                         {selectedOption !== null && (
                           <Img
-                            src={preloadAssets?.right}
+                            src={preloadedAssets?.right}
                             w={'50px'}
                             h={'50px'}
                             cursor={'pointer'}
-                            onClick={() => getData(data)}
+                            onClick={() => getData1(data)}
                           />
                         )}
                       </Box>
@@ -811,7 +886,7 @@ const ScreenPreview = () => {
                     position={'relative'}
                   >
                     <Img
-                      src={preloadAssets?.backgroundImage}
+                      src={preloadedAssets?.backgroundImage}
                       maxW={'100%'}
                       maxH={'100%'}
                       w={'100%'}
@@ -833,13 +908,13 @@ const ScreenPreview = () => {
                       w={'100%'}
                       h={'240px'}
                       bottom={'0'}
-                      src={preloadAssets?.dial}
+                      src={preloadedAssets?.dial}
                     />
                     {!showNote && (
                       <>
                         <Box position={'relative'}>
                           <Img
-                            src={preloadAssets?.char}
+                            src={preloadedAssets?.char}
                             position={'fixed'}
                             h={'70px'}
                             w={'25%'}
@@ -879,17 +954,17 @@ const ScreenPreview = () => {
                           bottom={'0'}
                         >
                           <Img
-                            src={preloadAssets?.left}
+                            src={preloadedAssets?.left}
                             w={'50px'}
                             h={'50px'}
                             cursor={'pointer'}
                           />
                           <Img
-                            src={preloadAssets?.right}
+                            src={preloadedAssets?.right}
                             w={'50px'}
                             h={'50px'}
                             cursor={'pointer'}
-                            onClick={() => getData(data)}
+                            onClick={() => getData1(data)}
                           />
                         </Box>
                       </>
@@ -908,7 +983,7 @@ const ScreenPreview = () => {
                 style={{ perspective: '1000px' }}
               >
                 <Box
-                  backgroundImage={preloadAssets?.backgroundImage}
+                  backgroundImage={preloadedAssets?.backgroundImage}
                   w={'100%'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}
@@ -941,7 +1016,7 @@ const ScreenPreview = () => {
                   justifyContent={'center'}
                   alignItems={'center'}
                 >
-                  <Img w={'90%'} h={'80vh'} src={preloadAssets?.feedi} />
+                  <Img w={'90%'} h={'80vh'} src={preloadedAssets?.feedi} />
                   <Box
                     position={'fixed'}
                     w={'50%'}
@@ -958,14 +1033,14 @@ const ScreenPreview = () => {
                     {feed}
                     <Box
                       w={'100%'}
-                      onClick={() => getData(data)}
+                      onClick={() => getData1(data)}
                       mt={'20px'}
                       display={'flex'}
                       justifyContent={'center'}
                       cursor={'pointer'}
                       transform={'translate(0px, 100px)'}
                     >
-                      <Img src={preloadAssets?.next} w={'200px'} h={'60px'} />
+                      <Img src={preloadedAssets?.next} w={'200px'} h={'60px'} />
                     </Box>
                   </Box>
                 </Box>
@@ -983,7 +1058,7 @@ const ScreenPreview = () => {
                 className="Main-Content"
               >
                 <Box
-                  backgroundImage={preloadAssets?.backgroundImage}
+                  backgroundImage={preloadedAssets?.backgroundImage}
                   w={'100% !important'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}
@@ -996,10 +1071,10 @@ const ScreenPreview = () => {
                     <CompletionContentScreen
                       preview={true}
                       formData={gameInfo.gameData}
-                      imageSrc={preloadAssets.Screen1}
+                      imageSrc={preloadedAssets.Screen1}
                       compliData={gameInfo.completionQuestOptions}
                       CompKeyCount={CompKeyCount}
-                      preloadedAssets ={preloadAssets}
+                      preloadedAssets ={preloadedAssets}
                     />
                   </Box>
                 </Box>
@@ -1017,7 +1092,7 @@ const ScreenPreview = () => {
                 className="Main-Content"
               >
                 <Box
-                 backgroundImage={preloadAssets?.backgroundImage}
+                 backgroundImage={preloadedAssets?.backgroundImage}
                   w={'100% !important'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}
@@ -1030,7 +1105,7 @@ const ScreenPreview = () => {
                   <Box className="Images">
                     <Box className="LearderBoards">
                       <Img
-                        src={preloadAssets?.Screen2}
+                        src={preloadedAssets?.Screen2}
                         alt="Your Image"
                         className="LearderBoards-Img"
                       />
@@ -1051,7 +1126,7 @@ const ScreenPreview = () => {
                 className="Main-Content"
               >
                 <Box
-                  backgroundImage={preloadAssets?.RefBg}
+                  backgroundImage={preloadedAssets?.RefBg}
                   w={'100% !important'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}
@@ -1064,10 +1139,10 @@ const ScreenPreview = () => {
                     <ReflectionContentScreen
                       preview={true}
                       formData={gameInfo.gameData}
-                      imageSrc={preloadAssets?.RefScreen1}
+                      imageSrc={preloadedAssets?.RefScreen1}
                       reflectionQuestions={gameInfo?.reflectionQuestions}
                       reflectionQuestionsdefault={reflectionQuestionsdefault}
-                      preloadedAssets ={preloadAssets}
+                      preloadedAssets ={preloadedAssets}
                     />
                   </Box>
                 </Box>
@@ -1085,7 +1160,7 @@ const ScreenPreview = () => {
                 className="Main-Content"
               >
                 <Box
-                 backgroundImage={preloadAssets?.backgroundImage}
+                 backgroundImage={preloadedAssets?.backgroundImage}
                   w={'100% !important'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}
@@ -1098,8 +1173,8 @@ const ScreenPreview = () => {
                     <TakeAwaysContentScreen
                       preview={true}
                       formData={gameInfo.gameData}
-                      imageSrc={preloadAssets?.Screen4}
-                      preloadedAssets ={preloadAssets}
+                      imageSrc={preloadedAssets?.Screen4}
+                      preloadedAssets={preloadedAssets}
                     />
                   </Box>
                 </Box>
@@ -1118,7 +1193,7 @@ const ScreenPreview = () => {
                   className="Main-Content"
                 >
                   <Box
-                   backgroundImage={preloadAssets?.backgroundImage}
+                   backgroundImage={preloadedAssets?.backgroundImage}
                     w={'100% !important'}
                     h={'100vh'}
                     backgroundRepeat={'no-repeat'}
@@ -1130,9 +1205,9 @@ const ScreenPreview = () => {
                     <Box className="Images">
                       <WelcomeContentScreen
                         formData={gameInfo.gameData}
-                        imageSrc={preloadAssets?.Screen5}
+                        imageSrc={preloadedAssets?.Screen5}
                         preview={true}
-                        preloadAssets ={preloadAssets}
+                        preloadedAssets ={preloadedAssets}
                       />
                     </Box>
                   </Box>
@@ -1151,7 +1226,7 @@ const ScreenPreview = () => {
                 className="Main-Content"
               >
                 <Box
-                 backgroundImage={preloadAssets?.backgroundImage}
+                 backgroundImage={preloadedAssets?.backgroundImage}
                   w={'100% !important'}
                   h={'100vh'}
                   backgroundRepeat={'no-repeat'}
@@ -1163,15 +1238,15 @@ const ScreenPreview = () => {
                   <Box className="Images">
                     <TyContentScreen
                       formData={gameInfo.gameData}
-                      imageSrc={preloadAssets?.Screen6}
+                      imageSrc={preloadedAssets?.Screen6}
                       preview={true}
-                      preloadedAssets ={preloadAssets}
+                      preloadedAssets ={preloadedAssets}
                     />
                   </Box>
                 </Box>
               </Box>
             )}
-            {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadAssets ={preloadAssets}/>}
+            {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadedAssets  ={preloadedAssets }/>}
               </Flex>
             </Box>
           </motion.div>

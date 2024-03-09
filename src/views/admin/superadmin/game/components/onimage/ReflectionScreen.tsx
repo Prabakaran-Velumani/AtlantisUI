@@ -13,6 +13,8 @@ import question from 'assets/img/games/question.png';
 import right from 'assets/img/games/right.png';
 import left from 'assets/img/games/left.png';
 import refsep from 'assets/img/games/refseparate.png';
+import next from 'assets/img/screens/next.png';
+
 interface Badge {
   gasId: number;
   gasAssetImage: string;
@@ -230,6 +232,7 @@ Object.assign(styleflex, {
                 )}
               </Box>
             </Box>
+            
           ) : null}
         </Box>
       )}

@@ -27,6 +27,8 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import CharacterPreview from './CharacterPreview';
 import {
   GoCodeReview,
+GoEye,
+  GoEyeClosed		
 } from 'react-icons/go';
 import Card from 'components/card/Card';
 import GameCard from './gameCard';
@@ -91,6 +93,7 @@ import { updatePreviewData } from '../../../../../store/preview/previewSlice';
 import { Dispatch } from '@reduxjs/toolkit'; // Import Dispatch type from @reduxjs/toolkit
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
+import { AiOutlineEye,AiOutlineEyeInvisible } from "react-icons/ai";
 
 // @ts-ignore
 import loadingImage from 'assets/img/games/loading.gif';
@@ -207,7 +210,6 @@ const GameCreation = () => {
         [refkey]: reflecation,
       };
     });
-    // console.log('reflectionQuestions', reflectionQuestions);
   };
 
   const handlesaveReflection = async () => {
@@ -216,7 +218,6 @@ const GameCreation = () => {
       gameReflectionQuestion: formData.gameReflectionQuestion,
       gameId: id,
     };
-    // console.log('handlesaveReflection', data);
     const datas = JSON.stringify(data);
     const resu = await createReflection(datas);
 
@@ -238,6 +239,9 @@ const GameCreation = () => {
   );
   const iconColor = useColorModeValue('brand.500', 'white');
   const bgList = useColorModeValue('white', 'whiteAlpha.100');
+  const Menupreview = { 
+    zIndex: 100000000 
+  };
   const bgShadow = useColorModeValue(
     '14px 17px 40px 4px rgba(112, 144, 176, 0.08)',
     'unset',
@@ -299,6 +303,7 @@ const GameCreation = () => {
     [cat, setCat] = useState([]),
     [enter, setEnter] = useState(false),
     [entire, setEntire] = useState(false),
+	[ShowReview, setShowReview] = useState(false),											  
     [share, setShare] = useState(false),
     [bgIndex, setBgIndex] = useState<number>(),
     [formData, setFormData] = useState({
@@ -319,6 +324,8 @@ const GameCreation = () => {
       gamePlayerFemaleVoice: null,
       gameNarratorVoice: null,
 
+			 
+			   
       gameStoryLine: '',
       gameReflectionQuestion: 4,
       gameRefQuestion1: '',
@@ -341,6 +348,9 @@ const GameCreation = () => {
       gameIsCollectLearnerFeedback: 'false',
       gameIsFeedbackMandatory: 'false',
       gameIsLearnerMandatoryQuestion: 'false',
+									  
+
+										   
       gameIsSetCongratsSingleMessage: 'false',
 
       gameIsShowTakeaway: 'false',
@@ -604,6 +614,8 @@ const GameCreation = () => {
     }));
   };
  
+														  
+   
   const handleH = (i: any) => {
     setBackgroundIndex(i);
   };
@@ -612,6 +624,9 @@ const GameCreation = () => {
     setBackgroundIndex('');
   };
 
+														  
+   
+											   
   const handlePreview = (img: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchImg((prev: any) => {
@@ -815,6 +830,7 @@ const GameCreation = () => {
   };
 
   const handleGet = async (quest: number) => {
+				 
     setAtuoSave(false);
     // console.log('handleGet');
     // return false;
@@ -900,13 +916,10 @@ const GameCreation = () => {
         setCompletion(result?.data);
         setCompliData(result?.data);
         setCompKeyCount(Object.keys(result?.data).length - 1);
-        // setCurrentTab(0);
         if (formData && formData.gameLastTabArray) {
           const tabformArray = formData.gameLastTabArray;
           const findArrayValue = tabformArray.includes(5);
-          console.log('findArrayValue0',findArrayValue);
           if (findArrayValue) {
-            console.log('findArrayValue1',findArrayValue);
             setCurrentTab(5);
           }
           else{
@@ -977,12 +990,15 @@ const GameCreation = () => {
     // const result1 = await getStory(id);
     // if (result1?.status !== 'Success') {de
     //   console.log(result1.message);
+
     // }
     // else {
+
     //   setBlockItems(result1.items);
     //   setserias(result1.serias);
     // }
     const result2 = await getListStory(id);
+
     if (result2?.status !== 'Success') {
       console.log(result2?.message);
     } else {
@@ -1045,7 +1061,12 @@ useEffect(()=>{
     setShare(true);
     onOpen();
   };
+	 const handleShowReview = () => {
+    setShowReview(!ShowReview);
+   
+  };							  
 
+  
   const handleTrans = (tabs: number) => {
     let tabArray: number[] = [];
 
@@ -1068,8 +1089,7 @@ useEffect(()=>{
     const title4 = tab4?.getAttribute('title');
     const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
     const tab4Height = tabs == 4 && (getFourElementHgt + getfirstElementHgt)
-    console.log('getFourElementHgt123',getFourElementHgt)
-    console.log('getFourElementHgttab123',questTabState)
+    
     //tab5
     const tab5 = document.getElementById(`tab5`)
     const title5 = tab5?.getAttribute('title');
@@ -1281,7 +1301,7 @@ useEffect(()=>{
                   var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                   var blockRoll = input[inputkey]?.blockRoll;
                   var interaction = input[inputkey]?.interaction;
-                  //console.log('QuestionsEmotion', QuestionsEmotion);
+                  console.log('QuestionsEmotion1', QuestionsEmotion);
                   //console.log('blockRoll', blockRoll);
                   //console.log('interaction', interaction);
                   if (!interaction) {
@@ -1314,14 +1334,9 @@ useEffect(()=>{
                   if (typeof alphabet === 'object' && alphabet !== null) {
                     var alphabetData = alphabet;
 
-                    // alphabetData?.filter((alp: any) => key.id === alp.seqs).map((alp: any, i: number, arr: any[]) => {
                     for (const alp of alphabetData?.filter(
                       (alp: any) => key.id === alp.seqs,
                     ) || []) {
-                      console.log(
-                        'alpha',
-                        input[inputkey]?.optionsObject[alp.option],
-                      );
                       if (!input[inputkey]?.optionsObject[alp.option]) {
                         var option = alp.option;
                         toast({
@@ -1846,7 +1861,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
       setOpenQuest(true);
       const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
       if (result.status === 'Success') {
-        const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
+        const maxQuestNo = MaxBlockQuestNumber?.data?.maxBlockQuestNo;
         console.log('Max QuestNo:', maxQuestNo);
         if (maxQuestNo < 5) {
           setOpenQuest(true);
@@ -1990,18 +2005,15 @@ if (formData.gameIsFeedbackMandatory === "true") {
     }
     if (tab === 4) {
       if (items.length !== 0) {
-        //console.log('items567', items);
         if (items.some((item: any) => item.type === 'Interaction')) {
           if (typeof items === 'object' && items !== null) {
             var inputData = items;
-            //console.log('inputData', inputData);
 
             for (var i = 0; i < inputData.length; i++) {
               var key = inputData[i];
               var inputkey = key.type + key.input;
               var inputget = input;
               var inputdataget = Object.values(inputget);
-              console.log('key', key);
 
               if (key.type === 'Note') {
                 var note = input[inputkey].note;
@@ -2047,7 +2059,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
                 var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                 var blockRoll = input[inputkey]?.blockRoll;
                 var interaction = input[inputkey]?.interaction;
-                //console.log('QuestionsEmotion', QuestionsEmotion);
+                console.log('QuestionsEmotion', QuestionsEmotion);
                 //console.log('blockRoll', blockRoll);
                 //console.log('interaction', interaction);
                 if (!interaction) {
@@ -2085,10 +2097,6 @@ if (formData.gameIsFeedbackMandatory === "true") {
                   for (const alp of alphabetData?.filter(
                     (alp: any) => key.id === alp.seqs,
                   ) || []) {
-                    console.log(
-                      'alpha',
-                      input[inputkey]?.optionsObject[alp.option],
-                    );
                     if (!input[inputkey]?.optionsObject[alp.option]) {
                       var option = alp.option;
                       setValidation({ ...validation, [`options${key.input}${option}`]: true })
@@ -2148,11 +2156,12 @@ if (formData.gameIsFeedbackMandatory === "true") {
                 }
               }
               var hasComplete = inputdataget.some((item: any) => {
-                console.log("hasComplete", hasComplete);
+                // console.log("hasComplete", hasComplete);
                 return (
                   item &&(item.Notenavigate === 'Complete' || item.Dialognavigate === 'Complete' || (item.navigateObjects && Object.values(item.navigateObjects).includes('Complete')))
                 );
               });
+              console.log("hasComplete", hasComplete);
                 if (!hasComplete) {
                   toast({
                     title:`At least Any One of the  Select Block as Complete`,
@@ -2921,111 +2930,7 @@ return false;
     }
   }, [formData.gameIsSetCongratsSingleMessage]);
 
-  //navin 16-12
-  //priyaDharshini
-  //   useEffect(() => {
-  //     const getTotalScore = () => {
-  //       let wordCount=[];
-  //       if (typeof items === 'object' && items !== null) {
-  //         var inputData = items;
-  //         console.log("inputData", inputData);
-  //         let maxArray = [];
-
-  //   let words;
-  //         for (var i = 0; i < inputData.length; i++) {
-  //           var key = inputData[i];
-  //           var inputkey = key.type + key.input;
-
-  //           if(key.type === 'Note'){
-  //   if(input[inputkey]?.note){
-  //     words =input[inputkey]?.note.trim().split(/\s+/);
-  //     wordCount.push(words.length)
-  //   }
-
-  //           }
-  //           if(key.type === 'Dialog'){
-  //             if(input[inputkey]?.dialog){
-  //              words = input[inputkey].dialog.trim().split(/\s+/);
-
-  //              wordCount.push(words.length)
-  //             }
-
-  //           }
-  //           if (key.type === "Interaction") {
-  //             //  words = sentence.trim().split(/\s+/);
-  //             console.log("scoreObject", input[inputkey]?.scoreObject);
-  //              //{ A: "2355", B: "22", C: "1000" }
-  //         var wordInteraction= input[inputkey]?.interaction
-  //         words = wordInteraction.trim().split(/\s+/);
-  //         wordCount.push(words.length)
-
-  //     for (const key in input[inputkey]?.optionsObject) {
-
-  //       if (input[inputkey]?.optionsObject.hasOwnProperty(key)) {
-
-  //         var wordOptionsObject = input[inputkey]?.optionsObject[key];
-  //         if(wordOptionsObject){
-  //           words = wordOptionsObject?.trim().split(/\s+/);
-  //           wordCount.push(words.length)
-  //         }
-
-  //         var wordfeedbackObject = input[inputkey]?.feedbackObject[key];
-  //         if(wordfeedbackObject){
-  //           words = wordfeedbackObject?.trim().split(/\s+/);
-  //           wordCount.push(words.length)
-  //         }
-
-  //        var wordresponseObject= input[inputkey]?.responseObject[key];
-  //        if(wordresponseObject){
-  //         words = wordresponseObject?.trim().split(/\s+/);
-  //         wordCount?.push(words.length)
-  //        }
-
-  //        var  wordoptionTitleObject = input[inputkey]?.optionTitleObject[key];
-  //        if(wordoptionTitleObject){
-  //         words = wordoptionTitleObject.trim().split(/\s+/);
-  //         wordCount.push(words.length)
-  //        }
-
-  //       }
-  //     }
-
-  //   // if(input[inputkey]?.ansObject==='true'){
-
-  //     var scoreObject = input[inputkey]?.scoreObject;
-
-  //     const objArray = scoreObject;
-
-  //     // Find the max value across all keys (A, B, C)
-  //     const maxValue = Math.max.apply(null, Object.values(objArray));
-
-  //     console.log("Max value:", maxValue);
-  //     maxArray.push(maxValue);
-  //   // }
-
-  //           }
-  //         }
-
-  //         console.log("maxArray", maxArray);
-  //         const numericValues = maxArray.map(Number);
-  //         const numericWord=wordCount.map(Number);
-  //         const sum = numericValues.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-  //   const sumWordLength=numericWord.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-  //   const totalmintues =sumWordLength/100
-  //         console.log("Sum of array values:", totalmintues);
-  //         setFormData((prev) => ({
-  //           ...prev,
-  //           gameTotalScore: sum,
-  //           gameDuration:totalmintues,
-  //         }));
-  //       }
-
-  //     };
-  //     if(input.length>0){
-  //       getTotalScore();
-  //     }
-
-  // }, [input]);
+  
   //navin
   const playerPerview = (id: any) => {
     setPreview(true);
@@ -3037,10 +2942,6 @@ return false;
         ...prev,
         gameNonPlayingCharacterId: id,
         gameNonPlayerName: name,
-        // gameNonPlayerVoice: null,
-        // gamePlayerMaleVoice: null,
-        // gamePlayerFemaleVoice: null,
-        // gameNarratorVoice: null,
       }));
       setPreview(true);
     } else {
@@ -3048,16 +2949,11 @@ return false;
         ...prev,
         gameNonPlayingCharacterId: '',
         gameNonPlayerName: name,
-        // gameNonPlayerVoice: null,
-        // gamePlayerMaleVoice: null,
-        // gamePlayerFemaleVoice: null,
-        // gameNarratorVoice: null,
       }));
     }
   };
   const reducePercentage = 16 * tab - 16;
-  //console.log(reducePercentage);
-  // alert(reducePercentage)
+  
   useEffect(() => {
     if (formData.gameNonPlayingCharacterId) {
       playerPerview(formData.gameNonPlayingCharacterId);
@@ -3072,13 +2968,11 @@ return false;
   const debouncedSubmit = useCallback(
     debounce(async (data: any) => {
       try {
-        //console.log('handlesaveReflection', data);
         const datas = JSON.stringify(data);
         const resu = await createReflection(datas);
         if (resu.status !== 'Success') {
           return false;
         }
-        console.log("*****debouncedSubmit");
         if(resu.status == 'Success')
         {
           dispatch(updatePreviewData({isDispatched: true, reflectionPageUpdated: true}));
@@ -3099,7 +2993,6 @@ return false;
             gameReflectionQuestion: formData.gameReflectionQuestion,
             gameId: id,
           };
-          //console.log('datas', data);
           debouncedSubmit(data);
           
         }
@@ -3111,11 +3004,8 @@ return false;
   const debouncedSubmitGame = useCallback(
     debounce(async (data: any) => {
       try {
-        //console.log('debouncedSubmitGame', data);
-
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
-          //console.log('data not updated');
         }
         else{
           dispatch(updatePreviewData({isDispatched: true}));
@@ -3129,25 +3019,13 @@ return false;
 
   useEffect(() => {
     if (id && autosave) {
-      // if (formData) {
-
-      //   let data = JSON.stringify(formData);
-
-      //   debouncedSubmitGame(data);
-      //   setExtensiveNavigation(null);
-      // }
       if (formData && formData.gameQuestNo) {
         const newFormData = { ...formData };
         delete newFormData['gameLastTabArray'];
         delete newFormData['gameLastTab'];
         let data = JSON.stringify(newFormData);
-        // let data = JSON.stringify(formData);
-        //alert("de"+tab);
         debouncedSubmitGame(data);
         setExtensiveNavigation(null);
-        // if(tab==5 && currentTab == )
-        // dispatch(updatePreviewData({isDispatched: true}));
-
       }
     }
   }, [formData]);
@@ -3156,7 +3034,6 @@ return false;
   const debouncedStorySubmit = useCallback(
     debounce(async (data: any) => {
       try {
-        //console.log('debouncedSubmit', data);
         const result = await setStory(id, JSON.stringify(data));
         if (result?.status !== 'Success') {
           return console.log('updateBackground error :' + result?.err);
@@ -3166,7 +3043,6 @@ return false;
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
       }
-      //console.log('save', JSON.stringify(input));
     }, 500),
     [id], // Empty dependency array to ensure that the function is only created once
   );
@@ -3183,7 +3059,7 @@ return false;
           console.log('data not updated');
         }
         else{
-          console.log('********debounce')
+
           dispatch(updatePreviewData({isDispatched: true}));
         }
       } catch (error) {
@@ -3225,9 +3101,9 @@ return false;
   useEffect(() => {
     if (id && autosave) {
       if (Object.keys(Completion).length) debouncedCompliSubmit(compliData);
-
-      // handleCompletionScreen(1)
     }
+											   
+														 
   }, [compliData]);
 
   ////handleCompliStore
@@ -3242,23 +3118,17 @@ return false;
 
   // onClick Func
   const duplicateSeq = (seq: any, i: any, name: any) => {
-    // const id = `${Math.floor(count / 10) + 1}.${count % 10 || 1}`;
-    // const upNext = `${Math.floor(count / 10) + 1}.${(count + 1) % 10 || 1}`;
     const sequencial = `${count / 10 + 1}`;
     const upNextSequencial = `${(count + 1) / 10 + 1}`;
     const floatRegex = /^[-+]?(\d*\.\d+|\.\d+)$/;
-    // const id = floatRegex.test(sequencial) ? sequencial : `${count / 10 + 1}.${0}`
-    // const upNext = floatRegex.test(upNextSequencial) ? upNextSequencial : `${(count + 1) / 10 + 1}.${0}`
     const id = `${serias}.${count}`;
     const upNext = `${serias}.${count + 1}`;
-    // setShowBox(true);
     setUpNext(upNext);
     setCount(count + 1);
     const newArr = { id, type: name, upNext, input: count, questNo: serias };
 
     setItems((prevArray: any) => {
       const nextIndex = i + 1;
-      //console.log('prevArray', newArr.input);
       setNumber([...number, newArr.input]);
       return [
         ...prevArray.slice(0, nextIndex),
@@ -3275,7 +3145,6 @@ return false;
     if (name === 'Interaction') {
       const currentAlpha = alphabet
         .slice()
-        //  .reverse() // Reverse the array to start searching from the end
         .find((item: any) => item.seqs === id);
       if (id !== currentAlpha?.seqs) {
         let secondaryArray: any = [];
@@ -3284,11 +3153,9 @@ return false;
         for (let i = 0; i < 3; i++) {
           // Insert data into the array
           let inc = makcount + i + 1;
-          //console.log('secondaryArray', countalphabet, '--', inc);
           secondaryArray.push(inc);
         }
         setAlphabetCount(secondaryArray[2]);
-        //console.log('secondaryArray', secondaryArray);
         setAlphabet((prev: any) => [
           ...prev,
           { seqs: id, option: 'A', secondaryId: secondaryArray[0] },
@@ -3353,7 +3220,6 @@ return false;
         };
       }
       if (seq.type === 'Interaction') {
-        //console.log('prevInput', oldInteractionKey);
         //Previous Object Data's
         const optionsObject = oldInteractionKey?.optionsObject;
         const ansObject = oldInteractionKey?.ansObject;
@@ -4102,7 +3968,6 @@ return false;
                                           _hover={{
                                             bg: '#f0f0f0',
                                           }}
-                                          // onClick={() => handlePreview(img, backgroundIndex, i)}
                                         >
                                           <span style={{ color: 'black' }}>
                                             Preview
@@ -4120,7 +3985,6 @@ return false;
                                           _hover={{
                                             bg: '#11047ae3',
                                           }}
-                                          // onClick={() => handleButtonTwo(id)}
                                           onClick={() =>
                                             handleBackground(img, i)
                                           }
@@ -4172,7 +4036,6 @@ return false;
                                           justifyContent="center"
                                           cursor="pointer"
                                         >
-                                          {/* <span style={{ color: 'white' }}>{selections[i] ? 'Selected' : 'Select'}</span> */}
                                           <span style={{ color: 'white' }}>
                                             {selectedCardIndex === i
                                               ? 'Selected'
@@ -4194,11 +4057,8 @@ return false;
                                             ? 'white'
                                             : 'black'
                                         }
-                                        // fontSize={'16px'}
-                                        // fontWeight={'800'}
                                         textTransform={'capitalize'}
                                         fontSize="md"
-                                        // fontWeight={'200'}
                                         fontWeight="bold"
                                         fontFamily="DM Sans, sans-serif"
                                       >
@@ -4206,10 +4066,6 @@ return false;
                                       </Text>
                                     </Box>
                                     <Box mt={2}>
-                                      {/* <Text fontSize={'12px'} fontWeight={'800'} color={'#555'}>
-                                        Test Title
-                                      </Text> */}
-
                                       {backgroundIndex === i ? (
                                         <Text
                                           fontSize={'12px'}
@@ -4253,8 +4109,6 @@ return false;
                                         display={'flex'}
                                         alignItems={'flex-end'}
                                       ></Box>
-                                      {/**TEXT**/}
-                                      {/**TEXT**/}
                                     </Flex>
                                   </Flex>
                                 </Card>
@@ -4306,7 +4160,6 @@ return false;
                           >
                             Select a Non-Playing Character
                           </Text>
-                          {/* <Text fontSize={'14px'} fontWeight={500} m={'0px 10px 20px 20px'} color={'#8b8b8bd9'} letterSpacing={'0.5px'}>Here is the Non-Playing Character from which you can choose any one</Text>                      */}
                         </Box>
                         <Divider mb={'0px'} />
                         <Box
@@ -4330,7 +4183,6 @@ return false;
                                   <GameCard
                                     name={capitalizedPlayerName} // Use the capitalized name
                                     author={''}
-                                    // image={game.gameBackgroundId && game?.image.gasAssetImage}
                                     image={
                                       player.gasId && player?.gasAssetImage
                                     }
@@ -4412,6 +4264,7 @@ return false;
                       deleteQuest={deleteQuest}
                       upNextCount={upNextCount}
                       setUpNextCount={setUpNextCount}
+					            ShowReview={ShowReview}						 
                       validation={validation}
                       setValidation={setValidation}
                     />
@@ -4484,7 +4337,8 @@ return false;
                 ) : null}
               </GridItem>
             </Grid>
-            {tab !== 4 ? (
+             {(tab !== 4 && tab !== 6) && ShowReview && (
+			   
               <Menu>
                 <MenuButton
                   p="0px"
@@ -4492,9 +4346,8 @@ return false;
                   position={'fixed'}
                   bottom={'0'}
                   right={'5px'}
-                  // onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className='menureviewshow'
                 >
-                  {/* $$$$$$$$ */}
                   <Icon
                     as={AiFillMessage}
                     bg={'#3311db'}
@@ -4504,6 +4357,7 @@ return false;
                     borderRadius={'50%'}
                     p={'15px'}
                     me="10px"
+                  
                   />
                 </MenuButton>
                 <MenuList
@@ -4516,8 +4370,9 @@ return false;
                   mt="10px"
                   minW={{ base: '360px' }}
                   maxW={{ base: '360px', md: 'unset' }}
+                  zIndex={'100000000'}
                 >
-                  <FormControl>
+                  <FormControl >
                     <FormLabel fontSize={18} fontWeight={700}>
                       Feedback For{' '}
                       {tab === 1
@@ -4624,12 +4479,11 @@ return false;
                   </MenuItem>
                 </MenuList>
               </Menu>
-            ) : null}
+            )}
             <Flex justify="center">
               <Card
                 display={'flex'}
                 justifyContent={tab === 1 || tab === 2 ? 'end' : 'flex-end'}
-                // w="350px"
                 flexDirection="row"
                 h="95px"
                 w="500px"
@@ -4639,22 +4493,16 @@ return false;
                 right={'8px'}
                 zIndex={99}
                 background={'#0000 !important'}
-                // alignItems="flex-end"
               >
                 <Menu isOpen={isOpen1} onClose={onClose1}>
                   <MenuButton
                     alignItems="center"
                     justifyContent="center"
-                    // bg={bgButton}
-                    // _hover={bgHover}
-                    // _focus={bgFocus}
-                    // _active={bgFocus}
                     w="37px"
                     h="37px"
                     lineHeight="100%"
                     onClick={onOpen1}
                     borderRadius="10px"
-                    // {...rest}
                   >
                     <Icon
                       as={BsShareFill}
@@ -4674,8 +4522,6 @@ return false;
                     minW="unset"
                     maxW="170px !important"
                     border="transparent"
-                    // backdropFilter="blur(63px)"
-                    // boxShadow={bgShadow}
                     borderRadius="20px"
                     bg="transparent"
                     p="15px"
@@ -4707,7 +4553,6 @@ return false;
                           bg: 'transparent',
                         }}
                         mb="10px"
-                        // onClick={() => menu.key(props.id)}
                       >
                         <Flex align="center">
                           <Icon
@@ -4734,7 +4579,6 @@ return false;
                           bg: 'transparent',
                         }}
                         mb="10px"
-                        // onClick={() => menu.key(props.id)}
                       >
                         <Flex align="center" onClick={handleShareReview}>
                           <Icon as={GoCodeReview} h="16px" w="16px" me="8px" />
@@ -4742,7 +4586,30 @@ return false;
                             Share for Review
                           </Text>
                         </Flex>
+					   
                       </MenuItem>
+						<MenuItem	   
+                        transition="0.2s linear"
+                        color={textColor}
+                        _hover={textHover}
+                        p="0px"
+                        borderRadius="8px"
+                        _active={{
+                          bg: 'transparent',
+                        }}
+                        _focus={{
+                          bg: 'transparent',
+                        }}
+                        mb="10px"
+                      >
+                        <Flex align="center" onClick={handleShowReview}>
+                          <Icon as={ShowReview ?AiOutlineEyeInvisible:AiOutlineEye} h="16px" w="16px" me="8px" />
+                          <Text fontSize="sm" fontWeight="400">
+                            {ShowReview ? "Hide Review" : "Show Review"}
+                          </Text>
+                        </Flex>
+                       
+                      </MenuItem>		   
                     </MenuList>
                   </Box>
                 </Menu>
@@ -4788,64 +4655,6 @@ return false;
                     Preview
                   </Button>
                 ) : null}
-                {/* {tab <= 1 ? null : (
-                  <Button
-                    bg={'#f4f7fe'}
-                    color={'#000'}
-                    _hover={{ bg: '#e9edf7' }}
-                    w="80px"
-                    mr="10px"
-                    onClick={() => setTab(tab - 1)}
-                  >
-                    Back
-                  </Button>
-                )} */}
-                {/* navin 15-12 */}
-                {/* {tab === 5 ? (
-                  <Button
-                    bg="#11047a"
-                    _hover={{ bg: '#190793' }}
-                    color="#fff"
-                    h={'46px'}
-                    w={'128px'}
-                    // onClick={() => handleButtonClick(showFunction)}
-                    // onClick={() => handleNext()}
-                    onClick={() => {
-                      if (currentTab === 5) {
-                        handleNext();
-                      } else {
-                        toast({
-                          title: 'Please complete all the screens before proceeding',
-                          status: 'error',
-                          duration: 3000,
-                          isClosable: true,
-                        });
-                      }
-                    }}
-
-                    mr={'33px'}
-                    mt={'7px'}
-                  >
-                    Next
-                  </Button>
-                ) : (
-                  tab !== 1 &&
-                  tab !== 2 &&
-                  tab !== 5 && (
-                    <Button
-                      bg="#11047a"
-                      _hover={{ bg: '#190793' }}
-                      color="#fff"
-                      h={'46px'}
-                      w={'128px'}
-                      onClick={commonNextFunction}
-                      mr={'33px'}
-                      mt={'7px'}
-                    >
-                      {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
-                    </Button>
-                  )
-                )} */}
                 {tab === 5  ? (
                   <Button
                     bg="#11047a"
@@ -4853,23 +4662,9 @@ return false;
                     color="#fff"
                     h={"46px"}
                     w={"128px"}
-                    // onClick={() => handleButtonClick(showFunction)}
                     onClick={() => handleNext()}
-                    // onClick={() => {
-                    //   if (currentTab === 5) {
-                    //     handleNext();
-                    //   } else {
-                    //     toast({
-                    //       title: 'Please complete all the screens before proceeding',
-                    //       status: 'error',
-                    //       duration: 3000,
-                    //       isClosable: true,
-                    //     });
-                    //   }
-                    // }}
                     mr={"33px"}
                     mt={"7px"}
-
                   >
                     Next
                   </Button>

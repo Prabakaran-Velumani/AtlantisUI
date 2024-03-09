@@ -30,6 +30,7 @@ import { getBlockData } from 'utils/game/gameService';
 import StrightConector from '../components/dragNdrop/strightConector'
 import {TbHandClick, TbMessages } from 'react-icons/tb';
 interface PropsDialog {
+    reviews?:any,
     id?:number,
     language?:any,
     seq?: any,
@@ -56,8 +57,9 @@ interface PropsDialog {
     handleSelectBlock: any,
     handleDialogBlockRoll: any,
     items?: any,
-    showSelectBlock?: any,
-    setSelectBlock?: any,
+    showSelectBlock?:any,
+     setSelectBlock?:any,
+     ShowReview?:any,
     validation?: any,
     handleMiniNDI?: any,
     currentseq?:any,
@@ -65,7 +67,7 @@ interface PropsDialog {
 
 
 
-const DialogCompo: React.FC<PropsDialog> = ({ id,language,seq, index, name, handleInput, handleSelect, input, getSeq, duplicateSeq, delSeq, characterOption, dialogOption, voicePoseOption, animateBtn, setAnimateBtn, handleDialogEmotion, handleDialogVoice, formData, handleDialogBlockRoll, alphabet, setNavigation, handleBlock, handleSelectBlock, items,handleNDI, showSelectBlock, setSelectBlock, validation, handleMiniNDI,currentseq }) => {
+const DialogCompo: React.FC<PropsDialog> = ({ id,language,seq, index, name, handleInput, handleSelect, input, getSeq, duplicateSeq, delSeq, characterOption, dialogOption, voicePoseOption, animateBtn, setAnimateBtn, handleDialogEmotion, handleDialogVoice, formData, handleDialogBlockRoll, alphabet, setNavigation, handleBlock, handleSelectBlock, items,handleNDI, showSelectBlock, setSelectBlock, validation, handleMiniNDI,currentseq,reviews,ShowReview }) => {
     const textareaRef = useRef(null);
     const selectValue = `Char${[seq.input]}`;
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -224,7 +226,19 @@ const DialogCompo: React.FC<PropsDialog> = ({ id,language,seq, index, name, hand
 
     return (
         <>
-            <Flex className='block-compo' mb={'20px'} padding={'10px 0'}  scrollBehavior={'smooth'} id={`${seq.id}`} alignItems={'start'} overflowX={'auto'} >
+            {/* {seq.status == 'no' ? 
+            (null) :               */}
+            <Flex className='block-compo' borderRadius={'12px'} mb={'20px'} padding={'10px 0'} alignItems={'start'} overflowX={'auto'} marginBottom={'0px'}   style={{
+          backgroundColor: ShowReview
+            ? reviews && reviews.find((item: any) => {
+                const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                return isMatched;
+              })
+                ? '#E2E8F0'
+                : ''
+            : ''
+        }}>
                 <Box className='block-action-icons'>
                     <Icon as={MdAdd} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => getSeq(seq, index, name)} />
                     <Icon as={BiSolidDuplicate} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => duplicateSeq(seq, index, name)} />

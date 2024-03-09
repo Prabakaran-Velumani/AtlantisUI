@@ -51,7 +51,6 @@ import React, {
   useState,
 } from 'react';
 
-// import ModelViewer from "../three/ModelViewer";
 import { json, useParams } from 'react-router-dom';
 import {
   getGameDemoData,
@@ -62,9 +61,9 @@ import {
 // import NoAuth from './NoAuth';
 import EntirePreview from './EntirePreview';
 import { API_SERVER } from 'config/constant';
-import { IoIosRefresh } from "react-icons/io";
+import { IoIosRefresh } from 'react-icons/io';
+import PlayInfo from './playcards/playinfo';
 
-// const gameScreens = ['GameIntro','Welcome','Story','Reflection',"Leaderboard", "ThanksScreen", "Completion","TakeAway"];
 const gameScreens = [
   'Completion',
   'Leaderboard',
@@ -91,23 +90,26 @@ const GamePreview = () => {
     useState<number>(InitialScreenId);
   const [profile, setProfile] = useState({
     score: [],
-    completedLevels:['1']
+    completedLevels: ['1'],
+    currentQuest: 1,
   });
   const [currentScore, setCurrentScore] = useState(0);
   const toast = useToast();
-
-  //for Reviewers
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowHeight, setWindowHeight] = useState(null);
+  const [showGame,setShowGame] = useState(false);
+  useEffect(() => {
+    if(windowWidth < 700)
+    {setShowGame(false)}
+    else{setShowGame(true);}
+  },[windowWidth]);
   useEffect(() => {
     uuid && fetchGameData();
   }, [uuid]);
-  //for Creators demo play
   useEffect(() => {
     id && fetchCreatorDemoData();
   }, [id]);
 
-  /*** Collect details of a game based on uuid not gameId
-   * This API took gameId based on uuid
-   */
   const fetchGameData = async () => {
     const gamedata = await getGameDemoData(uuid);
 
@@ -115,10 +117,6 @@ const GamePreview = () => {
       updateGameInfo(gamedata);
     }
   };
-
-  /*** Collect details of a game based on gameid
-   * This API took game data based on gameId
-   */
   const fetchCreatorDemoData = async () => {
     const gamedata = await getGameCreatorDemoData(id);
 
@@ -127,11 +125,7 @@ const GamePreview = () => {
     }
   };
 
-  /** THis function used to update gameInfo state on initial render and after every submition of a review
-   *
-   * Should update game info after update, delete, new review submition using this function updateGameInfo
-   */
-  // console.log('gameInfo', gameInfo);
+  
   const updateCreatorGameInfo = (info: any) => {
     const {
       gameview,
@@ -402,13 +396,17 @@ const GamePreview = () => {
   useEffect(() => {
     return () => clearTimeout(timeout); // Cleanup the timer on component unmount
   }, [timeout]);
+
   return (
     <>
       {gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
       gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
         <h1> {'Your are Not Authorized....'}</h1>
       ) : (
-        gameInfo?.gameId && (
+        gameInfo?.gameId &&
+        (!showGame ? (
+          <PlayInfo />
+        ) : (
           <ScoreContext.Provider value={{ profile, setProfile }}>
             <Box id="container" onMouseMove={handleMouseMove}>
               {isHovered && (
@@ -420,14 +418,14 @@ const GamePreview = () => {
                   color={'white'}
                   zIndex={999999}
                   width={'60px'}
-                  height={'60px'} 
+                  height={'60px'}
                   padding={'20px'}
                   borderRadius={'50%'}
                   bg={'grey'}
                   cursor={'pointer'}
-                  onClick={()=>window.location.reload()}
+                  onClick={() => window.location.reload()}
                 />
-               )} 
+              )}
               <EntirePreview
                 currentScore={currentScore}
                 setCurrentScore={setCurrentScore}
@@ -440,7 +438,7 @@ const GamePreview = () => {
               />
             </Box>
           </ScoreContext.Provider>
-        )
+        ))
       )}
     </>
   );

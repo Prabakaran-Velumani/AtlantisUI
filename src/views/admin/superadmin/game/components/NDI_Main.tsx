@@ -3,6 +3,8 @@ import Card from 'components/card/Card';
 import {
   Box,
   Text,
+  Flex,
+  Button,
   Icon,
   List,
   ListItem,
@@ -15,7 +17,18 @@ import {
   AccordionPanel,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { MdOutlineStickyNote2 } from 'react-icons/md';
+import {
+  MdAdd,
+  MdDelete,
+  MdInbox,
+  MdNote,
+  MdNoteAdd,
+  MdOutlineStickyNote2,
+  MdTextsms,
+} from 'react-icons/md';
+import { AiFillInteraction, AiOutlineInteraction } from 'react-icons/ai';
+import { CgNotes } from 'react-icons/cg';
+import OnToast from 'components/alerts/toast';
 import { Draggable } from 'react-beautiful-dnd';
 import CustomAccordion from './dragNdrop/CustomAccordion';
 import NoteCompo from '../blocksCompo/NoteCompo';
@@ -71,6 +84,7 @@ interface NDIMainProps {
   reviewers?: any;
   validation?: any;
   setValidation?: any;
+  ShowReview?: any;
 }
 
 const initial = {
@@ -217,7 +231,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
             animation: '',
             voice: '',
             dtime: null,
-            // status: "yes",
           },
         };
       }
@@ -246,7 +259,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     if (NDI === 'Interaction') {
       const currentAlpha = alphabet
         .slice()
-        //  .reverse() // Reverse the array to start searching from the end
         .find((item: any) => item.seqs === id);
       if (id !== currentAlpha?.seqs) {
         let secondaryArray: any = [];
@@ -267,10 +279,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
           { seqs: id, option: 'C', secondaryId: secondaryArray[2] },
         ]);
       }
-      // handleNDI
     }
-
-    console.log('upNext123', upNext);
   };
   const handleMiniNDI = (seq?: any, i?: any, name?: any) => {
     const sequencial = `${count / 10 + 1}`;
@@ -2534,6 +2543,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                       </AccordionPanel>
                                     </AccordionItem>
                                   </Accordion>
+
                                   {seq.id == showMiniBox ? (
                                     <MiniBox
                                       seq={seq}
