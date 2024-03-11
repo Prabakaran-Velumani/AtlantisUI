@@ -405,6 +405,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       case 3 && gameInfo?.gameData?.gameReflectionpageBackground:
         setBackgroundScreenUrl(
           API_SERVER + '/uploads/background/reflectionBg.png',
+          
         );
         break;
       default:

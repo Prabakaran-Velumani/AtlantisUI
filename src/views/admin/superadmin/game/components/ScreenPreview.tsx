@@ -802,7 +802,8 @@ const ScreenPreview = () => {
                         w={'100%'}
                       >
                         <Box w={'50%'} fontSize={'21px'}>
-                          Here You Can Answer the Interactions...!{' '}
+                          {/* Here You Can Answer the Interactions...!{' '} */}
+                          Interactions
                         </Box>
                       </Box>
                       <Box
@@ -1248,7 +1249,7 @@ const ScreenPreview = () => {
                 </Box>
               </Box>
             )}
-            {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadedAssets  ={preloadedAssets }/>}
+            {endOfQuest &&  <PreviewEndOfStory  imageSrc={preloadedAssets}  formData={gameInfo.gameData} setEndOfQuest= {setEndOfQuest} preloadAssets ={preloadedAssets}/>}
               </Flex>
             </Box>
           </motion.div>
