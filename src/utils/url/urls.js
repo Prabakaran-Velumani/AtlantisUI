@@ -1,4 +1,5 @@
 export const urls = {
+
   /*******************admin******************* */
   adminLogin: '/admin/login',
   /********************dashboard************************* */
@@ -148,6 +149,14 @@ export const urls = {
    updatelanguages:'/languages/updatelanguages',
 /* gamelanuages rajesh kanna */
      gameLanguages:'/languages/getGameLanguages/',
+     getMaxBlockQuestNo:'/game/getMaxBlockQuestNo/',
+	 getBlockData:'/languages/getBlockData/',
+  getGameStoryLine:'/languages/getGameStoryLine/',
+  getQuestionOptionsText:'/languages/getQuestionOptionsText/',
+  getQuestionResponse:'/languages/getQuestionResponse/',
+  getQuestionOptions:'/languages/getQuestionOptions/',
+getSelectedLanguages:'/languages/getSelectedLanguages/',
+getMaxBlockQuestNo:'/game/getMaxBlockQuestNo/',
       /****************************Reviews ********************************/
       addReviews:'/gamereview/addreviewers',
       getAllReviews:'/gamereview/getblockreviewlist/',

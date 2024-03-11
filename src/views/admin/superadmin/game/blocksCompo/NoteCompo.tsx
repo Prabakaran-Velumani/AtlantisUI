@@ -134,7 +134,7 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
 
   const handleMiniNDInewblock =(value?: any,seq?: any, i?: any) =>{
     handleNDI(value);
-    if(value !='')
+    if(value !=='')
     {
       console.log('seqval',seq,'i',i, 'value',value);
       handleSelectBlock({ value: currentseq }, currentseq , `Note${seq.input}`, `Note${seq.input}`);

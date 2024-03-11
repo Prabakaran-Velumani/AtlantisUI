@@ -145,6 +145,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
   reviewers,
   validation,
   setValidation,
+  ShowReview,
 }) => {
   const dragRef = useRef<any>();
   const bodyRef = useRef<any>();
@@ -2032,6 +2033,19 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                       ? 'scale(1.030)'
                                       : 'unset'
                                   }
+                                  style={{
+                                    backgroundColor: ShowReview
+                                      ? reviews && reviews.find((item: any) => {
+                                        const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                                        const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                                        console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+                                        return isMatched;
+                                      })
+                                        ? '#E2E8F0'
+                                        : ''
+                                      : '' ,    marginBottom: '10px', // Adjust the value as per your requirement
+
+                                  }}
                                   transition={'0.1s linear'}
                                   borderLeft={
                                     seq.id === targetSequence?.id
@@ -2054,7 +2068,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                   onKeyDown={(e) => handleKeyDown(e, i, seq)}
                                 >
                                   <NoteCompo
-                                    seq={seq}
+ ShowReview={ShowReview}
+                                     seq={seq}
                                     index={i}
                                     name={'Note'}
                                     getSeq={getSeq}
@@ -2069,8 +2084,12 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     items={items}
                                     setSelectBlock={setNotelead}
                                     handleInput={(e: any) => handleInput(e, i)}
+                                    handleNDI={handleNDI}
+                                                                        validation={validation}
+                                                                        currentseq={count}
                                   />
                                   {/* Review Preview Accordian for Note*/}
+                                  {ShowReview ? (
                                   <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
@@ -2173,6 +2192,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                       </AccordionPanel>
                                     </AccordionItem>
                                   </Accordion>
+                                    ) : (
+                                      ''
+                                  )}
                                   {seq.id == showMiniBox ? (
                                     <MiniBox seq={seq} i={i} name={'Note'} />
                                   ) : null}
@@ -2211,8 +2233,22 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                   tabIndex={0}
                                   onClick={(e) => handleKeyDown(e, i, seq)}
                                   onKeyDown={(e) => handleKeyDown(e, i, seq)}
+                                  style={{
+                                    backgroundColor: ShowReview
+                                      ? reviews && reviews.find((item: any) => {
+                                        const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                                        const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                                        console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+                                        return isMatched;
+                                      })
+                                        ? '#E2E8F0'
+                                        : ''
+                                      : '',    marginBottom: '10px', // Adjust the value as per your requirement
+
+                                  }}
                                 >
                                   <DialogCompo
+                                      ShowReview={ShowReview}
                                     id={id}
                                     language={formData?.gamelanguageCode}
                                     seq={seq}
@@ -2249,6 +2285,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     currentseq={count}
                                   />
                                   {/* Accordian For Dialog Blocks */}
+                                  {ShowReview ? (
                                   <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
@@ -2350,7 +2387,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                         )}
                                       </AccordionPanel>
                                     </AccordionItem>
-                                  </Accordion>
+                                  </Accordion> ) : ''}
                                   {seq.id == showMiniBox ? (
                                     <MiniBox seq={seq} i={i} name={'Dialog'} />
                                   ) : null}
@@ -2388,9 +2425,23 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                   }
                                   tabIndex={0}
                                   onClick={(e) => handleKeyDown(e, i, seq)}
+                                  style={{
+                                    backgroundColor: ShowReview
+                                      ? reviews && reviews.find((item: any) => {
+                                        const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                                        const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                                        console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+                                        return isMatched;
+                                      })
+                                        ? '#E2E8F0'
+                                        : ''
+                                      : '',    marginBottom: '10px', // Adjust the value as per your requirement
+
+                                  }}
                                   onKeyDown={(e) => handleKeyDown(e, i, seq)}
                                 >
                                   <InteractionCompo
+                                  ShowReview={ShowReview}
                                     id={id}
                                     language={formData?.gamelanguageCode}
                                     seq={seq}
@@ -2441,6 +2492,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     currentseq={count}
                                   />
                                   {/* Accordian for Interaction Blocks */}
+                                  {ShowReview ? (
                                   <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
@@ -2542,8 +2594,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                         )}
                                       </AccordionPanel>
                                     </AccordionItem>
-                                  </Accordion>
-
+                                  </Accordion>)
+: ''}
                                   {seq.id == showMiniBox ? (
                                     <MiniBox
                                       seq={seq}

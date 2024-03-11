@@ -1855,10 +1855,10 @@ if (formData.gameIsFeedbackMandatory === "true") {
       const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
       setFormData(formDataWithoutLastTab);
       dispatch(updatePreviewData({isDispatched: true}));
-      setOpenQuest(true);
+      // setOpenQuest(true);
       const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
       if (result.status === 'Success') {
-        const maxQuestNo = MaxBlockQuestNumber?.data?.maxBlockQuestNo;
+        const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
         console.log('Max QuestNo:', maxQuestNo);
         if (maxQuestNo < 5) {
           setOpenQuest(true);

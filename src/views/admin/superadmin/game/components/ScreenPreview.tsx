@@ -2,7 +2,7 @@
 import {
   Box,
   Flex,
-  Text,
+  Text,Button,
   Img,
 } from '@chakra-ui/react';
 import React, {
@@ -420,6 +420,13 @@ const ScreenPreview = () => {
     setSelectedOption(ind === selectedOption ? null : ind);
 
   };
+  const handleEntirePrev = async () => {
+
+    const url = ` /game/creator/demoplay/${id}`;
+    // const url = `/screen/preview/${id}`;
+    window.open(url, '_blank');
+  }
+
 
   return (
     <Box id="container">
@@ -430,7 +437,24 @@ const ScreenPreview = () => {
             animate={{ opacity: 1, background: '#0000' }}
             transition={{ duration: 1, delay: 0.5 }}
           >
-            <Box h={'100vh !important'} className="Images">
+           <Box h={'100vh !important'} className="Images" style={{ overflow: 'visible' }}>
+              <Button
+                bg="#11047a"
+                _hover={{ bg: '#190793' }}
+                color="#fff"
+                style={{
+                  position: 'absolute',
+                  top: '2vh',
+                  right: '0vw',
+                  pointerEvents: 'auto',
+                  zIndex: 99999999999999, // High z-index value
+                  // mixBlendMode: 'overlay', // or 'overlay', 'color-dodge', etc.
+                  visibility: 'visible',
+                }}
+                mr={'17px'}
+                mt={'6px'}
+                ml={'11px'}
+                onClick={handleEntirePrev}>Demo Play</Button>
               <Flex height="100vh" className="AddScores">
                 {currentTab == 3 && (
                     <Box
