@@ -2009,11 +2009,19 @@ if (formData.gameIsFeedbackMandatory === "true") {
           if (typeof items === 'object' && items !== null) {
             var inputData = items;
 
+            console.log('inputDataGC--',inputData)
+
             for (var i = 0; i < inputData.length; i++) {
               var key = inputData[i];
               var inputkey = key.type + key.input;
               var inputget = input;
               var inputdataget = Object.values(inputget);
+
+              console.log('firstkeyGC--',key)
+              console.log('firstinputKeyGC--',inputkey)
+              console.log('firstinputGetGC--',inputget)
+              console.log('firstinputDataGetGC--',inputdataget)
+
 
               if (key.type === 'Note') {
                 var note = input[inputkey].note;
