@@ -433,42 +433,453 @@ const ScreenPreview = () => {
             animate={{ opacity: 1, background: '#0000' }}
             transition={{ duration: 1, delay: 0.5 }}
           >
-            <Box h={'100vh !important'} className="Images">
-              <Flex height="100vh" className="AddScores">
-                {currentTab == 3 && (
-                    <Box
-                      w={'100%'}
-                      h={'100vh'}
-                      alignItems={'center'}
-                      justifyContent={'center'}
-                      position={'relative'}
-                      overflow={'visible'}
-                      style={{ perspective: '1000px' }}
-                      className="Main-Content"
-                    >
+            <Box id='EntirePreview-wrapper'>
+              <Box className='EntirePreview-content'>
+                <Box h={'100vh !important'} className="Images">
+                  <Flex height="100vh" className="EntirePreview">
+                    {currentTab == 3 && (
+                        <Box
+                          w={'100%'}
+                          h={'100vh'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          position={'relative'}
+                          overflow={'visible'}
+                          style={{ perspective: '1000px' }}
+                          className="Main-Content"
+                        >
+                          <Box
+                            backgroundImage={preloadedAssets .backgroundImage}
+                            w={'100% !important'}
+                            h={'100vh'}
+                            backgroundRepeat={'no-repeat'}
+                            backgroundSize={'cover'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            className="Game-Screen"
+                          >
+                            <Box className="Images">
+                              {gameInfo && (
+                                <WelcomeContentScreen
+                                  formData={gameInfo.gameData}
+                                  imageSrc={preloadedAssets?.Screen5}
+                                  preview={true}
+                                />
+                              )}
+                            </Box>
+                          </Box>
+                        </Box>
+                    )}
+                    {currentTab === 4 && data && type === 'Note' && (
                       <Box
-                        backgroundImage={preloadedAssets .backgroundImage}
-                        w={'100% !important'}
+                        w={'100%'}
                         h={'100vh'}
-                        backgroundRepeat={'no-repeat'}
-                        backgroundSize={'cover'}
+                        display={'flex'}
                         alignItems={'center'}
                         justifyContent={'center'}
-                        className="Game-Screen"
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
                       >
-                        <Box className="Images">
-                          {gameInfo && (
-                            <WelcomeContentScreen
-                              formData={gameInfo.gameData}
-                              imageSrc={preloadedAssets?.Screen5}
-                              preview={true}
-                            />
-                          )}
+                        <Box
+                          color={'rgba(0, 0, 0, 0.5)'}
+                          backgroundImage={preloadedAssets?.backgroundImage}
+                          w={'100%'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          transform={`scale(${first ? 1 : 0.9}) translateY(${
+                            first ? 0 : -0
+                          }%) translateX(${first ? 0 : -10}%)`}
+                          transition={'transform 0.9s ease-in-out'}
+                        >
+                          <Box
+                            position={'fixed'}
+                            top={'200px'}
+                            right={'0px'}
+                            bottom={0}
+                            zIndex={999}
+                            w={'300px'}
+                          >
+                            <Box
+                              style={{
+                                transform: `scale(${showNote ? 0.2 : 1})`,
+                                transition: 'transform 0.5s ease-in-out',
+                              }}
+                              position={'fixed'}
+                              w={'40%'}
+                              h={'60vh'}
+                              display={'flex'}
+                              flexDirection={'column'}
+                              justifyContent={'center'}
+                              alignItems={'center'}
+                            >
+                              <Img
+                                w={'100%'}
+                                h={'80vh'}
+                                src={preloadedAssets?.note}
+                              />
+                              <Box
+                                position={'fixed'}
+                                overflowY={'scroll'}
+                                transform={'translate(0px, 0px)'}
+                                w={'50%'}
+                                mt={'10px'}
+                                display={'flex'}
+                                flexDirection={'column'}
+                                textAlign={'center'}
+                                justifyContent={'center'}
+                                style={{
+                                  fontWeight: '900',
+                                  color: '#D9C7A2',
+                                  fontSize: '18px',
+                                  fontFamily: 'AtlantisContent',
+                                  lineHeight: 1,
+                                }}
+                              >
+                                <Box
+                                  w={'100%'}
+                                  overflowY={'scroll'}
+                                  h={'100px'}
+                                  display={'flex'}
+                                  alignItems={'center'}
+                                  justifyContent={'center'}
+                                  mt={'20px'}
+                                >
+                                  {data?.blockText}
+                                </Box>
+                                <Box
+                                  w={'100%'}
+                                  onClick={() => getData(data)}
+                                  mt={'20px'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                  cursor={'pointer'}
+                                >
+                                  <Img src={preloadedAssets .next} w={'200px'} h={'60px'} />
+                                </Box>
+                              </Box>
+                            </Box>
+                          </Box>
                         </Box>
                       </Box>
-                    </Box>
-                )}
-                {currentTab === 4 && data && type === 'Note' && (
+                    )}
+                    {currentTab === 4 && data && type === 'Dialog' && (
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                      >
+                        <Img
+                          src={preloadedAssets?.backgroundImage}
+                          maxW={'100%'}
+                          maxH={'100%'}
+                          w={'100%'}
+                          h={'100vh'}
+                          transform={
+                            'scale(1.3}) translateY(-10%) translateX(-10%)'
+                          }
+                          transition={'transform 0.9s ease-in-out'}
+                        />
+                        <Img
+                          style={{
+                            transform: `translateY(${showNote ? 200 : 0}px)`,
+                            transition:
+                              'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+                          }}
+                          position={'fixed'}
+                          maxW={'100%'}
+                          maxH={'100%'}
+                          w={'100%'}
+                          h={'240px'}
+                          bottom={'0'}
+                          src={preloadedAssets?.dial}
+                        />
+                        {!showNote && (
+                          <>
+                            <Box position={'relative'}>
+                              <Img
+                                src={preloadedAssets?.char}
+                                position={'fixed'}
+                                h={'70px'}
+                                w={'25%'}
+                                left={'13%'}
+                                bottom={'150px'}
+                              />
+                              <Text
+                                position={'fixed'}
+                                left={'24%'}
+                                bottom={'167px'}
+                                fontSize={'25'}
+                                fontWeight={700}
+                                textAlign={'center'}
+                                fontFamily={'AtlantisText'}
+                              >
+                                {data.blockRoll === 'Narrator'
+                                  ? data.blockRoll
+                                  : gameInfo?.gameData?.gameNonPlayerName}
+                              </Text>
+                            </Box>
+                            <Box
+                              display={'flex'}
+                              position={'fixed'}
+                              justifyContent={'space-between'}
+                              w={'75%'}
+                              bottom={'55px'}
+                              fontFamily={'AtlantisContent'}
+                              fontSize={'21px'}
+                            >
+                              <TypingEffect text={data?.blockText} speed={50} />
+                            </Box>
+                            <Box
+                              display={'flex'}
+                              position={'fixed'}
+                              justifyContent={'space-between'}
+                              w={'80%'}
+                              bottom={'0'}
+                            >
+                              <Img
+                                src={preloadedAssets?.left}
+                                w={'50px'}
+                                h={'50px'}
+                                cursor={'pointer'}
+                              />
+                              <Img
+                                src={preloadedAssets?.right}
+                                w={'50px'}
+                                h={'50px'}
+                                cursor={'pointer'}
+                                onClick={() => getData(data)}
+                              />
+                            </Box>
+                          </>
+                        )}
+                      </Box>
+                    )}
+                    {currentTab === 4 && data && type === 'Interaction' && (
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                      >
+                        <Img
+                          src={preloadedAssets?.backgroundImage}
+                          maxW={'100%'}
+                          maxH={'100%'}
+                          w={'100%'}
+                          h={'100vh'}
+                          transform={`scale(1.5}) translateY(-10%) translateX(${
+                            showNote ? -200 : 0
+                          }px)`}
+                          transition={'transform 0.9s ease-in-out'}
+                        />
+                        <Box
+                          style={{
+                            transform: `translateX(${
+                              showNote ? -200 : 0
+                            }px) scale(1.2)`,
+                            transition:
+                              'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+                          }}
+                          backgroundImage={preloadedAssets?.parch}
+                          position={'fixed'}
+                          w={{ sm: '350px', md: '500px' }}
+                          h={{ sm: '50vh', md: ' 550px' }}
+                          // top={'4vh'}
+                          left={{ sm: '60px', md: '180px' }}
+                          backgroundSize={'contain'}
+                          backgroundRepeat={'no-repeat'}
+                        >
+                          <Box
+                            textAlign={'center'}
+                            h={'100px'}
+                            display={'flex'}
+                            justifyContent={'center'}
+                            alignItems={'center'}
+                            fontWeight={700}
+                            fontFamily={'AtlantisText'}
+                            lineHeight={1}
+                            w={'100%'}
+                          >
+                            <Box w={'50%'} fontSize={'21px'}>
+                              Here You Can Answer the Interactions...!{' '}
+                            </Box>
+                          </Box>
+                          <Box
+                            textAlign={'center'}
+                            h={'100px'}
+                            display={'flex'}
+                            justifyContent={'center'}
+                            alignItems={'center'}
+                            fontWeight={500}
+                            fontFamily={'AtlantisText'}
+                            lineHeight={1}
+                            w={'96%'}
+                            overflowY={'scroll'}
+                          >
+                            <Box w={'60%'} fontSize={'20px'} letterSpacing={1}>
+                              {data?.blockText}
+                            </Box>
+                          </Box>
+                          <Box
+                            mt={'10px'}
+                            w={{ sm: '200px', md: '400px' }}
+                            fontWeight={500}
+                            ml={'17%'}
+                            h={'220px'}
+                            overflowY={'scroll'}
+                          >
+                            {options &&
+                              options.map((item: any, ind: number) => (
+                                <Box
+                                  mb={'10px'}
+                                  w={'80%'}
+                                  lineHeight={1}
+                                  key={ind}
+                                  color={selectedOption === ind ? 'purple' : ''}
+                                  textAlign={'center'}
+                                  cursor={'pointer'}
+                                  onClick={() => handleValidate(item, ind)}
+                                  fontFamily={'AtlantisText'}
+                                  fontSize={'20px'}
+                                >
+                                  <Img
+                                    src={selectedOption === ind ? preloadedAssets?.on : preloadedAssets?.off}
+                                    h={'30px'}
+                                    w={'95%'}
+                                  />
+                                  {item?.qpOptionText}
+                                </Box>
+                              ))}
+                          </Box>
+                          <Box
+                            display={'flex'}
+                            position={'fixed'}
+                            justifyContent={'space-between'}
+                            w={'508px'}
+                            left={'-10px'}
+                          >
+                            <Img
+                              src={preloadedAssets?.left}
+                              w={'50px'}
+                              h={'50px'}
+                              cursor={'pointer'}
+                            />
+                            {selectedOption !== null && (
+                              <Img
+                                src={preloadedAssets?.right}
+                                w={'50px'}
+                                h={'50px'}
+                                cursor={'pointer'}
+                                onClick={() => getData(data)}
+                              />
+                            )}
+                          </Box>
+                        </Box>
+                      </Box>
+                    )}
+                    {currentTab === 4 && data && type === 'response' && (
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                      >
+                        <Img
+                          src={preloadedAssets?.backgroundImage}
+                          maxW={'100%'}
+                          maxH={'100%'}
+                          w={'100%'}
+                          h={'100vh'}
+                          transform={
+                            'scale(1.3}) translateY(-10%) translateX(-10%)'
+                          }
+                          transition={'transform 0.9s ease-in-out'}
+                        />
+                        <Img
+                          style={{
+                            transform: `translateY(${showNote ? 200 : 0}px)`,
+                            transition:
+                              'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+                          }}
+                          position={'fixed'}
+                          maxW={'100%'}
+                          maxH={'100%'}
+                          w={'100%'}
+                          h={'240px'}
+                          bottom={'0'}
+                          src={preloadedAssets?.dial}
+                        />
+                        {!showNote && (
+                          <>
+                            <Box position={'relative'}>
+                              <Img
+                                src={preloadedAssets?.char}
+                                position={'fixed'}
+                                h={'70px'}
+                                w={'25%'}
+                                left={'13%'}
+                                bottom={'150px'}
+                              />
+                              <Text
+                                position={'fixed'}
+                                left={'24%'}
+                                bottom={'167px'}
+                                fontSize={'25'}
+                                fontWeight={700}
+                                textAlign={'center'}
+                                fontFamily={'AtlantisText'}
+                              >
+                                {data.blockRoll === 'Narrator'
+                                  ? data.blockRoll
+                                  : gameInfo?.gameData?.gameNonPlayerName}
+                              </Text>
+                            </Box>
+                            <Box
+                              display={'flex'}
+                              position={'fixed'}
+                              justifyContent={'space-between'}
+                              w={'75%'}
+                              bottom={'55px'}
+                              fontFamily={'AtlantisContent'}
+                              fontSize={'21px'}
+                            >
+                              <TypingEffect text={resMsg} speed={50} />
+                            </Box>
+                            <Box
+                              display={'flex'}
+                              position={'fixed'}
+                              justifyContent={'space-between'}
+                              w={'80%'}
+                              bottom={'0'}
+                            >
+                              <Img
+                                src={preloadedAssets?.left}
+                                w={'50px'}
+                                h={'50px'}
+                                cursor={'pointer'}
+                              />
+                              <Img
+                                src={preloadedAssets?.right}
+                                w={'50px'}
+                                h={'50px'}
+                                cursor={'pointer'}
+                                onClick={() => getData(data)}
+                              />
+                            </Box>
+                          </>
+                        )}
+                      </Box>
+                    )}
+                    {currentTab === 4 && data && type === 'feedback' && (
                   <Box
                     w={'100%'}
                     h={'100vh'}
@@ -480,14 +891,13 @@ const ScreenPreview = () => {
                     style={{ perspective: '1000px' }}
                   >
                     <Box
-                      color={'rgba(0, 0, 0, 0.5)'}
                       backgroundImage={preloadedAssets?.backgroundImage}
                       w={'100%'}
                       h={'100vh'}
                       backgroundRepeat={'no-repeat'}
                       backgroundSize={'cover'}
-                      transform={`scale(${first ? 1 : 0.9}) translateY(${
-                        first ? 0 : -0
+                      transform={`scale(${first ? 1 : 1.3}) translateY(${
+                        first ? 0 : -10
                       }%) translateX(${first ? 0 : -10}%)`}
                       transition={'transform 0.9s ease-in-out'}
                     >
@@ -499,661 +909,255 @@ const ScreenPreview = () => {
                         zIndex={999}
                         w={'300px'}
                       >
-                        <Box
-                          style={{
-                            transform: `scale(${showNote ? 0.2 : 1})`,
-                            transition: 'transform 0.5s ease-in-out',
-                          }}
-                          position={'fixed'}
-                          w={'40%'}
-                          h={'60vh'}
-                          display={'flex'}
-                          flexDirection={'column'}
-                          justifyContent={'center'}
-                          alignItems={'center'}
-                        >
-                          <Img
-                            w={'100%'}
-                            h={'80vh'}
-                            src={preloadedAssets?.note}
-                          />
-                          <Box
-                            position={'fixed'}
-                            overflowY={'scroll'}
-                            transform={'translate(0px, 0px)'}
-                            w={'50%'}
-                            mt={'10px'}
-                            display={'flex'}
-                            flexDirection={'column'}
-                            textAlign={'center'}
-                            justifyContent={'center'}
-                            style={{
-                              fontWeight: '900',
-                              color: '#D9C7A2',
-                              fontSize: '18px',
-                              fontFamily: 'AtlantisContent',
-                              lineHeight: 1,
-                            }}
-                          >
-                            <Box
-                              w={'100%'}
-                              overflowY={'scroll'}
-                              h={'100px'}
-                              display={'flex'}
-                              alignItems={'center'}
-                              justifyContent={'center'}
-                              mt={'20px'}
-                            >
-                              {data?.blockText}
-                            </Box>
-                            <Box
-                              w={'100%'}
-                              onClick={() => getData(data)}
-                              mt={'20px'}
-                              display={'flex'}
-                              justifyContent={'center'}
-                              cursor={'pointer'}
-                            >
-                              <Img src={preloadedAssets .next} w={'200px'} h={'60px'} />
-                            </Box>
-                          </Box>
-                        </Box>
                       </Box>
                     </Box>
-                  </Box>
-                )}
-                {currentTab === 4 && data && type === 'Dialog' && (
-                  <Box
-                    w={'100%'}
-                    h={'100vh'}
-                    display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                  >
-                    <Img
-                      src={preloadedAssets?.backgroundImage}
-                      maxW={'100%'}
-                      maxH={'100%'}
-                      w={'100%'}
-                      h={'100vh'}
-                      transform={
-                        'scale(1.3}) translateY(-10%) translateX(-10%)'
-                      }
-                      transition={'transform 0.9s ease-in-out'}
-                    />
-                    <Img
-                      style={{
-                        transform: `translateY(${showNote ? 200 : 0}px)`,
-                        transition:
-                          'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                      }}
-                      position={'fixed'}
-                      maxW={'100%'}
-                      maxH={'100%'}
-                      w={'100%'}
-                      h={'240px'}
-                      bottom={'0'}
-                      src={preloadedAssets?.dial}
-                    />
-                    {!showNote && (
-                      <>
-                        <Box position={'relative'}>
-                          <Img
-                            src={preloadedAssets?.char}
-                            position={'fixed'}
-                            h={'70px'}
-                            w={'25%'}
-                            left={'13%'}
-                            bottom={'150px'}
-                          />
-                          <Text
-                            position={'fixed'}
-                            left={'24%'}
-                            bottom={'167px'}
-                            fontSize={'25'}
-                            fontWeight={700}
-                            textAlign={'center'}
-                            fontFamily={'AtlantisText'}
-                          >
-                            {data.blockRoll === 'Narrator'
-                              ? data.blockRoll
-                              : gameInfo?.gameData?.gameNonPlayerName}
-                          </Text>
-                        </Box>
-                        <Box
-                          display={'flex'}
-                          position={'fixed'}
-                          justifyContent={'space-between'}
-                          w={'75%'}
-                          bottom={'55px'}
-                          fontFamily={'AtlantisContent'}
-                          fontSize={'21px'}
-                        >
-                          <TypingEffect text={data?.blockText} speed={50} />
-                        </Box>
-                        <Box
-                          display={'flex'}
-                          position={'fixed'}
-                          justifyContent={'space-between'}
-                          w={'80%'}
-                          bottom={'0'}
-                        >
-                          <Img
-                            src={preloadedAssets?.left}
-                            w={'50px'}
-                            h={'50px'}
-                            cursor={'pointer'}
-                          />
-                          <Img
-                            src={preloadedAssets?.right}
-                            w={'50px'}
-                            h={'50px'}
-                            cursor={'pointer'}
-                            onClick={() => getData(data)}
-                          />
-                        </Box>
-                      </>
-                    )}
-                  </Box>
-                )}
-                {currentTab === 4 && data && type === 'Interaction' && (
-                  <Box
-                    w={'100%'}
-                    h={'100vh'}
-                    display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                  >
-                    <Img
-                      src={preloadedAssets?.backgroundImage}
-                      maxW={'100%'}
-                      maxH={'100%'}
-                      w={'100%'}
-                      h={'100vh'}
-                      transform={`scale(1.5}) translateY(-10%) translateX(${
-                        showNote ? -200 : 0
-                      }px)`}
-                      transition={'transform 0.9s ease-in-out'}
-                    />
                     <Box
                       style={{
-                        transform: `translateX(${
-                          showNote ? -200 : 0
-                        }px) scale(1.2)`,
-                        transition:
-                          'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                      }}
-                      backgroundImage={preloadedAssets?.parch}
-                      position={'fixed'}
-                      w={{ sm: '350px', md: '500px' }}
-                      h={{ sm: '50vh', md: ' 550px' }}
-                      // top={'4vh'}
-                      left={{ sm: '60px', md: '180px' }}
-                      backgroundSize={'contain'}
-                      backgroundRepeat={'no-repeat'}
-                    >
-                      <Box
-                        textAlign={'center'}
-                        h={'100px'}
-                        display={'flex'}
-                        justifyContent={'center'}
-                        alignItems={'center'}
-                        fontWeight={700}
-                        fontFamily={'AtlantisText'}
-                        lineHeight={1}
-                        w={'100%'}
-                      >
-                        <Box w={'50%'} fontSize={'21px'}>
-                          Here You Can Answer the Interactions...!{' '}
-                        </Box>
-                      </Box>
-                      <Box
-                        textAlign={'center'}
-                        h={'100px'}
-                        display={'flex'}
-                        justifyContent={'center'}
-                        alignItems={'center'}
-                        fontWeight={500}
-                        fontFamily={'AtlantisText'}
-                        lineHeight={1}
-                        w={'96%'}
-                        overflowY={'scroll'}
-                      >
-                        <Box w={'60%'} fontSize={'20px'} letterSpacing={1}>
-                          {data?.blockText}
-                        </Box>
-                      </Box>
-                      <Box
-                        mt={'10px'}
-                        w={{ sm: '200px', md: '400px' }}
-                        fontWeight={500}
-                        ml={'17%'}
-                        h={'220px'}
-                        overflowY={'scroll'}
-                      >
-                        {options &&
-                          options.map((item: any, ind: number) => (
-                            <Box
-                              mb={'10px'}
-                              w={'80%'}
-                              lineHeight={1}
-                              key={ind}
-                              color={selectedOption === ind ? 'purple' : ''}
-                              textAlign={'center'}
-                              cursor={'pointer'}
-                              onClick={() => handleValidate(item, ind)}
-                              fontFamily={'AtlantisText'}
-                              fontSize={'20px'}
-                            >
-                              <Img
-                                src={selectedOption === ind ? preloadedAssets?.on : preloadedAssets?.off}
-                                h={'30px'}
-                                w={'95%'}
-                              />
-                              {item?.qpOptionText}
-                            </Box>
-                          ))}
-                      </Box>
-                      <Box
-                        display={'flex'}
-                        position={'fixed'}
-                        justifyContent={'space-between'}
-                        w={'508px'}
-                        left={'-10px'}
-                      >
-                        <Img
-                          src={preloadedAssets?.left}
-                          w={'50px'}
-                          h={'50px'}
-                          cursor={'pointer'}
-                        />
-                        {selectedOption !== null && (
-                          <Img
-                            src={preloadedAssets?.right}
-                            w={'50px'}
-                            h={'50px'}
-                            cursor={'pointer'}
-                            onClick={() => getData(data)}
-                          />
-                        )}
-                      </Box>
-                    </Box>
-                  </Box>
-                )}
-                {currentTab === 4 && data && type === 'response' && (
-                  <Box
-                    w={'100%'}
-                    h={'100vh'}
-                    display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    position={'relative'}
-                  >
-                    <Img
-                      src={preloadedAssets?.backgroundImage}
-                      maxW={'100%'}
-                      maxH={'100%'}
-                      w={'100%'}
-                      h={'100vh'}
-                      transform={
-                        'scale(1.3}) translateY(-10%) translateX(-10%)'
-                      }
-                      transition={'transform 0.9s ease-in-out'}
-                    />
-                    <Img
-                      style={{
-                        transform: `translateY(${showNote ? 200 : 0}px)`,
-                        transition:
-                          'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+                        transform: `scale(${showNote ? 0.2 : 1})`,
+                        transition: 'transform 0.5s ease-in-out',
                       }}
                       position={'fixed'}
-                      maxW={'100%'}
-                      maxH={'100%'}
-                      w={'100%'}
-                      h={'240px'}
-                      bottom={'0'}
-                      src={preloadedAssets?.dial}
-                    />
-                    {!showNote && (
-                      <>
-                        <Box position={'relative'}>
-                          <Img
-                            src={preloadedAssets?.char}
-                            position={'fixed'}
-                            h={'70px'}
-                            w={'25%'}
-                            left={'13%'}
-                            bottom={'150px'}
-                          />
-                          <Text
-                            position={'fixed'}
-                            left={'24%'}
-                            bottom={'167px'}
-                            fontSize={'25'}
-                            fontWeight={700}
-                            textAlign={'center'}
-                            fontFamily={'AtlantisText'}
-                          >
-                            {data.blockRoll === 'Narrator'
-                              ? data.blockRoll
-                              : gameInfo?.gameData?.gameNonPlayerName}
-                          </Text>
-                        </Box>
-                        <Box
-                          display={'flex'}
-                          position={'fixed'}
-                          justifyContent={'space-between'}
-                          w={'75%'}
-                          bottom={'55px'}
-                          fontFamily={'AtlantisContent'}
-                          fontSize={'21px'}
-                        >
-                          <TypingEffect text={resMsg} speed={50} />
-                        </Box>
-                        <Box
-                          display={'flex'}
-                          position={'fixed'}
-                          justifyContent={'space-between'}
-                          w={'80%'}
-                          bottom={'0'}
-                        >
-                          <Img
-                            src={preloadedAssets?.left}
-                            w={'50px'}
-                            h={'50px'}
-                            cursor={'pointer'}
-                          />
-                          <Img
-                            src={preloadedAssets?.right}
-                            w={'50px'}
-                            h={'50px'}
-                            cursor={'pointer'}
-                            onClick={() => getData(data)}
-                          />
-                        </Box>
-                      </>
-                    )}
-                  </Box>
-                )}
-                {currentTab === 4 && data && type === 'feedback' && (
-              <Box
-                w={'100%'}
-                h={'100vh'}
-                display={'flex'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-              >
-                <Box
-                  backgroundImage={preloadedAssets?.backgroundImage}
-                  w={'100%'}
-                  h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-                  transform={`scale(${first ? 1 : 1.3}) translateY(${
-                    first ? 0 : -10
-                  }%) translateX(${first ? 0 : -10}%)`}
-                  transition={'transform 0.9s ease-in-out'}
-                >
-                  <Box
-                    position={'fixed'}
-                    top={'200px'}
-                    right={'0px'}
-                    bottom={0}
-                    zIndex={999}
-                    w={'300px'}
-                  >
-                  </Box>
-                </Box>
-                <Box
-                  style={{
-                    transform: `scale(${showNote ? 0.2 : 1})`,
-                    transition: 'transform 0.5s ease-in-out',
-                  }}
-                  position={'fixed'}
-                  w={'40%'}
-                  h={'80vh'}
-                  display={'flex'}
-                  flexDirection={'column'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                >
-                  <Img w={'90%'} h={'80vh'} src={preloadedAssets?.feedi} />
-                  <Box
-                    position={'fixed'}
-                    w={'50%'}
-                    mt={'10px'}
-                    display={'flex'}
-                    flexDirection={'column'}
-                    textAlign={'center'}
-                    justifyContent={'center'}
-                    style={{
-                      fontWeight: '900',
-                      color: '#D9C7A2',
-                    }}
-                  >
-                    {feed}
-                    <Box
-                      w={'100%'}
-                      onClick={() => getData(data)}
-                      mt={'20px'}
+                      w={'40%'}
+                      h={'80vh'}
                       display={'flex'}
+                      flexDirection={'column'}
                       justifyContent={'center'}
-                      cursor={'pointer'}
-                      transform={'translate(0px, 100px)'}
+                      alignItems={'center'}
                     >
-                      <Img src={preloadedAssets?.next} w={'200px'} h={'60px'} />
+                      <Img w={'90%'} h={'80vh'} src={preloadedAssets?.feedi} />
+                      <Box
+                        position={'fixed'}
+                        w={'50%'}
+                        mt={'10px'}
+                        display={'flex'}
+                        flexDirection={'column'}
+                        textAlign={'center'}
+                        justifyContent={'center'}
+                        style={{
+                          fontWeight: '900',
+                          color: '#D9C7A2',
+                        }}
+                      >
+                        {feed}
+                        <Box
+                          w={'100%'}
+                          onClick={() => getData(data)}
+                          mt={'20px'}
+                          display={'flex'}
+                          justifyContent={'center'}
+                          cursor={'pointer'}
+                          transform={'translate(0px, 100px)'}
+                        >
+                          <Img src={preloadedAssets?.next} w={'200px'} h={'60px'} />
+                        </Box>
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              </Box>
-                )}
-           {currentTab === 5 && currentSubTab === 0 && (
-              <Box
-                w={'100%'}
-                h={'100vh'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-                className="Main-Content"
-              >
-                <Box
-                  backgroundImage={preloadedAssets?.backgroundImage}
-                  w={'100% !important'}
-                  h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  className="Game-Screen"
-                >
-                  <Box className="Images">
-                    <CompletionContentScreen
-                      preview={true}
-                      formData={gameInfo.gameData}
-                      imageSrc={preloadedAssets.Screen1}
-                      compliData={gameInfo.completionQuestOptions}
-                      CompKeyCount={CompKeyCount}
-                      preloadedAssets ={preloadedAssets}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            )}
-            {currentTab === 5 && currentSubTab === 1 && (
-              <Box
-                w={'100%'}
-                h={'100vh'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-                className="Main-Content"
-              >
-                <Box
-                 backgroundImage={preloadedAssets?.backgroundImage}
-                  w={'100% !important'}
-                  h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-        
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  className="Game-Screen"
-                >
-                  <Box className="Images">
-                    <Box className="LearderBoards">
-                      <Img
-                        src={preloadedAssets?.Screen2}
-                        alt="Your Image"
-                        className="LearderBoards-Img"
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-            )}
-            {currentTab === 5 && currentSubTab === 2 && (
-              <Box
-                w={'100%'}
-                h={'100vh'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-                className="Main-Content"
-              >
-                <Box
-                  backgroundImage={preloadedAssets?.RefBg}
-                  w={'100% !important'}
-                  h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  className="Game-Screen"
-                >
-                  <Box className="Images">
-                    <ReflectionContentScreen
-                      preview={true}
-                      formData={gameInfo.gameData}
-                      imageSrc={preloadedAssets?.RefScreen1}
-                      reflectionQuestions={gameInfo?.reflectionQuestions}
-                      reflectionQuestionsdefault={reflectionQuestionsdefault}
-                      preloadedAssets ={preloadedAssets}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            )}
-            {currentTab === 5 && currentSubTab === 3 && (
-              <Box
-                w={'100%'}
-                h={'100vh'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-                className="Main-Content"
-              >
-                <Box
-                 backgroundImage={preloadedAssets?.backgroundImage}
-                  w={'100% !important'}
-                  h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  className="Game-Screen"
-                >
-                  <Box className="Images">
-                    <TakeAwaysContentScreen
-                      preview={true}
-                      formData={gameInfo.gameData}
-                      imageSrc={preloadedAssets?.Screen4}
-                      preloadedAssets={preloadedAssets}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            )}
-            {currentTab === 5 && currentSubTab === 4 && (
-              <>
-                <Box
-                  w={'100%'}
-                  h={'100vh'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                  overflow={'visible'}
-                  style={{ perspective: '1000px' }}
-                  className="Main-Content"
-                >
+                    )}
+              {currentTab === 5 && currentSubTab === 0 && (
                   <Box
-                   backgroundImage={preloadedAssets?.backgroundImage}
-                    w={'100% !important'}
+                    w={'100%'}
                     h={'100vh'}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'cover'}
                     alignItems={'center'}
                     justifyContent={'center'}
-                    className="Game-Screen"
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
                   >
-                    <Box className="Images">
-                      <WelcomeContentScreen
-                        formData={gameInfo.gameData}
-                        imageSrc={preloadedAssets?.Screen5}
-                        preview={true}
-                        preloadedAssets ={preloadedAssets}
-                      />
+                    <Box
+                      backgroundImage={preloadedAssets?.backgroundImage}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+                      <Box className="Images">
+                        <CompletionContentScreen
+                          preview={true}
+                          formData={gameInfo.gameData}
+                          imageSrc={preloadedAssets.Screen1}
+                          compliData={gameInfo.completionQuestOptions}
+                          CompKeyCount={CompKeyCount}
+                          preloadedAssets ={preloadedAssets}
+                        />
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              </>
-            )}
-            {currentTab === 5 && currentSubTab === 5 && (
-              <Box
-                w={'100%'}
-                h={'100vh'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                position={'relative'}
-                overflow={'visible'}
-                style={{ perspective: '1000px' }}
-                className="Main-Content"
-              >
-                <Box
-                 backgroundImage={preloadedAssets?.backgroundImage}
-                  w={'100% !important'}
-                  h={'100vh'}
-                  backgroundRepeat={'no-repeat'}
-                  backgroundSize={'cover'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  className="Game-Screen"
-                >
-                  <Box className="Images">
-                    <TyContentScreen
-                      formData={gameInfo.gameData}
-                      imageSrc={preloadedAssets?.Screen6}
-                      preview={true}
-                      preloadedAssets ={preloadedAssets}
-                    />
+                )}
+                {currentTab === 5 && currentSubTab === 1 && (
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                    backgroundImage={preloadedAssets?.backgroundImage}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+            
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+                      <Box className="Images">
+                        <Box className="LearderBoards">
+                          <Img
+                            src={preloadedAssets?.Screen2}
+                            alt="Your Image"
+                            className="LearderBoards-Img"
+                          />
+                        </Box>
+                      </Box>
+                    </Box>
                   </Box>
+                )}
+                {currentTab === 5 && currentSubTab === 2 && (
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                      backgroundImage={preloadedAssets?.RefBg}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+                      <Box className="Images">
+                        <ReflectionContentScreen
+                          preview={true}
+                          formData={gameInfo.gameData}
+                          imageSrc={preloadedAssets?.RefScreen1}
+                          reflectionQuestions={gameInfo?.reflectionQuestions}
+                          reflectionQuestionsdefault={reflectionQuestionsdefault}
+                          preloadedAssets ={preloadedAssets}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+                {currentTab === 5 && currentSubTab === 3 && (
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                    backgroundImage={preloadedAssets?.backgroundImage}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+                      <Box className="Images">
+                        <TakeAwaysContentScreen
+                          preview={true}
+                          formData={gameInfo.gameData}
+                          imageSrc={preloadedAssets?.Screen4}
+                          preloadedAssets={preloadedAssets}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+                {currentTab === 5 && currentSubTab === 4 && (
+                  <>
+                    <Box
+                      w={'100%'}
+                      h={'100vh'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      position={'relative'}
+                      overflow={'visible'}
+                      style={{ perspective: '1000px' }}
+                      className="Main-Content"
+                    >
+                      <Box
+                      backgroundImage={preloadedAssets?.backgroundImage}
+                        w={'100% !important'}
+                        h={'100vh'}
+                        backgroundRepeat={'no-repeat'}
+                        backgroundSize={'cover'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        className="Game-Screen"
+                      >
+                        <Box className="Images">
+                          <WelcomeContentScreen
+                            formData={gameInfo.gameData}
+                            imageSrc={preloadedAssets?.Screen5}
+                            preview={true}
+                            preloadedAssets ={preloadedAssets}
+                          />
+                        </Box>
+                      </Box>
+                    </Box>
+                  </>
+                )}
+                {currentTab === 5 && currentSubTab === 5 && (
+                  <Box
+                    w={'100%'}
+                    h={'100vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    position={'relative'}
+                    overflow={'visible'}
+                    style={{ perspective: '1000px' }}
+                    className="Main-Content"
+                  >
+                    <Box
+                    backgroundImage={preloadedAssets?.backgroundImage}
+                      w={'100% !important'}
+                      h={'100vh'}
+                      backgroundRepeat={'no-repeat'}
+                      backgroundSize={'cover'}
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      className="Game-Screen"
+                    >
+                      <Box className="Images">
+                        <TyContentScreen
+                          formData={gameInfo.gameData}
+                          imageSrc={preloadedAssets?.Screen6}
+                          preview={true}
+                          preloadedAssets ={preloadedAssets}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+                {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadedAssets  ={preloadedAssets }/>}
+                  </Flex>
                 </Box>
               </Box>
-            )}
-            {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadedAssets  ={preloadedAssets }/>}
-              </Flex>
             </Box>
           </motion.div>
         )}
