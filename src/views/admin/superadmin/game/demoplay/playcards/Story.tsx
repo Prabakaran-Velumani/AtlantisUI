@@ -32,6 +32,9 @@ import { motion } from 'framer-motion';
 import { API_SERVER } from 'config/constant';
 import { ScoreContext } from '../GamePreview';
 
+const Notelength = 150;
+const Dialoglength = 300;
+
 const Story: React.FC<{
   currentScore: any;
   data: any;
@@ -76,12 +79,14 @@ const Story: React.FC<{
   const { profile, setProfile } = useContext(ScoreContext);
   const [currentPosition, setCurrentPosition] = useState(0);
   const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
+  const [Navigatenext, setNavigateNext] = useState<any>(false);
   const [score, setScore] = useState(null);
   useEffect(() => {
     getVoice(data, type);
     setShowNote(true);
     setTimeout(() => {
       setShowNote(false);
+      getData1(data);
     }, 1000);
   }, [data, type]);
 
@@ -178,17 +183,21 @@ const Story: React.FC<{
     handleValidate(item, ind);
   };
   console.log(profile);
-  
-  
 
-
+useEffect(() => {
+  if(Navigatenext === true)
+  {
+    getData(data);
+  console.log('**********q');
+}
+}, [Navigatenext]);
 const getData1 = (data: any) => {
+  setCurrentPosition(0);
   const content = data?.blockText || '';
   const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
   const newRemainingSentences = sentences.slice(currentPosition);
   console.log('Content:', content);
-  console.log('Remaining Sentences:', newRemainingSentences.length);
-
+  console.log('Remaining Sentences:', newRemainingSentences.length,sentences,newRemainingSentences,'........',currentPosition);
   const concatenatedSentences = [];
   let totalLength = 0;
 
@@ -196,31 +205,49 @@ const getData1 = (data: any) => {
     const sentence = newRemainingSentences[i];
 
     console.log(`Sentence ${i + 1}:`, sentence.length,totalLength);
-    if (totalLength + sentence.length <= 100) {
-      concatenatedSentences.push(sentence);
-      totalLength += sentence.length;
-    } else {
-      concatenatedSentences.push(sentence);
-      break;
+    if (data && type === 'Note') {
+      if (totalLength + sentence.length <= Notelength) {
+        concatenatedSentences.push(sentence);
+        totalLength += sentence.length;
+        console.log('concatenatedSentences12345',concatenatedSentences);
+      } else {
+        concatenatedSentences.push(sentence);
+        break;
+      }
     }
+    if (data && type === 'Dialog') {
+      if (totalLength + sentence.length <= Dialoglength) {
+        concatenatedSentences.push(sentence);
+        totalLength += sentence.length;
+      } else {
+        if(totalLength + sentence.length >= Dialoglength)
+        {
+          break;
+        }
+        concatenatedSentences.push(sentence);
+        break;
+      }
+    }
+   
+    
   }
   setRemainingSentences(concatenatedSentences);
 
   if (newRemainingSentences.length >= 1) {
     setCurrentPosition(currentPosition + concatenatedSentences.length);
+    console.log('concatenatedSentencescurrentPosition',concatenatedSentences.length,'...',currentPosition);
+    setNavigateNext(false);
   } else {
-    if (data && type === 'Note') {
-      getData(data);
-    }
+      setCurrentPosition(0);
+      setNavigateNext(true);
+      // getData(data);
   }
 };
-
 useEffect(() => {
-  if(data && type === 'Note')
-    {
-       getData1(data);
-    }
-}, [data]);
+  
+  getData1(data);
+}, []);
+
   return (
     <>
       {data && type === 'Note' && (
@@ -330,11 +357,7 @@ useEffect(() => {
                
               >
                
-            {remainingSentences.map((sentence, index) => (
-    <React.Fragment key={index}>
-       {sentence}
-    </React.Fragment>
-  ))}
+            {remainingSentences}
               </Box>
               <Box
                 w={'100%'}
@@ -439,7 +462,8 @@ useEffect(() => {
                 fontFamily={'AtlantisContent'}
                 fontSize={'21px'}
               >
-                <TypingEffect text={data?.blockText} speed={50} />
+                {/* <TypingEffect text={data?.blockText} speed={50} /> */}
+                {remainingSentences} 
               </Box>
               <Box
                 display={'flex'}
@@ -454,7 +478,7 @@ useEffect(() => {
                   w={'50px'}
                   h={'50px'}
                   cursor={'pointer'}
-                  onClick={() => getData(data)}
+                  onClick={() => getData1(data)}
                 />
               </Box>
             </>

@@ -372,6 +372,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [currentScreenId]);
 
   const getData = (next: any) => {
+    console.log('data***next',next);
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
