@@ -49,7 +49,7 @@ import SettingPad from 'assets/img/games/setting-pad.png';
 import SliderPointer from 'assets/img/games/slider-pointer.png';
 import Okay from 'assets/img/games/OKAY button.png';
 import TooltipImg from 'assets/img/games/tooltip-1.png';
-import TopMenuNDI from 'assets/img/games/top-menu-parts/top-menu-NDI.png'
+import TopMenuNDI from 'assets/img/games/top-menu-parts/top-menu-NDI.png';
 // import back from 'assets/img/games/back.jpg';
 // import Back from 'assets/img/games/back.jpg';
 // import Okay from 'assets/img/games/o'
@@ -233,9 +233,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   });
   const [audioVolume, setAudioVolume] = useState<any>(0.5);
   const [nextBlockAudioUrl, setNextBlockAudioUrl] = useState<string>('');
-  const [windowWidth,setWindowWidth ] = useState(null);
-  const [windowHeight,setWindowHeight] = useState(null);
- 
+  const [windowWidth, setWindowWidth] = useState(null);
+  const [windowHeight, setWindowHeight] = useState(null);
+
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [game3Position, setGame3Position] = useState({
     previousBlock: '',
@@ -935,7 +935,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   // const element = document.getElementById('EntirePreview-wrapper');
-  // // useEffect(()=> {  
+  // // useEffect(()=> {
   //   if (element) {
   //     try {
   //       // if (document.fullscreenEnabled) {
@@ -1103,46 +1103,46 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     window.addEventListener('resize', handleResizeWidth);
     window.addEventListener('resize', handleResizeHeight);
     return () => {
-        window.removeEventListener('resize', handleResizeWidth);
-        window.removeEventListener('resize', handleResizeHeight);
+      window.removeEventListener('resize', handleResizeWidth);
+      window.removeEventListener('resize', handleResizeHeight);
     };
   }, []);
 
   return (
     <ProfileContext.Provider value={profileData}>
-      <Box id='EntirePreview-wrapper'>
-        <Box className='EntirePreview-content'>
+      <Box id="EntirePreview-wrapper">
+        <Box className="EntirePreview-content">
           <Box id="container" className="Play-station">
             <Box className="top-menu-home-section">
-              {currentScreenId !== 5 && currentScreenId !== 7 ? 
-              <>
-                <Img src={TopMenu} className="top-menu-img" />
-                <Img
-                  src={Overview}
-                  className="overview-img"
-                  onClick={handleOverView}
-                />
-                <Img
-                  src={Setting}
-                  className="setting-img"
-                  onClick={() => setIsSettingOpen(true)}
-                />
-                <Box className="score-box">
-                  <Text className="text">
-                    {(profile &&
-                      profile.score &&
-                      profile.score.length > 0 &&
-                      profile.score.reduce(
-                        (accumulator: number, currentValue: any) => {
-                          return accumulator + currentValue.score;
-                        },
-                        0,
-                      )) ||
-                      0}
-                  </Text>
-                </Box>
-              </>
-             : null}    
+              {currentScreenId !== 5 && currentScreenId !== 7 ? (
+                <>
+                  <Img src={TopMenu} className="top-menu-img" />
+                  <Img
+                    src={Overview}
+                    className="overview-img"
+                    onClick={handleOverView}
+                  />
+                  <Img
+                    src={Setting}
+                    className="setting-img"
+                    onClick={() => setIsSettingOpen(true)}
+                  />
+                  <Box className="score-box">
+                    <Text className="text">
+                      {(profile &&
+                        profile.score &&
+                        profile.score.length > 0 &&
+                        profile.score.reduce(
+                          (accumulator: number, currentValue: any) => {
+                            return accumulator + currentValue.score;
+                          },
+                          0,
+                        )) ||
+                        0}
+                    </Text>
+                  </Box>
+                </>
+              ) : null}
 
               {/* {permission.setting ? */}
               {
@@ -1223,7 +1223,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               {informationScreen !== '' ? <InformationCompo /> : <DynamicComponent />}
             </DataContext.Provider>*/}
           </Box>
-          <Flex height="100vh" className={currentScreenId === 2 ? '' : 'EntirePreview'}>
+          <Flex
+            height="100vh"
+            className={currentScreenId === 2 ? '' : 'EntirePreview'}
+          >
             {(() => {
               switch (currentScreenId) {
                 case 0:
@@ -1355,7 +1358,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                               imageSrc={RefBg}
                               getData={getData}
                               data={data}
-                              reflectionQuestions={gameInfo?.reflectionQuestions}
+                              reflectionQuestions={
+                                gameInfo?.reflectionQuestions
+                              }
                             />
                           </Box>
                         </Box>
@@ -1452,7 +1457,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         animate={{ opacity: 1, background: '#0000' }}
                         transition={{ duration: 0.3, delay: 0.5 }}
                       > */}
-                      <Box
+                      {/* <Box
                         w={'100%'}
                         h={'100vh'}
                         alignItems={'center'}
@@ -1472,22 +1477,23 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           // justifyContent={'center'}
                           className="Game-Screen"
                         >
-                          <Box className="Images">
-                            <Completion
-                              questOptions={gameInfo?.questOptions}
-                              getData={getData}
-                              data={data}
-                              setCurrentScreenId={setCurrentScreenId}
-                              formData={gameInfo?.gameData}
-                              imageSrc={Screen1}
-                              currentQuestNo={currentQuestNo}
-                              completionScreenQuestOptions={
-                                gameInfo.completionQuestOptions
-                              }
-                            />
-                          </Box>
+                          <Box className="Images"> */}
+                      <Completion
+                        questOptions={gameInfo?.questOptions}
+                        getData={getData}
+                        data={data}
+                        setCurrentScreenId={setCurrentScreenId}
+                        formData={gameInfo?.gameData}
+                        imageSrc={backgroundScreenUrl}
+                        screen={Screen1}
+                        currentQuestNo={currentQuestNo}
+                        completionScreenQuestOptions={
+                          gameInfo.completionQuestOptions
+                        }
+                      />
+                      {/* </Box>
                         </Box>
-                      </Box>
+                      </Box> */}
                       {/* </motion.div> */}
                     </>
                   );
@@ -1679,7 +1685,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           >
                             <Box className="img-box" position={'relative'}>
                               {/* <Img className='img-bg' src={`${API_SERVER}/${useData?.Response?.[0]?.gasAssetImage}`} />  */}
-                              <Img className="img-bg" src={backgroundScreenUrl} />
+                              <Img
+                                className="img-bg"
+                                src={backgroundScreenUrl}
+                              />
                               <Img className="img" src={Login} loading="lazy" />
                               <Text className="heading">Atlantis</Text>
                               <Text className="welcome-text">Welcome To</Text>
@@ -1896,12 +1905,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       placeholder="Please Share your Thoughts..."
                       onChange={handleReview}
                     />
-                    <Text color="#CBD5E0" fontSize={{ base: 'sm', '2xl': 'md' }}>
+                    <Text
+                      color="#CBD5E0"
+                      fontSize={{ base: 'sm', '2xl': 'md' }}
+                    >
                       {'Maximum of 250 characters...'}
                     </Text>
                   </FormControl>
                   <MenuItem>
-                    <Box w={'100%'} display={'flex'} justifyContent={'flex-start'}>
+                    <Box
+                      w={'100%'}
+                      display={'flex'}
+                      justifyContent={'flex-start'}
+                    >
                       <Button
                         bg="#11047a"
                         _hover={{ bg: '#190793' }}
@@ -1916,7 +1932,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       </Button>
                     </Box>
 
-                    <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                    <Box
+                      w={'100%'}
+                      display={'flex'}
+                      justifyContent={'flex-end'}
+                    >
                       <Button
                         bg="#11047a"
                         _hover={{ bg: '#190793' }}

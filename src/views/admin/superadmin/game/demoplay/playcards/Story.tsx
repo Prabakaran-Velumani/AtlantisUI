@@ -657,7 +657,7 @@ const Story: React.FC<{
                 <Img
                   src={char}
                   position={'fixed'}
-                  h={'100px'}
+                  h={{base:'75px',md:'100px'}}
                   w={'30%'}
                   left={'5%'}
                   bottom={'93px'}

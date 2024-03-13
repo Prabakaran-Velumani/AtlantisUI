@@ -136,49 +136,7 @@ const Completion: React.FC<{
           </Box>
           <Box className="content-box">
           
-            <Box
-              className="content"
-              transform="translate(0px,100px) !important"
-            >
-              {completionScreenQuestOptions[currentQuestNo]
-                ?.gameIsSetCongratsSingleMessage != true &&
-              completionScreenQuestOptions[currentQuestNo]
-                ?.gameIsSetCongratsScoreWiseMessage != true
-                ? completionScreenQuestOptions[currentQuestNo]
-                    ?.gameCompletedCongratsMessage
-                : completionScreenQuestOptions[currentQuestNo]
-                    ?.gameIsSetCongratsScoreWiseMessage == true
-                ? completionScreenQuestOptions[currentQuestNo]
-                    ?.gameIsSetMinPassScore &&
-                  completionScreenQuestOptions[currentQuestNo]?.gameMinScore &&
-                  completionScreenQuestOptions[currentQuestNo]?.gameMinScore > 0
-                  ? profile?.score <
-                    completionScreenQuestOptions[currentQuestNo]?.gameMinScore
-                    ? completionScreenQuestOptions[currentQuestNo]
-                        ?.gameMinimumScoreCongratsMessage
-                    : completionScreenQuestOptions[currentQuestNo]
-                        ?.gameIsSetDistinctionScore &&
-                      profile?.score <
-                        completionScreenQuestOptions[currentQuestNo]
-                          ?.gameDistinctionScore
-                    ? completionScreenQuestOptions[currentQuestNo]
-                        ?.gameaboveMinimumScoreCongratsMessage
-                    : completionScreenQuestOptions[currentQuestNo]
-                        ?.gameIsSetDistinctionScore &&
-                      profile?.score >=
-                        completionScreenQuestOptions[currentQuestNo]
-                          ?.gameDistinctionScore
-                    ? completionScreenQuestOptions[currentQuestNo]
-                        ?.gameAboveDistinctionScoreCongratsMessage
-                    : completionScreenQuestOptions[currentQuestNo]
-                        ?.gameIsSetCongratsSingleMessage == true &&
-                      completionScreenQuestOptions[currentQuestNo]
-                        ?.gameCompletedCongratsMessage
-                  : completionScreenQuestOptions[currentQuestNo]
-                      ?.gameCompletedCongratsMessage
-                : completionScreenQuestOptions[currentQuestNo]
-                    ?.gameCompletedCongratsMessage}
-            </Box>
+        
           </Box>
           <Box
             className="rewards-img-box"
@@ -190,39 +148,8 @@ const Completion: React.FC<{
             className="points-box"
             transform="translate(0px,200px) !important"
           >
-            <Box className="box-1">
-              <Img src={back} className="box-1_img" />
-              <Text className="points-text" fontFamily={'content'}>
-                points
-              </Text>
-              <Box className="inside-box-1">
-                <Img src={point} className="inside-box-1_img" />
-                <Text className="inside-points-text" fontFamily={'content'}>
-                  {(profile &&
-                    profile.score &&
-                    profile.score.length > 0 &&
-                    profile.score.reduce(
-                      (accumulator: number, currentValue: any) => {
-                        return currentQuestNo === currentValue.quest ?  accumulator + currentValue.score : accumulator;
-                      },
-                      0,
-                    )) ||
-                    0}
-                  /{questScores && questScores[currentQuestNo]}
-                </Text>
-              </Box>
-            </Box>
-            {curretQuestOptions?.gameIsSetBadge === 'true' && (
-              <Box className="box-2">
-                <Img src={back} className="box-2_img" />
-                <Text className="points-text" fontFamily={'content'}>
-                  {curretQuestOptions?.gameBadgeName}
-                </Text>
-                {curretQuestOptions?.gameBadge && (
-                  <Img className="inside-img" src={imgb} />
-                )}{' '}
-              </Box>
-            )}
+           
+           
           </Box>
         
           <Box className="next-btn" transform="translate(0px,400px) !important">
@@ -240,6 +167,7 @@ const Completion: React.FC<{
         backgroundImage={imageSrc}
         backgroundSize={'cover'}
         backgroundRepeat={'no-repeat'}
+        className={'chapter_potrait'}
       >
         <Grid
           templateColumns="repeat(1, 1fr)"
@@ -252,10 +180,195 @@ const Completion: React.FC<{
           // className="story_complete_grid"
         >
           <GridItem colSpan={1} position={'relative'}>
-            <Box position={'relative'} w={'100%'} display={'flex'} justifyContent={'center'}>
-              <Img src={screen} className="story_completion_image" loading="lazy" />
-              <Box className={'story_completion_image'}>
-
+            <Box
+              position={'relative'}
+              w={'100%'}
+              display={'flex'}
+              justifyContent={'center'}
+            >
+              <Img
+                src={screen}
+                className="story_completion_image"
+                loading="lazy"
+              />
+              <Box className={'story_completion_content'}>
+                <Box
+                  w={'70%'}
+                  display={'flext'}
+                  justifyContent={'space-between'}
+                  flexDirection={'column'}
+                >
+                  <Box
+                    // className="title"
+                    h={'13%'}
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    className='completion_heading'
+                  >
+                    <Text fontFamily={'AtlantisText'} textAlign={'center'}  fontSize={'2vw'}>
+                      {curretQuestOptions?.gameScreenTitle}
+                    </Text>
+                  </Box>
+                  <Box
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    flexDirection={'column'}
+                    h={'80%'}
+                    className={'completion_content'}
+                  >
+                    <Box
+                      className="content"
+                      fontSize={'2vw'}
+                      fontFamily={'AtlantisText'}
+                      w={'80%'}
+                      // h={'20%'}
+                      textAlign={'center'}
+                      color={'#D9C7A2'}
+                    >
+                      {completionScreenQuestOptions[currentQuestNo]
+                        ?.gameIsSetCongratsSingleMessage !== true &&
+                      completionScreenQuestOptions[currentQuestNo]
+                        ?.gameIsSetCongratsScoreWiseMessage !== true
+                        ? completionScreenQuestOptions[currentQuestNo]
+                            ?.gameCompletedCongratsMessage
+                        : completionScreenQuestOptions[currentQuestNo]
+                            ?.gameIsSetCongratsScoreWiseMessage === true
+                        ? completionScreenQuestOptions[currentQuestNo]
+                            ?.gameIsSetMinPassScore &&
+                          completionScreenQuestOptions[currentQuestNo]
+                            ?.gameMinScore &&
+                          completionScreenQuestOptions[currentQuestNo]
+                            ?.gameMinScore > 0
+                          ? profile?.score <
+                            completionScreenQuestOptions[currentQuestNo]
+                              ?.gameMinScore
+                            ? completionScreenQuestOptions[currentQuestNo]
+                                ?.gameMinimumScoreCongratsMessage
+                            : completionScreenQuestOptions[currentQuestNo]
+                                ?.gameIsSetDistinctionScore &&
+                              profile?.score <
+                                completionScreenQuestOptions[currentQuestNo]
+                                  ?.gameDistinctionScore
+                            ? completionScreenQuestOptions[currentQuestNo]
+                                ?.gameaboveMinimumScoreCongratsMessage
+                            : completionScreenQuestOptions[currentQuestNo]
+                                ?.gameIsSetDistinctionScore &&
+                              profile?.score >=
+                                completionScreenQuestOptions[currentQuestNo]
+                                  ?.gameDistinctionScore
+                            ? completionScreenQuestOptions[currentQuestNo]
+                                ?.gameAboveDistinctionScoreCongratsMessage
+                            : completionScreenQuestOptions[currentQuestNo]
+                                ?.gameIsSetCongratsSingleMessage === true &&
+                              completionScreenQuestOptions[currentQuestNo]
+                                ?.gameCompletedCongratsMessage
+                          : completionScreenQuestOptions[currentQuestNo]
+                              ?.gameCompletedCongratsMessage
+                        : completionScreenQuestOptions[currentQuestNo]
+                            ?.gameCompletedCongratsMessage}
+                    </Box>
+                    <Img w={'100%'} src={rew} />
+                    <Box
+                      w={'100%'}
+                      display={'flex'}
+                      justifyContent={'space-between'}
+                    >
+                      <Box w="45%" position={'relative'}>
+                        <Img src={back} w={'100%'} h={'auto'} />
+                        <Box
+                          w={'100%'}
+                          position={'absolute'}
+                          top={'0'}
+                          h={'100%'}
+                        >
+                          <Box
+                            w={'100%'}
+                            display={'flex'}
+                            justifyContent={'center'}
+                          >
+                            <Text
+                              fontFamily={'AtlantisContent'}
+                              textAlign={'center'}
+                              fontSize={'1.8vw'}
+                            >
+                              points
+                            </Text>
+                          </Box>
+                          <Box
+                            w={'100%'}
+                            position={'relative'}
+                            h={{ md: '40%', xl: '60%', '2xl': '70%' }}
+                            display={'flex'}
+                            justifyContent={'center'}
+                            alignItems={'center'}
+                            flexDirection={'column'}
+                          >
+                            <Img src={point} w={'80%'} h={'auto'} />
+                            <Text
+                              position={'absolute'}
+                              top={'33%'}
+                              fontFamily={'AtlantisText'}
+                              color={'#D9C7A2'}
+                              fontSize={'1.6vw'}
+                            >
+                              {(profile &&
+                                profile.score &&
+                                profile.score.length > 0 &&
+                                profile.score.reduce(
+                                  (accumulator: number, currentValue: any) => {
+                                    return currentQuestNo === currentValue.quest
+                                      ? accumulator + currentValue.score
+                                      : accumulator;
+                                  },
+                                  0,
+                                )) ||
+                                0}
+                              /{questScores && questScores[currentQuestNo]}
+                            </Text>
+                          </Box>
+                        </Box>
+                      </Box>
+                      {curretQuestOptions?.gameIsSetBadge === 'true' && (
+                        <Box w={'45%'} position={'relative'}>
+                          <Img src={back} w={'100%'} h={'auto'} />
+                          <Box
+                            w={'100%'}
+                            position={'absolute'}
+                            top={'0'}
+                            h={'100%'}
+                          >
+                            <Box
+                              w={'100%'}
+                              display={'flex'}
+                              justifyContent={'center'}
+                            >
+                              <Text
+                                fontFamily={'AtlantisContent'}
+                                textAlign={'center'}
+                                fontSize={'1.8vw'}
+                              >
+                                {curretQuestOptions?.gameBadgeName}sdfaas
+                              </Text>
+                            </Box>
+                            {curretQuestOptions?.gameBadge && (
+                              <Img className="inside-img" src={imgb} />
+                            )}{' '}
+                          </Box>
+                        </Box>
+                      )}
+                    </Box>
+                  </Box>
+                    <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                      <Img
+                        src={next}
+                        onClick={() => getData(data)}
+                        cursor={'pointer'}
+                        w={'50%'}
+                      />
+                    </Box>
+                </Box>
               </Box>
             </Box>
           </GridItem>
