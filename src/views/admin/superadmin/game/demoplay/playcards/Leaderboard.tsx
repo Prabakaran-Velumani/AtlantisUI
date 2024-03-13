@@ -123,22 +123,11 @@ const LeaderBoard: React.FC<{
 
   return (
     <>
-      {imageSrc && (
-        <Box className="takeaway-screen">
-          <Box className="takeaway-screen-box">
-            <Img src={imageSrc} className="bg-lead" />
-            <Box
-              className="content-box"
-              width={'633px !important'}
-              overflowY={'scroll'}
-              position={'absolute'}
-              display={'flex'}
-              flexDirection={'column'}
-              justifyContent={'space-between'}
-            >
-              <Box>
-                <Box
-                  className="content-lead"
+      {imageSrc && (       
+          <Box className="Leaderboard-screen">
+            <Img src={imageSrc} className="leaderboard-img" />
+            <Box className="content-box">
+                <Box className="table-heading"
                   fontFamily={'AtlantisText'}
                   // color={'#D9C7A2'}
                   display={'flex'}
@@ -150,7 +139,7 @@ const LeaderBoard: React.FC<{
                     justifyContent={'center'}
                     alignItems={'center'}
                   >
-                    <Text color={'#D9C7A2'} fontSize={'x-large'}>
+                    <Text color={'#D9C7A2'}>
                       Name
                     </Text>
                   </Box>
@@ -203,79 +192,66 @@ const LeaderBoard: React.FC<{
                     </Box>
                   </Box>
                 </Box>
-                {/* {content && content.map((it: any, ind: number) => ( */}
-                {usersWithAllTimeScore &&
-                  usersWithAllTimeScore.map((item: any, index: number) => (
-                    <Box
-                      className="content-lead"
-                      fontFamily={'AtlantisText'}
-                      translateX={'30px'}
-                      // color={'#D9C7A2'}
-                      key={index}
-                      _hover={{
-                        filter: 'grayscale(50%)',
-                        transform: 'scale(1.02)',
-                        transition: 'transform 0.3s ease-in-out',
-                        opacity: '0.8',
-                      }}
-                    >
-                      <>
-                        <Img
-                          src={Entry}
-                          className="dot-img"
-                          w={'95%'}
-                          h={'50px'}
-                          ml={'25px'}
-                          position={'relative'}
-                          _hover={{ filter: 'grayscale(50%)' }}
-                        />
-                        <Box
-                          position={'absolute'}
-                          left={'25px'}
-                          w={'90%'}
-                          ml={'10px'}
-                          display={'flex'}
-                          justifyContent={'space-between'}
-                          _hover={{ filter: 'grayscale(50%)' }}
-                        >
-                          <Box w={'30%'}>
-                            <Text
-                              textAlign={'center'}
-                              fontSize={'x-large'}
-                              color={'#D9C7A2'}
+                <Box>
+                  {/* {content && content.map((it: any, ind: number) => ( */}
+                  {usersWithAllTimeScore &&
+                    usersWithAllTimeScore.map((item: any, index: number) => (
+                      <Box
+                        className="content-lead"                       
+                        key={index}
+                        _hover={{
+                          filter: 'grayscale(50%)',
+                          transform: 'scale(1.02)',
+                          transition: 'transform 0.3s ease-in-out',
+                          opacity: '0.8',
+                        }}
+                      >
+                        <>
+                          <Img
+                            src={Entry}
+                            className="list-pad"                           
+                            _hover={{ filter: 'grayscale(50%)' }}
+                          />
+                          <Box className='list-wrapper'                           
+                            _hover={{ filter: 'grayscale(50%)' }}
+                          >
+                            <Box w={'30%'}>
+                              <Text
+                                textAlign={'center'}                               
+                                color={'#D9C7A2'}
+                              >
+                                {item.name}
+                              </Text>
+                            </Box>
+                            <Box
+                              w={'30%'}
+                              display={'flex'}
+                              justifyContent={'space-between'}
                             >
-                              {item.name}
-                            </Text>
+                              <Text textAlign={'center'} color={'#D9C7A2'}>
+                                {index + 1}
+                              </Text>
+                              <Text textAlign={'center'} color={'#D9C7A2'}>
+                                {item.score}
+                              </Text>
+                            </Box>
+                            <Box
+                              w={'30%'}
+                              display={'flex'}
+                              justifyContent={'space-between'}
+                            >
+                              <Text textAlign={'center'} color={'#D9C7A2'}>
+                                {index + 1}
+                              </Text>
+                              <Text textAlign={'center'} color={'#D9C7A2'}>
+                                {item.allTimeScore}
+                              </Text>
+                            </Box>
                           </Box>
-                          <Box
-                            w={'30%'}
-                            display={'flex'}
-                            justifyContent={'space-between'}
-                          >
-                            <Text textAlign={'center'} color={'#D9C7A2'}>
-                              {index + 1}
-                            </Text>
-                            <Text textAlign={'center'} color={'#D9C7A2'}>
-                              {item.score}
-                            </Text>
-                          </Box>
-                          <Box
-                            w={'30%'}
-                            display={'flex'}
-                            justifyContent={'space-between'}
-                          >
-                            <Text textAlign={'center'} color={'#D9C7A2'}>
-                              {index + 1}
-                            </Text>
-                            <Text textAlign={'center'} color={'#D9C7A2'}>
-                              {item.allTimeScore}
-                            </Text>
-                          </Box>
-                        </Box>
-                      </>
-                    </Box>
-                  ))}
-              </Box>
+                        </>
+                      </Box>
+                    ))}
+                </Box>
               {/* <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
                 <Img
                   src={right}
@@ -286,28 +262,22 @@ const LeaderBoard: React.FC<{
                 />
               </Box> */}
             </Box>
-            <Box
-              w={'100%'}
-              position={'absolute'}
-              display={'flex'}
-              justifyContent={'center'}
-              top={'130px'}
-            >
-              <Box
-                w={'550px'}
-                display={'flex'}
-                justifyContent={'space-between'}
-                position={'relative'}
+            <Box className='top-bar'>
+              <Box className='list-wrapper'
+                // w={'550px'}
+                // display={'flex'}
+                // justifyContent={'space-between'}
+                // position={'relative'}
               >
-                <Box>
+                <Box className='heading-box'>
                   <Img
                     src={Label}
-                    className="dot-img"
+                    className="heading-box-img"
                     w={'200px'}
                     h={'60px'}
                     position={'relative'}
                   />{' '}
-                  <Box
+                  <Box className='heading-box-content'
                     top={'0'}
                     fontFamily={'AtlantisText'}
                     // color={'#D9C7A2'}
@@ -330,15 +300,15 @@ const LeaderBoard: React.FC<{
                     />{' '}
                   </Box>
                 </Box>
-                <Box>
+                <Box className='heading-box'>
                   <Img
                     src={Label}
-                    className="dot-img"
+                    className="heading-box-img"
                     w={'200px'}
                     h={'60px'}
                     position={'relative'}
                   />{' '}
-                  <Box
+                  <Box className='heading-box-content'
                     top={'0'}
                     fontFamily={'AtlantisText'}
                     // color={'#D9C7A2'}
@@ -361,15 +331,15 @@ const LeaderBoard: React.FC<{
                     />{' '}
                   </Box>
                 </Box>
-                <Box>
+                <Box className='heading-box'>
                   <Img
                     src={Label}
-                    className="dot-img"
+                    className="heading-box-img"
                     w={'200px'}
                     h={'60px'}
                     position={'relative'}
                   />{' '}
-                  <Box
+                  <Box className='heading-box-content'
                     top={'0'}
                     fontFamily={'AtlantisText'}
                     // color={'#D9C7A2'}
@@ -393,19 +363,13 @@ const LeaderBoard: React.FC<{
                   </Box>
                 </Box>
                 <Img
-                  src={Close}
-                  w={'50px'}
-                  h={'50px'}
-                  position={'absolute'}
-                  top={'-55px'}
-                  right={'-40px'}
-                  cursor={'pointer'}
+                  src={Close}                   
+                  className='close-btn'
                   onClick={() =>homeLeaderBoard ? handleHome() : getData(data)}
                 />
               </Box>
             </Box>
-          </Box>
-        </Box>
+          </Box>      
       )}
     </>
   );

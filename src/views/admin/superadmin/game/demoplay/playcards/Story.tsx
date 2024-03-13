@@ -238,6 +238,7 @@ const Story: React.FC<{
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
           backgroundRepeat={'no-repeat'}
+          className='chapter_potrait'
         >
           <Grid
             templateColumns="repeat(1, 1fr)"
@@ -297,6 +298,7 @@ const Story: React.FC<{
           alignItems={'center'}
           justifyContent={'center'}
           position={'relative'}
+          className='chapter_potrait'
         >
           <Img
             src={backGroundImg}
@@ -413,13 +415,13 @@ const Story: React.FC<{
                 w={'95%'}
                 bottom={'0'}
               >
-                {/* <Img
+                <Img
                   src={left}
                   w={'70px'}
                   h={'50px'}
                   cursor={'pointer'}
                   onClick={() => prevData(data)}
-                /> */}
+                />
                 <Img
                   src={right}
                   w={'70px'}
@@ -441,6 +443,7 @@ const Story: React.FC<{
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
           backgroundRepeat={'no-repeat'}
+          className='chapter_potrait'
         >
           <Grid
             templateColumns="repeat(1, 1fr)"
@@ -487,6 +490,7 @@ const Story: React.FC<{
                     lineHeight={1}
                     w={'96%'}
                     overflowY={'scroll'}
+                    marginTop={'15px'} 
                   >
                     <Box
                       w={'60%'}
@@ -578,6 +582,7 @@ const Story: React.FC<{
           alignItems={'center'}
           justifyContent={'center'}
           position={'relative'}
+          className='chapter_potrait'
         >
           <Img
             src={backGroundImg}
@@ -722,6 +727,7 @@ const Story: React.FC<{
           position={'relative'}
           overflow={'visible'}
           style={{ perspective: '1000px' }}
+          className='chapter_potrait'
         >
           <Box
             backgroundImage={backGroundImg}
@@ -782,8 +788,9 @@ const Story: React.FC<{
             flexDirection={'column'}
             justifyContent={'center'}
             alignItems={'center'}
+            className='story_feedback'
           >
-            <Img w={'90%'} h={'80vh'} src={feedi} />
+            <Img w={'90%'} h={'80vh'} src={feedi}  />
             <Box
               position={'fixed'}
               w={'50%'}
@@ -796,6 +803,7 @@ const Story: React.FC<{
                 fontWeight: '900',
                 color: '#D9C7A2',
               }}
+              fontFamily={'AtlantisContent'}
             >
               {feed}
               <Box
@@ -805,7 +813,7 @@ const Story: React.FC<{
                 display={'flex'}
                 justifyContent={'center'}
                 cursor={'pointer'}
-                transform={'translate(0px, 100px)'}
+                transform={{base:'translate(0px, 60px)',md:'translate(0px, 100px)'}}
               >
                 <Img src={next} w={'200px'} h={'60px'} />
               </Box>

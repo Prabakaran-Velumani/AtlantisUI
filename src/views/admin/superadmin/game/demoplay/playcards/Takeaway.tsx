@@ -24,13 +24,7 @@ const Takeway: React.FC<{
           <Box className="takeaway-screen-box">
             <Img src={imageSrc} className="bg-take" />
             <Box
-              className="content-box"
-              width={'633px !important'}
-              overflowY={'scroll'}
-              position={'absolute'}
-              display={'flex'}
-              flexDirection={'column'}
-              justifyContent={'space-between'}
+              className="content-box"             
             >
               <Box>
                 {content &&
@@ -59,17 +53,14 @@ const Takeway: React.FC<{
                       </Box>
                     );
                   })}
-              </Box>
-              <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+              </Box>              
+            </Box>
+            <Box className='next-btn-box'>
                 <Img
-                  src={right}
-                  w={'50px'}
-                  h={'50px'}
-                  cursor={'pointer'}
-                    onClick={()=>getData(data)}
+                  src={right}                 
+                  onClick={()=>getData(data)}
                 />
               </Box>
-            </Box>
           </Box>
         </Box>
       )}

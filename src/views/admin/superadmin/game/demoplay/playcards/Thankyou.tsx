@@ -1,5 +1,5 @@
-import { Box, Icon, Img, Text } from '@chakra-ui/react';
-import React from 'react';
+import { Box, Button, Icon, Img, Text } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import { ImHappy } from 'react-icons/im';
 import { TfiFaceSad } from 'react-icons/tfi';
 import { BsEmojiSunglasses } from 'react-icons/bs';
@@ -49,10 +49,10 @@ const ThankYou: React.FC<{
   return (
     <>
       {imageSrc && (
-        <>
-          <Box className="thankyou-screen">
+        <Box className='Thankyou-section'>
+            <Img src={imageSrc} className="bg-thankyou" />
+          <Box className="thankyou-screen"> 
             <Box className="thankyou-screen-box">
-              <Img src={imageSrc} className="bg-thankyou" />
             </Box>
             <Box
               w={'100%'}
@@ -63,8 +63,8 @@ const ThankYou: React.FC<{
               className="tq-msg"
             >
               <Box
-                h={'100px'}
-                w={'40%'}
+                // h={'100px'}
+                // w={'40%'}
                 mt={{ base: '0px', sm: '0px', md: '20px', lg: '20px' }}
                 lineHeight={1}
                 textAlign={'center'}
@@ -82,7 +82,7 @@ const ThankYou: React.FC<{
                   fontWeight="300"
                   textAlign="center"
                 >
-                  How do you feel about the experience?
+                  How do you feel about the experience?                 
                 </Text>
                 <Box className="collect-learner-feedback">
                   <Box className="grid">
@@ -313,7 +313,7 @@ const ThankYou: React.FC<{
               </>
             )}
           </Box>
-        </>
+        </Box>
       )}
     </>
   );

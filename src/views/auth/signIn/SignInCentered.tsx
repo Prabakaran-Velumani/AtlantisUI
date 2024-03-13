@@ -20,7 +20,7 @@
 
 */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 // Chakra imports
 import {
@@ -117,6 +117,26 @@ function SignIn() {
     localStorage.setItem('user', user);
     navigate('/admin/dashboards/default');
   };
+
+  const myScreenOrientation = window.screen.orientation;
+  useEffect(()=> {
+    const rotate = () => {
+      if(myScreenOrientation.type === 'portrait-primary') {
+        myScreenOrientation.lock('landscape-primary')
+        console.log('passed');
+      }
+      else {
+        console.log('failed');
+      }
+    }
+
+    window.addEventListener('orientationchange', rotate)
+
+    return (()=> {
+      window.removeEventListener('orientationchange', rotate);
+    });
+
+  },[])
 
   return (
     <CenteredAuth

@@ -302,6 +302,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
         backgroundImage={imageSrc}
         backgroundSize={'cover'}
         backgroundRepeat={'no-repeat'}
+        className='chapter_potrait'
       >
         <Grid
           templateColumns="repeat(1, 1fr)"
