@@ -115,6 +115,7 @@ const PreviewEndOfStory: React.FC<{
 
   return (
     <Flex className="end-of-quest" direction="column" align="center" position="relative">
+      
       <Img src={preloadAssets?.backgroundImage} className="eoq-bg-img" />
       {Replay && (
         <Box
@@ -130,28 +131,25 @@ const PreviewEndOfStory: React.FC<{
           alignItems="center"
         >
           
-          <Box className="thankyou-screen-box" zIndex="1">
-            <Img src={Replay} className="bg-Img" />
+          <Box className="thankyou-screen-box" >
+            <Img src={Replay} className="bg-Img" /></Box>
             {/* <Text  position={'relative'} fontFamily="AtlantisContent" textAlign="center" bottom={'390px'} color="white" fontSize="2xl" zIndex="999999">
               Do You Want to Play Again?
             </Text> */}
-            <Box  position={'relative'} fontSize={'3xl'} fontFamily="AtlantisContent" textAlign="center" bottom={'390px'} color="white"  zIndex="999999"> <Text fontFamily={'AtlantisContent'} textAlign={'center'} mb="4">
+            <Box  position={'absolute'} fontSize={['xl', '2xl', '3xl']} fontFamily="AtlantisContent" textAlign="center" color="white"  zIndex="999999"> <Text  mb="4">
                   End of the current Quest.!
                 </Text>
-                <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
+                <Text >
                   Do You Want Play Again ?
-                </Text></Box>
+                </Text>
            
-          </Box>
           <Flex
             mt="1"
             direction="column"
             align="center"
             justifyContent="center"
             className="eoq-replay-img"
-            zIndex="999999"
-            bottom={'350px'}
-            position={'relative'}
+           
           >
             <Img
               src={ReplayBtn}
@@ -160,7 +158,7 @@ const PreviewEndOfStory: React.FC<{
               cursor="pointer"
               onClick={replayQuest}
             />
-          </Flex>
+          </Flex></Box>
         </Box>
       )}
     </Flex>
