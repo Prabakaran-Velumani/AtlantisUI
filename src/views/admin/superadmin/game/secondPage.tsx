@@ -35,6 +35,7 @@ import OnToast from 'components/alerts/toast';
 import LeanerList from './components/LeanersList'
 import { SidebarResponsive } from 'components/sidebar/Sidebar';
 import routes from 'routes';
+import {API_SERVER} from 'config/constant';
 const gameNames = [
   "Super Adventure Quest",
   "Galactic Conquest",
@@ -359,7 +360,7 @@ const SecondPage: React.FC = () => {
                     name={game.gameTitle}
                     author={game.gameCategoryId}
                     // image={game.gameBackgroundId && game?.image.gasAssetImage}
-                    image={'http://35.183.46.127:5555/uploads/background/29977_1701772077260.jpg'}
+                    image={`http://${API_SERVER}/uploads/background/29977_1701772077260.jpg`}
                     tabState={tabState}
                     id={game.gameId}
                     handleButtonOne={handleButtonOne}
