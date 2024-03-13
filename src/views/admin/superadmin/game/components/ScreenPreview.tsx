@@ -383,7 +383,6 @@ const ScreenPreview = () => {
       } else {
         setType(null);
         setData(null);
-        // onClose();
         return false;
       }
     }
@@ -417,9 +416,7 @@ const ScreenPreview = () => {
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
     setSelectedOption(ind === selectedOption ? null : ind);
-
   };
-
 
   const getData1 = (data: any) => {
     const content = data?.blockText || '';
@@ -440,7 +437,6 @@ const ScreenPreview = () => {
       }
     }
     setRemainingSentences(concatenatedSentences);
-  
     if (newRemainingSentences.length >= 1) {
       setCurrentPosition(currentPosition + concatenatedSentences.length);
     } else {
@@ -486,9 +482,7 @@ const ScreenPreview = () => {
                         backgroundSize={'cover'}
                         alignItems={'center'}
                         justifyContent={'center'}
-                        className="123456"
                       >
-                        {/* <Box className="Images"> */}
                           {gameInfo && (
                             <WelcomeContentScreen
                               formData={gameInfo.gameData}
@@ -497,7 +491,6 @@ const ScreenPreview = () => {
                               preloadedAssets ={preloadedAssets}
                             />
                           )}
-                        {/* </Box> */}
                       </Box>
                     </Box>
                 )}
