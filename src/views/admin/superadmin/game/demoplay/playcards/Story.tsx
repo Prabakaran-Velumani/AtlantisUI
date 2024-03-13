@@ -214,6 +214,7 @@ const Story: React.FC<{
   
    
 const getData1 = (data: any) => {
+  // console.log('getData1STORY---',data)
   const content = data?.blockText || '';
   const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
   const newRemainingSentences = sentences.slice(currentPosition);
@@ -236,7 +237,9 @@ const getData1 = (data: any) => {
   if (newRemainingSentences.length >= 1) {
     setCurrentPosition(currentPosition + concatenatedSentences.length);
   } else {
+  
     if (data && type === 'Note') {
+
       getData(data);
     }
   }

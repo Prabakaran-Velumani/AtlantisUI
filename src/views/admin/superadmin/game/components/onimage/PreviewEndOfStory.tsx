@@ -14,7 +14,7 @@ const replayQuest = ()=>{
 
   return (
     <Flex className="end-of-quest" >
-      {/* <Img src={preloadedAssets?.backgroundImage} className='eoq-bg-img' /> */}
+      <Img src={preloadedAssets?.backgroundImage} className='eoq-bg-img' />
       <Box
               w={'100%'}
               display={'flex'}
@@ -40,7 +40,7 @@ const replayQuest = ()=>{
                 className='eoq-replay-img'
               >
                 <Img
-                  src={preloadedAssets.ReplayBtn}
+                  src={preloadedAssets.replayBtn}
                   w={'200px'}
                   h={'60px'}
                   cursor={'pointer'}

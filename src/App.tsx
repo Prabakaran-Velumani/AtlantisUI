@@ -18,6 +18,7 @@ import GlbPractise from 'views/admin/games/game/components/GlbPractise';
 import ScreenPreview from 'views/admin/superadmin/game/components/ScreenPreview';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
+import OrientationLock from 'views/admin/superadmin/game/components/onimage/LockOrientationComp';
 
 export default function Main() {
   const [currentTheme, setCurrentTheme] = useState(initialTheme);
@@ -45,6 +46,7 @@ export default function Main() {
             <RTLLayout theme={currentTheme} setTheme={setCurrentTheme} />
           }
         />
+          <Route path="/screen/preview/" element={<OrientationLock />} />
         <Route path="/" element={<Navigate to="/admin" replace />} />
       </Routes>
     </ChakraProvider>

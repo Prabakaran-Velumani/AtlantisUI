@@ -1,4 +1,4 @@
-import React, { useRef, useState , useEffect} from 'react';
+import React, { useRef, useState,useEffect } from 'react';
 import {
   Button,
   Box,
@@ -183,16 +183,7 @@ const CharacterPreview: React.FC<{
     const handleInputChange = (inputValue: any) => {
       setSearchTerm(inputValue);
     };
-    // useEffect(() => {
-    //   if (demo && audioRef.current) {
-    //     audioRef.current.load();
-    //     const handleLoadedData = () => {
-    //       audioRef.current.play();
-    //       audioRef.current.removeEventListener('loadeddata', handleLoadedData);
-    //     };
-    //     audioRef.current.addEventListener('loadeddata', handleLoadedData);
-    //   }
-    // }, [demo]);
+
     let currentAudio: any = null;
     const playAudio = (audioUrl: string): Promise<void> => {
       return new Promise<void>((resolve) => {
