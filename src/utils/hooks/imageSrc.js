@@ -52,13 +52,12 @@ import off from '../../assets/img/games/off.png';
 import replayBtn from '../../assets/img/games/ReplayBtn.png';
 import SelectButton from '../../assets/img/games/selectbtn.png';
 import Okay from '../../assets/img/games/Okay.png'
+import write from '../../assets/img/screens/Screens/Writing.png';
+
 
 
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
-
-
-
 
  */
 export const assetImageSrc = [
@@ -116,6 +115,7 @@ export const assetImageSrc = [
   { assetType: 'replayBtn', src: replayBtn },
   { assetType: 'SelectButton', src: SelectButton },
   { assetType: 'OkayBtn', src: Okay },
+  { assetType: 'write', src: write },
   
   
   /*file not available but used list

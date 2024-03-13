@@ -88,9 +88,7 @@ const ScreenPreview = () => {
       setViewportWidth(window.innerWidth);
       setViewportHeight(window.innerHeight);
     };
-
     window.addEventListener('resize', handleResize);
-
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -100,8 +98,9 @@ const ScreenPreview = () => {
     previewScreenRef.current.style.setProperty('--viewport-width', `${viewportWidth}px`);
     previewScreenRef.current.style.setProperty('--viewport-height', `${viewportHeight}px`);
   }, [viewportWidth, viewportHeight]);
-  console.log("viewportWidth",viewportWidth)
-  console.log("viewportHeight",viewportHeight)
+  // console.log("viewportWidth",viewportWidth)
+  // console.log("viewportHeight",viewportHeight)
+
   useEffect(() => {
     const fetchData = async () => {
       const resolvedResult: any = await preloadedImages(assetImageSrc);
@@ -185,12 +184,6 @@ const ScreenPreview = () => {
         for (let i = 0; i < gamedata?.resultReflection?.length ; i++)
         {
           let filteredValue = gamedata?.resultReflection.find((refRow:any) =>refRow?.refKey == `ref${i+1}`);
-          // {
-          //   if(refRow?.refKey == `ref${i+1}`)
-          //   {
-          //     return ({[refRow?.refKey] : [refRow?.refQuestion]});
-          //   }
-          // });
           reflectionData[filteredValue?.refKey]=filteredValue?.refQuestion;
         }
         setGameInfo({
@@ -283,7 +276,7 @@ const ScreenPreview = () => {
       setPreloadedAssets ({ ...apiUrlAssetImageUrls, ...staticAssetImageUrls });
     }
   }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
-
+  
   useEffect(() => {
     if (gameInfo && preloadedAssets ) {
       setContentReady(true);
@@ -296,6 +289,7 @@ const ScreenPreview = () => {
     dispatch(updatePreviewData({isDispatched: false}));
   },[CompKeyCount ])
   const getData = (next: any) => {
+    console.log('getDataSC--',next)
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
@@ -471,8 +465,8 @@ const ScreenPreview = () => {
             animate={{ opacity: 1, background: '#0000' }}
             transition={{ duration: 1, delay: 0.5 }}
           >
-            <Box h={'100vh !important'} className="Images">
-              <Flex height="100vh" className="AddScores">
+            <Box className="Images">
+              <Flex >
                 {currentTab == 3 && (
                     <Box
                       w={'100%'}
@@ -492,7 +486,7 @@ const ScreenPreview = () => {
                         backgroundSize={'cover'}
                         alignItems={'center'}
                         justifyContent={'center'}
-                        // className="Game-Screen"
+                        className="123456"
                       >
                         {/* <Box className="Images"> */}
                           {gameInfo && (
@@ -500,6 +494,7 @@ const ScreenPreview = () => {
                               formData={gameInfo.gameData}
                               imageSrc={preloadedAssets?.Screen5}
                               preview={true}
+                              preloadedAssets ={preloadedAssets}
                             />
                           )}
                         {/* </Box> */}

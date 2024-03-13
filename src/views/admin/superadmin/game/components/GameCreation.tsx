@@ -504,8 +504,11 @@ const GameCreation = () => {
             gameId: parseInt(id),
         };
     
-        if (tab) {
+        if (tab > 2 && tab < 6) {
             previewData = { ...previewData, currentTab: tab };
+        }
+        else{
+            previewData = { ...previewData, currentTab: 3 };
         }
     
         if (currentTab) {

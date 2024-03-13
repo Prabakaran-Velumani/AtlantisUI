@@ -580,7 +580,6 @@ const WelcomeContentScreen: React.FC<{
               <Img src={next}  />
             </Box>
             </Box>
-           
           </Box>
       )}
       </motion.div>

@@ -16,6 +16,7 @@ import Skills from 'assets/img/screens/Skills.png';
 import Story from 'assets/img/screens/Story.png';
 import SkillsLearningOutcome from 'assets/img/screens/Skills & Learning outcome.png';
 import LearningOutComes from './LearningOutComes';
+import Skill from './Skills';
 
 
 interface Badge {
@@ -128,24 +129,14 @@ const PreviewWelcomeScreen: React.FC<{
           <Box className="screen-preview-welcome-grid">
             <Box className="screen-preview-title screen-preview-grid-items">
               <Text
-                fontSize={{
-                  base: '13px',
-                  sm: '13px',
-                  md: '15px',
-                  lg: '20px',
-                }}
+                className='welcomescreen-heading'
               >
                 {formData?.gameTitle}
               </Text>
             </Box>
             <Box className="screen-preview-duration screen-preview-grid-items">
               <Text
-                fontSize={{
-                  base: '11px',
-                  sm: '12px',
-                  md: '13px',
-                  lg: '15px',
-                }}
+                className='welcomescreen-content'
               >
                 <>
                   <span style={customStylesicon}>
@@ -159,28 +150,40 @@ const PreviewWelcomeScreen: React.FC<{
             </Box>
 
             <Box className="screen-preview-storyline screen-preview-grid-items">
-              <Text>{formData?.gameStoryLine}</Text>
+              
+              <Text className='welcomescreen-content'>{formData?.gameStoryLine}</Text>
             </Box>
             {/*** Need to work */}
-            {/* <Box className='box-1'>
-            <Box className="screen-preview-skill screen-preview-grid-items">
-              Skill
+            <Box className='screen-welcome-rewardswrapper'>
+            <Img src={preloadedAssets.rew} alt="rew" className='screen-welcome-rewardsImg' />
             </Box>
-            <Box className="screen-preview-outcome screen-preview-grid-items">
-              Outcome
-              <Box>
+            <Box className='screen-preview-earnings'>
+             <Box className="screen-preview-grid-items ">
+              <Img src={preloadedAssets?.back} className="screen-preview-welcome-slo-box"  />
+                <Text className='learnig-outcome-tit welcomescreen-content'> Skills</Text>
+              <Box className="screen-preview-welcome-slo-content">
+                <Skill authorArray={authorArray} preloadedAssets={preloadedAssets} findSkillName={findSkillName} />
+              </Box>
+            </Box>
+            <Box className="screen-preview-grid-items ">
+              <Img src={preloadedAssets?.back} className="screen-preview-welcome-slo-box"  />
+                <Text className='learnig-outcome-tit welcomescreen-content'> Learning OutComes</Text>
+              <Box className="screen-preview-welcome-slo-content">
                 <LearningOutComes data={data} preloadedAssets={preloadedAssets} />
               </Box>
             </Box>
-            </Box> */}
-            {/*** Need to work */}
+            </Box>
+            
             <Box className="screen-preview-author screen-preview-grid-items">
-              <Text className="screen-preview-heading">Author
-              <Text className="screen-preview-text">{formData?.gameAuthorName}</Text>
+              <Text className="text-center">
+              <Text className="welcomescreen-content">Author</Text>
+              <Text className="screen-preview-text welcomescreen-content">{formData?.gameAuthorName}</Text>
+              {currentTab !== 3 && formData.gameIsShowAdditionalWelcomeNote === 'true' &&
+                <Text className="screen-preview-text welcomescreen-content welcome-additionaltext">{renderContent()}</Text>
+              }
               </Text>
             </Box>
-
-            <Box></Box>
+            <Box className='screen-preview-grid-items'><Img src={preloadedAssets.next} className='screen-preview-nxtbtn welcome-nxtbtn'/></Box>
           </Box>
         </Box>
       </motion.div>

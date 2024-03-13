@@ -1170,8 +1170,8 @@ useEffect(() => {
                   <GameCard
                     name={game.gameTitle}
                     author={game.gameSkills}
-                    // image={game.gameBackgroundId && game?.image.gasAssetImage}
-                    image={'http://35.183.46.127:5555/uploads/background/29977_1701772077260.jpg'}
+                    image={game.gameBackgroundId && game?.image.gasAssetImage}
+                    // image={'http://35.183.46.127:5555/uploads/background/29977_1701772077260.jpg'}
                     tabState={tabState}
                     id={game.gameId}
                     game={game}

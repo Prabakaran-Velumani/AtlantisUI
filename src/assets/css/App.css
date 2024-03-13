@@ -329,7 +329,7 @@ option {
   width: 65%;
   /* new */
   /* height: 800px; */
-  border-radius: 20px;
+  /* border-radius: 20px; */
   /* background: #fff; */
   /* box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08); */
   padding: 20px;
@@ -3468,8 +3468,8 @@ transform: translate(-167px, -84px);
   width: 100vw;
 }
 .preview-welcome-texture{
-  width: 90vw;
-  height: 100vh;
+  width: 80%;
+  height: 100%;
 }
 
 .screen-preview-content-wrapper{
@@ -3480,18 +3480,110 @@ transform: translate(-167px, -84px);
   font-family: AtlantisText;
   color: #ffe797;
   height: 100vh;
+  width: 100%;
   letter-spacing: 1.2px;
 }
 .screen-preview-welcome-grid{
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(3, 1fr) 3fr repeat(3, 1fr);
   position: absolute;
   background-position: center;
   background-attachment: fixed; 
-  height: 55vh;
+  height: 63vh;
   width: 60vw;
   transform: translateY(6%);
+}
+.learnig-outcome-tit{
+  position: absolute;
+  transform: translate(0.2vw, -9vh);
+  text-wrap: nowrap;
+  color: black;
+  font-size: 0.56em !important;
+}
+.welcomescreen-bulletsImg{
+  width: 0.85em;
+  height: 0.85em;
+}
+.welcomescreen-content{
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+.welcomescreen-heading{
+  font-size: 1rem;
+}
+
+
+/* style for skill and learning outcome box */
+.screen-preview-welcome-slo-box{
+  width: 22vw;
+  height: 25vh;
+  }
+  .screen-preview-welcome-slo-content{
+    position: absolute;
+    transform: translate(0.55vw, 1.4vh);
+    display: flex;
+    line-height: .5em;
+    flex-direction: column;
+    overflow-y: scroll;
+    height: 15.5vh;
+  }
+  .slo-content{
+    width: 17vw !important;
+    overflow-wrap: break-word;
+    text-align: justify;
+    display: flex;
+    justify-content: flex-start;
+    font-size: 0.68em;
+    padding-left: 0.5em;
+    margin-right: 0.5em;
+  }
+  .screen-welcome-rewardswrapper{
+    width: 100%;
+    height: .7em;
+    /* margin-top: 1; */
+    display: flex;
+    justify-content: center;
+  }
+  .screen-welcome-rewardsImg{
+    width: 42vw;
+    height: 2.5vh;
+  }
+  .welcome-additionaltext{
+    width: 40vw;  
+  }
+  .welcome-nxtbtn
+  {
+    width: 14vw;
+    height: 10vh;
+  }
+@media screen and (min-width: 950px){
+  .screen-preview-content-wrapper{
+    width: 100vw;
+  }
+  .preview-welcome-texture{
+    width: 65%;
+    height: 95%;
+  }
+  .screen-welcome-rewardswrapper{
+    display: flex;
+    justify-content: center;
+    height: 1.5vh;
+  }
+  .welcomescreen-content{
+  font-size: 1.2rem;
+}
+.welcomescreen-heading {
+  font-size: 1.6rem;
+}
+.screen-preview-welcome-slo-content p{
+  font-size: 0.94rem;
+}
+.welcome-additionaltext{
+  width: 45vw;  
+}
+.screen-preview-author{
+  /* transform: translateY(-2.2rem); */
+  }
+
 }
 @media (orientation: portrait){
   body {
@@ -3510,6 +3602,11 @@ transform: translate(-167px, -84px);
     margin: 0;
   }
   
+  .screen-preview-content-wrapper{
+    height: 100vw;
+    width: 100vh;
+    /* transform: translateY(-1.5rem); */
+  }
   .screen-preview-bgimg{
     display: flex;
     justify-content: center !important;
@@ -3525,7 +3622,7 @@ transform: translate(-167px, -84px);
   .preview-welcome-texture{
     width: 80vh;
     height: 100vw;
-    font-size: calc((var(--viewport-width))* 0.025);
+    font-size: calc((var(--viewport-height))* 0.025);
     font-family: AtlantisText;
     color: #ffe797;
   }
@@ -3533,9 +3630,70 @@ transform: translate(-167px, -84px);
   .screen-preview-welcome-grid {
     height: 56vw !important;
     width: 53vh !important;
-    transform: translateY(14px) !important;
+    transform: translateY(-0.2rem) !important;
+    place-items: center;
+  }
+  .screen-preview-welcome-slo-box{
+    width: 22vh;
+    height: 30vw;
+    }
+    .learnig-outcome-tit{
+      position: absolute;
+      transform: translate(0.2vh, -10.3vw);
+      text-wrap: nowrap;
+      color: black;
+      font-size: 0.7em !important;
+    }
+    .screen-preview-welcome-slo-content {
+      position: absolute;
+      transform:  translate(0.8vh, 0.5vw);
+      height: 17vw;
+      display: flex;
+      margin-top: 5px;
+      /* gap: 10px; */
+      line-height: normal;
+      flex-direction: column;
+      overflow-y: scroll;
+  }
+  .slo-content {
+    width: 17vh !important;
+    /* height: 18vw; */
+    overflow-wrap: break-word;
+    text-align: justify;
+    display: flex;
+    justify-content: flex-start;
+    font-size: 0.8em;
+    padding-left: 0.7em;
+    /* margin-top: -0.2em; */
+    margin-right: 0.5em;
+}
+.screen-welcome-rewardsImg{
+  width: 50vh;
+  height: 2.5vw;
+}
+.welcomescreen-heading {
+    font-size: 1rem;
+}
+.welcomescreen-content {
+  font-size: .85rem;
+}
+.screen-preview-author{
+  transform: translateY(-2.2rem);
+  }
+.welcome-nxtbtn
+{
+  width: 17vh;
+  height: 10vw;
+  }
+  .screen-preview-welcome-slo-content p{
+    /* font-size: 0.94rem; */
+    font-size: 0.5rem !important;;
+  }
+  .welcome-additionaltext{
+    width: 52vh;  
   }
   }
+
 .screen-preview-grid-items{
   display: flex;
   justify-content: center;
@@ -3544,36 +3702,50 @@ transform: translate(-167px, -84px);
 
 
 .screen-preview-title{
-grid-column: span 2;
 grid-row: 1 / 2;
 }
 .screen-preview-duration{
-grid-column: span 2;
 grid-row: 2 / 3;
 }
 .screen-preview-storyline{
-grid-column: span 2;
 grid-row: 3 / 4;
 }
 .screen-preview-skill{
-grid-column: 1 /2;
-grid-row: 4 / 5;
+/* grid-column: 1 /2; */
+/* grid-row: 4 / 5; */
 }
 .screen-preview-outcome{
-grid-column: 2 / 3;
-grid-row: 4 / 5;
+/* grid-column: 2 / 3; */
+/* grid-row: 4 / 5; */
+}
+.screen-preview-earnings
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .screen-preview-author{
-grid-column: span 2;
 grid-row: 6 / 7;
+transform: translateY(-0.6rem);
 }
+.screen-preview-additional_welcomenote{
+grid-row: 7 / 8;
+}
+.screen-preview-nxtbtn{
+  grid-row: 8 / 9;
+  }
 .screen-preview-heading{
-font-size: 1em ;
+font-size: .55em ;
 }
 .screen-preview-text{
-font-size: .7em;
+font-size: 0.75rem;
 text-transform: capitalize;
 }
+.text-center{
+  text-align: center;
+}
+
+
 /* Rajesh css works */
 /* player name in character selection */
 

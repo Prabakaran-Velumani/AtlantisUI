@@ -82,7 +82,7 @@ export const ScoreContext = createContext<any>(null);
 const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
-  const InitialScreenId = id ? 10 : 0;
+  const InitialScreenId = id ? 10 : 1;
   const [gameInfo, setGameInfo] = useState<any | null>();
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -404,9 +404,12 @@ const GamePreview = () => {
         <h1> {'Your are Not Authorized....'}</h1>
       ) : (
         gameInfo?.gameId &&
-        (!showGame ? (
-          <PlayInfo />
-        ) : (
+        (
+          // !showGame ? 
+        //   (
+        //   <PlayInfo />
+        // ) :
+         (
           <ScoreContext.Provider value={{ profile, setProfile }}>
             <Box id="container" onMouseMove={handleMouseMove}>
               {isHovered && (
