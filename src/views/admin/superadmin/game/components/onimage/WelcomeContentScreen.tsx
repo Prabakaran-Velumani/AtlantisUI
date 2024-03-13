@@ -99,6 +99,7 @@ const WelcomeContentScreen: React.FC<{
   }, []);
 
   useEffect(() => {
+     fetch();
     if (profile.gameSkills) {
       const Array = profile.gameSkills.split(',');
       setauthorArray(Array);
