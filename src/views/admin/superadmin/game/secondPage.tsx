@@ -360,7 +360,7 @@ const SecondPage: React.FC = () => {
                     name={game.gameTitle}
                     author={game.gameCategoryId}
                     // image={game.gameBackgroundId && game?.image.gasAssetImage}
-                    image={`http://${API_SERVER}/uploads/background/29977_1701772077260.jpg`}
+                    image={`${API_SERVER}/uploads/background/29977_1701772077260.jpg`}
                     tabState={tabState}
                     id={game.gameId}
                     handleButtonOne={handleButtonOne}
