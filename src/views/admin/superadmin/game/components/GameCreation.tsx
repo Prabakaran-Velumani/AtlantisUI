@@ -1023,6 +1023,7 @@ useEffect(()=>{
   const handleShareReview = () => {
     setEntire(false);
     setShare(true);
+    setPreview(false);
     onOpen();
   };
 

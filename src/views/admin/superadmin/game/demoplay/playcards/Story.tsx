@@ -183,7 +183,13 @@ const Story: React.FC<{
     handleValidate(item, ind);
   };
   console.log(profile);
-
+   // style={{
+  //   transform: `translateY(${showNote ? 200 : 0}px)`,
+  //   transition:
+  //     'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+  // }}
+const stylerender = (Navigatenext === true && (data && type === 'Dialog')) ? '' : 'transform 0.3s ease-in-out, translateY 0.3s ease-in-out';
+const styletransform =(Navigatenext === true && (data && type === 'Dialog')) ? '' : `translateY(${showNote ? 200 : 0}px)`;
 useEffect(() => {
   if(Navigatenext === true)
   {
@@ -414,11 +420,12 @@ useEffect(() => {
               // transform={'translate(0px, 55px)'}
             />
           )}
+        {/* Dialog */}
           <Img
             style={{
-              transform: `translateY(${showNote ? 200 : 0}px)`,
+              transform: styletransform,
               transition:
-                'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+              stylerender,
             }}
             position={'fixed'}
             maxW={'100%'}
