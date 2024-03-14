@@ -169,7 +169,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
                 <Img src={NextBtn} />
               </Button>
             </Box>
-            {/* <Button
+        {/* <Button
               position={'absolute'}
               top={0}
               right={0}

@@ -1338,7 +1338,7 @@ transform: translate(-167px, -84px);
 
 .dropdown {
   transform: translate(8px, 30px);
-  max-width: 280px;
+  max-width: 234px;
   max-height: 120px;
   overflow-y: scroll;
   font-family: 'AtlantisText';

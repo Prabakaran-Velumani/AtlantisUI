@@ -469,13 +469,13 @@ const Story: React.FC<{
                     justifyContent={'center'}
                     alignItems={'center'}
                     fontWeight={700}
-                    fontSize={{ sm: '1vw', md: '1.5vw', lg: '1.9vw' }}
+                    fontSize={{ sm: '1.8vw', md: '1.5vw', lg: '1.9vw' }}
                     fontFamily={'AtlantisText'}
                     lineHeight={1}
                     w={'100%'}
-                    h={'5%'}
+                    h={'10%'}
                   >
-                    <Box w={'80%'}>
+                    <Box w={'80%'} >
                       Here You Can Answer the Interactions...!{' '}
                     </Box>
                   </Box>

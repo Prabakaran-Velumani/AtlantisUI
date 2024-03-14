@@ -189,7 +189,7 @@ const Welcome: React.FC<{
                         justifyContent={'center'}
                       >
                         <Box w={'50%'}>
-                          {/* {formData.gameIsShowGameDuration === 'true' && ( */}
+                          {formData.gameIsShowGameDuration === 'true' && (
                           <Text
                             fontSize={{
                               base: '11px',
@@ -213,7 +213,7 @@ const Welcome: React.FC<{
                               </span>
                             </>
                           </Text>
-                          {/* )} */}
+                           )} 
                         </Box>
                       </Box>
                       <Box w={'100%'} 
@@ -256,7 +256,7 @@ const Welcome: React.FC<{
                               : 'center'
                           }
                         >
-                          {/* {formData.gameIsShowSkill === 'true' && ( */}
+                          {formData.gameIsShowSkill === 'true' && (
                           <Box w={'38%'} h={'auto'} position={'relative'}>
                             <motion.div
                               initial={{ opacity: 0, scale: 0.5 }}
@@ -336,8 +336,8 @@ const Welcome: React.FC<{
                               </Box>
                             </motion.div>
                           </Box>
-                          {/* )}  */}
-                          {/* {formData.gameIsShowLearningOutcome === 'true' && ( */}
+                          )} 
+                          {formData.gameIsShowLearningOutcome === 'true' && (
 
                           <Box w={'38%'} h={'auto'} position={'relative'}>
                             <motion.div
@@ -418,9 +418,9 @@ const Welcome: React.FC<{
                               </Box>
                             </motion.div>
                           </Box>
-                          {/* )}  */}
+                          )}  
                         </Box>
-                        {/* {formData.gameIsShowAuhorName === 'true' && ( */}
+                         {formData.gameIsShowAuhorName === 'true' && ( 
                         <Box
                           w={'100%'}
                           // h={'50px'}
@@ -436,11 +436,11 @@ const Welcome: React.FC<{
                             *Author* <br /> {formData.gameAuthorName}
                           </Text>
                         </Box>
-                        {/* )} */}
-                        {/* {formData.gameIsShowAdditionalWelcomeNote === 'true' && ( */}
+                         )} 
+                        {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
                         <Box
                           w={'100%'}
-                          h={'50px'}
+                          h={'30px'}
                           position={'relative'}
                           className="renderContent"
                         >
@@ -456,7 +456,7 @@ const Welcome: React.FC<{
                             {renderContent()}
                           </Text>
                         </Box>
-                        {/* )} */}
+                        )}
                       </Box>
                       <Box
                         // className="next-btn-welcome"
