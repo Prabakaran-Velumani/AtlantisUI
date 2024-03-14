@@ -238,7 +238,7 @@ const Story: React.FC<{
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
           backgroundRepeat={'no-repeat'}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Grid
             templateColumns="repeat(1, 1fr)"
@@ -267,10 +267,7 @@ const Story: React.FC<{
                     display={'flex'}
                     justifyContent={'center'}
                   >
-                    {data?.blockText} sdgi bibi aberi ahrh awhroi howiahro
-                    ihwaorh owharoh oawhosfoofocohhr oiwharoh oawir owaor oawiro
-                    iwaori oiwoair oorowairh oiawhro ihwoarih owihro ihwoarih
-                    owiharo hwaorhi owihrowha hos ghsokdhfo harhohrowiahroajfoj
+                    {data?.blockText}
                   </Box>
                 </Box>
                 <Box
@@ -298,7 +295,7 @@ const Story: React.FC<{
           alignItems={'center'}
           justifyContent={'center'}
           position={'relative'}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Img
             src={backGroundImg}
@@ -339,7 +336,6 @@ const Story: React.FC<{
               bottom={'100px'}
               w={'200px'}
               h={'324px'}
-              // transform={'translate(0px, 55px)'}
             />
           )}
           {selectedNpc && (
@@ -350,7 +346,6 @@ const Story: React.FC<{
               bottom={'100px'}
               w={'200px'}
               h={'324px'}
-              // transform={'translate(0px, 55px)'}
             />
           )}
           <Img
@@ -404,7 +399,6 @@ const Story: React.FC<{
                 fontSize={'2vw'}
                 bottom={'38px'}
                 fontFamily={'AtlantisContent'}
-                // fontSize={'21px'}
               >
                 <TypingEffect text={data?.blockText} speed={50} />
               </Box>
@@ -443,7 +437,7 @@ const Story: React.FC<{
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
           backgroundRepeat={'no-repeat'}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Grid
             templateColumns="repeat(1, 1fr)"
@@ -459,7 +453,7 @@ const Story: React.FC<{
                 <Img src={parch} w={'100%'} h={'100%'} loading="lazy" />
                 <Box
                   position={'absolute'}
-                  top={{ sm: '18px', md: '42px' }}
+                  top={{ sm: '14px', md: '38px' }}
                   h={'80% !important'}
                   className="story_interaction_image"
                 >
@@ -468,15 +462,15 @@ const Story: React.FC<{
                     display={'flex'}
                     justifyContent={'center'}
                     alignItems={'center'}
-                    fontWeight={700}
-                    fontSize={{ sm: '1.8vw', md: '1.5vw', lg: '1.9vw' }}
+                    fontWeight={500}
+                    fontSize={{ sm: '1.8vw', md: '2vw', lg: '2.5vw' }}
                     fontFamily={'AtlantisText'}
                     lineHeight={1}
                     w={'100%'}
                     h={'10%'}
                   >
-                    <Box w={'80%'} >
-                      Here You Can Answer the Interactions...!{' '}
+                    <Box w={'80%'} color={'#312821'}>
+                      Interaction{' '}
                     </Box>
                   </Box>
                   <Box
@@ -490,16 +484,14 @@ const Story: React.FC<{
                     lineHeight={1}
                     w={'96%'}
                     overflowY={'scroll'}
-                    marginTop={'15px'} 
+                    marginTop={'15px'}
                   >
                     <Box
                       w={'60%'}
                       fontSize={{ md: '1.5vw', lg: '1.9vw' }}
                       letterSpacing={1}
                     >
-                      {data?.blockText} fohfoihfoihoihf oihoaih ohiwoeiho
-                      iwhoihwqoibo bohiwge gigeguf fufuef uwfueyfwue fuweu
-                      ywfeuywhbhbckz
+                      {data?.blockText}
                     </Box>
                   </Box>
                   <Box
@@ -535,8 +527,6 @@ const Story: React.FC<{
                               display={'flex'}
                               justifyContent={'center'}
                               fontSize={{
-                                sm: '1.3vw',
-                                md: '1.5vw',
                                 lg: '1.9vw',
                               }}
                             >
@@ -582,7 +572,7 @@ const Story: React.FC<{
           alignItems={'center'}
           justifyContent={'center'}
           position={'relative'}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Img
             src={backGroundImg}
@@ -657,7 +647,7 @@ const Story: React.FC<{
                 <Img
                   src={char}
                   position={'fixed'}
-                  h={{base:'75px',md:'100px'}}
+                  h={{ base: '75px', md: '100px' }}
                   w={'30%'}
                   left={'5%'}
                   bottom={'93px'}
@@ -727,7 +717,7 @@ const Story: React.FC<{
           position={'relative'}
           overflow={'visible'}
           style={{ perspective: '1000px' }}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Box
             backgroundImage={backGroundImg}
@@ -788,9 +778,9 @@ const Story: React.FC<{
             flexDirection={'column'}
             justifyContent={'center'}
             alignItems={'center'}
-            className='story_feedback'
+            className="story_feedback"
           >
-            <Img w={'90%'} h={'80vh'} src={feedi}  />
+            <Img w={'90%'} h={'80vh'} src={feedi} />
             <Box
               position={'fixed'}
               w={'50%'}
@@ -813,7 +803,10 @@ const Story: React.FC<{
                 display={'flex'}
                 justifyContent={'center'}
                 cursor={'pointer'}
-                transform={{base:'translate(0px, 60px)',md:'translate(0px, 100px)'}}
+                transform={{
+                  base: 'translate(0px, 60px)',
+                  md: 'translate(0px, 100px)',
+                }}
               >
                 <Img src={next} w={'200px'} h={'60px'} />
               </Box>

@@ -834,7 +834,7 @@ font-family: 'AtlantisText';
 }
 
 .top-menu-home-section .Setting-box .setting-pad {
-  height: 500px;
+  height: 75%;
   width: 550px;
 }
 
@@ -877,7 +877,7 @@ font-family: 'AtlantisText';
 .top-menu-home-section .Setting-box .btns {
   position: absolute;
   display: flex;
-  transform: translateY(130px);
+  transform: translateY(20vh);
 }
 
 .top-menu-home-section .Setting-box .btns .btn {
@@ -2846,6 +2846,11 @@ transform: translate(-167px, -84px);
 }
 
 @media screen and (max-width: 480px) {
+  .top-menu-home-section .Setting-box .setting-pad {
+    height: 100%;
+    width: 550px;
+  }
+
   .Play-game .img-box .img-bg {
     height: 100vh;
     width: 700px !important;
@@ -2929,8 +2934,14 @@ transform: translate(-167px, -84px);
 
 /* Rajesh css works */
 /* player name in character selection */
+.player_name:focus {
+  outline: none;
+  border: none;
+}
 
 .player_name {
+  background-color: transparent;
+  outline: none;
   text-align: center;
   position: absolute;
   bottom: -15px;
@@ -3057,6 +3068,18 @@ transform: translate(-167px, -84px);
 }
 
 @media screen and (orientation: portrait) {
+  .info_potrait {
+    height: 90vw !important;
+  }
+  .intro_text{
+    font-size: 6vw !important;
+  }
+  .top-menu-home-section .Setting-box .btns {
+    position: absolute;
+    display: flex;
+    transform: translateY(10vh);
+  }
+
   .character_potrait {
     width: 100vh;
     height: 100vw;
@@ -3135,7 +3158,7 @@ transform: translate(-167px, -84px);
     height: 37% !important;
   }
 
-  .completion_heading{
+  .completion_heading {
     height: 6% !important;
   }
 
@@ -3212,6 +3235,11 @@ transform: translate(-167px, -84px);
     height: 226px;
     width: 240px;
   }
+
+  .top-menu-home-section .Setting-box .setting-pad {
+    height: 100%;
+    width: 550px;
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -3282,9 +3310,19 @@ transform: translate(-167px, -84px);
     height: 238px;
     width: 276px;
   }
+
+  .top-menu-home-section .Setting-box .setting-pad {
+    height: 100%;
+    width: 550px;
+  }
 }
 
 @media screen and (min-width: 900px) {
+  .top-menu-home-section .Setting-box .setting-pad {
+    height: 100%;
+    width: 550px;
+  }
+
   .player_name {
     position: absolute;
     bottom: -2px;

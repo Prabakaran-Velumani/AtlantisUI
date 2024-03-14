@@ -224,8 +224,9 @@ const Completion: React.FC<{
                       w={'100%'}
                       display={'flex'}
                       justifyContent={'space-between'}
+
                     >
-                      <Box w="45%" position={'relative'}>
+                      <Box w="45%" position={'relative'} >
                         <Img src={back} w={'100%'} h={'auto'} />
                         <Box
                           w={'100%'}

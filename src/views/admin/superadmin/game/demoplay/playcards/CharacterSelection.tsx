@@ -280,8 +280,9 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                   _hover={{ bg: 'none' }}
                   onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
                 ></Button>
-                <Box w={'30%'} position={'relative'}>
-                  <Text className="player_name">{playerInfo.name}</Text>
+                <Box w={'25%'} position={'relative'}>
+                  <input className="player_name" value={playerInfo.name} onChange={(e:any)=>setProfileData((prev:any)=>({...prev,name:e.target.value}))}/>
+                  {/* <Text >{playerInfo.name}</Text> */}
                 </Box>
                 <Button
                   className="btns right-btn"

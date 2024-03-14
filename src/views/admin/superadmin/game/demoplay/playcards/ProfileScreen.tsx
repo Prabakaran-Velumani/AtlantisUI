@@ -169,14 +169,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
                 <Img src={NextBtn} />
               </Button>
             </Box>
-        {/* <Button
-              position={'absolute'}
-              top={0}
-              right={0}
-              //   onClick={useData?.Function?.handleClose()}
-            >
-              <Icon as={MdClose} />
-            </Button> */}
           </motion.div>
         </Box>
       </Box>
