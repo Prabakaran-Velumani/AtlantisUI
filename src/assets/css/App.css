@@ -3052,7 +3052,107 @@ transform: translate(-167px, -84px);
   left: 100px;
 }
 
+
+.story_completion_content {
+  width: 38%;
+  height: 70vh;
+  position: absolute;
+  top: 11%;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (orientation: portrait) {
+  .character_potrait {
+    width: 100vh;
+    height: 100vw;
+  }
+
+  .welcome_potrait {
+    width: 100vh !important;
+    height: 100vw !important;
+  }
+
+  .player_name {
+    bottom: 16px;
+  }
+
+  .story_potrait {
+    width: 100vh !important;
+    height: 100vw !important;
+  }
+
+  .chapter_potrait {
+    width: 100vh !important;
+    height: 100vw !important;
+  }
+
+  .chapters_list_box {
+    top: 70px;
+  }
+
+  .Setting-box {
+    width: 100vh !important;
+    height: 100vw !important;
+    backdrop-filter: blur(10px);
+  }
+
+  /* .story_note_image {
+    width: 250px;
+    height: 90vw;
+  } */
+  .character_select_area {
+    top: 98px;
+  }
+
+  .character_next {
+    bottom: 0px
+  }
+
+  .select_player {
+    bottom: 37px;
+  }
+
+  .story_note_image {
+    width: 500px !important;
+    height: 90vw !important;
+  }
+
+  .story_note_grid {
+    width: 50%
+  }
+
+  .story_interaction_image {
+    height: 226px;
+    width: 240px;
+  }
+
+  .story_feedback {
+    width: 40% !important;
+    height: 80vw !important;
+  }
+
+  .story_completion_image {
+    width: 45%;
+    height: 90vw;
+  }
+
+  .completion_content {
+    height: 37% !important;
+  }
+
+  .completion_heading{
+    height: 6% !important;
+  }
+
+  /* .story_completion_image{
+    width: 100vh !important;
+    height: 100vw !important;
+  } */
+}
+
 @media screen and (min-width: 500px) {
+
   .player_name {
     position: absolute;
     bottom: 0px;
@@ -3101,7 +3201,7 @@ transform: translate(-167px, -84px);
   }
 
   .story_completion_image {
-    width: 500px;
+    width: 45%;
     height: 90vh;
   }
 
@@ -3153,7 +3253,7 @@ transform: translate(-167px, -84px);
   }
 
   .story_completion_image {
-    width: 500px;
+    width: 45%;
     height: 90vh;
   }
 
@@ -3223,7 +3323,7 @@ transform: translate(-167px, -84px);
   }
 
   .story_completion_image {
-    width: 500px;
+    width: 45%;
     height: 90vh;
   }
 
@@ -3291,7 +3391,7 @@ transform: translate(-167px, -84px);
   }
 
   .story_completion_image {
-    width: 600px;
+    width: 45%;
     height: 90vh;
   }
 
@@ -3360,7 +3460,7 @@ transform: translate(-167px, -84px);
   }
 
   .story_completion_image {
-    width: 650px;
+    width: 45%;
     height: 90vh;
   }
 
@@ -3428,7 +3528,7 @@ transform: translate(-167px, -84px);
   }
 
   .story_completion_image {
-    width: 700px;
+    width: 45%;
     height: 90vh;
   }
 
@@ -3498,7 +3598,7 @@ transform: translate(-167px, -84px);
   }
 
   .story_completion_image {
-    width: 750px;
+    width: 45%;
     height: 90vh;
   }
 
@@ -3566,7 +3666,7 @@ transform: translate(-167px, -84px);
   }
 
   .story_completion_image {
-    width: 800px;
+    width: 45%;
     height: 90vh;
   }
 
@@ -3634,7 +3734,7 @@ transform: translate(-167px, -84px);
   }
 
   .story_completion_image {
-    width: 850px;
+    width: 45%;
     height: 90vh;
   }
 
@@ -3702,7 +3802,7 @@ transform: translate(-167px, -84px);
   }
 
   .story_completion_image {
-    width: 900px;
+    width: 45%;
     height: 90vh;
   }
 
@@ -3770,7 +3870,7 @@ transform: translate(-167px, -84px);
   }
 
   .story_completion_image {
-    width: 1000px;
+    width: 45%;
     height: 90vh;
   }
 
@@ -3809,11 +3909,12 @@ transform: translate(-167px, -84px);
 .EntirePreview {
   cursor: url(data:image/cur;base64,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), default;
 }
-.EntirePreview .Game-Screen .Images {   
+
+.EntirePreview .Game-Screen .Images {
   position: relative;
   height: 100vh;
   width: 100vw;
-  border-radius: 12px;  
+  border-radius: 12px;
 }
 
 
@@ -3842,7 +3943,19 @@ transform: translate(-167px, -84px);
 }
 
 
-        /********************************* PREVIEW LEADERBOARD SCREEN *********************************************** */
+/********************************* PREVIEW WELCOME SCREEN *********************************************** */
+.EntirePreview .completion_content .inside-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(3vw, -5vh);  
+  position: absolute;
+  height: 10vh;
+  width: 6vw;
+  border-radius: 10px;
+}
+
+/********************************* PREVIEW LEADERBOARD SCREEN *********************************************** */
 .EntirePreview .Game-Screen .Images .LearderBoards {
   display: flex;
   justify-content: center;
@@ -3860,90 +3973,106 @@ transform: translate(-167px, -84px);
   width: 100%;
   height: 100%;
   position: absolute;
-}  
+}
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .leaderboard-img {
   width: 85vw;
   height: 80vh;
-}              
+}
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box {
   position: absolute;
   width: 65vw;
   height: 43vh;
   overflow-y: auto;
   transform: translateY(19%);
-}              
-.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .table-heading{
+}
+
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .table-heading {
   display: flex;
   width: 100%;
   justify-content: space-between;
   font-family: 'AtlantisText';
   font-size: 19px;
-}              
-.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .content-lead{
+}
+
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .content-lead {
   display: flex;
   justify-content: center;
   width: 100%;
   font-family: 'AtlantisText';
-}                            
-.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .list-pad{
+}
+
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .list-pad {
   width: 100%;
   height: 50px;
   /* margin-left: 25px; */
   position: relative;
-}              
-.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .list-wrapper{
-  position: absolute;  
+}
+
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .list-wrapper {
+  position: absolute;
   width: 95%;
-  gap: 10vw; 
-  display: flex; 
+  gap: 10vw;
+  display: flex;
   justify-content: space-between
-}              
-.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .list-wrapper div{
-  width: 30%;  
+}
+
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .list-wrapper div {
+  width: 30%;
   display: flex;
   justify-content: space-between;
   font-family: 'AtlantisText';
   font-size: 19px;
-} 
+}
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .list-wrapper img.close-btn {
   width: 50px;
   height: 50px;
   position: absolute;
   top: -47%;
   right: -17%;
-}             
+}
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .top-bar {
   position: absolute;
   transform: translateY(-20vh);
-}              
+}
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .list-wrapper {
   display: flex;
-}              
+}
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .heading-box {
   position: relative;
-}              
+}
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .heading-box .heading-box-img {
   width: 20vw;
   height: 9vh;
   position: relative;
-}              
+}
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .heading-box .heading-box-content {
   position: absolute;
   top: 0px;
   width: 20vw;
-  height: 6vh;    
+  height: 6vh;
   margin-top: 3px;
   font-family: 'AtlantisText';
   font-size: 3vh;
   display: flex;
   align-items: center;
-}              
+}
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .heading-box .dot-img {
   margin-top: 5px;
   margin-left: 3px;
   width: 2vw;
   height: 4vh;
-}              
+}
+
+/********************************* PREVIEW TAKEAWAY SCREEN *********************************************** */
 
 
         /********************************* PREVIEW REFLECTION SCREEN *********************************************** */
@@ -4022,7 +4151,6 @@ transform: translate(-167px, -84px);
 
         /********************************* PREVIEW TAKEAWAY SCREEN *********************************************** */
 
-        
 .EntirePreview .Game-Screen .Images .takeaway-screen .takeaway-screen-box {
   display: flex;
   justify-content: center;
@@ -4031,18 +4159,23 @@ transform: translate(-167px, -84px);
   height: 100%;
   position: absolute;
 }
+
 .EntirePreview .Game-Screen .Images .takeaway-screen .bg-img {
   height: 620px;
   /* width: 500px;  */
   background-position: center;
 }
-.EntirePreview .Game-Screen .Images .takeaway-screen .bg-take {   /* Ashiq modifying on 11-03-24, when he was in resposnivePreview branch */
+
+.EntirePreview .Game-Screen .Images .takeaway-screen .bg-take {
+  /* Ashiq modifying on 11-03-24, when he was in resposnivePreview branch */
   height: 100vh;
   width: 90vw;
   background-position: center;
 }
-.EntirePreview .Game-Screen .Images .takeaway-screen .content-box { /* Ashiq modifying on 11-03-24, when he was in resposnivePreview branch */
-  display: flex; 
+
+.EntirePreview .Game-Screen .Images .takeaway-screen .content-box {
+  /* Ashiq modifying on 11-03-24, when he was in resposnivePreview branch */
+  display: flex;
   width: 70vw !important;
   height: 47vh;
   position: absolute;
@@ -4050,6 +4183,7 @@ transform: translate(-167px, -84px);
   transform: translate(0, 15%);
   overflow-y: auto;
 }
+
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content {
   font-family: 'AtlantisText';
   /*letter-spacing: 2px;*/
@@ -4064,18 +4198,22 @@ transform: translate(-167px, -84px);
   margin-bottom: 10px;
   font-size: 18px;
 }
+
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content img {
   margin-right: 5px;
-} 
+}
+
 .content-box .content-lead {
   width: 100%;
   display: flex;
   justify-content: 'center';
 }
+
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content p {
   width: 334px;
   color: #d9c7a2;
 }
+
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content .bullet-content-box {
   width: 100%;
   /* Set your desired width 124% or 100%*/
@@ -4083,20 +4221,24 @@ transform: translate(-167px, -84px);
   overflow-wrap: break-word;
   /* Break the word if it exceeds the width */
 }
+
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content p {
   width: 100%;
   color: #D9C7A2
 }
+
 .EntirePreview .Game-Screen .Images .takeaway-screen .next-btn-box {
-  position: absolute;  
+  position: absolute;
   transform: translate(42vw, 40vh);
   width: auto;
 }
+
 .EntirePreview .Game-Screen .Images .takeaway-screen .next-btn-box img {
   height: 3.5rem;
   width: 4.8rem;
   cursor: pointer;
 }
+
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box::-webkit-scrollbar {
   width: 16px;
   /*height: 300px;*/
@@ -4122,34 +4264,39 @@ transform: translate(-167px, -84px);
 
 
 
-              /********************************* PREVIEW THANKYOU SCREEN *********************************************** */              
-.EntirePreview .Game-Screen .Images .section-thankyou-screen{
+/********************************* PREVIEW THANKYOU SCREEN *********************************************** */
+.EntirePreview .Game-Screen .Images .section-thankyou-screen {
   position: relative;
   display: flex;
   justify-content: center;
 }
+
 .EntirePreview .Game-Screen .Images .section-thankyou-screen .thankyou-screen-box {
   display: flex;
   justify-content: center;
   width: 100%;
 }
+
 .EntirePreview .Game-Screen .Images .section-thankyou-screen .thankyou-screen-box .bg-img {
   height: 800px;
   width: 715px;
 }
+
 .EntirePreview .Game-Screen .Images .Thankyou-section {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
+
 .EntirePreview .Game-Screen .Images .bg-thankyou {
   height: 80vh;
   width: 80vw;
 }
-.EntirePreview .Game-Screen .Images .thankyou-screen{
+
+.EntirePreview .Game-Screen .Images .thankyou-screen {
   font-family: 'AtlantisText';
-  letter-spacing: 0.4px; 
+  letter-spacing: 0.4px;
   color: var(--atlantis-text-color);
   /* transform: translate(0, 239px);
   position: absolute; */
@@ -4161,16 +4308,19 @@ transform: translate(-167px, -84px);
   position: absolute;
   overflow-y: auto;
 }
-.EntirePreview .Game-Screen .Images .thankyou-screen .tq-msg{
+
+.EntirePreview .Game-Screen .Images .thankyou-screen .tq-msg {
   font-family: 'AtlantisText';
-  letter-spacing: 0.8px; 
+  letter-spacing: 0.8px;
   color: var(--atlantis-text-color);
   /* transform: translate(0, 155px); modify */
   font-size: 19px;
 }
-.EntirePreview .Game-Screen .Images .thankyou-screen .tq-msg div{
+
+.EntirePreview .Game-Screen .Images .thankyou-screen .tq-msg div {
   line-height: 20px;
 }
+
 .EntirePreview .Game-Screen .Images .thankyou-screen .thankyou-screen-box {
   display: flex;
   justify-content: center;
@@ -4179,31 +4329,36 @@ transform: translate(-167px, -84px);
   height: 100%;
   position: absolute;
 }
+
 .EntirePreview .Game-Screen .Images .thankyou-screen .thankyou-screen-box .bg-img {
-  height: 800px; 
-  width: 700px; 
+  height: 800px;
+  width: 700px;
   background-position: center;
 }
+
 .EntirePreview .Game-Screen .Images .thankyou-screen .thankyou-screen-box .bg-thankyou {
-  height: 800px; 
-  width: 800px; 
+  height: 800px;
+  width: 800px;
   background-position: center;
 }
-.EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback {   
+
+.EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback {
   width: 100%;
   display: flex;
-  flex-direction: column;    
+  flex-direction: column;
   justify-content: center;
   /* transform: translate(0px, 109px); modify */
-  flex-flow: wrap;    
+  flex-flow: wrap;
   margin-top: 10px;
   z-index: 9;
 }
+
 .EntirePreview .Game-Screen .collect-learner-feedback {
   /* overflow-y: scroll; */
 }
-.EntirePreview .Game-Screen .Images .thankyou-screen .about-experience { 
-  font-size: 21px;     
+
+.EntirePreview .Game-Screen .Images .thankyou-screen .about-experience {
+  font-size: 21px;
   /* transform: translate(0px, 97px); modify */
   color: #bdac88;
   font-family: 'AtlantisText';
@@ -4214,8 +4369,9 @@ transform: translate(-167px, -84px);
   justify-content: center;
   flex-direction: column;
 }
-.EntirePreview .Game-Screen  .buttonfeel{
-     /* margin-left: 5px;
+
+.EntirePreview .Game-Screen .buttonfeel {
+  /* margin-left: 5px;
     margin-right: 5px;*/
   /*background-color: #b3a484;*/
   background: linear-gradient(to bottom right, #e4d2b5, #aa7f4d);
@@ -4263,12 +4419,12 @@ transform: translate(-167px, -84px);
 /* .EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback .content-box{
     width: 300px;
   } */
-  .EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid{
-    display: grid;
-    grid-gap: 1.3rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 60vw;  
-    /* overflow-y: scroll; modify
+.EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid {
+  display: grid;
+  grid-gap: 1.3rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 60vw;
+  /* overflow-y: scroll; modify
     height: 280px;   */
 }
 
@@ -4335,6 +4491,7 @@ transform: translate(-167px, -84px);
 .EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div div p {
   text-align: left;
 }
+
 .EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback::-webkit-scrollbar {
   width: 18px;
   height: 18px;
@@ -4355,4 +4512,4 @@ transform: translate(-167px, -84px);
   cursor: pointer;
   background-size: contain;
   height: 30px;
-}                            
+}

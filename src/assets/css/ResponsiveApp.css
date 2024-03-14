@@ -124,6 +124,12 @@
     width: 2vh;
     height: 4vw 
   }
+
+  .EntirePreview .completion_content .inside-img {   
+    transform: translate(3vh, 3vw) !important;
+    height: 10vw !important;
+    width: 6vh !important;   
+  } 
 }
 /* RESPONSIVE ORIENTATION END *********************************************** */
 
