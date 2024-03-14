@@ -1191,6 +1191,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     };
     console.log('///',isMobileView)
 
+    // Avoid Top Menu Section
+    const dontShowTopMenu = currentScreenId !== 7 && currentScreenId !== 6 && currentScreenId !== 5 && currentScreenId !== 4 && currentScreenId !== 3 && currentScreenId !== 10;
+
   return (
     <ProfileContext.Provider value={profileData}>
        {/* {isMobileView ? ( */}
@@ -1198,7 +1201,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         <Box className='EntirePreview-content'>
           <Box id="container" className="Play-station">
             <Box className="top-menu-home-section">
-              {currentScreenId !== 5 && currentScreenId !== 7 ? (
+              {dontShowTopMenu ? (
                 <>
                   <Img src={TopMenu} className="top-menu-img" />
                   <Img

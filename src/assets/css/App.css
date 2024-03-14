@@ -3996,6 +3996,10 @@ transform: translate(-167px, -84px);
   font-size: 19px;
 }
 
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .table-heading img {
+  margin: 0 10px;
+}
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .content-lead {
   display: flex;
   justify-content: center;
@@ -4026,12 +4030,11 @@ transform: translate(-167px, -84px);
   font-size: 19px;
 }
 
-.EntirePreview .Game-Screen .Images .Leaderboard-screen .list-wrapper img.close-btn {
-  width: 50px;
-  height: 50px;
+.EntirePreview .Game-Screen .Images .Leaderboard-screen img.close-btn {
   position: absolute;
-  top: -47%;
-  right: -17%;
+  height: 50px;
+  width: 50px;
+  transform: translate(37vw, -25vh);
 }
 
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .top-bar {

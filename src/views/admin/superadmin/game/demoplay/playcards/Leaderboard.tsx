@@ -270,7 +270,7 @@ const LeaderBoard: React.FC<{
                         </>
                       </Box>
                     ))}
-                </Box>
+                </Box>                
               {/* <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
                 <Img
                   src={right}
@@ -353,14 +353,14 @@ const LeaderBoard: React.FC<{
                       position={'relative'}
                     />{' '}
                   </Box>
-                </Box>
-                <Img
-                  src={Close}                   
-                  className='close-btn'
-                  onClick={() =>homeLeaderBoard ? handleHome() : getData(data)}
-                />
+                </Box>                
               </Box>
-            </Box>
+            </Box>  
+            <Img
+              src={Close}                   
+              className='close-btn'
+              onClick={() =>homeLeaderBoard ? handleHome() : getData(data)}
+            />          
           </Box>      
       )}
     </>

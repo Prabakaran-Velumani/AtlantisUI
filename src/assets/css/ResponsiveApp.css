@@ -48,7 +48,7 @@
   }
 
 
-  /* TAKEAWAY**************************************** */
+  /* REFLECTION**************************************** */
   .EntirePreview .Game-Screen .Images .reflection-screen .bg-img {
     height: 100vw;
     width: 100vh;
@@ -124,12 +124,14 @@
     width: 2vh;
     height: 4vw 
   }
-
   .EntirePreview .completion_content .inside-img {   
     transform: translate(3vh, 3vw) !important;
     height: 10vw !important;
     width: 6vh !important;   
   } 
+  .EntirePreview .Game-Screen .Images .Leaderboard-screen img.close-btn {   
+    transform: translate(37vh, -25vw);
+  }
 }
 /* RESPONSIVE ORIENTATION END *********************************************** */
 
@@ -201,6 +203,10 @@
   .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .list-wrapper div {
     font-size: 14px;
   }
+  .EntirePreview .Game-Screen .Images .Leaderboard-screen img.close-btn {   
+    height: 35px;
+    width: 35px;
+  }
 }
 @media (min-width: 480px) and (max-width: 768px) {
   .EntirePreview .Game-Screen .Images .reflection-screen .title img {
@@ -248,6 +254,10 @@
     margin-left: 0;
     margin-top: 5px 
   }
+  .EntirePreview .Game-Screen .Images .Leaderboard-screen img.close-btn {   
+    height: 40px;
+    width: 40px;
+  }
 }
 @media (min-width: 768px) and (max-width: 990px) {
   .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content {
@@ -289,7 +299,7 @@
 
 
 /* RESPONSIVE MOB LANDSCAPE ***************************************************************** */
-@media (min-width: 768px) and (max-width: 990px) and (max-height: 400px) {
+@media (min-width: 768px) and (max-width: 990px) and (max-height: 450px) {
   .EntirePreview .Game-Screen .Images .reflection-screen .title p {
     font-size: 1.5rem;
   }
