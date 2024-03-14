@@ -3583,6 +3583,15 @@ transform: translate(-167px, -84px);
 .screen-preview-author{
   /* transform: translateY(-2.2rem); */
   }
+.demo-btn{
+    position: absolute;
+    top: 2vh;
+    right: 0vw;
+    pointer-events: auto;
+    /* z-index: 1; */
+    visibility: visible;
+    height: 8vh;
+}
 
 }
 @media (orientation: portrait){
@@ -3692,7 +3701,11 @@ transform: translate(-167px, -84px);
   .welcome-additionaltext{
     width: 52vh;  
   }
+  .demo-btn{
+    height: 6vw;
   }
+  
+}
 
 .screen-preview-grid-items{
   display: flex;
