@@ -125,16 +125,12 @@ const PreviewWelcomeScreen: React.FC<{
       >
         <Box className="screen-preview-content-wrapper">
           <Img src={imageSrc} className="preview-welcome-texture" />
-
-          <Box className="screen-preview-welcome-grid">
-            <Box className="screen-preview-title screen-preview-grid-items">
-              <Text
+          <Box className='welcome-screen-head-content'>
+          <Text
                 className='welcomescreen-heading'
               >
                 {formData?.gameTitle}
               </Text>
-            </Box>
-            <Box className="screen-preview-duration screen-preview-grid-items">
               <Text
                 className='welcomescreen-content'
               >
@@ -147,8 +143,8 @@ const PreviewWelcomeScreen: React.FC<{
                   </span>
                 </>
               </Text>
-            </Box>
-
+          </Box>
+          <Box className="screen-preview-welcome-grid">
             <Box className="screen-preview-storyline screen-preview-grid-items">
               
               <Text className='welcomescreen-content'>{formData?.gameStoryLine}</Text>
@@ -183,9 +179,9 @@ const PreviewWelcomeScreen: React.FC<{
               }
               </Text>
             </Box>
-            <Box className='screen-preview-grid-items'><Img src={preloadedAssets.next} className='screen-preview-nxtbtn welcome-nxtbtn'/></Box>
-          </Box>
         </Box>
+            <Box className='screen-preview-nxtbtn '><Img src={preloadedAssets.next} className='welcome-nxtbtn'/></Box>
+          </Box>
       </motion.div>
     </>
   );

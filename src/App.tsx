@@ -1,12 +1,13 @@
 import './assets/css/App.css';
+import './assets/css/ResponsiveApp.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import {} from 'react-router-dom';
 import AuthLayout from './layouts/auth';
 import AdminLayout from './layouts/admin';
 import RTLLayout from './layouts/rtl';
 import SignInDefault from '../src/views/auth/signIn/SignInDefault';
 import {
   ChakraProvider,
+  Box
   // extendTheme
 } from '@chakra-ui/react';
 import initialTheme from './theme/theme'; //  { themeGreen }
@@ -30,7 +31,7 @@ export default function Main() {
       <Routes>
         {/* <Route path={'game/glbpractise'} element={<GlbPractise />} /> */}
         <Route path="game/demoplay/:uuid" element={<GamePreview />} />
-        <Route path="game/creator/demoplay/:id" element={<GamePreview />} />
+        <Route path="/game/creator/demoplay/:id" element={<GamePreview />} />
         <Route path="/screen/preview/:id" element={<ScreenPreview />} />
         <Route path="auth/sign-in/default" element={<SignInDefault />} />
         <Route path="auth/*" element={<AuthLayout />} />
@@ -48,7 +49,7 @@ export default function Main() {
         />
           <Route path="/screen/preview/" element={<OrientationLock />} />
         <Route path="/" element={<Navigate to="/admin" replace />} />
-      </Routes>
+      </Routes>      
     </ChakraProvider>
   );
 }

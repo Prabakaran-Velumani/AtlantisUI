@@ -61,6 +61,7 @@ import { BsQuestionSquare } from 'react-icons/bs';
 import { BsEmojiNeutral } from 'react-icons/bs';
 import { RiEmotionHappyLine } from 'react-icons/ri';
 import { FaRegTired } from 'react-icons/fa';
+import Thankyou from 'assets/img/games/thankyou.png';
 import next from 'assets/img/screens/next.png';
 
 import {
@@ -154,10 +155,10 @@ const styleflex = {};
     <>
       {imageSrc && preview ? (
         <>
-          <Box className='section-thankyou-screen'>
-            <Box className="thankyou-screen-box">
-              <Img src={imageSrc} className="bg-img" />
-            </Box>
+          <Box className='section-thankyou-screen Thankyou-section'>
+            <Img src={Thankyou} className="bg-img bg-thankyou" />
+            {/* <Box className="thankyou-screen-box">
+            </Box> */}
             <Box className="thankyou-screen">
               <Box
                 w={'100%'}
@@ -187,7 +188,7 @@ const styleflex = {};
                     fontWeight="300"
                     textAlign="center"
                   >
-                    <Img src={Feedback} mt={'25px'} alt="rew" w={'82%'} h={'23px'} ml={'50px'} /> 
+                    <Img src={Feedback}  alt="rew" w={'82%'} h={'23px'} /> 
                     How do you feel about the experience?
                   </Text>
                   <Box className="collect-learner-feedback">
@@ -211,12 +212,12 @@ const styleflex = {};
                               justifyContent: 'space-between',
                             }}
                           >
-                            <div className="buttonfeel" style={{ width: ((thirdValue === 'gameContent' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? '180px' : '110px' }}>
+                            <div className="buttonfeel" >
                               <p>
                               &#128522; I learned something useful
                               </p>
                             </div>
-                            <div className="buttonfeel2" style={{ width: ((thirdValue === 'gameContent' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? '180px' : '110px' }}>
+                            <div className="buttonfeel2" >
                               <p>
                               &#128542; It wasn't useful
                               </p>
@@ -242,14 +243,14 @@ const styleflex = {};
                               justifyContent: 'space-between',
                             }}
                           >
-                            <div className="buttonfeel" style={{ width: ((thirdValue === 'gameRelevance' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? '180px' : '110px' }}>
+                            <div className="buttonfeel" >
                               {/* &#127891; */}
                               <p>
                                 <Icon as={FaHatCowboy} /> I'll apply what I
                                 learned
                               </p>
                             </div>
-                            <div className="buttonfeel2" style={{ width: ((thirdValue === 'gameRelevance' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? '180px' : '110px' }}>
+                            <div className="buttonfeel2" >
                               <p>
                               &#128542; It's not relevant to
                                 me
@@ -276,13 +277,13 @@ const styleflex = {};
                               justifyContent: 'space-between',
                             }}
                           >
-                            <div className="buttonfeel" style={{ width: ((thirdValue === 'gameBehaviour' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? '180px' : '110px' }}>
+                            <div className="buttonfeel" >
                               <p>
                               &#128526; I understood what
                                 I can do differently
                               </p>
                             </div>
-                            <div className="buttonfeel2" style={{ width: ((thirdValue === 'gameBehaviour' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? '180px' : '110px' }}>
+                            <div className="buttonfeel2" >
                               <p>
                                 {' '}
                                 &#128566; I am not sure
@@ -309,14 +310,14 @@ const styleflex = {};
                               justifyContent: 'space-between',
                             }}
                           >
-                            <div className="buttonfeel" style={{ width: ((thirdValue === 'gameRecommendation' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? '180px' : '110px' }}>
+                            <div className="buttonfeel" >
                               <p>
                                 {' '}
                                 &#128522; I would recommend
                                 this game to others
                               </p>
                             </div>
-                            <div className="buttonfeel2" style={{ width: ((thirdValue === 'gameRecommendation' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? '180px' : '110px' }}>
+                            <div className="buttonfeel2" >
                               <p>
                                 {' '}
                                 &#128542; I wouldn't recommend
@@ -343,13 +344,13 @@ const styleflex = {};
                               justifyContent: 'space-between',
                             }}
                           >
-                            <div className="buttonfeel" style={{ width: ((thirdValue === 'gameGamification' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? '180px' : '110px' }}>
+                            <div className="buttonfeel" >
                               <p>
                               &#128077; I would like to learn
                                 via games
                               </p>
                             </div>
-                            <div className="buttonfeel2" style={{ width: ((thirdValue === 'gameGamification' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? '180px' : '110px' }}>
+                            <div className="buttonfeel2" >
                               <p>
                                 {' '}
                                 &#128078; I don't like this
