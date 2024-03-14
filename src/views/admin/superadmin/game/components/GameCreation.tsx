@@ -2468,22 +2468,10 @@ return false;
       };
     });
   };
+ 
   const handleChange = (e: any) => {
     const inputValue = e.target.value;
     const { name, value, checked } = e.target;
-    const feedbackselectedOptions = [
-      formData.gameContent,
-      formData.gameRecommendation,
-      formData.gameRelevance,
-      formData.gameGamification,
-      formData.gameBehaviour,
-      formData.gameOthers,
-    ];
-    const countfbSelectedOptions = feedbackselectedOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
-
-    if (checked && countfbSelectedOptions >= 4) {
-      return ;
-    } 
     if (name === 'gameDuration') {
       // let duration =
       //   parseInt(value.split(':')[0], 10) * 60 +
@@ -2590,10 +2578,7 @@ return false;
         // Set to an empty string or any default value
       }));
     }
-    ////////////////////////////////////
-
-    //console.log('formdata', formData);
-  };
+  }
 
   const handlecompletion = (e: any) => {
     const inputValue = e.target.value;

@@ -138,8 +138,6 @@ const GamePreview = () => {
     const sortBlockSequence = (blockArray: []) => {
       const transformedArray = blockArray.reduce((result: any, obj: any) => {
         const groupKey = obj?.blockQuestNo.toString();
-        // const seqKey = obj?.blockSecondaryId;
-        // const SplitArray = obj?.blockPrimarySequence.toString()?.split(".")[1];
         const seqKey = obj?.blockPrimarySequence.toString()?.split('.')[1];
         if (!result[groupKey]) {
           result[groupKey] = {};
