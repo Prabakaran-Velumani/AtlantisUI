@@ -323,7 +323,7 @@ import { addReviewers } from 'utils/reviews/reviews';
 						variant="solid"
 						bg={lightBlue}
 					  >
-						<TagLabel w="100%" color={textColor}>
+						<TagLabel w="200%" color={textColor}>
 						  {tag}
 						</TagLabel>
 						<TagCloseButton
@@ -345,7 +345,7 @@ import { addReviewers } from 'utils/reviews/reviews';
 					  p="0px"
 					  onKeyDown={(e: any) => keyPressSkill(e)}
 					  fontSize="md"
-					  width={'100%'}
+					  width={'200%'}
 					  // height={'150px'}
 					/>
 				  </Flex>

@@ -44,6 +44,9 @@ import Sample from 'assets/img/games/collector.glb';
 import { useLayoutEffect, useRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
+const Notelength = 150;
+const Dialoglength = 300;
+
 const Story: React.FC<{
   prevData?: any;
   currentScore: any;
@@ -94,17 +97,24 @@ const Story: React.FC<{
   const { profile, setProfile } = useContext(ScoreContext);
   const [currentPosition, setCurrentPosition] = useState(0);
   const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
-  const [score, setScore] = useState<any>(null);
+  const [Navigatenext, setNavigateNext] = useState<any>(false);
+  const [score, setScore] = useState(null);
   useEffect(() => {
     getVoice(data, type);
     setShowNote(true);
     setTimeout(() => {
       setShowNote(false);
+      getData1(data);
     }, 1000);
+    console.log('data changed', data);
   }, [data, type]);
 
+
+useEffect(()=>{
+  console.log('data changed ***', data);
+},[data])
+
   useEffect(() => {
-    // setShowNote(true);
     setFirst(true);
     setTimeout(() => {
       setFirst(false);
@@ -212,9 +222,18 @@ const Story: React.FC<{
     handleValidate(item, ind);
   };
   
-   
+const stylerender = (Navigatenext === true && (data && type === 'Dialog')) ? '' : 'transform 0.3s ease-in-out, translateY 0.3s ease-in-out';
+const styletransform =(Navigatenext === true && (data && type === 'Dialog')) ? '' : `translateY(${showNote ? 200 : 0}px)`;
+useEffect(() => {
+  if(Navigatenext === true)
+  {
+    getData(data);
+}
+}, [Navigatenext]);
+
 const getData1 = (data: any) => {
-  // console.log('getData1STORY---',data)
+  console.log('getData 1', data);
+  setCurrentPosition(0);
   const content = data?.blockText || '';
   const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
   const newRemainingSentences = sentences.slice(currentPosition);
@@ -224,94 +243,745 @@ const getData1 = (data: any) => {
 
   for (let i = 0; i < newRemainingSentences.length; i++) {
     const sentence = newRemainingSentences[i];
-    if (totalLength + sentence.length <= 100) {
-      concatenatedSentences.push(sentence);
-      totalLength += sentence.length;
-    } else {
-      concatenatedSentences.push(sentence);
-      break;
+
+
+    if (data && type === 'Note') {
+      if (totalLength + sentence.length <= Notelength) {
+        concatenatedSentences.push(sentence);
+        totalLength += sentence.length;
+      } else {
+        concatenatedSentences.push(sentence);
+        break;
+      }
     }
+    if (data && type === 'Dialog') {
+      if (totalLength + sentence.length <= Dialoglength) {
+        concatenatedSentences.push(sentence);
+        totalLength += sentence.length;
+      } else {
+        if(totalLength + sentence.length >= Dialoglength)
+        {
+          break;
+        }
+        concatenatedSentences.push(sentence);
+        break;
+      }
+    }
+   
+    
   }
   setRemainingSentences(concatenatedSentences);
 
   if (newRemainingSentences.length >= 1) {
     setCurrentPosition(currentPosition + concatenatedSentences.length);
+    console.log('concatenatedSentencescurrentPosition',concatenatedSentences.length,'...',currentPosition);
+    setNavigateNext(false);
   } else {
-  
-    if (data && type === 'Note') {
-
-      getData(data);
-    }
+      setCurrentPosition(0);
+      setNavigateNext(true);
+      // getData(data);
   }
 };
-
 useEffect(() => {
-  if(data && type === 'Note')
-    {
-       getData1(data);
-    }
-}, [data]);
+  getData1(data);
+}, []);
+
+//   return (
+//     <>
+//       {data && type === 'Note' && (
+//         <Box
+//           w={'100%'}
+//           h={'100vh'}
+//           display={'flex'}
+//           alignItems={'center'}
+//           justifyContent={'center'}
+//           position={'relative'}
+//           overflow={'visible'}
+//           style={{ perspective: '1000px' }}
+//         >
+//           <Box
+//             color={'rgba(0, 0, 0, 0.5)'}
+//             backgroundImage={backGroundImg}
+//             w={'100%'}
+//             h={'100vh'}
+//             backgroundRepeat={'no-repeat'}
+//             backgroundSize={'cover'}
+//             transform={`scale(${first ? 1 : 1.3}) translateY(${
+//               first ? 0 : -10
+//             }%) translateX(${first ? 0 : -10}%)`}
+//             transition={'transform 0.9s ease-in-out'}
+//           >
+//             <Box
+//               position={'fixed'}
+//               top={'200px'}
+//               // left={0}
+//               right={'0px'}
+//               bottom={0}
+//               zIndex={999}
+//               w={'300px'}
+//             >
+//               {/* <Canvas
+//                 camera={{ position: [3, 3, 10] }}
+                
+//               >
+//                 <directionalLight
+//                   position={[5, 5, 5]}
+//                   intensity={0.8}
+//                   color={0xffccaa}
+//                   castShadow
+//                 />
+//                 <ambientLight intensity={5.5} />
+//                 <pointLight
+//                   position={[5, 5, 5]}
+//                   color={0xff0000}
+//                   intensity={1}
+//                 />
+              
+//                 <mesh
+//                   rotation={[-Math.PI / 2, 0, 0]}
+//                   position={[0, -5, 0]}
+//                   receiveShadow
+//                 >
+//                   <planeGeometry args={[100, 100]} />
+//                   <shadowMaterial opacity={0.5} />
+//                 </mesh>
+//               </Canvas> */}
+//             </Box>
+//           </Box>
+//           {/* <motion.div
+//             initial={{ scale: 0 }}
+//             animate={{ scale: 1 }}
+//             transition={{ type: 'spring', stiffness: 100, damping: 10 }}
+//           > */}
+//           <Box
+//             style={{
+//               transform: `scale(${showNote ? 0.2 : 1})`,
+//               transition: 'transform 0.5s ease-in-out',
+//             }}
+//             position={'fixed'}
+//             w={'40%'}
+//             h={'80vh'}
+//             display={'flex'}
+//             flexDirection={'column'}
+//             justifyContent={'center'}
+//             alignItems={'center'}
+//           >
+//             <Img w={'100%'} h={'80vh'} src={note} />
+//             <Box
+//               position={'fixed'}
+//               overflowY={'scroll'}
+//               transform={'translate(0px, 45px)'}
+//               w={'50%'}
+//               mt={'10px'}
+//               display={'flex'}
+//               flexDirection={'column'}
+//               textAlign={'center'}
+//               justifyContent={'center'}
+//               style={{
+//                 fontWeight: '900',
+//                 color: '#D9C7A2',
+//                 fontSize: '18px',
+//                 fontFamily: 'AtlantisContent',
+//                 lineHeight: 1,
+//               }}
+//             >
+//               <Box
+//                 w={'100%'}
+//                 h={'100px'}
+//                 display={'flex'}
+//                 alignItems={'center'}
+//                 justifyContent={'center'}
+//                 mt={'20px'}
+               
+//               >
+               
+//             {remainingSentences}
+//               </Box>
+//               <Box
+//                 w={'100%'}
+//                 onClick={() => getData1(data)}
+//                 mt={'20px'}
+//                 display={'flex'}
+//                 justifyContent={'center'}
+//                 cursor={'pointer'}
+//                 position={'fixed'}
+//                 top={'70%'}
+//               >
+//                 <Img src={next} w={'100px'} />
+//               </Box>
+//             </Box>
+//           </Box>
+//           {/* </motion.div> */}
+//         </Box>
+//       )}
+//       {data && type === 'Dialog' && (
+//         <Box
+//           w={'100%'}
+//           h={'100vh'}
+//           display={'flex'}
+//           alignItems={'center'}
+//           justifyContent={'center'}
+//           position={'relative'}
+//         >
+//           <Img
+//             src={backGroundImg}
+//             maxW={'100%'}
+//             maxH={'100%'}
+//             w={'100%'}
+//             h={'100vh'}
+//             transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
+//             transition={'transform 0.9s ease-in-out'}
+//           />
+//           {selectedPlayer && (
+//             <Img
+//               src={`${API_SERVER}/${selectedPlayer}`}
+//               position={'fixed'}
+//               right={'300px'}
+//               bottom={'100px'}
+//               w={'200px'}
+//               h={'324px'}
+//               // transform={'translate(0px, 55px)'}
+//             />
+//           )}
+//           {selectedNpc && (
+//             <Img
+//               src={selectedNpc}
+//               position={'fixed'}
+//               right={'500px'}
+//               bottom={'100px'}
+//               w={'200px'}
+//               h={'324px'}
+//             />
+//           )}
+//         {/* Dialog */}
+//           <Img
+//             style={{
+//               transform: styletransform,
+//               transition:
+//               stylerender,
+//             }}
+//             position={'fixed'}
+//             maxW={'100%'}
+//             maxH={'100%'}
+//             w={'100%'}
+//             h={'240px'}
+//             bottom={'0'}
+//             src={dial}
+//           />
+//           {!showNote && (
+//             <>
+//               <Box position={'relative'}>
+//                 <Img
+//                   src={char}
+//                   position={'fixed'}
+//                   h={'70px'}
+//                   w={'25%'}
+//                   left={'13%'}
+//                   bottom={'150px'}
+//                 />
+//                 <Text
+//                   position={'fixed'}
+//                   left={'24%'}
+//                   bottom={'167px'}
+//                   fontSize={'25'}
+//                   fontWeight={700}
+//                   textAlign={'center'}
+//                   fontFamily={'AtlantisText'}
+//                 >
+//                   {data.blockRoll === 'Narrator'
+//                     ? data.blockRoll
+//                     : formData.gameNonPlayerName}
+//                 </Text>
+//               </Box>
+//               <Box
+//                 display={'flex'}
+//                 position={'fixed'}
+//                 justifyContent={'space-between'}
+//                 w={'75%'}
+//                 bottom={'55px'}
+//                 fontFamily={'AtlantisContent'}
+//                 fontSize={'21px'}
+//               >
+//                 {/* <TypingEffect text={data?.blockText} speed={50} /> */}
+//                 {remainingSentences} 
+//               </Box>
+//               <Box
+//                 display={'flex'}
+//                 position={'fixed'}
+//                 justifyContent={'space-between'}
+//                 w={'80%'}
+//                 bottom={'0'}
+//               >
+//                 <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+//                 <Img
+//                   src={right}
+//                   w={'50px'}
+//                   h={'50px'}
+//                   cursor={'pointer'}
+//                   onClick={() => getData1(data)}
+//                 />
+//               </Box>
+//             </>
+//           )}
+//         </Box>
+//       )}
+//       {data && type === 'Interaction' && (
+//         <Box
+//         w={'100%'}
+//         h={'100vh'}
+//         display={'flex'}
+//         alignItems={'center'}
+//         justifyContent={'center'}
+//         position={'relative'}
+//       >
+       
+//           <Img
+//             src={backGroundImg}
+//             maxW={'100%'}
+//             maxH={'100%'}
+//             w={'100%'}
+//             h={'100vh'}
+//             transform={`scale(1.5}) translateY(-10%) translateX(${
+//               showNote ? -200 : 0
+//             }px)`}
+//             transition={'transform 0.9s ease-in-out'}
+//           />
+//           {selectedPlayer && (
+//             <Img
+//               src={`${API_SERVER}/${selectedPlayer}`}
+//               position={'fixed'}
+//               right={'300px'}
+//               bottom={'100px'}
+//               w={'200px'}
+//               h={'auto'}
+//               transform={'translate(100px, 0px)'}
+//               transition={'transform 2s ease-in-out'}
+//             />
+//           )}
+//           {selectedNpc && (
+//             <Img
+//               src={selectedNpc}
+//               position={'fixed'}
+//               right={'500px'}
+//               bottom={'100px'}
+//               w={'200px'}
+//               h={'auto'}
+//               transform={'translate(100px, 0px)'}
+//               transition={'transform 2s ease-in-out'}
+//             />
+//           )}
+//           <Box
+//             style={{
+//               transform: `translateX(${showNote ? -200 : 0}px) scale(1.2)`,
+//               transition:
+//                 'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+//             }}
+//             backgroundImage={parch}
+//             position={'fixed'}
+//             w={{ sm: '350px', md: '500px' }}
+//             h={{ sm: '50vh', md: ' 550px' }}
+//             // top={'4vh'}
+//             left={{ sm: '60px', md: '180px' }}
+//             backgroundSize={'contain'}
+//             backgroundRepeat={'no-repeat'}
+//           >
+//             <Box
+//               textAlign={'center'}
+//               h={'100px'}
+//               display={'flex'}
+//               justifyContent={'center'}
+//               alignItems={'center'}
+//               fontWeight={700}
+//               fontFamily={'AtlantisText'}
+//               lineHeight={1}
+//               w={'100%'}
+//             >
+//               <Box w={'50%'} fontSize={'21px'}>
+//                 Here You Can Answer the Interactions...!{' '}
+//               </Box>
+//             </Box>
+//             <Box
+//               textAlign={'center'}
+//               h={'100px'}
+//               display={'flex'}
+//               justifyContent={'center'}
+//               alignItems={'center'}
+//               fontWeight={500}
+//               fontFamily={'AtlantisText'}
+//               lineHeight={1}
+//               w={'96%'}
+//               overflowY={'scroll'}
+//             >
+//               <Box w={'60%'} fontSize={'20px'} letterSpacing={1}>
+//                 {data?.blockText}
+//               </Box>
+//             </Box>
+//             <Box
+//               mt={'10px'}
+//               w={{ sm: '200px', md: '400px' }}
+//               fontWeight={500}
+//               ml={'17%'}
+//               h={'220px'}
+//               overflowY={'scroll'}
+//             >
+//               {options &&
+//                 options.map((item: any, ind: number) => (
+//                   <Box
+//                     mb={'10px'}
+//                     w={'80%'}
+//                     lineHeight={1}
+//                     key={ind}
+//                     color={option === ind ? 'purple' : ''}
+//                     textAlign={'center'}
+//                     cursor={'pointer'}
+//                     onClick={() => optionClick(item, ind)}
+//                     fontFamily={'AtlantisText'}
+//                     fontSize={'20px'}
+//                   >
+//                     <Img src={option === ind ? on : off} h={'30px'} w={'95%'} />
+//                     {item?.qpOptionText}
+//                   </Box>))}
+//                 </Box>
+//                 <Box
+//                   w={'100%'}
+//                   display={'flex'}
+//                   justifyContent={'space-between'}
+//                 >
+//                   <Img
+//                     src={left}
+//                     w={'50px'}
+//                     h={'50px'}
+//                     cursor={'pointer'}
+//                     onClick={() => prevData(data)}
+//                   />
+//                   {option !== null && (
+//                     <Img
+//                       src={right}
+//                       w={'50px'}
+//                       h={'50px'}
+//                       cursor={'pointer'}
+//                       onClick={() => InteractionFunction()}
+//                     />
+//                   )}
+//                 </Box>
+//               </Box>
+//             </Box>
+//         //   </GridItem>
+//         // </Grid>
+//       // </Box>
+//     )}
+//     {data && type === 'response' && (
+//       <Box
+//         w={'100%'}
+//         h={'100vh'}
+//         display={'flex'}
+//         alignItems={'center'}
+//         justifyContent={'center'}
+//         position={'relative'}
+//       >
+//         <Img
+//           src={backGroundImg}
+//           maxW={'100%'}
+//           maxH={'100%'}
+//           w={'100%'}
+//           h={'100vh'}
+//           transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
+//           transition={'transform 0.9s ease-in-out'}
+//         />
+//         {selectedPlayer && (
+//           <Img
+//             src={`${API_SERVER}/${selectedPlayer}`}
+//             position={'fixed'}
+//             right={'300px'}
+//             bottom={'100px'}
+//             w={'200px'}
+//             h={'324px'}
+//             // transform={'translate(0px, 55px)'}
+//           />
+//         )}
+//         {selectedNpc && (
+//           <Img
+//             src={selectedNpc}
+//             position={'fixed'}
+//             right={'500px'}
+//             bottom={'100px'}
+//             w={'200px'}
+//             h={'324px'}
+//             // transform={'translate(0px, 55px)'}
+//           />
+//         )}
+//         <Img
+//           style={{
+//             transform: `translateY(${showNote ? 200 : 0}px)`,
+//             transition:
+//               'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+//           }}
+//           position={'fixed'}
+//           maxW={'100%'}
+//           maxH={'100%'}
+//           w={'100%'}
+//           h={'240px'}
+//           bottom={'0'}
+//           src={dial}
+//         />
+//         {!showNote && (
+//           <>
+//             <Box position={'relative'}>
+//               <Img
+//                 src={char}
+//                 position={'fixed'}
+//                 h={'70px'}
+//                 w={'25%'}
+//                 left={'13%'}
+//                 bottom={'150px'}
+//               />
+//               <Text
+//                 position={'fixed'}
+//                 left={'24%'}
+//                 bottom={'167px'}
+//                 fontSize={'25'}
+//                 fontWeight={700}
+//                 textAlign={'center'}
+//                 fontFamily={'AtlantisText'}
+//               >
+//                 {data.blockRoll === 'Narrator'
+//                   ? data.blockRoll
+//                   : formData.gameNonPlayerName}
+//               </Text>
+//             </Box>
+//             <Box
+//               display={'flex'}
+//               position={'fixed'}
+//               justifyContent={'space-between'}
+//               w={'75%'}
+//               bottom={'55px'}
+//               fontFamily={'AtlantisContent'}
+//               fontSize={'21px'}
+//             >
+//               <TypingEffect text={resMsg} speed={50} />
+//             </Box>
+//             <Box
+//               display={'flex'}
+//               position={'fixed'}
+//               justifyContent={'flex-end'}
+//               w={'80%'}
+//               bottom={'0'}
+//             >
+//               {/* <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} /> */}
+//               <Img
+//                 src={right}
+//                 w={'60px'}
+//                 h={'50px'}
+//                 cursor={'pointer'}
+//                 onClick={() => getData1(data)}
+//               />
+//             </Box>
+//           </>
+//         )}
+//       </Box>
+//     )}
+//     {data && type === 'feedback' && (
+//       <Box
+//         w={'100%'}
+//         h={'100vh'}
+//         display={'flex'}
+//         alignItems={'center'}
+//         justifyContent={'center'}
+//         position={'relative'}
+//         overflow={'visible'}
+//         style={{ perspective: '1000px' }}
+//       >
+//         <Box
+//           backgroundImage={backGroundImg}
+//           w={'100%'}
+//           h={'100vh'}
+//           backgroundRepeat={'no-repeat'}
+//           backgroundSize={'cover'}
+//           transform={`scale(${first ? 1 : 1.3}) translateY(${
+//             first ? 0 : -10
+//           }%) translateX(${first ? 0 : -10}%)`}
+//           transition={'transform 0.9s ease-in-out'}
+//         >
+//           <Box
+//             position={'fixed'}
+//             top={'200px'}
+//             right={'0px'}
+//             bottom={0}
+//             zIndex={999}
+//             w={'300px'}
+//           >
+//             {/* <Canvas
+//               camera={{ position: [3, 3, 10] }}
+              
+//             >
+//               <directionalLight
+//                 position={[5, 5, 5]}
+//                 intensity={0.8}
+//                 color={0xffccaa}
+//                 castShadow
+//               />
+//               <ambientLight intensity={5.5} />
+//               <pointLight
+//                 position={[5, 5, 5]}
+//                 color={0xff0000}
+//                 intensity={1}
+//               />
+            
+//               <mesh
+//                 rotation={[-Math.PI / 2, 0, 0]}
+//                 position={[0, -5, 0]}
+//                 receiveShadow
+//               >
+//                 <planeGeometry args={[100, 100]} />
+//                 <shadowMaterial opacity={0.5} />
+//               </mesh>
+//             </Canvas> */}
+//           </Box>
+//         </Box>
+//         <Box
+//           style={{
+//             transform: `scale(${showNote ? 0.2 : 1})`,
+//             transition: 'transform 0.5s ease-in-out',
+//           }}
+//           position={'fixed'}
+//           w={'40%'}
+//           h={'80vh'}
+//           display={'flex'}
+//           flexDirection={'column'}
+//           justifyContent={'center'}
+//           alignItems={'center'}
+//         >
+//           <Img w={'90%'} h={'80vh'} src={feedi} />
+//           <Box
+//             position={'fixed'}
+//             w={'50%'}
+//             mt={'10px'}
+//             display={'flex'}
+//             flexDirection={'column'}
+//             textAlign={'center'}
+//             justifyContent={'center'}
+//             style={{
+//               fontWeight: '900',
+//               color: '#D9C7A2',
+//             }}
+//           >
+//             {feed}
+//             <Box
+//               w={'100%'}
+//               onClick={() => getData1(data)}
+//               mt={'20px'}
+//               display={'flex'}
+//               justifyContent={'center'}
+//               cursor={'pointer'}
+//               transform={'translate(0px, 100px)'}
+//             >
+//               <Img src={next} w={'200px'} h={'60px'} />
+//             </Box>
+//           </Box>
+//         </Box>
+//       </Box>
+//     )}
+//   </>
+// );
+
 return (
   <>
     {data && type === 'Note' && (
       <Box
-        position="relative"
-        maxW="100%"
-        w={'100vw'}
-        height="100vh"
-        backgroundImage={backGroundImg}
-        backgroundSize={'cover'}
-        backgroundRepeat={'no-repeat'}
+        w={'100%'}
+        h={'100vh'}
+        display={'flex'}
+        alignItems={'center'}
+        justifyContent={'center'}
+        position={'relative'}
+        overflow={'visible'}
+        style={{ perspective: '1000px' }}
       >
-        <Grid
-          templateColumns="repeat(1, 1fr)"
-          gap={4}
-          position="absolute"
-          top="50%"
-          left="50%"
-          transform="translate(-50%, -50%)"
-          className="story_note_grid"
+        <Box
+          color={'rgba(0, 0, 0, 0.5)'}
+          backgroundImage={backGroundImg}
+          w={'100%'}
+          h={'100vh'}
+          backgroundRepeat={'no-repeat'}
+          backgroundSize={'cover'}
+          transform={`scale(${first ? 1 : 1.3}) translateY(${
+            first ? 0 : -10
+          }%) translateX(${first ? 0 : -10}%)`}
+          transition={'transform 0.9s ease-in-out'}
         >
-          <GridItem colSpan={1} position={'relative'}>
-            <Img src={note} className="story_note_image" loading="lazy" />
+          <Box
+            position={'fixed'}
+            top={'200px'}
+            // left={0}
+            right={'0px'}
+            bottom={0}
+            zIndex={999}
+            w={'300px'}
+          >
+          </Box>
+        </Box>
+        {/* <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 100, damping: 10 }}
+        > */}
+        <Box
+          style={{
+            transform: `scale(${showNote ? 0.2 : 1})`,
+            transition: 'transform 0.5s ease-in-out',
+          }}
+          position={'fixed'}
+          w={'40%'}
+          h={'80vh'}
+          display={'flex'}
+          flexDirection={'column'}
+          justifyContent={'center'}
+          alignItems={'center'}
+        >
+          <Img w={'100%'} h={'80vh'} src={note} />
+          <Box
+            position={'fixed'}
+            overflowY={'scroll'}
+            transform={'translate(0px, 45px)'}
+            w={'50%'}
+            mt={'10px'}
+            display={'flex'}
+            flexDirection={'column'}
+            textAlign={'center'}
+            justifyContent={'center'}
+            style={{
+              fontWeight: '900',
+              color: '#D9C7A2',
+              fontSize: '18px',
+              fontFamily: 'AtlantisContent',
+              lineHeight: 1,
+            }}
+          >
             <Box
-              className={'story_note_content'}
-              // bg={'blue.300'}
+              w={'100%'}
+              h={'100px'}
+              display={'flex'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              mt={'20px'}
+             
             >
-              <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                <Box
-                  w={'65%'}
-                  fontSize={{ base: '3.8vw', sm: '2.8vw', md: '1.8vw' }}
-                  height={'20vh'}
-                  overflowY={'auto'}
-                  // bg={'blue.300'}
-                  fontFamily={'AtlantisContent'}
-                  color={'#D9C7A2'}
-                  display={'flex'}
-                  justifyContent={'center'}
-                >
-                 {remainingSentences.map((sentence, index) => (
-                    <React.Fragment key={index}>
-                      {sentence}
-                    </React.Fragment>
-                  ))}
-                </Box>
-              </Box>
-              <Box
-                w={'100%'}
-                onClick={() => getData1(data)}
-                mt={'20px'}
-                display={'flex'}
-                justifyContent={'center'}
-                cursor={'pointer'}
-                position={'fixed'}
-                top={'70%'}
-              >
-                <Img src={next} w={'100px'} />
-              </Box>
+             
+          {remainingSentences}
             </Box>
-          </GridItem>
-        </Grid>
+            <Box
+              w={'100%'}
+              onClick={() => getData1(data)}
+              mt={'20px'}
+              display={'flex'}
+              justifyContent={'center'}
+              cursor={'pointer'}
+            >
+              <Img src={next} w={'200px'} h={'60px'} />
+            </Box>
+          </Box>
+        </Box>
+        {/* </motion.div> */}
       </Box>
     )}
     {data && type === 'Dialog' && (
@@ -332,7 +1002,6 @@ return (
           transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
           transition={'transform 0.9s ease-in-out'}
         />
-       
         {selectedPlayer && (
           <Img
             src={`${API_SERVER}/${selectedPlayer}`}
@@ -341,6 +1010,7 @@ return (
             bottom={'100px'}
             w={'200px'}
             h={'324px'}
+            // transform={'translate(0px, 55px)'}
           />
         )}
         {selectedNpc && (
@@ -351,13 +1021,15 @@ return (
             bottom={'100px'}
             w={'200px'}
             h={'324px'}
+            // transform={'translate(0px, 55px)'}
           />
         )}
+      {/* Dialog */}
         <Img
           style={{
-            transform: `translateY(${showNote ? 200 : 0}px)`,
+            transform: styletransform,
             transition:
-              'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+            stylerender,
           }}
           position={'fixed'}
           maxW={'100%'}
@@ -373,14 +1045,14 @@ return (
               <Img
                 src={char}
                 position={'fixed'}
-                h={'100px'}
-                w={'30%'}
-                left={'5%'}
-                bottom={'140px'}
+                h={'70px'}
+                w={'25%'}
+                left={'13%'}
+                bottom={'150px'}
               />
               <Text
                 position={'fixed'}
-                left={'19%'}
+                left={'24%'}
                 bottom={'167px'}
                 fontSize={'25'}
                 fontWeight={700}
@@ -395,34 +1067,26 @@ return (
             <Box
               display={'flex'}
               position={'fixed'}
-              alignItems={'center'}
               justifyContent={'space-between'}
-              h={'80px'}
-              overflowY={'scroll'}
-              w={'85%'}
+              w={'75%'}
               bottom={'55px'}
               fontFamily={'AtlantisContent'}
               fontSize={'21px'}
             >
-              <TypingEffect text={data?.blockText} speed={50} />
+              {/* <TypingEffect text={data?.blockText} speed={50} /> */}
+              {remainingSentences} 
             </Box>
             <Box
               display={'flex'}
               position={'fixed'}
               justifyContent={'space-between'}
-              w={'95%'}
+              w={'80%'}
               bottom={'0'}
             >
-              <Img
-                src={left}
-                w={'70px'}
-                h={'50px'}
-                cursor={'pointer'}
-                onClick={() => prevData(data)}
-              />
+              <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
               <Img
                 src={right}
-                w={'70px'}
+                w={'50px'}
                 h={'50px'}
                 cursor={'pointer'}
                 onClick={() => getData1(data)}
@@ -434,143 +1098,140 @@ return (
     )}
     {data && type === 'Interaction' && (
       <Box
-        position="relative"
-        maxW="100%"
-        w={'100vw'}
-        height="100vh"
-        backgroundImage={backGroundImg}
-        backgroundSize={'cover'}
-        backgroundRepeat={'no-repeat'}
+        w={'100%'}
+        h={'100vh'}
+        display={'flex'}
+        alignItems={'center'}
+        justifyContent={'center'}
+        position={'relative'}
       >
-        <Grid
-          templateColumns="repeat(1, 1fr)"
-          gap={4}
-          position="absolute"
-          top="50%"
-          left="50%"
-          transform="translate(-50%, -50%)"
-          w={'90%'}
+        <Img
+          src={backGroundImg}
+          maxW={'100%'}
+          maxH={'100%'}
+          w={'100%'}
+          h={'100vh'}
+          transform={`scale(1.5}) translateY(-10%) translateX(${
+            showNote ? -200 : 0
+          }px)`}
+          transition={'transform 0.9s ease-in-out'}
+        />
+        {selectedPlayer && (
+          <Img
+            src={`${API_SERVER}/${selectedPlayer}`}
+            position={'fixed'}
+            right={'300px'}
+            bottom={'100px'}
+            w={'200px'}
+            h={'auto'}
+            transform={'translate(100px, 0px)'}
+            transition={'transform 2s ease-in-out'}
+          />
+        )}
+        {selectedNpc && (
+          <Img
+            src={selectedNpc}
+            position={'fixed'}
+            right={'500px'}
+            bottom={'100px'}
+            w={'200px'}
+            h={'auto'}
+            transform={'translate(100px, 0px)'}
+            transition={'transform 2s ease-in-out'}
+          />
+        )}
+        <Box
+          style={{
+            transform: `translateX(${showNote ? -200 : 0}px) scale(1.2)`,
+            transition:
+              'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+          }}
+          backgroundImage={parch}
+          position={'fixed'}
+          w={{ sm: '350px', md: '500px' }}
+          h={{ sm: '50vh', md: ' 550px' }}
+          // top={'4vh'}
+          left={{ sm: '60px', md: '180px' }}
+          backgroundSize={'contain'}
+          backgroundRepeat={'no-repeat'}
         >
-          <GridItem colSpan={1} position={'relative'}>
-            <Box position={'relative'} className="story_interaction_image">
-              <Img
-                src={parch}
-                w={'100%'}
-                h={'100%'}
-                loading="lazy"
-              />
-              <Box
-                position={'absolute'}
-                top={{ sm: '18px', md: '42px' }}
-                h={'80% !important'}
-                className="story_interaction_image"
-              >
-                <Box
-                  textAlign={'center'}
-                  display={'flex'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  fontWeight={700}
-                  fontSize={{ sm: '1vw', md: '1.5vw', lg: '1.9vw' }}
-                  fontFamily={'AtlantisText'}
-                  lineHeight={1}
-                  w={'100%'}
-                  h={'5%'}
-                >
-                  <Box w={'80%'}>
-                    Here You Can Answer the Interactions...!{' '}
-                  </Box>
-                </Box>
-                <Box
-                  textAlign={'center'}
-                  h={'25%'}
-                  display={'flex'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  fontWeight={500}
-                  fontFamily={'AtlantisText'}
-                  lineHeight={1}
-                  w={'96%'}
-                  overflowY={'scroll'}
-                >
-                  <Box
-                    w={'60%'}
-                    fontSize={{ md: '1.5vw', lg: '1.9vw' }}
-                    letterSpacing={1}
-                  >
-                    {data?.blockText}
-                  </Box>
-                </Box>
-                <Box
-                  mt={'10px'}
-                  w={'100%'}
-                  h={'40%'}
-                  fontWeight={500}
-                  overflowY={'scroll'}
-                  display={'flex'}
-                  justifyContent={'center'}
-                >
-                  <Box w={'60%'}>
-                    {options &&
-                      options.map((item: any, ind: number) => (
-                        <Box
-                          w={'100%'}
-                          mb={'10px'}
-                          lineHeight={1}
-                          key={ind}
-                          color={option === ind ? 'purple' : ''}
-                          textAlign={'center'}
-                          cursor={'pointer'}
-                          onClick={() => optionClick(item, ind)}
-                          fontFamily={'AtlantisText'}
-                        >
-                          <Img
-                            src={option === ind ? on : off}
-                            h={'30px'}
-                            w={'100%'}
-                          />
-                          <Box
-                            w={'100%'}
-                            display={'flex'}
-                            justifyContent={'center'}
-                            fontSize={{
-                              sm: '1.3vw',
-                              md: '1.5vw',
-                              lg: '1.9vw',
-                            }}
-                          >
-                            {item?.qpOptionText}
-                          </Box>
-                        </Box>
-                      ))}
-                  </Box>
-                </Box>
-                <Box
-                  w={'100%'}
-                  display={'flex'}
-                  justifyContent={'space-between'}
-                >
-                  <Img
-                    src={left}
-                    w={'50px'}
-                    h={'50px'}
-                    cursor={'pointer'}
-                    onClick={() => prevData(data)}
-                  />
-                  {option !== null && (
-                    <Img
-                      src={right}
-                      w={'50px'}
-                      h={'50px'}
-                      cursor={'pointer'}
-                      onClick={() => InteractionFunction()}
-                    />
-                  )}
-                </Box>
-              </Box>
+          <Box
+            textAlign={'center'}
+            h={'100px'}
+            display={'flex'}
+            justifyContent={'center'}
+            alignItems={'center'}
+            fontWeight={700}
+            fontFamily={'AtlantisText'}
+            lineHeight={1}
+            w={'100%'}
+          >
+            <Box w={'50%'} fontSize={'21px'}>
+              Here You Can Answer the Interactions...!{' '}
             </Box>
-          </GridItem>
-        </Grid>
+          </Box>
+          <Box
+            textAlign={'center'}
+            h={'100px'}
+            display={'flex'}
+            justifyContent={'center'}
+            alignItems={'center'}
+            fontWeight={500}
+            fontFamily={'AtlantisText'}
+            lineHeight={1}
+            w={'96%'}
+            overflowY={'scroll'}
+          >
+            <Box w={'60%'} fontSize={'20px'} letterSpacing={1}>
+              {data?.blockText}
+            </Box>
+          </Box>
+          <Box
+            mt={'10px'}
+            w={{ sm: '200px', md: '400px' }}
+            fontWeight={500}
+            ml={'17%'}
+            h={'220px'}
+            overflowY={'scroll'}
+          >
+            {options &&
+              options.map((item: any, ind: number) => (
+                <Box
+                  mb={'10px'}
+                  w={'80%'}
+                  lineHeight={1}
+                  key={ind}
+                  color={option === ind ? 'purple' : ''}
+                  textAlign={'center'}
+                  cursor={'pointer'}
+                  onClick={() => optionClick(item, ind)}
+                  fontFamily={'AtlantisText'}
+                  fontSize={'20px'}
+                >
+                  <Img src={option === ind ? on : off} h={'30px'} w={'95%'} />
+                  {item?.qpOptionText}
+                </Box>
+              ))}
+          </Box>
+          <Box
+            display={'flex'}
+            position={'fixed'}
+            justifyContent={'space-between'}
+            w={'508px'}
+            left={'-10px'}
+          >
+            <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+            {option !== null && (
+              <Img
+                src={right}
+                w={'50px'}
+                h={'50px'}
+                cursor={'pointer'}
+                onClick={() => InteractionFunction()}
+              />
+            )}
+          </Box>
+        </Box>
       </Box>
     )}
     {data && type === 'response' && (
@@ -666,22 +1327,23 @@ return (
             <Box
               display={'flex'}
               position={'fixed'}
-              justifyContent={'flex-end'}
+              justifyContent={'space-between'}
               w={'80%'}
               bottom={'0'}
             >
-              {/* <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} /> */}
+              <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
               <Img
                 src={right}
-                w={'60px'}
+                w={'50px'}
                 h={'50px'}
                 cursor={'pointer'}
-                onClick={() => getData1(data)}
+                onClick={() => getData(data)}
               />
             </Box>
           </>
         )}
       </Box>
+     
     )}
     {data && type === 'feedback' && (
       <Box
@@ -771,7 +1433,7 @@ return (
             {feed}
             <Box
               w={'100%'}
-              onClick={() => getData1(data)}
+              onClick={() => getData(data)}
               mt={'20px'}
               display={'flex'}
               justifyContent={'center'}
@@ -786,6 +1448,7 @@ return (
     )}
   </>
 );
+
 };
 const Model: React.FC = () => {
   const groupRef = useRef<any>();

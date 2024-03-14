@@ -453,9 +453,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setData(prevBlock[0]);
     }
   };
-
   const getData = (next: any) => {
-    // console.log('getDataEP--',next)
+    console.log("next", next)
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -497,7 +496,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
       setOptions(optionsFiltered);
     }
-
     if (
       type === 'Interaction' &&
       resMsg !== '' &&
@@ -527,7 +525,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
-        console.log('IN Replay Point');
         setType(demoBlocks['1']['1']?.blockChoosen);
         setData(demoBlocks['1']['1']);
         setSelectedOption(null);
@@ -536,18 +533,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
-              demoBlocks[currentQuest][item].blockSecondaryId ===
+              demoBlocks[currentQuest][item]?.blockSecondaryId ===
               parseInt(optionNavigation)
             );
           })
           .map((item: any) => {
             return demoBlocks[currentQuest][item];
           });
-        setType(selectedNext && selectedNext[0].blockChoosen);
+          
+        setType(selectedNext && selectedNext[0]?.blockChoosen);
         setData(selectedNext && selectedNext[0]);
         setGame3Position((prev: any) => ({
           ...prev,
-          nextBlock: selectedNext[0].blockPrimarySequence,
+          nextBlock: selectedNext[0]?.blockPrimarySequence,
         }));
         setSelectedOption(null);
         return false;
@@ -737,25 +735,31 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
-              demoBlocks[currentQuest][item].blockSecondaryId ===
+              demoBlocks[currentQuest][item]?.blockSecondaryId ===
               parseInt(next?.blockLeadTo)
             );
           })
           .map((item: any) => {
             return demoBlocks[currentQuest][item];
           });
-        setType(selectedNext && selectedNext[0].blockChoosen);
-        setData(selectedNext && selectedNext[0]);
+          if(selectedNext.length > 0){
+            setType(selectedNext && selectedNext[0]?.blockChoosen);
+            setData(selectedNext && selectedNext[0]);
+          }
+          else{
+            setType(nextBlock[0]?.blockChoosen);
+            setData(nextBlock[0]);
+          }
         setGame3Position((prev: any) => ({
           ...prev,
-          nextBlock: selectedNext[0].blockPrimarySequence,
+          nextBlock: selectedNext[0]?.blockPrimarySequence,
         }));
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
         setProfile((prev: any) => {
           const data = { ...prev };
-          data.completedLevels = [...data.completedLevels, nextLevel];
+          data.completedLevels = [...data?.completedLevels, nextLevel];
           return data;
         });
         setCurrentScreenId(13);
@@ -765,6 +769,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setType(nextBlock[0]?.blockChoosen);
     setData(nextBlock[0]);
     setSelectedOption(null);
+  
   };
 
   let menuBg = useColorModeValue('white', 'navy.800');
@@ -962,7 +967,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setReviewInput((prev: Review) => ({
       ...prev,
       tabAttribute: e.target.value
-        ? selectedTabFileds[reviewInput?.tabId.toString()].tabAttribute
+        ? selectedTabFileds[reviewInput?.tabId.toString()]?.tabAttribute
         : null,
       tabAttributeValue: e.target.value ?? null,
     }));
