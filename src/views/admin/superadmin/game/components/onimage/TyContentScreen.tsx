@@ -429,10 +429,10 @@ const styleflex = {};
                   </Box>
                   
                 </>
-              )}
-                <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'167px', right:'0' , justifyContent:'center', zIndex:'9999'}}>
-              <Img src={next} />
+              )}               
             </Box>
+            <Box className='next-btn'>
+              <Img src={next} />
             </Box>
             {/* <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'100px', right:'0' , justifyContent:'center'}}>
               <Img src={next} />

@@ -1027,7 +1027,7 @@ font-family: 'AtlantisText';
   align-items: center;
   width: 100%;
   position: absolute;
-  transform: translate(0px, 260px);
+  transform: translate(0px, 240px);
   top: 0;
 }
 
@@ -3943,7 +3943,7 @@ transform: translate(-167px, -84px);
 }
 
 
-/********************************* PREVIEW WELCOME SCREEN *********************************************** */
+/********************************* PREVIEW COMPLETION SCREEN *********************************************** */
 .EntirePreview .completion_content .inside-img {
   display: flex;
   align-items: center;
@@ -3978,6 +3978,15 @@ transform: translate(-167px, -84px);
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .leaderboard-img {
   width: 85vw;
   height: 80vh;
+}
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .title {
+ font-size: 4vh;
+ font-family: 'AtlantisText';
+ color: #000;
+ transform: translate(0, -31vh);
+ text-transform: uppercase;
+ position: absolute;
+
 }
 
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box {
@@ -4232,13 +4241,13 @@ transform: translate(-167px, -84px);
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .next-btn-box {
   position: absolute;
-  transform: translate(42vw, 40vh);
+  transform: translate(0vw, 35vh);
   width: auto;
 }
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .next-btn-box img {
-  height: 3.5rem;
-  width: 4.8rem;
+  height: 4rem;
+  width: 8.8rem;
   cursor: pointer;
 }
 
@@ -4306,8 +4315,8 @@ transform: translate(-167px, -84px);
   display: flex;
   flex-direction: column;
   width: 65vw;
-  height: 55vh;
-  transform: translate(0, 7%);
+  height: 50vh;
+  transform: translate(0, 1%);
   position: absolute;
   overflow-y: auto;
 }
@@ -4516,3 +4525,13 @@ transform: translate(-167px, -84px);
   background-size: contain;
   height: 30px;
 }
+.EntirePreview .Game-Screen .Images .Thankyou-section .next-btn{
+  position: absolute;
+  /* width: 6vw;
+  height: 6vh; */
+  transform: translate(0, 32vh);
+} 
+.EntirePreview .Game-Screen .Images .Thankyou-section .next-btn img{
+  width: 110px;
+  height: 45px;
+} 

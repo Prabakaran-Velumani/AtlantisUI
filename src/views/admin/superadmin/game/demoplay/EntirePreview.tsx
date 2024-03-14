@@ -168,6 +168,8 @@ export const ProfileContext = createContext<ProfileDataType>({
   name: '',
   gender: '',
   language: '',
+  score: 350,
+  allTimeScore: 950,
 });
 
 const EntirePreview: React.FC<ShowPreviewProps> = ({
