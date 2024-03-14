@@ -1,4 +1,5 @@
 export const urls = {
+
   /*******************admin******************* */
   adminLogin: '/admin/login',
   /********************dashboard************************* */
@@ -143,28 +144,31 @@ export const urls = {
   creatorBlocks: '/game/creator/blocks/',
   getStoryValidtion: '/game/getStoryValidtion/',
 
-  languages: '/languages/getlanguages',
-  getCreatedLanguages: '/languages/getcreatedlanguages',
-  updatelanguages: '/languages/updatelanguages',
-  /* gamelanuages rajesh kanna */
-  gameLanguages: '/languages/getGameLanguages/',
-  getMaxBlockQuestNo: '/game/getMaxBlockQuestNo/',
-  getBlockData: '/languages/getBlockData/',
-  getGameStoryLine: '/languages/getGameStoryLine/',
-  getQuestionOptionsText: '/languages/getQuestionOptionsText/',
-  getQuestionResponse: '/languages/getQuestionResponse/',
-  getQuestionOptions: '/languages/getQuestionOptions/',
-  getSelectedLanguages: '/languages/getSelectedLanguages/',
+  languages:'/languages/getlanguages',
+   getCreatedLanguages:'/languages/getcreatedlanguages',
+   updatelanguages:'/languages/updatelanguages',
+/* gamelanuages rajesh kanna */
+     gameLanguages:'/languages/getGameLanguages/',
+     getMaxBlockQuestNo:'/game/getMaxBlockQuestNo/',
+	 getBlockData:'/languages/getBlockData/',
+  getGameStoryLine:'/languages/getGameStoryLine/',
+  getQuestionOptionsText:'/languages/getQuestionOptionsText/',
+  getQuestionResponse:'/languages/getQuestionResponse/',
+  getQuestionOptions:'/languages/getQuestionOptions/',
+getSelectedLanguages:'/languages/getSelectedLanguages/',
+getMaxBlockQuestNo:'/game/getMaxBlockQuestNo/',
+      /****************************Reviews ********************************/
+      addReviews:'/gamereview/addreviewers',
+      getAllReviews:'/gamereview/getblockreviewlist/',
+   
+     /******** Game Demo with review ******/
+     getGameDemoData : '/game/tryout/',
+     addGameReview : "/gamereview/addblockreview",
+     testAudios: '/game/audioTest',
+     getGameCreatorPreview: '/game/creator/demo/' 
 
-  /****************************Reviews ********************************/
-  addReviews: '/gamereview/addreviewers',
-  getAllReviews: '/gamereview/getblockreviewlist/',
 
-  /******** Game Demo with review ******/
-  getGameDemoData: '/game/tryout/',
-  addGameReview: '/gamereview/addblockreview',
-  testAudios: '/game/audioTest',
-  getGameCreatorPreview: '/game/creator/demo/',
+
 };
 
 const person = localStorage.getItem('user');

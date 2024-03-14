@@ -19,7 +19,7 @@ const dispatch = useDispatch();
         <Box
           className="overlay-container"
           position="absolute"
-          top="1110"
+          top="0"
           left="0"
           width="100%"
           height="100%"
@@ -28,12 +28,16 @@ const dispatch = useDispatch();
           justifyContent="center"
           alignItems="center"
         >
-          <Box className="thankyou-screen-box" zIndex="1">
-            <Img src={preloadedAssets.Screen6} className="bg-Img" />
-            <Text fontFamily="AtlantisContent" textAlign="center"top={'-200px'} color="white" fontSize="2xl" zIndex="2">
-              You are at the end of the Quest..! Do You Want to Play this Quest Again..!?
-            </Text>
-          </Box>
+          
+          <Box className="thankyou-screen-box" >
+            <Img src={preloadedAssets.Screen6} className="bg-Img" /></Box>
+            <Box  position={'absolute'} fontSize={['xl', '2xl', '3xl']} fontFamily="AtlantisContent" textAlign="center" color="white"  zIndex="999999"> <Text  mb="4">
+                  End of the current Quest.!
+                </Text>
+                <Text >
+                  Do You Want Play Again ?
+                </Text>
+           
           <Flex
             mt="1"
             direction="column"
@@ -51,6 +55,7 @@ const dispatch = useDispatch();
             />
           </Flex>
         </Box>
+      </Box>
       )}
     </Flex>
   );

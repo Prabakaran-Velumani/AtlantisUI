@@ -419,9 +419,7 @@ const ScreenPreview = () => {
     setSelectedOption(ind === selectedOption ? null : ind);
   };
   const handleEntirePrev = async () => {
-
     const url = ` /game/creator/demoplay/${id}`;
-    // const url = `/screen/preview/${id}`;
     window.open(url, '_blank');
   }
 
