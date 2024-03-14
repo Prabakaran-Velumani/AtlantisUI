@@ -110,6 +110,9 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const [isLanguage, setIsLanguage] = useState(false);
   const [select, setSelect] = useState(false);
   const [lanuages, setLanguages] = useState<any[]>(null);
+    // Afrith-modified-starts-08/Mar/24
+    const [characterName, setCharacterName] = useState('');
+    // Afrith-modified-ends-08/Mar/24
   const { id } = useParams();
   useEffect(() => {
     const fetch = async () => {
@@ -152,6 +155,13 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       [id]: id === 'name' ? value : lang,
     }));
   };
+
+    // Afrith-modified-starts-08/Mar/24
+    const setPlayerName = (value:any) => {
+      setCharacterName(value);
+      setProfileData((prev:any) => ({...prev, name:value}))
+    };
+    // Afrith-modified-ends-08/Mar/24
  
   const innerBoxWidth = useBreakpointValue({
     base: '95%',
@@ -302,6 +312,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
         backgroundImage={imageSrc}
         backgroundSize={'cover'}
         backgroundRepeat={'no-repeat'}
+        className='CharacterScreen'
       >
         <Grid
           templateColumns="repeat(1, 1fr)"
@@ -344,7 +355,19 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                   onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
                 ></Button>
                 <Box w={'30%'} position={'relative'}>
-                <Text className="player_name" >{playerInfo.name}Leo Dasssdfsdfaf WRWRAWD </Text>
+                   {/* Afrith-modified-starts-08/Mar/24-just Uncommented Input & commented Text */}
+                    <Input
+                      className="enter-name player_name"
+                      fontSize={'4vh'}
+                      _focusVisible={{border: 'none'}}
+                      border={'none'}
+                      placeholder="Enter Character Name"
+                      onChange={(e: any) => setPlayerName(e.target.value)}
+                    />
+                    {/* <Text className="enter-name">{playerInfo.name}</Text> */}
+
+                  {/* Afrith-modified-starts-08/Mar/24-just Uncommented Input & commented Text */}
+                  {/* <Text className="player_name" >{playerInfo.name}Leo Dasssdfsdfaf WRWRAWD </Text> */}
                 </Box>
                 <Button
                   className="btns right-btn"

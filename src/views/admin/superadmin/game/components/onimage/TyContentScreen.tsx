@@ -188,7 +188,7 @@ const styleflex = {};
                     fontWeight="300"
                     textAlign="center"
                   >
-                    <Img src={Feedback} mt={'25px'} alt="rew" w={'82%'} h={'23px'} ml={'50px'} /> 
+                    <Img src={Feedback}  alt="rew" w={'82%'} h={'23px'} /> 
                     How do you feel about the experience?
                   </Text>
                   <Box className="collect-learner-feedback">

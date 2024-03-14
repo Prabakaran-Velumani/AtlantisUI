@@ -26,6 +26,7 @@ import Screen5 from '../../../../../assets/img/screens/screen5.png';
 import { AiFillMessage } from 'react-icons/ai';
 // import WelcomeContentScreen from './onimage/WelcomeContentScreen';
 import Screen1 from '../../../../../assets/img/screens/screen1.png';
+import leaderboard from '../../../../../assets/img/screens/Leaderboard.png'
 
 import Screen2 from '../../../../../assets/img/screens/screen2.png';
 import ReflectionContentScreen from './onimage/ReflectionScreen';
@@ -1013,13 +1014,18 @@ const ScreenPreview = () => {
                         >
                           <Box className="Images">
                             <Box className="LearderBoards">
-                              <Img
+                              {/* <Img
                                 src={preloadedAssets?.Screen2}
                                 alt="Your Image"
                                 className="LearderBoards-Img"
-                              />
-                            </Box>
-                            {/* <LeaderBoard /> */}
+                              /> */}
+                                <LeaderBoard   
+                                  formData = {gameInfo?.gameData}
+                                  imageSrc={leaderboard}
+                                  getData={getData}
+                                  data={data}
+                                />
+                            </Box>                            
                           </Box>
                         </Box>
                       </Box>
@@ -1036,20 +1042,21 @@ const ScreenPreview = () => {
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets?.RefBg}
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
+                          // backgroundImage={preloadedAssets?.RefBg}
+                          // w={'100% !important'}
+                          // h={'100vh'}
+                          // backgroundRepeat={'no-repeat'}
+                          // backgroundSize={'cover'}
+                          // alignItems={'center'}
+                          // justifyContent={'center'}
                           className="Game-Screen"
                         >
                           <Box className="Images">
                             <ReflectionContentScreen
                               preview={true}
                               formData={gameInfo.gameData}
-                              imageSrc={preloadedAssets?.RefScreen1}
+                              // imageSrc={preloadedAssets?.RefScreen1}
+                              imageSrc={preloadedAssets?.RefBg}
                               reflectionQuestions={gameInfo?.reflectionQuestions}
                               reflectionQuestionsdefault={reflectionQuestionsdefault}
                               preloadedAssets ={preloadedAssets}

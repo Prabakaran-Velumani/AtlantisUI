@@ -49,6 +49,31 @@
 
 
   /* TAKEAWAY**************************************** */
+  .EntirePreview .Game-Screen .Images .reflection-screen .bg-img {
+    height: 100vw;
+    width: 100vh;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .content-ref {
+    height: 100vw;
+    width: 100vh;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .content-ref .grid {
+    width: 70vh;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .content-ref .input-wrapper img {
+    height: 20vw;
+    width: 100vh;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .content-ref .input-wrapper textarea {
+    height: 12vw;
+  }
+
+
+
+
+
+
+  /* TAKEAWAY**************************************** */
   .EntirePreview .Game-Screen .Images .takeaway-screen .bg-take {
     height: 100vw;
     width: 80vh;
@@ -71,10 +96,10 @@
     height: 100vw;
     width: 100vh;
   }
-  .EntirePreview .Game-Screen .Images .LearderBoards img {
+  /* .EntirePreview .Game-Screen .Images .LearderBoards img {
     height: 100vw;
     width: 80vh;
-  }
+  } */
   .EntirePreview .Game-Screen .Images .Leaderboard-screen .leaderboard-img {
     width: 85vh;
     height: 80vw;
@@ -110,6 +135,26 @@
 /* RESPONSIVE START ***************************************************************** */
 
 @media (min-width: 250px) and (max-width: 480px) {
+  .EntirePreview .Game-Screen .Images .reflection-screen .title{ 
+    transform: translate(0,0) !important;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .title img {
+    width: 260px;
+    height: 70px;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .title p {
+    font-size: 1.2rem;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .content-ref .heading-wrapper p {
+    font-size: 18px;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .content-ref .input-wrapper textarea {
+    font-size: 16px;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .left-right-btn img {
+    width: 60px;
+    height: 50px;
+  }
   .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content {
     font-size: 12px;
   }
@@ -152,6 +197,24 @@
   }
 }
 @media (min-width: 480px) and (max-width: 768px) {
+  .EntirePreview .Game-Screen .Images .reflection-screen .title img {
+    width: 270px;
+    height: 80px;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .title p {
+    font-size: 1.5rem;
+    margin-top: 10px;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .title{ 
+    transform: translate(0,0) !important;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .left-right-btn img {
+    width: 65px;
+    height: 50px;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .content-ref .heading-wrapper p {
+    font-size: 18px;
+  }
   .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content {
     font-size: 14px;
   }
@@ -221,6 +284,23 @@
 
 /* RESPONSIVE MOB LANDSCAPE ***************************************************************** */
 @media (min-width: 768px) and (max-width: 990px) and (max-height: 400px) {
+  .EntirePreview .Game-Screen .Images .reflection-screen .title p {
+    font-size: 1.5rem;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .title img {
+    width: 250px;
+    height: 90px;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .content-ref .heading-wrapper p {
+    font-size: 18px;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .content-ref .input-wrapper textarea {
+    font-size: 16px;
+  }
+  .EntirePreview .Game-Screen .Images .reflection-screen .left-right-btn img {
+    width: 60px;
+    height: 50px;
+  }
   .EntirePreview .Game-Screen .Images .takeaway-screen .next-btn-box img {
     height: 2.8rem;
     width: 3.8rem; 

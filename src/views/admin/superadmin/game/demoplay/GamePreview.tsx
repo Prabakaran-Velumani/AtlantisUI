@@ -82,7 +82,7 @@ export const ScoreContext = createContext<any>(null);
 const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
-  const InitialScreenId = id ? 4 : 0;
+  const InitialScreenId = id ? 10 : 0;
   const [gameInfo, setGameInfo] = useState<any | null>();
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -407,7 +407,8 @@ const GamePreview = () => {
         // ) : 
         (
           <ScoreContext.Provider value={{ profile, setProfile }}>
-            <Box id="container" onMouseMove={handleMouseMove}>
+            {/* <Box id="container" onMouseMove={handleMouseMove}> */}
+            <Box id="container" >
               {isHovered && (
                 <Icon
                   as={IoIosRefresh}

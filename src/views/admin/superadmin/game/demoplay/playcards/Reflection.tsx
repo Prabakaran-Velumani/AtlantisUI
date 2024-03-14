@@ -44,34 +44,20 @@ const Reflection: React.FC<{
     <>
       {imageSrc && (
         <>
-          <Box className="reflection-screen">
-            <Box className="reflection-screen-box">
-              {/* <Img src={imageSrc} className="bg-ref" /> */}
-            </Box>
-            <Box
-              w={'100%'}
-              display={'flex'}
-              justifyContent={'center'}
-              position={'relative'}
-            >
-              <Img src={question} w={'320px'} h={'100px'} />
-              <Text
-                fontFamily={'AtlantisText'}
-                color={'##D9C7A2'}
-                // className="text drop"
-                position={'absolute'}
-                top={'20px'}
-                fontSize={'3rem'}
-                style={{ whiteSpace: 'break-spaces' }}
-              >
-                reflection
-              </Text>
+          <Box className="reflection-screen"> 
+              <Img src={imageSrc} className="bg-img" />
+            {/* <Box className="reflection-screen-box">
+            </Box> */}
+            <Box className='title'>
+              <Img src={question} />
+              <Text> reflection </Text>
             </Box>
             <Box className="content-ref">
               <SimpleGrid columns={{ base: 2 }} spacing={2} className="grid">
                 {reflectionQuestions.map((item: any, index: number) => (
+                  <>
                   <Box key={index}>
-                    <Box
+                    <Box className='heading-wrapper'
                       w={{
                         base: '150px',
                         sm: '100px',
@@ -100,7 +86,7 @@ const Reflection: React.FC<{
                         {item?.refQuestion}
                       </Text>
                     </Box>
-                    <Box position={'relative'}>
+                    <Box position={'relative'} className='input-wrapper'>
                       <Img
                         w={'350px'}
                         h={{
@@ -132,6 +118,7 @@ const Reflection: React.FC<{
                       />
                     </Box>
                   </Box>
+                  </>
                 ))}
               </SimpleGrid>
             </Box>
@@ -141,6 +128,7 @@ const Reflection: React.FC<{
               justifyContent={'center'}
               position={'absolute'}
               bottom={'0'}
+              className='left-right-btn'
             >
               <Box w={'80%'} display={'flex'} justifyContent={'space-between'}>
                 <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
