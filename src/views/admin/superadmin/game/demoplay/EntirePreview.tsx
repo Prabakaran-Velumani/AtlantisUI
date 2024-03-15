@@ -34,8 +34,12 @@ import {
   SliderThumb,
   SliderFilledTrack,
   Tooltip,
+<<<<<<< HEAD
   GridItem,
   Grid,
+=======
+  Stack,
+>>>>>>> 72ca1fb57c494e573633fe031ad7f7f440b7f0e1
 } from '@chakra-ui/react';
 import next from 'assets/img/screens/next.png';
 import Screen2 from 'assets/img/screens/screen2.png';
@@ -107,6 +111,9 @@ import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
 import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
+import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
+import { IoMdTabletLandscape } from 'react-icons/io';
+import { isMobile } from 'react-device-detect';
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
@@ -156,12 +163,18 @@ interface ProfileDataType {
   name?: string;
   gender?: string;
   language?: any;
+  // Afrith-modified-starts-07/Mar/24
+  score?: any;
+  allTimeScore?: any;
+  // Afrith-modified-starts-07/Mar/24
 }
 
 export const ProfileContext = createContext<ProfileDataType>({
   name: '',
   gender: '',
   language: '',
+  score: 350,
+  allTimeScore: 950,
 });
 
 const EntirePreview: React.FC<ShowPreviewProps> = ({
@@ -261,15 +274,31 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
   ];
 
-  const [profileData, setProfileData] = useState({
-    name: '',
-    gender: '',
-    language: '',
-  });
+   // Afrith-modified-starts-07/Mar/24
+   const gameScore = useContext(ScoreContext);
+   const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0 ;
+ 
+   useEffect(() => {
+     setProfileData((prev:any) => ({...prev, score:scoreComp}))
+   }, [scoreComp])
+ 
+   const [profileData, setProfileData] = useState({
+     name: '',
+     gender: '',
+     language: '',
+     score: '',
+     allTimeScore: 250,
+   });
+ 
+   console.log('gameScoreContextEP--',gameScore)
+ // Afrith-modified-ends-07/Mar/24
+ 
   const [voiceIds, setVoiceIds] = useState<any>();
   const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
     useState<boolean>(false);
   const [reflectionAnswers, setReflectionAnswers] = useState([]);
+  const [resolution, setResolution] = useState(null);
+  const [isMobileView, setIsMobileView] = useState(isMobile);
 
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
@@ -1110,13 +1139,76 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     };
   }, []);
 
+    // Afrith-modified-starts-13/Mar/24
+
+    const getCurrentResolution = () => {
+      // Logic to get current screen resolution
+      // You can use window.innerWidth and window.innerHeight
+      // return {
+      //   width: window.innerWidth,
+      //   height: window.innerHeight,
+      // };
+
+      const body = document.getElementById('body');
+      body.style.width = `${window.innerWidth}px`;
+      body.style.height = `${window.innerHeight}px`;   
+      
+      return body;
+    };
+    const getMobileResolution = () => {
+
+      // const width =  window.innerWidth - 500;
+      // const height = window.innerHeight - 500;    
+      // const body = document.getElementById('body');
+      // body.style.width = '390px';
+      // body.style.height = '890px';   
+
+      // console.log('resolu****',window.devicePixelRatio)
+      // return body;
+    };
+    console.log('getMobileResolution',getMobileResolution())
+  
+    const getCurrScreen = (screenType:any) => {
+      console.log('Current Screen:', screenType);
+      // Perform any other actions based on the screen type
+      if(screenType == 'Desktop'){
+        setResolution(getCurrentResolution())
+      }else if(screenType == 'Mobile'){
+        getMobileResolution();
+        setResolution({width: 430,height: 932})
+      }
+      else if(screenType == 'Tablet'){
+        setResolution({width: 768,height: 1024})
+      }
+    };
+  
+    // useEffect(() => {
+    //   const handleResize = () => {
+    //     setResolution(getCurrentResolution());
+    //   };
+    //   window.addEventListener('resize', handleResize);
+    //   return () => window.removeEventListener('resize', handleResize);
+    // }, []);
+  
+    console.log('resolution---',resolution)
+    // Afrith-modified-ends-13/Mar/24
+
+    const toggleView = () => {
+      setIsMobileView(!isMobileView);
+    };
+    console.log('///',isMobileView)
+
+    // Avoid Top Menu Section
+    const dontShowTopMenu = currentScreenId !== 7 && currentScreenId !== 6 && currentScreenId !== 5 && currentScreenId !== 4 && currentScreenId !== 3 && currentScreenId !== 10;
+
   return (
     <ProfileContext.Provider value={profileData}>
-      <Box id="EntirePreview-wrapper">
-        <Box className="EntirePreview-content">
+       {/* {isMobileView ? ( */}
+      <Box id='EntirePreview-wrapper'>
+        <Box className='EntirePreview-content'>
           <Box id="container" className="Play-station">
             <Box className="top-menu-home-section">
-              {currentScreenId !== 5 && currentScreenId !== 7 ? (
+              {dontShowTopMenu ? (
                 <>
                   <Img src={TopMenu} className="top-menu-img" />
                   <Img
@@ -1338,15 +1430,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={RefBg}
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
+                          // backgroundImage={RefBg}
+                          // w={'100% !important'}
+                          // h={'100vh'}
+                          // backgroundRepeat={'no-repeat'}
+                          // backgroundSize={'cover'}
+                          // alignItems={'center'}
+                          // justifyContent={'center'}
                           className="Game-Screen"
-                          backgroundColor={'#D9C7A2'}
+                          // backgroundColor={'#D9C7A2'}
                         >
                           <Box className="Images">
                             <Reflection
@@ -1876,6 +1968,90 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               }
             })()}
           </Flex>
+             {/*Afrith-modified-starts-13/Mar/24*/}
+            {/* <Stack direction='row' spacing={4} zIndex={999999} position={'absolute'} right={0} top={20}  >
+              <Text color={'#fff'}>{resolution?.width}{'*'}{resolution?.height}</Text>
+              <Box
+                justifyContent={'center'} 
+                alignItems={'center'}                
+                background={'transparent'} 
+                boxShadow={'unset'} 
+                backgroundImage={TooltipImg} 
+                backgroundRepeat={'no-repeat'} 
+                backgroundSize={'contain'} 
+                backgroundPosition={'center'}
+                filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}                                                 
+                padding={'10px'}
+                height={'70px'}
+                w={'150px'}>
+              <Button
+                leftIcon={<FaMobileAlt />}
+                colorScheme='none'
+                color={'#000'}
+                // variant='solid'
+                onClick={() => {
+                    getCurrScreen('Mobile');
+                }}
+              >
+                Mobile
+              </Button>
+              </Box>
+
+              <Box           
+                justifyContent={'center'} 
+                alignItems={'center'}                
+                background={'transparent'} 
+                boxShadow={'unset'} 
+                backgroundImage={TooltipImg} 
+                backgroundRepeat={'no-repeat'} 
+                backgroundSize={'contain'} 
+                backgroundPosition={'center'}
+                filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}                                                 
+                padding={'10px'}
+                height={'70px'}
+                w={'150px'} >
+              <Button
+                leftIcon={<FaDesktop />}
+                background={'transparent'}
+                colorScheme='none'
+                color={'#000'}
+                // colorScheme='blue'
+                // variant='solid'
+                onClick={() => {
+                  getCurrScreen('Desktop');
+                }}
+              >
+                Desktop
+              </Button>
+              </Box>
+
+              <Box    
+                justifyContent={'center'} 
+                alignItems={'center'}                
+                background={'transparent'} 
+                boxShadow={'unset'} 
+                backgroundImage={TooltipImg} 
+                backgroundRepeat={'no-repeat'} 
+                backgroundSize={'contain'} 
+                backgroundPosition={'center'}
+                filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}                                                 
+                padding={'10px'}
+                height={'70px'}
+                w={'150px'}   >
+              <Button
+                leftIcon={<IoMdTabletLandscape  />}
+                colorScheme='none'
+                color={'#000'}
+                // variant='solid'
+                onClick={() => {
+                  getCurrScreen('Tablet');
+                }}
+              >
+                Tablet
+              </Button>
+              </Box>
+            </Stack> */}
+    {/*Afrith-modified-ends-13/Mar/24*/}
           {isReviewDemo && (
             <Menu isOpen={isMenuOpen}>
               <MenuButton
@@ -2074,6 +2250,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           )}
         </Box>
       </Box>
+       {/* ) : (
+        <h1>Desktop View</h1>
+      )}
+        <button onClick={toggleView}>Toggle View</button> */}
     </ProfileContext.Provider>
   );
 };

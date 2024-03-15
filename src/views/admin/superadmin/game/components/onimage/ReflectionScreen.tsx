@@ -84,11 +84,12 @@ Object.assign(styleflex, {
     <>
       {imageSrc && (
         <Box className="reflection-screen">
-          <Box className="reflection-screen-box">
-            {preview ? null : <Img src={imageSrc} className="bg-img" />}
-          </Box>
+          {/* <Box className="reflection-screen-box"> */}
+            {/* {preview ? null : <Img src={imageSrc} className="bg-img" />} */}
+            <Img src={imageSrc} className="bg-img" />
+          {/* </Box> */}
           {preview ? (
-            <Box
+            <Box className='title'
               w={'100%'}
               display={'flex'}
               justifyContent={'center'}
@@ -99,7 +100,7 @@ Object.assign(styleflex, {
                 fontFamily={'AtlantisText'}
                 color={'##D9C7A2'}
                 position={'absolute'}
-                top={'20px'}
+                // top={'20px'}
                 fontSize={'2.8rem'}
                 style={{ whiteSpace: 'break-spaces' }}
               >
@@ -121,7 +122,7 @@ Object.assign(styleflex, {
                 { length: formData.gameReflectionQuestion },
                 (_, index) => (
                   <GridItem key={index} colSpan={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? { base: 2 } : {}}>
-                    <Box
+                    <Box  className='heading-wrapper'
                       w={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? {base:'150px',sm:'300px',md:'350px',lg:'380px'} : {base:'150px',sm:'100px',md:'150px',lg:'180px'}} 
                       lineHeight={1}
                       display={'flex'}
@@ -163,14 +164,14 @@ Object.assign(styleflex, {
                         </Text>
                       )}
                     </Box>
-                    <Box position={'relative'}>
+                    <Box position={'relative'} className='input-wrapper'>
                       <Img
                         w={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ?  '420px'  : '200px'} 
                         h={{
                           base: '20px',
                           sm: '40px',
                           md: '70px',
-                          lg: '150px',
+                          lg: '50px',
                         }}
                         padding-top={'20px'}
                         src={ref}
@@ -203,13 +204,14 @@ Object.assign(styleflex, {
               )}
             </SimpleGrid>
             {preview ? (
-              <Img
-                src={refsep}
-                w={'10px'}
-                h={'auto'}
-                position={'absolute'}
-                top={'0px'}
-              />
+              // <Img
+              //   src={refsep}
+              //   w={'10px'}
+              //   h={'auto'}
+              //   position={'absolute'}
+              //   top={'0px'}
+              // />
+              <></>
             ) : null}
           </Box>
           {preview ? (
@@ -219,6 +221,7 @@ Object.assign(styleflex, {
               justifyContent={'center'}
               position={'absolute'}
               bottom={'0'}
+              className='left-right-btn'
             >
               <Box w={'80%'} display={'flex'} justifyContent={'space-between'}>
                 <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />

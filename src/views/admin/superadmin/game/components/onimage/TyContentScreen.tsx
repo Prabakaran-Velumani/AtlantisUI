@@ -188,7 +188,7 @@ const styleflex = {};
                     fontWeight="300"
                     textAlign="center"
                   >
-                    <Img src={Feedback} mt={'25px'} alt="rew" w={'82%'} h={'23px'} ml={'50px'} /> 
+                    <Img src={Feedback}  alt="rew" w={'82%'} h={'23px'} /> 
                     How do you feel about the experience?
                   </Text>
                   <Box className="collect-learner-feedback">
@@ -429,10 +429,10 @@ const styleflex = {};
                   </Box>
                   
                 </>
-              )}
-                <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'167px', right:'0' , justifyContent:'center', zIndex:'9999'}}>
-              <Img src={next} />
+              )}               
             </Box>
+            <Box className='next-btn'>
+              <Img src={next} />
             </Box>
             {/* <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'100px', right:'0' , justifyContent:'center'}}>
               <Img src={next} />

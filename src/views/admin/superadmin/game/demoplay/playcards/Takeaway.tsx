@@ -8,6 +8,7 @@ import React from 'react';
 
 import bull from 'assets/img/screens/bullet.png';
 import right from 'assets/img/games/right.png';
+import nextBtn from 'assets/img/screens/next.png';
 const Takeway: React.FC<{
   formData: any;
   imageSrc: any;
@@ -57,7 +58,7 @@ const Takeway: React.FC<{
             </Box>
             <Box className='next-btn-box'>
                 <Img
-                  src={right}                 
+                  src={nextBtn}                 
                   onClick={()=>getData(data)}
                 />
               </Box>

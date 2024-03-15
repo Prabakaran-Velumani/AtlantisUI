@@ -110,6 +110,9 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const [isLanguage, setIsLanguage] = useState(false);
   const [select, setSelect] = useState(false);
   const [lanuages, setLanguages] = useState<any[]>(null);
+    // Afrith-modified-starts-08/Mar/24
+    const [characterName, setCharacterName] = useState('');
+    // Afrith-modified-ends-08/Mar/24
   const { id } = useParams();
   useEffect(() => {
     const fetch = async () => {
@@ -152,6 +155,13 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     }));
   };
 
+    // Afrith-modified-starts-08/Mar/24
+    // const setPlayerName = (value:any) => {
+    //   setCharacterName(value);
+    //   setProfileData((prev:any) => ({...prev, name:value}))
+    // };
+    // Afrith-modified-ends-08/Mar/24
+ 
   const innerBoxWidth = useBreakpointValue({
     base: '95%',
     lg: '95%',
@@ -226,7 +236,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
         backgroundImage={imageSrc}
         backgroundSize={'cover'}
         backgroundRepeat={'no-repeat'}
-        className="chapter_potrait"
+        className='CharacterScreen chapter_potrait'        
       >
         <Grid
           templateColumns="repeat(1, 1fr)"

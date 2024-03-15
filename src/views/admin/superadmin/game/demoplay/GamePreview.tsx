@@ -407,7 +407,8 @@ const GamePreview = () => {
         // ) : 
         (
           <ScoreContext.Provider value={{ profile, setProfile }}>
-            <Box id="container" onMouseMove={handleMouseMove}>
+            {/* <Box id="container" onMouseMove={handleMouseMove}> */}
+            <Box id="container" >
               {isHovered && (
                 <Icon
                   as={IoIosRefresh}
