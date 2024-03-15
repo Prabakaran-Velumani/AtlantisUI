@@ -90,7 +90,7 @@
 // }
 
 // export default PreviewEndOfStory
-import { Box, Flex, Text, Img } from '@chakra-ui/react';
+import { Box, Flex, Text, Img ,useBreakpointValue } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import React from 'react';
 import { updatePreviewData } from 'store/preview/previewSlice';
@@ -112,6 +112,13 @@ const PreviewEndOfStory: React.FC<{
     dispatch(updatePreviewData({ activeBlockSeq: 1 }));
     setEndOfQuest(false);
   };
+  const baseFontSize = 22;
+  const fontSize = useBreakpointValue({
+    base: `${baseFontSize}px`, // base font size for mobile
+    sm: `${baseFontSize * 1.2}px`, // font size for tablets
+    md: `${baseFontSize * 1.4}px`, // font size for small desktops
+    lg: `${baseFontSize * 1.6}px`, 
+  });
 
   return (
     <Flex className="end-of-quest" direction="column" align="center" position="relative">
@@ -131,12 +138,12 @@ const PreviewEndOfStory: React.FC<{
           alignItems="center"
         >
           
-          <Box className="thankyou-screen-box" >
-            <Img src={Replay} className="bg-Img" /></Box>
+          <Box className="end-screen" >
+            <Img src={Replay} className="bg-Img1" /></Box>
             {/* <Text  position={'relative'} fontFamily="AtlantisContent" textAlign="center" bottom={'390px'} color="white" fontSize="2xl" zIndex="999999">
               Do You Want to Play Again?
             </Text> */}
-            <Box  position={'absolute'} fontSize={['xl', '2xl', '3xl']} fontFamily="AtlantisContent" textAlign="center" color="white"  zIndex="999999"> <Text  mb="4">
+            <Box className='end-screen-text'  position={'absolute'} fontSize={fontSize} fontFamily="AtlantisContent" textAlign="center" color="white"  zIndex="999999"> <Text>
                   End of the current Quest.!
                 </Text>
                 <Text >

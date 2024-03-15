@@ -3444,6 +3444,14 @@ transform: translate(-167px, -84px);
   color: wheat;
   font-size: 50px;
 }
+.end-screen-text {
+  position: absolute; 
+  /* fontFamily: AtlantisContent; */ /* <-- This line has been commented out */
+  text-align: center;
+  color: white;
+  /* zIndex: 999999; */ /* <-- This line has been commented out */
+}
+
 
 .eoq-bg-img {
   position: absolute;
