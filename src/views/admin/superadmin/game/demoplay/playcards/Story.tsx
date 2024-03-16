@@ -507,10 +507,11 @@ useEffect(() => {
             maxH={'100%'}
             w={'100%'}
             h={'100vh'}
-            transform={`scale(1.5}) translateY(-10%) translateX(${
-              showNote ? -200 : 0
-            }px)`}
-            transition={'transform 0.9s ease-in-out'}
+            // transform={`scale(1.5}) translateY(-10%) translateX(${
+            //   showNote ? -100 : 0
+            // }px)`}
+            transform={`scale(1}) translateX(${showNote ? 100 : 0}px)`}
+            transition={'transform 0.6s ease-in-out'}
           />
           {selectedPlayer && (
             <Img
