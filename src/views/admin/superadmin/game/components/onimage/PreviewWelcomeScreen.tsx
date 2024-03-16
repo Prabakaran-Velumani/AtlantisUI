@@ -131,6 +131,7 @@ const PreviewWelcomeScreen: React.FC<{
               >
                 {formData?.gameTitle}
               </Text>
+              {((currentTab !== 3 && formData.gameIsShowGameDuration === 'true') || (currentTab === 3 )) &&
               <Text
                 className='welcomescreen-content'
               >
@@ -143,17 +144,23 @@ const PreviewWelcomeScreen: React.FC<{
                   </span>
                 </>
               </Text>
+}
           </Box>
+          
           <Box className="screen-preview-welcome-grid">
+          {((currentTab !== 3 && formData.gameIsShowStoryline === 'true') || (currentTab === 3)) &&
             <Box className="screen-preview-storyline screen-preview-grid-items">
               
               <Text className='welcomescreen-content'>{formData?.gameStoryLine}</Text>
             </Box>
-            {/*** Need to work */}
+            }
+            {((currentTab !== 3 && (formData.gameIsShowLearningOutcome === 'true' || formData.gameIsShowSkill === 'true'))|| (currentTab === 3)) &&
+            <>
             <Box className='screen-welcome-rewardswrapper'>
             <Img src={preloadedAssets.rew} alt="rew" className='screen-welcome-rewardsImg' />
             </Box>
             <Box className='screen-preview-earnings'>
+            {((currentTab !== 3 && formData.gameIsShowSkill === 'true') || (currentTab === 3 )) &&
              <Box className="screen-preview-grid-items ">
               <Img src={preloadedAssets?.back} className="screen-preview-welcome-slo-box"  />
                 <Text className='learnig-outcome-tit welcomescreen-content'> Skills</Text>
@@ -161,6 +168,8 @@ const PreviewWelcomeScreen: React.FC<{
                 <Skill authorArray={authorArray} preloadedAssets={preloadedAssets} findSkillName={findSkillName} />
               </Box>
             </Box>
+            }
+              {((currentTab !== 3 && formData.gameIsShowLearningOutcome === 'true') || (currentTab === 3)) &&
             <Box className="screen-preview-grid-items ">
               <Img src={preloadedAssets?.back} className="screen-preview-welcome-slo-box"  />
                 <Text className='learnig-outcome-tit welcomescreen-content'> Learning OutComes</Text>
@@ -168,18 +177,24 @@ const PreviewWelcomeScreen: React.FC<{
                 <LearningOutComes data={data} preloadedAssets={preloadedAssets} />
               </Box>
             </Box>
-            </Box>
-            {((currentTab !== 3 && formData.gameIsShowAdditionalWelcomeNote === 'true') || currentTab == 3 ) &&
+            }
+            </Box></>
+            }
+             {((currentTab !== 3 && (formData.gameIsShowAuhorName  === 'true' || formData.gameIsShowAdditionalWelcomeNote === 'true' )) || currentTab == 3 ) &&
             <Box className="screen-preview-author screen-preview-grid-items">
               <Text className="text-center">
-              <Text className="welcomescreen-content">Author</Text>
+              {((currentTab !== 3 && formData.gameIsShowAuhorName  === 'true') || currentTab == 3 ) &&
+              <>
+              <Text className="welcomescreen-content">Author</Text> 
               <Text className="screen-preview-text welcomescreen-content">{formData?.gameAuthorName}</Text>
+              </>
+              }
               {currentTab !== 3 && formData.gameIsShowAdditionalWelcomeNote === 'true' &&
                 <Text className="screen-preview-text welcomescreen-content welcome-additionaltext">{renderContent()}</Text>
               }
               </Text>
             </Box>
-          }
+            }
         </Box>
             <Box className='screen-preview-nxtbtn '><Img src={preloadedAssets.next} className='welcome-nxtbtn'/></Box>
           </Box>

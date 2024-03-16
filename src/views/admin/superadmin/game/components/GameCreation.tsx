@@ -4599,14 +4599,21 @@ return false;
                   />
                 ) : null}
 
-                {tab !== 1 && tab !== 2 ? (
+    
+                {tab == 3 && 
+                ( formData?.gameTitle ||
+                  formData?.gameStoryLine ||
+                  formData?.gameSkills ||
+                  formData?.gameLearningOutcome || 
+                  formData?.gameAuthorName ) &&
+                  (
                   <Button
                     bg="#11047a"
                     _hover={{ bg: '#190793' }}
                     color="#fff"
                     h={'46px'}
                     w={'128px'}
-                    display={tab === 7 || tab === 6 ? 'none' : 'block'}
+                    display={'block'}
                     mr={'17px'}
                     mt={'6px'}
                     ml={'11px'}
@@ -4614,7 +4621,39 @@ return false;
                   >
                     Preview
                   </Button>
-                ) : null}
+                )}
+
+              {tab === 4 && BlockItems?.length > 0 && (
+                  <Button
+                    bg="#11047a"
+                    _hover={{ bg: '#190793' }}
+                    color="#fff"
+                    h={'46px'}
+                    w={'128px'}
+                    mr={'17px'}
+                    mt={'6px'}
+                    ml={'11px'}
+                    onClick={handleEntirePrev}
+                  >
+                    Preview
+                  </Button>
+                ) }
+                {tab == 5 && (
+                <Button
+                    bg="#11047a"
+                    _hover={{ bg: '#190793' }}
+                    color="#fff"
+                    h={'46px'}
+                    w={'128px'}
+                    mr={'17px'}
+                    mt={'6px'}
+                    ml={'11px'}
+                    onClick={handleEntirePrev}
+                  >
+                    Preview
+                  </Button>
+                )}
+
                 {tab === 5  ? (
                   <Button
                     bg="#11047a"
