@@ -103,6 +103,7 @@ const AddScores: React.FC<{
   setCompKeyCount?: any;
   handleCompletionScreen?: any;
   handlecompletion?: any;
+  handleEnables: any;
 }> = ({
   languages,
   setShowFunction,
@@ -146,6 +147,7 @@ const AddScores: React.FC<{
   setCompKeyCount,
   handleCompletionScreen,
   handlecompletion,
+  handleEnables
 }) => {
   /**********navin */
   // brindha start
@@ -1044,6 +1046,7 @@ const AddScores: React.FC<{
                 setFormData={setFormData}
                 formData={formData}
                 handleChange={handleChange}
+                handleEnables={handleEnables}
               />
             )}
           </Box>
@@ -1287,7 +1290,6 @@ const AddScores: React.FC<{
                             </FormLabel>
                             <TextField
                               me="30px"
-                              // label=""
                               placeholder="eg. You can do better..."
                               id="gameMinimumScoreCongratsMessage"
                               name="gameMinimumScoreCongratsMessage"

@@ -3079,6 +3079,10 @@ transform: translate(-167px, -84px);
     visibility: visible;
     height: 8vh;
 }
+.screen-notebox3{
+  width: 30vw !important;
+  height: ;
+}
 
 }
 @media (orientation: portrait){
@@ -4834,4 +4838,73 @@ text-transform: capitalize;
   cursor: pointer;
   background-size: contain;
   height: 30px;
+}
+
+
+.screen-notebox1{
+  width: 100%;
+  height:100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: visible;
+  perspective: 1000px;
+}
+
+.screen-notebox2{
+  color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height:100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.screen-notebox3{
+  position: absolute;
+  /* top: 200px;
+  right: 0px;
+  bottom: 0;
+  z-index: 999; */
+  width: 40vw;
+  height: 50vh;
+  /* transform: translate(20vw, 25vh); */
+  animation: transformnote 2s ease-in-out;
+}
+@keyframes transformnote {
+  0% {
+    transform: scale(0) ;
+  }
+  /* 50%{
+    transform: scale(0.3) translate(-30vw, 85vh);
+  } */
+100%{
+  transform: scale(1) ;
+}
+}
+.screen-notebox4{
+  position: fixed;
+  width: 40%;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.screen-notebox5{
+
+}
+.screen-notebox6{
+
+}
+.screen-notebox7{
+
+}
+
+.screen-noteimage{
+  width: 100%;
+  height: 80vh;
+  
 }

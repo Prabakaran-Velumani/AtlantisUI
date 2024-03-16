@@ -11,7 +11,7 @@ import ReflectionContentScreen from './onimage/ReflectionScreen';
 import TyContentScreen from './onimage/TyContentScreen';
 import { getGameCreatorDemoData } from 'utils/game/gameService';
 import TypingEffect from '../demoplay/playcards/Typing';
-import { API_SERVER } from 'config/constant';
+import { API_SERVER, Notelength, Dialoglength} from 'config/constant';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { lazy } from 'react';
 import { motion } from 'framer-motion';
@@ -60,6 +60,8 @@ const ScreenPreview = () => {
   const [endOfQuest, setEndOfQuest] = useState<boolean>(false);
   const [currentPosition, setCurrentPosition] = useState(0);
   const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
+  const [Navigatenext, setNavigateNext] = useState<any>(false);
+  
   const reflectionQuestionsdefault = [
     'What were your biggest learnings?',
     'How can you apply these learnings back at work?',
@@ -116,6 +118,7 @@ const ScreenPreview = () => {
       }
       setData(currentBlock);
     }
+    console.log("activeBlockSeq",activeBlockSeq);
   }, [gameInfo, isDispatched, activeBlockSeq, currentQuest]);
 
   const fetchDataFromApi = async () => {
@@ -423,20 +426,21 @@ const ScreenPreview = () => {
     const url = ` /game/creator/demoplay/${id}`;
     window.open(url, '_blank');
   };
+console.log("data", data);
+const getDataSection = (data: any) => {
+  console.log('getData 1', data);
+  setCurrentPosition(0);
+  const content = data?.blockText || '';
+  const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
+  const newRemainingSentences = sentences.slice(currentPosition);
+ 
+  const concatenatedSentences = [];
+  let totalLength = 0;
 
-  const getData1 = (data: any) => {
-    const content = data?.blockText || '';
-    const sentences = content.split(
-      /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-    );
-    const newRemainingSentences = sentences.slice(currentPosition);
-
-    const concatenatedSentences = [];
-    let totalLength = 0;
-
-    for (let i = 0; i < newRemainingSentences.length; i++) {
-      const sentence = newRemainingSentences[i];
-      if (totalLength + sentence.length <= 100) {
+  for (let i = 0; i < newRemainingSentences.length; i++) {
+    const sentence = newRemainingSentences[i];
+    if (data && type === 'Note') {
+      if (totalLength + sentence.length <= Notelength) {
         concatenatedSentences.push(sentence);
         totalLength += sentence.length;
       } else {
@@ -444,24 +448,46 @@ const ScreenPreview = () => {
         break;
       }
     }
-    setRemainingSentences(concatenatedSentences);
-    if (newRemainingSentences.length >= 1) {
-      setCurrentPosition(currentPosition + concatenatedSentences.length);
-    } else {
-      if (data && type === 'Note') {
-        getData(data);
+    if (data && type === 'Dialog') {
+      if (totalLength + sentence.length <= Dialoglength) {
+        concatenatedSentences.push(sentence);
+        totalLength += sentence.length;
+      } else {
+        if(totalLength + sentence.length >= Dialoglength)
+        {
+          break;
+        }
+        concatenatedSentences.push(sentence);
+        break;
       }
     }
-  };
+  }
+  setRemainingSentences(concatenatedSentences);
+
+  if (newRemainingSentences.length >= 1) {
+    setCurrentPosition(currentPosition + concatenatedSentences.length);
+    setNavigateNext(false);
+  } else {
+      setCurrentPosition(0);
+      setNavigateNext(true);
+  }
+};
+
+useEffect(() => {
+  if(Navigatenext === true)
+  {
+    getData(data);
+  }
+}, [Navigatenext]);
 
   useEffect(() => {
     if (data && type === 'Note') {
-      getData1(data);
+      getDataSection(data);
     }
   }, [data]);
   return (
     <Box id="container" ref={previewScreenRef}>
-      <Suspense fallback={<h1>Component1 are loading please wait...</h1>}>
+      <Suspense fallback={<h1>Loading please wait...</h1>}>
         {contentReady && (
           <motion.div
             initial={{ opacity: 0, background: '#000' }}
@@ -501,7 +527,7 @@ const ScreenPreview = () => {
                         position={'relative'}
                         overflow={'visible'}
                         style={{ perspective: '1000px' }}
-                        className="Main-Content"
+                        // className="Main-Content"
                       >
                         <Box
                           backgroundImage={preloadedAssets.backgroundImage}
@@ -528,52 +554,31 @@ const ScreenPreview = () => {
                     )}
                     {currentTab === 4 && data && type === 'Note' && (
                       <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
+                        className="screen-notebox1"
                       >
                         <Box
-                          color={'rgba(0, 0, 0, 0.5)'}
                           backgroundImage={preloadedAssets?.backgroundImage}
-                          w={'100%'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          transform={`scale(${first ? 1 : 0.9}) translateY(${
-                            first ? 0 : -0
-                          }%) translateX(${first ? 0 : -10}%)`}
-                          transition={'transform 0.9s ease-in-out'}
+                          className="screen-notebox2"
                         >
                           <Box
-                            position={'fixed'}
-                            top={'200px'}
-                            right={'0px'}
-                            bottom={0}
-                            zIndex={999}
-                            w={'300px'}
+                            // position={'fixed'}
+                            // top={'200px'}
+                            // right={'0px'}
+                            // bottom={0}
+                            // zIndex={999}
+                            // w={'300px'}
+                            className="screen-notebox3"
                           >
-                            <Box
-                              style={{
-                                transform: `scale(${showNote ? 0.2 : 1})`,
-                                transition: 'transform 0.5s ease-in-out',
-                              }}
-                              position={'fixed'}
-                              w={'40%'}
-                              h={'60vh'}
-                              display={'flex'}
-                              flexDirection={'column'}
-                              justifyContent={'center'}
-                              alignItems={'center'}
-                            >
+                            {/* <Box
+                              // style={{
+                              //   transform: `scale(${showNote ? 0.2 : 1})`,
+                              //   transition: 'transform 0.5s ease-in-out',
+                              // }}
+                              className="screen-notebox4"
+                            > */}
                               <Img
-                                w={'100%'}
-                                h={'80vh'}
                                 src={preloadedAssets?.note}
+                                className='screen-noteimage'
                               />
                               <Box
                                 position={'fixed'}
@@ -592,6 +597,7 @@ const ScreenPreview = () => {
                                   fontFamily: 'AtlantisContent',
                                   lineHeight: 1,
                                 }}
+                                className="screen-notebox5"
                               >
                                 <Box
                                   w={'100%'}
@@ -601,6 +607,7 @@ const ScreenPreview = () => {
                                   alignItems={'center'}
                                   justifyContent={'center'}
                                   mt={'20px'}
+                                  className="screen-notebox6"
                                 >
                                   {data?.blockText}
                                 </Box>
@@ -611,6 +618,7 @@ const ScreenPreview = () => {
                                   display={'flex'}
                                   justifyContent={'center'}
                                   cursor={'pointer'}
+                                  className="screen-notebox7"
                                 >
                                   <Img
                                     src={preloadedAssets.next}
@@ -619,7 +627,7 @@ const ScreenPreview = () => {
                                   />
                                 </Box>
                               </Box>
-                            </Box>
+                            {/* </Box> */}
                           </Box>
                         </Box>
                       </Box>

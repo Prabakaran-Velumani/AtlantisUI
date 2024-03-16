@@ -1492,13 +1492,10 @@ useEffect(()=>{
      // Completion Screen Validation
 const complidatalength = Object.keys(compliData).length;
 const getcompliData = Object.keys(compliData);
-console.log('getcompliData',getcompliData);
-
 if (complidatalength !== 0) {
   for (let i = 0; i < complidatalength; i++) {
     const compkey = getcompliData[i] as unknown as keyof typeof compliData; 
     const compkeyNumber = Number(compkey);
-    console.log('formDatagameThankYouMessage123Key for entry', i, ':', compkey);
     const getgameTotalScore = compliData[compkey].gameTotalScore;
     if (Array.isArray(getgameTotalScore) && getgameTotalScore.length > 0) {
       const maxScore = getgameTotalScore[0].maxScore;
@@ -1510,6 +1507,7 @@ if (complidatalength !== 0) {
           isClosable: true,
         });
         setCompKeyCount(compkeyNumber);
+        setCurrentTab(0);
         return false
       }
     }
@@ -1529,6 +1527,7 @@ if (complidatalength !== 0) {
           },
         }));
         setCompKeyCount(compkeyNumber);
+        setCurrentTab(0);
         return false;
       }
 
@@ -1550,10 +1549,9 @@ if (complidatalength !== 0) {
           isClosable: true,
         });
         setCompKeyCount(compkeyNumber);
+        setCurrentTab(0);
         return false
-
       }
-
     }
     if (compliData[compkey]?.gameIsSetBadge === 'true') {
       if (!compliData[compkey]?.gameBadge) {
@@ -1564,6 +1562,7 @@ if (complidatalength !== 0) {
           isClosable: true,
         });
         setCompKeyCount(compkeyNumber);
+        setCurrentTab(0);
         return false
 
       }
@@ -1575,6 +1574,7 @@ if (complidatalength !== 0) {
           isClosable: true,
         });
         setCompKeyCount(compkeyNumber);
+        setCurrentTab(0);
         return false
 
       }
@@ -1587,6 +1587,7 @@ if (complidatalength !== 0) {
             isClosable: true,
           });
           setCompKeyCount(compkeyNumber);
+          setCurrentTab(0);
           return false
         }
 
@@ -1599,6 +1600,7 @@ if (complidatalength !== 0) {
           isClosable: true,
         });
         setCompKeyCount(compkeyNumber);
+        setCurrentTab(0);
         return false
       }
       if (compliData[compkey]?.gameIsSetCongratsSingleMessage === 'true') {
@@ -1611,6 +1613,7 @@ if (complidatalength !== 0) {
             isClosable: true,
           });
           setCompKeyCount(compkeyNumber);
+          setCurrentTab(0);
           return false
 
         }
@@ -1620,12 +1623,13 @@ if (complidatalength !== 0) {
         if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
           if (!compliData[compkey]?.gameMinimumScoreCongratsMessage) {
             toast({
-              title: 'Please Enter Minium Score Congrats Message.',
+              title: 'Please Enter Minimum Score Congrats Message.',
               status: 'error',
               duration: 3000,
               isClosable: true,
             });
             setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
             return false
 
           }
@@ -1637,21 +1641,23 @@ if (complidatalength !== 0) {
               isClosable: true,
             });
             setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
             return false
 
           }
         }
+        
         if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
           if (!compliData[compkey]?.gameLessthanDistinctionScoreCongratsMessage) {
             toast({
-              title: 'Please Enter Distinction  Score.',
+              title: 'Please Enter For Above Distinction Score Message.!',
               status: 'error',
               duration: 3000,
               isClosable: true,
             });
             setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
             return false
-
           }
           if (!compliData[compkey]?.gameAboveDistinctionScoreCongratsMessage) {
             toast({
@@ -1661,17 +1667,12 @@ if (complidatalength !== 0) {
               isClosable: true,
             });
             setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
             return false
-
           }
-
         }
-
-
       }
     }
-    // setCurrentTab(compkey);
-    // setCurrentTab(CompKeyCount);
     setCompKeyCount(compkeyNumber);
     setCurrentTab(0);
     setCompliData((prevInput: any) => ({
@@ -1821,6 +1822,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
           duration: 3000,
           isClosable: true,
         });
+        setCurrentTab(5);
         return false;
       }
       if (
@@ -1849,8 +1851,6 @@ if (formData.gameIsFeedbackMandatory === "true") {
       return console.log('updateBackground error :' + result?.err);
     }
     if (tab === 5 && result.status === 'Success') {
-      // alert("comnex"+tab);
-      // setOpenQuest(true);
       toast({
         title: 'All Screens are Updated',
         status: 'success',
@@ -1861,9 +1861,8 @@ if (formData.gameIsFeedbackMandatory === "true") {
 
       const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
       setFormData(formDataWithoutLastTab);
-      dispatch(updatePreviewData({isDispatched: true}));
-      // setOpenQuest(true);
       const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
+      console.log('idddddddd',MaxBlockQuestNumber)
       if (result.status === 'Success') {
         const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
         console.log('Max QuestNo:', maxQuestNo);
@@ -1878,7 +1877,6 @@ if (formData.gameIsFeedbackMandatory === "true") {
       }
     }
   };
-  
 
   const commonNextFunction = async () => {
     if (tab === 1 && !formData.gameBackgroundId) {
@@ -2469,14 +2467,38 @@ return false;
     });
   };
  
+  const handleEnables =(e:any) =>{
+    const { name,  checked } = e.target;
+    
+    const feedbackselectedOptions = [
+      formData.gameContent,
+      formData.gameRecommendation,
+      formData.gameRelevance,
+      formData.gameGamification,
+      formData.gameBehaviour,
+      formData.gameOthers,
+    ];
+    const countfbSelectedOptions = feedbackselectedOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
+    console.log('countfbSelectedOptions',countfbSelectedOptions);
+   
+    if (checked && countfbSelectedOptions >= 4) {
+         return false;
+    } 
+    if(name === 'gameContent' ||
+   name === 'gameRelevance' ||
+   name === 'gameBehaviour' ||
+   name === 'gameOthers' ||
+   name === 'gameGamification' ||
+   name === 'gameRecommendation' ) 
+   {
+    setFormData((prev) => ({ ...prev, [name]: String(checked) }));
+   }
+  }
   const handleChange = (e: any) => {
     const inputValue = e.target.value;
     const { name, value, checked } = e.target;
     if (name === 'gameDuration') {
-      // let duration =
-      //   parseInt(value.split(':')[0], 10) * 60 +
-      //   parseInt(value.split(':')[1], 10);
-      // setFormData((prev) => ({ ...prev, gameDuration: String(duration) }));
+      //No code here
     } else if (
       name === 'gameIsSetMinPassScore' ||
       name === 'gameIsSetDistinctionScore' ||
@@ -2518,31 +2540,21 @@ return false;
         : setFormData((prev) => ({ ...prev, [name]: 0 }));
     } else if (name === 'gameDownloadedAsScorm') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 1 : 0 }));
-      //console.log('gameDownloadedAsScorm', formData.gameDownloadedAsScorm);
     } else if (name === 'gameDefaultFeedbackForm') {
       setFormData((prev) => ({
         ...prev,
         [name]: checked ? feedBackForm.Yes : feedBackForm.No,
       }));
-      //console.log('gameDefaultFeedbackForm', formData.gameDefaultFeedbackForm);
     } else if (name === 'gameReplayAllowed') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      //console.log('gameReplayAllowed', formData.gameReplayAllowed);
     } else if (name === 'gameLeaderboardAllowed') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      //console.log('gameLeaderboardAllowed', formData.gameLeaderboardAllowed);
     } else if (name === 'gameReflectionpageAllowed') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      // console.log(
-      //   'gameReflectionpageAllowed',
-      //   formData.gameReflectionpageAllowed,
-      // );
     } else if (name === 'gameFeedbackQuestion') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      //console.log('gameFeedbackQuestion', formData.gameFeedbackQuestion);
     } else if (name === 'gameShuffle') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      //console.log('gameShuffle', formData.gameShuffle);
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -4219,7 +4231,7 @@ return false;
                 ) : tab === 5 ? (
                   <>
                     <AddScores
-                    languages={languages}
+                      languages={languages}
                       defaultskills={defaultskills}
                       setShowFunction={setShowFunction}
                       showBadge={showBadge}
@@ -4258,6 +4270,7 @@ return false;
                       setCompliData={setCompliData}
                       handleCompletionScreen={handleCompletionScreen}
                       handlecompletion={handlecompletion}
+                      handleEnables={handleEnables}
                     />
                   </>
                 ) : tab === 6 ? (

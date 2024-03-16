@@ -10,3 +10,6 @@ if (process.env.REACT_APP_BACKEND_SERVER) {
 }
 
 export const API_SERVER = BACKEND_SERVER;
+
+export const Notelength = 150;
+export const Dialoglength = 300;

@@ -169,7 +169,7 @@ const PreviewWelcomeScreen: React.FC<{
               </Box>
             </Box>
             </Box>
-            
+            {((currentTab !== 3 && formData.gameIsShowAdditionalWelcomeNote === 'true') || currentTab == 3 ) &&
             <Box className="screen-preview-author screen-preview-grid-items">
               <Text className="text-center">
               <Text className="welcomescreen-content">Author</Text>
@@ -179,6 +179,7 @@ const PreviewWelcomeScreen: React.FC<{
               }
               </Text>
             </Box>
+          }
         </Box>
             <Box className='screen-preview-nxtbtn '><Img src={preloadedAssets.next} className='welcome-nxtbtn'/></Box>
           </Box>
