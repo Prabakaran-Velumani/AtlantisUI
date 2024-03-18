@@ -156,7 +156,7 @@ const IndustryCreation: React.FC = () => {
 
   return (
     <>
-      <Box mb={{ base: '135px', md:'100px', xl: '100px' }}></Box>
+      <Box mb={{ base: '75px', md:'100px', xl: '100px' }}></Box>
       {/* <Card mb={{ base: '0px', xl: '20px' }} boxShadow={'1px 1px 12px #2e292914'} p={'10px 0'}>             */}
         <IndustryDataTable data={transformedData} />
       {/* </Card> */}
