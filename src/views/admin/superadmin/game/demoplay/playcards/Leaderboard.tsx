@@ -11,13 +11,77 @@ import Close from 'assets/img/games/close.png';
 import Arrow from 'assets/img/games/arrow.png';
 import { useContext } from 'react';
 import { ProfileContext } from '../EntirePreview';
+import { ScoreContext } from '../GamePreview';
+
+
+
+// Afrith-modified-starts-07/Mar/24
+
+const names = [
+  { name: 'John', score: 300, allTimeScore: 1000 },
+  { name: 'Jane', score: 400, allTimeScore: 800 },
+  { name: 'Michael', score: 300, allTimeScore: 700 },
+  { name: 'Emily', score: 200, allTimeScore: 600 },
+  { name: 'David', score: 100, allTimeScore: 500 },
+  { name: 'Sarah', score: 400, allTimeScore: 900 },
+  { name: 'Daniel', score: 300, allTimeScore: 500 },
+  { name: 'Jessica', score: 200, allTimeScore: 1000 },
+  { name: 'Christopher', score: 100, allTimeScore: 1000 },
+  { name: 'Amanda', score: 700, allTimeScore: 900 },
+  { name: 'Matthew', score: 300, allTimeScore: 1000 },
+  { name: 'Ashley', score: 500, allTimeScore: 900 },
+  { name: 'Andrew', score: 500, allTimeScore: 700 },
+  { name: 'Jennifer', score: 500, allTimeScore: 600 },
+  { name: 'James', score: 400, allTimeScore: 500 },
+  { name: 'Elizabeth', score: 300, allTimeScore: 900 },
+  { name: 'Joseph', score: 200, allTimeScore: 900 },
+  { name: 'Lauren', score: 100, allTimeScore: 900 },
+  { name: 'Joshua', score: 500, allTimeScore: 700 },
+  { name: 'Megan', score: 500, allTimeScore: 800 },
+  { name: 'Robert', score: 100, allTimeScore: 900 },
+  { name: 'Kayla', score: 100, allTimeScore: 800 },
+  { name: 'William', score: 200, allTimeScore: 700 },
+  { name: 'Samantha', score: 800, allTimeScore: 900 },
+  { name: 'Daniel', score: 700, allTimeScore: 900 },
+  { name: 'Emily', score: 500, allTimeScore: 800 },
+  { name: 'Anthony', score: 400, allTimeScore: 700 },
+  { name: 'Nicole', score: 100, allTimeScore: 1000 },
+  { name: 'Brandon', score: 200, allTimeScore: 900 },
+  { name: 'Amber', score: 300, allTimeScore: 1000 },
+  { name: 'Ryan', score: 800, allTimeScore: 900 },
+  { name: 'Rachel', score: 800, allTimeScore: 1000 },
+  { name: 'Tyler', score: 100, allTimeScore: 900 },
+  { name: 'Brittany', score: 400, allTimeScore: 800 },
+  { name: 'Alexander', score: 300, allTimeScore: 1000 },
+  { name: 'Stephanie', score: 200, allTimeScore: 600 },
+  { name: 'Nicholas', score: 200, allTimeScore: 800 },
+  { name: 'Heather', score: 100, allTimeScore: 600 },
+  { name: 'Jacob', score: 100, allTimeScore: 600 },
+  { name: 'Michelle', score: 400, allTimeScore: 700 },
+  { name: 'Zachary', score: 200, allTimeScore: 600 },
+  { name: 'Tiffany', score: 500, allTimeScore: 600 },
+  { name: 'Kevin', score: 500, allTimeScore: 600 },
+  { name: 'Melissa', score: 200, allTimeScore: 600 },
+  { name: 'Steven', score: 400, allTimeScore: 1000 },
+  { name: 'Rebecca', score: 200, allTimeScore: 800 },
+  { name: 'Justin', score: 400, allTimeScore: 1000 },
+  { name: 'Chelsea', score: 100, allTimeScore: 700 },
+  { name: 'Brian', score: 400, allTimeScore: 600 },
+  { name: 'Katherine', score: 400, allTimeScore: 500 }
+]
+
+const usersWithAllTimeScore = names.sort(() => Math.random() - 0.5).slice(0, 9);
+
+// Afrith-modified-ends-07/Mar/24
+
+
 const LeaderBoard: React.FC<{
-  formData: any;
-  imageSrc: any;
-  getData: any;
-  data: any;
-  homeLeaderBoard: any;
-  setHomeLeaderBoard: any;
+  formData?: any;
+  imageSrc?: any;
+  getData?: any;
+  data?: any;
+  homeLeaderBoard?: any;
+  setHomeLeaderBoard?: any;
   setCurrentScreenId?:any;
 }> = ({
   imageSrc,
@@ -29,90 +93,37 @@ const LeaderBoard: React.FC<{
   setHomeLeaderBoard,
 }) => {
   const content = [1, 2, 3, 4, 5, 6];
-  const names = [
-    'John',
-    'Jane',
-    'Michael',
-    'Emily',
-    'David',
-    'Sarah',
-    'Daniel',
-    'Jessica',
-    'Christopher',
-    'Amanda',
-    'Matthew',
-    'Ashley',
-    'Andrew',
-    'Jennifer',
-    'James',
-    'Elizabeth',
-    'Joseph',
-    'Lauren',
-    'Joshua',
-    'Megan',
-    'Robert',
-    'Kayla',
-    'William',
-    'Samantha',
-    'Daniel',
-    'Emily',
-    'Anthony',
-    'Nicole',
-    'Brandon',
-    'Amber',
-    'Ryan',
-    'Rachel',
-    'Tyler',
-    'Brittany',
-    'Alexander',
-    'Stephanie',
-    'Nicholas',
-    'Heather',
-    'Jacob',
-    'Michelle',
-    'Zachary',
-    'Tiffany',
-    'Kevin',
-    'Melissa',
-    'Steven',
-    'Rebecca',
-    'Justin',
-    'Chelsea',
-    'Brian',
-    'Katherine',
-  ];
+
   const playerInfo = useContext(ProfileContext);
-  const namesWithScores = names.map((name) => ({
-    name,
-    score: Math.floor(Math.random() * 101) * 10,
-  }));
-  // Generate random scores for each name (0-100)
 
-  const shuffledNamesWithScores = namesWithScores.sort(
-    () => Math.random() - 0.5,
-  );
-  // Shuffle the array of objects
-
-  const selectedNamesWithScores = shuffledNamesWithScores.slice(0, 10);
-  // Select the first 10 elements
-
-  const sortedSelectedNamesWithScores = selectedNamesWithScores.sort(
-    (a, b) => b.score - a.score,
-  );
-  // Sort the selected names based on score (descending order)
-
-  const usersWithAllTimeScore = sortedSelectedNamesWithScores.map((user) => {
-    const allTimeScore =
-      user.score + Math.floor(Math.random() * (2001 - user.score) * 10);
-    // Generate a random allTimeScore between the user's current score and 2000
-    return { ...user, allTimeScore };
-  });
-
-  const randomPosition = Math.floor(Math.random() * 10);
-  usersWithAllTimeScore[randomPosition] = {
-    ...usersWithAllTimeScore[randomPosition],
-    name: playerInfo.name,
-  };
+    ///Afrith-modified-starts-09/Mar/24
+    const profileInfo = useContext(ScoreContext);
+    console.log('profileInfoLB--',profileInfo)
+    const mergedUsersPlayers = [playerInfo,...usersWithAllTimeScore];
+  
+    ///Sorted Using Score-starts for score position
+    const sortedUsingScore = [...mergedUsersPlayers].sort((a, b) => b.score - a.score);
+    console.log('soretdUsingScoreLB--',sortedUsingScore)
+    ///Sorted Using Score-ends for score position
+  
+    ///Using unShift-starts - AllTimeScore
+    const beforeSorting = [...mergedUsersPlayers].sort((a, b) => b.allTimeScore - a.allTimeScore);
+    const sortedUsers = [...mergedUsersPlayers].sort((a, b) => b.allTimeScore - a.allTimeScore);
+    const playerIndex = sortedUsers.findIndex(x => x.name === playerInfo.name);
+    console.log('playerIndexLB--',playerIndex)
+    if (playerIndex !== -1) {
+      // Remove it from its current position
+      const unShiftedPlayer = sortedUsers.splice(playerIndex, 1)[0];
+      console.log('unShiftedPlayerLB--',unShiftedPlayer)
+      // Add it to the beginning of the array
+      sortedUsers.unshift(unShiftedPlayer);
+    }
+    ///Using unShift-ends - AllTimeScore
+  
+    console.log('userWithAllTimeScoreLB--',usersWithAllTimeScore)
+    console.log('abc--',mergedUsersPlayers)
+    console.log('sortedUsersLB--',sortedUsers)
+    ///Afrith-modified-ends-09/Mar/24
 
   const handleHome = () =>{
     setHomeLeaderBoard(false);
@@ -123,22 +134,11 @@ const LeaderBoard: React.FC<{
 
   return (
     <>
-      {imageSrc && (
-        <Box className="takeaway-screen">
-          <Box className="takeaway-screen-box">
-            <Img src={imageSrc} className="bg-lead" />
-            <Box
-              className="content-box"
-              width={'633px !important'}
-              overflowY={'scroll'}
-              position={'absolute'}
-              display={'flex'}
-              flexDirection={'column'}
-              justifyContent={'space-between'}
-            >
-              <Box>
-                <Box
-                  className="content-lead"
+      {imageSrc && (       
+          <Box className="Leaderboard-screen">
+            <Img src={imageSrc} className="leaderboard-img" />
+            <Box className="content-box">
+                <Box className="table-heading"
                   fontFamily={'AtlantisText'}
                   // color={'#D9C7A2'}
                   display={'flex'}
@@ -150,7 +150,7 @@ const LeaderBoard: React.FC<{
                     justifyContent={'center'}
                     alignItems={'center'}
                   >
-                    <Text color={'#D9C7A2'} fontSize={'x-large'}>
+                    <Text color={'#D9C7A2'}>
                       Name
                     </Text>
                   </Box>
@@ -162,9 +162,11 @@ const LeaderBoard: React.FC<{
                     position={'relative'}
                   />
                   <Box w={'200px'} h={'50px'}>
+                    {/* Afrith-modified-starts-07/Mar/24 */}
                     <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                      <Text color={'#D9C7A2'}>Monthly</Text>
+                      <Text color={'#D9C7A2'}>Daily</Text>
                     </Box>
+                    {/* Afrith-modified-ends-07/Mar/24 */}
                     <Box
                       w={'100%'}
                       display={'flex'}
@@ -203,79 +205,72 @@ const LeaderBoard: React.FC<{
                     </Box>
                   </Box>
                 </Box>
-                {/* {content && content.map((it: any, ind: number) => ( */}
-                {usersWithAllTimeScore &&
-                  usersWithAllTimeScore.map((item: any, index: number) => (
-                    <Box
-                      className="content-lead"
-                      fontFamily={'AtlantisText'}
-                      translateX={'30px'}
-                      // color={'#D9C7A2'}
-                      key={index}
-                      _hover={{
-                        filter: 'grayscale(50%)',
-                        transform: 'scale(1.02)',
-                        transition: 'transform 0.3s ease-in-out',
-                        opacity: '0.8',
-                      }}
-                    >
-                      <>
-                        <Img
-                          src={Entry}
-                          className="dot-img"
-                          w={'95%'}
-                          h={'50px'}
-                          ml={'25px'}
-                          position={'relative'}
-                          _hover={{ filter: 'grayscale(50%)' }}
-                        />
-                        <Box
-                          position={'absolute'}
-                          left={'25px'}
-                          w={'90%'}
-                          ml={'10px'}
-                          display={'flex'}
-                          justifyContent={'space-between'}
-                          _hover={{ filter: 'grayscale(50%)' }}
-                        >
-                          <Box w={'30%'}>
-                            <Text
-                              textAlign={'center'}
-                              fontSize={'x-large'}
-                              color={'#D9C7A2'}
+                <Box>
+                  {/* {content && content.map((it: any, ind: number) => ( */}
+                  {sortedUsers &&
+                    // usersWithAllTimeScore.map((item: any, index: number) => (
+                      sortedUsers.map((item: any, index: number) => (
+                      <Box
+                        className="content-lead"                       
+                        key={index}
+                        _hover={{
+                          filter: 'grayscale(50%)',
+                          transform: 'scale(1.02)',
+                          transition: 'transform 0.3s ease-in-out',
+                          opacity: '0.8',
+                        }}
+                      >
+                        <>
+                          <Img
+                            src={Entry}
+                            className="list-pad"                           
+                            _hover={{ filter: 'grayscale(50%)' }}
+                          />
+                          <Box className='list-wrapper'                           
+                            _hover={{ filter: 'grayscale(50%)' }}
+                          >
+                            <Box w={'30%'}>
+                              <Text
+                                textAlign={'center'}                               
+                                color={'#D9C7A2'}
+                              >
+                                {item.name ? item.name : 'Roman'}
+                              </Text>
+                            </Box>
+                            <Box
+                              w={'30%'}
+                              display={'flex'}
+                              justifyContent={'space-between'}
                             >
-                              {item.name}
-                            </Text>
+                              <Text textAlign={'center'} color={'#D9C7A2'}>
+                                {/* Afrith-modified-starts-09/Mar/24 */}
+                                {sortedUsingScore ? sortedUsingScore.indexOf(item) + 1 : 0}
+                                {/* Afrith-modified-ends-09/Mar/24 */}
+                              </Text>
+                              <Text textAlign={'center'} color={'#D9C7A2'}>
+                                {item.score ? item.score : 0}
+                              </Text>
+                            </Box>
+                            <Box
+                              w={'30%'}
+                              display={'flex'}
+                              justifyContent={'space-between'}
+                            >
+                              <Text textAlign={'center'} color={'#D9C7A2'}>
+                                {/* Afrith-modified-starts-09/Mar/24 */}
+                                {item.name === playerInfo?.name ? beforeSorting.indexOf(beforeSorting.find(x => x.name === playerInfo?.name)) + 1 : beforeSorting ? beforeSorting.indexOf(item) + 1  : 0}
+                                {/* Afrith-modified-ends-09/Mar/24 */}
+                                {/* {index + 1} */}
+                              </Text>
+                              <Text textAlign={'center'} color={'#D9C7A2'}>
+                                {item.allTimeScore ? item.allTimeScore : 0}
+                              </Text>
+                            </Box>
                           </Box>
-                          <Box
-                            w={'30%'}
-                            display={'flex'}
-                            justifyContent={'space-between'}
-                          >
-                            <Text textAlign={'center'} color={'#D9C7A2'}>
-                              {index + 1}
-                            </Text>
-                            <Text textAlign={'center'} color={'#D9C7A2'}>
-                              {item.score}
-                            </Text>
-                          </Box>
-                          <Box
-                            w={'30%'}
-                            display={'flex'}
-                            justifyContent={'space-between'}
-                          >
-                            <Text textAlign={'center'} color={'#D9C7A2'}>
-                              {index + 1}
-                            </Text>
-                            <Text textAlign={'center'} color={'#D9C7A2'}>
-                              {item.allTimeScore}
-                            </Text>
-                          </Box>
-                        </Box>
-                      </>
-                    </Box>
-                  ))}
-              </Box>
+                        </>
+                      </Box>
+                    ))}
+                </Box>                
               {/* <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
                 <Img
                   src={right}
@@ -286,28 +281,22 @@ const LeaderBoard: React.FC<{
                 />
               </Box> */}
             </Box>
-            <Box
-              w={'100%'}
-              position={'absolute'}
-              display={'flex'}
-              justifyContent={'center'}
-              top={'130px'}
-            >
-              <Box
-                w={'550px'}
-                display={'flex'}
-                justifyContent={'space-between'}
-                position={'relative'}
-              >
-                <Box>
+            <Box className='top-bar'>
+              <Box className='list-wrapper'
+                // w={'550px'}
+                // display={'flex'}
+                // justifyContent={'space-between'}
+                // position={'relative'}
+              >                
+                <Box className='heading-box'>
                   <Img
                     src={Label}
-                    className="dot-img"
+                    className="heading-box-img"
                     w={'200px'}
                     h={'60px'}
                     position={'relative'}
                   />{' '}
-                  <Box
+                  <Box className='heading-box-content'
                     top={'0'}
                     fontFamily={'AtlantisText'}
                     // color={'#D9C7A2'}
@@ -318,7 +307,9 @@ const LeaderBoard: React.FC<{
                     width={'200px'}
                     mt={'3px'}
                   >
-                    <Text>Your Region</Text>
+                     {/* Afrith-modified-starts-07/Mar/24 */}
+                     <Text>Department</Text>
+                    {/* Afrith-modifed-ends-07/Mar/24 */}
                     <Img
                       src={Arrow}
                       className="dot-img"
@@ -330,15 +321,15 @@ const LeaderBoard: React.FC<{
                     />{' '}
                   </Box>
                 </Box>
-                <Box>
+                <Box className='heading-box'>
                   <Img
                     src={Label}
-                    className="dot-img"
+                    className="heading-box-img"
                     w={'200px'}
                     h={'60px'}
                     position={'relative'}
                   />{' '}
-                  <Box
+                  <Box className='heading-box-content'
                     top={'0'}
                     fontFamily={'AtlantisText'}
                     // color={'#D9C7A2'}
@@ -349,7 +340,9 @@ const LeaderBoard: React.FC<{
                     width={'200px'}
                     mt={'3px'}
                   >
-                    <Text>Your Region</Text>
+                    {/* Afrith-modified-starts-07/Mar/24 */}
+                    <Text>Overall</Text>
+                    {/* Afrith-modified-ends-07/Mar/24 */}
                     <Img
                       src={Arrow}
                       className="dot-img"
@@ -360,52 +353,15 @@ const LeaderBoard: React.FC<{
                       position={'relative'}
                     />{' '}
                   </Box>
-                </Box>
-                <Box>
-                  <Img
-                    src={Label}
-                    className="dot-img"
-                    w={'200px'}
-                    h={'60px'}
-                    position={'relative'}
-                  />{' '}
-                  <Box
-                    top={'0'}
-                    fontFamily={'AtlantisText'}
-                    // color={'#D9C7A2'}
-                    fontSize={'x-large'}
-                    position={'absolute'}
-                    display={'flex'}
-                    justifyContent={'center'}
-                    width={'200px'}
-                    mt={'3px'}
-                  >
-                    <Text>Your Region</Text>
-                    <Img
-                      src={Arrow}
-                      className="dot-img"
-                      mt={'5px'}
-                      ml={'3px'}
-                      w={'30px'}
-                      h={'30px'}
-                      position={'relative'}
-                    />{' '}
-                  </Box>
-                </Box>
-                <Img
-                  src={Close}
-                  w={'50px'}
-                  h={'50px'}
-                  position={'absolute'}
-                  top={'-55px'}
-                  right={'-40px'}
-                  cursor={'pointer'}
-                  onClick={() =>homeLeaderBoard ? handleHome() : getData(data)}
-                />
+                </Box>                
               </Box>
-            </Box>
-          </Box>
-        </Box>
+            </Box>  
+            <Img
+              src={Close}                   
+              className='close-btn'
+              onClick={() =>homeLeaderBoard ? handleHome() : getData(data)}
+            />          
+          </Box>      
       )}
     </>
   );

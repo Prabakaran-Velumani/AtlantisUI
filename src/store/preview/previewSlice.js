@@ -2,7 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
     gameId: null,
-    currentTab: 1,
+    currentTab: 3,
     currentSubTab: 0,
     currentQuest: 1,
     isDispatched: false,

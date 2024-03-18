@@ -504,8 +504,11 @@ const GameCreation = () => {
             gameId: parseInt(id),
         };
     
-        if (tab) {
+        if (tab > 2 && tab < 6) {
             previewData = { ...previewData, currentTab: tab };
+        }
+        else{
+            previewData = { ...previewData, currentTab: 3 };
         }
     
         if (currentTab) {
@@ -1059,6 +1062,7 @@ useEffect(()=>{
   const handleShareReview = () => {
     setEntire(false);
     setShare(true);
+    setPreview(false);
     onOpen();
   };
 	 const handleShowReview = () => {
@@ -2055,13 +2059,9 @@ if (formData.gameIsFeedbackMandatory === "true") {
                 }
               }
               if (key.type === 'Interaction') {
-                //console.log('keyinput', key.type + key.input);
                 var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                 var blockRoll = input[inputkey]?.blockRoll;
                 var interaction = input[inputkey]?.interaction;
-                console.log('QuestionsEmotion', QuestionsEmotion);
-                //console.log('blockRoll', blockRoll);
-                //console.log('interaction', interaction);
                 if (!interaction) {
                   setValidation({ ...validation, [`Interaction${key.input}`]: true })
                   toast({
@@ -2156,12 +2156,10 @@ if (formData.gameIsFeedbackMandatory === "true") {
                 }
               }
               var hasComplete = inputdataget.some((item: any) => {
-                // console.log("hasComplete", hasComplete);
                 return (
                   item &&(item.Notenavigate === 'Complete' || item.Dialognavigate === 'Complete' || (item.navigateObjects && Object.values(item.navigateObjects).includes('Complete')))
                 );
               });
-              console.log("hasComplete", hasComplete);
                 if (!hasComplete) {
                   toast({
                     title:`At least Any One of the  Select Block as Complete`,
@@ -2174,8 +2172,6 @@ if (formData.gameIsFeedbackMandatory === "true") {
             }
 
             const apiValidationResult = await getStoryValidtion(id);
-
-            //console.log('apiValidationResult', apiValidationResult);
 
             if (apiValidationResult?.status === 'Failure') {
               // There are empty fields, show an error message
@@ -2221,32 +2217,12 @@ if (formData.gameIsFeedbackMandatory === "true") {
   setCurrentTab(6)
 return false;
 } else{
-  console.log('tabstage',tab);
   setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }))
   localStorage.setItem('gameGameStage','Review');
 }
     }
-    // if (tab === 6) {
-    //   console.log('tabstage',tab);
-    //   setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }))
-    //   localStorage.setItem('gameGameStage','Review');
-    // }
-    // if (tab === 6) {
-    //   setFormData({
-    //     ...formData,
-    //     gameGameStage: 'Review',
-    //   });
-    // }
-    // if(tab<tab)
-    // {
-    //   arrange.gameLastTab = tab;
-    // }
-    // else{
-    //   arrange.gameLastTab= formData?.gameLastTab
-    // }
+   
     let data = JSON.stringify(formData);
-    // console.log('data',tab);
-    // return false;
     if (tab === 1 && !id) {
       try {
         const result = await addgame(formData);
@@ -2272,7 +2248,6 @@ return false;
             const parsedGameLastTabArray = JSON.parse(
               result.data.gameLastTabArray,
             );
-            //console.log('formdata', parsedGameLastTabArray);
 
             // Update formData with the parsed array
             setFormData({
@@ -2280,7 +2255,6 @@ return false;
               gameLastTabArray: parsedGameLastTabArray,
             });
             navigate(`/admin/superadmin/game/creation/${result.data.gameId}`);
-            //  window.location.reload();
           }
         }
       } catch (error) {
@@ -2307,13 +2281,9 @@ return false;
             isClosable: true,
             position: 'bottom-right',
           });
-          //console.log('result?.data', result?.data);
           const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
-
           setFormData(formDataWithoutLastTab);
           setTab(tab + 1);
-
-          // setFormData((prev)=>({...prev,gameLastTab:formData.gameLastTab+1}));
         }
 
         if (tab === 2 && result.status === 'Success') {
@@ -2338,13 +2308,10 @@ return false;
             isClosable: true,
             position: 'bottom-right',
           });
-          // console.log('asbasflknafkanfknapnakndakndaknkanpAFPAofhEPEFPEAOFPAOEFPAEOHFAOJ[ALMAIGHPIWH  ke]pk3-it=0w4-tw0kfakf]ie0rgjsjg')
           const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
 
           setFormData(formDataWithoutLastTab);
           setTab(tab + 1);
-
-          // setFormData((prev)=>({...prev,gameLastTab:formData.gameLastTab+1}));
         }
 
         if (tab === 4 && result.status === 'Success') {
@@ -2448,11 +2415,8 @@ return false;
       };
     });
 
-    ///
-    //console.log('selectedCardIndex', selectedCardIndex, i);
 
     if (selectedCardIndex !== i) {
-      //console.log('selectedCardIndex1', selectedCardIndex, i);
       // Select new card and deselect the previously selected one (if any)
       setSelectedCardIndex(i);
       setFormData((prev) => ({
@@ -2460,7 +2424,6 @@ return false;
         gameBackgroundId: img.gasId,
         gameTitle: img?.temp.tempTitle,
         gameStoryLine: img?.temp.tempStoryLine,
-        // gameTitle:img?.gasAssetName
       }));
       localStorage.setItem('selectedCardIndex', i);
     }
@@ -2505,23 +2468,10 @@ return false;
       };
     });
   };
+ 
   const handleChange = (e: any) => {
     const inputValue = e.target.value;
     const { name, value, checked } = e.target;
-    const feedbackselectedOptions = [
-      formData.gameContent,
-      formData.gameRecommendation,
-      formData.gameRelevance,
-      formData.gameGamification,
-      formData.gameBehaviour,
-      formData.gameOthers,
-    ];
-    const countfbSelectedOptions = feedbackselectedOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
-    console.log('countfbSelectedOptions',countfbSelectedOptions);
-
-    if (checked && countfbSelectedOptions >= 4) {
-      return ;
-    } 
     if (name === 'gameDuration') {
       // let duration =
       //   parseInt(value.split(':')[0], 10) * 60 +
@@ -2628,10 +2578,7 @@ return false;
         // Set to an empty string or any default value
       }));
     }
-    ////////////////////////////////////
-
-    //console.log('formdata', formData);
-  };
+  }
 
   const handlecompletion = (e: any) => {
     const inputValue = e.target.value;

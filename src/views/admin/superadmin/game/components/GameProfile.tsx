@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import Card from 'components/card/Card';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   getGameById,
   getSkills,
@@ -25,6 +25,7 @@ export default function Settings(props: {
   data?: any;
 }) {
   const { id } = useParams();
+  const navigate = useNavigate();
   // eslint-disable-next-line
   const { name, avatar, banner, data } = props;
   // Chakra Color Mode
@@ -51,10 +52,11 @@ export default function Settings(props: {
     if (result?.status !== 'Success') {
       return console.log('getbackruond error:' + result?.message);
     }
-    const newTab = window.open('', '_self');
+    // const newTab = window.open('', '_self');
     // Navigate the new tab to the desired URL
     // newTab.location.assign(`/admin/game/preview/${id}`);
-    newTab.location.assign(`/game/creator/demoplay/${id}`);
+    // newTab.location.assign(`/game/creator/demoplay/${id}`);
+    navigate(`/game/creator/demoplay/${id}`)
   };
 
   const gameSkill = async () => {

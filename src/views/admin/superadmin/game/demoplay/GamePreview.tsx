@@ -82,7 +82,7 @@ export const ScoreContext = createContext<any>(null);
 const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
-  const InitialScreenId = id ? 10 : 0;
+  const InitialScreenId = id ? 10 : 1;
   const [gameInfo, setGameInfo] = useState<any | null>();
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -98,18 +98,45 @@ const GamePreview = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(null);
   const [showGame,setShowGame] = useState(false);
-  useEffect(() => {
-    if(windowWidth < 700)
-    {setShowGame(false)}
-    else{setShowGame(true);}
-  },[windowWidth]);
+  // useEffect(() => {
+  //   if(windowWidth < 700)
+  //   {setShowGame(false)}
+  //   else{setShowGame(true);}
+  // },[windowWidth]);
   useEffect(() => {
     uuid && fetchGameData();
   }, [uuid]);
   useEffect(() => {
     id && fetchCreatorDemoData();
+    handleFullScreen()
   }, [id]);
 
+  const element = document.getElementById('root');
+  const handleFullScreen = () => {     
+    if (element) {
+      try {
+        if (document.fullscreenEnabled) {          
+          if (!document.fullscreenElement) {            
+            element.requestFullscreen()
+              .catch((error) => {
+                console.log('Error entering fullscreen mode:', error.message);                
+              });
+          } else {
+            console.warn('Document is already in fullscreen mode');           
+          }
+        } else {
+          console.error('Fullscreen mode is not supported');
+          // Handle scenario where fullscreen mode is not supported by the browser
+        }
+      } catch (error) {
+        console.error('Error requesting fullscreen:', error);
+      }
+    }
+  }
+
+  /*** Collect details of a game based on uuid not gameId
+   * This API took gameId based on uuid
+   */
   const fetchGameData = async () => {
     const gamedata = await getGameDemoData(uuid);
 
@@ -138,8 +165,6 @@ const GamePreview = () => {
     const sortBlockSequence = (blockArray: []) => {
       const transformedArray = blockArray.reduce((result: any, obj: any) => {
         const groupKey = obj?.blockQuestNo.toString();
-        // const seqKey = obj?.blockSecondaryId;
-        // const SplitArray = obj?.blockPrimarySequence.toString()?.split(".")[1];
         const seqKey = obj?.blockPrimarySequence.toString()?.split('.')[1];
         if (!result[groupKey]) {
           result[groupKey] = {};
@@ -289,37 +314,7 @@ const GamePreview = () => {
     });
   };
 
-  // const element = document.getElementById('container');
-  // if (element) {
-  //   try {
-  //     if (document.fullscreenEnabled) {
-  //       // Check if fullscreen is supported
-  //       if (!document.fullscreenElement) {
-  //         // Check if not already in fullscreen
-  //         // Request fullscreen
-  //         element
-  //           .requestFullscreen()
-  //           .then(() => {
-  //             console.log('Entered fullscreen mode');
-  //             // Perform additional actions after entering fullscreen mode
-  //           })
-  //           .catch((error) => {
-  //             console.log('Error entering fullscreen mode:', error.message);
-  //             // Handle errors related to entering fullscreen mode
-  //           });
-  //       } else {
-  //         console.warn('Document is already in fullscreen mode');
-  //         // Handle scenario where document is already in fullscreen mode
-  //       }
-  //     } else {
-  //       console.error('Fullscreen mode is not supported');
-  //       // Handle scenario where fullscreen mode is not supported by the browser
-  //     }
-  //   } catch (error) {
-  //     console.error('Error requesting fullscreen:', error);
-  //     // Handle other errors related to requesting fullscreen mode
-  //   }
-  // }
+  
   const handleSubmitReview = async (inputdata: any) => {
     /** Sample post data
    * {"data" :{
@@ -404,11 +399,14 @@ const GamePreview = () => {
         <h1> {'Your are Not Authorized....'}</h1>
       ) : (
         gameInfo?.gameId &&
-        (!showGame ? (
-          <PlayInfo />
-        ) : (
+        (
+          // !showGame ? 
+        //   (
+        //   <PlayInfo />
+        // ) :
+         (
           <ScoreContext.Provider value={{ profile, setProfile }}>
-            <Box id="container" onMouseMove={handleMouseMove}>
+            <Box id="container" >
               {isHovered && (
                 <Icon
                   as={IoIosRefresh}

@@ -92,22 +92,13 @@
 // export default PreviewEndOfStory
 import { Box, Flex, Text, Img ,useBreakpointValue } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
-import React from 'react';
 import { updatePreviewData } from 'store/preview/previewSlice';
-import ReplayBtn from 'assets/img/games/ReplayBtn.png';
-import { ScoreContext } from '../../demoplay/GamePreview';
-import next from 'assets/img/screens/next.png';
 import Replay from 'assets/img/screens/Replay.png';
-import { relative } from 'path';
 
-const PreviewEndOfStory: React.FC<{
-  preloadAssets: any;
-  setEndOfQuest: any;
-  formData: any;
-  imageSrc: any;
-}> = ({ preloadAssets, setEndOfQuest, formData, imageSrc }) => {
-  const dispatch = useDispatch();
 
+const PreviewEndOfStory : React.FC<{preloadedAssets: any, setEndOfQuest:any}>= ({preloadedAssets, setEndOfQuest}) => {
+const dispatch = useDispatch();
+ 
   const replayQuest = () => {
     dispatch(updatePreviewData({ activeBlockSeq: 1 }));
     setEndOfQuest(false);
@@ -122,9 +113,8 @@ const PreviewEndOfStory: React.FC<{
 
   return (
     <Flex className="end-of-quest" direction="column" align="center" position="relative">
-      
-      <Img src={preloadAssets?.backgroundImage} className="eoq-bg-img" />
-      {Replay && (
+      <Img src={preloadedAssets?.backgroundImage} className="eoq-bg-img" />
+      {preloadedAssets.Screen6 && (
         <Box
           className="overlay-container"
           position="absolute"
@@ -156,17 +146,18 @@ const PreviewEndOfStory: React.FC<{
             align="center"
             justifyContent="center"
             className="eoq-replay-img"
-           
+            zIndex="2"
           >
             <Img
-              src={ReplayBtn}
+              src={preloadedAssets?.replayBtn}
               w="200px"
               h="60px"
               cursor="pointer"
               onClick={replayQuest}
             />
-          </Flex></Box>
+          </Flex>
         </Box>
+      </Box>
       )}
     </Flex>
   );

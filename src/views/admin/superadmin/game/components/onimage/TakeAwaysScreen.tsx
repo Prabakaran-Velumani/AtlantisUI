@@ -21,7 +21,7 @@ const TakewayScreen: React.FC<{
       {imageSrc && (
         <Box className="takeaway-screen">
           <Box className="takeaway-screen-box">
-            <Img src={imageSrc} className="bg-img" />
+            <Img src={imageSrc} className="bg-img bg-take" />
             <Box className="content-box" w={preview ? '25%' : '76%'}>
               {data &&
                 data.map((it: any, ind: number) => {
@@ -45,7 +45,7 @@ const TakewayScreen: React.FC<{
                   );
                 })}
             </Box>
-            <Box className='next-btn'>
+            <Box className='next-btn next-btn-box'>
               <Img src={preloadedAssets?.next ?? next}  />
             </Box>
           </Box>
