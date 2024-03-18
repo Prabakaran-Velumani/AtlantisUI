@@ -36,6 +36,7 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  Tooltip,
   useColorModeValue,
 } from '@chakra-ui/react';
 // Custom components
@@ -136,7 +137,7 @@ function SignIn() {
         flexDirection="column"
       >
         <Box me="auto">
-          <Heading color={textColor} fontSize="36px" mb="10px">
+          <Heading color={textColor} fontSize="36px" mb="15px">
             Sign In
           </Heading>
           {/* <Text
@@ -255,14 +256,16 @@ function SignIn() {
                   onChange={handleChange}
                   value={formData?.password}
                 />
-                <InputRightElement display="flex" alignItems="center" mt="4px">
-                  <Icon
-                    color={textColorSecondary}
-                    _hover={{ cursor: 'pointer' }}
-                    as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-                    onClick={handleClick}
-                  />
-                </InputRightElement>
+                <Tooltip label={show ? 'Hide Password' : 'Show Password'}>
+                  <InputRightElement display="flex" alignItems="center" mt="4px">
+                    <Icon
+                      color={textColorSecondary}
+                      _hover={{ cursor: 'pointer' }}
+                      as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
+                      onClick={handleClick}
+                    />
+                  </InputRightElement>
+                </Tooltip>
               </InputGroup>
               <Flex justifyContent="space-between" align="center" mb="24px">
                 <FormControl display="flex" alignItems="center">

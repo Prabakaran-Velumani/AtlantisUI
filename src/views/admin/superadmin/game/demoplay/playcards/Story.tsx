@@ -333,8 +333,11 @@ useEffect(() => {
                     color={'#D9C7A2'}
                     display={'flex'}
                     justifyContent={'center'}
+                    className={'story_note_content'}
                   >
-                     {remainingSentences}
+                    <Text textAlign={'center'}>
+                    {remainingSentences}
+                    </Text>
                   </Box>
                 </Box>
                 <Box
@@ -347,7 +350,7 @@ useEffect(() => {
                   position={'fixed'}
                   top={'70%'}
                 >
-                  <Img src={next} w={'100px'} />
+                  <Img src={next} h={'7vh'} className={'story_note_next_button'} />
                 </Box>
               </Box>
             </GridItem>
@@ -499,7 +502,7 @@ useEffect(() => {
                 <Img src={parch} w={'100%'} h={'100%'} loading="lazy" />
                 <Box
                   position={'absolute'}
-                  top={{ sm: '14px', md: '38px' }}
+                  top={{ sm: '5%', md: '6%' }}
                   h={'80% !important'}
                   className="story_interaction_image"
                 >
@@ -509,11 +512,12 @@ useEffect(() => {
                     justifyContent={'center'}
                     alignItems={'center'}
                     fontWeight={500}
-                    fontSize={{ sm: '1.8vw', md: '2vw', lg: '2.5vw' }}
+                    fontSize={{ md: '3vw', lg: '2.5vw' }}
                     fontFamily={'AtlantisText'}
                     lineHeight={1}
                     w={'100%'}
                     h={'10%'}
+                    className={'interaction_heading_potrait'}
                   >
                     <Box w={'80%'}>
                       Interactions...!{' '}
@@ -536,6 +540,7 @@ useEffect(() => {
                       w={'60%'}
                       fontSize={{ md: '1.5vw', lg: '1.9vw' }}
                       letterSpacing={1}
+                      className={'story_intraction_question'}
                     >
                       {data?.blockText}
                     </Box>
@@ -565,7 +570,7 @@ useEffect(() => {
                           >
                             <Img
                               src={option === ind ? on : off}
-                              h={'30px'}
+                              h={'4vh'}
                               w={'100%'}
                             />
                             <Box
@@ -575,6 +580,7 @@ useEffect(() => {
                               fontSize={{
                                 lg: '1.9vw',
                               }}
+                              className={'story_interaction_option'}
                             >
                               {item?.qpOptionText}
                             </Box>
@@ -589,16 +595,16 @@ useEffect(() => {
                   >
                     <Img
                       src={left}
-                      w={'50px'}
-                      h={'50px'}
+                      w={'4vw'}
+                      h={'7vh'}
                       cursor={'pointer'}
                       onClick={() => prevData(data)}
                     />
                     {option !== null && (
                       <Img
                         src={right}
-                        w={'50px'}
-                        h={'50px'}
+                        w={'4vw'}
+                        h={'7vh'}
                         cursor={'pointer'}
                         onClick={() => InteractionFunction()}
                       />

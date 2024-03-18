@@ -131,7 +131,7 @@ fetchData();
 return (
   <Flex
     direction={{ base: 'column', xl: 'row' }}
-    pt={{ base: '130px', md: '80px', xl: '80px' }}
+    pt={{ base: '70px', md: '80px', xl: '80px' }}
   >
     <Flex direction="column" width="stretch">
       <Grid

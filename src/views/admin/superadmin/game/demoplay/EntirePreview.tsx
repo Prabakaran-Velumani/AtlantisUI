@@ -275,7 +275,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
      allTimeScore: 250,
    });
  
-   console.log('gameScoreContextEP--',gameScore)
+
  // Afrith-modified-ends-07/Mar/24
  
   const [voiceIds, setVoiceIds] = useState<any>();
@@ -1493,11 +1493,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 5:
                   return (
                     <>
-                      {/* <motion.div
-                        initial={{ opacity: 0, background: '#000' }}
-                        animate={{ opacity: 1, background: '#0000' }}
-                        transition={{ duration: 0.3, delay: 0.5 }}
-                      > */}
+                     
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1526,38 +1522,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           </Box>
                         </Box>
                       </Box>
-                      {/* </motion.div> */}
                     </>
                   );
                 case 6:
                   return (
                     <>
-                      {/* <motion.div
-                        initial={{ opacity: 0, background: '#000' }}
-                        animate={{ opacity: 1, background: '#0000' }}
-                        transition={{ duration: 0.3, delay: 0.5 }}
-                      > */}
-                      {/* <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        // overflow={'visible'}
-                        // style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box
-                          backgroundImage={backgroundScreenUrl}
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          // alignItems={'center'}
-                          // justifyContent={'center'}
-                          className="Game-Screen"
-                        >
-                          <Box className="Images"> */}
+                     
                       <Completion
                         questOptions={gameInfo?.questOptions}
                         getData={getData}
@@ -1571,10 +1541,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           gameInfo.completionQuestOptions
                         }
                       />
-                      {/* </Box>
-                        </Box>
-                      </Box> */}
-                      {/* </motion.div> */}
                     </>
                   );
                 case 7:
@@ -1828,7 +1794,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             >
                               <Img src={Login} w={'auto'} h={'100%'} />
                               <Box
-                                w={'30%'}
+                                w={'15vw'}
                                 h={'49%'}
                                 position={'fixed'}
                                 top={'25%'}

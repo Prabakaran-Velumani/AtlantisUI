@@ -216,21 +216,25 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({data}) => {
        
       </Flex>
       {/* </Card> */}
-      <Box overflowX={{ sm: 'scroll', xl: 'scroll'}} padding="20px">
+      <Box overflowX={{ sm: 'scroll', xl: 'scroll'}} padding="2px" borderRadius={'13px 13px 20px 20px'}>
         <Table
           {...getTableProps()}
           variant={'simple'}
-          overflowX={{ base: 'auto', xl: 'unset' }}
+          overflowX={{ base: 'auto', xl: 'unset' }}  
+          style={{
+            border: '2px solid #E0E0E0',
+           
+          }}
         >
           {/* <Card> */}
           <Thead
             className="thead"
             bg={'#E9EDF7'}
           >
-            {headerGroups.map((headerGroup) => (
+            {headerGroups.map((headerGroup,index) => (
               <Tr
                 {...headerGroup.getHeaderGroupProps()}
-                borderBottom={'2px solid #f7f7f7'}
+                borderBottom={headerGroups.length === index + 1 ? '': '2px solid #f7f7f7'}
               >
                 {headerGroup.headers.map((column) => (
                   <Th
