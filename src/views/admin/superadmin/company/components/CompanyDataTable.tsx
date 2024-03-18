@@ -231,7 +231,7 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
           variant={'simple'}
           overflowX={{ base: 'auto', xl: 'unset' }}
           style={{
-            border: '2px solid #E0E0E0',
+            border: '2px solid #edebeb',
           }}
         >
           {/* <Card> */}
@@ -239,7 +239,7 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
             {headerGroups.map((headerGroup, index) => (
               <Tr
                 {...headerGroup.getHeaderGroupProps()}
-                borderBottom={'2px solid #E0E0E0'}
+                borderBottom={'2px solid #edebeb'}
               >
                 {headerGroup.headers.map((column) => (
                   <Th
@@ -267,7 +267,7 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
               return (
                 <Tr
                   {...row.getRowProps()}
-                  borderBottom={'2px solid #E0E0E0'}
+                  borderBottom={'2px solid #edebeb'}
                   _hover={{ bg: '#FAF9F6' }}
                   cursor={'pointer'}
                 >

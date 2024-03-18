@@ -223,7 +223,7 @@ const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
           variant={'simple'}
           overflowX={{ base: 'auto', xl: 'unset' }}
           style={{
-            border: '2px solid #E0E0E0',
+            border: '2px solid #edebeb',
           }}
         >
           {/* <Card> */}
@@ -231,7 +231,7 @@ const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
             {headerGroups.map((headerGroup) => (
               <Tr
                 {...headerGroup.getHeaderGroupProps()}
-                borderBottom={'2px solid #E0E0E0'}
+                borderBottom={'2px solid #edebeb'}
               >
                 {headerGroup.headers.map((column) => (
                   <Th
@@ -259,7 +259,7 @@ const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
               return (
                 <Tr
                   {...row.getRowProps()}
-                  borderBottom={'2px solid #E0E0E0'}
+                  borderBottom={'2px solid #edebeb'}
                   _hover={{ bg: '#FAF9F6' }}
                   cursor={'pointer'}
                 >

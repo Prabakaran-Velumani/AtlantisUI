@@ -466,7 +466,7 @@ const CreatorDataTable: React.FC<CreatorDataTableProps> = ({
           variant={'simple'}
           overflowX={{ base: 'auto', xl: 'unset' }}
           style={{
-            border: '2px solid #E0E0E0',
+            border: '2px solid #edebeb',
           }}
         >
           {/* <Card> */}
@@ -474,7 +474,7 @@ const CreatorDataTable: React.FC<CreatorDataTableProps> = ({
             {headerGroups.map((headerGroup) => (
               <Tr
                 {...headerGroup.getHeaderGroupProps()}
-                borderBottom={'2px solid #E0E0E0'}
+                borderBottom={'2px solid #edebeb'}
               >
                 {headerGroup.headers.map((column) => (
                   <Th
@@ -500,7 +500,7 @@ const CreatorDataTable: React.FC<CreatorDataTableProps> = ({
             {page.map((row) => {
               prepareRow(row);
               return (
-                <Tr {...row.getRowProps()} borderBottom={'2px solid #E0E0E0'}>
+                <Tr {...row.getRowProps()} borderBottom={'2px solid #edebeb'}>
                   {row.cells.map((cell) => {
                     return (
                       <Td
