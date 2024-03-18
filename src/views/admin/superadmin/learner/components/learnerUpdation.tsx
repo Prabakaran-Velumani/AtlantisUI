@@ -278,9 +278,10 @@ const selectedCountry = mappedCountryOptions.find(
 };
   return (
     <>
-      <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>      
-      <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'absolute'} alignItems={'center'}></Card>
-          <Card mb={{ base: '0px', xl: '20px' }} width={'70%'} marginTop={'120px'}>
+      <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>    
+        <Card alignItems={'center'}>
+          <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'relative'} alignItems={'center'}></Card>
+          <Card mb={{ base: '0px', xl: '20px' }} width={{base: '95%', md: '70%'}} marginTop={'-120px'}>
           <Flex direction="column" ms="10px">
             <Box>
             <Text color={useColorModeValue('secondaryGray.900', 'white')} fontSize="2xl" fontWeight="700" mb="20px">
@@ -289,7 +290,7 @@ const selectedCountry = mappedCountryOptions.find(
               </Box>
             </Flex>
             <Box padding="10px">
-            <SimpleGrid columns={{ sm: 1, md: 3 }} spacing={{ base: '20px', xl: '20px' }} >            
+            <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing={{ base: '20px', xl: '20px' }} >            
                 <Box>
                     <FormLabel fontSize='sm' fontWeight='bold' color={textColorPrimary}>Learner Name<span style={{ color: 'red' }}>*</span></FormLabel>
                     <InputField mb='0px' me='30px' id={`lenUserName`} name={`lenUserName`} placeholder='eg.james' autoComplete="off" disabled={false} onChange={handleChange} value={formData?.lenUserName}  ref={lenUserNameRef} />                              
@@ -352,12 +353,16 @@ const selectedCountry = mappedCountryOptions.find(
             </Box>       
             <Flex justify="space-between">
             <Button
-               variant="light"
+              //  variant="light"
                fontSize="sm"
                borderRadius="16px"
+               border={'1px solid #00000024'}
                w={{ base: '128px', md: '148px' }}
                h="46px"
                mt="20px"
+               mr="20px"
+               bg={'transparent'}
+               _hover={{bg: '#11047a', color: '#fff'}}
               onClick={handleBack}
             >
               Cancel
@@ -375,7 +380,8 @@ const selectedCountry = mappedCountryOptions.find(
               {id ? 'Update' : 'Save'}
             </Button>
           </Flex>          
-        </Card>
+          </Card>
+        </Card>  
       </Box>
       {alert  ? <OnToast msg={msg} status={toastStatus}  setAlert={setAlert}
  /> : null} 

@@ -110,12 +110,12 @@ export default function AdminNavbar(props: {
       w={
         mini === false
           ? {
-            base: 'calc(100vw - 6%)',
-            md: 'calc(100vw - 8%)',
-            lg: 'calc(100vw - 6%)',
-            xl: 'calc(100vw - 340px)',
-            '2xl': path.startsWith('/admin/superadmin/game/template') || path.startsWith('/admin/game/preview/') ? 'calc(100vw - 120px)' : 'calc(100vw - 345px)',
-          }
+              base: 'calc(100vw - 6%)',
+              md: 'calc(100vw - 8%)',
+              lg: 'calc(100vw - 6%)',
+              xl: 'calc(100vw - 350px)',
+              '2xl':path.startsWith('/admin/superadmin/game/template')||path.startsWith('/admin/game/preview/') ? 'calc(100vw - 120px)': '',
+            }
           : mini === true && hovered === true
             ? {
               base: 'calc(100vw - 6%)',

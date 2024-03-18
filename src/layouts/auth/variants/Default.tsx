@@ -59,7 +59,7 @@ function AuthIllustration(props: {
         </NavLink>
         {children}
         <Box
-          display={{ base: 'none', md: 'block' }}
+          display={{ base: 'none', md: 'none', lg: 'block' }}
           h="100%"
           minH="100vh"
           w={{ lg: '50vw', '2xl': '44vw' }}
