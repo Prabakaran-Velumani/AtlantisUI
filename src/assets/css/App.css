@@ -126,7 +126,7 @@ option {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  /* background: #dfdfdf; */
+  background: #dfdfdf;
   border-radius: 30px;
   cursor: pointer;
 }
@@ -725,7 +725,9 @@ font-family: 'AtlantisText';
   right: 0;
   z-index: 999;
   height: 63px;
-  transform: translate(-110px, 2px);
+  width: 4%;
+  /* transform: translate(-110px, 2px); */
+  transform: translate(-150%, 3%);
 }
 
 .top-menu-home-section .profile-img {
@@ -734,6 +736,7 @@ font-family: 'AtlantisText';
   left: 2%;
   z-index: 999;
   height: 63px;
+  width: 4%;
   transform: translate(0, 11%);
 }
 
@@ -743,6 +746,7 @@ font-family: 'AtlantisText';
   right: 0;
   z-index: 999;
   height: 63px;
+  width: 4%;
   transform: translate(-28px, 2px);
 }
 
