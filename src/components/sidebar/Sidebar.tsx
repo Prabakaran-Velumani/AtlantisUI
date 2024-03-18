@@ -21,20 +21,20 @@ import {
   renderViewMini,
 } from 'components/scrollbar/Scrollbar';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import Navbar from 'assets/img/crm/navbar.png'
-import Navbar1 from 'assets/img/auth/banner.png'
-import NFT from 'assets/img/nfts/NftBanner2.png'
-import OverView from 'assets/img/product/OverviewBanner.png'
-import './sidebar.css'
+import Navbar from 'assets/img/crm/navbar.png';
+import Navbar1 from 'assets/img/auth/banner.png';
+import NFT from 'assets/img/nfts/NftBanner2.png';
+import OverView from 'assets/img/product/OverviewBanner.png';
+import './sidebar.css';
 import { IoMenuOutline } from 'react-icons/io5';
 import { useLocation } from 'react-router-dom';
 import { css, keyframes } from '@emotion/react';
-const usePath=()=>{
-    const location = useLocation()
-    return location.pathname;
-}
+const usePath = () => {
+  const location = useLocation();
+  return location.pathname;
+};
 
-function Sidebar(props: { routes: RoutesType[]; [x: string]: any }) {
+function Sidebar(props: { routes: RoutesType[];[x: string]: any }) {
   const { routes, mini, hovered, setHovered } = props;
   // this is for the rest of the collapses
   let variantChange = '0.2s linear';
@@ -46,15 +46,25 @@ function Sidebar(props: { routes: RoutesType[]; [x: string]: any }) {
   let sidebarBg = useColorModeValue('white', 'navy.800');
   let sidebarRadius = '30px';
   let sidebarMargins = '0px';
-  
-const path = usePath();
-console.log(path);
-  return ( 
+
+  const path = usePath();
+  console.log(path);
+  return (
     <Box
-    transform={path.startsWith('/admin/superadmin/game/creation') || path.startsWith('/admin/superadmin/game/template') || path.startsWith('/admin/game/preview/') ? 'translateX(-100%)' : 'translateX(0)'}
-    transition="transform 1s ease-in-out"
-    position="fixed"
-    minH="100%"
+      transform={{
+        base:'translateX(-100%)',
+        sm: 'translateX(-100%)',
+        md: 'translateX(-100%)',
+        lg:'translateX(-100%)',
+        xl: path.startsWith('/admin/superadmin/game/creation') ||
+          path.startsWith('/admin/superadmin/game/template') ||
+          path.startsWith('/admin/game/preview/')
+          ? 'translateX(-100%)'
+          : 'translateX(0)'
+      }}
+      transition="transform 1s ease-in-out"
+      position="fixed"
+      minH="100%"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -70,8 +80,8 @@ console.log(path);
           mini === false
             ? '285px'
             : mini === true && hovered === true
-            ? '285px'
-            : '120px'
+              ? '285px'
+              : '120px'
         }
         ms={{
           sm: '16px',
@@ -94,8 +104,8 @@ console.log(path);
             mini === false
               ? renderView
               : mini === true && hovered === true
-              ? renderView
-              : renderViewMini
+                ? renderView
+                : renderViewMini
           }
         >
           <Content mini={mini} hovered={hovered} routes={routes} />
@@ -140,24 +150,31 @@ export function SidebarResponsive(props: {
   `;
 
   const blinkStyles = css`
-  animation: ${blinkAnimation} 0.2143s infinite alternate; /* Set iteration count for more than 10 times within 1 second */
-`;
-
+    animation: ${blinkAnimation} 0.2143s infinite alternate; /* Set iteration count for more than 10 times within 1 second */
+  `;
 
   return (
-    
-
-    <Flex display={{ sm: 'flex', xl: path.startsWith('/admin/superadmin/game/creation')||path.startsWith('/admin/superadmin/game/template')||path.startsWith('/admin/game/preview/') ? 'flex' : 'none' }} alignItems="center">
+    <Flex
+      display={{
+        sm: 'flex',
+        xl:
+          path.startsWith('/admin/superadmin/game/creation') ||
+            path.startsWith('/admin/superadmin/game/template') ||
+            path.startsWith('/admin/game/preview/')
+            ? 'flex'
+            : 'none',
+      }}
+      alignItems="center"
+    >
       <Flex
-  ref={btnRef}
-  w="max-content"
-  h="max-content"
-  onClick={onOpen}
-  
-  align="center"  // Align vertically
-  justify="center" // Align horizontally
->
-  {/* <Icon
+        ref={btnRef}
+        w="max-content"
+        h="max-content"
+        onClick={onOpen}
+        align="center" // Align vertically
+        justify="center" // Align horizontally
+      >
+        {/* <Icon
     as={IoMenuOutline}
     color={menuColor}
     className='kkkooo'
@@ -165,25 +182,22 @@ export function SidebarResponsive(props: {
     h="20px"
     _hover={{ cursor: 'pointer' }}
   /> */}
-   <Icon
-  as={IoMenuOutline}
-  color={menuColor}
-  className={`kkkooo ${shouldBlink ? 'blink-animation' : ''}`}
-  w="20px"
-  h="20px"
-  borderRadius={shouldBlink ? '50%' : '0'}
-  border={shouldBlink ? '2px solid #3311db' : 'none'}
-  boxSizing="content-box"
-  p="4px"
-  _hover={{
-    cursor: 'pointer',
-  }}
-  css={shouldBlink ? blinkStyles : undefined}
-/>
-
-</Flex>
-
-
+        <Icon
+          as={IoMenuOutline}
+          color={menuColor}
+          className={`kkkooo ${shouldBlink ? 'blink-animation' : ''}`}
+          w="20px"
+          h="20px"
+          borderRadius={shouldBlink ? '50%' : '0'}
+          border={shouldBlink ? '2px solid #3311db' : 'none'}
+          boxSizing="content-box"
+          p="4px"
+          _hover={{
+            cursor: 'pointer',
+          }}
+          css={shouldBlink ? blinkStyles : undefined}
+        />
+      </Flex>
       <Drawer
         isOpen={isOpen}
         onClose={onClose}
@@ -203,8 +217,9 @@ export function SidebarResponsive(props: {
           borderRadius="16px"
           // bg={sidebarBackgroundColor}
           bg={'linear-gradient(to bottom, #7551ff, #3311db)'}
-          // backgroundImage={OverView}
-          // className='sidebar-bgGradient'
+         
+        // backgroundImage={OverView}
+        // className='sidebar-bgGradient'
         >
           <DrawerCloseButton
             zIndex="3"
@@ -212,15 +227,15 @@ export function SidebarResponsive(props: {
             _focus={{ boxShadow: 'none' }}
             _hover={{ boxShadow: 'none' }}
           />
-          <DrawerBody maxW="285px" px="0rem" pb="0">
-            <Scrollbars
+          <DrawerBody maxW="285px" px="0rem" pb="0" sx={{ overflowY: "hidden", overflowX: "hidden", height: "100%" }} >
+            {/* <Scrollbars
               autoHide
               renderTrackVertical={renderTrack}
               renderThumbVertical={renderThumb}
               renderView={renderView}
-            >
+            > */}
               <Content mini={false} routes={routes} />
-            </Scrollbars>
+            {/* </Scrollbars> */}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

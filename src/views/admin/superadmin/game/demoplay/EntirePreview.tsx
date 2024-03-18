@@ -34,12 +34,9 @@ import {
   SliderThumb,
   SliderFilledTrack,
   Tooltip,
-<<<<<<< HEAD
   GridItem,
   Grid,
-=======
   Stack,
->>>>>>> 72ca1fb57c494e573633fe031ad7f7f440b7f0e1
 } from '@chakra-ui/react';
 import next from 'assets/img/screens/next.png';
 import Screen2 from 'assets/img/screens/screen2.png';
@@ -113,7 +110,7 @@ import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
-import { isMobile } from 'react-device-detect';
+// import { isMobile } from 'react-device-detect';
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
@@ -290,7 +287,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
      allTimeScore: 250,
    });
  
-   console.log('gameScoreContextEP--',gameScore)
+
  // Afrith-modified-ends-07/Mar/24
  
   const [voiceIds, setVoiceIds] = useState<any>();
@@ -298,7 +295,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     useState<boolean>(false);
   const [reflectionAnswers, setReflectionAnswers] = useState([]);
   const [resolution, setResolution] = useState(null);
-  const [isMobileView, setIsMobileView] = useState(isMobile);
+  // const [isMobileView, setIsMobileView] = useState(isMobile);
 
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
@@ -1193,10 +1190,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     console.log('resolution---',resolution)
     // Afrith-modified-ends-13/Mar/24
 
-    const toggleView = () => {
-      setIsMobileView(!isMobileView);
-    };
-    console.log('///',isMobileView)
+    // const toggleView = () => {
+    //   setIsMobileView(!isMobileView);
+    // };
+    // console.log('///',isMobileView)
 
     // Avoid Top Menu Section
     const dontShowTopMenu = currentScreenId !== 7 && currentScreenId !== 6 && currentScreenId !== 5 && currentScreenId !== 4 && currentScreenId !== 3 && currentScreenId !== 10;
@@ -1501,11 +1498,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 5:
                   return (
                     <>
-                      {/* <motion.div
-                        initial={{ opacity: 0, background: '#000' }}
-                        animate={{ opacity: 1, background: '#0000' }}
-                        transition={{ duration: 0.3, delay: 0.5 }}
-                      > */}
+                     
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1534,38 +1527,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           </Box>
                         </Box>
                       </Box>
-                      {/* </motion.div> */}
                     </>
                   );
                 case 6:
                   return (
                     <>
-                      {/* <motion.div
-                        initial={{ opacity: 0, background: '#000' }}
-                        animate={{ opacity: 1, background: '#0000' }}
-                        transition={{ duration: 0.3, delay: 0.5 }}
-                      > */}
-                      {/* <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        // overflow={'visible'}
-                        // style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box
-                          backgroundImage={backgroundScreenUrl}
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          // alignItems={'center'}
-                          // justifyContent={'center'}
-                          className="Game-Screen"
-                        >
-                          <Box className="Images"> */}
+                     
                       <Completion
                         questOptions={gameInfo?.questOptions}
                         getData={getData}
@@ -1579,10 +1546,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           gameInfo.completionQuestOptions
                         }
                       />
-                      {/* </Box>
-                        </Box>
-                      </Box> */}
-                      {/* </motion.div> */}
                     </>
                   );
                 case 7:
@@ -1836,7 +1799,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             >
                               <Img src={Login} w={'auto'} h={'100%'} />
                               <Box
-                                w={'30%'}
+                                w={'15vw'}
                                 h={'49%'}
                                 position={'fixed'}
                                 top={'25%'}

@@ -258,14 +258,14 @@ const Characterspage: React.FC<PlayGamesProps> = ({
               >
                 <Img
                   src={Selected}
-                  w="40px"
-                  h="45px"
+                  w="4vw"
+                  h="6vh"
                   transform={'rotate(90deg)'}
                 />
                 <Img
                   src={Selected}
-                  w="40px"
-                  h="45px"
+                  w="4vw"
+                  h="6vh"
                   transform={'rotate(-90deg)'}
                 />
               </Box>
@@ -291,8 +291,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                   onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
                 ></Button>
                 <Box w={'25%'} position={'relative'}>
-                  <input className="player_name" value={playerInfo.name} onChange={(e:any)=>setProfileData((prev:any)=>({...prev,name:e.target.value}))}/>
-                  {/* <Text >{playerInfo.name}</Text> */}
+                  <input className="player_name" placeholder={'Enter Your Name'} value={playerInfo.name} onChange={(e:any)=>setProfileData((prev:any)=>({...prev,name:e.target.value}))}/>                 
                 </Box>
                 <Button
                   className="btns right-btn"

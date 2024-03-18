@@ -2990,7 +2990,7 @@ transform: translate(-167px, -84px);
 
 .chapters_list_box {
   position: absolute;
-  top: 120px;
+  top: 25%;
   width: 100%;
   height: 65%;
   overflow-y: scroll;
@@ -3031,10 +3031,10 @@ transform: translate(-167px, -84px);
 /* story part note  */
 
 .story_interaction_image {
-  height: 800px;
-  width: 500px;
+  height: 80vh;
+  width: 40vw;
   max-width: 100%;
-}
+} 
 
 .story_note_grid {
   width: 100%;
@@ -3074,6 +3074,28 @@ transform: translate(-167px, -84px);
 }
 
 @media screen and (orientation: portrait) {
+  .interaction_heading_potrait{
+    font-size: 3.5vh !important;
+  }
+  .story_note_content{
+    height: 20vw !important;
+  }
+  .story_note_next_button{
+    height: 7vw !important;
+  }
+ 
+  .story_intraction_question{
+    font-size: 2.6vh !important;
+  }
+  .story_interaction_option{
+    font-size: 2vh !important;
+  }
+  .story_interaction_image {
+    height: 90vw;
+    width: 35vh;
+    max-width: 100%;
+  }
+
   .info_potrait {
     height: 90vw !important;
   }
@@ -3109,10 +3131,10 @@ transform: translate(-167px, -84px);
     width: 100vh !important;
     height: 100vw !important;
   }
-
+/* 
   .chapters_list_box {
     top: 70px;
-  }
+  } */
 
   .Setting-box {
     width: 100vh !important;
@@ -3145,10 +3167,10 @@ transform: translate(-167px, -84px);
     width: 50%
   }
 
-  .story_interaction_image {
+  /* .story_interaction_image {
     height: 226px;
     width: 240px;
-  }
+  } */
 
   .story_feedback {
     width: 40% !important;
@@ -3193,9 +3215,9 @@ transform: translate(-167px, -84px);
     bottom: 40px;
   }
 
-  .chapters_list_box {
+  /* .chapters_list_box {
     top: 85px;
-  }
+  } */
 
   .welcome_screen_image {
     height: 370px;
@@ -3237,10 +3259,10 @@ transform: translate(-167px, -84px);
     left: 45px;
   }
 
-  .story_interaction_image {
+  /* .story_interaction_image {
     height: 226px;
     width: 240px;
-  }
+  } */
 
   .top-menu-home-section .Setting-box .setting-pad {
     height: 100%;
@@ -3266,9 +3288,9 @@ transform: translate(-167px, -84px);
     bottom: 49px;
   }
 
-  .chapters_list_box {
+  /* .chapters_list_box {
     top: 110px;
-  }
+  } */
 
   .welcome_screen_image {
     height: 365px;
@@ -3312,10 +3334,10 @@ transform: translate(-167px, -84px);
     left: 45px;
   }
 
-  .story_interaction_image {
+  /* .story_interaction_image {
     height: 238px;
     width: 276px;
-  }
+  } */
 
   .top-menu-home-section .Setting-box .setting-pad {
     height: 100%;
@@ -3346,9 +3368,9 @@ transform: translate(-167px, -84px);
     bottom: 52px;
   }
 
-  .chapters_list_box {
+  /* .chapters_list_box {
     top: 120px;
-  }
+  } */
 
   .welcome_screen_image {
     height: 485px;
@@ -3390,10 +3412,10 @@ transform: translate(-167px, -84px);
     left: 45px;
   }
 
-  .story_interaction_image {
-    height: 800px;
-    width: 500px;
-  }
+  /* .story_interaction_image {
+    height: 90vh;
+    width: 35vw;
+  } */
 }
 
 @media screen and (min-width: 960px) {
@@ -3414,9 +3436,9 @@ transform: translate(-167px, -84px);
     bottom: 55px;
   }
 
-  .chapters_list_box {
+  /* .chapters_list_box {
     top: 130px;
-  }
+  } */
 
   .welcome_screen_image {
     height: 520px;
@@ -3459,10 +3481,10 @@ transform: translate(-167px, -84px);
     left: 45px;
   }
 
-  .story_interaction_image {
-    height: 560px;
-    width: 520px;
-  }
+  /* .story_interaction_image {
+    height: 90vh;
+    width: 35vw;
+  } */
 }
 
 @media screen and (min-width: 1200px) {
@@ -3483,9 +3505,9 @@ transform: translate(-167px, -84px);
     bottom: 85px;
   }
 
-  .chapters_list_box {
+  /* .chapters_list_box {
     top: 150px;
-  }
+  } */
 
   .welcome_screen_image {
     height: 600px;
@@ -3527,10 +3549,10 @@ transform: translate(-167px, -84px);
     left: 75px;
   }
 
-  .story_interaction_image {
+  /* .story_interaction_image {
     height: 640px;
     width: 550px;
-  }
+  } */
 }
 
 @media screen and (min-width: 1400px) {
@@ -3551,9 +3573,9 @@ transform: translate(-167px, -84px);
     bottom: 95px;
   }
 
-  .chapters_list_box {
+  /* .chapters_list_box {
     top: 173px;
-  }
+  } */
 
   .welcome_screen_image {
     height: 600px;
@@ -3597,10 +3619,10 @@ transform: translate(-167px, -84px);
     left: 85px;
   }
 
-  .story_interaction_image {
+  /* .story_interaction_image {
     height: 800px;
     width: 670px;
-  }
+  } */
 }
 
 @media screen and (min-width: 1600px) {
@@ -3621,9 +3643,9 @@ transform: translate(-167px, -84px);
     bottom: 113px;
   }
 
-  .chapters_list_box {
+  /* .chapters_list_box {
     top: 180px;
-  }
+  } */
 
   .welcome_screen_image {
     height: 680px;
@@ -3665,10 +3687,10 @@ transform: translate(-167px, -84px);
     left: 130px;
   }
 
-  .story_interaction_image {
+  /* .story_interaction_image {
     height: 800px;
     width: 700px;
-  }
+  } */
 }
 
 @media screen and (min-width: 1800px) {
@@ -3689,9 +3711,9 @@ transform: translate(-167px, -84px);
     bottom: 135px;
   }
 
-  .chapters_list_box {
+  /* .chapters_list_box {
     top: 195px;
-  }
+  } */
 
   .welcome_screen_image {
     height: 750px;
@@ -3733,10 +3755,10 @@ transform: translate(-167px, -84px);
     left: 160px;
   }
 
-  .story_interaction_image {
+  /* .story_interaction_image {
     height: 920px;
     width: 750px;
-  }
+  } */
 }
 
 @media screen and (min-width: 2000px) {
@@ -3757,9 +3779,9 @@ transform: translate(-167px, -84px);
     bottom: 158px;
   }
 
-  .chapters_list_box {
+  /* .chapters_list_box {
     top: 204px;
-  }
+  } */
 
   .welcome_screen_image {
     height: 910px;
@@ -3801,10 +3823,10 @@ transform: translate(-167px, -84px);
     left: 183px;
   }
 
-  .story_interaction_image {
+  /* .story_interaction_image {
     height: 1000px;
     width: 820px;
-  }
+  } */
 }
 
 @media screen and (min-width: 2300px) {
@@ -3825,9 +3847,9 @@ transform: translate(-167px, -84px);
     bottom: 160px;
   }
 
-  .chapters_list_box {
+  /* .chapters_list_box {
     top: 265px;
-  }
+  } */
 
   .welcome_screen_image {
     height: 1075px;
@@ -3869,10 +3891,10 @@ transform: translate(-167px, -84px);
     left: 165px;
   }
 
-  .story_interaction_image {
+  /* .story_interaction_image {
     height: 1100px;
     width: 850px;
-  }
+  } */
 }
 
 @media screen and (min-width: 2600px) {
@@ -3893,9 +3915,9 @@ transform: translate(-167px, -84px);
     bottom: 180px;
   }
 
-  .chapters_list_box {
+  /* .chapters_list_box {
     top: 240px;
-  }
+  } */
 
   .welcome_screen_image {
     height: 950px;
@@ -3928,10 +3950,10 @@ transform: translate(-167px, -84px);
     top: 400px;
   }
 
-  .story_interaction_image {
+  /* .story_interaction_image {
     height: 1150px;
     width: 960px;
-  }
+  } */
 
   .story_interaction_content {
     top: 100px;

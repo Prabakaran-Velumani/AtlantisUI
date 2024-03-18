@@ -266,8 +266,11 @@ const Story: React.FC<{
                     color={'#D9C7A2'}
                     display={'flex'}
                     justifyContent={'center'}
+                    className={'story_note_content'}
                   >
+                    <Text textAlign={'center'}>
                     {data?.blockText}
+                    </Text>
                   </Box>
                 </Box>
                 <Box
@@ -280,7 +283,7 @@ const Story: React.FC<{
                   position={'fixed'}
                   top={'70%'}
                 >
-                  <Img src={next} w={'100px'} />
+                  <Img src={next} h={'7vh'} className={'story_note_next_button'} />
                 </Box>
               </Box>
             </GridItem>
@@ -453,7 +456,7 @@ const Story: React.FC<{
                 <Img src={parch} w={'100%'} h={'100%'} loading="lazy" />
                 <Box
                   position={'absolute'}
-                  top={{ sm: '14px', md: '38px' }}
+                  top={{ sm: '5%', md: '6%' }}
                   h={'80% !important'}
                   className="story_interaction_image"
                 >
@@ -463,11 +466,12 @@ const Story: React.FC<{
                     justifyContent={'center'}
                     alignItems={'center'}
                     fontWeight={500}
-                    fontSize={{ sm: '1.8vw', md: '2vw', lg: '2.5vw' }}
+                    fontSize={{ md: '3vw', lg: '2.5vw' }}
                     fontFamily={'AtlantisText'}
                     lineHeight={1}
                     w={'100%'}
                     h={'10%'}
+                    className={'interaction_heading_potrait'}
                   >
                     <Box w={'80%'} color={'#312821'}>
                       Interaction{' '}
@@ -490,6 +494,7 @@ const Story: React.FC<{
                       w={'60%'}
                       fontSize={{ md: '1.5vw', lg: '1.9vw' }}
                       letterSpacing={1}
+                      className={'story_intraction_question'}
                     >
                       {data?.blockText}
                     </Box>
@@ -519,7 +524,7 @@ const Story: React.FC<{
                           >
                             <Img
                               src={option === ind ? on : off}
-                              h={'30px'}
+                              h={'4vh'}
                               w={'100%'}
                             />
                             <Box
@@ -529,6 +534,7 @@ const Story: React.FC<{
                               fontSize={{
                                 lg: '1.9vw',
                               }}
+                              className={'story_interaction_option'}
                             >
                               {item?.qpOptionText}
                             </Box>
@@ -543,16 +549,16 @@ const Story: React.FC<{
                   >
                     <Img
                       src={left}
-                      w={'50px'}
-                      h={'50px'}
+                      w={'4vw'}
+                      h={'7vh'}
                       cursor={'pointer'}
                       onClick={() => prevData(data)}
                     />
                     {option !== null && (
                       <Img
                         src={right}
-                        w={'50px'}
-                        h={'50px'}
+                        w={'4vw'}
+                        h={'7vh'}
                         cursor={'pointer'}
                         onClick={() => InteractionFunction()}
                       />
