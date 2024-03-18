@@ -171,7 +171,7 @@ Object.assign(styleflex, {
                           base: '20px',
                           sm: '40px',
                           md: '70px',
-                          lg: '150px',
+                          lg: '50px',
                         }}
                         padding-top={'20px'}
                         src={ref}

@@ -836,7 +836,7 @@ font-family: 'AtlantisText';
 }
 
 .top-menu-home-section .Setting-box .setting-pad {
-  height: 500px;
+  height: 75%;
   width: 550px;
 }
 
@@ -879,7 +879,7 @@ font-family: 'AtlantisText';
 .top-menu-home-section .Setting-box .btns {
   position: absolute;
   display: flex;
-  transform: translateY(130px);
+  transform: translateY(20vh);
 }
 
 .top-menu-home-section .Setting-box .btns .btn {
@@ -1028,7 +1028,7 @@ font-family: 'AtlantisText';
   align-items: center;
   width: 100%;
   position: absolute;
-  transform: translate(0px, 260px);
+  transform: translate(0px, 240px);
   top: 0;
 }
 
@@ -1349,7 +1349,7 @@ transform: translate(-167px, -84px);
 
 .dropdown {
   transform: translate(8px, 30px);
-  max-width: 280px;
+  max-width: 234px;
   max-height: 120px;
   overflow-y: scroll;
   font-family: 'AtlantisText';
@@ -2857,6 +2857,11 @@ transform: translate(-167px, -84px);
 }
 
 @media screen and (max-width: 480px) {
+  .top-menu-home-section .Setting-box .setting-pad {
+    height: 100%;
+    width: 550px;
+  }
+
   .Play-game .img-box .img-bg {
     height: 100vh;
     width: 700px !important;
@@ -3262,8 +3267,14 @@ text-transform: capitalize;
 
 /* Rajesh css works */
 /* player name in character selection */
+.player_name:focus {
+  outline: none;
+  border: none;
+}
 
 .player_name {
+  background-color: transparent;
+  outline: none;
   text-align: center;
   position: absolute;
   bottom: -15px;
@@ -3390,6 +3401,18 @@ text-transform: capitalize;
 }
 
 @media screen and (orientation: portrait) {
+  .info_potrait {
+    height: 90vw !important;
+  }
+  .intro_text{
+    font-size: 6vw !important;
+  }
+  .top-menu-home-section .Setting-box .btns {
+    position: absolute;
+    display: flex;
+    transform: translateY(10vh);
+  }
+
   .character_potrait {
     width: 100vh;
     height: 100vw;
@@ -3464,7 +3487,7 @@ text-transform: capitalize;
     height: 37% !important;
   }
 
-  .completion_heading{
+  .completion_heading {
     height: 6% !important;
   }
 
@@ -3541,6 +3564,11 @@ text-transform: capitalize;
     height: 226px;
     width: 240px;
   }
+
+  .top-menu-home-section .Setting-box .setting-pad {
+    height: 100%;
+    width: 550px;
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -3611,9 +3639,19 @@ text-transform: capitalize;
     height: 238px;
     width: 276px;
   }
+
+  .top-menu-home-section .Setting-box .setting-pad {
+    height: 100%;
+    width: 550px;
+  }
 }
 
 @media screen and (min-width: 900px) {
+  .top-menu-home-section .Setting-box .setting-pad {
+    height: 100%;
+    width: 550px;
+  }
+
   .player_name {
     position: absolute;
     bottom: -2px;
@@ -4266,7 +4304,7 @@ text-transform: capitalize;
 }
 
 
-/********************************* PREVIEW WELCOME SCREEN *********************************************** */
+/********************************* PREVIEW COMPLETION SCREEN *********************************************** */
 .EntirePreview .completion_content .inside-img {
   display: flex;
   align-items: center;
@@ -4301,6 +4339,15 @@ text-transform: capitalize;
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .leaderboard-img {
   width: 85vw;
   height: 80vh;
+}
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .title {
+ font-size: 4vh;
+ font-family: 'AtlantisText';
+ color: #000;
+ transform: translate(0, -31vh);
+ text-transform: uppercase;
+ position: absolute;
+
 }
 
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box {
@@ -4555,13 +4602,13 @@ text-transform: capitalize;
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .next-btn-box {
   position: absolute;
-  transform: translate(42vw, 40vh);
+  transform: translate(0vw, 35vh);
   width: auto;
 }
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .next-btn-box img {
-  height: 3.5rem;
-  width: 4.8rem;
+  height: 4rem;
+  width: 8.8rem;
   cursor: pointer;
 }
 
@@ -4629,8 +4676,8 @@ text-transform: capitalize;
   display: flex;
   flex-direction: column;
   width: 65vw;
-  height: 55vh;
-  transform: translate(0, 7%);
+  height: 50vh;
+  transform: translate(0, 1%);
   position: absolute;
   overflow-y: auto;
 }
@@ -4840,7 +4887,6 @@ text-transform: capitalize;
   height: 30px;
 }
 
-
 .screen-notebox1{
   width: 100%;
   height:100vh;
@@ -4908,3 +4954,13 @@ text-transform: capitalize;
   height: 80vh;
   
 }
+.EntirePreview .Game-Screen .Images .Thankyou-section .next-btn{
+  position: absolute;
+  /* width: 6vw;
+  height: 6vh; */
+  transform: translate(0, 32vh);
+} 
+.EntirePreview .Game-Screen .Images .Thankyou-section .next-btn img{
+  width: 110px;
+  height: 45px;
+} 

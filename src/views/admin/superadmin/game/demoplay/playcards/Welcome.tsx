@@ -130,7 +130,7 @@ const Welcome: React.FC<{
             backgroundImage={imageSrc}
             backgroundSize={'cover'}
             backgroundRepeat={'no-repeat'}
-            className='chapter_potrait'
+            className="chapter_potrait"
           >
             <Grid
               templateColumns="repeat(1, 1fr)"
@@ -159,8 +159,13 @@ const Welcome: React.FC<{
                     top={'22%'}
                     display={'flex'}
                     justifyContent={'center'}
-                    h={{base:'49% !important',sm:'69% !important',md:'77% !important','2xl':'50% !important'}}
-                    >
+                    h={{
+                      base: '49% !important',
+                      sm: '69% !important',
+                      md: '77% !important',
+                      '2xl': '50% !important',
+                    }}
+                  >
                     <Box w={'65%'}>
                       <Box
                         w={'100%'}
@@ -189,45 +194,39 @@ const Welcome: React.FC<{
                         justifyContent={'center'}
                       >
                         <Box w={'50%'}>
-                          {/* {formData.gameIsShowGameDuration === 'true' && ( */}
-                          <Text
-                            fontSize={{
-                              base: '11px',
-                              sm: '12px',
-                              md: '13px',
-                              lg: '15px',
-                            }}
-                            fontFamily={'AtlantisContent'}
-                            textAlign={'center'}
-                          >
-                            <>
-                              {' '}
-                              <Icon
-                                as={FaClock}
-                                style={customStylesicon}
-                              />{' '}
-                              <span style={customStylesicon}>
-                                {formData.gameDuration > 1
-                                  ? formData.gameDuration + ' mins'
-                                  : 'Few mins'}
-                              </span>
-                            </>
-                          </Text>
-                          {/* )} */}
+                          {formData.gameIsShowGameDuration === 'true' && (
+                            <Text
+                              fontSize={{
+                                base: '11px',
+                                sm: '12px',
+                                md: '13px',
+                                lg: '15px',
+                              }}
+                              fontFamily={'AtlantisContent'}
+                              textAlign={'center'}
+                            >
+                              <>
+                                {' '}
+                                <Icon
+                                  as={FaClock}
+                                  style={customStylesicon}
+                                />{' '}
+                                <span style={customStylesicon}>
+                                  {formData.gameDuration > 1
+                                    ? formData.gameDuration + ' mins'
+                                    : 'Few mins'}
+                                </span>
+                              </>
+                            </Text>
+                          )}
                         </Box>
                       </Box>
-                      <Box w={'100%'} 
-                      // overflowY={'scroll'} 
-                      h={'auto'}>
+                      <Box w={'100%'} h={'auto'}>
                         {formData.gameIsShowStoryline === 'true' && (
                           <Text
-                            fontSize={{
-                              base: '11px',
-                              sm: '12px',
-                              md: '13px',
-                              lg: '15px',
-                            }}
-                            fontFamily={'AtlantisContent'}
+                            fontSize={'1.5vw'}
+                            fontFamily={'AtlantisText'}
+                            color={'#D9C7A2'}
                             textAlign={'center'}
                           >
                             {formData.gameStoryLine}
@@ -240,7 +239,7 @@ const Welcome: React.FC<{
                         >
                           <Img
                             src={rew}
-                            mt={{base:'',sm:'10px',md:'25px'}}
+                            mt={{ base: '', sm: '10px', md: '25px' }}
                             alt="rew"
                             w={'100%'}
                             h={'20px'}
@@ -249,224 +248,228 @@ const Welcome: React.FC<{
                         <Box
                           w={'100%'}
                           display={'flex'}
-                          justifyContent={
-                            formData.gameIsShowSkill === 'true' &&
-                            formData.gameIsShowLearningOutcome === 'true'
-                              ? 'space-between'
-                              : 'center'
-                          }
+                          justifyContent={'center'}
                         >
-                          {/* {formData.gameIsShowSkill === 'true' && ( */}
-                          <Box w={'38%'} h={'auto'} position={'relative'}>
-                            <motion.div
-                              initial={{ opacity: 0, scale: 0.5 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ duration: 0.5, delay: 0.5 }}
-                            >
-                              <Img src={back} w={'100%'} h={'100%'} />
-                              <Box
-                                w={'100%'}
-                                h={'auto'}
-                                position={'absolute'}
-                                top={'4px'}
-                              >
-                                <Text
-                                  // className="skill-text"
-                                  style={{ textAlign: 'center' }}
-                                  fontFamily={'AtlantisContent'}
-                                  color={'black'}
-                                  fontSize={'1.5vw'}
+                          <Box
+                            w={'70%'}
+                            display={'flex'}
+                            justifyContent={
+                              formData.gameIsShowSkill === 'true' &&
+                              formData.gameIsShowLearningOutcome === 'true'
+                                ? 'space-between'
+                                : 'center'
+                            }
+                          >
+                            {formData.gameIsShowSkill === 'true' && (
+                              <Box w={'50%'} h={'auto'} position={'relative'}>
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.5 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ duration: 0.5, delay: 0.5 }}
                                 >
-                                  Skills
-                                </Text>
-                                <Box w={'100%'} className={'skill_content'} mt={'10px'}>
-                                  {authorArray
-                                    .map((authorItem, index) => {
-                                      const skillName =
-                                        findSkillName(authorItem);
-                                      return skillName;
-                                    })
-                                    .filter((skillName) => skillName !== null)
-                                    .map((filteredSkillName, index) => (
-                                      <Box
-                                        display={'flex'}
-                                        key={index}
-                                        w={'100%'}
-                                        justifyContent={'center'}
-                                      >
-                                        <Img
-                                          src={write}
-                                          w={{
-                                            base: '25px',
-                                            sm: '25px',
-                                            md: '25px',
-                                            lg: '35px',
-                                          }}
-                                          h={{
-                                            base: '25px',
-                                            sm: '25px',
-                                            md: '25px',
-                                            lg: '35px',
-                                          }}
-                                          mt={index === 0 ? '10px' : ''}
-                                        />
-                                        <Box>
+                                  <Img src={back} w={'100%'} h={'100%'} />
+                                  <Box
+                                    w={'100%'}
+                                    h={'auto'}
+                                    position={'absolute'}
+                                    top={'4px'}
+                                  >
+                                    <Text
+                                      // className="skill-text"
+                                      style={{ textAlign: 'center' }}
+                                      fontFamily={'AtlantisContent'}
+                                      color={'black'}
+                                      fontSize={'1.5vw'}
+                                    >
+                                      Skills
+                                    </Text>
+                                    <Box
+                                      w={'100%'}
+                                      className={'skill_content'}
+                                      mt={{ base: '', md: '10px' }}
+                                    >
+                                      {authorArray
+                                        .map((authorItem, index) => {
+                                          const skillName =
+                                            findSkillName(authorItem);
+                                          return skillName;
+                                        })
+                                        .filter(
+                                          (skillName) => skillName !== null,
+                                        )
+                                        .map((filteredSkillName, index) => (
                                           <Box
                                             display={'flex'}
-                                            w={'50px'}
-                                            h={'20px'}
-                                            justifyContent={'space-between'}
-                                            fontWeight={'300'}
-                                            marginLeft={'5px'}
-                                            lineHeight={0.9}
-                                            mt={index === 0 ? '10px' : ''}
+                                            key={index}
+                                            w={'100%'}
+                                            justifyContent={'center'}
                                           >
-                                            <Text
-                                              fontSize={'1.5vw'}
-                                              color={'#D9C7A2'}
-                                              fontFamily={'AtlantisContent'}
-                                            >
-                                              {filteredSkillName} 
-                                            </Text>
+                                            <Img
+                                              src={write}
+                                              w={{
+                                                base: '25px',
+                                                sm: '25px',
+                                                md: '25px',
+                                                lg: '35px',
+                                              }}
+                                              h={{
+                                                base: '25px',
+                                                sm: '25px',
+                                                md: '25px',
+                                                lg: '35px',
+                                              }}
+                                              mt={index === 0 ? '10px' : ''}
+                                            />
+                                            <Box>
+                                              <Box
+                                                display={'flex'}
+                                                w={'50px'}
+                                                h={'20px'}
+                                                justifyContent={'space-between'}
+                                                fontWeight={'300'}
+                                                marginLeft={'5px'}
+                                                lineHeight={0.9}
+                                                mt={index === 0 ? '10px' : ''}
+                                              >
+                                                <Text
+                                                  fontSize={'1.5vw'}
+                                                  color={'#D9C7A2'}
+                                                  fontFamily={'AtlantisContent'}
+                                                >
+                                                  {filteredSkillName}
+                                                </Text>
+                                              </Box>
+                                            </Box>
                                           </Box>
-                                        </Box>
-                                      </Box>
-                                    ))}
-                                </Box>
+                                        ))}
+                                    </Box>
+                                  </Box>
+                                </motion.div>
                               </Box>
-                            </motion.div>
-                          </Box>
-                          {/* )}  */}
-                          {/* {formData.gameIsShowLearningOutcome === 'true' && ( */}
-
-                          <Box w={'38%'} h={'auto'} position={'relative'}>
-                            <motion.div
-                              initial={{ opacity: 0, scale: 0.5 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ duration: 0.5, delay: 1 }}
-                            >
-                              <Img src={back} w={'100%'} h={'100%'} />
-                              <Box
-                                w={'100%'}
-                                h={'auto'}
-                                position={'absolute'}
-                                top={'4px'}
-                              >
-                                <Text
-                                  // className="skill-text"
-                                  style={{ textAlign: 'center' }}
-                                  fontFamily={'AtlantisContent'}
-                                  fontSize={'1.5vw'}
+                            )}
+                            {formData.gameIsShowLearningOutcome === 'true' && (
+                              <Box w={'50%'} h={'auto'} position={'relative'}>
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.5 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ duration: 0.5, delay: 1 }}
                                 >
-                                  Learning Outcomes
-                                </Text>
-                                <Box w={'100%'} className={'skill_content'} ml={'20px'} mt={'10px'} display={'flex'} justifyContent={'center'} flexDirection={'column'}>
-                                  {data &&
-                                    data.map((it: any, ind: number) => {
-                                      const bulletIndex = it.indexOf('\u2022');
-                                      const contentAfterBullet =
-                                        bulletIndex !== -1
-                                          ? it.slice(bulletIndex + 1).trim()
-                                          : it;
-                                      return (
-                                        <Box
-                                          display={'flex'}
-                                          key={ind}
-                                          w={'78%'}
-                                          justifyContent={'space-between'}
-                                        >
-                                          <Img
-                                            src={write}
-                                            w={{
-                                              base: '25px',
-                                              sm: '25px',
-                                              md: '25px',
-                                              lg: '35px',
-                                            }}
-                                            h={{
-                                              base: '25px',
-                                              sm: '25px',
-                                              md: '25px',
-                                              lg: '35px',
-                                            }}
-                                            mt={ind === 0 ? '10px' : ''}
-                                          />
+                                  <Img src={back} w={'100%'} h={'100%'} />
+                                  <Box
+                                    w={'100%'}
+                                    h={'auto'}
+                                    position={'absolute'}
+                                    top={'4px'}
+                                  >
+                                    <Text
+                                      // className="skill-text"
+                                      style={{ textAlign: 'center' }}
+                                      fontFamily={'AtlantisContent'}
+                                      fontSize={'1.1vw'}
+                                    >
+                                      Learning Outcomes
+                                    </Text>
+                                    <Box
+                                      w={'100%'}
+                                      className={'skill_content'}
+                                      ml={'20px'}
+                                      mt={{ base: '', md: '10px' }}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                      flexDirection={'column'}
+                                    >
+                                      {data &&
+                                        data.map((it: any, ind: number) => {
+                                          const bulletIndex =
+                                            it.indexOf('\u2022');
+                                          const contentAfterBullet =
+                                            bulletIndex !== -1
+                                              ? it.slice(bulletIndex + 1).trim()
+                                              : it;
+                                          return (
+                                            <Box
+                                              display={'flex'}
+                                              key={ind}
+                                              w={'78%'}
+                                              justifyContent={'center'}
+                                              mt={ind === 0 ? '50px' : ''}
+                                            >
+                                              <Img
+                                                src={write}
+                                                w={{
+                                                  base: '25px',
+                                                  sm: '25px',
+                                                  md: '25px',
+                                                  lg: '35px',
+                                                }}
+                                                h={{
+                                                  base: '25px',
+                                                  sm: '25px',
+                                                  md: '25px',
+                                                  lg: '35px',
+                                                }}
+                                              />
                                               <Text
                                                 color={'#D9C7A2'}
                                                 fontFamily={'AtlantisContent'}
                                                 fontSize={'1.5vw'}
                                               >
-                                                {contentAfterBullet} dfgfdg e e  this dsjfpj  jwrj ojwprp wrwrwh oirhwoahaw wrhiwug riwbao
+                                                {contentAfterBullet}
                                               </Text>
-                                          {/* <Box>
-                                            <Box
-                                              display={'flex'}
-                                              w={'50px'}
-                                              h={'20px'}
-                                              justifyContent={'space-between'}
-                                              fontWeight={'300'}
-                                              marginLeft={'5px'}
-                                              lineHeight={0.9}
-                                              mt={ind === 0 ? '10px' : ''}
-                                            >
                                             </Box>
-                                          </Box> */}
-                                        </Box>
-                                      );
-                                    })}
-                                </Box>
+                                          );
+                                        })}
+                                    </Box>
+                                  </Box>
+                                </motion.div>
                               </Box>
-                            </motion.div>
+                            )}
                           </Box>
-                          {/* )}  */}
                         </Box>
-                        {/* {formData.gameIsShowAuhorName === 'true' && ( */}
-                        <Box
-                          w={'100%'}
-                          // h={'50px'}
-                          position={'relative'}
-                          className="author"
-                        >
-                          <Text
-                            fontSize={'1.5vw'}
-                            fontFamily={'AtlantisContent'}
-                            color={'#D9C7A2'}
-                            textAlign={'center'}
+                        {formData.gameIsShowAdditionalWelcomeNote ===
+                          'true' && (
+                          <Box
+                            w={'100%'}
+                            h={'30px'}
+                            position={'relative'}
+                            className="renderContent"
                           >
-                            *Author* <br /> {formData.gameAuthorName}
-                          </Text>
-                        </Box>
-                        {/* )} */}
-                        {/* {formData.gameIsShowAdditionalWelcomeNote === 'true' && ( */}
-                        <Box
-                          w={'100%'}
-                          h={'50px'}
-                          position={'relative'}
-                          className="renderContent"
-                        >
-                          <Text
-                            fontSize={{
-                              base: '11px',
-                              sm: '12px',
-                              md: '13px',
-                              lg: '15px',
-                            }}
-                            fontFamily={'content'}
+                            <Text
+                              fontSize={'1.5vw'}
+                              fontFamily={'AtlantisText'}
+                              color={'#D9C7A2'}
+                              textAlign={'center'}
+                            >
+                              {renderContent()}
+                            </Text>
+                          </Box>
+                        )}
+                        {formData.gameIsShowAuhorName === 'true' && (
+                          <Box
+                            w={'100%'}
+                            // h={'50px'}
+                            position={'relative'}
+                            className="author"
                           >
-                            {renderContent()}
-                          </Text>
-                        </Box>
-                        {/* )} */}
+                            <Text
+                              fontSize={'1.5vw'}
+                              fontFamily={'AtlantisContent'}
+                              color={'#D9C7A2'}
+                              textAlign={'center'}
+                              lineHeight={'1'}
+                            >
+                              *Author* <br /> {formData.gameAuthorName}
+                            </Text>
+                          </Box>
+                        )}
                       </Box>
                       <Box
-                        // className="next-btn-welcome"
-                        // position={'absolute'}
-                        // bottom={'0'}
-                        // left={'0'}
-                        w={'100%'}
+                        w={'64%'}
                         display={'flex'}
                         justifyContent={'center'}
                         alignItems={'flex-end'}
+                        position={'fixed'}
+                        bottom={{ sm: '25px', md: '50px' }}
                       >
                         <Img
                           w={'100px'}

@@ -34,6 +34,8 @@ import {
   SliderThumb,
   SliderFilledTrack,
   Tooltip,
+  GridItem,
+  Grid,
   Stack,
 } from '@chakra-ui/react';
 import next from 'assets/img/screens/next.png';
@@ -51,19 +53,7 @@ import SliderPointer from 'assets/img/games/slider-pointer.png';
 import Okay from 'assets/img/games/OKAY button.png';
 import TooltipImg from 'assets/img/games/tooltip-1.png';
 import TopMenuNDI from 'assets/img/games/top-menu-parts/top-menu-NDI.png';
-// import back from 'assets/img/games/back.jpg';
-// import Back from 'assets/img/games/back.jpg';
-// import Okay from 'assets/img/games/o'
-// import bk from 'assets/img/games/17.png';
-// import note from 'assets/img/games/note.png';
-// import next from 'assets/img/screens/next.png';
-// import dial from 'assets/img/games/Dialogue.png';
-// import char from 'assets/img/games/charbox.png';
-// import right from 'assets/img/games/right.png';
-// import left from 'assets/img/games/left.png';
-// import parch from 'assets/img/games/parch.png';
-// import on from 'assets/img/games/on.png';
-// import off from 'assets/img/games/off.png';
+
 import { motion } from 'framer-motion';
 import React, {
   Suspense,
@@ -1344,11 +1334,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 1:
                   return (
                     <>
-                      {/* <motion.div
-                        initial={{ opacity: 0, background: '#000' }}
-                        animate={{ opacity: 1, background: '#0000' }}
-                        transition={{ duration: 0.3, delay: 0.5 }}
-                      > */}
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1381,7 +1366,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           </Box>
                         </Box>
                       </Box>
-                      {/* </motion.div> */}
                     </>
                   );
                 case 2:
@@ -1765,7 +1749,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 10:
                   return (
                     <>
-                      <Box className="Play-game First-Screen">
+                      {/* <Box className="Play-game First-Screen">
                         <Box
                           position={'fixed'}
                           top={0}
@@ -1780,7 +1764,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             transition={{ duration: 0.3, delay: 0.5 }}
                           >
                             <Box className="img-box" position={'relative'}>
-                              {/* <Img className='img-bg' src={`${API_SERVER}/${useData?.Response?.[0]?.gasAssetImage}`} />  */}
+                             
                               <Img
                                 className="img-bg"
                                 src={backgroundScreenUrl}
@@ -1809,9 +1793,117 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                               onClick={() => setCurrentScreenId(1)}
                             >
                               <Icon as={MdClose} />
-                            </Button> */}
+                            </Button> 
                           </motion.div>
                         </Box>
+                      </Box> */}
+                      <Box
+                        position="relative"
+                        maxW="100%"
+                        w={'100vw'}
+                        height="100vh"
+                        backgroundImage={backgroundScreenUrl}
+                        backgroundSize={'cover'}
+                        backgroundRepeat={'no-repeat'}
+                        className="chapter_potrait"
+                      >
+                        <Grid
+                          templateColumns="repeat(1, 1fr)"
+                          gap={4}
+                          position="absolute"
+                          top="50%"
+                          left="50%"
+                          transform="translate(-50%, -50%)"
+                          // className="story_note_grid"
+                          width={'100%'}
+                        >
+                          <GridItem colSpan={1}>
+                            <Box
+                              w={'auto'}
+                              h={'90vh'}
+                              display={'flex'}
+                              justifyContent={'center'}
+                              position={'relative'}
+                              className={'info_potrait'}
+                            >
+                              <Img src={Login} w={'auto'} h={'100%'} />
+                              <Box
+                                w={'30%'}
+                                h={'49%'}
+                                position={'fixed'}
+                                top={'25%'}
+                                display={'flex'}
+                                justifyContent={'space-between'}
+                                alignItems={'center'}
+                                flexDirection={'column'}
+                              >
+                                  <Box>
+                                    <Box
+                                      w={'100%'}                                     
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Text
+                                        fontFamily={'AtlantisText'}
+                                        fontSize={'2.8vw'}
+                                        color={'#D9C7A2'}
+                                        className={'intro_text'}
+                                      >
+                                        Atlantis
+                                      </Text>
+                                    </Box>
+                                  </Box>
+                                  <Box>
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Text
+                                        fontFamily={'AtlantisText'}
+                                        fontSize={'2.5vw'}
+                                        color={'#D9C7A2'}
+                                        className={'intro_text'}
+                                      >
+                                        Welcome To
+                                      </Text>
+                                    </Box>
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Text
+                                        fontFamily={'AtlantisText'}
+                                        fontSize={'2.5vw'}
+                                        color={'#D9C7A2'}
+                                        textTransform={'capitalize'}
+                                         className={'intro_text'}
+                                      >
+                                        The Demo Play
+                                      </Text>
+                                    </Box>
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Button
+                                        w={'90%'}
+                                        h={{sm:'20px',md:'30px'}}
+                                        bg={'none'}
+                                        _hover={{bg:'none'}}
+                                        onClick={() => {
+                                          setCurrentScreenId(12);
+                                          setIsGetsPlayAudioConfirmation(true);
+                                        }}
+                                      ></Button>
+                                    </Box>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </GridItem>
+                        </Grid>
                       </Box>
                     </>
                   );

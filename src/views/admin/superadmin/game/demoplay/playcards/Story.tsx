@@ -307,7 +307,7 @@ useEffect(() => {
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
           backgroundRepeat={'no-repeat'}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Grid
             templateColumns="repeat(1, 1fr)"
@@ -362,7 +362,7 @@ useEffect(() => {
           alignItems={'center'}
           justifyContent={'center'}
           position={'relative'}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Img
             src={backGroundImg}
@@ -483,7 +483,7 @@ useEffect(() => {
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
           backgroundRepeat={'no-repeat'}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Grid
             templateColumns="repeat(1, 1fr)"
@@ -499,7 +499,7 @@ useEffect(() => {
                 <Img src={parch} w={'100%'} h={'100%'} loading="lazy" />
                 <Box
                   position={'absolute'}
-                  top={{ sm: '18px', md: '42px' }}
+                  top={{ sm: '14px', md: '38px' }}
                   h={'80% !important'}
                   className="story_interaction_image"
                 >
@@ -508,12 +508,12 @@ useEffect(() => {
                     display={'flex'}
                     justifyContent={'center'}
                     alignItems={'center'}
-                    fontWeight={700}
-                    fontSize={{ sm: '1vw', md: '1.5vw', lg: '1.9vw' }}
+                    fontWeight={500}
+                    fontSize={{ sm: '1.8vw', md: '2vw', lg: '2.5vw' }}
                     fontFamily={'AtlantisText'}
                     lineHeight={1}
                     w={'100%'}
-                    h={'5%'}
+                    h={'10%'}
                   >
                     <Box w={'80%'}>
                       Interactions...!{' '}
@@ -530,7 +530,7 @@ useEffect(() => {
                     lineHeight={1}
                     w={'96%'}
                     overflowY={'scroll'}
-                    marginTop={'15px'} 
+                    marginTop={'15px'}
                   >
                     <Box
                       w={'60%'}
@@ -573,8 +573,6 @@ useEffect(() => {
                               display={'flex'}
                               justifyContent={'center'}
                               fontSize={{
-                                sm: '1.3vw',
-                                md: '1.5vw',
                                 lg: '1.9vw',
                               }}
                             >
@@ -620,7 +618,7 @@ useEffect(() => {
           alignItems={'center'}
           justifyContent={'center'}
           position={'relative'}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Img
             src={backGroundImg}
@@ -671,7 +669,7 @@ useEffect(() => {
                 <Img
                   src={char}
                   position={'fixed'}
-                  h={{base:'75px',md:'100px'}}
+                  h={{ base: '75px', md: '100px' }}
                   w={'30%'}
                   left={'5%'}
                   bottom={'93px'}
@@ -734,7 +732,7 @@ useEffect(() => {
           position={'relative'}
           overflow={'visible'}
           style={{ perspective: '1000px' }}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Box
             backgroundImage={backGroundImg}
@@ -769,9 +767,9 @@ useEffect(() => {
             flexDirection={'column'}
             justifyContent={'center'}
             alignItems={'center'}
-            className='story_feedback'
+            className="story_feedback"
           >
-            <Img w={'90%'} h={'80vh'} src={feedi}  />
+            <Img w={'90%'} h={'80vh'} src={feedi} />
             <Box
               position={'fixed'}
               w={'50%'}
@@ -794,7 +792,10 @@ useEffect(() => {
                 display={'flex'}
                 justifyContent={'center'}
                 cursor={'pointer'}
-                transform={{base:'translate(0px, 60px)',md:'translate(0px, 100px)'}}
+                transform={{
+                  base: 'translate(0px, 60px)',
+                  md: 'translate(0px, 100px)',
+                }}
               >
                 <Img src={next} w={'200px'} h={'60px'} />
               </Box>

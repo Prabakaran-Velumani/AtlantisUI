@@ -142,14 +142,13 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     if (Object.keys(demoBlocks).length > 1) {
       setCurrentScreenId(13);
     } else {
-      setCurrentScreenId(2);
+      setCurrentScreenId(1);
     }
   };
 
   const handleProfile = (e: any, lang?: any) => {
     const { id, value } = e.target;
     setSelect(false);
-    // setIsGender(false);
     setProfileData((prev: any) => ({
       ...prev,
       [id]: id === 'name' ? value : lang,
@@ -157,10 +156,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   };
 
     // Afrith-modified-starts-08/Mar/24
-    const setPlayerName = (value:any) => {
-      setCharacterName(value);
-      setProfileData((prev:any) => ({...prev, name:value}))
-    };
+    // const setPlayerName = (value:any) => {
+    //   setCharacterName(value);
+    //   setProfileData((prev:any) => ({...prev, name:value}))
+    // };
     // Afrith-modified-ends-08/Mar/24
  
   const innerBoxWidth = useBreakpointValue({
@@ -174,136 +173,61 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       {formData && formData?.gameLanguageId !== null ? (
         <Box id="container" className="Play-station">
           <Box className="top-menu-home-section">
-            {
-              isLanguage ? (
-                <Box className="Setting-box">
-                  <Img src={Lang} className="setting-pad" />
-                  <Box className="music-volume volumes">
-                    <Box className="gender">
-                      <FormLabel>Language</FormLabel>
-                      <Text
-                        transform={'translate(0px,25px)'}
-                        textAlign={'center'}
-                        onClick={() => setSelect(!select)}
-                        position={'relative'}
-                        zIndex={9999999}
-                        fontFamily={'AtlantisText'}
-                        color={'#D9C7A2'}
-                      >
-                        {profileData?.language}
-                      </Text>
-                      <Img
-                        className="formfield"
-                        src={FormField}
-                        onClick={() => setSelect(!select)}
-                      />
-                      <Img className="selectField" src={Selected} />
-                      {select && (
-                        <Box className="dropdown">
-                          {lanuages &&
-                            lanuages.map((lang: any, num: any) => (
-                              <Text
-                                ml={'5px'}
-                                key={num}
-                                _hover={{ bgColor: '#377498' }}
-                                id={'language'}
-                                onClick={(e: any) =>
-                                  handleProfile(e, lang.label)
-                                }
-                              >
-                                {lang.label}
-                              </Text>
-                            ))}
-                        </Box>
-                      )}
-                    </Box>
-                    {/* </Box>
-                      </Box>
-                    </Box>
-                  </Box> */}
-                  </Box>
-                  <Box className="voice-volume volumes">
-                    {/* <Slider
-                  aria-label="slider-ex-4"
-                  defaultValue={30}
-                  name="voiceVolume"
-                  
-                >
-                  <SliderTrack
-                    className="slider-track"
-                    height="15px"
-                    borderRadius="80px"
-                  >
-                    <SliderFilledTrack
-                      className="filled-volume"
-                      bg="pink.500"
-                    />
-                  </SliderTrack>
-                  <SliderThumb boxSize={9} background={'transparent'}>
-                    <Img src={SliderPointer} />
-                  </SliderThumb>
-                </Slider> */}
-                  </Box>
-                  <Box className="btns">
-                    {/* <Button className='back-btn btn'><Img src={Back} 
-                // onClick={()=> setPermission({...permission, setting: false})}
-                 /></Button> */}
-                    <Button
-                      className="okay-btn btn"
-                      onClick={() => setIsLanguage(false)}
+            {isLanguage ? (
+              <Box className="Setting-box">
+                <Img src={Lang} className="setting-pad" />
+                <Box className="music-volume volumes">
+                  <Box className="gender">
+                    <FormLabel>Language</FormLabel>
+                    <Text
+                      transform={'translate(0px,25px)'}
+                      textAlign={'center'}
+                      onClick={() => setSelect(!select)}
+                      position={'relative'}
+                      zIndex={9999999}
+                      fontFamily={'AtlantisText'}
+                      color={'#D9C7A2'}
                     >
-                      <Img src={Okay} />
-                    </Button>
+                      {profileData?.language}
+                    </Text>
+                    <Img
+                      className="formfield"
+                      src={FormField}
+                      onClick={() => setSelect(!select)}
+                    />
+                    <Img className="selectField" src={Selected} />
+                    {select && (
+                      <Box className="dropdown">
+                        {lanuages &&
+                          lanuages.map((lang: any, num: any) => (
+                            <Text
+                              ml={'5px'}
+                              key={num}
+                              _hover={{ bgColor: '#377498' }}
+                              id={'language'}
+                              onClick={(e: any) => handleProfile(e, lang.label)}
+                            >
+                              {lang.label}
+                            </Text>
+                          ))}
+                      </Box>
+                    )}
                   </Box>
                 </Box>
-              ) : null
-              // <Box className="Setting-box off"></Box>
-            }
+                <Box className="voice-volume volumes"></Box>
+                <Box className="btns">
+                  <Button
+                    className="okay-btn btn"
+                    onClick={() => setIsLanguage(false)}
+                  >
+                    <Img src={Okay} />
+                  </Button>
+                </Box>
+              </Box>
+            ) : null}
           </Box>
         </Box>
       ) : null}
-      {/* <Box className="Play-game CharacterScreen">
-        <Box h={'100vh'} w={'100%'}>
-          <motion.div
-            initial={{ opacity: 0, background: '#000' }}
-            animate={{ opacity: 1, background: '#0000' }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
-            <Box className="img-box">
-              <Img className="img-bg" src={imageSrc} />   
-                <Box className="img-section">
-                  <Img 
-                  className="select-pad" 
-                  src={Select} loading="lazy" />
-                
-                  <Text className="enter-name">{playerInfo.name}</Text>
-                  <Box className="back-n-next-box">
-                    <Box
-                      w={'230px'}
-                      h={'50px'}
-                      transform={'translate(475px, 250px)'}
-                      cursor={'pointer'}
-                      position={'relative'}
-                      zIndex={9999999}
-                     
-                    ></Box>
-                  </Box>
-                  <Box className="back-n-next-box">
-                    <Button
-                      className="btns left-btn"
-                      onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
-                    ></Button>
-                    <Button
-                      className="btns right-btn"
-                      onClick={() => setI(players.length - 1 === i ? 0 : i + 1)}
-                    ></Button>
-                  </Box>
-                
-                </Box>
-            </Box>
-          </motion.div>
-        </Box>
-      </Box> */}
       <Box
         position="relative"
         maxW="100%"
@@ -325,24 +249,36 @@ const Characterspage: React.FC<PlayGamesProps> = ({
         >
           <GridItem colSpan={1} position={'relative'}>
             <Img src={Select} h={'auto'} maxW={'100%'} loading="lazy" />
-            <Box   
-              className={'character_select_area'}
-            >
-              <Box w={'30%'} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                <Img src={Selected} w='40px' h='45px' transform={'rotate(90deg)'}/>
-                <Img src={Selected} w='40px' h='45px' transform={'rotate(-90deg)'}/>
+            <Box className={'character_select_area'}>
+              <Box
+                w={'30%'}
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'space-between'}
+              >
+                <Img
+                  src={Selected}
+                  w="40px"
+                  h="45px"
+                  transform={'rotate(90deg)'}
+                />
+                <Img
+                  src={Selected}
+                  w="40px"
+                  h="45px"
+                  transform={'rotate(-90deg)'}
+                />
               </Box>
             </Box>
-            <Box
-            className={'select_player'}
-            
-            >
-              <Button w={'15%'} bg={'none'} _hover={{bg:'none'}} onClick={selectPlayerClick}></Button>
+            <Box className={'select_player'}>
+              <Button
+                w={'15%'}
+                bg={'none'}
+                _hover={{ bg: 'none' }}
+                onClick={selectPlayerClick}
+              ></Button>
             </Box>
-            <Box
-              className={'character_next'}
-
-            >
+            <Box className={'character_next'}>
               <Box
                 w={innerBoxWidth}
                 display={'flex'}
@@ -351,28 +287,17 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 <Button
                   className="btns left-btn"
                   bg={'none'}
-                  _hover={{bg:'none'}}
+                  _hover={{ bg: 'none' }}
                   onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
                 ></Button>
-                <Box w={'30%'} position={'relative'}>
-                   {/* Afrith-modified-starts-08/Mar/24-just Uncommented Input & commented Text */}
-                    <Input
-                      className="enter-name player_name"
-                      fontSize={'4vh'}
-                      _focusVisible={{border: 'none'}}
-                      border={'none'}
-                      placeholder="Enter Character Name"
-                      onChange={(e: any) => setPlayerName(e.target.value)}
-                    />
-                    {/* <Text className="enter-name">{playerInfo.name}</Text> */}
-
-                  {/* Afrith-modified-starts-08/Mar/24-just Uncommented Input & commented Text */}
-                  {/* <Text className="player_name" >{playerInfo.name}Leo Dasssdfsdfaf WRWRAWD </Text> */}
+                <Box w={'25%'} position={'relative'}>
+                  <input className="player_name" value={playerInfo.name} onChange={(e:any)=>setProfileData((prev:any)=>({...prev,name:e.target.value}))}/>
+                  {/* <Text >{playerInfo.name}</Text> */}
                 </Box>
                 <Button
                   className="btns right-btn"
                   bg={'none'}
-                  _hover={{bg:'none'}}
+                  _hover={{ bg: 'none' }}
                   onClick={() => setI(players.length - 1 === i ? 0 : i + 1)}
                 ></Button>
               </Box>

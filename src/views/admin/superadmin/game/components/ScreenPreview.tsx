@@ -317,6 +317,7 @@ const ScreenPreview = () => {
       /* Check wheather has next block or not, if not then show End of Current Quest.
           Want to play next quest, then switch the current quest in game creation screen */
     }
+    console.log('nextBlock',nextBlock);
     if (nextBlock.length == 0) {
       setEndOfQuest(true);
     } else {
@@ -481,19 +482,22 @@ useEffect(() => {
 }, [Navigatenext]);
 
   useEffect(() => {
-    if (data && type === 'Note') {
+    console.log('type', type)
+    console.log('data', data)
+    if (data && (type === 'Note' || type === 'Dialog') ){
       getDataSection(data);
     }
-  }, [data]);
+
+  }, [data, type]);
   return (
     <Box id="container" ref={previewScreenRef}>
       <Suspense fallback={<h1>Loading please wait...</h1>}>
         {contentReady && (
-          <motion.div
-            initial={{ opacity: 0, background: '#000' }}
-            animate={{ opacity: 1, background: '#0000' }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
+          // <motion.div
+          //   initial={{ opacity: 0, background: '#000' }}
+          //   animate={{ opacity: 1, background: '#0000' }}
+          //   transition={{ duration: 1, delay: 0.5 }}
+          // >
             <Box id="EntirePreview-wrapper">
               <Box className="EntirePreview-content">
                 <Box h={'100vh !important'} className="Images">
@@ -519,6 +523,11 @@ useEffect(() => {
                       Demo Play
                     </Button>
                     {currentTab == 3 && (
+                      <motion.div
+                      initial={{ opacity: 0, background: '#000' }}
+                      animate={{ opacity: 1, background: '#0000' }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -527,7 +536,6 @@ useEffect(() => {
                         position={'relative'}
                         overflow={'visible'}
                         style={{ perspective: '1000px' }}
-                        // className="Main-Content"
                       >
                         <Box
                           backgroundImage={preloadedAssets.backgroundImage}
@@ -551,8 +559,14 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
+                      </motion.div>
                     )}
                     {currentTab === 4 && data && type === 'Note' && (
+                      <motion.div
+                      initial={{ opacity: 0, background: '#000' }}
+                      animate={{ opacity: 1, background: '#0000' }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
                       <Box
                         className="screen-notebox1"
                       >
@@ -631,8 +645,14 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
+                      </motion.div>
                     )}
                     {currentTab === 4 && data && type === 'Dialog' && (
+                      <motion.div
+                      initial={{ opacity: 0, background: '#000' }}
+                      animate={{ opacity: 1, background: '#0000' }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -726,8 +746,14 @@ useEffect(() => {
                           </>
                         )}
                       </Box>
+                      </motion.div>
                     )}
                     {currentTab === 4 && data && type === 'Interaction' && (
+                      <motion.div
+                      initial={{ opacity: 0, background: '#000' }}
+                      animate={{ opacity: 1, background: '#0000' }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -776,7 +802,7 @@ useEffect(() => {
                             w={'100%'}
                           >
                             <Box w={'50%'} fontSize={'21px'}>
-                              Here You Can Answer the Interactions...!{' '}
+                              Interactions...!{' '}
                             </Box>
                           </Box>
                           <Box
@@ -855,8 +881,14 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
+                      </motion.div>
                     )}
                     {currentTab === 4 && data && type === 'response' && (
+                      <motion.div
+                      initial={{ opacity: 0, background: '#000' }}
+                      animate={{ opacity: 1, background: '#0000' }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -950,8 +982,14 @@ useEffect(() => {
                           </>
                         )}
                       </Box>
+                      </motion.div>
                     )}
                     {currentTab === 4 && data && type === 'feedback' && (
+                      <motion.div
+                      initial={{ opacity: 0, background: '#000' }}
+                      animate={{ opacity: 1, background: '#0000' }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1032,8 +1070,14 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
+                      </motion.div>
                     )}
                     {currentTab === 5 && currentSubTab === 0 && (
+                      <motion.div
+                      initial={{ opacity: 0, background: '#000' }}
+                      animate={{ opacity: 1, background: '#0000' }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1066,8 +1110,14 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
+                      </motion.div>
                     )}
                     {currentTab === 5 && currentSubTab === 1 && (
+                      <motion.div
+                      initial={{ opacity: 0, background: '#000' }}
+                      animate={{ opacity: 1, background: '#0000' }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1100,8 +1150,14 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
+                      </motion.div>
                     )}
                     {currentTab === 5 && currentSubTab === 2 && (
+                      <motion.div
+                      initial={{ opacity: 0, background: '#000' }}
+                      animate={{ opacity: 1, background: '#0000' }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1139,8 +1195,14 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
+                      </motion.div>
                     )}
                     {currentTab === 5 && currentSubTab === 3 && (
+                      <motion.div
+                      initial={{ opacity: 0, background: '#000' }}
+                      animate={{ opacity: 1, background: '#0000' }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1171,9 +1233,14 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
+                      </motion.div>
                     )}
                     {currentTab === 5 && currentSubTab === 4 && (
-                      <>
+                      <motion.div
+                      initial={{ opacity: 0, background: '#000' }}
+                      animate={{ opacity: 1, background: '#0000' }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
                         <Box
                           w={'100%'}
                           h={'100vh'}
@@ -1204,10 +1271,15 @@ useEffect(() => {
                             </Box>
                           </Box>
                         </Box>
-                      </>
+                      </motion.div>
                     )}
                     {currentTab === 5 && currentSubTab === 5 && (
-                      <Box
+                      <motion.div
+                      initial={{ opacity: 0, background: '#000' }}
+                      animate={{ opacity: 1, background: '#0000' }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
+                      <Box 
                         w={'100%'}
                         h={'100vh'}
                         alignItems={'center'}
@@ -1237,13 +1309,14 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
+                      </motion.div>
                     )}
-                    {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadedAssets={preloadedAssets }/>}
+                    {/* {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadedAssets={preloadedAssets }/>} */}
                   </Flex>
                 </Box>
               </Box>
             </Box>
-          </motion.div>
+          // </motion.div>
         )}
       </Suspense>
     </Box>
