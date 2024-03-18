@@ -1,5 +1,8 @@
 /* RESPONSIVE ORIENTATION START *********************************************** */
 @media screen and (orientation: portrait) {
+   
+  
+
   #EntirePreview-wrapper {
     height: 100vh;
     width: 100vw;

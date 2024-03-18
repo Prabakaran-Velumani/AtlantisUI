@@ -238,7 +238,7 @@ const Story: React.FC<{
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
           backgroundRepeat={'no-repeat'}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Grid
             templateColumns="repeat(1, 1fr)"
@@ -266,11 +266,11 @@ const Story: React.FC<{
                     color={'#D9C7A2'}
                     display={'flex'}
                     justifyContent={'center'}
+                    className={'story_note_content'}
                   >
-                    {data?.blockText} sdgi bibi aberi ahrh awhroi howiahro
-                    ihwaorh owharoh oawhosfoofocohhr oiwharoh oawir owaor oawiro
-                    iwaori oiwoair oorowairh oiawhro ihwoarih owihro ihwoarih
-                    owiharo hwaorhi owihrowha hos ghsokdhfo harhohrowiahroajfoj
+                    <Text textAlign={'center'}>
+                    {data?.blockText}
+                    </Text>
                   </Box>
                 </Box>
                 <Box
@@ -283,7 +283,7 @@ const Story: React.FC<{
                   position={'fixed'}
                   top={'70%'}
                 >
-                  <Img src={next} w={'100px'} />
+                  <Img src={next} h={'7vh'} className={'story_note_next_button'} />
                 </Box>
               </Box>
             </GridItem>
@@ -298,7 +298,7 @@ const Story: React.FC<{
           alignItems={'center'}
           justifyContent={'center'}
           position={'relative'}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Img
             src={backGroundImg}
@@ -339,7 +339,6 @@ const Story: React.FC<{
               bottom={'100px'}
               w={'200px'}
               h={'324px'}
-              // transform={'translate(0px, 55px)'}
             />
           )}
           {selectedNpc && (
@@ -350,7 +349,6 @@ const Story: React.FC<{
               bottom={'100px'}
               w={'200px'}
               h={'324px'}
-              // transform={'translate(0px, 55px)'}
             />
           )}
           <Img
@@ -404,7 +402,6 @@ const Story: React.FC<{
                 fontSize={'2vw'}
                 bottom={'38px'}
                 fontFamily={'AtlantisContent'}
-                // fontSize={'21px'}
               >
                 <TypingEffect text={data?.blockText} speed={50} />
               </Box>
@@ -443,7 +440,7 @@ const Story: React.FC<{
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
           backgroundRepeat={'no-repeat'}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Grid
             templateColumns="repeat(1, 1fr)"
@@ -459,7 +456,7 @@ const Story: React.FC<{
                 <Img src={parch} w={'100%'} h={'100%'} loading="lazy" />
                 <Box
                   position={'absolute'}
-                  top={{ sm: '18px', md: '42px' }}
+                  top={{ sm: '5%', md: '6%' }}
                   h={'80% !important'}
                   className="story_interaction_image"
                 >
@@ -468,15 +465,16 @@ const Story: React.FC<{
                     display={'flex'}
                     justifyContent={'center'}
                     alignItems={'center'}
-                    fontWeight={700}
-                    fontSize={{ sm: '1vw', md: '1.5vw', lg: '1.9vw' }}
+                    fontWeight={500}
+                    fontSize={{ md: '3vw', lg: '2.5vw' }}
                     fontFamily={'AtlantisText'}
                     lineHeight={1}
                     w={'100%'}
-                    h={'5%'}
+                    h={'10%'}
+                    className={'interaction_heading_potrait'}
                   >
-                    <Box w={'80%'}>
-                      Here You Can Answer the Interactions...!{' '}
+                    <Box w={'80%'} color={'#312821'}>
+                      Interaction{' '}
                     </Box>
                   </Box>
                   <Box
@@ -490,16 +488,15 @@ const Story: React.FC<{
                     lineHeight={1}
                     w={'96%'}
                     overflowY={'scroll'}
-                    marginTop={'15px'} 
+                    marginTop={'15px'}
                   >
                     <Box
                       w={'60%'}
                       fontSize={{ md: '1.5vw', lg: '1.9vw' }}
                       letterSpacing={1}
+                      className={'story_intraction_question'}
                     >
-                      {data?.blockText} fohfoihfoihoihf oihoaih ohiwoeiho
-                      iwhoihwqoibo bohiwge gigeguf fufuef uwfueyfwue fuweu
-                      ywfeuywhbhbckz
+                      {data?.blockText}
                     </Box>
                   </Box>
                   <Box
@@ -527,7 +524,7 @@ const Story: React.FC<{
                           >
                             <Img
                               src={option === ind ? on : off}
-                              h={'30px'}
+                              h={'4vh'}
                               w={'100%'}
                             />
                             <Box
@@ -535,10 +532,9 @@ const Story: React.FC<{
                               display={'flex'}
                               justifyContent={'center'}
                               fontSize={{
-                                sm: '1.3vw',
-                                md: '1.5vw',
                                 lg: '1.9vw',
                               }}
+                              className={'story_interaction_option'}
                             >
                               {item?.qpOptionText}
                             </Box>
@@ -553,16 +549,16 @@ const Story: React.FC<{
                   >
                     <Img
                       src={left}
-                      w={'50px'}
-                      h={'50px'}
+                      w={'4vw'}
+                      h={'7vh'}
                       cursor={'pointer'}
                       onClick={() => prevData(data)}
                     />
                     {option !== null && (
                       <Img
                         src={right}
-                        w={'50px'}
-                        h={'50px'}
+                        w={'4vw'}
+                        h={'7vh'}
                         cursor={'pointer'}
                         onClick={() => InteractionFunction()}
                       />
@@ -582,7 +578,7 @@ const Story: React.FC<{
           alignItems={'center'}
           justifyContent={'center'}
           position={'relative'}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Img
             src={backGroundImg}
@@ -657,7 +653,7 @@ const Story: React.FC<{
                 <Img
                   src={char}
                   position={'fixed'}
-                  h={{base:'75px',md:'100px'}}
+                  h={{ base: '75px', md: '100px' }}
                   w={'30%'}
                   left={'5%'}
                   bottom={'93px'}
@@ -727,7 +723,7 @@ const Story: React.FC<{
           position={'relative'}
           overflow={'visible'}
           style={{ perspective: '1000px' }}
-          className='chapter_potrait'
+          className="chapter_potrait"
         >
           <Box
             backgroundImage={backGroundImg}
@@ -788,9 +784,9 @@ const Story: React.FC<{
             flexDirection={'column'}
             justifyContent={'center'}
             alignItems={'center'}
-            className='story_feedback'
+            className="story_feedback"
           >
-            <Img w={'90%'} h={'80vh'} src={feedi}  />
+            <Img w={'90%'} h={'80vh'} src={feedi} />
             <Box
               position={'fixed'}
               w={'50%'}
@@ -813,7 +809,10 @@ const Story: React.FC<{
                 display={'flex'}
                 justifyContent={'center'}
                 cursor={'pointer'}
-                transform={{base:'translate(0px, 60px)',md:'translate(0px, 100px)'}}
+                transform={{
+                  base: 'translate(0px, 60px)',
+                  md: 'translate(0px, 100px)',
+                }}
               >
                 <Img src={next} w={'200px'} h={'60px'} />
               </Box>

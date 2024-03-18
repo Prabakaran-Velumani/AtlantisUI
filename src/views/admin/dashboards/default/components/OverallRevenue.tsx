@@ -43,7 +43,7 @@ export default function OverallRevenue(props: { [x: string]: any ,count:number})
       mb={{ base: '20px', lg: '0px' }}
       {...rest}
     >
-      <Flex justify="space-between" px="20px" pt="5px" w="100%">
+      <Flex justify="space-between" px={{base:'0px',sm:"20px"}} pt="5px" w="100%">
         <Flex align="center" w="100%">
           <Flex flexDirection="column" me="20px">
             <Text

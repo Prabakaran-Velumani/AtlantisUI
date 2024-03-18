@@ -34,6 +34,8 @@ import {
   SliderThumb,
   SliderFilledTrack,
   Tooltip,
+  GridItem,
+  Grid,
   Stack,
 } from '@chakra-ui/react';
 import next from 'assets/img/screens/next.png';
@@ -108,7 +110,7 @@ import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
-import { isMobile } from 'react-device-detect';
+// import { isMobile } from 'react-device-detect';
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
@@ -285,7 +287,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
      allTimeScore: 250,
    });
  
-   console.log('gameScoreContextEP--',gameScore)
+
  // Afrith-modified-ends-07/Mar/24
  
   const [voiceIds, setVoiceIds] = useState<any>();
@@ -293,7 +295,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     useState<boolean>(false);
   const [reflectionAnswers, setReflectionAnswers] = useState([]);
   const [resolution, setResolution] = useState(null);
-  const [isMobileView, setIsMobileView] = useState(isMobile);
+  // const [isMobileView, setIsMobileView] = useState(isMobile);
 
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
@@ -1188,10 +1190,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     console.log('resolution---',resolution)
     // Afrith-modified-ends-13/Mar/24
 
-    const toggleView = () => {
-      setIsMobileView(!isMobileView);
-    };
-    console.log('///',isMobileView)
+    // const toggleView = () => {
+    //   setIsMobileView(!isMobileView);
+    // };
+    // console.log('///',isMobileView)
 
     // Avoid Top Menu Section
     const dontShowTopMenu = currentScreenId !== 7 && currentScreenId !== 6 && currentScreenId !== 5 && currentScreenId !== 4 && currentScreenId !== 3 && currentScreenId !== 10;
@@ -1337,11 +1339,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 1:
                   return (
                     <>
-                      {/* <motion.div
-                        initial={{ opacity: 0, background: '#000' }}
-                        animate={{ opacity: 1, background: '#0000' }}
-                        transition={{ duration: 0.3, delay: 0.5 }}
-                      > */}
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1374,7 +1371,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           </Box>
                         </Box>
                       </Box>
-                      {/* </motion.div> */}
                     </>
                   );
                 case 2:
@@ -1502,11 +1498,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 5:
                   return (
                     <>
-                      {/* <motion.div
-                        initial={{ opacity: 0, background: '#000' }}
-                        animate={{ opacity: 1, background: '#0000' }}
-                        transition={{ duration: 0.3, delay: 0.5 }}
-                      > */}
+                     
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1535,38 +1527,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           </Box>
                         </Box>
                       </Box>
-                      {/* </motion.div> */}
                     </>
                   );
                 case 6:
                   return (
                     <>
-                      {/* <motion.div
-                        initial={{ opacity: 0, background: '#000' }}
-                        animate={{ opacity: 1, background: '#0000' }}
-                        transition={{ duration: 0.3, delay: 0.5 }}
-                      > */}
-                      {/* <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        // overflow={'visible'}
-                        // style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box
-                          backgroundImage={backgroundScreenUrl}
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          // alignItems={'center'}
-                          // justifyContent={'center'}
-                          className="Game-Screen"
-                        >
-                          <Box className="Images"> */}
+                     
                       <Completion
                         questOptions={gameInfo?.questOptions}
                         getData={getData}
@@ -1580,10 +1546,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           gameInfo.completionQuestOptions
                         }
                       />
-                      {/* </Box>
-                        </Box>
-                      </Box> */}
-                      {/* </motion.div> */}
                     </>
                   );
                 case 7:
@@ -1758,7 +1720,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 10:
                   return (
                     <>
-                      <Box className="Play-game First-Screen">
+                      {/* <Box className="Play-game First-Screen">
                         <Box
                           position={'fixed'}
                           top={0}
@@ -1773,7 +1735,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             transition={{ duration: 0.3, delay: 0.5 }}
                           >
                             <Box className="img-box" position={'relative'}>
-                              {/* <Img className='img-bg' src={`${API_SERVER}/${useData?.Response?.[0]?.gasAssetImage}`} />  */}
+                             
                               <Img
                                 className="img-bg"
                                 src={backgroundScreenUrl}
@@ -1802,9 +1764,117 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                               onClick={() => setCurrentScreenId(1)}
                             >
                               <Icon as={MdClose} />
-                            </Button> */}
+                            </Button> 
                           </motion.div>
                         </Box>
+                      </Box> */}
+                      <Box
+                        position="relative"
+                        maxW="100%"
+                        w={'100vw'}
+                        height="100vh"
+                        backgroundImage={backgroundScreenUrl}
+                        backgroundSize={'cover'}
+                        backgroundRepeat={'no-repeat'}
+                        className="chapter_potrait"
+                      >
+                        <Grid
+                          templateColumns="repeat(1, 1fr)"
+                          gap={4}
+                          position="absolute"
+                          top="50%"
+                          left="50%"
+                          transform="translate(-50%, -50%)"
+                          // className="story_note_grid"
+                          width={'100%'}
+                        >
+                          <GridItem colSpan={1}>
+                            <Box
+                              w={'auto'}
+                              h={'90vh'}
+                              display={'flex'}
+                              justifyContent={'center'}
+                              position={'relative'}
+                              className={'info_potrait'}
+                            >
+                              <Img src={Login} w={'auto'} h={'100%'} />
+                              <Box
+                                w={'15vw'}
+                                h={'49%'}
+                                position={'fixed'}
+                                top={'25%'}
+                                display={'flex'}
+                                justifyContent={'space-between'}
+                                alignItems={'center'}
+                                flexDirection={'column'}
+                              >
+                                  <Box>
+                                    <Box
+                                      w={'100%'}                                     
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Text
+                                        fontFamily={'AtlantisText'}
+                                        fontSize={'2.8vw'}
+                                        color={'#D9C7A2'}
+                                        className={'intro_text'}
+                                      >
+                                        Atlantis
+                                      </Text>
+                                    </Box>
+                                  </Box>
+                                  <Box>
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Text
+                                        fontFamily={'AtlantisText'}
+                                        fontSize={'2.5vw'}
+                                        color={'#D9C7A2'}
+                                        className={'intro_text'}
+                                      >
+                                        Welcome To
+                                      </Text>
+                                    </Box>
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Text
+                                        fontFamily={'AtlantisText'}
+                                        fontSize={'2.5vw'}
+                                        color={'#D9C7A2'}
+                                        textTransform={'capitalize'}
+                                         className={'intro_text'}
+                                      >
+                                        The Demo Play
+                                      </Text>
+                                    </Box>
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Button
+                                        w={'90%'}
+                                        h={{sm:'20px',md:'30px'}}
+                                        bg={'none'}
+                                        _hover={{bg:'none'}}
+                                        onClick={() => {
+                                          setCurrentScreenId(12);
+                                          setIsGetsPlayAudioConfirmation(true);
+                                        }}
+                                      ></Button>
+                                    </Box>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </GridItem>
+                        </Grid>
                       </Box>
                     </>
                   );

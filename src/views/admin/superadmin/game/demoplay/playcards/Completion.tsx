@@ -112,53 +112,6 @@ const Completion: React.FC<{
 
   return (
     <>
-      {/* <Box
-        className="comple-screen"
-        
-      >
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: 'spring', stiffness: 100, damping: 10 }}
-        >
-          <Img src={imageSrc} className="bg-img" />
-        </motion.div>
-      </Box>
-      {!showComplete && (
-        <>
-         
-          <Box className="title" 
-        
-          >
-            <Text fontFamily={'AtlantisText'} textAlign={'center'}>
-              {curretQuestOptions?.gameScreenTitle}
-            </Text>
-          </Box>
-          <Box className="content-box">
-          
-        
-          </Box>
-          <Box
-            className="rewards-img-box"
-            transform="translate(0px,200px) !important"
-          >
-            <Img className="rewards-arrow-img" src={rew} />
-          </Box>
-          <Box
-            className="points-box"
-            transform="translate(0px,200px) !important"
-          >
-           
-           
-          </Box>
-        
-          <Box className="next-btn" transform="translate(0px,400px) !important">
-            <Img src={next} onClick={() => getData(data)} cursor={'pointer'} />
-          </Box>
-          
-        </>
-      )} */}
-
       <Box
         position="relative"
         maxW="100%"
@@ -177,7 +130,6 @@ const Completion: React.FC<{
           left="50%"
           transform="translate(-50%, -50%)"
           w={'100%'}
-          // className="story_complete_grid"
         >
           <GridItem colSpan={1} position={'relative'}>
             <Box
@@ -199,7 +151,6 @@ const Completion: React.FC<{
                   flexDirection={'column'}
                 >
                   <Box
-                    // className="title"
                     h={'13%'}
                     display={'flex'}
                     justifyContent={'center'}
@@ -215,7 +166,7 @@ const Completion: React.FC<{
                     justifyContent={'center'}
                     alignItems={'center'}
                     flexDirection={'column'}
-                    h={'80%'}
+                    h={'70%'}
                     className={'completion_content'}
                   >
                     <Box
@@ -223,7 +174,6 @@ const Completion: React.FC<{
                       fontSize={'2vw'}
                       fontFamily={'AtlantisText'}
                       w={'80%'}
-                      // h={'20%'}
                       textAlign={'center'}
                       color={'#D9C7A2'}
                     >
@@ -274,8 +224,9 @@ const Completion: React.FC<{
                       w={'100%'}
                       display={'flex'}
                       justifyContent={'space-between'}
+
                     >
-                      <Box w="45%" position={'relative'}>
+                      <Box w="45%" position={'relative'} >
                         <Img src={back} w={'100%'} h={'auto'} />
                         <Box
                           w={'100%'}
