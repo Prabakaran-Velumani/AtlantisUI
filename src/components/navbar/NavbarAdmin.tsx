@@ -179,7 +179,7 @@ export default function AdminNavbar(props: {
             {brandText}
           </Link>
         </Box>
-        <Box ms="auto" w={{ sm: 'unset', md: 'unset' }} display={'flex'} alignItems={'center'}>
+        <Box ms="auto" w={{ sm: 'unset', md: 'unset' }} display={{lg:'flex',xl:'none'}} alignItems={'center'}>
           <AdminNavbarLinks
             mini={mini}
             setMini={setMini}

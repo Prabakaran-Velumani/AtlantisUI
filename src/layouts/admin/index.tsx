@@ -293,7 +293,7 @@ export default function Dashboard(props: { [x: string]: any }) {
                 base: 'block',
                 sm: 'block',
                 md: 'block', 
-                xl: path.startsWith('/admin/game/preview/') ? 'none' : 'block',
+                lg: path.startsWith('/admin/game/preview/') ? 'none' : 'block',
               }}
             >
               <Navbar

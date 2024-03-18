@@ -87,8 +87,8 @@ function SidebarContent(props: {
       >
         <SidebarCard mini={mini} hovered={hovered} />
       </Box> */}
-      <Flex mb="30px" justifyContent="space-between">
-        <Box display="flex" justifyContent="flex-start" w={'210px'} alignItems="flex-between">
+      <Flex mt="30px" justifyContent="space-between" w={'210px'}>
+        <Box display="flex" justifyContent="flex-start"  alignItems="flex-between">
           <Avatar
             h="48px"
             w="48px"

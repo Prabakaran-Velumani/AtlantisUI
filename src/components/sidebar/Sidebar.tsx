@@ -48,7 +48,7 @@ function Sidebar(props: { routes: RoutesType[];[x: string]: any }) {
   let sidebarMargins = '0px';
 
   const path = usePath();
-  console.log(path);
+
   return (
     <Box
       transform={{

@@ -8,6 +8,7 @@ import {
 IconButton,
 InputGroup,
 InputLeftElement,
+Tooltip,
 useColorModeValue,
 } from '@chakra-ui/react';
 
@@ -152,7 +153,7 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({data}) => {
         justifyContent="flex-end"
         align={'center'}
         mb={'10px'}
-        p={'20px'}
+        p={{sm:'20px 0px',md:'20px'}}
       >
       <Flex
       w={{ sm: '100%', md: 'auto' }}
@@ -165,7 +166,7 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({data}) => {
       borderRadius="999px"
       boxShadow={shadow}
     >
-        <InputGroup w={{ base: '100%', md: '200px' }} >
+        <InputGroup w={{ base: '70%',sm:'70%', md: '200px' }} >
       <InputLeftElement
         children={
           <IconButton
@@ -195,23 +196,24 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({data}) => {
             onChange={(e) => setGlobalFilter(e.target.value)}
             bg={'#f9f9f9'}
             borderRadius={'14px'}
-            w={{ base: '200px', xl: '300px' }}
+            w={{ base: '70%',sm:'70%', xl: '300px' }}
           />
        
           </InputGroup>
+          <Tooltip label='Create a New Company' hasArrow placement='right-start'>
           <Button
-         ml={10}
+          ml={{sm:0,md:10}}
           padding={2}
           boxShadow={'3px 4px 12px #2e292940'}
           _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
           background="#3311db"
           color="#fff"
-          w={70}
+          w={{sm:'20%',md:70}}
           onClick={handleNavigate}
         >
           New
         </Button>
-       
+       </Tooltip>
         </Flex>
        
       </Flex>
@@ -223,25 +225,25 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({data}) => {
           overflowX={{ base: 'auto', xl: 'unset' }}  
           style={{
             border: '2px solid #E0E0E0',
-           
           }}
         >
           {/* <Card> */}
           <Thead
             className="thead"
-            bg={'#E9EDF7'}
+            bg={'#f9f9f9'}
+            
           >
             {headerGroups.map((headerGroup,index) => (
               <Tr
                 {...headerGroup.getHeaderGroupProps()}
-                borderBottom={headerGroups.length === index + 1 ? '': '2px solid #f7f7f7'}
+                borderBottom={'2px solid #E0E0E0'}
               >
                 {headerGroup.headers.map((column) => (
                   <Th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     color={'#191919'}
                     textAlign={'start'}
-                    p={'15px 10px'}
+                    p={'10px 10px'}
                   >
                     {column.render('Header')}
                     <span>
