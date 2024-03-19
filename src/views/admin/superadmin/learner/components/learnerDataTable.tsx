@@ -384,23 +384,27 @@ const CreatorDataTable: React.FC<CreatorDataTableProps> = ({
       {/* </Box> */}
 
       <Flex
-        justifyContent="flex-end"
+        justifyContent={{
+          base: 'center',
+          sm: 'flex-end',
+          md: 'flex-end',
+          lg: 'flex-end',
+        }}
         align={'center'}
         mb={'10px'}
-        p={{ sm: '20px 0px', md: '20px' }}
+        p={'20px 0'}
       >
         <Flex
           w={{ sm: '100%', md: 'auto' }}
           alignItems="center"
-          flexDirection="row"
+          flexDirection={{ xs: 'column', sm: 'row', md: 'row', lg: 'row' }}
           bg={menuBg}
           flexWrap={{ base: 'wrap', md: 'nowrap' }}
           p="10px"
-          borderRadius="999px"
+          borderRadius="20px"
           boxShadow={shadow}
-          justifyContent={'space-between'}
         >
-          <InputGroup w={{ base: '70%', sm: '70%', md: '200px' }}>
+          <InputGroup w={{ base: '100%', sm: '100%', md: '200px' }}>
             <InputLeftElement
               children={
                 <IconButton
@@ -440,18 +444,20 @@ const CreatorDataTable: React.FC<CreatorDataTableProps> = ({
             hasArrow
             placement="right-start"
           >
-          <Button
-            ml={{ sm: 0, md: 10 }}
-            padding={2}
-            boxShadow={'3px 4px 12px #2e292940'}
-            _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
-            background="#3311db"
-            color="#fff"
-            w={{ sm: '20%', md: 70 }}
-            onClick={handleNavigate}
-          >
-            New
-          </Button>
+            <Button
+              ml={{ base: 0, sm: 0, md: 10, lg: 10 }}
+              mt={{ base: 5, sm: 5, md: 0 }}
+              padding={2}
+              boxShadow={'3px 4px 12px #2e292940'}
+              _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
+              background="#3311db"
+              color="#fff"
+              w={{ base: '100%', sm: '100%', md: 70, lg: 70 }}
+              onClick={handleNavigate}
+            >
+              {' '}
+              New
+            </Button>
           </Tooltip>
         </Flex>
       </Flex>

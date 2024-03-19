@@ -67,7 +67,7 @@ export default function Default(props: {
 		<Flex direction='column' mb={mb ? mb : '30px'}>
 			<FormLabel
 				display='flex'
-				ms='10px'
+				// ms='10px'
 				htmlFor={id}
 				fontSize='sm'
 				color={textColorPrimary}
@@ -86,6 +86,7 @@ export default function Default(props: {
               borderRadius: '15px',
               height: '45px',
               padding: '0 !important',
+              borderColor: '#e0e5f2'
             }), }}
             options={options}
             onChange={handleSelectChange}
