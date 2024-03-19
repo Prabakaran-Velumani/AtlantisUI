@@ -292,12 +292,12 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
         </Table>
       </Box>
       <Box
-        p={'20px'}
+        p={'20px 5px'}
         display={{ base: 'block', xl: 'flex' }}
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        <Box>
+        <Box  mb={5}>
           <Box mr={'10px'} color={'#000'}>
             <span style={{ color: '#20212396' }}>
               Page{' '}
@@ -308,12 +308,13 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
           </Box>
         </Box>
         <Box display={{ base: 'flex', xl: 'flex' }}>
-          <Box mr={'10px'}>
+          <Box mr={'10px'} display={'flex'} alignItems={'center'}>
             <Button
               onClick={() => previousPage()}
               disabled={!canPreviousPage}
               bg={'#f3f0f0'}
-              h={'35px'}
+              mr={'5px'}
+              h={'40px'}
               w={'40px'}
               borderRadius="50%"
               lineHeight="1em"
@@ -326,9 +327,9 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
               <Button
                 key={index}
                 mr={'5px'}
-                h={'35px'}
+                h={'40px'}
                 w={'40px'}
-                borderRadius="50%"
+                borderRadius="100px"
                 lineHeight="1em"
                 flexShrink={0}
                 fontWeight={800}
@@ -345,9 +346,9 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
               onClick={() => nextPage()}
               disabled={!canNextPage}
               bg={'#f3f0f0'}
-              h={'35px'}
+              h={'40px'}
               w={'40px'}
-              borderRadius="50%"
+              borderRadius="100px"
               lineHeight="1em"
               flexShrink={0}
               fontWeight={800}
