@@ -534,200 +534,204 @@ const Plan: React.FC = () => {
   return (
     <>
       <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>
-        <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'absolute'} alignItems={'center'}></Card>
-        <Card mb={{ base: '0px', xl: '20px' }} width={'70%'} marginTop={'120px'} >
-          <Flex direction="column" mb="0px" ms="10px">
-          <Text color={textColorPrimary} fontSize="2xl" fontWeight="700" mb="20px">
-              Plan {id ? 'Updation' : 'Creation'}
-            </Text>
+        <Card alignItems={'center'}>       
+          <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={{base: '170', sm: '170', md: '300', lg: '300'}} position={'relative'} alignItems={'center'}></Card>
+          <Card mb={{ base: '0px', xl: '20px' }} width={{base: '95%', md: '70%'}} marginTop={'-120px'} >
+            <Flex direction="column" >
+            <Text color={textColorPrimary} fontSize="2xl" fontWeight="700" mb="20px">
+                Plan {id ? 'Updation' : 'Creation'}
+              </Text>
 
-          </Flex>
-          <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '20px' }}>
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plPlanName"
-              value={formData.plPlanName}
-              onChange={handleChange}
-              label="Plan Name"
-              placeholder="eg. High Demand"
-              isRequired={true}
-              ref={plPlanNameRef}
-            // isDisabled={isDisabled.plPlanName}
-            />
-
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plMaxLearner"
-              onChange={handleChange}
-              id="plMaxLearner"
-              value={formData.plMaxLearner}
-              label="Learner Limit"
-              type="number"
-              isRequired={true}
-              // isDisabled={isDisabled.plMaxLearner}
-              placeholder="Enter Learner Limit"
-              ref={plMaxLearnerRef}
-            />
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plMaxGame"
-              onChange={handleChange}
-              id="plMaxGame"
-              value={formData.plMaxGame}
-              label="Game Limit"
-              type="number"
-              isRequired={true}
-              // isDisabled={isDisabled.plMaxGame}
-              placeholder="Enter Game Limit"
-              ref={plMaxGameRef}
-            />
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plMaxBackgrounds"
-              onChange={handleChange}
-              id="plMaxBackgrounds"
-              value={formData.plMaxBackgrounds}
-              label="Backgrounds Limit"
-              type="number"
-              isRequired={true}
-              // isDisabled={isDisabled.plMaxBackgrounds}
-              placeholder="Enter Background sLimit"
-              ref={plMaxBackgroundsRef}
-            />
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plMaxCharacters"
-              onChange={handleChange}
-              id="plMaxCharacters"
-              value={formData.plMaxCharacters}
-              label="Characters Limit"
-              type="number"
-              isRequired={true}
-              // isDisabled={isDisabled.plMaxCharacters}
-              placeholder="Enter Characters Limit"
-              ref={plMaxCharactersRef}
-            />
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plMaxAnalyticsDashboard"
-              onChange={handleChange}
-              id="plMaxAnalyticsDashboard"
-              value={formData.plMaxAnalyticsDashboard}
-              label="Dashboard Limit"
-              type="number"
-              isRequired={true}
-              // isDisabled={isDisabled.plMaxAnalyticsDashboard}
-              placeholder="Enter Dashboard Limit"
-              ref={plMaxAnalyticsDashboardRef}
-            />
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plMAxGameHours"
-              onChange={handleChange}
-              id="plMAxGameHours"
-              value={formData.plMAxGameHours}
-              label="Game DurationLimit"
-              type="number"
-              isRequired={true}
-              // isDisabled={isDisabled.plMAxGameHours}
-              placeholder="Enter Game Duration"
-              ref={plMAxGameHoursRef}
-            />
-
-            <SelectField
-              mb="0px"
-              me="30px"
-              id="plStatus"
-              label="Active Status"
-              name="plStatus"
-              options={statusOptions}
-              value={statusOptions.find((option) => option.value === formData.plStatus) || null}
-              onChange={handleStatusChange}
-              isRequired={true}
-              handleSeletAttr={handleSeletAttr}
-            // isDisabled={isDisabled.plStatus}
-            />
-          </SimpleGrid>
-          <Box m={'50px 0 20px 0'} w={'100%'} overflowX={'auto'}>
-            <Flex mb={'20px'}>
-              <Button onClick={handleAddRow} bg={'#11047a'} _hover={{ bg: '#11047a' }} color={'#fff'}>Add Row</Button>
             </Flex>
-            <Table variant={'striped'} boxShadow={'1px 2px 17px #f7f7f7'} mb={'50px'}>
-              <Thead whiteSpace={'nowrap'}>
-                <Tr borderBottom={'2px solid #ddd'}>
-                  <Th color={'#000'} width="51%" > Plan Type<span style={{ color: 'red' }}>*</span></Th>
-                  <Th color={'#000'} width="49%">Plan Duration<span style={{ color: 'red' }}>*</span></Th>
-                </Tr>
-              </Thead>
-              <Tbody whiteSpace={'nowrap'}>
-                {rows.map((row, i) => (
-                  <Tr key={i} whiteSpace={'nowrap'}>
-                    <Td width="51%">
-                      <SelectField
-                        mb='0px'
-                        me='30px'
-                        id={`plantype-${i}`}
-                        name={`psPlanType-${i}`}
-                        options={options}
-                        value={options.find((option) => option.value === formDatas[i.toString()]?.psPlanType) || null}
-                        onChange={(selectedOption: OptionType | null) => handleSelectChange(selectedOption, i.toString())}
-                        style={{
-                          borderColor: isInvalid && specificInvalidIds.includes(`plantype-${i}`) ? 'red' : ''
-                        }}
-                      />
-                    </Td>
-                    <Td width="49%">
-                      <InputField
-                        mb='0px'
-                        me='30px'
-                        id={`psPlanDuration-${i}`}
-                        name={`psPlanDuration-${i}`}
-                        placeholder='eg. 1'
-                        autoComplete="off"
-                        value={row.psPlanDuration}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          handleRowChange(i, 'psPlanDuration', e.target.value)
-                        }
-                        style={{ borderColor: specificInvalidIds.includes(`psPlanDuration-${i}`) ? 'red' : '' }}
-                      />
-                    </Td>
+            <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '25px' }}>
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plPlanName"
+                value={formData.plPlanName}
+                onChange={handleChange}
+                label="Plan Name"
+                placeholder="eg. High Demand"
+                isRequired={true}
+                ref={plPlanNameRef}
+              // isDisabled={isDisabled.plPlanName}
+              />
+
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plMaxLearner"
+                onChange={handleChange}
+                id="plMaxLearner"
+                value={formData.plMaxLearner}
+                label="Learner Limit"
+                type="number"
+                isRequired={true}
+                // isDisabled={isDisabled.plMaxLearner}
+                placeholder="Enter Learner Limit"
+                ref={plMaxLearnerRef}
+              />
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plMaxGame"
+                onChange={handleChange}
+                id="plMaxGame"
+                value={formData.plMaxGame}
+                label="Game Limit"
+                type="number"
+                isRequired={true}
+                // isDisabled={isDisabled.plMaxGame}
+                placeholder="Enter Game Limit"
+                ref={plMaxGameRef}
+              />
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plMaxBackgrounds"
+                onChange={handleChange}
+                id="plMaxBackgrounds"
+                value={formData.plMaxBackgrounds}
+                label="Backgrounds Limit"
+                type="number"
+                isRequired={true}
+                // isDisabled={isDisabled.plMaxBackgrounds}
+                placeholder="Enter Background sLimit"
+                ref={plMaxBackgroundsRef}
+              />
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plMaxCharacters"
+                onChange={handleChange}
+                id="plMaxCharacters"
+                value={formData.plMaxCharacters}
+                label="Characters Limit"
+                type="number"
+                isRequired={true}
+                // isDisabled={isDisabled.plMaxCharacters}
+                placeholder="Enter Characters Limit"
+                ref={plMaxCharactersRef}
+              />
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plMaxAnalyticsDashboard"
+                onChange={handleChange}
+                id="plMaxAnalyticsDashboard"
+                value={formData.plMaxAnalyticsDashboard}
+                label="Dashboard Limit"
+                type="number"
+                isRequired={true}
+                // isDisabled={isDisabled.plMaxAnalyticsDashboard}
+                placeholder="Enter Dashboard Limit"
+                ref={plMaxAnalyticsDashboardRef}
+              />
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plMAxGameHours"
+                onChange={handleChange}
+                id="plMAxGameHours"
+                value={formData.plMAxGameHours}
+                label="Game DurationLimit"
+                type="number"
+                isRequired={true}
+                // isDisabled={isDisabled.plMAxGameHours}
+                placeholder="Enter Game Duration"
+                ref={plMAxGameHoursRef}
+              />
+
+              <SelectField
+                mb="0px"
+                me="30px"
+                id="plStatus"
+                label="Active Status"
+                name="plStatus"
+                options={statusOptions}
+                value={statusOptions.find((option) => option.value === formData.plStatus) || null}
+                onChange={handleStatusChange}
+                isRequired={true}
+                handleSeletAttr={handleSeletAttr}
+              // isDisabled={isDisabled.plStatus}
+              />
+            </SimpleGrid>
+            <Box m={'50px 0 20px 0'} w={'100%'} overflowX={'auto'}>              
+              <Table boxShadow={'1px 2px 17px #f7f7f7'} border={'2px solid #f1f1f1'} mb={'30px'}>
+                <Thead whiteSpace={'nowrap'}>
+                  <Tr>
+                    <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}> Plan Type<span style={{ color: 'red' }}>*</span></Th>
+                    <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>Plan Duration<span style={{ color: 'red' }}>*</span></Th>
                   </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </Box>
-          <Flex justify="space-between">
-            <Button
-               variant="light"
-               fontSize="sm"
-               borderRadius="16px"
-               w={{ base: '128px', md: '148px' }}
-               h="46px"
-               mt="20px"
-              onClick={handleBack}
-            >
-              Cancel
-            </Button>
-            <Button
-              mt="20px"
-              variant="darkBrand"
-              fontSize="sm"
-              borderRadius="16px"
-              w={{ base: '128px', md: '148px' }}
-              h="46px"
-              ms="auto"
-              onClick={handleSubmit}
-            >
-              {id ? 'Update' : 'Save'}
-            </Button>
-          </Flex>
+                </Thead>
+                <Tbody whiteSpace={'nowrap'}>
+                  {rows.map((row, i) => (
+                    <Tr key={i} whiteSpace={'nowrap'}>
+                      <Td width="51%" p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
+                        <SelectField
+                          mb='0px'
+                          me='30px'
+                          id={`plantype-${i}`}
+                          name={`psPlanType-${i}`}
+                          options={options}
+                          value={options.find((option) => option.value === formDatas[i.toString()]?.psPlanType) || null}
+                          onChange={(selectedOption: OptionType | null) => handleSelectChange(selectedOption, i.toString())}
+                          style={{
+                            borderColor: isInvalid && specificInvalidIds.includes(`plantype-${i}`) ? 'red' : ''
+                          }}
+                        />
+                      </Td>
+                      <Td width="49%" p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
+                        <InputField
+                          mb='0px'
+                          me='30px'
+                          id={`psPlanDuration-${i}`}
+                          name={`psPlanDuration-${i}`}
+                          placeholder='eg. 1'
+                          autoComplete="off"
+                          value={row.psPlanDuration}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            handleRowChange(i, 'psPlanDuration', e.target.value)
+                          }
+                          style={{ borderColor: specificInvalidIds.includes(`psPlanDuration-${i}`) ? 'red' : '' }}
+                        />
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+              <Flex mb={'20px'}>
+                <Button onClick={handleAddRow} fontSize="sm" color={'#190793'} border={'1px solid #190793'} bg={'transparent'} _hover={{bg: '#11047a', color: '#fff'}}>Add Row</Button>
+              </Flex>
+            </Box>
+            <Flex justify="space-between">
+              <Button
+                 fontSize="sm"
+                 borderRadius="16px"
+                 border={'1px solid #00000024'}
+                 w={{ base: '128px', md: '148px' }}
+                 h="46px"
+                 mt="20px"
+                 mr="20px"
+                 bg={'transparent'}
+                 _hover={{bg: '#11047a', color: '#fff'}}
+                 onClick={handleBack}
+              >
+                Cancel
+              </Button>
+              <Button
+                mt="20px"
+                variant="darkBrand"
+                fontSize="sm"
+                borderRadius="16px"
+                w={{ base: '128px', md: '148px' }}
+                h="46px"               
+                onClick={handleSubmit}
+              >
+                {id ? 'Update' : 'Save'}
+              </Button>
+            </Flex>
+          </Card>
         </Card>
       </Box>
       {alert ? <OnToast msg={msg} status={toastStatus} setAlert={setAlert} /> : null}

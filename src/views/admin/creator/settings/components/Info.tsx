@@ -92,7 +92,7 @@ console.log(funk);
   return (
     <FormControl>
       <Card>
-        <Flex direction="column" mb="40px" ms="10px">
+        <Flex direction="column" mb="40px" >
           <Text fontSize="xl" color={textColorPrimary} fontWeight="bold">
             Account Settings
           </Text>
@@ -105,7 +105,7 @@ console.log(funk);
           spacing={{ base: '20px', xl: '20px' }}
         >
           <InputField
-            mb="25px"
+            mb="15px"
             me="30px"
             id="ctName"
 			     name='ctName'
@@ -115,7 +115,7 @@ console.log(funk);
 			onChange={handleChange}
           />
           <InputField
-            mb="25px"
+            mb="15px"
             id="email"
             label="Age"
 			name="ctAge"

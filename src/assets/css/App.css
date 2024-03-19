@@ -20,6 +20,11 @@ option {
   color: black;
 }
 
+.css-124hyrz-control {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
 .cards {
   transition: 2s ease;
 }
