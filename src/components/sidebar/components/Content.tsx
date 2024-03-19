@@ -60,8 +60,8 @@ function SidebarContent(props: {
   }, []); // Run only once when the component mounts
   // SIDEBAR
   return (
-    <Flex direction="column" height="100%" p="25px" w="285px" borderRadius="30px"
-      m="20px" >
+    <Flex direction="column" height="100%" p="25px" w={{sm:'265px',lg:"285px"}} borderRadius="30px"
+      m={{sm:'20px 10px',lg:"20px"}} >
       <Brand mini={mini} hovered={hovered} />
       <Stack direction="column" mb="" mt="8px" ml="-15px" alignItems="left" overflowY={'auto'} h={'65%'}>
         <Box

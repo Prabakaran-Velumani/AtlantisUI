@@ -206,7 +206,7 @@ export function SidebarResponsive(props: {
       >
         <DrawerOverlay />
         <DrawerContent
-          w="285px"
+          w={"285px"}
           maxW="285px"
           ms={{
             sm: '16px',
