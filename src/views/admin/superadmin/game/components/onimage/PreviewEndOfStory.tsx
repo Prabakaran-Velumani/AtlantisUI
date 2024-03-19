@@ -4,13 +4,7 @@ import { useDispatch } from 'react-redux';
 import { updatePreviewData } from 'store/preview/previewSlice';
 
 
-const PreviewEndOfStory : React.FC<{preloadedAssets: any, setEndOfQuest:any}>= ({preloadedAssets, setEndOfQuest}) => {
-const dispatch = useDispatch();
- 
-  const replayQuest = () => {
-    dispatch(updatePreviewData({ activeBlockSeq: 1 }));
-    setEndOfQuest(false);
-  };
+const PreviewEndOfStory : React.FC<{preloadedAssets: any, setEndOfQuest:any, replayQuest: ()=> void}>= ({preloadedAssets, setEndOfQuest, replayQuest}) => {
 
   return (
     <Flex className="end-of-quest" direction="column" align="center" position="relative">

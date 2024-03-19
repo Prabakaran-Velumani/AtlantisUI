@@ -1,6 +1,6 @@
 // Chakra Imports
 import { Box, Flex, Text, Img, Grid, GridItem, Button } from '@chakra-ui/react';
-import React, { Suspense, useEffect, useState, useRef } from 'react';
+import React, { Suspense, useEffect, useState, useRef, useMemo, useCallback} from 'react';
 import TakeAwaysContentScreen from './onimage/TakeAwaysScreen';
 // import Sample from '../../../../assets/img/games/Character_sample.glb';
 // import WelcomeContentScreen from './onimage/WelcomeContentScreen';
@@ -46,16 +46,22 @@ const ScreenPreview = () => {
   const [apiImageSet, setApiImageSet] = useState<any>();
   const [staticAssetImageUrls, setStaticAssetImageUrls] = useState<any>(null);
   const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
-  const [preloadedAssets, setPreloadedAssets] = useState<any>();
+  // const [preloadedAssets, setPreloadedAssets] = useState<any>();
   const [demoBlocks, setDemoBlocks] = useState(null);
   const [navi, setNavi] = useState<string>('');
   const [options, setOptions] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
   const [showNote, setShowNote] = useState(false),
     [first, setFirst] = useState(false);
+    const [game3Position, setGame3Position] = useState({
+      previousBlock: '',
+      currentBlock: '',
+      nextBlock: '',
+    });
   const [data, setData] = useState(null);
   const [type, setType] = useState<string>('');
   const [resMsg, setResMsg] = useState<string>('');
+
   const [feed, setFeed] = useState<string>('');
   const [endOfQuest, setEndOfQuest] = useState<boolean>(false);
   const [currentPosition, setCurrentPosition] = useState(0);
@@ -75,30 +81,30 @@ const ScreenPreview = () => {
     ref4: "What's one thing you are committing to change?",
   });
   const previewScreenRef = useRef(null);
-  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
-  const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
+  // const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+  // const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setViewportWidth(window.innerWidth);
-      setViewportHeight(window.innerHeight);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setViewportWidth(window.innerWidth);
+  //     setViewportHeight(window.innerHeight);
+  //   };
+  //   window.addEventListener('resize', handleResize);
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize);
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    previewScreenRef.current.style.setProperty(
-      '--viewport-width',
-      `${viewportWidth}px`,
-    );
-    previewScreenRef.current.style.setProperty(
-      '--viewport-height',
-      `${viewportHeight}px`,
-    );
-  }, [viewportWidth, viewportHeight]);
+  // useEffect(() => {
+  //   previewScreenRef.current.style.setProperty(
+  //     '--viewport-width',
+  //     `${viewportWidth}px`,
+  //   );
+  //   previewScreenRef.current.style.setProperty(
+  //     '--viewport-height',
+  //     `${viewportHeight}px`,
+  //   );
+  // }, [viewportWidth, viewportHeight]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -119,10 +125,20 @@ const ScreenPreview = () => {
       setData(currentBlock);
     }
     console.log("activeBlockSeq",activeBlockSeq);
+    setCurrentPosition(0);
   }, [gameInfo, isDispatched, activeBlockSeq, currentQuest]);
 
-  const fetchDataFromApi = async () => {
+
+  const replayQuest = () => {
+    console.log('replyquest');
+    dispatch(updatePreviewData({ activeBlockSeq: 1 , isDispatched:true}));
+    // getData(data);
+    setEndOfQuest(false);
+  };
+  const fetchDataFromApi = useCallback(async () => {
     try {
+      if(id && isDispatched)
+      {
       const gamedata = await getGameCreatorDemoData(id);
       if (!gamedata.error && gamedata) {
         const {
@@ -240,10 +256,14 @@ const ScreenPreview = () => {
           }),
         );
       }
+      }
+      else{
+        console.log('game id is missing...');
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };
+  },[id, isDispatched]);
   const setInteractionOptions = (gameInfo: any, currentBlock: any) => {
     const optionsFiltered = gameInfo?.questOptions.filter(
       (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
@@ -275,10 +295,14 @@ const ScreenPreview = () => {
     apiImageSet && fetchData();
   }, [apiImageSet]);
 
-  useEffect(() => {
-    if (apiUrlAssetImageUrls && staticAssetImageUrls) {
-      setPreloadedAssets({ ...apiUrlAssetImageUrls, ...staticAssetImageUrls });
-    }
+  // useEffect(() => {
+  //   if (apiUrlAssetImageUrls && staticAssetImageUrls) {
+  //     setPreloadedAssets({ ...apiUrlAssetImageUrls, ...staticAssetImageUrls });
+  //   }
+  // }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
+
+  const preloadedAssets = useMemo(() => {
+    return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls };
   }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
 
   useEffect(() => {
@@ -292,6 +316,40 @@ const ScreenPreview = () => {
   useEffect(() => {
     dispatch(updatePreviewData({ isDispatched: false }));
   }, [CompKeyCount]);
+
+  const previousData = (current: any) => {
+    setCurrentPosition(0);
+    const currentBlock = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[1])
+      : null;
+    const PrevItem = currentBlock != null ? currentBlock - 1 : null;
+    
+    const prevSeq =
+      game3Position.previousBlock !== ''
+        ? game3Position.previousBlock
+        : current
+        ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
+        : '';
+
+        console.log('prevSeq',prevSeq);
+    const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
+    const currentQuest = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[0])
+      : null;
+    const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    const prevBlock = current
+      ? Object.keys(demoBlocks[quest] || {})
+          .filter(
+            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
+      : [];
+    if (prevBlock.length !== 0 &&
+      prevBlock[0]?.blockChoosen !== 'Interaction') {
+      setType(prevBlock[0]?.blockChoosen);
+      setData(prevBlock[0]);
+    }
+  };
   const getData = (next: any) => {
     console.log('getDataSC--', next);
     const currentBlock = next
@@ -301,8 +359,8 @@ const ScreenPreview = () => {
     const nextSeq = next
       ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
       : '';
+    
     const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
-
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
 
     const nextBlock = next
@@ -313,12 +371,10 @@ const ScreenPreview = () => {
           .map((key: any) => demoBlocks[quest]?.[key])
       : [];
 
-    {
-      /* Check wheather has next block or not, if not then show End of Current Quest.
-          Want to play next quest, then switch the current quest in game creation screen */
-    }
+    // {/* Check wheather has next block or not, if not then show End of Current Quest.
+    //       Want to play next quest, then switch the current quest in game creation screen */}
     console.log('nextBlock',nextBlock);
-    if (nextBlock.length == 0) {
+    if (nextBlock.length === 0) {
       setEndOfQuest(true);
     } else {
       setEndOfQuest(false);
@@ -427,10 +483,27 @@ const ScreenPreview = () => {
     const url = ` /game/creator/demoplay/${id}`;
     window.open(url, '_blank');
   };
-console.log("data", data);
+useEffect(()=>
+{
+  
+  if (data && (type === 'Note' || type === 'Dialog') ){
+    console.log('useeffect1');
+    getDataSection(data);
+  }
+  
+},[data,type]);
+useEffect(() => {
+  
+  if(Navigatenext === true)
+  {
+    console.log('useeffect2');
+    getData(data);
+    
+  }
+}, [Navigatenext]);
 const getDataSection = (data: any) => {
-  console.log('getData 1', data);
-  setCurrentPosition(0);
+  // setCurrentPosition(0);
+  console.log('getData 1', data,currentPosition,'......', data?.blockText,Navigatenext);
   const content = data?.blockText || '';
   const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
   const newRemainingSentences = sentences.slice(currentPosition);
@@ -471,15 +544,11 @@ const getDataSection = (data: any) => {
   } else {
       setCurrentPosition(0);
       setNavigateNext(true);
+    
   }
 };
 
-useEffect(() => {
-  if(Navigatenext === true)
-  {
-    getData(data);
-  }
-}, [Navigatenext]);
+
 
   useEffect(() => {
     console.log('type', type)
@@ -487,21 +556,22 @@ useEffect(() => {
     if (data && (type === 'Note' || type === 'Dialog') ){
       getDataSection(data);
     }
+    
+  }, []);
 
-  }, [data, type]);
   return (
     <Box id="container" ref={previewScreenRef}>
       <Suspense fallback={<h1>Loading please wait...</h1>}>
         {contentReady && (
-          // <motion.div
-          //   initial={{ opacity: 0, background: '#000' }}
-          //   animate={{ opacity: 1, background: '#0000' }}
-          //   transition={{ duration: 1, delay: 0.5 }}
-          // >
+          <motion.div
+            initial={{ opacity: 0, background: '#000' }}
+            animate={{ opacity: 1, background: '#0000' }}
+            transition={{ duration: 1, delay: 0.5 }}
+          >
             <Box id="EntirePreview-wrapper">
               <Box className="EntirePreview-content">
-                <Box h={'100vh !important'} className="Images">
-                  <Flex height="100vh" className="EntirePreview">
+                <Box h={'100vh !important'} className="Images" >
+                  <Flex height="100vh" backgroundImage={preloadedAssets?.backgroundImage} className="EntirePreview screen-bgImage" >
                     <Button
                       className="demo-btn"
                       bg="#11047a"
@@ -512,7 +582,7 @@ useEffect(() => {
                         top: '2vh',
                         right: '0vw',
                         pointerEvents: 'auto',
-                        zIndex: 99999999999999, // High z-index value
+                        zIndex: 1, // High z-index value
                         visibility: 'visible',
                       }}
                       mr={'17px'}
@@ -523,11 +593,7 @@ useEffect(() => {
                       Demo Play
                     </Button>
                     {currentTab == 3 && (
-                      <motion.div
-                      initial={{ opacity: 0, background: '#000' }}
-                      animate={{ opacity: 1, background: '#0000' }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    >
+                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -538,7 +604,6 @@ useEffect(() => {
                         style={{ perspective: '1000px' }}
                       >
                         <Box
-                          backgroundImage={preloadedAssets.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -559,37 +624,18 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
-                      </motion.div>
+                     
                     )}
                     {currentTab === 4 && data && type === 'Note' && (
-                      <motion.div
-                      initial={{ opacity: 0, background: '#000' }}
-                      animate={{ opacity: 1, background: '#0000' }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    >
                       <Box
                         className="screen-notebox1"
                       >
                         <Box
-                          backgroundImage={preloadedAssets?.backgroundImage}
                           className="screen-notebox2"
                         >
                           <Box
-                            // position={'fixed'}
-                            // top={'200px'}
-                            // right={'0px'}
-                            // bottom={0}
-                            // zIndex={999}
-                            // w={'300px'}
                             className="screen-notebox3"
                           >
-                            {/* <Box
-                              // style={{
-                              //   transform: `scale(${showNote ? 0.2 : 1})`,
-                              //   transition: 'transform 0.5s ease-in-out',
-                              // }}
-                              className="screen-notebox4"
-                            > */}
                               <Img
                                 src={preloadedAssets?.note}
                                 className='screen-noteimage'
@@ -614,20 +660,17 @@ useEffect(() => {
                                 className="screen-notebox5"
                               >
                                 <Box
-                                  w={'100%'}
-                                  overflowY={'scroll'}
-                                  h={'100px'}
-                                  display={'flex'}
-                                  alignItems={'center'}
-                                  justifyContent={'center'}
-                                  mt={'20px'}
                                   className="screen-notebox6"
                                 >
-                                  {data?.blockText}
+                                  {/* {data?.blockText} */}
+                                  {remainingSentences}
+                                  {/* {remainingSentences.map((sentence, index) => (
+  <React.Fragment key={index}>{sentence}</React.Fragment>
+))} */}
                                 </Box>
                                 <Box
                                   w={'100%'}
-                                  onClick={() => getData(data)}
+                                  onClick={() => getDataSection(data)}
                                   mt={'20px'}
                                   display={'flex'}
                                   justifyContent={'center'}
@@ -645,14 +688,10 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
-                      </motion.div>
+                     
                     )}
                     {currentTab === 4 && data && type === 'Dialog' && (
-                      <motion.div
-                      initial={{ opacity: 0, background: '#000' }}
-                      animate={{ opacity: 1, background: '#0000' }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    >
+                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -661,17 +700,7 @@ useEffect(() => {
                         justifyContent={'center'}
                         position={'relative'}
                       >
-                        <Img
-                          src={preloadedAssets?.backgroundImage}
-                          maxW={'100%'}
-                          maxH={'100%'}
-                          w={'100%'}
-                          h={'100vh'}
-                          transform={
-                            'scale(1.3}) translateY(-10%) translateX(-10%)'
-                          }
-                          transition={'transform 0.9s ease-in-out'}
-                        />
+                     
                         <Img
                           style={{
                             transform: `translateY(${showNote ? 200 : 0}px)`,
@@ -720,7 +749,11 @@ useEffect(() => {
                               fontFamily={'AtlantisContent'}
                               fontSize={'21px'}
                             >
-                              <TypingEffect text={data?.blockText} speed={50} />
+                              {/* <TypingEffect text={data?.blockText} speed={50} /> */}
+                              {remainingSentences}
+                              {/* {remainingSentences.map((sentence, index) => (
+  <React.Fragment key={index}>{sentence}</React.Fragment>
+))} */}
                             </Box>
                             <Box
                               display={'flex'}
@@ -734,26 +767,23 @@ useEffect(() => {
                                 w={'50px'}
                                 h={'50px'}
                                 cursor={'pointer'}
+                                onClick={() => previousData(data)}
                               />
                               <Img
                                 src={preloadedAssets?.right}
                                 w={'50px'}
                                 h={'50px'}
                                 cursor={'pointer'}
-                                onClick={() => getData(data)}
+                                onClick={() => getDataSection(data)}
                               />
                             </Box>
                           </>
                         )}
                       </Box>
-                      </motion.div>
+                     
                     )}
                     {currentTab === 4 && data && type === 'Interaction' && (
-                      <motion.div
-                      initial={{ opacity: 0, background: '#000' }}
-                      animate={{ opacity: 1, background: '#0000' }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    >
+                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -762,7 +792,7 @@ useEffect(() => {
                         justifyContent={'center'}
                         position={'relative'}
                       >
-                        <Img
+                        {/* <Img
                           src={preloadedAssets?.backgroundImage}
                           maxW={'100%'}
                           maxH={'100%'}
@@ -772,7 +802,7 @@ useEffect(() => {
                             showNote ? -200 : 0
                           }px)`}
                           transition={'transform 0.9s ease-in-out'}
-                        />
+                        /> */}
                         <Box
                           style={{
                             transform: `translateX(${
@@ -785,7 +815,6 @@ useEffect(() => {
                           position={'fixed'}
                           w={{ sm: '350px', md: '500px' }}
                           h={{ sm: '50vh', md: ' 550px' }}
-                          // top={'4vh'}
                           left={{ sm: '60px', md: '180px' }}
                           backgroundSize={'contain'}
                           backgroundRepeat={'no-repeat'}
@@ -881,14 +910,10 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
-                      </motion.div>
+                     
                     )}
                     {currentTab === 4 && data && type === 'response' && (
-                      <motion.div
-                      initial={{ opacity: 0, background: '#000' }}
-                      animate={{ opacity: 1, background: '#0000' }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    >
+                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -982,14 +1007,10 @@ useEffect(() => {
                           </>
                         )}
                       </Box>
-                      </motion.div>
+                     
                     )}
                     {currentTab === 4 && data && type === 'feedback' && (
-                      <motion.div
-                      initial={{ opacity: 0, background: '#000' }}
-                      animate={{ opacity: 1, background: '#0000' }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    >
+                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1001,7 +1022,6 @@ useEffect(() => {
                         style={{ perspective: '1000px' }}
                       >
                         <Box
-                          backgroundImage={preloadedAssets?.backgroundImage}
                           w={'100%'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -1070,14 +1090,10 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
-                      </motion.div>
+                     
                     )}
                     {currentTab === 5 && currentSubTab === 0 && (
-                      <motion.div
-                      initial={{ opacity: 0, background: '#000' }}
-                      animate={{ opacity: 1, background: '#0000' }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    >
+                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1089,7 +1105,6 @@ useEffect(() => {
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets?.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -1110,14 +1125,10 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
-                      </motion.div>
+                     
                     )}
                     {currentTab === 5 && currentSubTab === 1 && (
-                      <motion.div
-                      initial={{ opacity: 0, background: '#000' }}
-                      animate={{ opacity: 1, background: '#0000' }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    >
+                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1129,7 +1140,6 @@ useEffect(() => {
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets?.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -1150,14 +1160,10 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
-                      </motion.div>
+                     
                     )}
                     {currentTab === 5 && currentSubTab === 2 && (
-                      <motion.div
-                      initial={{ opacity: 0, background: '#000' }}
-                      animate={{ opacity: 1, background: '#0000' }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    >
+                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1169,20 +1175,12 @@ useEffect(() => {
                         className="Main-Content"
                       >
                         <Box
-                          // backgroundImage={preloadedAssets?.RefBg}
-                          // w={'100% !important'}
-                          // h={'100vh'}
-                          // backgroundRepeat={'no-repeat'}
-                          // backgroundSize={'cover'}
-                          // alignItems={'center'}
-                          // justifyContent={'center'}
                           className="Game-Screen"
                         >
                           <Box className="Images">
                             <ReflectionContentScreen
                               preview={true}
                               formData={gameInfo.gameData}
-                              // imageSrc={preloadedAssets?.RefScreen1}
                               imageSrc={preloadedAssets?.RefBg}
                               reflectionQuestions={
                                 gameInfo?.reflectionQuestions
@@ -1195,14 +1193,10 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
-                      </motion.div>
+                     
                     )}
                     {currentTab === 5 && currentSubTab === 3 && (
-                      <motion.div
-                      initial={{ opacity: 0, background: '#000' }}
-                      animate={{ opacity: 1, background: '#0000' }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    >
+                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1214,7 +1208,6 @@ useEffect(() => {
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets?.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -1233,14 +1226,9 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
-                      </motion.div>
+                     
                     )}
                     {currentTab === 5 && currentSubTab === 4 && (
-                      <motion.div
-                      initial={{ opacity: 0, background: '#000' }}
-                      animate={{ opacity: 1, background: '#0000' }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    >
                         <Box
                           w={'100%'}
                           h={'100vh'}
@@ -1252,7 +1240,6 @@ useEffect(() => {
                           className="Main-Content"
                         >
                           <Box
-                            backgroundImage={preloadedAssets?.backgroundImage}
                             w={'100% !important'}
                             h={'100vh'}
                             backgroundRepeat={'no-repeat'}
@@ -1271,14 +1258,10 @@ useEffect(() => {
                             </Box>
                           </Box>
                         </Box>
-                      </motion.div>
+                     
                     )}
                     {currentTab === 5 && currentSubTab === 5 && (
-                      <motion.div
-                      initial={{ opacity: 0, background: '#000' }}
-                      animate={{ opacity: 1, background: '#0000' }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    >
+                    
                       <Box 
                         w={'100%'}
                         h={'100vh'}
@@ -1290,7 +1273,6 @@ useEffect(() => {
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets?.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -1309,14 +1291,14 @@ useEffect(() => {
                           </Box>
                         </Box>
                       </Box>
-                      </motion.div>
+                     
                     )}
-                    {/* {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadedAssets={preloadedAssets }/>} */}
+                   {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadedAssets={preloadedAssets } replayQuest={replayQuest}/>} 
                   </Flex>
                 </Box>
               </Box>
             </Box>
-          // </motion.div>
+          </motion.div>
         )}
       </Suspense>
     </Box>
