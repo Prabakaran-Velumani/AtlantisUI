@@ -30,7 +30,8 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedQuestNo, setSelectedQuestNo] = useState<number | null>(null); // Initialize as null
-
+  const [deletequestgameId, setDeleteQuestGameId] = useState<number | null>(null); // Initialize as null
+  const [QuestTabStateDelete, setQuestTabStateDelete] = useState<any>(false);
   const handleNavigation = (nid: number) => {
 
     if (nid) {
@@ -41,15 +42,25 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
 
   }
   const handleDeleteClick = (item: any) => {
-    setSelectedQuestNo(item.gameQuestNo); // Set the selected quest number
-    console.log("selectedQuestNo",item.gameQuestNo,item.gameId)
-    onOpen();
+    if(item.gameQuestNo === 1)
+    {
+      setQuestTabStateDelete(true)
+      onOpen();
+    }
+    else
+    {
+      setQuestTabStateDelete(false)
+      setSelectedQuestNo(item.gameQuestNo); // Set the selected quest number
+      setDeleteQuestGameId(item.gameId);
+      console.log("selectedQuestNo",item.gameQuestNo,item.gameId)
+      onOpen();
+  }
   };
   
   const handleCancelDelete = () => {
     // Close the modal without deleting
     setSelectedQuestNo(null); // Set the selected quest number
-
+    setDeleteQuestGameId(null);
     onClose();
   };
 
@@ -90,12 +101,14 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
                   <Modal isOpen={isOpen} onClose={onClose} size="md">
                     <ModalOverlay />
                     <ModalContent>
-                      <ModalHeader>
+                      { (QuestTabStateDelete===false)? 
+                      <><ModalHeader>
                         Confirm Deletion</ModalHeader>
                       <ModalBody>
                         <Text color={textColor} fontSize="18px" fontWeight="600"
                         >
-                          Are you sure you want to delete Quest {selectedQuestNo}?
+                         
+                           Are you sure you want to delete Quest {selectedQuestNo} ?
                         </Text>
 
                       </ModalBody>
@@ -103,14 +116,29 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
                         <Button color={'#fff'}
                           bg={'#11047a'}
                           _hover={{ color: '#fff', bg: '#11047a' }}
-                          mr={'10px'} onClick={() => { deleteQuest(item.gameId, selectedQuestNo); onClose(); }} >
+                          mr={'10px'} onClick={() => { deleteQuest(deletequestgameId, selectedQuestNo); onClose(); }} >
                           Delete
                         </Button>
                         <Button color={'#fff'}
                           bg={'#11047a'}
                           _hover={{ color: '#fff', bg: '#11047a' }}
                           mr={'10px'} onClick={handleCancelDelete}>Cancel</Button>
-                      </ModalFooter>
+                      </ModalFooter></>
+                      :<>
+                    <ModalBody>
+                      <Text color={textColor} fontSize="18px" fontWeight="600">
+                       
+                      Please do not delete Quest {selectedQuestNo}. You can delete the items associated with it instead.
+                      </Text>
+
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color={'#fff'}
+                        bg={'#11047a'}
+                        _hover={{ color: '#fff', bg: '#11047a' }}
+                        mr={'10px'} onClick={() => {onClose()}}>Close</Button>
+                    </ModalFooter></>
+                     }
                     </ModalContent>
                   </Modal>
                 </Flex>

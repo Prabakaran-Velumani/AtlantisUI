@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import ChatPopup from './ChatPopup';
 import { MdAdd} from 'react-icons/md';
-import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
+// import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import ChatGPTIcon  from '../../../../../assets/img/chatgpt/gpticon2.png'
 import {
     Box,

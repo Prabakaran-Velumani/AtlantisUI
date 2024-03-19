@@ -156,7 +156,6 @@ export const urls = {
   getQuestionResponse:'/languages/getQuestionResponse/',
   getQuestionOptions:'/languages/getQuestionOptions/',
 getSelectedLanguages:'/languages/getSelectedLanguages/',
-getMaxBlockQuestNo:'/game/getMaxBlockQuestNo/',
       /****************************Reviews ********************************/
       addReviews:'/gamereview/addreviewers',
       getAllReviews:'/gamereview/getblockreviewlist/',

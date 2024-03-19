@@ -1477,7 +1477,7 @@ useEffect(()=>{
     } else if (title1 === 'done') {
       setHeightOfTab(getfirstElementHgt);
     }     
-  },[tab,listQuest?.length])
+  },[tab, listQuest?.length, questTabState])
 
   //navin
   const handleNext = async () => {
@@ -1578,6 +1578,7 @@ if (complidatalength !== 0) {
         return false
 
       }
+    }
       if (compliData[compkey]?.gameIsSetCriteriaForBadge === 'true') {
         if (!compliData[compkey]?.gameAwardBadgeScore) {
           toast({
@@ -1648,17 +1649,7 @@ if (complidatalength !== 0) {
         }
         
         if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
-          if (!compliData[compkey]?.gameLessthanDistinctionScoreCongratsMessage) {
-            toast({
-              title: 'Please Enter For Above Distinction Score Message.!',
-              status: 'error',
-              duration: 3000,
-              isClosable: true,
-            });
-            setCompKeyCount(compkeyNumber);
-            setCurrentTab(0);
-            return false
-          }
+          
           if (!compliData[compkey]?.gameAboveDistinctionScoreCongratsMessage) {
             toast({
               title: 'Please Enter Above Distinction Score CongratsMessage.',
@@ -1672,7 +1663,7 @@ if (complidatalength !== 0) {
           }
         }
       }
-    }
+    
     setCompKeyCount(compkeyNumber);
     setCurrentTab(0);
     setCompliData((prevInput: any) => ({
@@ -4599,14 +4590,21 @@ return false;
                   />
                 ) : null}
 
-                {tab !== 1 && tab !== 2 ? (
+    
+                {tab == 3 && 
+                ( formData?.gameTitle ||
+                  formData?.gameStoryLine ||
+                  formData?.gameSkills ||
+                  formData?.gameLearningOutcome || 
+                  formData?.gameAuthorName ) &&
+                  (
                   <Button
                     bg="#11047a"
                     _hover={{ bg: '#190793' }}
                     color="#fff"
                     h={'46px'}
                     w={'128px'}
-                    display={tab === 7 || tab === 6 ? 'none' : 'block'}
+                    display={'block'}
                     mr={'17px'}
                     mt={'6px'}
                     ml={'11px'}
@@ -4614,7 +4612,39 @@ return false;
                   >
                     Preview
                   </Button>
-                ) : null}
+                )}
+
+              {tab === 4 && BlockItems?.length > 0 && (
+                  <Button
+                    bg="#11047a"
+                    _hover={{ bg: '#190793' }}
+                    color="#fff"
+                    h={'46px'}
+                    w={'128px'}
+                    mr={'17px'}
+                    mt={'6px'}
+                    ml={'11px'}
+                    onClick={handleEntirePrev}
+                  >
+                    Preview
+                  </Button>
+                ) }
+                {tab == 5 && (
+                <Button
+                    bg="#11047a"
+                    _hover={{ bg: '#190793' }}
+                    color="#fff"
+                    h={'46px'}
+                    w={'128px'}
+                    mr={'17px'}
+                    mt={'6px'}
+                    ml={'11px'}
+                    onClick={handleEntirePrev}
+                  >
+                    Preview
+                  </Button>
+                )}
+
                 {tab === 5  ? (
                   <Button
                     bg="#11047a"

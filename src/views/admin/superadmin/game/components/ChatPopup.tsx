@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {
-  MainContainer,
-  ChatContainer,
-  MessageList,
-  Message,
-  TypingIndicator,
-  MessageInput,
-} from '@chatscope/chat-ui-kit-react';
+// import {
+//   MainContainer,
+//   ChatContainer,
+//   MessageList,
+//   Message,
+//   TypingIndicator,
+//   MessageInput,
+// } from '@chatscope/chat-ui-kit-react';
 
 interface ChatPopupProps {
   messages: any[]; // Adjust the type based on your actual message structure
@@ -57,7 +57,7 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ messages, isTyping, onSend, onClo
           ChatGPT
         </h2>
       </div>
-      <MainContainer
+      {/* <MainContainer
         style={{
           padding: '10px 0px',
           borderRadius: '0px 0px 8px 8px',
@@ -82,7 +82,7 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ messages, isTyping, onSend, onClo
             sendButton={true}
           />
         </ChatContainer>
-      </MainContainer>
+      </MainContainer> */}
       {/* <button onClick={onClose}>Close</button> */}
     </div>
   );
