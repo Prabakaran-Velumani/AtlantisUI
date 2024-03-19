@@ -113,9 +113,10 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
       gotoPage(pageNumber);
     }
   };
-
+ 
+  
   const getPageNumbers = () => {
-    const pageCount = 5; // Adjust the number of visible page numbers as needed
+    const pageCount = 3; // Adjust the number of visible page numbers as needed
     const currentPage = pageIndex + 1;
     const pages = [];
 
@@ -129,13 +130,14 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
       const start = Math.max(1, currentPage - Math.floor(pageCount / 2));
       const end = Math.min(totalPages, start + pageCount - 1);
 
-      if (start > 1) {
-        pages.push(1, '...'); // Display first page and three dots if not in the initial range
-      }
+      // if (start > 1) {
+      //   pages.push(1, '...'); // Display first page and three dots if not in the initial range
+      // }
 
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
+
 
       if (end < totalPages) {
         pages.push('...', totalPages); // Display three dots and last page if not in the final range
@@ -157,15 +159,15 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
         <Flex
           w={{ sm: '100%', md: 'auto' }}
           alignItems="center"
-          flexDirection="row"
+          flexDirection={{sm:'column',md:"row"}}
           bg={menuBg}
           flexWrap={{ base: 'wrap', md: 'nowrap' }}
           p="10px"
-          borderRadius="999px"
+          borderRadius="20px"
           boxShadow={shadow}
           justifyContent={'space-between'}
         >
-          <InputGroup w={{ base: '70%', sm: '70%', md: '200px' }}>
+          <InputGroup w={{sm: '100%', md: '200px' }}>
             <InputLeftElement
               children={
                 <IconButton
@@ -197,7 +199,7 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
               onChange={(e) => setGlobalFilter(e.target.value)}
               bg={'#f9f9f9'}
               borderRadius={'14px'}
-              w={{ base: '70%', sm: '70%', xl: '300px' }}
+              w={{ base: '100%', sm: '100%', xl: '300px' }}
             />
           </InputGroup>
           <Tooltip
@@ -207,12 +209,13 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
           >
             <Button
               ml={{ sm: 0, md: 10 }}
+              mt={{sm:5,md:0}}
               padding={2}
               boxShadow={'3px 4px 12px #2e292940'}
               _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
               background="#3311db"
               color="#fff"
-              w={{ sm: '20%', md: 70 }}
+              w={{ sm: '100%', md: 70 }}
               onClick={handleNavigate}
             >
               New
@@ -231,7 +234,7 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
           variant={'simple'}
           overflowX={{ base: 'auto', xl: 'unset' }}
           style={{
-            border: '2px solid #edebeb',
+            border: '2px solid #f7f7f7',
           }}
         >
           {/* <Card> */}
@@ -239,7 +242,7 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
             {headerGroups.map((headerGroup, index) => (
               <Tr
                 {...headerGroup.getHeaderGroupProps()}
-                borderBottom={'2px solid #edebeb'}
+                borderBottom={'2px solid #f7f7f7'}
               >
                 {headerGroup.headers.map((column) => (
                   <Th
@@ -267,7 +270,7 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
               return (
                 <Tr
                   {...row.getRowProps()}
-                  borderBottom={'2px solid #edebeb'}
+                  borderBottom={'2px solid #f7f7f7'}
                   _hover={{ bg: '#FAF9F6' }}
                   cursor={'pointer'}
                 >

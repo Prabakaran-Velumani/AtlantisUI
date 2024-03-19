@@ -384,73 +384,81 @@ const CreatorDataTable: React.FC<CreatorDataTableProps> = ({
       {/* </Box> */}
 
       <Flex
-        justifyContent={{base: 'center', sm: "flex-end", md: "flex-end", lg: "flex-end"}}
+        justifyContent={{
+          base: 'center',
+          sm: 'flex-end',
+          md: 'flex-end',
+          lg: 'flex-end',
+        }}
         align={'center'}
         mb={'10px'}
         p={'20px 0'}
       >
-      <Flex
-      w={{ sm: '100%', md: 'auto' }}
-      alignItems="center"
-      flexDirection={{xs: "column", sm: 'row', md: "row" ,lg: "row"}}
-      bg={menuBg}
-      flexWrap={{ base: 'wrap', md: 'nowrap' }}
-      p="10px"
-      borderRadius="20px"
-      boxShadow={shadow}
-    >
-        <InputGroup w={{ base: '100%', sm: '100%', md: '200px' }} >
-      <InputLeftElement
-        children={
-          <IconButton
-            aria-label="search"
-            bg="inherit"
-            borderRadius="inherit"
-            _active={{
-              bg: 'inherit',
-              transform: 'none',
-              borderColor: 'transparent',
-            }}
-            _hover={{
-              background: 'none',
-            }}
-            _focus={{
-              background: 'none',
-              boxShadow: 'none',
-            }}
-            icon={<SearchIcon color={searchIconColor} w="15px" h="15px" />}
-          />
-        }
-      />
-          <Input
-            type="text"
-            placeholder="Search..."
-            value={globalFilter || ''}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            bg={'#f9f9f9'}
-            borderRadius={'14px'}
-            w={{ base: '100%', sm: '100%', xl: '300px' }}
-          />
-       
+        <Flex
+          w={{ sm: '100%', md: 'auto' }}
+          alignItems="center"
+          flexDirection={{ xs: 'column', sm: 'row', md: 'row', lg: 'row' }}
+          bg={menuBg}
+          flexWrap={{ base: 'wrap', md: 'nowrap' }}
+          p="10px"
+          borderRadius="20px"
+          boxShadow={shadow}
+        >
+          <InputGroup w={{ base: '100%', sm: '100%', md: '200px' }}>
+            <InputLeftElement
+              children={
+                <IconButton
+                  aria-label="search"
+                  bg="inherit"
+                  borderRadius="inherit"
+                  _active={{
+                    bg: 'inherit',
+                    transform: 'none',
+                    borderColor: 'transparent',
+                  }}
+                  _hover={{
+                    background: 'none',
+                  }}
+                  _focus={{
+                    background: 'none',
+                    boxShadow: 'none',
+                  }}
+                  icon={
+                    <SearchIcon color={searchIconColor} w="15px" h="15px" />
+                  }
+                />
+              }
+            />
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={globalFilter || ''}
+              onChange={(e) => setGlobalFilter(e.target.value)}
+              bg={'#f9f9f9'}
+              borderRadius={'14px'}
+              w={{ base: '100%', sm: '100%', xl: '300px' }}
+            />
           </InputGroup>
           <Tooltip
             label="Create a New Learner"
             hasArrow
             placement="right-start"
           >
-          <Button
-         ml={{base: 0, sm: 0, md: 10, lg: 10}}
-         mt={{base: 5, sm: 5, md: 0}}
-          padding={2}
-          boxShadow={'3px 4px 12px #2e292940'}
-          _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
-          background="#3311db"
-          color="#fff"
-          w={{base: '100%', sm: '100%', md: 70 ,lg: 70}}
-          onClick={handleNavigate}
-        > New
-        </Button>
-          </Tooltip>          
+            <Button
+              ml={{ base: 0, sm: 0, md: 10, lg: 10 }}
+              mt={{ base: 5, sm: 5, md: 0 }}
+              padding={2}
+              boxShadow={'3px 4px 12px #2e292940'}
+              _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
+              background="#3311db"
+              color="#fff"
+              w={{ base: '100%', sm: '100%', md: 70, lg: 70 }}
+              onClick={handleNavigate}
+            >
+              {' '}
+              New
+            </Button>
+          </Tooltip>
         </Flex>
       </Flex>
       {/* <Card mb={{ base: '0px', xl: '20px' }} mt={'20px'} boxShadow={'1px 1px 12px #2e292914'} p={'10px 0'}> */}
@@ -464,7 +472,7 @@ const CreatorDataTable: React.FC<CreatorDataTableProps> = ({
           variant={'simple'}
           overflowX={{ base: 'auto', xl: 'unset' }}
           style={{
-            border: '2px solid #edebeb',
+            border: '2px solid #f7f7f7',
           }}
         >
           {/* <Card> */}
@@ -472,7 +480,7 @@ const CreatorDataTable: React.FC<CreatorDataTableProps> = ({
             {headerGroups.map((headerGroup) => (
               <Tr
                 {...headerGroup.getHeaderGroupProps()}
-                borderBottom={'2px solid #edebeb'}
+                borderBottom={'2px solid #f7f7f7'}
               >
                 {headerGroup.headers.map((column) => (
                   <Th
@@ -498,7 +506,7 @@ const CreatorDataTable: React.FC<CreatorDataTableProps> = ({
             {page.map((row) => {
               prepareRow(row);
               return (
-                <Tr {...row.getRowProps()} borderBottom={'2px solid #edebeb'}>
+                <Tr {...row.getRowProps()} borderBottom={'2px solid #f7f7f7'}>
                   {row.cells.map((cell) => {
                     return (
                       <Td
