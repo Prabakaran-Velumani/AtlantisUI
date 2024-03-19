@@ -141,7 +141,6 @@ useEffect(() => {
       setTabState('Review');
       setLoadingdata(true);
     }
-    console.log('gameGameStage',gameGameStage);
     gameLists(tabState);
     fetchData();
     fetchCount();
