@@ -303,7 +303,6 @@ const ScreenPreview = () => {
     dispatch(updatePreviewData({ isDispatched: false }));
   }, [CompKeyCount]);
   const getData = (next: any) => {
-    console.log('getDataSC--', next);
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
@@ -314,40 +313,40 @@ const ScreenPreview = () => {
     const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
 
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-
+    console.log('demoBlocks', demoBlocks[quest])
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
             (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
           )
-          .map((key: any) => demoBlocks[quest]?.[key])
+          .map((key: any) => {console.log('quest', quest); console.log('key', key);  return (demoBlocks[quest]?.[key])})
       : [];
+      console.log('')
 
     {
       /* Check wheather has next block or not, if not then show End of Current Quest.
           Want to play next quest, then switch the current quest in game creation screen */
     }
-    console.log('nextBlock',nextBlock);
+
+console.log('nextBlock.length ', nextBlock )
     if (nextBlock.length == 0) {
       setEndOfQuest(true);
     } else {
       setEndOfQuest(false);
     }
-
+   
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       setInteractionOptions(gameInfo, nextBlock[0]);
     }
     if (
       type === 'Interaction' &&
       resMsg !== ''
-      //&& gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
       setType('response');
       return false;
     } else if (
       (type === 'Interaction' || type === 'response') &&
       feed !== ''
-      // && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
       setType('feedback');
       return false;
@@ -356,6 +355,8 @@ const ScreenPreview = () => {
       type === 'response' ||
       type === 'feedback'
     ) {
+      console.log('navi', navi)
+      console.log('nextBlock[0]?.blockChoosen', nextBlock[0]?.blockChoosen)
       if (navi === 'Repeat Question') {
         setType('Interaction');
         setSelectedOption(null);
@@ -371,18 +372,22 @@ const ScreenPreview = () => {
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
+        
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
         setSelectedOption(null);
         return false;
       } else if (navi === 'Complete') {
-        if (demoBlocks.hasOwnProperty(nextLevel)) {
-          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-          setData(demoBlocks[nextLevel]['1']);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          return false;
-        }
+        // if (demoBlocks.hasOwnProperty(nextLevel)) {
+        //   setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+        //   setData(demoBlocks[nextLevel]['1']);
+        //   return false;
+        // } else {
+        //   setType(null);
+        //   setData(null);
+        //   return false;
+        // }
+        setEndOfQuest(true);
       } else {
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
@@ -392,15 +397,16 @@ const ScreenPreview = () => {
     }
 
     if (nextBlock.length === 0) {
-      if (demoBlocks.hasOwnProperty(nextLevel)) {
-        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        setData(demoBlocks[nextLevel]['1']);
-        return false;
-      } else {
-        setType(null);
-        setData(null);
-        return false;
-      }
+      // if (demoBlocks.hasOwnProperty(nextLevel)) {
+      //   setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+      //   setData(demoBlocks[nextLevel]['1']);
+      //   return false;
+      // } else {
+      //   setType(null);
+      //   setData(null);
+      //   return false;
+      // }
+      setEndOfQuest(true);
     }
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
@@ -439,7 +445,6 @@ const ScreenPreview = () => {
   };
 
 const getDataSection = (data: any) => {
-  console.log('getData 1', data);
   setCurrentPosition(0);
   const content = data?.blockText || '';
   const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
@@ -492,12 +497,9 @@ useEffect(() => {
 }, [Navigatenext]);
 
   useEffect(() => {
-    console.log('type', type)
-    console.log('data', data)
     if (data && (type === 'Note' || type === 'Dialog') ){
       getDataSection(data);
     }
-
   }, [data, type]);
 
   return (
