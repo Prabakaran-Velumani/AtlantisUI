@@ -86,7 +86,10 @@ export default function Default(props: {
               borderRadius: '15px',
               height: '45px',
               padding: '0 !important',
-              borderColor: '#e0e5f2'
+              borderColor: '#e0e5f2',
+              width: '100%',
+              maxWidth: '100%'
+
             }), }}
             options={options}
             onChange={handleSelectChange}

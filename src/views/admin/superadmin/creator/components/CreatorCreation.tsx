@@ -764,249 +764,254 @@ const CreatorCreation = () => {
   return (
     <>
       <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>
-        <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'absolute'} alignItems={'center'}></Card>
-        <Card mb={{ base: '0px', xl: '20px' }} width={{sm:'95%',lg:'70%'}} marginTop={'120px'}>
-          <Flex direction="column" ms="10px">
-          <Text color={useColorModeValue('secondaryGray.900', 'white')} fontSize="2xl" fontWeight="700" mb="20px">
-              Creator {id ? 'Updation' : 'Creation'}
-            </Text>
-            {/* <Text fontSize="md" color={textColorSecondary}>
-              Here you can change your Creator details
-            </Text> */}
-          </Flex>
-          <SimpleGrid
-            columns={{ sm: 1, md: 2 }}
-            spacing={{ base: '20px', xl: '20px' }}
-          >
-           
-            <InputField
-              mb="0px"
-              me="30px"
-              id="ctName"
-              name="ctName"
-              label="Creator Name"
-              isRequired={true}
-              placeholder="eg. Adam Copeland"
-              onChange={handleChange}
-              value={formData?.ctName}
-              ref={ctNameRef}
-            />
-            <SelectField
-              mb="0px"
-              me="30px"
-              id="ctCompanyId"
-              name="ctCompanyId"
-              label="Creator Company Name"
-              options={companyOptions}
-              isRequired={true}
-              onChange={handleCompanyChange}
-              value={
-                companyOptions.find(
-                  (option) => option.value === formData.ctCompanyId,
-                ) || null
-              }
-              handleSeletAttr={handleSeletAttr}
-            />
-
-            <InputField
-              mb="0px"
-              me="30px"
-              id="ctMail"
-              name="ctMail"
-              type='mail'
-              label="Creator Mail"
-              isRequired={true}
-              placeholder="eg. Mail@sample.com"
-              onChange={handleChange}
-              value={formData?.ctMail}
-              onBlur={handleEmailOnBlur}
-              autoComplete="off"
-              ref={ctMailRef}
-
-            />
-                  <SelectField
-              mb="0px"
-              me="30px"
-              id="ctPlanId"
-              isRequired={true}
-              label="Plan"
-              placeholder="Select Plan"
-              name="ctPlanId"
-              value={
-                mappedPlanOptions.find(
-                  (option) => option.value === formData?.ctPlanId
-                ) || null
-              }
-              handleSeletAttr={handlePlan}
-              onChange={handleChangeplan}
-              options={mappedPlanOptions}
-              isDisabled={!!id}
-
-            />
-            {!id && (
-
-              <SelectField
-              mb="0px"
-              me="30px"
-                id="phPlanId"
-                name="phPlanId"
-                label="Plan Type"
-                isRequired={true}
-                options={plantype.data.map((pt) => ({
-                  value: `${pt.psPlanDuration}-${pt.psPlanType}`,
-                  label: `${pt.psPlanDuration}-${pt.psPlanType} `,// Adjust the label format as needed
-                }))}
-                onChange={handleChangePlanType}
-                value={plantype.data.find((pt) => pt.phPlanId === selected.phPlanId)}
-                handleSeletAttr={handlePlanType}
-
-              />
-            )}
-            {id && (
-              <SelectField
-                mb="0px"
-                me="30px"
-                id="phPlanId"
-                name="phPlanId"
-                label="Plan Type"
-                isRequired={true}
-                options={plantype.data.map((pt) => ({
-                  value: `${pt.psPlanDuration}-${pt.psPlanType}`,
-                  label: `${pt.psPlanDuration}-${pt.psPlanType} `,// Adjust the label format as needed
-                }))}
-                onChange={handleChangePlanType}
-                value={selectedPlanType}
-                handleSeletAttr={handlePlanType}
-                isDisabled={!!id}
-              />
-            )}
- <SelectField
-             mb="0px"
-             me="30px"
-              id="ctStatus"
-              name="ctStatus"
-              label="Active Status"
-              isRequired={true}
-              options={statusOptions}
-              onChange={handleStatusChange}
-              value={
-                statusOptions.find(
-                  (option) => option.value === selectedStatus.value,
-                ) || null
-              }
-              handleSeletAttr={handleStatus}
-              isDisabled={user.data.role === 'Creator'}
-            />
-            <InputField
-
-              mb="0px"
-              me="30px"
-              id="ctAge"
-              name="ctAge"
-              label="Creator Age"
-              placeholder="eg. 30"
-              type="number"
-              onChange={handleChange}
-              value={formData?.ctAge}
-            />
-            <SelectField
-              mb="0px"
-              me="30px"
-              id="ctGender"
-              name="ctGender"
-              label="Creator Gender"
-              isRequired={false}
-              options={genderOptions}
-              onChange={handleGenderChange}
-              autoComplete="off"
-              value={
-                genderOptions.find(
-                  (option) => option.value === formData.ctGender,
-                ) || null
-              }
-
-            />
-
-            <SelectField
-              mb="0px"
-              me="30px"
-              id="ctCountry"
-              name="ctCountry"
-              label="Creator Country Name"
-              options={mappedCountryOptions}
-              isRequired={false}
-              onChange={handleCountryChange}
-              value={
-                mappedCountryOptions.find(
-                  (option) => option.value === formData.ctCountry,
-                ) || null
-              }
-            />
-            <InputField
-              mb="0px"
-              me="30px"
-              id="ctDesignation"
-              name="ctDesignation"
-              label="Creator Designation"
-              placeholder='eg. I"m a Creator'
-              onChange={handleChange}
-              value={formData?.ctDesignation}
-            />
-             <InputField
-              mb="0px"
-              me="30px"
-              id="creatorEntryDate"
-              label="Creator Entry Date"
-              type="date-local"
-              defaultValue={isoFormatDate}
-              disabled={true}
-              
-            />
-           
-            {user?.data?.role === 'Creator' && (
+        <Card alignItems={'center'}>      
+          <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={{base: '170', sm: '170', md: '300', lg: '300'}} position={'relative'} alignItems={'center'}></Card>
+          <Card mb={{ base: '0px', xl: '20px' }} width={{base: '95%', md: '70%'}} marginTop={'-120px'}>
+            <Flex direction="column">
+            <Text color={useColorModeValue('secondaryGray.900', 'white')} fontSize="2xl" fontWeight="700" mb="20px">
+                Creator {id ? 'Updation' : 'Creation'}
+              </Text>
+              {/* <Text fontSize="md" color={textColorSecondary}>
+                Here you can change your Creator details
+              </Text> */}
+            </Flex>
+            <SimpleGrid
+              columns={{ sm: 1, md: 2 }}
+              spacing={{ base: '20px', xl: '25px' }}
+            >
+            
               <InputField
                 mb="0px"
                 me="30px"
-                id="ctPassword"
-                name="ctPassword"
-                label="Password"
+                id="ctName"
+                name="ctName"
+                label="Creator Name"
+                isRequired={true}
+                placeholder="eg. Adam Copeland"
+                onChange={handleChange}
+                value={formData?.ctName}
+                ref={ctNameRef}
+              />
+              <SelectField
+                mb="0px"
+                me="30px"
+                id="ctCompanyId"
+                name="ctCompanyId"
+                label="Creator Company Name"
+                options={companyOptions}
+                isRequired={true}
+                onChange={handleCompanyChange}
+                value={
+                  companyOptions.find(
+                    (option) => option.value === formData.ctCompanyId,
+                  ) || null
+                }
+                handleSeletAttr={handleSeletAttr}
+              />
+
+              <InputField
+                mb="0px"
+                me="30px"
+                id="ctMail"
+                name="ctMail"
+                type='mail'
+                label="Creator Mail"
+                isRequired={true}
+                placeholder="eg. Mail@sample.com"
+                onChange={handleChange}
+                value={formData?.ctMail}
+                onBlur={handleEmailOnBlur}
+                autoComplete="off"
+                ref={ctMailRef}
+
+              />
+                    <SelectField
+                mb="0px"
+                me="30px"
+                id="ctPlanId"
+                isRequired={true}
+                label="Plan"
+                placeholder="Select Plan"
+                name="ctPlanId"
+                value={
+                  mappedPlanOptions.find(
+                    (option) => option.value === formData?.ctPlanId
+                  ) || null
+                }
+                handleSeletAttr={handlePlan}
+                onChange={handleChangeplan}
+                options={mappedPlanOptions}
+                isDisabled={!!id}
+
+              />
+              {!id && (
+
+                <SelectField
+                mb="0px"
+                me="30px"
+                  id="phPlanId"
+                  name="phPlanId"
+                  label="Plan Type"
+                  isRequired={true}
+                  options={plantype.data.map((pt) => ({
+                    value: `${pt.psPlanDuration}-${pt.psPlanType}`,
+                    label: `${pt.psPlanDuration}-${pt.psPlanType} `,// Adjust the label format as needed
+                  }))}
+                  onChange={handleChangePlanType}
+                  value={plantype.data.find((pt) => pt.phPlanId === selected.phPlanId)}
+                  handleSeletAttr={handlePlanType}
+
+                />
+              )}
+              {id && (
+                <SelectField
+                  mb="0px"
+                  me="30px"
+                  id="phPlanId"
+                  name="phPlanId"
+                  label="Plan Type"
+                  isRequired={true}
+                  options={plantype.data.map((pt) => ({
+                    value: `${pt.psPlanDuration}-${pt.psPlanType}`,
+                    label: `${pt.psPlanDuration}-${pt.psPlanType} `,// Adjust the label format as needed
+                  }))}
+                  onChange={handleChangePlanType}
+                  value={selectedPlanType}
+                  handleSeletAttr={handlePlanType}
+                  isDisabled={!!id}
+                />
+              )}
+  <SelectField
+              mb="0px"
+              me="30px"
+                id="ctStatus"
+                name="ctStatus"
+                label="Active Status"
+                isRequired={true}
+                options={statusOptions}
+                onChange={handleStatusChange}
+                value={
+                  statusOptions.find(
+                    (option) => option.value === selectedStatus.value,
+                  ) || null
+                }
+                handleSeletAttr={handleStatus}
+                isDisabled={user.data.role === 'Creator'}
+              />
+              <InputField
+
+                mb="0px"
+                me="30px"
+                id="ctAge"
+                name="ctAge"
+                label="Creator Age"
+                placeholder="eg. 30"
+                type="number"
+                onChange={handleChange}
+                value={formData?.ctAge}
+              />
+              <SelectField
+                mb="0px"
+                me="30px"
+                id="ctGender"
+                name="ctGender"
+                label="Creator Gender"
+                isRequired={false}
+                options={genderOptions}
+                onChange={handleGenderChange}
+                autoComplete="off"
+                value={
+                  genderOptions.find(
+                    (option) => option.value === formData.ctGender,
+                  ) || null
+                }
+
+              />
+
+              <SelectField
+                mb="0px"
+                me="30px"
+                id="ctCountry"
+                name="ctCountry"
+                label="Creator Country Name"
+                options={mappedCountryOptions}
+                isRequired={false}
+                onChange={handleCountryChange}
+                value={
+                  mappedCountryOptions.find(
+                    (option) => option.value === formData.ctCountry,
+                  ) || null
+                }
+              />
+              <InputField
+                mb="0px"
+                me="30px"
+                id="ctDesignation"
+                name="ctDesignation"
+                label="Creator Designation"
                 placeholder='eg. I"m a Creator'
                 onChange={handleChange}
-                type='password'
-                value={formData?.ctPassword}
+                value={formData?.ctDesignation}
               />
-            )}
+              <InputField
+                mb="0px"
+                me="30px"
+                id="creatorEntryDate"
+                label="Creator Entry Date"
+                type="date-local"
+                defaultValue={isoFormatDate}
+                disabled={true}
+                
+              />
+            
+              {user?.data?.role === 'Creator' && (
+                <InputField
+                  mb="0px"
+                  me="30px"
+                  id="ctPassword"
+                  name="ctPassword"
+                  label="Password"
+                  placeholder='eg. I"m a Creator'
+                  onChange={handleChange}
+                  type='password'
+                  value={formData?.ctPassword}
+                />
+              )}
 
 
 
-      
-          </SimpleGrid>
+        
+            </SimpleGrid>
 
-          <Flex justify="space-between">
-            <Button
-               variant="light"
-               fontSize="sm"
-               borderRadius="16px"
-               w={{ base: '128px', md: '148px' }}
-               h="46px"
-               mt="20px"
-              onClick={handleBack}
-            >
-              Cancel
-            </Button>
-            <Button
-              mt="20px"
-              variant="darkBrand"
-              fontSize="sm"
-              borderRadius="16px"
-              w={{ base: '128px', md: '148px' }}
-              h="46px"
-              ms="auto"
-              onClick={handleSubmit}
-            >
-              {id ? 'Update' : 'Save'}
-            </Button>
-          </Flex>
+            <Flex justify="space-between">
+              <Button
+                 // variant="light"
+                 fontSize="sm"
+                 borderRadius="16px"
+                 border={'1px solid #00000024'}
+                 w={{ base: '128px', md: '148px' }}
+                 h="46px"
+                 mt="20px"
+                 mr="20px"
+                 bg={'transparent'}
+                 _hover={{bg: '#11047a', color: '#fff'}}
+                onClick={handleBack}
+              >
+                Cancel
+              </Button>
+              <Button
+                mt="20px"
+                variant="darkBrand"
+                fontSize="sm"
+                borderRadius="16px"
+                w={{ base: '128px', md: '148px' }}
+                h="46px"                
+                onClick={handleSubmit}
+              >
+                {id ? 'Update' : 'Save'}
+              </Button>
+            </Flex>
+          </Card>
         </Card>
       </Box>
       {alert ? <OnToast msg={msg} status={toastStatus} setAlert={setAlert} /> : null}
