@@ -159,7 +159,7 @@ const CompanyDataTable: React.FC<CompanyDataTableProps> = ({ data }) => {
         <Flex
           w={{ sm: '100%', md: 'auto' }}
           alignItems="center"
-          flexDirection={{sm:'column',md:"row"}}
+          flexDirection={{base:'column',sm:'column',md:"row"}}
           bg={menuBg}
           flexWrap={{ base: 'wrap', md: 'nowrap' }}
           p="10px"
