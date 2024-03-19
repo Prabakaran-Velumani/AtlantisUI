@@ -387,7 +387,7 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({
               onChange={(e) => setGlobalFilter(e.target.value)}
               bg={'#f9f9f9'}
               borderRadius={'14px'}
-              w={{ base: '70%', sm: '70%', xl: '300px' }}
+              w={{ base: '100%', sm: '100%', xl: '300px' }}
             />
           </InputGroup>
           <Tooltip
@@ -422,7 +422,7 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({
           variant={'simple'}
           overflowX={{ base: 'auto', xl: 'scroll' }}
           style={{
-            border: '2px solid #edebeb',
+            border: '2px solid #f7f7f7',
           }}
         >
           {/* <Card> */}
@@ -430,7 +430,7 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({
             {headerGroups.map((headerGroup) => (
               <Tr
                 {...headerGroup.getHeaderGroupProps()}
-                borderBottom={'2px solid #edebeb'}
+                borderBottom={'2px solid #f7f7f7'}
               >
                 {headerGroup.headers.map((column) => (
                   <Th
@@ -459,7 +459,7 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({
               return (
                 <Tr
                   {...row.getRowProps()}
-                  borderBottom={'2px solid #edebeb'}
+                  borderBottom={'2px solid #f7f7f7'}
                   _hover={{ bg: '#FAF9F6' }}
                   cursor={'pointer'}
                 >

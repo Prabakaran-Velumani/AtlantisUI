@@ -193,7 +193,7 @@ useEffect(() => {
     <>
       <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>      
         <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'absolute'} alignItems={'center'}></Card>
-        <Card mb={{ base: '0px', xl: '20px' }} width={'70%'} marginTop={'120px'}>
+        <Card mb={{ base: '0px', xl: '20px' }} width={{sm:'95%',lg:'70%'}} marginTop={'120px'}>
           <Flex direction="column"  ms="10px">
           <Text color={textColorPrimary} fontSize="2xl" fontWeight="700" mb="20px">
               Industry {id? 'Updation':'Creation'}
