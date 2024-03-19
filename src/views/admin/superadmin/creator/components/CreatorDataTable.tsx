@@ -347,15 +347,15 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({
         <Flex
           w={{ sm: '100%', md: 'auto' }}
           alignItems="center"
-          flexDirection="row"
+          flexDirection={{base:'column',sm:'column',md:"row"}}
           bg={menuBg}
           flexWrap={{ base: 'wrap', md: 'nowrap' }}
           p="10px"
-          borderRadius="999px"
+          borderRadius="20px"
           boxShadow={shadow}
           justifyContent={'space-between'}
         >
-          <InputGroup w={{ base: '70%', sm: '70%', md: '200px' }}>
+          <InputGroup w={{ base: '100%', sm: '100%', md: '200px' }}>
             <InputLeftElement
               children={
                 <IconButton
@@ -397,12 +397,13 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({
           >
           <Button
             ml={{ sm: 0, md: 10 }}
+            mt={{sm:5,md:0}}
             padding={2}
             boxShadow={'3px 4px 12px #2e292940'}
             _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
             background="#3311db"
             color="#fff"
-            w={{ sm: '20%', md: 70 }}
+            w={{ sm: '100%', md: 70 }}
             onClick={handleNavigate}
           >
             New
