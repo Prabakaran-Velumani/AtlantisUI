@@ -119,16 +119,14 @@ const Game: React.FC = () => {
   //   setGameList(result.data);
   // };
 
-
-useEffect(() => {
   const gameGameStage = localStorage.getItem('gameGameStage');
-  if(gameGameStage == 'Review')
+useEffect(() => {
+ 
+  if(gameGameStage === 'Review')
   {
     setTabState('Review');
     setLoadingdata(true);
-    localStorage.removeItem('gameGameStage');
   }
-  
   console.log('gameGameStage',gameGameStage);
   gameLists(tabState);
 }, [tabState]);
@@ -138,8 +136,13 @@ useEffect(() => {
   // }, [tabState]);
 
   useEffect(() => {
+    if(gameGameStage === 'Review')
+    {
+      setTabState('Review');
+      setLoadingdata(true);
+    }
+    gameLists(tabState);
     fetchData();
-
     fetchCount();
   }, []);
   const handleMouse = (i: number) => {
@@ -200,7 +203,14 @@ useEffect(() => {
   const containerRef = useRef(null);
   useEffect(() => {
     // Your code to fetch data or handle tab change
-
+    if(gameGameStage === 'Review')
+    {
+      setTabState('Review');
+      setLoadingdata(true);
+      
+    }
+    gameLists(tabState);
+    console.log('gameGameStage',gameGameStage);
     // Scroll to top when tab changes
     if (containerRef.current) {
       containerRef.current.scrollTop = 0;
@@ -489,10 +499,11 @@ useEffect(() => {
     } else {
 
       setGameList(result.data);
+      localStorage.removeItem('gameGameStage');
     }
 
     setLoadingdata(false);
-
+    
   };
 
   const [scormEdition, setScormEdition] = useState('SCORM 1.2');

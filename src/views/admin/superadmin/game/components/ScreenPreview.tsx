@@ -53,9 +53,15 @@ const ScreenPreview = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [showNote, setShowNote] = useState(false),
     [first, setFirst] = useState(false);
+    const [game3Position, setGame3Position] = useState({
+      previousBlock: '',
+      currentBlock: '',
+      nextBlock: '',
+    });
   const [data, setData] = useState(null);
   const [type, setType] = useState<string>('');
   const [resMsg, setResMsg] = useState<string>('');
+
   const [feed, setFeed] = useState<string>('');
   const [endOfQuest, setEndOfQuest] = useState<boolean>(false);
   const [currentPosition, setCurrentPosition] = useState(0);
@@ -119,8 +125,16 @@ const ScreenPreview = () => {
       setData(currentBlock);
     }
     console.log("activeBlockSeq",activeBlockSeq);
+    setCurrentPosition(0);
   }, [gameInfo, isDispatched, activeBlockSeq, currentQuest]);
 
+
+  const replayQuest = () => {
+    console.log('replyquest');
+    dispatch(updatePreviewData({ activeBlockSeq: 1 , isDispatched:true}));
+    // getData(data);
+    setEndOfQuest(false);
+  };
   const fetchDataFromApi = useCallback(async () => {
     try {
       if(id && isDispatched)
@@ -302,6 +316,40 @@ const ScreenPreview = () => {
   useEffect(() => {
     dispatch(updatePreviewData({ isDispatched: false }));
   }, [CompKeyCount]);
+
+  const previousData = (current: any) => {
+    setCurrentPosition(0);
+    const currentBlock = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[1])
+      : null;
+    const PrevItem = currentBlock != null ? currentBlock - 1 : null;
+    
+    const prevSeq =
+      game3Position.previousBlock !== ''
+        ? game3Position.previousBlock
+        : current
+        ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
+        : '';
+
+        console.log('prevSeq',prevSeq);
+    const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
+    const currentQuest = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[0])
+      : null;
+    const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    const prevBlock = current
+      ? Object.keys(demoBlocks[quest] || {})
+          .filter(
+            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
+      : [];
+    if (prevBlock.length !== 0 &&
+      prevBlock[0]?.blockChoosen !== 'Interaction') {
+      setType(prevBlock[0]?.blockChoosen);
+      setData(prevBlock[0]);
+    }
+  };
   const getData = (next: any) => {
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -310,8 +358,8 @@ const ScreenPreview = () => {
     const nextSeq = next
       ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
       : '';
+    
     const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
-
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     console.log('demoBlocks', demoBlocks[quest])
     const nextBlock = next
@@ -321,15 +369,10 @@ const ScreenPreview = () => {
           )
           .map((key: any) => {console.log('quest', quest); console.log('key', key);  return (demoBlocks[quest]?.[key])})
       : [];
-      console.log('')
-
-    {
-      /* Check wheather has next block or not, if not then show End of Current Quest.
-          Want to play next quest, then switch the current quest in game creation screen */
-    }
-
-console.log('nextBlock.length ', nextBlock )
-    if (nextBlock.length == 0) {
+ 
+    // {/* Check wheather has next block or not, if not then show End of Current Quest.
+    //       Want to play next quest, then switch the current quest in game creation screen */}
+    if (nextBlock.length === 0) {
       setEndOfQuest(true);
     } else {
       setEndOfQuest(false);
@@ -443,9 +486,21 @@ console.log('nextBlock.length ', nextBlock )
     const url = ` /game/creator/demoplay/${id}`;
     window.open(url, '_blank');
   };
-
+useEffect(()=>
+{
+  if (data && (type === 'Note' || type === 'Dialog') ){
+    getDataSection(data);
+  }  
+},[data,type]);
+useEffect(() => {
+  if(Navigatenext === true)
+  {
+    getData(data);
+  }
+}, [Navigatenext]);
 const getDataSection = (data: any) => {
-  setCurrentPosition(0);
+  // setCurrentPosition(0);
+  console.log('getData 1', data,currentPosition,'......', data?.blockText,Navigatenext);
   const content = data?.blockText || '';
   const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
   const newRemainingSentences = sentences.slice(currentPosition);
@@ -486,21 +541,16 @@ const getDataSection = (data: any) => {
   } else {
       setCurrentPosition(0);
       setNavigateNext(true);
+    
   }
 };
 
-useEffect(() => {
-  if(Navigatenext === true && currentPosition>0)
-  {
-    getData(data);
-  }
-}, [Navigatenext]);
 
   useEffect(() => {
     if (data && (type === 'Note' || type === 'Dialog') ){
       getDataSection(data);
     }
-  }, [data, type]);
+  }, []);
 
   return (
     <Box id="container" ref={previewScreenRef}>
@@ -605,11 +655,15 @@ useEffect(() => {
                                 <Box
                                   className="screen-notebox6"
                                 >
-                                  {data?.blockText}
+                                  {/* {data?.blockText} */}
+                                  {remainingSentences}
+                                  {/* {remainingSentences.map((sentence, index) => (
+  <React.Fragment key={index}>{sentence}</React.Fragment>
+))} */}
                                 </Box>
                                 <Box
                                   w={'100%'}
-                                  onClick={() => getData(data)}
+                                  onClick={() => getDataSection(data)}
                                   mt={'20px'}
                                   display={'flex'}
                                   justifyContent={'center'}
@@ -688,7 +742,11 @@ useEffect(() => {
                               fontFamily={'AtlantisContent'}
                               fontSize={'21px'}
                             >
-                              <TypingEffect text={data?.blockText} speed={50} />
+                              {/* <TypingEffect text={data?.blockText} speed={50} /> */}
+                              {remainingSentences}
+                              {/* {remainingSentences.map((sentence, index) => (
+  <React.Fragment key={index}>{sentence}</React.Fragment>
+))} */}
                             </Box>
                             <Box
                               display={'flex'}
@@ -702,13 +760,14 @@ useEffect(() => {
                                 w={'50px'}
                                 h={'50px'}
                                 cursor={'pointer'}
+                                onClick={() => previousData(data)}
                               />
                               <Img
                                 src={preloadedAssets?.right}
                                 w={'50px'}
                                 h={'50px'}
                                 cursor={'pointer'}
-                                onClick={() => getData(data)}
+                                onClick={() => getDataSection(data)}
                               />
                             </Box>
                           </>
@@ -1227,7 +1286,7 @@ useEffect(() => {
                       </Box>
                      
                     )}
-                    {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadedAssets={preloadedAssets }/>}
+                   {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadedAssets={preloadedAssets } replayQuest={replayQuest}/>} 
                   </Flex>
                 </Box>
               </Box>

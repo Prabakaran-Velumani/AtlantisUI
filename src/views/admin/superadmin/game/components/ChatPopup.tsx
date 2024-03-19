@@ -83,7 +83,6 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ messages, isTyping, onSend, onClo
           />
         </ChatContainer>
       </MainContainer>
-      {/* <button onClick={onClose}>Close</button> */}
     </div>
   );
 };
