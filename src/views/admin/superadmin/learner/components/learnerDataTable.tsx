@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useTable, useSortBy, useGlobalFilter, usePagination, TableInstance } from 'react-table';
+import {
+  useTable,
+  useSortBy,
+  useGlobalFilter,
+  usePagination,
+  TableInstance,
+} from 'react-table';
 import { Navigate, useNavigate } from 'react-router-dom';
 import SelectField from 'components/fields/SelectField';
 // Chakra imports
 import {
   Flex,
-  Table, 
+  Table,
   Thead,
   Tbody,
   Tr,
@@ -15,6 +21,7 @@ import {
   Box,
   Button,
   SimpleGrid,
+  Tooltip,
 } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import { getCompanyList, getSelectCreator } from 'utils/creator/creator';
@@ -23,13 +30,12 @@ import { getAllCohorts, getAllLearner } from 'utils/leaner/leaner';
 import { formToJSON } from 'axios';
 import { SearchIcon } from '@chakra-ui/icons';
 
-  import {
+import {
   IconButton,
   InputGroup,
   InputLeftElement,
   useColorModeValue,
 } from '@chakra-ui/react';
-
 
 interface CreatorData {
   lenId: number;
@@ -37,11 +43,11 @@ interface CreatorData {
     ctName: string;
     // other properties of creator...
   };
-  lenUserName: string; 
+  lenUserName: string;
   lenMail: string;
-  
+
   lenStatus: string;
-  lenCompanyId:string;
+  lenCompanyId: string;
 }
 
 // interface RowObj {
@@ -59,11 +65,11 @@ type RowObj = {
   creatorName: string;
   learnerName: string;
   learnerMail: string;
-  
+
   status: any;
- 
+
   action: any;
-  companyName:any;
+  companyName: any;
 };
 
 interface OptionType {
@@ -82,41 +88,47 @@ interface planType {
 interface CreatorDataTableProps {
   data: RowObj[];
   setApiData: React.Dispatch<React.SetStateAction<CreatorData[]>>;
-  setCompany:any;
+  setCompany: any;
 }
 
 type DataCol = TableInstance<RowObj>;
 
-
-const CreatorDataTable: React.FC<CreatorDataTableProps> = ({ data,setApiData,setCompany }) => {
+const CreatorDataTable: React.FC<CreatorDataTableProps> = ({
+  data,
+  setApiData,
+  setCompany,
+}) => {
   const storage = JSON.parse(localStorage.getItem('user'));
- 
 
   let storageCreatorId = '';
-  const UserRole=storage.data.role;
+  const UserRole = storage.data.role;
   if (storage.data.role === 'Creator') {
     storageCreatorId = storage.data.id;
   }
   const [lastPage, setLastPage] = useState<any>();
   const [companyOptions, setCompanyOptions] = useState([]);
-  const [selected,setSelected] = useState({companyId:'',creatorId:'',cohortId:''});
+  const [selected, setSelected] = useState({
+    companyId: '',
+    creatorId: '',
+    cohortId: '',
+  });
   const [creators, setCreators] = useState([]),
-        [cohorts,setCohorts] = useState([]);
-  const navigate = useNavigate();  
+    [cohorts, setCohorts] = useState([]);
+  const navigate = useNavigate();
   const searchIconColor = useColorModeValue('gray.700', 'white');
-let menuBg = useColorModeValue('white', 'navy.800');
- const shadow = useColorModeValue(
-  '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
-  '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
-);       
+  let menuBg = useColorModeValue('white', 'navy.800');
+  const shadow = useColorModeValue(
+    '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
+    '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
+  );
   interface OptionTypecon {
     value: string;
     label: string;
     CompanyId: string;
-}                   
-  const handleNavigate= () => {
+  }
+  const handleNavigate = () => {
     navigate('creation');
-  } 
+  };
 
   // const columns: ColumnObj[] = React.useMemo(
   //   () => [
@@ -133,7 +145,7 @@ let menuBg = useColorModeValue('white', 'navy.800');
   // );
   const columns: ColumnObj[] = React.useMemo(() => {
     let userRoleColumns: ColumnObj[];
-  
+
     // Define columns based on user role
     if (UserRole === 'Creator') {
       userRoleColumns = [
@@ -142,7 +154,7 @@ let menuBg = useColorModeValue('white', 'navy.800');
         { Header: 'Learner Name', accessor: 'learnerName' },
         { Header: 'Learner Mail', accessor: 'learnerMail' },
         { Header: 'Status', accessor: 'status' },
-        { Header: '', accessor: 'action' },
+        { Header: 'Action', accessor: 'action' },
       ];
     } else if (UserRole === 'Admin') {
       // Define columns for creator role
@@ -153,13 +165,12 @@ let menuBg = useColorModeValue('white', 'navy.800');
         { Header: 'Learner Name', accessor: 'learnerName' },
         { Header: 'Learner Mail', accessor: 'learnerMail' },
         { Header: 'Status', accessor: 'status' },
-        { Header: '', accessor: 'action' },
+        { Header: 'Action', accessor: 'action' },
       ];
-    } 
+    }
     return userRoleColumns;
   }, [UserRole]);
 
-  
   const {
     getTableProps,
     getTableBodyProps,
@@ -182,14 +193,14 @@ let menuBg = useColorModeValue('white', 'navy.800');
     },
     useGlobalFilter,
     useSortBy,
-    usePagination
+    usePagination,
   );
   const mappedPlanOptions = Array.isArray(creators)
-  ? creators.map((creators) => ({
-    value: creators.plId, // Convert to string if necessary
-    label: creators.plPlan,
-  }))
-  : [];
+    ? creators.map((creators) => ({
+        value: creators.plId, // Convert to string if necessary
+        label: creators.plPlan,
+      }))
+    : [];
   useEffect(() => {
     const lastPage = Math.floor(data.length / pageSize);
     setLastPage(Math.floor(data.length / pageSize));
@@ -233,7 +244,7 @@ let menuBg = useColorModeValue('white', 'navy.800');
     }
 
     return pages;
-  };  
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -250,9 +261,11 @@ let menuBg = useColorModeValue('white', 'navy.800');
           return console.log('getPlanNames Error:', creator?.message);
         setCreators(creator.data);
         if (storage.data.role === 'Creator') {
-        const selectCreatorData: OptionTypecon[] = creator?.data || [];
-        const foundItem = selectCreatorData.find(item => item.value === storageCreatorId);
-        setSelected({ ...selected, companyId: foundItem?.CompanyId });
+          const selectCreatorData: OptionTypecon[] = creator?.data || [];
+          const foundItem = selectCreatorData.find(
+            (item) => item.value === storageCreatorId,
+          );
+          setSelected({ ...selected, companyId: foundItem?.CompanyId });
         }
       } catch (error) {
         console.error('An error occurred while fetching data:', error);
@@ -261,26 +274,22 @@ let menuBg = useColorModeValue('white', 'navy.800');
 
     fetchData();
   }, []);
-  
-  const handleCompanyChange = (selectedOption: OptionType | null) => {
-      
-       
-    setSelected({
-        ...selected,
-        
-        companyId: selectedOption.value,
-        creatorId: '',
-      });
-    
-};
 
+  const handleCompanyChange = (selectedOption: OptionType | null) => {
+    setSelected({
+      ...selected,
+
+      companyId: selectedOption.value,
+      creatorId: '',
+    });
+  };
 
   const handleCreatorIdChange = (selectedOption: OptionTypecon | null) => {
     if (selectedOption) {
       setSelected({
         ...selected,
         creatorId: selectedOption.value,
-        companyId: selectedOption.CompanyId
+        companyId: selectedOption.CompanyId,
       });
     } else {
       // Handle the case where selectedOption is null if needed
@@ -294,60 +303,57 @@ let menuBg = useColorModeValue('white', 'navy.800');
     const result = await getAllLearner(data);
     if (result?.status !== 'Success') return setApiData([]);
     setApiData(result?.data);
-  }
+  };
   useEffect(() => {
     handleClick();
-  }, [selected.companyId,selected.creatorId]);
+  }, [selected.companyId, selected.creatorId]);
   return (
     <>
-     {/* <Box w={'100%'} display={'flex'} justifyContent={'center'}> */}
+      {/* <Box w={'100%'} display={'flex'} justifyContent={'center'}> */}
       <Card mt={'20px'} width={'100%'}>
-      <SimpleGrid
-        columns={{ base: 1, md: 3, lg: 3 }}
-        
-        // ml="30px"
-        spacing={6}
-      >
-        {/* fsdfdsa */}
+        <SimpleGrid
+          columns={{ base: 1, md: 3, lg: 3 }}
+          // ml="30px"
+          spacing={6}
+        >
+          {/* fsdfdsa */}
 
-        {UserRole === 'Admin' ? (
-  <>
-    {/* Admin content goes here */}
-    <SelectField
-      mb="0px"
-      id="ctCompanyId"
-      name="companyId"
-      label="Company Name"
-      options={companyOptions}
-      onChange={handleCompanyChange}
-      value={
-        companyOptions.find(
-          (option) => option.value === selected.companyId,
-        ) || null
-      }
-      isDisabled={storage.data.role === 'Creator'}
-      isClearable={true}
-    />
-    <SelectField
-      mb="0px"
-      id="ctCompanyId"
-      name="planId"
-      label="Creator Name"
-      options={creators}
-      onChange={handleCreatorIdChange}
-      value={
-        creators.find(
-          (option) => option.value === selected.creatorId,
-        ) || null
-      }
-      isClearable={true}
-    />
-  </>
-) : null}
+          {UserRole === 'Admin' ? (
+            <>
+              {/* Admin content goes here */}
+              <SelectField
+                mb="0px"
+                id="ctCompanyId"
+                name="companyId"
+                label="Company Name"
+                options={companyOptions}
+                onChange={handleCompanyChange}
+                value={
+                  companyOptions.find(
+                    (option) => option.value === selected.companyId,
+                  ) || null
+                }
+                isDisabled={storage.data.role === 'Creator'}
+                isClearable={true}
+              />
+              <SelectField
+                mb="0px"
+                id="ctCompanyId"
+                name="planId"
+                label="Creator Name"
+                options={creators}
+                onChange={handleCreatorIdChange}
+                value={
+                  creators.find(
+                    (option) => option.value === selected.creatorId,
+                  ) || null
+                }
+                isClearable={true}
+              />
+            </>
+          ) : null}
 
-       
-
-         {/* <SelectField
+          {/* <SelectField
           mb="0px"
           id="ctCompanyId" 
           name="planId"
@@ -361,7 +367,7 @@ let menuBg = useColorModeValue('white', 'navy.800');
           }
           isClearable={true}
         /> */}
-        {/* <Button
+          {/* <Button
           mt="25px"
           padding={2}
           boxShadow={'3px 4px 12px #2e292940'}
@@ -373,10 +379,10 @@ let menuBg = useColorModeValue('white', 'navy.800');
         >
           Go
         </Button> */}
-      </SimpleGrid>
-      </Card> 
+        </SimpleGrid>
+      </Card>
       {/* </Box> */}
-      
+
       <Flex
         justifyContent={{base: 'center', sm: "flex-end", md: "flex-end", lg: "flex-end"}}
         align={'center'}
@@ -390,7 +396,7 @@ let menuBg = useColorModeValue('white', 'navy.800');
       bg={menuBg}
       flexWrap={{ base: 'wrap', md: 'nowrap' }}
       p="10px"
-      borderRadius="30px"
+      borderRadius="20px"
       boxShadow={shadow}
     >
         <InputGroup w={{ base: '100%', sm: '100%', md: '200px' }} >
@@ -427,6 +433,11 @@ let menuBg = useColorModeValue('white', 'navy.800');
           />
        
           </InputGroup>
+          <Tooltip
+            label="Create a New Learner"
+            hasArrow
+            placement="right-start"
+          >
           <Button
          ml={{base: 0, sm: 0, md: 10, lg: 10}}
          mt={{base: 5, sm: 5, md: 0}}
@@ -437,36 +448,38 @@ let menuBg = useColorModeValue('white', 'navy.800');
           color="#fff"
           w={{base: '100%', sm: '100%', md: 70 ,lg: 70}}
           onClick={handleNavigate}
-        >
-          New
+        > New
         </Button>
-       
+          </Tooltip>          
         </Flex>
-       
       </Flex>
       {/* <Card mb={{ base: '0px', xl: '20px' }} mt={'20px'} boxShadow={'1px 1px 12px #2e292914'} p={'10px 0'}> */}
-      <Box overflowX={{ sm: 'scroll', xl: 'scroll'}} padding="20px">
+      <Box
+        overflowX={{ sm: 'scroll', xl: 'scroll' }}
+        padding="2px"
+        borderRadius={'13px 13px 20px 20px'}
+      >
         <Table
           {...getTableProps()}
           variant={'simple'}
           overflowX={{ base: 'auto', xl: 'unset' }}
+          style={{
+            border: '2px solid #edebeb',
+          }}
         >
           {/* <Card> */}
-          <Thead
-            className="thead"
-            bg={'#E9EDF7'}
-          >
+          <Thead className="thead" bg={'#f9f9f9'}>
             {headerGroups.map((headerGroup) => (
               <Tr
                 {...headerGroup.getHeaderGroupProps()}
-                borderBottom={'2px solid #f7f7f7'}
+                borderBottom={'2px solid #edebeb'}
               >
                 {headerGroup.headers.map((column) => (
                   <Th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     color={'#191919'}
                     textAlign={'start'}
-                    p={'15px 10px'}
+                    p={'10px 10px'}
                   >
                     {column.render('Header')}
                     <span>
@@ -485,12 +498,12 @@ let menuBg = useColorModeValue('white', 'navy.800');
             {page.map((row) => {
               prepareRow(row);
               return (
-                <Tr {...row.getRowProps()} borderBottom={'2px solid #E0E0E0'}>
+                <Tr {...row.getRowProps()} borderBottom={'2px solid #edebeb'}>
                   {row.cells.map((cell) => {
                     return (
                       <Td
                         {...cell.getCellProps()}
-                        className='learnerForAction'
+                        className="learnerForAction"
                         p={'12px'}
                         textAlign={'start'}
                       >
@@ -528,7 +541,7 @@ let menuBg = useColorModeValue('white', 'navy.800');
               bg={'#f3f0f0'}
               h={'35px'}
               w={'40px'}
-             borderRadius='50%'
+              borderRadius="50%"
               lineHeight="1em"
               flexShrink={0}
               fontWeight={800}
@@ -541,7 +554,7 @@ let menuBg = useColorModeValue('white', 'navy.800');
                 mr={'5px'}
                 h={'35px'}
                 w={'40px'}
-                borderRadius='50%'
+                borderRadius="50%"
                 lineHeight="1em"
                 flexShrink={0}
                 fontWeight={800}
@@ -560,7 +573,7 @@ let menuBg = useColorModeValue('white', 'navy.800');
               bg={'#f3f0f0'}
               h={'35px'}
               w={'40px'}
-              borderRadius='50%'
+              borderRadius="50%"
               lineHeight="1em"
               flexShrink={0}
               fontWeight={800}

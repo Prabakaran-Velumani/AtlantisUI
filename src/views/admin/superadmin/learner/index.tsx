@@ -295,7 +295,7 @@ const CreatorCreation: React.FC = () => {
   };
   return (
     <> 
-      <Box mb={{ base: '135px',md:'100px', xl: '100px' }}></Box> 
+      <Box mb={{ base: '75px',md:'100px', xl: '100px' }}></Box> 
                        
         <LeanerDataTable data={transformedData} setApiData={setApiData} setCompany={setCompany}/>
       

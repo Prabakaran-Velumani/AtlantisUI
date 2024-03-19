@@ -48,7 +48,7 @@ function Sidebar(props: { routes: RoutesType[];[x: string]: any }) {
   let sidebarMargins = '0px';
 
   const path = usePath();
-  console.log(path);
+
   return (
     <Box
       transform={{
@@ -234,7 +234,7 @@ export function SidebarResponsive(props: {
               renderThumbVertical={renderThumb}
               renderView={renderView}
             > */}
-              <Content mini={false} routes={routes} />
+              <Content mini={false} routes={routes} onClick={onClose}/>
             {/* </Scrollbars> */}
           </DrawerBody>
         </DrawerContent>

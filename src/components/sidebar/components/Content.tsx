@@ -25,11 +25,12 @@ import { updatePreviewData } from 'store/preview/previewSlice';
 // FUNCTIONS
 
 function SidebarContent(props: {
+  onClick?: any;
   routes: RoutesType[];
   hovered?: boolean;
   mini?: boolean;
 }) {
-  const { routes, mini, hovered } = props;
+  const { routes, mini, hovered,onClick } = props;
   const textColor = useColorModeValue('navy.700', 'white');
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ function SidebarContent(props: {
           ms={mini && hovered === false ? '-16px' : 'unset'}
 
         >
-          <Links mini={mini} hovered={hovered} routes={routes} />
+          <Links mini={mini} hovered={hovered} routes={routes} onClick={onClick} />
         </Box>
       </Stack>
 
@@ -87,8 +88,8 @@ function SidebarContent(props: {
       >
         <SidebarCard mini={mini} hovered={hovered} />
       </Box> */}
-      <Flex mb="30px" justifyContent="space-between">
-        <Box display="flex" justifyContent="flex-start" w={'210px'} alignItems="flex-between">
+      <Flex mt="30px" justifyContent="space-between" w={'210px'}>
+        <Box display="flex" justifyContent="flex-start"  alignItems="flex-between">
           <Avatar
             h="48px"
             w="48px"
@@ -117,7 +118,7 @@ function SidebarContent(props: {
               {user?.data?.role}
             </Text>
           </Box></Box>
-        <Box display="flex" justifyContent="center" alignItems="center">
+         <Box display="flex" justifyContent="center" alignItems="center">
           <Icon ml={'15px'} color={'#fff'} cursor={'pointer'} as={AiOutlineLogout} w={'20px'} h={'20px'} onClick={handleLogout} style={{ transform: 'rotate(270deg)' }} />
         </Box>
       </Flex>
