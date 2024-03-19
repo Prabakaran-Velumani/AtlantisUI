@@ -378,23 +378,22 @@ let menuBg = useColorModeValue('white', 'navy.800');
       {/* </Box> */}
       
       <Flex
-        justifyContent="flex-end"
+        justifyContent={{base: 'center', sm: "flex-end", md: "flex-end", lg: "flex-end"}}
         align={'center'}
         mb={'10px'}
-        p={'20px'}
+        p={'20px 0'}
       >
       <Flex
       w={{ sm: '100%', md: 'auto' }}
-
       alignItems="center"
-      flexDirection="row"
+      flexDirection={{xs: "column", sm: 'row', md: "row" ,lg: "row"}}
       bg={menuBg}
       flexWrap={{ base: 'wrap', md: 'nowrap' }}
       p="10px"
-      borderRadius="999px"
+      borderRadius="30px"
       boxShadow={shadow}
     >
-        <InputGroup w={{ base: '100%', md: '200px' }} >
+        <InputGroup w={{ base: '100%', sm: '100%', md: '200px' }} >
       <InputLeftElement
         children={
           <IconButton
@@ -424,18 +423,19 @@ let menuBg = useColorModeValue('white', 'navy.800');
             onChange={(e) => setGlobalFilter(e.target.value)}
             bg={'#f9f9f9'}
             borderRadius={'14px'}
-            w={{ base: '200px', xl: '300px' }}
+            w={{ base: '100%', sm: '100%', xl: '300px' }}
           />
        
           </InputGroup>
           <Button
-         ml={10}
+         ml={{base: 0, sm: 0, md: 10, lg: 10}}
+         mt={{base: 5, sm: 5, md: 0}}
           padding={2}
           boxShadow={'3px 4px 12px #2e292940'}
           _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
           background="#3311db"
           color="#fff"
-          w={70}
+          w={{base: '100%', sm: '100%', md: 70 ,lg: 70}}
           onClick={handleNavigate}
         >
           New
