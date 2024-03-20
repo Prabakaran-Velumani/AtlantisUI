@@ -51,6 +51,7 @@ const ScreenPreview = () => {
   const [navi, setNavi] = useState<string>('');
   const [options, setOptions] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [optionNavigation, setOptionNavigation] = useState(null);
   const [showNote, setShowNote] = useState(false),
     [first, setFirst] = useState(false);
     const [game3Position, setGame3Position] = useState({
@@ -389,7 +390,6 @@ const ScreenPreview = () => {
       resMsg !== ''
       //&& gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
-      console.log('1');
       setType('response');
       return false;
     } else if (
@@ -397,7 +397,6 @@ const ScreenPreview = () => {
       feed !== ''
       // && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
-      console.log('2');
       setType('feedback');
       return false;
     } else if (
@@ -405,7 +404,9 @@ const ScreenPreview = () => {
       type === 'response' ||
       type === 'feedback'
     ) {
+      console.log('feedbach');
       if (navi === 'Repeat Question') {
+        console.log('feedbach1');
       const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
       setInteractionOptions(gameInfo, currentBlockinteraction);
       console.log('nextblock123',demoBlocks,'....',nextBlock,'..',currentBlock,'...',demoBlocks['1'][currentBlock],'...',currentBlockinteraction,'...',gameInfo,'....',currentQuest,'...',activeBlockSeq);
@@ -415,19 +416,45 @@ const ScreenPreview = () => {
         setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
+        console.log('feedbach2');
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
+        console.log('feedbach3');
         setType(demoBlocks['1']['1']?.blockChoosen);
         setData(demoBlocks['1']['1']);
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
+        console.log('feedbach4');
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+        .filter((item: any) => {
+          return (
+            demoBlocks[currentQuest][item]?.blockSecondaryId ===
+            parseInt(optionNavigation)
+          );
+        })
+        .map((item: any) => {
+          return demoBlocks[currentQuest][item];
+        });
+        
+      setType(selectedNext && selectedNext[0]?.blockChoosen);
+      setData(selectedNext && selectedNext[0]);
+      setGame3Position((prev: any) => ({
+        ...prev,
+        nextBlock: selectedNext[0]?.blockPrimarySequence,
+      }));
+      setSelectedOption(null);
+      return false;
+
+
+
         setSelectedOption(null);
         return false;
       } else if (navi === 'Complete') {
+        console.log('feedbach5');
         if (demoBlocks.hasOwnProperty(nextLevel)) {
           setType(demoBlocks[nextLevel]['1']?.blockChoosen);
           setData(demoBlocks[nextLevel]['1']);
@@ -438,6 +465,7 @@ const ScreenPreview = () => {
           return false;
         }
       } else {
+        console.log('feedbach6');
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
@@ -462,6 +490,7 @@ const ScreenPreview = () => {
         setData(next);
         return false;
       } else if (next?.blockShowNavigate === 'New Block') {
+        console.log('2');
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
@@ -485,6 +514,7 @@ const ScreenPreview = () => {
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
+    setOptionNavigation(item?.qpNextOption);
     setSelectedOption(ind === selectedOption ? null : ind);
   };
   const handleEntirePrev = async () => {

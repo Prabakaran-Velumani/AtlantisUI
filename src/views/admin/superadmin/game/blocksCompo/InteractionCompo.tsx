@@ -1230,7 +1230,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index
 
                                                     />
                                                 </Box> */}
-                                                <Box ml={'4px'} cursor={'pointer'} display={input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'Select Block' ? 'block' : 'none'} >
+                                                {/* <Box ml={'4px'} cursor={'pointer'} display={input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'Select Block' ? 'block' : 'none'} >
                                                     <Select
                                                         placeholder={'Blocks...'}
                                                         id='interaction'
@@ -1248,7 +1248,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index
                                                         onChange={(e: any) => handleSelectBlock(e, seq.input, `Option${alp.option}`, `Interaction${seq.input}`)}
                                                     />
 
-                                                </Box>
+                                                </Box> */}
                                             </Box>
                                         </>
                                     ))}
@@ -1393,16 +1393,14 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index
                                                         //         )?.label
                                                         //     ) :
                                                         input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'New Block' ? (
-                                                            (showSelectBlock.find(
-                                                              (option: any) => option.value === input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
-                                                            )?.label ) === undefined  ? `${(parseFloat(seq.id) + 0.1).toFixed(1)}` : showSelectBlock.find(
-                                                              (option: any) => option.value === input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
+                                                            showSelectBlock.find(
+                                                              (option: any) => option.value == input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
                                                             )?.label
                                                           ) :
                                                             input?.[`Interaction${seq.input}`]?.navigateshowObjects?.[alp.option] === 'Select Block'
                                                                 ? (
                                                                     showSelectBlock.find(
-                                                                        (option: any) => option.value === input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
+                                                                        (option: any) => option.value == input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
                                                                     )?.label
                                                                 )
                                                                 : input?.[`Interaction${seq.input}`]?.navigateObjects?.[alp.option]
