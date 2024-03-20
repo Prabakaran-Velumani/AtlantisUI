@@ -34,11 +34,23 @@ import {
   updateCreator,
   emailExistenceChecker,
 } from 'utils/creator/creator';
-import { getAllCompanies, getCountries, geoLocation } from 'utils/company/companyService';
+import {
+  getAllCompanies,
+  getCountries,
+  geoLocation,
+} from 'utils/company/companyService';
 import { getPlanName } from 'utils/plan/plan';
-import { creatPlanValidity, updatePlanValidity, getPlanTypeInCreator } from 'utils/planvalidity/planvalidity'
+import {
+  creatPlanValidity,
+  updatePlanValidity,
+  getPlanTypeInCreator,
+} from 'utils/planvalidity/planvalidity';
 import { getPlanType } from 'utils/subscriptionPlans/subscriptionPlan';
-import { getEndDateById, getPlanValidity, getEndDate } from 'utils/planvalidity/planvalidity';
+import {
+  getEndDateById,
+  getPlanValidity,
+  getEndDate,
+} from 'utils/planvalidity/planvalidity';
 import { useAuth } from 'contexts/auth.context';
 const CreatorCreation = () => {
   const toast = useToast();
@@ -64,7 +76,9 @@ const CreatorCreation = () => {
   // ****
   const [showPlanValidity, setShowPlanValidity] = useState(true);
   const [showRenewPlanValidity, setShowRenewPlanValidity] = useState(false);
-  const [selectedPlanType, setSelectedPlanType] = useState<OptionType | null>(null);
+  const [selectedPlanType, setSelectedPlanType] = useState<OptionType | null>(
+    null,
+  );
 
   const [isCtNameValid, setIsCtNameValid] = useState<boolean>(false);
   const [isCtCompanyValid, setIsCtCompanyValid] = useState<boolean>(false);
@@ -80,10 +94,6 @@ const CreatorCreation = () => {
   const [handlePlan, sethandlePlan] = useState<boolean>(true);
   const [handlePlanType, sethandlePlanType] = useState<boolean>(true);
 
-
-
-
-
   const [endDate, setEndDate] = useState([]);
   // *****
   const [selectedStatus, setSelectedStatus] = useState({
@@ -91,33 +101,31 @@ const CreatorCreation = () => {
     label: 'Active',
   });
 
-
-
   const [emailExisted, setEmailExisted] = useState(null);
 
   type FormData = {
-    ctCompanyId: string,
-    ctName: string,
-    ctMail: string,
-    ctCountry: string,
-    ctDesignation: string,
-    ctAge: string,
-    ctGender: string,
-    ctPassword: null,
-    ctCreatedUserId: number,
-    ctEditedUserId: number,
-    ctCreatedDate: string,
-    ctEditedDate: string,
-    ctCreateAdminId: number,
-    ctEditAdminId: string,
-    ctCreateAdminDate: string,
-    ctEditAdminDate: string,
-    ctStatus: string,
-    ctPlanId: string,
-    phPlanId: string,
-    phRenewalPlanId: string,
-    phRenewalValidityDays: string,
-  }
+    ctCompanyId: string;
+    ctName: string;
+    ctMail: string;
+    ctCountry: string;
+    ctDesignation: string;
+    ctAge: string;
+    ctGender: string;
+    ctPassword: null;
+    ctCreatedUserId: number;
+    ctEditedUserId: number;
+    ctCreatedDate: string;
+    ctEditedDate: string;
+    ctCreateAdminId: number;
+    ctEditAdminId: string;
+    ctCreateAdminDate: string;
+    ctEditAdminDate: string;
+    ctStatus: string;
+    ctPlanId: string;
+    phPlanId: string;
+    phRenewalPlanId: string;
+    phRenewalValidityDays: string;
+  };
 
   const [formData, setFormData] = useState<FormData>({
     ctName: '',
@@ -164,9 +172,12 @@ const CreatorCreation = () => {
           const response = await geoLocation();
           setGeolocation.ctCountry = response.data[0].id;
           console.log('response', setGeolocation);
-          setFormData((prevForm) => ({ ...prevForm, ctCountry: setGeolocation.ctCountry }));
+          setFormData((prevForm) => ({
+            ...prevForm,
+            ctCountry: setGeolocation.ctCountry,
+          }));
         }
-       
+
         if (id) {
           const result = await getCreator(id);
           if (result?.status !== 'Success')
@@ -188,16 +199,20 @@ const CreatorCreation = () => {
         setCompanyOptions(company?.data);
         if (id) {
           const getPlanType = await getPlanTypeInCreator(id);
-          console.log("getPlanType", getPlanType)
+          console.log('getPlanType', getPlanType);
           if (getPlanType?.status === 'Success' && getPlanType?.data) {
             const { phValidityDays, phPlanType } = getPlanType.data;
-            setSelectedPlanType({ value: `${phValidityDays}-${phPlanType}`, label: `${phValidityDays}` });
+            setSelectedPlanType({
+              value: `${phValidityDays}-${phPlanType}`,
+              label: `${phValidityDays}`,
+            });
           } else {
-            console.error('Error fetching plan type data:', getPlanType?.message);
+            console.error(
+              'Error fetching plan type data:',
+              getPlanType?.message,
+            );
           }
         }
-
-
 
         const result = await getCountries();
         if (result?.status !== 'Success')
@@ -208,9 +223,8 @@ const CreatorCreation = () => {
           return console.log('getPlanNames Error:', plans?.message);
         setplan(plans.data);
         setPlanOptions(plans?.data);
-        console.log("plans", plans)
-        console.log("plan", plan)
-
+        console.log('plans', plans);
+        console.log('plan', plan);
       } catch (error) {
         console.error('An error occurred while fetching data:', error);
       }
@@ -226,38 +240,43 @@ const CreatorCreation = () => {
     // console.log("ctPlanId:", formData?.ctPlanId);
 
     formData.ctName ? setIsCtNameValid(true) : setIsCtNameValid(false);
-    (formData.ctCompanyId && formData.ctName) ? setIsCtCompanyValid(true) : setIsCtCompanyValid(false);
-    (formData.ctStatus && formData.ctCompanyId && formData.ctName) ? setIsCtStatusValid(true) : setIsCtStatusValid(false);
+    formData.ctCompanyId && formData.ctName
+      ? setIsCtCompanyValid(true)
+      : setIsCtCompanyValid(false);
+    formData.ctStatus && formData.ctCompanyId && formData.ctName
+      ? setIsCtStatusValid(true)
+      : setIsCtStatusValid(false);
 
-    (formData.ctPlanId && formData.ctCompanyId && formData.ctName && formData.ctStatus) ? setisCtPlanIdValid(true) : setisCtPlanIdValid(false);
-
-
+    formData.ctPlanId &&
+    formData.ctCompanyId &&
+    formData.ctName &&
+    formData.ctStatus
+      ? setisCtPlanIdValid(true)
+      : setisCtPlanIdValid(false);
   }, [formData]);
   // Sample options data
 
   const mappedCompanyOptions = Array.isArray(companyOptions)
     ? companyOptions.map((company) => ({
-      value: company.cpId,
-      label: company.cpCompanyName,
-    }))
+        value: company.cpId,
+        label: company.cpCompanyName,
+      }))
     : [];
   const mappedPlanOptions = Array.isArray(plan)
     ? plan.map((plan) => ({
-      value: plan.plId, // Convert to string
-      label: plan.plPlanName,
-    }))
+        value: plan.plId, // Convert to string
+        label: plan.plPlanName,
+      }))
     : [];
 
   console.log(mappedPlanOptions, 'mappedPlanOptions');
   console.log('form:', formData);
   const mappedCountryOptions = Array.isArray(countryOptions)
     ? countryOptions.map((country) => ({
-      value: country.value.toString(), // Change 'Id' to 'value'
-      label: country.label,
-    }))
+        value: country.value.toString(), // Change 'Id' to 'value'
+        label: country.label,
+      }))
     : [];
-
-
 
   console.log(mappedCountryOptions, 'mappedCountryOptions');
 
@@ -275,8 +294,16 @@ const CreatorCreation = () => {
   const getYear = date.getFullYear();
   const getMonth = (date.getMonth() + 1).toString().padStart(2, '0');
   const getDate = date.getDate().toString().padStart(2, '0');
-  const [plantype, setPlantype] = useState({ status: '', message: '', data: [] });
-  const [selected, setSelected] = useState({ ctPlanId: '', phPlanId: '', phRenewalValidityDays: '' });
+  const [plantype, setPlantype] = useState({
+    status: '',
+    message: '',
+    data: [],
+  });
+  const [selected, setSelected] = useState({
+    ctPlanId: '',
+    phPlanId: '',
+    phRenewalValidityDays: '',
+  });
 
   const isoFormatDate = `${getYear}-${getMonth}-${getDate}`;
 
@@ -294,12 +321,10 @@ const CreatorCreation = () => {
       // Set the value of the field to the current value of the target
       setFormData({ ...formData, [name]: value });
       validDataSet({ name, value });
-
     }
   };
 
   function validDataSet(obj: any) {
-
     const formDataKeysOrder: (keyof FormData)[] = [
       'ctName',
       'ctCompanyId',
@@ -326,58 +351,53 @@ const CreatorCreation = () => {
 
     const currentIndex = formDataKeysOrder.indexOf(obj.name);
     const emptyKeys = Object.keys(formData).filter((key, index) => {
-      return index < currentIndex && formData[key as keyof FormData] === "";
+      return index < currentIndex && formData[key as keyof FormData] === '';
     });
-
 
     Object.keys(formData).forEach((key) => {
       const inputRef = getRefForKey(key);
       if (inputRef && inputRef.current) {
         if (emptyKeys.includes(key)) {
-          inputRef.current.style.borderColor = "red";
+          inputRef.current.style.borderColor = 'red';
         } else {
-          inputRef.current.style.borderColor = "";
+          inputRef.current.style.borderColor = '';
         }
 
-        if (emptyKeys.includes("ctCompanyId")) {
+        if (emptyKeys.includes('ctCompanyId')) {
           setHandleSeletAttr(true);
         } else {
           setHandleSeletAttr(false);
         }
 
-        if (emptyKeys.includes("ctStatus")) {
+        if (emptyKeys.includes('ctStatus')) {
           sethandleStatus(true);
         } else {
           sethandleStatus(false);
         }
 
-        if (emptyKeys.includes("ctPlanId")) {
+        if (emptyKeys.includes('ctPlanId')) {
           sethandlePlan(true);
         } else {
           sethandlePlan(false);
         }
 
-        if (emptyKeys.includes("phPlanId")) {
+        if (emptyKeys.includes('phPlanId')) {
           sethandlePlanType(true);
         } else {
           sethandlePlanType(false);
         }
-
       }
     });
     // console.log('currentIndex',currentIndex);
 
-
     // console.log('emptyKeys',emptyKeys);
     // console.log('form',formData);
-
   }
   const getRefForKey = (key: any) => {
-
     switch (key) {
-      case "ctName":
+      case 'ctName':
         return ctNameRef;
-      case "ctMail":
+      case 'ctMail':
         return ctMailRef;
       default:
         return null;
@@ -386,37 +406,36 @@ const CreatorCreation = () => {
   const handleCompanyChange = (selectedOption: OptionType | null) => {
     const value = selectedOption ? selectedOption.value : '';
     setFormData({ ...formData, ctCompanyId: value });
-    validDataSet({ "name": "ctCompanyId", "value": value });
+    validDataSet({ name: 'ctCompanyId', value: value });
   };
   const handleCountryChange = (selectedOption: OptionType | null) => {
     const value = selectedOption ? selectedOption.value : '';
     setFormData({ ...formData, ctCountry: selectedOption.value });
-    validDataSet({ "name": "ctCountry", "value": value });
+    validDataSet({ name: 'ctCountry', value: value });
   };
 
   const handleGenderChange = (selectedOption: OptionType | null) => {
     const value = selectedOption ? selectedOption.value : '';
     setFormData({ ...formData, ctGender: selectedOption.value });
-    validDataSet({ "name": "ctGender", "value": value });
+    validDataSet({ name: 'ctGender', value: value });
   };
   const handleStatusChange = (selectedOption: OptionType | null) => {
     const value = selectedOption ? selectedOption.value : '';
     setSelectedStatus(selectedOption);
     setFormData({ ...formData, ctStatus: value });
 
-    validDataSet({ "name": "ctStatus", "value": value });
+    validDataSet({ name: 'ctStatus', value: value });
   };
 
   const fetchPlanType = async (planId: string) => {
     try {
       const result = await getPlanType(planId);
-      console.log("fetchPlanType", result)
+      console.log('fetchPlanType', result);
       setPlantype(result);
     } catch (error) {
       console.error('An error occurred while fetching plan types:', error);
     }
   };
-
 
   // const handleChangeplan = (selectedOption: OptionType | null) => {
   //   console.log('Selected plan option:', selectedOption?.value);
@@ -445,9 +464,8 @@ const CreatorCreation = () => {
       setFormData({ ...formData, ctPlanId: selectedOption?.value });
       fetchPlanType(selectedOption?.value || '');
       // setSelected({ ctPlanId: selectedOption?.value || '', phPlanId: '' });
-      validDataSet({ "name": "ctPlanId", "value": value });
+      validDataSet({ name: 'ctPlanId', value: value });
     }
-
   };
   const handleChangeRenewplan = (selectedOption: OptionType | null) => {
     setFormData({ ...formData, phRenewalPlanId: selectedOption?.value });
@@ -459,7 +477,7 @@ const CreatorCreation = () => {
     const value = selectedOption ? selectedOption.value : '';
     // console.log('Selected Plan Type:', selectedOption);
     setSelectedStatus(selectedOption);
-    validDataSet({ "name": "phPlanId", "value": value });
+    validDataSet({ name: 'phPlanId', value: value });
     setFormData({ ...formData, phPlanId: selectedOption.value });
   };
   const handleChangeRenewPlanType = (selectedOption: OptionType | null) => {
@@ -476,43 +494,37 @@ const CreatorCreation = () => {
     Object.keys(formData).forEach((key) => {
       // Access the corresponding ref based on the key
       const inputRef =
-        key === 'ctName'
-          ? ctNameRef
-          : key === 'ctMail'
-            ? ctMailRef
-            : null;
+        key === 'ctName' ? ctNameRef : key === 'ctMail' ? ctMailRef : null;
 
       // If the field is empty and there is a corresponding ref
       if (!formData[key as keyof FormData] && inputRef && inputRef.current) {
         // Set the border color to red
         inputRef.current.style.borderColor = 'red';
-
       } else if (inputRef && inputRef.current) {
         // If the field is not empty, reset the border color
         inputRef.current.style.borderColor = '';
       }
-
     });
 
-    if (!formData["ctCompanyId"]) {
+    if (!formData['ctCompanyId']) {
       setHandleSeletAttr(true);
     } else {
       setHandleSeletAttr(false);
     }
 
-    if (!formData["ctStatus"]) {
+    if (!formData['ctStatus']) {
       sethandleStatus(true);
     } else {
       sethandleStatus(false);
     }
     if (!id) {
-      if (!formData["ctPlanId"]) {
+      if (!formData['ctPlanId']) {
         sethandlePlan(true);
       } else {
         sethandlePlan(false);
       }
 
-      if (!formData["phPlanId"]) {
+      if (!formData['phPlanId']) {
         sethandlePlanType(true);
       } else {
         sethandlePlanType(false);
@@ -526,7 +538,6 @@ const CreatorCreation = () => {
     }
 
     if (!formData.ctCompanyId) {
-
       setMsg('Please select the company name');
       setToastStatus('error');
       setAlert(true);
@@ -552,8 +563,6 @@ const CreatorCreation = () => {
       setAlert(true);
       return false;
     }
-
-
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isValidEmail = emailRegex.test(formData.ctMail);
@@ -597,37 +606,31 @@ const CreatorCreation = () => {
           setAlert(true);
           return;
         } else {
-
           setMsg('Creator updated');
           setToastStatus('success');
           setAlert(true);
-         
+
           setTimeout(() => {
             if (user.data.role === 'Admin') {
               navigate('/admin/superadmin/creator');
             } else {
               navigate('/admin/superadmin/dashboards');
             }
-
           }, 200);
         }
-
       } else {
-
-
         const result = await addCreator(data);
-        console.log("result", result);
+        console.log('result', result);
         console.log('ctId:', result.result.ctId);
         if (result?.status === 'MailFailure') {
           // setButtonDisabled(false);
           // setMsg(result?.message);
           // setToastStatus('error');
           // setAlert(true);
-          return
-
+          return;
         }
         if (result?.status !== 'Success') {
-          setButtonDisabled(false)
+          setButtonDisabled(false);
           setMsg('Failed to Add creator');
           setToastStatus('error');
           setAlert(true);
@@ -637,8 +640,6 @@ const CreatorCreation = () => {
           setToastStatus('success');
           setAlert(true);
           console.log('result', result);
-
-        
 
           const formDatas = {
             phCreatorId: result.result.ctId,
@@ -698,7 +699,7 @@ const CreatorCreation = () => {
           }
 
           let datas = JSON.stringify(formDatas);
-          console.log("datasdatas", datas)
+          console.log('datasdatas', datas);
           const validityResult = await creatPlanValidity(datas);
           if (validityResult?.status !== 'Success') {
             setButtonDisabled(false);
@@ -721,7 +722,7 @@ const CreatorCreation = () => {
         }
       }
     } catch (error: any) {
-      setButtonDisabled(false)
+      setButtonDisabled(false);
       setMsg(error?.message);
       setToastStatus('error');
       setAlert(true);
@@ -745,14 +746,18 @@ const CreatorCreation = () => {
     } else {
       navigate('/admin/superadmin/dashboards');
     }
-
   };
   const handleEmailOnBlur = async (e: any) => {
-    const validationResult = await emailExistenceChecker(JSON.stringify({ email: e.target.value }));
-    console.log("validationResult", validationResult);
-    if (validationResult?.valid === false || validationResult?.status == "Failure") {
+    const validationResult = await emailExistenceChecker(
+      JSON.stringify({ email: e.target.value }),
+    );
+    console.log('validationResult', validationResult);
+    if (
+      validationResult?.valid === false ||
+      validationResult?.status == 'Failure'
+    ) {
       validationResult?.valid === false && setEmailExisted(true);
-      setMsg(validationResult.message)
+      setMsg(validationResult.message);
       setToastStatus('error');
       setAlert(true);
       setTimeout(() => {
@@ -760,15 +765,36 @@ const CreatorCreation = () => {
       }, 100);
     }
     validationResult?.valid === true && setEmailExisted(false);
-  }
+  };
   return (
     <>
-      <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>
-        <Card alignItems={'center'}>      
-          <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={{base: '170', sm: '170', md: '300', lg: '300'}} position={'relative'} alignItems={'center'}></Card>
-          <Card mb={{ base: '0px', xl: '20px' }} width={{base: '95%', md: '70%'}} marginTop={'-120px'}>
+      <Box
+        display={'flex'}
+        flexDirection={'column'}
+        alignItems={'center'}
+        marginTop={'75px'}
+        position={'relative'}
+      >
+        <Card alignItems={'center'}>
+          <Card
+            bg={'linear-gradient(to bottom, #7551ff, #3311db)'}
+            w={'100%'}
+            h={{ base: '170', sm: '170', md: '300', lg: '300' }}
+            position={'relative'}
+            alignItems={'center'}
+          ></Card>
+          <Card
+            mb={{ base: '0px', xl: '20px' }}
+            width={{ base: '95%', md: '70%' }}
+            marginTop={'-120px'}
+          >
             <Flex direction="column">
-            <Text color={useColorModeValue('secondaryGray.900', 'white')} fontSize="2xl" fontWeight="700" mb="20px">
+              <Text
+                color={useColorModeValue('secondaryGray.900', 'white')}
+                fontSize="2xl"
+                fontWeight="700"
+                mb="20px"
+              >
                 Creator {id ? 'Updation' : 'Creation'}
               </Text>
               {/* <Text fontSize="md" color={textColorSecondary}>
@@ -779,7 +805,6 @@ const CreatorCreation = () => {
               columns={{ sm: 1, md: 2 }}
               spacing={{ base: '20px', xl: '25px' }}
             >
-            
               <InputField
                 mb="0px"
                 me="30px"
@@ -814,7 +839,7 @@ const CreatorCreation = () => {
                 me="30px"
                 id="ctMail"
                 name="ctMail"
-                type='mail'
+                type="mail"
                 label="Creator Mail"
                 isRequired={true}
                 placeholder="eg. Mail@sample.com"
@@ -823,9 +848,8 @@ const CreatorCreation = () => {
                 onBlur={handleEmailOnBlur}
                 autoComplete="off"
                 ref={ctMailRef}
-
               />
-                    <SelectField
+              <SelectField
                 mb="0px"
                 me="30px"
                 id="ctPlanId"
@@ -835,32 +859,31 @@ const CreatorCreation = () => {
                 name="ctPlanId"
                 value={
                   mappedPlanOptions.find(
-                    (option) => option.value === formData?.ctPlanId
+                    (option) => option.value === formData?.ctPlanId,
                   ) || null
                 }
                 handleSeletAttr={handlePlan}
                 onChange={handleChangeplan}
                 options={mappedPlanOptions}
                 isDisabled={!!id}
-
               />
               {!id && (
-
                 <SelectField
-                mb="0px"
-                me="30px"
+                  mb="0px"
+                  me="30px"
                   id="phPlanId"
                   name="phPlanId"
                   label="Plan Type"
                   isRequired={true}
                   options={plantype.data.map((pt) => ({
                     value: `${pt.psPlanDuration}-${pt.psPlanType}`,
-                    label: `${pt.psPlanDuration}-${pt.psPlanType} `,// Adjust the label format as needed
+                    label: `${pt.psPlanDuration}-${pt.psPlanType} `, // Adjust the label format as needed
                   }))}
                   onChange={handleChangePlanType}
-                  value={plantype.data.find((pt) => pt.phPlanId === selected.phPlanId)}
+                  value={plantype.data.find(
+                    (pt) => pt.phPlanId === selected.phPlanId,
+                  )}
                   handleSeletAttr={handlePlanType}
-
                 />
               )}
               {id && (
@@ -873,7 +896,7 @@ const CreatorCreation = () => {
                   isRequired={true}
                   options={plantype.data.map((pt) => ({
                     value: `${pt.psPlanDuration}-${pt.psPlanType}`,
-                    label: `${pt.psPlanDuration}-${pt.psPlanType} `,// Adjust the label format as needed
+                    label: `${pt.psPlanDuration}-${pt.psPlanType} `, // Adjust the label format as needed
                   }))}
                   onChange={handleChangePlanType}
                   value={selectedPlanType}
@@ -881,9 +904,9 @@ const CreatorCreation = () => {
                   isDisabled={!!id}
                 />
               )}
-  <SelectField
-              mb="0px"
-              me="30px"
+              <SelectField
+                mb="0px"
+                me="30px"
                 id="ctStatus"
                 name="ctStatus"
                 label="Active Status"
@@ -899,7 +922,6 @@ const CreatorCreation = () => {
                 isDisabled={user.data.role === 'Creator'}
               />
               <InputField
-
                 mb="0px"
                 me="30px"
                 id="ctAge"
@@ -925,7 +947,6 @@ const CreatorCreation = () => {
                     (option) => option.value === formData.ctGender,
                   ) || null
                 }
-
               />
 
               <SelectField
@@ -961,9 +982,8 @@ const CreatorCreation = () => {
                 type="date-local"
                 defaultValue={isoFormatDate}
                 disabled={true}
-                
               />
-            
+
               {user?.data?.role === 'Creator' && (
                 <InputField
                   mb="0px"
@@ -973,28 +993,24 @@ const CreatorCreation = () => {
                   label="Password"
                   placeholder='eg. I"m a Creator'
                   onChange={handleChange}
-                  type='password'
+                  type="password"
                   value={formData?.ctPassword}
                 />
               )}
-
-
-
-        
             </SimpleGrid>
 
             <Flex justify="space-between">
               <Button
-                 // variant="light"
-                 fontSize="sm"
-                 borderRadius="16px"
-                 border={'1px solid #00000024'}
-                 w={{ base: '128px', md: '148px' }}
-                 h="46px"
-                 mt="20px"
-                 mr="20px"
-                 bg={'transparent'}
-                 _hover={{bg: '#11047a', color: '#fff'}}
+                // variant="light"
+                fontSize="sm"
+                borderRadius="16px"
+                border={'1px solid #00000024'}
+                w={{ base: '128px', md: '148px' }}
+                h="46px"
+                mt="20px"
+                mr="20px"
+                bg={'transparent'}
+                _hover={{ bg: '#11047a', color: '#fff' }}
                 onClick={handleBack}
               >
                 Cancel
@@ -1005,7 +1021,7 @@ const CreatorCreation = () => {
                 fontSize="sm"
                 borderRadius="16px"
                 w={{ base: '128px', md: '148px' }}
-                h="46px"                
+                h="46px"
                 onClick={handleSubmit}
               >
                 {id ? 'Update' : 'Save'}
@@ -1014,8 +1030,9 @@ const CreatorCreation = () => {
           </Card>
         </Card>
       </Box>
-      {alert ? <OnToast msg={msg} status={toastStatus} setAlert={setAlert} /> : null}
-
+      {alert ? (
+        <OnToast msg={msg} status={toastStatus} setAlert={setAlert} />
+      ) : null}
     </>
   );
 };

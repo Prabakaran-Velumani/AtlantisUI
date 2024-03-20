@@ -1,9 +1,9 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Axios from 'axios';
 import { API_SERVER } from 'config/constant';
-import { CircularProgress} from '@chakra-ui/react';
+import { CircularProgress } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
-import SweetAlert from "react-bootstrap-sweetalert"
+import SweetAlert from 'react-bootstrap-sweetalert';
 import { useParams } from 'react-router-dom';
 // Chakra imports
 import {
@@ -22,7 +22,11 @@ import SelectField from 'components/fields/SelectFieldtwo';
 import Card from 'components/card/Card';
 import OnToast from 'components/alerts/toast';
 import { createplan, getPlanById, updateplan } from 'utils/plan/plan';
-import { createSubscription,updateSubscription,getSubscriptionPlanById } from 'utils/subscriptionPlans/subscriptionPlan';
+import {
+  createSubscription,
+  updateSubscription,
+  getSubscriptionPlanById,
+} from 'utils/subscriptionPlans/subscriptionPlan';
 
 // Define the type for the options
 interface OptionType {
@@ -36,26 +40,24 @@ interface RowType {
   psPrice: string; // Example additional detail
 }
 type FormData = {
-   
-  plPlanName: string; 
+  plPlanName: string;
   plMaxLearner: string;
   plMaxGame: string;
   plMaxBackgrounds: string;
   plMaxCharacters: string;
   plMaxAnalyticsDashboard: string;
   plMAxGameHours: string;
-  plStatus:string,
-
+  plStatus: string;
 };
 type FormDatas = {
-    psPlanDuration: string,
-    psPlanType: string,
-    psPlanId: string,
-    psStatus: string,
-}
+  psPlanDuration: string;
+  psPlanType: string;
+  psPlanId: string;
+  psStatus: string;
+};
 const Plan: React.FC = () => {
   const toast = useToast();
- 
+
   const [formData, setFormData] = useState<FormData>({
     plPlanName: '',
     // psPlanType: '',
@@ -67,27 +69,26 @@ const Plan: React.FC = () => {
     plMaxCharacters: '',
     plMaxAnalyticsDashboard: '',
     plMAxGameHours: '',
-    plStatus:'',
+    plStatus: '',
   });
   const [formDatas, setFormDatas] = useState<FormDatas>({
-    psPlanDuration:'',
-    psPlanType:'',
-    psPlanId:'',
-    psStatus:'',
+    psPlanDuration: '',
+    psPlanType: '',
+    psPlanId: '',
+    psStatus: '',
   });
- 
-  
-  
 
   const { id } = useParams();
-  console.log('useParams',id);
+  console.log('useParams', id);
   const [isButtonDisabled, setButtonDisabled] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(false);
   const [msg, setMsg] = useState<string>('');
   const [toastStatus, setToastStatus] = useState<string>('');
   const [noOfRows, setNoOfRows] = useState<any>(1);
-  const [rows, setRows] = useState<RowType[]>([{ psPlanType: '', psPlanDuration: '', psPrice: '' }]);
+  const [rows, setRows] = useState<RowType[]>([
+    { psPlanType: '', psPlanDuration: '', psPrice: '' },
+  ]);
 
   const [successMessage, setSuccessMessage] = useState(''); // Add success message state
   const navigate = useNavigate(); // Use the useNavigate hook
@@ -102,116 +103,110 @@ const Plan: React.FC = () => {
   const [handlePlanType, setHandlePlanType] = useState<boolean>(true);
   const psPlanDurationRef = useRef<HTMLInputElement | null>(null);
 
-
-
   useEffect(() => {
     const fetchData = async () => {
-        if (id) {
-          try {
-            console.log('edit', id);
-            const planId = id;
-            const result = await getSubscriptionPlanById(planId);
-    
-            if (result.status !== 'Success') {
-              console.log('getPlan Error', result?.message);
-              return;
-            }
-    
-            let planData = result.data[0]; // Assuming data is an array with one element
-            console.log('planData:', planData);
-            let planDatas = result.data[0].someAlias; // Assuming data is an array with one element
-            console.log('planDatas:', planDatas);
-           const ids= planDatas.psPlanId;
-           console.log("ids",ids);
-            // Initialize formData state
-            setFormData({
-              plPlanName: planData.plPlanName,
-            //   plStatus: planData.plStatus,
-              plMaxLearner: planData.plMaxLearner,
-              plMaxGame: planData.plMaxGame,
-              plMaxBackgrounds: planData.plMaxBackgrounds,
-              plMaxCharacters: planData.plMaxCharacters,
-              plMaxAnalyticsDashboard: planData.plMaxAnalyticsDashboard,
-              plMAxGameHours: planData.plMAxGameHours,
-              plStatus:planData.plStatus,
-            });
+      if (id) {
+        try {
+          console.log('edit', id);
+          const planId = id;
+          const result = await getSubscriptionPlanById(planId);
 
-            setFormDatas({
-                psPlanDuration:planDatas.psPlanDuration,
-                psPlanType:planDatas.psPlanType,
-                psPlanId:planDatas.psPlanId,
-                psStatus:planDatas.psStatus,
-              });
-
-    
-            // Initialize rows state based on subscription plans
-            // const subscriptionData = planDatas?.psSubscriptionPlans;
-    
-            // if (subscriptionData && subscriptionData.length > 0) {
-            //   const initialRows = subscriptionData.map((subscription: any) => ({
-            //     psPlanType: subscription.psPlanType,
-            //     psPlanDuration: subscription.psPlanDuration.toString(), // Assuming psPlanDuration is a string, adjust if needed
-            //     psPrice: subscription.psPrice?.toString() || '', // Convert to string or use an empty string if null
-            //   }));
-    
-            //   setRows(initialRows);
-            // }
-          } catch (error) {
-            console.error('Error fetching data:', error);
+          if (result.status !== 'Success') {
+            console.log('getPlan Error', result?.message);
+            return;
           }
+
+          let planData = result.data[0]; // Assuming data is an array with one element
+          console.log('planData:', planData);
+          let planDatas = result.data[0].someAlias; // Assuming data is an array with one element
+          console.log('planDatas:', planDatas);
+          const ids = planDatas.psPlanId;
+          console.log('ids', ids);
+          // Initialize formData state
+          setFormData({
+            plPlanName: planData.plPlanName,
+            //   plStatus: planData.plStatus,
+            plMaxLearner: planData.plMaxLearner,
+            plMaxGame: planData.plMaxGame,
+            plMaxBackgrounds: planData.plMaxBackgrounds,
+            plMaxCharacters: planData.plMaxCharacters,
+            plMaxAnalyticsDashboard: planData.plMaxAnalyticsDashboard,
+            plMAxGameHours: planData.plMAxGameHours,
+            plStatus: planData.plStatus,
+          });
+
+          setFormDatas({
+            psPlanDuration: planDatas.psPlanDuration,
+            psPlanType: planDatas.psPlanType,
+            psPlanId: planDatas.psPlanId,
+            psStatus: planDatas.psStatus,
+          });
+
+          // Initialize rows state based on subscription plans
+          // const subscriptionData = planDatas?.psSubscriptionPlans;
+
+          // if (subscriptionData && subscriptionData.length > 0) {
+          //   const initialRows = subscriptionData.map((subscription: any) => ({
+          //     psPlanType: subscription.psPlanType,
+          //     psPlanDuration: subscription.psPlanDuration.toString(), // Assuming psPlanDuration is a string, adjust if needed
+          //     psPrice: subscription.psPrice?.toString() || '', // Convert to string or use an empty string if null
+          //   }));
+
+          //   setRows(initialRows);
+          // }
+        } catch (error) {
+          console.error('Error fetching data:', error);
         }
-      };
+      }
+    };
     fetchData();
     setHandleSeletAttr(!handleSeletAttr);
     setHandlePlanType(!handlePlanType);
   }, [id]);
-  
 
   const handleRowChange = (index: number, key: string, value: string) => {
     setRows((prevRows) =>
-      prevRows.map((row, i) => (i === index ? { ...row, [key]: value } : row))
+      prevRows.map((row, i) => (i === index ? { ...row, [key]: value } : row)),
     );
   };
   const handlePlanDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setFormDatas({ ...formDatas, psPlanDuration: value });
 
-         // Iterate through the keys of the form
-         Object.keys(formData).forEach((key) => {
-          // Access the corresponding ref based on the key
-          const inputRef =
-            key === 'plPlanName'
-              ? plPlanNameRef
-              : key === 'plMaxLearner'
-              ? plMaxLearnerRef
-              : key === 'plMaxGame'
-              ? plMaxGameRef
-              : key === 'plMaxBackgrounds'
-              ? plMaxBackgroundsRef
-              : key === 'plMaxCharacters'
-              ? plMaxCharactersRef
-              : key === 'plMaxAnalyticsDashboard'
-              ? plMaxAnalyticsDashboardRef
-              : key === 'plMAxGameHours'
-              ? plMAxGameHoursRef
-              : null;
-    
-          // If the field is empty and there is a corresponding ref
-          if (!formData[key as keyof FormData] && inputRef && inputRef.current) {
-            // Set the border color to red
-            inputRef.current.style.borderColor = 'red';
-           
-          } else if (inputRef && inputRef.current) {
-            // If the field is not empty, reset the border color
-            inputRef.current.style.borderColor = '';
-          }
-         
-        }); 
-        
-    if(value === ""){
-      psPlanDurationRef.current.style.borderColor = 'red'; 
-    }else{
-      psPlanDurationRef.current.style.borderColor = ''; 
+    // Iterate through the keys of the form
+    Object.keys(formData).forEach((key) => {
+      // Access the corresponding ref based on the key
+      const inputRef =
+        key === 'plPlanName'
+          ? plPlanNameRef
+          : key === 'plMaxLearner'
+          ? plMaxLearnerRef
+          : key === 'plMaxGame'
+          ? plMaxGameRef
+          : key === 'plMaxBackgrounds'
+          ? plMaxBackgroundsRef
+          : key === 'plMaxCharacters'
+          ? plMaxCharactersRef
+          : key === 'plMaxAnalyticsDashboard'
+          ? plMaxAnalyticsDashboardRef
+          : key === 'plMAxGameHours'
+          ? plMAxGameHoursRef
+          : null;
+
+      // If the field is empty and there is a corresponding ref
+      if (!formData[key as keyof FormData] && inputRef && inputRef.current) {
+        // Set the border color to red
+        inputRef.current.style.borderColor = 'red';
+      } else if (inputRef && inputRef.current) {
+        // If the field is not empty, reset the border color
+        inputRef.current.style.borderColor = '';
+      }
+    });
+
+    if (value === '') {
+      psPlanDurationRef.current.style.borderColor = 'red';
+    } else {
+      psPlanDurationRef.current.style.borderColor = '';
     }
   };
 
@@ -222,7 +217,7 @@ const Plan: React.FC = () => {
     const emptyKeys = Object.keys(formData).filter((key, index) => {
       return index < currentIndex && formData[key as keyof FormData] === '';
     });
-    
+
     // console.log('isUserInteraction',isUserInteraction);
     // setHandleSeletAttr(!handleSeletAttr);
     Object.keys(formData).forEach((key) => {
@@ -259,13 +254,19 @@ const Plan: React.FC = () => {
     }
   };
 
-  const handleSelectChange = (selectedOption: OptionType | null, rowIndex: string) => {
+  const handleSelectChange = (
+    selectedOption: OptionType | null,
+    rowIndex: string,
+  ) => {
     const value = selectedOption ? selectedOption.value : '';
-    setFormDatas({ ...formDatas, psPlanType: selectedOption ? selectedOption.value : '' });
+    setFormDatas({
+      ...formDatas,
+      psPlanType: selectedOption ? selectedOption.value : '',
+    });
     const isUserInteraction = selectedOption !== null;
-   
+
     setHandlePlanType(isUserInteraction ? !value.trim() : handlePlanType);
- 
+
     const currentIndex = Object.keys(formDatas).indexOf('psPlanType');
     const emptyKeys = Object.keys(formDatas).filter((key, index) => {
       // Exclude cpIndustry from emptyKeys if it has a value
@@ -291,18 +292,19 @@ const Plan: React.FC = () => {
     });
     console.log('formData', formDatas);
     console.log('emptyKeys', emptyKeys);
-   
-      
   };
- 
+
   const handleStatusChange = (selectedOption: OptionType | null) => {
     const value = selectedOption ? selectedOption.value : '';
-    setFormData({ ...formData, plStatus: selectedOption ? selectedOption.value : '' });
-     // Check if the function is triggered by user interaction
-     const isUserInteraction = selectedOption !== null;
-   
+    setFormData({
+      ...formData,
+      plStatus: selectedOption ? selectedOption.value : '',
+    });
+    // Check if the function is triggered by user interaction
+    const isUserInteraction = selectedOption !== null;
+
     setHandleSeletAttr(isUserInteraction ? !value.trim() : handleSeletAttr);
- 
+
     const currentIndex = Object.keys(formDatas).indexOf('psStatus');
     const emptyKeys = Object.keys(formDatas).filter((key, index) => {
       // Exclude cpIndustry from emptyKeys if it has a value
@@ -331,10 +333,10 @@ const Plan: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log("HandleSumbit");
+    console.log('HandleSumbit');
     setAlert(false);
-     // Iterate through the keys of the form
-     Object.keys(formData).forEach((key) => {
+    // Iterate through the keys of the form
+    Object.keys(formData).forEach((key) => {
       // Access the corresponding ref based on the key
       const inputRef =
         key === 'plPlanName'
@@ -357,17 +359,15 @@ const Plan: React.FC = () => {
       if (!formData[key as keyof FormData] && inputRef && inputRef.current) {
         // Set the border color to red
         inputRef.current.style.borderColor = 'red';
-       
       } else if (inputRef && inputRef.current) {
         // If the field is not empty, reset the border color
         inputRef.current.style.borderColor = '';
       }
-     
     });
 
-    if(!formDatas["psStatus"]){
+    if (!formDatas['psStatus']) {
       setHandleSeletAttr(true);
-    }else{
+    } else {
       setHandleSeletAttr(false);
     }
     e.preventDefault();
@@ -380,7 +380,7 @@ const Plan: React.FC = () => {
     //   return false;
     // }
     // if (!formDatas.psPlanDuration) {
-    //   psPlanDurationRef.current.style.borderColor = 'red'; 
+    //   psPlanDurationRef.current.style.borderColor = 'red';
     //   handleToast('Please enter the Plan validity days', 'error', true);
     //   return false;
     // }
@@ -414,12 +414,11 @@ const Plan: React.FC = () => {
     }
     try {
       setButtonDisabled(true);
-     const ids= formDatas.psPlanId
+      const ids = formDatas.psPlanId;
       let data = JSON.stringify(formData);
-      console.log("datasd",data)
+      console.log('datasd', data);
 
       if (id) {
-
         const result = await updateplan(id, data);
         if (result?.status !== 'Success') {
           setButtonDisabled(false);
@@ -428,68 +427,74 @@ const Plan: React.FC = () => {
           //   navigate('/admin/superadmin/plan');
           // }, 2000);
           return;
-        }else{
-        handleToast('Plan updated Successfully', 'success', true);
-        console.log('result.data', result.data);
+        } else {
+          handleToast('Plan updated Successfully', 'success', true);
+          console.log('result.data', result.data);
 
-        for (const row of rows) {
-          const datass = JSON.stringify(formDatas);
+          for (const row of rows) {
+            const datass = JSON.stringify(formDatas);
 
-          const subscriptionResult = await updateSubscription(id,datass);
+            const subscriptionResult = await updateSubscription(id, datass);
 
-          if (subscriptionResult?.status !== 'Success') {
-            console.error('Failed to update subscription:', subscriptionResult?.message);
-          } else {
-            console.log('Subscription updated successfully:', subscriptionResult.data);
-            setTimeout(() => {
-          navigate('/admin/superadmin/plan');
-        }, 200);
+            if (subscriptionResult?.status !== 'Success') {
+              console.error(
+                'Failed to update subscription:',
+                subscriptionResult?.message,
+              );
+            } else {
+              console.log(
+                'Subscription updated successfully:',
+                subscriptionResult.data,
+              );
+              setTimeout(() => {
+                navigate('/admin/superadmin/plan');
+              }, 200);
+            }
           }
+          // setTimeout(() => {
+          //   navigate('/admin/superadmin/plan');
+          // }, 2000);
         }
-        // setTimeout(() => {
-        //   navigate('/admin/superadmin/plan');
-        // }, 2000);
-      }
         // navigate('/admin/superadmin/plan/');
       }
-    //   else {
-    //     const result = await createplan(data);
-    //     if (result?.status !== 'Success') {
-    //       setButtonDisabled(false);
-    //       // console.log('updatePlan Error :', result?.message);
-    //       handleToast('Failed to Add plan', 'error', true);
-    //       // setTimeout(() => {
-    //       //   navigate('/admin/superadmin/plan/');
-    //       // }, 2000);
-    //       // return;
-    //     } else {
-    //       handleToast('Plan Created Successfully', 'success', true);
-    //       console.log('result.data', result.data);
-          
-    //       let rowIndex: string;
+      //   else {
+      //     const result = await createplan(data);
+      //     if (result?.status !== 'Success') {
+      //       setButtonDisabled(false);
+      //       // console.log('updatePlan Error :', result?.message);
+      //       handleToast('Failed to Add plan', 'error', true);
+      //       // setTimeout(() => {
+      //       //   navigate('/admin/superadmin/plan/');
+      //       // }, 2000);
+      //       // return;
+      //     } else {
+      //       handleToast('Plan Created Successfully', 'success', true);
+      //       console.log('result.data', result.data);
 
-    //       for (const row of rows) {
-    //         const subscriptionData = {
-    //           psPlanId: result.data?.plId,
-    //           psPlanType: row.psPlanType,
-    //           psPlanDuration: row.psPlanDuration,
-    //         };
+      //       let rowIndex: string;
 
-    //         const subscriptionResult = await createSubscription(JSON.stringify(subscriptionData));
+      //       for (const row of rows) {
+      //         const subscriptionData = {
+      //           psPlanId: result.data?.plId,
+      //           psPlanType: row.psPlanType,
+      //           psPlanDuration: row.psPlanDuration,
+      //         };
 
-    //         if (subscriptionResult?.status !== 'Success') {
-    //           console.error('Failed to create subscription:', subscriptionResult?.message);
-    //         } else {
-    //           console.log('Subscription created successfully:', subscriptionResult.data);
-    //         }
-    //       }
+      //         const subscriptionResult = await createSubscription(JSON.stringify(subscriptionData));
 
-    //       // Redirect to the plan listing page
-    //       // setTimeout(() => {
-    //       //   navigate('/admin/superadmin/plan');
-    //       // }, 2000);}
-    //     }
-    //   }
+      //         if (subscriptionResult?.status !== 'Success') {
+      //           console.error('Failed to create subscription:', subscriptionResult?.message);
+      //         } else {
+      //           console.log('Subscription created successfully:', subscriptionResult.data);
+      //         }
+      //       }
+
+      //       // Redirect to the plan listing page
+      //       // setTimeout(() => {
+      //       //   navigate('/admin/superadmin/plan');
+      //       // }, 2000);}
+      //     }
+      //   }
     } catch (error) {
       setButtonDisabled(false);
       console.error('An error occurred while sending the request:', error);
@@ -500,12 +505,11 @@ const Plan: React.FC = () => {
     setMsg(msg);
     setToastStatus(status);
     setAlert(alert);
-  }
+  };
   const handleBack = () => {
     // Navigate back to the previous page
     navigate('/admin/superadmin/plan/');
   };
-
 
   // Chakra Color Mode
   const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
@@ -524,21 +528,42 @@ const Plan: React.FC = () => {
     { value: 'Inactive', label: 'Inactive' },
   ];
 
-
-
   return (
     <>
-      <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>
-        <Card alignItems={'center'}>   
-          <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={{base: '170', sm: '170', md: '300', lg: '300'}} position={'relative'} alignItems={'center'}></Card>
-          <Card mb={{ base: '0px', xl: '20px' }} width={{base: '95%', md: '70%'}} marginTop={'-120px'}>
+      <Box
+        display={'flex'}
+        flexDirection={'column'}
+        alignItems={'center'}
+        marginTop={'75px'}
+        position={'relative'}
+      >
+        <Card alignItems={'center'}>
+          <Card
+            bg={'linear-gradient(to bottom, #7551ff, #3311db)'}
+            w={'100%'}
+            h={{ base: '170', sm: '170', md: '300', lg: '300' }}
+            position={'relative'}
+            alignItems={'center'}
+          ></Card>
+          <Card
+            mb={{ base: '0px', xl: '20px' }}
+            width={{ base: '95%', md: '70%' }}
+            marginTop={'-120px'}
+          >
             <Flex direction="column">
-            <Text color={textColorPrimary} fontSize="2xl" fontWeight="700" mb="20px">
+              <Text
+                color={textColorPrimary}
+                fontSize="2xl"
+                fontWeight="700"
+                mb="20px"
+              >
                 Plan {id ? 'Updation' : 'Creation'}
               </Text>
-
             </Flex>
-            <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '25px' }}  >
+            <SimpleGrid
+              columns={{ sm: 1, md: 2 }}
+              spacing={{ base: '20px', xl: '25px' }}
+            >
               <InputField
                 mb="0px"
                 me="30px"
@@ -643,55 +668,65 @@ const Plan: React.FC = () => {
                 label="Active Status"
                 name="plStatus"
                 options={statusOptions}
-                value={statusOptions.find((option) => option.value === formData.plStatus) || null}
+                value={
+                  statusOptions.find(
+                    (option) => option.value === formData.plStatus,
+                  ) || null
+                }
                 onChange={handleStatusChange}
                 isRequired={true}
                 handleSeletAttr={handleSeletAttr}
-              // isDisabled={isDisabled.plStatus}
-
+                // isDisabled={isDisabled.plStatus}
               />
-              </SimpleGrid>
-              <SimpleGrid  columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '25px' }} style={{ display: 'none' }} >
-              <SelectField
-                          mb='0px'
-                          me='30px'
-                          id="psPlanType"
-                          label="Plan Type"
-                          name="psPlanType"
-                          options={options}
-                          value={options.find(option => option.value === formDatas.psPlanType) || null}
-                          // value={options.find((option) => option.value === formDatas[i.toString()]?.psPlanType) || null}
-                          onChange={handleSelectChange}
-                          isRequired={true}
-                          handleSeletAttr={handlePlanType}
-                          // isRequired={true}
-                          
-                        />
-                        <InputField
-                          mb='0px'
-                          me='30px'
-                          id="psPlanDuration"
-                          name="psPlanDuration"
-                          label='Plan Duration'
-                          placeholder='eg. 1'
-                          value={formDatas.psPlanDuration}
-                          onChange={handlePlanDurationChange}
-                          isRequired={true}
-                          ref={psPlanDurationRef}
-                        />
             </SimpleGrid>
-        
+            <SimpleGrid
+              columns={{ sm: 1, md: 2 }}
+              spacing={{ base: '20px', xl: '25px' }}
+              style={{ display: 'none' }}
+            >
+              <SelectField
+                mb="0px"
+                me="30px"
+                id="psPlanType"
+                label="Plan Type"
+                name="psPlanType"
+                options={options}
+                value={
+                  options.find(
+                    (option) => option.value === formDatas.psPlanType,
+                  ) || null
+                }
+                // value={options.find((option) => option.value === formDatas[i.toString()]?.psPlanType) || null}
+                onChange={handleSelectChange}
+                isRequired={true}
+                handleSeletAttr={handlePlanType}
+                // isRequired={true}
+              />
+              <InputField
+                mb="0px"
+                me="30px"
+                id="psPlanDuration"
+                name="psPlanDuration"
+                label="Plan Duration"
+                placeholder="eg. 1"
+                value={formDatas.psPlanDuration}
+                onChange={handlePlanDurationChange}
+                isRequired={true}
+                ref={psPlanDurationRef}
+              />
+            </SimpleGrid>
+
             <Flex justify="space-between">
               <Button
-               fontSize="sm"
-               borderRadius="16px"
-               border={'1px solid #00000024'}
-               w={{ base: '128px', md: '148px' }}
-               h="46px"
-               mt="20px"
-               mr="20px"
-               bg={'transparent'}
-               _hover={{bg: '#11047a', color: '#fff'}}
+                fontSize="sm"
+                borderRadius="16px"
+                border={'1px solid #00000024'}
+                w={{ base: '128px', md: '148px' }}
+                h="46px"
+                mt="20px"
+                mr="20px"
+                bg={'transparent'}
+                _hover={{ bg: '#11047a', color: '#fff' }}
                 onClick={handleBack}
               >
                 Cancel
@@ -702,7 +737,7 @@ const Plan: React.FC = () => {
                 fontSize="sm"
                 borderRadius="16px"
                 w={{ base: '128px', md: '148px' }}
-                h="46px"                
+                h="46px"
                 onClick={handleSubmit}
               >
                 {id ? 'Update' : 'Save'}
@@ -711,7 +746,9 @@ const Plan: React.FC = () => {
           </Card>
         </Card>
       </Box>
-      {alert ? <OnToast msg={msg} status={toastStatus} setAlert={setAlert} /> : null}
+      {alert ? (
+        <OnToast msg={msg} status={toastStatus} setAlert={setAlert} />
+      ) : null}
     </>
   );
 };
