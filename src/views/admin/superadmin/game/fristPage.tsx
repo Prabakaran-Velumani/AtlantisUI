@@ -938,42 +938,41 @@ useEffect(() => {
   return (
     <>
       <Box className='Game' position={'relative'}>
-      <div  ref={containerRef} style={{ overflowY: 'auto', maxHeight: '800px' }}>
-        <Box mb={{ base: '130px', md: '100px', xl: '100px' }} className='box'></Box>
-        <Card backgroundImage={NFTBanner} backgroundRepeat={'no-repeat'} backgroundSize={'cover'} height={'150px'} width={'100%'} overflow={{ sm: 'auto', xl: 'unset' }}>
-          <Box display={{ base: 'block', xl: 'flex' }} justifyContent="space-between" alignItems={'end'} padding={'20px'}>
-            <Box display={'flex'} flexDirection={'column'} width={'700px'}>
-              <Heading color={'#fff'} pb={'20px'} display={'flex'} alignItems={'center'} >Your Creations<Img src={Rocket} height={'50px'} width={'50px'} ml={'20px'} transform={'rotate(40deg)'} /></Heading>
-              <Text fontSize={'15px'} color={'#fff'} letterSpacing={'1px'}>Developing games that ignite curiosity, turning every challenge into a lesson.</Text>
+        <div ref={containerRef} style={{  }}>
+        <Box mb={{ base: '100px', md: '100px', xl: '100px' }} className='box'></Box>
+        <Card backgroundImage={NFTBanner} backgroundRepeat={'no-repeat'} backgroundSize={'cover'} justifyContent={'center'} height={{sm: 'auto', md: 'auto', lg: '180px'}} width={'100%'} overflow={{ sm: 'auto', xl: 'unset' }}>
+          <Box display={{ base: 'block', xl: 'flex' }} justifyContent="space-between" alignItems={'center'}>
+            <Box display={'flex'} flexDirection={'column'} >
+              <Text fontSize={'1.8rem'} fontWeight={700} color={'#fff'} pb={{sm: '10px', md: '0'}} display={'flex'} alignItems={'center'} >Your Creations<Img src={Rocket} height={'50px'} width={'50px'} ml={'20px'} transform={'rotate(40deg)'} /></Text>
+              <Text fontSize={'15px'} color={'#fff'} letterSpacing={{sm: '.4px',md: '1px' }}>Developing games that ignite curiosity, turning every challenge into a lesson.</Text>
             </Box>
-            <Button
-              mt="10px"
-              mb="15px"
-              mr="10px"
-              padding={5}
-              bg="#fff"
-              color="#3311db"
-              // w={150}
-              onClick={handleCourse}
-            >
-              Create Game
-            </Button>
+            <Box display={'flex'} alignItems={'center'} justifyContent={'end'} mt={{base: '15px',sm: '15px', lg: '0'}}>
+              <Button                
+                padding={5}
+                bg="#fff"
+                color="#2b2b2b"
+                // w={150}
+                onClick={handleCourse}
+              >
+                Create Game
+              </Button>
+            </Box>
             {/* <Button mt='10px' mb='15px' padding={2} background='#3311db' color='#fff' w={70} onClick={handleNavigate}>New</Button> */}
           </Box>
 
         </Card>
-        <Card>
-          <Flex gridArea='1 / 1 / 2 / 2' display={{ base: 'block', lg: 'flex' }}>
+        <Card m={'30px 0'}>
+          <Flex gridArea='1 / 1 / 2 / 2' display={{ base: 'block', md:'flex', lg: 'flex' }}>
             <Tabs variant='soft-rounded' colorScheme='brandTabs'>
-              <TabList mx={{ base: '10px', lg: '30px' }} overflowX={{ sm: 'scroll', lg: 'unset' }}>
+              <TabList overflowX={{ sm: 'scroll', lg: 'unset' }}>
                 <Flex>
-                  <Tab
-                    pb='0px'
+                  <Tab                                   
+                    p={'0.5rem 0 0 0'}
                     flexDirection='column'
                     onClick={function () {
                       setTabState('Creation');
                     }}
-                    me='10px'
+                    me='30px'
                     bg='unset'
                     _selected={{
                       bg: 'none'
@@ -1001,8 +1000,8 @@ useEffect(() => {
                     onClick={function () {
                       setTabState('Review');
                     }}
-                    pb='0px'
-                    me='10px'
+                    p={'0.5rem 0 0 0'}
+                    me='30px'
                     bg='unset'
                     _selected={{
                       bg: 'none'
@@ -1028,7 +1027,7 @@ useEffect(() => {
                     />
                   </Tab>
                   <Tab
-                    pb='0px'
+                    p={'0.5rem 0 0 0'}
                     flexDirection='column'
                     onClick={function () {
                       setTabState('Launched');
@@ -1064,11 +1063,12 @@ useEffect(() => {
 						<TabPanel px='0px'>{panelExample}</TabPanel>
 					</TabPanels> */}
             </Tabs>
-            <VSeparator mx='30px' h='100%' />
+            {/* <VSeparator mx='30px' h='100%' /> */}
 
 
-            <InputGroup w={{ base: '100%', md: '300px' }} ml="auto">
+            <InputGroup w={{ base: '100%', md: '300px' }} mt={{base: '15px', sm: '15px', md: '0'}} ml="auto" alignItems={'center'}>
               <InputLeftElement
+                top={'inherit'}
                 children={
                   <IconButton
                     aria-label="search"
@@ -1097,7 +1097,7 @@ useEffect(() => {
                 onChange={(e) => setFil(e.target.value)}
                 bg={'#f9f9f9'}
                 borderRadius={'14px'}
-                w={{ base: '200px', xl: '300px' }}
+                w={{ base: '200px', sm: '100%', md: '300px', xl: '300px' }}
               />
               {fil && (
                 <InputRightElement
@@ -1170,8 +1170,8 @@ useEffect(() => {
                   <GameCard
                     name={game.gameTitle}
                     author={game.gameSkills}
-                    // image={game.gameBackgroundId && game?.image.gasAssetImage}
-                    image={'http://35.183.46.127:5555/uploads/background/29977_1701772077260.jpg'}
+                    image={game.gameBackgroundId && game?.image.gasAssetImage}
+                    // image={'http://35.183.46.127:5555/uploads/background/29977_1701772077260.jpg'}
                     tabState={tabState}
                     id={game.gameId}
                     game={game}

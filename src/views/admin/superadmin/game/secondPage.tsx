@@ -76,6 +76,7 @@ const SecondPage: React.FC = () => {
   let [tabState, setTabState] = useState('All');
 
   const [selected, setSelected] = useState({ gameCategoryId: '' });
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const handleCourse = () => {
@@ -207,37 +208,48 @@ const SecondPage: React.FC = () => {
 
   }, [isConfirm, duplicateId]);
 
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);   
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <>
     <Box ml={'5px'} position={'fixed'}> <SidebarResponsive routes={routes} /></Box>
       <Box className='Game' position={'relative'} width={'100%'} >
-        <Box mb={{ base: '130px', md: '100px', xl: '100px' }} className='box'></Box>
-        <Card backgroundImage={NFTBanner} backgroundRepeat={'no-repeat'} backgroundSize={'cover'} height={'150px'} width={'100%'} overflow={{ sm: 'auto', xl: 'unset' }}>
-          <Box display={{ base: 'block', xl: 'flex' }} justifyContent="space-between" alignItems={'end'} padding={'20px'}>
-            <Box display={'flex'} flexDirection={'column'} width={'700px'}>
-              <Heading color={'#fff'} pb={'20px'} display={'flex'} alignItems={'center'} >Creation Zone<Img src={Rocket} height={'50px'} width={'50px'} ml={'20px'} transform={'rotate(40deg)'} /></Heading>
-              <Text fontSize={'15px'} color={'#fff'} whiteSpace={'nowrap'} letterSpacing={'1px'}>Building games, where learning becomes an adventure and knowledge is the ultimate reward. </Text>
+        <Box mb={{ base: '100px', md: '100px', xl: '100px' }} className='box'></Box>
+        <Card backgroundImage={NFTBanner} backgroundRepeat={'no-repeat'} backgroundSize={'cover'} justifyContent={'center'} height={{sm: 'auto', md: 'auto', lg: '180px'}} width={'100%'} overflow={{ sm: 'auto', xl: 'unset' }}>
+          <Box display={{ base: 'block', xl: 'flex' }} justifyContent="space-between" alignItems={'center'}>
+            <Box display={'flex'} flexDirection={'column'}>
+              <Text fontSize={'1.8rem'} fontWeight={700} color={'#fff'} pb={{sm: '10px', md: '0'}} display={'flex'} alignItems={'center'} >Creation Zone<Img src={Rocket} height={'50px'} width={'50px'} ml={'20px'} transform={'rotate(40deg)'} /></Text>
+              <Text fontSize={'15px'} color={'#fff'} letterSpacing={{sm: '.4px',md: '1px' }}>Building games, where learning becomes an adventure and knowledge is the ultimate reward. </Text>
             </Box>
-            <Button
-             mt="10px"
-             mb="15px"
-             mr="10px"
+            <Box display={'flex'} alignItems={'center'} justifyContent={'end'} mt={{base: '15px',sm: '15px', lg: '0'}}>
+            <Button             
              padding={5}
               bg="#fff"
-              color="#3311db"
+              color="##2b2b2b"
               // w={180}
               onClick={handleCourse}
             >
               Create Your Own Story
             </Button>
+            </Box>
             {/* <Button mt='10px' mb='15px' padding={2} background='#3311db' color='#fff' w={70} onClick={handleNavigate}>New</Button> */}
           </Box>
 
         </Card>
         {/* <Text fontSize={'30px'} fontWeight={} mt={'25px'} alignItems={'center'} whiteSpace={'nowrap'}  color={'#1B254B'}  display={'flex'} letterSpacing={'1px'}>Customise Game Templates</Text> */}
-        <Heading fontSize={'30px'} mt={'25px'} color={'#1B254B'} pb={'20px'} display={'flex'} alignItems={'center'} >Customise Game Templates</Heading>
+        <Text fontSize={'1.8rem'} fontWeight={700} m={'25px 0'} color={'#1B254B'} display={'flex'} alignItems={'center'} >Customise Game Templates</Text>
         <Card>
-          <Flex gridArea='1 / 1 / 2 / 2' display={{ base: 'block', lg: 'flex' }}>
+          <Flex gridArea='1 / 1 / 2 / 2' display={{ base: 'block', md:'flex', lg: 'flex' }}>
           <Select
             menuPortalTarget={document.body} 
             styles={{ menuPortal: base => ({ ...base, zIndex: 9999, }), control: (provided: any, state: any) => ({
@@ -245,7 +257,7 @@ const SecondPage: React.FC = () => {
               borderRadius: '15px',
               height: '45px',
               padding: '0 !important',
-              width:'300px'
+              width: windowWidth < 768 ? '100%' : '300px'
             }), }}
             options={Category}
             onChange={(selectedOption) => handleCompanyChange(selectedOption)}
@@ -262,8 +274,9 @@ const SecondPage: React.FC = () => {
         />
            
 
-            <InputGroup w={{ base: '100%', md: '300px' }} ml="auto">
+            <InputGroup w={{ base: '100%', md: '300px' }} mt={{base: '15px', sm: '15px', md: '0'}} ml="auto" alignItems={'center'}>
   <InputLeftElement
+   top={'inherit'}
     children={
       <IconButton
         aria-label="search"
@@ -292,7 +305,7 @@ const SecondPage: React.FC = () => {
     onChange={(e) => setFil(e.target.value)}
     bg={'#f9f9f9'}
     borderRadius={'14px'}
-    w={{ base: '200px', xl: '300px' }}
+    w={{ base: '200px', sm: '100%', md: '300px', xl: '300px' }}
   />
   {fil && (
     <InputRightElement
@@ -358,8 +371,8 @@ const SecondPage: React.FC = () => {
                   <GameCard
                     name={game.gameTitle}
                     author={game.gameCategoryId}
-                    // image={game.gameBackgroundId && game?.image.gasAssetImage}
-                    image={'http://35.183.46.127:5555/uploads/background/29977_1701772077260.jpg'}
+                    image={game.gameBackgroundId && game?.image.gasAssetImage}
+                    // image={'http://35.183.46.127:5555/uploads/background/29977_1701772077260.jpg'}
                     tabState={tabState}
                     id={game.gameId}
                     handleButtonOne={handleButtonOne}
