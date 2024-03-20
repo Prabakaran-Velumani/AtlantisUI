@@ -144,6 +144,7 @@ export default function NFT(props: {
   const textColor = useColorModeValue('navy.700', 'white');
   const textColorBid = useColorModeValue('brand.500', 'white');
   const [isHovered, setIsHovered] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
   let [datePart, timePart] = '';
   if (game) {
@@ -209,6 +210,20 @@ export default function NFT(props: {
 
   let lightBlue = useColorModeValue('#3311db5c', '#3311db5c');
 
+  
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);   
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  
+  
+
   return (
     <Card
       p="20px"
@@ -248,7 +263,7 @@ export default function NFT(props: {
             <Image
               src={image}
               w={{ base: '100%', '2xl': '100%' }}
-              h={{ base: '100%', '2xl': '100%' }}
+              h={{ base: '220px', '2xl': '220px' }}
               borderRadius="20px"
             />
           ) : (
@@ -419,7 +434,7 @@ export default function NFT(props: {
           )}
 
           {/* dsfdffffffffffffffffffffffffff */}
-          {isHovered ? (
+          {isHovered || windowWidth < 768 ? (
             <Flex
               position="absolute"
               bottom="0px"
