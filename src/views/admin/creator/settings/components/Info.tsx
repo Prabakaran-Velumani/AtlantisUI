@@ -117,6 +117,7 @@ export default function Settings(props: { funk: any; setFunk: any }) {
             placeholder="eg. 20"
           />
           <SelectField
+            mb={{base:'15px',sm:'15px',md:'30px'}}
             id="ctGender"
             name="ctGender"
             label="Gender"
@@ -130,6 +131,7 @@ export default function Settings(props: { funk: any; setFunk: any }) {
             }
           />
           <SelectField
+          mb={{base:'15px',sm:'15px',md:'30px'}}
             id="ctGender"
             name="ctCountry"
             label="Country"
