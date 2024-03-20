@@ -71,6 +71,7 @@ const ScreenPreview = () => {
   const [navi, setNavi] = useState<string>('');
   const [options, setOptions] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [optionNavigation, setOptionNavigation] = useState(null);
   const [showNote, setShowNote] = useState(false),
     [first, setFirst] = useState(false);
   const [game3Position, setGame3Position] = useState({
@@ -143,7 +144,6 @@ const ScreenPreview = () => {
       }
       setData(currentBlock);
     }
-    console.log('activeBlockSeq', activeBlockSeq);
     setCurrentPosition(0);
   }, [gameInfo, isDispatched, activeBlockSeq, currentQuest]);
 
@@ -429,10 +429,21 @@ const ScreenPreview = () => {
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
-        setType(nextBlock[0]?.blockChoosen);
-        setData(nextBlock[0]);
-        setSelectedOption(null);
-        return false;
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+        .filter((item: any) => {
+          return (
+            demoBlocks[currentQuest][item]?.blockSecondaryId ===
+            parseInt(optionNavigation)
+          );
+        })
+        .map((item: any) => {
+          return demoBlocks[currentQuest][item];
+        });
+        
+      setType(selectedNext && selectedNext[0]?.blockChoosen);
+      setData(selectedNext && selectedNext[0]);
+      setSelectedOption(null);
+      return false;
       } else if (navi === 'Complete') {
         // if (demoBlocks.hasOwnProperty(nextLevel)) {
         //   setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -493,6 +504,7 @@ const ScreenPreview = () => {
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
+    setOptionNavigation(item?.qpNextOption);
     setSelectedOption(ind === selectedOption ? null : ind);
   };
   const handleEntirePrev = async () => {
@@ -510,15 +522,6 @@ const ScreenPreview = () => {
     }
   }, [Navigatenext]);
   const getDataSection = (data: any) => {
-    // setCurrentPosition(0);
-    // console.log(
-    //   'getData 1',
-    //   data,
-    //   currentPosition,
-    //   '......',
-    //   data?.blockText,
-    //   Navigatenext,
-    // );
     const content = data?.blockText || '';
     const sentences = content.split(
       /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
@@ -569,10 +572,6 @@ const ScreenPreview = () => {
     }
   }, []);
 
-  useEffect(() => 
-  { 
-    console.log('remainingSentences', remainingSentences)
-  },[remainingSentences]);
   const handleCloseWindow = () => {
     window.close();
   };
