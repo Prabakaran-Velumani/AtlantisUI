@@ -11,7 +11,7 @@ import Card from 'components/card/Card';
 import InputField from 'components/fields/InputField';
 import TextField from 'components/fields/TextField';
 import SelectField from 'components/fields/SelectField';
-import OnToast from 'components/alerts/toast'
+import OnToast from 'components/alerts/toast';
 import { useEffect, useState } from 'react';
 import { getCountries } from 'utils/company/companyService';
 import { updateCreator } from 'utils/creator/creator';
@@ -20,15 +20,15 @@ interface OptionType {
   value: string;
   label: string;
 }
-export default function Settings(props: { funk: any,setFunk:any }) {
+export default function Settings(props: { funk: any; setFunk: any }) {
   const storage = JSON.parse(localStorage.getItem('user'));
-	const { funk,setFunk } = props;
+  const { funk, setFunk } = props;
   const [alert, setAlert] = useState(false);
   const [msg, setMsg] = useState<string>('');
   const [toastStatus, setToastStatus] = useState<string>('');
   const navigate = useNavigate();
   const [countryOptions, setCountryOptions] = useState([]);
-  const {id} = useParams();
+  const { id } = useParams();
   const genderOptions = [
     { value: 'Male', label: 'Male' },
     { value: 'Female', label: 'Female' },
@@ -59,40 +59,32 @@ export default function Settings(props: { funk: any,setFunk:any }) {
   // Chakra Color Mode
   const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
   const textColorSecondary = 'secondaryGray.600';
-  const handleChange = (e:any) =>{
-	const {name,value} = e.target
-	setFunk((prev:any)=>({...prev,[name]:value}))
-  }
-  const handleUpdate = async () =>{
-	const data = JSON.stringify(funk);
-  const result = await updateCreator(storage.data.id,data)
-	if(result?.status !== 'Success') {
-    setMsg('NOT UPDATE');
-    setToastStatus('error');
-    setAlert(true);
-    return console.log('error :'+result?.message)
-	
-
-}else{
-  setMsg('Updated Sucessfuly');
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFunk((prev: any) => ({ ...prev, [name]: value }));
+  };
+  const handleUpdate = async () => {
+    const data = JSON.stringify(funk);
+    const result = await updateCreator(storage.data.id, data);
+    if (result?.status !== 'Success') {
+      setMsg('NOT UPDATE');
+      setToastStatus('error');
+      setAlert(true);
+      return console.log('error :' + result?.message);
+    } else {
+      setMsg('Updated Sucessfuly');
       setToastStatus('success');
       setAlert(true);
       setTimeout(() => {
-       
         navigate('/admin/dashboards');
-     
-
       }, 200);
-
-}
-
-
-  }
-console.log(funk);
+    }
+  };
+  console.log(funk);
   return (
     <FormControl>
       <Card>
-        <Flex direction="column" mb="40px" >
+        <Flex direction="column" mb="40px">
           <Text fontSize="xl" color={textColorPrimary} fontWeight="bold">
             Account Settings
           </Text>
@@ -102,25 +94,25 @@ console.log(funk);
         </Flex>
         <SimpleGrid
           columns={{ sm: 1, md: 2 }}
-          spacing={{ base: '20px', xl: '20px' }}
+          spacing={{ base: '0px', xl: '20px' }}
         >
           <InputField
             mb="15px"
             me="30px"
             id="ctName"
-			     name='ctName'
+            name="ctName"
             value={funk?.ctName}
             label="Username"
             placeholder="@john123"
-			onChange={handleChange}
+            onChange={handleChange}
           />
           <InputField
             mb="15px"
             id="email"
             label="Age"
-			name="ctAge"
+            name="ctAge"
             type="number"
-			onChange={handleChange}
+            onChange={handleChange}
             value={funk?.ctAge}
             placeholder="eg. 20"
           />
@@ -152,29 +144,29 @@ console.log(funk);
               ) || null
             }
           />
-        </SimpleGrid>
         <InputField
           id="job"
-		  name="ctDesignation"
+          name="ctDesignation"
           label="Designation"
           placeholder="Web Developer"
           value={funk?.ctDesignation}
-		  onChange={handleChange}
+          onChange={handleChange}
         />
+        </SimpleGrid>
         <Button
           variant="brand"
-          minW="183px"
+          minW={{base:'100%',sm:'100%',md:"183px"}}
           fontSize="sm"
           fontWeight="500"
           ms="auto"
-		  onClick={handleUpdate}
+          onClick={handleUpdate}
         >
           Save changes
         </Button>
-
       </Card>
-      {alert ? <OnToast msg={msg} status={toastStatus} setAlert={setAlert} /> : null}
-   
+      {alert ? (
+        <OnToast msg={msg} status={toastStatus} setAlert={setAlert} />
+      ) : null}
     </FormControl>
   );
 }

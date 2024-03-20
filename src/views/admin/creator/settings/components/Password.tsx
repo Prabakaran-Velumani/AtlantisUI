@@ -95,7 +95,7 @@ export default function Settings() {
         </FormControl>
         <Button
           variant="brand"
-          minW="183px"
+          minW={{base:'100%',sm:'100%',md:"183px"}}
           fontSize="sm"
           fontWeight="500"
           ms="auto"
