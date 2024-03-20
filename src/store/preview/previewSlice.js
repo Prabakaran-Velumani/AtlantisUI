@@ -16,8 +16,6 @@ name: 'preview',
 initialState,
 reducers:{
     updatePreviewData : (state, action)=>{
-        console.log('state',state, action );
-
         if(!action.payload){
             return initialState;
         }

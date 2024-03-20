@@ -87,11 +87,6 @@ const ScreenPreview = () => {
   const [currentPosition, setCurrentPosition] = useState(0);
   const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
   const [Navigatenext, setNavigateNext] = useState<any>(false);
-<<<<<<< HEAD
-  const [NavigatenextContent, setNavigateNextContent] = useState<any>(false);
-=======
-
->>>>>>> main
   const reflectionQuestionsdefault = [
     'What were your biggest learnings?',
     'How can you apply these learnings back at work?',
@@ -153,9 +148,7 @@ const ScreenPreview = () => {
   }, [gameInfo, isDispatched, activeBlockSeq, currentQuest]);
 
   const replayQuest = () => {
-    console.log('replyquest');
     dispatch(updatePreviewData({ activeBlockSeq: 1, isDispatched: true }));
-    // getData(data);
     setEndOfQuest(false);
   };
   const fetchDataFromApi = useCallback(async () => {
@@ -355,7 +348,6 @@ const ScreenPreview = () => {
         ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
         : '';
 
-    console.log('prevSeq', prevSeq);
     const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
     const currentQuest = current
       ? parseInt(current?.blockPrimarySequence.split('.')[0])
@@ -387,25 +379,18 @@ const ScreenPreview = () => {
 
     const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-    console.log('demoBlocks', demoBlocks[quest]);
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
             (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
           )
           .map((key: any) => {
-            console.log('quest', quest);
-            console.log('key', key);
             return demoBlocks[quest]?.[key];
           })
       : [];
 
     // {/* Check wheather has next block or not, if not then show End of Current Quest.
     //       Want to play next quest, then switch the current quest in game creation screen */}
-<<<<<<< HEAD
-    console.log('nextBlock',nextBlock,'...',type,'....',resMsg,'.....',feed,'..');
-=======
->>>>>>> main
     if (nextBlock.length === 0) {
       setEndOfQuest(true);
     } else {
@@ -413,30 +398,12 @@ const ScreenPreview = () => {
     }
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
-      console.log();
       setInteractionOptions(gameInfo, nextBlock[0]);
     }
-<<<<<<< HEAD
-    if (
-      type === 'Interaction' &&
-      resMsg !== ''
-      //&& gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
-    ) {
-      console.log('1');
-      setType('response');
-      return false;
-    } else if (
-      (type === 'Interaction' || type === 'response') &&
-      feed !== ''
-      // && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
-    ) {
-      console.log('2');
-=======
     if (type === 'Interaction' && resMsg !== '') {
       setType('response');
       return false;
     } else if ((type === 'Interaction' || type === 'response') && feed !== '') {
->>>>>>> main
       setType('feedback');
       return false;
     } else if (
@@ -444,15 +411,11 @@ const ScreenPreview = () => {
       type === 'response' ||
       type === 'feedback'
     ) {
-      console.log('navi', navi);
-      console.log('nextBlock[0]?.blockChoosen', nextBlock[0]?.blockChoosen);
       if (navi === 'Repeat Question') {
       const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
       setInteractionOptions(gameInfo, currentBlockinteraction);
-      console.log('nextblock123',demoBlocks,'....',nextBlock,'..',currentBlock,'...',demoBlocks['1'][currentBlock],'...',currentBlockinteraction,'...',gameInfo,'....',currentQuest,'...',activeBlockSeq);
         setType(demoBlocks['1'][currentBlock]?.blockChoosen);
        setData(demoBlocks['1'][currentBlock]);
-      // setType('Interaction')
         setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
@@ -548,14 +511,14 @@ const ScreenPreview = () => {
   }, [Navigatenext]);
   const getDataSection = (data: any) => {
     // setCurrentPosition(0);
-    console.log(
-      'getData 1',
-      data,
-      currentPosition,
-      '......',
-      data?.blockText,
-      Navigatenext,
-    );
+    // console.log(
+    //   'getData 1',
+    //   data,
+    //   currentPosition,
+    //   '......',
+    //   data?.blockText,
+    //   Navigatenext,
+    // );
     const content = data?.blockText || '';
     const sentences = content.split(
       /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
@@ -606,16 +569,13 @@ const ScreenPreview = () => {
     }
   }, []);
 
-<<<<<<< HEAD
   useEffect(() => 
-  { console.log('remainingSentences', remainingSentences)
-
+  { 
+    console.log('remainingSentences', remainingSentences)
   },[remainingSentences]);
-=======
   const handleCloseWindow = () => {
     window.close();
   };
->>>>>>> main
 
   return (
     <Box id="container" ref={previewScreenRef}>
@@ -798,20 +758,12 @@ const ScreenPreview = () => {
                               fontFamily={'AtlantisContent'}
                               fontSize={'21px'}
                             >
-<<<<<<< HEAD
                               {/* <TypingEffect text={data?.blockText} speed={50} /> */}
                               {/* <TypingEffect text={remainingSentences} speed={5000} /> */}
-                              {remainingSentences}
-=======
                               <TypingEffect
-                                text={remainingSentences}
+                                text={remainingSentences.toString()}
                                 speed={50}
                               />
-
->>>>>>> main
-                              {/* {remainingSentences.map((sentence, index) => (
-  <React.Fragment key={index}>{sentence}</React.Fragment>
-))} */}
                             </Box>
                             <Box
                               display={'flex'}
