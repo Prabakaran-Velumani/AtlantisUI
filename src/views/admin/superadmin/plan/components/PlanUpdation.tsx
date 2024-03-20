@@ -525,184 +525,188 @@ const Plan: React.FC = () => {
   return (
     <>
       <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>
-        <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'absolute'} alignItems={'center'}></Card>
-        <Card mb={{ base: '0px', xl: '20px' }} width={'40%'} marginTop={'120px'} >
-          <Flex direction="column" mb="0" ms="10px">
-          <Text color={textColorPrimary}  ml={'0px'} fontSize="2xl" p={'23px 0px'} fontWeight="700" mb="0px">
-              Plan {id ? 'Updation' : 'Creation'}
-            </Text>
+        <Card alignItems={'center'}>    
+          <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={{base: '170', sm: '170', md: '300', lg: '300'}} position={'relative'} alignItems={'center'}></Card>
+          <Card mb={{ base: '0px', xl: '20px' }} width={{base: '95%', md: '70%'}} marginTop={'-120px'} >
+            <Flex direction="column">
+              <Text color={textColorPrimary} fontSize="2xl" p={'23px 0px'} fontWeight="700" mb="0px">
+                Plan {id ? 'Updation' : 'Creation'}
+              </Text>
 
-          </Flex>
-          <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '20px' }}  style={{ display: 'none' }}>
-            
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plPlanName"
-              value={formData.plPlanName}
-              onChange={handleChange}
-              label="Plan Name"
-              placeholder="eg. High Demand"
-              isRequired={true}
-              ref={plPlanNameRef}
-            />
+            </Flex>
+            <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '25px' }}  style={{ display: 'none' }}>
+              
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plPlanName"
+                value={formData.plPlanName}
+                onChange={handleChange}
+                label="Plan Name"
+                placeholder="eg. High Demand"
+                isRequired={true}
+                ref={plPlanNameRef}
+              />
 
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plMaxLearner"
-              onChange={handleChange}
-              id="plMaxLearner"
-              value={formData.plMaxLearner}
-              label="Learner Limit"
-              type="number"
-              isRequired={true}
-              // isDisabled={isDisabled.plMaxLearner}
-              placeholder="Enter Learner Limit"
-              ref={plMaxLearnerRef}
-            />
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plMaxGame"
-              onChange={handleChange}
-              id="plMaxGame"
-              value={formData.plMaxGame}
-              label="Game Limit"
-              type="number"
-              isRequired={true}
-              // isDisabled={isDisabled.plMaxGame}
-              placeholder="Enter Game Limit"
-              ref={plMaxGameRef}
-            />
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plMaxBackgrounds"
-              onChange={handleChange}
-              id="plMaxBackgrounds"
-              value={formData.plMaxBackgrounds}
-              label="Backgrounds Limit"
-              type="number"
-              isRequired={true}
-              // isDisabled={isDisabled.plMaxBackgrounds}
-              placeholder="Enter Background sLimit"
-              ref={plMaxBackgroundsRef}
-            />
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plMaxCharacters"
-              onChange={handleChange}
-              id="plMaxCharacters"
-              value={formData.plMaxCharacters}
-              label="Characters Limit"
-              type="number"
-              isRequired={true}
-              // isDisabled={isDisabled.plMaxCharacters}
-              placeholder="Enter Characters Limit"
-              ref={plMaxCharactersRef}
-            />
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plMaxAnalyticsDashboard"
-              onChange={handleChange}
-              id="plMaxAnalyticsDashboard"
-              value={formData.plMaxAnalyticsDashboard}
-              label="Dashboard Limit"
-              type="number"
-              isRequired={true}
-              // isDisabled={isDisabled.plMaxAnalyticsDashboard}
-              placeholder="Enter Dashboard Limit"
-              ref={plMaxAnalyticsDashboardRef}
-            />
-            <InputField
-              mb="0px"
-              me="30px"
-              name="plMAxGameHours"
-              onChange={handleChange}
-              id="plMAxGameHours"
-              value={formData.plMAxGameHours}
-              label="Game DurationLimit"
-              type="number"
-              isRequired={true}
-              // isDisabled={isDisabled.plMAxGameHours}
-              placeholder="Enter Game Duration"
-              ref={plMAxGameHoursRef}
-            />
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plMaxLearner"
+                onChange={handleChange}
+                id="plMaxLearner"
+                value={formData.plMaxLearner}
+                label="Learner Limit"
+                type="number"
+                isRequired={true}
+                // isDisabled={isDisabled.plMaxLearner}
+                placeholder="Enter Learner Limit"
+                ref={plMaxLearnerRef}
+              />
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plMaxGame"
+                onChange={handleChange}
+                id="plMaxGame"
+                value={formData.plMaxGame}
+                label="Game Limit"
+                type="number"
+                isRequired={true}
+                // isDisabled={isDisabled.plMaxGame}
+                placeholder="Enter Game Limit"
+                ref={plMaxGameRef}
+              />
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plMaxBackgrounds"
+                onChange={handleChange}
+                id="plMaxBackgrounds"
+                value={formData.plMaxBackgrounds}
+                label="Backgrounds Limit"
+                type="number"
+                isRequired={true}
+                // isDisabled={isDisabled.plMaxBackgrounds}
+                placeholder="Enter Background sLimit"
+                ref={plMaxBackgroundsRef}
+              />
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plMaxCharacters"
+                onChange={handleChange}
+                id="plMaxCharacters"
+                value={formData.plMaxCharacters}
+                label="Characters Limit"
+                type="number"
+                isRequired={true}
+                // isDisabled={isDisabled.plMaxCharacters}
+                placeholder="Enter Characters Limit"
+                ref={plMaxCharactersRef}
+              />
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plMaxAnalyticsDashboard"
+                onChange={handleChange}
+                id="plMaxAnalyticsDashboard"
+                value={formData.plMaxAnalyticsDashboard}
+                label="Dashboard Limit"
+                type="number"
+                isRequired={true}
+                // isDisabled={isDisabled.plMaxAnalyticsDashboard}
+                placeholder="Enter Dashboard Limit"
+                ref={plMaxAnalyticsDashboardRef}
+              />
+              <InputField
+                mb="0px"
+                me="30px"
+                name="plMAxGameHours"
+                onChange={handleChange}
+                id="plMAxGameHours"
+                value={formData.plMAxGameHours}
+                label="Game DurationLimit"
+                type="number"
+                isRequired={true}
+                // isDisabled={isDisabled.plMAxGameHours}
+                placeholder="Enter Game Duration"
+                ref={plMAxGameHoursRef}
+              />
 
-            <SelectField
-              mb="0px"
-              me="30px"
-              id="psStatus"
-              label="Active Status"
-              name="psStatus"
-              options={statusOptions}
-              value={statusOptions.find((option) => option.value === formDatas.psStatus) || null}
-              onChange={handleStatusChange}
-              isRequired={true}
-               handleSeletAttr={handleSeletAttr}
-            // isDisabled={isDisabled.plStatus}
+              <SelectField
+                mb="0px"
+                me="30px"
+                id="psStatus"
+                label="Active Status"
+                name="psStatus"
+                options={statusOptions}
+                value={statusOptions.find((option) => option.value === formDatas.psStatus) || null}
+                onChange={handleStatusChange}
+                isRequired={true}
+                handleSeletAttr={handleSeletAttr}
+              // isDisabled={isDisabled.plStatus}
 
-            />
+              />
+              </SimpleGrid>
+              <SimpleGrid  columns={{ sm: 1, md: 2 }}
+              spacing={{ base: '20px', xl: '20px' }}>
+              <SelectField
+                          mb='0px'
+                          me='30px'
+                          id="psPlanType"
+                          label="Plan Type"
+                          name="psPlanType"
+                          options={options}
+                          value={options.find(option => option.value === formDatas.psPlanType) || null}
+                          // value={options.find((option) => option.value === formDatas[i.toString()]?.psPlanType) || null}
+                          onChange={handleSelectChange}
+                          isRequired={true}
+                          handleSeletAttr={handlePlanType}
+                          // isRequired={true}
+                          
+                        />
+                        <InputField
+                          mb='0px'
+                          me='30px'
+                          id="psPlanDuration"
+                          name="psPlanDuration"
+                          label='Plan Duration'
+                          placeholder='eg. 1'
+                          value={formDatas.psPlanDuration}
+                          onChange={handlePlanDurationChange}
+                          isRequired={true}
+                          ref={psPlanDurationRef}
+                        />
             </SimpleGrid>
-            <SimpleGrid  columns={{ sm: 1, md: 1 }}
-            spacing={{ base: '20px', xl: '20px' }}>
-             <SelectField
-                        mb='0px'
-                        me='30px'
-                        id="psPlanType"
-                        label="Plan Type"
-                        name="psPlanType"
-                        options={options}
-                        value={options.find(option => option.value === formDatas.psPlanType) || null}
-                        // value={options.find((option) => option.value === formDatas[i.toString()]?.psPlanType) || null}
-                        onChange={handleSelectChange}
-                        isRequired={true}
-                        handleSeletAttr={handlePlanType}
-                        // isRequired={true}
-                        
-                      />
-                      <InputField
-                        mb='0px'
-                        me='30px'
-                        id="psPlanDuration"
-                        name="psPlanDuration"
-                        label='Plan Duration'
-                        placeholder='eg. 1'
-                        value={formDatas.psPlanDuration}
-                        onChange={handlePlanDurationChange}
-                        isRequired={true}
-                        ref={psPlanDurationRef}
-                      />
-          </SimpleGrid>
-       
-          <Flex justify="space-between">
-            <Button
-               variant="light"
-               fontSize="sm"
-               borderRadius="16px"
-               w={{ base: '128px', md: '148px' }}
-               h="46px"
-               mt="20px"
-              onClick={handleBack}
-            >
-              Cancel
-            </Button>
-            <Button
-              mt="20px"
-              variant="darkBrand"
-              fontSize="sm"
-              borderRadius="16px"
-              w={{ base: '128px', md: '148px' }}
-              h="46px"
-              ms="auto"
-              onClick={handleSubmit}
-            >
-              {id ? 'Update' : 'Save'}
-            </Button>
-          </Flex>
+        
+            <Flex justify="space-between">
+              <Button
+                fontSize="sm"
+                borderRadius="16px"
+                border={'1px solid #00000024'}
+                w={{ base: '128px', md: '148px' }}
+                h="46px"
+                mt="20px"
+                mr="20px"
+                bg={'transparent'}
+                _hover={{bg: '#11047a', color: '#fff'}}
+                onClick={handleBack}
+              >
+                Cancel
+              </Button>
+              <Button
+                mt="20px"
+                variant="darkBrand"
+                fontSize="sm"
+                borderRadius="16px"
+                w={{ base: '128px', md: '148px' }}
+                h="46px"                
+                onClick={handleSubmit}
+              >
+                {id ? 'Update' : 'Save'}
+              </Button>
+            </Flex>
+          </Card>
         </Card>
       </Box>
       {alert ? <OnToast msg={msg} status={toastStatus} setAlert={setAlert} /> : null}

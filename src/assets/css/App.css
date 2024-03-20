@@ -21,6 +21,11 @@ option {
   color: black;
 }
 
+.css-124hyrz-control {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
 .cards {
   transition: 2s ease;
 }
@@ -2935,6 +2940,14 @@ transform: translate(-167px, -84px);
   color: wheat;
   font-size: 50px;
 }
+.end-screen-text {
+  position: absolute; 
+  font-family: AtlantisContent; /* <-- This line has been commented out */
+  text-align: center;
+  color: white;
+  /* zIndex: 999999; */ /* <-- This line has been commented out */
+}
+
 
 .eoq-bg-img {
   position: absolute;
@@ -4936,22 +4949,18 @@ text-transform: capitalize;
 }
 .screen-notebox3{
   position: absolute;
-  /* top: 200px;
-  right: 0px;
-  bottom: 0;
-  z-index: 999; */
   width: 40vw;
-  height: 50vh;
-  /* transform: translate(20vw, 25vh); */
-  animation: transformnote 2s ease-in-out;
+  height: 80vh;
+  animation: transformnote 1s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 @keyframes transformnote {
   0% {
     transform: scale(0) ;
   }
-  /* 50%{
-    transform: scale(0.3) translate(-30vw, 85vh);
-  } */
+ 
 100%{
   transform: scale(1) ;
 }
@@ -4966,10 +4975,21 @@ text-transform: capitalize;
   align-items: center;
 }
 .screen-notebox5{
-
+  position: absolute !important;
+  width: 100% !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(8vh) !important;
 }
+/* can hold upto 200 charectors maximum */
 .screen-notebox6{
-
+  width: 64%;
+  text-align: justify;
+  text-overflow: clip;
+  overflow: visible;
+  letter-spacing: 0.5;
+  line-height: 1.5;
 }
 .screen-notebox7{
 
@@ -4977,8 +4997,15 @@ text-transform: capitalize;
 
 .screen-noteimage{
   width: 100%;
-  height: 80vh;
+  height: 100%;
   
+}
+.screen-bgImage{
+  width: 100%;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 }
 .EntirePreview .Game-Screen .Images .Thankyou-section .next-btn{
   position: absolute;

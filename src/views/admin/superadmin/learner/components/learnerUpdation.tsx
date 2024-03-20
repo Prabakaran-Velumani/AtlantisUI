@@ -280,16 +280,16 @@ const selectedCountry = mappedCountryOptions.find(
     <>
       <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>    
         <Card alignItems={'center'}>
-          <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'relative'} alignItems={'center'}></Card>
+          <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={{base: '170', sm: '170', md: '300', lg: '300'}} position={'relative'} alignItems={'center'}></Card>
           <Card mb={{ base: '0px', xl: '20px' }} width={{base: '95%', md: '70%'}} marginTop={'-120px'}>
-          <Flex direction="column" ms="10px">
+          <Flex direction="column">
             <Box>
             <Text color={useColorModeValue('secondaryGray.900', 'white')} fontSize="2xl" fontWeight="700" mb="20px">
                 Learner Updation
               </Text>
               </Box>
             </Flex>
-            <Box padding="10px">
+            <Box >
             <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing={{ base: '20px', xl: '20px' }} >            
                 <Box>
                     <FormLabel fontSize='sm' fontWeight='bold' color={textColorPrimary}>Learner Name<span style={{ color: 'red' }}>*</span></FormLabel>

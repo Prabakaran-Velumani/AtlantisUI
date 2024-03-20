@@ -398,376 +398,379 @@ console.log("datass",datass)
   return (
     <>
       <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>
-        <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'absolute'} alignItems={'center'}></Card>
-        <Card mb={{ base: '0px', xl: '20px' }} width={'70%'} marginTop={'120px'} >
-          <Flex justifyContent={'space-between'}>
-       
-
-        <Box position={'relative'} mt='25px' ml='25px'>
-                  <Card
-                    w={'300px'}
-                    h={'285px'}
-                    borderRadius={'none'}
-                    boxShadow={'5px 5px 20px #c5c5c5'}
-                    alignItems={'center'}
-                    // onMouseEnter={() => handleParent(i)}
-                    // onMouseLeave={handleParentLeave}
-                    m={0}
-                    p={0}
-                  >
-                    <Box w={'80%'} display={'flex'}>
-                      <Icon
-                        as={FaBolt}
-                        width={'25px'}
-                        h={'25px'}
-                        mt={'30px'}
-                        boxShadow={'5px 5px 20px grey'}
-                        bg={'linear-gradient(to bottom, #7551ff, #3311db)'}
-                        color={'#fff'}
-                        borderRadius={'50%'}
-                      />
-                    
-                        <Text color={textColorPrimary}  ml={'10px'} fontSize="2xl" p={'23px 0px'} fontWeight="700" mb="0px">
-                          
-                        {subscriptionPlan?.data[0]?.plPlanName}
-                        {/* {item?.plPlanName} */}
-                      </Text>
-                    </Box>
-                    <Box
-                      mt={'5px'}
-                      w={'80%'}
-                      justifyContent={'center'}
-                      textAlign={'start'}
+        <Card alignItems={'center'}>
+          <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={{base: '170', sm: '170', md: '300', lg: '300'}} position={'relative'} alignItems={'center'}></Card>
+          <Card mb={{ base: '0px', xl: '20px' }} width={{base:'96%',sm:'96%',md:'96%',lg:'70%'}} marginTop={'-120px'} >
+            <Flex flexDirection={{base:'column',sm:'column',md:'column',lg:'row'}} justifyContent={'space-between'}>
+                <Box position={'relative'} w={{md:'100%',lg:'50%'}} mt={{md:'',lg:'25px'}} ml={{md:'',lg:'25px'}}>
+                    <Card
+                      w={{md:'100%',lg:'95%'}}
+                      h={'285px'}
+                      borderRadius={'none'}
+                      boxShadow={'5px 5px 20px #c5c5c5'}
+                      alignItems={'center'}
+                      // onMouseEnter={() => handleParent(i)}
+                      // onMouseLeave={handleParentLeave}
+                      m={0}
+                      p={0}
                     >
-                      <Box w={'90%'}>
-                        <Flex justifyContent={'space-between'}>
-                          <Text
-                            color={'#8f9bba'}
-                            fontWeight={500}
-                            fontSize={'1rem'}
-                          >
-                            Max Games
-                          </Text>
-                          <Box w={'50px'}>
-                            <Text  color={'#8f9bba'}
-                            fontWeight={500}
-                            fontSize={'1rem'}>
-                               {subscriptionPlan?.data[0]?.plMaxGame}
-                              {/* {item?.plMaxGame} */}
+                      <Box w={'80%'} display={'flex'}>
+                        <Icon
+                          as={FaBolt}
+                          width={'25px'}
+                          h={'25px'}
+                          mt={'30px'}
+                          boxShadow={'5px 5px 20px grey'}
+                          bg={'linear-gradient(to bottom, #7551ff, #3311db)'}
+                          color={'#fff'}
+                          borderRadius={'50%'}
+                        />
+                      
+                          <Text color={textColorPrimary}  ml={'10px'} fontSize="2xl" p={'23px 0px'} fontWeight="700" mb="0px">
+                            
+                          {subscriptionPlan?.data[0]?.plPlanName}
+                          {/* {item?.plPlanName} */}
+                        </Text>
+                      </Box>
+                      <Box
+                        mt={'5px'}
+                        w={'80%'}
+                        justifyContent={'center'}
+                        textAlign={'start'}
+                      >
+                        <Box w={'100%'}>
+                          <Flex justifyContent={'space-between'}>
+                            <Text
+                              color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}
+                            >
+                              Max Games
                             </Text>
-                          </Box>
-                        </Flex>
-                        <Flex justifyContent={'space-between'}>
-                          <Text
-                            color={'#8f9bba'}
-                            fontWeight={500}
-                            fontSize={'1rem'}
-                          >
-                           Max Learners
-                          </Text>
-                          <Box w={'50px'}>
-                            <Text  color={'#8f9bba'}
-                            fontWeight={500}
-                            fontSize={'1rem'}>
-                               {subscriptionPlan?.data[0]?.plMaxLearner}
-                              {/* {item?.plMaxLearner} */}
+                            <Box w={'50px'} display={'flex'} justifyContent={'end'}>
+                              <Text  color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}>
+                                {subscriptionPlan?.data[0]?.plMaxGame}
+                                {/* {item?.plMaxGame} */}
+                              </Text>
+                            </Box>
+                          </Flex>
+                          <Flex justifyContent={'space-between'}>
+                            <Text
+                              color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}
+                            >
+                            Max Learners
                             </Text>
-                          </Box>
-                        </Flex>
-                        <Flex justifyContent={'space-between'}>
-                          <Text
-                            color={'#8f9bba'}
-                            fontWeight={500}
-                            fontSize={'1rem'}
-                          >
-                           Max Backgrounds
-                          </Text>
-                          <Box w={'50px'}>
+                            <Box w={'50px'} display={'flex'} justifyContent={'end'}>
+                              <Text  color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}>
+                                {subscriptionPlan?.data[0]?.plMaxLearner}
+                                {/* {item?.plMaxLearner} */}
+                              </Text>
+                            </Box>
+                          </Flex>
+                          <Flex justifyContent={'space-between'}>
+                            <Text
+                              color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}
+                            >
+                            Max Backgrounds
+                            </Text>
+                            <Box w={'50px'} display={'flex'} justifyContent={'end'}>
+                              <Text
+                                
+                                textAlign={'start'}
+                                color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}
+                              >
+                                {subscriptionPlan?.data[0]?.plMaxBackgrounds}
+                                {/* {item?.plMaxBackgrounds} */}
+                              </Text>
+                            </Box>
+                          </Flex>
+                          <Flex justifyContent={'space-between'}>
                             <Text
                               
-                              textAlign={'start'}
+                            
                               color={'#8f9bba'}
                             fontWeight={500}
                             fontSize={'1rem'}
                             >
-                               {subscriptionPlan?.data[0]?.plMaxBackgrounds}
-                              {/* {item?.plMaxBackgrounds} */}
+                            Max DashBoards
                             </Text>
-                          </Box>
-                        </Flex>
-                        <Flex justifyContent={'space-between'}>
-                          <Text
+                            <Box w={'50px'} display={'flex'} justifyContent={'end'}>
+                              <Text  
+                                textAlign={'start'}
+                                color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}>
+                                {subscriptionPlan?.data[0]?.plMaxAnalyticsDashboard}
+                                {/* {item?.plMaxAnalyticsDashboard} */}
+                              </Text>
+                            </Box>
+                          </Flex>
+                          <Flex justifyContent={'space-between'}>
+                            <Text
                             
-                           
+                            
                             color={'#8f9bba'}
                           fontWeight={500}
                           fontSize={'1rem'}
-                          >
-                          Max DashBoards
-                          </Text>
-                          <Box w={'50px'}>
-                            <Text  
-                              textAlign={'start'}
-                              color={'#8f9bba'}
-                            fontWeight={500}
-                            fontSize={'1rem'}>
-                               {subscriptionPlan?.data[0]?.plMaxAnalyticsDashboard}
-                              {/* {item?.plMaxAnalyticsDashboard} */}
-                            </Text>
-                          </Box>
-                        </Flex>
-                        <Flex justifyContent={'space-between'}>
-                          <Text
-                           
-                          
-                           color={'#8f9bba'}
-                         fontWeight={500}
-                         fontSize={'1rem'}
-                          >
-                           Max Characters
-                          </Text>
-                          <Box w={'50px'}>
-                            <Text  textAlign={'start'}
-                              color={'#8f9bba'}
-                            fontWeight={500}
-                            fontSize={'1rem'}>
-                               {subscriptionPlan?.data[0]?.plMaxCharacters}
-                              {/* {item?.plMaxCharacters} */}
-                            </Text>
-                          </Box>
-                        </Flex>
-                        <Flex justifyContent={'space-between'}>
-                          <Text
-                           
-                            color={'#8f9bba'}
-                          fontWeight={500}
-                          fontSize={'1rem'}
-                          >
-                           Max Duration
-                          </Text>
-                          <Box w={'50px'}>
-                            <Text  textAlign={'start'}
-                              color={'#8f9bba'}
-                            fontWeight={500}
-                            fontSize={'1rem'}>
-                               {subscriptionPlan?.data[0]?.plMAxGameHours}
-                              {/* {item?.plMAxGameHours} */}
-                            </Text>
-                          </Box>
-                        </Flex>
-                      </Box>
-                    </Box>
-                    {/* <ButtonGroup mt={'20px'}>
-                      <Button
-                        p={'0px 30px'}
-                        mt={'20px'}
-                        color={'#fff'}
-                        _hover={{
-                          bg: '#3311db',
-                        }}
-                        bg={'#3311db'}
-                        onClick={() => navigate(`updationPlan/${item?.plId}`)}
-                      >
-                        Update
-                      </Button>
-                      <Button
-                        p={'0px 30px'}
-                        mt={'20px'}
-                        color={'#fff'}
-                        _hover={{
-                          bg: '#3311db',
-                        }}
-                        bg={'#3311db'}
-                        onClick={() => handleDeletePlan(item?.plId)}
-                      >
-                        Delete
-                      </Button>
-                    </ButtonGroup> */}
-                  </Card>
-                  {/* <Icon as={FaInfo}  position={'absolute'} top={'15px'} right={'-20px'} /> */}
-                    {/* <Menu isOpen={isOpen1} onClose={onClose1}>
-                      <MenuButton
-                        alignItems="center"
-                        justifyContent="center"
-                        bg={'none'}
-                        w="37px"
-                        h="37px"
-                        lineHeight="100%"
-                        onClick={() => handleMenu(i)}
-                        borderRadius="10px"
-                      >
-                        <Icon
-                          as={FaEllipsisH}
-                          color={'#3311db'}
-                          w="20px"
-                          h="20px"
-                          mt="4px"
-                        />
-                      </MenuButton>
-                      {menu === i && (
-                        <MenuList
-                          w="150px"
-                          minW="unset"
-                          maxW="150px !important"
-                          border="transparent"
-                          backdropFilter="blur(63px)"
-                          bg={bgList}
-                          boxShadow={bgShadow}
-                          borderRadius="20px"
-                          p="15px"
-                        >
-                          {item?.someAlias.map((sub: any, subi: any) => (
-                            <MenuItem
-                              key={subi}
-                              transition="0.2s linear"
-                              color={textColor}
-                              p="0px"
-                              borderRadius="8px"
-                              _focus={{
-                                bg: 'transparent',
-                              }}
-                              mb="10px"
                             >
-                              <Flex
-                                minWidth="max-content"
-                                alignItems="center"
-                                justifyContent={'space-between'}
-                                w="100%"
-                              >
-                                <Box>
-                                  <Text fontSize="sm" fontWeight="400">
-                                    {sub?.psPlanDuration} {sub?.psPlanType}
-                                  </Text>
-                                </Box>
-                                <Spacer />
-                                <ButtonGroup>
-                                  <Icon
-                                    _hover={textHover}
-                                    _active={{
-                                      bg: 'transparent',
-                                    }}
-                                    as={MdEdit}
-                                    onClick={() => handleedit(sub?.psId)}
-                                    h="16px"
-                                    w="16px"
-                                    me="8px"
-                                  />
-                                  <Icon
-                                    _hover={textHover}
-                                    _active={{
-                                      bg: 'transparent',
-                                    }}
-                                    as={MdDelete}
-                                    onClick={() => handleDelete(sub?.psId)}
-                                    h="16px"
-                                    w="16px"
-                                    me="8px"
-                                  />
-                                </ButtonGroup>
-                              </Flex>
-                            </MenuItem>
-                          ))}
-                          <ButtonGroup  _hover={textHover}
-                            onClick={() =>
-                              navigate(`updatePlanDuration/${item?.plId}`)
-                            }
-                          >
-                            <Icon
-                              mt={'5px'}
-                              _hover={textHover}
-                              alignItems={'center'}
-                              color={textColor}
-                              cursor={'pointer'}
-                              as={FaPlus}
-                              h="16px"
-                              w="16px"
-                              me="8px"
-                            />
-                            <Text color={textColor} _hover={textHover} cursor={'pointer'}>
-                              Add more
+                            Max Characters
                             </Text>
-                          </ButtonGroup>
-                        </MenuList>
-                      )}
-                    </Menu> */}
-                  
-          </Box>
+                            <Box w={'50px'} display={'flex'} justifyContent={'end'}>
+                              <Text  textAlign={'start'}
+                                color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}>
+                                {subscriptionPlan?.data[0]?.plMaxCharacters}
+                                {/* {item?.plMaxCharacters} */}
+                              </Text>
+                            </Box>
+                          </Flex>
+                          <Flex justifyContent={'space-between'}>
+                            <Text
+                            
+                              color={'#8f9bba'}
+                            fontWeight={500}
+                            fontSize={'1rem'}
+                            >
+                            Max Duration
+                            </Text>
+                            <Box w={'50px'} display={'flex'} justifyContent={'end'}>
+                              <Text  textAlign={'start'}
+                                color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}>
+                                {subscriptionPlan?.data[0]?.plMAxGameHours}
+                                {/* {item?.plMAxGameHours} */}
+                              </Text>
+                            </Box>
+                          </Flex>
+                        </Box>
+                      </Box>
+                      {/* <ButtonGroup mt={'20px'}>
+                        <Button
+                          p={'0px 30px'}
+                          mt={'20px'}
+                          color={'#fff'}
+                          _hover={{
+                            bg: '#3311db',
+                          }}
+                          bg={'#3311db'}
+                          onClick={() => navigate(`updationPlan/${item?.plId}`)}
+                        >
+                          Update
+                        </Button>
+                        <Button
+                          p={'0px 30px'}
+                          mt={'20px'}
+                          color={'#fff'}
+                          _hover={{
+                            bg: '#3311db',
+                          }}
+                          bg={'#3311db'}
+                          onClick={() => handleDeletePlan(item?.plId)}
+                        >
+                          Delete
+                        </Button>
+                      </ButtonGroup> */}
+                    </Card>
+                    {/* <Icon as={FaInfo}  position={'absolute'} top={'15px'} right={'-20px'} /> */}
+                      {/* <Menu isOpen={isOpen1} onClose={onClose1}>
+                        <MenuButton
+                          alignItems="center"
+                          justifyContent="center"
+                          bg={'none'}
+                          w="37px"
+                          h="37px"
+                          lineHeight="100%"
+                          onClick={() => handleMenu(i)}
+                          borderRadius="10px"
+                        >
+                          <Icon
+                            as={FaEllipsisH}
+                            color={'#3311db'}
+                            w="20px"
+                            h="20px"
+                            mt="4px"
+                          />
+                        </MenuButton>
+                        {menu === i && (
+                          <MenuList
+                            w="150px"
+                            minW="unset"
+                            maxW="150px !important"
+                            border="transparent"
+                            backdropFilter="blur(63px)"
+                            bg={bgList}
+                            boxShadow={bgShadow}
+                            borderRadius="20px"
+                            p="15px"
+                          >
+                            {item?.someAlias.map((sub: any, subi: any) => (
+                              <MenuItem
+                                key={subi}
+                                transition="0.2s linear"
+                                color={textColor}
+                                p="0px"
+                                borderRadius="8px"
+                                _focus={{
+                                  bg: 'transparent',
+                                }}
+                                mb="10px"
+                              >
+                                <Flex
+                                  minWidth="max-content"
+                                  alignItems="center"
+                                  justifyContent={'space-between'}
+                                  w="100%"
+                                >
+                                  <Box>
+                                    <Text fontSize="sm" fontWeight="400">
+                                      {sub?.psPlanDuration} {sub?.psPlanType}
+                                    </Text>
+                                  </Box>
+                                  <Spacer />
+                                  <ButtonGroup>
+                                    <Icon
+                                      _hover={textHover}
+                                      _active={{
+                                        bg: 'transparent',
+                                      }}
+                                      as={MdEdit}
+                                      onClick={() => handleedit(sub?.psId)}
+                                      h="16px"
+                                      w="16px"
+                                      me="8px"
+                                    />
+                                    <Icon
+                                      _hover={textHover}
+                                      _active={{
+                                        bg: 'transparent',
+                                      }}
+                                      as={MdDelete}
+                                      onClick={() => handleDelete(sub?.psId)}
+                                      h="16px"
+                                      w="16px"
+                                      me="8px"
+                                    />
+                                  </ButtonGroup>
+                                </Flex>
+                              </MenuItem>
+                            ))}
+                            <ButtonGroup  _hover={textHover}
+                              onClick={() =>
+                                navigate(`updatePlanDuration/${item?.plId}`)
+                              }
+                            >
+                              <Icon
+                                mt={'5px'}
+                                _hover={textHover}
+                                alignItems={'center'}
+                                color={textColor}
+                                cursor={'pointer'}
+                                as={FaPlus}
+                                h="16px"
+                                w="16px"
+                                me="8px"
+                              />
+                              <Text color={textColor} _hover={textHover} cursor={'pointer'}>
+                                Add more
+                              </Text>
+                            </ButtonGroup>
+                          </MenuList>
+                        )}
+                      </Menu> */}
+                    
+            </Box>
+          
+          <Card mb={{ base: '0px', xl: '20px' }} w={{md:'100%',lg:'50%'}} mt={{base:3,sm:3,md:3,lg:0}} >
+            <Flex direction="column">
+            <Text color={textColorPrimary} fontSize="2xl" fontWeight="700" mb="20px">
+                Plan {id ? 'Updation':'Creation'} 
+              </Text>
+            </Flex>        
+              <SimpleGrid  columns={{ sm: 1, md: 1 }}
+              spacing={{ base: '20px', xl: '20px' }}>
+              <SelectField
+                          mb='0px'
+                          me='30px'
+                          id="psPlanType"
+                          label="Plan Type"
+                          name="psPlanType"
+                          options={options}
+                          value={options.find(option => option.value === formDatas.psPlanType) || null}
+                          // value={options.find((option) => option.value === formDatas[i.toString()]?.psPlanType) || null}
+                          onChange={handleSelectChange}
+                          isRequired={true}
+                          handleSeletAttr={handlePlanType}
+                          // isRequired={true}
+                          
+                        />
+                        <InputField
+                          mb='0px'
+                          me='30px'
+                          id="psPlanDuration"
+                          name="psPlanDuration"
+                          label='Plan Duration'
+                          placeholder='eg. 1'
+                          value={formDatas.psPlanDuration}
+                          onChange={handlePlanDurationChange}
+                          isRequired={true}
+                          ref={psPlanDurationRef}
+                        />
+            </SimpleGrid>
         
-        <Card mb={{ base: '0px', xl: '20px' }} width={'50%'}  >
-          <Flex direction="column" ms="10px">
-          <Text color={textColorPrimary} fontSize="2xl" fontWeight="700" mb="20px">
-              Plan {id ? 'Updation':'Creation'} 
-            </Text>
-          </Flex>        
-            <SimpleGrid  columns={{ sm: 1, md: 1 }}
-            spacing={{ base: '20px', xl: '20px' }}>
-             <SelectField
-                        mb='0px'
-                        me='30px'
-                        id="psPlanType"
-                        label="Plan Type"
-                        name="psPlanType"
-                        options={options}
-                        value={options.find(option => option.value === formDatas.psPlanType) || null}
-                        // value={options.find((option) => option.value === formDatas[i.toString()]?.psPlanType) || null}
-                        onChange={handleSelectChange}
-                        isRequired={true}
-                        handleSeletAttr={handlePlanType}
-                        // isRequired={true}
-                        
-                      />
-                      <InputField
-                        mb='0px'
-                        me='30px'
-                        id="psPlanDuration"
-                        name="psPlanDuration"
-                        label='Plan Duration'
-                        placeholder='eg. 1'
-                        value={formDatas.psPlanDuration}
-                        onChange={handlePlanDurationChange}
-                        isRequired={true}
-                        ref={psPlanDurationRef}
-                      />
-          </SimpleGrid>
-       
-          {/* <Flex flexDirection="row" justifyContent={'center'}>
-            <Button mt="20px" mr="10px" padding={2} background="#3311db" color="#fff" w={70} onClick={handleSubmit}
-            //  isDisabled={isDisabled.plStatus||isButtonDisabled}
-            >
-              {id ? 'Update' : 'Save'}
-            </Button>
+            {/* <Flex flexDirection="row" justifyContent={'center'}>
+              <Button mt="20px" mr="10px" padding={2} background="#3311db" color="#fff" w={70} onClick={handleSubmit}
+              //  isDisabled={isDisabled.plStatus||isButtonDisabled}
+              >
+                {id ? 'Update' : 'Save'}
+              </Button>
 
-            <Button mt="20px" padding={2} background="#3311db" color="#fff" w={70} onClick={handleBack}>
-              Cancel
-            </Button>
-          </Flex> */}
-           <Flex justify="space-between">
-            <Button
-               variant="light"
-               fontSize="sm"
-               borderRadius="16px"
-               w={{ base: '128px', md: '148px' }}
-               h="46px"
-               mt="20px"
-              onClick={handleBack}
-            >
-              Cancel
-            </Button>
-            <Button
-              mt="20px"
-              variant="darkBrand"
-              fontSize="sm"
-              borderRadius="16px"
-              w={{ base: '128px', md: '148px' }}
-              h="46px"
-              ms="auto"
-              onClick={handleSubmit}
-            >
-              {id ? 'Update' : 'Save'}
-            </Button>
-          </Flex>
+              <Button mt="20px" padding={2} background="#3311db" color="#fff" w={70} onClick={handleBack}>
+                Cancel
+              </Button>
+            </Flex> */}
+            <Flex justify="space-between">
+              <Button
+                  //  variant="light"
+                  fontSize="sm"
+                  borderRadius="16px"
+                  border={'1px solid #00000024'}
+                  w={{ base: '128px', md: '148px' }}
+                  h="46px"
+                  mt="20px"
+                  mr="20px"
+                  bg={'transparent'}
+                  _hover={{bg: '#11047a', color: '#fff'}}
+                onClick={handleBack}
+              >
+                Cancel
+              </Button>
+              <Button
+                mt="20px"
+                variant="darkBrand"
+                fontSize="sm"
+                borderRadius="16px"
+                w={{ base: '128px', md: '148px' }}
+                h="46px"             
+                onClick={handleSubmit}
+              >
+                {id ? 'Update' : 'Save'}
+              </Button>
+            </Flex>
+            </Card>
+            </Flex>
           </Card>
-          </Flex>
         </Card>
       </Box>
       {alert ? <OnToast msg={msg} status={toastStatus} setAlert={setAlert} /> : null}

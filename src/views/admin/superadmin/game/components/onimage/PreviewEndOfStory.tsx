@@ -1,7 +1,7 @@
-import React from 'react'
-import {Box, Flex,Text,Img} from '@chakra-ui/react'
+import { Box, Flex, Text, Img ,useBreakpointValue } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import { updatePreviewData } from 'store/preview/previewSlice';
+import Replay from 'assets/img/screens/Replay.png';
 
 
 const PreviewEndOfStory : React.FC<{preloadedAssets: any, setEndOfQuest:any, replayQuest: ()=> void}>= ({preloadedAssets, setEndOfQuest, replayQuest}) => {
@@ -23,9 +23,11 @@ const PreviewEndOfStory : React.FC<{preloadedAssets: any, setEndOfQuest:any, rep
           alignItems="center"
         >
           
-          <Box className="thankyou-screen-box" >
-            <Img src={preloadedAssets.Screen6} className="bg-Img" /></Box>
-            <Box  position={'absolute'} fontSize={['xl', '2xl', '3xl']} fontFamily="AtlantisContent" textAlign="center" color="white"  zIndex="999999"> <Text  mb="4">
+          <Box className="end-screen" >
+            <Img src={Replay} className="bg-Img1" />
+          </Box>
+            <Box className='end-screen-text'> 
+                <Text>
                   End of the current Quest.!
                 </Text>
                 <Text >

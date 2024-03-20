@@ -61,7 +61,7 @@ export default function Settings() {
   return (
     <FormControl>
       <Card>
-        <Flex direction="column" mb="40px" ms="10px">
+        <Flex direction="column" mb="40px">
           <Text fontSize="xl" color={textColorPrimary} fontWeight="bold">
             Change password
           </Text>

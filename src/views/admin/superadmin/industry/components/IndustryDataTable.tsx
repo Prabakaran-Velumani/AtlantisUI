@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useTable, useSortBy, useGlobalFilter, usePagination, TableInstance } from 'react-table';
+import {
+  useTable,
+  useSortBy,
+  useGlobalFilter,
+  usePagination,
+  TableInstance,
+} from 'react-table';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 // Chakra imports
@@ -14,21 +20,22 @@ import {
   Input,
   Box,
   Button,
+  Tooltip,
 } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import { SearchIcon } from '@chakra-ui/icons';
 
 import {
-IconButton,
-InputGroup,
-InputLeftElement,
-useColorModeValue,
+  IconButton,
+  InputGroup,
+  InputLeftElement,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 type RowObj = {
   sNo: number;
   industryName: string;
-  status:string;
+  status: string;
   action: any;
 };
 
@@ -46,19 +53,19 @@ type DataCol = TableInstance<RowObj>;
 const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
   const [lastPage, setLastPage] = useState<any>();
 
-  const navigate = useNavigate();                            
-  const handleNavigate= () => {
+  const navigate = useNavigate();
+  const handleNavigate = () => {
     navigate('creation');
-  } 
+  };
 
   const columns: ColumnObj[] = React.useMemo(
     () => [
       { Header: 'S.No', accessor: 'sNo' },
       { Header: 'Industry Name', accessor: 'industryName' },
       { Header: 'Status', accessor: 'status' },
-      { Header: '', accessor: 'action' },
+      { Header: 'Action', accessor: 'action' },
     ],
-    []
+    [],
   );
 
   const {
@@ -83,7 +90,7 @@ const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
     },
     useGlobalFilter,
     useSortBy,
-    usePagination
+    usePagination,
   );
 
   useEffect(() => {
@@ -91,15 +98,13 @@ const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
     setLastPage(Math.floor(data.length / pageSize));
   }, []);
 
-
   const totalPages = Math.ceil(data.length / pageSize);
   const searchIconColor = useColorModeValue('gray.700', 'white');
   let menuBg = useColorModeValue('white', 'navy.800');
-   const shadow = useColorModeValue(
+  const shadow = useColorModeValue(
     '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
     '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
   );
-
 
   const handleGoPage = (pageNumber: number) => {
     // Ensure the page number is within valid range
@@ -137,156 +142,212 @@ const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
     }
 
     return pages;
-  };  
-
+  };
 
   return (
-    <>          
+    <>
+      <Flex justifyContent="flex-end" align={'center'} mb={'10px'}  p={{sm:'20px 0px',md:'20px'}}>
         <Flex
-        justifyContent="flex-end"
-        align={'center'}
-        mb={'10px'}
-        p={'20px'}
-      >
-      <Flex
-      w={{ sm: '100%', md: 'auto' }}
-
-      alignItems="center"
-      flexDirection="row"
-      bg={menuBg}
-      flexWrap={{ base: 'wrap', md: 'nowrap' }}
-      p="10px"
-      borderRadius="999px"
-      boxShadow={shadow}
-    >
-        <InputGroup w={{ base: '100%', md: '200px' }} >
-      <InputLeftElement
-        children={
-          <IconButton
-            aria-label="search"
-            bg="inherit"
-            borderRadius="inherit"
-            _active={{
-              bg: 'inherit',
-              transform: 'none',
-              borderColor: 'transparent',
-            }}
-            _hover={{
-              background: 'none',
-            }}
-            _focus={{
-              background: 'none',
-              boxShadow: 'none',
-            }}
-            icon={<SearchIcon color={searchIconColor} w="15px" h="15px" />}
-          />
-        }
-      />
-          <Input
-            type="text"
-            placeholder="Search..."
-            value={globalFilter || ''}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            bg={'#f9f9f9'}
-            borderRadius={'14px'}
-            w={{ base: '200px', xl: '300px' }}
-          />
-       
-          </InputGroup>
-          <Button
-         ml={10}
-          padding={2}
-          boxShadow={'3px 4px 12px #2e292940'}
-          _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
-          background="#3311db"
-          color="#fff"
-          w={70}
-          onClick={handleNavigate}
+          w={{ sm: '100%', md: 'auto' }}
+          alignItems="center"
+          flexDirection={{base:'column',sm:'column',md:"row"}}
+          bg={menuBg}
+          flexWrap={{ base: 'wrap', md: 'nowrap' }}
+          p="10px"
+          borderRadius="20px"
+          boxShadow={shadow}
+          justifyContent={'space-between'}
         >
-          New
-        </Button>
-       
+          <InputGroup w={{ base: '100%', sm: '100%', md: '200px' }}>
+            <InputLeftElement
+              children={
+                <IconButton
+                  aria-label="search"
+                  bg="inherit"
+                  borderRadius="inherit"
+                  _active={{
+                    bg: 'inherit',
+                    transform: 'none',
+                    borderColor: 'transparent',
+                  }}
+                  _hover={{
+                    background: 'none',
+                  }}
+                  _focus={{
+                    background: 'none',
+                    boxShadow: 'none',
+                  }}
+                  icon={
+                    <SearchIcon color={searchIconColor} w="15px" h="15px" />
+                  }
+                />
+              }
+            />
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={globalFilter || ''}
+              onChange={(e) => setGlobalFilter(e.target.value)}
+              bg={'#f9f9f9'}
+              borderRadius={'14px'}
+              w={{ base: '100%', sm: '100%', xl: '300px' }}
+            />
+          </InputGroup>
+          <Tooltip
+            label="Create a New Industry"
+            hasArrow
+            placement="right-start"
+          >
+            <Button
+              ml={{ sm: 0, md: 10 }}
+              mt={{sm:5,md:0}}
+              padding={2}
+              boxShadow={'3px 4px 12px #2e292940'}
+              _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
+              background="#3311db"
+              color="#fff"
+              w={{ sm: '100%', md: 70 }}
+              onClick={handleNavigate}
+            >
+              New
+            </Button>
+          </Tooltip>
         </Flex>
-       
       </Flex>
-      <Box overflowX={{ sm: 'scroll', xl: 'scroll'}} padding="20px">
-        <Table {...getTableProps()} variant={'simple'} overflowX={{base:'auto', xl:'unset'}}>
-              {/* <Card> */}
-            <Thead className='thead'   bg={'#E9EDF7'}>
+      <Box
+        overflowX={{ sm: 'scroll', xl: 'scroll' }}
+        padding="2px"
+        borderRadius={'13px 13px 20px 20px'}
+      >
+        <Table
+          {...getTableProps()}
+          variant={'simple'}
+          overflowX={{ base: 'auto', xl: 'unset' }}
+          style={{
+            border: '2px solid #f7f7f7',
+          }}
+        >
+          {/* <Card> */}
+          <Thead className="thead" bg={'#f9f9f9'}>
             {headerGroups.map((headerGroup) => (
-                <Tr {...headerGroup.getHeaderGroupProps()} borderBottom={'2px solid #f7f7f7'} >
+              <Tr
+                {...headerGroup.getHeaderGroupProps()}
+                borderBottom={'2px solid #f7f7f7'}
+              >
                 {headerGroup.headers.map((column) => (
-                    <Th  {...column.getHeaderProps(column.getSortByToggleProps())} color={'#191919'}  textAlign={'start'}  p={'15px 10px'} >
+                  <Th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    color={'#191919'}
+                    textAlign={'start'}
+                    p={'10px 10px'}
+                  >
                     {column.render('Header')}
                     <span>
-                        {column.isSorted
+                      {column.isSorted
                         ? column.isSortedDesc
-                            ? ' 🔽'
-                            : ' 🔼'
+                          ? ' 🔽'
+                          : ' 🔼'
                         : ''}
                     </span>
-                    </Th>
+                  </Th>
                 ))}
-                </Tr>
+              </Tr>
             ))}
-            </Thead>               
-            <Tbody {...getTableBodyProps()} fontSize={'17px'}>
+          </Thead>
+          <Tbody {...getTableBodyProps()} fontSize={'17px'}>
             {page.map((row) => {
-                prepareRow(row);
-                return (
-                <Tr {...row.getRowProps()}  borderBottom={'2px solid #E0E0E0'} _hover={{bg:'#FAF9F6'}} cursor={'pointer'}>
-                    {row.cells.map((cell) => {
+              prepareRow(row);
+              return (
+                <Tr
+                  {...row.getRowProps()}
+                  borderBottom={'2px solid #f7f7f7'}
+                  _hover={{ bg: '#FAF9F6' }}
+                  cursor={'pointer'}
+                >
+                  {row.cells.map((cell) => {
                     return (
-                        <Td {...cell.getCellProps()} p={'12px'} className='industryForAction' textAlign={'start'} justifyContent={'center'}>{cell.render('Cell')}</Td>
+                      <Td
+                        {...cell.getCellProps()}
+                        p={'12px'}
+                        className="industryForAction"
+                        textAlign={'start'}
+                        justifyContent={'center'}
+                      >
+                        {cell.render('Cell')}
+                      </Td>
                     );
-                    })}
+                  })}
                 </Tr>
-                );
+              );
             })}
-            </Tbody>                
+          </Tbody>
         </Table>
       </Box>
-      <Box p={'20px'} display={{ base:'block', xl:'flex'}} justifyContent={'space-between'} alignItems={'center'}>
-        <Box>
+      <Box
+        p={'20px 5px'}
+        display={{ base: 'block', xl: 'flex' }}
+        justifyContent={'space-between'}
+        alignItems={'center'}
+      >
+        <Box mb={5}>
           <Box mr={'10px'} color={'#000'}>
-            <span style={{ color:'#20212396' }}>
+            <span style={{ color: '#20212396' }}>
               Page{' '}
               <span>
-                  {pageIndex + 1} of {Math.ceil(data.length / pageSize)}
+                {pageIndex + 1} of {Math.ceil(data.length / pageSize)}
               </span>{' '}
-            </span>         
-          </Box>  
+            </span>
+          </Box>
         </Box>
-        <Box display={{ base:'flex', xl:'flex'}}>
-          <Box mr={'10px'}>              
-            <Button onClick={()=> previousPage()} disabled={!canPreviousPage} bg={'#f3f0f0'} h={'35px'} w={'40px'}   borderRadius='50%'
+        <Box display={{ base: 'flex', xl: 'flex' }}>
+          <Box mr={'10px'} display={'flex'} alignContent={'center'}>
+            <Button
+              onClick={() => previousPage()}
+              disabled={!canPreviousPage}
+              bg={'#f3f0f0'}
+              mr={'5px'}
+              h={'40px'}
+              w={'40px'}
+              borderRadius="50%"
               lineHeight="1em"
               flexShrink={0}
-              fontWeight={800}>
-            {'<'}                              
-            </Button>{' '}                 
+              fontWeight={800}
+            >
+              {'<'}
+            </Button>{' '}
             {getPageNumbers().map((page, index) => (
-              <Button 
-                key={index} 
+              <Button
+                key={index}
                 mr={'5px'}
-                h={'35px'} w={'40px'}   borderRadius='50%'
+                h={'40px'}
+                w={'40px'}
+                borderRadius="100px"
                 lineHeight="1em"
                 flexShrink={0}
                 fontWeight={800}
-                background={pageIndex + 1 === page ? '#3311db' : 'unset'} 
-                color={pageIndex + 1 === page ? '#fff' : 'unset'} 
-                onClick={() => (typeof page === 'number' ? handleGoPage(page - 1) : null)
-                }>
-                  {page}
+                background={pageIndex + 1 === page ? '#3311db' : 'unset'}
+                color={pageIndex + 1 === page ? '#fff' : 'unset'}
+                onClick={() =>
+                  typeof page === 'number' ? handleGoPage(page - 1) : null
+                }
+              >
+                {page}
               </Button>
             ))}
-            <Button onClick={() => nextPage()} disabled={!canNextPage} bg={'#f3f0f0'} h={'35px'} w={'40px'}   borderRadius='50%'
+            <Button
+              onClick={() => nextPage()}
+              disabled={!canNextPage}
+              bg={'#f3f0f0'}
+              h={'40px'}
+              w={'40px'}
+              borderRadius="100px"
               lineHeight="1em"
               flexShrink={0}
-              fontWeight={800}>
-            {'>'}
-            </Button>{' '}   
-          </Box>   
+              fontWeight={800}
+            >
+              {'>'}
+            </Button>{' '}
+          </Box>
           <Box>
             {/* <span>
             {' '}  {' '}
@@ -313,9 +374,9 @@ const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
                 </option>
             ))}
             </select> */}
-          </Box>    
-        </Box>             
-      </Box>       
+          </Box>
+        </Box>
+      </Box>
     </>
   );
 };

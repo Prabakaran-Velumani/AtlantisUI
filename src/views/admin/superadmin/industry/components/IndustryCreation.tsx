@@ -192,63 +192,67 @@ useEffect(() => {
   return (
     <>
       <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>      
-        <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'absolute'} alignItems={'center'}></Card>
-        <Card mb={{ base: '0px', xl: '20px' }} width={'70%'} marginTop={'120px'}>
-          <Flex direction="column"  ms="10px">
-          <Text color={textColorPrimary} fontSize="2xl" fontWeight="700" mb="20px">
-              Industry {id? 'Updation':'Creation'}
-            </Text>
-          
-          </Flex>
-          <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '20px' }}>
-            <InputField
-              mb="0px"
-              me="30px"
-              name="itIndustryName"
-              value={formData.itIndustryName}
-              onChange={handleChange}
-              label="Industry Name"
-              placeholder="eg. High Demand"
-              isRequired={true}
-            />
-            <SelectField
-              mb="0px"
-              me="30px"
-              id="itStatus"
-              label="Active Status"
-              name="itStatus"
-              options={statusOptions}
-              value={statusOptions.find((option) => option.value === formData.itStatus) || null}
-              onChange={handleStatusChange}
-              isRequired={true}
-              isDisabled={!isItIndustryNameValid}
-            />
-          </SimpleGrid>
-          <Flex justify="space-between">
-            <Button
-               variant="light"
-               fontSize="sm"
-               borderRadius="16px"
-               w={{ base: '128px', md: '148px' }}
-               h="46px"
-               mt="20px"
-              onClick={handleBack}
-            >
-              Cancel
-            </Button>
-            <Button
-              mt="20px"
-              variant="darkBrand"
-              fontSize="sm"
-              borderRadius="16px"
-              w={{ base: '128px', md: '148px' }}
-              h="46px"
-              ms="auto"
-              onClick={handleSubmit}
-            >
-              {id ? 'Update' : 'Save'}
-            </Button>
-          </Flex>
+        <Card alignItems={'center'}>    
+          <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={{base: '170', sm: '170', md: '300', lg: '300'}} position={'relative'} alignItems={'center'}></Card>
+          <Card mb={{ base: '0px', xl: '20px' }} width={{base: '95%', md: '70%'}} marginTop={'-120px'}>
+            <Flex direction="column" >
+            <Text color={textColorPrimary} fontSize="2xl" fontWeight="700" mb="20px">
+                Industry {id? 'Updation':'Creation'}
+              </Text>
+            
+            </Flex>
+            <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '25px' }}>
+              <InputField
+                mb="0px"
+                me="30px"
+                name="itIndustryName"
+                value={formData.itIndustryName}
+                onChange={handleChange}
+                label="Industry Name"
+                placeholder="eg. High Demand"
+                isRequired={true}
+              />
+              <SelectField
+                mb="0px"
+                me="30px"
+                id="itStatus"
+                label="Active Status"
+                name="itStatus"
+                options={statusOptions}
+                value={statusOptions.find((option) => option.value === formData.itStatus) || null}
+                onChange={handleStatusChange}
+                isRequired={true}
+                isDisabled={!isItIndustryNameValid}
+              />
+            </SimpleGrid>
+            <Flex justify="space-between">
+              <Button
+                fontSize="sm"
+                borderRadius="16px"
+                border={'1px solid #00000024'}
+                w={{ base: '128px', md: '148px' }}
+                h="46px"
+                mt="20px"
+                mr="20px"
+                bg={'transparent'}
+                _hover={{bg: '#11047a', color: '#fff'}}
+                onClick={handleBack}
+              >
+                Cancel
+              </Button>
+              <Button
+                mt="20px"
+                variant="darkBrand"
+                fontSize="sm"
+                borderRadius="16px"
+                w={{ base: '128px', md: '148px' }}
+                h="46px"                
+                onClick={handleSubmit}
+              >
+                {id ? 'Update' : 'Save'}
+              </Button>
+            </Flex>
+          </Card>
         </Card>
       </Box>
       {alert ? <OnToast msg={msg} status={toastStatus}  setAlert={setAlert} /> : null}

@@ -1,6 +1,26 @@
 // Chakra Imports
-import { Box, Flex, Text, Img, Grid, GridItem, Button } from '@chakra-ui/react';
-import React, { Suspense, useEffect, useState, useRef, useMemo, useCallback} from 'react';
+import {
+  Box,
+  Flex,
+  Text,
+  Img,
+  Grid,
+  GridItem,
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalOverlay,
+  ModalCloseButton,
+} from '@chakra-ui/react';
+import React, {
+  Suspense,
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+  useCallback,
+} from 'react';
 import TakeAwaysContentScreen from './onimage/TakeAwaysScreen';
 // import Sample from '../../../../assets/img/games/Character_sample.glb';
 // import WelcomeContentScreen from './onimage/WelcomeContentScreen';
@@ -11,7 +31,7 @@ import ReflectionContentScreen from './onimage/ReflectionScreen';
 import TyContentScreen from './onimage/TyContentScreen';
 import { getGameCreatorDemoData } from 'utils/game/gameService';
 import TypingEffect from '../demoplay/playcards/Typing';
-import { API_SERVER, Notelength, Dialoglength} from 'config/constant';
+import { API_SERVER, Notelength, Dialoglength } from 'config/constant';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { lazy } from 'react';
 import { motion } from 'framer-motion';
@@ -53,11 +73,11 @@ const ScreenPreview = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [showNote, setShowNote] = useState(false),
     [first, setFirst] = useState(false);
-    const [game3Position, setGame3Position] = useState({
-      previousBlock: '',
-      currentBlock: '',
-      nextBlock: '',
-    });
+  const [game3Position, setGame3Position] = useState({
+    previousBlock: '',
+    currentBlock: '',
+    nextBlock: '',
+  });
   const [data, setData] = useState(null);
   const [type, setType] = useState<string>('');
   const [resMsg, setResMsg] = useState<string>('');
@@ -67,7 +87,11 @@ const ScreenPreview = () => {
   const [currentPosition, setCurrentPosition] = useState(0);
   const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
   const [Navigatenext, setNavigateNext] = useState<any>(false);
+<<<<<<< HEAD
   const [NavigatenextContent, setNavigateNextContent] = useState<any>(false);
+=======
+
+>>>>>>> main
   const reflectionQuestionsdefault = [
     'What were your biggest learnings?',
     'How can you apply these learnings back at work?',
@@ -124,146 +148,146 @@ const ScreenPreview = () => {
       }
       setData(currentBlock);
     }
-    console.log("activeBlockSeq",activeBlockSeq);
+    console.log('activeBlockSeq', activeBlockSeq);
     setCurrentPosition(0);
   }, [gameInfo, isDispatched, activeBlockSeq, currentQuest]);
 
-
   const replayQuest = () => {
     console.log('replyquest');
-    dispatch(updatePreviewData({ activeBlockSeq: 1 , isDispatched:true}));
+    dispatch(updatePreviewData({ activeBlockSeq: 1, isDispatched: true }));
     // getData(data);
     setEndOfQuest(false);
   };
   const fetchDataFromApi = useCallback(async () => {
     try {
-      if(id && isDispatched)
-      {
-      const gamedata = await getGameCreatorDemoData(id);
-      if (!gamedata.error && gamedata) {
-        const {
-          gameview,
-          image,
-          lmsblocks,
-          lmsquestionsoptions,
-          gameQuest,
-          ...gameData
-        } = gamedata?.result;
-        const sortBlockSequence = (blockArray: []) => {
-          const transformedArray = blockArray.reduce(
-            (result: any, obj: any) => {
-              const groupKey = obj?.blockQuestNo.toString();
-              const seqKey = obj?.blockPrimarySequence
-                .toString()
-                ?.split('.')[1];
-              if (!result[groupKey]) {
-                result[groupKey] = {};
-              }
-              result[groupKey][seqKey] = obj;
-              return result;
-            },
-            {},
-          );
-          return transformedArray;
-        };
-        const completionOptions = gameQuest.map((qst: any, i: number) => {
-          const item = {
-            gameId: qst.gameId,
-            questNo: qst.gameQuestNo,
-            gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
-            gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
-            gameDistinctionScore: qst.gameDistinctionScore,
-            gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
-            gameIsSetBadge: qst.gameIsSetBadge,
-            gameBadge: qst.gameBadge,
-            gameBadgeName: qst.gameBadgeName,
-            gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
-            gameAwardBadgeScore: qst.gameAwardBadgeScore,
-            gameScreenTitle: qst.gameScreenTitle,
-            gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage,
-            gameIsSetCongratsScoreWiseMessage:
-              qst.gameIsSetCongratsScoreWiseMessage,
-            gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
-            gameMinimumScoreCongratsMessage:
-              qst.gameMinimumScoreCongratsMessage,
-            gameaboveMinimumScoreCongratsMessage:
-              qst.gameaboveMinimumScoreCongratsMessage,
-            gameLessthanDistinctionScoreCongratsMessage:
-              qst.gameLessthanDistinctionScoreCongratsMessage,
-            gameAboveDistinctionScoreCongratsMessage:
-              qst.gameAboveDistinctionScoreCongratsMessage,
+      if (id && isDispatched) {
+        const gamedata = await getGameCreatorDemoData(id);
+        if (!gamedata.error && gamedata) {
+          const {
+            gameview,
+            image,
+            lmsblocks,
+            lmsquestionsoptions,
+            gameQuest,
+            ...gameData
+          } = gamedata?.result;
+          const sortBlockSequence = (blockArray: []) => {
+            const transformedArray = blockArray.reduce(
+              (result: any, obj: any) => {
+                const groupKey = obj?.blockQuestNo.toString();
+                const seqKey = obj?.blockPrimarySequence
+                  .toString()
+                  ?.split('.')[1];
+                if (!result[groupKey]) {
+                  result[groupKey] = {};
+                }
+                result[groupKey][seqKey] = obj;
+                return result;
+              },
+              {},
+            );
+            return transformedArray;
           };
-          return item;
-        });
+          const completionOptions = gameQuest.map((qst: any, i: number) => {
+            const item = {
+              gameId: qst.gameId,
+              questNo: qst.gameQuestNo,
+              gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
+              gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
+              gameDistinctionScore: qst.gameDistinctionScore,
+              gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
+              gameIsSetBadge: qst.gameIsSetBadge,
+              gameBadge: qst.gameBadge,
+              gameBadgeName: qst.gameBadgeName,
+              gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
+              gameAwardBadgeScore: qst.gameAwardBadgeScore,
+              gameScreenTitle: qst.gameScreenTitle,
+              gameIsSetCongratsSingleMessage:
+                qst.gameIsSetCongratsSingleMessage,
+              gameIsSetCongratsScoreWiseMessage:
+                qst.gameIsSetCongratsScoreWiseMessage,
+              gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
+              gameMinimumScoreCongratsMessage:
+                qst.gameMinimumScoreCongratsMessage,
+              gameaboveMinimumScoreCongratsMessage:
+                qst.gameaboveMinimumScoreCongratsMessage,
+              gameLessthanDistinctionScoreCongratsMessage:
+                qst.gameLessthanDistinctionScoreCongratsMessage,
+              gameAboveDistinctionScoreCongratsMessage:
+                qst.gameAboveDistinctionScoreCongratsMessage,
+            };
+            return item;
+          });
 
-        let reflectionData: any = [];
-        for (let i = 0; i < gamedata?.resultReflection?.length; i++) {
-          let filteredValue = gamedata?.resultReflection.find(
-            (refRow: any) => refRow?.refKey == `ref${i + 1}`,
+          let reflectionData: any = [];
+          for (let i = 0; i < gamedata?.resultReflection?.length; i++) {
+            let filteredValue = gamedata?.resultReflection.find(
+              (refRow: any) => refRow?.refKey == `ref${i + 1}`,
+            );
+            reflectionData[filteredValue?.refKey] = filteredValue?.refQuestion;
+          }
+          setGameInfo({
+            gameId: id,
+            gameData: gameData,
+            gameHistory: gameview,
+            assets: image,
+            blocks: sortBlockSequence(lmsblocks),
+            gameQuest: gameQuest, //used for completion screen
+            completionQuestOptions: completionOptions,
+            questOptions: lmsquestionsoptions,
+            reflectionQuestions:
+              gamedata?.resultReflection.length > 0
+                ? reflectionData
+                : reflectionQuestions,
+            gamePlayers: gamedata?.assets?.playerCharectorsUrl,
+            bgMusic:
+              gamedata?.assets?.bgMusicUrl &&
+              API_SERVER + '/' + gamedata?.assets?.bgMusicUrl,
+            gameNonPlayerUrl:
+              gamedata?.assets?.npcUrl &&
+              API_SERVER + '/' + gamedata?.assets?.npcUrl,
+            badges: await gamedata?.assets?.badges?.map(
+              (path: string) => API_SERVER + '/' + path,
+            ),
+          });
+
+          const apiImageSetArr: any = [
+            { assetType: 'backgroundImage', src: image?.gasAssetImage },
+            {
+              assetType: 'nonplayerImage',
+              src: API_SERVER + '/' + gamedata?.assets?.npcUrl,
+            },
+          ];
+
+          let playerCharectorsUrls = gamedata?.assets?.playerCharectorsUrl.map(
+            (item: any, index: number) => {
+              let objValue = API_SERVER + '/' + item;
+              let objKey = `playerCharacterImage_${index}`;
+              apiImageSetArr.push({ assetType: objKey, src: objValue });
+            },
           );
-          reflectionData[filteredValue?.refKey] = filteredValue?.refQuestion;
+          let gameQuestBadges = await Promise.all(
+            gamedata?.assets?.badges.map(
+              async (item: Record<string, string>) => {
+                Object.entries(item).forEach(([key, value]) => {
+                  let objkeyValue = key.split('_')[1];
+                  let objKey = `Quest_${objkeyValue}`;
+                  let objKeyValue = API_SERVER + '/' + value;
+                  apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
+                });
+                setApiImageSet(apiImageSetArr);
+                return true;
+              },
+            ),
+          );
         }
-        setGameInfo({
-          gameId: id,
-          gameData: gameData,
-          gameHistory: gameview,
-          assets: image,
-          blocks: sortBlockSequence(lmsblocks),
-          gameQuest: gameQuest, //used for completion screen
-          completionQuestOptions: completionOptions,
-          questOptions: lmsquestionsoptions,
-          reflectionQuestions:
-            gamedata?.resultReflection.length > 0
-              ? reflectionData
-              : reflectionQuestions,
-          gamePlayers: gamedata?.assets?.playerCharectorsUrl,
-          bgMusic:
-            gamedata?.assets?.bgMusicUrl &&
-            API_SERVER + '/' + gamedata?.assets?.bgMusicUrl,
-          gameNonPlayerUrl:
-            gamedata?.assets?.npcUrl &&
-            API_SERVER + '/' + gamedata?.assets?.npcUrl,
-          badges: await gamedata?.assets?.badges?.map(
-            (path: string) => API_SERVER + '/' + path,
-          ),
-        });
-
-        const apiImageSetArr: any = [
-          { assetType: 'backgroundImage', src: image?.gasAssetImage },
-          {
-            assetType: 'nonplayerImage',
-            src: API_SERVER + '/' + gamedata?.assets?.npcUrl,
-          },
-        ];
-
-        let playerCharectorsUrls = gamedata?.assets?.playerCharectorsUrl.map(
-          (item: any, index: number) => {
-            let objValue = API_SERVER + '/' + item;
-            let objKey = `playerCharacterImage_${index}`;
-            apiImageSetArr.push({ assetType: objKey, src: objValue });
-          },
-        );
-        let gameQuestBadges = await Promise.all(
-          gamedata?.assets?.badges.map(async (item: Record<string, string>) => {
-            Object.entries(item).forEach(([key, value]) => {
-              let objkeyValue = key.split('_')[1];
-              let objKey = `Quest_${objkeyValue}`;
-              let objKeyValue = API_SERVER + '/' + value;
-              apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
-            });
-            setApiImageSet(apiImageSetArr);
-            return true;
-          }),
-        );
-      }
-      }
-      else{
+      } else {
         console.log('game id is missing...');
       }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  },[id, isDispatched]);
+  }, [id, isDispatched]);
   const setInteractionOptions = (gameInfo: any, currentBlock: any) => {
     const optionsFiltered = gameInfo?.questOptions.filter(
       (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
@@ -323,7 +347,7 @@ const ScreenPreview = () => {
       ? parseInt(current?.blockPrimarySequence.split('.')[1])
       : null;
     const PrevItem = currentBlock != null ? currentBlock - 1 : null;
-    
+
     const prevSeq =
       game3Position.previousBlock !== ''
         ? game3Position.previousBlock
@@ -331,7 +355,7 @@ const ScreenPreview = () => {
         ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
         : '';
 
-        console.log('prevSeq',prevSeq);
+    console.log('prevSeq', prevSeq);
     const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
     const currentQuest = current
       ? parseInt(current?.blockPrimarySequence.split('.')[0])
@@ -344,14 +368,15 @@ const ScreenPreview = () => {
           )
           .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-    if (prevBlock.length !== 0 &&
-      prevBlock[0]?.blockChoosen !== 'Interaction') {
+    if (
+      prevBlock.length !== 0 &&
+      prevBlock[0]?.blockChoosen !== 'Interaction'
+    ) {
       setType(prevBlock[0]?.blockChoosen);
       setData(prevBlock[0]);
     }
   };
   const getData = (next: any) => {
-    console.log('getDataSC--', next);
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
@@ -359,21 +384,28 @@ const ScreenPreview = () => {
     const nextSeq = next
       ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
       : '';
-    
+
     const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-
+    console.log('demoBlocks', demoBlocks[quest]);
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
             (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
           )
-          .map((key: any) => demoBlocks[quest]?.[key])
+          .map((key: any) => {
+            console.log('quest', quest);
+            console.log('key', key);
+            return demoBlocks[quest]?.[key];
+          })
       : [];
 
     // {/* Check wheather has next block or not, if not then show End of Current Quest.
     //       Want to play next quest, then switch the current quest in game creation screen */}
+<<<<<<< HEAD
     console.log('nextBlock',nextBlock,'...',type,'....',resMsg,'.....',feed,'..');
+=======
+>>>>>>> main
     if (nextBlock.length === 0) {
       setEndOfQuest(true);
     } else {
@@ -384,6 +416,7 @@ const ScreenPreview = () => {
       console.log();
       setInteractionOptions(gameInfo, nextBlock[0]);
     }
+<<<<<<< HEAD
     if (
       type === 'Interaction' &&
       resMsg !== ''
@@ -398,6 +431,12 @@ const ScreenPreview = () => {
       // && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
       console.log('2');
+=======
+    if (type === 'Interaction' && resMsg !== '') {
+      setType('response');
+      return false;
+    } else if ((type === 'Interaction' || type === 'response') && feed !== '') {
+>>>>>>> main
       setType('feedback');
       return false;
     } else if (
@@ -405,6 +444,8 @@ const ScreenPreview = () => {
       type === 'response' ||
       type === 'feedback'
     ) {
+      console.log('navi', navi);
+      console.log('nextBlock[0]?.blockChoosen', nextBlock[0]?.blockChoosen);
       if (navi === 'Repeat Question') {
       const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
       setInteractionOptions(gameInfo, currentBlockinteraction);
@@ -425,18 +466,21 @@ const ScreenPreview = () => {
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
         setSelectedOption(null);
         return false;
       } else if (navi === 'Complete') {
-        if (demoBlocks.hasOwnProperty(nextLevel)) {
-          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-          setData(demoBlocks[nextLevel]['1']);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          return false;
-        }
+        // if (demoBlocks.hasOwnProperty(nextLevel)) {
+        //   setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+        //   setData(demoBlocks[nextLevel]['1']);
+        //   return false;
+        // } else {
+        //   setType(null);
+        //   setData(null);
+        //   return false;
+        // }
+        setEndOfQuest(true);
       } else {
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
@@ -446,15 +490,16 @@ const ScreenPreview = () => {
     }
 
     if (nextBlock.length === 0) {
-      if (demoBlocks.hasOwnProperty(nextLevel)) {
-        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        setData(demoBlocks[nextLevel]['1']);
-        return false;
-      } else {
-        setType(null);
-        setData(null);
-        return false;
-      }
+      // if (demoBlocks.hasOwnProperty(nextLevel)) {
+      //   setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+      //   setData(demoBlocks[nextLevel]['1']);
+      //   return false;
+      // } else {
+      //   setType(null);
+      //   setData(null);
+      //   return false;
+      // }
+      setEndOfQuest(true);
     }
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
@@ -491,86 +536,86 @@ const ScreenPreview = () => {
     const url = ` /game/creator/demoplay/${id}`;
     window.open(url, '_blank');
   };
-useEffect(()=>
-{
-  
-  if (data && (type === 'Note' || type === 'Dialog') ){
-    console.log('useeffect1');
-    getDataSection(data);
-  }
-  
-},[data,type]);
-useEffect(() => {
-  
-  if(Navigatenext === true)
-  {
-    console.log('useeffect2');
-    getData(data);
-    
-  }
-}, [Navigatenext]);
-const getDataSection = (data: any) => {
-  // setCurrentPosition(0);
-  console.log('getData 1', data,currentPosition,'......', data?.blockText,Navigatenext);
-  const content = data?.blockText || '';
-  const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
-  const newRemainingSentences = sentences.slice(currentPosition);
- 
-  const concatenatedSentences = [];
-  let totalLength = 0;
-
-  for (let i = 0; i < newRemainingSentences.length; i++) {
-    const sentence = newRemainingSentences[i];
-    if (data && type === 'Note') {
-      if (totalLength + sentence.length <= Notelength) {
-        concatenatedSentences.push(sentence);
-        totalLength += sentence.length;
-      } else {
-        concatenatedSentences.push(sentence);
-        break;
-      }
-    }
-    if (data && type === 'Dialog') {
-      if (totalLength + sentence.length <= Dialoglength) {
-        concatenatedSentences.push(sentence);
-        totalLength += sentence.length;
-      } else {
-        if(totalLength + sentence.length >= Dialoglength)
-        {
-          break;
-        }
-        concatenatedSentences.push(sentence);
-        break;
-      }
-    }
-  }
-  setRemainingSentences(concatenatedSentences);
-
-  if (newRemainingSentences.length >= 1) {
-    setCurrentPosition(currentPosition + concatenatedSentences.length);
-    setNavigateNext(false);
-  } else {
-      setCurrentPosition(0);
-      setNavigateNext(true);
-    
-  }
-};
-
-
-
   useEffect(() => {
-    console.log('type', type)
-    console.log('data', data)
-    if (data && (type === 'Note' || type === 'Dialog') ){
+    if (data && (type === 'Note' || type === 'Dialog')) {
       getDataSection(data);
     }
-    
+  }, [data, type]);
+  useEffect(() => {
+    if (Navigatenext === true) {
+      getData(data);
+    }
+  }, [Navigatenext]);
+  const getDataSection = (data: any) => {
+    // setCurrentPosition(0);
+    console.log(
+      'getData 1',
+      data,
+      currentPosition,
+      '......',
+      data?.blockText,
+      Navigatenext,
+    );
+    const content = data?.blockText || '';
+    const sentences = content.split(
+      /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+    );
+    const newRemainingSentences = sentences.slice(currentPosition);
+
+    const concatenatedSentences = [];
+    let totalLength = 0;
+
+    for (let i = 0; i < newRemainingSentences.length; i++) {
+      const sentence = newRemainingSentences[i];
+      if (data && type === 'Note') {
+        if (totalLength + sentence.length <= Notelength) {
+          concatenatedSentences.push(sentence);
+          totalLength += sentence.length;
+        } else {
+          concatenatedSentences.push(sentence);
+          break;
+        }
+      }
+      if (data && type === 'Dialog') {
+        if (totalLength + sentence.length <= Dialoglength) {
+          concatenatedSentences.push(sentence);
+          totalLength += sentence.length;
+        } else {
+          if (totalLength + sentence.length >= Dialoglength) {
+            break;
+          }
+          concatenatedSentences.push(sentence);
+          break;
+        }
+      }
+    }
+    setRemainingSentences(concatenatedSentences);
+
+    if (newRemainingSentences.length >= 1) {
+      setCurrentPosition(currentPosition + concatenatedSentences.length);
+      setNavigateNext(false);
+    } else {
+      setCurrentPosition(0);
+      setNavigateNext(true);
+    }
+  };
+
+  useEffect(() => {
+    if (data && (type === 'Note' || type === 'Dialog')) {
+      getDataSection(data);
+    }
   }, []);
 
+<<<<<<< HEAD
   useEffect(() => 
   { console.log('remainingSentences', remainingSentences)
 
   },[remainingSentences]);
+=======
+  const handleCloseWindow = () => {
+    window.close();
+  };
+>>>>>>> main
 
   return (
     <Box id="container" ref={previewScreenRef}>
@@ -583,8 +628,12 @@ const getDataSection = (data: any) => {
           >
             <Box id="EntirePreview-wrapper">
               <Box className="EntirePreview-content">
-                <Box h={'100vh !important'} className="Images" >
-                  <Flex height="100vh" backgroundImage={preloadedAssets?.backgroundImage} className="EntirePreview screen-bgImage" >
+                <Box h={'100vh !important'} className="Images">
+                  <Flex
+                    height="100vh"
+                    backgroundImage={preloadedAssets?.backgroundImage}
+                    className="EntirePreview screen-bgImage"
+                  >
                     <Button
                       className="demo-btn"
                       bg="#11047a"
@@ -606,7 +655,6 @@ const getDataSection = (data: any) => {
                       Demo Play
                     </Button>
                     {currentTab == 3 && (
-                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -628,83 +676,72 @@ const getDataSection = (data: any) => {
                           <Box className="Images">
                             {gameInfo && (
                               <WelcomeContentScreen
-                              formData={gameInfo.gameData}
-                              imageSrc={preloadedAssets?.Screen5}
-                              preview={true}
-                              preloadedAssets ={preloadedAssets}
+                                formData={gameInfo.gameData}
+                                imageSrc={preloadedAssets?.Screen5}
+                                preview={true}
+                                preloadedAssets={preloadedAssets}
                               />
                             )}
                           </Box>
                         </Box>
                       </Box>
-                     
                     )}
                     {currentTab === 4 && data && type === 'Note' && (
-                      <Box
-                        className="screen-notebox1"
-                      >
-                        <Box
-                          className="screen-notebox2"
-                        >
-                          <Box
-                            className="screen-notebox3"
-                          >
-                              <Img
-                                src={preloadedAssets?.note}
-                                className='screen-noteimage'
-                              />
-                              <Box
-                                position={'fixed'}
-                                overflowY={'scroll'}
-                                transform={'translate(0px, 0px)'}
-                                w={'50%'}
-                                mt={'10px'}
-                                display={'flex'}
-                                flexDirection={'column'}
-                                textAlign={'center'}
-                                justifyContent={'center'}
-                                style={{
-                                  fontWeight: '900',
-                                  color: '#D9C7A2',
-                                  fontSize: '18px',
-                                  fontFamily: 'AtlantisContent',
-                                  lineHeight: 1,
-                                }}
-                                className="screen-notebox5"
-                              >
-                                <Box
-                                  className="screen-notebox6"
-                                >
-                                  {/* {data?.blockText} */}
-                                  {remainingSentences}
-                                  {/* {remainingSentences.map((sentence, index) => (
+                      <Box className="screen-notebox1">
+                        <Box className="screen-notebox2">
+                          <Box className="screen-notebox3">
+                            <Img
+                              src={preloadedAssets?.note}
+                              className="screen-noteimage"
+                            />
+                            <Box
+                              position={'fixed'}
+                              overflowY={'scroll'}
+                              transform={'translate(0px, 0px)'}
+                              w={'50%'}
+                              mt={'10px'}
+                              display={'flex'}
+                              flexDirection={'column'}
+                              textAlign={'center'}
+                              justifyContent={'center'}
+                              style={{
+                                fontWeight: '900',
+                                color: '#D9C7A2',
+                                fontSize: '18px',
+                                fontFamily: 'AtlantisContent',
+                                lineHeight: 1,
+                              }}
+                              className="screen-notebox5"
+                            >
+                              <Box className="screen-notebox6">
+                                {/* {data?.blockText} */}
+                                {remainingSentences}
+                                {/* {remainingSentences.map((sentence, index) => (
   <React.Fragment key={index}>{sentence}</React.Fragment>
 ))} */}
-                                </Box>
-                                <Box
-                                  w={'100%'}
-                                  onClick={() => getDataSection(data)}
-                                  mt={'20px'}
-                                  display={'flex'}
-                                  justifyContent={'center'}
-                                  cursor={'pointer'}
-                                  className="screen-notebox7"
-                                >
-                                  <Img
-                                    src={preloadedAssets.next}
-                                    w={'200px'}
-                                    h={'60px'}
-                                  />
-                                </Box>
                               </Box>
+                              <Box
+                                w={'100%'}
+                                onClick={() => getDataSection(data)}
+                                mt={'20px'}
+                                display={'flex'}
+                                justifyContent={'center'}
+                                cursor={'pointer'}
+                                className="screen-notebox7"
+                              >
+                                <Img
+                                  src={preloadedAssets.next}
+                                  w={'200px'}
+                                  h={'60px'}
+                                />
+                              </Box>
+                            </Box>
                             {/* </Box> */}
                           </Box>
                         </Box>
                       </Box>
-                     
                     )}
                     {currentTab === 4 && data && type === 'Dialog' && (
-                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -713,7 +750,6 @@ const getDataSection = (data: any) => {
                         justifyContent={'center'}
                         position={'relative'}
                       >
-                     
                         <Img
                           style={{
                             transform: `translateY(${showNote ? 200 : 0}px)`,
@@ -762,9 +798,17 @@ const getDataSection = (data: any) => {
                               fontFamily={'AtlantisContent'}
                               fontSize={'21px'}
                             >
+<<<<<<< HEAD
                               {/* <TypingEffect text={data?.blockText} speed={50} /> */}
                               {/* <TypingEffect text={remainingSentences} speed={5000} /> */}
                               {remainingSentences}
+=======
+                              <TypingEffect
+                                text={remainingSentences}
+                                speed={50}
+                              />
+
+>>>>>>> main
                               {/* {remainingSentences.map((sentence, index) => (
   <React.Fragment key={index}>{sentence}</React.Fragment>
 ))} */}
@@ -794,10 +838,8 @@ const getDataSection = (data: any) => {
                           </>
                         )}
                       </Box>
-                     
                     )}
                     {currentTab === 4 && data && type === 'Interaction' && (
-                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -924,10 +966,8 @@ const getDataSection = (data: any) => {
                           </Box>
                         </Box>
                       </Box>
-                     
                     )}
                     {currentTab === 4 && data && type === 'response' && (
-                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1021,10 +1061,8 @@ const getDataSection = (data: any) => {
                           </>
                         )}
                       </Box>
-                     
                     )}
                     {currentTab === 4 && data && type === 'feedback' && (
-                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1104,10 +1142,8 @@ const getDataSection = (data: any) => {
                           </Box>
                         </Box>
                       </Box>
-                     
                     )}
                     {currentTab === 5 && currentSubTab === 0 && (
-                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1139,10 +1175,8 @@ const getDataSection = (data: any) => {
                           </Box>
                         </Box>
                       </Box>
-                     
                     )}
                     {currentTab === 5 && currentSubTab === 1 && (
-                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1174,10 +1208,8 @@ const getDataSection = (data: any) => {
                           </Box>
                         </Box>
                       </Box>
-                     
                     )}
                     {currentTab === 5 && currentSubTab === 2 && (
-                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1188,9 +1220,7 @@ const getDataSection = (data: any) => {
                         style={{ perspective: '1000px' }}
                         className="Main-Content"
                       >
-                        <Box
-                          className="Game-Screen"
-                        >
+                        <Box className="Game-Screen">
                           <Box className="Images">
                             <ReflectionContentScreen
                               preview={true}
@@ -1207,10 +1237,8 @@ const getDataSection = (data: any) => {
                           </Box>
                         </Box>
                       </Box>
-                     
                     )}
                     {currentTab === 5 && currentSubTab === 3 && (
-                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1240,43 +1268,40 @@ const getDataSection = (data: any) => {
                           </Box>
                         </Box>
                       </Box>
-                     
                     )}
                     {currentTab === 5 && currentSubTab === 4 && (
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
+                      >
                         <Box
-                          w={'100%'}
+                          w={'100% !important'}
                           h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
                           alignItems={'center'}
                           justifyContent={'center'}
-                          position={'relative'}
-                          overflow={'visible'}
-                          style={{ perspective: '1000px' }}
-                          className="Main-Content"
+                          className="Game-Screen"
                         >
-                          <Box
-                            w={'100% !important'}
-                            h={'100vh'}
-                            backgroundRepeat={'no-repeat'}
-                            backgroundSize={'cover'}
-                            alignItems={'center'}
-                            justifyContent={'center'}
-                            className="Game-Screen"
-                          >
-                            <Box className="Images">
-                              <WelcomeContentScreen
-                                formData={gameInfo.gameData}
-                                imageSrc={preloadedAssets?.Screen5}
-                                preview={true}
-                                preloadedAssets={preloadedAssets}
-                              />
-                            </Box>
+                          <Box className="Images">
+                            <WelcomeContentScreen
+                              formData={gameInfo.gameData}
+                              imageSrc={preloadedAssets?.Screen5}
+                              preview={true}
+                              preloadedAssets={preloadedAssets}
+                            />
                           </Box>
                         </Box>
-                     
+                      </Box>
                     )}
                     {currentTab === 5 && currentSubTab === 5 && (
-                    
-                      <Box 
+                      <Box
                         w={'100%'}
                         h={'100vh'}
                         alignItems={'center'}
@@ -1305,9 +1330,28 @@ const getDataSection = (data: any) => {
                           </Box>
                         </Box>
                       </Box>
-                     
                     )}
-                   {endOfQuest &&  <PreviewEndOfStory setEndOfQuest= {setEndOfQuest} preloadedAssets={preloadedAssets } replayQuest={replayQuest}/>} 
+
+                    <Modal
+                      isOpen={endOfQuest}
+                      size="full"
+                      onClose={handleCloseWindow}
+                    >
+                      <ModalOverlay />
+                      <ModalContent backgroundColor="rgba(0, 0, 0, 0.9)">
+                        <ModalCloseButton
+                          // zIndex={99999999999}
+                          color={'white'}
+                        />
+                        <ModalBody p={0}>
+                          <PreviewEndOfStory
+                            setEndOfQuest={setEndOfQuest}
+                            preloadedAssets={preloadedAssets}
+                            replayQuest={replayQuest}
+                          />
+                        </ModalBody>
+                      </ModalContent>
+                    </Modal>
                   </Flex>
                 </Box>
               </Box>

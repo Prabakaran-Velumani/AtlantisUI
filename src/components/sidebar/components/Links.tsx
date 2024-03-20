@@ -22,6 +22,7 @@ import { FaCircle } from 'react-icons/fa';
 import { MdCircle } from 'react-icons/md';
 
 export function SidebarLinks(props: {
+  onClick:any;
   routes: RoutesType[];
   [x: string]: any;
 }) {
@@ -39,7 +40,7 @@ export function SidebarLinks(props: {
   );
   let activeIcon = useColorModeValue('secondaryGray.600', 'white');
 
-  const { routes, hovered, mini } = props;
+  const { routes, hovered, mini ,onClick} = props;
 
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName: string) => {
@@ -231,7 +232,7 @@ export function SidebarLinks(props: {
         );
       } else {
         return (
-          <NavLink to={route.layout + route.path} key={key}>
+          <NavLink to={route.layout + route.path} onClick={onClick} key={key}>
             {route.icon ? (
               <Flex
                 // align="center"
