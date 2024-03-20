@@ -34,7 +34,7 @@ const usePath = () => {
   return location.pathname;
 };
 
-function Sidebar(props: { routes: RoutesType[];[x: string]: any }) {
+function Sidebar(props: { routes: RoutesType[]; [x: string]: any }) {
   const { routes, mini, hovered, setHovered } = props;
   // this is for the rest of the collapses
   let variantChange = '0.2s linear';
@@ -52,15 +52,16 @@ function Sidebar(props: { routes: RoutesType[];[x: string]: any }) {
   return (
     <Box
       transform={{
-        base:'translateX(-100%)',
+        base: 'translateX(-100%)',
         sm: 'translateX(-100%)',
         md: 'translateX(-100%)',
-        lg:'translateX(-100%)',
-        xl: path.startsWith('/admin/superadmin/game/creation') ||
+        lg: 'translateX(-100%)',
+        xl:
+          path.startsWith('/admin/superadmin/game/creation') ||
           path.startsWith('/admin/superadmin/game/template') ||
           path.startsWith('/admin/game/preview/')
-          ? 'translateX(-100%)'
-          : 'translateX(0)'
+            ? 'translateX(-100%)'
+            : 'translateX(0)',
       }}
       transition="transform 1s ease-in-out"
       position="fixed"
@@ -80,8 +81,8 @@ function Sidebar(props: { routes: RoutesType[];[x: string]: any }) {
           mini === false
             ? '285px'
             : mini === true && hovered === true
-              ? '285px'
-              : '120px'
+            ? '285px'
+            : '120px'
         }
         ms={{
           sm: '16px',
@@ -104,8 +105,8 @@ function Sidebar(props: { routes: RoutesType[];[x: string]: any }) {
             mini === false
               ? renderView
               : mini === true && hovered === true
-                ? renderView
-                : renderViewMini
+              ? renderView
+              : renderViewMini
           }
         >
           <Content mini={mini} hovered={hovered} routes={routes} />
@@ -159,8 +160,8 @@ export function SidebarResponsive(props: {
         sm: 'flex',
         xl:
           path.startsWith('/admin/superadmin/game/creation') ||
-            path.startsWith('/admin/superadmin/game/template') ||
-            path.startsWith('/admin/game/preview/')
+          path.startsWith('/admin/superadmin/game/template') ||
+          path.startsWith('/admin/game/preview/')
             ? 'flex'
             : 'none',
       }}
@@ -206,7 +207,7 @@ export function SidebarResponsive(props: {
       >
         <DrawerOverlay />
         <DrawerContent
-          w={"285px"}
+          w={'285px'}
           maxW="285px"
           ms={{
             sm: '16px',
@@ -217,9 +218,9 @@ export function SidebarResponsive(props: {
           borderRadius="16px"
           // bg={sidebarBackgroundColor}
           bg={'linear-gradient(to bottom, #7551ff, #3311db)'}
-         
-        // backgroundImage={OverView}
-        // className='sidebar-bgGradient'
+
+          // backgroundImage={OverView}
+          // className='sidebar-bgGradient'
         >
           <DrawerCloseButton
             zIndex="3"
@@ -227,14 +228,19 @@ export function SidebarResponsive(props: {
             _focus={{ boxShadow: 'none' }}
             _hover={{ boxShadow: 'none' }}
           />
-          <DrawerBody maxW="285px" px="0rem" pb="0" sx={{ overflowY: "hidden", overflowX: "hidden", height: "100%" }} >
+          <DrawerBody
+            maxW="285px"
+            px="0rem"
+            pb="0"
+            sx={{ overflowY: 'hidden', overflowX: 'hidden', height: '100%' }}
+          >
             {/* <Scrollbars
               autoHide
               renderTrackVertical={renderTrack}
               renderThumbVertical={renderThumb}
               renderView={renderView}
             > */}
-              <Content mini={false} routes={routes} onClick={onClose}/>
+            <Content mini={false} routes={routes} onClick={onClose} />
             {/* </Scrollbars> */}
           </DrawerBody>
         </DrawerContent>
