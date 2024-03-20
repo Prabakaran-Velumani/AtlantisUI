@@ -67,7 +67,7 @@ const ScreenPreview = () => {
   const [currentPosition, setCurrentPosition] = useState(0);
   const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
   const [Navigatenext, setNavigateNext] = useState<any>(false);
-  
+  const [NavigatenextContent, setNavigateNextContent] = useState<any>(false);
   const reflectionQuestionsdefault = [
     'What were your biggest learnings?',
     'How can you apply these learnings back at work?',
@@ -373,7 +373,7 @@ const ScreenPreview = () => {
 
     // {/* Check wheather has next block or not, if not then show End of Current Quest.
     //       Want to play next quest, then switch the current quest in game creation screen */}
-    console.log('nextBlock',nextBlock);
+    console.log('nextBlock',nextBlock,'...',type,'....',resMsg,'.....',feed,'..');
     if (nextBlock.length === 0) {
       setEndOfQuest(true);
     } else {
@@ -381,6 +381,7 @@ const ScreenPreview = () => {
     }
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
+      console.log();
       setInteractionOptions(gameInfo, nextBlock[0]);
     }
     if (
@@ -388,6 +389,7 @@ const ScreenPreview = () => {
       resMsg !== ''
       //&& gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
+      console.log('1');
       setType('response');
       return false;
     } else if (
@@ -395,6 +397,7 @@ const ScreenPreview = () => {
       feed !== ''
       // && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
+      console.log('2');
       setType('feedback');
       return false;
     } else if (
@@ -403,7 +406,12 @@ const ScreenPreview = () => {
       type === 'feedback'
     ) {
       if (navi === 'Repeat Question') {
-        setType('Interaction');
+      const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
+      setInteractionOptions(gameInfo, currentBlockinteraction);
+      console.log('nextblock123',demoBlocks,'....',nextBlock,'..',currentBlock,'...',demoBlocks['1'][currentBlock],'...',currentBlockinteraction,'...',gameInfo,'....',currentQuest,'...',activeBlockSeq);
+        setType(demoBlocks['1'][currentBlock]?.blockChoosen);
+       setData(demoBlocks['1'][currentBlock]);
+      // setType('Interaction')
         setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
@@ -558,6 +566,11 @@ const getDataSection = (data: any) => {
     }
     
   }, []);
+
+  useEffect(() => 
+  { console.log('remainingSentences', remainingSentences)
+
+  },[remainingSentences]);
 
   return (
     <Box id="container" ref={previewScreenRef}>
@@ -750,6 +763,7 @@ const getDataSection = (data: any) => {
                               fontSize={'21px'}
                             >
                               {/* <TypingEffect text={data?.blockText} speed={50} /> */}
+                              {/* <TypingEffect text={remainingSentences} speed={5000} /> */}
                               {remainingSentences}
                               {/* {remainingSentences.map((sentence, index) => (
   <React.Fragment key={index}>{sentence}</React.Fragment>
