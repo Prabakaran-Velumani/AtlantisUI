@@ -17,7 +17,7 @@ const Popup = (props: {setIsConfirm:any, setIsOpen:any ,msg:any,setmsg:any}) => 
   return (
     <>
     <Flex _before={{ content:'""', background:'#1b1b1c4a', height:'100%', width:'100%', position:'fixed', top: '0', left: '0', right: '0'}}  >
-        <Card position='fixed' top='50%' left='50%' transform='translate(-50%, -50%)' background='#fff' width='500px' display='flex'  alignItems='center' boxShadow='1px 2px 17px #42414556' p='20px' >
+        <Card position='fixed' top='50%' left='50%' transform='translate(-50%, -50%)' background='#fff' width={{base:'87%',sm:'87%',md:'87%',lg:'500px'}} display='flex'  alignItems='center' boxShadow='1px 2px 17px #42414556' p='20px' >
             {props.msg ? (
             <Text display='flex' w='100%'>
               {props.msg}

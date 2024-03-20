@@ -375,19 +375,21 @@ console.log('isConfirm',isConfirm);
             w={{ base: '200px', xl: '300px' }}
           />
         </Box>
-        <Button
-          mt="10px"
-          mb="15px"
-          padding={2}
-          boxShadow={'3px 4px 12px #2e292940'}
-          _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
-          background="#3311db"
-          color="#fff"
-          w={70}
-          onClick={handleNavigate}
-        >
-          New
-        </Button>
+        <Tooltip label="Create a New Plan" hasArrow placement="right-start">
+          <Button
+            mt="10px"
+            mb="15px"
+            padding={2}
+            boxShadow={'3px 4px 12px #2e292940'}
+            _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
+            background="#3311db"
+            color="#fff"
+            w={70}
+            onClick={handleNavigate}
+          >
+            New
+          </Button>
+        </Tooltip>
       </Flex>
 
       <Box w={'100%'} display={'flex'} justifyContent={'center'}>
@@ -410,32 +412,29 @@ console.log('isConfirm',isConfirm);
                     m={0}
                     p={5}
                   >
-                  <Flex align='center' mb='20px'>
-                     <Box h="55px"
-      w="55px"
-      bgGradient={bgButton2}
-    
-      borderRadius="50px"
-   
-      display="flex"
-      p="0px"
-     me='20px'
-
-      alignItems="center"
-      justifyContent="center">
-                      <Icon
-                       as={FaBolt}
-                       h="22px"
-                       w="22px"
-                       color="white"              
-                      />
-                     </Box>
-                     <Flex direction='column'>
-                      <Text color={textColorPrimary} fontWeight='bold' fontSize='2xl'>
-                        {item?.plPlanName}
-                      </Text>
-          
-                   </Flex>
+                    <Flex align="center" mb="20px">
+                      <Box
+                        h="55px"
+                        w="55px"
+                        bgGradient={bgButton2}
+                        borderRadius="50px"
+                        display="flex"
+                        p="0px"
+                        me="20px"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Icon as={FaBolt} h="22px" w="22px" color="white" />
+                      </Box>
+                      <Flex direction="column">
+                        <Text
+                          color={textColorPrimary}
+                          fontWeight="bold"
+                          fontSize="2xl"
+                        >
+                          {item?.plPlanName}
+                        </Text>
+                      </Flex>
                     </Flex>
                     <Box
                       mt={'0px'}
@@ -446,47 +445,50 @@ console.log('isConfirm',isConfirm);
                       <Box w={'90%'}>
                         <Flex justifyContent={'space-between'}>
                           <Text
-                           color={'#8f9bba'}
-                           fontWeight={500}
-                           fontSize={'1rem'}
+                            color={'#8f9bba'}
+                            fontWeight={500}
+                            fontSize={'1rem'}
                           >
                             Max Games
                           </Text>
                           <Box w={'50px'}>
-                            <Text  color={'#8f9bba'}
-                         fontWeight={500}
-                         fontSize={'1rem'}>
+                            <Text
+                              color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}
+                            >
                               {item?.plMaxGame}
                             </Text>
                           </Box>
                         </Flex>
                         <Flex justifyContent={'space-between'}>
                           <Text
-                             color={'#8f9bba'}
-                             fontWeight={500}
-                             fontSize={'1rem'}
+                            color={'#8f9bba'}
+                            fontWeight={500}
+                            fontSize={'1rem'}
                           >
                             Max Learners
                           </Text>
                           <Box w={'50px'}>
-                            <Text  color={'#8f9bba'}
-                         fontWeight={500}
-                         fontSize={'1rem'}>
+                            <Text
+                              color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}
+                            >
                               {item?.plMaxLearner}
                             </Text>
                           </Box>
                         </Flex>
                         <Flex justifyContent={'space-between'}>
                           <Text
-                             color={'#8f9bba'}
-                             fontWeight={500}
-                             fontSize={'1rem'}
+                            color={'#8f9bba'}
+                            fontWeight={500}
+                            fontSize={'1rem'}
                           >
                             Max Backgrounds
                           </Text>
                           <Box w={'50px'}>
                             <Text
-                             
                               textAlign={'start'}
                               color={'#8f9bba'}
                               fontWeight={500}
@@ -505,25 +507,29 @@ console.log('isConfirm',isConfirm);
                             Max DashBoards
                           </Text>
                           <Box w={'50px'}>
-                            <Text  color={'#8f9bba'}
-                         fontWeight={500}
-                         fontSize={'1rem'}>
+                            <Text
+                              color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}
+                            >
                               {item?.plMaxAnalyticsDashboard}
                             </Text>
                           </Box>
                         </Flex>
                         <Flex justifyContent={'space-between'}>
                           <Text
-                             color={'#8f9bba'}
-                             fontWeight={500}
-                             fontSize={'1rem'}
+                            color={'#8f9bba'}
+                            fontWeight={500}
+                            fontSize={'1rem'}
                           >
                             Max Characters
                           </Text>
                           <Box w={'50px'}>
-                            <Text  color={'#8f9bba'}
-                         fontWeight={500}
-                         fontSize={'1rem'}>
+                            <Text
+                              color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}
+                            >
                               {item?.plMaxCharacters}
                             </Text>
                           </Box>
@@ -537,9 +543,11 @@ console.log('isConfirm',isConfirm);
                             Max Duration
                           </Text>
                           <Box w={'50px'}>
-                            <Text  color={'#8f9bba'}
-                         fontWeight={500}
-                         fontSize={'1rem'}>
+                            <Text
+                              color={'#8f9bba'}
+                              fontWeight={500}
+                              fontSize={'1rem'}
+                            >
                               {item?.plMAxGameHours}
                             </Text>
                           </Box>
@@ -575,21 +583,27 @@ console.log('isConfirm',isConfirm);
                   </Card>
                   <Box position={'absolute'} top={'5px'} right={'10px'}>
                     <Menu isOpen={isOpen1} onClose={onClose1}>
-                    <MenuButton
-				alignItems='center'
-				justifyContent='center'
-				bg={bgButton}
-				_hover={bgHover}
-				_focus={bgFocus}
-				_active={bgFocus}
-				w='37px'
-				h='37px'
-				lineHeight='100%'
-        onClick={() => handleMenu(i)}
-				borderRadius='10px'
-				>
-				<Icon as={MdOutlineMoreHoriz} color={iconColor} w='24px' h='24px' mt='4px' />
-			</MenuButton>
+                      <MenuButton
+                        alignItems="center"
+                        justifyContent="center"
+                        bg={bgButton}
+                        _hover={bgHover}
+                        _focus={bgFocus}
+                        _active={bgFocus}
+                        w="37px"
+                        h="37px"
+                        lineHeight="100%"
+                        onClick={() => handleMenu(i)}
+                        borderRadius="10px"
+                      >
+                        <Icon
+                          as={MdOutlineMoreHoriz}
+                          color={iconColor}
+                          w="24px"
+                          h="24px"
+                          mt="4px"
+                        />
+                      </MenuButton>
                       {menu === i && (
                         <MenuList
                           w="150px"
@@ -653,7 +667,8 @@ console.log('isConfirm',isConfirm);
                               </Flex>
                             </MenuItem>
                           ))}
-                          <ButtonGroup _hover={textHover}
+                          <ButtonGroup
+                            _hover={textHover}
                             onClick={() =>
                               navigate(`updatePlanDuration/${item?.plId}`)
                             }
@@ -669,7 +684,11 @@ console.log('isConfirm',isConfirm);
                               w="16px"
                               me="8px"
                             />
-                            <Text color={textColor} _hover={textHover} cursor={'pointer'}>
+                            <Text
+                              color={textColor}
+                              _hover={textHover}
+                              cursor={'pointer'}
+                            >
                               Add more
                             </Text>
                           </ButtonGroup>
@@ -681,7 +700,12 @@ console.log('isConfirm',isConfirm);
               ))}
         </SimpleGrid>
         {isOpen ? (
-          <Popup setIsConfirm={setIsConfirm} setIsOpen={setIsOpen} msg={''} setmsg={''}/>
+          <Popup
+            setIsConfirm={setIsConfirm}
+            setIsOpen={setIsOpen}
+            msg={''}
+            setmsg={''}
+          />
         ) : null}
       </Box>
     </>

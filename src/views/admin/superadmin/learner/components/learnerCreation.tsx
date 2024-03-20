@@ -529,10 +529,10 @@ let selectDisable=false;
     return (
         <>
             <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>
-                <Card alignItems={'center'}>
-                    <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'relative'} alignItems={'center'}></Card>
+                <Card alignItems={'center'}>                    
+                    <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={{base: '170', sm: '170', md: '300', lg: '300'}} position={'relative'} alignItems={'center'}></Card>
                     <Card mb={{ base: '0px', xl: '20px' }} width={{base: '95%', md: '70%'}} marginTop={'-120px'} >
-                        <Flex direction='row' w={'100%'}  ms='10px' justifyContent={'space-between'} alignItems={'center'}>
+                        <Flex direction='row' w={'100%'} justifyContent={'space-between'} alignItems={'center'}>
                             <Box>
                             <Text color={useColorModeValue('secondaryGray.900', 'white')} fontSize="2xl" fontWeight="700" mb="20px">
                                 Learner {id ? 'Updation' : 'Creation'}
@@ -582,24 +582,24 @@ let selectDisable=false;
 
                         {/* Table Input */}
                         <Box m={'50px 0 20px 0'} w={'100%'} overflowX={'auto'}>                            
-                            <Table variant={'striped'} boxShadow={'1px 2px 17px #f7f7f7'} mb={'50px'}>
+                            <Table boxShadow={'1px 2px 17px #f7f7f7'} border={'2px solid #f1f1f1'} mb={'30px'}>
                                 <Thead whiteSpace={'nowrap'}>
-                                    <Tr borderBottom={'2px solid #ddd'}>
-                                        <Th color={'#000'}>learner Name<span style={{ color: 'red' }}>*</span></Th>
+                                    <Tr>
+                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Name<span style={{ color: 'red' }}>*</span></Th>
 
-                                        <Th color={'#000'}>learner Mail<span style={{ color: 'red' }}>*</span></Th>
-                                        <Th color={'#000'}>learner Department<span style={{ color: 'red' }}>*</span></Th>
-                                        <Th color={'#000'}>learner Designation<span style={{ color: 'red' }}>*</span></Th>
-                                        <Th color={'#000'}>learner Country</Th>
-                                        <Th color={'#000'}>learner Age</Th>
-                                        <Th color={'#000'}>learner Gender</Th>
+                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Mail<span style={{ color: 'red' }}>*</span></Th>
+                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Department<span style={{ color: 'red' }}>*</span></Th>
+                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Designation<span style={{ color: 'red' }}>*</span></Th>
+                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Country</Th>
+                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Age</Th>
+                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Gender</Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody whiteSpace={'nowrap'}>
                                     {rows.map((row, i) => (
                                         
                                         <Tr key={i} whiteSpace={'nowrap'}>
-                                            <Td p={'0.5rem 1.0rem'}>
+                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
                                                 <InputField
                                                     mb='0px'
                                                     me='30px'
@@ -616,25 +616,25 @@ let selectDisable=false;
                                                 />
                                             </Td>
 
-                                            <Td p={'0.5rem 1.0rem'}>
+                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
                                                 <InputField mb='0px' me='30px' id={`lenMail-${i}`} name={`lenMail-${i}`} placeholder='eg. Mail@sample.com' onChange={handleChangeflied} value={formDatas[i]?.lenMail || ''} autoComplete="off" disabled={id ? true : false}
                                                     style={{
                                                         borderColor: isInvalid && specificInvalidIds.includes(`lenMail-${i}`) ? 'red' : ''
                                                     }}
                                                 />
                                             </Td>
-                                            <Td p={'0.5rem 1.0rem'}>
+                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
                                                 <InputField mb='0px' me='30px' id={`lenDepartment-${i}`} name={`lenDepartment-${i}`} placeholder='eg. sales ' onChange={handleChangeflied} value={formDatas[i]?.lenDepartment || ''}  style={{
                                                         borderColor: isInvalid && specificInvalidIds.includes(`lenDepartment-${i}`) ? 'red' : ''
                                                     }}
                                                     />
                                             </Td>
-                                            <Td p={'0.5rem 1.0rem'}>
+                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
                                                 <InputField mb='0px' me='30px' id={`lenDesignation-${i}`} name={`lenDesignation-${i}`} placeholder='eg. new joinee' onChange={handleChangeflied} value={formDatas[i]?.lenDesignation || ''}  style={{
                                                         borderColor: isInvalid && specificInvalidIds.includes(`lenDesignation-${i}`) ? 'red' : ''
                                                     }} />
                                             </Td>
-                                            <Td p={'0.5rem 1.0rem'}>
+                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
                                                 <SelectField
                                                     mb='0px'
                                                     me='30px'
@@ -649,10 +649,10 @@ let selectDisable=false;
 
                                                 />
                                             </Td>
-                                            <Td p={'0.5rem 1.0rem'}>
+                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
                                                 <InputField mb='0px' me='30px' id={`lenAge-${i}`} name={`lenAge-${i}`} placeholder='eg. 30' type='number' onChange={handleChangeflied} value={formDatas[i]?.lenAge || ''} />
                                             </Td>
-                                            <Td p={'0.5rem 1.0rem'}>
+                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
                                                 <SelectField
                                                     mb='0px'
                                                     me='30px'
@@ -673,7 +673,7 @@ let selectDisable=false;
                                 </Tbody>
                             </Table>
                             <Flex mb={'20px'}>
-                                <Button onClick={handleAddRow} fontSize="sm" border={'1px solid #00000024'} bg={'transparent'} _hover={{bg: '#11047a', color: '#fff'}}>Add Row</Button>
+                                <Button onClick={handleAddRow} fontSize="sm" color={'#190793'} border={'1px solid #190793'} bg={'transparent'} _hover={{bg: '#11047a', color: '#fff'}}>Add Row</Button>
                             </Flex>
                         </Box>
                         {/* <Flex flexDirection="row" justifyContent={'center'}>

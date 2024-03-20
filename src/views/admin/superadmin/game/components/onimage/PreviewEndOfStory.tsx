@@ -24,11 +24,10 @@ const PreviewEndOfStory : React.FC<{preloadedAssets: any, setEndOfQuest:any, rep
         >
           
           <Box className="end-screen" >
-            <Img src={Replay} className="bg-Img1" /></Box>
-            {/* <Text  position={'relative'} fontFamily="AtlantisContent" textAlign="center" bottom={'390px'} color="white" fontSize="2xl" zIndex="999999">
-              Do You Want to Play Again?
-            </Text> */}
-            <Box className='end-screen-text'  position={'absolute'} fontSize={'5vw'} fontFamily="AtlantisContent" textAlign="center" color="white"  zIndex="999999"> <Text>
+            <Img src={Replay} className="bg-Img1" />
+          </Box>
+            <Box className='end-screen-text'> 
+                <Text>
                   End of the current Quest.!
                 </Text>
                 <Text >

@@ -21,6 +21,11 @@ option {
   color: black;
 }
 
+.css-124hyrz-control {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
 .cards {
   transition: 2s ease;
 }
@@ -2937,7 +2942,7 @@ transform: translate(-167px, -84px);
 }
 .end-screen-text {
   position: absolute; 
-  /* fontFamily: AtlantisContent; */ /* <-- This line has been commented out */
+  font-family: AtlantisContent; /* <-- This line has been commented out */
   text-align: center;
   color: white;
   /* zIndex: 999999; */ /* <-- This line has been commented out */

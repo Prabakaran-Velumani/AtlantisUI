@@ -20,7 +20,7 @@ export default function Default(props: {
 		<Flex direction='column' mb={mb ? mb : '30px'}>
 			<FormLabel
 				display='flex'
-				ms='10px'
+				// ms='10px'
 				htmlFor={id}
 				fontSize='sm'
 				color={textColorPrimary}

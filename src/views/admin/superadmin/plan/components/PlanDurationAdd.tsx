@@ -399,13 +399,11 @@ console.log("datass",datass)
     <>
       <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>
         <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'absolute'} alignItems={'center'}></Card>
-        <Card mb={{ base: '0px', xl: '20px' }} width={'70%'} marginTop={'120px'} >
-          <Flex justifyContent={'space-between'}>
-       
-
-        <Box position={'relative'} mt='25px' ml='25px'>
+        <Card mb={{ base: '0px', xl: '20px' }} width={{base:'96%',sm:'96%',md:'96%',lg:'70%'}} marginTop={'120px'} >
+          <Flex flexDirection={{base:'column',sm:'column',md:'column',lg:'row'}} justifyContent={'space-between'}>
+               <Box position={'relative'} w={{md:'100%',lg:'50%'}} mt={{md:'',lg:'25px'}} ml={{md:'',lg:'25px'}}>
                   <Card
-                    w={'300px'}
+                    w={{md:'100%',lg:'95%'}}
                     h={'285px'}
                     borderRadius={'none'}
                     boxShadow={'5px 5px 20px #c5c5c5'}
@@ -693,7 +691,7 @@ console.log("datass",datass)
                   
           </Box>
         
-        <Card mb={{ base: '0px', xl: '20px' }} width={'50%'}  >
+        <Card mb={{ base: '0px', xl: '20px' }} w={{md:'100%',lg:'50%'}} mt={{base:3,sm:3,md:3,lg:0}} >
           <Flex direction="column" ms="10px">
           <Text color={textColorPrimary} fontSize="2xl" fontWeight="700" mb="20px">
               Plan {id ? 'Updation':'Creation'} 
