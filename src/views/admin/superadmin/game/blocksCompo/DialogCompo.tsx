@@ -356,9 +356,7 @@ const DialogCompo: React.FC<PropsDialog> = ({ id,language,seq, index, name, hand
                                             <StrightConector
                                                 name={
                                                     input?.[`Dialog${seq.input}`]?.DialogleadShow === 'New Block' ? (
-                                                        (showSelectBlock.find(
-                                                          (option: any) => option.value === input?.[`Dialog${seq.input}`]?.Dialognavigate
-                                                        )?.label ) === undefined  ? `${(parseFloat(seq.id) + 0.1).toFixed(1)}` : showSelectBlock.find(
+                                                        showSelectBlock.find(
                                                           (option: any) => option.value === input?.[`Dialog${seq.input}`]?.Dialognavigate
                                                         )?.label ) :
                                                     input?.[`Dialog${seq.input}`]?.DialogleadShow === 'Select Block'

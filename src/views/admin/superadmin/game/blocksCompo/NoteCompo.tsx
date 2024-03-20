@@ -260,11 +260,9 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
                   <StrightConector
                     name={
                       input?.[`Note${seq.input}`]?.NoteleadShow === 'New Block' ?  (
-                        (showSelectBlock.find(
+                        showSelectBlock.find(
                           (option: any) => option.value === input?.[`Note${seq.input}`]?.Notenavigate
-                        )?.label ) !== undefined  ? showSelectBlock.find(
-                          (option: any) => option.value === input?.[`Note${seq.input}`]?.Notenavigate
-                        )?.label : `${(parseFloat(seq.id) + 0.1).toFixed(1)}` 
+                        )?.label
                       ) :
                         input?.[`Note${seq.input}`]?.NoteleadShow === 'Select Block'
                           ? (
@@ -274,6 +272,7 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
                           )
                           : input?.[`Note${seq.input}`]?.Notenavigate
                     }
+                    
                   />
                 </div>
               </>

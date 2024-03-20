@@ -31,7 +31,7 @@ import ReflectionContentScreen from './onimage/ReflectionScreen';
 import TyContentScreen from './onimage/TyContentScreen';
 import { getGameCreatorDemoData } from 'utils/game/gameService';
 import TypingEffect from '../demoplay/playcards/Typing';
-import { API_SERVER, Notelength, Dialoglength } from 'config/constant';
+import { API_SERVER, Notelength, Dialoglength,Responselength} from 'config/constant';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { lazy } from 'react';
 import { motion } from 'framer-motion';
@@ -87,6 +87,7 @@ const ScreenPreview = () => {
   const [endOfQuest, setEndOfQuest] = useState<boolean>(false);
   const [currentPosition, setCurrentPosition] = useState(0);
   const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
+  const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
   const [Navigatenext, setNavigateNext] = useState<any>(false);
   const reflectionQuestionsdefault = [
     'What were your biggest learnings?',
@@ -512,9 +513,9 @@ const ScreenPreview = () => {
     window.open(url, '_blank');
   };
   useEffect(() => {
-    if (data && (type === 'Note' || type === 'Dialog')) {
+    
       getDataSection(data);
-    }
+    
   }, [data, type]);
   useEffect(() => {
     if (Navigatenext === true) {
@@ -522,15 +523,23 @@ const ScreenPreview = () => {
     }
   }, [Navigatenext]);
   const getDataSection = (data: any) => {
+    setShowTypingEffect(false);
+   // Note and Dialog
     const content = data?.blockText || '';
     const sentences = content.split(
       /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
     );
     const newRemainingSentences = sentences.slice(currentPosition);
-
+    // Response 
+    const Responsecontent = resMsg || '';
+    const Responsesentences = Responsecontent.split(
+      /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+    );
+    const newRemainingResponseSentences = Responsesentences.slice(currentPosition); 
+    
     const concatenatedSentences = [];
     let totalLength = 0;
-
+   // Note and Dialog
     for (let i = 0; i < newRemainingSentences.length; i++) {
       const sentence = newRemainingSentences[i];
       if (data && type === 'Note') {
@@ -555,23 +564,54 @@ const ScreenPreview = () => {
         }
       }
     }
+     // Response 
+    for (let i = 0; i < newRemainingResponseSentences.length; i++) {
+      const ressentence = newRemainingResponseSentences[i];
+      if (data && type === 'response') {
+        if (totalLength + ressentence.length <= Responselength) {
+          concatenatedSentences.push(ressentence);
+          totalLength += ressentence.length;
+        } else {
+          if (totalLength + ressentence.length >= Responselength) {
+            break;
+          }
+          concatenatedSentences.push(ressentence);
+          break;
+        }
+      }
+    }
+     
     setRemainingSentences(concatenatedSentences);
 
     if (newRemainingSentences.length >= 1) {
       setCurrentPosition(currentPosition + concatenatedSentences.length);
       setNavigateNext(false);
-    } else {
+      console.log('1');
+    }
+    if(newRemainingResponseSentences.length >= 1){
+      setCurrentPosition(currentPosition + concatenatedSentences.length);
+      setNavigateNext(false);
+      console.log('2');
+    }
+    else {
       setCurrentPosition(0);
       setNavigateNext(true);
+      console.log('4');
     }
   };
-
-  useEffect(() => {
-    if (data && (type === 'Note' || type === 'Dialog')) {
+  const Updatecontent = () =>
+  {
+    if(showTypingEffect === false)
+    {
+      setShowTypingEffect(true);
+    }
+    else{
       getDataSection(data);
     }
+  }
+  useEffect(() => {
+      getDataSection(data);
   }, []);
-
   const handleCloseWindow = () => {
     window.close();
   };
@@ -759,10 +799,12 @@ const ScreenPreview = () => {
                             >
                               {/* <TypingEffect text={data?.blockText} speed={50} /> */}
                               {/* <TypingEffect text={remainingSentences} speed={5000} /> */}
-                              <TypingEffect
+                              {showTypingEffect=== false ? <TypingEffect
                                 text={remainingSentences.toString()}
                                 speed={50}
-                              />
+                              /> :remainingSentences }
+                            
+                              
                             </Box>
                             <Box
                               display={'flex'}
@@ -783,7 +825,7 @@ const ScreenPreview = () => {
                                 w={'50px'}
                                 h={'50px'}
                                 cursor={'pointer'}
-                                onClick={() => getDataSection(data)}
+                                onClick={() => Updatecontent()}
                               />
                             </Box>
                           </>
@@ -986,7 +1028,11 @@ const ScreenPreview = () => {
                               fontFamily={'AtlantisContent'}
                               fontSize={'21px'}
                             >
-                              <TypingEffect text={resMsg} speed={50} />
+                              {showTypingEffect=== false ? <TypingEffect
+                                text={remainingSentences.toString()}
+                                speed={50}
+                              /> :remainingSentences }
+                              {/* <TypingEffect text={resMsg} speed={50} /> */}
                             </Box>
                             <Box
                               display={'flex'}
@@ -1006,7 +1052,7 @@ const ScreenPreview = () => {
                                 w={'50px'}
                                 h={'50px'}
                                 cursor={'pointer'}
-                                onClick={() => getData(data)}
+                                onClick={() => Updatecontent()}
                               />
                             </Box>
                           </>
