@@ -180,14 +180,8 @@ const ScreenPreview = () => {
         let reflectionData: any = [];
         for (let i = 0; i < gamedata?.resultReflection?.length; i++) {
           let filteredValue = gamedata?.resultReflection.find(
-            (refRow: any) => refRow?.refKey == `ref${i + 1}`,
+            (refRow: any) => refRow?.refKey === `ref${i + 1}`,
           );
-          // {
-          //   if(refRow?.refKey == `ref${i+1}`)
-          //   {
-          //     return ({[refRow?.refKey] : [refRow?.refQuestion]});
-          //   }
-          // });
           reflectionData[filteredValue?.refKey] = filteredValue?.refQuestion;
         }
         setGameInfo({

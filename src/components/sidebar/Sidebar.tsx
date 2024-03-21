@@ -205,8 +205,9 @@ export function SidebarResponsive(props: {
         placement={document.documentElement.dir === 'rtl' ? 'right' : 'left'}
         finalFocusRef={btnRef}
       >
-        <DrawerOverlay />
+        <DrawerOverlay zIndex={9999999}/>
         <DrawerContent
+        containerProps={{ zIndex: 999999999}}
           w={'285px'}
           maxW="285px"
           ms={{

@@ -22,7 +22,7 @@ import {
   FormControl,
   FormLabel,
 } from '@chakra-ui/react';
-import { MdOutlineSubtitles } from 'react-icons/md';
+import { MdOutlineRocketLaunch, MdOutlineSubtitles } from 'react-icons/md';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import CharacterPreview from './CharacterPreview';
 import { GoCodeReview, GoEye, GoEyeClosed } from 'react-icons/go';
@@ -66,7 +66,7 @@ import { FaRobot } from 'react-icons/fa';
 import { GiBlackBook } from 'react-icons/gi';
 import { FaCubes } from 'react-icons/fa';
 import { MdTune } from 'react-icons/md';
-import { IoArrowBackCircle } from 'react-icons/io5';
+import { IoArrowBackCircle, IoArrowForwardCircle } from 'react-icons/io5';
 import { BsShareFill } from 'react-icons/bs';
 import AddScores from './AddScores';
 import CompletionScreen from './Completion';
@@ -3966,7 +3966,7 @@ const GameCreation = () => {
           </HStack>
         </GridItem>
         <GridItem colSpan={{ sm: 5, md: 5, lg: 5, xl: 4 }}>
-          <Box className="game-creation" mt={{ base: '100px', xl: '100px' }}>
+          <Box className="game-creation" mt={{ base: '50px', xl: '100px' }}>
             <Grid templateColumns="repeat(1, 1fr)" gap={6}>
               <GridItem w="100%" colSpan={2}>
                 {/*******************Changes-14/12/23*************************/}
@@ -4448,7 +4448,7 @@ const GameCreation = () => {
               </GridItem>
             </Grid>
             {tab !== 4 && tab !== 6 && ShowReview && (
-              <Menu>
+              <Menu >
                 <MenuButton
                   p="0px"
                   bg={'brandScheme'}
@@ -4475,6 +4475,7 @@ const GameCreation = () => {
                   borderRadius="20px"
                   bg={menuBg}
                   border="none"
+                  
                   mt="10px"
                   minW={{ base: '360px' }}
                   maxW={{ base: '360px', md: 'unset' }}
@@ -4600,32 +4601,45 @@ const GameCreation = () => {
               zIndex={999999}
             >
               <Box display={'flex'} flexDirection={{ sm: 'column', md: 'row' }}>
-                <Box display={'flex'} justifyContent={'space-between'} w={{sm:'100%',md:'60%',xl:'60%','2xl':'65%'}}>
+                <Box
+                  display={'flex'}
+                  justifyContent={'space-between'}
+                  w={{ sm: '100%', md: '60%', xl: '60%', '2xl': '65%' }}
+                >
                   {tab !== 1 && (
-                    <Flex justify={'flex-start'} alignItems={'center'}>
-                      <IoArrowBackCircle
-                        onClick={() => {
-                          setTab(tab - 1);
-                        }}
-                        size={46} // Adjust the size as needed
-                        color="#11047a"
-                        style={{
-                          // position: 'fixed',
-                          // top: '43px',
-                          // left: '350px',
-                          zIndex: 99,
-                          cursor: 'pointer',
-                        }}
-                      />
-                    </Flex>
-                   )}
+                    <Box
+                      display={{
+                        base: 'none',
+                        sm: 'none',
+                        md: 'none',
+                        lg: 'none',
+                        xl: 'flex',
+                      }}
+                    >
+                      <Flex justify={'flex-start'} alignItems={'center'}>
+                        <IoArrowBackCircle
+                          onClick={() => {
+                            setTab(tab - 1);
+                          }}
+                          size={46} // Adjust the size as needed
+                          color="#11047a"
+                          style={{
+                            // position: 'fixed',
+                            // top: '43px',
+                            // left: '350px',
+                            zIndex: 99,
+                            cursor: 'pointer',
+                          }}
+                        />
+                      </Flex>
+                    </Box>
+                  )}
                   <Flex justify="center">
                     <Card
                       display={'flex'}
                       justifyContent={
                         tab === 1 || tab === 2 ? 'end' : 'flex-end'
                       }
-                    
                       flexDirection="row"
                       h="95px"
                       boxShadow={'1px 3px 14px #0000'}
@@ -4679,7 +4693,7 @@ const GameCreation = () => {
                             position="absolute"
                             p="15px"
                             zIndex="1000" // Set a higher z-index value
-                            right="0"
+                            right={{lg:'-180px',xl:'0'}}
                           >
                             <MenuItem
                               transition="0.2s linear"
@@ -4794,11 +4808,21 @@ const GameCreation = () => {
                     </Card>
                   </Flex>
                 </Box>
-                <Box display={'flex'} w={{sm:'120%',md:'40%',lg:'25%'}} justifyContent={'center'}>
+                <Box
+                  display={{
+                    base: 'none',
+                    sm: 'none',
+                    md: 'none',
+                    lg: 'none',
+                    xl: 'flex',
+                  }}
+                  w={{ sm: '120%', md: '40%', lg: '25%' }}
+                  justifyContent={'center'}
+                >
                   <Flex justify="center">
                     <Card
                       display={'flex'}
-                      p={{base:'0px 20px',sm:'0px 20px',md:'20px'}}
+                      p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
                       justifyContent={
                         tab === 1 || tab === 2 ? 'end' : 'flex-end'
                       }
@@ -4862,6 +4886,137 @@ const GameCreation = () => {
                   </Flex>
                 </Box>
               </Box>
+            </Box>
+            <Box
+              display={{
+                base: 'flex',
+                sm: 'flex',
+                md: 'flex',
+                lg: 'flex',
+                xl: 'none',
+              }}
+              width={'94vw'}
+              position={'fixed'}
+              bottom={0}
+              left="3vw" 
+              zIndex={999999}
+            >
+              <Flex justify="center" w={'100%'} >
+                <Card
+                  display={'flex'}
+                  p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
+                  justifyContent={'space-between'}
+                  flexDirection="row"
+                  h="95px"
+                  w={'100%'}
+                  boxShadow={'1px 3px 14px #0000'}
+                  // position={'fixed'}
+                  // top={'24px'}
+                  // right={'8px'}
+                  zIndex={99}
+                  // background={'#0000 !important'}
+                >
+                  {tab !== 1 && (
+                    <Flex justify={'flex-start'} alignItems={'center'}>
+                      <IoArrowBackCircle
+                        onClick={() => {
+                          setTab(tab - 1);
+                        }}
+                        size={46} // Adjust the size as needed
+                        color="#11047a"
+                        style={{
+                          // position: 'fixed',
+                          // top: '43px',
+                          // left: '350px',
+                          zIndex: 99,
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </Flex>
+                  )}
+                  {tab !== 1 && tab !== 2 ? (
+                    <Box display={'flex'} alignItems={'center'} w={'60%'}>
+                    <Button
+                      bg="#11047a"
+                      _hover={{ bg: '#190793' }}
+                      color="#fff"
+                      h={'46px'}
+                      w={'100%'}
+                      display={tab === 7 || tab === 6 ? 'none' : 'block'}
+                      mr={'17px'}
+                      mt={'6px'}
+                      ml={'11px'}
+                      onClick={handleEntirePrev}
+                    >
+                      Preview
+                    </Button>
+                    </Box>
+                  ) : null}
+                  {tab === 5 ? (
+                   <Flex justify={'flex-start'} alignItems={'center'}>
+                   <IoArrowForwardCircle
+                     onClick={handleNext}
+                     size={46} // Adjust the size as needed
+                     color="#11047a"
+                     style={{
+                       // position: 'fixed',
+                       // top: '43px',
+                       // left: '350px',
+                       zIndex: 99,
+                       cursor: 'pointer',
+                     }}
+                   />
+                 </Flex>
+                  ) : (
+                    tab !== 1 &&
+                    tab !== 2 &&
+                    tab !== 5 &&
+                    (tab === 6 || tab === 7 ? (
+                      <Flex justify={'flex-start'} alignItems={'center'}>
+                        <MdOutlineRocketLaunch
+                          onClick={commonNextFunction}
+                          size={46} // Adjust the size as needed
+                          color="#11047a"
+                          style={{
+                            // position: 'fixed',
+                            // top: '43px',
+                            // left: '350px',
+                            zIndex: 99,
+                            cursor: 'pointer',
+                          }}
+                        />
+                      </Flex>
+                    ) : (
+                      <Flex justify={'flex-start'} alignItems={'center'}>
+                        <IoArrowForwardCircle
+                          onClick={commonNextFunction}
+                          size={46} // Adjust the size as needed
+                          color="#11047a"
+                          style={{
+                            // position: 'fixed',
+                            // top: '43px',
+                            // left: '350px',
+                            zIndex: 99,
+                            cursor: 'pointer',
+                          }}
+                        />
+                      </Flex>
+                    ))
+                    // <Button
+                    //   bg="#11047a"
+                    //   _hover={{ bg: '#190793' }}
+                    //   color="#fff"
+                    //   h={'46px'}
+                    //   w={'128px'}
+                    //   onClick={commonNextFunction}
+                    //   mr={'33px'}
+                    //   mt={'7px'}
+                    // >
+                    //   {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
+                    // </Button>
+                  )}
+                </Card>
+              </Flex>
             </Box>
             {share && tableDataCheck && (
               <ShareReviewTable
