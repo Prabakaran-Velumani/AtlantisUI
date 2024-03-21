@@ -424,6 +424,18 @@ export async function getGameLanguages(id){
       console.log('editLanguage Error:', err.message);
     }
 }
+///Afrith-modified-starts-20/Mar/24
+export async function getContentRelatedLanguage(currGameId,langId){
+  try{
+    const response = await fetch(`${API_SERVER}${urls.getContentRelatedLanguage}${currGameId}/${langId}`,getMethod);
+    const result = await response.json();
+    return result;
+}
+catch (err) {
+    console.log('editLanguage Error:', err.message);
+  }
+}
+///Afrith-modified-ends-20/Mar/24
 export async function getSelectedLanguages(id) {
   try {
     const response = await fetch(`${API_SERVER}${urls.getSelectedLanguages}${id}`,getMethod);

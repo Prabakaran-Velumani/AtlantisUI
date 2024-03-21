@@ -152,6 +152,11 @@ interface ProfileDataType {
   score?: any;
   allTimeScore?: any;
   // Afrith-modified-starts-07/Mar/24
+  
+  // Afrith-modified-starts-20/Mar/24
+  content?: any;
+  audioUrls?: any;
+  // Afrith-modified-ends-20/Mar/24
 }
 
 export const ProfileContext = createContext<ProfileDataType>({
@@ -273,9 +278,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
      language: '',
      score: '',
      allTimeScore: 250,
+      ///Afrith-modified-starts-20/Mar/24
+      content: '',
+      audioUrls: '',
+      ///Afrith-modified-ends-20/Mar/24
    });
  
-
+console.log('**********',profileData);
  // Afrith-modified-ends-07/Mar/24
  
   const [voiceIds, setVoiceIds] = useState<any>();
@@ -471,8 +480,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setData(prevBlock[0]);
     }
   };
+  
   const getData = (next: any) => {
-    console.log("next", next)
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -534,7 +543,21 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       type === 'feedback'
     ) {
       if (navi === 'Repeat Question') {
-        setType('Interaction');
+        const optionsFiltered = gameInfo?.questOptions.filter(
+          (key: any) => key?.qpSequence === next?.blockPrimarySequence,
+        );
+        if (gameInfo?.gameData?.gameShuffle) {
+          for (let i = optionsFiltered.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [optionsFiltered[i], optionsFiltered[j]] = [
+              optionsFiltered[j],
+              optionsFiltered[i],
+            ];
+          }
+        }
+        setOptions(optionsFiltered);
+        setType(next?.blockChoosen);
+        setData(next);
         setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
@@ -1158,10 +1181,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       // console.log('resolu****',window.devicePixelRatio)
       // return body;
     };
-    console.log('getMobileResolution',getMobileResolution())
   
     const getCurrScreen = (screenType:any) => {
-      console.log('Current Screen:', screenType);
       // Perform any other actions based on the screen type
       if(screenType == 'Desktop'){
         setResolution(getCurrentResolution())
@@ -1182,7 +1203,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     //   return () => window.removeEventListener('resize', handleResize);
     // }, []);
   
-    console.log('resolution---',resolution)
     // Afrith-modified-ends-13/Mar/24
 
     // const toggleView = () => {

@@ -37,15 +37,13 @@ import { useParams } from 'react-router-dom';
 // Import ProfileContext from EntirePreview
 import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
-import { API_SERVER } from 'config/constant';
+import { API_SERVER,Notelength, Dialoglength,Responselength } from 'config/constant';
 import { ScoreContext } from '../GamePreview';
 import { Canvas, useFrame, useLoader } from 'react-three-fiber';
 import Sample from 'assets/img/games/collector.glb';
 import { useLayoutEffect, useRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
-const Notelength = 150;
-const Dialoglength = 300;
 
 const Story: React.FC<{
   prevData?: any;
@@ -98,6 +96,7 @@ const Story: React.FC<{
   const [currentPosition, setCurrentPosition] = useState(0);
   const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
   const [Navigatenext, setNavigateNext] = useState<any>(false);
+  const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
   const [score, setScore] = useState(null);
   useEffect(() => {
     getVoice(data, type);
@@ -106,13 +105,9 @@ const Story: React.FC<{
       setShowNote(false);
       getDataSection(data);
     }, 1000);
-    console.log('data changed', data);
   }, [data, type]);
 
 
-useEffect(()=>{
-  console.log('data changed ***', data);
-},[data])
 
   useEffect(() => {
     setFirst(true);
@@ -155,7 +150,6 @@ useEffect(()=>{
         break;
       case 'Interaction':
         let optionsText = '';
-        console.log('options', options);
         options.forEach((item: any) => {
           optionsText +=
             '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
@@ -242,15 +236,22 @@ useEffect(() => {
 }, [Navigatenext]);
 
 const getDataSection = (data: any) => {
-  console.log('getData 1', data);
+  setShowTypingEffect(false);
   setCurrentPosition(0);
+ 
+  // Note and Dialog
   const content = data?.blockText || '';
   const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
   const newRemainingSentences = sentences.slice(currentPosition);
- 
+  // response
+  const Responsecontent = resMsg || '';
+  const Responsesentences = Responsecontent.split(
+      /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+    );
+    const newRemainingResponseSentences = Responsesentences.slice(currentPosition); 
   const concatenatedSentences = [];
   let totalLength = 0;
-
+// Note and Dialog
   for (let i = 0; i < newRemainingSentences.length; i++) {
     const sentence = newRemainingSentences[i];
 
@@ -280,11 +281,30 @@ const getDataSection = (data: any) => {
    
     
   }
+   // Response 
+   for (let i = 0; i < newRemainingResponseSentences.length; i++) {
+    const ressentence = newRemainingResponseSentences[i];
+    if (data && type === 'response') {
+      if (totalLength + ressentence.length <= Responselength) {
+        concatenatedSentences.push(ressentence);
+        totalLength += ressentence.length;
+      } else {
+        if (totalLength + ressentence.length >= Responselength) {
+          break;
+        }
+        concatenatedSentences.push(ressentence);
+        break;
+      }
+    }
+  }
   setRemainingSentences(concatenatedSentences);
 
   if (newRemainingSentences.length >= 1) {
     setCurrentPosition(currentPosition + concatenatedSentences.length);
-    console.log('concatenatedSentencescurrentPosition',concatenatedSentences.length,'...',currentPosition);
+    setNavigateNext(false);
+  }
+  else if(newRemainingResponseSentences.length >= 1){
+    setCurrentPosition(currentPosition + concatenatedSentences.length);
     setNavigateNext(false);
   } else {
       setCurrentPosition(0);
@@ -292,10 +312,19 @@ const getDataSection = (data: any) => {
       // getData(data);
   }
 };
+const Updatecontent = () =>
+{
+  if(showTypingEffect === false)
+  {
+    setShowTypingEffect(true);
+  }
+  else{
+    getDataSection(data);
+  }
+}
 useEffect(() => {
   getDataSection(data);
 }, []);
-
   return (
     <>
       {data && type === 'Note' && (
@@ -449,7 +478,11 @@ useEffect(() => {
                 fontFamily={'AtlantisContent'}
               >
                 {/* <TypingEffect text={data?.blockText} speed={50} /> */}
-                <TypingEffect text={remainingSentences} speed={50} />
+                {/* <TypingEffect text={remainingSentences} speed={50} /> */}
+                {showTypingEffect=== false ? <TypingEffect
+                                text={remainingSentences.toString()}
+                                speed={50}
+                              /> :remainingSentences }
               </Box>
               <Box
                 display={'flex'}
@@ -470,7 +503,7 @@ useEffect(() => {
                   w={'70px'}
                   h={'50px'}
                   cursor={'pointer'}
-                  onClick={() => getDataSection(data)}
+                  onClick={() => Updatecontent()}
                 />
               </Box>
             </>
@@ -707,7 +740,11 @@ useEffect(() => {
                 bottom={'38px'}
                 fontFamily={'AtlantisContent'}
               >
-                <TypingEffect text={resMsg} speed={50} />
+                {/* <TypingEffect text={resMsg} speed={50} /> */}
+                {showTypingEffect=== false ? <TypingEffect
+                                text={remainingSentences.toString()}
+                                speed={50}
+                              /> :remainingSentences }
               </Box>
               <Box
                 display={'flex'}
@@ -721,7 +758,7 @@ useEffect(() => {
                   w={'70px'}
                   h={'50px'}
                   cursor={'pointer'}
-                  onClick={() => getData(data)}
+                  onClick={() => Updatecontent()}
                 />
               </Box>
             </>

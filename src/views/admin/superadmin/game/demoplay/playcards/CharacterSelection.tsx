@@ -53,7 +53,7 @@ import Selected from 'assets/img/games/selected.png';
 // import { Parrot } from '../three/Parrot';
 // Import ProfileContext from EntirePreview
 import { ProfileContext } from '../EntirePreview';
-import { getGameLanguages, getLanguages } from 'utils/game/gameService';
+import { getGameLanguages, getLanguages, getContentRelatedLanguage} from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
 interface PlayGamesProps {
   formData?: any;
@@ -113,6 +113,9 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     // Afrith-modified-starts-08/Mar/24
     const [characterName, setCharacterName] = useState('');
     // Afrith-modified-ends-08/Mar/24
+     //Afrith-modified-starts-20/Mar/24
+     const [gameContentId, setGameContentId] = useState(null);
+     //Afrith-modified-ends-20/Mar/24
   const { id } = useParams();
   useEffect(() => {
     const fetch = async () => {
@@ -146,15 +149,55 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     }
   };
 
-  const handleProfile = (e: any, lang?: any) => {
+  // const handleProfile = (e: any, lang?: any) => {
+  //   const { id, value } = e.target;
+  //   setSelect(false);
+  //   setProfileData((prev: any) => ({
+  //     ...prev,
+  //     [id]: id === 'name' ? value : lang,
+  //   }));
+  // };
+
+  ///Afrith-modified-starts-20/Mar/24
+  const currGameId = id; //from useParams
+  const handleProfile = (e: any, lang?: any, langId?:any) => {
+    /*(*/
+    console.log('langIDCS--',langId)
+    console.log('LangCS--',lang)
+    /*)*/
     const { id, value } = e.target;
+
     setSelect(false);
     setProfileData((prev: any) => ({
       ...prev,
       [id]: id === 'name' ? value : lang,
     }));
+    setGameContentId(langId);
+    getContentRelatedLanguage(currGameId,langId);
+    // console.log('gameRelatedContentCS--',gameRelatedContent)
   };
 
+    //////////
+    useEffect(() => {
+      const fetchGameContent = async() => {
+          const gameContentResult = await getContentRelatedLanguage(currGameId,gameContentId);
+          if (gameContentResult.status === 'Success'){
+            const data = gameContentResult.data;
+            setProfileData((prev:any)=>({
+              ...prev,
+              // content: data[0]?.content,
+              // audioUrls: data[0]?.audioUrls
+              content: data.map((x:any)=>({content: x.content})),
+              audioUrls: data.map((x:any)=>({audioUrls: x.audioUrls}))
+
+            }))
+          }
+      };
+      fetchGameContent();
+    },[gameContentId])
+
+    console.log('gameContentIdCS--',gameContentId)
+    /////////
     // Afrith-modified-starts-08/Mar/24
     // const setPlayerName = (value:any) => {
     //   setCharacterName(value);
@@ -205,7 +248,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                               key={num}
                               _hover={{ bgColor: '#377498' }}
                               id={'language'}
-                              onClick={(e: any) => handleProfile(e, lang.label)}
+                              onClick={(e: any) => handleProfile(e, lang.label, lang.value)}
                             >
                               {lang.label}
                             </Text>

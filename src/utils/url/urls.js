@@ -149,6 +149,9 @@ export const urls = {
    updatelanguages:'/languages/updatelanguages',
 /* gamelanuages rajesh kanna */
      gameLanguages:'/languages/getGameLanguages/',
+      /*Afrith-mdofied-starts-20/Mar/24*/
+      getContentRelatedLanguage:'/languages/getContentRelatedLanguage/',
+      /*Afrith-mdofied-ends-20/Mar/24*/
      getMaxBlockQuestNo:'/game/getMaxBlockQuestNo/',
 	 getBlockData:'/languages/getBlockData/',
   getGameStoryLine:'/languages/getGameStoryLine/',

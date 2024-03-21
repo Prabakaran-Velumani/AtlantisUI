@@ -588,7 +588,7 @@ const ScreenPreview = () => {
       setNavigateNext(false);
       console.log('1');
     }
-    if(newRemainingResponseSentences.length >= 1){
+   else if(newRemainingResponseSentences.length >= 1){
       setCurrentPosition(currentPosition + concatenatedSentences.length);
       setNavigateNext(false);
       console.log('2');
