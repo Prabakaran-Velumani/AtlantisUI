@@ -196,6 +196,7 @@ const GameCreation = () => {
   const [extensiveNavigation, setExtensiveNavigation] = useState<number | null>(
     null,
   );
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   ///////reflectionQuestions///////////////
 
@@ -3589,6 +3590,17 @@ return false;
     setExtensiveNavigation(id);
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);   
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <>
       {loading && (
@@ -3887,15 +3899,16 @@ return false;
                         <Text
                           fontSize={'20px'}
                           fontWeight={800}
-                          m={'10px 10px 10px 20px'}
+                          // m={'10px 10px 10px 20px'}
+                          pl={'13px'}
                         >
                           Select a Background
                         </Text>
                       </Box>
-                      <Divider mb={'0px'} />
+                      {/* <Divider mb={'0px'} /> */}
                       <Box
-                        height={'700px'}
-                        overflowY={'auto'}
+                        // height={'700px'}
+                        // overflowY={'auto'}
                         borderRadius={'70px'}
                         padding={'30px 0'}
                       >
@@ -3939,7 +3952,7 @@ return false;
                                       cursor="pointer"
                                     />
 
-                                    {backgroundIndex === i ? (
+                                    {backgroundIndex === i || windowWidth < 768 ? (
                                       <Flex
                                         position="absolute"
                                         bottom="0px"
@@ -3955,7 +3968,7 @@ return false;
                                             'transform 0.5s ease, opacity 0.5s ease',
                                         }}
                                       >
-                                        <Box
+                                        {/* <Box
                                           bg="white"
                                           width="50%"
                                           height="35px"
@@ -3971,10 +3984,10 @@ return false;
                                           <span style={{ color: 'black' }}>
                                             Preview
                                           </span>
-                                        </Box>
+                                        </Box> */}
                                         <Box
                                           bg="#11047a"
-                                          width="50%"
+                                          width="100%"
                                           height="35px"
                                           borderBottomRightRadius="10px"
                                           display="flex"
@@ -4011,7 +4024,7 @@ return false;
                                             'transform 0.5s ease, opacity 0.5s ease',
                                         }}
                                       >
-                                        <Box
+                                        {/* <Box
                                           bg="white"
                                           width="50%"
                                           height="35px"
@@ -4024,10 +4037,10 @@ return false;
                                           <span style={{ color: 'black' }}>
                                             Preview
                                           </span>
-                                        </Box>
+                                        </Box> */}
                                         <Box
                                           bg="#11047a"
-                                          width="50%"
+                                          width="100%"
                                           height="35px"
                                           borderBottomRightRadius="10px"
                                           display="flex"
@@ -4064,8 +4077,8 @@ return false;
                                         {img?.temp.tempTitle}
                                       </Text>
                                     </Box>
-                                    <Box mt={2}>
-                                      {backgroundIndex === i ? (
+                                    <Box mt={2} h={'12px'}>
+                                       {backgroundIndex === i || windowWidth < 768 ? (
                                         <Text
                                           fontSize={'12px'}
                                           fontWeight={'500'}
@@ -4155,20 +4168,22 @@ return false;
                           <Text
                             fontSize={'20px'}
                             fontWeight={800}
-                            m={'10px 10px 10px 20px'}
+                            // m={'10px 10px 10px 20px'}
+                            pl={'13px'}
                           >
                             Select a Non-Playing Character
                           </Text>
                         </Box>
-                        <Divider mb={'0px'} />
+                        {/* <Divider mb={'0px'} /> */}
                         <Box
-                          height={'700px'}
-                          overflowY={'auto'}
+                          // height={'700px'}
+                          // overflowY={'auto'}
                           borderRadius={'70px'}
                           padding={'30px 0'}
                         >
                           <SimpleGrid
-                            columns={{ base: 1, md: 2, lg: 3 }}
+                            className='gameCreationGrid'
+                            columns={{ base: 1, md: 2, lg: 4 }}
                             spacing={6}
                           >
                             {players &&
@@ -4200,13 +4215,7 @@ return false;
                               })}
                           </SimpleGrid>
                         </Box>
-                      </Box>
-                      <Box
-                        width={'1px'}
-                        background={'#dddddd87'}
-                        marginInline={'20px'}
-                        display={'flex'}
-                      ></Box>
+                      </Box>                     
                     </Box>
                   </>
                 ) : tab === 3 ? (

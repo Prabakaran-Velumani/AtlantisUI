@@ -23,7 +23,7 @@ import NFTBanner from 'assets/img/auth/topbg.jpg'
 import NFT from 'assets/img/nfts/Nft3.png'
 import GameBG from 'assets/img/auth/banner.png'
 import Rocket from 'assets/img/games/rocket1-removebg-preview.png'
-import { MdArrowCircleRight, MdMoreVert } from 'react-icons/md';
+import { MdArrowCircleRight, MdMoreVert, MdOutlinePublic, MdOutlineRocketLaunch } from 'react-icons/md';
 import { VSeparator } from 'components/separator/Separator';
 import GameCard from './components/gameCard';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
@@ -35,6 +35,7 @@ import TexttoVoice from './components/SpeeachKit'
 import { createScormConfig, getScormConfig, generateScorm } from 'utils/scorm/scorm';
 // @ts-ignore
 import loadingImage from 'assets/img/games/loading.gif';
+import { RiDraftLine } from 'react-icons/ri';
 interface Counting {
   draftCount: any;
   internalCount: any;
@@ -946,7 +947,7 @@ useEffect(() => {
               <Text fontSize={'1.8rem'} fontWeight={700} color={'#fff'} pb={{sm: '10px', md: '0'}} display={'flex'} alignItems={'center'} >Your Creations<Img src={Rocket} height={'50px'} width={'50px'} ml={'20px'} transform={'rotate(40deg)'} /></Text>
               <Text fontSize={'15px'} color={'#fff'} letterSpacing={{sm: '.4px',md: '1px' }}>Developing games that ignite curiosity, turning every challenge into a lesson.</Text>
             </Box>
-            <Box display={'flex'} alignItems={'center'} justifyContent={'end'} mt={{base: '15px',sm: '15px', lg: '0'}}>
+            <Box display={'flex'} alignItems={'center'} justifyContent={'start'} mt={{base: '15px',sm: '15px', lg: '0'}}>
               <Button                
                 padding={5}
                 bg="#fff"
@@ -964,15 +965,15 @@ useEffect(() => {
         <Card m={'30px 0'}>
           <Flex gridArea='1 / 1 / 2 / 2' display={{ base: 'block', md:'flex', lg: 'flex' }}>
             <Tabs variant='soft-rounded' colorScheme='brandTabs'>
-              <TabList overflowX={{ sm: 'scroll', lg: 'unset' }}>
-                <Flex>
+              <TabList overflowX={{ base: 'auto', sm: 'unset' }}>
+                <Flex width={'100%'} justifyContent={{base: 'space-between', sm: 'space-between'}}>
                   <Tab                                   
                     p={'0.5rem 0 0 0'}
                     flexDirection='column'
                     onClick={function () {
                       setTabState('Creation');
                     }}
-                    me='30px'
+                    me={{base: '10px', sm: '10px', md: '30px'}}
                     bg='unset'
                     _selected={{
                       bg: 'none'
@@ -980,10 +981,10 @@ useEffect(() => {
                     _focus={{ border: 'none' }}
                     minW='max-content'>
                     <Flex align='center'>
-                      <Text color={textColor} fontSize='lg' fontWeight='500' me='12px'>
-                        Draft
+                      <Text color={textColor} display={'flex'} alignItems={'center'} fontSize={{base: '14px', sm: '14px', md: '18px'}} fontWeight='500' me={{base: '7px', sm: '7px', md: '12px'}}>
+                        <Icon as={RiDraftLine} fontSize={'17px'} mr={{base: 1, sm: 1, md: 2}} color={textColor} /> Draft
                       </Text>
-                      <Text color='secondaryGray.600' fontSize='md' fontWeight='400'>
+                      <Text color='secondaryGray.600' fontSize={{base: '13px', sm: '13px', md: '17px'}} fontWeight='400'>
                         {showcount.draftCount}
                       </Text>
                     </Flex>
@@ -1001,7 +1002,7 @@ useEffect(() => {
                       setTabState('Review');
                     }}
                     p={'0.5rem 0 0 0'}
-                    me='30px'
+                    me={{base: '10px', sm: '10px', md: '30px'}}
                     bg='unset'
                     _selected={{
                       bg: 'none'
@@ -1010,10 +1011,10 @@ useEffect(() => {
                     minW='max-content'
                     flexDirection='column'>
                     <Flex align='center'>
-                      <Text color={textColor} fontSize='lg' fontWeight='500' me='12px'>
-                        Launched
+                      <Text color={textColor} display={'flex'} alignItems={'center'} fontSize={{base: '14px', sm: '14px', md: '18px'}} fontWeight='500'  me={{base: '7px', sm: '7px', md: '12px'}}>
+                        <Icon as={MdOutlineRocketLaunch} fontSize={'17px'} mr={{base: 1, sm: 1, md: 2}} color={textColor} /> Launched
                       </Text>
-                      <Text color='secondaryGray.600' fontSize='md' fontWeight='400'>
+                      <Text color='secondaryGray.600' fontSize={{base: '13px', sm: '13px', md: '17px'}} fontWeight='400'>
                         {showcount.internalCount}
                       </Text>
                     </Flex>
@@ -1027,7 +1028,7 @@ useEffect(() => {
                     />
                   </Tab>
                   <Tab
-                    p={'0.5rem 0 0 0'}
+                    p={'0.5rem 0 0 0'}                    
                     flexDirection='column'
                     onClick={function () {
                       setTabState('Launched');
@@ -1039,10 +1040,10 @@ useEffect(() => {
                     _focus={{ border: 'none' }}
                     minW='max-content'>
                     <Flex align='center'>
-                      <Text color={textColor} fontSize='lg' fontWeight='500' me='12px'>
-                        public
+                      <Text color={textColor} display={'flex'} alignItems={'center'} fontSize={{base: '14px', sm: '14px', md: '18px'}} fontWeight='500'  me={{base: '7px', sm: '7px', md: '12px'}}>
+                        <Icon as={MdOutlinePublic} fontSize={'17px'} mr={{base: 1, sm: 1, md: 2}} color={textColor} /> Public
                       </Text>
-                      <Text color='secondaryGray.600' fontSize='md' fontWeight='400'>
+                      <Text color='secondaryGray.600' fontSize={{base: '13px', sm: '13px', md: '17px'}} fontWeight='400'>
                         {showcount.publicCount}
                       </Text>
                     </Flex>

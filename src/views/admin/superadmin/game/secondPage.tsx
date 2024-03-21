@@ -231,7 +231,7 @@ const SecondPage: React.FC = () => {
               <Text fontSize={'1.8rem'} fontWeight={700} color={'#fff'} pb={{sm: '10px', md: '0'}} display={'flex'} alignItems={'center'} >Creation Zone<Img src={Rocket} height={'50px'} width={'50px'} ml={'20px'} transform={'rotate(40deg)'} /></Text>
               <Text fontSize={'15px'} color={'#fff'} letterSpacing={{sm: '.4px',md: '1px' }}>Building games, where learning becomes an adventure and knowledge is the ultimate reward. </Text>
             </Box>
-            <Box display={'flex'} alignItems={'center'} justifyContent={'end'} mt={{base: '15px',sm: '15px', lg: '0'}}>
+            <Box display={'flex'} alignItems={'center'} justifyContent={'start'} mt={{base: '15px',sm: '15px', lg: '0'}}>
             <Button             
              padding={5}
               bg="#fff"
@@ -247,7 +247,7 @@ const SecondPage: React.FC = () => {
 
         </Card>
         {/* <Text fontSize={'30px'} fontWeight={} mt={'25px'} alignItems={'center'} whiteSpace={'nowrap'}  color={'#1B254B'}  display={'flex'} letterSpacing={'1px'}>Customise Game Templates</Text> */}
-        <Text fontSize={'1.8rem'} fontWeight={700} m={'25px 0'} color={'#1B254B'} display={'flex'} alignItems={'center'} >Customise Game Templates</Text>
+        <Text fontSize={'21px'} fontWeight={700} m={'25px 0'} pl={'20px'} color={'#1B254B'} display={'flex'} alignItems={'center'} >Customise Game Templates</Text>
         <Card>
           <Flex gridArea='1 / 1 / 2 / 2' display={{ base: 'block', md:'flex', lg: 'flex' }}>
           <Select
