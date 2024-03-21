@@ -256,6 +256,9 @@ export default function NFT(props: {
           position="relative"
           w="100%"
           h="100%"
+          display={'flex'}
+          justifyContent={'center'}
+          alignItems={'center'}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -269,13 +272,13 @@ export default function NFT(props: {
           ) : (
             <Image
               src={image}
-              w={{ base: '100%', xl: '100%' }} // Adjust the values based on your design
-              h="400px"
+              w={{ base: '250px', xl: '250px' }} // Adjust the values based on your design
+              h={{base: "400px", sm: "400px", md: "300px"}}
               borderRadius="20px"
             />
           )}
 
-          {isHovered && tabState !== 'charater' && (
+          { (isHovered && tabState !== 'charater') || windowWidth < 768 ? (            
             <Menu
               tabState={tabState}
               position="absolute"
@@ -289,7 +292,7 @@ export default function NFT(props: {
               handelDelete={handelDelete}
               handleDownload={handleDownload}
             />
-          )}
+          ) : null }
           {/* {isHovered && (
   <Flex
     position='absolute'
@@ -543,7 +546,7 @@ export default function NFT(props: {
             }}
             mb="auto"
           >
-            <Flex direction="column">
+            <Flex direction="column" width={'100%'} alignItems={'start'}>
               {/* {handelAssign.gameNonPlayingCharacterId === id ? (
              <>
              <Box
@@ -707,11 +710,11 @@ value={handelAssign.gameNarratorVoice}
                 //   '3xl': 'lg'
                 // }}
                 mb="5px"
-                fontWeight="bold"
-                me="14px"
+                fontWeight="bold"                
                 textAlign="center"
                 fontSize="lg"
-                fontFamily="DM Sans, sans-serif"
+                textTransform={'capitalize'}
+                // fontFamily="DM Sans, sans-serif"
               >
                 {name}
               </Text>
@@ -722,8 +725,10 @@ value={handelAssign.gameNarratorVoice}
                 fontSize={{
                   base: 'sm',
                 }}
-                fontWeight="400"
-                me="14px"
+                fontWeight="400"    
+                display='flex'
+                flexWrap='wrap'
+                gap= '8px'                   
               >
                 {/* {author} */}
                 {author &&
@@ -734,10 +739,10 @@ value={handelAssign.gameNarratorVoice}
                       size="md"
                       variant="solid"
                       colorScheme="brandScheme"
-                      m="2"
+                      // mr="2"
                       bg="lightblue" // Assuming lightBlue is a variable or constant containing the background color
                     >
-                      <TagLabel>{authorItem}</TagLabel>
+                      <TagLabel color={'#11047a'}>{authorItem}</TagLabel>
                     </Tag>
                   ))}
                 {/* <Tag

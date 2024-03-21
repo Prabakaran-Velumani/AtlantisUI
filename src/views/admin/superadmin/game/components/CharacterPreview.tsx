@@ -603,21 +603,27 @@ const CharacterPreview: React.FC<{
             <ModalBody p={0} pl={'25px'} >
               {/* {formData.gameNonPlayingCharacterId === previewId ? ( */}
               <Flex
-                flexDirection="row"
-                justifyContent="Center"
-                alignItems="Center"
-                height="100vh"
+                flexDirection={{base: "column", sm: "column", md: "column", lg: 'column'}}
+                justifyContent={{base: "start", sm: "start", md: "start", lg: 'start'}}
+                alignItems={{base: "center", sm: "center", md: "center", lg: 'start'}}
+                height="80vh"
+                padding={'20px 0'}
+                // overflow={'auto'}
                 background="#ffffff"
               >
+                <Box width={{base: '0%', sm: '0%', lg: '100%'}} display={{base: 'block', sm: 'block', lg: 'flex'}} justifyContent={{base: 'end', sm: 'end', lg: 'end'}}>
+                  <ModalCloseButton position={'relative'} top={0} /> 
+                </Box>
+                <Box display={'flex'} w={'100%'} flexDir={{base: 'column', sm: 'column', md: 'column', lg: 'row'}}>
                 {formData.gameNonPlayingCharacterId !== previewId ? (
 
-                  <Card w={'70%'} h={'90%'} backgroundImage={img} backgroundSize={'cover'} mb="20" backgroundPosition={'center'} backgroundRepeat={'no-repeat'} alignItems={'end'} justifyContent={'flex-end'}>
-                    <Img src={selectedPlayer?.gasAssetImage} width={'150px'} height={'250px'} />
+                  <Card w={{base: '100%', sm: '100%', md: '100%', lg: '70%'}} mb={{base: '0px',sm: '0px', lg: '20px'}} h={{base: "40vh", sm: "40vh", md: "40vh", lg: 'auto'}} backgroundImage={img} backgroundSize={'cover'} backgroundPosition={'center'} backgroundRepeat={'no-repeat'} alignItems={'end'} justifyContent={'flex-end'}>
+                    <Img src={selectedPlayer?.gasAssetImage} width={'100px'} height={'120px'} />
                   </Card>
                 ) : (
                   prev ?
-                    <Card w={'70%'} h={'90%'} backgroundImage={img} backgroundSize={'cover'} mb="20" backgroundPosition={'center'} backgroundRepeat={'no-repeat'} alignItems={'end'} justifyContent={'flex-end'}>
-                      <Img src={selectedPlayer?.gasAssetImage} width={'150px'} height={'250px'} />
+                    <Card w={{base: '100%', sm: '100%', md: '100%', lg: '70%'}} mb={{base: '0px',sm: '0px', lg: '20px'}} h={{base: "40vh", sm: "40vh", md: "40vh", lg: 'auto'}} backgroundImage={img} backgroundSize={'cover'} backgroundPosition={'center'} backgroundRepeat={'no-repeat'} alignItems={'end'} justifyContent={'flex-end'}>
+                      <Img src={selectedPlayer?.gasAssetImage} width={'100px'} height={'120px'} />
                     </Card>
                     :
                     <Box flex="1" p={4} w={'80%'}>
@@ -625,8 +631,8 @@ const CharacterPreview: React.FC<{
                     </Box>
                 )}
                 {formData.gameNonPlayingCharacterId !== previewId ? (
-                  <Box w={'30%'} h={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                    <Card flex="1" w={'100%'} ml={'25px'} mr={'25px'} p={4} boxShadow={'5px 5px 20px #c5c5c5'}>
+                  // <Box w={{base: '100%', sm: '100%', md: '100%', lg: '30%'}} m={{base: '20px 0 0 0', sm: '20px 0 0 0', lg: '0 20px'}} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+                    <Card flex="1" w={{base: '100%', sm: '100%', md: '100%', lg: '30%'}} m={{base: '20px 0 20px 0', sm: '20px 0 20px 0', lg: '0 0 20px 20px'}} p={4} boxShadow={'5px 5px 20px #c5c5c5'}>
                     <Flex direction='column' mb='20px' mt="0px">
                       <Text fontSize={"1.25rem"} color={'#1B2559'} fontWeight={'700'}>
                       Non Playing Character 
@@ -645,9 +651,10 @@ const CharacterPreview: React.FC<{
                         Select
                       </Button>
                     </Card>
-                  </Box>) : (
-                  <Box w={'30%'} h={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'} mb={"0px"}>
-                    <Card flex="1" w={'100%'} mb={"0px"} ml={'25px'} mr={'25px'} top={'-38px'} p={4} mt={"0px"} boxShadow={'5px 5px 20px #c5c5c5'}>
+                  // </Box>
+                  ) : (
+                  // <Box w={{base: '100%', sm: '100%', md: '100%', lg: '30%'}} m={{base: '20px 0 0 0', sm: '20px 0 0 0', lg: '0 20px'}} display={'flex'} justifyContent={'center'} alignItems={'center'} mb={"0px"}>
+                    <Card flex="1" w={{base: '100%', sm: '100%', md: '100%', lg: '30%'}} m={{base: '20px 0 20px 0', sm: '20px 0 20px 0', lg: '0 0 20px 20px'}} p={4} boxShadow={'5px 5px 20px #c5c5c5'}>
                       <Flex direction='column' mb='20px' mt="0px">
                         <Text fontSize='xl' ml="1px" color={textColorPrimary} fontWeight='bold'>
                           Edit Name
@@ -1341,9 +1348,10 @@ const CharacterPreview: React.FC<{
                         Submit
                       </Button>
                     </Card>
-                  </Box>
+                  // </Box>
                   )
                 }
+                </Box>
               </Flex>
               {/* ) : ( */}
               {/* <Flex justifyContent="space-between" alignItems="center" flexDirection="column" h="100%">
