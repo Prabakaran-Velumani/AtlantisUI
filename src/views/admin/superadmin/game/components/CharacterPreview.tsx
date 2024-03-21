@@ -595,12 +595,12 @@ const CharacterPreview: React.FC<{
   };
     return (
       <>
-        <Modal isOpen={setPreview} onClose={setPreview} size={'full'} >
-          <ModalOverlay />
-          <ModalContent position="fixed" overflowY="auto" m={0}>
-            {/* <ModalHeader>Preview</ModalHeader>
-            <ModalCloseButton /> */}
-            <ModalBody p={'0 20px'} >
+        <Modal isOpen={setPreview} onClose={setPreview} size="full"  >
+          <ModalOverlay zIndex={999999999} />
+          <ModalContent position="fixed" overflowY="auto" m={0} className={'model_class'}  containerProps={{ zIndex: 999999999,}} >
+            <ModalHeader>Preview</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody p={0} pl={'25px'} >
               {/* {formData.gameNonPlayingCharacterId === previewId ? ( */}
               <Flex
                 flexDirection={{base: "column", sm: "column", md: "column", lg: 'column'}}

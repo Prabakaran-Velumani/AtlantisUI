@@ -210,45 +210,45 @@ export default function NFT(props: {
 
   let lightBlue = useColorModeValue('#3311db5c', '#3311db5c');
 
-  
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
 
-    window.addEventListener('resize', handleResize);   
+    window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-  
-  
+
+
 
   return (
     <Card
       p="20px"
-      border={
-        handelAssign.gameNonPlayingCharacterId === id
-          ? '2px solid #11047a'
-          : '' ||
-            (game?.gameDuplicated === 'YES' &&
-              game?.gameGameStage === 'Creation' &&
-              datePart === getCurrentDate()) ||
-            (game?.gameDuplicated !== 'YES' &&
-              game?.gameGameStage === 'Creation' &&
-              datePart === getCurrentDate()) ||
-            (game?.gameDuplicated !== 'YES' &&
-              game?.gameGameStage === 'Review' &&
-              datePart === getCurrentDate()) ||
-            (game?.gameDuplicated !== 'YES' &&
-              game?.gameGameStage === 'Launched' &&
-              datePart === getCurrentDate())
-          ? '5px solid #ADD8E6'
-          : 'none'
-      }
-      borderColor={
-        handelAssign.gameNonPlayingCharacterId === id ? '#11047a' : ''
-      }
+      // border={
+      //   handelAssign.gameNonPlayingCharacterId === id
+      //     ? '2px solid #11047a'
+      //     : '' ||
+      //       (game?.gameDuplicated === 'YES' &&
+      //         game?.gameGameStage === 'Creation' &&
+      //         datePart === getCurrentDate()) ||
+      //       (game?.gameDuplicated !== 'YES' &&
+      //         game?.gameGameStage === 'Creation' &&
+      //         datePart === getCurrentDate()) ||
+      //       (game?.gameDuplicated !== 'YES' &&
+      //         game?.gameGameStage === 'Review' &&
+      //         datePart === getCurrentDate()) ||
+      //       (game?.gameDuplicated !== 'YES' &&
+      //         game?.gameGameStage === 'Launched' &&
+      //         datePart === getCurrentDate())
+      //       ? '5px solid #ADD8E6'
+      //       : 'none'
+      // }
+      // borderColor={
+      //   handelAssign.gameNonPlayingCharacterId === id ? '#11047a' : ''
+      // }
     >
       <Flex direction={{ base: 'column' }} justify="center">
         <Box
