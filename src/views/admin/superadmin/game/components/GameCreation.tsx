@@ -4604,7 +4604,7 @@ const GameCreation = () => {
                 <Box
                   display={'flex'}
                   justifyContent={'space-between'}
-                  w={{ sm: '100%', md: '60%', xl: '60%', '2xl': '65%' }}
+                  w={{ sm: '75%', md: '60%', xl: '60%', '2xl': '65%' }}
                 >
                   {tab !== 1 && (
                     <Box
