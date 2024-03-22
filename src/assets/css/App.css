@@ -4611,9 +4611,14 @@ transform: translate(-167px, -84px);
 
 
 
-
+/* For Emergency */
 @media (min-width: 960px) and (max-width: 1300px) {
   .gameCreationGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+@media (min-width: 250px) and (max-width: 960px) {
+  .voice-library-filters {
+    flex-direction: column;
   }
 }
