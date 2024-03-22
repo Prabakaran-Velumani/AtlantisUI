@@ -70,7 +70,7 @@ export default function OverallRevenue(props: { [x: string]: any ,count:number})
             </Text>
           </Flex>
         </Flex>
-        <Select
+        {/* <Select
           fontSize="sm"
           variant="subtle"
           defaultValue="monthly"
@@ -80,7 +80,7 @@ export default function OverallRevenue(props: { [x: string]: any ,count:number})
           <option value="daily">Daily</option>
           <option value="monthly">Monthly</option>
           <option value="yearly">Yearly</option>
-        </Select>
+        </Select> */}
       </Flex>
       <Box minH="260px" mt="auto" w="100%">
         <LineChart

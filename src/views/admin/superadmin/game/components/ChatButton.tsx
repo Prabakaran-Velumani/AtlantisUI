@@ -94,7 +94,7 @@ const ChatButton: React.FC = () => {
           onClose={handleCloseChat}
         />
       )}
-      <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
+      <Box position='fixed' bottom ={{base:'95px',xl:'20px'}} right={{base:'25px',xl:'20px'}}>
         <Button
           bg={'#279b7e'}
           _hover={{
@@ -110,7 +110,7 @@ const ChatButton: React.FC = () => {
         >
           <Img src={ChatGPTIcon} style={{ height: '30px', maxWidth: '30px' }} />
         </Button>
-      </div>
+      </Box>
     </div>
   );
 };

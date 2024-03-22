@@ -422,11 +422,11 @@ console.log('**********',profileData);
       });
     }
   }, [gameInfo?.gameData]);
-
+  http://192.168.1.30:5555/uploads/background/2.png
   useEffect(() => {
     switch (currentScreenId) {
       case 1 && gameInfo?.gameData?.gameWelcomepageBackground:
-        setBackgroundScreenUrl(API_SERVER + '/uploads/background/20252.jpg');
+        setBackgroundScreenUrl(API_SERVER + '/uploads/background/2.png');
         break;
       case 3 && gameInfo?.gameData?.gameReflectionpageBackground:
         setBackgroundScreenUrl(
@@ -436,7 +436,7 @@ console.log('**********',profileData);
         break;
       default:
         setBackgroundScreenUrl(
-          API_SERVER + '/uploads/background/41524_1701765021527.jpg',
+          API_SERVER + '/uploads/background/2.png',
         );
         currentScreenId > 0 &&
           currentScreenId === 1 &&

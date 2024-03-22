@@ -22,14 +22,10 @@ import {
   FormControl,
   FormLabel,
 } from '@chakra-ui/react';
-import { MdOutlineSubtitles } from 'react-icons/md';
+import { MdOutlineRocketLaunch, MdOutlineSubtitles } from 'react-icons/md';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import CharacterPreview from './CharacterPreview';
-import {
-  GoCodeReview,
-GoEye,
-  GoEyeClosed		
-} from 'react-icons/go';
+import { GoCodeReview, GoEye, GoEyeClosed } from 'react-icons/go';
 import Card from 'components/card/Card';
 import GameCard from './gameCard';
 import {
@@ -57,7 +53,7 @@ import {
   getStoryValidtion,
   getGameCreatorDemoData,
   getSelectedLanguages,
-  getMaxBlockQuestNo
+  getMaxBlockQuestNo,
 } from 'utils/game/gameService';
 import { useNavigate, useParams } from 'react-router-dom';
 import Select from 'react-select';
@@ -70,7 +66,7 @@ import { FaRobot } from 'react-icons/fa';
 import { GiBlackBook } from 'react-icons/gi';
 import { FaCubes } from 'react-icons/fa';
 import { MdTune } from 'react-icons/md';
-import { IoArrowBackCircle } from 'react-icons/io5';
+import { IoArrowBackCircle, IoArrowForwardCircle } from 'react-icons/io5';
 import { BsShareFill } from 'react-icons/bs';
 import AddScores from './AddScores';
 import CompletionScreen from './Completion';
@@ -93,7 +89,7 @@ import { updatePreviewData } from '../../../../../store/preview/previewSlice';
 import { Dispatch } from '@reduxjs/toolkit'; // Import Dispatch type from @reduxjs/toolkit
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
-import { AiOutlineEye,AiOutlineEyeInvisible } from "react-icons/ai";
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 // @ts-ignore
 import loadingImage from 'assets/img/games/loading.gif';
@@ -196,6 +192,7 @@ const GameCreation = () => {
   const [extensiveNavigation, setExtensiveNavigation] = useState<number | null>(
     null,
   );
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   ///////reflectionQuestions///////////////
 
@@ -239,8 +236,8 @@ const GameCreation = () => {
   );
   const iconColor = useColorModeValue('brand.500', 'white');
   const bgList = useColorModeValue('white', 'whiteAlpha.100');
-  const Menupreview = { 
-    zIndex: 100000000 
+  const Menupreview = {
+    zIndex: 100000000,
   };
   const bgShadow = useColorModeValue(
     '14px 17px 40px 4px rgba(112, 144, 176, 0.08)',
@@ -303,7 +300,7 @@ const GameCreation = () => {
     [cat, setCat] = useState([]),
     [enter, setEnter] = useState(false),
     [entire, setEntire] = useState(false),
-	[ShowReview, setShowReview] = useState(false),											  
+    [ShowReview, setShowReview] = useState(false),
     [share, setShare] = useState(false),
     [bgIndex, setBgIndex] = useState<number>(),
     [formData, setFormData] = useState({
@@ -317,15 +314,12 @@ const GameCreation = () => {
       gameCourseType: 'Public',
       gameNonPlayingCharacterId: null,
 
-
       gameNonPlayerName: null,
       gameNonPlayerVoice: null,
       gamePlayerMaleVoice: null,
       gamePlayerFemaleVoice: null,
       gameNarratorVoice: null,
 
-			 
-			   
       gameStoryLine: '',
       gameReflectionQuestion: 4,
       gameRefQuestion1: '',
@@ -348,9 +342,7 @@ const GameCreation = () => {
       gameIsCollectLearnerFeedback: 'false',
       gameIsFeedbackMandatory: 'false',
       gameIsLearnerMandatoryQuestion: 'false',
-									  
 
-										   
       gameIsSetCongratsSingleMessage: 'false',
 
       gameIsShowTakeaway: 'false',
@@ -418,12 +410,11 @@ const GameCreation = () => {
       gameFeedBackLink: '',
       gameIsShowAdditionalWelcomeNoteInvalid: 'false',
       isCategoryIdInvalid: false,
-      //newlyadded start 
+      //newlyadded start
       isStoryTitleInvalid: false,
       isSkillsInvalid: false,
-      isfeedbackthankyou:false,
-      //newlyadded end 
-
+      isfeedbackthankyou: false,
+      //newlyadded end
     });
   const [compliData, setCompliData] = useState({
     0: {
@@ -448,7 +439,6 @@ const GameCreation = () => {
       gameLessthanDistinctionScoreCongratsMessage: null,
       gameAboveDistinctionScoreCongratsMessage: null,
       gameIsSetCongratsSingleMessage: 'false',
-
     },
   });
   const [reviews, setReviews] = useState<any[]>([]);
@@ -493,7 +483,6 @@ const GameCreation = () => {
     }
   };
 
- 
   useEffect(() => {
     if (defaultskills.length === 0 && id) {
       fetchDefaultSkill();
@@ -580,24 +569,29 @@ const GameCreation = () => {
             (language: SelectedLanguageEntry) => ({
               value: language['translationId'],
               label: language['lmsMultiLanguageSupport.language_name'],
-            })
+            }),
           );
 
           setLanguageOptions(options);
         } else {
-          console.error('Error: Selected languages data is missing or in unexpected format.');
+          console.error(
+            'Error: Selected languages data is missing or in unexpected format.',
+          );
         }
       } catch (error) {
         console.error('Error:', error);
       }
     };
 
-    if (isMenuOpen && (tab !== 1 )) {
+    if (isMenuOpen && tab !== 1) {
       fetchLanguages();
       setMenuOpen(false); // Close the menu after fetching
     }
   }, [id, isMenuOpen, tab]);
-  const handleSelectChange = (selectedOption: { value: any; label: string }) => {
+  const handleSelectChange = (selectedOption: {
+    value: any;
+    label: string;
+  }) => {
     // Do something with the selected option
     console.log('Selected Option:', selectedOption);
 
@@ -616,9 +610,7 @@ const GameCreation = () => {
       gameWelcomepageBackground: e.target.id,
     }));
   };
- 
-														  
-   
+
   const handleH = (i: any) => {
     setBackgroundIndex(i);
   };
@@ -627,9 +619,6 @@ const GameCreation = () => {
     setBackgroundIndex('');
   };
 
-														  
-   
-											   
   const handlePreview = (img: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchImg((prev: any) => {
@@ -647,8 +636,6 @@ const GameCreation = () => {
       };
     });
     onOpen();
-
-   
   };
 
   const fetch = async () => {
@@ -661,7 +648,7 @@ const GameCreation = () => {
       setSelectedAud(res?.data);
     }
   };
- 
+
   const handlePreviewPlayer = (player: any, backgroundIndex: any, i: any) => {
     setPreview(true);
     setFetchPlayerImg((prev: any) => {
@@ -728,7 +715,7 @@ const GameCreation = () => {
       };
       return item;
     });
-  
+
     setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,
@@ -797,14 +784,17 @@ const GameCreation = () => {
         // if(tab === 6)
         // {setTab(6);}
         // else{setTab(parseInt(lastValue)+1);}
-        if(tab === 6)
-        {setTab(6);console.log('parseinthi');}
-        else{
-          if((parseInt(lastValue)+1)>=6){
+        if (tab === 6) {
+          setTab(6);
+          console.log('parseinthi');
+        } else {
+          if (parseInt(lastValue) + 1 >= 6) {
             setTab(6);
-          }else{
-            setTab(parseInt(lastValue)+1);
-          };console.log('parseinthi1',tab);}
+          } else {
+            setTab(parseInt(lastValue) + 1);
+          }
+          console.log('parseinthi1', tab);
+        }
       }
     }
 
@@ -833,7 +823,6 @@ const GameCreation = () => {
   };
 
   const handleGet = async (quest: number) => {
-				 
     setAtuoSave(false);
     // console.log('handleGet');
     // return false;
@@ -924,12 +913,10 @@ const GameCreation = () => {
           const findArrayValue = tabformArray.includes(5);
           if (findArrayValue) {
             setCurrentTab(5);
-          }
-          else{
+          } else {
             setCurrentTab(0);
           }
-        }
-        else{
+        } else {
           setCurrentTab(0);
         }
         setAtuoSave(true);
@@ -1029,11 +1016,13 @@ const GameCreation = () => {
     }
   }, [id, items]);
 
-useEffect(()=>{
-  dispatch(updatePreviewData({isDispatched:true, CompKeyCount: CompKeyCount}))
-},[CompKeyCount])
+  useEffect(() => {
+    dispatch(
+      updatePreviewData({ isDispatched: true, CompKeyCount: CompKeyCount }),
+    );
+  }, [CompKeyCount]);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (id) {
       const previewData = {
         gameId: parseInt(id),
@@ -1046,18 +1035,17 @@ useEffect(()=>{
   }, [id, tab, currentTab, questTabState]);
 
   const handleEntirePrev = async () => {
- 
-      const previewData = {
-        gameId: parseInt(id),
-        currentTab: tab,
-        currentSubTab: currentTab,
-        currentQuest: questTabState,
-        isDispatched: true,
-      };
-      dispatch(updatePreviewData(previewData));
-      const url = `/screen/preview/${id}`;
-      window.open(url, '_blank');
-    }
+    const previewData = {
+      gameId: parseInt(id),
+      currentTab: tab,
+      currentSubTab: currentTab,
+      currentQuest: questTabState,
+      isDispatched: true,
+    };
+    dispatch(updatePreviewData(previewData));
+    const url = `/screen/preview/${id}`;
+    window.open(url, '_blank');
+  };
 
   const handleShareReview = () => {
     setEntire(false);
@@ -1065,52 +1053,73 @@ useEffect(()=>{
     setPreview(false);
     onOpen();
   };
-	 const handleShowReview = () => {
+  const handleShowReview = () => {
     setShowReview(!ShowReview);
-   
-  };							  
+  };
 
-  
   const handleTrans = (tabs: number) => {
     let tabArray: number[] = [];
 
     // Watching Stepper Height for Green Progress
-    const tab1 = document.getElementById(`tab1`)
+    const tab1 = document.getElementById(`tab1`);
     const title1 = tab1?.getAttribute('title');
     const getfirstElementHgt = tab1?.clientHeight;
 
     //tab2
-    const tab2 = document.getElementById(`tab2`)
+    const tab2 = document.getElementById(`tab2`);
     const title2 = tab2?.getAttribute('title');
     const getsecondElementHgt = tab2?.clientHeight;
     //tab3
-    const tab3 = document.getElementById(`tab3`)
+    const tab3 = document.getElementById(`tab3`);
     const title3 = tab3?.getAttribute('title');
     const getThirdElementHgt = tab3?.clientHeight;
     //tab4
-    
-    const tab4 = document.getElementById(`tab4`)    
+
+    const tab4 = document.getElementById(`tab4`);
     const title4 = tab4?.getAttribute('title');
     const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
-    const tab4Height = tabs == 4 && (getFourElementHgt + getfirstElementHgt)
-    
+    const tab4Height = tabs == 4 && getFourElementHgt + getfirstElementHgt;
+
     //tab5
-    const tab5 = document.getElementById(`tab5`)
+    const tab5 = document.getElementById(`tab5`);
     const title5 = tab5?.getAttribute('title');
     const getFifthElementHgt = tab5?.clientHeight;
     //tab6
-    const tab6 = document.getElementById(`tab6`)
+    const tab6 = document.getElementById(`tab6`);
     const title6 = tab6?.getAttribute('title');
     const getSixthElementHgt = tab6?.clientHeight;
-    
-    if(title6 === 'done') {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
+
+    if (title6 === 'done') {
+      setHeightOfTab(
+        getfirstElementHgt +
+          getsecondElementHgt +
+          getThirdElementHgt +
+          getFourElementHgt +
+          getFifthElementHgt +
+          getSixthElementHgt +
+          150,
+      );
     } else if (title5 === 'done') {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+      setHeightOfTab(
+        getfirstElementHgt +
+          getsecondElementHgt +
+          getThirdElementHgt +
+          getFourElementHgt +
+          getFifthElementHgt +
+          120,
+      );
     } else if (title4 === 'done') {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + 90 );
+      setHeightOfTab(
+        getfirstElementHgt +
+          getsecondElementHgt +
+          getThirdElementHgt +
+          getFourElementHgt +
+          90,
+      );
     } else if (title3 === 'done') {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
+      setHeightOfTab(
+        getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60,
+      );
     } else if (title2 === 'done') {
       setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
     } else if (title1 === 'done') {
@@ -1434,44 +1443,68 @@ useEffect(()=>{
   };
   ///navin 15-12
 
-  useEffect(()=> { // Watching Stepper Height
+  useEffect(() => {
+    // Watching Stepper Height
 
-    const tab1 = document.getElementById(`tab1`)
+    const tab1 = document.getElementById(`tab1`);
     const title1 = tab1?.getAttribute('title');
     const getfirstElementHgt = tab1?.clientHeight;
     //tab2
-    const tab2 = document.getElementById(`tab2`)
+    const tab2 = document.getElementById(`tab2`);
     const title2 = tab2?.getAttribute('title');
     const getsecondElementHgt = tab2?.clientHeight;
     //tab3
-    const tab3 = document.getElementById(`tab3`)
+    const tab3 = document.getElementById(`tab3`);
     const title3 = tab3?.getAttribute('title');
     const getThirdElementHgt = tab3?.clientHeight;
     //tab4
-    const tab4 = document.getElementById(`tab4`)
-    const taby4 = document.getElementById(`taby4`)
+    const tab4 = document.getElementById(`tab4`);
+    const taby4 = document.getElementById(`taby4`);
     const title4 = taby4?.getAttribute('title');
     const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
-    const tab4Height = tab == 4 && (getFourElementHgt + getfirstElementHgt)
-    console.log('getFourElementHgttab',questTabState);
-    console.log('getFourElementHgt',getFourElementHgt)
+    const tab4Height = tab == 4 && getFourElementHgt + getfirstElementHgt;
+    console.log('getFourElementHgttab', questTabState);
+    console.log('getFourElementHgt', getFourElementHgt);
     //tab5
-    const tab5 = document.getElementById(`tab5`)
+    const tab5 = document.getElementById(`tab5`);
     const title5 = tab5?.getAttribute('title');
     const getFifthElementHgt = tab5?.clientHeight;
     //tab6
-    const tab6 = document.getElementById(`tab6`)
+    const tab6 = document.getElementById(`tab6`);
     const title6 = tab6?.getAttribute('title');
     const getSixthElementHgt = tab6?.clientHeight;
-    
-    if(title6 === 'done') {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + getSixthElementHgt + 150);
+
+    if (title6 === 'done') {
+      setHeightOfTab(
+        getfirstElementHgt +
+          getsecondElementHgt +
+          getThirdElementHgt +
+          getFourElementHgt +
+          getFifthElementHgt +
+          getSixthElementHgt +
+          150,
+      );
     } else if (title5 === 'done') {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + getFifthElementHgt + 120 );
+      setHeightOfTab(
+        getfirstElementHgt +
+          getsecondElementHgt +
+          getThirdElementHgt +
+          getFourElementHgt +
+          getFifthElementHgt +
+          120,
+      );
     } else if (title4 === 'done') {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + getFourElementHgt + 90 );
+      setHeightOfTab(
+        getfirstElementHgt +
+          getsecondElementHgt +
+          getThirdElementHgt +
+          getFourElementHgt +
+          90,
+      );
     } else if (title3 === 'done') {
-      setHeightOfTab(getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60 );
+      setHeightOfTab(
+        getfirstElementHgt + getsecondElementHgt + getThirdElementHgt + 60,
+      );
     } else if (title2 === 'done') {
       setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
     } else if (title1 === 'done') {
@@ -2012,7 +2045,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
                 var note = input[inputkey].note;
 
                 if (!note) {
-                  setValidation({ ...validation, [`Note${key.input}`]: true })
+                  setValidation({ ...validation, [`Note${key.input}`]: true });
                   toast({
                     title: `Note is Empty On This Sequence ${key.id} `,
                     status: 'error',
@@ -2028,7 +2061,10 @@ if (formData.gameIsFeedbackMandatory === "true") {
                 var voice = input[inputkey]?.voice;
 
                 if (!Dialog) {
-                  setValidation({ ...validation, [`Dialog${key.input}`]: true })
+                  setValidation({
+                    ...validation,
+                    [`Dialog${key.input}`]: true,
+                  });
                   toast({
                     title: `Dialogue is Empty On This Sequence ${key.id} `,
                     status: 'error',
@@ -2052,7 +2088,10 @@ if (formData.gameIsFeedbackMandatory === "true") {
                 var blockRoll = input[inputkey]?.blockRoll;
                 var interaction = input[inputkey]?.interaction;
                 if (!interaction) {
-                  setValidation({ ...validation, [`Interaction${key.input}`]: true })
+                  setValidation({
+                    ...validation,
+                    [`Interaction${key.input}`]: true,
+                  });
                   toast({
                     title: `Interaction is Empty On This Sequence ${key.id} `,
                     status: 'error',
@@ -2088,7 +2127,10 @@ if (formData.gameIsFeedbackMandatory === "true") {
                   ) || []) {
                     if (!input[inputkey]?.optionsObject[alp.option]) {
                       var option = alp.option;
-                      setValidation({ ...validation, [`options${key.input}${option}`]: true })
+                      setValidation({
+                        ...validation,
+                        [`options${key.input}${option}`]: true,
+                      });
                       toast({
                         title: `${option} is Empty On This Sequence ${key.id} `,
                         status: 'error',
@@ -2099,7 +2141,10 @@ if (formData.gameIsFeedbackMandatory === "true") {
                     }
                     if (!input[inputkey]?.optionsemotionObject[alp.option]) {
                       var option = alp.option;
-                      setValidation({ ...validation, [`optionsEmotion${key.input}${option}`]: true })
+                      setValidation({
+                        ...validation,
+                        [`optionsEmotion${key.input}${option}`]: true,
+                      });
                       toast({
                         title: `${option} is Empty On This Sequence ${key.id} Please Select`,
                         status: 'error',
@@ -2120,7 +2165,10 @@ if (formData.gameIsFeedbackMandatory === "true") {
                         const ansValue = input[inputkey]?.ansObject[option];
                         isAtLeastOneTrue = true;
                         if (!input[inputkey]?.scoreObject[option]) {
-                          setValidation({ ...validation, [`score${key.input}`]: true })
+                          setValidation({
+                            ...validation,
+                            [`score${key.input}`]: true,
+                          });
                           toast({
                             title: `${option} Score is Empty On This Sequence ${key.id}`,
                             status: 'error',
@@ -2132,7 +2180,10 @@ if (formData.gameIsFeedbackMandatory === "true") {
                       }
                     }
                     if (!isAtLeastOneTrue) {
-                      setValidation({ ...validation, [`checkbox${key.input}`]: true })
+                      setValidation({
+                        ...validation,
+                        [`checkbox${key.input}`]: true,
+                      });
                       toast({
                         title: `At least one option must be selected on this sequence ${key.id}`,
                         status: 'error',
@@ -2146,18 +2197,22 @@ if (formData.gameIsFeedbackMandatory === "true") {
               }
               var hasComplete = inputdataget.some((item: any) => {
                 return (
-                  item &&(item.Notenavigate === 'Complete' || item.Dialognavigate === 'Complete' || (item.navigateObjects && Object.values(item.navigateObjects).includes('Complete')))
+                  item &&
+                  (item.Notenavigate === 'Complete' ||
+                    item.Dialognavigate === 'Complete' ||
+                    (item.navigateObjects &&
+                      Object.values(item.navigateObjects).includes('Complete')))
                 );
               });
-                if (!hasComplete) {
-                  toast({
-                    title:`At least Any One of the  Select Block as Complete`,
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                  });
-                  return false;
-                }
+              if (!hasComplete) {
+                toast({
+                  title: `At least Any One of the  Select Block as Complete`,
+                  status: 'error',
+                  duration: 3000,
+                  isClosable: true,
+                });
+                return false;
+              }
             }
 
             const apiValidationResult = await getStoryValidtion(id);
@@ -2586,7 +2641,10 @@ return false;
   const handlecompletion = (e: any) => {
     const inputValue = e.target.value;
     const { name, value, checked } = e.target;
-    if((name === 'gameIsSetMinPassScore'  && checked === true) || (name === 'gameIsSetDistinctionScore' && checked === true)){
+    if (
+      (name === 'gameIsSetMinPassScore' && checked === true) ||
+      (name === 'gameIsSetDistinctionScore' && checked === true)
+    ) {
       setCompliData((prevInput: any) => {
         return {
           ...prevInput,
@@ -2880,7 +2938,6 @@ return false;
     }
   }, [formData.gameIsSetCongratsSingleMessage]);
 
-  
   //navin
   const playerPerview = (id: any) => {
     setPreview(true);
@@ -2903,7 +2960,7 @@ return false;
     }
   };
   const reducePercentage = 16 * tab - 16;
-  
+
   useEffect(() => {
     if (formData.gameNonPlayingCharacterId) {
       playerPerview(formData.gameNonPlayingCharacterId);
@@ -2923,9 +2980,13 @@ return false;
         if (resu.status !== 'Success') {
           return false;
         }
-        if(resu.status == 'Success')
-        {
-          dispatch(updatePreviewData({isDispatched: true, reflectionPageUpdated: true}));
+        if (resu.status == 'Success') {
+          dispatch(
+            updatePreviewData({
+              isDispatched: true,
+              reflectionPageUpdated: true,
+            }),
+          );
         }
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
@@ -2944,7 +3005,6 @@ return false;
             gameId: id,
           };
           debouncedSubmit(data);
-          
         }
       }
     }
@@ -2956,9 +3016,8 @@ return false;
       try {
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
-        }
-        else{
-          dispatch(updatePreviewData({isDispatched: true}));
+        } else {
+          dispatch(updatePreviewData({ isDispatched: true }));
         }
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
@@ -2997,8 +3056,6 @@ return false;
     [id], // Empty dependency array to ensure that the function is only created once
   );
 
-
-
   const debouncedCompliSubmit = useCallback(
     debounce(async (data: any) => {
       try {
@@ -3007,10 +3064,8 @@ return false;
         const result = await UpdateCompletionScreen(id, datas);
         if (result?.status !== 'Success') {
           console.log('data not updated');
-        }
-        else{
-
-          dispatch(updatePreviewData({isDispatched: true}));
+        } else {
+          dispatch(updatePreviewData({ isDispatched: true }));
         }
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
@@ -3052,8 +3107,6 @@ return false;
     if (id && autosave) {
       if (Object.keys(Completion).length) debouncedCompliSubmit(compliData);
     }
-											   
-														 
   }, [compliData]);
 
   ////handleCompliStore
@@ -3250,31 +3303,36 @@ return false;
 
   const delSeq = (seq: any, i: any, name: any) => {
     const filteredNotes = Object.keys(input)
-        .filter(noteKey => input[noteKey].Notenavigate === seq.input)
-        .map(noteKey => {
-            input[noteKey].Notenavigate = null;
-            input[noteKey].NoteleadShow = null;
-            return input[noteKey];
-        });
+      .filter((noteKey) => input[noteKey].Notenavigate === seq.input)
+      .map((noteKey) => {
+        input[noteKey].Notenavigate = null;
+        input[noteKey].NoteleadShow = null;
+        return input[noteKey];
+      });
     const filteredDialog = Object.keys(input)
-        .filter(dialogKey => input[dialogKey].Dialognavigate === seq.input)
-        .map(dialogKey => {
-            input[dialogKey].Dialognavigate = null;
-            input[dialogKey].DialogleadShow = null;
-            return input[dialogKey];
+      .filter((dialogKey) => input[dialogKey].Dialognavigate === seq.input)
+      .map((dialogKey) => {
+        input[dialogKey].Dialognavigate = null;
+        input[dialogKey].DialogleadShow = null;
+        return input[dialogKey];
+      });
+    const filteredInteraction = Object.keys(input)
+      .filter(
+        (interactionkey) =>
+          input[interactionkey].navigateObjects &&
+          Object.values(input[interactionkey].navigateObjects).includes(
+            seq.input,
+          ),
+      )
+      .map((interactionkey) => {
+        Object.keys(input[interactionkey].navigateObjects).forEach((option) => {
+          if (input[interactionkey].navigateObjects[option] === seq.input) {
+            input[interactionkey].navigateObjects[option] = null;
+            input[interactionkey].navigateshowObjects[option] = null;
+          }
         });
-        const filteredInteraction = Object.keys(input)
-        .filter(interactionkey => input[interactionkey].navigateObjects && Object.values(input[interactionkey].navigateObjects).includes(seq.input))
-        .map(interactionkey => {
-            Object.keys(input[interactionkey].navigateObjects).forEach(option => {
-                if (input[interactionkey].navigateObjects[option] === seq.input) {
-                  input[interactionkey].navigateObjects[option] = null;
-                  input[interactionkey].navigateshowObjects[option] = null;
-                  
-                }
-              });
-            return input[interactionkey];
-        });
+        return input[interactionkey];
+      });
     if (name === 'Interaction') {
       setAlphabet((prevAlphabet: any) => {
         // Use filter to create a new array without items that match the condition
@@ -3485,7 +3543,9 @@ return false;
         }
       }
     }
-    dispatch(updatePreviewData({activeBlockSeq: parseInt(seq.id.split('.')[1])}));
+    dispatch(
+      updatePreviewData({ activeBlockSeq: parseInt(seq.id.split('.')[1]) }),
+    );
   };
 
   const moveItem = (startIndex: number, endIndex: number, seq: any) => {
@@ -3540,21 +3600,59 @@ return false;
     setExtensiveNavigation(id);
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);   
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <>
       {loading && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(10px)' }}>
-          <img src={loadingImage} alt="Loading" style={{ width: '25%', maxWidth: '200px', backgroundColor: 'transparent' }}/>
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 9999,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backdropFilter: 'blur(10px)',
+          }}
+        >
+          <img
+            src={loadingImage}
+            alt="Loading"
+            style={{
+              width: '25%',
+              maxWidth: '200px',
+              backgroundColor: 'transparent',
+            }}
+          />
         </div>
       )}
 
       <Grid templateColumns="repeat(5, 1fr)" gap={2}>
         <GridItem
-          colSpan={{ sm: 1, md: 1, lg: 1 }}
-          display={{ base: 'none', lg: 'block' }}
+          colSpan={{ lg: 0, xl: 1 }}
+          display={{
+            base: 'none',
+            sm: 'none',
+            md: 'none',
+            lg: 'none',
+            xl: 'block',
+          }}
         >
           <HStack borderRadius={'20px'} width={'280px'} overflow={'auto'}>
-          <Card
+            <Card
               position="fixed"
               flexDirection="column"
               bg={'#E2E8F0'}
@@ -3805,8 +3903,8 @@ return false;
             </Card>
           </HStack>
         </GridItem>
-        <GridItem colSpan={{ sm: 5, md: 5, lg: 4 }}>
-          <Box className="game-creation" mt={{ base: '100px', xl: '100px' }}>
+        <GridItem colSpan={{ sm: 5, md: 5, lg: 5, xl: 4 }}>
+          <Box className="game-creation" mt={{ base: '50px', xl: '100px' }}>
             <Grid templateColumns="repeat(1, 1fr)" gap={6}>
               <GridItem w="100%" colSpan={2}>
                 {/*******************Changes-14/12/23*************************/}
@@ -3838,15 +3936,16 @@ return false;
                         <Text
                           fontSize={'20px'}
                           fontWeight={800}
-                          m={'10px 10px 10px 20px'}
+                          // m={'10px 10px 10px 20px'}
+                          pl={'13px'}
                         >
                           Select a Background
                         </Text>
                       </Box>
-                      <Divider mb={'0px'} />
+                      {/* <Divider mb={'0px'} /> */}
                       <Box
-                        height={'700px'}
-                        overflowY={'auto'}
+                        // height={'700px'}
+                        // overflowY={'auto'}
                         borderRadius={'70px'}
                         padding={'30px 0'}
                       >
@@ -3890,7 +3989,7 @@ return false;
                                       cursor="pointer"
                                     />
 
-                                    {backgroundIndex === i ? (
+                                    {backgroundIndex === i || windowWidth < 768 ? (
                                       <Flex
                                         position="absolute"
                                         bottom="0px"
@@ -3906,7 +4005,7 @@ return false;
                                             'transform 0.5s ease, opacity 0.5s ease',
                                         }}
                                       >
-                                        <Box
+                                        {/* <Box
                                           bg="white"
                                           width="50%"
                                           height="35px"
@@ -3922,10 +4021,10 @@ return false;
                                           <span style={{ color: 'black' }}>
                                             Preview
                                           </span>
-                                        </Box>
+                                        </Box> */}
                                         <Box
                                           bg="#11047a"
-                                          width="50%"
+                                          width="100%"
                                           height="35px"
                                           borderBottomRightRadius="10px"
                                           display="flex"
@@ -3962,7 +4061,7 @@ return false;
                                             'transform 0.5s ease, opacity 0.5s ease',
                                         }}
                                       >
-                                        <Box
+                                        {/* <Box
                                           bg="white"
                                           width="50%"
                                           height="35px"
@@ -3975,10 +4074,10 @@ return false;
                                           <span style={{ color: 'black' }}>
                                             Preview
                                           </span>
-                                        </Box>
+                                        </Box> */}
                                         <Box
                                           bg="#11047a"
-                                          width="50%"
+                                          width="100%"
                                           height="35px"
                                           borderBottomRightRadius="10px"
                                           display="flex"
@@ -4015,8 +4114,8 @@ return false;
                                         {img?.temp.tempTitle}
                                       </Text>
                                     </Box>
-                                    <Box mt={2}>
-                                      {backgroundIndex === i ? (
+                                    <Box mt={2} h={'12px'}>
+                                       {backgroundIndex === i || windowWidth < 768 ? (
                                         <Text
                                           fontSize={'12px'}
                                           fontWeight={'500'}
@@ -4073,8 +4172,8 @@ return false;
                   <>
                     {preview && (
                       <CharacterPreview
-                      id={id}
-                      languages={languages}
+                        id={id}
+                        languages={languages}
                         voices={voices}
                         prev={preview}
                         show={img}
@@ -4106,20 +4205,22 @@ return false;
                           <Text
                             fontSize={'20px'}
                             fontWeight={800}
-                            m={'10px 10px 10px 20px'}
+                            // m={'10px 10px 10px 20px'}
+                            pl={'13px'}
                           >
                             Select a Non-Playing Character
                           </Text>
                         </Box>
-                        <Divider mb={'0px'} />
+                        {/* <Divider mb={'0px'} /> */}
                         <Box
-                          height={'700px'}
-                          overflowY={'auto'}
+                          // height={'700px'}
+                          // overflowY={'auto'}
                           borderRadius={'70px'}
                           padding={'30px 0'}
                         >
                           <SimpleGrid
-                            columns={{ base: 1, md: 2, lg: 3 }}
+                            className='gameCreationGrid'
+                            columns={{ base: 1, md: 2, lg: 4 }}
                             spacing={6}
                           >
                             {players &&
@@ -4151,19 +4252,13 @@ return false;
                               })}
                           </SimpleGrid>
                         </Box>
-                      </Box>
-                      <Box
-                        width={'1px'}
-                        background={'#dddddd87'}
-                        marginInline={'20px'}
-                        display={'flex'}
-                      ></Box>
+                      </Box>                     
                     </Box>
                   </>
                 ) : tab === 3 ? (
                   <>
                     <AboutStory
-                    languages={languages}
+                      languages={languages}
                       defaultskills={defaultskills}
                       setDefaultSkills={setDefaultSkills}
                       setCat={setCat}
@@ -4214,7 +4309,7 @@ return false;
                       deleteQuest={deleteQuest}
                       upNextCount={upNextCount}
                       setUpNextCount={setUpNextCount}
-					            ShowReview={ShowReview}						 
+                      ShowReview={ShowReview}
                       validation={validation}
                       setValidation={setValidation}
                     />
@@ -4288,16 +4383,15 @@ return false;
                 ) : null}
               </GridItem>
             </Grid>
-             {(tab !== 4 && tab !== 6) && ShowReview && (
-			   
-              <Menu>
+            {tab !== 4 && tab !== 6 && ShowReview && (
+              <Menu >
                 <MenuButton
                   p="0px"
                   bg={'brandScheme'}
                   position={'fixed'}
-                  bottom={'0'}
-                  right={'5px'}
-                  className='menureviewshow'
+                  bottom={{base:'95px',xl:'0'}}
+                  right={{base:'15px',xl:'5px'}}
+                  className="menureviewshow"
                 >
                   <Icon
                     as={AiFillMessage}
@@ -4308,7 +4402,6 @@ return false;
                     borderRadius={'50%'}
                     p={'15px'}
                     me="10px"
-                  
                   />
                 </MenuButton>
                 <MenuList
@@ -4318,12 +4411,13 @@ return false;
                   borderRadius="20px"
                   bg={menuBg}
                   border="none"
+                  
                   mt="10px"
                   minW={{ base: '360px' }}
                   maxW={{ base: '360px', md: 'unset' }}
                   zIndex={'100000000'}
                 >
-                  <FormControl >
+                  <FormControl>
                     <FormLabel fontSize={18} fontWeight={700}>
                       Feedback For{' '}
                       {tab === 1
@@ -4431,273 +4525,438 @@ return false;
                 </MenuList>
               </Menu>
             )}
-            <Flex justify="center">
-              <Card
-                display={'flex'}
-                justifyContent={tab === 1 || tab === 2 ? 'end' : 'flex-end'}
-                flexDirection="row"
-                h="95px"
-                w="500px"
-                position={'fixed'}
-                boxShadow={'1px 3px 14px #0000'}
-                top={'24px'}
-                right={'8px'}
-                zIndex={99}
-                background={'#0000 !important'}
-              >
-                <Menu isOpen={isOpen1} onClose={onClose1}>
-                  <MenuButton
-                    alignItems="center"
-                    justifyContent="center"
-                    w="37px"
-                    h="37px"
-                    lineHeight="100%"
-                    onClick={onOpen1}
-                    borderRadius="10px"
-                  >
-                    <Icon
-                      as={BsShareFill}
-                      color="#11047a"
-                      mt="18px"
-                      cursor={'pointer'}
-                      w={'22px'}
-                      h={'22px'}
-                      mr={'9px'}
-                    />
-                  </MenuButton>
-                  <Box
-                    position="absolute"
-                    left="0"
-                    top="0"
-                    w="170px"
-                    minW="unset"
-                    maxW="170px !important"
-                    border="transparent"
-                    borderRadius="20px"
-                    bg="transparent"
-                    p="15px"
-                    zIndex="1000"
-                  >
-                    <MenuList
-                      w="170px"
-                      minW="unset"
-                      maxW="170px !important"
-                      border="transparent"
-                      backdropFilter="blur(63px)"
-                      boxShadow={bgShadow}
-                      borderRadius="20px"
-                      position="absolute"
-                      p="15px"
-                      zIndex="1000" // Set a higher z-index value
-                      right="0"
+            <Box
+              w={{
+                base: '80%',
+                sm: '80%',
+                md: '76%',
+                lg: '76%',
+              }}
+              position={'fixed'}
+              top={0}
+              zIndex={999999}
+            >
+              <Box display={'flex'} flexDirection={{ sm: 'column', md: 'row' }}>
+                <Box
+                  display={'flex'}
+                  justifyContent={'space-between'}
+                  w={{ sm: '75%', md: '60%', xl: '60%', '2xl': '65%' }}
+                >
+                  {tab !== 1 && (
+                    <Box
+                      display={{
+                        base: 'none',
+                        sm: 'none',
+                        md: 'none',
+                        lg: 'none',
+                        xl: 'flex',
+                      }}
                     >
-                      <MenuItem
-                        transition="0.2s linear"
-                        color={textColor}
-                        _hover={textHover}
-                        p="0px"
-                        borderRadius="8px"
-                        _active={{
-                          bg: 'transparent',
-                        }}
-                        _focus={{
-                          bg: 'transparent',
-                        }}
-                        mb="10px"
-                      >
-                        <Flex align="center">
+                      <Flex justify={'flex-start'} alignItems={'center'}>
+                        <IoArrowBackCircle
+                          onClick={() => {
+                            setTab(tab - 1);
+                          }}
+                          size={46} // Adjust the size as needed
+                          color="#11047a"
+                          style={{
+                            // position: 'fixed',
+                            // top: '43px',
+                            // left: '350px',
+                            zIndex: 99,
+                            cursor: 'pointer',
+                          }}
+                        />
+                      </Flex>
+                    </Box>
+                  )}
+                  <Flex justify="center">
+                    <Card
+                      display={'flex'}
+                      justifyContent={
+                        tab === 1 || tab === 2 ? 'end' : 'flex-end'
+                      }
+                      flexDirection="row"
+                      h="95px"
+                      boxShadow={'1px 3px 14px #0000'}
+                      // position={'fixed'}
+                      // top={'24px'}
+                      // right={'8px'}
+                      zIndex={99}
+                      background={'#0000 !important'}
+                    >
+                      <Menu isOpen={isOpen1} onClose={onClose1}>
+                        <MenuButton
+                          alignItems="center"
+                          justifyContent="center"
+                          w="37px"
+                          h="37px"
+                          lineHeight="100%"
+                          onClick={onOpen1}
+                          borderRadius="10px"
+                        >
                           <Icon
-                            as={IoIosPersonAdd}
-                            h="16px"
-                            w="16px"
-                            me="8px"
+                            as={BsShareFill}
+                            color="#11047a"
+                            mt="18px"
+                            cursor={'pointer'}
+                            w={'22px'}
+                            h={'22px'}
+                            mr={'9px'}
                           />
-                          <Text fontSize="sm" fontWeight="400">
-                            Add Creator
-                          </Text>
-                        </Flex>
-                      </MenuItem>
-                      <MenuItem
-                        transition="0.2s linear"
-                        color={textColor}
-                        _hover={textHover}
-                        p="0px"
-                        borderRadius="8px"
-                        _active={{
-                          bg: 'transparent',
-                        }}
-                        _focus={{
-                          bg: 'transparent',
-                        }}
-                        mb="10px"
-                      >
-                        <Flex align="center" onClick={handleShareReview}>
-                          <Icon as={GoCodeReview} h="16px" w="16px" me="8px" />
-                          <Text fontSize="sm" fontWeight="400">
-                            Share for Review
-                          </Text>
-                        </Flex>
-					   
-                      </MenuItem>
-						<MenuItem	   
-                        transition="0.2s linear"
-                        color={textColor}
-                        _hover={textHover}
-                        p="0px"
-                        borderRadius="8px"
-                        _active={{
-                          bg: 'transparent',
-                        }}
-                        _focus={{
-                          bg: 'transparent',
-                        }}
-                        mb="10px"
-                      >
-                        <Flex align="center" onClick={handleShowReview}>
-                          <Icon as={ShowReview ?AiOutlineEyeInvisible:AiOutlineEye} h="16px" w="16px" me="8px" />
-                          <Text fontSize="sm" fontWeight="400">
-                            {ShowReview ? "Hide Review" : "Show Review"}
-                          </Text>
-                        </Flex>
-                       
-                      </MenuItem>		   
-                    </MenuList>
-                  </Box>
-                </Menu>
-                {tab !== 1 && tab !== 6 ? (
-                  <Select
-                    options={[defaultLanguageOption, ...languageOptions]}
-                    // options={languageOptions}
-                    isSearchable
-                    placeholder="Language.."
-                    onChange={handleSelectChange}
-                    onMenuOpen={() => setMenuOpen(true)}
-                    styles={{
-                      control: (base) => ({
-                        ...base,
-                        borderRadius: '12px',
-                        // borderColor: formData.isCategoryIdInvalid ? 'red' : '#ccc',
-                        _focus: { borderColor: 'teal.300' },
-                        minHeight: '42px',
-                        cursor: 'pointer',
-                        fontSize: 'sm',
-                        marginRight: '17px',
-                        marginTop: '6px',
-                        marginLeft: '11px',
-                        width: '150px'
-                      }),
-                    }}
-                  />
-                ) : null}
-
-    
-                {tab == 3 && 
-                ( formData?.gameTitle ||
-                  formData?.gameStoryLine ||
-                  formData?.gameSkills ||
-                  formData?.gameLearningOutcome || 
-                  formData?.gameAuthorName ) &&
-                  (
-                  <Button
-                    bg="#11047a"
-                    _hover={{ bg: '#190793' }}
-                    color="#fff"
-                    h={'46px'}
-                    w={'128px'}
-                    display={'block'}
-                    mr={'17px'}
-                    mt={'6px'}
-                    ml={'11px'}
-                    onClick={handleEntirePrev}
-                  >
-                    Preview
-                  </Button>
-                )}
-
-              {tab === 4 && BlockItems?.length > 0 && (
-                  <Button
-                    bg="#11047a"
-                    _hover={{ bg: '#190793' }}
-                    color="#fff"
-                    h={'46px'}
-                    w={'128px'}
-                    mr={'17px'}
-                    mt={'6px'}
-                    ml={'11px'}
-                    onClick={handleEntirePrev}
-                  >
-                    Preview
-                  </Button>
-                ) }
-                {tab == 5 && (
-                <Button
-                    bg="#11047a"
-                    _hover={{ bg: '#190793' }}
-                    color="#fff"
-                    h={'46px'}
-                    w={'128px'}
-                    mr={'17px'}
-                    mt={'6px'}
-                    ml={'11px'}
-                    onClick={handleEntirePrev}
-                  >
-                    Preview
-                  </Button>
-                )}
-
-                {tab === 5  ? (
-                  <Button
-                    bg="#11047a"
-                    _hover={{ bg: '#190793' }}
-                    color="#fff"
-                    h={"46px"}
-                    w={"128px"}
-                    onClick={() => handleNext()}
-                    mr={"33px"}
-                    mt={"7px"}
-                  >
-                    Next
-                  </Button>
-):(
-  tab !== 1 &&
-  tab !== 2 &&
-  tab !== 5 && (
-    <Button
-      bg="#11047a"
-      _hover={{ bg: '#190793' }}
-      color="#fff"
-      h={'46px'}
-      w={'128px'}
-      onClick={commonNextFunction}
-      mr={'33px'}
-      mt={'7px'}
-    >
-      {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
-    </Button>
-  )
-)}
-
-                {/* navin */}
-              </Card>
-            </Flex>
-            {tab !== 1 && (
-              <Flex justify={'flex-start'}>
-                <IoArrowBackCircle
-                  onClick={() => {
-                    setTab(tab - 1);
+                        </MenuButton>
+                        <Box
+                          position="absolute"
+                          left="0"
+                          top="0"
+                          w="170px"
+                          minW="unset"
+                          maxW="170px !important"
+                          border="transparent"
+                          borderRadius="20px"
+                          bg="transparent"
+                          p="15px"
+                          zIndex="1000"
+                        >
+                          <MenuList
+                            w="170px"
+                            minW="unset"
+                            maxW="170px !important"
+                            border="transparent"
+                            backdropFilter="blur(63px)"
+                            boxShadow={bgShadow}
+                            borderRadius="20px"
+                            position="absolute"
+                            p="15px"
+                            zIndex="1000" // Set a higher z-index value
+                            right={{lg:'-180px',xl:'0'}}
+                          >
+                            <MenuItem
+                              transition="0.2s linear"
+                              color={textColor}
+                              _hover={textHover}
+                              p="0px"
+                              borderRadius="8px"
+                              _active={{
+                                bg: 'transparent',
+                              }}
+                              _focus={{
+                                bg: 'transparent',
+                              }}
+                              mb="10px"
+                            >
+                              <Flex align="center">
+                                <Icon
+                                  as={IoIosPersonAdd}
+                                  h="16px"
+                                  w="16px"
+                                  me="8px"
+                                />
+                                <Text fontSize="sm" fontWeight="400">
+                                  Add Creator
+                                </Text>
+                              </Flex>
+                            </MenuItem>
+                            <MenuItem
+                              transition="0.2s linear"
+                              color={textColor}
+                              _hover={textHover}
+                              p="0px"
+                              borderRadius="8px"
+                              _active={{
+                                bg: 'transparent',
+                              }}
+                              _focus={{
+                                bg: 'transparent',
+                              }}
+                              mb="10px"
+                            >
+                              <Flex align="center" onClick={handleShareReview}>
+                                <Icon
+                                  as={GoCodeReview}
+                                  h="16px"
+                                  w="16px"
+                                  me="8px"
+                                />
+                                <Text fontSize="sm" fontWeight="400">
+                                  Share for Review
+                                </Text>
+                              </Flex>
+                            </MenuItem>
+                            <MenuItem
+                              transition="0.2s linear"
+                              color={textColor}
+                              _hover={textHover}
+                              p="0px"
+                              borderRadius="8px"
+                              _active={{
+                                bg: 'transparent',
+                              }}
+                              _focus={{
+                                bg: 'transparent',
+                              }}
+                              mb="10px"
+                            >
+                              <Flex align="center" onClick={handleShowReview}>
+                                <Icon
+                                  as={
+                                    ShowReview
+                                      ? AiOutlineEyeInvisible
+                                      : AiOutlineEye
+                                  }
+                                  h="16px"
+                                  w="16px"
+                                  me="8px"
+                                />
+                                <Text fontSize="sm" fontWeight="400">
+                                  {ShowReview ? 'Hide Review' : 'Show Review'}
+                                </Text>
+                              </Flex>
+                            </MenuItem>
+                          </MenuList>
+                        </Box>
+                      </Menu>
+                      {tab !== 1 && tab !== 6 ? (
+                        <Select
+                          options={[defaultLanguageOption, ...languageOptions]}
+                          // options={languageOptions}
+                          isSearchable
+                          placeholder="Language.."
+                          onChange={handleSelectChange}
+                          onMenuOpen={() => setMenuOpen(true)}
+                          styles={{
+                            control: (base) => ({
+                              ...base,
+                              borderRadius: '12px',
+                              // borderColor: formData.isCategoryIdInvalid ? 'red' : '#ccc',
+                              _focus: { borderColor: 'teal.300' },
+                              minHeight: '42px',
+                              cursor: 'pointer',
+                              fontSize: 'sm',
+                              marginRight: '17px',
+                              marginTop: '6px',
+                              marginLeft: '11px',
+                              width: '150px',
+                            }),
+                          }}
+                        />
+                      ) : null}
+                    </Card>
+                  </Flex>
+                </Box>
+                <Box
+                  display={{
+                    base: 'none',
+                    sm: 'none',
+                    md: 'none',
+                    lg: 'none',
+                    xl: 'flex',
                   }}
-                  size={46} // Adjust the size as needed
-                  color="#11047a"
-                  style={{
-                    position: 'fixed',
-                    top: '43px',
-                    left: '350px',
-                    zIndex: 99,
-                    cursor: 'pointer',
-                  }}
-                />
+                  w={{ sm: '120%', md: '40%', lg: '25%' }}
+                  justifyContent={'center'}
+                >
+                  <Flex justify="center">
+                    <Card
+                      display={'flex'}
+                      p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
+                      justifyContent={
+                        tab === 1 || tab === 2 ? 'end' : 'flex-end'
+                      }
+                      flexDirection="row"
+                      h="95px"
+                      boxShadow={'1px 3px 14px #0000'}
+                      // position={'fixed'}
+                      // top={'24px'}
+                      // right={'8px'}
+                      zIndex={99}
+                      background={'#0000 !important'}
+                    >
+                      {tab !== 1 && tab !== 2 ? (
+                        <Button
+                          bg="#11047a"
+                          _hover={{ bg: '#190793' }}
+                          color="#fff"
+                          h={'46px'}
+                          w={'128px'}
+                          display={tab === 7 || tab === 6 ? 'none' : 'block'}
+                          mr={'17px'}
+                          mt={'6px'}
+                          ml={'11px'}
+                          onClick={handleEntirePrev}
+                        >
+                          Preview
+                        </Button>
+                      ) : null}
+                      {tab === 5 ? (
+                        <Button
+                          bg="#11047a"
+                          _hover={{ bg: '#190793' }}
+                          color="#fff"
+                          h={'46px'}
+                          w={'128px'}
+                          onClick={() => handleNext()}
+                          mr={'33px'}
+                          mt={'7px'}
+                        >
+                          Next
+                        </Button>
+                      ) : (
+                        tab !== 1 &&
+                        tab !== 2 &&
+                        tab !== 5 && (
+                          <Button
+                            bg="#11047a"
+                            _hover={{ bg: '#190793' }}
+                            color="#fff"
+                            h={'46px'}
+                            w={'128px'}
+                            onClick={commonNextFunction}
+                            mr={'33px'}
+                            mt={'7px'}
+                          >
+                            {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
+                          </Button>
+                        )
+                      )}
+                    </Card>
+                  </Flex>
+                </Box>
+              </Box>
+            </Box>
+            <Box
+              display={{
+                base: tab === 1 ? 'none': 'flex' ,
+                // sm: 'flex',
+                // md: 'flex',
+                // lg: 'flex',
+                xl: 'none',
+              }}
+              width={'94vw'}
+              position={'fixed'}
+              bottom={0}
+              left="3vw" 
+              zIndex={999999}
+            >
+              <Flex justify="center" w={'100%'} >
+                <Card
+                  display={'flex'}
+                  p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
+                  justifyContent={'space-between'}
+                  flexDirection="row"
+                  h="90px"
+                  w={'100%'}
+                  boxShadow={'1px 3px 14px #0000'}
+                  // position={'fixed'}
+                  // top={'24px'}
+                  // right={'8px'}
+                  zIndex={99}
+                  // background={'#0000 !important'}
+                >
+                  {tab !== 1 && (
+                    <Flex justify={'flex-start'} alignItems={'center'}>
+                      <IoArrowBackCircle
+                        onClick={() => {
+                          setTab(tab - 1);
+                        }}
+                        size={46} // Adjust the size as needed
+                        color="#11047a"
+                        style={{
+                          // position: 'fixed',
+                          // top: '43px',
+                          // left: '350px',
+                          zIndex: 99,
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </Flex>
+                  )}
+                  {tab !== 1 && tab !== 2 ? (
+                    <Box display={'flex'} alignItems={'center'} w={'60%'}>
+                    <Button
+                      bg="#11047a"
+                      _hover={{ bg: '#190793' }}
+                      color="#fff"
+                      h={'46px'}
+                      w={'100%'}
+                      display={tab === 7 || tab === 6 ? 'none' : 'block'}
+                      mr={'17px'}
+                      mt={'6px'}
+                      ml={'11px'}
+                      onClick={handleEntirePrev}
+                    >
+                      Preview
+                    </Button>
+                    </Box>
+                  ) : null}
+                  {tab === 5 ? (
+                   <Flex justify={'flex-start'} alignItems={'center'}>
+                   <IoArrowForwardCircle
+                     onClick={handleNext}
+                     size={46} // Adjust the size as needed
+                     color="#11047a"
+                     style={{
+                       // position: 'fixed',
+                       // top: '43px',
+                       // left: '350px',
+                       zIndex: 99,
+                       cursor: 'pointer',
+                     }}
+                   />
+                 </Flex>
+                  ) : (
+                    tab !== 1 &&
+                    tab !== 2 &&
+                    tab !== 5 &&
+                    (tab === 6 || tab === 7 ? (
+                      <Flex justify={'flex-start'} alignItems={'center'}>
+                        <MdOutlineRocketLaunch
+                          onClick={commonNextFunction}
+                          size={35} // Adjust the size as needed
+                          color="#fff"                         
+                          style={{
+                            padding:'5px',
+                            borderRadius:'50%',
+                            backgroundColor:'#11047A',
+                            // position: 'fixed',
+                            // top: '43px',
+                            // left: '350px',
+                            zIndex: 99,
+                            cursor: 'pointer',
+                          }}
+                        />
+                      </Flex>
+                    ) : (
+                      <Flex justify={'flex-start'} alignItems={'center'}>
+                        <IoArrowForwardCircle
+                          onClick={commonNextFunction}
+                          size={46} // Adjust the size as needed
+                          color="#11047a"
+                          style={{
+                            // position: 'fixed',
+                            // top: '43px',
+                            // left: '350px',
+                            zIndex: 99,
+                            cursor: 'pointer',
+                          }}
+                        />
+                      </Flex>
+                    ))
+                    // <Button
+                    //   bg="#11047a"
+                    //   _hover={{ bg: '#190793' }}
+                    //   color="#fff"
+                    //   h={'46px'}
+                    //   w={'128px'}
+                    //   onClick={commonNextFunction}
+                    //   mr={'33px'}
+                    //   mt={'7px'}
+                    // >
+                    //   {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
+                    // </Button>
+                  )}
+                </Card>
               </Flex>
-            )}
+            </Box>
             {share && tableDataCheck && (
               <ShareReviewTable
                 isOpen={isOpen}
@@ -4706,7 +4965,6 @@ return false;
                 tableData={tableDataCheck}
               />
             )}
-         
           </Box>
         </GridItem>
       </Grid>
