@@ -160,9 +160,10 @@ const CharacterPreview: React.FC<{
     const handleAddVoice = (character: any) => {
       setChosenModal(character);
       setShowModal(true); // Show the modal when the button is clicked
-
+      
       //alert(chosenModal);
     };
+    console.log('showModal',showModal)
     //        const [bgColor, setBgColor] = useState('transparent');
     // const [borderColor, setBorderColor] = useState('1px solid #cacfd8');
 
@@ -596,11 +597,11 @@ const CharacterPreview: React.FC<{
     return (
       <>
         <Modal isOpen={setPreview} onClose={setPreview} size="full"  >
-          <ModalOverlay zIndex={999999999} />
-          <ModalContent position="fixed" overflowY="auto" m={0} className={'model_class'}  containerProps={{ zIndex: 999999999,}} >
-            <ModalHeader>Preview</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody p={0} pl={'25px'} >
+          <ModalOverlay />
+          <ModalContent position="fixed" overflowY="auto" m={0} className={'model_class'}  containerProps={{ zIndex: 999999}} >
+            {/* <ModalHeader>Preview</ModalHeader>
+            <ModalCloseButton /> */}
+            <ModalBody p={'0 20px'} >
               {/* {formData.gameNonPlayingCharacterId === previewId ? ( */}
               <Flex
                 flexDirection={{base: "column", sm: "column", md: "column", lg: 'column'}}
@@ -611,7 +612,7 @@ const CharacterPreview: React.FC<{
                 // overflow={'auto'}
                 background="#ffffff"
               >
-                <Box width={{base: '0%', sm: '0%', lg: '100%'}} display={{base: 'block', sm: 'block', lg: 'flex'}} justifyContent={{base: 'end', sm: 'end', lg: 'end'}}>
+                <Box width={'100%'} display={'flex'} justifyContent={'end'}>
                   <ModalCloseButton position={'relative'} top={0} /> 
                 </Box>
                 <Box display={'flex'} w={'100%'} flexDir={{base: 'column', sm: 'column', md: 'column', lg: 'row'}}>
@@ -739,17 +740,17 @@ const CharacterPreview: React.FC<{
                               </div>
                             </Box>
                           </SimpleGrid>
-                          {showModal && (
+                          {/* {showModal && ( */}
                             <Modal isOpen={showModal} onClose={closeModal} size="full">
 
                               <ModalOverlay />
-                              <ModalContent>
+                              <ModalContent containerProps={{ zIndex: 999999}}>
                                 <ModalHeader></ModalHeader>
                                 <ModalCloseButton />
                                 <ModalBody>
                                   <>
                                     <SimpleGrid
-                                      columns={{ sm: 16, md: 16, xl: 16 }}
+                                      columns={{ sm: 1, md: 1, xl: 16 }}
                                       w="100%" border={"1px solid grey"} alignItems="center" style={{ position: 'sticky', top: '0', background: 'white', zIndex: 1000 }}
                                     >
                                       {/* <Box gridColumn={{ sm: 'span 16',md: 'span 4', xl: 'span 4' }} alignItems="center" mr="0px" borderRight={"1px lightgrey"}  alignItems="center"> */}
@@ -765,6 +766,7 @@ const CharacterPreview: React.FC<{
                                       >
                                         <InputField
                                            mt={'17px'}
+                                           mb={{base: '10px', sm: '10px', md: '30px'}}
                                           bg="transparent"
                                           placeholder="Search Voices..."
                                           margin="0px"
@@ -851,6 +853,7 @@ const CharacterPreview: React.FC<{
                                           transform: isSecondGridVisible ? "translateY(0px)" : "translateY(-50px)",
                                         }}
                                         transition={{ duration: 0.3, ease: "easeInOut" }}
+                                        className='voice-library-filters'
                                         style={{
                                           // overflow: "hidden",
                                           border: "1px solid grey",
@@ -858,8 +861,8 @@ const CharacterPreview: React.FC<{
                                           gridColumn: "span 16", // Adjust this to your grid layout
                                           width: "100%",
                                           alignItems: "center",
-                                          display: "grid", // Add this line
-                                          gridTemplateColumns: "repeat(16, 1fr)", // Adjust this based on your grid layout
+                                          display: "flex", // Add this line                                                                                    
+                                          // gridTemplateColumns: "repeat(16, 1fr)", // Adjust this based on your grid layout
                                           position: 'sticky',
                                           top: '11%',
                                           zIndex: 999,
@@ -875,22 +878,33 @@ const CharacterPreview: React.FC<{
                                           </Text>
                                         </div>
                                       </Box> */}
-                                        <Box pl={"20px"} pr="150px" gridColumn={{ sm: 'span 16', md: 'span 4', xl: 'span 4' }} alignItems="center">
-                                          <div style={{ borderRight: "1px solid grey", margin: '0', paddingTop: '20px', paddingBottom: '20px' }}>
+                                        <Box pl={{base: "0", sm: "0", lg: "20px"}} pr={{base: "0", sm: "0", lg: "150px"}} gridColumn={{ sm: 'span 16', md: 'span 4', xl: 'span 4' }} alignItems="center">
+                                          <Box style={{ margin: '0', paddingTop: '20px', paddingBottom: '20px' }}>
                                             <Text fontSize='13px' color={textColorPrimary}>
                                               ADVANCED FILTERS
                                             </Text>
-                                          </div>
+                                          </Box>
                                         </Box>
 
 
 
-                                        <Box p="10px" gridColumn={{ sm: 'span 14', md: 'span 10', xl: 'span 10' }} display="flex" alignItems="center" mr="0px" position="relative">
-                                          <div style={{ marginRight: '20px', position: 'absolute', left: '-130px', width: '150px', zIndex: '500' }}>
+                                        <Box p="10px" gridColumn={{ sm: 'span 14', md: 'span 10', xl: 'span 10' }} display="flex" flexDir={{base: 'column', sm: 'column', lg: 'row'}} alignItems="center" mr="0px" position="relative">
+                                          <Box position={{ base: 'unset', sm: 'unset', lg: 'absolute' }} mr={{base: '0', sm: 0, lg: '20px'}} style={{  left: '-130px', width: '150px', zIndex: '500' }}>
                                             <Select
                                               placeholder="Gender"
                                               options={genderOptions}
-                                              styles={customStyles}
+                                               // styles={customStyles}                                             
+                                               menuPortalTarget={document.body} 
+                                               styles={{ menuPortal: base => ({ ...base, zIndex: 999999, }), option: (provided: any, state: any) => ({
+                                                 ...provided,
+                                                 backgroundColor: state.isFocused ? '#e0e0e0' : 'transparent',
+                                                 cursor: 'pointer',
+                                                 color: 'black',
+                                                 zIndex: '101',
+                                                 '&:hover': {
+                                                   backgroundColor: '#e0e0e0', // Change background color on hover
+                                                 },
+                                               }), }}
                                               value={
                                                 // Conditionally set the value based on some condition
                                                 selectedGender !== ""
@@ -901,13 +915,24 @@ const CharacterPreview: React.FC<{
 
 
                                             />
-                                          </div>
-                                          <div style={{ marginRight: '20px', position: 'absolute', left: '50px', width: '150px', zIndex: '500' }}>
+                                          </Box>
+                                          <Box position={{ base: 'unset', sm: 'unset', lg: 'absolute' }} mr={{base: '0', sm: 0, lg: '20px'}} style={{ left: '50px', width: '150px', zIndex: '500' }}>
                                             {/* Render other dropdowns similarly */}
                                             <Select
                                               placeholder="Accent"
                                               options={accentOptions}
-                                              styles={customStyles}
+                                              // styles={customStyles}                                             
+                                              menuPortalTarget={document.body} 
+                                              styles={{ menuPortal: base => ({ ...base, zIndex: 999999, }), option: (provided: any, state: any) => ({
+                                                ...provided,
+                                                backgroundColor: state.isFocused ? '#e0e0e0' : 'transparent',
+                                                cursor: 'pointer',
+                                                color: 'black',
+                                                zIndex: '101',
+                                                '&:hover': {
+                                                  backgroundColor: '#e0e0e0', // Change background color on hover
+                                                },
+                                              }), }}
                                               value={
                                                 // Conditionally set the value based on some condition
                                                 selectedAccent !== ""
@@ -917,11 +942,22 @@ const CharacterPreview: React.FC<{
 
                                               onChange={handleAccentChange}
                                             />
-                                          </div> <div style={{ marginRight: '20px', position: 'absolute', left: '230px', width: '150px', zIndex: '500' }}>
+                                          </Box> <Box position={{ base: 'unset', sm: 'unset', lg: 'absolute' }} mr={{base: '0', sm: 0, lg: '20px'}} style={{ left: '230px', width: '150px', zIndex: '500' }}>
                                             <Select
                                               placeholder="Age"
                                               options={ageOptions}
-                                              styles={customStyles}
+                                              // styles={customStyles}                                             
+                                              menuPortalTarget={document.body} 
+                                              styles={{ menuPortal: base => ({ ...base, zIndex: 999999, }), option: (provided: any, state: any) => ({
+                                                ...provided,
+                                                backgroundColor: state.isFocused ? '#e0e0e0' : 'transparent',
+                                                cursor: 'pointer',
+                                                color: 'black',
+                                                zIndex: '101',
+                                                '&:hover': {
+                                                  backgroundColor: '#e0e0e0', // Change background color on hover
+                                                },
+                                              }), }}
                                               value={
                                                 // Conditionally set the value based on some condition
                                                 selectedAge !== ""
@@ -930,17 +966,18 @@ const CharacterPreview: React.FC<{
                                               }
 
                                               onChange={handleAgeChange}
-                                            />    </div>  </Box>
+                                            />    </Box>  
+                                          </Box>
                                         <Box p="5px" gridColumn={{ sm: 'span 2', md: 'span 2', xl: 'span 2' }} display="flex" alignItems="center" mr="0px">
                                           <Button
                                             variant="light"
                                             fontSize="sm"
                                             borderRadius="16px"
-                                            position="absolute"
+                                            position={{base: 'unset', sm: 'unset', lg: 'absolute'}}
                                             zIndex="500"
                                             right="-60px"
                                             h="46px"
-                                            m="80px"
+                                            m={{base: "0", sm: "0", lg: "80px"}}
                                             onClick={handleClearFilters}>Clear All</Button>
                                         </Box>
                                       </motion.div>
@@ -1114,7 +1151,7 @@ const CharacterPreview: React.FC<{
                                 </ModalBody>
                               </ModalContent>
                             </Modal>
-                          )}
+                          {/* )} */}
 
                           {/* <Select
                         options={options}
