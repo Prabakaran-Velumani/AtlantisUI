@@ -734,7 +734,7 @@ const GreetingsForm: React.FC<{
                   </TabList>
                   <TabPanels pt="30px">
                     <TabPanel>
-                      <Box w={'65%'}>
+                      <Box w={{base:'100%',md:'65%'}}>
                         <SimpleGrid
                           columns={{ sm: 1, md: 1, xl: 1 }}
                           spacing={{ base: '20px', xl: '20px' }}
@@ -828,7 +828,6 @@ const GreetingsForm: React.FC<{
                               }
                             />
                           </FormControl>
-
                           <FormControl
                             display="flex"
                             alignItems="center"
@@ -844,14 +843,7 @@ const GreetingsForm: React.FC<{
                             >
                               Change introductory music{' '}
                               <span style={{ color: 'red' }}>*</span>
-                            </FormLabel>
-                            <PreferenceAudio
-                              isModalOpen={isModalOpen}
-                              onClose={() => setIsModalOpen(false)}
-                              badgeData={badgeData}
-                              handleBadgeSelection={handleBadgeSelection}
-                              textColorPrimary={textColorPrimary}
-                            />
+                            </FormLabel>                       
 
                             {!formData.gameIntroMusic ||
                               formData.gameIntroMusic === '' ||
@@ -861,7 +853,7 @@ const GreetingsForm: React.FC<{
                                 <Box
                                   position={'relative'}
                                   mb={'30px'}
-                                  left="-36px"
+                                  left={{base:'-25%',md:'-8%'}}
                                   cursor={'pointer'}
                                   onClick={() => handleBadgeImages()}
                                 >
@@ -1024,7 +1016,6 @@ const GreetingsForm: React.FC<{
                               </Box>
                             )}
                           </FormControl>
-
                           <FormControl
                             display="flex"
                             alignItems="center"
@@ -1380,6 +1371,13 @@ const GreetingsForm: React.FC<{
             </Flex>
           </Box >
         </Card >
+        <PreferenceAudio
+          isModalOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          badgeData={badgeData}
+          handleBadgeSelection={handleBadgeSelection}
+          textColorPrimary={textColorPrimary}
+        />
       </>
     );
   };

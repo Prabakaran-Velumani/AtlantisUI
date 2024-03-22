@@ -210,7 +210,6 @@ export default function NFT(props: {
 
   let lightBlue = useColorModeValue('#3311db5c', '#3311db5c');
 
-
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -221,8 +220,6 @@ export default function NFT(props: {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
-
 
   return (
     <Card
@@ -273,12 +270,12 @@ export default function NFT(props: {
             <Image
               src={image}
               w={{ base: '250px', xl: '250px' }} // Adjust the values based on your design
-              h={{base: "400px", sm: "400px", md: "300px"}}
+              h={{ base: '400px', sm: '400px', md: '300px' }}
               borderRadius="20px"
             />
           )}
 
-          { (isHovered && tabState !== 'charater') || windowWidth < 768 ? (            
+          {(isHovered && tabState !== 'charater') || (windowWidth < 768 && tabState !== 'charater') ? (
             <Menu
               tabState={tabState}
               position="absolute"
@@ -292,7 +289,7 @@ export default function NFT(props: {
               handelDelete={handelDelete}
               handleDownload={handleDownload}
             />
-          ) : null }
+          ) : null}
           {/* {isHovered && (
   <Flex
     position='absolute'
@@ -710,7 +707,7 @@ value={handelAssign.gameNarratorVoice}
                 //   '3xl': 'lg'
                 // }}
                 mb="5px"
-                fontWeight="bold"                
+                fontWeight="bold"
                 textAlign="center"
                 fontSize="lg"
                 textTransform={'capitalize'}
@@ -725,10 +722,10 @@ value={handelAssign.gameNarratorVoice}
                 fontSize={{
                   base: 'sm',
                 }}
-                fontWeight="400"    
-                display='flex'
-                flexWrap='wrap'
-                gap= '8px'                   
+                fontWeight="400"
+                display="flex"
+                flexWrap="wrap"
+                gap="8px"
               >
                 {/* {author} */}
                 {author &&

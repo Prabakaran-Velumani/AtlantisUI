@@ -4462,8 +4462,8 @@ const GameCreation = () => {
                   p="0px"
                   bg={'brandScheme'}
                   position={'fixed'}
-                  bottom={'0'}
-                  right={'5px'}
+                  bottom={{base:'95px',xl:'0'}}
+                  right={{base:'15px',xl:'5px'}}
                   className="menureviewshow"
                 >
                   <Icon
@@ -4898,10 +4898,10 @@ const GameCreation = () => {
             </Box>
             <Box
               display={{
-                base: 'flex',
-                sm: 'flex',
-                md: 'flex',
-                lg: 'flex',
+                base: tab === 1 ? 'none': 'flex' ,
+                // sm: 'flex',
+                // md: 'flex',
+                // lg: 'flex',
                 xl: 'none',
               }}
               width={'94vw'}
@@ -4916,7 +4916,7 @@ const GameCreation = () => {
                   p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
                   justifyContent={'space-between'}
                   flexDirection="row"
-                  h="95px"
+                  h="90px"
                   w={'100%'}
                   boxShadow={'1px 3px 14px #0000'}
                   // position={'fixed'}
@@ -4984,9 +4984,12 @@ const GameCreation = () => {
                       <Flex justify={'flex-start'} alignItems={'center'}>
                         <MdOutlineRocketLaunch
                           onClick={commonNextFunction}
-                          size={46} // Adjust the size as needed
-                          color="#11047a"
+                          size={35} // Adjust the size as needed
+                          color="#fff"                         
                           style={{
+                            padding:'5px',
+                            borderRadius:'50%',
+                            backgroundColor:'#11047A',
                             // position: 'fixed',
                             // top: '43px',
                             // left: '350px',

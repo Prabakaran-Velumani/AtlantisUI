@@ -695,8 +695,12 @@ const CharacterPreview: React.FC<{
                           Here you can select voices for Characters
                         </Text>
                       </Flex>
-                      <FormControl mb="5px">
+                     
 
+
+
+                      <FormControl mb="5px">
+                     
                         <>
                           <SimpleGrid
                             columns={{ sm: 8, md: 8, xl: 8 }}
@@ -713,7 +717,7 @@ const CharacterPreview: React.FC<{
                                 w="100%"
                                 label='Non-Player Voice'
                                 value={formData.gameNonPlayerVoice !== '' ? filterByVoiceId(formData.gameNonPlayerVoice) : chosenVoiceNPC}
-
+                                borderColor={formData.gameNonPlayerVoice === '' || formData.gameNonPlayerVoice === null ? 'red' : null}
                               // m="0px"
                               />
 
@@ -1154,6 +1158,7 @@ const CharacterPreview: React.FC<{
                               readOnly="readOnly"
                               w="100%"
                               label='Player Male Voice'
+                              borderColor={formData.gamePlayerMaleVoice === '' || formData.gamePlayerMaleVoice === null ? 'red' : null}
                               value={formData.gamePlayerMaleVoice !== '' ? filterByVoiceId(formData.gamePlayerMaleVoice) : chosenVoiceMALE}
                               m="0px"
                             />
@@ -1218,6 +1223,7 @@ const CharacterPreview: React.FC<{
                               readOnly="readOnly"
                               w="100%"
                               label='Player Female Voice'
+                              borderColor={formData.gamePlayerFemaleVoice === '' || formData.gamePlayerFemaleVoice === null ? 'red' : null}
                               value={formData.gamePlayerFemaleVoice !== '' ? filterByVoiceId(formData.gamePlayerFemaleVoice) : chosenVoiceFEMALE}
                               m="0px"
                             />
@@ -1283,6 +1289,7 @@ const CharacterPreview: React.FC<{
                               readOnly="readOnly"
                               w="100%"
                               label='Narrator Voice'
+                              borderColor={formData.gameNarratorVoice === '' || formData.gameNarratorVoice === null ? 'red' : null}
                               value={formData.gameNarratorVoice !== '' ? filterByVoiceId(formData.gameNarratorVoice) : chosenVoiceNAR}
                               m="0px"
                             />
