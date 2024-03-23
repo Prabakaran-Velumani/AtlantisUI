@@ -188,8 +188,15 @@ const Characterspage: React.FC<PlayGamesProps> = ({
               // content: data[0]?.content,
               // audioUrls: data[0]?.audioUrls
               content: data.map((x:any)=>({content: x.content})),
-              audioUrls: data.map((x:any)=>({audioUrls: x.audioUrls}))
-
+              audioUrls: data.map((x:any)=>({audioUrls: x.audioUrls})),
+              textId:data.map((x:any)=>({textId: x.textId})),
+              fieldName:data.map((x:any)=>({fieldName: x.fieldName})),
+              Audiogetlanguage: data.map((x:any) => ({
+                content: x.content,
+                audioUrls: x.audioUrls,
+                textId: x.textId,
+                fieldName: x.fieldName,
+              })),
             }))
           }
       };
