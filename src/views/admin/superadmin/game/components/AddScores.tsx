@@ -838,12 +838,12 @@ const AddScores: React.FC<{
           mb={'15px'}
           flexDirection={{
             base: 'column',
-            md: currentTab === 0 ? 'row' : 'column',
+            // md: currentTab === 0 ? 'row' : 'column',
             lg: 'row',
           }}
           alignItems="start"
         >
-          <Box className="Game-Screen">
+          <Box className="Game-Screen" w={{base:'100% !important',lg:'65% !important'}}>
             <Text
               color="black"
               fontSize="14"
