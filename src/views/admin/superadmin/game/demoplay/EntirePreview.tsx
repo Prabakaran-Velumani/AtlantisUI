@@ -152,11 +152,11 @@ interface ProfileDataType {
   score?: any;
   allTimeScore?: any;
   // Afrith-modified-starts-07/Mar/24
-  
-  // Afrith-modified-starts-20/Mar/24
+
   content?: any;
   audioUrls?: any;
-  // Afrith-modified-ends-20/Mar/24
+  textId?: any,
+  fieldName?: any,
 }
 
 export const ProfileContext = createContext<ProfileDataType>({
@@ -264,29 +264,29 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
   ];
 
-   // Afrith-modified-starts-07/Mar/24
-   const gameScore = useContext(ScoreContext);
-   const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0 ;
- 
-   useEffect(() => {
-     setProfileData((prev:any) => ({...prev, score:scoreComp}))
-   }, [scoreComp])
- 
-   const [profileData, setProfileData] = useState({
-     name: '',
-     gender: '',
-     language: '',
-     score: '',
-     allTimeScore: 250,
-      ///Afrith-modified-starts-20/Mar/24
-      content: '',
-      audioUrls: '',
-      ///Afrith-modified-ends-20/Mar/24
-   });
- 
-console.log('**********',profileData);
- // Afrith-modified-ends-07/Mar/24
- 
+  // Afrith-modified-starts-07/Mar/24
+  const gameScore = useContext(ScoreContext);
+  const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0;
+
+  useEffect(() => {
+    setProfileData((prev: any) => ({ ...prev, score: scoreComp }))
+  }, [scoreComp])
+
+  const [profileData, setProfileData] = useState({
+    name: '',
+    gender: '',
+    language: '',
+    score: '',
+    allTimeScore: 250,
+    content: '',
+    audioUrls: '',
+    textId: '',
+    fieldName: '',
+    Audiogetlanguage: [],
+  });
+
+  // Afrith-modified-ends-07/Mar/24
+
   const [voiceIds, setVoiceIds] = useState<any>();
   const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
     useState<boolean>(false);
@@ -297,19 +297,23 @@ console.log('**********',profileData);
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
     if (res?.status === 'success' && res?.url)
-      setAudioObj({
-        url: res?.url,
-        type: 'bgm',
-        volume: '0.5',
-        loop: true,
-        autoplay: true,
-      });
+      console.log('url6768', res?.url);
+    setAudioObj({
+      url: res?.url,
+      type: 'bgm',
+      volume: '0.5',
+      loop: true,
+      autoplay: true,
+    });
+
   };
 
   useEffect(() => {
+
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
     setData(gameInfo?.blocks[profile?.currentQuest]['1']);
+
     if (
       gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen ===
       'Interaction'
@@ -395,10 +399,18 @@ console.log('**********',profileData);
         audioRef.current.pause();
       }
       // Update the audio source and play if necessary
+      console.log('audioRefcurrentsrc', audioRef.current.src = audioObj.url, '....', audioObj.autoplay);
       audioRef.current.src = audioObj.url;
-      if (audioObj.autoplay) {
-        audioRef.current.play();
+      try {
+        if (audioObj.autoplay) {
+          audioRef.current.play();
+        }
       }
+      catch
+      {
+        console.log('Error Required');
+      }
+
     } else {
       // Stop the audio playback and set audioRef.current to null
       if (audioRef.current) {
@@ -431,7 +443,7 @@ console.log('**********',profileData);
       case 3 && gameInfo?.gameData?.gameReflectionpageBackground:
         setBackgroundScreenUrl(
           API_SERVER + '/uploads/background/reflectionBg.png',
-          
+
         );
         break;
       default:
@@ -455,8 +467,8 @@ console.log('**********',profileData);
       game3Position.previousBlock !== ''
         ? game3Position.previousBlock
         : current
-        ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
-        : '';
+          ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
+          : '';
     const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
     const currentQuest = current
       ? parseInt(current?.blockPrimarySequence.split('.')[0])
@@ -467,10 +479,10 @@ console.log('**********',profileData);
     const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const prevBlock = current
       ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
+        .filter(
+          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+        )
+        .map((key: any) => demoBlocks[quest]?.[key])
       : [];
     if (
       prevBlock.length !== 0 &&
@@ -480,7 +492,7 @@ console.log('**********',profileData);
       setData(prevBlock[0]);
     }
   };
-  
+
   const getData = (next: any) => {
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
@@ -503,10 +515,10 @@ console.log('**********',profileData);
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
+        .filter(
+          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+        )
+        .map((key: any) => demoBlocks[quest]?.[key])
       : [];
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = gameInfo?.questOptions.filter(
@@ -581,13 +593,25 @@ console.log('**********',profileData);
           .map((item: any) => {
             return demoBlocks[currentQuest][item];
           });
-          
-        setType(selectedNext && selectedNext[0]?.blockChoosen);
-        setData(selectedNext && selectedNext[0]);
-        setGame3Position((prev: any) => ({
-          ...prev,
-          nextBlock: selectedNext[0]?.blockPrimarySequence,
-        }));
+          console.log('selectedNextentri', selectedNext);
+          if (selectedNext.length > 0) {
+            setType(selectedNext && selectedNext[0]?.blockChoosen);
+            setData(selectedNext && selectedNext[0]);
+            setGame3Position((prev: any) => ({
+              ...prev,
+              nextBlock: selectedNext[0]?.blockPrimarySequence,
+            }));
+          }
+          else {
+            setType(nextBlock[0]?.blockChoosen);
+            setData(nextBlock[0]);
+            setGame3Position((prev: any) => ({
+              ...prev,
+              nextBlock: nextBlock[0]?.blockPrimarySequence,
+            }));
+          }
+        
+       
         setSelectedOption(null);
         return false;
       } else if (navi === 'Complete') {
@@ -783,14 +807,14 @@ console.log('**********',profileData);
           .map((item: any) => {
             return demoBlocks[currentQuest][item];
           });
-          if(selectedNext.length > 0){
-            setType(selectedNext && selectedNext[0]?.blockChoosen);
-            setData(selectedNext && selectedNext[0]);
-          }
-          else{
-            setType(nextBlock[0]?.blockChoosen);
-            setData(nextBlock[0]);
-          }
+        if (selectedNext.length > 0) {
+          setType(selectedNext && selectedNext[0]?.blockChoosen);
+          setData(selectedNext && selectedNext[0]);
+        }
+        else {
+          setType(nextBlock[0]?.blockChoosen);
+          setData(nextBlock[0]);
+        }
         setGame3Position((prev: any) => ({
           ...prev,
           nextBlock: selectedNext[0]?.blockPrimarySequence,
@@ -810,7 +834,7 @@ console.log('**********',profileData);
     setType(nextBlock[0]?.blockChoosen);
     setData(nextBlock[0]);
     setSelectedOption(null);
-  
+
   };
 
   let menuBg = useColorModeValue('white', 'navy.800');
@@ -835,7 +859,7 @@ console.log('**********',profileData);
       profileData?.gender == 'Male'
         ? voiceIds?.playerMale
         : voiceIds?.playerFemale;
-    getAudioForText(text, voiceId);
+     getAudioForText(text, voiceId);
   };
   useEffect(() => {
     setFeedBackFromValue();
@@ -885,30 +909,30 @@ console.log('**********',profileData);
   const subTabOptionsForTabIds: Array<{
     [key: string]: Array<{ value: string; label: string }> | null;
   }> = [
-    { '1': null },
-    { '2': null },
-    {
-      '3': [
-        { value: 'Title', label: 'Title' },
-        { value: 'Skill', label: 'Skill' },
-        { value: 'Storyline', label: 'Storyline' },
-        { value: 'Outcomes', label: 'Outcomes' },
-        { value: 'Category', label: 'Category' },
-        { value: 'Author', label: 'Author' },
-      ],
-    },
-    { '4': null },
-    {
-      '5': [
-        { value: '0', label: 'Completion' },
-        { value: '1', label: 'Leaderboard' },
-        { value: '2', label: 'Reflection' },
-        { value: '3', label: 'Takeaway' },
-        { value: '4', label: 'Welcome' },
-        { value: '5', label: 'Thanks' },
-      ],
-    },
-  ];
+      { '1': null },
+      { '2': null },
+      {
+        '3': [
+          { value: 'Title', label: 'Title' },
+          { value: 'Skill', label: 'Skill' },
+          { value: 'Storyline', label: 'Storyline' },
+          { value: 'Outcomes', label: 'Outcomes' },
+          { value: 'Category', label: 'Category' },
+          { value: 'Author', label: 'Author' },
+        ],
+      },
+      { '4': null },
+      {
+        '5': [
+          { value: '0', label: 'Completion' },
+          { value: '1', label: 'Leaderboard' },
+          { value: '2', label: 'Reflection' },
+          { value: '3', label: 'Takeaway' },
+          { value: '4', label: 'Welcome' },
+          { value: '5', label: 'Thanks' },
+        ],
+      },
+    ];
   useEffect(() => {
     if (audioRef.current) {
       if (currentScreenId === 2) {
@@ -1104,7 +1128,6 @@ console.log('**********',profileData);
     setData(gameInfo?.blocks['1']['1']);
     setCurrentScreenId(2);
   };
-
   const getAudioForText = async (text: string, voiceId: string) => {
     if (text && voiceId) {
       const send = {
@@ -1154,68 +1177,68 @@ console.log('**********',profileData);
     };
   }, []);
 
-    // Afrith-modified-starts-13/Mar/24
+  // Afrith-modified-starts-13/Mar/24
 
-    const getCurrentResolution = () => {
-      // Logic to get current screen resolution
-      // You can use window.innerWidth and window.innerHeight
-      // return {
-      //   width: window.innerWidth,
-      //   height: window.innerHeight,
-      // };
-
-      const body = document.getElementById('body');
-      body.style.width = `${window.innerWidth}px`;
-      body.style.height = `${window.innerHeight}px`;   
-      
-      return body;
-    };
-    const getMobileResolution = () => {
-
-      // const width =  window.innerWidth - 500;
-      // const height = window.innerHeight - 500;    
-      // const body = document.getElementById('body');
-      // body.style.width = '390px';
-      // body.style.height = '890px';   
-
-      // console.log('resolu****',window.devicePixelRatio)
-      // return body;
-    };
-  
-    const getCurrScreen = (screenType:any) => {
-      // Perform any other actions based on the screen type
-      if(screenType == 'Desktop'){
-        setResolution(getCurrentResolution())
-      }else if(screenType == 'Mobile'){
-        getMobileResolution();
-        setResolution({width: 430,height: 932})
-      }
-      else if(screenType == 'Tablet'){
-        setResolution({width: 768,height: 1024})
-      }
-    };
-  
-    // useEffect(() => {
-    //   const handleResize = () => {
-    //     setResolution(getCurrentResolution());
-    //   };
-    //   window.addEventListener('resize', handleResize);
-    //   return () => window.removeEventListener('resize', handleResize);
-    // }, []);
-  
-    // Afrith-modified-ends-13/Mar/24
-
-    // const toggleView = () => {
-    //   setIsMobileView(!isMobileView);
+  const getCurrentResolution = () => {
+    // Logic to get current screen resolution
+    // You can use window.innerWidth and window.innerHeight
+    // return {
+    //   width: window.innerWidth,
+    //   height: window.innerHeight,
     // };
-    // console.log('///',isMobileView)
 
-    // Avoid Top Menu Section
-    const dontShowTopMenu = currentScreenId !== 7 && currentScreenId !== 6 && currentScreenId !== 5 && currentScreenId !== 4 && currentScreenId !== 3 && currentScreenId !== 10;
+    const body = document.getElementById('body');
+    body.style.width = `${window.innerWidth}px`;
+    body.style.height = `${window.innerHeight}px`;
+
+    return body;
+  };
+  const getMobileResolution = () => {
+
+    // const width =  window.innerWidth - 500;
+    // const height = window.innerHeight - 500;    
+    // const body = document.getElementById('body');
+    // body.style.width = '390px';
+    // body.style.height = '890px';   
+
+    // console.log('resolu****',window.devicePixelRatio)
+    // return body;
+  };
+
+  const getCurrScreen = (screenType: any) => {
+    // Perform any other actions based on the screen type
+    if (screenType == 'Desktop') {
+      setResolution(getCurrentResolution())
+    } else if (screenType == 'Mobile') {
+      getMobileResolution();
+      setResolution({ width: 430, height: 932 })
+    }
+    else if (screenType == 'Tablet') {
+      setResolution({ width: 768, height: 1024 })
+    }
+  };
+
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setResolution(getCurrentResolution());
+  //   };
+  //   window.addEventListener('resize', handleResize);
+  //   return () => window.removeEventListener('resize', handleResize);
+  // }, []);
+
+  // Afrith-modified-ends-13/Mar/24
+
+  // const toggleView = () => {
+  //   setIsMobileView(!isMobileView);
+  // };
+  // console.log('///',isMobileView)
+
+  // Avoid Top Menu Section
+  const dontShowTopMenu = currentScreenId !== 7 && currentScreenId !== 6 && currentScreenId !== 5 && currentScreenId !== 4 && currentScreenId !== 3 && currentScreenId !== 10;
 
   return (
     <ProfileContext.Provider value={profileData}>
-       {/* {isMobileView ? ( */}
+      {/* {isMobileView ? ( */}
       <Box id='EntirePreview-wrapper'>
         <Box className='EntirePreview-content'>
           <Box id="container" className="Play-station">
@@ -1260,7 +1283,7 @@ console.log('**********',profileData);
                         aria-label="slider-ex-4"
                         defaultValue={30}
                         name="musicVolume"
-                        //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
+                      //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
                       >
                         <SliderTrack
                           className="slider-track"
@@ -1288,7 +1311,7 @@ console.log('**********',profileData);
                         aria-label="slider-ex-4"
                         defaultValue={30}
                         name="voiceVolume"
-                        // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
+                      // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
                       >
                         <SliderTrack
                           className="slider-track"
@@ -1415,9 +1438,13 @@ console.log('**********',profileData);
                           getData={getData}
                           options={options}
                           option={selectedOption}
+                          profileData={profileData}
                           setAudio={setAudio}
                           getAudioForText={getAudioForText}
                           voiceIds={voiceIds}
+                          setAudioObj={setAudioObj}
+                          setIsGetsPlayAudioConfirmation={setIsGetsPlayAudioConfirmation}
+                          isGetsPlayAudioConfirmation={isGetsPlayAudioConfirmation}
                         />
                       )}
                       {/* </motion.div> */}
@@ -1450,7 +1477,7 @@ console.log('**********',profileData);
                           // alignItems={'center'}
                           // justifyContent={'center'}
                           className="Game-Screen"
-                          // backgroundColor={'#D9C7A2'}
+                        // backgroundColor={'#D9C7A2'}
                         >
                           <Box className="Images">
                             <Reflection
@@ -1513,7 +1540,7 @@ console.log('**********',profileData);
                 case 5:
                   return (
                     <>
-                     
+
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1547,7 +1574,7 @@ console.log('**********',profileData);
                 case 6:
                   return (
                     <>
-                     
+
                       <Completion
                         questOptions={gameInfo?.questOptions}
                         getData={getData}
@@ -1671,9 +1698,8 @@ console.log('**********',profileData);
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
                           backgroundSize={'cover'}
-                          transform={`scale(${first ? 1 : 1.3}) translateY(${
-                            first ? 0 : -10
-                          }%) translateX(${first ? 0 : -10}%)`}
+                          transform={`scale(${first ? 1 : 1.3}) translateY(${first ? 0 : -10
+                            }%) translateX(${first ? 0 : -10}%)`}
                           transition={'transform 0.9s ease-in-out'}
                         >
                           <Box
@@ -1823,68 +1849,68 @@ console.log('**********',profileData);
                                 alignItems={'center'}
                                 flexDirection={'column'}
                               >
-                                  <Box>
-                                    <Box
-                                      w={'100%'}                                     
-                                      display={'flex'}
-                                      justifyContent={'center'}
+                                <Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Text
+                                      fontFamily={'AtlantisText'}
+                                      fontSize={'2.8vw'}
+                                      color={'#D9C7A2'}
+                                      className={'intro_text'}
                                     >
-                                      <Text
-                                        fontFamily={'AtlantisText'}
-                                        fontSize={'2.8vw'}
-                                        color={'#D9C7A2'}
-                                        className={'intro_text'}
-                                      >
-                                        Atlantis
-                                      </Text>
-                                    </Box>
+                                      Atlantis
+                                    </Text>
                                   </Box>
-                                  <Box>
-                                    <Box
-                                      w={'100%'}
-                                      display={'flex'}
-                                      justifyContent={'center'}
+                                </Box>
+                                <Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Text
+                                      fontFamily={'AtlantisText'}
+                                      fontSize={'2.5vw'}
+                                      color={'#D9C7A2'}
+                                      className={'intro_text'}
                                     >
-                                      <Text
-                                        fontFamily={'AtlantisText'}
-                                        fontSize={'2.5vw'}
-                                        color={'#D9C7A2'}
-                                        className={'intro_text'}
-                                      >
-                                        Welcome To
-                                      </Text>
-                                    </Box>
-                                    <Box
-                                      w={'100%'}
-                                      display={'flex'}
-                                      justifyContent={'center'}
+                                      Welcome To
+                                    </Text>
+                                  </Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Text
+                                      fontFamily={'AtlantisText'}
+                                      fontSize={'2.5vw'}
+                                      color={'#D9C7A2'}
+                                      textTransform={'capitalize'}
+                                      className={'intro_text'}
                                     >
-                                      <Text
-                                        fontFamily={'AtlantisText'}
-                                        fontSize={'2.5vw'}
-                                        color={'#D9C7A2'}
-                                        textTransform={'capitalize'}
-                                         className={'intro_text'}
-                                      >
-                                        The Demo Play
-                                      </Text>
-                                    </Box>
-                                    <Box
-                                      w={'100%'}
-                                      display={'flex'}
-                                      justifyContent={'center'}
-                                    >
-                                      <Button
-                                        w={'90%'}
-                                        h={{sm:'20px',md:'30px'}}
-                                        bg={'none'}
-                                        _hover={{bg:'none'}}
-                                        onClick={() => {
-                                          setCurrentScreenId(12);
-                                          setIsGetsPlayAudioConfirmation(true);
-                                        }}
-                                      ></Button>
-                                    </Box>
+                                      The Demo Play
+                                    </Text>
+                                  </Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Button
+                                      w={'90%'}
+                                      h={{ sm: '20px', md: '30px' }}
+                                      bg={'none'}
+                                      _hover={{ bg: 'none' }}
+                                      onClick={() => {
+                                        setCurrentScreenId(12);
+                                        setIsGetsPlayAudioConfirmation(true);
+                                      }}
+                                    ></Button>
+                                  </Box>
                                 </Box>
                               </Box>
                             </Box>
@@ -1946,8 +1972,8 @@ console.log('**********',profileData);
               }
             })()}
           </Flex>
-             {/*Afrith-modified-starts-13/Mar/24*/}
-            {/* <Stack direction='row' spacing={4} zIndex={999999} position={'absolute'} right={0} top={20}  >
+          {/*Afrith-modified-starts-13/Mar/24*/}
+          {/* <Stack direction='row' spacing={4} zIndex={999999} position={'absolute'} right={0} top={20}  >
               <Text color={'#fff'}>{resolution?.width}{'*'}{resolution?.height}</Text>
               <Box
                 justifyContent={'center'} 
@@ -2029,7 +2055,7 @@ console.log('**********',profileData);
               </Button>
               </Box>
             </Stack> */}
-    {/*Afrith-modified-ends-13/Mar/24*/}
+          {/*Afrith-modified-ends-13/Mar/24*/}
           {isReviewDemo && (
             <Menu isOpen={isMenuOpen}>
               <MenuButton
@@ -2228,7 +2254,7 @@ console.log('**********',profileData);
           )}
         </Box>
       </Box>
-       {/* ) : (
+      {/* ) : (
         <h1>Desktop View</h1>
       )}
         <button onClick={toggleView}>Toggle View</button> */}

@@ -471,18 +471,23 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                     </Tag>
                   );
                 })}
-                <Input
-                  variant='main'
-                  bg='transparent'
-                  border='none'
-                  p='0px'
+                <textarea
+                  // variant='main'
+                  // bg='transparent'
+                  // border='none'
+                  // p='0px'
+                  ref={textareaRef}
                   onKeyDown={(e: any) => keyPressSkill(e)}
-                  fontSize='sm'
-                  style={{
-                    resize: 'none', // This property prevents the textarea from being resized by the user
-                    height: '100%', // Set the initial height of the textarea
-                  }}
-                />
+                  style={
+                    styles.textareaStyle
+                  //   resize: 'none', // This property prevents the textarea from being resized by the user
+                  //   height: '100%', // Set the initial height of the textarea
+                  //   background:'transparent',
+                  // border:'none',
+                  // fontVariant:'main',
+                  // fontSize:'sm'
+                  }></textarea>
+               
               </Flex>
               <Text fontSize='xs' color='gray.500' mt='2px' style={{ textAlign: 'left' }}>
                 <b>Note: </b> After Text, you must enter.
@@ -672,6 +677,19 @@ const styles: { [name: string]: React.CSSProperties } = {
     borderWidth: "1px", // Border width
     borderStyle: "solid", // Border style
     overflow: "hidden", // Hide the scrollbar
+  },
+  textareaStyle: {
+    padding: 0,
+    width: 500,
+    display: "block",
+    resize: "none",
+    backgroundColor: "white",
+    borderRadius: "12px",
+    borderColor: "white", // Border color
+    outlineColor: "white", // Outline color
+    borderWidth: "1px", // Border width
+    borderStyle: "solid", // Border style
+    overflow: "hidden",
   },
   labelStyle: {
     display: "block",

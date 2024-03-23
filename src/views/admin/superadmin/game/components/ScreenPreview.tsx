@@ -31,7 +31,7 @@ import ReflectionContentScreen from './onimage/ReflectionScreen';
 import TyContentScreen from './onimage/TyContentScreen';
 import { getGameCreatorDemoData } from 'utils/game/gameService';
 import TypingEffect from '../demoplay/playcards/Typing';
-import { API_SERVER, Notelength, Dialoglength,Responselength} from 'config/constant';
+import { API_SERVER, Notelength, Dialoglength, Responselength } from 'config/constant';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { lazy } from 'react';
 import { motion } from 'framer-motion';
@@ -346,8 +346,8 @@ const ScreenPreview = () => {
       game3Position.previousBlock !== ''
         ? game3Position.previousBlock
         : current
-        ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
-        : '';
+          ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
+          : '';
 
     const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
     const currentQuest = current
@@ -356,10 +356,10 @@ const ScreenPreview = () => {
     const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const prevBlock = current
       ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
+        .filter(
+          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+        )
+        .map((key: any) => demoBlocks[quest]?.[key])
       : [];
     if (
       prevBlock.length !== 0 &&
@@ -382,12 +382,12 @@ const ScreenPreview = () => {
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-          )
-          .map((key: any) => {
-            return demoBlocks[quest]?.[key];
-          })
+        .filter(
+          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+        )
+        .map((key: any) => {
+          return demoBlocks[quest]?.[key];
+        })
       : [];
 
     // {/* Check wheather has next block or not, if not then show End of Current Quest.
@@ -413,10 +413,10 @@ const ScreenPreview = () => {
       type === 'feedback'
     ) {
       if (navi === 'Repeat Question') {
-      const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
-      setInteractionOptions(gameInfo, currentBlockinteraction);
+        const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
+        setInteractionOptions(gameInfo, currentBlockinteraction);
         setType(demoBlocks['1'][currentBlock]?.blockChoosen);
-       setData(demoBlocks['1'][currentBlock]);
+        setData(demoBlocks['1'][currentBlock]);
         setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
@@ -431,20 +431,26 @@ const ScreenPreview = () => {
         return false;
       } else if (navi === 'Select Block') {
         const selectedNext = Object.keys(demoBlocks[currentQuest])
-        .filter((item: any) => {
-          return (
-            demoBlocks[currentQuest][item]?.blockSecondaryId ===
-            parseInt(optionNavigation)
-          );
-        })
-        .map((item: any) => {
-          return demoBlocks[currentQuest][item];
-        });
-        
-      setType(selectedNext && selectedNext[0]?.blockChoosen);
-      setData(selectedNext && selectedNext[0]);
-      setSelectedOption(null);
-      return false;
+          .filter((item: any) => {
+            return (
+              demoBlocks[currentQuest][item]?.blockSecondaryId ===
+              parseInt(optionNavigation)
+            );
+          })
+          .map((item: any) => {
+            return demoBlocks[currentQuest][item];
+          });
+        console.log('selectedNext', selectedNext);
+        if (selectedNext.length > 0) {
+          setType(selectedNext && selectedNext[0]?.blockChoosen);
+          setData(selectedNext && selectedNext[0]);
+        }
+        else {
+          setType(nextBlock[0]?.blockChoosen);
+          setData(nextBlock[0]);
+        }
+        setSelectedOption(null);
+        return false;
       } else if (navi === 'Complete') {
         // if (demoBlocks.hasOwnProperty(nextLevel)) {
         //   setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -513,9 +519,9 @@ const ScreenPreview = () => {
     window.open(url, '_blank');
   };
   useEffect(() => {
-    
-      getDataSection(data);
-    
+
+    getDataSection(data);
+
   }, [data, type]);
   useEffect(() => {
     if (Navigatenext === true) {
@@ -524,7 +530,7 @@ const ScreenPreview = () => {
   }, [Navigatenext]);
   const getDataSection = (data: any) => {
     setShowTypingEffect(false);
-   // Note and Dialog
+    // Note and Dialog
     const content = data?.blockText || '';
     const sentences = content.split(
       /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
@@ -535,11 +541,11 @@ const ScreenPreview = () => {
     const Responsesentences = Responsecontent.split(
       /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
     );
-    const newRemainingResponseSentences = Responsesentences.slice(currentPosition); 
-    
+    const newRemainingResponseSentences = Responsesentences.slice(currentPosition);
+
     const concatenatedSentences = [];
     let totalLength = 0;
-   // Note and Dialog
+    // Note and Dialog
     for (let i = 0; i < newRemainingSentences.length; i++) {
       const sentence = newRemainingSentences[i];
       if (data && type === 'Note') {
@@ -564,7 +570,7 @@ const ScreenPreview = () => {
         }
       }
     }
-     // Response 
+    // Response 
     for (let i = 0; i < newRemainingResponseSentences.length; i++) {
       const ressentence = newRemainingResponseSentences[i];
       if (data && type === 'response') {
@@ -580,7 +586,7 @@ const ScreenPreview = () => {
         }
       }
     }
-     
+
     setRemainingSentences(concatenatedSentences);
 
     if (newRemainingSentences.length >= 1) {
@@ -588,7 +594,7 @@ const ScreenPreview = () => {
       setNavigateNext(false);
       console.log('1');
     }
-   else if(newRemainingResponseSentences.length >= 1){
+    else if (newRemainingResponseSentences.length >= 1) {
       setCurrentPosition(currentPosition + concatenatedSentences.length);
       setNavigateNext(false);
       console.log('2');
@@ -599,18 +605,16 @@ const ScreenPreview = () => {
       console.log('4');
     }
   };
-  const Updatecontent = () =>
-  {
-    if(showTypingEffect === false)
-    {
+  const Updatecontent = () => {
+    if (showTypingEffect === false) {
       setShowTypingEffect(true);
     }
-    else{
+    else {
       getDataSection(data);
     }
   }
   useEffect(() => {
-      getDataSection(data);
+    getDataSection(data);
   }, []);
   const handleCloseWindow = () => {
     window.close();
@@ -799,12 +803,12 @@ const ScreenPreview = () => {
                             >
                               {/* <TypingEffect text={data?.blockText} speed={50} /> */}
                               {/* <TypingEffect text={remainingSentences} speed={5000} /> */}
-                              {showTypingEffect=== false ? <TypingEffect
+                              {showTypingEffect === false ? <TypingEffect
                                 text={remainingSentences.toString()}
                                 speed={50}
-                              /> :remainingSentences }
-                            
-                              
+                              /> : remainingSentences}
+
+
                             </Box>
                             <Box
                               display={'flex'}
@@ -854,9 +858,8 @@ const ScreenPreview = () => {
                         /> */}
                         <Box
                           style={{
-                            transform: `translateX(${
-                              showNote ? -200 : 0
-                            }px) scale(1.2)`,
+                            transform: `translateX(${showNote ? -200 : 0
+                              }px) scale(1.2)`,
                             transition:
                               'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
                           }}
@@ -1028,10 +1031,10 @@ const ScreenPreview = () => {
                               fontFamily={'AtlantisContent'}
                               fontSize={'21px'}
                             >
-                              {showTypingEffect=== false ? <TypingEffect
+                              {showTypingEffect === false ? <TypingEffect
                                 text={remainingSentences.toString()}
                                 speed={50}
-                              /> :remainingSentences }
+                              /> : remainingSentences}
                               {/* <TypingEffect text={resMsg} speed={50} /> */}
                             </Box>
                             <Box
@@ -1075,9 +1078,8 @@ const ScreenPreview = () => {
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
                           backgroundSize={'cover'}
-                          transform={`scale(${first ? 1 : 1.3}) translateY(${
-                            first ? 0 : -10
-                          }%) translateX(${first ? 0 : -10}%)`}
+                          transform={`scale(${first ? 1 : 1.3}) translateY(${first ? 0 : -10
+                            }%) translateX(${first ? 0 : -10}%)`}
                           transition={'transform 0.9s ease-in-out'}
                         >
                           <Box
