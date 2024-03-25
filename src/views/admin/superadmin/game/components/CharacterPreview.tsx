@@ -665,7 +665,6 @@ const CharacterPreview: React.FC<{
                         </Text>
                       </Flex>
                       <FormControl mb="5px">
-
                         <InputField
                           id="title"
                           placeholder="eg. Oliver"

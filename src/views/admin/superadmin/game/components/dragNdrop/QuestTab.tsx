@@ -56,7 +56,7 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
   return (
     <>
       <Tabs variant='soft-rounded' colorScheme='brandTabs'>
-        <TabList mx={{ base: '10px', lg: '30px' }} overflowX={{ sm: 'scroll', lg: 'unset' }}>
+        <TabList mx={{ base: '0px', lg: '10px' }} overflowX={{ sm: 'scroll', lg: 'unset' }}>
           <Flex>
             {listQuest ? (listQuest.map((item: any, index: number) => (
               <Tab
@@ -65,7 +65,9 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
                 // }}
                 onClick={() => handleNavigation(item.gameQuestNo)}
                 pb='0px'
-                me='10px'
+                pl={'10px'}
+                paddingInline={0}
+                me='20px'
                 bg='unset'
                 _selected={{
                   bg: 'none'

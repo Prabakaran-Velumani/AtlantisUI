@@ -183,8 +183,8 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
         <Icon as={MdDelete} fontSize={'18px'} color={'grey'} cursor={'pointer'} onClick={() => delSeq(seq, index, name)} />
       </Box>
       <Box className='box-block' display={'flex'} alignItems={'start'}>
-        <Box mr={'10px'} w={'50px'} fontSize={'17px'} color={'#1b2559'} fontWeight={'700'}>{seq.id}</Box>
-        <Box mr={'10px'} w={'150px'}>
+        <Box className='block-id' mr={'10px'} w={'50px'} fontSize={'17px'} color={'#1b2559'} fontWeight={'700'}>{seq.id}</Box>
+        <Box className='block-character-name' mr={'10px'} w={'150px'}>
           <button
             style={customButtonStyles}
             disabled={true}
@@ -193,7 +193,7 @@ const NoteCompo: React.FC<PropsNote> = ({ id, language, seq, index, name, handle
           </button>
 
         </Box>
-        <Box mr={'10px'} w={'400px'} >
+        <Box className='block-input-text' mr={'10px'} w={'400px'} >
           <Textarea
             ref={textareaRef}
             placeholder='Note'

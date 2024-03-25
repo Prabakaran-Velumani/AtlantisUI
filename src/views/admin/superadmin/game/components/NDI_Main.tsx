@@ -1980,7 +1980,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
         className="NDI"
         position={'relative'}
       >
-        <Card mb={'20px'}>
+        {/* <Card mb={'20px'}> */}
           <Text fontSize={22} fontWeight={800} mb={'20px'}>
             Story
           </Text>
@@ -2016,36 +2016,37 @@ const NDIMain: React.FC<NDIMainProps> = ({
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                           >
-                            <Box key={i}>
+                            <Box key={i} className='block-item-type'>
                               {seq.type == 'Note' ? (
-                                <Box
+                                <Card
                                   id={`tarSeqRef${seq.id}`}
+                                  className='target-block'
                                   position={'relative'}
                                   boxShadow={
                                     seq.input === lastInputName
                                       ? '1px 2px 13px #a2a1b00a'
                                       : 'unset'
                                   }
-                                  borderRadius={'12px'}
-                                  transform={
-                                    seq.input === lastInputName
-                                      ? 'scale(1.030)'
-                                      : 'unset'
-                                  }
+                                  borderRadius={'20px'}
+                                  // transform={
+                                  //   seq.input === lastInputName
+                                  //     ? 'scale(1.030)'
+                                  //     : 'unset'
+                                  // }
                                   transition={'0.1s linear'}
-                                  borderLeft={
-                                    seq.id === targetSequence?.id
-                                      ? '3px solid #3311db'
-                                      : 'unset'
-                                  }
+                                  
+                                  borderWidth={{base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px'}}
+                                  borderStyle={{base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid'}}
+                                  borderColor={{base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db'}}
+                                  
                                   background={
                                     seq.input === lastInputName ||
                                     dragData.isDragging === true ||
                                     seq.id === targetSequence?.id
-                                      ? '#c7c7c724'
+                                      ? '#f7f7f5'
                                       : 'unset'
                                   }
-                                  _hover={{ background: '#c7c7c724' }}
+                                  _hover={{ background: '#f7f7f5' }}
                                   zIndex={
                                     seq.input === lastInputName ? '9' : 'unset'
                                   }
@@ -2176,35 +2177,36 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                   {seq.id == showMiniBox ? (
                                     <MiniBox seq={seq} i={i} name={'Note'} />
                                   ) : null}
-                                </Box>
+                                </Card>
                               ) : seq.type == 'Dialog' ? (
-                                <Box
+                                <Card
                                   id={`tarSeqRef${seq.id}`}
+                                  className='target-block'
                                   position={'relative'}
                                   boxShadow={
                                     seq.input === lastInputName
                                       ? '1px 2px 13px #a2a1b00a'
                                       : 'unset'
                                   }
-                                  borderRadius={'12px'}
-                                  transform={
-                                    seq.input === lastInputName
-                                      ? 'scale(1.030)'
-                                      : 'unset'
-                                  }
+                                  borderRadius={'20px'}
+                                  // transform={
+                                  //   seq.input === lastInputName
+                                  //     ? 'scale(1.030)'
+                                  //     : 'unset'
+                                  // }
                                   transition={'0.1s linear'}
-                                  borderLeft={
-                                    seq.id === targetSequence?.id
-                                      ? '3px solid #3311db'
-                                      : 'unset'
-                                  }
+
+                                  borderWidth={{base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px'}}
+                                  borderStyle={{base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid'}}
+                                  borderColor={{base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db'}}
+
                                   background={
                                     seq.input === lastInputName ||
                                     dragData.isDragging === true
-                                      ? '#c7c7c724'
+                                      ? '#f7f7f5'
                                       : 'unset'
                                   }
-                                  _hover={{ background: '#c7c7c724' }}
+                                  _hover={{ background: '#f7f7f5' }}
                                   zIndex={
                                     seq.input === lastInputName ? '9' : 'unset'
                                   }
@@ -2354,9 +2356,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                   {seq.id == showMiniBox ? (
                                     <MiniBox seq={seq} i={i} name={'Dialog'} />
                                   ) : null}
-                                </Box>
+                                </Card>
                               ) : seq.type == 'Interaction' ? (
-                                <Box
+                                <Card
                                   id={`tarSeqRef${seq.id}`}
                                   position={'relative'}
                                   boxShadow={
@@ -2364,25 +2366,30 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                       ? '1px 2px 13px #a2a1b00a'
                                       : 'unset'
                                   }
-                                  borderRadius={'12px'}
-                                  transform={
-                                    seq.input === lastInputName
-                                      ? 'scale(1.030)'
-                                      : 'unset'
-                                  }
+                                  borderRadius={'20px'}
+                                  // transform={
+                                  //   seq.input === lastInputName
+                                  //     ? 'scale(1.030)'
+                                  //     : 'unset'
+                                  // }
                                   transition={'0.1s linear'}
-                                  borderLeft={
-                                    seq.id === targetSequence?.id
-                                      ? '3px solid #3311db'
-                                      : 'unset'
-                                  }
+
+                                  // border={{ base: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
+                                  // sm: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
+                                  // lg: seq.id === targetSequence?.id ? '3px solid #3311db unset unset unset' : 'unset',
+                                  // }}
+
+                                  // borderLeft={ seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'}
+                                  borderWidth={{base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px'}}
+                                  borderStyle={{base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid'}}
+                                  borderColor={{base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db'}}
                                   background={
                                     seq.input === lastInputName ||
                                     dragData.isDragging === true
-                                      ? '#c7c7c724'
+                                      ? '#f7f7f5'
                                       : 'unset'
                                   }
-                                  _hover={{ background: '#c7c7c724' }}
+                                  _hover={{ background: '#f7f7f5' }}
                                   zIndex={
                                     seq.input === lastInputName ? '9' : 'unset'
                                   }
@@ -2551,7 +2558,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                       name={'Interaction'}
                                     />
                                   ) : null}
-                                </Box>
+                                </Card>
                               ) : null}
                             </Box>
                           </div>
@@ -2621,7 +2628,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
               <Icon as={TbHandClick} fontSize={'23px'} />
             </Box>
           </Box>
-        </Card>
+        {/* </Card> */}
       </Box>
       <ChatButton />
     </>
