@@ -175,7 +175,7 @@ const QuestTab: React.FC<PropsNote> = ({
                       borderRadius="30px"
                     />
                   </Tab>
-                ))
+                )))
               : null}
           </Flex>
         </TabList>
