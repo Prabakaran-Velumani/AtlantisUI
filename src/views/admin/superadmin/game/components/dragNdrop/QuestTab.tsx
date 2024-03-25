@@ -74,30 +74,27 @@ const QuestTab: React.FC<PropsNote> = ({
 
   return (
     <>
-      <Tabs variant="soft-rounded" colorScheme="brandTabs">
-        <TabList
-          mx={{ base: '10px', lg: '30px' }}
-          overflowX={{ sm: 'scroll', lg: 'unset' }}
-        >
+      <Tabs variant='soft-rounded' colorScheme='brandTabs'>
+        <TabList mx={{ base: '0px', lg: '10px' }} overflowX={{ sm: 'scroll', lg: 'unset' }}>
           <Flex>
-            {listQuest
-              ? listQuest.map((item: any, index: number) => (
-                  <Tab
-                    // onClick={function () {
-                    //   setTabState('Review');
-                    // }}
-                    onClick={() => handleNavigation(item.gameQuestNo)}
-                    pb="0px"
-                    me="10px"
-                    bg="unset"
-                    _selected={{
-                      bg: 'none',
-                    }}
-                    _focus={{ border: 'none' }}
-                    minW="max-content"
-                    flexDirection="column"
-                  >
-                    {/* <Flex align='center'>
+            {listQuest ? (listQuest.map((item: any, index: number) => (
+              <Tab
+                // onClick={function () {
+                //   setTabState('Review');
+                // }}
+                onClick={() => handleNavigation(item.gameQuestNo)}
+                pb='0px'
+                pl={'10px'}
+                paddingInline={0}
+                me='20px'
+                bg='unset'
+                _selected={{
+                  bg: 'none'
+                }}
+                _focus={{ border:'none'}}
+                minW='max-content'
+                flexDirection='column'>
+                {/* <Flex align='center'>
                       <Text color={textColor} fontSize='lg' fontWeight='500' me='12px'>
                       Quest {item.gameQuestNo}
                       </Text>

@@ -3980,7 +3980,7 @@ const GameCreation = () => {
           </HStack>
         </GridItem>
         <GridItem colSpan={{ sm: 5, md: 5, lg: 5, xl: 4 }}>
-          <Box className="game-creation" mt={{ base: '50px', xl: '100px' }}>
+          <Box className="game-creation" mt={{ base: '50px', xl: '100px' }} pl={{base: '0', lg: '10px'}}>
             <Grid templateColumns="repeat(1, 1fr)" gap={6}>
               <GridItem w="100%" colSpan={2}>
                 {/*******************Changes-14/12/23*************************/}

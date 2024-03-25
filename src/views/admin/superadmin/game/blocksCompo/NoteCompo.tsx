@@ -302,22 +302,17 @@ const NoteCompo: React.FC<PropsNote> = ({
           </div>
         </Tooltip>
       </Box>
-      <Box className="box-block" display={'flex'} alignItems={'start'}>
-        <Box
-          mr={'10px'}
-          w={'50px'}
-          fontSize={'17px'}
-          color={'#1b2559'}
-          fontWeight={'700'}
-        >
-          {seq.id}
-        </Box>
-        <Box mr={'10px'} w={'150px'}>
-          <button style={customButtonStyles} disabled={true} onClick={() => {}}>
+      <Box className='box-block' display={'flex'} alignItems={'start'}>
+        <Box className='block-id' mr={'10px'} w={'50px'} fontSize={'17px'} color={'#1b2559'} fontWeight={'700'}>{seq.id}</Box>
+        <Box className='block-character-name' mr={'10px'} w={'150px'}>
+          <button
+            style={customButtonStyles}
+            disabled={true}
+            onClick={() => { }} >
             <span style={{ textAlign: 'left' }}>Narrator</span>
           </button>
         </Box>
-        <Box mr={'10px'} w={'400px'}>
+        <Box className='block-input-text' mr={'10px'} w={'400px'} >
           <Textarea
             ref={textareaRef}
             placeholder="Note"

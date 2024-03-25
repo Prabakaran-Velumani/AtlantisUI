@@ -618,12 +618,12 @@ const CharacterPreview: React.FC<{
                 <Box display={'flex'} w={'100%'} flexDir={{base: 'column', sm: 'column', md: 'column', lg: 'row'}}>
                 {formData.gameNonPlayingCharacterId !== previewId ? (
 
-                  <Card w={{base: '100%', sm: '100%', md: '100%', lg: '70%'}} mb={{base: '0px',sm: '0px', lg: '20px'}} h={{base: "40vh", sm: "40vh", md: "40vh", lg: 'auto'}} backgroundImage={img} backgroundSize={'cover'} backgroundPosition={'center'} backgroundRepeat={'no-repeat'} alignItems={'end'} justifyContent={'flex-end'}>
+                  <Card w={{base: '100%', sm: '100%', md: '100%', lg: '70%'}} mb={{base: '0px',sm: '0px', lg: '20px'}} h={{base: "40vh", sm: "40vh", md: "40vh", lg: '90vh'}} backgroundImage={img} backgroundSize={'cover'} backgroundPosition={'center'} backgroundRepeat={'no-repeat'} alignItems={'end'} justifyContent={'flex-end'}>
                     <Img src={selectedPlayer?.gasAssetImage} width={'100px'} height={'120px'} />
                   </Card>
                 ) : (
                   prev ?
-                    <Card w={{base: '100%', sm: '100%', md: '100%', lg: '70%'}} mb={{base: '0px',sm: '0px', lg: '20px'}} h={{base: "40vh", sm: "40vh", md: "40vh", lg: 'auto'}} backgroundImage={img} backgroundSize={'cover'} backgroundPosition={'center'} backgroundRepeat={'no-repeat'} alignItems={'end'} justifyContent={'flex-end'}>
+                    <Card w={{base: '100%', sm: '100%', md: '100%', lg: '70%'}} mb={{base: '0px',sm: '0px', lg: '20px'}} h={{base: "40vh", sm: "40vh", md: "40vh", lg: '90vh'}} backgroundImage={img} backgroundSize={'cover'} backgroundPosition={'center'} backgroundRepeat={'no-repeat'} alignItems={'end'} justifyContent={'flex-end'}>
                       <Img src={selectedPlayer?.gasAssetImage} width={'100px'} height={'120px'} />
                     </Card>
                     :
@@ -633,7 +633,7 @@ const CharacterPreview: React.FC<{
                 )}
                 {formData.gameNonPlayingCharacterId !== previewId ? (
                   // <Box w={{base: '100%', sm: '100%', md: '100%', lg: '30%'}} m={{base: '20px 0 0 0', sm: '20px 0 0 0', lg: '0 20px'}} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                    <Card flex="1" w={{base: '100%', sm: '100%', md: '100%', lg: '30%'}} m={{base: '20px 0 20px 0', sm: '20px 0 20px 0', lg: '0 0 20px 20px'}} p={4} boxShadow={'5px 5px 20px #c5c5c5'}>
+                    <Card flex="1" w={{base: '100%', sm: '100%', md: '100%', lg: '30%'}} h={'max-content'} m={{base: '20px 0 20px 0', sm: '20px 0 20px 0', lg: '0 0 20px 20px'}} p={4} boxShadow={'5px 5px 20px #c5c5c5'}>
                     <Flex direction='column' mb='20px' mt="0px">
                       <Text fontSize={"1.25rem"} color={'#1B2559'} fontWeight={'700'}>
                       Non Playing Character 
@@ -655,7 +655,7 @@ const CharacterPreview: React.FC<{
                   // </Box>
                   ) : (
                   // <Box w={{base: '100%', sm: '100%', md: '100%', lg: '30%'}} m={{base: '20px 0 0 0', sm: '20px 0 0 0', lg: '0 20px'}} display={'flex'} justifyContent={'center'} alignItems={'center'} mb={"0px"}>
-                    <Card flex="1" w={{base: '100%', sm: '100%', md: '100%', lg: '30%'}} m={{base: '20px 0 20px 0', sm: '20px 0 20px 0', lg: '0 0 20px 20px'}} p={4} boxShadow={'5px 5px 20px #c5c5c5'}>
+                    <Card flex="1" w={{base: '100%', sm: '100%', md: '100%', lg: '30%'}} h={'max-content'} m={{base: '20px 0 20px 0', sm: '20px 0 20px 0', lg: '0 0 20px 20px'}} p={4} boxShadow={'5px 5px 20px #c5c5c5'}>
                       <Flex direction='column' mb='20px' mt="0px">
                         <Text fontSize='xl' ml="1px" color={textColorPrimary} fontWeight='bold'>
                           Edit Name
@@ -665,7 +665,6 @@ const CharacterPreview: React.FC<{
                         </Text>
                       </Flex>
                       <FormControl mb="5px">
-
                         <InputField
                           id="title"
                           placeholder="eg. Oliver"
