@@ -224,6 +224,7 @@ export default function NFT(props: {
   return (
     <Card
       p="20px"
+      boxShadow={'1px 4px 29px #44445429'}
       // border={
       //   handelAssign.gameNonPlayingCharacterId === id
       //     ? '2px solid #11047a'

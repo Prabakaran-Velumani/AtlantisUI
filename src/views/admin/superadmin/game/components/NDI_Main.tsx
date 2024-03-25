@@ -16,6 +16,7 @@ import {
   AccordionIcon,
   AccordionPanel,
   useColorModeValue,
+  Tooltip,
 } from '@chakra-ui/react';
 import {
   MdAdd,
@@ -2576,6 +2577,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
             justifyContent={'center'}
             alignItems={'center'}
           >
+            <Tooltip hasArrow label="Add Note">         
             <Box
               mr={'20px'}
               p={'20px'}
@@ -2590,9 +2592,11 @@ const NDIMain: React.FC<NDIMainProps> = ({
               filter={'drop-shadow(4px 5px 8px #8080807d)'}
               _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
               onClick={() => handleBottomNDI('Note')}
-            >
-              <Icon as={MdOutlineStickyNote2} fontSize={'23px'} />
+            >                    
+                  <Icon as={MdOutlineStickyNote2} fontSize={'23px'} />               
             </Box>
+              </Tooltip>
+            <Tooltip hasArrow label="Add Dialog">   
             <Box
               mr={'20px'}
               p={'20px'}
@@ -2607,9 +2611,12 @@ const NDIMain: React.FC<NDIMainProps> = ({
               filter={'drop-shadow(4px 5px 8px #8080807d)'}
               _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
               onClick={() => handleBottomNDI('Dialog')}
-            >
-              <Icon as={TbMessages} fontSize={'23px'} />
+            >                          
+                  <Icon as={TbMessages} fontSize={'23px'} />
+                
             </Box>
+              </Tooltip>
+            <Tooltip hasArrow label="Add Interaction">
             <Box
               mr={'20px'}
               p={'20px'}
@@ -2624,9 +2631,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
               filter={'drop-shadow(4px 5px 8px #8080807d)'}
               _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
               onClick={() => handleBottomNDI('Interaction')}
-            >
-              <Icon as={TbHandClick} fontSize={'23px'} />
+            >                              
+                  <Icon as={TbHandClick} fontSize={'23px'} />             
             </Box>
+              </Tooltip>
           </Box>
         {/* </Card> */}
       </Box>
