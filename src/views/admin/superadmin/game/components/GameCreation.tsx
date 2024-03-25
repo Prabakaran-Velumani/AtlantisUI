@@ -4922,16 +4922,18 @@ const GameCreation = () => {
                 // lg: 'flex',
                 xl: 'none',
               }}
-              width={'94vw'}
+              width={'100vw'}
               position={'fixed'}
               bottom={0}
-              left="3vw"
+              right={0}
               zIndex={999999}
+              borderTop={'1px solid '}
             >
               <Flex justify="center" w={'100%'}>
                 <Card
                   display={'flex'}
-                  p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
+                  borderRadius={'none'}
+                  // p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
                   justifyContent={'space-between'}
                   flexDirection="row"
                   h="90px"

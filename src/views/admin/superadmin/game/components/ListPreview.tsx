@@ -16,12 +16,10 @@ const ListPreview:React.FC = () => {
     mb="20px"
     columns={{ sm: 1, lg: 1 }}
     spacing={{ base: '20px', xl: '20px' }}
-   
-  >
+   >
     <Flex direction="column" width="100%">
       <Profile name="Vlad Mihalache" data={'GAME Title'} avatar={'http://192.168.1.51:5556/uploads/background/29977_1701772077260.jpg'} banner={'DASDAS'} />
     </Flex>
-    
   </SimpleGrid>
 </Box>
     </>
