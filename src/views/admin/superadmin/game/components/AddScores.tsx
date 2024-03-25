@@ -931,9 +931,19 @@ const AddScores: React.FC<{
                   formData={formData}
                   imageSrc={ScreenMainImages[currentTab]}
                 />
-              )}
-              {(currentTab !== 0 || CompKeyCount !== 0) && (
-                <Box className="left-icon">
+              )}              
+            </Box>
+            <Box className='left-right-btns' 
+            // display={{base: 'flex', lg: 'block'}} justifyContent={{base: 'space-between', lg : 'unset'}} width={'100%'}
+            >
+            {(currentTab !== 0 || CompKeyCount !== 0) && (
+                <Box className="left-icon" 
+                // pos={{base: 'relative', lg: 'absolute'}}
+                h={{base: 'inherit', lg: '100%'}}
+                ml={{base: '0', lg: '-15px'}}
+                top={{base: 'unset', lg: '0'}}
+                bottom={{base: '0', lg: 'unset'}}
+                >
                   <Icon
                     as={FaChevronCircleLeft}
                     fontSize="25px"
@@ -942,7 +952,12 @@ const AddScores: React.FC<{
                 </Box>
               )}
               {currentTab !== 5 && (
-                <Box className="right-icon">
+                <Box className="right-icon" 
+                // pos={{base: 'relative', lg: 'absolute'}}
+                h={{base: 'inherit', lg: '100%'}}
+                mr={{base: '0', lg: '-15px'}}
+                top={{base: 'unset', lg: '0'}}
+                bottom={{base: '0', lg: 'unset'}}>
                   <Icon
                     as={FaChevronCircleRight}
                     // position="absolute"
