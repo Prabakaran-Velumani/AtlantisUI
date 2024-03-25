@@ -16,6 +16,7 @@ import {
   AccordionIcon,
   AccordionPanel,
   useColorModeValue,
+  Tooltip,
 } from '@chakra-ui/react';
 import {
   MdAdd,
@@ -2584,7 +2585,11 @@ const NDIMain: React.FC<NDIMainProps> = ({
               _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
               onClick={() => handleBottomNDI('Note')}
             >
-              <Icon as={MdOutlineStickyNote2} fontSize={'23px'} />
+              <Tooltip hasArrow label="Add Note">
+                <div>
+                  <Icon as={MdOutlineStickyNote2} fontSize={'23px'} />
+                </div>
+              </Tooltip>
             </Box>
             <Box
               mr={'20px'}
@@ -2601,7 +2606,11 @@ const NDIMain: React.FC<NDIMainProps> = ({
               _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
               onClick={() => handleBottomNDI('Dialog')}
             >
-              <Icon as={TbMessages} fontSize={'23px'} />
+              <Tooltip hasArrow label="Add Dialog">
+                <div>
+                  <Icon as={TbMessages} fontSize={'23px'} />
+                </div>
+              </Tooltip>
             </Box>
             <Box
               mr={'20px'}
@@ -2618,7 +2627,11 @@ const NDIMain: React.FC<NDIMainProps> = ({
               _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
               onClick={() => handleBottomNDI('Interaction')}
             >
-              <Icon as={TbHandClick} fontSize={'23px'} />
+              <Tooltip hasArrow label="Add Interaction">
+                <div>
+                  <Icon as={TbHandClick} fontSize={'23px'} />
+                </div>
+              </Tooltip>
             </Box>
           </Box>
         </Card>
