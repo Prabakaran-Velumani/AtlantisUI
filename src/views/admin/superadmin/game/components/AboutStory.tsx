@@ -378,8 +378,8 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
           justifyContent="center"
           textAlign="center"
         >
-          <Box w={{sm:'100%',md:'60%'}}>
-          <Text fontSize={20} textAlign={'center'} fontWeight={800} mb={'20px'}>
+          <Box w={{sm:'100%',md:'60%'}} mb={'25px'} mt={'25px'}>
+          <Text fontSize={20} textAlign={'start'} fontWeight={800} mb={'20px'}>
             Game Overview
           </Text>
           {/* <Box> */}

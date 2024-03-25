@@ -4191,10 +4191,10 @@ const GameCreation = () => {
                                         {img?.temp.tempTitle}
                                       </Text>
                                     </Box>
-                                    <Box mt={2} mb={2} h={'auto'}>
+                                    <Box mt={2} mb={2} h={'12px'}>
                                       {backgroundIndex === i ||
                                       windowWidth < 768 ? (
-                                        <Tooltip label={img?.temp?.tempStoryLine}>
+                                        <Tooltip label={img?.temp?.tempStoryLine} placement='top'>
                                           <Text
                                             fontSize={'12px'}
                                             fontWeight={'500'}
@@ -4222,16 +4222,7 @@ const GameCreation = () => {
                                                   0,
                                                   60,
                                                 ) + '...'
-                                              : // <span
-                                                // >
-                                                //   {truncateText(
-                                                //     img.temp.tempStoryLine,
-                                                //     60,
-                                                //     10,
-                                                //   )}{' '}
-                                                //   ...
-                                                // </span>
-                                                img?.temp?.tempStoryLine}
+                                              : img?.temp?.tempStoryLine}
                                           </Text>
                                         </Tooltip>
                                       ) : (
@@ -4619,10 +4610,11 @@ const GameCreation = () => {
             )}
             <Box
               w={{
-                base: '80%',
-                sm: '80%',
-                md: '76%',
-                lg: '76%',
+                base: '70%',
+                sm: '76%',
+                md: '85%',
+                // lg: '76%',
+                xl:'76%'
               }}
               position={'fixed'}
               top={0}
@@ -4631,7 +4623,7 @@ const GameCreation = () => {
               <Box display={'flex'} flexDirection={{ sm: 'column', md: 'row' }}>
                 <Box
                   display={'flex'}
-                  justifyContent={tab === 1 ? 'flex-end' : 'space-between'}
+                justifyContent={{base:'flex-end',xl:tab === 1 ? 'flex-end' : 'space-between'}}
                   // w={{ sm: '75%', md: '60%', xl: '60%', '2xl': '65%' }}
                   w={'100%'}
                 >
@@ -4809,6 +4801,7 @@ const GameCreation = () => {
                           </MenuList>
                         </Box>
                       </Menu>
+                    
                       {tab !== 1 && tab !== 6 ? (
                         <Select
                           options={[defaultLanguageOption, ...languageOptions]}
@@ -4834,6 +4827,7 @@ const GameCreation = () => {
                           }}
                         />
                       ) : null}
+                       <Box display={{base:'none',xl:'flex'}}>         
                        {tab !== 1 && tab !== 2 ? (
                         <Button
                           bg="#11047a"
@@ -4850,6 +4844,7 @@ const GameCreation = () => {
                           Preview
                         </Button>
                       ) : null}
+                       
                        {tab === 5 ? (
                         <Button
                           bg="#11047a"
@@ -4881,6 +4876,7 @@ const GameCreation = () => {
                           </Button>
                         )
                       )}
+                        </Box>
                     </Card>
                   </Flex>
                 </Box>
