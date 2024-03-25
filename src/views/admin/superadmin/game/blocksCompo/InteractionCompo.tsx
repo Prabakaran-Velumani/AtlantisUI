@@ -736,6 +736,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index
             <div>
               <Icon
                 as={MdAdd}
+                transitionDelay={'0s !important'}
                 fontSize={'18px'}
                 color={'grey'}
                 mr={'10px'}
@@ -748,6 +749,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index
             <div>
               <Icon
                 as={BiSolidDuplicate}
+                transitionDelay={'0.1s !important'}
                 fontSize={'18px'}
                 color={'grey'}
                 mr={'10px'}
@@ -760,6 +762,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index
             <div>
               <Icon
                 as={MdDelete}
+                transitionDelay={'0.2s !important'}
                 fontSize={'18px'}
                 color={'grey'}
                 cursor={'pointer'}

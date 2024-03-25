@@ -2577,6 +2577,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
             justifyContent={'center'}
             alignItems={'center'}
           >
+            <Tooltip hasArrow label="Add Note">         
             <Box
               mr={'20px'}
               p={'20px'}
@@ -2591,13 +2592,11 @@ const NDIMain: React.FC<NDIMainProps> = ({
               filter={'drop-shadow(4px 5px 8px #8080807d)'}
               _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
               onClick={() => handleBottomNDI('Note')}
-            >
-              <Tooltip hasArrow label="Add Note">
-                <div>
-                  <Icon as={MdOutlineStickyNote2} fontSize={'23px'} />
-                </div>
-              </Tooltip>
+            >                    
+                  <Icon as={MdOutlineStickyNote2} fontSize={'23px'} />               
             </Box>
+              </Tooltip>
+            <Tooltip hasArrow label="Add Dialog">   
             <Box
               mr={'20px'}
               p={'20px'}
@@ -2612,13 +2611,12 @@ const NDIMain: React.FC<NDIMainProps> = ({
               filter={'drop-shadow(4px 5px 8px #8080807d)'}
               _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
               onClick={() => handleBottomNDI('Dialog')}
-            >
-              <Tooltip hasArrow label="Add Dialog">
-                <div>
+            >                          
                   <Icon as={TbMessages} fontSize={'23px'} />
-                </div>
-              </Tooltip>
+                
             </Box>
+              </Tooltip>
+            <Tooltip hasArrow label="Add Interaction">
             <Box
               mr={'20px'}
               p={'20px'}
@@ -2633,13 +2631,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
               filter={'drop-shadow(4px 5px 8px #8080807d)'}
               _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
               onClick={() => handleBottomNDI('Interaction')}
-            >
-              <Tooltip hasArrow label="Add Interaction">
-                <div>
-                  <Icon as={TbHandClick} fontSize={'23px'} />
-                </div>
-              </Tooltip>
+            >                              
+                  <Icon as={TbHandClick} fontSize={'23px'} />             
             </Box>
+              </Tooltip>
           </Box>
         {/* </Card> */}
       </Box>

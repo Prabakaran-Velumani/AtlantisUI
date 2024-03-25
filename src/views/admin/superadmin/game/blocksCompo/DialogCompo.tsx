@@ -348,6 +348,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
             <div>
               <Icon
                 as={MdAdd}
+                transitionDelay={'0s !important'}
                 fontSize={'18px'}
                 color={'grey'}
                 mr={'10px'}
@@ -360,6 +361,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
             <div>
               <Icon
                 as={BiSolidDuplicate}
+                transitionDelay={'0.1s !important'}
                 fontSize={'18px'}
                 color={'grey'}
                 mr={'10px'}
@@ -372,6 +374,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
             <div>
               <Icon
                 as={MdDelete}
+                transitionDelay={'0.2s !important'}
                 fontSize={'18px'}
                 color={'grey'}
                 cursor={'pointer'}
@@ -478,7 +481,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
           <Box className="navigation-icon" mr={'40px'}>
             <Flex mb={'13px'}>
               <Box>
-                <Tooltip hasArrow label="Add Navigations">
+                <Tooltip hasArrow label="Add Navigations" placement='top'>
                   <div>
                     <Menu
                       tabState={'leadDialog'}
