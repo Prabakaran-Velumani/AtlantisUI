@@ -112,17 +112,22 @@ option {
   /* visibility: hidden; */
   display: flex;
   flex-direction: column;
+  height: 5rem;
   /* margin-right: 15px;
   margin-bottom: 15px; */
   /* margin-left: 15px; */
 }
+
 .block-compo .block-action-icons svg{
   margin-bottom: 10px;
+  height: 0;
+  transition: 0.2s ease;
 }
 
-/* .block-compo:hover .block-action-icons {
-  visibility: visible;
-} */
+.NDI .block-item-type:hover .block-action-icons svg{
+  /* visibility: visible; */
+  height: 1em;
+}
 
 /* InteractionCompo */
 .interaction-option .interaction-option-del-icon {

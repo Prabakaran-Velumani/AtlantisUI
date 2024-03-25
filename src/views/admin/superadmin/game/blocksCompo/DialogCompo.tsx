@@ -240,9 +240,9 @@ const DialogCompo: React.FC<PropsDialog> = ({ id,language,seq, index, name, hand
             : ''
         }}>
                 <Box className='block-action-icons'>
-                    <Icon as={MdAdd} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => getSeq(seq, index, name)} />
-                    <Icon as={BiSolidDuplicate} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => duplicateSeq(seq, index, name)} />
-                    <Icon as={MdDelete} fontSize={'18px'} color={'grey'} cursor={'pointer'} onClick={() => delSeq(seq, index, name)} />
+                    <Icon as={MdAdd} transitionDelay={'0s !important'} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => getSeq(seq, index, name)} />
+                    <Icon as={BiSolidDuplicate} transitionDelay={'0.1s !important'} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => duplicateSeq(seq, index, name)} />
+                    <Icon as={MdDelete} transitionDelay={'0.2s !important'} fontSize={'18px'} color={'grey'} cursor={'pointer'} onClick={() => delSeq(seq, index, name)} />
                 </Box>
                 <Box className='box-block' display={'flex'} w={'100%'} alignItems={'start'}>
                     <Box mr={'10px'} w={'50px'} fontSize={'17px'} color={'#1b2559'} fontWeight={'700'}>{seq.id}</Box>

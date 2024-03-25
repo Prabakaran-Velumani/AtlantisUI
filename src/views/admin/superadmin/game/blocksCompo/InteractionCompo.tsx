@@ -701,9 +701,9 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index
             </Box>
               )}
             <Box className='block-action-icons'>
-                <Icon as={MdAdd} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => getSeq(seq, index, name)} />
-                <Icon as={BiSolidDuplicate} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => duplicateSeq(seq, index, name)} />
-                <Icon as={MdDelete} fontSize={'18px'} color={'grey'} cursor={'pointer'} onClick={() => delSeq(seq, index, name)} />
+                <Icon as={MdAdd} transitionDelay={'0s !important'} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => getSeq(seq, index, name)} />
+                <Icon as={BiSolidDuplicate} transitionDelay={'0.1s !important'} fontSize={'18px'} color={'grey'} mr={'10px'} cursor={'pointer'} onClick={() => duplicateSeq(seq, index, name)} />
+                <Icon as={MdDelete} transitionDelay={'0.2s !important'} fontSize={'18px'} color={'grey'} cursor={'pointer'} onClick={() => delSeq(seq, index, name)} />
             </Box>
             <Box className='box-block' display={'flex'} mr={'8px'} mb={'30px'} >
                 <Box mr={'10px'} fontWeight={'700'} w={'50px'}>{seq.id}</Box>
