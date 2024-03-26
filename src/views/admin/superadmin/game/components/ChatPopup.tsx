@@ -7,6 +7,7 @@ import {
   TypingIndicator,
   MessageInput,
 } from '@chatscope/chat-ui-kit-react';
+import { Box } from '@chakra-ui/react';
 
 interface ChatPopupProps {
   messages: any[]; // Adjust the type based on your actual message structure
@@ -21,21 +22,23 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ messages, isTyping, onSend, onClo
     setTimeout(()=>{setTrans(false)},1000)
  },[])
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 20,
-        right: 20,
-        height: '85%',
-        width: '25%',
-        background: '#fff',
-        zIndex: 256,
-        borderRadius:'8px',
-        padding: '5px 5px 50px 5px',
-        border: '3px solid #11047a',
-        transform: trans ? 'scale(0.5) translate(30px 100px)':'scale(1) translate(0px 0px)',
-        transition:'transform 0.3s ease-in-out'
-      }}
+    <Box
+      position={'fixed'}
+      top={'20px'}
+      right={'20px'}
+      height={{base:'78%',xl:"85%"}}
+      width = {{base:'90%',md:'32%',xl:"25%"}}
+      background={'#fff'}
+      zIndex={9999999}
+      borderRadius={'8px'}
+      padding={'5px 5px 50px 5px'}
+      border={'3px solid #11047a'}
+      transform={
+        trans
+          ? 'scale(0.5) translate(30px 100px)'
+          : 'scale(1) translate(0px 0px)'
+      }
+      transition="transform 0.3s ease-in-out"
     >
       <div
         style={{
@@ -83,7 +86,8 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ messages, isTyping, onSend, onClo
           />
         </ChatContainer>
       </MainContainer>
-    </div>
+      {/* <button onClick={onClose}>Close</button> */}
+    </Box>
   );
 };
 

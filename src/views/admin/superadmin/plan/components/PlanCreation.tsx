@@ -701,7 +701,12 @@ const Plan: React.FC = () => {
                 </Tbody>
               </Table>
               <Flex mb={'20px'}>
-                <Button onClick={handleAddRow} fontSize="sm" color={'#190793'} border={'1px solid #190793'} bg={'transparent'} _hover={{bg: '#11047a', color: '#fff'}}>Add Row</Button>
+                <Button onClick={handleAddRow} fontSize="sm" 
+                color={'#190793'} 
+                border={'1px solid #190793'} 
+                bg={'transparent'} 
+                _hover={{bg: '#11047a', color: '#fff'}}
+                >Add Row</Button>
               </Flex>
             </Box>
             <Flex justify="space-between">

@@ -237,6 +237,43 @@
     height: 27px;
     transform: translate(-15px, 7px);
   }
+
+
+  
+
+  .NDI .block-item-type {
+    box-shadow: 1px 3px 15px #2d2d2d24;
+    margin-bottom: 20px;
+    border-radius: 20px;
+  }
+  /* .NDI .block-item-type .target-block {
+    border: 3px solid #3311db;
+  } */
+  .NDI .sequence-lists .block-compo {
+    flex-direction: column;
+  }
+  .NDI .sequence-lists .block-compo .box-block{
+    flex-direction: column;
+    width: 100%;
+  }
+  .NDI .sequence-lists .block-compo .box-block .block-id{
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .NDI .sequence-lists .block-compo .box-block .block-character-name{
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .NDI .sequence-lists .block-compo .box-block .block-character-name button{
+    width: 100% !important;
+  }
+  .NDI .sequence-lists .block-compo .box-block .block-input-text{
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .NDI .sequence-lists .block-compo .box-block .react-select{
+    width: 100% !important;
+  }
 }
 @media (min-width: 480px) and (max-width: 768px) {
   .EntirePreview .Game-Screen .Images .reflection-screen .title img {
@@ -309,6 +346,39 @@
     height: 35px;
     transform: translate(-51px, 5px)
   }
+
+  
+
+  .NDI .block-item-type {
+    box-shadow: 1px 3px 15px #2d2d2d24;
+    margin-bottom: 20px;
+    border-radius: 20px;
+  }
+  .NDI .sequence-lists .block-compo {
+    flex-direction: column;
+  }
+  .NDI .sequence-lists .block-compo .box-block{
+    flex-direction: column;
+    width: 100%;
+  }
+  .NDI .sequence-lists .block-compo .box-block .block-id{
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .NDI .sequence-lists .block-compo .box-block .block-character-name{
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .NDI .sequence-lists .block-compo .box-block .block-character-name button{
+    width: 100% !important;
+  }
+  .NDI .sequence-lists .block-compo .box-block .block-input-text{
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .NDI .sequence-lists .block-compo .box-block .react-select{
+    width: 100% !important;
+  }
 }
 @media (min-width: 768px) and (max-width: 990px) {
   .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content {
@@ -354,10 +424,43 @@
     height: 45px;
     transform: translate(-53px, 3px)
   }
+
+
+  .NDI .block-item-type {
+    box-shadow: 1px 3px 15px #2d2d2d24;
+    margin-bottom: 20px;
+    border-radius: 20px;
+  }
+  .NDI .sequence-lists .block-compo {
+    flex-direction: column;
+  }
+  .NDI .sequence-lists .block-compo .box-block{
+    flex-direction: column;
+    width: 100%;
+  }
+  .NDI .sequence-lists .block-compo .box-block .block-id{
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .NDI .sequence-lists .block-compo .box-block .block-character-name{
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .NDI .sequence-lists .block-compo .box-block .block-character-name button{
+    width: 100% !important;
+  }
+  .NDI .sequence-lists .block-compo .box-block .block-input-text{
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .NDI .sequence-lists .block-compo .box-block .react-select{
+    width: 100% !important;
+  }
 }
 /* RESPONSIVE END ***************************************************************** */
 
 
+/* TOP Menu Secion */
 @media (min-width: 1300px) and (max-width: 1500px) {
   .top-menu-home-section .overview-img {
     height: 60px;

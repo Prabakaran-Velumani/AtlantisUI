@@ -21,6 +21,7 @@ import {
   MenuItem,
   FormControl,
   FormLabel,
+  Tooltip,
 } from '@chakra-ui/react';
 import { MdOutlineRocketLaunch, MdOutlineSubtitles } from 'react-icons/md';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
@@ -450,6 +451,7 @@ const GameCreation = () => {
   const [CompKeyCount, setCompKeyCount] = useState<any>(0);
   const [prevdata, setPrevdata] = useState();
   const [gameInfo, setGameInfo] = useState<any | null>();
+  const [readMore,setReadMore] = useState(null);
   // const [gameId, setGameId] = useState();
   // const [reviewers, setReviewers] = useState<any[]>([]);
   const { id } = useParams();
@@ -2435,7 +2437,7 @@ return false;
         '$1\n',
       );
 
-      return truncatedText + '........';
+      return truncatedText;
     }
   }
   ////////////////////////////Changes-11/01/2024//////////////////////
@@ -3904,7 +3906,7 @@ return false;
           </HStack>
         </GridItem>
         <GridItem colSpan={{ sm: 5, md: 5, lg: 5, xl: 4 }}>
-          <Box className="game-creation" mt={{ base: '50px', xl: '100px' }}>
+          <Box className="game-creation" mt={{ base: '50px', xl: '100px' }} pl={{base: '0', lg: '10px'}}>
             <Grid templateColumns="repeat(1, 1fr)" gap={6}>
               <GridItem w="100%" colSpan={2}>
                 {/*******************Changes-14/12/23*************************/}
@@ -3974,11 +3976,11 @@ return false;
                                       : '1px 4px 29px #44445429'
                                   }
                                   transition={'0.3s'}
-                                  overflow="hidden"
+                                  // overflow="hidden"
                                 >
                                   <Box
                                     position={'relative'}
-                                    overflow={'hidden'}
+                                    // overflow={'hidden'}
                                     borderRadius={'10px'}
                                   >
                                     <Img
@@ -3989,7 +3991,8 @@ return false;
                                       cursor="pointer"
                                     />
 
-                                    {backgroundIndex === i || windowWidth < 768 ? (
+                                    {backgroundIndex === i ||
+                                    windowWidth < 768 ? (
                                       <Flex
                                         position="absolute"
                                         bottom="0px"
@@ -4114,32 +4117,40 @@ return false;
                                         {img?.temp.tempTitle}
                                       </Text>
                                     </Box>
-                                    <Box mt={2} h={'12px'}>
-                                       {backgroundIndex === i || windowWidth < 768 ? (
-                                        <Text
-                                          fontSize={'12px'}
-                                          fontWeight={'500'}
-                                          color={
-                                            selectedCardIndex === i
-                                              ? 'white'
-                                              : 'black'
-                                          }
-                                          maxH={
-                                            showFullTextStates[i]
-                                              ? 'none'
-                                              : '1.5em'
-                                          } // Limit to one line (adjust height as needed)
-                                          overflow={'hidden'}
-                                          textOverflow={'ellipsis'}
-                                          whiteSpace={'nowrap'}
-                                        >
-                                          {' '}
-                                          {truncateText(
-                                            img.temp.tempStoryLine,
-                                            60,
-                                            10,
-                                          )}
-                                        </Text>
+                                    <Box mt={2} mb={2} h={'12px'}>
+                                      {backgroundIndex === i ||
+                                      windowWidth < 768 ? (
+                                        <Tooltip label={img?.temp?.tempStoryLine} placement='top'>
+                                          <Text
+                                            fontSize={'12px'}
+                                            fontWeight={'500'}
+                                            onMouseEnter={() => setReadMore(i)}
+                                            onMouseLeave={() =>
+                                              setReadMore(null)
+                                            }
+                                            color={
+                                              selectedCardIndex === i
+                                                ? 'white'
+                                                : 'black'
+                                            }
+                                            maxH={
+                                              showFullTextStates[i]
+                                                ? 'none'
+                                                : '1.5em'
+                                            } // Limit to one line (adjust height as needed)
+                                            // overflow={'hidden'}
+                                            // textOverflow={'ellipsis'}
+                                            // whiteSpace={'nowrap'}
+                                          >
+                                            {img?.temp?.tempStoryLine?.length >
+                                            60
+                                              ? img?.temp?.tempStoryLine.slice(
+                                                  0,
+                                                  60,
+                                                ) + '...'
+                                              : img?.temp?.tempStoryLine}
+                                          </Text>
+                                        </Tooltip>
                                       ) : (
                                         ''
                                       )}
@@ -4219,7 +4230,7 @@ return false;
                           padding={'30px 0'}
                         >
                           <SimpleGrid
-                            className='gameCreationGrid'
+                            className="gameCreationGrid"
                             columns={{ base: 1, md: 2, lg: 4 }}
                             spacing={6}
                           >
@@ -4252,7 +4263,7 @@ return false;
                               })}
                           </SimpleGrid>
                         </Box>
-                      </Box>                     
+                      </Box>
                     </Box>
                   </>
                 ) : tab === 3 ? (
@@ -4384,13 +4395,13 @@ return false;
               </GridItem>
             </Grid>
             {tab !== 4 && tab !== 6 && ShowReview && (
-              <Menu >
+              <Menu>
                 <MenuButton
                   p="0px"
                   bg={'brandScheme'}
                   position={'fixed'}
-                  bottom={{base:'95px',xl:'0'}}
-                  right={{base:'15px',xl:'5px'}}
+                  bottom={{ base: '105px', xl: '0' }}
+                  right={{ base: '15px', xl: '5px' }}
                   className="menureviewshow"
                 >
                   <Icon
@@ -4411,7 +4422,6 @@ return false;
                   borderRadius="20px"
                   bg={menuBg}
                   border="none"
-                  
                   mt="10px"
                   minW={{ base: '360px' }}
                   maxW={{ base: '360px', md: 'unset' }}
@@ -4527,10 +4537,11 @@ return false;
             )}
             <Box
               w={{
-                base: '80%',
-                sm: '80%',
-                md: '76%',
-                lg: '76%',
+                base: '70%',
+                sm: '76%',
+                md: '85%',
+                // lg: '76%',
+                xl:'76%'
               }}
               position={'fixed'}
               top={0}
@@ -4539,8 +4550,9 @@ return false;
               <Box display={'flex'} flexDirection={{ sm: 'column', md: 'row' }}>
                 <Box
                   display={'flex'}
-                  justifyContent={'space-between'}
-                  w={{ sm: '75%', md: '60%', xl: '60%', '2xl': '65%' }}
+                justifyContent={{base:'flex-end',xl:tab === 1 ? 'flex-end' : 'space-between'}}
+                  // w={{ sm: '75%', md: '60%', xl: '60%', '2xl': '65%' }}
+                  w={'100%'}
                 >
                   {tab !== 1 && (
                     <Box
@@ -4629,7 +4641,7 @@ return false;
                             position="absolute"
                             p="15px"
                             zIndex="1000" // Set a higher z-index value
-                            right={{lg:'-180px',xl:'0'}}
+                            right={{ lg: '-180px', xl: '0' }}
                           >
                             <MenuItem
                               transition="0.2s linear"
@@ -4716,6 +4728,7 @@ return false;
                           </MenuList>
                         </Box>
                       </Menu>
+                    
                       {tab !== 1 && tab !== 6 ? (
                         <Select
                           options={[defaultLanguageOption, ...languageOptions]}
@@ -4741,37 +4754,8 @@ return false;
                           }}
                         />
                       ) : null}
-                    </Card>
-                  </Flex>
-                </Box>
-                <Box
-                  display={{
-                    base: 'none',
-                    sm: 'none',
-                    md: 'none',
-                    lg: 'none',
-                    xl: 'flex',
-                  }}
-                  w={{ sm: '120%', md: '40%', lg: '25%' }}
-                  justifyContent={'center'}
-                >
-                  <Flex justify="center">
-                    <Card
-                      display={'flex'}
-                      p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
-                      justifyContent={
-                        tab === 1 || tab === 2 ? 'end' : 'flex-end'
-                      }
-                      flexDirection="row"
-                      h="95px"
-                      boxShadow={'1px 3px 14px #0000'}
-                      // position={'fixed'}
-                      // top={'24px'}
-                      // right={'8px'}
-                      zIndex={99}
-                      background={'#0000 !important'}
-                    >
-                      {tab !== 1 && tab !== 2 ? (
+                       <Box display={{base:'none',xl:'flex'}}>         
+                       {tab !== 1 && tab !== 2 ? (
                         <Button
                           bg="#11047a"
                           _hover={{ bg: '#190793' }}
@@ -4787,7 +4771,8 @@ return false;
                           Preview
                         </Button>
                       ) : null}
-                      {tab === 5 ? (
+                       
+                       {tab === 5 ? (
                         <Button
                           bg="#11047a"
                           _hover={{ bg: '#190793' }}
@@ -4818,29 +4803,64 @@ return false;
                           </Button>
                         )
                       )}
+                        </Box>
                     </Card>
                   </Flex>
                 </Box>
+                {/* <Box
+                  display={{
+                    base: 'none',
+                    sm: 'none',
+                    md: 'none',
+                    lg: 'none',
+                    xl: 'flex',
+                  }}
+                  w={{ sm: '120%', md: '40%', lg: '25%' }}
+                  justifyContent={'center'}
+                >
+                  <Flex justify="center">
+                    <Card
+                      display={'flex'}
+                      p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
+                      justifyContent={
+                        tab === 1 || tab === 2 ? 'end' : 'flex-end'
+                      }
+                      flexDirection="row"
+                      h="95px"
+                      boxShadow={'1px 3px 14px #0000'}
+                      // position={'fixed'}
+                      // top={'24px'}
+                      // right={'8px'}
+                      zIndex={99}
+                      background={'#0000 !important'}
+                    >
+                     
+                     
+                    </Card>
+                  </Flex>
+                </Box> */}
               </Box>
             </Box>
             <Box
               display={{
-                base: tab === 1 ? 'none': 'flex' ,
+                base: tab === 1 ? 'none' : 'flex',
                 // sm: 'flex',
                 // md: 'flex',
                 // lg: 'flex',
                 xl: 'none',
               }}
-              width={'94vw'}
+              width={'100vw'}
               position={'fixed'}
               bottom={0}
-              left="3vw" 
+              right={0}
               zIndex={999999}
+              borderTop={'1px solid #d5cbcb'}
             >
-              <Flex justify="center" w={'100%'} >
+              <Flex justify="center" w={'100%'}>
                 <Card
                   display={'flex'}
-                  p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
+                  borderRadius={'none'}
+                  // p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
                   justifyContent={'space-between'}
                   flexDirection="row"
                   h="90px"
@@ -4872,37 +4892,41 @@ return false;
                   )}
                   {tab !== 1 && tab !== 2 ? (
                     <Box display={'flex'} alignItems={'center'} w={'60%'}>
-                    <Button
-                      bg="#11047a"
-                      _hover={{ bg: '#190793' }}
-                      color="#fff"
-                      h={'46px'}
-                      w={'100%'}
-                      display={tab === 7 || tab === 6 ? 'none' : 'block'}
-                      mr={'17px'}
-                      mt={'6px'}
-                      ml={'11px'}
-                      onClick={handleEntirePrev}
-                    >
-                      Preview
-                    </Button>
+                      <Button
+                        // bg="#11047a"
+                        // _hover={{ bg: '#190793' }}
+                        // color="#fff"
+                        color={'#190793'} 
+                border={'1px solid #190793'} 
+                bg={'transparent'} 
+                _hover={{bg: '#11047a', color: '#fff'}}
+                        h={'46px'}
+                        w={'100%'}
+                        display={tab === 7 || tab === 6 ? 'none' : 'block'}
+                        mr={'17px'}
+                        mt={'6px'}
+                        ml={'11px'}
+                        onClick={handleEntirePrev}
+                      >
+                        Preview
+                      </Button>
                     </Box>
                   ) : null}
                   {tab === 5 ? (
-                   <Flex justify={'flex-start'} alignItems={'center'}>
-                   <IoArrowForwardCircle
-                     onClick={handleNext}
-                     size={46} // Adjust the size as needed
-                     color="#11047a"
-                     style={{
-                       // position: 'fixed',
-                       // top: '43px',
-                       // left: '350px',
-                       zIndex: 99,
-                       cursor: 'pointer',
-                     }}
-                   />
-                 </Flex>
+                    <Flex justify={'flex-start'} alignItems={'center'}>
+                      <IoArrowForwardCircle
+                        onClick={handleNext}
+                        size={46} // Adjust the size as needed
+                        color="#11047a"
+                        style={{
+                          // position: 'fixed',
+                          // top: '43px',
+                          // left: '350px',
+                          zIndex: 99,
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </Flex>
                   ) : (
                     tab !== 1 &&
                     tab !== 2 &&
@@ -4912,11 +4936,11 @@ return false;
                         <MdOutlineRocketLaunch
                           onClick={commonNextFunction}
                           size={35} // Adjust the size as needed
-                          color="#fff"                         
+                          color="#fff"
                           style={{
-                            padding:'5px',
-                            borderRadius:'50%',
-                            backgroundColor:'#11047A',
+                            padding: '5px',
+                            borderRadius: '50%',
+                            backgroundColor: '#11047A',
                             // position: 'fixed',
                             // top: '43px',
                             // left: '350px',

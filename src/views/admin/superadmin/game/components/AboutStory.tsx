@@ -378,8 +378,8 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
           justifyContent="center"
           textAlign="center"
         >
-          <Box w={{sm:'100%',md:'60%'}}>
-          <Text fontSize={20} textAlign={'center'} fontWeight={800} mb={'20px'}>
+          <Card w={{sm:'100%',md:'65%'}}  boxShadow={{base:'',md:'1px 4px 29px #44445429'}} p={{base:'0',md:'25px'}}>
+          <Text fontSize={20} textAlign={'start'} fontWeight={800} mb={'20px'}>
             Game Overview
           </Text>
           {/* <Box> */}
@@ -637,7 +637,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
               onChange={handleChange}
             />
           </SimpleGrid>
-          </Box>
+          </Card>
         </Flex>
       </Card>
       {openCourse ? <AddCourse setOpenCourse={setOpenCourse} isOpen={isOpen} onClose={onClose} onOpen={onOpen} /> : null}

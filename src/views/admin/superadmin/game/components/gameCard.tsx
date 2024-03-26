@@ -224,6 +224,7 @@ export default function NFT(props: {
   return (
     <Card
       p="20px"
+      boxShadow={'1px 4px 29px #44445429'}
       // border={
       //   handelAssign.gameNonPlayingCharacterId === id
       //     ? '2px solid #11047a'
@@ -530,7 +531,6 @@ export default function NFT(props: {
             </Flex>
           )}
         </Box>
-
         <Flex flexDirection="column" justify="space-between" h="100%">
           <Flex
             justify="space-between"
@@ -756,7 +756,7 @@ value={handelAssign.gameNarratorVoice}
               </Text>
             </Flex>
           </Flex>
-          <Flex
+          {/* <Flex
             justify="space-between"
             align={{
               base: 'center',
@@ -773,11 +773,11 @@ value={handelAssign.gameNarratorVoice}
               '2xl': 'row',
             }}
             mt="25px"
-          >
+          > */}
             {/* <Text fontWeight='700' fontSize='sm' color={textColorBid}>
                        
 						</Text> */}
-          </Flex>
+          {/* </Flex> */}
         </Flex>
       </Flex>
     </Card>

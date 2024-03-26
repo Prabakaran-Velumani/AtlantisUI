@@ -1,12 +1,25 @@
-
 import {
-  Box, Button, Flex, Heading, Icon, Img, SimpleGrid, Text, Tabs,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Icon,
+  Img,
+  SimpleGrid,
+  Text,
+  Tabs,
   TabList,
   TabPanels,
   Tab,
-  TabPanel, useColorModeValue, Grid, IconButton,
+  TabPanel,
+  useColorModeValue,
+  Grid,
+  IconButton,
   InputGroup,
-  InputLeftElement, Input, InputRightElement, Modal,
+  InputLeftElement,
+  Input,
+  InputRightElement,
+  Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
@@ -14,7 +27,8 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
-} from '@chakra-ui/react'
+  Tooltip,
+} from '@chakra-ui/react';
 import { MdCheck, MdClose, MdTimer, MdDelete } from 'react-icons/md';
 import React, { useEffect, useState } from 'react';
 interface PropsNote {
@@ -26,21 +40,26 @@ interface PropsNote {
   deleteQuest?: any;
 }
 
-const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, questTabState, setQuestTabState, deleteQuest }) => {
+const QuestTab: React.FC<PropsNote> = ({
+  listQuest,
+  handleGet,
+  fetchBlocks,
+  questTabState,
+  setQuestTabState,
+  deleteQuest,
+}) => {
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedQuestNo, setSelectedQuestNo] = useState<number | null>(null); // Initialize as null
   const [deletequestgameId, setDeleteQuestGameId] = useState<number | null>(null); // Initialize as null
   const [QuestTabStateDelete, setQuestTabStateDelete] = useState<any>(false);
   const handleNavigation = (nid: number) => {
-
     if (nid) {
       setQuestTabState(nid);
       handleGet(nid);
       fetchBlocks();
     }
-
-  }
+  };
   const handleDeleteClick = (item: any) => {
     if(item.gameQuestNo === 1)
     {
@@ -56,7 +75,7 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
       onOpen();
   }
   };
-  
+
   const handleCancelDelete = () => {
     // Close the modal without deleting
     setSelectedQuestNo(null); // Set the selected quest number
@@ -67,7 +86,7 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
   return (
     <>
       <Tabs variant='soft-rounded' colorScheme='brandTabs'>
-        <TabList mx={{ base: '10px', lg: '30px' }} overflowX={{ sm: 'scroll', lg: 'unset' }}>
+        <TabList mx={{ base: '0px', lg: '10px' }} overflowX={{ sm: 'scroll', lg: 'unset' }}>
           <Flex>
             {listQuest ? (listQuest.map((item: any, index: number) => (
               <Tab
@@ -76,7 +95,9 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
                 // }}
                 onClick={() => handleNavigation(item.gameQuestNo)}
                 pb='0px'
-                me='10px'
+                pl={'10px'}
+                paddingInline={0}
+                me='20px'
                 bg='unset'
                 _selected={{
                   bg: 'none'
@@ -84,12 +105,6 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
                 _focus={{ border:'none'}}
                 minW='max-content'
                 flexDirection='column'>
-                {/* <Flex align='center'>
-                      <Text color={textColor} fontSize='lg' fontWeight='500' me='12px'>
-                      Quest {item.gameQuestNo}
-                      </Text>
-                      <Icon as={MdDelete} fontSize={'md'} color={'grey'} cursor={'pointer'}   onClick={() => deleteQuest(item.gameId,item.gameQuestNo)}   />
-                    </Flex> */}
                 <Flex align='center'>
                   <Text color={textColor} fontSize='lg' fontWeight='500' me='12px'>
                     Quest {item.gameQuestNo}
@@ -128,7 +143,7 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
                     <ModalBody>
                       <Text color={textColor} fontSize="18px" fontWeight="600">
                        
-                      Please do not delete Quest {selectedQuestNo}. You can delete the items associated with it instead.
+                      Please do not delete Quest {selectedQuestNo ?? 1}. You can delete the items associated with it instead.
                       </Text>
 
                     </ModalBody>
@@ -136,7 +151,7 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
                       <Button color={'#fff'}
                         bg={'#11047a'}
                         _hover={{ color: '#fff', bg: '#11047a' }}
-                        mr={'10px'} onClick={() => {onClose()}}>Close</Button>
+                        mr={'10px'} onClick={() => {onClose()}}>Okey</Button>
                     </ModalFooter></>
                      }
                     </ModalContent>
@@ -161,9 +176,7 @@ const QuestTab: React.FC<PropsNote> = ({ listQuest, handleGet, fetchBlocks, ques
 						<TabPanel px='0px'>{panelExample}</TabPanel>
 					</TabPanels> */}
       </Tabs>
-
     </>
-
   );
 };
 
