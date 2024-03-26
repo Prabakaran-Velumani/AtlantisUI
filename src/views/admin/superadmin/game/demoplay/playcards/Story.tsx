@@ -31,6 +31,7 @@ import React, {
 // import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 
 import feedi from 'assets/img/screens/feed.png';
+import Interaction from './Interaction';
 import TypingEffect from './Typing';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
@@ -106,9 +107,7 @@ const Story: React.FC<{
     const [Navigatenext, setNavigateNext] = useState<any>(false);
     const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
     const [isPlayAudioConfirmation, setIsPlayAudioConfirmation] = useState<boolean>(false);
-    const [AudioOptions, SetAudioOptions] = useState({
-      qpOptionId: '',
-    });
+    
     const [score, setScore] = useState(null);
 
     useEffect(() => {
@@ -260,7 +259,7 @@ const Story: React.FC<{
       fetchData();
     }, [profileData,data]);
 
-    
+   
     const getVoice = async (blockInfo: any, blockType: string) => {
       let text = '';
       let voiceId = '';
@@ -357,7 +356,6 @@ const Story: React.FC<{
       getData(data);
     };
     const optionClick = (item: any, ind: any) => {
-      SetAudioOptions(item);
       setScore({ seqId: item?.qpSequence, score: parseInt(item?.qpScore) });
       handleValidate(item, ind);
     };
@@ -652,145 +650,10 @@ const Story: React.FC<{
             )}
           </Box>
         )}
-        {data && type === 'Interaction' && (
-          <Box
-            position="relative"
-            maxW="100%"
-            w={'100vw'}
-            height="100vh"
-            backgroundImage={backGroundImg}
-            backgroundSize={'cover'}
-            backgroundRepeat={'no-repeat'}
-            className="chapter_potrait"
-          >
-            <Grid
-              templateColumns="repeat(1, 1fr)"
-              gap={4}
-              position="absolute"
-              top="50%"
-              left="50%"
-              transform="translate(-50%, -50%)"
-              w={'90%'}
-            >
-              <GridItem colSpan={1} position={'relative'}>
-                <Box position={'relative'} className="story_interaction_image">
-                  <Img src={parch} w={'100%'} h={'100%'} loading="lazy" />
-                  <Box
-                    position={'absolute'}
-                    top={{ sm: '5%', md: '6%' }}
-                    h={'80% !important'}
-                    className="story_interaction_image"
-                  >
-                    <Box
-                      textAlign={'center'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                      alignItems={'center'}
-                      fontWeight={500}
-                      fontSize={{ md: '3vw', lg: '2.5vw' }}
-                      fontFamily={'AtlantisText'}
-                      lineHeight={1}
-                      w={'100%'}
-                      h={'10%'}
-                      className={'interaction_heading_potrait'}
-                    >
-                      <Box w={'80%'}>
-                        Interactions...!{' '}
-                      </Box>
-                    </Box>
-                    <Box
-                      textAlign={'center'}
-                      h={'25%'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                      alignItems={'center'}
-                      fontWeight={500}
-                      fontFamily={'AtlantisText'}
-                      lineHeight={1}
-                      w={'96%'}
-                      overflowY={'scroll'}
-                      marginTop={'15px'}
-                    >
-                      <Box
-                        w={'60%'}
-                        fontSize={{ md: '1.5vw', lg: '1.9vw' }}
-                        letterSpacing={1}
-                        className={'story_intraction_question'}
-                      >
-                        {data?.blockText}
-                      </Box>
-                    </Box>
-                    <Box
-                      mt={'10px'}
-                      w={'100%'}
-                      h={'40%'}
-                      fontWeight={500}
-                      overflowY={'scroll'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                    >
-                      <Box w={'60%'}>
-                        {options &&
-                          options.map((item: any, ind: number) => (
-                            <Box
-                              w={'100%'}
-                              mb={'10px'}
-                              lineHeight={1}
-                              key={ind}
-                              color={option === ind ? 'purple' : ''}
-                              textAlign={'center'}
-                              cursor={'pointer'}
-                              onClick={() => optionClick(item, ind)}
-                              fontFamily={'AtlantisText'}
-                            >
-                              <Img
-                                src={option === ind ? on : off}
-                                h={'4vh'}
-                                w={'100%'}
-                              />
-                              <Box
-                                w={'100%'}
-                                display={'flex'}
-                                justifyContent={'center'}
-                                fontSize={{
-                                  lg: '1.9vw',
-                                }}
-                                className={'story_interaction_option'}
-                              >
-                                {item?.qpOptionText}
-                              </Box>
-                            </Box>
-                          ))}
-                      </Box>
-                    </Box>
-                    <Box
-                      w={'100%'}
-                      display={'flex'}
-                      justifyContent={'space-between'}
-                    >
-                      <Img
-                        src={left}
-                        w={'4vw'}
-                        h={'7vh'}
-                        cursor={'pointer'}
-                        onClick={() => prevData(data)}
-                      />
-                      {option !== null && (
-                        <Img
-                          src={right}
-                          w={'4vw'}
-                          h={'7vh'}
-                          cursor={'pointer'}
-                          onClick={() => InteractionFunction()}
-                        />
-                      )}
-                    </Box>
-                  </Box>
-                </Box>
-              </GridItem>
-            </Grid>
-          </Box>
-        )}
+        
+         {data && type === 'Interaction' && (
+        <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick}  prevData={prevData}  InteractionFunction={InteractionFunction}  />
+      )}
         {data && type === 'response' && (
           <Box
             w={'100%'}

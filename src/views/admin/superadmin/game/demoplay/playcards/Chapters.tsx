@@ -85,6 +85,7 @@ const ChapterPage: React.FC<{
   //   }
   // }, [profile]);
   const handleChapter = (it: any) => {
+    console.log('handleChapter');
     if (profile.completedLevels.includes(it)) {
       setCurrentScreenId(1);
       setProfile((prev: any) => ({
