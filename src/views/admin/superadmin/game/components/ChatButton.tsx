@@ -99,8 +99,8 @@ const ChatButton: React.FC = () => {
       )}
       <Box
         position="fixed"
-        bottom={{ base: '95px', xl: '20px' }}
-        right={{ base: '25px', xl: '20px' }}
+        bottom={{ base: '105px', xl: '20px' }}
+        right={{ base: '12px', xl: '20px' }}
       >
         <Tooltip hasArrow label="Ask From ChatGPT" placement='top-start'>
           <div>

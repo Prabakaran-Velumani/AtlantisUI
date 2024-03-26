@@ -4473,7 +4473,7 @@ const GameCreation = () => {
                   p="0px"
                   bg={'brandScheme'}
                   position={'fixed'}
-                  bottom={{ base: '95px', xl: '0' }}
+                  bottom={{ base: '105px', xl: '0' }}
                   right={{ base: '15px', xl: '5px' }}
                   className="menureviewshow"
                 >
@@ -4927,7 +4927,7 @@ const GameCreation = () => {
               bottom={0}
               right={0}
               zIndex={999999}
-              borderTop={'1px solid #e7e3e300'}
+              borderTop={'1px solid #d5cbcb'}
             >
               <Flex justify="center" w={'100%'}>
                 <Card
