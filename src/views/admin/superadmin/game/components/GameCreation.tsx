@@ -4927,7 +4927,7 @@ const GameCreation = () => {
               bottom={0}
               right={0}
               zIndex={999999}
-              borderTop={'1px solid '}
+              borderTop={'1px solid #e7e3e300'}
             >
               <Flex justify="center" w={'100%'}>
                 <Card
@@ -4966,9 +4966,13 @@ const GameCreation = () => {
                   {tab !== 1 && tab !== 2 ? (
                     <Box display={'flex'} alignItems={'center'} w={'60%'}>
                       <Button
-                        bg="#11047a"
-                        _hover={{ bg: '#190793' }}
-                        color="#fff"
+                        // bg="#11047a"
+                        // _hover={{ bg: '#190793' }}
+                        // color="#fff"
+                        color={'#190793'} 
+                border={'1px solid #190793'} 
+                bg={'transparent'} 
+                _hover={{bg: '#11047a', color: '#fff'}}
                         h={'46px'}
                         w={'100%'}
                         display={tab === 7 || tab === 6 ? 'none' : 'block'}
