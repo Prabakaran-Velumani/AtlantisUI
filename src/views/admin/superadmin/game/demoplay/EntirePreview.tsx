@@ -504,16 +504,23 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const getData = (next: any) => {
-    // console.log('next', next);
+
     if (next?.blockChoosen === 'Interaction') {
-      // console.log('gameinfo =>',profile);
-      setFeedbackList(prevFeedbackList => [...prevFeedbackList,
-      {
-        feedbackcontent: feed,
-        Seq: next?.blockPrimarySequence,
-        Options: getSelectedOptions
-      }
-      ]);
+      const isDuplicate = feedbackList?.some((item:any) => 
+        item.Seq === next?.blockPrimarySequence && 
+        item.Options === getSelectedOptions
+    );
+
+    if (!isDuplicate) {
+        setFeedbackList(prevFeedbackList => [
+            ...prevFeedbackList,
+            {
+                feedbackcontent: feed,
+                Seq: next?.blockPrimarySequence,
+                Options: getSelectedOptions
+            }
+        ]);
+    }
     }
 
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
@@ -557,7 +564,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
       setOptions(optionsFiltered);
     }
-    // console.log('nextlevel1',navi);
     
     if (
       type === 'Interaction' &&
@@ -618,7 +624,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             return demoBlocks[currentQuest][item];
           });
         if (selectedNext.length > 0) {
-          console.log('nextlevel2',selectedNext);
           setType(selectedNext && selectedNext[0]?.blockChoosen);
           setData(selectedNext && selectedNext[0]);
           setGame3Position((prev: any) => ({
@@ -627,7 +632,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           }));
         }
         else {
-          console.log('nextlevel3',selectedNext);
           setType(nextBlock[0]?.blockChoosen);
           setData(nextBlock[0]);
           setGame3Position((prev: any) => ({
@@ -640,9 +644,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'Complete') {
-        console.log('nextlevel4',nextLevel)
         if (demoBlocks.hasOwnProperty(nextLevel)) {
-          console.log('nextLevel5',nextLevel)
           setProfile((prev: any) => {
             const data = { ...prev };
             data.completedLevels = [...data.completedLevels, nextLevel];
@@ -653,7 +655,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(6);
           return false;
         } else {
-          console.log('nextLevel6',nextLevel)
           setType(null);
           setData(null);
           setCurrentScreenId(6);
@@ -702,35 +703,28 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
         gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion'
       ) {
-        console.log('gameinfo 1=>',profile);
         getFeedbackData(data);
         setCurrentScreenId(14);
         return false;
       } else if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
-        console.log('gameReplayAllowed');
         setCurrentScreenId(8);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-        console.log('gameIsShowLeaderboard');
+       
         setCurrentScreenId(4);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-        console.log('gameIsShowReflectionScreen');
+       
         setCurrentScreenId(3);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        console.log('gameIsShowTakeaway');
         setCurrentScreenId(7);
         return false;
       } else {
-        
-        // setCurrentScreenId(13);
         if (data && type) {
-          console.log('setCurrentScreenId 1');
           setCurrentScreenId(13);
           return false;
         } else {
-          console.log('setCurrentScreenId 2');
           setType(null);
           setData(null);
           setCurrentScreenId(5);
@@ -740,28 +734,22 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (currentScreenId === 9 || currentScreenId === 14) {
       if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
-        console.log('gameReplayAllowed 1');
         setCurrentScreenId(8);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-        console.log('gameIsShowLeaderboard 1');
         setCurrentScreenId(4);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-        console.log('gameIsShowReflectionScreen 1');
         setCurrentScreenId(3);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        console.log('gameIsShowTakeaway 1');
         setCurrentScreenId(7);
         return false;
       } else {
         if (data && type) {
-          console.log('setCurrentScreenId 3');
           setCurrentScreenId(2);
           return false;
         } else {
-          console.log('setCurrentScreenId 4');
           setType(null);
           setData(null);
           setCurrentScreenId(5);
@@ -829,7 +817,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (currentScreenId === 7) {
       if (data && type) {
-        setCurrentScreenId(2);
+        setFeedbackNavigateNext(false);
+        setCurrentScreenId(13);
         return false;
       } else {
         setType(null);
@@ -840,7 +829,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (nextBlock.length === 0) {
       if (demoBlocks.hasOwnProperty(nextLevel)) {
-        console.log('nextlevel 10');
         setProfile((prev: any) => {
           const data = { ...prev };
           data.completedLevels = [...data.completedLevels, nextLevel];
@@ -851,7 +839,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setCurrentScreenId(6);
         return false;
       } else {
-        console.log('nextlevel 11');
         setType(null);
         setData(null);
         setCurrentScreenId(6);
@@ -913,7 +900,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setSelectedOption(null);
 
   };
-
   let menuBg = useColorModeValue('white', 'navy.800');
   const shadow = useColorModeValue(
     '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
@@ -1333,27 +1319,21 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         
         getData(data);
     }
-    // console.log('navigated ****2');
+    
   }, [FeedbackNavigatenext]);
 
   useEffect(() => {
 
   }, [FeedBackoptionData]);
-  const geTfeedBackoption = () => {
-
-    setisScreenshot(true);
-  }
+  
   
   const getFeedbackData = (getdata: any) => {
-    
-    // console.log('gameinfo2 =>',gameInfo?.blocks[profile?.currentQuest] ,'...',currentQuestNo ,'.....',profile?.currentQuest,'....',profile);
-    setisScreenshot(false);
+    setisScreenshot(true);
     const sortedFeedbackList = feedbackList.slice().sort((a, b) => {
       const seqA = parseFloat(a.Seq);
       const seqB = parseFloat(b.Seq);
       return seqA - seqB;
     });
-    // console.log('sortedFeedbackList', sortedFeedbackList);
     const groupedFeedback: { [key: string]: any[] } = {};
     sortedFeedbackList.forEach((feedback) => {
       if (!(feedback.Seq in groupedFeedback)) {
@@ -1361,14 +1341,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
       groupedFeedback[feedback.Seq].push(feedback);
     });
-    //  console.log('groupedFeedback', groupedFeedback);
     const firstPageFeedback: any[] = [];
     Object.keys(groupedFeedback).forEach((seq) => {
       const lastIndex = groupedFeedback[seq].length - 1;
       firstPageFeedback.push(groupedFeedback[seq][lastIndex]);
     });
-    //  console.log('firstPageFeedback', firstPageFeedback , '....',gameInfo?.blocks[profile?.currentQuest]);
-
+  
     let newRemainingSentences;
     if (FeedbackcurrentPosition < firstPageFeedback.length) {
       newRemainingSentences = firstPageFeedback[FeedbackcurrentPosition].feedbackcontent;
@@ -1394,20 +1372,16 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           ];
         }
       }
-      // console.log('getArray',getArray,'..',GetSeqData,'.....',optionsFiltered);
       const SelectedoptionsFiltered = optionsFiltered.filter((key: any) => key?.qpOptions == firstPageFeedback[FeedbackcurrentPosition].Options['options']);
-      // console.log('SelectedoptionsFiltered', SelectedoptionsFiltered, '...', firstPageFeedback[FeedbackcurrentPosition].Options['options'], '....', optionsFiltered);
       const selectoptionfeed = SelectedoptionsFiltered[0].qpOptions? SelectedoptionsFiltered[0].qpOptions :'null';
       setOptions(optionsFiltered);
       setFeedBackSelectedoptionData(selectoptionfeed);
-      setFeedBackoptionData(GetSeqData);//FeedBackoptionData
+      setFeedBackoptionData(GetSeqData);
       setFeedbackCurrentPosition(FeedbackcurrentPosition + 1);
       setFeedbackRemainingSentences(newRemainingSentences);
-      console.log('if');
     } else {
       setFeedbackList([]);
       setFeedbackCurrentPosition(0);
-      console.log('else');
       setFeedbackNavigateNext(true);
     }
   };
@@ -1852,7 +1826,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   );
                 case 9:
                   return (
-                  <FeedBackScreen backgroundScreenUrl={backgroundScreenUrl} first={first} showNote={showNote} isScreenshot={isScreenshot} geTfeedBackoption={geTfeedBackoption} FeedbackremainingSentences={FeedbackremainingSentences} options={options} FeedBackselectedoptionData={FeedBackselectedoptionData} FeedBackoptionData={FeedBackoptionData} getFeedbackData={getFeedbackData} data={data} feed={feed} currentScreenId={currentScreenId} getData={getData}/> 
+                  <FeedBackScreen backgroundScreenUrl={backgroundScreenUrl} first={first} showNote={showNote} isScreenshot={isScreenshot}  FeedbackremainingSentences={FeedbackremainingSentences} options={options} setisScreenshot={setisScreenshot} FeedBackselectedoptionData={FeedBackselectedoptionData} FeedBackoptionData={FeedBackoptionData} getFeedbackData={getFeedbackData} data={data} feed={feed} currentScreenId={currentScreenId} getData={getData} backGroundImg={backgroundScreenUrl} profile={profile}/> 
                   );
                   
                 
@@ -2063,7 +2037,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   );
                 case 14:
                   return (
-                     <FeedBackScreen backgroundScreenUrl={backgroundScreenUrl} first={first} showNote={showNote} isScreenshot={isScreenshot} geTfeedBackoption={geTfeedBackoption} FeedbackremainingSentences={FeedbackremainingSentences} options={options} FeedBackselectedoptionData={FeedBackselectedoptionData} FeedBackoptionData={FeedBackoptionData} getFeedbackData={getFeedbackData} data={data} currentScreenId={currentScreenId} getData={getData}/> 
+                     <FeedBackScreen backgroundScreenUrl={backgroundScreenUrl} first={first} showNote={showNote} isScreenshot={isScreenshot}  FeedbackremainingSentences={FeedbackremainingSentences} setisScreenshot={setisScreenshot} options={options} FeedBackselectedoptionData={FeedBackselectedoptionData} FeedBackoptionData={FeedBackoptionData} getFeedbackData={getFeedbackData} data={data} currentScreenId={currentScreenId} getData={getData} backGroundImg={backgroundScreenUrl} profile={profile}/> 
                   )
                  
                 default:

@@ -1,9 +1,9 @@
-import { Box, Img } from '@chakra-ui/react';
+import { Box, Img, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay } from '@chakra-ui/react';
 import React from 'react'
 import next from 'assets/img/screens/next.png';
 import feedi from 'assets/img/screens/feed.png';
 import InteractionScreenShot from './InteractionScreenShot';
-
+import Close from 'assets/img/games/close.png';
 interface FeedBackScreenShotProps {
 
     backgroundScreenUrl: any;
@@ -11,7 +11,7 @@ interface FeedBackScreenShotProps {
     showNote: any;
     currentScreenId: any;
     isScreenshot: any;
-    geTfeedBackoption: any;
+    backGroundImg: any;
     FeedbackremainingSentences: any;
     options: any;
     getData: any;
@@ -20,13 +20,16 @@ interface FeedBackScreenShotProps {
     FeedBackoptionData: any;
     feed?: any;
     getFeedbackData: any;
+    profile:any;
+    setisScreenshot: any;
 }
-const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl,
+const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl, backGroundImg,
     first,
+    profile,
     showNote,
     isScreenshot,
+    setisScreenshot,
     data,
-    geTfeedBackoption,
     getData,
     FeedbackremainingSentences,
     options,
@@ -35,6 +38,12 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl
     FeedBackoptionData,
     feed,
     getFeedbackData }) => {
+
+
+    const geTfeedBackoption = () => {
+        setisScreenshot(false);
+    }
+    console.log('****', isScreenshot);
     return (
         <>
             {/* <motion.div
@@ -77,7 +86,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl
                         transition: 'transform 0.5s ease-in-out',
 
                     }}
-                    ml={isScreenshot === true ? '-500px' : ''}
+                    // ml={isScreenshot === true ? '-500px' : ''}
                     position={'fixed'}
                     w={'40%'}
                     h={'80vh'}
@@ -122,10 +131,13 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl
                             </Box>
                         </>
                             :
-                            <><Box onClick={geTfeedBackoption}>
-                                <React.Fragment>{FeedbackremainingSentences}</React.Fragment>
-                            </Box>
-                                {isScreenshot === true ? <InteractionScreenShot data={FeedBackoptionData} option={FeedBackselectedoptionData} options={options} /> : ''}
+                            <>
+                                {FeedbackremainingSentences}
+                                {isScreenshot === true ?
+                                   
+                                                <InteractionScreenShot data={FeedBackoptionData} option={FeedBackselectedoptionData} options={options} backGroundImg={backGroundImg} profile={profile} geTfeedBackoption={geTfeedBackoption} isScreenshot={isScreenshot} />
+
+                                    : ''}
                                 <Box
                                     w={'100%'}
                                     onClick={() => getFeedbackData(data)}
