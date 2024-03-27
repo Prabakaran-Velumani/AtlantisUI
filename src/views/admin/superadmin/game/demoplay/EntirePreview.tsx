@@ -318,12 +318,24 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen ===
       'Interaction'
     ) {
-      const optionsFiltered = gameInfo?.questOptions.filter(
-        (key: any) =>
-          key?.qpSequence ===
-          gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,
-      );
-      if (gameInfo?.gameData?.gameShuffle) {
+      console.log(gameInfo?.questOptions,"options123")
+      // const optionsFiltered = gameInfo?.questOptions.filter(
+      //   (key: any) =>
+      //     key?.qpSequence ===
+      //     gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,
+      // ); 
+
+      const optionsFiltered = [];
+const primarySequence = gameInfo.blocks[profile.currentQuest]['1'].blockPrimarySequence;
+
+for (const option of gameInfo.questOptions) {
+    if (option?.qpSequence === primarySequence) {
+      optionsFiltered.push(option);
+    }
+}
+     console.log("loginfo", gameInfo?.gameData?.gameShuffle)
+      if (gameInfo?.gameData?.gameShuffle === 'true') {
+        console.log("test",gameInfo?.gameData?.gameShuffle)
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [optionsFiltered[i], optionsFiltered[j]] = [
@@ -521,10 +533,18 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         .map((key: any) => demoBlocks[quest]?.[key])
       : [];
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
-      const optionsFiltered = gameInfo?.questOptions.filter(
-        (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
-      );
-      if (gameInfo?.gameData?.gameShuffle) {
+      console.log(gameInfo?.gameData?.gameShuffle,"options1234")
+      const optionsFiltered = [];
+const primarySequence = gameInfo.blocks[profile.currentQuest]['1'].blockPrimarySequence;
+
+for (const option of gameInfo.questOptions) {
+    if (option?.qpSequence === primarySequence) {
+      optionsFiltered.push(option);
+    }
+}
+     console.log("loginfo", gameInfo?.gameData?.gameShuffle)
+      if (gameInfo?.gameData?.gameShuffle === 'true') {
+        console.log("test")
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [optionsFiltered[i], optionsFiltered[j]] = [
@@ -555,10 +575,18 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       type === 'feedback'
     ) {
       if (navi === 'Repeat Question') {
-        const optionsFiltered = gameInfo?.questOptions.filter(
-          (key: any) => key?.qpSequence === next?.blockPrimarySequence,
-        );
-        if (gameInfo?.gameData?.gameShuffle) {
+        console.log(gameInfo?.gameData?.gameShuffle,"options12345")
+        const optionsFiltered = [];
+const primarySequence = gameInfo.blocks[profile.currentQuest]['1'].blockPrimarySequence;
+
+for (const option of gameInfo.questOptions) {
+    if (option?.qpSequence === primarySequence) {
+      optionsFiltered.push(option);
+    }
+}
+     console.log("loginfo", optionsFiltered)
+        if (gameInfo?.gameData?.gameShuffle === 'true') {
+          console.log("test")
           for (let i = optionsFiltered.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [optionsFiltered[i], optionsFiltered[j]] = [
@@ -635,7 +663,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
-        return false;
+        return false; 
       }
     }
     if (currentScreenId === 6) {
@@ -1235,7 +1263,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   // Avoid Top Menu Section
   const dontShowTopMenu = currentScreenId !== 7 && currentScreenId !== 6 && currentScreenId !== 5 && currentScreenId !== 4 && currentScreenId !== 3 && currentScreenId !== 10;
-
+console.log("options",options)
   return (
     <ProfileContext.Provider value={profileData}>
       {/* {isMobileView ? ( */}

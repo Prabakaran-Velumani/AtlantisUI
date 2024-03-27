@@ -293,12 +293,22 @@ const Story: React.FC<{
                 : voiceIds?.playerFemale;
           break;
         case 'Interaction':
+          // let optionsText = '';
+          // options.forEach((item: any) => {
+          //   optionsText +=
+          //     '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
+          //     console.log("optionsText",item?.qpOptionText)
+          // });
+          // text = blockInfo.blockText + optionsText;
           let optionsText = '';
-          options.forEach((item: any) => {
-            optionsText +=
-              '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
-          });
-          text = blockInfo.blockText + optionsText;
+// Sort the options array based on a unique identifier, such as index
+options.sort((a: any, b: any) => a.index - b.index);
+options.forEach((item: any) => {
+    optionsText += '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
+    console.log("optionsText",options);
+});
+
+text = blockInfo.blockText + optionsText;
           // console.log(
           //   "userProfile?.gender == 'Male'",
           //   userProfile?.gender == 'Male',
@@ -729,7 +739,7 @@ const Story: React.FC<{
                       display={'flex'}
                       justifyContent={'center'}
                     >
-                      <Box w={'60%'}>
+                     <Box w={'60%'}>
                         {options &&
                           options.map((item: any, ind: number) => (
                             <Box
@@ -757,11 +767,11 @@ const Story: React.FC<{
                                 }}
                                 className={'story_interaction_option'}
                               >
-                                {item?.qpOptionText}
+                               {item?.qpOptionText}
                               </Box>
                             </Box>
                           ))}
-                      </Box>
+                      </Box> 
                     </Box>
                     <Box
                       w={'100%'}
