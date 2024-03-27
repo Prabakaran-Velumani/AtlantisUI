@@ -570,6 +570,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       resMsg !== ''
       // && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
+      console.log('1');
       setType('response');
       return false;
     } else if (
@@ -577,6 +578,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       feed !== '' &&
       gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
+      console.log('2');
       setType('feedback');
       return false;
     } else if (
@@ -585,6 +587,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       type === 'feedback'
     ) {
       if (navi === 'Repeat Question') {
+        console.log('3');
         const optionsFiltered = gameInfo?.questOptions.filter(
           (key: any) => key?.qpSequence === next?.blockPrimarySequence,
         );
@@ -603,16 +606,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
+        console.log('4');
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
+        console.log('5');
         setType(demoBlocks['1']['1']?.blockChoosen);
         setData(demoBlocks['1']['1']);
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
+        console.log('6');
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -644,7 +650,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'Complete') {
+        console.log('7');
         if (demoBlocks.hasOwnProperty(nextLevel)) {
+          console.log('8');
           setProfile((prev: any) => {
             const data = { ...prev };
             data.completedLevels = [...data.completedLevels, nextLevel];
@@ -655,66 +663,35 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(6);
           return false;
         } else {
+          console.log('9');
           setType(null);
           setData(null);
           setCurrentScreenId(6);
           return false;
         }
       } else {
+        console.log('10');
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
         return false;
       }
     }
-    // if (currentScreenId === 6) {
-    //   if (
-    //     gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
-    //     gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Complete'
-    //   ) {
-    //     setCurrentScreenId(9);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
-    //     setCurrentScreenId(8);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-    //     setCurrentScreenId(4);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-    //     setCurrentScreenId(3);
-    //     return false;
-    //   } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-    //     setCurrentScreenId(7);
-    //     return false;
-    //   } else {
-    //     if (data && type) {
-    //       setCurrentScreenId(13);
-    //       return false;
-    //     } else {
-    //       setType(null);
-    //       setData(null);
-    //       setCurrentScreenId(5);
-    //       return false;
-    //     }
-    //   }
-    // }
+    /*
     if (currentScreenId === 6) {
       if (
         gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
-        gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion'
+        gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Complete'
       ) {
-        getFeedbackData(data);
-        setCurrentScreenId(14);
+        setCurrentScreenId(9);
         return false;
       } else if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
         setCurrentScreenId(8);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-       
         setCurrentScreenId(4);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-       
         setCurrentScreenId(3);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
@@ -732,103 +709,178 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         }
       }
     }
-    if (currentScreenId === 9 || currentScreenId === 14) {
-      if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
-        setCurrentScreenId(8);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-        setCurrentScreenId(4);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-        setCurrentScreenId(3);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      } else {
-        if (data && type) {
-          setCurrentScreenId(2);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
-          return false;
-        }
-      }
-    }
-    if (currentScreenId === 8) {
-      if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-        setCurrentScreenId(4);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-        setCurrentScreenId(3);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      } else {
-        if (data && type) {
-          setCurrentScreenId(2);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
-          return false;
-        }
-      }
-    }
-    if (currentScreenId === 4) {
-      if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-        setCurrentScreenId(3);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      } else {
-        if (data && type) {
-          setCurrentScreenId(2);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
-          return false;
-        }
-      }
-    }
-    if (currentScreenId === 3) {
-      if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      } else {
-        if (data && type) {
-          setCurrentScreenId(2);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
-          return false;
-        }
-      }
-      // }
-    }
-    if (currentScreenId === 7) {
+    */
+     if (currentScreenId === 6) {
+    if (
+      gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
+      gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion'
+    ) {
+      console.log('gameIsShowInteractionFeedBack');
+      getFeedbackData(data);
+      setCurrentScreenId(14);
+      return false;
+    } else if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
+      console.log('gameReplayAllowed');
+      setCurrentScreenId(8);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+      console.log('gameIsShowLeaderboard');
+      setCurrentScreenId(4);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+      console.log('gameIsShowReflectionScreen');
+      setCurrentScreenId(3);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+      console.log('gameIsShowTakeaway');
+      setCurrentScreenId(7);
+      return false;
+    } else {
       if (data && type) {
-        setFeedbackNavigateNext(false);
+        console.log('currentscreenid 1 =>',currentScreenId);
         setCurrentScreenId(13);
         return false;
       } else {
+        console.log('currentscreenid 2 =>',currentScreenId);
         setType(null);
         setData(null);
         setCurrentScreenId(5);
         return false;
       }
     }
+  }
+  if (currentScreenId === 9 || currentScreenId === 14) {
+    if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
+      console.log('gameReplayAllowed 1');
+      setCurrentScreenId(8);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+      console.log('gameIsShowLeaderboard 1');
+      setCurrentScreenId(4);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+      console.log('gameIsShowReflectionScreen 1');
+      setCurrentScreenId(3);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+      console.log('gameIsShowTakeaway 1');
+      setCurrentScreenId(7);
+      return false;
+    } else {
+      if (data && type) {
+        console.log('currentscreenid 3 =>',currentScreenId);
+        setCurrentScreenId(2);
+        return false;
+      } else {
+        console.log('currentscreenid 4 =>',currentScreenId);
+        setType(null);
+        setData(null);
+        setCurrentScreenId(5);
+        return false;
+      }
+    }
+  }
+  if (currentScreenId === 8) {
+    if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+      console.log('gameIsShowLeaderboard 2');
+      setCurrentScreenId(4);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+      console.log('gameIsShowReflectionScreen 2');
+      setCurrentScreenId(3);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+      console.log('gameIsShowTakeaway 2');
+      setCurrentScreenId(7);
+      return false;
+    } else {
+      if (data && type) {
+        console.log('currentscreenid 5 =>',currentScreenId);
+        setCurrentScreenId(2);
+        return false;
+      } else {
+        console.log('currentscreenid 6 =>',currentScreenId);
+        setType(null);
+        setData(null);
+        setCurrentScreenId(5);
+        return false;
+      }
+    }
+  }
+  if (currentScreenId === 4) {
+    
+    // if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+    //   console.log('gameIsShowReflectionScreen 3');
+    //   setCurrentScreenId(3);
+    //   return false;
+    // } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+    //   console.log('gameIsShowTakeaway 3');
+    //   setCurrentScreenId(7);
+    //   return false;
+    // } else {
+      if (data && type) {
+        console.log('currentscreenid 7 =>',currentScreenId);
+        setFeedbackNavigateNext(false);
+        setCurrentScreenId(13);
+        return false;
+      } else {
+        if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+          console.log('gameIsShowReflectionScreen 3');
+          setCurrentScreenId(3);
+          return false;
+        } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+          console.log('gameIsShowTakeaway 3');
+          setCurrentScreenId(7);
+          return false;
+        }
+        else{
+          console.log('currentscreenid 8 =>',currentScreenId);
+          setType(null);
+          setData(null);
+          setCurrentScreenId(5);
+          return false;
+        }
+        
+      // }
+    }
+  }
+  if (currentScreenId === 3) {
+    if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+      console.log('gameIsShowTakeaway 4');
+      setCurrentScreenId(7);
+      return false;
+    } else {
+      if (data && type) {
+        console.log('currentscreenid 9 =>',currentScreenId);
+        setCurrentScreenId(2);
+        return false;
+      } else {
+        console.log('currentscreenid 10 =>',currentScreenId);
+        setType(null);
+        setData(null);
+        setCurrentScreenId(5);
+        return false;
+      }
+    }
+    // }
+  }
+  if (currentScreenId === 7) {
+    if (data && type) {
+      console.log('currentscreenid 11 =>',currentScreenId);
+      setFeedbackNavigateNext(false);
+      setCurrentScreenId(13);
+      return false;
+    } else {
+      console.log('currentscreenid 12 =>',currentScreenId);
+      setType(null);
+      setData(null);
+      setCurrentScreenId(5);
+      return false;
+    }
+  }
     if (nextBlock.length === 0) {
       if (demoBlocks.hasOwnProperty(nextLevel)) {
+        console.log('21');
         setProfile((prev: any) => {
           const data = { ...prev };
           data.completedLevels = [...data.completedLevels, nextLevel];
@@ -839,6 +891,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setCurrentScreenId(6);
         return false;
       } else {
+        console.log('22');
         setType(null);
         setData(null);
         setCurrentScreenId(6);
@@ -847,20 +900,24 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
+        console.log('23');
         setType(next?.blockChoosen);
         setData(next);
         return false;
       } else if (next?.blockShowNavigate === 'New Block') {
+        console.log('24');
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Replay Point') {
+        console.log('25');
         setType(demoBlocks['1']['1']?.blockChoosen);
         setData(demoBlocks['1']['1']);
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Select Block') {
+        console.log('26');
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -886,6 +943,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
+        console.log('27');
         setProfile((prev: any) => {
           const data = { ...prev };
           data.completedLevels = [...data?.completedLevels, nextLevel];

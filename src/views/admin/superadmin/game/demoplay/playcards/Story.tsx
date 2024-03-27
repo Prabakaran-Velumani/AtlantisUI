@@ -106,6 +106,7 @@ const Story: React.FC<{
     const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
     const [Navigatenext, setNavigateNext] = useState<any>(false);
     const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
+    // const [SpeedIsOver, setSpeedIsOver] = useState<any>(false);
     const [isPlayAudioConfirmation, setIsPlayAudioConfirmation] = useState<boolean>(false);
     
     const [score, setScore] = useState(null);
@@ -132,17 +133,13 @@ const Story: React.FC<{
 
     useEffect(() => {
       const fetchData = async () => {
-        console.log('Priya$$$$$$');
         if (profileData?.Audiogetlanguage.length !== 0) {
-          console.log('&&&',profileData?.Audiogetlanguage);
           // if(AudioOptions.qpOptionId ==='')
           // {
             const GetblocktextAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) =>key?.textId === data?.blockId);
-            console.log('*** => ',GetblocktextAudioFiltered ,'....',data);
             if (GetblocktextAudioFiltered.length > 0) {
               const FilteredFieldName = GetblocktextAudioFiltered.map((item: any) => item.fieldName);
               if (FilteredFieldName[0] === 'blockText') {
-                console.log('FilteredFieldName =>',FilteredFieldName);
                 const audioUrls = GetblocktextAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
                 const relativePath = audioUrls[0].split('\\uploads\\')[1];
                 const normalizedPath = relativePath.replace(/\\/g, '/');
@@ -158,12 +155,6 @@ const Story: React.FC<{
                   });
                   setIsGetsPlayAudioConfirmation(true);
                 }
-                // else{
-                //   setAudioObj({
-                //     autoplay: false,
-                //   });
-                //   setIsGetsPlayAudioConfirmation(false);
-                // }
   
               }
             }
@@ -623,6 +614,7 @@ const Story: React.FC<{
                   {showTypingEffect === false ? <TypingEffect
                     text={remainingSentences.toString()}
                     speed={50}
+                    setSpeedIsOver={setShowTypingEffect}
                   /> : remainingSentences}
                 </Box>
                 <Box
@@ -750,6 +742,7 @@ const Story: React.FC<{
                   {showTypingEffect === false ? <TypingEffect
                     text={remainingSentences.toString()}
                     speed={50}
+                    setSpeedIsOver={setShowTypingEffect}
                   /> : remainingSentences}
                 </Box>
                 <Box

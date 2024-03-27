@@ -221,7 +221,6 @@ export const putMethod = (data) => {
 };
 
 export const postMethodVoice = (data) => {
-  console.log('data', data);
   let method = {
     method: 'POST',
     // mode: 'cors',
