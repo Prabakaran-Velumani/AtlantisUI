@@ -445,10 +445,11 @@ const Story: React.FC<{
         setCurrentPosition(currentPosition + concatenatedSentences.length);
         setNavigateNext(false);
       }
-      else if (newRemainingResponseSentences.length >= 1) {
+      if (newRemainingResponseSentences.length >= 1) {
         setCurrentPosition(currentPosition + concatenatedSentences.length);
         setNavigateNext(false);
-      } else {
+      } 
+      else {
         setCurrentPosition(0);
         setNavigateNext(true);
         // getData(data);

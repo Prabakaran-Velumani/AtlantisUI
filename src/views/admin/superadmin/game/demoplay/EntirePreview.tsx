@@ -78,7 +78,7 @@ import ThankYou from './playcards/Thankyou';
 // import Screen6 from 'assets/img/screens/screen6.png';
 import Screen6 from 'assets/img/games/thankyou.png';
 import Reflection from './playcards/Reflection';
-import InteractionScreenShot from './playcards/InteractionScreenShot';
+
 import RefScreen1 from 'assets/img/screens/refscreen1.png';
 import Takeway from './playcards/Takeaway';
 import Screen4 from 'assets/img/screens/screen4.png';
@@ -93,6 +93,7 @@ import { MdClose } from 'react-icons/md';
 import ProfileScreen from './playcards/ProfileScreen';
 import Characterspage from './playcards/CharacterSelection';
 import ChapterPage from './playcards/Chapters';
+import FeedBackScreen from './playcards/FeedBackScreen';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
 import { ScoreContext } from './GamePreview';
@@ -214,6 +215,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [FeedbackNavigatenext, setFeedbackNavigateNext] = useState<any>(false);
   const [isScreenshot, setisScreenshot] = useState<any>(false);
   const [FeedBackoptionData, setFeedBackoptionData] = useState(null);
+  const [FeedBackselectedoptionData, setFeedBackSelectedoptionData] = useState(null);
 
   const [reviewSubTabOptions, setReviewSubTabOptions] = useState<
     Array<{ value: string; label: string }>
@@ -502,8 +504,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const getData = (next: any) => {
-    console.log('next', next);
+    // console.log('next', next);
     if (next?.blockChoosen === 'Interaction') {
+      // console.log('gameinfo =>',profile);
       setFeedbackList(prevFeedbackList => [...prevFeedbackList,
       {
         feedbackcontent: feed,
@@ -554,10 +557,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
       setOptions(optionsFiltered);
     }
+    // console.log('nextlevel1',navi);
+    
     if (
       type === 'Interaction' &&
-      resMsg !== '' &&
-      gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
+      resMsg !== ''
+      // && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
       setType('response');
       return false;
@@ -613,6 +618,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             return demoBlocks[currentQuest][item];
           });
         if (selectedNext.length > 0) {
+          console.log('nextlevel2',selectedNext);
           setType(selectedNext && selectedNext[0]?.blockChoosen);
           setData(selectedNext && selectedNext[0]);
           setGame3Position((prev: any) => ({
@@ -621,6 +627,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           }));
         }
         else {
+          console.log('nextlevel3',selectedNext);
           setType(nextBlock[0]?.blockChoosen);
           setData(nextBlock[0]);
           setGame3Position((prev: any) => ({
@@ -633,7 +640,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'Complete') {
+        console.log('nextlevel4',nextLevel)
         if (demoBlocks.hasOwnProperty(nextLevel)) {
+          console.log('nextLevel5',nextLevel)
           setProfile((prev: any) => {
             const data = { ...prev };
             data.completedLevels = [...data.completedLevels, nextLevel];
@@ -644,6 +653,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(6);
           return false;
         } else {
+          console.log('nextLevel6',nextLevel)
           setType(null);
           setData(null);
           setCurrentScreenId(6);
@@ -692,26 +702,35 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
         gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion'
       ) {
+        console.log('gameinfo 1=>',profile);
         getFeedbackData(data);
         setCurrentScreenId(14);
         return false;
       } else if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
+        console.log('gameReplayAllowed');
         setCurrentScreenId(8);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+        console.log('gameIsShowLeaderboard');
         setCurrentScreenId(4);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+        console.log('gameIsShowReflectionScreen');
         setCurrentScreenId(3);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+        console.log('gameIsShowTakeaway');
         setCurrentScreenId(7);
         return false;
       } else {
+        
+        // setCurrentScreenId(13);
         if (data && type) {
+          console.log('setCurrentScreenId 1');
           setCurrentScreenId(13);
           return false;
         } else {
+          console.log('setCurrentScreenId 2');
           setType(null);
           setData(null);
           setCurrentScreenId(5);
@@ -721,22 +740,28 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (currentScreenId === 9 || currentScreenId === 14) {
       if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
+        console.log('gameReplayAllowed 1');
         setCurrentScreenId(8);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+        console.log('gameIsShowLeaderboard 1');
         setCurrentScreenId(4);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+        console.log('gameIsShowReflectionScreen 1');
         setCurrentScreenId(3);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+        console.log('gameIsShowTakeaway 1');
         setCurrentScreenId(7);
         return false;
       } else {
         if (data && type) {
+          console.log('setCurrentScreenId 3');
           setCurrentScreenId(2);
           return false;
         } else {
+          console.log('setCurrentScreenId 4');
           setType(null);
           setData(null);
           setCurrentScreenId(5);
@@ -815,6 +840,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (nextBlock.length === 0) {
       if (demoBlocks.hasOwnProperty(nextLevel)) {
+        console.log('nextlevel 10');
         setProfile((prev: any) => {
           const data = { ...prev };
           data.completedLevels = [...data.completedLevels, nextLevel];
@@ -825,6 +851,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setCurrentScreenId(6);
         return false;
       } else {
+        console.log('nextlevel 11');
         setType(null);
         setData(null);
         setCurrentScreenId(6);
@@ -1300,12 +1327,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   // };
   // console.log('///',isMobileView)
   const dontShowTopMenu = currentScreenId !== 7 && currentScreenId !== 6 && currentScreenId !== 5 && currentScreenId !== 4 && currentScreenId !== 3 && currentScreenId !== 10;
-
+ 
   useEffect(() => {
     if (FeedbackNavigatenext === true) {
-      getData(data);
+        
+        getData(data);
     }
-    console.log('navigated ****2');
+    // console.log('navigated ****2');
   }, [FeedbackNavigatenext]);
 
   useEffect(() => {
@@ -1315,15 +1343,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
     setisScreenshot(true);
   }
-
+  
   const getFeedbackData = (getdata: any) => {
+    
+    // console.log('gameinfo2 =>',gameInfo?.blocks[profile?.currentQuest] ,'...',currentQuestNo ,'.....',profile?.currentQuest,'....',profile);
     setisScreenshot(false);
     const sortedFeedbackList = feedbackList.slice().sort((a, b) => {
       const seqA = parseFloat(a.Seq);
       const seqB = parseFloat(b.Seq);
       return seqA - seqB;
     });
-    console.log('sortedFeedbackList', sortedFeedbackList);
+    // console.log('sortedFeedbackList', sortedFeedbackList);
     const groupedFeedback: { [key: string]: any[] } = {};
     sortedFeedbackList.forEach((feedback) => {
       if (!(feedback.Seq in groupedFeedback)) {
@@ -1331,13 +1361,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
       groupedFeedback[feedback.Seq].push(feedback);
     });
-    console.log('groupedFeedback', groupedFeedback);
+    //  console.log('groupedFeedback', groupedFeedback);
     const firstPageFeedback: any[] = [];
     Object.keys(groupedFeedback).forEach((seq) => {
       const lastIndex = groupedFeedback[seq].length - 1;
       firstPageFeedback.push(groupedFeedback[seq][lastIndex]);
     });
-    console.log('firstPageFeedback', firstPageFeedback);
+    //  console.log('firstPageFeedback', firstPageFeedback , '....',gameInfo?.blocks[profile?.currentQuest]);
 
     let newRemainingSentences;
     if (FeedbackcurrentPosition < firstPageFeedback.length) {
@@ -1350,7 +1380,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           getArray.push(getgameinfoblockchoosen[key]);
         }
       }
-
+      
       const GetSeqData = getArray.filter((item: any) => {
         return (item?.blockPrimarySequence === firstPageFeedback[FeedbackcurrentPosition].Seq);
       });
@@ -1364,14 +1394,18 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           ];
         }
       }
+      // console.log('getArray',getArray,'..',GetSeqData,'.....',optionsFiltered);
       const SelectedoptionsFiltered = optionsFiltered.filter((key: any) => key?.qpOptions == firstPageFeedback[FeedbackcurrentPosition].Options['options']);
-      console.log('SelectedoptionsFiltered', SelectedoptionsFiltered, '...', firstPageFeedback[FeedbackcurrentPosition].Options['options'], '....', optionsFiltered);
+      // console.log('SelectedoptionsFiltered', SelectedoptionsFiltered, '...', firstPageFeedback[FeedbackcurrentPosition].Options['options'], '....', optionsFiltered);
+      const selectoptionfeed = SelectedoptionsFiltered[0].qpOptions? SelectedoptionsFiltered[0].qpOptions :'null';
       setOptions(optionsFiltered);
+      setFeedBackSelectedoptionData(selectoptionfeed);
       setFeedBackoptionData(GetSeqData);//FeedBackoptionData
       setFeedbackCurrentPosition(FeedbackcurrentPosition + 1);
       setFeedbackRemainingSentences(newRemainingSentences);
       console.log('if');
     } else {
+      setFeedbackList([]);
       setFeedbackCurrentPosition(0);
       console.log('else');
       setFeedbackNavigateNext(true);
@@ -1818,88 +1852,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   );
                 case 9:
                   return (
-                    <>
-                      {/* <motion.div
-                        initial={{ opacity: 0, background: '#000' }}
-                        animate={{ opacity: 1, background: '#0000' }}
-                        transition={{ duration: 0.3, delay: 0.5 }}
-                      > */}
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                      >
-                        <Box
-                          backgroundImage={backgroundScreenUrl}
-                          w={'100%'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          transform={`scale(${first ? 1 : 1.3}) translateY(${first ? 0 : -10
-                            }%) translateX(${first ? 0 : -10}%)`}
-                          transition={'transform 0.9s ease-in-out'}
-                        >
-                          <Box
-                            position={'fixed'}
-                            top={'200px'}
-                            right={'0px'}
-                            bottom={0}
-                            zIndex={999}
-                            w={'300px'}
-                          ></Box>
-                        </Box>
-                        <Box
-                          style={{
-                            transform: `scale(${showNote ? 0.2 : 1})`,
-                            transition: 'transform 0.5s ease-in-out',
-                          }}
-                          position={'fixed'}
-                          w={'40%'}
-                          h={'80vh'}
-                          display={'flex'}
-                          flexDirection={'column'}
-                          justifyContent={'center'}
-                          alignItems={'center'}
-                        >
-                          <Img w={'80%'} h={'80vh'} src={feedi} />
-                          <Box
-                            position={'fixed'}
-                            w={'50%'}
-                            mt={'10px'}
-                            display={'flex'}
-                            flexDirection={'column'}
-                            textAlign={'center'}
-                            justifyContent={'center'}
-                            style={{
-                              fontWeight: '900',
-                              color: '#D9C7A2',
-                              fontSize: '18px',
-                              lineHeight: 1,
-                              fontFamily: 'cont',
-                            }}
-                          >
-                            {feed}
-                            <Box
-                              w={'100%'}
-                              onClick={() => getData(data)}
-                              mt={'20px'}
-                              display={'flex'}
-                              justifyContent={'center'}
-                              cursor={'pointer'}
-                            >
-                              <Img src={next} w={'200px'} h={'60px'} />
-                            </Box>
-                          </Box>
-                        </Box>
-                      </Box>
-                      {/* </motion.div> */}
-                    </>
+                  <FeedBackScreen backgroundScreenUrl={backgroundScreenUrl} first={first} showNote={showNote} isScreenshot={isScreenshot} geTfeedBackoption={geTfeedBackoption} FeedbackremainingSentences={FeedbackremainingSentences} options={options} FeedBackselectedoptionData={FeedBackselectedoptionData} FeedBackoptionData={FeedBackoptionData} getFeedbackData={getFeedbackData} data={data} feed={feed} currentScreenId={currentScreenId} getData={getData}/> 
                   );
+                  
+                
+                  
                 case 10:
                   return (
                     <>
@@ -2106,97 +2063,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   );
                 case 14:
                   return (
-                    <>
-                      {/* <motion.div
-                          initial={{ opacity: 0, background: '#000' }}
-                          animate={{ opacity: 1, background: '#0000' }}
-                          transition={{ duration: 0.3, delay: 0.5 }}
-                        > */}
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                      >
-                        <Box
-                          backgroundImage={backgroundScreenUrl}
-                          w={'100%'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          transform={`scale(${first ? 1 : 1.3}) translateY(${first ? 0 : -10
-                            }%) translateX(${first ? 0 : -10}%)`}
-                          transition={'transform 0.9s ease-in-out'}
-                        >
-                          <Box
-                            position={'fixed'}
-                            top={'200px'}
-                            right={'0px'}
-                            bottom={0}
-                            zIndex={999}
-                            w={'300px'}
-                          ></Box>
-                        </Box>
-                        <Box
-                          style={{
-                            transform: `scale(${showNote ? 0.2 : 1})`,
-                            transition: 'transform 0.5s ease-in-out',
-
-                          }}
-                          ml={isScreenshot === true ? '-500px' : ''}
-                          position={'fixed'}
-                          w={'40%'}
-                          h={'80vh'}
-                          display={'flex'}
-                          flexDirection={'column'}
-                          justifyContent={'center'}
-                          alignItems={'center'}
-                        >
-                          <Img w={'80%'} h={'80vh'} src={feedi} />
-                          <Box
-                            position={'fixed'}
-                            w={'50%'}
-                            mt={'10px'}
-                            display={'flex'}
-                            flexDirection={'column'}
-                            textAlign={'center'}
-                            justifyContent={'center'}
-                            style={{
-                              fontWeight: '900',
-                              color: '#D9C7A2',
-                              fontSize: '18px',
-                              lineHeight: 1,
-                              fontFamily: 'cont',
-                            }}
-                          >
-                            {/* {feed} */}
-                            {/* {FeedbackremainingSentences} */}
-
-                            <Box onClick={geTfeedBackoption}>
-                              <React.Fragment>{FeedbackremainingSentences}</React.Fragment>
-                            </Box>
-                            {isScreenshot === true ? <InteractionScreenShot data={FeedBackoptionData} option={selectedOption} options={options} /> : ''}
-                            <Box
-                              w={'100%'}
-                              onClick={() => getFeedbackData(data)}
-                              mt={'20px'}
-                              display={'flex'}
-                              justifyContent={'center'}
-                              cursor={'pointer'}
-                            >
-                              <Img src={next} w={'200px'} h={'60px'} />
-                            </Box>
-                          </Box>
-                        </Box>
-                      </Box>
-                      {/* </motion.div> */}
-                    </>
-                  );
-
+                     <FeedBackScreen backgroundScreenUrl={backgroundScreenUrl} first={first} showNote={showNote} isScreenshot={isScreenshot} geTfeedBackoption={geTfeedBackoption} FeedbackremainingSentences={FeedbackremainingSentences} options={options} FeedBackselectedoptionData={FeedBackselectedoptionData} FeedBackoptionData={FeedBackoptionData} getFeedbackData={getFeedbackData} data={data} currentScreenId={currentScreenId} getData={getData}/> 
+                  )
+                 
                 default:
                   console.log(
                     'game details of the data',

@@ -91,13 +91,13 @@ const  InteractionScreenShot :  React.FC<InteractionScreenShotProps> = ({data,op
                       mb={'10px'}
                       lineHeight={1}
                       key={ind}
-                      color={option === ind ? 'purple' : 'black'}
+                      color={option === item?.qpOptions ? 'purple' : 'black'}
                       textAlign={'center'}
                       cursor={'pointer'}
                       fontFamily={'AtlantisText'}
                     >
                       <Img
-                        src={option === ind ? on : off}
+                        src={option === item?.qpOptions ? on : off}
                         h={'30px'}
                         w={'100%'}
                       />
