@@ -434,38 +434,38 @@ const ScreenPreview = () => {
                 <Box h={'100vh !important'} className="Images">
                   <Flex height="100vh" className="EntirePreview">
                     {currentTab === 3 && (
-                      // <Box
-                      //   w={'100%'}
-                      //   h={'100vh'}
-                      //   alignItems={'center'}
-                      //   justifyContent={'center'}
-                      //   position={'relative'}
-                      //   overflow={'visible'}
-                      //   style={{ perspective: '1000px' }}
-                      //   className="Main-Content"
-                      // >
-                      //   <Box
-                      //     backgroundImage={preloadedAssets.backgroundImage}
-                      //     w={'100% !important'}
-                      //     h={'100vh'}
-                      //     backgroundRepeat={'no-repeat'}
-                      //     backgroundSize={'cover'}
-                      //     alignItems={'center'}
-                      //     justifyContent={'center'}
-                      //     className="Game-Screen"
-                      //   >
-                      //     <Box className="Images">
-                            // {gameInfo && (
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
+                      >
+                        <Box
+                          backgroundImage={preloadedAssets.backgroundImage}
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                        >
+                          <Box className="Images">
+                            {gameInfo && (
                               <WelcomeContentScreen
                                 background={preloadedAssets.backgroundImage}
                                 formData={gameInfo.gameData}
                                 imageSrc={preloadedAssets?.Screen5}
                                 preview={true}
                               />
-                            // )}
-                      //     </Box>
-                      //   </Box>
-                      // </Box>
+                            )}
+                          </Box>
+                        </Box>
+                      </Box>
                     )}
                     {currentTab === 4 && data && type === 'Note' && (
                        <Box
