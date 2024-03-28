@@ -78,6 +78,7 @@ import ThankYou from './playcards/Thankyou';
 // import Screen6 from 'assets/img/screens/screen6.png';
 import Screen6 from 'assets/img/games/thankyou.png';
 import Reflection from './playcards/Reflection';
+
 import RefScreen1 from 'assets/img/screens/refscreen1.png';
 import Takeway from './playcards/Takeaway';
 import Screen4 from 'assets/img/screens/screen4.png';
@@ -92,6 +93,7 @@ import { MdClose } from 'react-icons/md';
 import ProfileScreen from './playcards/ProfileScreen';
 import Characterspage from './playcards/CharacterSelection';
 import ChapterPage from './playcards/Chapters';
+import FeedBackScreen from './playcards/FeedBackScreen';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
 import { ScoreContext } from './GamePreview';
@@ -203,9 +205,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [options, setOptions] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [optionNavigation, setOptionNavigation] = useState(null);
+  const [getSelectedOptions, SetgetSelectedOptions] = useState({});
   /** This state handles the Review Form Tab and Sub Tab options */
   const [reviewTabOptions, setReviewTabOptions] = useState([]);
   const [filteredTabOptions, setFilteredTabOptions] = useState([]);
+  // Feed back after completion 
+  const [FeedbackcurrentPosition, setFeedbackCurrentPosition] = useState(0);
+  const [FeedbackremainingSentences, setFeedbackRemainingSentences] = useState<any[]>([]);
+  const [FeedbackNavigatenext, setFeedbackNavigateNext] = useState<any>(false);
+  const [isScreenshot, setisScreenshot] = useState<any>(false);
+  const [FeedBackoptionData, setFeedBackoptionData] = useState(null);
+  const [FeedBackselectedoptionData, setFeedBackSelectedoptionData] = useState(null);
 
   const [reviewSubTabOptions, setReviewSubTabOptions] = useState<
     Array<{ value: string; label: string }>
@@ -288,6 +298,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   // Afrith-modified-ends-07/Mar/24
 
   const [voiceIds, setVoiceIds] = useState<any>();
+  const [feedbackList, setFeedbackList] = useState([]);
+  const [interactionCount, setinteractionCount] = useState(null);
   const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
     useState<boolean>(false);
   const [reflectionAnswers, setReflectionAnswers] = useState([]);
@@ -297,14 +309,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
     if (res?.status === 'success' && res?.url)
-      console.log('url6768', res?.url);
-    setAudioObj({
-      url: res?.url,
-      type: 'bgm',
-      volume: '0.5',
-      loop: true,
-      autoplay: true,
-    });
+      setAudioObj({
+        url: res?.url,
+        type: 'bgm',
+        volume: '0.5',
+        loop: true,
+        autoplay: true,
+      });
 
   };
 
@@ -411,7 +422,6 @@ for (const option of gameInfo.questOptions) {
         audioRef.current.pause();
       }
       // Update the audio source and play if necessary
-      console.log('audioRefcurrentsrc', audioRef.current.src = audioObj.url, '....', audioObj.autoplay);
       audioRef.current.src = audioObj.url;
       try {
         if (audioObj.autoplay) {
@@ -506,15 +516,58 @@ for (const option of gameInfo.questOptions) {
   };
 
   const getData = (next: any) => {
+
+    if (next?.blockChoosen === 'Interaction') {
+      const isDuplicate = feedbackList?.some((item:any) => 
+        item.Seq === next?.blockPrimarySequence && 
+        item.Options === getSelectedOptions
+    );
+
+    if (!isDuplicate) {
+        setFeedbackList(prevFeedbackList => [
+            ...prevFeedbackList,
+            {
+                feedbackcontent: feed,
+                Seq: next?.blockPrimarySequence,
+                Options: getSelectedOptions
+            }
+        ]);
+    }
+    }
+
     setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
-    const NextItem = currentBlock != null ? currentBlock + 1 : null;
+    // const NextItem = currentBlock != null ? currentBlock + 1 : null;
+    //get the next block details
+    const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
+    let NextItem=0;
+    if(next.blockLeadTo!=null){
+      // console.log('demoBlocks', demoBlocks);
+      // console.log('quest', quest);
+      let NextObj;
+      // const NextObj = demoBlocks[quest].find((obj:any)=> obj.blockSecondaryId == next.blockLeadTo)
+      for (const key in demoBlocks[quest]) {
+        if (demoBlocks[quest].hasOwnProperty(key)) {
+            const obj = demoBlocks[quest][key];
+            if (obj.blockSecondaryId == next.blockLeadTo) {
+                NextObj = obj;
+                break; // Once found, exit the loop
+            }
+        }
+    }
+      NextItem= NextObj.blockPrimarySequence.split('.')[1];
+    }
+    else{
+      NextItem = currentBlock != null ? currentBlock + 1 : null;
+    }
+    console.log('NextItem', NextItem);
+
     const nextSeq = next
       ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
       : '';
-    const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
+    // const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
     const currentQuest = next
       ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
@@ -555,11 +608,13 @@ for (const option of gameInfo.questOptions) {
       }
       setOptions(optionsFiltered);
     }
+    
     if (
       type === 'Interaction' &&
-      resMsg !== '' &&
-      gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
+      resMsg !== ''
+      // && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
+      console.log('1');
       setType('response');
       return false;
     } else if (
@@ -567,6 +622,7 @@ for (const option of gameInfo.questOptions) {
       feed !== '' &&
       gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
+      console.log('2');
       setType('feedback');
       return false;
     } else if (
@@ -575,18 +631,23 @@ for (const option of gameInfo.questOptions) {
       type === 'feedback'
     ) {
       if (navi === 'Repeat Question') {
-        console.log(gameInfo?.gameData?.gameShuffle,"options12345")
-        const optionsFiltered = [];
-const primarySequence = gameInfo.blocks[profile.currentQuest]['1'].blockPrimarySequence;
+//         console.log(gameInfo?.gameData?.gameShuffle,"options12345")
+//         const optionsFiltered = [];
+// const primarySequence = gameInfo.blocks[profile.currentQuest]['1'].blockPrimarySequence;
 
-for (const option of gameInfo.questOptions) {
-    if (option?.qpSequence === primarySequence) {
-      optionsFiltered.push(option);
-    }
-}
-     console.log("loginfo", optionsFiltered)
+// for (const option of gameInfo.questOptions) {
+//     if (option?.qpSequence === primarySequence) {
+//       optionsFiltered.push(option);
+//     }
+// }
+//      console.log("loginfo", optionsFiltered)
+//         if (gameInfo?.gameData?.gameShuffle === 'true') {
+//           console.log("test")
+//         console.log('3');
+        const optionsFiltered = gameInfo?.questOptions.filter(
+          (key: any) => key?.qpSequence === next?.blockPrimarySequence,
+        );
         if (gameInfo?.gameData?.gameShuffle === 'true') {
-          console.log("test")
           for (let i = optionsFiltered.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [optionsFiltered[i], optionsFiltered[j]] = [
@@ -601,16 +662,19 @@ for (const option of gameInfo.questOptions) {
         setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
+        console.log('4');
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
+        console.log('5');
         setType(demoBlocks['1']['1']?.blockChoosen);
         setData(demoBlocks['1']['1']);
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
+        console.log('6');
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -621,29 +685,30 @@ for (const option of gameInfo.questOptions) {
           .map((item: any) => {
             return demoBlocks[currentQuest][item];
           });
-          console.log('selectedNextentri', selectedNext);
-          if (selectedNext.length > 0) {
-            setType(selectedNext && selectedNext[0]?.blockChoosen);
-            setData(selectedNext && selectedNext[0]);
-            setGame3Position((prev: any) => ({
-              ...prev,
-              nextBlock: selectedNext[0]?.blockPrimarySequence,
-            }));
-          }
-          else {
-            setType(nextBlock[0]?.blockChoosen);
-            setData(nextBlock[0]);
-            setGame3Position((prev: any) => ({
-              ...prev,
-              nextBlock: nextBlock[0]?.blockPrimarySequence,
-            }));
-          }
-        
-       
+        if (selectedNext.length > 0) {
+          setType(selectedNext && selectedNext[0]?.blockChoosen);
+          setData(selectedNext && selectedNext[0]);
+          setGame3Position((prev: any) => ({
+            ...prev,
+            nextBlock: selectedNext[0]?.blockPrimarySequence,
+          }));
+        }
+        else {
+          setType(nextBlock[0]?.blockChoosen);
+          setData(nextBlock[0]);
+          setGame3Position((prev: any) => ({
+            ...prev,
+            nextBlock: nextBlock[0]?.blockPrimarySequence,
+          }));
+        }
+
+
         setSelectedOption(null);
         return false;
       } else if (navi === 'Complete') {
+        console.log('7');
         if (demoBlocks.hasOwnProperty(nextLevel)) {
+          console.log('8');
           setProfile((prev: any) => {
             const data = { ...prev };
             data.completedLevels = [...data.completedLevels, nextLevel];
@@ -654,18 +719,21 @@ for (const option of gameInfo.questOptions) {
           setCurrentScreenId(6);
           return false;
         } else {
+          console.log('9');
           setType(null);
           setData(null);
           setCurrentScreenId(6);
           return false;
         }
       } else {
+        console.log('10');
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
         return false; 
       }
     }
+    /*
     if (currentScreenId === 6) {
       if (
         gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
@@ -697,102 +765,178 @@ for (const option of gameInfo.questOptions) {
         }
       }
     }
-    if (currentScreenId === 9) {
-      if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
-        setCurrentScreenId(8);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-        setCurrentScreenId(4);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-        setCurrentScreenId(3);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      } else {
-        if (data && type) {
-          setCurrentScreenId(2);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
-          return false;
-        }
-      }
-    }
-    if (currentScreenId === 8) {
-      if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-        setCurrentScreenId(4);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-        setCurrentScreenId(3);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      } else {
-        if (data && type) {
-          setCurrentScreenId(2);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
-          return false;
-        }
-      }
-    }
-    if (currentScreenId === 4) {
-      if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-        setCurrentScreenId(3);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      } else {
-        if (data && type) {
-          setCurrentScreenId(2);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
-          return false;
-        }
-      }
-    }
-    if (currentScreenId === 3) {
-      if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      } else {
-        if (data && type) {
-          setCurrentScreenId(2);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
-          return false;
-        }
-      }
-      // }
-    }
-    if (currentScreenId === 7) {
+    */
+     if (currentScreenId === 6) {
+    if (
+      gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
+      gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion'
+    ) {
+      console.log('gameIsShowInteractionFeedBack');
+      getFeedbackData(data);
+      setCurrentScreenId(14);
+      return false;
+    } else if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
+      console.log('gameReplayAllowed');
+      setCurrentScreenId(8);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+      console.log('gameIsShowLeaderboard');
+      setCurrentScreenId(4);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+      console.log('gameIsShowReflectionScreen');
+      setCurrentScreenId(3);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+      console.log('gameIsShowTakeaway');
+      setCurrentScreenId(7);
+      return false;
+    } else {
       if (data && type) {
-        setCurrentScreenId(2);
+        console.log('currentscreenid 1 =>',currentScreenId);
+        setCurrentScreenId(13);
         return false;
       } else {
+        console.log('currentscreenid 2 =>',currentScreenId);
         setType(null);
         setData(null);
         setCurrentScreenId(5);
         return false;
       }
     }
+  }
+  if (currentScreenId === 9 || currentScreenId === 14) {
+    if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
+      console.log('gameReplayAllowed 1');
+      setCurrentScreenId(8);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+      console.log('gameIsShowLeaderboard 1');
+      setCurrentScreenId(4);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+      console.log('gameIsShowReflectionScreen 1');
+      setCurrentScreenId(3);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+      console.log('gameIsShowTakeaway 1');
+      setCurrentScreenId(7);
+      return false;
+    } else {
+      if (data && type) {
+        console.log('currentscreenid 3 =>',currentScreenId);
+        setCurrentScreenId(2);
+        return false;
+      } else {
+        console.log('currentscreenid 4 =>',currentScreenId);
+        setType(null);
+        setData(null);
+        setCurrentScreenId(5);
+        return false;
+      }
+    }
+  }
+  if (currentScreenId === 8) {
+    if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+      console.log('gameIsShowLeaderboard 2');
+      setCurrentScreenId(4);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+      console.log('gameIsShowReflectionScreen 2');
+      setCurrentScreenId(3);
+      return false;
+    } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+      console.log('gameIsShowTakeaway 2');
+      setCurrentScreenId(7);
+      return false;
+    } else {
+      if (data && type) {
+        console.log('currentscreenid 5 =>',currentScreenId);
+        setCurrentScreenId(2);
+        return false;
+      } else {
+        console.log('currentscreenid 6 =>',currentScreenId);
+        setType(null);
+        setData(null);
+        setCurrentScreenId(5);
+        return false;
+      }
+    }
+  }
+  if (currentScreenId === 4) {
+    
+    // if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+    //   console.log('gameIsShowReflectionScreen 3');
+    //   setCurrentScreenId(3);
+    //   return false;
+    // } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+    //   console.log('gameIsShowTakeaway 3');
+    //   setCurrentScreenId(7);
+    //   return false;
+    // } else {
+      if (data && type) {
+        console.log('currentscreenid 7 =>',currentScreenId);
+        setFeedbackNavigateNext(false);
+        setCurrentScreenId(13);
+        return false;
+      } else {
+        if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+          console.log('gameIsShowReflectionScreen 3');
+          setCurrentScreenId(3);
+          return false;
+        } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+          console.log('gameIsShowTakeaway 3');
+          setCurrentScreenId(7);
+          return false;
+        }
+        else{
+          console.log('currentscreenid 8 =>',currentScreenId);
+          setType(null);
+          setData(null);
+          setCurrentScreenId(5);
+          return false;
+        }
+        
+      // }
+    }
+  }
+  if (currentScreenId === 3) {
+    if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+      console.log('gameIsShowTakeaway 4');
+      setCurrentScreenId(7);
+      return false;
+    } else {
+      if (data && type) {
+        console.log('currentscreenid 9 =>',currentScreenId);
+        setCurrentScreenId(2);
+        return false;
+      } else {
+        console.log('currentscreenid 10 =>',currentScreenId);
+        setType(null);
+        setData(null);
+        setCurrentScreenId(5);
+        return false;
+      }
+    }
+    // }
+  }
+  if (currentScreenId === 7) {
+    if (data && type) {
+      console.log('currentscreenid 11 =>',currentScreenId);
+      setFeedbackNavigateNext(false);
+      setCurrentScreenId(13);
+      return false;
+    } else {
+      console.log('currentscreenid 12 =>',currentScreenId);
+      setType(null);
+      setData(null);
+      setCurrentScreenId(5);
+      return false;
+    }
+  }
     if (nextBlock.length === 0) {
       if (demoBlocks.hasOwnProperty(nextLevel)) {
+        console.log('21');
         setProfile((prev: any) => {
           const data = { ...prev };
           data.completedLevels = [...data.completedLevels, nextLevel];
@@ -803,6 +947,7 @@ for (const option of gameInfo.questOptions) {
         setCurrentScreenId(6);
         return false;
       } else {
+        console.log('22');
         setType(null);
         setData(null);
         setCurrentScreenId(6);
@@ -811,20 +956,24 @@ for (const option of gameInfo.questOptions) {
     }
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
+        console.log('23');
         setType(next?.blockChoosen);
         setData(next);
         return false;
       } else if (next?.blockShowNavigate === 'New Block') {
+        console.log('24');
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Replay Point') {
+        console.log('25');
         setType(demoBlocks['1']['1']?.blockChoosen);
         setData(demoBlocks['1']['1']);
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Select Block') {
+        console.log('26');
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -850,6 +999,7 @@ for (const option of gameInfo.questOptions) {
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
+        console.log('27');
         setProfile((prev: any) => {
           const data = { ...prev };
           data.completedLevels = [...data?.completedLevels, nextLevel];
@@ -864,7 +1014,6 @@ for (const option of gameInfo.questOptions) {
     setSelectedOption(null);
 
   };
-
   let menuBg = useColorModeValue('white', 'navy.800');
   const shadow = useColorModeValue(
     '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
@@ -879,16 +1028,33 @@ for (const option of gameInfo.questOptions) {
     setNavi(item?.qpNavigateShow);
     setOptionNavigation(item?.qpNextOption);
     setSelectedOption(ind === selectedOption ? null : ind);
-
     const text = '..Option ' + item.qpOptions + ' -- ' + item.qpOptionText;
+    SetgetSelectedOptions({
+      options: item.qpOptions,
+      optionText: item.qpOptionText
+    });
     const voiceId =
       // data?.blockRoll == '999999'
       //   ? voiceIds.NPC :
       profileData?.gender == 'Male'
         ? voiceIds?.playerMale
         : voiceIds?.playerFemale;
-     getAudioForText(text, voiceId);
+    getAudioForText(text, voiceId);
+
+    //  collectInteractionFeedback(item.qpFeedback);
   };
+  /*
+    useEffect(() => {
+      const getgameinfoblockchoosen = gameInfo?.blocks[profile?.currentQuest];
+      let getinteractionCount = 0;
+      for (const key in getgameinfoblockchoosen) {
+        if (getgameinfoblockchoosen[key].blockChoosen === "Interaction") {
+          getinteractionCount++;
+        }
+      }
+      setinteractionCount(getinteractionCount);
+    }, [gameInfo, profile]);
+    */
   useEffect(() => {
     setFeedBackFromValue();
   }, [currentScreenId]);
@@ -1260,10 +1426,80 @@ for (const option of gameInfo.questOptions) {
   //   setIsMobileView(!isMobileView);
   // };
   // console.log('///',isMobileView)
-
-  // Avoid Top Menu Section
   const dontShowTopMenu = currentScreenId !== 7 && currentScreenId !== 6 && currentScreenId !== 5 && currentScreenId !== 4 && currentScreenId !== 3 && currentScreenId !== 10;
-console.log("options",options)
+ 
+  useEffect(() => {
+    if (FeedbackNavigatenext === true) {
+        
+        getData(data);
+    }
+    
+  }, [FeedbackNavigatenext]);
+
+  useEffect(() => {
+
+  }, [FeedBackoptionData]);
+  
+  
+  const getFeedbackData = (getdata: any) => {
+    setisScreenshot(true);
+    const sortedFeedbackList = feedbackList.slice().sort((a, b) => {
+      const seqA = parseFloat(a.Seq);
+      const seqB = parseFloat(b.Seq);
+      return seqA - seqB;
+    });
+    const groupedFeedback: { [key: string]: any[] } = {};
+    sortedFeedbackList.forEach((feedback) => {
+      if (!(feedback.Seq in groupedFeedback)) {
+        groupedFeedback[feedback.Seq] = [];
+      }
+      groupedFeedback[feedback.Seq].push(feedback);
+    });
+    const firstPageFeedback: any[] = [];
+    Object.keys(groupedFeedback).forEach((seq) => {
+      const lastIndex = groupedFeedback[seq].length - 1;
+      firstPageFeedback.push(groupedFeedback[seq][lastIndex]);
+    });
+  
+    let newRemainingSentences;
+    if (FeedbackcurrentPosition < firstPageFeedback.length) {
+      newRemainingSentences = firstPageFeedback[FeedbackcurrentPosition].feedbackcontent;
+      // getOption for FeedBack 
+      const getgameinfoblockchoosen = gameInfo?.blocks[profile?.currentQuest];
+      const getArray = [];
+      for (const key in getgameinfoblockchoosen) {
+        if (getgameinfoblockchoosen[key].blockChoosen === "Interaction") {
+          getArray.push(getgameinfoblockchoosen[key]);
+        }
+      }
+      
+      const GetSeqData = getArray.filter((item: any) => {
+        return (item?.blockPrimarySequence === firstPageFeedback[FeedbackcurrentPosition].Seq);
+      });
+      const optionsFiltered = gameInfo?.questOptions.filter((key: any) => key?.qpSequence === GetSeqData[0]?.blockPrimarySequence);
+      if (gameInfo?.gameData?.gameShuffle) {
+        for (let i = optionsFiltered.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [optionsFiltered[i], optionsFiltered[j]] = [
+            optionsFiltered[j],
+            optionsFiltered[i],
+          ];
+        }
+      }
+      const SelectedoptionsFiltered = optionsFiltered.filter((key: any) => key?.qpOptions == firstPageFeedback[FeedbackcurrentPosition].Options['options']);
+      const selectoptionfeed = SelectedoptionsFiltered[0].qpOptions? SelectedoptionsFiltered[0].qpOptions :'null';
+      setOptions(optionsFiltered);
+      setFeedBackSelectedoptionData(selectoptionfeed);
+      setFeedBackoptionData(GetSeqData);
+      setFeedbackCurrentPosition(FeedbackcurrentPosition + 1);
+      setFeedbackRemainingSentences(newRemainingSentences);
+    } else {
+      setFeedbackList([]);
+      setFeedbackCurrentPosition(0);
+      setFeedbackNavigateNext(true);
+    }
+  };
+
   return (
     <ProfileContext.Provider value={profileData}>
       {/* {isMobileView ? ( */}
@@ -1704,88 +1940,11 @@ console.log("options",options)
                   );
                 case 9:
                   return (
-                    <>
-                      {/* <motion.div
-                        initial={{ opacity: 0, background: '#000' }}
-                        animate={{ opacity: 1, background: '#0000' }}
-                        transition={{ duration: 0.3, delay: 0.5 }}
-                      > */}
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                      >
-                        <Box
-                          backgroundImage={backgroundScreenUrl}
-                          w={'100%'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          transform={`scale(${first ? 1 : 1.3}) translateY(${first ? 0 : -10
-                            }%) translateX(${first ? 0 : -10}%)`}
-                          transition={'transform 0.9s ease-in-out'}
-                        >
-                          <Box
-                            position={'fixed'}
-                            top={'200px'}
-                            right={'0px'}
-                            bottom={0}
-                            zIndex={999}
-                            w={'300px'}
-                          ></Box>
-                        </Box>
-                        <Box
-                          style={{
-                            transform: `scale(${showNote ? 0.2 : 1})`,
-                            transition: 'transform 0.5s ease-in-out',
-                          }}
-                          position={'fixed'}
-                          w={'40%'}
-                          h={'80vh'}
-                          display={'flex'}
-                          flexDirection={'column'}
-                          justifyContent={'center'}
-                          alignItems={'center'}
-                        >
-                          <Img w={'80%'} h={'80vh'} src={feedi} />
-                          <Box
-                            position={'fixed'}
-                            w={'50%'}
-                            mt={'10px'}
-                            display={'flex'}
-                            flexDirection={'column'}
-                            textAlign={'center'}
-                            justifyContent={'center'}
-                            style={{
-                              fontWeight: '900',
-                              color: '#D9C7A2',
-                              fontSize: '18px',
-                              lineHeight: 1,
-                              fontFamily: 'cont',
-                            }}
-                          >
-                            {feed}
-                            <Box
-                              w={'100%'}
-                              onClick={() => getData(data)}
-                              mt={'20px'}
-                              display={'flex'}
-                              justifyContent={'center'}
-                              cursor={'pointer'}
-                            >
-                              <Img src={next} w={'200px'} h={'60px'} />
-                            </Box>
-                          </Box>
-                        </Box>
-                      </Box>
-                      {/* </motion.div> */}
-                    </>
+                  <FeedBackScreen backgroundScreenUrl={backgroundScreenUrl} first={first} showNote={showNote} isScreenshot={isScreenshot}  FeedbackremainingSentences={FeedbackremainingSentences} options={options} setisScreenshot={setisScreenshot} FeedBackselectedoptionData={FeedBackselectedoptionData} FeedBackoptionData={FeedBackoptionData} getFeedbackData={getFeedbackData} data={data} feed={feed} currentScreenId={currentScreenId} getData={getData} backGroundImg={backgroundScreenUrl} profile={profile}/> 
                   );
+                  
+                
+                  
                 case 10:
                   return (
                     <>
@@ -1990,6 +2149,11 @@ console.log("options",options)
                       {/* </SimpleGrid> */}
                     </>
                   );
+                case 14:
+                  return (
+                     <FeedBackScreen backgroundScreenUrl={backgroundScreenUrl} first={first} showNote={showNote} isScreenshot={isScreenshot}  FeedbackremainingSentences={FeedbackremainingSentences} setisScreenshot={setisScreenshot} options={options} FeedBackselectedoptionData={FeedBackselectedoptionData} FeedBackoptionData={FeedBackoptionData} getFeedbackData={getFeedbackData} data={data} currentScreenId={currentScreenId} getData={getData} backGroundImg={backgroundScreenUrl} profile={profile}/> 
+                  )
+                 
                 default:
                   console.log(
                     'game details of the data',

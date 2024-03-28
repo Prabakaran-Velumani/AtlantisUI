@@ -806,6 +806,7 @@ const ScreenPreview = () => {
                               {showTypingEffect === false ? <TypingEffect
                                 text={remainingSentences.toString()}
                                 speed={50}
+                                setSpeedIsOver={setShowTypingEffect}
                               /> : remainingSentences}
 
 
@@ -1034,6 +1035,7 @@ const ScreenPreview = () => {
                               {showTypingEffect === false ? <TypingEffect
                                 text={remainingSentences.toString()}
                                 speed={50}
+                                setSpeedIsOver={setShowTypingEffect}
                               /> : remainingSentences}
                               {/* <TypingEffect text={resMsg} speed={50} /> */}
                             </Box>
