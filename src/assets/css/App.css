@@ -2323,11 +2323,7 @@ transform: translate(-167px, -84px);
     transform: translate(0px, -50px) !important;
     font-size: 18px;
   }
-
-  .title {
-    transform: translate(0px, 52px) !important;
-    font-size: 18px;
-  }
+ 
 
   .AddScores .Main-Content .Game-Screen .Images .congratulations {
     transform: translate(0px, 84px) !important;
@@ -2468,11 +2464,6 @@ transform: translate(-167px, -84px);
   }
 
   .AddScores .Main-Content .Game-Screen .Images .title {
-    transform: translate(0px, 73px);
-    font-size: 20px;
-  }
-
-  .title {
     transform: translate(0px, 73px);
     font-size: 20px;
   }
@@ -4051,6 +4042,156 @@ transform: translate(-167px, -84px);
   border-radius: 10px;
 }
 
+
+
+
+/********************************* PREVIEW WELCOME SCREEN *********************************************** */
+.EntirePreview .Game-Screen .Images .welcome-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .welcome-pad {
+  height: 100vh;
+  width: auto;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 50vh;
+  width: calc(50vh - (-20vh));
+  /* overflow-x: clip; */
+  overflow-y: auto;
+  transform: translateY(12%);
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .top-title {
+  position: absolute;
+  top: 22vh;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .top-title .title {
+  font-size: 3vh;  
+  /* width: calc(3vh - -22vh); */
+  font-family: 'AtlantisText';
+  color: var(--atlantis-text-color);  
+  text-transform: uppercase; 
+  text-align: center;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .top-title .duration {
+  font-size: 3vh;  
+  font-family: 'AtlantisText';
+  color: var(--atlantis-text-color);  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .text {
+  font-size: 3vh;  
+  font-family: 'AtlantisText';
+  color: var(--atlantis-text-color);  
+  margin-top: 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-arrow-img {
+  margin-top: 2%;
+  width: auto;
+  height: 3vh;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box {
+ display: flex;
+ justify-content: space-evenly;
+ width: 100%;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 {
+  width: 50%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 > img {
+ display: none;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .skill-text {
+  font-size: 3vh;  
+  font-family: 'AtlantisText';
+  color: var(--atlantis-text-color);  
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .inside-box {
+  transform: unset;
+  height: auto;
+  overflow: unset;
+  align-items: self-start;
+  width: 40%;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .inside-box > div {
+  align-items: center;
+  width: 100%;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .inside-box img {
+ height: 3vh; 
+ width: auto;
+ margin-right: 5%;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .inside-box p {
+  font-size: 2.5vh;  
+  font-family: 'AtlantisContent';
+  color: var(--atlantis-text-color);  
+  word-break: break-all;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .inside-box p:nth-child(2) {
+  display: none;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .inside-box .text-wrapper {
+  display: block;
+  height: unset;
+  width: unset;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .author{
+ display: flex;
+ justify-content: center;
+ width: 100%;
+ position: inherit;
+ height: auto;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .author p{
+  font-size: 2.5vh;  
+  font-family: 'AtlantisText';
+  color: var(--atlantis-text-color);  
+  position: inherit;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .renderContent p{
+  font-size: 2.5vh;  
+  font-family: 'AtlantisText';
+  color: var(--atlantis-text-color);  
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .next-btn {
+  transform: translate(0, 35vh);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+.EntirePreview .Game-Screen .Images .welcome-screen .next-btn img {
+  width: auto;
+  height: 6vh;
+}
+
+
 /********************************* PREVIEW LEADERBOARD SCREEN *********************************************** */
 .EntirePreview .Game-Screen .Images .LearderBoards {
   display: flex;
@@ -4276,15 +4417,21 @@ transform: translate(-167px, -84px);
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .bg-take {
   /* Ashiq modifying on 11-03-24, when he was in resposnivePreview branch */
+  /* height: 100vh;
+  width: 90vw; */
+  /* new */
   height: 100vh;
-  width: 90vw;
+  width: auto;
   background-position: center;
 }
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box {
   /* Ashiq modifying on 11-03-24, when he was in resposnivePreview branch */
   display: flex;
-  width: 70vw !important;
+  /* width: 70vw !important;
+  height: 47vh; */
+  /* new */
+  width: calc(47vh - (-47vh)) !important;
   height: 47vh;
   position: absolute;
   flex-direction: column;
@@ -4293,22 +4440,24 @@ transform: translate(-167px, -84px);
 }
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content {
-  font-family: 'AtlantisText';
-  /*letter-spacing: 2px;*/
-  /*color: var(--atlantis-text-color);*/
+  font-family: 'AtlantisText';  
   word-break: break-all;
   display: flex;
   align-items: center;
   letter-spacing: 0.5px;
   font-weight: 400;
-  color: #bdac88;
+  color: var(--atlantis-text-color);
   width: 100%;
   margin-bottom: 10px;
-  font-size: 18px;
+  /* font-size: 18px; */
+  /* new */
+  font-size: 2.7vh !important;
 }
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content img {
   margin-right: 5px;
+  width: auto;
+  height: 1.5vh;
 }
 
 .content-box .content-lead {
@@ -4342,13 +4491,16 @@ transform: translate(-167px, -84px);
 }
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .next-btn-box img {
-  height: 4rem;
-  width: 8.8rem;
+  /* height: 4rem;
+  width: 8.8rem; */
+  /* new */
+  height: 8vh !important;
+  width: auto !important;
   cursor: pointer;
 }
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box::-webkit-scrollbar {
-  width: 16px;
+  width: 18px;
   /*height: 300px;*/
   border-radius: 30px;
   background-size: contain;
@@ -4367,6 +4519,12 @@ transform: translate(-167px, -84px);
   cursor: pointer;
   background-size: contain;
   /*height: 300px;*/
+  /* background-size: 26px 63px; */
+}
+.EntirePreview .Game-Screen .Images .takeaway-screen .content-box::-webkit-scrollbar-button:start:decrement,
+.EntirePreview .Game-Screen .Images .takeaway-screen .content-box::-webkit-scrollbar-button:end:increment  {}
+.EntirePreview .Game-Screen .Images .takeaway-screen .content-box::-webkit-scrollbar-track-piece  {
+    display:none;
 }
 
 

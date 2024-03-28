@@ -82,16 +82,26 @@
   /* TAKEAWAY**************************************** */
   .EntirePreview .Game-Screen .Images .takeaway-screen .bg-take {
     height: 100vw;
-    width: 80vh;
+    /* width: 80vh; */
   }
   .EntirePreview .Game-Screen .Images .takeaway-screen .content-box {
     height: 40vw;
-    width: 65vh !important;
+    /* width: 65vh !important; */
+    width: calc(40vw - (-50vw)) !important;
     transform: translate(0%, 17%);
+  }
+  .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content {
+    font-size: 2.7vw !important;
+  }
+  .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content img {
+    height: 1.5vw;
   }
   .EntirePreview .Game-Screen .Images .takeaway-screen .next-btn-box {
     position: absolute;  
     transform: translate(0, 35vw);
+  }
+  .EntirePreview .Game-Screen .Images .takeaway-screen .next-btn-box img {
+    height: 8vw !important;
   }
 
 
@@ -140,6 +150,55 @@
   } 
   .EntirePreview .Game-Screen .Images .Leaderboard-screen img.close-btn {   
     transform: translate(37vh, -25vw);
+  }
+
+
+  /* WELCOME SCREEN**************************************** */
+  .EntirePreview .Game-Screen .Images .welcome-screen {    
+    height: 100vw;
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .welcome-pad {
+    height: 100vw;    
+  } 
+  .EntirePreview .Game-Screen .Images .welcome-screen .top-title {    
+    top: 22vw;
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .top-title .title {
+    font-size: 3vw;  
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .top-title .duration {
+    font-size: 3vw;
+  } 
+  .EntirePreview .Game-Screen .Images .welcome-screen .content-box {   
+    height: 50vw !important;
+    width: calc(50vw - (-20vw)) !important;   
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .text {
+    font-size: 3vw;
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-arrow-img {    
+    height: 3vw;
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .skill-text { 
+    font-size: 3vw;  
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .inside-box img { 
+    height: 3vw; 
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .inside-box p {
+    font-size: 2.5vw;  
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .author p{
+    font-size: 2.5vw;      
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .renderContent p{
+    font-size: 2.5vw;  
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .next-btn {
+    transform: translate(0, 35vw);   
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .next-btn img {    
+    height: 6vw;
   }
 }
 /* RESPONSIVE ORIENTATION END *********************************************** */
