@@ -4927,7 +4927,7 @@ const GameCreation = () => {
               bottom={0}
               right={0}
               zIndex={999999}
-              borderTop={'1px solid #d5cbcb'}
+              borderTop={'1px solid #d1d1d1'}
             >
               <Flex justify="center" w={'100%'}>
                 <Card

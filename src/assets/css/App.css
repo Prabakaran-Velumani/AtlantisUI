@@ -3030,9 +3030,8 @@ transform: translate(-167px, -84px);
 /* welcome screen image */
 
 .welcome_screen_image {
-  height: 400px;
-  width: 700px;
-  max-width: 100%;
+  height: 100vh;
+  width: auto;
 }
 
 .welcome_screen_grid {
@@ -3060,13 +3059,15 @@ transform: translate(-167px, -84px);
 /* story part note  */
 
 .story_interaction_image {
-  height: 80vh;
+  height: 90vh;
   width: 40vw;
   max-width: 100%;
 } 
 
 .story_note_grid {
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .story_complete_grid {
@@ -3141,7 +3142,13 @@ transform: translate(-167px, -84px);
     width: 100vh;
     height: 100vw;
   }
-
+  .next_potrait{
+    height: 7vw !important
+  }
+  .welcome_screen_image {
+    height: 100vw;
+    width: auto;
+  }
   .welcome_potrait {
     width: 100vh !important;
     height: 100vw !important;
@@ -3188,13 +3195,13 @@ transform: translate(-167px, -84px);
   }
 
   .story_note_image {
-    width: 500px !important;
-    height: 90vw !important;
+    width: 100%;
+    height: auto;
   }
 
-  .story_note_grid {
-    width: 50%
-  }
+  /* .story_note_grid {
+    width: 40%
+  } */
 
   /* .story_interaction_image {
     height: 226px;
@@ -3248,18 +3255,18 @@ transform: translate(-167px, -84px);
     top: 85px;
   } */
 
-  .welcome_screen_image {
-    height: 370px;
-    width: 700px;
-  }
+  /* .welcome_screen_image {
+    height: 90vh;
+    width: auto;
+  } */
 
-  .welcome_screen_grid {
+  /* .welcome_screen_grid {
     width: 65%;
-  }
+  } */
 
-  .story_note_grid {
+  /* .story_note_grid {
     width: 39%;
-  }
+  } */
 
   .story_complete_grid {
     width: 60%;
@@ -3270,8 +3277,8 @@ transform: translate(-167px, -84px);
   }
 
   .story_note_image {
-    width: 500px;
-    height: 90vh;
+    width: 100%;
+    height: auto;
   }
 
   .story_completion_image {
@@ -3321,14 +3328,14 @@ transform: translate(-167px, -84px);
     top: 110px;
   } */
 
-  .welcome_screen_image {
-    height: 365px;
-    width: 700px;
-  }
+  /* .welcome_screen_image {
+    height: 90vh;
+    width: auto;
+  } */
 
   .story_note_image {
-    width: 500px;
-    height: 90vh;
+    width: 100%;
+    height: auto;
   }
 
   .story_completion_image {
@@ -3336,13 +3343,13 @@ transform: translate(-167px, -84px);
     height: 90vh;
   }
 
-  .welcome_screen_grid {
+  /* .welcome_screen_grid {
     width: 54%;
-  }
+  } */
 
-  .story_note_grid {
+  /* .story_note_grid {
     width: 32%;
-  }
+  } */
 
   .story_complete_grid {
     width: 56%;
@@ -3401,14 +3408,14 @@ transform: translate(-167px, -84px);
     top: 120px;
   } */
 
-  .welcome_screen_image {
-    height: 485px;
-    width: 700px;
-  }
+  /* .welcome_screen_image {
+    height: 90vh;
+    width: auto;
+  } */
 
   .story_note_image {
-    width: 500px;
-    height: 90vh;
+    width: 100%;
+    height: auto;
   }
 
   .story_completion_image {
@@ -3416,13 +3423,13 @@ transform: translate(-167px, -84px);
     height: 90vh;
   }
 
-  .welcome_screen_grid {
+  /* .welcome_screen_grid {
     width: 53%;
-  }
+  } */
 
-  .story_note_grid {
+  /* .story_note_grid {
     width: 52%;
-  }
+  } */
 
   .story_complete_grid {
     width: 32%;
@@ -3469,14 +3476,14 @@ transform: translate(-167px, -84px);
     top: 130px;
   } */
 
-  .welcome_screen_image {
-    height: 520px;
-    width: 700px;
-  }
+  /* .welcome_screen_image {
+    height: 90vh;
+    width: auto;
+  } */
 
   .story_note_image {
-    width: 500px;
-    height: 90vh;
+    width: 100%;
+    height: auto;
   }
 
   .story_completion_image {
@@ -3484,13 +3491,13 @@ transform: translate(-167px, -84px);
     height: 90vh;
   }
 
-  .welcome_screen_grid {
+  /* .welcome_screen_grid {
     width: 52%;
-  }
+  } */
 
-  .story_note_grid {
+  /* .story_note_grid {
     width: 42%;
-  }
+  } */
 
   .story_complete_grid {
     width: 40%;
@@ -3538,14 +3545,14 @@ transform: translate(-167px, -84px);
     top: 150px;
   } */
 
-  .welcome_screen_image {
-    height: 600px;
-    width: 800px;
-  }
+  /* .welcome_screen_image {
+    height: 90vh;
+    width: auto;
+  } */
 
   .story_note_image {
-    width: 500px;
-    height: 90vh;
+    width: 100%;
+    height: auto;
   }
 
   .story_completion_image {
@@ -3553,13 +3560,13 @@ transform: translate(-167px, -84px);
     height: 90vh;
   }
 
-  .welcome_screen_grid {
+  /* .welcome_screen_grid {
     width: 56%;
-  }
+  } */
 
-  .story_note_grid {
+  /* .story_note_grid {
     width: 30%;
-  }
+  } */
 
   .story_complete_grid {
     width: 30%;
@@ -3606,14 +3613,14 @@ transform: translate(-167px, -84px);
     top: 173px;
   } */
 
-  .welcome_screen_image {
-    height: 600px;
-    width: 900px;
-  }
+  /* .welcome_screen_image {
+    height: 90vh;
+    width: auto;
+  } */
 
   .story_note_image {
-    width: 500px;
-    height: 90vh;
+    width: 100%;
+    height: auto;
   }
 
   .story_completion_image {
@@ -3621,13 +3628,13 @@ transform: translate(-167px, -84px);
     height: 90vh;
   }
 
-  .welcome_screen_grid {
+  /* .welcome_screen_grid {
     width: 48%;
-  }
+  } */
 
-  .story_note_grid {
+  /* .story_note_grid {
     width: 32%;
-  }
+  } */
 
   .story_complete_grid {
     width: 32%;
@@ -3676,14 +3683,14 @@ transform: translate(-167px, -84px);
     top: 180px;
   } */
 
-  .welcome_screen_image {
-    height: 680px;
-    width: 900px;
-  }
+  /* .welcome_screen_image {
+    height: 90vh;
+    width: auto;
+  } */
 
   .story_note_image {
-    width: 625px;
-    height: 90vh;
+    width: 100%;
+    height: auto;
   }
 
   .story_completion_image {
@@ -3691,13 +3698,13 @@ transform: translate(-167px, -84px);
     height: 90vh;
   }
 
-  .welcome_screen_grid {
+  /* .welcome_screen_grid {
     width: 55%;
-  }
+  } */
 
-  .story_note_grid {
+  /* .story_note_grid {
     width: 35%;
-  }
+  } */
 
   .story_complete_grid {
     width: 35%;
@@ -3744,14 +3751,14 @@ transform: translate(-167px, -84px);
     top: 195px;
   } */
 
-  .welcome_screen_image {
-    height: 750px;
-    width: 1125px;
-  }
+  /* .welcome_screen_image {
+    height: 90vh;
+    width: auto;
+  } */
 
   .story_note_image {
-    width: 660px;
-    height: 90vh;
+    width: 100%;
+    height: auto;;
   }
 
   .story_completion_image {
@@ -3759,13 +3766,13 @@ transform: translate(-167px, -84px);
     height: 90vh;
   }
 
-  .welcome_screen_grid {
+  /* .welcome_screen_grid {
     width: 55%;
-  }
+  } */
 
-  .story_note_grid {
+  /* .story_note_grid {
     width: 32%;
-  }
+  } */
 
   .story_complete_grid {
     width: 32%;
@@ -3812,14 +3819,14 @@ transform: translate(-167px, -84px);
     top: 204px;
   } */
 
-  .welcome_screen_image {
-    height: 910px;
-    width: 1200px;
-  }
+  /* .welcome_screen_image {
+    height: 90vh;
+    width: auto;
+  } */
 
   .story_note_image {
-    width: 850px;
-    height: 90vh;
+    width: 100%;
+    height: auto;
   }
 
   .story_completion_image {
@@ -3827,13 +3834,13 @@ transform: translate(-167px, -84px);
     height: 90vh;
   }
 
-  .welcome_screen_grid {
+  /* .welcome_screen_grid {
     width: 59%;
-  }
+  } */
 
-  .story_note_grid {
+  /* .story_note_grid {
     width: 37%;
-  }
+  } */
 
   .story_complete_grid {
     width: 37%;
@@ -3880,14 +3887,14 @@ transform: translate(-167px, -84px);
     top: 265px;
   } */
 
-  .welcome_screen_image {
-    height: 1075px;
-    width: 1660px;
-  }
+  /* .welcome_screen_image {
+    height: 90vh;
+    width: auto;
+  } */
 
   .story_note_image {
-    width: 1120px;
-    height: 90vh;
+    width: 100%;
+    height: auto;
   }
 
   .story_completion_image {
@@ -3895,13 +3902,13 @@ transform: translate(-167px, -84px);
     height: 90vh;
   }
 
-  .welcome_screen_grid {
+  /* .welcome_screen_grid {
     width: 65%;
-  }
+  } */
 
-  .story_note_grid {
+  /* .story_note_grid {
     width: 43%;
-  }
+  } */
 
   .story_complete_grid {
     width: 43%;
@@ -3948,14 +3955,14 @@ transform: translate(-167px, -84px);
     top: 240px;
   } */
 
-  .welcome_screen_image {
-    height: 950px;
-    width: 1700px;
-  }
+  /* .welcome_screen_image {
+    height: 90vh;
+    width: auto;
+  } */
 
   .story_note_image {
-    width: 1300px;
-    height: 90vh;
+    width: 100%;
+    height: auto;
   }
 
   .story_completion_image {
@@ -3963,13 +3970,13 @@ transform: translate(-167px, -84px);
     height: 90vh;
   }
 
-  .welcome_screen_grid {
+  /* .welcome_screen_grid {
     width: 75%;
-  }
+  } */
 
-  .story_note_grid {
+  /* .story_note_grid {
     width: 45%;
-  }
+  } */
 
   .story_complete_grid {
     width: 45%;
