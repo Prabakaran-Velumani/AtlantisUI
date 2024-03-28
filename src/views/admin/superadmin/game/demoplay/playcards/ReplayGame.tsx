@@ -15,18 +15,60 @@ const ReplayGame: React.FC<{
   replayGame: any;
   setCurrentScreenId: any;
   getData?: any;
+  isOptionalReplay:any;
+  setisOptionalReplay:any;
+  profilescore:any;
+  setisReplay:any;
+  isReplay:any;
   data?: any;
+  gameInfo:any;
+  type?:any;
+  setType:any;
+  setData:any;
 }> = ({
   formData,
   imageSrc,
   replayGame,
+  setisReplay,
+  setisOptionalReplay,
+  isOptionalReplay,
+  profilescore,
+  gameInfo,
+  setData,
+  setType,
+  isReplay,
   setCurrentScreenId,
   getData,
   data,
+  type,
 }) => {
    const { profile } = useContext(ScoreContext);
-   console.log(profile.score)
-  //  console.log()
+   
+
+   const nextNavigation = (data:any)=>{
+
+     if(data && type)
+     {
+         setCurrentScreenId(13);
+         return false;
+     }
+     else{
+      if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+        setCurrentScreenId(3);
+        return false;
+      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+        setCurrentScreenId(7);
+        return false;
+      }
+      else {
+        setType(null);
+        setData(null);
+        setCurrentScreenId(5);
+        return false;
+      }
+     }
+  }
+
   return (
     <>
       {imageSrc && (
@@ -44,7 +86,8 @@ const ReplayGame: React.FC<{
             >
               <Box className="title" mt={'80px'}>
                 <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
-                  Do You Want Play Again ?
+                  {isReplay === true ? `Your Are Only ${profilescore} Points Away From A Perfect Score  Would You Like To Replay` : (isOptionalReplay === true)?`Your Score is to low. So U have to play Again` : 'Do You Want Play Again ?'}
+                 {/* {isOptionalReplay === true ? `Your Score is to low. So U have to play Again`  : 'Do You Want Play Again ?'}  */}
                 </Text>
               </Box>
               <Box
@@ -62,13 +105,20 @@ const ReplayGame: React.FC<{
                   cursor={'pointer'}
                   onClick={replayGame}
                 />
-                {formData?.gameMinScore < profile?.score ? (
+                {isReplay === true ? (
+                  // <Img
+                  //   src={next}
+                  //   w={'200px'}
+                  //   h={'60px'}
+                  //   cursor={'pointer'}
+                  //   onClick={() => getData(data)}
+                  // />
                   <Img
                     src={next}
                     w={'200px'}
                     h={'60px'}
                     cursor={'pointer'}
-                    onClick={() => getData(data)}
+                    onClick={() => nextNavigation(data)}
                   />
                 ) : null}
               </Box>

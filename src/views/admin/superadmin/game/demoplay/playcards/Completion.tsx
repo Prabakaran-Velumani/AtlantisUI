@@ -15,10 +15,14 @@ const Completion: React.FC<{
   setCompliData?: any;
   CompKeyCount?: any;
   preview?: any;
+  getFeedbackData:any;
   setCurrentScreenId?: any;
   getData?: any;
+  gameInfo:any
   data?: any;
+  setFeedbackNavigateNext:any;
   screen?: any;
+  profile:any;
   // currentQuestNo: any;
   completionScreenQuestOptions: any;
   questOptions: any;
@@ -29,12 +33,16 @@ const Completion: React.FC<{
   selectedBadge,
   formData,
   imageSrc,
+  gameInfo,
   compliData,
   setCompliData,
+  setFeedbackNavigateNext,
   CompKeyCount,
+  profile,
   getData,
   data,
   screen,
+  getFeedbackData,
   // currentQuestNo,
   completionScreenQuestOptions,
   questOptions,
@@ -48,7 +56,7 @@ const Completion: React.FC<{
     ),
   );
   const [questScores, setQuestScores] = useState(null);
-  const { profile, setProfile } = useContext(ScoreContext);
+  // const { profile, setProfile } = useContext(ScoreContext);
   useEffect(() => {
     setShowComplete(true);
     setTimeout(() => {
@@ -109,6 +117,66 @@ const Completion: React.FC<{
     };
     fetchDatass();
   }, []);
+  const nextNavigation = (data:any)=>{
+
+    const currentQuest = data?.blockPrimarySequence.split('.')[0]?? null;
+    const currentGameData = gameInfo.gameQuest.find((row:any)=> row.gameQuestNo == profile?.currentQuest);
+    const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    const haveNextQuest = gameInfo.gameQuest.some((row:any)=> (row.gameQuestNo > profile?.currentQuest))
+   const totalScore = profile?.score.forEach((item:any)=>{
+    if (item && item.marks) {
+      return item.marks.reduce((acc:any, mark:any) => acc + mark, 0);
+   }
+     
+    }) 
+    
+  
+  
+    
+    if(gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') 
+    {
+      getFeedbackData(data);
+      setFeedbackNavigateNext(false);
+      setCurrentScreenId(14);
+    }
+    else if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+    {
+
+      setCurrentScreenId(4);
+    }
+    else if (haveNextQuest) {
+        if (currentGameData?.gameIsSetMinPassScore ==='true') {
+          const  getminpassscore = currentGameData?.gameMinScore;
+          const scores = profile?.score;
+          const sums:any = {};
+          scores.forEach((score:any) => {
+              const quest = score.quest;
+              if (!sums[quest]) {
+                  sums[quest] = 0;
+              }
+              sums[quest] += score.score;
+          });
+
+          // const getFinalscores = Object.values(sums);
+          const getFinalscores = Object.entries(sums).map(([quest, score]) => ({ quest, score }));
+          const getscores = getFinalscores.find((row:any)=> row.quest == currentGameData.gameQuestNo);
+          const finalscore = getscores?.score;
+        //   if (profile?.score < currentGameData?.gameMinScore ) {
+        //     const initialBlock = demoBlocks[currentQuest]['1'];
+        //     console.log('**Mandatory Replay',initialBlock);
+        //       // getData(initialBlock);
+        //       //mandatory replay. need to prompt about to replay
+        //   } else 
+        if (finalscore >= getminpassscore && finalscore < currentGameData?.gameDistinctionScore && gameInfo.gameData?.gameDisableOptionalReplays ==='false') {
+          
+               setCurrentScreenId(8);
+               //set to prompt it for replay the game
+              }
+    }
+  }
+  }
+
+
 
   return (
     <>
@@ -312,9 +380,15 @@ const Completion: React.FC<{
                     </Box>
                   </Box>
                     <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                      <Img
+                      {/* <Img
                         src={next}
                         onClick={() => getData(data)}
+                        cursor={'pointer'}
+                        w={'50%'}
+                      /> */}
+                       <Img
+                        src={next}
+                        onClick={() => nextNavigation(data)}
                         cursor={'pointer'}
                         w={'50%'}
                       />
