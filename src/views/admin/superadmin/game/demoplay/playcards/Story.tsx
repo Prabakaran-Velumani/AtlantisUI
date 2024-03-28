@@ -232,8 +232,7 @@ const Story: React.FC<{
       {data && type === 'Note' && (
         <Box
           position="relative"
-          maxW="100%"
-          w={'100vw'}
+          w={'100%'}
           height="100vh"
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
@@ -398,8 +397,7 @@ const Story: React.FC<{
       {data && type === 'Interaction' && (
         <Box
           position="relative"
-          maxW="100%"
-          w={'100vw'}
+          w={'100%'}
           height="100vh"
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
@@ -637,8 +635,7 @@ const Story: React.FC<{
       {data && type === 'feedback' && (
         <Box
           position="relative"
-          maxW="100%"
-          w={'100vw'}
+          w={'100%'}
           height="100vh"
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
