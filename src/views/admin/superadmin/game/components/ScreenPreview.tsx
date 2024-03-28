@@ -32,12 +32,12 @@ import TyContentScreen from './onimage/TyContentScreen';
 import { getGameCreatorDemoData } from 'utils/game/gameService';
 import TypingEffect from '../demoplay/playcards/Typing';
 import { API_SERVER, Notelength, Dialoglength, Responselength } from 'config/constant';
-import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { lazy } from 'react';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
 import { preloadedImages } from 'utils/hooks/function';
+import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { updatePreviewData } from 'store/preview/previewSlice';
 import LeaderBoard from '../demoplay/playcards/Leaderboard';
 
@@ -101,32 +101,7 @@ const ScreenPreview = () => {
     ref3: "What's one thing you learned about your mindset?",
     ref4: "What's one thing you are committing to change?",
   });
-  const previewScreenRef = useRef(null);
-  // const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
-  // const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
-
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setViewportWidth(window.innerWidth);
-  //     setViewportHeight(window.innerHeight);
-  //   };
-  //   window.addEventListener('resize', handleResize);
-  //   return () => {
-  //     window.removeEventListener('resize', handleResize);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   previewScreenRef.current.style.setProperty(
-  //     '--viewport-width',
-  //     `${viewportWidth}px`,
-  //   );
-  //   previewScreenRef.current.style.setProperty(
-  //     '--viewport-height',
-  //     `${viewportHeight}px`,
-  //   );
-  // }, [viewportWidth, viewportHeight]);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       const resolvedResult: any = await preloadedImages(assetImageSrc);
@@ -621,7 +596,7 @@ const ScreenPreview = () => {
   };
 
   return (
-    <Box id="container" ref={previewScreenRef}>
+    <Box id="container">
       <Suspense fallback={<h1>Loading please wait...</h1>}>
         {contentReady && (
           <motion.div

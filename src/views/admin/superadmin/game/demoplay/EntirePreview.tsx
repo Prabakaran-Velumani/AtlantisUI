@@ -116,11 +116,11 @@ interface ShowPreviewProps {
   currentScreenId: number;
   setCurrentScreenId: React.Dispatch<React.SetStateAction<number>>;
   gameInfo: any;
-  // setToastObj?: React.Dispatch<React.SetStateAction<any>>;
   handleSubmitReview: (data: any) => Promise<boolean>;
   isReviewDemo: boolean;
   currentScore: any;
   setCurrentScore: any;
+  preloadedAssets: any;
 }
 
 type TabAttributeSet = {
@@ -178,6 +178,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   isReviewDemo,
   currentScore,
   setCurrentScore,
+  preloadedAssets
 }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -321,6 +322,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   };
 
+
   useEffect(() => {
 
     setDemoBlocks(gameInfo?.blocks);
@@ -448,27 +450,27 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [gameInfo?.gameData]);
 
   useEffect(() => {
-    switch (currentScreenId) {
-      case 1 && gameInfo?.gameData?.gameWelcomepageBackground:
-        setBackgroundScreenUrl(API_SERVER + '/uploads/background/20252.jpg');
-        break;
-      case 3 && gameInfo?.gameData?.gameReflectionpageBackground:
-        setBackgroundScreenUrl(
-          API_SERVER + '/uploads/background/reflectionBg.png',
-
-        );
-        break;
-      default:
-        setBackgroundScreenUrl(
-          API_SERVER + '/uploads/background/41524_1701765021527.jpg',
-        );
+    // switch (currentScreenId) {
+      // case 1 && gameInfo?.gameData?.gameWelcomepageBackground:
+      //   setBackgroundScreenUrl(API_SERVER + '/uploads/background/20252.jpg');
+      //   break;
+      // case 3 && gameInfo?.gameData?.gameReflectionpageBackground:
+        // setBackgroundScreenUrl(
+        //   API_SERVER + '/uploads/background/reflectionBg.png',
+        // );
+        // break;
+      // default:
+        // setBackgroundScreenUrl(gameInfo.assets.gasAssetImage);
+          // API_SERVER + '/uploads/background/41524_1701765021527.jpg',
+         // );
         currentScreenId > 0 &&
           currentScreenId === 1 &&
           isGetsPlayAudioConfirmation &&
           setAudio(gameInfo?.bgMusic ?? '');
-        break;
-    }
-  }, [currentScreenId]);
+        // break;
+    // }
+  }, [currentScreenId, gameInfo]);
+
 
   const prevData = (current: any) => {
     const currentBlock = current
@@ -1228,39 +1230,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   };
 
-  // const element = document.getElementById('EntirePreview-wrapper');
-  // // useEffect(()=> {
-  //   if (element) {
-  //     try {
-  //       // if (document.fullscreenEnabled) {
-  //         // Check if fullscreen is supported
-  //         if (!document.fullscreenElement) {
-  //           // Check if not already in fullscreen
-  //           // Request fullscreen
-  //           element
-  //             .requestFullscreen()
-  //             .then(() => {
-  //               console.log('Entered fullscreen mode');
-  //               // Perform additional actions after entering fullscreen mode
-  //             })
-  //             .catch((error) => {
-  //               console.log('Error entering fullscreen mode:', error.message);
-  //               // Handle errors related to entering fullscreen mode
-  //             });
-  //         } else {
-  //           console.warn('Document is already in fullscreen mode');
-  //           // Handle scenario where document is already in fullscreen mode
-  //         }
-  //       // } else {
-  //       //   console.error('Fullscreen mode is not supported');
-  //       //   // Handle scenario where fullscreen mode is not supported by the browser
-  //       // }
-  //     } catch (error) {
-  //       console.error('Error requesting fullscreen:', error);
-  //       // Handle other errors related to requesting fullscreen mode
-  //     }
-  //   }
-  // },[])
   //no need for story
   const handleTabSelection = (e: any) => {
     e.preventDefault();
@@ -1442,20 +1411,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   };
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setResolution(getCurrentResolution());
-  //   };
-  //   window.addEventListener('resize', handleResize);
-  //   return () => window.removeEventListener('resize', handleResize);
-  // }, []);
-
-  // Afrith-modified-ends-13/Mar/24
-
-  // const toggleView = () => {
-  //   setIsMobileView(!isMobileView);
-  // };
-  // console.log('///',isMobileView)
   const dontShowTopMenu = currentScreenId !== 7 && currentScreenId !== 6 && currentScreenId !== 5 && currentScreenId !== 4 && currentScreenId !== 3 && currentScreenId !== 10;
 
   useEffect(() => {
@@ -1539,14 +1494,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             <Box className="top-menu-home-section">
               {dontShowTopMenu ? (
                 <>
-                  <Img src={TopMenu} className="top-menu-img" />
+                  <Img src={preloadedAssets.TopMenu} className="top-menu-img" />
                   <Img
-                    src={Overview}
+                    src={preloadedAssets.Overview}
                     className="overview-img"
                     onClick={handleOverView}
                   />
                   <Img
-                    src={Setting}
+                    src={preloadedAssets.Setting}
                     className="setting-img"
                     onClick={() => setIsSettingOpen(true)}
                   />
@@ -1571,7 +1526,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               {
                 isSettingOpen ? (
                   <Box className="Setting-box">
-                    <Img src={SettingPad} className="setting-pad" />
+                    <Img src={preloadedAssets.SettingPad} className="setting-pad" />
                     <Box className="music-volume volumes">
                       <Slider
                         aria-label="slider-ex-4"
@@ -1596,7 +1551,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           left={'calc(100% - 30%)'}
                         >
                           {/* <Box color='tomato' as={MdCall} /> */}
-                          <Img src={SliderPointer} />
+                          <Img src={preloadedAssets.SliderPointer} />
                         </SliderThumb>
                       </Slider>
                     </Box>
@@ -1618,7 +1573,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           />
                         </SliderTrack>
                         <SliderThumb boxSize={9} background={'transparent'}>
-                          <Img src={SliderPointer} />
+                          <Img src={preloadedAssets.SliderPointer} />
                         </SliderThumb>
                       </Slider>
                     </Box>
@@ -1630,7 +1585,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         className="okay-btn btn"
                         onClick={() => setIsSettingOpen(false)}
                       >
-                        <Img src={Okay} />
+                        <Img src={preloadedAssets.Okay} />
                       </Button>
                     </Box>
                   </Box>
@@ -1682,7 +1637,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={backgroundScreenUrl}
+                          backgroundImage={preloadedAssets.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -1696,7 +1651,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                               intro={audio}
                               setCurrentScreenId={setCurrentScreenId}
                               formData={gameInfo?.gameData}
-                              imageSrc={backgroundScreenUrl}
+                              imageSrc={preloadedAssets.backgroundImage}
                               screen={Screen5}
                               preview={true}
                             />
@@ -1722,7 +1677,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           selectedNpc={gameInfo?.gameNonPlayerUrl}
                           selectedPlayer={selectedPlayer}
                           formData={gameInfo?.gameData}
-                          backGroundImg={backgroundScreenUrl}
+                          backGroundImg={preloadedAssets.backgroundImage}
                           data={data}
                           type={type}
                           setCurrentScreenId={setCurrentScreenId}
@@ -1763,20 +1718,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         className="Main-Content"
                       >
                         <Box
-                          // backgroundImage={RefBg}
-                          // w={'100% !important'}
-                          // h={'100vh'}
-                          // backgroundRepeat={'no-repeat'}
-                          // backgroundSize={'cover'}
-                          // alignItems={'center'}
-                          // justifyContent={'center'}
                           className="Game-Screen"
-                        // backgroundColor={'#D9C7A2'}
                         >
                           <Box className="Images">
                             <Reflection
                               formData={gameInfo?.gameData}
-                              imageSrc={RefBg}
+                              imageSrc={preloadedAssets.RefBg}
                               getData={getData}
                               data={data}
                               reflectionQuestions={
@@ -1807,7 +1754,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       className="Main-Content"
                     >
                       <Box
-                        backgroundImage={backgroundScreenUrl}
+                        backgroundImage={preloadedAssets.backgroundImage}
                         w={'100% !important'}
                         h={'100vh'}
                         backgroundRepeat={'no-repeat'}
@@ -1822,7 +1769,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             setHomeLeaderBoard={setHomeLeaderBoard}
                             setCurrentScreenId={setCurrentScreenId}
                             formData={gameInfo?.gameData}
-                            imageSrc={Lead}
+                            imageSrc={preloadedAssets.Lead}
                             getData={getData}
                             data={data}
                           />
@@ -1846,7 +1793,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={backgroundScreenUrl}
+                          backgroundImage={preloadedAssets.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -1858,7 +1805,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           <Box className="Images">
                             <ThankYou
                               formData={gameInfo?.gameData}
-                              imageSrc={Screen6}
+                              imageSrc={preloadedAssets.Screen6}
                             />
                           </Box>
                         </Box>
@@ -1868,7 +1815,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 6:
                   return (
                     <>
-
                       <Completion
                         questOptions={gameInfo?.questOptions}
                         getData={getData}
@@ -1878,7 +1824,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         gameInfo={gameInfo}
                         setCurrentScreenId={setCurrentScreenId}
                         formData={gameInfo?.gameData}
-                        imageSrc={backgroundScreenUrl}
+                        imageSrc={preloadedAssets.backgroundImage}
                         screen={Screen1}
                         profile={profile}
                         currentQuestNo={currentQuestNo}
@@ -1907,7 +1853,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={backgroundScreenUrl}
+                          backgroundImage={preloadedAssets.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -1919,7 +1865,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           <Box className="Images">
                             <Takeway
                               formData={gameInfo?.gameData}
-                              imageSrc={Screen4}
+                              imageSrc={preloadedAssets.Screen4}
                               getData={getData}
                               data={data}
                             />
@@ -1948,7 +1894,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={backgroundScreenUrl}
+                          backgroundImage={preloadedAssets.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -1971,7 +1917,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                               isReplay={isReplay}
                               setCurrentScreenId={setCurrentScreenId}
                               formData={gameInfo?.gameData}
-                              imageSrc={Replay}
+                              imageSrc={preloadedAssets.Replay}
                               getData={getData}
                               data={data}
                             />
@@ -1985,9 +1931,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   return (
                     <FeedBackScreen backgroundScreenUrl={backgroundScreenUrl} first={first} showNote={showNote} isScreenshot={isScreenshot} FeedbackremainingSentences={FeedbackremainingSentences} options={options} setisScreenshot={setisScreenshot} FeedBackselectedoptionData={FeedBackselectedoptionData} FeedBackoptionData={FeedBackoptionData} getFeedbackData={getFeedbackData} data={data} feed={feed} currentScreenId={currentScreenId} getData={getData} backGroundImg={backgroundScreenUrl} profile={profile} />
                   );
-
-
-
                 case 10:
                   return (
                     <>
@@ -2044,7 +1987,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         maxW="100%"
                         w={'100vw'}
                         height="100vh"
-                        backgroundImage={backgroundScreenUrl}
+                        backgroundImage={preloadedAssets.backgroundImage}
                         backgroundSize={'cover'}
                         backgroundRepeat={'no-repeat'}
                         className="chapter_potrait"
@@ -2068,7 +2011,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                               position={'relative'}
                               className={'info_potrait'}
                             >
-                              <Img src={Login} w={'auto'} h={'100%'} />
+                              <Img src={preloadedAssets.Login} w={'auto'} h={'100%'} />
                               <Box
                                 w={'15vw'}
                                 h={'49%'}
@@ -2153,7 +2096,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   return (
                     <>
                       <ProfileScreen
-                        imageSrc={backgroundScreenUrl}
+                        imageSrc={preloadedAssets.backgroundImage}
                         setCurrentScreenId={setCurrentScreenId}
                         profileData={profileData}
                         formData={gameInfo?.gameData}
@@ -2170,7 +2113,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         setSelectedPlayer={setSelectedPlayer}
                         players={gameInfo?.gamePlayers}
                         formData={gameInfo?.gameData}
-                        imageSrc={backgroundScreenUrl}
+                        imageSrc={preloadedAssets.backgroundImage}
                         setCurrentScreenId={setCurrentScreenId}
                         demoBlocks={demoBlocks}
                       />
@@ -2184,7 +2127,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         setCurrentQuestNo={setCurrentQuestNo}
                         currentQuestNo={currentQuestNo}
                         formData={gameInfo?.gameData}
-                        imageSrc={backgroundScreenUrl}
+                        imageSrc={preloadedAssets.backgroundImage}
                         demoBlocks={demoBlocks}
                         questOptions={gameInfo?.questOptions}
                         setCurrentScreenId={setCurrentScreenId}

@@ -55,6 +55,17 @@ import Okay from '../../assets/img/games/Okay.png'
 import write from '../../assets/img/screens/Screens/Writing.png';
 
 
+import TopMenu from '../../assets/img/games/top-menu.png';
+import Overview from '../../assets/img/games/game-overview.png';
+import Setting from '../../assets/img/games/settings.png';
+import SettingPad from '../../assets/img/games/setting-pad.png';
+import SliderPointer from '../../assets/img/games/slider-pointer.png';
+
+
+import rew from 'assets/img/screens/Reward Bar.png';
+import back from 'assets/img/screens/back.png';
+import write from 'assets/img/screens/Writing.png';
+import next from 'assets/img/screens/next.png';
 
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
@@ -115,7 +126,11 @@ export const assetImageSrc = [
   { assetType: 'replayBtn', src: replayBtn },
   { assetType: 'SelectButton', src: SelectButton },
   { assetType: 'OkayBtn', src: Okay },
-  { assetType: 'write', src: write },
+  { assetType: 'TopMenu', src: TopMenu },
+  { assetType: 'Overview', src: Overview },
+  { assetType: 'Setting', src: Setting },
+  { assetType: 'SettingPad', src: SettingPad },
+  { assetType: 'SliderPointer', src: SliderPointer },
   
   
   /*file not available but used list
