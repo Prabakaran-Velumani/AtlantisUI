@@ -160,276 +160,278 @@ const styleflex = {};
             {/* <Box className="thankyou-screen-box">
             </Box> */}
             <Box className="thankyou-screen">
-              <Box
-                w={'100%'}
-                fontFamily={'content'}
-                display={'flex'}
-                justifyContent={'center'}
-                alignItems={'center'}
-                className="tq-msg"
-              >
+              <Box className='content'>
                 <Box
-                  w={'80%'}
-                  mt={{ base: '0px', sm: '0px', md: '20px', lg: '20px' }}
-                  lineHeight={1}
-                  textAlign={'center'}
-                  color="#D9C7A2"
-                  fontWeight="300"
+                  w={'100%'}
+                  fontFamily={'content'}
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  className="tq-msg"
                 >
-                  {renderContentTy()}
-                </Box>
-              </Box>
-
-              {formData.gameIsCollectLearnerFeedback === 'true' && (
-                <>
-                  <Text
-                    className="about-experience"
-                    fontSize={18}
+                  <Box
+                    w={'80%'}
+                    mt={{ base: '0px', sm: '0px', md: '20px', lg: '20px' }}
+                    lineHeight={1}
+                    textAlign={'center'}
+                    color="#D9C7A2"
                     fontWeight="300"
-                    textAlign="center"
                   >
-                    <Img src={Feedback}  alt="rew" w={'82%'} h={'23px'} /> 
-                    How do you feel about the experience?
-                  </Text>
-                  <Box className="collect-learner-feedback">
-                    <Box className="grid" style={styleflex}>
-                      {formData.gameContent === 'true' && (
-                       <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameContent' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
- 
-                          <Text
-                            fontSize={18}
-                            fontWeight="300"
-                            textAlign="center"
-                            border="2px solid #b3a484"
-                          >
-                            Content
-                          </Text>
-                          <div
-                            className="content-div"
-                            style={{
-                              display: 'flex',
-                              marginTop: '5px',
-                              justifyContent: 'space-between',
-                            }}
-                          >
-                            <div className="buttonfeel" >
-                              <p>
-                              &#128522; I learned something useful
-                              </p>
-                            </div>
-                            <div className="buttonfeel2" >
-                              <p>
-                              &#128542; It wasn't useful
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {formData.gameRelevance === 'true' && (
-                       <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameRelevance' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
- 
-                          <Text
-                            fontSize={18}
-                            fontWeight="300"
-                            textAlign="center"
-                            border="2px solid #b3a484"
-                          >
-                            Relevance
-                          </Text>
-                          <div
-                            className="content-div"
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                            }}
-                          >
-                            <div className="buttonfeel" >
-                              {/* &#127891; */}
-                              <p>
-                                <Icon as={FaHatCowboy} /> I'll apply what I
-                                learned
-                              </p>
-                            </div>
-                            <div className="buttonfeel2" >
-                              <p>
-                              &#128542; It's not relevant to
-                                me
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {formData.gameBehaviour === 'true' && (
-                       <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameBehaviour' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
- 
-                          <Text
-                            fontSize={18}
-                            fontWeight="300"
-                            textAlign="center"
-                            border="2px solid #b3a484"
-                          >
-                            Behaviour
-                          </Text>
-                          <div
-                            className="content-div"
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                            }}
-                          >
-                            <div className="buttonfeel" >
-                              <p>
-                              &#128526; I understood what
-                                I can do differently
-                              </p>
-                            </div>
-                            <div className="buttonfeel2" >
-                              <p>
-                                {' '}
-                                &#128566; I am not sure
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {formData.gameRecommendation === 'true' && (
-                        <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameRecommendation' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
- 
-                          <Text
-                            fontSize={18}
-                            fontWeight="300"
-                            textAlign="center"
-                            border="2px solid #b3a484"
-                          >
-                            Recommendation
-                          </Text>
-                          <div
-                            className="content-div"
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                            }}
-                          >
-                            <div className="buttonfeel" >
-                              <p>
-                                {' '}
-                                &#128522; I would recommend
-                                this game to others
-                              </p>
-                            </div>
-                            <div className="buttonfeel2" >
-                              <p>
-                                {' '}
-                                &#128542; I wouldn't recommend
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {formData.gameGamification === 'true' && (
-                       <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameGamification' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
-
-                          <Text
-                            fontSize={18}
-                            fontWeight="300"
-                            textAlign="center"
-                            border="2px solid #b3a484"
-                          >
-                            Gamification
-                          </Text>
-                          <div
-                            className="content-div"
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                            }}
-                          >
-                            <div className="buttonfeel" >
-                              <p>
-                              &#128077; I would like to learn
-                                via games
-                              </p>
-                            </div>
-                            <div className="buttonfeel2" >
-                              <p>
-                                {' '}
-                                &#128078; I don't like this
-                                format
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {formData.gameOthers === 'true' && (
-                       <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameOthers' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
- 
-                          <Text
-                            fontSize={16}
-                            fontWeight="300"
-                            letterSpacing="0px"
-                            textAlign="center"
-                            border="2px solid #b3a484"
-                          >
-                            Anything else you'd like to share
-                          </Text>
-                          <div
-                            className="content-div"
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              border: '2px solid #b3a484',
-                            }}
-                          >
-                            <div className="buttonfeel3">
-                              <p>
-                                <Icon as={FaRegCommentDots} />
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {formData.gameFeedBack === 'true' && (
-                        <>
-                          <div className="last-item">
-                            <Text
-                              className=""
-                              fontSize={18}
-                              fontWeight="300"
-                              textAlign="center"
-                            >
-                              {' '}
-                              Could you please share your feedback with us on the
-                              below link:
-                            </Text>
-                            <Text
-                              className=""
-                              fontSize={18}
-                              fontWeight="300"
-                              textAlign="center"
-                            >
-                              <a
-                                href={formData.gameFeedBackLink}
-                                style={{
-                                  color: '#caa784',
-                                  textDecoration: 'underline',
-                                }}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                {formData.gameFeedBackLink}
-                              </a>
-                            </Text>
-                          </div>
-                        
-                        </>
-                      )}
-                    </Box>
-                   
+                    {renderContentTy()}
                   </Box>
-                  
-                </>
-              )}               
+                </Box>
+
+                {formData.gameIsCollectLearnerFeedback === 'true' && (
+                  <>
+                    <Text
+                      className="about-experience"
+                      fontSize={18}
+                      fontWeight="300"
+                      textAlign="center"
+                    >
+                      <Img src={Feedback}  alt="rew" w={'82%'} h={'23px'} /> 
+                      How do you feel about the experience?
+                    </Text>
+                    <Box className="collect-learner-feedback">
+                      <Box className="grid" style={styleflex}>
+                        {formData.gameContent === 'true' && (
+                        <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameContent' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
+  
+                            <Text
+                              fontSize={18}
+                              fontWeight="300"
+                              textAlign="center"
+                              border="2px solid #b3a484"
+                            >
+                              Content
+                            </Text>
+                            <div
+                              className="content-div"
+                              style={{
+                                display: 'flex',
+                                marginTop: '5px',
+                                justifyContent: 'space-between',
+                              }}
+                            >
+                              <div className="buttonfeel" >
+                                <p>
+                                &#128522; I learned something useful
+                                </p>
+                              </div>
+                              <div className="buttonfeel2" >
+                                <p>
+                                &#128542; It wasn't useful
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {formData.gameRelevance === 'true' && (
+                        <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameRelevance' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
+  
+                            <Text
+                              fontSize={18}
+                              fontWeight="300"
+                              textAlign="center"
+                              border="2px solid #b3a484"
+                            >
+                              Relevance
+                            </Text>
+                            <div
+                              className="content-div"
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                              }}
+                            >
+                              <div className="buttonfeel" >
+                                {/* &#127891; */}
+                                <p>
+                                  <Icon as={FaHatCowboy} /> I'll apply what I
+                                  learned
+                                </p>
+                              </div>
+                              <div className="buttonfeel2" >
+                                <p>
+                                &#128542; It's not relevant to
+                                  me
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {formData.gameBehaviour === 'true' && (
+                        <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameBehaviour' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
+  
+                            <Text
+                              fontSize={18}
+                              fontWeight="300"
+                              textAlign="center"
+                              border="2px solid #b3a484"
+                            >
+                              Behaviour
+                            </Text>
+                            <div
+                              className="content-div"
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                              }}
+                            >
+                              <div className="buttonfeel" >
+                                <p>
+                                &#128526; I understood what
+                                  I can do differently
+                                </p>
+                              </div>
+                              <div className="buttonfeel2" >
+                                <p>
+                                  {' '}
+                                  &#128566; I am not sure
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {formData.gameRecommendation === 'true' && (
+                          <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameRecommendation' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
+  
+                            <Text
+                              fontSize={18}
+                              fontWeight="300"
+                              textAlign="center"
+                              border="2px solid #b3a484"
+                            >
+                              Recommendation
+                            </Text>
+                            <div
+                              className="content-div"
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                              }}
+                            >
+                              <div className="buttonfeel" >
+                                <p>
+                                  {' '}
+                                  &#128522; I would recommend
+                                  this game to others
+                                </p>
+                              </div>
+                              <div className="buttonfeel2" >
+                                <p>
+                                  {' '}
+                                  &#128542; I wouldn't recommend
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {formData.gameGamification === 'true' && (
+                        <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameGamification' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
+
+                            <Text
+                              fontSize={18}
+                              fontWeight="300"
+                              textAlign="center"
+                              border="2px solid #b3a484"
+                            >
+                              Gamification
+                            </Text>
+                            <div
+                              className="content-div"
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                              }}
+                            >
+                              <div className="buttonfeel" >
+                                <p>
+                                &#128077; I would like to learn
+                                  via games
+                                </p>
+                              </div>
+                              <div className="buttonfeel2" >
+                                <p>
+                                  {' '}
+                                  &#128078; I don't like this
+                                  format
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {formData.gameOthers === 'true' && (
+                        <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameOthers' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
+  
+                            <Text
+                              fontSize={16}
+                              fontWeight="300"
+                              letterSpacing="0px"
+                              textAlign="center"
+                              border="2px solid #b3a484"
+                            >
+                              Anything else you'd like to share
+                            </Text>
+                            <div
+                              className="content-div"
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                border: '2px solid #b3a484',
+                              }}
+                            >
+                              <div className="buttonfeel3">
+                                <p>
+                                  <Icon as={FaRegCommentDots} />
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {formData.gameFeedBack === 'true' && (
+                          <>
+                            <div className="last-item">
+                              <Text
+                                className=""
+                                fontSize={18}
+                                fontWeight="300"
+                                textAlign="center"
+                              >
+                                {' '}
+                                Could you please share your feedback with us on the
+                                below link:
+                              </Text>
+                              <Text
+                                className=""
+                                fontSize={18}
+                                fontWeight="300"
+                                textAlign="center"
+                              >
+                                <a
+                                  href={formData.gameFeedBackLink}
+                                  style={{
+                                    color: '#caa784',
+                                    textDecoration: 'underline',
+                                  }}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  {formData.gameFeedBackLink}
+                                </a>
+                              </Text>
+                            </div>
+                          
+                          </>
+                        )}
+                      </Box>
+                    
+                    </Box>
+                    
+                  </>
+                )}      
+              </Box>         
             </Box>
             <Box className='next-btn'>
               <Img src={next} />
