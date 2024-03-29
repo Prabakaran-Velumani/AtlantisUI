@@ -1785,19 +1785,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           top="50%"
                           left="50%"
                           transform="translate(-50%, -50%)"
-                          // className="story_note_grid"
-                          width={'100%'}
+                          className="story_note_grid"
+                          // width={'100%'}
                         >
                           <GridItem colSpan={1}>
                             <Box
-                              w={'100%'}
-                              h={'100vh'}
+                              // w={'100%'}
+                              // h={'100vh'}
                               display={'flex'}
                               justifyContent={'center'}
                               position={'relative'}
-                              className={'info_potrait'}
+                              // className={'info_potrait'}
                             >
-                              <Img src={Login} w={'auto'} h={'100%'} />
+                              <Img src={Login} className={'first_play'} />
                               <Box
                               className={'play_screen_content'}                             
                               >
