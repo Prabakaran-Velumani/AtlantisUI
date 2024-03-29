@@ -43,7 +43,6 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl
     const geTfeedBackoption = () => {
         setisScreenshot(false);
     }
-    console.log('****', isScreenshot);
     return (
         <>
             {/* <motion.div

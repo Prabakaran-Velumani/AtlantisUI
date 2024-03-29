@@ -202,7 +202,6 @@ const GamePreview = () => {
       };
       return item;
     });
-    console.log('completionOptions', completionOptions);
     setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,

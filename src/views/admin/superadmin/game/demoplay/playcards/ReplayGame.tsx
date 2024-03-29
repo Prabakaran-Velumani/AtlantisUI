@@ -25,8 +25,7 @@ const ReplayGame: React.FC<{
   data,
 }) => {
    const { profile } = useContext(ScoreContext);
-   console.log(profile.score)
-  //  console.log()
+
   return (
     <>
       {imageSrc && (
