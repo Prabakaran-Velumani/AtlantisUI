@@ -2106,7 +2106,7 @@ for (const option of gameInfo.questOptions) {
                                       bg={'none'}
                                       _hover={{ bg: 'none' }}
                                       onClick={() => {
-                                        setCurrentScreenId(12);
+                                        setCurrentScreenId(1);
                                         setIsGetsPlayAudioConfirmation(true);
                                       }}
                                     ></Button>

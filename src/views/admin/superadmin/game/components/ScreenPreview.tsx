@@ -258,10 +258,12 @@ const ScreenPreview = () => {
     }
   }, [id, isDispatched]);
   const setInteractionOptions = (gameInfo: any, currentBlock: any) => {
+    console.log('currentBlock', currentBlock)
     const optionsFiltered = gameInfo?.questOptions.filter(
       (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
     );
-    if (gameInfo?.gameData?.gameShuffle) {
+    console.log('optionsFiltered', optionsFiltered);
+    if (gameInfo?.gameData?.gameShuffle === 'true') {
       for (let i = optionsFiltered.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [optionsFiltered[i], optionsFiltered[j]] = [
@@ -288,11 +290,6 @@ const ScreenPreview = () => {
     apiImageSet && fetchData();
   }, [apiImageSet]);
 
-  // useEffect(() => {
-  //   if (apiUrlAssetImageUrls && staticAssetImageUrls) {
-  //     setPreloadedAssets({ ...apiUrlAssetImageUrls, ...staticAssetImageUrls });
-  //   }
-  // }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
 
   const preloadedAssets = useMemo(() => {
     return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls };
@@ -367,15 +364,14 @@ const ScreenPreview = () => {
 
     // {/* Check wheather has next block or not, if not then show End of Current Quest.
     //       Want to play next quest, then switch the current quest in game creation screen */}
-    if (nextBlock.length === 0) {
-      setEndOfQuest(true);
-    } else {
-      setEndOfQuest(false);
-    }
-
+    // if (nextBlock[0]?.blockChoosen === 'Interaction') {
+    //   setInteractionOptions(gameInfo, next);
+    // }
+    console.log('nextBlock[0]?.blockChoosen === Interaction',nextBlock[0]?.blockChoosen)
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       setInteractionOptions(gameInfo, nextBlock[0]);
     }
+   
     if (type === 'Interaction' && resMsg !== '') {
       setType('response');
       return false;
@@ -390,8 +386,8 @@ const ScreenPreview = () => {
       if (navi === 'Repeat Question') {
         const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
         setInteractionOptions(gameInfo, currentBlockinteraction);
-        setType(demoBlocks['1'][currentBlock]?.blockChoosen);
-        setData(demoBlocks['1'][currentBlock]);
+        setType(demoBlocks[currentQuest][currentBlock]?.blockChoosen);
+        setData(demoBlocks[currentQuest][currentBlock]);
         setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
@@ -400,11 +396,12 @@ const ScreenPreview = () => {
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
-        setType(demoBlocks['1']['1']?.blockChoosen);
-        setData(demoBlocks['1']['1']);
+        setType(demoBlocks[currentQuest]['1']?.blockChoosen);
+        setData(demoBlocks[currentQuest]['1']);
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
+        console.log('navi === Select Block');
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -415,7 +412,8 @@ const ScreenPreview = () => {
           .map((item: any) => {
             return demoBlocks[currentQuest][item];
           });
-        console.log('selectedNext', selectedNext);
+          console.log('selectedNext', selectedNext);
+          
         if (selectedNext.length > 0) {
           setType(selectedNext && selectedNext[0]?.blockChoosen);
           setData(selectedNext && selectedNext[0]);
@@ -438,25 +436,22 @@ const ScreenPreview = () => {
         // }
         setEndOfQuest(true);
       } else {
-        setType(nextBlock[0]?.blockChoosen);
-        setData(nextBlock[0]);
-        setSelectedOption(null);
-        return false;
+        console.log('navi === null');
+        console.log('nextBlock.length === 0', nextBlock.length === 0);
+        
+        if(nextBlock.length === 0)
+        {
+          setEndOfQuest(true);
+        }
+        else{
+          setType(nextBlock[0]?.blockChoosen);
+          setData(nextBlock[0]);
+          setSelectedOption(null);
+          return false;
+        }
       }
     }
-
-    if (nextBlock.length === 0) {
-      // if (demoBlocks.hasOwnProperty(nextLevel)) {
-      //   setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-      //   setData(demoBlocks[nextLevel]['1']);
-      //   return false;
-      // } else {
-      //   setType(null);
-      //   setData(null);
-      //   return false;
-      // }
-      setEndOfQuest(true);
-    }
+console.log('next?.blockShowNavigate', next?.blockShowNavigate)
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
         setType(next?.blockChoosen);
@@ -468,19 +463,119 @@ const ScreenPreview = () => {
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Replay Point') {
-        setType(demoBlocks['1']['1']?.blockChoosen);
-        setData(demoBlocks['1']['1']);
+        setType(demoBlocks[currentQuest]['1']?.blockChoosen);
+        setData(demoBlocks[currentQuest]['1']);
         setSelectedOption(null);
         return false;
-      } else if (next?.blockShowNavigate === 'Select Block') {
-        setSelectedOption(null);
-      } else if (next?.blockShowNavigate === 'Complete') {
+      // } else if (next?.blockShowNavigate === 'Select Block') {
+      //   setType(nextBlock[0]?.blockChoosen);
+ 
+      //   console.log('next?.blockShowNavigate === Select Block');
+      //   console.log(' next?.blockLeadTo',  next?.blockLeadTo)
+      //   const selectedNext = Object.keys(demoBlocks[currentQuest])
+      //   .filter((item: any) => {
+      //       return (
+      //         demoBlocks[currentQuest][item]?.blockSecondaryId == next?.blockLeadTo
+      //       );
+      //     })
+      //     .map((item: any) => {
+      //       return demoBlocks[currentQuest][item];
+      //     });          
+      //     console.log('selectedNext',selectedNext)
+      //   if (selectedNext.length > 0) {
+      //       setType(selectedNext && selectedNext[0]?.blockChoosen);
+      //     if(selectedNext[0]?.blockChoosen === 'Interaction')
+      //     {
+      //       setInteractionOptions(gameInfo, selectedNext[0]);
+      //     }
+      //     setData(selectedNext && selectedNext[0]);
+      //   }
+      //   else {
+      //     console.log("selectedNext.length !> 0" , selectedNext.length > 0)
+      //     setType(nextBlock[0]?.blockChoosen);
+      //     if(nextBlock[0]?.blockChoosen === 'Interaction')
+      //     setInteractionOptions(gameInfo, nextBlock[0]);
+      //   }
+      //   setData(nextBlock[0]);
+      //     return false;
+      // } 
+    } else if (next?.blockShowNavigate === 'Select Block') {
+      const selectedNext = Object.keys(demoBlocks[currentQuest])
+        .filter((item: any) => {
+          return (
+            demoBlocks[currentQuest][item]?.blockSecondaryId ===
+            parseInt(next?.blockLeadTo)
+          );
+        })
+        .map((item: any) => {
+          return demoBlocks[currentQuest][item];
+        });
+      if (selectedNext.length > 0) {
+        setType(selectedNext && selectedNext[0]?.blockChoosen);
+          if(selectedNext[0]?.blockChoosen === 'Interaction')
+      {
+        const optionsFiltered = [];
+        for (const option of gameInfo.questOptions) {
+            if (option?.qpSequence ===  selectedNext[0]?.blockPrimarySequence) {
+              optionsFiltered.push(option);
+            }
+        }
+              if (gameInfo?.gameData?.gameShuffle === 'true') {
+                for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                  const j = Math.floor(Math.random() * (i + 1));
+                  [optionsFiltered[i], optionsFiltered[j]] = [
+                    optionsFiltered[j],
+                    optionsFiltered[i],
+                  ];
+                }
+              }
+              setOptions(optionsFiltered);
+      }
+      setData(selectedNext && selectedNext[0]);
+    }
+    else {
+      setType(nextBlock[0]?.blockChoosen);
+      if(nextBlock[0]?.blockChoosen === 'Interaction')
+      {
+        const optionsFiltered = [];
+        for (const option of gameInfo.questOptions) {
+            if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
+              optionsFiltered.push(option);
+            }
+        }
+              if (gameInfo?.gameData?.gameShuffle === 'true') {
+                for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                  const j = Math.floor(Math.random() * (i + 1));
+                  [optionsFiltered[i], optionsFiltered[j]] = [
+                    optionsFiltered[j],
+                    optionsFiltered[i],
+                  ];
+                }
+              }
+              setOptions(optionsFiltered);
+      }
+      setData(nextBlock[0]);
+    }
+    setSelectedOption(null);
+      return false;
+    }
+      else if (next?.blockShowNavigate === 'Complete') {
+        setEndOfQuest(true);
+        return false;
+      }
+      else{
+        setEndOfQuest(true);
         return false;
       }
     }
-    setType(nextBlock[0]?.blockChoosen);
+    else if(nextBlock.length > 0 )
+    {setType(nextBlock[0]?.blockChoosen);
     setData(nextBlock[0]);
     setSelectedOption(null);
+    }
+    else{
+      setEndOfQuest(true);
+    }
   };
   const handleValidate = (item: any, ind: number) => {
     setResMsg(item?.qpResponse);
@@ -494,9 +589,7 @@ const ScreenPreview = () => {
     window.open(url, '_blank');
   };
   useEffect(() => {
-
     getDataSection(data);
-
   }, [data, type]);
   useEffect(() => {
     if (Navigatenext === true) {
@@ -567,17 +660,14 @@ const ScreenPreview = () => {
     if (newRemainingSentences.length >= 1) {
       setCurrentPosition(currentPosition + concatenatedSentences.length);
       setNavigateNext(false);
-      console.log('1');
     }
     else if (newRemainingResponseSentences.length >= 1) {
       setCurrentPosition(currentPosition + concatenatedSentences.length);
       setNavigateNext(false);
-      console.log('2');
     }
     else {
       setCurrentPosition(0);
       setNavigateNext(true);
-      console.log('4');
     }
   };
   const Updatecontent = () => {
