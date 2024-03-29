@@ -310,9 +310,6 @@
   .EntirePreview .Game-Screen .Images .reflection-screen .title{ 
     transform: translate(0,0) !important;
   } 
-  .EntirePreview .Game-Screen .Images .reflection-screen .content-ref .input-wrapper textarea {
-    font-size: 16px;
-  }
   .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content {
     font-size: 12px;
   }
