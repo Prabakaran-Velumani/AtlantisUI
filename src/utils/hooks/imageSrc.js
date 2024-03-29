@@ -61,12 +61,6 @@ import Setting from '../../assets/img/games/settings.png';
 import SettingPad from '../../assets/img/games/setting-pad.png';
 import SliderPointer from '../../assets/img/games/slider-pointer.png';
 
-
-import rew from 'assets/img/screens/Reward Bar.png';
-import back from 'assets/img/screens/back.png';
-import write from 'assets/img/screens/Writing.png';
-import next from 'assets/img/screens/next.png';
-
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
 
