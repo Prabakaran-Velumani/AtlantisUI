@@ -232,8 +232,7 @@ const Story: React.FC<{
       {data && type === 'Note' && (
         <Box
           position="relative"
-          maxW="100%"
-          w={'100vw'}
+          w={'100%'}
           height="100vh"
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
@@ -250,40 +249,33 @@ const Story: React.FC<{
             className="story_note_grid"
           >
             <GridItem colSpan={1} position={'relative'}>
-              <Img src={note} className="story_note_image" loading="lazy" />
-              <Box
-                className={'story_note_content'}
-                // bg={'blue.300'}
-              >
-                <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+              <Box display={'flex'} justifyContent={'center'}>
+                <Img src={note} className="story_note_image" loading="lazy" />
+                <Box
+                  className={'story_note_content'}
+                  // bg={'blue.300'}
+                >
+                  <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                    <Box className={'story_note_block'}>
+                      <Text textAlign={'center'}>{data?.blockText}</Text>
+                    </Box>
+                  </Box>
                   <Box
-                    w={'65%'}
-                    fontSize={{ base: '3.8vw', sm: '2.8vw', md: '1.8vw' }}
-                    height={'20vh'}
-                    overflowY={'auto'}
-                    // bg={'blue.300'}
-                    fontFamily={'AtlantisContent'}
-                    color={'#D9C7A2'}
+                    w={'100%'}
+                    onClick={() => getData(data)}
+                    mt={'20px'}
                     display={'flex'}
                     justifyContent={'center'}
-                    className={'story_note_content'}
+                    cursor={'pointer'}
+                    position={'fixed'}
+                    top={'70%'}
                   >
-                    <Text textAlign={'center'}>
-                    {data?.blockText}
-                    </Text>
+                    <Img
+                      src={next}
+                      h={'7vh'}
+                      className={'story_note_next_button'}
+                    />
                   </Box>
-                </Box>
-                <Box
-                  w={'100%'}
-                  onClick={() => getData(data)}
-                  mt={'20px'}
-                  display={'flex'}
-                  justifyContent={'center'}
-                  cursor={'pointer'}
-                  position={'fixed'}
-                  top={'70%'}
-                >
-                  <Img src={next} h={'7vh'} className={'story_note_next_button'} />
                 </Box>
               </Box>
             </GridItem>
@@ -291,46 +283,30 @@ const Story: React.FC<{
         </Box>
       )}
       {data && type === 'Dialog' && (
-        <Box
-          w={'100%'}
-          h={'100vh'}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          position={'relative'}
-          className="chapter_potrait"
-        >
-          <Img
-            src={backGroundImg}
-            maxW={'100%'}
-            maxH={'100%'}
-            w={'100%'}
-            h={'100vh'}
-            transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
-            transition={'transform 0.9s ease-in-out'}
-          />
+        <Box className="chapter_potrait">
+          <Img src={backGroundImg} className="dialogue_screen" />
           {/* <Box w={'100%'} h={'100vh'}>
-            <Canvas camera={{ position: [30, 0, 10] }}>
-              <directionalLight
-                position={[5, 5, 5]}
-                intensity={0.8}
-                color={0xffccaa}
-                castShadow
-              />
-              <ambientLight intensity={5.5} />
-              {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
+          <Canvas camera={{ position: [30, 0, 10] }}>
+            <directionalLight
+              position={[5, 5, 5]}
+              intensity={0.8}
+              color={0xffccaa}
+              castShadow
+            />
+            <ambientLight intensity={5.5} />
+            {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
           {/* <Background /> */}
           {/* <Model /> */}
           {/* <mesh 
-          rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, -5, 0]}
-          receiveShadow 
-        > */}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -5, 0]}
+        receiveShadow 
+      > */}
           {/* <planeGeometry args={[100, 100]} />
-          <shadowMaterial opacity={0.5} />
-        </mesh> */}
+        <shadowMaterial opacity={0.5} />
+      </mesh> */}
           {/* </Canvas>
-          </Box> */}
+        </Box> */}
           {selectedPlayer && (
             <Img
               src={`${API_SERVER}/${selectedPlayer}`}
@@ -351,20 +327,7 @@ const Story: React.FC<{
               h={'324px'}
             />
           )}
-          <Img
-            style={{
-              transform: `translateY(${showNote ? 200 : 0}px)`,
-              transition:
-                'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-            }}
-            position={'fixed'}
-            maxW={'100%'}
-            maxH={'100%'}
-            w={'100%'}
-            h={'180px'}
-            bottom={'0'}
-            src={dial}
-          />
+          <Img className={'dialogue_image'} src={dial} />
           {!showNote && (
             <>
               <Box position={'relative'}>
@@ -380,7 +343,7 @@ const Story: React.FC<{
                   position={'fixed'}
                   left={'18%'}
                   bottom={'118px'}
-                  fontSize={'2.8vw'}
+                  fontSize={{ base: '30px', xl: '2.2vw' }}
                   fontWeight={500}
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
@@ -399,7 +362,7 @@ const Story: React.FC<{
                 h={'61px'}
                 overflowY={'scroll'}
                 w={'85%'}
-                fontSize={'2vw'}
+                fontSize={{ base: '30px', lg: '1.8vw' }}
                 bottom={'38px'}
                 fontFamily={'AtlantisContent'}
               >
@@ -434,8 +397,7 @@ const Story: React.FC<{
       {data && type === 'Interaction' && (
         <Box
           position="relative"
-          maxW="100%"
-          w={'100vw'}
+          w={'100%'}
           height="100vh"
           backgroundImage={backGroundImg}
           backgroundSize={'cover'}
@@ -453,12 +415,12 @@ const Story: React.FC<{
           >
             <GridItem colSpan={1} position={'relative'}>
               <Box position={'relative'} className="story_interaction_image">
-                <Img src={parch} w={'100%'} h={'100%'} loading="lazy" />
+                <Img src={parch} w={'auto'} h={'100%'} loading="lazy" />
                 <Box
                   position={'absolute'}
-                  top={{ sm: '5%', md: '6%' }}
-                  h={'80% !important'}
-                  className="story_interaction_image"
+                  top={{ base: '5%', md: '6%' }}
+                  // h={'80% !important'}
+                  className="story_interaction_content"
                 >
                   <Box
                     textAlign={'center'}
@@ -491,9 +453,6 @@ const Story: React.FC<{
                     marginTop={'15px'}
                   >
                     <Box
-                      w={'60%'}
-                      fontSize={{ md: '1.5vw', lg: '1.9vw' }}
-                      letterSpacing={1}
                       className={'story_intraction_question'}
                     >
                       {data?.blockText}
@@ -528,12 +487,7 @@ const Story: React.FC<{
                               w={'100%'}
                             />
                             <Box
-                              w={'100%'}
-                              display={'flex'}
-                              justifyContent={'center'}
-                              fontSize={{
-                                lg: '1.9vw',
-                              }}
+                            
                               className={'story_interaction_option'}
                             >
                               {item?.qpOptionText}
@@ -543,23 +497,19 @@ const Story: React.FC<{
                     </Box>
                   </Box>
                   <Box
-                    w={'100%'}
+                    w={'98%'}
                     display={'flex'}
                     justifyContent={'space-between'}
                   >
                     <Img
                       src={left}
-                      w={'4vw'}
-                      h={'7vh'}
-                      cursor={'pointer'}
+                      className={'interaction_button'}
                       onClick={() => prevData(data)}
                     />
                     {option !== null && (
                       <Img
                         src={right}
-                        w={'4vw'}
-                        h={'7vh'}
-                        cursor={'pointer'}
+                        className={'interaction_button'}
                         onClick={() => InteractionFunction()}
                       />
                     )}
@@ -571,24 +521,8 @@ const Story: React.FC<{
         </Box>
       )}
       {data && type === 'response' && (
-        <Box
-          w={'100%'}
-          h={'100vh'}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          position={'relative'}
-          className="chapter_potrait"
-        >
-          <Img
-            src={backGroundImg}
-            maxW={'100%'}
-            maxH={'100%'}
-            w={'100%'}
-            h={'100vh'}
-            transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
-            transition={'transform 0.9s ease-in-out'}
-          />
+        <Box className="chapter_potrait">
+          <Img src={backGroundImg} className="dialogue_screen" />
           {/* <Box w={'100%'} h={'100vh'}>
         <Canvas camera={{ position: [30, 0, 10] }}>
           <directionalLight
@@ -619,7 +553,6 @@ const Story: React.FC<{
               bottom={'100px'}
               w={'200px'}
               h={'324px'}
-              // transform={'translate(0px, 55px)'}
             />
           )}
           {selectedNpc && (
@@ -630,30 +563,16 @@ const Story: React.FC<{
               bottom={'100px'}
               w={'200px'}
               h={'324px'}
-              // transform={'translate(0px, 55px)'}
             />
           )}
-          <Img
-            style={{
-              transform: `translateY(${showNote ? 200 : 0}px)`,
-              transition:
-                'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-            }}
-            position={'fixed'}
-            maxW={'100%'}
-            maxH={'100%'}
-            w={'100%'}
-            h={'180px'}
-            bottom={'0'}
-            src={dial}
-          />
+          <Img className={'dialogue_image'} src={dial} />
           {!showNote && (
             <>
               <Box position={'relative'}>
                 <Img
                   src={char}
                   position={'fixed'}
-                  h={{ base: '75px', md: '100px' }}
+                  h={'100px'}
                   w={'30%'}
                   left={'5%'}
                   bottom={'93px'}
@@ -662,7 +581,7 @@ const Story: React.FC<{
                   position={'fixed'}
                   left={'18%'}
                   bottom={'118px'}
-                  fontSize={'2.8vw'}
+                  fontSize={{ base: '30px', xl: '2.2vw' }}
                   fontWeight={500}
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
@@ -681,7 +600,7 @@ const Story: React.FC<{
                 h={'61px'}
                 overflowY={'scroll'}
                 w={'85%'}
-                fontSize={'2vw'}
+                fontSize={{ base: '30px', lg: '1.8vw' }}
                 bottom={'38px'}
                 fontFamily={'AtlantisContent'}
               >
@@ -690,17 +609,17 @@ const Story: React.FC<{
               <Box
                 display={'flex'}
                 position={'fixed'}
-                justifyContent={'flex-end'}
+                justifyContent={'space-between'}
                 w={'95%'}
                 bottom={'0'}
               >
-                {/* <Img
-              src={left}
-              w={'70px'}
-              h={'50px'}
-              cursor={'pointer'}
-              onClick={() => prevData(data)}
-            /> */}
+                <Img
+                  src={left}
+                  w={'70px'}
+                  h={'50px'}
+                  cursor={'pointer'}
+                  onClick={() => prevData(data)}
+                />
                 <Img
                   src={right}
                   w={'70px'}
@@ -715,109 +634,55 @@ const Story: React.FC<{
       )}
       {data && type === 'feedback' && (
         <Box
+          position="relative"
           w={'100%'}
-          h={'100vh'}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          position={'relative'}
-          overflow={'visible'}
-          style={{ perspective: '1000px' }}
+          height="100vh"
+          backgroundImage={backGroundImg}
+          backgroundSize={'cover'}
+          backgroundRepeat={'no-repeat'}
           className="chapter_potrait"
         >
-          <Box
-            backgroundImage={backGroundImg}
-            w={'100%'}
-            h={'100vh'}
-            backgroundRepeat={'no-repeat'}
-            backgroundSize={'cover'}
-            transform={`scale(${first ? 1 : 1.3}) translateY(${
-              first ? 0 : -10
-            }%) translateX(${first ? 0 : -10}%)`}
-            transition={'transform 0.9s ease-in-out'}
+          <Grid
+            templateColumns="repeat(1, 1fr)"
+            gap={4}
+            position="absolute"
+            top="50%"
+            left="50%"
+            transform="translate(-50%, -50%)"
+            className="story_note_grid"
           >
-            <Box
-              position={'fixed'}
-              top={'200px'}
-              right={'0px'}
-              bottom={0}
-              zIndex={999}
-              w={'300px'}
-            >
-              {/* <Canvas
-                camera={{ position: [3, 3, 10] }}
-                
-              >
-                <directionalLight
-                  position={[5, 5, 5]}
-                  intensity={0.8}
-                  color={0xffccaa}
-                  castShadow
-                />
-                <ambientLight intensity={5.5} />
-                <pointLight
-                  position={[5, 5, 5]}
-                  color={0xff0000}
-                  intensity={1}
-                />
-              
-                <mesh
-                  rotation={[-Math.PI / 2, 0, 0]}
-                  position={[0, -5, 0]}
-                  receiveShadow
+            <GridItem colSpan={1} position={'relative'}>
+              <Box display={'flex'} justifyContent={'center'}>
+                <Img src={feedi} className="story_note_image" loading="lazy" />
+                <Box
+                  className={'story_note_content'}
+                  // bg={'blue.300'}
                 >
-                  <planeGeometry args={[100, 100]} />
-                  <shadowMaterial opacity={0.5} />
-                </mesh>
-              </Canvas> */}
-            </Box>
-          </Box>
-          <Box
-            style={{
-              transform: `scale(${showNote ? 0.2 : 1})`,
-              transition: 'transform 0.5s ease-in-out',
-            }}
-            position={'fixed'}
-            w={'40%'}
-            h={'80vh'}
-            display={'flex'}
-            flexDirection={'column'}
-            justifyContent={'center'}
-            alignItems={'center'}
-            className="story_feedback"
-          >
-            <Img w={'90%'} h={'80vh'} src={feedi} />
-            <Box
-              position={'fixed'}
-              w={'50%'}
-              mt={'10px'}
-              display={'flex'}
-              flexDirection={'column'}
-              textAlign={'center'}
-              justifyContent={'center'}
-              style={{
-                fontWeight: '900',
-                color: '#D9C7A2',
-              }}
-              fontFamily={'AtlantisContent'}
-            >
-              {feed}
-              <Box
-                w={'100%'}
-                onClick={() => getData(data)}
-                mt={'20px'}
-                display={'flex'}
-                justifyContent={'center'}
-                cursor={'pointer'}
-                transform={{
-                  base: 'translate(0px, 60px)',
-                  md: 'translate(0px, 100px)',
-                }}
-              >
-                <Img src={next} w={'200px'} h={'60px'} />
+                  <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                    <Box className={'story_note_block'}>
+                      <Text textAlign={'center'}>{feed}</Text>
+                    </Box>
+                  </Box>
+                  <Box
+                    w={'100%'}
+                    onClick={() => getData(data)}
+                    mt={'20px'}
+                    display={'flex'}
+                    justifyContent={'center'}
+                    cursor={'pointer'}
+                    position={'fixed'}
+                    top={'70%'}
+                  >
+                    <Img
+                      src={next}
+                      h={'7vh'}
+                      className={'story_note_next_button'}
+                    />
+                  </Box>
+                </Box>
               </Box>
-            </Box>
-          </Box>
+            </GridItem>
+          </Grid>
         </Box>
       )}
     </>

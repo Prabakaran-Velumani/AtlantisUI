@@ -1790,8 +1790,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         >
                           <GridItem colSpan={1}>
                             <Box
-                              w={'auto'}
-                              h={'90vh'}
+                              w={'100%'}
+                              h={'100vh'}
                               display={'flex'}
                               justifyContent={'center'}
                               position={'relative'}
@@ -1799,14 +1799,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             >
                               <Img src={Login} w={'auto'} h={'100%'} />
                               <Box
-                                w={'15vw'}
-                                h={'49%'}
-                                position={'fixed'}
-                                top={'25%'}
-                                display={'flex'}
-                                justifyContent={'space-between'}
-                                alignItems={'center'}
-                                flexDirection={'column'}
+                              className={'play_screen_content'}                             
                               >
                                   <Box>
                                     <Box
@@ -1815,10 +1808,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                                       justifyContent={'center'}
                                     >
                                       <Text
-                                        fontFamily={'AtlantisText'}
-                                        fontSize={'2.8vw'}
-                                        color={'#D9C7A2'}
-                                        className={'intro_text'}
+                                      className={'play_screen_heading'}                                       
                                       >
                                         Atlantis
                                       </Text>
@@ -1831,10 +1821,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                                       justifyContent={'center'}
                                     >
                                       <Text
-                                        fontFamily={'AtlantisText'}
-                                        fontSize={'2.5vw'}
-                                        color={'#D9C7A2'}
-                                        className={'intro_text'}
+                                        className={'play_screen_text'}
                                       >
                                         Welcome To
                                       </Text>
@@ -1843,13 +1830,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                                       w={'100%'}
                                       display={'flex'}
                                       justifyContent={'center'}
+                                      mb={{base:0,lg:2}}
                                     >
                                       <Text
-                                        fontFamily={'AtlantisText'}
-                                        fontSize={'2.5vw'}
-                                        color={'#D9C7A2'}
-                                        textTransform={'capitalize'}
-                                         className={'intro_text'}
+                                       className={'play_screen_text'}
                                       >
                                         The Demo Play
                                       </Text>

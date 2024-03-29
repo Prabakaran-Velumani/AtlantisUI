@@ -468,67 +468,69 @@ const ScreenPreview = () => {
                       </Box>
                     )}
                     {currentTab === 4 && data && type === 'Note' && (
-                       <Box
-                       position="relative"
-                       maxW="100%"
-                       w={'100vw'}
-                       height="100vh"
-                       backgroundImage={preloadedAssets?.backgroundImage}
-                       backgroundSize={'cover'}
-                       backgroundRepeat={'no-repeat'}
-                       className="chapter_potrait"
-                     >
-                       <Grid
-                         templateColumns="repeat(1, 1fr)"
-                         gap={4}
-                         position="absolute"
-                         top="50%"
-                         left="50%"
-                         transform="translate(-50%, -50%)"
-                         className="story_note_grid"
-                       >
-                         <GridItem colSpan={1} position={'relative'}>
-                           <Img src={preloadedAssets?.note} className="story_note_image" loading="lazy" />
-                           <Box
-                             className={'story_note_content'}
-                             // bg={'blue.300'}
-                           >
-                             <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                               <Box
-                                 w={'65%'}
-                                 fontSize={{ base: '3.8vw', sm: '2.8vw', md: '1.8vw' }}
-                                 height={'20vh'}
-                                 overflowY={'auto'}
-                                 // bg={'blue.300'}
-                                 fontFamily={'AtlantisContent'}
-                                 color={'#D9C7A2'}
-                                 display={'flex'}
-                                 justifyContent={'center'}
-                                 className={'story_note_content'}
-                               >
-                                 <Text textAlign={'center'}>
-                                 {data?.blockText}
-                                 </Text>
-                               </Box>
-                             </Box>
-                             <Box
-                               w={'100%'}
-                               onClick={() => getData(data)}
-                               mt={'20px'}
-                               display={'flex'}
-                               justifyContent={'center'}
-                               cursor={'pointer'}
-                               position={'fixed'}
-                               top={'70%'}
-                             >
-                               <Img src={preloadedAssets.next} h={'7vh'} className={'story_note_next_button'} />
-                             </Box>
-                           </Box>
-                         </GridItem>
-                       </Grid>
-                     </Box>
-  
-                   // old note ui copy
+                      <Box
+                        position="relative"                       
+                        w={'100%'}
+                        height="100vh"
+                        backgroundImage={preloadedAssets?.backgroundImage}
+                        backgroundSize={'cover'}
+                        backgroundRepeat={'no-repeat'}
+                        className="chapter_potrait"
+                      >
+                        <Grid
+                          templateColumns="repeat(1, 1fr)"
+                          gap={4}
+                          position="absolute"
+                          top="50%"
+                          left="50%"
+                          transform="translate(-50%, -50%)"
+                          className="story_note_grid"
+                        >
+                          <GridItem colSpan={1} position={'relative'}>
+                            <Box display={'flex'} justifyContent={'center'}>
+                              <Img
+                                src={preloadedAssets?.note}
+                                className="story_note_image"
+                                loading="lazy"
+                              />
+                              <Box
+                                className={'story_note_content'}
+                                // bg={'blue.300'}
+                              >
+                                <Box
+                                  w={'100%'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                >
+                                  <Box className={'story_note_block'}>
+                                    <Text textAlign={'center'}>
+                                      {data?.blockText}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={'100%'}
+                                  onClick={() => getData(data)}
+                                  mt={'20px'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                  cursor={'pointer'}
+                                  position={'fixed'}
+                                  top={'70%'}
+                                >
+                                  <Img
+                                    src={preloadedAssets.next}
+                                    h={'7vh'}
+                                    className={'story_note_next_button'}
+                                  />
+                                </Box>
+                              </Box>
+                            </Box>
+                          </GridItem>
+                        </Grid>
+                      </Box>
+
+                      // old note ui copy
 
                       // <Box
                       //   w={'100%'}
@@ -628,25 +630,12 @@ const ScreenPreview = () => {
                       // </Box>
                     )}
                     {currentTab === 4 && data && type === 'Dialog' && (
-                         <Box
-                         w={'100%'}
-                         h={'100vh'}
-                         display={'flex'}
-                         alignItems={'center'}
-                         justifyContent={'center'}
-                         position={'relative'}
-                         className="chapter_potrait"
-                       >
-                         <Img
-                           src={preloadedAssets?.backgroundImage}
-                           maxW={'100%'}
-                           maxH={'100%'}
-                           w={'100%'}
-                           h={'100vh'}
-                           transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
-                           transition={'transform 0.9s ease-in-out'}
-                         />
-                         {/* <Box w={'100%'} h={'100vh'}>
+                      <Box className="chapter_potrait">
+                        <Img
+                          src={preloadedAssets?.backgroundImage}
+                          className="dialogue_screen"
+                        />
+                        {/* <Box w={'100%'} h={'100vh'}>
                            <Canvas camera={{ position: [30, 0, 10] }}>
                              <directionalLight
                                position={[5, 5, 5]}
@@ -656,19 +645,19 @@ const ScreenPreview = () => {
                              />
                              <ambientLight intensity={5.5} />
                              {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
-                         {/* <Background /> */}
-                         {/* <Model /> */}
-                         {/* <mesh 
+                        {/* <Background /> */}
+                        {/* <Model /> */}
+                        {/* <mesh 
                          rotation={[-Math.PI / 2, 0, 0]}
                          position={[0, -5, 0]}
                          receiveShadow 
                        > */}
-                         {/* <planeGeometry args={[100, 100]} />
+                        {/* <planeGeometry args={[100, 100]} />
                          <shadowMaterial opacity={0.5} />
                        </mesh> */}
-                         {/* </Canvas>
+                        {/* </Canvas>
                          </Box> */}
-                         {/* {selectedPlayer && (
+                        {/* {selectedPlayer && (
                            <Img
                              src={`${API_SERVER}/${selectedPlayer}`}
                              position={'fixed'}
@@ -688,85 +677,75 @@ const ScreenPreview = () => {
                              h={'324px'}
                            />
                          )} */}
-                         <Img
-                           style={{
-                             transform: `translateY(${showNote ? 200 : 0}px)`,
-                             transition:
-                               'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                           }}
-                           position={'fixed'}
-                           maxW={'100%'}
-                           maxH={'100%'}
-                           w={'100%'}
-                           h={'180px'}
-                           bottom={'0'}
-                           src={preloadedAssets?.dial}
-                         />
-                         {!showNote && (
-                           <>
-                             <Box position={'relative'}>
-                               <Img
-                                 src={preloadedAssets?.char}
-                                 position={'fixed'}
-                                 h={'100px'}
-                                 w={'30%'}
-                                 left={'5%'}
-                                 bottom={'93px'}
-                               />
-                               <Text
-                                 position={'fixed'}
-                                 left={'18%'}
-                                 bottom={'118px'}
-                                 fontSize={{base:'2.8vw',xl:'1.8vw'}}
-                                 fontWeight={500}
-                                 textAlign={'center'}
-                                 fontFamily={'AtlantisText'}
-                                 color={'#312821'}
-                               >
-                                 {data.blockRoll === 'Narrator'
-                                   ? data.blockRoll
-                                   : gameInfo?.gameData?.gameNonPlayerName}
-                               </Text>
-                             </Box>
-                             <Box
-                               display={'flex'}
-                               position={'fixed'}
-                               alignItems={'center'}
-                               justifyContent={'space-between'}
-                               h={'61px'}
-                               overflowY={'scroll'}
-                               w={'85%'}
-                               fontSize={{base:'2vw',lg:'1.8vw'}}
-                               bottom={'38px'}
-                               fontFamily={'AtlantisContent'}
-                             >
-                               <TypingEffect text={data?.blockText} speed={50} />
-                             </Box>
-                             <Box
-                               display={'flex'}
-                               position={'fixed'}
-                               justifyContent={'space-between'}
-                               w={'95%'}
-                               bottom={'0'}
-                             >
-                               <Img
-                                 src={preloadedAssets?.left}
-                                 w={'70px'}
-                                 h={'50px'}
-                                 cursor={'pointer'}
+                        <Img
+                          className={'dialogue_image'}
+                          src={preloadedAssets?.dial}
+                        />
+                        {!showNote && (
+                          <>
+                            <Box position={'relative'}>
+                              <Img
+                                src={preloadedAssets?.char}
+                                position={'fixed'}
+                                h={'100px'}
+                                w={'30%'}
+                                left={'5%'}
+                                bottom={'93px'}
+                              />
+                              <Text
+                                position={'fixed'}
+                                left={{ base: '17%', md: '18%' }}
+                                bottom={'118px'}
+                                fontSize={{ base: '30px', xl: '2.2vw' }}
+                                fontWeight={500}
+                                textAlign={'center'}
+                                fontFamily={'AtlantisText'}
+                                color={'#312821'}
+                              >
+                                {data.blockRoll === 'Narrator'
+                                  ? data.blockRoll
+                                  : gameInfo?.gameData?.gameNonPlayerName}
+                              </Text>
+                            </Box>
+                            <Box
+                              display={'flex'}
+                              position={'fixed'}
+                              alignItems={'center'}
+                              justifyContent={'space-between'}
+                              h={'61px'}
+                              overflowY={'scroll'}
+                              w={'85%'}
+                              fontSize={{ base: '30px', lg: '1.8vw' }}
+                              bottom={'38px'}
+                              fontFamily={'AtlantisContent'}
+                            >
+                              <TypingEffect text={data?.blockText} speed={50} />
+                            </Box>
+                            <Box
+                              display={'flex'}
+                              position={'fixed'}
+                              justifyContent={'space-between'}
+                              w={'95%'}
+                              bottom={'0'}
+                            >
+                              <Img
+                                src={preloadedAssets?.left}
+                                w={'70px'}
+                                h={'50px'}
+                                cursor={'pointer'}
                                 //  onClick={() => prevData(data)}
-                               />
-                               <Img
-                                 src={preloadedAssets?.right}
-                                 w={'70px'}
-                                 h={'50px'}
-                                 cursor={'pointer'}
-                                 onClick={() => getData(data)}
-                               />
-                             </Box>
-                           </>
-                         )}
-                       </Box>
+                              />
+                              <Img
+                                src={preloadedAssets?.right}
+                                w={'70px'}
+                                h={'50px'}
+                                cursor={'pointer'}
+                                onClick={() => getData(data)}
+                              />
+                            </Box>
+                          </>
+                        )}
+                      </Box>
                       // old dialog ui copy
                       // <Box
                       //   w={'100%'}
@@ -864,142 +843,146 @@ const ScreenPreview = () => {
                     )}
                     {currentTab === 4 && data && type === 'Interaction' && (
                       <Box
-                      position="relative"
-                      maxW="100%"
-                      w={'100vw'}
-                      height="100vh"
-                      backgroundImage={preloadedAssets?.backgroundImage}
-                      backgroundSize={'cover'}
-                      backgroundRepeat={'no-repeat'}
-                      className="chapter_potrait"
-                    >
-                      <Grid
-                        templateColumns="repeat(1, 1fr)"
-                        gap={4}
-                        position="absolute"
-                        top="50%"
-                        left="50%"
-                        transform="translate(-50%, -50%)"
-                        w={'90%'}
+                        position="relative"                       
+                        w={'100%'}
+                        height="100vh"
+                        backgroundImage={preloadedAssets?.backgroundImage}
+                        backgroundSize={'cover'}
+                        backgroundRepeat={'no-repeat'}
+                        className="chapter_potrait"
                       >
-                        <GridItem colSpan={1} position={'relative'}>
-                          <Box position={'relative'} className="story_interaction_image">
-                            <Img src={preloadedAssets?.parch} w={'100%'} h={'100%'} loading="lazy" />
+                        <Grid
+                          templateColumns="repeat(1, 1fr)"
+                          gap={4}
+                          position="absolute"
+                          top="50%"
+                          left="50%"
+                          transform="translate(-50%, -50%)"
+                          w={'90%'}
+                        >
+                          <GridItem colSpan={1} position={'relative'}>
                             <Box
-                              position={'absolute'}
-                              top={{ sm: '5%', md: '6%' }}
-                              h={'80% !important'}
+                              position={'relative'}
                               className="story_interaction_image"
                             >
+                              <Img
+                                src={preloadedAssets?.parch}
+                                w={'auto'}
+                                h={'100%'}
+                                loading="lazy"
+                              />
                               <Box
-                                textAlign={'center'}
-                                display={'flex'}
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                                fontWeight={500}
-                                fontSize={{ md: '3vw', lg: '2.5vw' }}
-                                fontFamily={'AtlantisText'}
-                                lineHeight={1}
-                                w={'100%'}
-                                h={'10%'}
-                                className={'interaction_heading_potrait'}
-                              >
-                                <Box w={'80%'} color={'#312821'}>
-                                  Interaction{' '}
-                                </Box>
-                              </Box>
-                              <Box
-                                textAlign={'center'}
-                                h={'25%'}
-                                display={'flex'}
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                                fontWeight={500}
-                                fontFamily={'AtlantisText'}
-                                lineHeight={1}
-                                w={'96%'}
-                                overflowY={'scroll'}
-                                marginTop={'15px'}
+                                position={'absolute'}
+                                top={{ base: '5%', md: '6%' }}
+                                // h={'80% !important'}
+                                className="story_interaction_content"
                               >
                                 <Box
-                                  w={'60%'}
-                                  fontSize={{ md: '1.5vw', lg: '1.9vw' }}
-                                  letterSpacing={1}
-                                  className={'story_intraction_question'}
+                                  textAlign={'center'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                  alignItems={'center'}
+                                  fontWeight={500}
+                                  fontSize={{ md: '3vw', lg: '2.5vw' }}
+                                  fontFamily={'AtlantisText'}
+                                  lineHeight={1}
+                                  w={'100%'}
+                                  h={'10%'}
+                                  className={'interaction_heading_potrait'}
                                 >
-                                 {data?.blockText}
+                                  <Box w={'80%'} color={'#312821'}>
+                                    Interaction{' '}
+                                  </Box>
                                 </Box>
-                              </Box>
-                              <Box
-                                mt={'10px'}
-                                w={'100%'}
-                                h={'40%'}
-                                fontWeight={500}
-                                overflowY={'scroll'}
-                                display={'flex'}
-                                justifyContent={'center'}
-                              >
-                                <Box w={'60%'}>
-                                  {options &&
-                                    options.map((item: any, ind: number) => (
-                                      <Box
-                                        w={'100%'}
-                                        mb={'10px'}
-                                        lineHeight={1}
-                                        key={ind}
-                                        color={selectedOption === ind ? 'purple' : ''}
-                                        textAlign={'center'}
-                                        cursor={'pointer'}
-                                        onClick={() => handleValidate(item, ind)}
-                                        fontFamily={'AtlantisText'}
-                                      >
-                                        <Img
-                                          src={selectedOption === ind ? preloadedAssets?.on : preloadedAssets?.off}
-                                          h={'4vh'}
-                                          w={'100%'}
-                                        />
+                                <Box
+                                  textAlign={'center'}
+                                  h={'25%'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                  alignItems={'center'}
+                                  fontWeight={500}
+                                  fontFamily={'AtlantisText'}
+                                  lineHeight={1}
+                                  w={'96%'}
+                                  overflowY={'scroll'}
+                                  marginTop={'15px'}
+                                >
+                                  <Box className={'story_intraction_question'}>
+                                    {data?.blockText}
+                                  </Box>
+                                </Box>
+                                <Box
+                                  mt={'10px'}
+                                  w={'100%'}
+                                  h={'40%'}
+                                  fontWeight={500}
+                                  overflowY={'scroll'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                >
+                                  <Box w={'60%'}>
+                                    {options &&
+                                      options.map((item: any, ind: number) => (
                                         <Box
                                           w={'100%'}
-                                          display={'flex'}
-                                          justifyContent={'center'}
-                                          fontSize={{
-                                            lg: '1.9vw',
-                                          }}
-                                          className={'story_interaction_option'}
+                                          mb={'10px'}
+                                          lineHeight={1}
+                                          key={ind}
+                                          color={
+                                            selectedOption === ind
+                                              ? 'purple'
+                                              : ''
+                                          }
+                                          textAlign={'center'}
+                                          cursor={'pointer'}
+                                          onClick={() =>
+                                            handleValidate(item, ind)
+                                          }
+                                          fontFamily={'AtlantisText'}
                                         >
-                                          {item?.qpOptionText}
+                                          <Img
+                                            src={
+                                              selectedOption === ind
+                                                ? preloadedAssets?.on
+                                                : preloadedAssets?.off
+                                            }
+                                            h={'4vh'}
+                                            w={'100%'}
+                                          />
+                                          <Box
+                                            className={
+                                              'story_interaction_option'
+                                            }
+                                          >
+                                            {item?.qpOptionText}
+                                          </Box>
                                         </Box>
-                                      </Box>
-                                    ))}
+                                      ))}
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={'98%'}
+                                  display={'flex'}
+                                  justifyContent={'space-between'}
+                                >
+                                  <Img
+                                    src={preloadedAssets?.left}
+                                    className={'interaction_button'}
+                                    // onClick={() => prevData(data)}
+                                  />
+                                  {selectedOption !== null && (
+                                    <Img
+                                      src={preloadedAssets?.right}
+                                      className={'interaction_button'}
+                                      onClick={() => getData(data)}
+                                    />
+                                  )}
                                 </Box>
                               </Box>
-                              <Box
-                                w={'100%'}
-                                display={'flex'}
-                                justifyContent={'space-between'}
-                              >
-                                <Img
-                                  src={preloadedAssets?.left}
-                                  w={'4vw'}
-                                  h={'7vh'}
-                                  cursor={'pointer'}
-                                  // onClick={() => prevData(data)}
-                                />
-                                {selectedOption !== null && (
-                                  <Img
-                                    src={preloadedAssets?.right}
-                                    w={'4vw'}
-                                    h={'7vh'}
-                                    cursor={'pointer'}
-                                    onClick={() => getData(data)}
-                                  />
-                                )}
-                              </Box>
                             </Box>
-                          </Box>
-                        </GridItem>
-                      </Grid>
-                    </Box>
+                          </GridItem>
+                        </Grid>
+                      </Box>
 
                       // old interaction ui copy
 
@@ -1132,23 +1115,10 @@ const ScreenPreview = () => {
                       // </Box>
                     )}
                     {currentTab === 4 && data && type === 'response' && (
-                        <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        className="chapter_potrait"
-                      >
+                      <Box className="chapter_potrait">
                         <Img
                           src={preloadedAssets?.backgroundImage}
-                          maxW={'100%'}
-                          maxH={'100%'}
-                          w={'100%'}
-                          h={'100vh'}
-                          transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
-                          transition={'transform 0.9s ease-in-out'}
+                          className="dialogue_screen"
                         />
                         {/* <Box w={'100%'} h={'100vh'}>
                           <Canvas camera={{ position: [30, 0, 10] }}>
@@ -1193,17 +1163,7 @@ const ScreenPreview = () => {
                           />
                         )} */}
                         <Img
-                          style={{
-                            transform: `translateY(${showNote ? 200 : 0}px)`,
-                            transition:
-                              'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                          }}
-                          position={'fixed'}
-                          maxW={'100%'}
-                          maxH={'100%'}
-                          w={'100%'}
-                          h={'180px'}
-                          bottom={'0'}
+                          className={'dialogue_image'}
                           src={preloadedAssets?.dial}
                         />
                         {!showNote && (
@@ -1219,9 +1179,9 @@ const ScreenPreview = () => {
                               />
                               <Text
                                 position={'fixed'}
-                                left={'18%'}
+                                left={{ base: '17%', md: '18%' }}
                                 bottom={'118px'}
-                                fontSize={{base:'2.8vw',xl:'1.8vw'}}
+                                fontSize={{ base: '30px', xl: '2.2vw' }}
                                 fontWeight={500}
                                 textAlign={'center'}
                                 fontFamily={'AtlantisText'}
@@ -1240,11 +1200,11 @@ const ScreenPreview = () => {
                               h={'61px'}
                               overflowY={'scroll'}
                               w={'85%'}
-                              fontSize={{base:'2vw',lg:'1.8vw'}}
+                              fontSize={{ base: '30px', lg: '1.8vw' }}
                               bottom={'38px'}
                               fontFamily={'AtlantisContent'}
                             >
-                              <TypingEffect text={data?.blockText} speed={50} />
+                              <TypingEffect text={resMsg} speed={50} />
                             </Box>
                             <Box
                               display={'flex'}
@@ -1258,7 +1218,7 @@ const ScreenPreview = () => {
                                 w={'70px'}
                                 h={'50px'}
                                 cursor={'pointer'}
-                               //  onClick={() => prevData(data)}
+                                //  onClick={() => prevData(data)}
                               />
                               <Img
                                 src={preloadedAssets?.right}
@@ -1366,65 +1326,65 @@ const ScreenPreview = () => {
                       // </Box>
                     )}
                     {currentTab === 4 && data && type === 'feedback' && (
-                       <Box
-                       position="relative"
-                       maxW="100%"
-                       w={'100vw'}
-                       height="100vh"
-                       backgroundImage={preloadedAssets?.backgroundImage}
-                       backgroundSize={'cover'}
-                       backgroundRepeat={'no-repeat'}
-                       className="chapter_potrait"
-                     >
-                       <Grid
-                         templateColumns="repeat(1, 1fr)"
-                         gap={4}
-                         position="absolute"
-                         top="50%"
-                         left="50%"
-                         transform="translate(-50%, -50%)"
-                         className="story_note_grid"
-                       >
-                         <GridItem colSpan={1} position={'relative'}>
-                           <Img src={preloadedAssets?.feedi} className="story_note_image" loading="lazy" />
-                           <Box
-                             className={'story_note_content'}
-                             // bg={'blue.300'}
-                           >
-                             <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                               <Box
-                                 w={'65%'}
-                                 fontSize={{ base: '3.8vw', sm: '2.8vw', md: '1.8vw' }}
-                                 height={'20vh'}
-                                 overflowY={'auto'}
-                                 // bg={'blue.300'}
-                                 fontFamily={'AtlantisContent'}
-                                 color={'#D9C7A2'}
-                                 display={'flex'}
-                                 justifyContent={'center'}
-                                 className={'story_note_content'}
-                               >
-                                 <Text textAlign={'center'}>
-                                 {data?.blockText}
-                                 </Text>
-                               </Box>
-                             </Box>
-                             <Box
-                               w={'100%'}
-                               onClick={() => getData(data)}
-                               mt={'20px'}
-                               display={'flex'}
-                               justifyContent={'center'}
-                               cursor={'pointer'}
-                               position={'fixed'}
-                               top={'70%'}
-                             >
-                               <Img src={preloadedAssets.next} h={'7vh'} className={'story_note_next_button'} />
-                             </Box>
-                           </Box>
-                         </GridItem>
-                       </Grid>
-                     </Box>
+                      <Box
+                        position="relative"                      
+                        w={'100%'}
+                        height="100vh"
+                        backgroundImage={preloadedAssets?.backgroundImage}
+                        backgroundSize={'cover'}
+                        backgroundRepeat={'no-repeat'}
+                        className="chapter_potrait"
+                      >
+                        <Grid
+                          templateColumns="repeat(1, 1fr)"
+                          gap={4}
+                          position="absolute"
+                          top="50%"
+                          left="50%"
+                          transform="translate(-50%, -50%)"
+                          className="story_note_grid"
+                        >
+                          <GridItem colSpan={1} position={'relative'}>
+                            <Box display={'flex'} justifyContent={'center'}>
+                              <Img
+                                src={preloadedAssets?.feedi}
+                                className="story_note_image"
+                                loading="lazy"
+                              />
+                              <Box
+                                className={'story_note_content'}
+                                // bg={'blue.300'}
+                              >
+                                <Box
+                                  w={'100%'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                >
+                                  <Box className={'story_note_block'}>
+                                    <Text textAlign={'center'}>{feed}</Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={'100%'}
+                                  onClick={() => getData(data)}
+                                  mt={'20px'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                  cursor={'pointer'}
+                                  position={'fixed'}
+                                  top={'70%'}
+                                >
+                                  <Img
+                                    src={preloadedAssets.next}
+                                    h={'7vh'}
+                                    className={'story_note_next_button'}
+                                  />
+                                </Box>
+                              </Box>
+                            </Box>
+                          </GridItem>
+                        </Grid>
+                      </Box>
                       // <Box
                       //   w={'100%'}
                       //   h={'100vh'}
@@ -1567,13 +1527,13 @@ const ScreenPreview = () => {
                                 alt="Your Image"
                                 className="LearderBoards-Img"
                               /> */}
-                                <LeaderBoard   
-                                  formData = {gameInfo?.gameData}
-                                  imageSrc={leaderboard}
-                                  getData={getData}
-                                  data={data}
-                                />
-                            </Box>                            
+                              <LeaderBoard
+                                formData={gameInfo?.gameData}
+                                imageSrc={leaderboard}
+                                getData={getData}
+                                data={data}
+                              />
+                            </Box>
                           </Box>
                         </Box>
                       </Box>
@@ -1605,9 +1565,13 @@ const ScreenPreview = () => {
                               formData={gameInfo.gameData}
                               // imageSrc={preloadedAssets?.RefScreen1}
                               imageSrc={preloadedAssets?.RefBg}
-                              reflectionQuestions={gameInfo?.reflectionQuestions}
-                              reflectionQuestionsdefault={reflectionQuestionsdefault}
-                              preloadedAssets ={preloadedAssets}
+                              reflectionQuestions={
+                                gameInfo?.reflectionQuestions
+                              }
+                              reflectionQuestionsdefault={
+                                reflectionQuestionsdefault
+                              }
+                              preloadedAssets={preloadedAssets}
                             />
                           </Box>
                         </Box>
