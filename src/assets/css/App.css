@@ -87,11 +87,21 @@ option {
 }
 
 /* Game Story */
+.NDI .block-item-type {
+  box-shadow: 1px 3px 15px #2d2d2d24;
+  margin-bottom: 1.5rem;
+  border-radius: 20px;
+}
+.NDI .block-item-type:hover {
+  box-shadow: unset;
+}
+
+
 .block-compo {
   display: flex;
   align-items: start;
-  border-bottom: 2px solid #f9f9f9;
-  padding: 25px 0 !important;
+  /* border-bottom: 2px solid #f9f9f9; */
+  /* padding: 25px 0 !important; */
 }
 
 .box-block {
@@ -100,14 +110,24 @@ option {
 }
 
 .block-compo .block-action-icons {
-  visibility: hidden;
+  /* visibility: hidden; */
   display: flex;
-  margin-right: 15px;
-  margin-left: 15px;
+  flex-direction: column;
+  height: 6rem;
+  /* margin-right: 15px;
+  margin-bottom: 15px; */
+  /* margin-left: 15px; */
 }
 
-.block-compo:hover .block-action-icons {
-  visibility: visible;
+.block-compo .block-action-icons svg{
+  margin-bottom: 10px;
+  height: 0;
+  transition: 0.2s ease;
+}
+
+.NDI .block-item-type:hover .block-action-icons svg{
+  /* visibility: visible; */
+  height: 1em;
 }
 
 /* InteractionCompo */
@@ -5017,3 +5037,21 @@ text-transform: capitalize;
   width: 110px;
   height: 45px;
 } 
+
+
+
+
+
+
+
+/* For Emergency */
+@media (min-width: 960px) and (max-width: 1300px) {
+  .gameCreationGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+@media (min-width: 250px) and (max-width: 960px) {
+  .voice-library-filters {
+    flex-direction: column;
+  }
+}

@@ -527,156 +527,337 @@ let selectDisable=false;
 
     // console.log('fsfsd', formData);
     return (
-        <>
-            <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>
-                <Card alignItems={'center'}>                    
-                    <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={{base: '170', sm: '170', md: '300', lg: '300'}} position={'relative'} alignItems={'center'}></Card>
-                    <Card mb={{ base: '0px', xl: '20px' }} width={{base: '95%', md: '70%'}} marginTop={'-120px'} >
-                        <Flex direction='row' w={'100%'} justifyContent={'space-between'} alignItems={'center'}>
-                            <Box>
-                            <Text color={useColorModeValue('secondaryGray.900', 'white')} fontSize="2xl" fontWeight="700" mb="20px">
-                                Learner {id ? 'Updation' : 'Creation'}
-                            </Text>
-                            </Box>
-                            {/* <Box>
+      <>
+        <Box
+          display={'flex'}
+          flexDirection={'column'}
+          alignItems={'center'}
+          marginTop={'75px'}
+          position={'relative'}
+        >
+          <Card alignItems={'center'}>
+            <Card
+              bg={'linear-gradient(to bottom, #7551ff, #3311db)'}
+              w={'100%'}
+              h={{ base: '170', sm: '170', md: '300', lg: '300' }}
+              position={'relative'}
+              alignItems={'center'}
+            ></Card>
+            <Card
+              mb={{ base: '0px', xl: '20px' }}
+              width={{ base: '95%', md: '70%' }}
+              marginTop={'-120px'}
+            >
+              <Flex
+                direction="row"
+                w={'100%'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+              >
+                <Box>
+                  <Text
+                    color={useColorModeValue('secondaryGray.900', 'white')}
+                    fontSize="2xl"
+                    fontWeight="700"
+                    mb="20px"
+                  >
+                    Learner {id ? 'Updation' : 'Creation'}
+                  </Text>
+                </Box>
+                {/* <Box>
                                 <Button bg={'#11047a'} color={'#fff'} mr={'10px'} >Click To Upload</Button>
                                 <Button bg={'#11047a'} color={'#fff'}>Submit Data</Button>
                             </Box> */}
-                            {/* <Text fontSize='md' color={textColorSecondary}>
+                {/* <Text fontSize='md' color={textColorSecondary}>
                                 Here you can change your Creator details
                             </Text> */}
-                        </Flex>
-                        <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing={{ base: '20px', xl: '20px' }}>
-                            
-                            <SelectField
-                                mb='0px'
-                                me='30px'
-                                id='lenCompanyId'
-                                name='lenCompanyId'
-                                label='Learner Company Name'
-                                options={companyOptions}
-                                onChange={handleCompanyChange}
-                                isRequired={true}
-                                value={companyOptions.find(option => option.value === formData.lenCompanyId) || null}
-                                isDisabled={selectDisable}
-                                isClearable={true}
-                                styles={customStyles}
-                            />
-                            <SelectField
-                                mb='0px'
-                                me='30px'
-                                id='lenCreatorId'
-                                name='lenCreatorId'
-                                label='Creator Name'
-                                options={creatorOptions}
-                                onChange={handleCreatorChange}
-                                isRequired={true}
-                                value={creatorOptions.find(option => option.value === formData.lenCreatorId) || null}
-                                isDisabled={selectDisable}
-                                isClearable={true}
-                                styles={customStyles}
-                            />
-    <InputField mb='0px' me='30px' id='creatorEntryDate' label='Learner Entry Date' type='date-local' defaultValue={isoFormatDate} disabled={true} />
+              </Flex>
+              <SimpleGrid
+                columns={{ sm: 1, md: 2, lg: 3 }}
+                spacing={{ base: '20px', xl: '20px' }}
+              >
+                <SelectField
+                  mb="0px"
+                  me="30px"
+                  id="lenCompanyId"
+                  name="lenCompanyId"
+                  label="Learner Company Name"
+                  options={companyOptions}
+                  onChange={handleCompanyChange}
+                  isRequired={true}
+                  value={
+                    companyOptions.find(
+                      (option) => option.value === formData.lenCompanyId,
+                    ) || null
+                  }
+                  isDisabled={selectDisable}
+                  isClearable={true}
+                  styles={customStyles}
+                />
+                <SelectField
+                  mb="0px"
+                  me="30px"
+                  id="lenCreatorId"
+                  name="lenCreatorId"
+                  label="Creator Name"
+                  options={creatorOptions}
+                  onChange={handleCreatorChange}
+                  isRequired={true}
+                  value={
+                    creatorOptions.find(
+                      (option) => option.value === formData.lenCreatorId,
+                    ) || null
+                  }
+                  isDisabled={selectDisable}
+                  isClearable={true}
+                  styles={customStyles}
+                />
+                <InputField
+                  mb="0px"
+                  me="30px"
+                  id="creatorEntryDate"
+                  label="Learner Entry Date"
+                  type="date-local"
+                  defaultValue={isoFormatDate}
+                  disabled={true}
+                />
+              </SimpleGrid>
 
-                        </SimpleGrid>
+              {/* Table Input */}
+              <Box m={'50px 0 20px 0'} w={'100%'} overflowX={'auto'}>
+                <Table
+                  boxShadow={'1px 2px 17px #f7f7f7'}
+                  border={'2px solid #f1f1f1'}
+                  mb={'30px'}
+                >
+                  <Thead whiteSpace={'nowrap'}>
+                    <Tr>
+                      <Th
+                        color={'#000'}
+                        fontFamily={'Nunito Sans'}
+                        borderRight={'2px solid #f1f1f1'}
+                      >
+                        learner Name<span style={{ color: 'red' }}>*</span>
+                      </Th>
 
-                        {/* Table Input */}
-                        <Box m={'50px 0 20px 0'} w={'100%'} overflowX={'auto'}>                            
-                            <Table boxShadow={'1px 2px 17px #f7f7f7'} border={'2px solid #f1f1f1'} mb={'30px'}>
-                                <Thead whiteSpace={'nowrap'}>
-                                    <Tr>
-                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Name<span style={{ color: 'red' }}>*</span></Th>
+                      <Th
+                        color={'#000'}
+                        fontFamily={'Nunito Sans'}
+                        borderRight={'2px solid #f1f1f1'}
+                      >
+                        learner Mail<span style={{ color: 'red' }}>*</span>
+                      </Th>
+                      <Th
+                        color={'#000'}
+                        fontFamily={'Nunito Sans'}
+                        borderRight={'2px solid #f1f1f1'}
+                      >
+                        learner Department
+                        <span style={{ color: 'red' }}>*</span>
+                      </Th>
+                      <Th
+                        color={'#000'}
+                        fontFamily={'Nunito Sans'}
+                        borderRight={'2px solid #f1f1f1'}
+                      >
+                        learner Designation
+                        <span style={{ color: 'red' }}>*</span>
+                      </Th>
+                      <Th
+                        color={'#000'}
+                        fontFamily={'Nunito Sans'}
+                        borderRight={'2px solid #f1f1f1'}
+                      >
+                        learner Country
+                      </Th>
+                      <Th
+                        color={'#000'}
+                        fontFamily={'Nunito Sans'}
+                        borderRight={'2px solid #f1f1f1'}
+                      >
+                        learner Age
+                      </Th>
+                      <Th
+                        color={'#000'}
+                        fontFamily={'Nunito Sans'}
+                        borderRight={'2px solid #f1f1f1'}
+                      >
+                        learner Gender
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody whiteSpace={'nowrap'}>
+                    {rows.map((row, i) => (
+                      <Tr key={i} whiteSpace={'nowrap'}>
+                        <Td
+                          p={'0.5rem 1.0rem'}
+                          borderRight={'2px solid #f1f1f1'}
+                        >
+                          <InputField
+                            mb="0px"
+                            me="30px"
+                            id={`lenUserName-${i}`}
+                            name={`lenUserName-${i}`}
+                            placeholder="eg. jhon "
+                            onChange={handleChangeflied}
+                            value={formDatas[i]?.lenUserName || ''}
+                            style={{
+                              borderColor:
+                                isInvalid &&
+                                specificInvalidIds.includes(`lenUserName-${i}`)
+                                  ? 'red'
+                                  : '',
+                            }}
+                          />
+                        </Td>
 
-                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Mail<span style={{ color: 'red' }}>*</span></Th>
-                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Department<span style={{ color: 'red' }}>*</span></Th>
-                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Designation<span style={{ color: 'red' }}>*</span></Th>
-                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Country</Th>
-                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Age</Th>
-                                        <Th color={'#000'} fontFamily={'Nunito Sans'} borderRight={'2px solid #f1f1f1'}>learner Gender</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody whiteSpace={'nowrap'}>
-                                    {rows.map((row, i) => (
-                                        
-                                        <Tr key={i} whiteSpace={'nowrap'}>
-                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
-                                                <InputField
-                                                    mb='0px'
-                                                    me='30px'
-                                                    id={`lenUserName-${i}`}
-
-                                                    name={`lenUserName-${i}`}
-
-                                                    placeholder='eg. jhon '
-                                                    onChange={handleChangeflied}
-                                                    value={formDatas[i]?.lenUserName || ''}
-                                                    style={{
-                                                        borderColor: isInvalid && specificInvalidIds.includes(`lenUserName-${i}`) ? 'red' : ''
-                                                    }}
-                                                />
-                                            </Td>
-
-                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
-                                                <InputField mb='0px' me='30px' id={`lenMail-${i}`} name={`lenMail-${i}`} placeholder='eg. Mail@sample.com' onChange={handleChangeflied} value={formDatas[i]?.lenMail || ''} autoComplete="off" disabled={id ? true : false}
-                                                    style={{
-                                                        borderColor: isInvalid && specificInvalidIds.includes(`lenMail-${i}`) ? 'red' : ''
-                                                    }}
-                                                />
-                                            </Td>
-                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
-                                                <InputField mb='0px' me='30px' id={`lenDepartment-${i}`} name={`lenDepartment-${i}`} placeholder='eg. sales ' onChange={handleChangeflied} value={formDatas[i]?.lenDepartment || ''}  style={{
-                                                        borderColor: isInvalid && specificInvalidIds.includes(`lenDepartment-${i}`) ? 'red' : ''
-                                                    }}
-                                                    />
-                                            </Td>
-                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
-                                                <InputField mb='0px' me='30px' id={`lenDesignation-${i}`} name={`lenDesignation-${i}`} placeholder='eg. new joinee' onChange={handleChangeflied} value={formDatas[i]?.lenDesignation || ''}  style={{
-                                                        borderColor: isInvalid && specificInvalidIds.includes(`lenDesignation-${i}`) ? 'red' : ''
-                                                    }} />
-                                            </Td>
-                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
-                                                <SelectField
-                                                    mb='0px'
-                                                    me='30px'
-                                                    id={`lenCountryId-${i}`}
-                                                    name={`lenCountryId-${i}`}
-
-                                                    options={mappedCountryOptions}
-                                                    // onChange={handleCountryChange}
-                                                    onChange={(selectedOption: any) => handleCountryChange(selectedOption, i.toString())}
-
-                                                    value={mappedCountryOptions.find((option) => option.value === formDatas[i]?.lenCountryId) || null}
-
-                                                />
-                                            </Td>
-                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
-                                                <InputField mb='0px' me='30px' id={`lenAge-${i}`} name={`lenAge-${i}`} placeholder='eg. 30' type='number' onChange={handleChangeflied} value={formDatas[i]?.lenAge || ''} />
-                                            </Td>
-                                            <Td p={'0.5rem 1.0rem'} borderRight={'2px solid #f1f1f1'}>
-                                                <SelectField
-                                                    mb='0px'
-                                                    me='30px'
-                                                    id={`lenGender-${i}`}
-                                                    name={`lenGender-${i}`}
-
-                                                    options={genderOptions}
-
-                                                    onChange={(selectedOption: any) => handleGenderChange(selectedOption, i.toString())}
-                                                    autoComplete="off"
-
-                                                    value={genderOptions.find((option) => option.value === (formDatas[i]?.lenGender || '')) || null}
-
-                                                />
-                                            </Td>
-                                        </Tr>
-                                    ))}
-                                </Tbody>
-                            </Table>
-                            <Flex mb={'20px'}>
-                                <Button onClick={handleAddRow} fontSize="sm" color={'#190793'} border={'1px solid #190793'} bg={'transparent'} _hover={{bg: '#11047a', color: '#fff'}}>Add Row</Button>
-                            </Flex>
-                        </Box>
-                        {/* <Flex flexDirection="row" justifyContent={'center'}>
+                        <Td
+                          p={'0.5rem 1.0rem'}
+                          borderRight={'2px solid #f1f1f1'}
+                        >
+                          <InputField
+                            mb="0px"
+                            me="30px"
+                            id={`lenMail-${i}`}
+                            name={`lenMail-${i}`}
+                            placeholder="eg. Mail@sample.com"
+                            onChange={handleChangeflied}
+                            value={formDatas[i]?.lenMail || ''}
+                            autoComplete="off"
+                            disabled={id ? true : false}
+                            style={{
+                              borderColor:
+                                isInvalid &&
+                                specificInvalidIds.includes(`lenMail-${i}`)
+                                  ? 'red'
+                                  : '',
+                            }}
+                          />
+                        </Td>
+                        <Td
+                          p={'0.5rem 1.0rem'}
+                          borderRight={'2px solid #f1f1f1'}
+                        >
+                          <InputField
+                            mb="0px"
+                            me="30px"
+                            id={`lenDepartment-${i}`}
+                            name={`lenDepartment-${i}`}
+                            placeholder="eg. sales "
+                            onChange={handleChangeflied}
+                            value={formDatas[i]?.lenDepartment || ''}
+                            style={{
+                              borderColor:
+                                isInvalid &&
+                                specificInvalidIds.includes(
+                                  `lenDepartment-${i}`,
+                                )
+                                  ? 'red'
+                                  : '',
+                            }}
+                          />
+                        </Td>
+                        <Td
+                          p={'0.5rem 1.0rem'}
+                          borderRight={'2px solid #f1f1f1'}
+                        >
+                          <InputField
+                            mb="0px"
+                            me="30px"
+                            id={`lenDesignation-${i}`}
+                            name={`lenDesignation-${i}`}
+                            placeholder="eg. new joinee"
+                            onChange={handleChangeflied}
+                            value={formDatas[i]?.lenDesignation || ''}
+                            style={{
+                              borderColor:
+                                isInvalid &&
+                                specificInvalidIds.includes(
+                                  `lenDesignation-${i}`,
+                                )
+                                  ? 'red'
+                                  : '',
+                            }}
+                          />
+                        </Td>
+                        <Td
+                          p={'0.5rem 1.0rem'}
+                          borderRight={'2px solid #f1f1f1'}
+                        >
+                          <SelectField
+                            mb="0px"
+                            me="30px"
+                            id={`lenCountryId-${i}`}
+                            name={`lenCountryId-${i}`}
+                            options={mappedCountryOptions}
+                            // onChange={handleCountryChange}
+                            onChange={(selectedOption: any) =>
+                              handleCountryChange(selectedOption, i.toString())
+                            }
+                            value={
+                              mappedCountryOptions.find(
+                                (option) =>
+                                  option.value === formDatas[i]?.lenCountryId,
+                              ) || null
+                            }
+                          />
+                        </Td>
+                        <Td
+                          p={'0.5rem 1.0rem'}
+                          borderRight={'2px solid #f1f1f1'}
+                        >
+                          <InputField
+                            mb="0px"
+                            me="30px"
+                            id={`lenAge-${i}`}
+                            name={`lenAge-${i}`}
+                            placeholder="eg. 30"
+                            type="number"
+                            onChange={handleChangeflied}
+                            value={formDatas[i]?.lenAge || ''}
+                          />
+                        </Td>
+                        <Td
+                          p={'0.5rem 1.0rem'}
+                          borderRight={'2px solid #f1f1f1'}
+                        >
+                          <SelectField
+                            mb="0px"
+                            me="30px"
+                            id={`lenGender-${i}`}
+                            name={`lenGender-${i}`}
+                            options={genderOptions}
+                            onChange={(selectedOption: any) =>
+                              handleGenderChange(selectedOption, i.toString())
+                            }
+                            autoComplete="off"
+                            value={
+                              genderOptions.find(
+                                (option) =>
+                                  option.value ===
+                                  (formDatas[i]?.lenGender || ''),
+                              ) || null
+                            }
+                          />
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+                <Flex mb={'20px'}>
+                  <Button
+                    onClick={handleAddRow}
+                    fontSize="sm"
+                    color={'#190793'}
+                    border={'1px solid #190793'}
+                    bg={'transparent'}
+                    _hover={{ bg: '#11047a', color: '#fff' }}
+                  >
+                    Add Row
+                  </Button>
+                </Flex>
+              </Box>
+              {/* <Flex flexDirection="row" justifyContent={'center'}>
 
                             <Button mt="20px" mr="10px" padding={2} background="#f7f4fe"  _hover={{background:"#e9edf7"}} color="#000" w={100} onClick={handleBack}>
                                 Cancel
@@ -685,41 +866,43 @@ let selectDisable=false;
                                 {id ? 'Update' : 'Save'}
                             </Button>
                         </Flex> */}
-                        <Flex justify="space-between">
+              <Flex justify="space-between">
                 <Button
-                // variant="light"
-                fontSize="sm"
-                borderRadius="16px"
-                border={'1px solid #00000024'}
-                w={{ base: '128px', md: '148px' }}
-                h="46px"
-                mt="20px"
-                mr="20px"
-                bg={'transparent'}
-                _hover={{bg: '#11047a', color: '#fff'}}
-                onClick={handleBack}
+                  // variant="light"
+                  fontSize="sm"
+                  borderRadius="16px"
+                  border={'1px solid #00000024'}
+                  w={{ base: '128px', md: '148px' }}
+                  h="46px"
+                  mt="20px"
+                  mr="20px"
+                  bg={'transparent'}
+                  _hover={{ bg: '#11047a', color: '#fff' }}
+                  onClick={handleBack}
                 >
-                Cancel
+                  Cancel
                 </Button>
                 <Button
-                mt="20px"
-                variant="darkBrand"
-                fontSize="sm"
-                borderRadius="16px"
-                w={{ base: '128px', md: '148px' }}
-                h="46px"
-                ms="auto"
-                onClick={handleSubmit}
+                  mt="20px"
+                  variant="darkBrand"
+                  fontSize="sm"
+                  borderRadius="16px"
+                  w={{ base: '128px', md: '148px' }}
+                  h="46px"
+                  ms="auto"
+                  onClick={handleSubmit}
                 >
-                {id ? 'Update' : 'Save'}
+                  {id ? 'Update' : 'Save'}
                 </Button>
-            </Flex>
-                    </Card>
-                </Card>
-            </Box>
-            {alert ? <OnToast msg={msg} status={toastStatus}  setAlert={setAlert} /> : null}
-        </>
-    )
+              </Flex>
+            </Card>
+          </Card>
+        </Box>
+        {alert ? (
+          <OnToast msg={msg} status={toastStatus} setAlert={setAlert} />
+        ) : null}
+      </>
+    );
 }
 
 export default CreatorCreation;

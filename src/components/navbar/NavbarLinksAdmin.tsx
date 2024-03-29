@@ -124,8 +124,9 @@ export default function HeaderLinks(props: {
          base: 'flex',
          sm: 'flex',
          md: 'flex', 
-        lg: path.startsWith('/admin/superadmin/game/creation') || path.startsWith('/admin/superadmin/game/template') || path.startsWith('/admin/game/preview/') ? 'none' : 'flex'
-      }} alignItems={'center'} >
+         lg:  path.startsWith('/admin/superadmin/game/template') || path.startsWith('/admin/game/preview/') ? 'none' : 'flex'
+      }} 
+      alignItems={'center'} >
       <SidebarResponsive routes={routes} />
       </Box>
       {/* <Menu>

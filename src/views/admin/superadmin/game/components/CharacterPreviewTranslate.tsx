@@ -577,9 +577,9 @@ const CharacterPreviewTranslate: React.FC<{
   };
     return (
       <>
-        <Modal isOpen={isModalOpen2} onClose={handleCloseModal} >
-          <ModalOverlay />
-          <ModalContent position="fixed" overflowY="auto" m={0}>
+        <Modal isOpen={isModalOpen2} onClose={handleCloseModal} isCentered>
+          <ModalOverlay zIndex={99999999}/>
+          <ModalContent containerProps={{zIndex:999999999}} position="fixed" overflowY="auto" m={0} w={{sm:'80%',md:'100%'}}>
           <ModalHeader>Voices</ModalHeader>
             <ModalCloseButton />
             <ModalBody p={0} pl={'25px'} >

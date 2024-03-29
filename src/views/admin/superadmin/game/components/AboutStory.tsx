@@ -7,7 +7,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   PopoverHeader,
-  PopoverBody, 
+  PopoverBody,
   Checkbox,
 } from "@chakra-ui/react"
 import InputField from "components/fields/InputField"
@@ -19,7 +19,7 @@ import { MdAdd, MdAddCircle } from "react-icons/md"
 import AddCourse from "./AddCourse"
 import narrator from 'assets/img/games/meeting_room.png';
 import back from 'assets/img/games/narrator.png';
-import { getSkills, getDefaultCat, getDefaultSkill , getGameStoryLine} from "utils/game/gameService"
+import { getSkills, getDefaultCat, getDefaultSkill, getGameStoryLine } from "utils/game/gameService"
 import { useParams } from "react-router-dom"
 // import ResizeTextarea from "react-textarea-autosize";
 // import {autosize} from "autosize";
@@ -27,7 +27,7 @@ import { useParams } from "react-router-dom"
 
 
 // const AboutStory : React.FC<{handleChange:(e:any)=>void,formData:any,setTags:any,setFormData:any,setCat:any,id:any}>= ({handleChange,formData,setTags,setFormData,setCat,id}) => {
-const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any, setDefaultSkills: any, formData: any, setTags: any, setFormData: any, setCat: any, id: any,languages:any }> = ({ handleChange, setDefaultSkills, defaultskills, formData, setTags, setFormData, setCat, id,languages }) => {
+const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any, setDefaultSkills: any, formData: any, setTags: any, setFormData: any, setCat: any, id: any, languages: any }> = ({ handleChange, setDefaultSkills, defaultskills, formData, setTags, setFormData, setCat, id, languages }) => {
   //navin 16-12
   const [openCourse, setOpenCourse] = useState(false),
     // [defaultskills,setDefaultSkills] = useState([]),
@@ -43,10 +43,10 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
 
       },
     ]);
-    const [storyLine, setStoryline] = useState<String>();
-    const [title, setTitle] = useState<String>();
-    const [nonplayerName, setNonplayerName] = useState<String>();
-  
+  const [storyLine, setStoryline] = useState<String>();
+  const [title, setTitle] = useState<String>();
+  const [nonplayerName, setNonplayerName] = useState<String>();
+
   // const fetchDefaultcat = async () =>{
   //   setDefaultCat([]);
   //   const result = await getDefaultCat(id);
@@ -57,11 +57,11 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
   useEffect(() => {
     setFormData((prev: any) => ({
       ...prev,
-      gameSkills: defaultskills.length!==0 ? defaultskills :'',
+      gameSkills: defaultskills.length !== 0 ? defaultskills : '',
 
     }));
   }, [defaultskills])
-  console.log('defaultskills',defaultskills)
+  console.log('defaultskills', defaultskills)
   // useEffect(()=>{
   //   setFormData((prev:any) => ({
   //     ...prev,
@@ -98,7 +98,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
 
 
   // console.log('skill,cat',formData.gameSkills,formData.gameCategoryId)
-  
+
   // useEffect(()=>{
   //   fetchDefaultcat();
   // },[])
@@ -131,7 +131,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
   const keyPressSkill = (e: any) => {
     if (e.keyCode === 13) {
       const trimmedValue = e.target.value.trim(); // Remove leading and trailing whitespaces
-  
+
       if (trimmedValue !== '') {
         setDefaultSkills([
           ...defaultskills,
@@ -145,7 +145,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
           isSkillsInvalid: false, // Include the new property in the state
         }));
       }
-  
+
       e.target.value = '';
     }
   };
@@ -168,10 +168,10 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
     const currentValue = event.target.value;
     const newLength = currentValue.length;
     setValue(event.target.value);
-    
+
     if (event.nativeEvent instanceof InputEvent) {
       const keyCode = (event.nativeEvent as InputEvent).inputType;
-  
+
       if (keyCode === 'insertLineBreak') {
         // Handle Enter key or newline
         event.preventDefault(); // Prevent the default behavior (line break)
@@ -197,11 +197,11 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
         }
       }
     }
-  
+
     setFormData((prev: any) => ({ ...prev, gameLearningOutcome: event.target.value }));
     previousLength = event.target.value.length;
   };
-  
+
 
   const fetch = async () => {
     const result = await getSkills();
@@ -221,7 +221,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
 
     setFormData((prev: any) => ({
       ...prev, gameCategoryId: e.target.value,
-      isCategoryIdInvalid: false, 
+      isCategoryIdInvalid: false,
     }))
   }
   const checkvalue = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -316,15 +316,15 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
     const fetchData = async () => {
       try {
         // Call getBlockData with both game ID and translation ID
-        if(languages){
+        if (languages) {
           const blockData = await getGameStoryLine(id, languages);
 
-        console.log("updatedBlockData", blockData.gameStoryLine);
-        setStoryline(blockData.gameStoryLine)
-        setTitle(blockData.gameTitle)
-        setNonplayerName(blockData.gameNonPlayerName)
+          console.log("updatedBlockData", blockData.gameStoryLine);
+          setStoryline(blockData.gameStoryLine)
+          setTitle(blockData.gameTitle)
+          setNonplayerName(blockData.gameNonPlayerName)
         }
-        
+
         // textareaRef.current.value = blockData.content;
       } catch (error) {
         console.error("getBlockData Error:", error);
@@ -378,30 +378,31 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
           justifyContent="center"
           textAlign="center"
         >
-          <Text fontSize={20} fontWeight={800} mb={'20px'}>
+          <Card w={{sm:'100%',md:'65%'}}  boxShadow={{base:'',md:'1px 4px 29px #44445429'}} p={{base:'0',md:'25px'}}>
+          <Text fontSize={20} textAlign={'start'} fontWeight={800} mb={'20px'}>
             Game Overview
           </Text>
           {/* <Box> */}
-          <SimpleGrid columns={{ base: 1, md: 1 }}>
-          <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
-                Title<Text as='span' color='red.500'>*</Text>
-              </FormLabel>
-  <InputField
-    //ref={textareaRefss}
-    //style={{
-      //...styles.textareaDefaultStyle,
-      //height: formData?.gameTitle ? `${textareaRefss.current?.scrollHeight}px` : '35px',
-    //}}
-    
-    id="title"
-    // minHeight="45px"
-     mb="0px"
+          <SimpleGrid columns={{ base: 1, md: 1 }} >
+            <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
+              Title<Text as='span' color='red.500'>*</Text>
+            </FormLabel>
+            <InputField
+              //ref={textareaRefss}
+              //style={{
+              //...styles.textareaDefaultStyle,
+              //height: formData?.gameTitle ? `${textareaRefss.current?.scrollHeight}px` : '35px',
+              //}}
+
+              id="title"
+              // minHeight="45px"
+              mb="0px"
               // me="30px"
-              
+
               //label="Author"
               //placeholder="eg. Admin"
               //name="gameAuthorName"
-              width="500px"
+              width="100%"
               // value={formData?.gameTitle}
               // onChange={handleChange}
               value={languages !== undefined && languages !== null && languages !== '' ? String(title) : formData?.gameTitle}
@@ -412,20 +413,18 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                   handleChange(e);
                 }
               }}
-   placeholder="eg. Marketing Strategy"
-    name="gameTitle"
-    onKeyPress={checkvalue}
-    style={{
-      border: formData.isStoryTitleInvalid ? '1px solid red' : '1px solid #ccc',
-    }}
-  >
-    
-  </InputField>
-</SimpleGrid>
+              placeholder="eg. Marketing Strategy"
+              name="gameTitle"
+              onKeyPress={checkvalue}
+              style={{
+                border: formData.isStoryTitleInvalid ? '1px solid red' : '1px solid #ccc',
+              }}
+            >
 
-
+            </InputField>
+          </SimpleGrid>
           <SimpleGrid columns={{ base: 1, md: 1 }} mt={'10px'}>
-            <Box width='500px'>
+            <Box>
               <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
                 Skills<Text as='span' color='red.500'>*</Text>
               </FormLabel>
@@ -439,12 +438,12 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                 borderRadius='16px'
                 _focus={{ borderColor: 'teal.300' }}
                 minH='30px'
-                maxH='300px !important' 
+                maxH='300px !important'
                 h='stretch'
                 cursor='text'
-                style={{ overflowY: 'auto', border: formData.isSkillsInvalid ? '1px solid red' : '1px solid #ccc', }} 
+                style={{ overflowY: 'auto', border: formData.isSkillsInvalid ? '1px solid red' : '1px solid #ccc', }}
               >
-                { defaultskills && defaultskills?.map((tag: any, index: any) => {
+                {defaultskills && defaultskills?.map((tag: any, index: any) => {
                   return (
                     <Tag
                       fontSize='xs'
@@ -494,10 +493,8 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
               </Text>
             </Box>
           </SimpleGrid>
-
-
           <SimpleGrid columns={{ base: 1, md: 2, ml: 10 }} mt={'20px'}>
-            <Box width='500px' >
+            <Box >
 
               {/* <TextField
                 mb="10px"
@@ -518,9 +515,10 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                 
               /> */}
 
-<FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
-              Storyline
+              <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
+                Storyline
               </FormLabel>
+             
               <textarea
                 ref={textareaRef}
                 style={styles.textareaDefaultStyle}
@@ -532,6 +530,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                     textAreaChange(e);
                   }
                 }}
+
                 // mb="10px"
                 id="storyline"
                 // label="Storyline"
@@ -545,13 +544,10 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
               >
                 {/* {formData?.gameStoryLine} */}
               </textarea>
-
             </Box>
           </SimpleGrid>
-
-
           <SimpleGrid columns={{ base: 1, md: 2, ml: 10 }} mt={'20px'}>
-            <Box width='500px'>
+            <Box>
               {/* <TextField
               mb="10px"
               // me="30px"
@@ -568,7 +564,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                 resize: 'none', // Disable manual resizing
               }}
             /> */}
-             {/* <TextField
+              {/* <TextField
               mb="0px"
               me="30px"
               id="learningOutcome"
@@ -590,17 +586,15 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                 // label="Storyline"
                 placeholder="eg. Problem Solving"
                 name="gameLearningOutcome"
-              value={formData.gameLearningOutcome}
+                value={formData.gameLearningOutcome}
               // onChange={handleChange}
               >
               </textarea>
             </Box>
 
           </SimpleGrid>
-
-
           <SimpleGrid columns={{ base: 1, md: 2, ml: 10 }} mt={'20px'}>
-            <Box width='500px'>
+            <Box>
               <FormControl>
                 <FormLabel fontWeight='bold' fontSize='sm' mb='8px' ml='10px'>
                   Category<Text as='span' color='red.500'>*</Text>
@@ -619,7 +613,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                   fontSize='sm'
                   style={{
                     border: formData.isCategoryIdInvalid ? '1px solid red' : '1px solid #ccc',
-                  }} 
+                  }}
                 >
                   {defaultCat.map((tag) => (
                     <option key={tag.catId} value={tag.catId}>
@@ -630,10 +624,6 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
               </FormControl>
             </Box>
           </SimpleGrid>
-
-
-
-
           <SimpleGrid columns={{ base: 1, md: 1 }} mt={'20px'}>
             <InputField
               mb="0px"
@@ -642,13 +632,12 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
               label="Author"
               placeholder="eg. Penelope Sterling"
               name="gameAuthorName"
-              width="500px"
+              width="100%"
               value={formData?.gameAuthorName}
               onChange={handleChange}
             />
           </SimpleGrid>
-
-          {/* </Box> */}
+          </Card>
         </Flex>
       </Card>
       {openCourse ? <AddCourse setOpenCourse={setOpenCourse} isOpen={isOpen} onClose={onClose} onOpen={onOpen} /> : null}
@@ -667,7 +656,7 @@ const styles: { [name: string]: React.CSSProperties } = {
   },
   textareaDefaultStyle: {
     padding: 5,
-    width: 500,
+    width: '100%',
     display: "block",
     resize: "none",
     backgroundColor: "white",

@@ -333,12 +333,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen ===
       'Interaction'
     ) {
-      const optionsFiltered = gameInfo?.questOptions.filter(
-        (key: any) =>
-          key?.qpSequence ===
-          gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,
-      );
-      if (gameInfo?.gameData?.gameShuffle) {
+       const optionsFiltered = [];
+      const primarySequence = gameInfo.blocks[profile.currentQuest]['1'].blockPrimarySequence;
+
+for (const option of gameInfo.questOptions) {
+    if (option?.qpSequence === primarySequence) {
+      optionsFiltered.push(option);
+    }
+}
+      if (gameInfo?.gameData?.gameShuffle === 'true') {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [optionsFiltered[i], optionsFiltered[j]] = [
@@ -448,27 +451,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       });
     }
   }, [gameInfo?.gameData]);
-
+  
   useEffect(() => {
-    // switch (currentScreenId) {
-      // case 1 && gameInfo?.gameData?.gameWelcomepageBackground:
-      //   setBackgroundScreenUrl(API_SERVER + '/uploads/background/20252.jpg');
-      //   break;
-      // case 3 && gameInfo?.gameData?.gameReflectionpageBackground:
-        // setBackgroundScreenUrl(
-        //   API_SERVER + '/uploads/background/reflectionBg.png',
-        // );
-        // break;
-      // default:
-        // setBackgroundScreenUrl(gameInfo.assets.gasAssetImage);
-          // API_SERVER + '/uploads/background/41524_1701765021527.jpg',
-         // );
         currentScreenId > 0 &&
           currentScreenId === 1 &&
           isGetsPlayAudioConfirmation &&
           setAudio(gameInfo?.bgMusic ?? '');
-        // break;
-    // }
   }, [currentScreenId, gameInfo]);
 
 
@@ -531,11 +519,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
+
+    //get the next block details
+    const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
     const NextItem = currentBlock != null ? currentBlock + 1 : null;
+    
     const nextSeq = next
       ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
       : '';
-    const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
     const currentQuest = next
       ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
@@ -553,11 +544,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         )
         .map((key: any) => demoBlocks[quest]?.[key])
       : [];
+
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
-      const optionsFiltered = gameInfo?.questOptions.filter(
-        (key: any) => key?.qpSequence === nextBlock[0]?.blockPrimarySequence,
-      );
-      if (gameInfo?.gameData?.gameShuffle) {
+      const optionsFiltered = [];
+for (const option of gameInfo.questOptions) {
+    if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
+      optionsFiltered.push(option);
+    }
+}
+      if (gameInfo?.gameData?.gameShuffle === 'true') {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [optionsFiltered[i], optionsFiltered[j]] = [
@@ -572,7 +567,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     if (
       type === 'Interaction' &&
       resMsg !== ''
-      // && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
       setType('response');
       return false;
@@ -589,22 +583,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       type === 'feedback'
     ) {
       if (navi === 'Repeat Question') {
-        const optionsFiltered = gameInfo?.questOptions.filter(
-          (key: any) => key?.qpSequence === next?.blockPrimarySequence,
-        );
-        if (gameInfo?.gameData?.gameShuffle) {
-          for (let i = optionsFiltered.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [optionsFiltered[i], optionsFiltered[j]] = [
-              optionsFiltered[j],
-              optionsFiltered[i],
-            ];
-          }
-        }
-        setOptions(optionsFiltered);
+        const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
+        setInteractionOptions(gameInfo, currentBlockinteraction);
         setType(next?.blockChoosen);
         setData(next);
-        setSelectedOption(null);
+        setSelectedOption(null);  
         return false;
       } else if (navi === 'New Block') {
         setType(nextBlock[0]?.blockChoosen);
@@ -629,22 +612,58 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           });
         if (selectedNext.length > 0) {
           setType(selectedNext && selectedNext[0]?.blockChoosen);
-          setData(selectedNext && selectedNext[0]);
-          setGame3Position((prev: any) => ({
-            ...prev,
-            nextBlock: selectedNext[0]?.blockPrimarySequence,
-          }));
+              if(selectedNext[0]?.blockChoosen === 'Interaction')
+        {
+          const optionsFiltered = [];
+          for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence ===  selectedNext[0]?.blockPrimarySequence) {
+                optionsFiltered.push(option);
+              }
+          }
+                if (gameInfo?.gameData?.gameShuffle === 'true') {
+                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsFiltered[i], optionsFiltered[j]] = [
+                      optionsFiltered[j],
+                      optionsFiltered[i],
+                    ];
+                  }
+                }
+                setOptions(optionsFiltered);
         }
-        else {
-          setType(nextBlock[0]?.blockChoosen);
-          setData(nextBlock[0]);
-          setGame3Position((prev: any) => ({
-            ...prev,
-            nextBlock: nextBlock[0]?.blockPrimarySequence,
-          }));
+        setData(selectedNext && selectedNext[0]);
+        setGame3Position((prev: any) => ({
+          ...prev,
+          nextBlock: selectedNext[0]?.blockPrimarySequence,
+        }));
+      }
+      else {
+        setType(nextBlock[0]?.blockChoosen);
+        if(nextBlock[0]?.blockChoosen === 'Interaction')
+        {
+          const optionsFiltered = [];
+          for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
+                optionsFiltered.push(option);
+              }
+          }
+                if (gameInfo?.gameData?.gameShuffle === 'true') {
+                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsFiltered[i], optionsFiltered[j]] = [
+                      optionsFiltered[j],
+                      optionsFiltered[i],
+                    ];
+                  }
+                }
+                setOptions(optionsFiltered);
         }
-
-
+        setData(nextBlock[0]);
+        setGame3Position((prev: any) => ({
+          ...prev,
+          nextBlock: nextBlock[0]?.blockPrimarySequence,
+        }));
+      }
         setSelectedOption(null);
         return false;
       } else if (navi === 'Complete') {
@@ -668,42 +687,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
-        return false;
+        return false; 
       }
     }
-    /*
-    if (currentScreenId === 6) {
-      if (
-        gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
-        gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Complete'
-      ) {
-        setCurrentScreenId(9);
-        return false;
-      } else if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
-        setCurrentScreenId(8);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-        setCurrentScreenId(4);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-        setCurrentScreenId(3);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      } else {
-        if (data && type) {
-          setCurrentScreenId(13);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
-          return false;
-        }
-      }
-    }
-    */
     if (currentScreenId === 6) {
       if (
         gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
@@ -1019,17 +1005,55 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           });
         if (selectedNext.length > 0) {
           setType(selectedNext && selectedNext[0]?.blockChoosen);
-          setData(selectedNext && selectedNext[0]);
+            if(selectedNext[0]?.blockChoosen === 'Interaction')
+        {
+          const optionsFiltered = [];
+          for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence ===  selectedNext[0]?.blockPrimarySequence) {
+                optionsFiltered.push(option);
+              }
+          }
+                if (gameInfo?.gameData?.gameShuffle === 'true') {
+                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsFiltered[i], optionsFiltered[j]] = [
+                      optionsFiltered[j],
+                      optionsFiltered[i],
+                    ];
+                  }
+                }
+                setOptions(optionsFiltered);
         }
-        else {
-          setType(nextBlock[0]?.blockChoosen);
-          setData(nextBlock[0]);
+        setData(selectedNext && selectedNext[0]);
+      }
+      else {
+        setType(nextBlock[0]?.blockChoosen);
+        if(nextBlock[0]?.blockChoosen === 'Interaction')
+        {
+          const optionsFiltered = [];
+          for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
+                optionsFiltered.push(option);
+              }
+          }
+                if (gameInfo?.gameData?.gameShuffle === 'true') {
+                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsFiltered[i], optionsFiltered[j]] = [
+                      optionsFiltered[j],
+                      optionsFiltered[i],
+                    ];
+                  }
+                }
+                setOptions(optionsFiltered);
         }
-        setGame3Position((prev: any) => ({
-          ...prev,
-          nextBlock: selectedNext[0]?.blockPrimarySequence,
-        }));
-        setSelectedOption(null);
+        setData(nextBlock[0]);
+      }
+      setGame3Position((prev: any) => ({
+        ...prev,
+        nextBlock: selectedNext[0]?.blockPrimarySequence,
+      }));
+      setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
         setProfile((prev: any) => {
@@ -1051,6 +1075,22 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
     '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
   );
+
+  const setInteractionOptions = (gameInfo: any, currentBlock: any) => {
+    const optionsFiltered = gameInfo?.questOptions.filter(
+      (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
+    );
+    if (gameInfo?.gameData?.gameShuffle ==='true') {
+      for (let i = optionsFiltered.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optionsFiltered[i], optionsFiltered[j]] = [
+          optionsFiltered[j],
+          optionsFiltered[i],
+        ];
+      }
+      setOptions(optionsFiltered);
+    }
+  };
 
   // validate the choosed option
   const handleValidate = (item: any, ind: number) => {
@@ -1386,24 +1426,16 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
     return body;
   };
-  const getMobileResolution = () => {
+  // const getMobileResolution = () => {
 
-    // const width =  window.innerWidth - 500;
-    // const height = window.innerHeight - 500;    
-    // const body = document.getElementById('body');
-    // body.style.width = '390px';
-    // body.style.height = '890px';   
-
-    // console.log('resolu****',window.devicePixelRatio)
-    // return body;
-  };
+  // };
 
   const getCurrScreen = (screenType: any) => {
     // Perform any other actions based on the screen type
     if (screenType == 'Desktop') {
       setResolution(getCurrentResolution())
     } else if (screenType == 'Mobile') {
-      getMobileResolution();
+      // getMobileResolution();
       setResolution({ width: 430, height: 932 })
     }
     else if (screenType == 'Tablet') {
@@ -1428,13 +1460,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   const getFeedbackData = (getdata: any) => {
     setisScreenshot(true);
-    const sortedFeedbackList = feedbackList.slice().sort((a, b) => {
-      const seqA = parseFloat(a.Seq);
-      const seqB = parseFloat(b.Seq);
-      return seqA - seqB;
-    });
     const groupedFeedback: { [key: string]: any[] } = {};
-    sortedFeedbackList.forEach((feedback) => {
+    feedbackList.forEach((feedback) => {
       if (!(feedback.Seq in groupedFeedback)) {
         groupedFeedback[feedback.Seq] = [];
       }
@@ -1462,7 +1489,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         return (item?.blockPrimarySequence === firstPageFeedback[FeedbackcurrentPosition].Seq);
       });
       const optionsFiltered = gameInfo?.questOptions.filter((key: any) => key?.qpSequence === GetSeqData[0]?.blockPrimarySequence);
-      if (gameInfo?.gameData?.gameShuffle) {
+      if (gameInfo?.gameData?.gameShuffle === 'true') {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [optionsFiltered[i], optionsFiltered[j]] = [
@@ -2131,6 +2158,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         demoBlocks={demoBlocks}
                         questOptions={gameInfo?.questOptions}
                         setCurrentScreenId={setCurrentScreenId}
+                        gameQuest={gameInfo?.gameQuest}
                       />
                       {/* </SimpleGrid> */}
                     </>

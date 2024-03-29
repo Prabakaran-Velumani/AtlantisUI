@@ -144,6 +144,7 @@ export default function NFT(props: {
   const textColor = useColorModeValue('navy.700', 'white');
   const textColorBid = useColorModeValue('brand.500', 'white');
   const [isHovered, setIsHovered] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
   let [datePart, timePart] = '';
   if (game) {
@@ -209,31 +210,43 @@ export default function NFT(props: {
 
   let lightBlue = useColorModeValue('#3311db5c', '#3311db5c');
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <Card
       p="20px"
-      border={
-        handelAssign.gameNonPlayingCharacterId === id
-          ? '2px solid #11047a'
-          : '' ||
-            (game?.gameDuplicated === 'YES' &&
-              game?.gameGameStage === 'Creation' &&
-              datePart === getCurrentDate()) ||
-            (game?.gameDuplicated !== 'YES' &&
-              game?.gameGameStage === 'Creation' &&
-              datePart === getCurrentDate()) ||
-            (game?.gameDuplicated !== 'YES' &&
-              game?.gameGameStage === 'Review' &&
-              datePart === getCurrentDate()) ||
-            (game?.gameDuplicated !== 'YES' &&
-              game?.gameGameStage === 'Launched' &&
-              datePart === getCurrentDate())
-          ? '5px solid #ADD8E6'
-          : 'none'
-      }
-      borderColor={
-        handelAssign.gameNonPlayingCharacterId === id ? '#11047a' : ''
-      }
+      boxShadow={'1px 4px 29px #44445429'}
+      // border={
+      //   handelAssign.gameNonPlayingCharacterId === id
+      //     ? '2px solid #11047a'
+      //     : '' ||
+      //       (game?.gameDuplicated === 'YES' &&
+      //         game?.gameGameStage === 'Creation' &&
+      //         datePart === getCurrentDate()) ||
+      //       (game?.gameDuplicated !== 'YES' &&
+      //         game?.gameGameStage === 'Creation' &&
+      //         datePart === getCurrentDate()) ||
+      //       (game?.gameDuplicated !== 'YES' &&
+      //         game?.gameGameStage === 'Review' &&
+      //         datePart === getCurrentDate()) ||
+      //       (game?.gameDuplicated !== 'YES' &&
+      //         game?.gameGameStage === 'Launched' &&
+      //         datePart === getCurrentDate())
+      //       ? '5px solid #ADD8E6'
+      //       : 'none'
+      // }
+      // borderColor={
+      //   handelAssign.gameNonPlayingCharacterId === id ? '#11047a' : ''
+      // }
     >
       <Flex direction={{ base: 'column' }} justify="center">
         <Box
@@ -241,6 +254,9 @@ export default function NFT(props: {
           position="relative"
           w="100%"
           h="100%"
+          display={'flex'}
+          justifyContent={'center'}
+          alignItems={'center'}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -248,19 +264,19 @@ export default function NFT(props: {
             <Image
               src={image}
               w={{ base: '100%', '2xl': '100%' }}
-              h={{ base: '100%', '2xl': '100%' }}
+              h={{ base: '220px', '2xl': '220px' }}
               borderRadius="20px"
             />
           ) : (
             <Image
               src={image}
-              w={{ base: '100%', xl: '100%' }} // Adjust the values based on your design
-              h="400px"
+              w={{ base: '250px', xl: '250px' }} // Adjust the values based on your design
+              h={{ base: '400px', sm: '400px', md: '300px' }}
               borderRadius="20px"
             />
           )}
 
-          {isHovered && tabState !== 'charater' && (
+          {(isHovered && tabState !== 'charater') || (windowWidth < 768 && tabState !== 'charater') ? (
             <Menu
               tabState={tabState}
               position="absolute"
@@ -274,7 +290,7 @@ export default function NFT(props: {
               handelDelete={handelDelete}
               handleDownload={handleDownload}
             />
-          )}
+          ) : null}
           {/* {isHovered && (
   <Flex
     position='absolute'
@@ -419,7 +435,7 @@ export default function NFT(props: {
           )}
 
           {/* dsfdffffffffffffffffffffffffff */}
-          {isHovered ? (
+          {isHovered || windowWidth < 768 ? (
             <Flex
               position="absolute"
               bottom="0px"
@@ -515,7 +531,6 @@ export default function NFT(props: {
             </Flex>
           )}
         </Box>
-
         <Flex flexDirection="column" justify="space-between" h="100%">
           <Flex
             justify="space-between"
@@ -528,7 +543,7 @@ export default function NFT(props: {
             }}
             mb="auto"
           >
-            <Flex direction="column">
+            <Flex direction="column" width={'100%'} alignItems={'start'}>
               {/* {handelAssign.gameNonPlayingCharacterId === id ? (
              <>
              <Box
@@ -693,10 +708,10 @@ value={handelAssign.gameNarratorVoice}
                 // }}
                 mb="5px"
                 fontWeight="bold"
-                me="14px"
                 textAlign="center"
                 fontSize="lg"
-                fontFamily="DM Sans, sans-serif"
+                textTransform={'capitalize'}
+                // fontFamily="DM Sans, sans-serif"
               >
                 {name}
               </Text>
@@ -708,7 +723,9 @@ value={handelAssign.gameNarratorVoice}
                   base: 'sm',
                 }}
                 fontWeight="400"
-                me="14px"
+                display="flex"
+                flexWrap="wrap"
+                gap="8px"
               >
                 {/* {author} */}
                 {author &&
@@ -719,10 +736,10 @@ value={handelAssign.gameNarratorVoice}
                       size="md"
                       variant="solid"
                       colorScheme="brandScheme"
-                      m="2"
+                      // mr="2"
                       bg="lightblue" // Assuming lightBlue is a variable or constant containing the background color
                     >
-                      <TagLabel>{authorItem}</TagLabel>
+                      <TagLabel color={'#11047a'}>{authorItem}</TagLabel>
                     </Tag>
                   ))}
                 {/* <Tag
@@ -739,7 +756,7 @@ value={handelAssign.gameNarratorVoice}
               </Text>
             </Flex>
           </Flex>
-          <Flex
+          {/* <Flex
             justify="space-between"
             align={{
               base: 'center',
@@ -756,11 +773,11 @@ value={handelAssign.gameNarratorVoice}
               '2xl': 'row',
             }}
             mt="25px"
-          >
+          > */}
             {/* <Text fontWeight='700' fontSize='sm' color={textColorBid}>
                        
 						</Text> */}
-          </Flex>
+          {/* </Flex> */}
         </Flex>
       </Flex>
     </Card>

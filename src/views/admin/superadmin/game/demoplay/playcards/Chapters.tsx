@@ -30,6 +30,7 @@ const ChapterPage: React.FC<{
   questOptions?: any;
   currentQuestNo?: any;
   setCurrentQuestNo?: any;
+  gameQuest?: any;
 }> = ({
   imageSrc,
   demoBlocks,
@@ -38,9 +39,9 @@ const ChapterPage: React.FC<{
   questOptions,
   currentQuestNo,
   setCurrentQuestNo,
+  gameQuest
 }) => {
   const [questScores, setQuestScores] = useState(null);
-  // const [completed, setCompleted] = useState(['1']);
 
   useEffect(() => {
     const groupedByQuest: any = {};
@@ -74,18 +75,21 @@ const ChapterPage: React.FC<{
       maxScoresByQuest[questNo] = maxScoreForQuest;
     }
     setQuestScores(maxScoresByQuest);
+
+    
   }, []);
   const { profile, setProfile } = useContext(ScoreContext);
-  // useEffect(() => {
-  //   if (profile.completedLevels.length !== 0) {
-  //     const completedLevels = profile.completedLevels.map(
-  //       (item: any) => item,
-  //     );
-  //     setCompleted(completedLevels);
-  //   }
-  // }, [profile]);
+  useEffect(() => {
+    // if (profile.completedLevels.length !== 0) {
+    //   const completedLevels = profile.completedLevels.map(
+    //     (item: any) => item,
+    //   );
+    //   setCompleted(completedLevels);
+    // }
+    console.log('profile', profile);
+  }, [profile]);
   const handleChapter = (it: any) => {
-    console.log('handleChapter');
+    console.log('handleChapter', it);
     if (profile.completedLevels.includes(it)) {
       setCurrentScreenId(1);
       setProfile((prev: any) => ({

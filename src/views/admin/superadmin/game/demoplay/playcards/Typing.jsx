@@ -16,13 +16,11 @@ function TypingEffect({ text, speed ,setSpeedIsOver}) {
           setDisplayText(currentText);
           setCurrentIndex(prevIndex => prevIndex + 1);
         }, speed);
-        console.log('hellow');
         return () => clearTimeout(timer);
       }
       else{
         if(currentIndex > 0)
         {
-          console.log('hi',currentIndex,'...',text.length);
           setSpeedIsOver(true);
         }
         

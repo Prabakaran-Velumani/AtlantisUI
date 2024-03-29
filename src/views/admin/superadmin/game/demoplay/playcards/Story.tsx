@@ -283,17 +283,21 @@ const Story: React.FC<{
                 : voiceIds?.playerFemale;
           break;
         case 'Interaction':
+          // let optionsText = '';
+          // options.forEach((item: any) => {
+          //   optionsText +=
+          //     '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
+          //     console.log("optionsText",item?.qpOptionText)
+          // });
+          // text = blockInfo.blockText + optionsText;
           let optionsText = '';
-          options.forEach((item: any) => {
-            optionsText +=
-              '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
-          });
-          text = blockInfo.blockText + optionsText;
-          // console.log(
-          //   "userProfile?.gender == 'Male'",
-          //   userProfile?.gender == 'Male',
-          // );
-          // console.log('blockInfo?.blockRoll ', blockInfo?.blockRoll);
+// Sort the options array based on a unique identifier, such as index
+options.sort((a: any, b: any) => a.index - b.index);
+options.forEach((item: any) => {
+    optionsText += '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
+});
+
+text = blockInfo.blockText + optionsText;
           voiceId =
             blockInfo?.blockRoll == '999999'
               ? voiceIds.NPC

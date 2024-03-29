@@ -109,7 +109,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const [i, setI] = useState(0);
   const [isLanguage, setIsLanguage] = useState(false);
   const [select, setSelect] = useState(false);
-  const [lanuages, setLanguages] = useState<any[]>(null);
+  const [language, setLanguages] = useState<any[]>(null);
     // Afrith-modified-starts-08/Mar/24
     const [characterName, setCharacterName] = useState('');
     // Afrith-modified-ends-08/Mar/24
@@ -161,10 +161,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   ///Afrith-modified-starts-20/Mar/24
   const currGameId = id; //from useParams
   const handleProfile = (e: any, lang?: any, langId?:any) => {
-    /*(*/
-    console.log('langIDCS--',langId)
-    console.log('LangCS--',lang)
-    /*)*/
+
     const { id, value } = e.target;
 
     setSelect(false);
@@ -174,7 +171,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     }));
     setGameContentId(langId);
     getContentRelatedLanguage(currGameId,langId);
-    // console.log('gameRelatedContentCS--',gameRelatedContent)
   };
 
     //////////
@@ -185,8 +181,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
             const data = gameContentResult.data;
             setProfileData((prev:any)=>({
               ...prev,
-              // content: data[0]?.content,
-              // audioUrls: data[0]?.audioUrls
               content: data.map((x:any)=>({content: x.content})),
               audioUrls: data.map((x:any)=>({audioUrls: x.audioUrls})),
               textId:data.map((x:any)=>({textId: x.textId})),
@@ -202,8 +196,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       };
       fetchGameContent();
     },[gameContentId])
-
-    console.log('gameContentIdCS--',gameContentId)
     /////////
     // Afrith-modified-starts-08/Mar/24
     // const setPlayerName = (value:any) => {
@@ -248,8 +240,8 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     <Img className="selectField" src={Selected} />
                     {select && (
                       <Box className="dropdown">
-                        {lanuages &&
-                          lanuages.map((lang: any, num: any) => (
+                        {language &&
+                          language.map((lang: any, num: any) => (
                             <Text
                               ml={'5px'}
                               key={num}

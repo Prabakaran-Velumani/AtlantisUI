@@ -290,9 +290,9 @@ export default function Dashboard(props: { [x: string]: any }) {
           <Portal>
             <Box
               display={{
-                base: 'block',
-                sm: 'block',
-                md: 'block', 
+                base: path.startsWith('/admin/game/preview/') ? 'none' :'block',
+                sm: path.startsWith('/admin/game/preview/') ? 'none' :'block',
+                md: path.startsWith('/admin/game/preview/') ? 'none' :'block', 
                 lg: path.startsWith('/admin/game/preview/') ? 'none' : 'block',
               }}
             >

@@ -397,7 +397,7 @@ console.log("datass",datass)
 
   return (
     <>
-      <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>
+      <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'75px'} position={'relative'}>
         <Card alignItems={'center'}>
           <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={{base: '170', sm: '170', md: '300', lg: '300'}} position={'relative'} alignItems={'center'}></Card>
           <Card mb={{ base: '0px', xl: '20px' }} width={{base:'96%',sm:'96%',md:'96%',lg:'70%'}} marginTop={'-120px'} >

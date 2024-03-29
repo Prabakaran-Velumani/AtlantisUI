@@ -120,7 +120,8 @@ interface MenuItem {
                 position='absolute'
 				p='15px'
                 zIndex='1000' // Set a higher z-index value
-				right='0'
+				right='-28px'
+				top='-3px'
                 >
  {showMenu &&
             showMenu.map((menu:any) => (

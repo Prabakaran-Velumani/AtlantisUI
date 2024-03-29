@@ -24,7 +24,7 @@ export default function Settings(props: {
       <Flex
         w="100%"
         bgGradient="linear(to-b, brand.400, brand.600)"
-        minH="127px"
+        minH={{base:'85px',sm:'85px',md:'95px',lg:"127px"}}
         borderRadius="16px"
       ></Flex>
       <Avatar mx="auto" bg={'#fff'} src={avatar} h="87px" w="87px" mt="-43px" mb="15px" />

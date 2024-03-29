@@ -98,31 +98,24 @@ const LeaderBoard: React.FC<{
 
     ///Afrith-modified-starts-09/Mar/24
     const profileInfo = useContext(ScoreContext);
-    console.log('profileInfoLB--',profileInfo)
     const mergedUsersPlayers = [playerInfo,...usersWithAllTimeScore];
   
     ///Sorted Using Score-starts for score position
     const sortedUsingScore = [...mergedUsersPlayers].sort((a, b) => b.score - a.score);
-    console.log('soretdUsingScoreLB--',sortedUsingScore)
     ///Sorted Using Score-ends for score position
   
     ///Using unShift-starts - AllTimeScore
     const beforeSorting = [...mergedUsersPlayers].sort((a, b) => b.allTimeScore - a.allTimeScore);
     const sortedUsers = [...mergedUsersPlayers].sort((a, b) => b.allTimeScore - a.allTimeScore);
     const playerIndex = sortedUsers.findIndex(x => x.name === playerInfo.name);
-    console.log('playerIndexLB--',playerIndex)
     if (playerIndex !== -1) {
       // Remove it from its current position
       const unShiftedPlayer = sortedUsers.splice(playerIndex, 1)[0];
-      console.log('unShiftedPlayerLB--',unShiftedPlayer)
       // Add it to the beginning of the array
       sortedUsers.unshift(unShiftedPlayer);
     }
     ///Using unShift-ends - AllTimeScore
-  
-    console.log('userWithAllTimeScoreLB--',usersWithAllTimeScore)
-    console.log('abc--',mergedUsersPlayers)
-    console.log('sortedUsersLB--',sortedUsers)
+
     ///Afrith-modified-ends-09/Mar/24
 
   const handleHome = () =>{
@@ -130,7 +123,6 @@ const LeaderBoard: React.FC<{
     setCurrentScreenId(10)
   }
 
- 
 
   return (
     <>
