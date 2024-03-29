@@ -1490,7 +1490,7 @@ const ScreenPreview = () => {
                             <CompletionContentScreen
                               preview={true}
                               formData={gameInfo.gameData}
-                              imageSrc={preloadedAssets.Screen1}
+                              imageSrc={preloadedAssets.Completion}
                               compliData={gameInfo.completionQuestOptions}
                               CompKeyCount={CompKeyCount}
                               preloadedAssets={preloadedAssets}
