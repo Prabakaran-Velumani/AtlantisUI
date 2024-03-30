@@ -83,6 +83,7 @@ const LeaderBoard: React.FC<{
   homeLeaderBoard?: any;
   setHomeLeaderBoard?: any;
   setCurrentScreenId?:any;
+  gameInfo?: any;
 }> = ({
   imageSrc,
   formData,
@@ -91,6 +92,7 @@ const LeaderBoard: React.FC<{
   setCurrentScreenId,
   homeLeaderBoard,
   setHomeLeaderBoard,
+  gameInfo
 }) => {
   const content = [1, 2, 3, 4, 5, 6];
 
@@ -119,11 +121,32 @@ const LeaderBoard: React.FC<{
     ///Afrith-modified-ends-09/Mar/24
 
   const handleHome = () =>{
-    setHomeLeaderBoard(false);
-    setCurrentScreenId(10)
+    console.log('handleHome')
+    if(homeLeaderBoard)
+    {
+      setCurrentScreenId(homeLeaderBoard);
+      setHomeLeaderBoard(null);
+    }
+    else{
+      console.log('homeLeaderBoard is null' )
+      if(gameInfo)
+      {
+        if(gameInfo?.gameData?.gameIsShowReflectionScreen == true){
+          console.log('gameInfo?.gameData?.gameIsShowReflectionScreen == true')
+          setCurrentScreenId(3);//Navigate to Reflection screen
+        }
+        else if(gameInfo?.gameData?.gameIsShowTakeaway == true){
+          console.log('gameInfo?.gameData?.gameIsShowTakeaway == true')
+          setCurrentScreenId(7);//Navigate to Takeaway screen
+        }
+        else{
+          console.log('Thank you screen')
+          setCurrentScreenId(5);//Navigate to Thank you screen
+        }
+      }
+      console.log('gameinfo is not not null')
   }
-
-
+  }
   return (
     <>
       {imageSrc && (       
@@ -352,7 +375,7 @@ const LeaderBoard: React.FC<{
             <Img
               src={Close}                   
               className='close-btn'
-              onClick={() =>homeLeaderBoard ? handleHome() : getData(data)}
+              onClick={() => homeLeaderBoard ? handleHome() : getData(data) }
             />          
           </Box>      
       )}

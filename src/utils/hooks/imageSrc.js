@@ -93,7 +93,7 @@ export const assetImageSrc = [
   { assetType: 'question', src: question },
   { assetType: 'qs', src: qs },
   { assetType: 'ref', src: ref },
-  { assetType: 'Leaderboard', src: Lead },
+  { assetType: 'Lead', src: Lead },
   { assetType: 'Replay', src: Replay },
   { assetType: 'InitialImg', src: InitialImg },
   { assetType: 'QueueBackground', src: QueueBackground },

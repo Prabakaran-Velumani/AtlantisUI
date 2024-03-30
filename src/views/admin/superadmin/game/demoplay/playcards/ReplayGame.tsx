@@ -25,10 +25,12 @@ const ReplayGame: React.FC<{
   type?:any;
   setType:any;
   setData:any;
+  replayNextHandler: any;
 }> = ({
   formData,
   imageSrc,
   replayGame,
+  replayNextHandler,
   setisReplay,
   setisOptionalReplay,
   isOptionalReplay,
@@ -45,29 +47,28 @@ const ReplayGame: React.FC<{
    const { profile } = useContext(ScoreContext);
    
 
-   const nextNavigation = (data:any)=>{
-
-     if(data && type)
-     {
-         setCurrentScreenId(13);
-         return false;
-     }
-     else{
-      if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-        setCurrentScreenId(3);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      }
-      else {
-        setType(null);
-        setData(null);
-        setCurrentScreenId(5);
-        return false;
-      }
-     }
-  }
+  //  const nextNavigation = (data:any)=>{
+  //    if(data && type)
+  //    {
+  //        setCurrentScreenId(13);
+  //        return false;
+  //    }
+  //    else{
+  //     if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+  //       setCurrentScreenId(3);
+  //       return false;
+  //     } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+  //       setCurrentScreenId(7);
+  //       return false;
+  //     }
+  //     else {
+  //       setType(null);
+  //       setData(null);
+  //       setCurrentScreenId(5);
+  //       return false;
+  //     }
+  //    }
+  // }
 
   return (
     <>
@@ -106,19 +107,12 @@ const ReplayGame: React.FC<{
                   onClick={replayGame}
                 />
                 {isReplay === true ? (
-                  // <Img
-                  //   src={next}
-                  //   w={'200px'}
-                  //   h={'60px'}
-                  //   cursor={'pointer'}
-                  //   onClick={() => getData(data)}
-                  // />
                   <Img
                     src={next}
                     w={'200px'}
                     h={'60px'}
                     cursor={'pointer'}
-                    onClick={() => nextNavigation(data)}
+                    onClick={() => replayNextHandler(data)}
                   />
                 ) : null}
               </Box>

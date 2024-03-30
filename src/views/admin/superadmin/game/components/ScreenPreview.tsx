@@ -367,7 +367,6 @@ const ScreenPreview = () => {
     // if (nextBlock[0]?.blockChoosen === 'Interaction') {
     //   setInteractionOptions(gameInfo, next);
     // }
-    console.log('nextBlock[0]?.blockChoosen === Interaction',nextBlock[0]?.blockChoosen)
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       setInteractionOptions(gameInfo, nextBlock[0]);
     }
@@ -401,7 +400,6 @@ const ScreenPreview = () => {
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
-        console.log('navi === Select Block');
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -411,9 +409,7 @@ const ScreenPreview = () => {
           })
           .map((item: any) => {
             return demoBlocks[currentQuest][item];
-          });
-          console.log('selectedNext', selectedNext);
-          
+          });         
         if (selectedNext.length > 0) {
           setType(selectedNext && selectedNext[0]?.blockChoosen);
           setData(selectedNext && selectedNext[0]);
@@ -451,7 +447,6 @@ const ScreenPreview = () => {
         }
       }
     }
-console.log('next?.blockShowNavigate', next?.blockShowNavigate)
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
         setType(next?.blockChoosen);
@@ -467,38 +462,6 @@ console.log('next?.blockShowNavigate', next?.blockShowNavigate)
         setData(demoBlocks[currentQuest]['1']);
         setSelectedOption(null);
         return false;
-      // } else if (next?.blockShowNavigate === 'Select Block') {
-      //   setType(nextBlock[0]?.blockChoosen);
- 
-      //   console.log('next?.blockShowNavigate === Select Block');
-      //   console.log(' next?.blockLeadTo',  next?.blockLeadTo)
-      //   const selectedNext = Object.keys(demoBlocks[currentQuest])
-      //   .filter((item: any) => {
-      //       return (
-      //         demoBlocks[currentQuest][item]?.blockSecondaryId == next?.blockLeadTo
-      //       );
-      //     })
-      //     .map((item: any) => {
-      //       return demoBlocks[currentQuest][item];
-      //     });          
-      //     console.log('selectedNext',selectedNext)
-      //   if (selectedNext.length > 0) {
-      //       setType(selectedNext && selectedNext[0]?.blockChoosen);
-      //     if(selectedNext[0]?.blockChoosen === 'Interaction')
-      //     {
-      //       setInteractionOptions(gameInfo, selectedNext[0]);
-      //     }
-      //     setData(selectedNext && selectedNext[0]);
-      //   }
-      //   else {
-      //     console.log("selectedNext.length !> 0" , selectedNext.length > 0)
-      //     setType(nextBlock[0]?.blockChoosen);
-      //     if(nextBlock[0]?.blockChoosen === 'Interaction')
-      //     setInteractionOptions(gameInfo, nextBlock[0]);
-      //   }
-      //   setData(nextBlock[0]);
-      //     return false;
-      // } 
     } else if (next?.blockShowNavigate === 'Select Block') {
       const selectedNext = Object.keys(demoBlocks[currentQuest])
         .filter((item: any) => {
