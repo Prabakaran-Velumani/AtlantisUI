@@ -690,7 +690,14 @@ font-family: 'AtlantisText';
   align-items: center;
   position: absolute;
 }
-
+.okay:hover{
+  background: transparent !important;
+}
+.okay{
+  width:50%;
+  height: 10vh;
+  background: transparent !important;
+}
 .next-btn {
   transform: translate(0, 215px);
   width: 100%;
@@ -866,13 +873,23 @@ font-family: 'AtlantisText';
 }
 
 .top-menu-home-section .Setting-box .setting-pad {
-  height: 75%;
-  width: 550px;
+  height: 90vh;
+  width: auto;
 }
 
 .top-menu-home-section .Setting-box .volumes {
+
   position: absolute;
-  width: 250px;
+  width: calc(90vh - 31vh);
+}
+.vertex{
+  height: 68vh;
+  width: calc(90vh - 31vh);
+  position: absolute;
+  top: 12%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .top-menu-home-section .Setting-box .volumes .slider-track {
@@ -1374,15 +1391,31 @@ transform: translate(-167px, -84px);
 }
 
 .dropdown {
-  transform: translate(8px, 30px);
-  max-width: 234px;
+  /* transform: translate(8px, 30px); */
+  position: absolute;
+  top: 100%;
+  width: 100%;
   max-height: 120px;
   overflow-y: scroll;
   font-family: 'AtlantisText';
   color: #d9c7a2;
   background-color: #062c42;
 }
-
+.choosen_lang{
+  position:relative;
+  z-index:9999999;
+  font-family:AtlantisText;
+  color:#D9C7A2;
+  margin-left:25%;
+  font-size: 4vh;
+}
+.choosen_langs{
+  font-size: 4vh;
+}
+.select{
+  height: 3vh;
+  width:auto;
+}
 .ProfileScreen .img-box .img-section .img {
   height: 870px;
   width: 1600px;
@@ -1397,7 +1430,8 @@ transform: translate(-167px, -84px);
 }
 
 .ProfileScreen .img-box .img-section .profile-box .nick-name label {
-  text-align: center;
+  color:#312821;
+  text-align: center ;
   text-transform: uppercase;
   font-size: 24px;
   margin-right: 0;
@@ -1411,13 +1445,13 @@ transform: translate(-167px, -84px);
   font-family: 'AtlantisText';
 }
 
-.gender label {
-  text-align: center;
+.label {
+  text-align: center !important;
   text-transform: uppercase;
-  font-size: 24px;
+  font-size: 4vh !important;
   margin-right: 0;
   font-family: 'AtlantisText';
-  color: #d9c7a2;
+  color: #312821;
 }
 
 .ProfileScreen .img-box .img-section .profile-box .nick-name input {
@@ -2870,10 +2904,10 @@ transform: translate(-167px, -84px);
 }
 
 @media screen and (max-width: 480px) {
-  .top-menu-home-section .Setting-box .setting-pad {
-    height: 100%;
+  /* .top-menu-home-section .Setting-box .setting-pad {
+    height: ;
     width: 550px;
-  }
+  } */
 
   .Play-game .img-box .img-bg {
     height: 100vh;
@@ -2964,12 +2998,13 @@ transform: translate(-167px, -84px);
 }
 
 .player_name {
+  height: 5vh;
   background-color: transparent;
   outline: none;
   text-align: center;
   position: absolute;
-  bottom: -15px;
-  font-size: 1.5vw;
+  bottom: -80%;
+  font-size: 2.5vw;
   font-family: 'AtlantisText';
 }
 
@@ -2977,8 +3012,8 @@ transform: translate(-167px, -84px);
 
 .character_next {
   position: absolute;
-  bottom: 40px;
-  width: 100%;
+  bottom: 9%;
+  width: calc(90vh - (-48vh));
   display: flex;
   justify-content: center;
 }
@@ -2987,19 +3022,25 @@ transform: translate(-167px, -84px);
 
 .character_select_area {
   position: absolute;
-  width: 100%;
-  top: 150px;
+  width: calc(90vh - (-34vh));
+  top: 34%;
   height: 42%;
   display: flex;
   justify-content: center;
 }
 
 /* seleceet player button */
-
+.character_buttons{
+  width: 90%;
+  height: 5vh;
+  display:flex;
+  justify-content: space-between;
+ 
+}
 .select_player {
   position: absolute;
-  bottom: 70px;
-  width: 100%;
+  bottom: 16.5%;
+  width: calc(90vh - (-34vh));
   display: flex;
   justify-content: center;
 }
@@ -3138,7 +3179,7 @@ transform: translate(-167px, -84px);
 
 
 .play_screen_content{
-  width: 15vw;
+  width: calc(90vh - 49vh);
   height: calc(90vh - 42vh);
   position: absolute;
   top: 25%;
@@ -3180,7 +3221,52 @@ font-size: 4vh
   color:#D9C7A2;
   letter-spacing:2px
 }
+
+.character_template{
+  height: 90vh;
+  width:auto;
+}
+.first_play{
+  width:auto;
+  height: 100vh;
+}
+
 @media screen and (orientation: portrait) {
+  .first_play{
+    width:auto;
+    height: 100vw;
+  }
+  .choosen_langs{
+    font-size: 4vw;
+  }
+  .choosen_lang{
+    font-size: 4vw;
+  }
+  .select{
+    height: 3vw;
+    width:auto;
+  }
+
+  .label {
+    font-size: 4vw !important;
+  }
+
+  .vertex{
+    height: 68vw;
+    width: calc(90vw - 31vw);
+  }
+
+.top-menu-home-section .Setting-box .setting-pad {
+  height: 90vw;
+  width: auto;
+}
+  .character_buttons{
+    height: 5vw;
+  }
+  .character_template{
+    height: 90vw;
+    width:auto;
+  }
   .play_screen_heading{   
     font-size: 6.5vw;   
   }
@@ -3198,7 +3284,7 @@ font-size: 4vh
     font-size: 4vw;
   }
   .play_screen_content{
-    width: 15vh;
+    width: calc(90vw - 49vw);
     height: calc(90vw - 42vw);
   }
   .interaction_heading_potrait{
@@ -3256,7 +3342,8 @@ font-size: 4vh
   }
 
   .player_name {
-    bottom: 16px;
+   height: 5vw;
+   font-size: 2.5vh;
   }
 
   .story_potrait {
@@ -3289,15 +3376,15 @@ font-size: 4vh
     height: 90vw;
   } */
   .character_select_area {
-    top: 98px;
+    width: calc(90vw - (-34vw));
   }
 
   .character_next {
-    bottom: 0px
+    width: calc(90vw - (-48vw));
   }
 
   .select_player {
-    bottom: 37px;
+    width: calc(90vw - (-34vw));
   }
 /* 
   .story_note_image {
@@ -3343,22 +3430,22 @@ font-size: 4vh
 
 @media screen and (min-width: 500px) {
 
-  .player_name {
+  /* .player_name {
     position: absolute;
     bottom: 0px;
-  }
+  } */
 
-  .character_next {
+  /* .character_next {
     bottom: 15px;
-  }
+  } */
 
-  .character_select_area {
+  /* .character_select_area {
     top: 105px;
-  }
+  } */
 
-  .select_player {
+  /* .select_player {
     bottom: 40px;
-  }
+  } */
 
   /* .chapters_list_box {
     top: 85px;
@@ -3409,29 +3496,29 @@ font-size: 4vh
     width: 240px;
   } */
 
-  .top-menu-home-section .Setting-box .setting-pad {
+  /* .top-menu-home-section .Setting-box .setting-pad {
     height: 100%;
     width: 550px;
-  }
+  } */
 }
 
 @media screen and (min-width: 768px) {
-  .player_name {
+  /* .player_name {
     position: absolute;
     bottom: -4px;
-  }
+  } */
 
-  .character_next {
+  /* .character_next {
     bottom: 22px;
-  }
+  } */
 
-  .character_select_area {
+  /* .character_select_area {
     top: 130px;
-  }
+  } */
 
-  .select_player {
+  /* .select_player {
     bottom: 49px;
-  }
+  } */
 
   /* .chapters_list_box {
     top: 110px;
@@ -3484,34 +3571,34 @@ font-size: 4vh
     width: 276px;
   } */
 
-  .top-menu-home-section .Setting-box .setting-pad {
+  /* .top-menu-home-section .Setting-box .setting-pad {
     height: 100%;
     width: 550px;
-  }
+  } */
 }
 
 @media screen and (min-width: 900px) {
-  .top-menu-home-section .Setting-box .setting-pad {
+  /* .top-menu-home-section .Setting-box .setting-pad {
     height: 100%;
     width: 550px;
-  }
-
+  } */
+/* 
   .player_name {
     position: absolute;
     bottom: -2px;
-  }
+  } */
 
-  .character_next {
+  /* .character_next {
     bottom: 24px;
-  }
+  } */
 
-  .character_select_area {
+  /* .character_select_area {
     top: 143px;
-  }
+  } */
 
-  .select_player {
+  /* .select_player {
     bottom: 52px;
-  }
+  } */
 
   /* .chapters_list_box {
     top: 120px;
@@ -3564,22 +3651,22 @@ font-size: 4vh
 }
 
 @media screen and (min-width: 960px) {
-  .player_name {
+  /* .player_name {
     position: absolute;
     bottom: -6px;
-  }
-
+  } */
+/* 
   .character_next {
     bottom: 32px;
-  }
-
+  } */
+/* 
   .character_select_area {
     top: 173px;
-  }
+  } */
 
-  .select_player {
+  /* .select_player {
     bottom: 55px;
-  }
+  } */
 
   /* .chapters_list_box {
     top: 130px;
@@ -3633,22 +3720,22 @@ font-size: 4vh
 }
 
 @media screen and (min-width: 1200px) {
-  .player_name {
+  /* .player_name {
     position: absolute;
     bottom: -10px;
-  }
+  } */
 
-  .character_next {
+  /* .character_next {
     bottom: 40px;
-  }
+  } */
 
-  .character_select_area {
+  /* .character_select_area {
     top: 210px;
-  }
+  } */
 
-  .select_player {
+  /* .select_player {
     bottom: 85px;
-  }
+  } */
 
   /* .chapters_list_box {
     top: 150px;
@@ -3701,22 +3788,22 @@ font-size: 4vh
 }
 
 @media screen and (min-width: 1400px) {
-  .player_name {
+  /* .player_name {
     position: absolute;
     bottom: -22px;
-  }
+  } */
 
-  .character_next {
+  /* .character_next {
     bottom: 50px;
-  }
+  } */
 
-  .character_select_area {
+  /* .character_select_area {
     top: 235px;
-  }
+  } */
 
-  .select_player {
+  /* .select_player {
     bottom: 95px;
-  }
+  } */
 
   /* .chapters_list_box {
     top: 173px;
@@ -3771,22 +3858,22 @@ font-size: 4vh
 }
 
 @media screen and (min-width: 1600px) {
-  .player_name {
+  /* .player_name {
     position: absolute;
     bottom: -15px;
-  }
+  } */
 
-  .character_next {
+  /* .character_next {
     bottom: 57px;
-  }
+  } */
 
-  .character_select_area {
+  /* .character_select_area {
     top: 260px;
-  }
+  } */
 
-  .select_player {
+  /* .select_player {
     bottom: 113px;
-  }
+  } */
 
   /* .chapters_list_box {
     top: 180px;
@@ -3839,22 +3926,22 @@ font-size: 4vh
 }
 
 @media screen and (min-width: 1800px) {
-  .player_name {
+  /* .player_name {
     position: absolute;
     bottom: -10px;
-  }
+  } */
 
-  .character_next {
+  /* .character_next {
     bottom: 63px;
-  }
-
+  } */
+/* 
   .character_select_area {
     top: 300px;
-  }
+  } */
 
-  .select_player {
+  /* .select_player {
     bottom: 135px;
-  }
+  } */
 
   /* .chapters_list_box {
     top: 195px;
@@ -3907,22 +3994,22 @@ font-size: 4vh
 }
 
 @media screen and (min-width: 2000px) {
-  .player_name {
+  /* .player_name {
     position: absolute;
     bottom: -27px;
-  }
+  } */
 
-  .character_next {
+  /* .character_next {
     bottom: 79px;
-  }
+  } */
 
-  .character_select_area {
+  /* .character_select_area {
     top: 332px;
-  }
+  } */
 
-  .select_player {
+  /* .select_player {
     bottom: 158px;
-  }
+  } */
 
   /* .chapters_list_box {
     top: 204px;
@@ -3975,22 +4062,22 @@ font-size: 4vh
 }
 
 @media screen and (min-width: 2300px) {
-  .player_name {
+  /* .player_name {
     position: absolute;
     bottom: -25px;
-  }
+  } */
 
-  .character_next {
+  /* .character_next {
     bottom: 84px;
-  }
+  } */
 
-  .character_select_area {
+  /* .character_select_area {
     top: 355px;
-  }
+  } */
 
-  .select_player {
+  /* .select_player {
     bottom: 160px;
-  }
+  } */
 
   /* .chapters_list_box {
     top: 265px;
@@ -4043,22 +4130,22 @@ font-size: 4vh
 }
 
 @media screen and (min-width: 2600px) {
-  .player_name {
+  /* .player_name {
     position: absolute;
     bottom: -14px;
-  }
-
+  } */
+/* 
   .character_next {
     bottom: 92px;
-  }
-
+  } */
+/* 
   .character_select_area {
     top: 375px;
-  }
+  } */
 
-  .select_player {
+  /* .select_player {
     bottom: 180px;
-  }
+  } */
 
   /* .chapters_list_box {
     top: 240px;
