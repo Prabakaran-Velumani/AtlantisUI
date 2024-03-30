@@ -12,6 +12,7 @@ import fill from '../../assets/img/screens/Fill.png';
 import bull from '../../assets/img/screens/bullet.png';
 import batch from '../../assets/img/screens/upback.png';
 import feedi from '../../assets/img/screens/feed.png';
+import Completion from '../../assets/img/screens/Chapter Complete Background.png';
 import Screen1 from '../../assets/img/screens/screen1.png';
 import Screen2 from '../../assets/img/screens/screen2.png';
 import Screen4 from '../../assets/img/screens/screen4.png';
@@ -80,6 +81,7 @@ export const assetImageSrc = [
   { assetType: 'bull', src: bull },
   { assetType: 'batch', src: batch },
   { assetType: 'feedi', src: feedi },
+  { assetType: 'Completion', src: Completion },
   { assetType: 'Screen1', src: Screen1 },
   { assetType: 'Screen2', src: Screen2 },
   { assetType: 'Screen4', src: Screen4 },

@@ -124,7 +124,7 @@ const PreviewWelcomeScreen: React.FC<{
         transition={{ duration: 0.5, delay: 0.5 }}
       >
         <Box className="screen-preview-content-wrapper">
-          <Img src={imageSrc} className="preview-welcome-texture" />
+          <Img src={preloadedAssets.backgroundImage} className="preview-welcome-texture" />
           <Box className='welcome-screen-head-content'>
           <Text
                 className='welcomescreen-heading'

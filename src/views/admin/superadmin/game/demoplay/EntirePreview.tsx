@@ -2026,91 +2026,75 @@ for (const option of gameInfo.questOptions) {
                           top="50%"
                           left="50%"
                           transform="translate(-50%, -50%)"
-                          // className="story_note_grid"
-                          width={'100%'}
+                          className="story_note_grid"
+                          // width={'100%'}
                         >
                           <GridItem colSpan={1}>
                             <Box
-                              w={'auto'}
-                              h={'90vh'}
+                              // w={'100%'}
+                              // h={'100vh'}
                               display={'flex'}
                               justifyContent={'center'}
                               position={'relative'}
-                              className={'info_potrait'}
+                              // className={'info_potrait'}
                             >
-                              <Img src={preloadedAssets.Login} w={'auto'} h={'100%'} />
+                              <Img src={Login} className={'first_play'} />
                               <Box
-                                w={'15vw'}
-                                h={'49%'}
-                                position={'fixed'}
-                                top={'25%'}
-                                display={'flex'}
-                                justifyContent={'space-between'}
-                                alignItems={'center'}
-                                flexDirection={'column'}
+                              className={'play_screen_content'}                             
                               >
-                                <Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                  >
-                                    <Text
-                                      fontFamily={'AtlantisText'}
-                                      fontSize={'2.8vw'}
-                                      color={'#D9C7A2'}
-                                      className={'intro_text'}
+                                  <Box>
+                                    <Box
+                                      w={'100%'}                                     
+                                      display={'flex'}
+                                      justifyContent={'center'}
                                     >
-                                      Atlantis
-                                    </Text>
+                                      <Text
+                                      className={'play_screen_heading'}                                       
+                                      >
+                                        Atlantis
+                                      </Text>
+                                    </Box>
                                   </Box>
-                                </Box>
-                                <Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                  >
-                                    <Text
-                                      fontFamily={'AtlantisText'}
-                                      fontSize={'2.5vw'}
-                                      color={'#D9C7A2'}
-                                      className={'intro_text'}
+                                  <Box>
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
                                     >
-                                      Welcome To
-                                    </Text>
-                                  </Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                  >
-                                    <Text
-                                      fontFamily={'AtlantisText'}
-                                      fontSize={'2.5vw'}
-                                      color={'#D9C7A2'}
-                                      textTransform={'capitalize'}
-                                      className={'intro_text'}
+                                      <Text
+                                        className={'play_screen_text'}
+                                      >
+                                        Welcome To
+                                      </Text>
+                                    </Box>
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                      mb={{base:0,lg:2}}
                                     >
-                                      The Demo Play
-                                    </Text>
-                                  </Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                  >
-                                    <Button
-                                      w={'90%'}
-                                      h={{ sm: '20px', md: '30px' }}
-                                      bg={'none'}
-                                      _hover={{ bg: 'none' }}
-                                      onClick={() => {
-                                        setCurrentScreenId(12);
-                                        setIsGetsPlayAudioConfirmation(true);
-                                      }}
-                                    ></Button>
-                                  </Box>
+                                      <Text
+                                       className={'play_screen_text'}
+                                      >
+                                        The Demo Play
+                                      </Text>
+                                    </Box>
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Button
+                                        w={'90%'}
+                                        h={{sm:'20px',md:'30px'}}
+                                        bg={'none'}
+                                        _hover={{bg:'none'}}
+                                        onClick={() => {
+                                          setCurrentScreenId(12);
+                                          setIsGetsPlayAudioConfirmation(true);
+                                        }}
+                                      ></Button>
+                                    </Box>
                                 </Box>
                               </Box>
                             </Box>

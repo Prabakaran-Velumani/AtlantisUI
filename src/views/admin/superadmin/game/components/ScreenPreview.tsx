@@ -41,10 +41,10 @@ import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { updatePreviewData } from 'store/preview/previewSlice';
 import LeaderBoard from '../demoplay/playcards/Leaderboard';
 
-// const WelcomeContentScreen = lazy(() => import('./onimage/WelcomeContentScreen'));
-const WelcomeContentScreen = lazy(
-  () => import('./onimage/PreviewWelcomeScreen'),
-);
+const WelcomeContentScreen = lazy(() => import('./onimage/WelcomeContentScreen'));
+// const WelcomeContentScreen = lazy(
+//   () => import('./onimage/PreviewWelcomeScreen'),
+// );
 const CompletionContentScreen = lazy(
   () => import('./onimage/CompletionContentScreen'),
 );
@@ -607,32 +607,8 @@ const ScreenPreview = () => {
             <Box id="EntirePreview-wrapper">
               <Box className="EntirePreview-content">
                 <Box h={'100vh !important'} className="Images">
-                  <Flex
-                    height="100vh"
-                    backgroundImage={preloadedAssets?.backgroundImage}
-                    className="EntirePreview screen-bgImage"
-                  >
-                    <Button
-                      className="demo-btn"
-                      bg="#11047a"
-                      _hover={{ bg: '#190793' }}
-                      color="#fff"
-                      style={{
-                        position: 'absolute',
-                        top: '2vh',
-                        right: '0vw',
-                        pointerEvents: 'auto',
-                        zIndex: 1, // High z-index value
-                        visibility: 'visible',
-                      }}
-                      mr={'17px'}
-                      mt={'6px'}
-                      ml={'11px'}
-                      onClick={handleEntirePrev}
-                    >
-                      Demo Play
-                    </Button>
-                    {currentTab == 3 && (
+                  <Flex height="100vh" className="EntirePreview">
+                    {currentTab === 3 && (
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -650,10 +626,12 @@ const ScreenPreview = () => {
                           alignItems={'center'}
                           justifyContent={'center'}
                           className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
                             {gameInfo && (
                               <WelcomeContentScreen
+                                // backgroundImage={preloadedAssets.backgroundImage}
                                 formData={gameInfo.gameData}
                                 imageSrc={preloadedAssets?.Screen5}
                                 preview={true}
@@ -665,81 +643,217 @@ const ScreenPreview = () => {
                       </Box>
                     )}
                     {currentTab === 4 && data && type === 'Note' && (
-                      <Box className="screen-notebox1">
-                        <Box className="screen-notebox2">
-                          <Box className="screen-notebox3">
-                            <Img
-                              src={preloadedAssets?.note}
-                              className="screen-noteimage"
-                            />
-                            <Box
-                              position={'fixed'}
-                              overflowY={'scroll'}
-                              transform={'translate(0px, 0px)'}
-                              w={'50%'}
-                              mt={'10px'}
-                              display={'flex'}
-                              flexDirection={'column'}
-                              textAlign={'center'}
-                              justifyContent={'center'}
-                              style={{
-                                fontWeight: '900',
-                                color: '#D9C7A2',
-                                fontSize: '18px',
-                                fontFamily: 'AtlantisContent',
-                                lineHeight: 1,
-                              }}
-                              className="screen-notebox5"
-                            >
-                              <Box className="screen-notebox6">
-                                {/* {data?.blockText} */}
-                                {remainingSentences}
-                                {/* {remainingSentences.map((sentence, index) => (
-  <React.Fragment key={index}>{sentence}</React.Fragment>
-))} */}
-                              </Box>
+                      <Box
+                        position="relative"                       
+                        w={'100%'}
+                        height="100vh"
+                        backgroundImage={preloadedAssets?.backgroundImage}
+                        backgroundSize={'cover'}
+                        backgroundRepeat={'no-repeat'}
+                        className="chapter_potrait"
+                      >
+                        <Grid
+                          templateColumns="repeat(1, 1fr)"
+                          gap={4}
+                          position="absolute"
+                          top="50%"
+                          left="50%"
+                          transform="translate(-50%, -50%)"
+                          className="story_note_grid"
+                        >
+                          <GridItem colSpan={1} position={'relative'}>
+                            <Box display={'flex'} justifyContent={'center'}>
+                              <Img
+                                src={preloadedAssets?.note}
+                                className="story_note_image"
+                                loading="lazy"
+                              />
                               <Box
-                                w={'100%'}
-                                onClick={() => getDataSection(data)}
-                                mt={'20px'}
-                                display={'flex'}
-                                justifyContent={'center'}
-                                cursor={'pointer'}
-                                className="screen-notebox7"
+                                className={'story_note_content'}
+                                // bg={'blue.300'}
                               >
-                                <Img
-                                  src={preloadedAssets.next}
-                                  w={'200px'}
-                                  h={'60px'}
-                                />
+                                <Box
+                                  w={'100%'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                >
+                                  <Box className={'story_note_block'}>
+                                    <Text textAlign={'center'}>
+                                    {remainingSentences}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={'100%'}
+                                  onClick={() => getData(data)}
+                                  mt={'20px'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                  cursor={'pointer'}
+                                  position={'fixed'}
+                                  top={'70%'}
+                                >
+                                  <Img
+                                    src={preloadedAssets.next}
+                                    h={'7vh'}
+                                    className={'story_note_next_button'}
+                                  />
+                                </Box>
                               </Box>
                             </Box>
-                            {/* </Box> */}
-                          </Box>
-                        </Box>
+                          </GridItem>
+                        </Grid>
                       </Box>
+
+                      // old note ui copy
+
+                      // <Box
+                      //   w={'100%'}
+                      //   h={'100vh'}
+                      //   display={'flex'}
+                      //   alignItems={'center'}
+                      //   justifyContent={'center'}
+                      //   position={'relative'}
+                      //   overflow={'visible'}
+                      //   style={{ perspective: '1000px' }}
+                      // >
+                      //   <Box
+                      //     color={'rgba(0, 0, 0, 0.5)'}
+                      //     backgroundImage={preloadedAssets?.backgroundImage}
+                      //     w={'100%'}
+                      //     h={'100vh'}
+                      //     backgroundRepeat={'no-repeat'}
+                      //     backgroundSize={'cover'}
+                      //     transform={`scale(${first ? 1 : 0.9}) translateY(${
+                      //       first ? 0 : -0
+                      //     }%) translateX(${first ? 0 : -10}%)`}
+                      //     transition={'transform 0.9s ease-in-out'}
+                      //   >
+                      //     <Box
+                      //       position={'fixed'}
+                      //       top={'200px'}
+                      //       right={'0px'}
+                      //       bottom={0}
+                      //       zIndex={999}
+                      //       w={'300px'}
+                      //     >
+                      //       <Box
+                      //         style={{
+                      //           transform: `scale(${showNote ? 0.2 : 1})`,
+                      //           transition: 'transform 0.5s ease-in-out',
+                      //         }}
+                      //         position={'fixed'}
+                      //         w={'40%'}
+                      //         h={'60vh'}
+                      //         display={'flex'}
+                      //         flexDirection={'column'}
+                      //         justifyContent={'center'}
+                      //         alignItems={'center'}
+                      //       >
+                      //         <Img
+                      //           w={'100%'}
+                      //           h={'80vh'}
+                      //           src={preloadedAssets?.note}
+                      //         />
+                      //         <Box
+                      //           position={'fixed'}
+                      //           overflowY={'scroll'}
+                      //           transform={'translate(0px, 0px)'}
+                      //           w={'50%'}
+                      //           mt={'10px'}
+                      //           display={'flex'}
+                      //           flexDirection={'column'}
+                      //           textAlign={'center'}
+                      //           justifyContent={'center'}
+                      //           style={{
+                      //             fontWeight: '900',
+                      //             color: '#D9C7A2',
+                      //             fontSize: '18px',
+                      //             fontFamily: 'AtlantisContent',
+                      //             lineHeight: 1,
+                      //           }}
+                      //         >
+                      //           <Box
+                      //             w={'100%'}
+                      //             overflowY={'scroll'}
+                      //             h={'100px'}
+                      //             display={'flex'}
+                      //             alignItems={'center'}
+                      //             justifyContent={'center'}
+                      //             mt={'20px'}
+                      //           >
+                      //             {data?.blockText}
+                      //           </Box>
+                      //           <Box
+                      //             w={'100%'}
+                      //             onClick={() => getData(data)}
+                      //             mt={'20px'}
+                      //             display={'flex'}
+                      //             justifyContent={'center'}
+                      //             cursor={'pointer'}
+                      //           >
+                      //             <Img
+                      //               src={preloadedAssets.next}
+                      //               w={'200px'}
+                      //               h={'60px'}
+                      //             />
+                      //           </Box>
+                      //         </Box>
+                      //       </Box>
+                      //     </Box>
+                      //   </Box>
+                      // </Box>
                     )}
                     {currentTab === 4 && data && type === 'Dialog' && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                      >
+                      <Box className="chapter_potrait">
                         <Img
-                          style={{
-                            transform: `translateY(${showNote ? 200 : 0}px)`,
-                            transition:
-                              'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                          }}
-                          position={'fixed'}
-                          maxW={'100%'}
-                          maxH={'100%'}
-                          w={'100%'}
-                          h={'240px'}
-                          bottom={'0'}
+                          src={preloadedAssets?.backgroundImage}
+                          className="dialogue_screen"
+                        />
+                        {/* <Box w={'100%'} h={'100vh'}>
+                           <Canvas camera={{ position: [30, 0, 10] }}>
+                             <directionalLight
+                               position={[5, 5, 5]}
+                               intensity={0.8}
+                               color={0xffccaa}
+                               castShadow
+                             />
+                             <ambientLight intensity={5.5} />
+                             {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
+                        {/* <Background /> */}
+                        {/* <Model /> */}
+                        {/* <mesh 
+                         rotation={[-Math.PI / 2, 0, 0]}
+                         position={[0, -5, 0]}
+                         receiveShadow 
+                       > */}
+                        {/* <planeGeometry args={[100, 100]} />
+                         <shadowMaterial opacity={0.5} />
+                       </mesh> */}
+                        {/* </Canvas>
+                         </Box> */}
+                        {/* {selectedPlayer && (
+                           <Img
+                             src={`${API_SERVER}/${selectedPlayer}`}
+                             position={'fixed'}
+                             right={'300px'}
+                             bottom={'100px'}
+                             w={'200px'}
+                             h={'324px'}
+                           />
+                         )}
+                         {selectedNpc && (
+                           <Img
+                             src={selectedNpc}
+                             position={'fixed'}
+                             right={'500px'}
+                             bottom={'100px'}
+                             w={'200px'}
+                             h={'324px'}
+                           />
+                         )} */}
+                        <Img
+                          className={'dialogue_image'}
                           src={preloadedAssets?.dial}
                         />
                         {!showNote && (
@@ -748,19 +862,20 @@ const ScreenPreview = () => {
                               <Img
                                 src={preloadedAssets?.char}
                                 position={'fixed'}
-                                h={'70px'}
-                                w={'25%'}
-                                left={'13%'}
-                                bottom={'150px'}
+                                h={'100px'}
+                                w={'30%'}
+                                left={'5%'}
+                                bottom={'93px'}
                               />
                               <Text
                                 position={'fixed'}
-                                left={'24%'}
-                                bottom={'167px'}
-                                fontSize={'25'}
-                                fontWeight={700}
+                                left={{ base: '17%', md: '18%' }}
+                                bottom={'118px'}
+                                fontSize={{ base: '30px', xl: '2.2vw' }}
+                                fontWeight={500}
                                 textAlign={'center'}
                                 fontFamily={'AtlantisText'}
+                                color={'#312821'}
                               >
                                 {data.blockRoll === 'Narrator'
                                   ? data.blockRoll
@@ -770,14 +885,16 @@ const ScreenPreview = () => {
                             <Box
                               display={'flex'}
                               position={'fixed'}
+                              alignItems={'center'}
                               justifyContent={'space-between'}
-                              w={'75%'}
-                              bottom={'55px'}
+                              h={'61px'}
+                              overflowY={'scroll'}
+                              w={'85%'}
+                              fontSize={{ base: '30px', lg: '1.8vw' }}
+                              bottom={'38px'}
                               fontFamily={'AtlantisContent'}
-                              fontSize={'21px'}
+                              // fontSize={'21px'}
                             >
-                              {/* <TypingEffect text={data?.blockText} speed={50} /> */}
-                              {/* <TypingEffect text={remainingSentences} speed={5000} /> */}
                               {showTypingEffect === false ? <TypingEffect
                                 text={remainingSentences.toString()}
                                 speed={50}
@@ -790,19 +907,19 @@ const ScreenPreview = () => {
                               display={'flex'}
                               position={'fixed'}
                               justifyContent={'space-between'}
-                              w={'80%'}
+                              w={'95%'}
                               bottom={'0'}
                             >
                               <Img
                                 src={preloadedAssets?.left}
-                                w={'50px'}
+                                w={'70px'}
                                 h={'50px'}
                                 cursor={'pointer'}
                                 onClick={() => previousData(data)}
                               />
                               <Img
                                 src={preloadedAssets?.right}
-                                w={'50px'}
+                                w={'70px'}
                                 h={'50px'}
                                 cursor={'pointer'}
                                 onClick={() => Updatecontent()}
@@ -811,166 +928,424 @@ const ScreenPreview = () => {
                           </>
                         )}
                       </Box>
+                      // old dialog ui copy
+                      // <Box
+                      //   w={'100%'}
+                      //   h={'100vh'}
+                      //   display={'flex'}
+                      //   alignItems={'center'}
+                      //   justifyContent={'center'}
+                      //   position={'relative'}
+                      // >
+                      //   <Img
+                      //     src={preloadedAssets?.backgroundImage}
+                      //     maxW={'100%'}
+                      //     maxH={'100%'}
+                      //     w={'100%'}
+                      //     h={'100vh'}
+                      //     transform={
+                      //       'scale(1.3}) translateY(-10%) translateX(-10%)'
+                      //     }
+                      //     transition={'transform 0.9s ease-in-out'}
+                      //   />
+                      //   <Img
+                      //     style={{
+                      //       transform: `translateY(${showNote ? 200 : 0}px)`,
+                      //       transition:
+                      //         'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+                      //     }}
+                      //     position={'fixed'}
+                      //     maxW={'100%'}
+                      //     maxH={'100%'}
+                      //     w={'100%'}
+                      //     h={'240px'}
+                      //     bottom={'0'}
+                      //     src={preloadedAssets?.dial}
+                      //   />
+                      //   {!showNote && (
+                      //     <>
+                      //       <Box position={'relative'}>
+                      //         <Img
+                      //           src={preloadedAssets?.char}
+                      //           position={'fixed'}
+                      //           h={'70px'}
+                      //           w={'25%'}
+                      //           left={'13%'}
+                      //           bottom={'150px'}
+                      //         />
+                      //         <Text
+                      //           position={'fixed'}
+                      //           left={'24%'}
+                      //           bottom={'167px'}
+                      //           fontSize={'25'}
+                      //           fontWeight={700}
+                      //           textAlign={'center'}
+                      //           fontFamily={'AtlantisText'}
+                      //         >
+                      //           {data.blockRoll === 'Narrator'
+                      //             ? data.blockRoll
+                      //             : gameInfo?.gameData?.gameNonPlayerName}
+                      //         </Text>
+                      //       </Box>
+                      //       <Box
+                      //         display={'flex'}
+                      //         position={'fixed'}
+                      //         justifyContent={'space-between'}
+                      //         w={'75%'}
+                      //         bottom={'55px'}
+                      //         fontFamily={'AtlantisContent'}
+                      //         fontSize={'21px'}
+                      //       >
+                      //         <TypingEffect text={data?.blockText} speed={50} />
+                      //       </Box>
+                      //       <Box
+                      //         display={'flex'}
+                      //         position={'fixed'}
+                      //         justifyContent={'space-between'}
+                      //         w={'80%'}
+                      //         bottom={'0'}
+                      //       >
+                      //         <Img
+                      //           src={preloadedAssets?.left}
+                      //           w={'50px'}
+                      //           h={'50px'}
+                      //           cursor={'pointer'}
+                      //         />
+                      //         <Img
+                      //           src={preloadedAssets?.right}
+                      //           w={'50px'}
+                      //           h={'50px'}
+                      //           cursor={'pointer'}
+                      //           onClick={() => getData(data)}
+                      //         />
+                      //       </Box>
+                      //     </>
+                      //   )}
+                      // </Box>
                     )}
                     {currentTab === 4 && data && type === 'Interaction' && (
                       <Box
+                        position="relative"                       
                         w={'100%'}
-                        h={'100vh'}
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
+                        height="100vh"
+                        backgroundImage={preloadedAssets?.backgroundImage}
+                        backgroundSize={'cover'}
+                        backgroundRepeat={'no-repeat'}
+                        className="chapter_potrait"
                       >
-                        {/* <Img
-                          src={preloadedAssets?.backgroundImage}
-                          maxW={'100%'}
-                          maxH={'100%'}
-                          w={'100%'}
-                          h={'100vh'}
-                          transform={`scale(1.5}) translateY(-10%) translateX(${
-                            showNote ? -200 : 0
-                          }px)`}
-                          transition={'transform 0.9s ease-in-out'}
-                        /> */}
-                        <Box
-                          style={{
-                            transform: `translateX(${showNote ? -200 : 0
-                              }px) scale(1.2)`,
-                            transition:
-                              'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                          }}
-                          backgroundImage={preloadedAssets?.parch}
-                          position={'fixed'}
-                          w={{ sm: '350px', md: '500px' }}
-                          h={{ sm: '50vh', md: ' 550px' }}
-                          left={{ sm: '60px', md: '180px' }}
-                          backgroundSize={'contain'}
-                          backgroundRepeat={'no-repeat'}
+                        <Grid
+                          templateColumns="repeat(1, 1fr)"
+                          gap={4}
+                          position="absolute"
+                          top="50%"
+                          left="50%"
+                          transform="translate(-50%, -50%)"
+                          w={'90%'}
                         >
-                          <Box
-                            textAlign={'center'}
-                            h={'100px'}
-                            display={'flex'}
-                            justifyContent={'center'}
-                            alignItems={'center'}
-                            fontWeight={700}
-                            fontFamily={'AtlantisText'}
-                            lineHeight={1}
-                            w={'100%'}
-                          >
-                            <Box w={'50%'} fontSize={'21px'}>
-                              Interactions...!{' '}
-                            </Box>
-                          </Box>
-                          <Box
-                            textAlign={'center'}
-                            h={'100px'}
-                            display={'flex'}
-                            justifyContent={'center'}
-                            alignItems={'center'}
-                            fontWeight={500}
-                            fontFamily={'AtlantisText'}
-                            lineHeight={1}
-                            w={'96%'}
-                            overflowY={'scroll'}
-                          >
-                            <Box w={'60%'} fontSize={'20px'} letterSpacing={1}>
-                              {data?.blockText}
-                            </Box>
-                          </Box>
-                          <Box
-                            mt={'10px'}
-                            w={{ sm: '200px', md: '400px' }}
-                            fontWeight={500}
-                            ml={'17%'}
-                            h={'220px'}
-                            overflowY={'scroll'}
-                          >
-                            {options &&
-                              options.map((item: any, ind: number) => (
+                          <GridItem colSpan={1} position={'relative'}>
+                            <Box
+                              position={'relative'}
+                              className="story_interaction_image"
+                            >
+                              <Img
+                                src={preloadedAssets?.parch}
+                                w={'auto'}
+                                h={'100%'}
+                                loading="lazy"
+                              />
+                              <Box
+                                position={'absolute'}
+                                top={{ base: '5%', md: '6%' }}
+                                // h={'80% !important'}
+                                className="story_interaction_content"
+                              >
                                 <Box
-                                  mb={'10px'}
-                                  w={'80%'}
-                                  lineHeight={1}
-                                  key={ind}
-                                  color={selectedOption === ind ? 'purple' : ''}
                                   textAlign={'center'}
-                                  cursor={'pointer'}
-                                  onClick={() => handleValidate(item, ind)}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                  alignItems={'center'}
+                                  fontWeight={500}
+                                  fontSize={{ md: '3vw', lg: '2.5vw' }}
                                   fontFamily={'AtlantisText'}
-                                  fontSize={'20px'}
+                                  lineHeight={1}
+                                  w={'100%'}
+                                  h={'10%'}
+                                  className={'interaction_heading_potrait'}
+                                >
+                                  <Box w={'80%'} color={'#312821'}>
+                                    Interaction{' '}
+                                  </Box>
+                                </Box>
+                                <Box
+                                  textAlign={'center'}
+                                  h={'25%'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                  alignItems={'center'}
+                                  fontWeight={500}
+                                  fontFamily={'AtlantisText'}
+                                  lineHeight={1}
+                                  w={'96%'}
+                                  overflowY={'scroll'}
+                                  marginTop={'15px'}
+                                >
+                                  <Box className={'story_intraction_question'}>
+                                    {data?.blockText}
+                                  </Box>
+                                </Box>
+                                <Box
+                                  mt={'10px'}
+                                  w={'100%'}
+                                  h={'40%'}
+                                  fontWeight={500}
+                                  overflowY={'scroll'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                >
+                                  <Box w={'60%'}>
+                                    {options &&
+                                      options.map((item: any, ind: number) => (
+                                        <Box
+                                          w={'100%'}
+                                          mb={'10px'}
+                                          lineHeight={1}
+                                          key={ind}
+                                          color={
+                                            selectedOption === ind
+                                              ? 'purple'
+                                              : ''
+                                          }
+                                          textAlign={'center'}
+                                          cursor={'pointer'}
+                                          onClick={() =>
+                                            handleValidate(item, ind)
+                                          }
+                                          fontFamily={'AtlantisText'}
+                                        >
+                                          <Img
+                                            src={
+                                              selectedOption === ind
+                                                ? preloadedAssets?.on
+                                                : preloadedAssets?.off
+                                            }
+                                            h={'4vh'}
+                                            w={'100%'}
+                                          />
+                                          <Box
+                                            className={
+                                              'story_interaction_option'
+                                            }
+                                          >
+                                            {item?.qpOptionText}
+                                          </Box>
+                                        </Box>
+                                      ))}
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={'98%'}
+                                  display={'flex'}
+                                  justifyContent={'space-between'}
                                 >
                                   <Img
-                                    src={
-                                      selectedOption === ind
-                                        ? preloadedAssets?.on
-                                        : preloadedAssets?.off
-                                    }
-                                    h={'30px'}
-                                    w={'95%'}
+                                    src={preloadedAssets?.left}
+                                    className={'interaction_button'}
+                                    // onClick={() => prevData(data)}
                                   />
-                                  {item?.qpOptionText}
+                                  {selectedOption !== null && (
+                                    <Img
+                                      src={preloadedAssets?.right}
+                                      className={'interaction_button'}
+                                      onClick={() => getData(data)}
+                                    />
+                                  )}
                                 </Box>
-                              ))}
-                          </Box>
-                          <Box
-                            display={'flex'}
-                            position={'fixed'}
-                            justifyContent={'space-between'}
-                            w={'508px'}
-                            left={'-10px'}
-                          >
-                            <Img
-                              src={preloadedAssets?.left}
-                              w={'50px'}
-                              h={'50px'}
-                              cursor={'pointer'}
-                            />
-                            {selectedOption !== null && (
-                              <Img
-                                src={preloadedAssets?.right}
-                                w={'50px'}
-                                h={'50px'}
-                                cursor={'pointer'}
-                                onClick={() => getData(data)}
-                              />
-                            )}
-                          </Box>
-                        </Box>
+                              </Box>
+                            </Box>
+                          </GridItem>
+                        </Grid>
                       </Box>
+
+                      // old interaction ui copy
+
+                      // <Box
+                      //   w={'100%'}
+                      //   h={'100vh'}
+                      //   display={'flex'}
+                      //   alignItems={'center'}
+                      //   justifyContent={'center'}
+                      //   position={'relative'}
+                      // >
+                      //   <Img
+                      //     src={preloadedAssets?.backgroundImage}
+                      //     maxW={'100%'}
+                      //     maxH={'100%'}
+                      //     w={'100%'}
+                      //     h={'100vh'}
+                      //     transform={`scale(1.5}) translateY(-10%) translateX(${
+                      //       showNote ? -200 : 0
+                      //     }px)`}
+                      //     transition={'transform 0.9s ease-in-out'}
+                      //   />
+                      //   <Box
+                      //     style={{
+                      //       transform: `translateX(${
+                      //         showNote ? -200 : 0
+                      //       }px) scale(1.2)`,
+                      //       transition:
+                      //         'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+                      //     }}
+                      //     backgroundImage={preloadedAssets?.parch}
+                      //     position={'fixed'}
+                      //     w={{ sm: '350px', md: '500px' }}
+                      //     h={{ sm: '50vh', md: ' 550px' }}
+                      //     // top={'4vh'}
+                      //     left={{ sm: '60px', md: '180px' }}
+                      //     backgroundSize={'contain'}
+                      //     backgroundRepeat={'no-repeat'}
+                      //   >
+                      //     <Box
+                      //       textAlign={'center'}
+                      //       h={'100px'}
+                      //       display={'flex'}
+                      //       justifyContent={'center'}
+                      //       alignItems={'center'}
+                      //       fontWeight={700}
+                      //       fontFamily={'AtlantisText'}
+                      //       lineHeight={1}
+                      //       w={'100%'}
+                      //     >
+                      //       <Box w={'50%'} fontSize={'21px'}>
+                      //         Here You Can Answer the Interactions...!{' '}
+                      //       </Box>
+                      //     </Box>
+                      //     <Box
+                      //       textAlign={'center'}
+                      //       h={'100px'}
+                      //       display={'flex'}
+                      //       justifyContent={'center'}
+                      //       alignItems={'center'}
+                      //       fontWeight={500}
+                      //       fontFamily={'AtlantisText'}
+                      //       lineHeight={1}
+                      //       w={'96%'}
+                      //       overflowY={'scroll'}
+                      //     >
+                      //       <Box w={'60%'} fontSize={'20px'} letterSpacing={1}>
+                      //         {data?.blockText}
+                      //       </Box>
+                      //     </Box>
+                      //     <Box
+                      //       mt={'10px'}
+                      //       w={{ sm: '200px', md: '400px' }}
+                      //       fontWeight={500}
+                      //       ml={'17%'}
+                      //       h={'220px'}
+                      //       overflowY={'scroll'}
+                      //     >
+                      //       {options &&
+                      //         options.map((item: any, ind: number) => (
+                      //           <Box
+                      //             mb={'10px'}
+                      //             w={'80%'}
+                      //             lineHeight={1}
+                      //             key={ind}
+                      //             color={selectedOption === ind ? 'purple' : ''}
+                      //             textAlign={'center'}
+                      //             cursor={'pointer'}
+                      //             onClick={() => handleValidate(item, ind)}
+                      //             fontFamily={'AtlantisText'}
+                      //             fontSize={'20px'}
+                      //           >
+                      //             <Img
+                      //               src={
+                      //                 selectedOption === ind
+                      //                   ? preloadedAssets?.on
+                      //                   : preloadedAssets?.off
+                      //               }
+                      //               h={'30px'}
+                      //               w={'95%'}
+                      //             />
+                      //             {item?.qpOptionText}
+                      //           </Box>
+                      //         ))}
+                      //     </Box>
+                      //     <Box
+                      //       display={'flex'}
+                      //       position={'fixed'}
+                      //       justifyContent={'space-between'}
+                      //       w={'508px'}
+                      //       left={'-10px'}
+                      //     >
+                      //       <Img
+                      //         src={preloadedAssets?.left}
+                      //         w={'50px'}
+                      //         h={'50px'}
+                      //         cursor={'pointer'}
+                      //       />
+                      //       {selectedOption !== null && (
+                      //         <Img
+                      //           src={preloadedAssets?.right}
+                      //           w={'50px'}
+                      //           h={'50px'}
+                      //           cursor={'pointer'}
+                      //           onClick={() => getData(data)}
+                      //         />
+                      //       )}
+                      //     </Box>
+                      //   </Box>
+                      // </Box>
                     )}
                     {currentTab === 4 && data && type === 'response' && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                      >
+                      <Box className="chapter_potrait">
                         <Img
                           src={preloadedAssets?.backgroundImage}
-                          maxW={'100%'}
-                          maxH={'100%'}
-                          w={'100%'}
-                          h={'100vh'}
-                          transform={
-                            'scale(1.3}) translateY(-10%) translateX(-10%)'
-                          }
-                          transition={'transform 0.9s ease-in-out'}
+                          className="dialogue_screen"
                         />
+                        {/* <Box w={'100%'} h={'100vh'}>
+                          <Canvas camera={{ position: [30, 0, 10] }}>
+                            <directionalLight
+                              position={[5, 5, 5]}
+                              intensity={0.8}
+                              color={0xffccaa}
+                              castShadow
+                            />
+                            <ambientLight intensity={5.5} />
+                            {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
+                        {/* <Background /> */}
+                        {/* <Model /> */}
+                        {/* <mesh 
+                        rotation={[-Math.PI / 2, 0, 0]}
+                        position={[0, -5, 0]}
+                        receiveShadow 
+                      > */}
+                        {/* <planeGeometry args={[100, 100]} />
+                        <shadowMaterial opacity={0.5} />
+                      </mesh> */}
+                        {/* </Canvas>
+                        </Box> */}
+                        {/* {selectedPlayer && (
+                          <Img
+                            src={`${API_SERVER}/${selectedPlayer}`}
+                            position={'fixed'}
+                            right={'300px'}
+                            bottom={'100px'}
+                            w={'200px'}
+                            h={'324px'}
+                          />
+                        )}
+                        {selectedNpc && (
+                          <Img
+                            src={selectedNpc}
+                            position={'fixed'}
+                            right={'500px'}
+                            bottom={'100px'}
+                            w={'200px'}
+                            h={'324px'}
+                          />
+                        )} */}
                         <Img
-                          style={{
-                            transform: `translateY(${showNote ? 200 : 0}px)`,
-                            transition:
-                              'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                          }}
-                          position={'fixed'}
-                          maxW={'100%'}
-                          maxH={'100%'}
-                          w={'100%'}
-                          h={'240px'}
-                          bottom={'0'}
+                          className={'dialogue_image'}
                           src={preloadedAssets?.dial}
                         />
                         {!showNote && (
@@ -979,19 +1354,20 @@ const ScreenPreview = () => {
                               <Img
                                 src={preloadedAssets?.char}
                                 position={'fixed'}
-                                h={'70px'}
-                                w={'25%'}
-                                left={'13%'}
-                                bottom={'150px'}
+                                h={'100px'}
+                                w={'30%'}
+                                left={'5%'}
+                                bottom={'93px'}
                               />
                               <Text
                                 position={'fixed'}
-                                left={'24%'}
-                                bottom={'167px'}
-                                fontSize={'25'}
-                                fontWeight={700}
+                                left={{ base: '17%', md: '18%' }}
+                                bottom={'118px'}
+                                fontSize={{ base: '30px', xl: '2.2vw' }}
+                                fontWeight={500}
                                 textAlign={'center'}
                                 fontFamily={'AtlantisText'}
+                                color={'#312821'}
                               >
                                 {data.blockRoll === 'Narrator'
                                   ? data.blockRoll
@@ -1001,35 +1377,38 @@ const ScreenPreview = () => {
                             <Box
                               display={'flex'}
                               position={'fixed'}
+                              alignItems={'center'}
                               justifyContent={'space-between'}
-                              w={'75%'}
-                              bottom={'55px'}
+                              h={'61px'}
+                              overflowY={'scroll'}
+                              w={'85%'}
+                              fontSize={{ base: '30px', lg: '1.8vw' }}
+                              bottom={'38px'}
                               fontFamily={'AtlantisContent'}
-                              fontSize={'21px'}
                             >
                               {showTypingEffect === false ? <TypingEffect
                                 text={remainingSentences.toString()}
                                 speed={50}
                                 setSpeedIsOver={setShowTypingEffect}
                               /> : remainingSentences}
-                              {/* <TypingEffect text={resMsg} speed={50} /> */}
                             </Box>
                             <Box
                               display={'flex'}
                               position={'fixed'}
                               justifyContent={'space-between'}
-                              w={'80%'}
+                              w={'95%'}
                               bottom={'0'}
                             >
                               <Img
                                 src={preloadedAssets?.left}
-                                w={'50px'}
+                                w={'70px'}
                                 h={'50px'}
                                 cursor={'pointer'}
+                                //  onClick={() => prevData(data)}
                               />
                               <Img
                                 src={preloadedAssets?.right}
-                                w={'50px'}
+                                w={'70px'}
                                 h={'50px'}
                                 cursor={'pointer'}
                                 onClick={() => Updatecontent()}
@@ -1038,86 +1417,239 @@ const ScreenPreview = () => {
                           </>
                         )}
                       </Box>
+                      // <Box
+                      //   w={'100%'}
+                      //   h={'100vh'}
+                      //   display={'flex'}
+                      //   alignItems={'center'}
+                      //   justifyContent={'center'}
+                      //   position={'relative'}
+                      // >
+                      //   <Img
+                      //     src={preloadedAssets?.backgroundImage}
+                      //     maxW={'100%'}
+                      //     maxH={'100%'}
+                      //     w={'100%'}
+                      //     h={'100vh'}
+                      //     transform={
+                      //       'scale(1.3}) translateY(-10%) translateX(-10%)'
+                      //     }
+                      //     transition={'transform 0.9s ease-in-out'}
+                      //   />
+                      //   <Img
+                      //     style={{
+                      //       transform: `translateY(${showNote ? 200 : 0}px)`,
+                      //       transition:
+                      //         'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
+                      //     }}
+                      //     position={'fixed'}
+                      //     maxW={'100%'}
+                      //     maxH={'100%'}
+                      //     w={'100%'}
+                      //     h={'240px'}
+                      //     bottom={'0'}
+                      //     src={preloadedAssets?.dial}
+                      //   />
+                      //   {!showNote && (
+                      //     <>
+                      //       <Box position={'relative'}>
+                      //         <Img
+                      //           src={preloadedAssets?.char}
+                      //           position={'fixed'}
+                      //           h={'70px'}
+                      //           w={'25%'}
+                      //           left={'13%'}
+                      //           bottom={'150px'}
+                      //         />
+                      //         <Text
+                      //           position={'fixed'}
+                      //           left={'24%'}
+                      //           bottom={'167px'}
+                      //           fontSize={'25'}
+                      //           fontWeight={700}
+                      //           textAlign={'center'}
+                      //           fontFamily={'AtlantisText'}
+                      //         >
+                      //           {data.blockRoll === 'Narrator'
+                      //             ? data.blockRoll
+                      //             : gameInfo?.gameData?.gameNonPlayerName}
+                      //         </Text>
+                      //       </Box>
+                      //       <Box
+                      //         display={'flex'}
+                      //         position={'fixed'}
+                      //         justifyContent={'space-between'}
+                      //         w={'75%'}
+                      //         bottom={'55px'}
+                      //         fontFamily={'AtlantisContent'}
+                      //         fontSize={'21px'}
+                      //       >
+                      //         <TypingEffect text={resMsg} speed={50} />
+                      //       </Box>
+                      //       <Box
+                      //         display={'flex'}
+                      //         position={'fixed'}
+                      //         justifyContent={'space-between'}
+                      //         w={'80%'}
+                      //         bottom={'0'}
+                      //       >
+                      //         <Img
+                      //           src={preloadedAssets?.left}
+                      //           w={'50px'}
+                      //           h={'50px'}
+                      //           cursor={'pointer'}
+                      //         />
+                      //         <Img
+                      //           src={preloadedAssets?.right}
+                      //           w={'50px'}
+                      //           h={'50px'}
+                      //           cursor={'pointer'}
+                      //           onClick={() => getData(data)}
+                      //         />
+                      //       </Box>
+                      //     </>
+                      //   )}
+                      // </Box>
                     )}
                     {currentTab === 4 && data && type === 'feedback' && (
                       <Box
+                        position="relative"                      
                         w={'100%'}
-                        h={'100vh'}
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
+                        height="100vh"
+                        backgroundImage={preloadedAssets?.backgroundImage}
+                        backgroundSize={'cover'}
+                        backgroundRepeat={'no-repeat'}
+                        className="chapter_potrait"
                       >
-                        <Box
-                          w={'100%'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          transform={`scale(${first ? 1 : 1.3}) translateY(${first ? 0 : -10
-                            }%) translateX(${first ? 0 : -10}%)`}
-                          transition={'transform 0.9s ease-in-out'}
+                        <Grid
+                          templateColumns="repeat(1, 1fr)"
+                          gap={4}
+                          position="absolute"
+                          top="50%"
+                          left="50%"
+                          transform="translate(-50%, -50%)"
+                          className="story_note_grid"
                         >
-                          <Box
-                            position={'fixed'}
-                            top={'200px'}
-                            right={'0px'}
-                            bottom={0}
-                            zIndex={999}
-                            w={'300px'}
-                          ></Box>
-                        </Box>
-                        <Box
-                          style={{
-                            transform: `scale(${showNote ? 0.2 : 1})`,
-                            transition: 'transform 0.5s ease-in-out',
-                          }}
-                          position={'fixed'}
-                          w={'40%'}
-                          h={'80vh'}
-                          display={'flex'}
-                          flexDirection={'column'}
-                          justifyContent={'center'}
-                          alignItems={'center'}
-                        >
-                          <Img
-                            w={'90%'}
-                            h={'80vh'}
-                            src={preloadedAssets?.feedi}
-                          />
-                          <Box
-                            position={'fixed'}
-                            w={'50%'}
-                            mt={'10px'}
-                            display={'flex'}
-                            flexDirection={'column'}
-                            textAlign={'center'}
-                            justifyContent={'center'}
-                            style={{
-                              fontWeight: '900',
-                              color: '#D9C7A2',
-                            }}
-                          >
-                            {feed}
-                            <Box
-                              w={'100%'}
-                              onClick={() => getData(data)}
-                              mt={'20px'}
-                              display={'flex'}
-                              justifyContent={'center'}
-                              cursor={'pointer'}
-                              transform={'translate(0px, 100px)'}
-                            >
+                          <GridItem colSpan={1} position={'relative'}>
+                            <Box display={'flex'} justifyContent={'center'}>
                               <Img
-                                src={preloadedAssets?.next}
-                                w={'200px'}
-                                h={'60px'}
+                                src={preloadedAssets?.feedi}
+                                className="story_note_image"
+                                loading="lazy"
                               />
+                              <Box
+                                className={'story_note_content'}
+                                // bg={'blue.300'}
+                              >
+                                <Box
+                                  w={'100%'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                >
+                                  <Box className={'story_note_block'}>
+                                    <Text textAlign={'center'}>{feed}</Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={'100%'}
+                                  onClick={() => getData(data)}
+                                  mt={'20px'}
+                                  display={'flex'}
+                                  justifyContent={'center'}
+                                  cursor={'pointer'}
+                                  position={'fixed'}
+                                  top={'70%'}
+                                >
+                                  <Img
+                                    src={preloadedAssets.next}
+                                    h={'7vh'}
+                                    className={'story_note_next_button'}
+                                  />
+                                </Box>
+                              </Box>
                             </Box>
-                          </Box>
-                        </Box>
+                          </GridItem>
+                        </Grid>
                       </Box>
+                      // <Box
+                      //   w={'100%'}
+                      //   h={'100vh'}
+                      //   display={'flex'}
+                      //   alignItems={'center'}
+                      //   justifyContent={'center'}
+                      //   position={'relative'}
+                      //   overflow={'visible'}
+                      //   style={{ perspective: '1000px' }}
+                      // >
+                      //   <Box
+                      //     backgroundImage={preloadedAssets?.backgroundImage}
+                      //     w={'100%'}
+                      //     h={'100vh'}
+                      //     backgroundRepeat={'no-repeat'}
+                      //     backgroundSize={'cover'}
+                      //     transform={`scale(${first ? 1 : 1.3}) translateY(${
+                      //       first ? 0 : -10
+                      //     }%) translateX(${first ? 0 : -10}%)`}
+                      //     transition={'transform 0.9s ease-in-out'}
+                      //   >
+                      //     <Box
+                      //       position={'fixed'}
+                      //       top={'200px'}
+                      //       right={'0px'}
+                      //       bottom={0}
+                      //       zIndex={999}
+                      //       w={'300px'}
+                      //     ></Box>
+                      //   </Box>
+                      //   <Box
+                      //     style={{
+                      //       transform: `scale(${showNote ? 0.2 : 1})`,
+                      //       transition: 'transform 0.5s ease-in-out',
+                      //     }}
+                      //     position={'fixed'}
+                      //     w={'40%'}
+                      //     h={'auto'}
+                      //     display={'flex'}
+                      //     flexDirection={'column'}
+                      //     justifyContent={'center'}
+                      //     alignItems={'center'}
+                      //   >
+                      //     <Img
+                      //       w={'100%'}
+                      //       h={'auto'}
+                      //       src={preloadedAssets?.feedi}
+                      //     />
+                      //     <Box
+                      //       position={'absolute'}
+                      //       w={'75%'}
+                      //       mt={'10px'}
+                      //       display={'flex'}
+                      //       flexDirection={'column'}
+                      //       textAlign={'center'}
+                      //       justifyContent={'center'}
+                      //       style={{
+                      //         fontWeight: '900',
+                      //         color: '#D9C7A2',
+                      //       }}
+                      //     >
+                      //       {feed}
+                      //       <Box
+                      //         w={'100%'}
+                      //         onClick={() => getData(data)}
+                      //         mt={'20px'}
+                      //         display={'flex'}
+                      //         justifyContent={'center'}
+                      //         cursor={'pointer'}
+                      //         transform={'translate(0px, 100px)'}
+                      //       >
+                      //         <Img
+                      //           src={preloadedAssets?.next}
+                      //           h={'7vh'}
+                      //         />
+                      //       </Box>
+                      //     </Box>
+                      //   </Box>
+                      // </Box>
                     )}
                     {currentTab === 5 && currentSubTab === 0 && (
                       <Box
@@ -1138,12 +1670,13 @@ const ScreenPreview = () => {
                           alignItems={'center'}
                           justifyContent={'center'}
                           className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
                             <CompletionContentScreen
                               preview={true}
                               formData={gameInfo.gameData}
-                              imageSrc={preloadedAssets.Screen1}
+                              imageSrc={preloadedAssets.Completion}
                               compliData={gameInfo.completionQuestOptions}
                               CompKeyCount={CompKeyCount}
                               preloadedAssets={preloadedAssets}
@@ -1171,6 +1704,7 @@ const ScreenPreview = () => {
                           alignItems={'center'}
                           justifyContent={'center'}
                           className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
                             <Box className="LearderBoards">
@@ -1233,6 +1767,7 @@ const ScreenPreview = () => {
                           alignItems={'center'}
                           justifyContent={'center'}
                           className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
                             <TakeAwaysContentScreen
@@ -1264,6 +1799,7 @@ const ScreenPreview = () => {
                           alignItems={'center'}
                           justifyContent={'center'}
                           className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
                             <WelcomeContentScreen
@@ -1295,6 +1831,7 @@ const ScreenPreview = () => {
                           alignItems={'center'}
                           justifyContent={'center'}
                           className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
                             <TyContentScreen
