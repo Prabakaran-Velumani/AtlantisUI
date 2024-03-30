@@ -142,10 +142,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 
   const selectPlayerClick = () => {
     setSelectedPlayer(players[i]);
+    console.log('Object.keys(demoBlocks).length', Object.keys(demoBlocks).length);
+    /**if game has more than one quest, then navigate to chapter selection screen, otherwise navigate to story part direclty */
     if (Object.keys(demoBlocks).length > 1) {
-      setCurrentScreenId(13);
+      setCurrentScreenId(13);//navigate to Chapter selection
     } else {
-      setCurrentScreenId(1);
+      setCurrentScreenId(2);//navigate to story
     }
   };
 

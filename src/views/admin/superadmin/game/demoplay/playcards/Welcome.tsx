@@ -850,7 +850,7 @@ const Welcome: React.FC<{
                           w={'100px'}
                           h={'41px'}
                           src={next}
-                          onClick={() => setCurrentScreenId(2)}
+                          onClick={() => setCurrentScreenId(12)}
                         />
                       </Box>
                     </Box>

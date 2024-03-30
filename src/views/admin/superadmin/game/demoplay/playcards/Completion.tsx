@@ -117,67 +117,71 @@ const Completion: React.FC<{
     };
     fetchDatass();
   }, []);
-  const nextNavigation = (data:any)=>{
+  // const nextNavigation = (data:any)=>{
 
-    const currentQuest = data?.blockPrimarySequence.split('.')[0]?? null;
-    const currentGameData = gameInfo.gameQuest.find((row:any)=> row.gameQuestNo == profile?.currentQuest);
-    const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-    const haveNextQuest = gameInfo.gameQuest.some((row:any)=> (row.gameQuestNo > profile?.currentQuest))
-   const totalScore = profile?.score.forEach((item:any)=>{
-    if (item && item.marks) {
-      return item.marks.reduce((acc:any, mark:any) => acc + mark, 0);
-   }
+  //   const currentQuest = data?.blockPrimarySequence.split('.')[0]?? null;
+  //   const currentGameData = gameInfo.gameQuest.find((row:any)=> row.gameQuestNo == profile?.currentQuest);
+  //   const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+  //   const haveNextQuest = gameInfo.gameQuest.some((row:any)=> (row.gameQuestNo > profile?.currentQuest))
+  //  const totalScore = profile?.score.forEach((item:any)=>{
+  //   if (item && item.marks) {
+  //     return item.marks.reduce((acc:any, mark:any) => acc + mark, 0);
+  //  }
      
-    }) 
-    
-  
-  
-    
-    if(gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') 
-    {
-      getFeedbackData(data);
-      setFeedbackNavigateNext(false);
-      setCurrentScreenId(14);
-    }
-    else if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
-    {
+  //   }) 
+  //   if(gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') 
+  //   {
+  //     console.log('gameIsShowInteractionFeedBack === Completion');
+  //     getFeedbackData(data);
+  //     setFeedbackNavigateNext(false);
+  //     setCurrentScreenId(14); //Navigate to together all feedback
+  //   }
+  //   else if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+  //   {
+  //     console.log('gameIsShowLeaderboard === true');
+  //     setCurrentScreenId(4); //Navigate to leaderboard
+  //   }
+  //   else if (haveNextQuest) {
+  //     console.log('haveNextQuest');
+  //       if (currentGameData?.gameIsSetMinPassScore ==='true') {
+  //         const  getminpassscore = currentGameData?.gameMinScore;
+  //         const scores = profile?.score;
+  //         const sums:any = {};
+  //         scores.forEach((score:any) => {
+  //             const quest = score.quest;
+  //             if (!sums[quest]) {
+  //                 sums[quest] = 0;
+  //             }
+  //             sums[quest] += score.score;
+  //         });
 
-      setCurrentScreenId(4);
-    }
-    else if (haveNextQuest) {
-        if (currentGameData?.gameIsSetMinPassScore ==='true') {
-          const  getminpassscore = currentGameData?.gameMinScore;
-          const scores = profile?.score;
-          const sums:any = {};
-          scores.forEach((score:any) => {
-              const quest = score.quest;
-              if (!sums[quest]) {
-                  sums[quest] = 0;
-              }
-              sums[quest] += score.score;
-          });
-
-          // const getFinalscores = Object.values(sums);
-          const getFinalscores = Object.entries(sums).map(([quest, score]) => ({ quest, score }));
-          const getscores = getFinalscores.find((row:any)=> row.quest == currentGameData.gameQuestNo);
-          const finalscore = getscores?.score;
-        //   if (profile?.score < currentGameData?.gameMinScore ) {
-        //     const initialBlock = demoBlocks[currentQuest]['1'];
-        //     console.log('**Mandatory Replay',initialBlock);
-        //       // getData(initialBlock);
-        //       //mandatory replay. need to prompt about to replay
-        //   } else 
-        if (finalscore >= getminpassscore && finalscore < currentGameData?.gameDistinctionScore && gameInfo.gameData?.gameDisableOptionalReplays ==='false') {
-          
-               setCurrentScreenId(8);
-               //set to prompt it for replay the game
-              }
-    }
-  }
-  }
-
-
-
+  //         // const getFinalscores = Object.values(sums);
+  //         const getFinalscores = Object.entries(sums).map(([quest, score]) => ({ quest, score }));
+  //         const getscores = getFinalscores.find((row:any)=> row.quest == currentGameData.gameQuestNo);
+  //         const finalscore = getscores?.score;
+      
+  //       if (finalscore >= getminpassscore && finalscore < currentGameData?.gameDistinctionScore && gameInfo.gameData?.gameDisableOptionalReplays ==='false') {    
+  //              setCurrentScreenId(8);//Navigate to replaygame prompt screen
+  //              //set to prompt it for replay the game
+  //             }
+  //       else{
+  //         setCurrentScreenId(13);//Navigate to Character Selection screen
+  //       }
+  //   }
+  //   else if(gameInfo.gameData?.gameDisableOptionalReplays ==='false'){
+  //     setCurrentScreenId(8);//Navigate to replaygame prompt screen
+  //   }
+  // }
+  // else if(gameInfo.gameData?.gameIsShowReflectionScreen == true){
+  //   setCurrentScreenId(3);//Navigate to Reflection screen
+  // }
+  // else if(gameInfo.gameData?.gameIsShowTakeaway == true){
+  //   setCurrentScreenId(7);//Navigate to Reflection screen
+  // }
+  // else{
+  //   setCurrentScreenId(5);//Navigate to Thank you screen
+  // }
+  // }
   return (
     <>
       <Box
@@ -388,7 +392,7 @@ const Completion: React.FC<{
                       /> */}
                        <Img
                         src={next}
-                        onClick={() => nextNavigation(data)}
+                        onClick={() => getData(data)}
                         cursor={'pointer'}
                         w={'50%'}
                       />

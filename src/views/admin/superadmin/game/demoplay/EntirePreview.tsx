@@ -267,7 +267,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
   const userProfile = useContext(ProfileContext);
   const [currentQuestNo, setCurrentQuestNo] = useState(1);
-  const [homeLeaderBoard, setHomeLeaderBoard] = useState(false);
+  const [homeLeaderBoard, setHomeLeaderBoard] = useState(null);
   const { profile, setProfile } = useContext(ScoreContext);
   const tabAttributeSets: TabAttributeSet[] = [
     { '1': { tabAttribute: null, tabAttributeValue: null } },
@@ -573,7 +573,7 @@ for (const option of gameInfo.questOptions) {
     } else if (
       (type === 'Interaction' || type === 'response') &&
       feed !== '' &&
-      gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
+      (gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each' || gameInfo?.gameData?.gameIsShowInteractionFeedBack !== 'Completion')
     ) {
       setType('feedback');
       return false;
@@ -692,41 +692,92 @@ for (const option of gameInfo.questOptions) {
     }
     if (currentScreenId === 6) {
       if (
-        gameInfo?.gameData?.gameIsShowInteractionFeedBack &&
         gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion'
       ) {
         getFeedbackData(data);
         setCurrentScreenId(14);
         return false;
-      } else if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
-        setCurrentScreenId(8);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-        setCurrentScreenId(4);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-        setCurrentScreenId(3);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      } else {
-        if (data && type) {
-          setCurrentScreenId(13);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
+      } 
+      else{
+              const currentQuest = data?.blockPrimarySequence.split('.')[0]?? null;
+          const currentGameData = gameInfo.gameQuest.find((row:any)=> row.gameQuestNo == profile?.currentQuest);
+          const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+          const haveNextQuest = gameInfo.gameQuest.some((row:any)=> (row.gameQuestNo > profile?.currentQuest))
+        const totalScore = profile?.score.forEach((item:any)=>{
+          if (item && item.marks) {
+            return item.marks.reduce((acc:any, mark:any) => acc + mark, 0);
+        }
+          }) 
+          if(gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') 
+          {
+            console.log('gameIsShowInteractionFeedBack === Completion');
+            getFeedbackData(data);
+            setFeedbackNavigateNext(false);
+            setCurrentScreenId(14); //Navigate to together all feedback
+            return false;
+          }
+          else if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+          {
+            console.log('gameIsShowLeaderboard === true');
+            setCurrentScreenId(4); //Navigate to leaderboard
+            return false;
+          }
+          else if (haveNextQuest) {
+            console.log('haveNextQuest');
+              if (currentGameData?.gameIsSetMinPassScore ==='true') {
+                const  getminpassscore = currentGameData?.gameMinScore;
+                const scores = profile?.score;
+                const sums:any = {};
+                scores.forEach((score:any) => {
+                    const quest = score.quest;
+                    if (!sums[quest]) {
+                        sums[quest] = 0;
+                    }
+                    sums[quest] += score.score;
+                });
+
+                // const getFinalscores = Object.values(sums);
+                const getFinalscores = Object.entries(sums).map(([quest, score]) => ({ quest, score }));
+                const getscores = getFinalscores.find((row:any)=> row.quest == currentGameData.gameQuestNo);
+                const finalscore = getscores?.score;
+            
+              if (finalscore >= getminpassscore && finalscore < currentGameData?.gameDistinctionScore && gameInfo.gameData?.gameDisableOptionalReplays ==='false') {    
+                    setCurrentScreenId(8);//Navigate to replaygame prompt screen
+                    return false;
+                    //set to prompt it for replay the game
+                    }
+              else{
+                setCurrentScreenId(13);//Navigate to Character Selection screen
+                return false;
+              }
+          }
+          else if(gameInfo.gameData?.gameDisableOptionalReplays ==='false'){
+            setCurrentScreenId(8);//Navigate to replaygame prompt screen
+            return false;
+          }
+        }
+        else if(gameInfo.gameData?.gameIsShowReflectionScreen == true){
+          setCurrentScreenId(3);//Navigate to Reflection screen
           return false;
         }
+        else if(gameInfo.gameData?.gameIsShowTakeaway == true){
+          setCurrentScreenId(7);//Navigate to Reflection screen
+          return false;
+        }
+        else{
+          setCurrentScreenId(5);//Navigate to Thank you screen
+          return false;
+        }
+        setCurrentScreenId(13); //Navigate Chapter Select page
+        return false;
       }
     }
-    if (currentScreenId === 9 || currentScreenId === 14) {
-      if (gameInfo?.gameData?.gameReplayAllowed === 'false') {
-        setCurrentScreenId(8);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+    if ( currentScreenId === 14) {
+      // if (gameInfo?.gameData?.gameDisableOptionalReplays === 'false') {
+      //   setCurrentScreenId(8);  
+      //   return false;
+      // } else
+       if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
         setCurrentScreenId(4);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
@@ -735,16 +786,35 @@ for (const option of gameInfo.questOptions) {
       } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
         setCurrentScreenId(7);
         return false;
-      } else {
-        if (data && type) {
-          setCurrentScreenId(2);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
-          return false;
-        }
+      } 
+      // else {
+      //   if (data && type) {
+      //     setCurrentScreenId(2);
+      //     return false;
+      //   } else {
+      //     setType(null);
+      //     setData(null);
+      //     setCurrentScreenId(5);
+      //     return false;
+      //   }
+      // }
+      if(demoBlocks.hasOwnProperty(nextLevel)){
+        setCurrentScreenId(13);
+        setType(null);
+        setData(null);
+        return false;
+      }
+      else{
+        setCurrentScreenId(5);
+        setType(null);
+        setData(null);
+        return false;
+      }
+    }
+    if(currentScreenId === 9 ){
+      if (data && type) {
+        setCurrentScreenId(2);
+        return false;
       }
     }
     if (currentScreenId === 8) {
@@ -780,6 +850,7 @@ for (const option of gameInfo.questOptions) {
       //   setCurrentScreenId(7);
       //   return false;
       // } else {
+        console.log('Current Screen Id', currentScreenId);
       const Nextcurrentquest = profile?.currentQuest;
       const getgameinfoquest = gameInfo?.gameQuest.find((row: any) => row.gameQuestNo == Nextcurrentquest);
       const haveNextQuest = gameInfo.gameQuest.some((row: any) => (row.gameQuestNo == Nextcurrentquest));
@@ -796,7 +867,6 @@ for (const option of gameInfo.questOptions) {
             sums[quest] += score.score;
           });
 
-          // const getFinalscores = Object.values(sums);
           const getFinalscores = Object.entries(sums).map(([quest, score]) => ({ quest, score }));
           const getscores = getFinalscores.find((row: any) => row.quest == getgameinfoquest.gameQuestNo);
           const finalscore = getscores?.score;
@@ -806,6 +876,8 @@ for (const option of gameInfo.questOptions) {
             setisReplay(true);
             Setprofilescore(finalscore);
             setCurrentScreenId(8)
+            console.log("replay game");
+            return false;
           }
           else {
             if (data && type) {
@@ -826,8 +898,6 @@ for (const option of gameInfo.questOptions) {
                 setCurrentScreenId(5);
                 return false;
               }
-  
-              // }
             }
           }
         }
@@ -851,7 +921,6 @@ for (const option of gameInfo.questOptions) {
               return false;
             }
 
-            // }
           }
         }
       }
@@ -874,41 +943,43 @@ for (const option of gameInfo.questOptions) {
             setCurrentScreenId(5);
             return false;
           }
-
-          // }
         }
       }
 
 
     }
-    if (currentScreenId === 3) {
-      if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      } else {
-        if (data && type) {
-          setCurrentScreenId(2);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
-          return false;
-        }
-      }
-      // }
-    }
+    // if (currentScreenId === 3) {
+    //   if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+    //     setCurrentScreenId(7);
+    //     return false;
+    //   } else {
+    //     if (data && type) {
+    //       setCurrentScreenId(2);
+    //       return false;
+    //     } else {
+    //       setType(null);
+    //       setData(null);
+    //       setCurrentScreenId(5);
+    //       return false;
+    //     }
+    //   }
+    //   // }
+    // }
+    // if (currentScreenId === 7) {
+    //   if (data && type) {
+    //     setFeedbackNavigateNext(false);
+    //     setCurrentScreenId(13);
+    //     return false;
+    //   } else {
+    //     setType(null);
+    //     setData(null);
+    //     setCurrentScreenId(5);
+    //     return false;
+    //   }
+    // }
     if (currentScreenId === 7) {
-      if (data && type) {
-        setFeedbackNavigateNext(false);
-        setCurrentScreenId(13);
-        return false;
-      } else {
-        setType(null);
-        setData(null);
-        setCurrentScreenId(5);
-        return false;
-      }
+      setCurrentScreenId(5);
+      return false;
     }
     if (nextBlock.length === 0) {
       const Nextcurrentquest = next?.blockQuestNo;
@@ -1361,6 +1432,29 @@ for (const option of gameInfo.questOptions) {
     setData(gameInfo?.blocks['1']['1']);
     setCurrentScreenId(2);
   };
+  const replayNextHandler = (data:any) => {
+    console.log("gameInfo.gameData?.gameIsShowTakeaway", gameInfo.gameData?.gameIsShowTakeaway);
+    const currentQuest = data
+    ? parseInt(data?.blockPrimarySequence.split('.')[0])
+    : null;
+const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+  if(demoBlocks.hasOwnProperty(nextLevel)){
+    setCurrentScreenId(13);
+  }
+  else{
+    if(gameInfo.gameData?.gameIsShowReflectionScreen !== 'false'){
+      setCurrentScreenId(3);//Navigate to Reflection screen
+    }
+    else if(gameInfo.gameData?.gameIsShowTakeaway !== 'false'){
+      setCurrentScreenId(7);//Navigate to Takeaway screen
+    }
+    else{
+      setCurrentScreenId(5);//Navigate to Thank you screen
+    }
+  }
+  setType(null)
+  setData(null)
+  };
   const getAudioForText = async (text: string, voiceId: string) => {
     if (text && voiceId) {
       const send = {
@@ -1395,7 +1489,8 @@ for (const option of gameInfo.questOptions) {
     );
   };
   const handleOverView = () => {
-    setHomeLeaderBoard(true);
+    console.log('handleOverView -- currentScreenId', currentScreenId);
+    setHomeLeaderBoard(currentScreenId);
     setCurrentScreenId(4);
   };
 
@@ -1756,6 +1851,8 @@ for (const option of gameInfo.questOptions) {
                               reflectionQuestions={
                                 gameInfo?.reflectionQuestions
                               }
+                              gameInfo={gameInfo}
+                              setCurrentScreenId={setCurrentScreenId}
                             />
                           </Box>
                         </Box>
@@ -1799,6 +1896,7 @@ for (const option of gameInfo.questOptions) {
                             imageSrc={preloadedAssets.Lead}
                             getData={getData}
                             data={data}
+                            gameInfo={gameInfo}
                           />
                         </Box>
                       </Box>
@@ -1933,6 +2031,7 @@ for (const option of gameInfo.questOptions) {
                           <Box className="Images">
                             <ReplayGame
                               replayGame={replayGame}
+                              replayNextHandler={replayNextHandler}
                               type={type}
                               gameInfo={gameInfo}
                               setType={setType}
@@ -2073,6 +2172,7 @@ for (const option of gameInfo.questOptions) {
                                       justifyContent={'center'}
                                       mb={{base:0,lg:2}}
                                     >
+<<<<<<< HEAD
                                       <Text
                                        className={'play_screen_text'}
                                       >
@@ -2095,6 +2195,27 @@ for (const option of gameInfo.questOptions) {
                                         }}
                                       ></Button>
                                     </Box>
+=======
+                                      The Demo Play
+                                    </Text>
+                                  </Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Button
+                                      w={'90%'}
+                                      h={{ sm: '20px', md: '30px' }}
+                                      bg={'none'}
+                                      _hover={{ bg: 'none' }}
+                                      onClick={() => {
+                                        setCurrentScreenId(1);
+                                        setIsGetsPlayAudioConfirmation(true);
+                                      }}
+                                    ></Button>
+                                  </Box>
+>>>>>>> main-bugfixing
                                 </Box>
                               </Box>
                             </Box>

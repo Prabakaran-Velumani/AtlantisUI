@@ -14,7 +14,9 @@ const Reflection: React.FC<{
   preview?: any;
   getData?: any;
   data?: any;
-}> = ({ formData, reflectionQuestions, imageSrc, preview, getData, data }) => {
+  gameInfo?:any;
+  setCurrentScreenId?: any;
+}> = ({ formData, reflectionQuestions, imageSrc, preview, getData, data, gameInfo , setCurrentScreenId}) => {
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [answers, setAnswers] = useState<any>([]);
 
@@ -40,6 +42,15 @@ const Reflection: React.FC<{
     updatedAnswers[index] = { ...updatedAnswers[index], text: e.target.value };
     setAnswers(updatedAnswers);
   };
+
+  const nextNavigation = ()=>{
+    if(gameInfo?.gameData?.gameIsShowTakeaway == true){
+      setCurrentScreenId(7);//Navigate to Takeaway screen
+    }
+    else{
+      setCurrentScreenId(5);//Navigate to Thank you screen
+    }
+  }
   return (
     <>
       {imageSrc && (
@@ -138,7 +149,8 @@ const Reflection: React.FC<{
                     w={'50px'}
                     h={'50px'}
                     cursor={'pointer'}
-                    onClick={() => getData(data)}
+                    // onClick={() => getData(data)}
+                    onClick={() => nextNavigation()}
                   />
                 )}
               </Box>
