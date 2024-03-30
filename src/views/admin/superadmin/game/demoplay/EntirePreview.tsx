@@ -496,7 +496,7 @@ for (const option of gameInfo.questOptions) {
   };
 
   const getData = (next: any) => {
-console.log('getData');
+
     if (next?.blockChoosen === 'Interaction') {
       const isDuplicate = feedbackList?.some((item: any) =>
         item.Seq === next?.blockPrimarySequence &&
@@ -850,6 +850,7 @@ for (const option of gameInfo.questOptions) {
       //   setCurrentScreenId(7);
       //   return false;
       // } else {
+        console.log('Current Screen Id', currentScreenId);
       const Nextcurrentquest = profile?.currentQuest;
       const getgameinfoquest = gameInfo?.gameQuest.find((row: any) => row.gameQuestNo == Nextcurrentquest);
       const haveNextQuest = gameInfo.gameQuest.some((row: any) => (row.gameQuestNo == Nextcurrentquest));
@@ -875,6 +876,8 @@ for (const option of gameInfo.questOptions) {
             setisReplay(true);
             Setprofilescore(finalscore);
             setCurrentScreenId(8)
+            console.log("replay game");
+            return false;
           }
           else {
             if (data && type) {
@@ -940,8 +943,6 @@ for (const option of gameInfo.questOptions) {
             setCurrentScreenId(5);
             return false;
           }
-
-          // }
         }
       }
 
@@ -1432,7 +1433,7 @@ for (const option of gameInfo.questOptions) {
     setCurrentScreenId(2);
   };
   const replayNextHandler = (data:any) => {
-
+    console.log("gameInfo.gameData?.gameIsShowTakeaway", gameInfo.gameData?.gameIsShowTakeaway);
     const currentQuest = data
     ? parseInt(data?.blockPrimarySequence.split('.')[0])
     : null;
@@ -1441,11 +1442,11 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     setCurrentScreenId(13);
   }
   else{
-    if(gameInfo.gameData?.gameIsShowReflectionScreen == true){
+    if(gameInfo.gameData?.gameIsShowReflectionScreen !== 'false'){
       setCurrentScreenId(3);//Navigate to Reflection screen
     }
-    else if(gameInfo.gameData?.gameIsShowTakeaway == true){
-      setCurrentScreenId(7);//Navigate to Reflection screen
+    else if(gameInfo.gameData?.gameIsShowTakeaway !== 'false'){
+      setCurrentScreenId(7);//Navigate to Takeaway screen
     }
     else{
       setCurrentScreenId(5);//Navigate to Thank you screen
