@@ -710,10 +710,11 @@ useEffect(() => {
               <Box
                 display={'flex'}
                 position={'fixed'}
-                justifyContent={'space-between'}
+                justifyContent={'end'}
                 w={'95%'}
                 bottom={'0'}
               >
+
                 <Img
                   src={right}
                   w={'70px'}

@@ -582,6 +582,7 @@ for (const option of gameInfo.questOptions) {
       type === 'response' ||
       type === 'feedback'
     ) {
+      console.log("In Feedback loading navigation");
       if (navi === 'Repeat Question') {
         const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
         setInteractionOptions(gameInfo, currentBlockinteraction);
@@ -812,10 +813,16 @@ for (const option of gameInfo.questOptions) {
       }
     }
     if(currentScreenId === 9 ){
+      console.log("In currentScreenId === 9")
       if (data && type) {
         setCurrentScreenId(2);
         return false;
       }
+      else{
+        console.log("data && type Not avail")
+
+      }
+
     }
     if (currentScreenId === 8) {
       if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
@@ -2172,7 +2179,6 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                                       justifyContent={'center'}
                                       mb={{base:0,lg:2}}
                                     >
-<<<<<<< HEAD
                                       <Text
                                        className={'play_screen_text'}
                                       >
@@ -2195,27 +2201,6 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                                         }}
                                       ></Button>
                                     </Box>
-=======
-                                      The Demo Play
-                                    </Text>
-                                  </Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                  >
-                                    <Button
-                                      w={'90%'}
-                                      h={{ sm: '20px', md: '30px' }}
-                                      bg={'none'}
-                                      _hover={{ bg: 'none' }}
-                                      onClick={() => {
-                                        setCurrentScreenId(1);
-                                        setIsGetsPlayAudioConfirmation(true);
-                                      }}
-                                    ></Button>
-                                  </Box>
->>>>>>> main-bugfixing
                                 </Box>
                               </Box>
                             </Box>
