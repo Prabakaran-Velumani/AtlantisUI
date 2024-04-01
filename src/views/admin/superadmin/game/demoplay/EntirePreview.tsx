@@ -271,25 +271,24 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
   ];
 
-   // Afrith-modified-starts-07/Mar/24
-   const gameScore = useContext(ScoreContext);
-   const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0 ;
- 
-   useEffect(() => {
-     setProfileData((prev:any) => ({...prev, score:scoreComp}))
-   }, [scoreComp])
- 
-   const [profileData, setProfileData] = useState({
-     name: '',
-     gender: '',
-     language: '',
-     score: '',
-     allTimeScore: 250,
-   });
- 
+  // Afrith-modified-starts-07/Mar/24
+  const gameScore = useContext(ScoreContext);
+  const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0;
 
- // Afrith-modified-ends-07/Mar/24
- 
+  useEffect(() => {
+    setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
+  }, [scoreComp]);
+
+  const [profileData, setProfileData] = useState({
+    name: '',
+    gender: '',
+    language: '',
+    score: '',
+    allTimeScore: 250,
+  });
+
+  // Afrith-modified-ends-07/Mar/24
+
   const [voiceIds, setVoiceIds] = useState<any>();
   const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
     useState<boolean>(false);
@@ -352,6 +351,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [profile?.currentQuest]);
+
+  console.log('checking', profile);
 
   useEffect(() => {
     if (!gameInfo?.bgMusic) {
@@ -425,8 +426,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       });
     }
   }, [gameInfo?.gameData]);
-  http://192.168.1.30:5555/uploads/background/2.png
-  useEffect(() => {
+  //192.168.1.30:5555/uploads/background/2.png
+  http: useEffect(() => {
     switch (currentScreenId) {
       case 1 && gameInfo?.gameData?.gameWelcomepageBackground:
         setBackgroundScreenUrl(API_SERVER + '/uploads/background/2.png');
@@ -437,9 +438,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         );
         break;
       default:
-        setBackgroundScreenUrl(
-          API_SERVER + '/uploads/background/2.png',
-        );
+        setBackgroundScreenUrl(API_SERVER + '/uploads/background/2.png');
         currentScreenId > 0 &&
           currentScreenId === 1 &&
           isGetsPlayAudioConfirmation &&
@@ -571,6 +570,29 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           .map((item: any) => {
             return demoBlocks[currentQuest][item];
           });
+        if (selectedNext[0]?.blockChoosen === 'Interaction') {
+          const optionsFiltered = gameInfo?.questOptions.filter(
+            (key: any) =>
+              key?.qpSequence === selectedNext[0]?.blockPrimarySequence,
+          );
+          if (gameInfo?.gameData?.gameShuffle) {
+            for (let i = optionsFiltered.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [optionsFiltered[i], optionsFiltered[j]] = [
+                optionsFiltered[j],
+                optionsFiltered[i],
+              ];
+            }
+          }
+          setOptions(optionsFiltered);
+          setType(selectedNext && selectedNext[0].blockChoosen);
+          setData(selectedNext && selectedNext[0]);
+          setGame3Position((prev: any) => ({
+            ...prev,
+            nextBlock: selectedNext[0].blockPrimarySequence,
+          }));
+          return false;
+        }
         setType(selectedNext && selectedNext[0].blockChoosen);
         setData(selectedNext && selectedNext[0]);
         setGame3Position((prev: any) => ({
@@ -719,7 +741,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (currentScreenId === 7) {
       if (data && type) {
-        setCurrentScreenId(2);
+        setCurrentScreenId(13);
         return false;
       } else {
         setType(null);
@@ -772,6 +794,30 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           .map((item: any) => {
             return demoBlocks[currentQuest][item];
           });
+        if (selectedNext[0]?.blockChoosen === 'Interaction') {
+          const optionsFiltered = gameInfo?.questOptions.filter(
+            (key: any) =>
+              key?.qpSequence === selectedNext[0]?.blockPrimarySequence,
+          );
+          if (gameInfo?.gameData?.gameShuffle) {
+            for (let i = optionsFiltered.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [optionsFiltered[i], optionsFiltered[j]] = [
+                optionsFiltered[j],
+                optionsFiltered[i],
+              ];
+            }
+          }
+          setOptions(optionsFiltered);
+          setType(selectedNext && selectedNext[0].blockChoosen);
+          setData(selectedNext && selectedNext[0]);
+          setGame3Position((prev: any) => ({
+            ...prev,
+            nextBlock: selectedNext[0].blockPrimarySequence,
+          }));
+          return false;
+        }
+
         setType(selectedNext && selectedNext[0].blockChoosen);
         setData(selectedNext && selectedNext[0]);
         setGame3Position((prev: any) => ({
@@ -1136,73 +1182,76 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     };
   }, []);
 
-    // Afrith-modified-starts-13/Mar/24
+  // Afrith-modified-starts-13/Mar/24
 
-    const getCurrentResolution = () => {
-      // Logic to get current screen resolution
-      // You can use window.innerWidth and window.innerHeight
-      // return {
-      //   width: window.innerWidth,
-      //   height: window.innerHeight,
-      // };
-
-      const body = document.getElementById('body');
-      body.style.width = `${window.innerWidth}px`;
-      body.style.height = `${window.innerHeight}px`;   
-      
-      return body;
-    };
-    const getMobileResolution = () => {
-
-      // const width =  window.innerWidth - 500;
-      // const height = window.innerHeight - 500;    
-      // const body = document.getElementById('body');
-      // body.style.width = '390px';
-      // body.style.height = '890px';   
-
-      // console.log('resolu****',window.devicePixelRatio)
-      // return body;
-    };
-    console.log('getMobileResolution',getMobileResolution())
-  
-    const getCurrScreen = (screenType:any) => {
-      console.log('Current Screen:', screenType);
-      // Perform any other actions based on the screen type
-      if(screenType == 'Desktop'){
-        setResolution(getCurrentResolution())
-      }else if(screenType == 'Mobile'){
-        getMobileResolution();
-        setResolution({width: 430,height: 932})
-      }
-      else if(screenType == 'Tablet'){
-        setResolution({width: 768,height: 1024})
-      }
-    };
-  
-    // useEffect(() => {
-    //   const handleResize = () => {
-    //     setResolution(getCurrentResolution());
-    //   };
-    //   window.addEventListener('resize', handleResize);
-    //   return () => window.removeEventListener('resize', handleResize);
-    // }, []);
-  
-    console.log('resolution---',resolution)
-    // Afrith-modified-ends-13/Mar/24
-
-    // const toggleView = () => {
-    //   setIsMobileView(!isMobileView);
+  const getCurrentResolution = () => {
+    // Logic to get current screen resolution
+    // You can use window.innerWidth and window.innerHeight
+    // return {
+    //   width: window.innerWidth,
+    //   height: window.innerHeight,
     // };
-    // console.log('///',isMobileView)
 
-    // Avoid Top Menu Section
-    const dontShowTopMenu = currentScreenId !== 7 && currentScreenId !== 6 && currentScreenId !== 5 && currentScreenId !== 4 && currentScreenId !== 3 && currentScreenId !== 10;
+    const body = document.getElementById('body');
+    body.style.width = `${window.innerWidth}px`;
+    body.style.height = `${window.innerHeight}px`;
+
+    return body;
+  };
+  const getMobileResolution = () => {
+    // const width =  window.innerWidth - 500;
+    // const height = window.innerHeight - 500;
+    // const body = document.getElementById('body');
+    // body.style.width = '390px';
+    // body.style.height = '890px';
+    // console.log('resolu****',window.devicePixelRatio)
+    // return body;
+  };
+  console.log('getMobileResolution', getMobileResolution());
+
+  const getCurrScreen = (screenType: any) => {
+    console.log('Current Screen:', screenType);
+    // Perform any other actions based on the screen type
+    if (screenType == 'Desktop') {
+      setResolution(getCurrentResolution());
+    } else if (screenType == 'Mobile') {
+      getMobileResolution();
+      setResolution({ width: 430, height: 932 });
+    } else if (screenType == 'Tablet') {
+      setResolution({ width: 768, height: 1024 });
+    }
+  };
+
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setResolution(getCurrentResolution());
+  //   };
+  //   window.addEventListener('resize', handleResize);
+  //   return () => window.removeEventListener('resize', handleResize);
+  // }, []);
+
+  console.log('resolution---', resolution);
+  // Afrith-modified-ends-13/Mar/24
+
+  // const toggleView = () => {
+  //   setIsMobileView(!isMobileView);
+  // };
+  // console.log('///',isMobileView)
+
+  // Avoid Top Menu Section
+  const dontShowTopMenu =
+    currentScreenId !== 7 &&
+    currentScreenId !== 6 &&
+    currentScreenId !== 5 &&
+    currentScreenId !== 4 &&
+    currentScreenId !== 3 &&
+    currentScreenId !== 10;
 
   return (
     <ProfileContext.Provider value={profileData}>
-       {/* {isMobileView ? ( */}
-      <Box id='EntirePreview-wrapper'>
-        <Box className='EntirePreview-content'>
+      {/* {isMobileView ? ( */}
+      <Box id="EntirePreview-wrapper">
+        <Box className="EntirePreview-content">
           <Box id="container" className="Play-station">
             <Box className="top-menu-home-section">
               {dontShowTopMenu ? (
@@ -1498,7 +1547,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 5:
                   return (
                     <>
-                     
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -1532,7 +1580,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 6:
                   return (
                     <>
-                     
                       <Completion
                         questOptions={gameInfo?.questOptions}
                         getData={getData}
@@ -1798,62 +1845,54 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                               // className={'info_potrait'}
                             >
                               <Img src={Login} className={'first_play'} />
-                              <Box
-                              className={'play_screen_content'}                             
-                              >
-                                  <Box>
-                                    <Box
-                                      w={'100%'}                                     
-                                      display={'flex'}
-                                      justifyContent={'center'}
-                                    >
-                                      <Text
-                                      className={'play_screen_heading'}                                       
-                                      >
-                                        Atlantis
-                                      </Text>
-                                    </Box>
+                              <Box className={'play_screen_content'}>
+                                <Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Text className={'play_screen_heading'}>
+                                      Atlantis
+                                    </Text>
                                   </Box>
-                                  <Box>
-                                    <Box
-                                      w={'100%'}
-                                      display={'flex'}
-                                      justifyContent={'center'}
-                                    >
-                                      <Text
-                                        className={'play_screen_text'}
-                                      >
-                                        Welcome To
-                                      </Text>
-                                    </Box>
-                                    <Box
-                                      w={'100%'}
-                                      display={'flex'}
-                                      justifyContent={'center'}
-                                      mb={{base:0,lg:2}}
-                                    >
-                                      <Text
-                                       className={'play_screen_text'}
-                                      >
-                                        The Demo Play
-                                      </Text>
-                                    </Box>
-                                    <Box
-                                      w={'100%'}
-                                      display={'flex'}
-                                      justifyContent={'center'}
-                                    >
-                                      <Button
-                                        w={'90%'}
-                                        h={{sm:'20px',md:'30px'}}
-                                        bg={'none'}
-                                        _hover={{bg:'none'}}
-                                        onClick={() => {
-                                          setCurrentScreenId(12);
-                                          setIsGetsPlayAudioConfirmation(true);
-                                        }}
-                                      ></Button>
-                                    </Box>
+                                </Box>
+                                <Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Text className={'play_screen_text'}>
+                                      Welcome To
+                                    </Text>
+                                  </Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                    mb={{ base: 0, lg: 2 }}
+                                  >
+                                    <Text className={'play_screen_text'}>
+                                      The Demo Play
+                                    </Text>
+                                  </Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Button
+                                      w={'90%'}
+                                      h={{ sm: '20px', md: '30px' }}
+                                      bg={'none'}
+                                      _hover={{ bg: 'none' }}
+                                      onClick={() => {
+                                        setCurrentScreenId(12);
+                                        setIsGetsPlayAudioConfirmation(true);
+                                      }}
+                                    ></Button>
+                                  </Box>
                                 </Box>
                               </Box>
                             </Box>
@@ -1901,6 +1940,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         demoBlocks={demoBlocks}
                         questOptions={gameInfo?.questOptions}
                         setCurrentScreenId={setCurrentScreenId}
+                        setData={setData}
+                        setType={setType}
+                        setOptions={setOptions}
                       />
                       {/* </SimpleGrid> */}
                     </>
@@ -1915,8 +1957,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               }
             })()}
           </Flex>
-             {/*Afrith-modified-starts-13/Mar/24*/}
-            {/* <Stack direction='row' spacing={4} zIndex={999999} position={'absolute'} right={0} top={20}  >
+          {/*Afrith-modified-starts-13/Mar/24*/}
+          {/* <Stack direction='row' spacing={4} zIndex={999999} position={'absolute'} right={0} top={20}  >
               <Text color={'#fff'}>{resolution?.width}{'*'}{resolution?.height}</Text>
               <Box
                 justifyContent={'center'} 
@@ -1998,7 +2040,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               </Button>
               </Box>
             </Stack> */}
-    {/*Afrith-modified-ends-13/Mar/24*/}
+          {/*Afrith-modified-ends-13/Mar/24*/}
           {isReviewDemo && (
             <Menu isOpen={isMenuOpen}>
               <MenuButton
@@ -2197,7 +2239,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           )}
         </Box>
       </Box>
-       {/* ) : (
+      {/* ) : (
         <h1>Desktop View</h1>
       )}
         <button onClick={toggleView}>Toggle View</button> */}

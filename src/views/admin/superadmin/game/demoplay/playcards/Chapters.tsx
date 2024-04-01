@@ -30,6 +30,9 @@ const ChapterPage: React.FC<{
   questOptions?: any;
   currentQuestNo?: any;
   setCurrentQuestNo?: any;
+  setData?: any;
+  setType?: any;
+  setOptions?: any;
 }> = ({
   imageSrc,
   demoBlocks,
@@ -38,6 +41,9 @@ const ChapterPage: React.FC<{
   questOptions,
   currentQuestNo,
   setCurrentQuestNo,
+  setData,
+  setType,
+  setOptions
 }) => {
   const [questScores, setQuestScores] = useState(null);
   // const [completed, setCompleted] = useState(['1']);
@@ -86,11 +92,34 @@ const ChapterPage: React.FC<{
   // }, [profile]);
   const handleChapter = (it: any) => {
     if (profile.completedLevels.includes(it)) {
-      setCurrentScreenId(1);
       setProfile((prev: any) => ({
         ...prev,
         currentQuest: it,
       }));
+     
+      setType(demoBlocks[it]['1']?.blockChoosen);
+      setData(demoBlocks[it]['1']);
+      if (
+        demoBlocks[it]['1']?.blockChoosen ===
+        'Interaction'
+      ) {
+        const optionsFiltered = questOptions.filter(
+          (key: any) =>
+            key?.qpSequence ===
+            demoBlocks[profile?.currentQuest]['1']?.blockPrimarySequence,
+        );
+        if (formData?.gameShuffle) {
+          for (let i = optionsFiltered.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [optionsFiltered[i], optionsFiltered[j]] = [
+              optionsFiltered[j],
+              optionsFiltered[i],
+            ]; // Swap elements at indices i and j
+          }
+        }
+        setOptions(optionsFiltered);
+      }
+      setCurrentScreenId(1);
     }
   };
 
