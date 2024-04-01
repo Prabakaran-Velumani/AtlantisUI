@@ -108,7 +108,7 @@ const Story: React.FC<{
     const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
     // const [SpeedIsOver, setSpeedIsOver] = useState<any>(false);
     const [isPlayAudioConfirmation, setIsPlayAudioConfirmation] = useState<boolean>(false);
-    
+
     const [score, setScore] = useState(null);
 
     useEffect(() => {
@@ -136,97 +136,97 @@ const Story: React.FC<{
         if (profileData?.Audiogetlanguage.length !== 0) {
           // if(AudioOptions.qpOptionId ==='')
           // {
-            const GetblocktextAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) =>key?.textId === data?.blockId);
-            if (GetblocktextAudioFiltered.length > 0) {
-              const FilteredFieldName = GetblocktextAudioFiltered.map((item: any) => item.fieldName);
-              if (FilteredFieldName[0] === 'blockText') {
-                const audioUrls = GetblocktextAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
-                const relativePath = audioUrls[0].split('\\uploads\\')[1];
-                const normalizedPath = relativePath.replace(/\\/g, '/');
-                const fullUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-                const responseblockText = await fetch(fullUrl);
-                if (responseblockText.ok) {
-                  setAudioObj({
-                    url: fullUrl,
-                    type: 'bgm',
-                    volume: '0.5',
-                    loop: true,
-                    autoplay: true,
-                  });
-                  setIsGetsPlayAudioConfirmation(true);
-                }
-  
+          const GetblocktextAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === data?.blockId);
+          if (GetblocktextAudioFiltered.length > 0) {
+            const FilteredFieldName = GetblocktextAudioFiltered.map((item: any) => item.fieldName);
+            if (FilteredFieldName[0] === 'blockText') {
+              const audioUrls = GetblocktextAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
+              const relativePath = audioUrls[0].split('\\uploads\\')[1];
+              const normalizedPath = relativePath.replace(/\\/g, '/');
+              const fullUrl = `${API_SERVER}/uploads/${normalizedPath}`;
+              const responseblockText = await fetch(fullUrl);
+              if (responseblockText.ok) {
+                setAudioObj({
+                  url: fullUrl,
+                  type: 'bgm',
+                  volume: '0.5',
+                  loop: true,
+                  autoplay: true,
+                });
+                setIsGetsPlayAudioConfirmation(true);
               }
+
             }
+          }
           // }
           // else{
-            // console.log(' =>', AudioOptions);
-            // if (AudioOptions.qpOptionId) {
-            //   const optionAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === AudioOptions?.qpOptionId);
-            //   console.log('1 =>',optionAudioFiltered,'.....', AudioOptions);
-            //   if (optionAudioFiltered.length > 0) {
-            //     const getoptionsAudioFiltered = optionAudioFiltered.filter((key: any) => key?.fieldName === 'qpOptionText');
-            //     console.log('2 =>',getoptionsAudioFiltered);
-            //     if (getoptionsAudioFiltered.length > 0) {
-            //       const QOTaudioUrls = getoptionsAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
-            //       console.log('3 =>',QOTaudioUrls);
-            //       if (QOTaudioUrls.length > 0) {
-            //         const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
-            //         const normalizedPath = relativePath.replace(/\\/g, '/');
-            //         const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-            //         const responseqpOptionText = await fetch(qpOptionTextUrl);
-            //         console.log('4 =>',responseqpOptionText,qpOptionTextUrl);
-            //         if (responseqpOptionText.ok) {
-            //           setAudioObj({
-            //             url: qpOptionTextUrl,
-            //             type: 'bgm',
-            //             volume: '0.5',
-            //             loop: true,
-            //             autoplay: true,
-            //           });
-            //           setIsGetsPlayAudioConfirmation(true);
-            //         }
-            //         else {
-            //           const getAudioFiltered1 = optionAudioFiltered.filter((key: any) => key?.fieldName === "qpOptions");
-            //           if (getAudioFiltered1.length > 0) {
-            //             const QPaudioUrls = getAudioFiltered1.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
-            //             if (QPaudioUrls.length > 0) {
-            //               const relativePath = QPaudioUrls[0].split('\\uploads\\')[1];
-            //               const normalizedPath = relativePath.replace(/\\/g, '/');
-            //               const qpOptionsUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-            //               const responsequestoption = await fetch(qpOptionsUrl);
-            //               console.log('4 =>',responsequestoption);
-            //               if (responsequestoption.ok) {
-            //                 setAudioObj({
-            //                   url: qpOptionsUrl,
-            //                   type: 'bgm',
-            //                   volume: '0.5',
-            //                   loop: true,
-            //                   autoplay: true,
-            //                 });
-            //                 setIsGetsPlayAudioConfirmation(true);
-            //               }
-            //               else
-            //               {
-            //                 setAudioObj({
-            //                   url: '',
-            //                   type: 'bgm',
-            //                   volume: '0.5',
-            //                   loop: true,
-            //                   autoplay: true,
-            //                 });
-            //                 setIsGetsPlayAudioConfirmation(false);
-            //               }
-  
-            //             }
-            //           }
-            //         }
-  
-            //       }
-            //     }
-            //   }
-  
-            // }
+          // console.log(' =>', AudioOptions);
+          // if (AudioOptions.qpOptionId) {
+          //   const optionAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === AudioOptions?.qpOptionId);
+          //   console.log('1 =>',optionAudioFiltered,'.....', AudioOptions);
+          //   if (optionAudioFiltered.length > 0) {
+          //     const getoptionsAudioFiltered = optionAudioFiltered.filter((key: any) => key?.fieldName === 'qpOptionText');
+          //     console.log('2 =>',getoptionsAudioFiltered);
+          //     if (getoptionsAudioFiltered.length > 0) {
+          //       const QOTaudioUrls = getoptionsAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
+          //       console.log('3 =>',QOTaudioUrls);
+          //       if (QOTaudioUrls.length > 0) {
+          //         const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
+          //         const normalizedPath = relativePath.replace(/\\/g, '/');
+          //         const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
+          //         const responseqpOptionText = await fetch(qpOptionTextUrl);
+          //         console.log('4 =>',responseqpOptionText,qpOptionTextUrl);
+          //         if (responseqpOptionText.ok) {
+          //           setAudioObj({
+          //             url: qpOptionTextUrl,
+          //             type: 'bgm',
+          //             volume: '0.5',
+          //             loop: true,
+          //             autoplay: true,
+          //           });
+          //           setIsGetsPlayAudioConfirmation(true);
+          //         }
+          //         else {
+          //           const getAudioFiltered1 = optionAudioFiltered.filter((key: any) => key?.fieldName === "qpOptions");
+          //           if (getAudioFiltered1.length > 0) {
+          //             const QPaudioUrls = getAudioFiltered1.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
+          //             if (QPaudioUrls.length > 0) {
+          //               const relativePath = QPaudioUrls[0].split('\\uploads\\')[1];
+          //               const normalizedPath = relativePath.replace(/\\/g, '/');
+          //               const qpOptionsUrl = `${API_SERVER}/uploads/${normalizedPath}`;
+          //               const responsequestoption = await fetch(qpOptionsUrl);
+          //               console.log('4 =>',responsequestoption);
+          //               if (responsequestoption.ok) {
+          //                 setAudioObj({
+          //                   url: qpOptionsUrl,
+          //                   type: 'bgm',
+          //                   volume: '0.5',
+          //                   loop: true,
+          //                   autoplay: true,
+          //                 });
+          //                 setIsGetsPlayAudioConfirmation(true);
+          //               }
+          //               else
+          //               {
+          //                 setAudioObj({
+          //                   url: '',
+          //                   type: 'bgm',
+          //                   volume: '0.5',
+          //                   loop: true,
+          //                   autoplay: true,
+          //                 });
+          //                 setIsGetsPlayAudioConfirmation(false);
+          //               }
+
+          //             }
+          //           }
+          //         }
+
+          //       }
+          //     }
+          //   }
+
+          // }
           //   setAudioObj({
           //     url: '',
           //     type: 'bgm',
@@ -235,12 +235,12 @@ const Story: React.FC<{
           //     autoplay: true,
           //   });
           //   setIsGetsPlayAudioConfirmation(false);
-          
+
           // }
-          
+
         }
         // else {
-          
+
         //   setAudioObj({
         //     autoplay: false,
         //   });
@@ -248,9 +248,9 @@ const Story: React.FC<{
         // }
       };
       fetchData();
-    }, [profileData,data]);
+    }, [profileData, data]);
 
-   
+
     const getVoice = async (blockInfo: any, blockType: string) => {
       let text = '';
       let voiceId = '';
@@ -291,13 +291,13 @@ const Story: React.FC<{
           // });
           // text = blockInfo.blockText + optionsText;
           let optionsText = '';
-// Sort the options array based on a unique identifier, such as index
-options.sort((a: any, b: any) => a.index - b.index);
-options.forEach((item: any) => {
-    optionsText += '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
-});
+          // Sort the options array based on a unique identifier, such as index
+          options.sort((a: any, b: any) => a.index - b.index);
+          options.forEach((item: any) => {
+            optionsText += '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
+          });
 
-text = blockInfo.blockText + optionsText;
+          text = blockInfo.blockText + optionsText;
           voiceId =
             blockInfo?.blockRoll == '999999'
               ? voiceIds.NPC
@@ -324,7 +324,7 @@ text = blockInfo.blockText + optionsText;
                 : voiceIds?.playerFemale;
           break;
       }
-       getAudioForText(text, voiceId);
+      getAudioForText(text, voiceId);
     };
 
     const InteractionFunction = () => {
@@ -443,7 +443,7 @@ text = blockInfo.blockText + optionsText;
       if (newRemainingResponseSentences.length >= 1) {
         setCurrentPosition(currentPosition + concatenatedSentences.length);
         setNavigateNext(false);
-      } 
+      }
       else {
         setCurrentPosition(0);
         setNavigateNext(true);
@@ -647,10 +647,10 @@ text = blockInfo.blockText + optionsText;
             )}
           </Box>
         )}
-        
-         {data && type === 'Interaction' && (
-        <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick}  prevData={prevData}  InteractionFunction={InteractionFunction}  />
-      )}
+
+        {data && type === 'Interaction' && (
+          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick} prevData={prevData} InteractionFunction={InteractionFunction} />
+        )}
         {data && type === 'response' && (
           <Box
             w={'100%'}

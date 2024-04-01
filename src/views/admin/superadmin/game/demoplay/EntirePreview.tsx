@@ -209,6 +209,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [getSelectedOptions, SetgetSelectedOptions] = useState({});
   /** This state handles the Review Form Tab and Sub Tab options */
   const [reviewTabOptions, setReviewTabOptions] = useState([]);
+  const [questState, setQuestState] = useState({});
   const [filteredTabOptions, setFilteredTabOptions] = useState([]);
   // Feed back after completion 
   const [FeedbackcurrentPosition, setFeedbackCurrentPosition] = useState(0);
@@ -219,7 +220,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [FeedBackselectedoptionData, setFeedBackSelectedoptionData] = useState(null);
   const [isOptionalReplay, setisOptionalReplay] = useState<any>(false);
   const [isReplay, setisReplay] = useState<any>(false);
-  const [profilescore,Setprofilescore] = useState(null);
+  const [profilescore, Setprofilescore] = useState(null);
   const [reviewSubTabOptions, setReviewSubTabOptions] = useState<
     Array<{ value: string; label: string }>
   >([]);
@@ -322,7 +323,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   };
 
-
   useEffect(() => {
 
     setDemoBlocks(gameInfo?.blocks);
@@ -333,14 +333,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen ===
       'Interaction'
     ) {
-       const optionsFiltered = [];
+      const optionsFiltered = [];
       const primarySequence = gameInfo.blocks[profile.currentQuest]['1'].blockPrimarySequence;
 
-for (const option of gameInfo.questOptions) {
-    if (option?.qpSequence === primarySequence) {
-      optionsFiltered.push(option);
-    }
-}
+      for (const option of gameInfo.questOptions) {
+        if (option?.qpSequence === primarySequence) {
+          optionsFiltered.push(option);
+        }
+      }
       if (gameInfo?.gameData?.gameShuffle === 'true') {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -451,12 +451,12 @@ for (const option of gameInfo.questOptions) {
       });
     }
   }, [gameInfo?.gameData]);
-  
+
   useEffect(() => {
-        currentScreenId > 0 &&
-          currentScreenId === 1 &&
-          isGetsPlayAudioConfirmation &&
-          setAudio(gameInfo?.bgMusic ?? '');
+    currentScreenId > 0 &&
+      currentScreenId === 1 &&
+      isGetsPlayAudioConfirmation &&
+      setAudio(gameInfo?.bgMusic ?? '');
   }, [currentScreenId, gameInfo]);
 
 
@@ -490,6 +490,7 @@ for (const option of gameInfo.questOptions) {
       prevBlock.length !== 0 &&
       prevBlock[0]?.blockChoosen !== 'Interaction'
     ) {
+
       setType(prevBlock[0]?.blockChoosen);
       setData(prevBlock[0]);
     }
@@ -523,7 +524,7 @@ for (const option of gameInfo.questOptions) {
     //get the next block details
     const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
     const NextItem = currentBlock != null ? currentBlock + 1 : null;
-    
+
     const nextSeq = next
       ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
       : '';
@@ -547,11 +548,11 @@ for (const option of gameInfo.questOptions) {
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = [];
-for (const option of gameInfo.questOptions) {
-    if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
-      optionsFiltered.push(option);
-    }
-}
+      for (const option of gameInfo.questOptions) {
+        if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+          optionsFiltered.push(option);
+        }
+      }
       if (gameInfo?.gameData?.gameShuffle === 'true') {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -573,7 +574,7 @@ for (const option of gameInfo.questOptions) {
     } else if (
       (type === 'Interaction' || type === 'response') &&
       feed !== '' &&
-      gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
+      gameInfo?.gameData?.gameIsShowInteractionFeedBack !== 'Completion'
     ) {
       setType('feedback');
       return false;
@@ -587,7 +588,7 @@ for (const option of gameInfo.questOptions) {
         setInteractionOptions(gameInfo, currentBlockinteraction);
         setType(next?.blockChoosen);
         setData(next);
-        setSelectedOption(null);  
+        setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
         setType(nextBlock[0]?.blockChoosen);
@@ -612,58 +613,56 @@ for (const option of gameInfo.questOptions) {
           });
         if (selectedNext.length > 0) {
           setType(selectedNext && selectedNext[0]?.blockChoosen);
-              if(selectedNext[0]?.blockChoosen === 'Interaction')
-        {
-          const optionsFiltered = [];
-          for (const option of gameInfo.questOptions) {
-              if (option?.qpSequence ===  selectedNext[0]?.blockPrimarySequence) {
+          if (selectedNext[0]?.blockChoosen === 'Interaction') {
+            const optionsFiltered = [];
+            for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence === selectedNext[0]?.blockPrimarySequence) {
                 optionsFiltered.push(option);
               }
+            }
+            if (gameInfo?.gameData?.gameShuffle === 'true') {
+              for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsFiltered[i], optionsFiltered[j]] = [
+                  optionsFiltered[j],
+                  optionsFiltered[i],
+                ];
+              }
+            }
+            setOptions(optionsFiltered);
           }
-                if (gameInfo?.gameData?.gameShuffle === 'true') {
-                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [optionsFiltered[i], optionsFiltered[j]] = [
-                      optionsFiltered[j],
-                      optionsFiltered[i],
-                    ];
-                  }
-                }
-                setOptions(optionsFiltered);
+          setData(selectedNext && selectedNext[0]);
+          setGame3Position((prev: any) => ({
+            ...prev,
+            nextBlock: selectedNext[0]?.blockPrimarySequence,
+          }));
         }
-        setData(selectedNext && selectedNext[0]);
-        setGame3Position((prev: any) => ({
-          ...prev,
-          nextBlock: selectedNext[0]?.blockPrimarySequence,
-        }));
-      }
-      else {
-        setType(nextBlock[0]?.blockChoosen);
-        if(nextBlock[0]?.blockChoosen === 'Interaction')
-        {
-          const optionsFiltered = [];
-          for (const option of gameInfo.questOptions) {
-              if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
+        else {
+          setType(nextBlock[0]?.blockChoosen);
+          if (nextBlock[0]?.blockChoosen === 'Interaction') {
+            const optionsFiltered = [];
+            for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
                 optionsFiltered.push(option);
               }
+            }
+            if (gameInfo?.gameData?.gameShuffle === 'true') {
+              for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsFiltered[i], optionsFiltered[j]] = [
+                  optionsFiltered[j],
+                  optionsFiltered[i],
+                ];
+              }
+            }
+            setOptions(optionsFiltered);
           }
-                if (gameInfo?.gameData?.gameShuffle === 'true') {
-                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [optionsFiltered[i], optionsFiltered[j]] = [
-                      optionsFiltered[j],
-                      optionsFiltered[i],
-                    ];
-                  }
-                }
-                setOptions(optionsFiltered);
+          setData(nextBlock[0]);
+          setGame3Position((prev: any) => ({
+            ...prev,
+            nextBlock: nextBlock[0]?.blockPrimarySequence,
+          }));
         }
-        setData(nextBlock[0]);
-        setGame3Position((prev: any) => ({
-          ...prev,
-          nextBlock: nextBlock[0]?.blockPrimarySequence,
-        }));
-      }
         setSelectedOption(null);
         return false;
       } else if (navi === 'Complete') {
@@ -687,7 +686,7 @@ for (const option of gameInfo.questOptions) {
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         setSelectedOption(null);
-        return false; 
+        return false;
       }
     }
     if (currentScreenId === 6) {
@@ -712,6 +711,7 @@ for (const option of gameInfo.questOptions) {
         return false;
       } else {
         if (data && type) {
+          setFeedbackNavigateNext(false);
           setCurrentScreenId(13);
           return false;
         } else {
@@ -729,21 +729,47 @@ for (const option of gameInfo.questOptions) {
       } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
         setCurrentScreenId(4);
         return false;
-      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-        setCurrentScreenId(3);
-        return false;
-      } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-        setCurrentScreenId(7);
-        return false;
-      } else {
+      }
+      //  else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+      //   console.log('19');
+      //   setCurrentScreenId(3);
+      //   return false;
+      // } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+      //   console.log('20');
+      //   setCurrentScreenId(7);
+      //   return false;
+      // } 
+      else {
         if (data && type) {
-          setCurrentScreenId(2);
+          // setCurrentScreenId(2);
+          setFeedbackNavigateNext(false);
+          setCurrentScreenId(13);
           return false;
         } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(5);
-          return false;
+          if (gameInfo?.gameData?.gameIsShowLeaderboard === 'false') {
+            if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+              setCurrentScreenId(3);
+              return false;
+            }
+            else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+              setCurrentScreenId(7);
+              return false;
+            }
+            else {
+              setType(null);
+              setData(null);
+              setCurrentScreenId(5);
+              return false;
+            }
+          }
+          else {
+            setType(null);
+            setData(null);
+            setCurrentScreenId(5);
+            return false;
+          }
+
+
         }
       }
     }
@@ -770,7 +796,6 @@ for (const option of gameInfo.questOptions) {
       }
     }
     if (currentScreenId === 4) {
-
       // if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
       //   console.log('gameIsShowReflectionScreen 3');
       //   setCurrentScreenId(3);
@@ -802,7 +827,6 @@ for (const option of gameInfo.questOptions) {
           const finalscore = getscores?.score;
           if (finalscore >= getminpassscore && finalscore < getgameinfoquest?.gameDistinctionScore && gameInfo.gameData?.gameDisableOptionalReplays === 'false') {
             setisOptionalReplay(false);
-            
             setisReplay(true);
             Setprofilescore(finalscore);
             setCurrentScreenId(8)
@@ -826,7 +850,7 @@ for (const option of gameInfo.questOptions) {
                 setCurrentScreenId(5);
                 return false;
               }
-  
+
               // }
             }
           }
@@ -937,6 +961,7 @@ for (const option of gameInfo.questOptions) {
           return false;
         }
         else {
+
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
@@ -1005,55 +1030,53 @@ for (const option of gameInfo.questOptions) {
           });
         if (selectedNext.length > 0) {
           setType(selectedNext && selectedNext[0]?.blockChoosen);
-            if(selectedNext[0]?.blockChoosen === 'Interaction')
-        {
-          const optionsFiltered = [];
-          for (const option of gameInfo.questOptions) {
-              if (option?.qpSequence ===  selectedNext[0]?.blockPrimarySequence) {
+          if (selectedNext[0]?.blockChoosen === 'Interaction') {
+            const optionsFiltered = [];
+            for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence === selectedNext[0]?.blockPrimarySequence) {
                 optionsFiltered.push(option);
               }
+            }
+            if (gameInfo?.gameData?.gameShuffle === 'true') {
+              for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsFiltered[i], optionsFiltered[j]] = [
+                  optionsFiltered[j],
+                  optionsFiltered[i],
+                ];
+              }
+            }
+            setOptions(optionsFiltered);
           }
-                if (gameInfo?.gameData?.gameShuffle === 'true') {
-                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [optionsFiltered[i], optionsFiltered[j]] = [
-                      optionsFiltered[j],
-                      optionsFiltered[i],
-                    ];
-                  }
-                }
-                setOptions(optionsFiltered);
+          setData(selectedNext && selectedNext[0]);
         }
-        setData(selectedNext && selectedNext[0]);
-      }
-      else {
-        setType(nextBlock[0]?.blockChoosen);
-        if(nextBlock[0]?.blockChoosen === 'Interaction')
-        {
-          const optionsFiltered = [];
-          for (const option of gameInfo.questOptions) {
-              if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
+        else {
+          setType(nextBlock[0]?.blockChoosen);
+          if (nextBlock[0]?.blockChoosen === 'Interaction') {
+            const optionsFiltered = [];
+            for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
                 optionsFiltered.push(option);
               }
+            }
+            if (gameInfo?.gameData?.gameShuffle === 'true') {
+              for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsFiltered[i], optionsFiltered[j]] = [
+                  optionsFiltered[j],
+                  optionsFiltered[i],
+                ];
+              }
+            }
+            setOptions(optionsFiltered);
           }
-                if (gameInfo?.gameData?.gameShuffle === 'true') {
-                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [optionsFiltered[i], optionsFiltered[j]] = [
-                      optionsFiltered[j],
-                      optionsFiltered[i],
-                    ];
-                  }
-                }
-                setOptions(optionsFiltered);
+          setData(nextBlock[0]);
         }
-        setData(nextBlock[0]);
-      }
-      setGame3Position((prev: any) => ({
-        ...prev,
-        nextBlock: selectedNext[0]?.blockPrimarySequence,
-      }));
-      setSelectedOption(null);
+        setGame3Position((prev: any) => ({
+          ...prev,
+          nextBlock: selectedNext[0]?.blockPrimarySequence,
+        }));
+        setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
         setProfile((prev: any) => {
@@ -1061,6 +1084,7 @@ for (const option of gameInfo.questOptions) {
           data.completedLevels = [...data?.completedLevels, nextLevel];
           return data;
         });
+        setFeedbackNavigateNext(false);
         setCurrentScreenId(13);
         return false;
       }
@@ -1080,7 +1104,7 @@ for (const option of gameInfo.questOptions) {
     const optionsFiltered = gameInfo?.questOptions.filter(
       (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
     );
-    if (gameInfo?.gameData?.gameShuffle ==='true') {
+    if (gameInfo?.gameData?.gameShuffle === 'true') {
       for (let i = optionsFiltered.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [optionsFiltered[i], optionsFiltered[j]] = [
@@ -1447,7 +1471,6 @@ for (const option of gameInfo.questOptions) {
 
   useEffect(() => {
     if (FeedbackNavigatenext === true) {
-
       getData(data);
     }
 
@@ -1796,7 +1819,7 @@ for (const option of gameInfo.questOptions) {
                             setHomeLeaderBoard={setHomeLeaderBoard}
                             setCurrentScreenId={setCurrentScreenId}
                             formData={gameInfo?.gameData}
-                            imageSrc={preloadedAssets.Lead}
+                            imageSrc={preloadedAssets.Leaderboard}
                             getData={getData}
                             data={data}
                           />
@@ -1845,6 +1868,8 @@ for (const option of gameInfo.questOptions) {
                       <Completion
                         questOptions={gameInfo?.questOptions}
                         getData={getData}
+                        questState={questState}
+                        setQuestState={setQuestState}
                         data={data}
                         setFeedbackNavigateNext={setFeedbackNavigateNext}
                         getFeedbackData={getFeedbackData}
@@ -2152,6 +2177,8 @@ for (const option of gameInfo.questOptions) {
                       {/* <SimpleGrid columns={{ base: 1 }}> */}
                       <ChapterPage
                         setCurrentQuestNo={setCurrentQuestNo}
+                        questState={questState}
+                        setQuestState={setQuestState}
                         currentQuestNo={currentQuestNo}
                         formData={gameInfo?.gameData}
                         imageSrc={preloadedAssets.backgroundImage}

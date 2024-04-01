@@ -123,7 +123,6 @@ const LeaderBoard: React.FC<{
     setCurrentScreenId(10)
   }
 
-
   return (
     <>
       {imageSrc && (       
