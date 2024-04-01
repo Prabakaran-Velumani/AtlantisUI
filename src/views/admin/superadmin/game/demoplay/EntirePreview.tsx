@@ -524,7 +524,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
       setOptions(optionsFiltered);
     }
-
     if (
       type === 'Interaction' &&
       resMsg !== '' &&
@@ -860,7 +859,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const voiceId =
       // data?.blockRoll == '999999'
       //   ? voiceIds.NPC :
-      profileData?.gender == 'Male'
+      profileData?.gender === 'Male'
         ? voiceIds?.playerMale
         : voiceIds?.playerFemale;
     getAudioForText(text, voiceId);
@@ -948,7 +947,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [currentScreenId]);
   useEffect(() => {
     if (reviewInput?.tabId) {
-      if (reviewInput?.tabId == 5) {
+      if (reviewInput?.tabId === 5) {
         setReviewSubTabOptions([]);
         setReviewInput((prev: Review) => ({
           ...prev,
@@ -957,7 +956,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             Number(currentScreenId),
           ).toString(),
         }));
-      } else if (reviewInput?.tabId == 4) {
+      } else if (reviewInput?.tabId === 4) {
         //for Story Tab
         const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
         setReviewSubTabOptions([]);
@@ -968,7 +967,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         }));
       } else {
         const subOptions = subTabOptionsForTabIds.find(
-          (item: any) => Object.keys(item)[0] == reviewInput?.tabId.toString(),
+          (item: any) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
         );
         setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
       }

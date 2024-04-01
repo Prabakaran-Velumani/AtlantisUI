@@ -14,14 +14,13 @@ const Takeway: React.FC<{
   imageSrc: any;
   getData?: any;
   data?: any;
-}> = ({ formData, imageSrc, getData,
-  data }) => {
+}> = ({ formData, imageSrc, getData, data }) => {
   const content = formData.gameTakeawayContent?.split('\n');
 
   return (
     <>
       {imageSrc && (
-        <Box className="takeaway-screen">
+        <Box className="takeaway-screen"> 
           <Box className="takeaway-screen-box">
             <Img src={imageSrc} className="bg-take" />
             <Box
