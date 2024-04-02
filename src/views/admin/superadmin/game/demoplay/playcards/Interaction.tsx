@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Grid,GridItem,Img,Text } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Img, Text } from '@chakra-ui/react';
 import right from 'assets/img/games/right.png';
 import left from 'assets/img/games/left.png';
 import parch from 'assets/img/games/parch.png';

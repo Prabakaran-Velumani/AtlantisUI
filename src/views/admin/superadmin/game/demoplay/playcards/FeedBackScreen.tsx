@@ -5,13 +5,11 @@ import feedi from 'assets/img/screens/feed.png';
 import InteractionScreenShot from './InteractionScreenShot';
 import Close from 'assets/img/games/close.png';
 interface FeedBackScreenShotProps {
-
     backgroundScreenUrl: any;
     first: any;
     showNote: any;
     currentScreenId: any;
     isScreenshot: any;
-    backGroundImg: any;
     FeedbackremainingSentences: any;
     options: any;
     getData: any;
@@ -23,8 +21,7 @@ interface FeedBackScreenShotProps {
     profile:any;
     setisScreenshot: any;
 }
-const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl, backGroundImg,
-    first,
+const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl, first,
     profile,
     showNote,
     isScreenshot,
@@ -134,7 +131,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl
                                 {FeedbackremainingSentences}
                                 {isScreenshot === true ?
                                    
-                                                <InteractionScreenShot data={FeedBackoptionData} option={FeedBackselectedoptionData} options={options} backGroundImg={backGroundImg} profile={profile} geTfeedBackoption={geTfeedBackoption} isScreenshot={isScreenshot} />
+                                                <InteractionScreenShot data={FeedBackoptionData} option={FeedBackselectedoptionData} options={options} backGroundImg={backgroundScreenUrl} profile={profile} geTfeedBackoption={geTfeedBackoption} isScreenshot={isScreenshot} />
 
                                     : ''}
                                 <Box

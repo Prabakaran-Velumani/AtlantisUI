@@ -82,7 +82,7 @@ export const ScoreContext = createContext<any>(null);
 const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
-  const InitialScreenId = id ? 2 : 1; //replace 10 by which screen you want to play
+  const InitialScreenId = id ? 10 : 1; //replace 10 by which screen you want to play
   const [gameInfo, setGameInfo] = useState<any | null>();
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);

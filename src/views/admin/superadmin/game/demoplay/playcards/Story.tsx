@@ -166,124 +166,124 @@ useEffect(() => {
   }, 1000);
 }, []);
 
-useEffect(() => {
-  const fetchData = async () => {
-    if (profileData?.Audiogetlanguage.length !== 0) {
-      // if(AudioOptions.qpOptionId ==='')
-      // {
-        const GetblocktextAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) =>key?.textId === data?.blockId);
-        if (GetblocktextAudioFiltered.length > 0) {
-          const FilteredFieldName = GetblocktextAudioFiltered.map((item: any) => item.fieldName);
-          if (FilteredFieldName[0] === 'blockText') {
-            const audioUrls = GetblocktextAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
-            const relativePath = audioUrls[0].split('\\uploads\\')[1];
-            const normalizedPath = relativePath.replace(/\\/g, '/');
-            const fullUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-            const responseblockText = await fetch(fullUrl);
-            if (responseblockText.ok) {
-              setAudioObj({
-                url: fullUrl,
-                type: 'bgm',
-                volume: '0.5',
-                loop: true,
-                autoplay: true,
-              });
-              setIsGetsPlayAudioConfirmation(true);
+    useEffect(() => {
+      const fetchData = async () => {
+        if (profileData?.Audiogetlanguage.length !== 0) {
+          // if(AudioOptions.qpOptionId ==='')
+          // {
+          const GetblocktextAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === data?.blockId);
+          if (GetblocktextAudioFiltered.length > 0) {
+            const FilteredFieldName = GetblocktextAudioFiltered.map((item: any) => item.fieldName);
+            if (FilteredFieldName[0] === 'blockText') {
+              const audioUrls = GetblocktextAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
+              const relativePath = audioUrls[0].split('\\uploads\\')[1];
+              const normalizedPath = relativePath.replace(/\\/g, '/');
+              const fullUrl = `${API_SERVER}/uploads/${normalizedPath}`;
+              const responseblockText = await fetch(fullUrl);
+              if (responseblockText.ok) {
+                setAudioObj({
+                  url: fullUrl,
+                  type: 'bgm',
+                  volume: '0.5',
+                  loop: true,
+                  autoplay: true,
+                });
+                setIsGetsPlayAudioConfirmation(true);
+              }
+
             }
-
           }
+          // }
+          // else{
+          // console.log(' =>', AudioOptions);
+          // if (AudioOptions.qpOptionId) {
+          //   const optionAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === AudioOptions?.qpOptionId);
+          //   console.log('1 =>',optionAudioFiltered,'.....', AudioOptions);
+          //   if (optionAudioFiltered.length > 0) {
+          //     const getoptionsAudioFiltered = optionAudioFiltered.filter((key: any) => key?.fieldName === 'qpOptionText');
+          //     console.log('2 =>',getoptionsAudioFiltered);
+          //     if (getoptionsAudioFiltered.length > 0) {
+          //       const QOTaudioUrls = getoptionsAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
+          //       console.log('3 =>',QOTaudioUrls);
+          //       if (QOTaudioUrls.length > 0) {
+          //         const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
+          //         const normalizedPath = relativePath.replace(/\\/g, '/');
+          //         const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
+          //         const responseqpOptionText = await fetch(qpOptionTextUrl);
+          //         console.log('4 =>',responseqpOptionText,qpOptionTextUrl);
+          //         if (responseqpOptionText.ok) {
+          //           setAudioObj({
+          //             url: qpOptionTextUrl,
+          //             type: 'bgm',
+          //             volume: '0.5',
+          //             loop: true,
+          //             autoplay: true,
+          //           });
+          //           setIsGetsPlayAudioConfirmation(true);
+          //         }
+          //         else {
+          //           const getAudioFiltered1 = optionAudioFiltered.filter((key: any) => key?.fieldName === "qpOptions");
+          //           if (getAudioFiltered1.length > 0) {
+          //             const QPaudioUrls = getAudioFiltered1.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
+          //             if (QPaudioUrls.length > 0) {
+          //               const relativePath = QPaudioUrls[0].split('\\uploads\\')[1];
+          //               const normalizedPath = relativePath.replace(/\\/g, '/');
+          //               const qpOptionsUrl = `${API_SERVER}/uploads/${normalizedPath}`;
+          //               const responsequestoption = await fetch(qpOptionsUrl);
+          //               console.log('4 =>',responsequestoption);
+          //               if (responsequestoption.ok) {
+          //                 setAudioObj({
+          //                   url: qpOptionsUrl,
+          //                   type: 'bgm',
+          //                   volume: '0.5',
+          //                   loop: true,
+          //                   autoplay: true,
+          //                 });
+          //                 setIsGetsPlayAudioConfirmation(true);
+          //               }
+          //               else
+          //               {
+          //                 setAudioObj({
+          //                   url: '',
+          //                   type: 'bgm',
+          //                   volume: '0.5',
+          //                   loop: true,
+          //                   autoplay: true,
+          //                 });
+          //                 setIsGetsPlayAudioConfirmation(false);
+          //               }
+
+          //             }
+          //           }
+          //         }
+
+          //       }
+          //     }
+          //   }
+
+          // }
+          //   setAudioObj({
+          //     url: '',
+          //     type: 'bgm',
+          //     volume: '0.5',
+          //     loop: true,
+          //     autoplay: true,
+          //   });
+          //   setIsGetsPlayAudioConfirmation(false);
+
+          // }
+
         }
-      // }
-      // else{
-        // console.log(' =>', AudioOptions);
-        // if (AudioOptions.qpOptionId) {
-        //   const optionAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === AudioOptions?.qpOptionId);
-        //   console.log('1 =>',optionAudioFiltered,'.....', AudioOptions);
-        //   if (optionAudioFiltered.length > 0) {
-        //     const getoptionsAudioFiltered = optionAudioFiltered.filter((key: any) => key?.fieldName === 'qpOptionText');
-        //     console.log('2 =>',getoptionsAudioFiltered);
-        //     if (getoptionsAudioFiltered.length > 0) {
-        //       const QOTaudioUrls = getoptionsAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
-        //       console.log('3 =>',QOTaudioUrls);
-        //       if (QOTaudioUrls.length > 0) {
-        //         const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
-        //         const normalizedPath = relativePath.replace(/\\/g, '/');
-        //         const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-        //         const responseqpOptionText = await fetch(qpOptionTextUrl);
-        //         console.log('4 =>',responseqpOptionText,qpOptionTextUrl);
-        //         if (responseqpOptionText.ok) {
-        //           setAudioObj({
-        //             url: qpOptionTextUrl,
-        //             type: 'bgm',
-        //             volume: '0.5',
-        //             loop: true,
-        //             autoplay: true,
-        //           });
-        //           setIsGetsPlayAudioConfirmation(true);
-        //         }
-        //         else {
-        //           const getAudioFiltered1 = optionAudioFiltered.filter((key: any) => key?.fieldName === "qpOptions");
-        //           if (getAudioFiltered1.length > 0) {
-        //             const QPaudioUrls = getAudioFiltered1.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
-        //             if (QPaudioUrls.length > 0) {
-        //               const relativePath = QPaudioUrls[0].split('\\uploads\\')[1];
-        //               const normalizedPath = relativePath.replace(/\\/g, '/');
-        //               const qpOptionsUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-        //               const responsequestoption = await fetch(qpOptionsUrl);
-        //               console.log('4 =>',responsequestoption);
-        //               if (responsequestoption.ok) {
-        //                 setAudioObj({
-        //                   url: qpOptionsUrl,
-        //                   type: 'bgm',
-        //                   volume: '0.5',
-        //                   loop: true,
-        //                   autoplay: true,
-        //                 });
-        //                 setIsGetsPlayAudioConfirmation(true);
-        //               }
-        //               else
-        //               {
-        //                 setAudioObj({
-        //                   url: '',
-        //                   type: 'bgm',
-        //                   volume: '0.5',
-        //                   loop: true,
-        //                   autoplay: true,
-        //                 });
-        //                 setIsGetsPlayAudioConfirmation(false);
-        //               }
+        // else {
 
-        //             }
-        //           }
-        //         }
-
-        //       }
-        //     }
-        //   }
-
+        //   setAudioObj({
+        //     autoplay: false,
+        //   });
+        //   setIsGetsPlayAudioConfirmation(false);
         // }
-      //   setAudioObj({
-      //     url: '',
-      //     type: 'bgm',
-      //     volume: '0.5',
-      //     loop: true,
-      //     autoplay: true,
-      //   });
-      //   setIsGetsPlayAudioConfirmation(false);
-      
-      // }
-      
-    }
-    // else {
-      
-    //   setAudioObj({
-    //     autoplay: false,
-    //   });
-    //   setIsGetsPlayAudioConfirmation(false);
-    // }
-  };
-  fetchData();
-}, [profileData,data]);
+      };
+      fetchData();
+    }, [profileData, data]);
 
 
 const getVoice = async (blockInfo: any, blockType: string) => {

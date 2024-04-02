@@ -92,21 +92,20 @@ const ReplayGame: React.FC<{
                 </Text>
               </Box>
               <Box
-                // onClick={() => getData(data)}
                 position={'fixed'}
                 top={'360px'}
                 w={'40%'}
                 display={'flex'}
-                justifyContent={'space-between'}
+                justifyContent={'center'}
               >
+                 {(isReplay === true || isOptionalReplay === true) ?
                 <Img
                   src={ReplayBtn}
                   w={'200px'}
                   h={'60px'}
                   cursor={'pointer'}
                   onClick={replayGame}
-                />
-                {isReplay === true ? (
+                />: null}
                   <Img
                     src={next}
                     w={'200px'}
@@ -114,7 +113,7 @@ const ReplayGame: React.FC<{
                     cursor={'pointer'}
                     onClick={() => replayNextHandler(data)}
                   />
-                ) : null}
+               
               </Box>
             </Box>
           </Box>
