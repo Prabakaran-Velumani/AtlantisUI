@@ -194,7 +194,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                         </Text>
                       </Box>
                        <Box w={'20%'} >
-                        <Img src={Selected} className={'select'} mt={'7px'} />
+                        <Img src={Selected} className={'select'} mt={'18%'} />
                       </Box>
                       {select && (
                         <Box className="dropdown">
