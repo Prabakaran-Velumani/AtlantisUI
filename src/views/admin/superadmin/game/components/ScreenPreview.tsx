@@ -31,7 +31,12 @@ import ReflectionContentScreen from './onimage/ReflectionScreen';
 import TyContentScreen from './onimage/TyContentScreen';
 import { getGameCreatorDemoData } from 'utils/game/gameService';
 import TypingEffect from '../demoplay/playcards/Typing';
-import { API_SERVER, Notelength, Dialoglength, Responselength } from 'config/constant';
+import {
+  API_SERVER,
+  Notelength,
+  Dialoglength,
+  Responselength,
+} from 'config/constant';
 import { lazy } from 'react';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
@@ -41,7 +46,9 @@ import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { updatePreviewData } from 'store/preview/previewSlice';
 import LeaderBoard from '../demoplay/playcards/Leaderboard';
 
-const WelcomeContentScreen = lazy(() => import('./onimage/WelcomeContentScreen'));
+const WelcomeContentScreen = lazy(
+  () => import('./onimage/WelcomeContentScreen'),
+);
 // const WelcomeContentScreen = lazy(
 //   () => import('./onimage/PreviewWelcomeScreen'),
 // );
@@ -101,7 +108,9 @@ const ScreenPreview = () => {
     ref3: "What's one thing you learned about your mindset?",
     ref4: "What's one thing you are committing to change?",
   });
-  
+  const [navTrack, setNavTrack] = useState([]);
+  const [isPrevNavigation, setIsPrevNavigation] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       const resolvedResult: any = await preloadedImages(assetImageSrc);
@@ -258,7 +267,7 @@ const ScreenPreview = () => {
     }
   }, [id, isDispatched]);
   const setInteractionOptions = (gameInfo: any, currentBlock: any) => {
-    console.log('currentBlock', currentBlock)
+    console.log('currentBlock', currentBlock);
     const optionsFiltered = gameInfo?.questOptions.filter(
       (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
     );
@@ -290,7 +299,6 @@ const ScreenPreview = () => {
     apiImageSet && fetchData();
   }, [apiImageSet]);
 
-
   const preloadedAssets = useMemo(() => {
     return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls };
   }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
@@ -307,154 +315,249 @@ const ScreenPreview = () => {
     dispatch(updatePreviewData({ isDispatched: false }));
   }, [CompKeyCount]);
 
-  const previousData = (current: any) => {
-    setCurrentPosition(0);
+  //   setCurrentPosition(0);
+  //   const currentBlock = current
+  //     ? parseInt(current?.blockPrimarySequence.split('.')[1])
+  //     : null;
+  //   const PrevItem = currentBlock != null ? currentBlock - 1 : null;
+
+  //   const prevSeq =
+  //     game3Position.previousBlock !== ''
+  //       ? game3Position.previousBlock
+  //       : current
+  //         ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
+  //         : '';
+
+  //   const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
+  //   const currentQuest = current
+  //     ? parseInt(current?.blockPrimarySequence.split('.')[0])
+  //     : null;
+  //   const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
+  //   const prevBlock = current
+  //     ? Object.keys(demoBlocks[quest] || {})
+  //       .filter(
+  //         (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+  //       )
+  //       .map((key: any) => demoBlocks[quest]?.[key])
+  //     : [];
+  //   if (
+  //     prevBlock.length !== 0 &&
+  //     prevBlock[0]?.blockChoosen !== 'Interaction'
+  //   ) {
+  //     setType(prevBlock[0]?.blockChoosen);
+  //     setData(prevBlock[0]);
+  //   }
+  // };
+  const prevData = (current: any) => {
+    console.log('current', current)
+    const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
     const currentBlock = current
       ? parseInt(current?.blockPrimarySequence.split('.')[1])
       : null;
-    const PrevItem = currentBlock != null ? currentBlock - 1 : null;
+    console.log('navTrack.length', navTrack.length)
+    navTrack.pop(); //clears last index sequence
+    if (navTrack.length > 0) {
+      const newTrackSequence = navTrack[navTrack.length - 1];
+      const prevBlock = current
+        ? Object.keys(demoBlocks[quest] || {})
+            .filter(
+              (key) =>
+                demoBlocks[quest]?.[key]?.blockPrimarySequence ==
+                newTrackSequence,
+            )
+            .map((key: any) => demoBlocks[quest]?.[key])
+        : [];
+        console.log('prevBlock',prevBlock);
+      console.log('newTrackSequence', newTrackSequence);
+      if (
+        prevBlock.length !== 0 &&
+        prevBlock[0]?.blockChoosen !== 'Interaction'
+      ) {
+        /*** Handle the previous track */
+        const removedElement = navTrack.pop();
+        console.log('removedElement', removedElement);
+        setNavTrack(navTrack);
+        /*** End of Handle the previous track */
 
-    const prevSeq =
-      game3Position.previousBlock !== ''
-        ? game3Position.previousBlock
-        : current
-          ? `${current?.blockPrimarySequence.split('.')[0]}.${PrevItem}`
-          : '';
-
-    const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
-    const currentQuest = current
-      ? parseInt(current?.blockPrimarySequence.split('.')[0])
-      : null;
-    const prevLevel = currentQuest != null ? String(currentQuest + 1) : null;
-    const prevBlock = current
-      ? Object.keys(demoBlocks[quest] || {})
-        .filter(
-          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
-        )
-        .map((key: any) => demoBlocks[quest]?.[key])
-      : [];
-    if (
-      prevBlock.length !== 0 &&
-      prevBlock[0]?.blockChoosen !== 'Interaction'
-    ) {
-      setType(prevBlock[0]?.blockChoosen);
-      setData(prevBlock[0]);
+        setType(prevBlock[0]?.blockChoosen);
+        setData(prevBlock[0]);
+        setIsPrevNavigation(true);
+        return false;
+      }
+    } else {
+      return false;
     }
   };
-  const getData = (next: any) => {
-    console.log('next', next);
-    const currentBlock = next
-      ? parseInt(next?.blockPrimarySequence.split('.')[1])
-      : null;
-    const NextItem = currentBlock != null ? currentBlock + 1 : null;
-    const nextSeq = next
-      ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
-      : '';
 
-    const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
-    const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-    
-    //get the next block, it could be used when current block not has navigation
-    const nextBlock = next
-      ? Object.keys(demoBlocks[quest] || {})
-        .filter(
-          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-        )
-        .map((key: any) => {
-          return demoBlocks[quest]?.[key];
-        })
-      : [];
+const getData = (next: any) => {
+  setIsPrevNavigation(false);
 
-    // {/* Check wheather has next block or not, if not then show End of Current Quest.
-    //       Want to play next quest, then switch the current quest in game creation screen */}
-    // if (nextBlock[0]?.blockChoosen === 'Interaction') {
-    //   setInteractionOptions(gameInfo, next);
-    // }
-    console.log('nextBlock[0]?.blockChoosen === Interaction', nextBlock[0]?.blockChoosen === 'Interaction')
-    if (nextBlock[0]?.blockChoosen === 'Interaction') {
-      // setInteractionOptions(gameInfo, nextBlock[0]);
-      setInteractionOptions(gameInfo, next);
+//get the next block details
+const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
+const currentBlock = next
+  ? parseInt(next?.blockPrimarySequence.split('.')[1])
+  : null;
+const NextItem = currentBlock != null ? currentBlock + 1 : null;
+
+const nextSeq = next
+  ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
+  : '';
+  const prevTrack = navTrack;
+ 
+const currentQuest = next
+  ? parseInt(next?.blockPrimarySequence.split('.')[0])
+  : null;
+
+const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+const nextBlock = next
+  ? Object.keys(demoBlocks[quest] || {})
+    .filter(
+      (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+    )
+    .map((key: any) => demoBlocks[quest]?.[key])
+  : [];
+
+if (nextBlock[0]?.blockChoosen === 'Interaction') {
+  const optionsFiltered = [];
+for (const option of gameInfo.questOptions) {
+if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
+  optionsFiltered.push(option);
+}
+}
+  if (gameInfo?.gameData?.gameShuffle === 'true') {
+    for (let i = optionsFiltered.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [optionsFiltered[i], optionsFiltered[j]] = [
+        optionsFiltered[j],
+        optionsFiltered[i],
+      ];
     }
-   console.log('next?.blockShowNavigate',next?.blockShowNavigate)
-    if (type === 'Interaction' && resMsg !== '') {
-      setType('response');
-      return false;
-    } else if ((type === 'Interaction' || type === 'response') && feed !== '') {
-      setType('feedback');
-      return false;
-    } else if (
-      type === 'Interaction' ||
-      type === 'response' ||
-      type === 'feedback'
-    ) {
-      console.log('navi----', navi)
-      if (navi === 'Repeat Question') {
-        const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
-        setInteractionOptions(gameInfo, currentBlockinteraction);
-        setType(demoBlocks[currentQuest][currentBlock]?.blockChoosen);
-        setData(demoBlocks[currentQuest][currentBlock]);
-        setSelectedOption(null);
-        return false;
-      } else if (navi === 'New Block') {
-        setType(nextBlock[0]?.blockChoosen);
-        setData(nextBlock[0]);
-        setSelectedOption(null);
-        return false;
-      } else if (navi === 'Replay Point') {
-        setType(demoBlocks[currentQuest]['1']?.blockChoosen);
-        setData(demoBlocks[currentQuest]['1']);
-        setSelectedOption(null);
-        return false;
-      } else if (navi === 'Select Block') {
-        const selectedNext = Object.keys(demoBlocks[currentQuest])
-          .filter((item: any) => {
-            return (
-              demoBlocks[currentQuest][item]?.blockSecondaryId ===
-              parseInt(optionNavigation)
-            );
-          })
-          .map((item: any) => {
-            return demoBlocks[currentQuest][item];
-          });         
-        if (selectedNext.length > 0) {
-          setType(selectedNext && selectedNext[0]?.blockChoosen);
-          setData(selectedNext && selectedNext[0]);
-        }
-        else {
-          setType(nextBlock[0]?.blockChoosen);
-          setData(nextBlock[0]);
-        }
-        setSelectedOption(null);
-        return false;
-      } else if (navi === 'Complete') {
-        // if (demoBlocks.hasOwnProperty(nextLevel)) {
-        //   setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        //   setData(demoBlocks[nextLevel]['1']);
-        //   return false;
-        // } else {
-        //   setType(null);
-        //   setData(null);
-        //   return false;
-        // }
-        setEndOfQuest(true);
-      } else {
-        console.log('navi === null');
-        console.log('nextBlock.length === 0', nextBlock.length === 0);
-        
-        if(nextBlock.length === 0)
-        {
-          setEndOfQuest(true);
-        }
-        else{
-          setType(nextBlock[0]?.blockChoosen);
-          setData(nextBlock[0]);
-          setSelectedOption(null);
-          return false;
-        }
+  }
+  setOptions(optionsFiltered);
+}
+
+if (
+  type === 'Interaction' &&
+  resMsg !== ''
+) {
+  setType('response');
+  return false;
+} else if (
+  (type === 'Interaction' || type === 'response') &&
+  feed !== '' &&
+  gameInfo?.gameData?.gameIsShowInteractionFeedBack !== 'Completion'
+) {
+  setType('feedback');
+  return false;
+} else if (
+  type === 'Interaction' ||
+  type === 'response' ||
+  type === 'feedback'
+) {
+  if (navi === 'Repeat Question') {
+    const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
+    setInteractionOptions(gameInfo, currentBlockinteraction);
+    setType(next?.blockChoosen);
+    setData(next);
+    setSelectedOption(null);  
+    return false;
+  } else if (navi === 'New Block') {
+    setType(nextBlock[0]?.blockChoosen);
+    setData(nextBlock[0]);
+    setSelectedOption(null);
+    return false;
+  } else if (navi === 'Replay Point') {
+    setType(demoBlocks[quest]['1']?.blockChoosen);
+    setData(demoBlocks[quest]['1']);
+    setSelectedOption(null);
+    return false;
+  } else if (navi === 'Select Block') {
+    const selectedNext = Object.keys(demoBlocks[currentQuest])
+      .filter((item: any) => {
+        return (
+          demoBlocks[currentQuest][item]?.blockSecondaryId ===
+          parseInt(optionNavigation)
+        );
+      })
+      .map((item: any) => {
+        return demoBlocks[currentQuest][item];
+      });
+    if (selectedNext.length > 0) {
+      setType(selectedNext && selectedNext[0]?.blockChoosen);
+
+          if(selectedNext[0]?.blockChoosen === 'Interaction')
+    {
+      const optionsFiltered = [];
+      for (const option of gameInfo.questOptions) {
+          if (option?.qpSequence ===  selectedNext[0]?.blockPrimarySequence) {
+            optionsFiltered.push(option);
+          }
       }
+            if (gameInfo?.gameData?.gameShuffle === 'true') {
+              for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsFiltered[i], optionsFiltered[j]] = [
+                  optionsFiltered[j],
+                  optionsFiltered[i],
+                ];
+              }
+            }
+            setOptions(optionsFiltered);
     }
-    else if (next?.blockShowNavigate) {
-      console.log('next?.blockShowNavigate == true /// type ', type );
+    setData(selectedNext && selectedNext[0]);
+    setSelectedOption(null);
+    return false;
+  }
+  else {    
+    setType(nextBlock[0]?.blockChoosen);
+    if(nextBlock[0]?.blockChoosen === 'Interaction')
+    {
+      const optionsFiltered = [];
+      for (const option of gameInfo.questOptions) {
+          if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
+            optionsFiltered.push(option);
+          }
+      }
+            if (gameInfo?.gameData?.gameShuffle === 'true') {
+              for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsFiltered[i], optionsFiltered[j]] = [
+                  optionsFiltered[j],
+                  optionsFiltered[i],
+                ];
+              }
+            }
+            setOptions(optionsFiltered);
+    }
+    setData(nextBlock[0]);
+    setSelectedOption(null);
+    return false;
+  }
+  } else if (navi === 'Complete') {
+    // if (demoBlocks.hasOwnProperty(nextLevel)) {
+      setEndOfQuest(true);
+      // setProfile((prev: any) => {
+      //   const data = { ...prev };
+      //   data.completedLevels = [...data.completedLevels, nextLevel];
+      //   return data;
+      // });
+      // setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+      // setData(demoBlocks[nextLevel]['1']);
+      return false;
+    // } else {
+    //   setType(null);
+    //   setData(null);
+    //   return false;
+    // }
+  } else {
+    setType(nextBlock[0]?.blockChoosen);
+    setData(nextBlock[0]);
+    setSelectedOption(null);
+    return false; 
+  }
+}
+   
+    if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
         setType(next?.blockChoosen);
         setData(next);
@@ -465,105 +568,95 @@ const ScreenPreview = () => {
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Replay Point') {
-        setType(demoBlocks[currentQuest]['1']?.blockChoosen);
-        setData(demoBlocks[currentQuest]['1']);
+        setType(demoBlocks['1']['1']?.blockChoosen);
+        setData(demoBlocks['1']['1']);
         setSelectedOption(null);
         return false;
-    } else if (next?.blockShowNavigate === 'Select Block') {
-      console.log("In Selected Blocks")
-      console.log("currentQuest", currentQuest)
-      console.log("demoBlocks[currentQuest]",demoBlocks[currentQuest])
-      console.log('next?.blockLeadTo', next?.blockLeadTo)
-
-      const selectedNext = Object.keys(demoBlocks[currentQuest])
-        .filter((item: any) => {
-          return (
-            demoBlocks[currentQuest][item]?.blockSecondaryId ===
-            parseInt(next?.blockLeadTo)
-          );
-        })
-        .map((item: any) => {
-          return demoBlocks[currentQuest][item];
-        });
-        console.log('selectedNext', selectedNext)
+      } else if (next?.blockShowNavigate === 'Select Block') {
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+          .filter((item: any) => {
+            return (
+              demoBlocks[currentQuest][item]?.blockSecondaryId ===
+              parseInt(next?.blockLeadTo)
+            );
+          })
+          .map((item: any) => {
+            return demoBlocks[currentQuest][item];
+          });
         if (selectedNext.length > 0) {
-        console.log('selectedNext.length > 0', selectedNext.length > 0)
-        console.log('selectedNext[0]?.blockChoosen', selectedNext[0]?.blockChoosen)
-        setType(selectedNext && selectedNext[0]?.blockChoosen);
-          // if(selectedNext[0]?.blockChoosen === 'Interaction')
-          //   {
-          //     const optionsFiltered = [];
-          //     for (const option of gameInfo.questOptions) {
-          //         if (option?.qpSequence ===  selectedNext[0]?.blockPrimarySequence) {
-          //           optionsFiltered.push(option);
-          //         }
-          //     }
-          //     if (gameInfo?.gameData?.gameShuffle === 'true') {
-          //             for (let i = optionsFiltered.length - 1; i > 0; i--) {
-          //               const j = Math.floor(Math.random() * (i + 1));
-          //               [optionsFiltered[i], optionsFiltered[j]] = [
-          //                 optionsFiltered[j],
-          //                 optionsFiltered[i],
-          //               ];
-          //             }
-          //           }
-          //     setOptions(optionsFiltered);
-                
-          //   }
-      setData(selectedNext && selectedNext[0]);
-    }
-    else {
-      console.log('Else');
-      
-      setType(nextBlock[0]?.blockChoosen);
-      // if(nextBlock[0]?.blockChoosen === 'Interaction')
-      // {
-      //   const optionsFiltered = [];
-      //   for (const option of gameInfo.questOptions) {
-      //       if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
-      //         optionsFiltered.push(option);
-      //       }
-      //   }
-      //         if (gameInfo?.gameData?.gameShuffle === 'true') {
-      //           for (let i = optionsFiltered.length - 1; i > 0; i--) {
-      //             const j = Math.floor(Math.random() * (i + 1));
-      //             [optionsFiltered[i], optionsFiltered[j]] = [
-      //               optionsFiltered[j],
-      //               optionsFiltered[i],
-      //             ];
-      //           }
-      //         }
-      //         setOptions(optionsFiltered);
-      // }
-      setData(nextBlock[0]);
-    }
-    setSelectedOption(null);
-      return false;
-    }
-      else if (next?.blockShowNavigate === 'Complete') {
-        setEndOfQuest(true);
-        return false;
+          setType(selectedNext && selectedNext[0]?.blockChoosen);
+            if(selectedNext[0]?.blockChoosen === 'Interaction')
+        {
+          const optionsFiltered = [];
+          for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence ===  selectedNext[0]?.blockPrimarySequence) {
+                optionsFiltered.push(option);
+              }
+          }
+                if (gameInfo?.gameData?.gameShuffle === 'true') {
+                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsFiltered[i], optionsFiltered[j]] = [
+                      optionsFiltered[j],
+                      optionsFiltered[i],
+                    ];
+                  }
+                }
+                setOptions(optionsFiltered);
+        }
+        setData(selectedNext && selectedNext[0]);
       }
-      else{
-        setEndOfQuest(true);
-        return false;
+      else {
+        setType(nextBlock[0]?.blockChoosen);
+        if(nextBlock[0]?.blockChoosen === 'Interaction')
+        {
+          const optionsFiltered = [];
+          for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
+                optionsFiltered.push(option);
+              }
+          }
+                if (gameInfo?.gameData?.gameShuffle === 'true') {
+                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsFiltered[i], optionsFiltered[j]] = [
+                      optionsFiltered[j],
+                      optionsFiltered[i],
+                    ];
+                  }
+                }
+                setOptions(optionsFiltered);
+        }
+        setData(nextBlock[0]);
       }
-    }
-    else if(nextBlock.length > 0 )
-    {
-      setType(nextBlock[0]?.blockChoosen);
-      setData(nextBlock[0]);
+      setGame3Position((prev: any) => ({
+        ...prev,
+        nextBlock: selectedNext[0]?.blockPrimarySequence,
+      }));
       setSelectedOption(null);
+        return false;
+      } else if (next?.blockShowNavigate === 'Complete') {
+        // setProfile((prev: any) => {
+        //   const data = { ...prev };
+        //   data.completedLevels = [...data?.completedLevels, nextLevel];
+        //   return data;
+        // });
+        // setCurrentScreenId(13);
+        setEndOfQuest(true);
+        return false;
+      }
     }
-    else{
-      setEndOfQuest(true);
-    }
+    setType(nextBlock[0]?.blockChoosen);
+    setData(nextBlock[0]);
+    setSelectedOption(null);
   };
+
   const handleValidate = (item: any, ind: number) => {
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
     setOptionNavigation(item?.qpNextOption);
+    console.log('item?.qpNextOption', item?.qpNextOption);
     setSelectedOption(ind === selectedOption ? null : ind);
   };
   const handleEntirePrev = async () => {
@@ -571,33 +664,60 @@ const ScreenPreview = () => {
     window.open(url, '_blank');
   };
   useEffect(() => {
-    getDataSection(data);
+    console.log('data', data);
+    if (data && type) {
+      
+      /** this logic is used to hanlde the navigation options in both forward and backward navigation */
+      if (gameInfo.hasOwnProperty('blocks')) {
+        let previousPrimarySeq = navTrack[navTrack.length - 1];
+        if (previousPrimarySeq) {
+          let currentQuest = previousPrimarySeq.split('.')[0];
+          let previousBlock: any = Object.values(
+            gameInfo?.blocks[currentQuest],
+          )?.find((row: any) => {
+            return row.blockPrimarySequence == previousPrimarySeq;
+          });
+          if (data.blockPrimarySequence != previousPrimarySeq) {
+            if (previousBlock?.blockChoosen === 'Interaction') {
+              setNavTrack([data.blockPrimarySequence]);
+            } else {
+              const newArray = navTrack;
+              newArray.push(data.blockPrimarySequence);
+              setNavTrack(newArray);
+            }
+          }
+        } else {
+          setNavTrack([data.blockPrimarySequence]);
+        }
+        getDataSection(data);
+      }
+    }
   }, [data, type]);
   useEffect(() => {
     if (Navigatenext === true) {
       getData(data);
     }
   }, [Navigatenext]);
-  const getDataSection = (data: any) => {
+   const getDataSection = (data: any) => {
     setShowTypingEffect(false);
+    setCurrentPosition(0);
     // Note and Dialog
     const content = data?.blockText || '';
-    const sentences = content.split(
-      /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-    );
+    const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
     const newRemainingSentences = sentences.slice(currentPosition);
-    // Response 
+    
+    // response
     const Responsecontent = resMsg || '';
     const Responsesentences = Responsecontent.split(
       /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
     );
     const newRemainingResponseSentences = Responsesentences.slice(currentPosition);
-
     const concatenatedSentences = [];
     let totalLength = 0;
     // Note and Dialog
-    for (let i = 0; i < newRemainingSentences.length; i++) {
-      const sentence = newRemainingSentences[i];
+        for (let i = 0; i < newRemainingSentences.length; i++) {
+        const sentence = newRemainingSentences[i];
+  
       if (data && type === 'Note') {
         if (totalLength + sentence.length <= Notelength) {
           concatenatedSentences.push(sentence);
@@ -636,36 +756,53 @@ const ScreenPreview = () => {
         }
       }
     }
-
     setRemainingSentences(concatenatedSentences);
-
-    if (newRemainingSentences.length >= 1) {
+    if (newRemainingSentences.length > 0 ) {
       setCurrentPosition(currentPosition + concatenatedSentences.length);
       setNavigateNext(false);
     }
-    else if (newRemainingResponseSentences.length >= 1) {
+    else if (newRemainingResponseSentences.length > 0 ) {
       setCurrentPosition(currentPosition + concatenatedSentences.length);
       setNavigateNext(false);
-    }
+    } 
     else {
-      setCurrentPosition(0);
-      setNavigateNext(true);
+        setNavigateNext(true);
+        setIsPrevNavigation(false);
     }
   };
-  const Updatecontent = () => {
+  
+const Updatecontent = () => {
+  console.log('*******showTypingEffect', showTypingEffect)
     if (showTypingEffect === false) {
-      setShowTypingEffect(true);
-    }
-    else {
-      getDataSection(data);
-    }
+    setShowTypingEffect(true);
   }
+  else {
+    getDataSection(data);
+  }
+}
   useEffect(() => {
     getDataSection(data);
   }, []);
   const handleCloseWindow = () => {
     window.close();
   };
+
+  const SkipContentForBackNavigation = () => {
+    if (showTypingEffect === false) {
+      setShowTypingEffect(true);
+    }
+    else {
+      setCurrentPosition(0);
+      prevData(data)
+    }
+  }
+
+  const getNoteNextData = ()=>{
+    setIsPrevNavigation(false); 
+    getDataSection(data)
+  }
+
+  console.log('navTrack', navTrack);
 
   return (
     <Box id="container">
@@ -680,6 +817,26 @@ const ScreenPreview = () => {
               <Box className="EntirePreview-content">
                 <Box h={'100vh !important'} className="Images">
                   <Flex height="100vh" className="EntirePreview">
+                  <Button
+                      className="demo-btn"
+                      bg="#11047a"
+                      _hover={{ bg: '#190793' }}
+                      color="#fff"
+                      style={{
+                        position: 'absolute',
+                        top: '2vh',
+                        right: '0vw',
+                        pointerEvents: 'auto',
+                        zIndex: 1, // High z-index value
+                        visibility: 'visible',
+                      }}
+                      mr={'17px'}
+                      mt={'6px'}
+                      ml={'11px'}
+                      onClick={handleEntirePrev}
+                    >
+                      Demo Play
+                    </Button>
                     {currentTab === 3 && (
                       <Box
                         w={'100%'}
@@ -716,7 +873,7 @@ const ScreenPreview = () => {
                     )}
                     {currentTab === 4 && data && type === 'Note' && (
                       <Box
-                        position="relative"                       
+                        position="relative"
                         w={'100%'}
                         height="100vh"
                         backgroundImage={preloadedAssets?.backgroundImage}
@@ -742,7 +899,6 @@ const ScreenPreview = () => {
                               />
                               <Box
                                 className={'story_note_content'}
-                                // bg={'blue.300'}
                               >
                                 <Box
                                   w={'100%'}
@@ -751,13 +907,13 @@ const ScreenPreview = () => {
                                 >
                                   <Box className={'story_note_block'}>
                                     <Text textAlign={'center'}>
-                                    {remainingSentences}
+                                      {remainingSentences}
                                     </Text>
                                   </Box>
                                 </Box>
                                 <Box
                                   w={'100%'}
-                                  onClick={() => getData(data)}
+                                  onClick={() => getNoteNextData()}
                                   mt={'20px'}
                                   display={'flex'}
                                   justifyContent={'center'}
@@ -776,105 +932,6 @@ const ScreenPreview = () => {
                           </GridItem>
                         </Grid>
                       </Box>
-
-                      // old note ui copy
-
-                      // <Box
-                      //   w={'100%'}
-                      //   h={'100vh'}
-                      //   display={'flex'}
-                      //   alignItems={'center'}
-                      //   justifyContent={'center'}
-                      //   position={'relative'}
-                      //   overflow={'visible'}
-                      //   style={{ perspective: '1000px' }}
-                      // >
-                      //   <Box
-                      //     color={'rgba(0, 0, 0, 0.5)'}
-                      //     backgroundImage={preloadedAssets?.backgroundImage}
-                      //     w={'100%'}
-                      //     h={'100vh'}
-                      //     backgroundRepeat={'no-repeat'}
-                      //     backgroundSize={'cover'}
-                      //     transform={`scale(${first ? 1 : 0.9}) translateY(${
-                      //       first ? 0 : -0
-                      //     }%) translateX(${first ? 0 : -10}%)`}
-                      //     transition={'transform 0.9s ease-in-out'}
-                      //   >
-                      //     <Box
-                      //       position={'fixed'}
-                      //       top={'200px'}
-                      //       right={'0px'}
-                      //       bottom={0}
-                      //       zIndex={999}
-                      //       w={'300px'}
-                      //     >
-                      //       <Box
-                      //         style={{
-                      //           transform: `scale(${showNote ? 0.2 : 1})`,
-                      //           transition: 'transform 0.5s ease-in-out',
-                      //         }}
-                      //         position={'fixed'}
-                      //         w={'40%'}
-                      //         h={'60vh'}
-                      //         display={'flex'}
-                      //         flexDirection={'column'}
-                      //         justifyContent={'center'}
-                      //         alignItems={'center'}
-                      //       >
-                      //         <Img
-                      //           w={'100%'}
-                      //           h={'80vh'}
-                      //           src={preloadedAssets?.note}
-                      //         />
-                      //         <Box
-                      //           position={'fixed'}
-                      //           overflowY={'scroll'}
-                      //           transform={'translate(0px, 0px)'}
-                      //           w={'50%'}
-                      //           mt={'10px'}
-                      //           display={'flex'}
-                      //           flexDirection={'column'}
-                      //           textAlign={'center'}
-                      //           justifyContent={'center'}
-                      //           style={{
-                      //             fontWeight: '900',
-                      //             color: '#D9C7A2',
-                      //             fontSize: '18px',
-                      //             fontFamily: 'AtlantisContent',
-                      //             lineHeight: 1,
-                      //           }}
-                      //         >
-                      //           <Box
-                      //             w={'100%'}
-                      //             overflowY={'scroll'}
-                      //             h={'100px'}
-                      //             display={'flex'}
-                      //             alignItems={'center'}
-                      //             justifyContent={'center'}
-                      //             mt={'20px'}
-                      //           >
-                      //             {data?.blockText}
-                      //           </Box>
-                      //           <Box
-                      //             w={'100%'}
-                      //             onClick={() => getData(data)}
-                      //             mt={'20px'}
-                      //             display={'flex'}
-                      //             justifyContent={'center'}
-                      //             cursor={'pointer'}
-                      //           >
-                      //             <Img
-                      //               src={preloadedAssets.next}
-                      //               w={'200px'}
-                      //               h={'60px'}
-                      //             />
-                      //           </Box>
-                      //         </Box>
-                      //       </Box>
-                      //     </Box>
-                      //   </Box>
-                      // </Box>
                     )}
                     {currentTab === 4 && data && type === 'Dialog' && (
                       <Box className="chapter_potrait">
@@ -882,48 +939,6 @@ const ScreenPreview = () => {
                           src={preloadedAssets?.backgroundImage}
                           className="dialogue_screen"
                         />
-                        {/* <Box w={'100%'} h={'100vh'}>
-                           <Canvas camera={{ position: [30, 0, 10] }}>
-                             <directionalLight
-                               position={[5, 5, 5]}
-                               intensity={0.8}
-                               color={0xffccaa}
-                               castShadow
-                             />
-                             <ambientLight intensity={5.5} />
-                             {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
-                        {/* <Background /> */}
-                        {/* <Model /> */}
-                        {/* <mesh 
-                         rotation={[-Math.PI / 2, 0, 0]}
-                         position={[0, -5, 0]}
-                         receiveShadow 
-                       > */}
-                        {/* <planeGeometry args={[100, 100]} />
-                         <shadowMaterial opacity={0.5} />
-                       </mesh> */}
-                        {/* </Canvas>
-                         </Box> */}
-                        {/* {selectedPlayer && (
-                           <Img
-                             src={`${API_SERVER}/${selectedPlayer}`}
-                             position={'fixed'}
-                             right={'300px'}
-                             bottom={'100px'}
-                             w={'200px'}
-                             h={'324px'}
-                           />
-                         )}
-                         {selectedNpc && (
-                           <Img
-                             src={selectedNpc}
-                             position={'fixed'}
-                             right={'500px'}
-                             bottom={'100px'}
-                             w={'200px'}
-                             h={'324px'}
-                           />
-                         )} */}
                         <Img
                           className={'dialogue_image'}
                           src={preloadedAssets?.dial}
@@ -965,30 +980,33 @@ const ScreenPreview = () => {
                               fontSize={{ base: '30px', lg: '1.8vw' }}
                               bottom={'38px'}
                               fontFamily={'AtlantisContent'}
-                              // fontSize={'21px'}
                             >
-                              {showTypingEffect === false ? <TypingEffect
-                                text={remainingSentences.toString()}
-                                speed={50}
-                                setSpeedIsOver={setShowTypingEffect}
-                              /> : remainingSentences}
-
-
+                              {showTypingEffect === false ? (
+                                <TypingEffect
+                                  text={remainingSentences.toString()}
+                                  speed={50}
+                                  setSpeedIsOver={setShowTypingEffect}
+                                />
+                              ) : (
+                                remainingSentences
+                              )}
                             </Box>
                             <Box
                               display={'flex'}
                               position={'fixed'}
-                              justifyContent={'space-between'}
+                              justifyContent={navTrack.length > 1 ? 'space-between': 'end'}
                               w={'95%'}
                               bottom={'0'}
                             >
+                            {navTrack.length > 1 &&
                               <Img
                                 src={preloadedAssets?.left}
                                 w={'70px'}
                                 h={'50px'}
                                 cursor={'pointer'}
-                                onClick={() => previousData(data)}
+                                onClick={() => SkipContentForBackNavigation()}
                               />
+                            }
                               <Img
                                 src={preloadedAssets?.right}
                                 w={'70px'}
@@ -1000,104 +1018,10 @@ const ScreenPreview = () => {
                           </>
                         )}
                       </Box>
-                      // old dialog ui copy
-                      // <Box
-                      //   w={'100%'}
-                      //   h={'100vh'}
-                      //   display={'flex'}
-                      //   alignItems={'center'}
-                      //   justifyContent={'center'}
-                      //   position={'relative'}
-                      // >
-                      //   <Img
-                      //     src={preloadedAssets?.backgroundImage}
-                      //     maxW={'100%'}
-                      //     maxH={'100%'}
-                      //     w={'100%'}
-                      //     h={'100vh'}
-                      //     transform={
-                      //       'scale(1.3}) translateY(-10%) translateX(-10%)'
-                      //     }
-                      //     transition={'transform 0.9s ease-in-out'}
-                      //   />
-                      //   <Img
-                      //     style={{
-                      //       transform: `translateY(${showNote ? 200 : 0}px)`,
-                      //       transition:
-                      //         'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                      //     }}
-                      //     position={'fixed'}
-                      //     maxW={'100%'}
-                      //     maxH={'100%'}
-                      //     w={'100%'}
-                      //     h={'240px'}
-                      //     bottom={'0'}
-                      //     src={preloadedAssets?.dial}
-                      //   />
-                      //   {!showNote && (
-                      //     <>
-                      //       <Box position={'relative'}>
-                      //         <Img
-                      //           src={preloadedAssets?.char}
-                      //           position={'fixed'}
-                      //           h={'70px'}
-                      //           w={'25%'}
-                      //           left={'13%'}
-                      //           bottom={'150px'}
-                      //         />
-                      //         <Text
-                      //           position={'fixed'}
-                      //           left={'24%'}
-                      //           bottom={'167px'}
-                      //           fontSize={'25'}
-                      //           fontWeight={700}
-                      //           textAlign={'center'}
-                      //           fontFamily={'AtlantisText'}
-                      //         >
-                      //           {data.blockRoll === 'Narrator'
-                      //             ? data.blockRoll
-                      //             : gameInfo?.gameData?.gameNonPlayerName}
-                      //         </Text>
-                      //       </Box>
-                      //       <Box
-                      //         display={'flex'}
-                      //         position={'fixed'}
-                      //         justifyContent={'space-between'}
-                      //         w={'75%'}
-                      //         bottom={'55px'}
-                      //         fontFamily={'AtlantisContent'}
-                      //         fontSize={'21px'}
-                      //       >
-                      //         <TypingEffect text={data?.blockText} speed={50} />
-                      //       </Box>
-                      //       <Box
-                      //         display={'flex'}
-                      //         position={'fixed'}
-                      //         justifyContent={'space-between'}
-                      //         w={'80%'}
-                      //         bottom={'0'}
-                      //       >
-                      //         <Img
-                      //           src={preloadedAssets?.left}
-                      //           w={'50px'}
-                      //           h={'50px'}
-                      //           cursor={'pointer'}
-                      //         />
-                      //         <Img
-                      //           src={preloadedAssets?.right}
-                      //           w={'50px'}
-                      //           h={'50px'}
-                      //           cursor={'pointer'}
-                      //           onClick={() => getData(data)}
-                      //         />
-                      //       </Box>
-                      //     </>
-                      //   )}
-                      // </Box>
                     )}
                     {currentTab === 4 && data && type === 'Interaction' && (
                       <Box
-                        position="relative"                       
+                        position="relative"
                         w={'100%'}
                         height="100vh"
                         backgroundImage={preloadedAssets?.backgroundImage}
@@ -1128,7 +1052,6 @@ const ScreenPreview = () => {
                               <Box
                                 position={'absolute'}
                                 top={{ base: '5%', md: '6%' }}
-                                // h={'80% !important'}
                                 className="story_interaction_content"
                               >
                                 <Box
@@ -1217,13 +1140,15 @@ const ScreenPreview = () => {
                                 <Box
                                   w={'98%'}
                                   display={'flex'}
-                                  justifyContent={'space-between'}
+                                  justifyContent={navTrack.length > 1 ? 'space-between': 'end'}
                                 >
+                                {navTrack.length > 1 &&
                                   <Img
                                     src={preloadedAssets?.left}
                                     className={'interaction_button'}
-                                    // onClick={() => prevData(data)}
+                                    onClick={() => prevData(data)}
                                   />
+                                }
                                   {selectedOption !== null && (
                                     <Img
                                       src={preloadedAssets?.right}
@@ -1237,136 +1162,6 @@ const ScreenPreview = () => {
                           </GridItem>
                         </Grid>
                       </Box>
-
-                      // old interaction ui copy
-
-                      // <Box
-                      //   w={'100%'}
-                      //   h={'100vh'}
-                      //   display={'flex'}
-                      //   alignItems={'center'}
-                      //   justifyContent={'center'}
-                      //   position={'relative'}
-                      // >
-                      //   <Img
-                      //     src={preloadedAssets?.backgroundImage}
-                      //     maxW={'100%'}
-                      //     maxH={'100%'}
-                      //     w={'100%'}
-                      //     h={'100vh'}
-                      //     transform={`scale(1.5}) translateY(-10%) translateX(${
-                      //       showNote ? -200 : 0
-                      //     }px)`}
-                      //     transition={'transform 0.9s ease-in-out'}
-                      //   />
-                      //   <Box
-                      //     style={{
-                      //       transform: `translateX(${
-                      //         showNote ? -200 : 0
-                      //       }px) scale(1.2)`,
-                      //       transition:
-                      //         'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                      //     }}
-                      //     backgroundImage={preloadedAssets?.parch}
-                      //     position={'fixed'}
-                      //     w={{ sm: '350px', md: '500px' }}
-                      //     h={{ sm: '50vh', md: ' 550px' }}
-                      //     // top={'4vh'}
-                      //     left={{ sm: '60px', md: '180px' }}
-                      //     backgroundSize={'contain'}
-                      //     backgroundRepeat={'no-repeat'}
-                      //   >
-                      //     <Box
-                      //       textAlign={'center'}
-                      //       h={'100px'}
-                      //       display={'flex'}
-                      //       justifyContent={'center'}
-                      //       alignItems={'center'}
-                      //       fontWeight={700}
-                      //       fontFamily={'AtlantisText'}
-                      //       lineHeight={1}
-                      //       w={'100%'}
-                      //     >
-                      //       <Box w={'50%'} fontSize={'21px'}>
-                      //         Here You Can Answer the Interactions...!{' '}
-                      //       </Box>
-                      //     </Box>
-                      //     <Box
-                      //       textAlign={'center'}
-                      //       h={'100px'}
-                      //       display={'flex'}
-                      //       justifyContent={'center'}
-                      //       alignItems={'center'}
-                      //       fontWeight={500}
-                      //       fontFamily={'AtlantisText'}
-                      //       lineHeight={1}
-                      //       w={'96%'}
-                      //       overflowY={'scroll'}
-                      //     >
-                      //       <Box w={'60%'} fontSize={'20px'} letterSpacing={1}>
-                      //         {data?.blockText}
-                      //       </Box>
-                      //     </Box>
-                      //     <Box
-                      //       mt={'10px'}
-                      //       w={{ sm: '200px', md: '400px' }}
-                      //       fontWeight={500}
-                      //       ml={'17%'}
-                      //       h={'220px'}
-                      //       overflowY={'scroll'}
-                      //     >
-                      //       {options &&
-                      //         options.map((item: any, ind: number) => (
-                      //           <Box
-                      //             mb={'10px'}
-                      //             w={'80%'}
-                      //             lineHeight={1}
-                      //             key={ind}
-                      //             color={selectedOption === ind ? 'purple' : ''}
-                      //             textAlign={'center'}
-                      //             cursor={'pointer'}
-                      //             onClick={() => handleValidate(item, ind)}
-                      //             fontFamily={'AtlantisText'}
-                      //             fontSize={'20px'}
-                      //           >
-                      //             <Img
-                      //               src={
-                      //                 selectedOption === ind
-                      //                   ? preloadedAssets?.on
-                      //                   : preloadedAssets?.off
-                      //               }
-                      //               h={'30px'}
-                      //               w={'95%'}
-                      //             />
-                      //             {item?.qpOptionText}
-                      //           </Box>
-                      //         ))}
-                      //     </Box>
-                      //     <Box
-                      //       display={'flex'}
-                      //       position={'fixed'}
-                      //       justifyContent={'space-between'}
-                      //       w={'508px'}
-                      //       left={'-10px'}
-                      //     >
-                      //       <Img
-                      //         src={preloadedAssets?.left}
-                      //         w={'50px'}
-                      //         h={'50px'}
-                      //         cursor={'pointer'}
-                      //       />
-                      //       {selectedOption !== null && (
-                      //         <Img
-                      //           src={preloadedAssets?.right}
-                      //           w={'50px'}
-                      //           h={'50px'}
-                      //           cursor={'pointer'}
-                      //           onClick={() => getData(data)}
-                      //         />
-                      //       )}
-                      //     </Box>
-                      //   </Box>
-                      // </Box>
                     )}
                     {currentTab === 4 && data && type === 'response' && (
                       <Box className="chapter_potrait">
@@ -1374,48 +1169,6 @@ const ScreenPreview = () => {
                           src={preloadedAssets?.backgroundImage}
                           className="dialogue_screen"
                         />
-                        {/* <Box w={'100%'} h={'100vh'}>
-                          <Canvas camera={{ position: [30, 0, 10] }}>
-                            <directionalLight
-                              position={[5, 5, 5]}
-                              intensity={0.8}
-                              color={0xffccaa}
-                              castShadow
-                            />
-                            <ambientLight intensity={5.5} />
-                            {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
-                        {/* <Background /> */}
-                        {/* <Model /> */}
-                        {/* <mesh 
-                        rotation={[-Math.PI / 2, 0, 0]}
-                        position={[0, -5, 0]}
-                        receiveShadow 
-                      > */}
-                        {/* <planeGeometry args={[100, 100]} />
-                        <shadowMaterial opacity={0.5} />
-                      </mesh> */}
-                        {/* </Canvas>
-                        </Box> */}
-                        {/* {selectedPlayer && (
-                          <Img
-                            src={`${API_SERVER}/${selectedPlayer}`}
-                            position={'fixed'}
-                            right={'300px'}
-                            bottom={'100px'}
-                            w={'200px'}
-                            h={'324px'}
-                          />
-                        )}
-                        {selectedNpc && (
-                          <Img
-                            src={selectedNpc}
-                            position={'fixed'}
-                            right={'500px'}
-                            bottom={'100px'}
-                            w={'200px'}
-                            h={'324px'}
-                          />
-                        )} */}
                         <Img
                           className={'dialogue_image'}
                           src={preloadedAssets?.dial}
@@ -1458,26 +1211,23 @@ const ScreenPreview = () => {
                               bottom={'38px'}
                               fontFamily={'AtlantisContent'}
                             >
-                              {showTypingEffect === false ? <TypingEffect
-                                text={remainingSentences.toString()}
-                                speed={50}
-                                setSpeedIsOver={setShowTypingEffect}
-                              /> : remainingSentences}
+                              {showTypingEffect === false ? (
+                                <TypingEffect
+                                  text={remainingSentences.toString()}
+                                  speed={50}
+                                  setSpeedIsOver={setShowTypingEffect}
+                                />
+                              ) : (
+                                remainingSentences
+                              )}
                             </Box>
                             <Box
                               display={'flex'}
                               position={'fixed'}
-                              justifyContent={'space-between'}
+                              justifyContent={'end'}
                               w={'95%'}
                               bottom={'0'}
                             >
-                              <Img
-                                src={preloadedAssets?.left}
-                                w={'70px'}
-                                h={'50px'}
-                                cursor={'pointer'}
-                                //  onClick={() => prevData(data)}
-                              />
                               <Img
                                 src={preloadedAssets?.right}
                                 w={'70px'}
@@ -1489,103 +1239,10 @@ const ScreenPreview = () => {
                           </>
                         )}
                       </Box>
-                      // <Box
-                      //   w={'100%'}
-                      //   h={'100vh'}
-                      //   display={'flex'}
-                      //   alignItems={'center'}
-                      //   justifyContent={'center'}
-                      //   position={'relative'}
-                      // >
-                      //   <Img
-                      //     src={preloadedAssets?.backgroundImage}
-                      //     maxW={'100%'}
-                      //     maxH={'100%'}
-                      //     w={'100%'}
-                      //     h={'100vh'}
-                      //     transform={
-                      //       'scale(1.3}) translateY(-10%) translateX(-10%)'
-                      //     }
-                      //     transition={'transform 0.9s ease-in-out'}
-                      //   />
-                      //   <Img
-                      //     style={{
-                      //       transform: `translateY(${showNote ? 200 : 0}px)`,
-                      //       transition:
-                      //         'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-                      //     }}
-                      //     position={'fixed'}
-                      //     maxW={'100%'}
-                      //     maxH={'100%'}
-                      //     w={'100%'}
-                      //     h={'240px'}
-                      //     bottom={'0'}
-                      //     src={preloadedAssets?.dial}
-                      //   />
-                      //   {!showNote && (
-                      //     <>
-                      //       <Box position={'relative'}>
-                      //         <Img
-                      //           src={preloadedAssets?.char}
-                      //           position={'fixed'}
-                      //           h={'70px'}
-                      //           w={'25%'}
-                      //           left={'13%'}
-                      //           bottom={'150px'}
-                      //         />
-                      //         <Text
-                      //           position={'fixed'}
-                      //           left={'24%'}
-                      //           bottom={'167px'}
-                      //           fontSize={'25'}
-                      //           fontWeight={700}
-                      //           textAlign={'center'}
-                      //           fontFamily={'AtlantisText'}
-                      //         >
-                      //           {data.blockRoll === 'Narrator'
-                      //             ? data.blockRoll
-                      //             : gameInfo?.gameData?.gameNonPlayerName}
-                      //         </Text>
-                      //       </Box>
-                      //       <Box
-                      //         display={'flex'}
-                      //         position={'fixed'}
-                      //         justifyContent={'space-between'}
-                      //         w={'75%'}
-                      //         bottom={'55px'}
-                      //         fontFamily={'AtlantisContent'}
-                      //         fontSize={'21px'}
-                      //       >
-                      //         <TypingEffect text={resMsg} speed={50} />
-                      //       </Box>
-                      //       <Box
-                      //         display={'flex'}
-                      //         position={'fixed'}
-                      //         justifyContent={'space-between'}
-                      //         w={'80%'}
-                      //         bottom={'0'}
-                      //       >
-                      //         <Img
-                      //           src={preloadedAssets?.left}
-                      //           w={'50px'}
-                      //           h={'50px'}
-                      //           cursor={'pointer'}
-                      //         />
-                      //         <Img
-                      //           src={preloadedAssets?.right}
-                      //           w={'50px'}
-                      //           h={'50px'}
-                      //           cursor={'pointer'}
-                      //           onClick={() => getData(data)}
-                      //         />
-                      //       </Box>
-                      //     </>
-                      //   )}
-                      // </Box>
                     )}
                     {currentTab === 4 && data && type === 'feedback' && (
                       <Box
-                        position="relative"                      
+                        position="relative"
                         w={'100%'}
                         height="100vh"
                         backgroundImage={preloadedAssets?.backgroundImage}
@@ -1643,85 +1300,6 @@ const ScreenPreview = () => {
                           </GridItem>
                         </Grid>
                       </Box>
-                      // <Box
-                      //   w={'100%'}
-                      //   h={'100vh'}
-                      //   display={'flex'}
-                      //   alignItems={'center'}
-                      //   justifyContent={'center'}
-                      //   position={'relative'}
-                      //   overflow={'visible'}
-                      //   style={{ perspective: '1000px' }}
-                      // >
-                      //   <Box
-                      //     backgroundImage={preloadedAssets?.backgroundImage}
-                      //     w={'100%'}
-                      //     h={'100vh'}
-                      //     backgroundRepeat={'no-repeat'}
-                      //     backgroundSize={'cover'}
-                      //     transform={`scale(${first ? 1 : 1.3}) translateY(${
-                      //       first ? 0 : -10
-                      //     }%) translateX(${first ? 0 : -10}%)`}
-                      //     transition={'transform 0.9s ease-in-out'}
-                      //   >
-                      //     <Box
-                      //       position={'fixed'}
-                      //       top={'200px'}
-                      //       right={'0px'}
-                      //       bottom={0}
-                      //       zIndex={999}
-                      //       w={'300px'}
-                      //     ></Box>
-                      //   </Box>
-                      //   <Box
-                      //     style={{
-                      //       transform: `scale(${showNote ? 0.2 : 1})`,
-                      //       transition: 'transform 0.5s ease-in-out',
-                      //     }}
-                      //     position={'fixed'}
-                      //     w={'40%'}
-                      //     h={'auto'}
-                      //     display={'flex'}
-                      //     flexDirection={'column'}
-                      //     justifyContent={'center'}
-                      //     alignItems={'center'}
-                      //   >
-                      //     <Img
-                      //       w={'100%'}
-                      //       h={'auto'}
-                      //       src={preloadedAssets?.feedi}
-                      //     />
-                      //     <Box
-                      //       position={'absolute'}
-                      //       w={'75%'}
-                      //       mt={'10px'}
-                      //       display={'flex'}
-                      //       flexDirection={'column'}
-                      //       textAlign={'center'}
-                      //       justifyContent={'center'}
-                      //       style={{
-                      //         fontWeight: '900',
-                      //         color: '#D9C7A2',
-                      //       }}
-                      //     >
-                      //       {feed}
-                      //       <Box
-                      //         w={'100%'}
-                      //         onClick={() => getData(data)}
-                      //         mt={'20px'}
-                      //         display={'flex'}
-                      //         justifyContent={'center'}
-                      //         cursor={'pointer'}
-                      //         transform={'translate(0px, 100px)'}
-                      //       >
-                      //         <Img
-                      //           src={preloadedAssets?.next}
-                      //           h={'7vh'}
-                      //         />
-                      //       </Box>
-                      //     </Box>
-                      //   </Box>
-                      // </Box>
                     )}
                     {currentTab === 5 && currentSubTab === 0 && (
                       <Box
@@ -1925,7 +1503,6 @@ const ScreenPreview = () => {
                       <ModalOverlay />
                       <ModalContent backgroundColor="rgba(0, 0, 0, 0.9)">
                         <ModalCloseButton
-                          // zIndex={99999999999}
                           color={'white'}
                         />
                         <ModalBody p={0}>

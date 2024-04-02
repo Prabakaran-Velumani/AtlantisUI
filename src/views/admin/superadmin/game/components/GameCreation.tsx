@@ -1313,7 +1313,7 @@ const GameCreation = () => {
                   }
                 }
                 if (key.type === 'Interaction') {
-                  // console.log('keyinput', key.type + key.input);
+                  console.log('keyinput', key.type + key.input);
                   var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                   var blockRoll = input[inputkey]?.blockRoll;
                   var interaction = input[inputkey]?.interaction;
@@ -1329,6 +1329,7 @@ const GameCreation = () => {
                     });
                     return false;
                   }
+                  console.log('QuestionsEmotion', QuestionsEmotion);
                   if (!QuestionsEmotion || QuestionsEmotion === undefined) {
                     toast({
                       title: `Questions is Empty On This Sequence ${key.id} `,
@@ -2103,6 +2104,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
                   });
                   return false;
                 }
+                console.log('QuestionsEmotion', QuestionsEmotion)
                 if (!QuestionsEmotion || QuestionsEmotion === undefined) {
                   toast({
                     title: `Questions is Empty On This Sequence ${key.id} `,

@@ -1520,50 +1520,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index
 
                                                     />
                                                 </Box> */}
-                            <Box
-                              ml={'4px'}
-                              cursor={'pointer'}
-                              display={
-                                input?.[`Interaction${seq.input}`]
-                                  ?.navigateshowObjects?.[alp.option] ===
-                                'Select Block'
-                                  ? 'block'
-                                  : 'none'
-                              }
-                            >
-                              <Select
-                                placeholder={'Blocks...'}
-                                id="interaction"
-                                name={`Interaction${seq.input}`}
-                                menuPortalTarget={document.body}
-                                styles={customStyles}
-                                options={showSelectBlock.filter(
-                                  (option: any) => option.value !== seq.input,
-                                )}
-                                isSearchable={true}
-                                className="react-select"
-                                value={
-                                  showSelectBlock.find(
-                                    (option: any) =>
-                                      option.value ===
-                                      parseInt(
-                                        input?.[`Interaction${seq.input}`]
-                                          ?.navigateObjects?.[alp.option],
-                                        10,
-                                      ),
-                                  ) || null
-                                }
-                                onChange={(e: any) =>
-                                  handleSelectBlock(
-                                    e,
-                                    seq.input,
-                                    `Option${alp.option}`,
-                                    `Interaction${seq.input}`,
-                                  )
-                                }
-                              />
-                            </Box>
-                          </Box>
+                                                 </Box>
                         </>
                       ))}
                   </Box>
@@ -1803,20 +1760,21 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index
                                           input?.[`Interaction${seq.input}`]
                                             ?.navigateshowObjects?.[
                                             alp.option
-                                          ] === 'New Block'
-                                            ? showSelectBlock.find(
-                                                (option: any) =>
-                                                  option.value ===
-                                                  input?.[
-                                                    `Interaction${seq.input}`
-                                                  ]?.navigateObjects?.[
-                                                    alp.option
-                                                  ],
-                                              )?.label === undefined
-                                              ? `${(
-                                                  parseFloat(seq.id) + 0.1
-                                                ).toFixed(1)}`
-                                              : showSelectBlock.find(
+                                          ] === 'New Block' ?
+                                            // ? showSelectBlock.find(
+                                            //     (option: any) =>
+                                            //       option.value ==
+                                            //       input?.[
+                                            //         `Interaction${seq.input}`
+                                            //       ]?.navigateObjects?.[
+                                            //         alp.option
+                                            //       ],
+                                            //   )                                              
+                                              // ? `${(
+                                              //     seq.id + 0.1
+                                              //   ).toFixed(1)}`
+                                              // : 
+                                                  showSelectBlock.find(
                                                   (option: any) =>
                                                     option.value ===
                                                     input?.[
@@ -1831,7 +1789,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({ id, language, seq, index
                                               ] === 'Select Block'
                                             ? showSelectBlock.find(
                                                 (option: any) =>
-                                                  option.value ===
+                                                  option.value ==
                                                   input?.[
                                                     `Interaction${seq.input}`
                                                   ]?.navigateObjects?.[
