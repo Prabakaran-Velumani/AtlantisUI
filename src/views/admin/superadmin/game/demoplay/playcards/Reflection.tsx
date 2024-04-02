@@ -44,7 +44,8 @@ const Reflection: React.FC<{
   };
 
   const nextNavigation = ()=>{
-    if(gameInfo?.gameData?.gameIsShowTakeaway == true){
+    console.log('gameInfo?.gameData?.gameIsShowTakeaway == true', gameInfo?.gameData?.gameIsShowTakeaway==='true');
+    if(gameInfo?.gameData?.gameIsShowTakeaway === 'true'){
       setCurrentScreenId(7);//Navigate to Takeaway screen
     }
     else{

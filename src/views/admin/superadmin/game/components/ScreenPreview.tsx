@@ -342,6 +342,7 @@ const ScreenPreview = () => {
     }
   };
   const getData = (next: any) => {
+    console.log('next', next);
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
@@ -352,6 +353,8 @@ const ScreenPreview = () => {
 
     const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    
+    //get the next block, it could be used when current block not has navigation
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
         .filter(
@@ -367,10 +370,12 @@ const ScreenPreview = () => {
     // if (nextBlock[0]?.blockChoosen === 'Interaction') {
     //   setInteractionOptions(gameInfo, next);
     // }
+    console.log('nextBlock[0]?.blockChoosen === Interaction', nextBlock[0]?.blockChoosen === 'Interaction')
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
-      setInteractionOptions(gameInfo, nextBlock[0]);
+      // setInteractionOptions(gameInfo, nextBlock[0]);
+      setInteractionOptions(gameInfo, next);
     }
-   
+   console.log('next?.blockShowNavigate',next?.blockShowNavigate)
     if (type === 'Interaction' && resMsg !== '') {
       setType('response');
       return false;
@@ -382,6 +387,7 @@ const ScreenPreview = () => {
       type === 'response' ||
       type === 'feedback'
     ) {
+      console.log('navi----', navi)
       if (navi === 'Repeat Question') {
         const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
         setInteractionOptions(gameInfo, currentBlockinteraction);
@@ -447,7 +453,8 @@ const ScreenPreview = () => {
         }
       }
     }
-    if (next?.blockShowNavigate) {
+    else if (next?.blockShowNavigate) {
+      console.log('next?.blockShowNavigate == true /// type ', type );
       if (next?.blockShowNavigate === 'Repeat Question') {
         setType(next?.blockChoosen);
         setData(next);
@@ -463,6 +470,11 @@ const ScreenPreview = () => {
         setSelectedOption(null);
         return false;
     } else if (next?.blockShowNavigate === 'Select Block') {
+      console.log("In Selected Blocks")
+      console.log("currentQuest", currentQuest)
+      console.log("demoBlocks[currentQuest]",demoBlocks[currentQuest])
+      console.log('next?.blockLeadTo', next?.blockLeadTo)
+
       const selectedNext = Object.keys(demoBlocks[currentQuest])
         .filter((item: any) => {
           return (
@@ -473,50 +485,56 @@ const ScreenPreview = () => {
         .map((item: any) => {
           return demoBlocks[currentQuest][item];
         });
-      if (selectedNext.length > 0) {
+        console.log('selectedNext', selectedNext)
+        if (selectedNext.length > 0) {
+        console.log('selectedNext.length > 0', selectedNext.length > 0)
+        console.log('selectedNext[0]?.blockChoosen', selectedNext[0]?.blockChoosen)
         setType(selectedNext && selectedNext[0]?.blockChoosen);
-          if(selectedNext[0]?.blockChoosen === 'Interaction')
-      {
-        const optionsFiltered = [];
-        for (const option of gameInfo.questOptions) {
-            if (option?.qpSequence ===  selectedNext[0]?.blockPrimarySequence) {
-              optionsFiltered.push(option);
-            }
-        }
-              if (gameInfo?.gameData?.gameShuffle === 'true') {
-                for (let i = optionsFiltered.length - 1; i > 0; i--) {
-                  const j = Math.floor(Math.random() * (i + 1));
-                  [optionsFiltered[i], optionsFiltered[j]] = [
-                    optionsFiltered[j],
-                    optionsFiltered[i],
-                  ];
-                }
-              }
-              setOptions(optionsFiltered);
-      }
+          // if(selectedNext[0]?.blockChoosen === 'Interaction')
+          //   {
+          //     const optionsFiltered = [];
+          //     for (const option of gameInfo.questOptions) {
+          //         if (option?.qpSequence ===  selectedNext[0]?.blockPrimarySequence) {
+          //           optionsFiltered.push(option);
+          //         }
+          //     }
+          //     if (gameInfo?.gameData?.gameShuffle === 'true') {
+          //             for (let i = optionsFiltered.length - 1; i > 0; i--) {
+          //               const j = Math.floor(Math.random() * (i + 1));
+          //               [optionsFiltered[i], optionsFiltered[j]] = [
+          //                 optionsFiltered[j],
+          //                 optionsFiltered[i],
+          //               ];
+          //             }
+          //           }
+          //     setOptions(optionsFiltered);
+                
+          //   }
       setData(selectedNext && selectedNext[0]);
     }
     else {
+      console.log('Else');
+      
       setType(nextBlock[0]?.blockChoosen);
-      if(nextBlock[0]?.blockChoosen === 'Interaction')
-      {
-        const optionsFiltered = [];
-        for (const option of gameInfo.questOptions) {
-            if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
-              optionsFiltered.push(option);
-            }
-        }
-              if (gameInfo?.gameData?.gameShuffle === 'true') {
-                for (let i = optionsFiltered.length - 1; i > 0; i--) {
-                  const j = Math.floor(Math.random() * (i + 1));
-                  [optionsFiltered[i], optionsFiltered[j]] = [
-                    optionsFiltered[j],
-                    optionsFiltered[i],
-                  ];
-                }
-              }
-              setOptions(optionsFiltered);
-      }
+      // if(nextBlock[0]?.blockChoosen === 'Interaction')
+      // {
+      //   const optionsFiltered = [];
+      //   for (const option of gameInfo.questOptions) {
+      //       if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
+      //         optionsFiltered.push(option);
+      //       }
+      //   }
+      //         if (gameInfo?.gameData?.gameShuffle === 'true') {
+      //           for (let i = optionsFiltered.length - 1; i > 0; i--) {
+      //             const j = Math.floor(Math.random() * (i + 1));
+      //             [optionsFiltered[i], optionsFiltered[j]] = [
+      //               optionsFiltered[j],
+      //               optionsFiltered[i],
+      //             ];
+      //           }
+      //         }
+      //         setOptions(optionsFiltered);
+      // }
       setData(nextBlock[0]);
     }
     setSelectedOption(null);
@@ -532,9 +550,10 @@ const ScreenPreview = () => {
       }
     }
     else if(nextBlock.length > 0 )
-    {setType(nextBlock[0]?.blockChoosen);
-    setData(nextBlock[0]);
-    setSelectedOption(null);
+    {
+      setType(nextBlock[0]?.blockChoosen);
+      setData(nextBlock[0]);
+      setSelectedOption(null);
     }
     else{
       setEndOfQuest(true);

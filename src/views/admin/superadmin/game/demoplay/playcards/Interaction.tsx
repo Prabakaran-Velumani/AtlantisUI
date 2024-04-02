@@ -15,9 +15,10 @@ interface InteractionProps{
     InteractionFunction: ()=> void;
     option: any;
     isScreenshot?: boolean;
+    navTrack?:any;
 }
 
-const  Interaction :  React.FC<InteractionProps> = ({backGroundImg,data,option, options,optionClick, prevData, InteractionFunction, isScreenshot })=> {
+const  Interaction :  React.FC<InteractionProps> = ({backGroundImg,data,option, options,optionClick, prevData, InteractionFunction, isScreenshot,navTrack })=> {
 
   return (
 
@@ -122,13 +123,14 @@ const  Interaction :  React.FC<InteractionProps> = ({backGroundImg,data,option, 
             <Box
               w={'98%'}
               display={'flex'}
-              justifyContent={'space-between'}
+              justifyContent={navTrack.length > 1 ? 'space-between': 'end'}
             >
+            {navTrack.length > 1 &&
               <Img
                 src={left}
                 className={'interaction_button'}
                 onClick={() => prevData(data)}
-              />
+              />}
               {option !== null && (
                 <Img
                   src={right}

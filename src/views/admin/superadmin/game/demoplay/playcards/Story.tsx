@@ -71,6 +71,12 @@ const Story: React.FC<{
   voiceIds: any;
   windowWidth: any;
   windowHeight: any;
+  setIsPrevNavigation: any;
+  isPrevNavigation: any;
+  setNavTrack: any;
+  navTrack: any;
+  setCurrentTrackPointer: any;
+  gameInfo:any;
 }> = ({
   data,
   type,
@@ -96,6 +102,12 @@ const Story: React.FC<{
   prevData,
   windowWidth,
   windowHeight,
+  setIsPrevNavigation,
+  isPrevNavigation,
+  setNavTrack,
+  navTrack,
+  setCurrentTrackPointer,
+  gameInfo
 }) => {
   const [showNote, setShowNote] = useState(true),
   [first, setFirst] = useState(false);
@@ -106,21 +118,45 @@ const [currentPosition, setCurrentPosition] = useState(0);
 const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
 const [Navigatenext, setNavigateNext] = useState<any>(false);
 const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
-// const [SpeedIsOver, setSpeedIsOver] = useState<any>(false);
 const [isPlayAudioConfirmation, setIsPlayAudioConfirmation] = useState<boolean>(false);
-
 const [score, setScore] = useState(null);
 
 useEffect(() => {
-  getVoice(data, type);
-  setShowNote(true);
-  setTimeout(() => {
-    setShowNote(false);
-    getDataSection(data);
-  }, 1000);
+  if(data && type){
+    getVoice(data, type);
+    setShowNote(true);
+    setTimeout(() => {
+      setShowNote(false);
+      getDataSection(data);
+    }, 1000);
+
+    /** this logic is used to hanlde the navigation options in both forward and backward navigation */
+    if(gameInfo.hasOwnProperty('blocks')){
+      let previousPrimarySeq = navTrack[navTrack.length-1];
+      if(previousPrimarySeq){
+        let currentQuest = previousPrimarySeq.split('.')[0];
+        let previousBlock : any = Object.values(gameInfo?.blocks[currentQuest])?.find((row: any)=> {
+          console.log('row', row);
+          return row.blockPrimarySequence == previousPrimarySeq});
+        if(data.blockPrimarySequence != previousPrimarySeq)
+        {
+        if(previousBlock?.blockChoosen === 'Interaction')
+        {
+          setNavTrack([data.blockPrimarySequence]);
+        }
+        else{
+          const newArray = navTrack;
+          newArray.push(data.blockPrimarySequence);
+          setNavTrack(newArray);
+        }
+      }
+      }
+      else{     
+        setNavTrack([data.blockPrimarySequence]);
+      }
+    }
+  }
 }, [data, type]);
-
-
 
 useEffect(() => {
   setFirst(true);
@@ -129,7 +165,6 @@ useEffect(() => {
     setShowNote(false);
   }, 1000);
 }, []);
-
 
 useEffect(() => {
   const fetchData = async () => {
@@ -283,13 +318,6 @@ const getVoice = async (blockInfo: any, blockType: string) => {
             : voiceIds?.playerFemale;
       break;
     case 'Interaction':
-      // let optionsText = '';
-      // options.forEach((item: any) => {
-      //   optionsText +=
-      //     '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
-      //     console.log("optionsText",item?.qpOptionText)
-      // });
-      // text = blockInfo.blockText + optionsText;
       let optionsText = '';
 // Sort the options array based on a unique identifier, such as index
 options.sort((a: any, b: any) => a.index - b.index);
@@ -354,16 +382,7 @@ const optionClick = (item: any, ind: any) => {
   setScore({ seqId: item?.qpSequence, score: parseInt(item?.qpScore) });
   handleValidate(item, ind);
 };
-const imageRef = useRef(null);
-const [imageHeight, setImageHeight] = useState(null);
-useEffect(() => {
-  if (imageRef.current) {
-    // Ensure image is loaded before accessing its dimensions
-    imageRef.current.onload = () => {
-      setImageHeight(imageRef.current.height);
-    };
-  }
-}, [imageRef, windowWidth, windowHeight]);
+
 
 const stylerender = (Navigatenext === true && (data && type === 'Dialog')) ? '' : 'transform 0.3s ease-in-out, translateY 0.3s ease-in-out';
 const styletransform = (Navigatenext === true && (data && type === 'Dialog')) ? '' : `translateY(${showNote ? 200 : 0}px)`;
@@ -376,11 +395,11 @@ useEffect(() => {
 const getDataSection = (data: any) => {
   setShowTypingEffect(false);
   setCurrentPosition(0);
-
   // Note and Dialog
   const content = data?.blockText || '';
   const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
   const newRemainingSentences = sentences.slice(currentPosition);
+  
   // response
   const Responsecontent = resMsg || '';
   const Responsesentences = Responsecontent.split(
@@ -390,9 +409,8 @@ const getDataSection = (data: any) => {
   const concatenatedSentences = [];
   let totalLength = 0;
   // Note and Dialog
-  for (let i = 0; i < newRemainingSentences.length; i++) {
-    const sentence = newRemainingSentences[i];
-
+      for (let i = 0; i < newRemainingSentences.length; i++) {
+      const sentence = newRemainingSentences[i];
 
     if (data && type === 'Note') {
       if (totalLength + sentence.length <= Notelength) {
@@ -415,8 +433,6 @@ const getDataSection = (data: any) => {
         break;
       }
     }
-
-
   }
   // Response 
   for (let i = 0; i < newRemainingResponseSentences.length; i++) {
@@ -435,21 +451,24 @@ const getDataSection = (data: any) => {
     }
   }
   setRemainingSentences(concatenatedSentences);
-
-  if (newRemainingSentences.length >= 1) {
+  if (newRemainingSentences.length > 0 ) {
     setCurrentPosition(currentPosition + concatenatedSentences.length);
     setNavigateNext(false);
   }
-  if (newRemainingResponseSentences.length >= 1) {
+  else if (newRemainingResponseSentences.length > 0 ) {
     setCurrentPosition(currentPosition + concatenatedSentences.length);
     setNavigateNext(false);
   } 
   else {
-    setCurrentPosition(0);
-    setNavigateNext(true);
-    // getData(data);
+    // console.log('******isPrevNavigation',isPrevNavigation)
+    // if(isPrevNavigation == false)
+    // {
+      // setCurrentPosition(0);
+      setNavigateNext(true);
+      setIsPrevNavigation(false);
   }
 };
+
 const Updatecontent = () => {
   if (showTypingEffect === false) {
     setShowTypingEffect(true);
@@ -458,9 +477,29 @@ const Updatecontent = () => {
     getDataSection(data);
   }
 }
+
 useEffect(() => {
   getDataSection(data);
 }, []);
+
+const getNoteNextData = ()=>{
+  setIsPrevNavigation(false); 
+  getDataSection(data)
+}
+
+console.log('data.blockPrimarySequence', data.blockPrimarySequence)
+console.log('NavTrack', navTrack)
+
+const SkipContentForBackNavigation = () => {
+  if (showTypingEffect === false) {
+    setShowTypingEffect(true);
+  }
+  else {
+    setCurrentPosition(0);
+    prevData(data)
+  }
+}
+
   return (
     <>
       {data && type === 'Note' && (
@@ -499,7 +538,7 @@ useEffect(() => {
                 </Box>
                 <Box
                   w={'100%'}
-                  onClick={() => getDataSection(data)}
+                  onClick={() => getNoteNextData()}
                   mt={'20px'}
                   display={'flex'}
                   justifyContent={'center'}
@@ -587,17 +626,19 @@ useEffect(() => {
               <Box
                 display={'flex'}
                 position={'fixed'}
-                justifyContent={'space-between'}
+                justifyContent={navTrack.length > 1 ? 'space-between': 'end'}
                 w={'95%'}
                 bottom={'0'}
               >
+              {navTrack.length > 1 &&
                 <Img
                   src={left}
                   w={'70px'}
                   h={'50px'}
                   cursor={'pointer'}
-                  onClick={() => prevData(data)}
+                  onClick={() => {SkipContentForBackNavigation()}}
                 />
+              }
                 <Img
                   src={right}
                   w={'70px'}
@@ -611,7 +652,7 @@ useEffect(() => {
         </Box>
       )}
       {data && type === 'Interaction' && (
-        <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick}  prevData={prevData}  InteractionFunction={InteractionFunction}  />
+        <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick}  prevData={prevData}  InteractionFunction={InteractionFunction} navTrack={navTrack} />
       )}
       {data && type === 'response' && (
         <Box
@@ -720,7 +761,7 @@ useEffect(() => {
                   w={'70px'}
                   h={'50px'}
                   cursor={'pointer'}
-                  onClick={() => getData(data)}
+                  onClick={() => {setCurrentPosition(0);getDataSection(data)}}
                 />
               </Box>
             </>
