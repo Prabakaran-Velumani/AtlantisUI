@@ -194,9 +194,8 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                         </Text>
                       </Box>
                        <Box w={'20%'} >
-                        <Img src={Selected} className={'select'} mt={'7px'} />
+                        <Img src={Selected} className={'select'} mt={'18%'} />
                       </Box>
-
                       {select && (
                         <Box className="dropdown">
                           {lanuages &&
@@ -292,7 +291,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     className="btns left-btn"
                     bg={'none'}
                     _hover={{ bg: 'none' }}
-                    onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
+                    onClick={() => setCurrentScreenId(10)}
                   ></Button>
                   <Box w={'25%'} position={'relative'}>
                     <input
@@ -312,7 +311,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     className="btns right-btn"
                     bg={'none'}
                     _hover={{ bg: 'none' }}
-                    onClick={() => setI(players.length - 1 === i ? 0 : i + 1)}
+                    onClick={selectPlayerClick}
                   ></Button>
                 </Box>
               </Box>
