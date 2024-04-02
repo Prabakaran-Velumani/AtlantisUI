@@ -33,6 +33,9 @@ const ChapterPage: React.FC<{
   currentQuestNo?: any;
   setCurrentQuestNo?: any;
   gameQuest?: any;
+  setData?: any;
+  setType?: any;
+  setOptions?: any;
 }> = ({
   imageSrc,
   demoBlocks,
@@ -43,7 +46,10 @@ const ChapterPage: React.FC<{
   setCurrentQuestNo,
   gameQuest,
   questState,
-  setQuestState
+  setQuestState,
+  setData,
+  setType,
+  setOptions
 }) => {
     const [questScores, setQuestScores] = useState(null);
 

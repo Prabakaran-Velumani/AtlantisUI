@@ -374,6 +374,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     };
   }, [profile?.currentQuest]);
 
+  console.log('checking', profile);
+
   useEffect(() => {
     if (!gameInfo?.bgMusic) {
       fetchDefaultBgMusic();
@@ -1271,7 +1273,7 @@ const calScore = () =>{
     const voiceId =
       // data?.blockRoll == '999999'
       //   ? voiceIds.NPC :
-      profileData?.gender == 'Male'
+      profileData?.gender === 'Male'
         ? voiceIds?.playerMale
         : voiceIds?.playerFemale;
     getAudioForText(text, voiceId);
@@ -1373,7 +1375,7 @@ const calScore = () =>{
   }, [currentScreenId]);
   useEffect(() => {
     if (reviewInput?.tabId) {
-      if (reviewInput?.tabId == 5) {
+      if (reviewInput?.tabId === 5) {
         setReviewSubTabOptions([]);
         setReviewInput((prev: Review) => ({
           ...prev,
@@ -1382,7 +1384,7 @@ const calScore = () =>{
             Number(currentScreenId),
           ).toString(),
         }));
-      } else if (reviewInput?.tabId == 4) {
+      } else if (reviewInput?.tabId === 4) {
         //for Story Tab
         const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
         setReviewSubTabOptions([]);
@@ -1393,7 +1395,7 @@ const calScore = () =>{
         }));
       } else {
         const subOptions = subTabOptionsForTabIds.find(
-          (item: any) => Object.keys(item)[0] == reviewInput?.tabId.toString(),
+          (item: any) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
         );
         setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
       }
@@ -2002,7 +2004,6 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                 case 5:
                   return (
                     <>
-
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -2236,62 +2237,54 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                               // className={'info_potrait'}
                             >
                               <Img src={Login} className={'first_play'} />
-                              <Box
-                              className={'play_screen_content'}                             
-                              >
-                                  <Box>
-                                    <Box
-                                      w={'100%'}                                     
-                                      display={'flex'}
-                                      justifyContent={'center'}
-                                    >
-                                      <Text
-                                      className={'play_screen_heading'}                                       
-                                      >
-                                        Atlantis
-                                      </Text>
-                                    </Box>
+                              <Box className={'play_screen_content'}>
+                                <Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Text className={'play_screen_heading'}>
+                                      Atlantis
+                                    </Text>
                                   </Box>
-                                  <Box>
-                                    <Box
-                                      w={'100%'}
-                                      display={'flex'}
-                                      justifyContent={'center'}
-                                    >
-                                      <Text
-                                        className={'play_screen_text'}
-                                      >
-                                        Welcome To
-                                      </Text>
-                                    </Box>
-                                    <Box
-                                      w={'100%'}
-                                      display={'flex'}
-                                      justifyContent={'center'}
-                                      mb={{base:0,lg:2}}
-                                    >
-                                      <Text
-                                       className={'play_screen_text'}
-                                      >
-                                        The Demo Play
-                                      </Text>
-                                    </Box>
-                                    <Box
-                                      w={'100%'}
-                                      display={'flex'}
-                                      justifyContent={'center'}
-                                    >
-                                      <Button
-                                        w={'90%'}
-                                        h={{sm:'20px',md:'30px'}}
-                                        bg={'none'}
-                                        _hover={{bg:'none'}}
-                                        onClick={() => {
-                                          setCurrentScreenId(12);
-                                          setIsGetsPlayAudioConfirmation(true);
-                                        }}
-                                      ></Button>
-                                    </Box>
+                                </Box>
+                                <Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Text className={'play_screen_text'}>
+                                      Welcome To
+                                    </Text>
+                                  </Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                    mb={{ base: 0, lg: 2 }}
+                                  >
+                                    <Text className={'play_screen_text'}>
+                                      The Demo Play
+                                    </Text>
+                                  </Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Button
+                                      w={'90%'}
+                                      h={{ sm: '20px', md: '30px' }}
+                                      bg={'none'}
+                                      _hover={{ bg: 'none' }}
+                                      onClick={() => {
+                                        setCurrentScreenId(12);
+                                        setIsGetsPlayAudioConfirmation(true);
+                                      }}
+                                    ></Button>
+                                  </Box>
                                 </Box>
                               </Box>
                             </Box>
@@ -2341,6 +2334,9 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                         demoBlocks={demoBlocks}
                         questOptions={gameInfo?.questOptions}
                         setCurrentScreenId={setCurrentScreenId}
+                        setData={setData}
+                        setType={setType}
+                        setOptions={setOptions}
                         gameQuest={gameInfo?.gameQuest}
                       />
                       {/* </SimpleGrid> */}

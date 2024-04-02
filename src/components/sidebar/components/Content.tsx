@@ -35,14 +35,12 @@ function SidebarContent(props: {
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleLogout = () => {
-    // AuthApi.Logout(user).then((response: any) => {
+  const handleLogout = () => { 
     setUser(null);
     dispatch(logout());
     dispatch(updatePreviewData(null))
     localStorage.removeItem('user')
     navigate('/auth/sign-in/default')
-    // })
   }
 
   useEffect(() => {

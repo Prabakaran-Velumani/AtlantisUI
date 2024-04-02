@@ -111,7 +111,7 @@ function SignIn() {
       setAlert(true);
       return false; 
     } 
-    let valid = {data:result?.data,token:result?.token,role:result?.role};
+    let valid = {data:result?.data,token:result?.token,role:result?.role,expiration:result?.expiration};
     let user = JSON.stringify(valid);
     
     setUser(user);
