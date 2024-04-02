@@ -137,7 +137,7 @@ const LeaderBoard: React.FC<{
       {imageSrc && (       
           <Box className="Leaderboard-screen">
             <Img src={imageSrc} className="leaderboard-img" />
-            <Box className='wrapper'>
+            {/* <Box className='wrapper'> */}
               <Text className='title'>LeaderBoard</Text>
               <Box className="content-box">
                   <Box className="table-heading"
@@ -364,7 +364,7 @@ const LeaderBoard: React.FC<{
                 onClick={() =>homeLeaderBoard ? handleHome() : getData(data)}
               />   
             </Box>       
-          </Box>      
+          // </Box>      
       )}
     </>
   );
