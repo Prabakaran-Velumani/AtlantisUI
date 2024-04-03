@@ -852,6 +852,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
+    console.log('feedback',item)
     setOptionNavigation(item?.qpNextOption);
     setSelectedOption(ind === selectedOption ? null : ind);
 

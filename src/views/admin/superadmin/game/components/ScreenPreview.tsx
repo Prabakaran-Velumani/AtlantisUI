@@ -689,8 +689,8 @@ const ScreenPreview = () => {
                           className={'dialogue_image'}
                           src={preloadedAssets?.dial}
                         />
-                        {!showNote && (
-                          <>
+                        {/* {!showNote && (
+                          <> */}
                             <Box position={'relative'}>
                               <Img
                                 src={preloadedAssets?.char}
@@ -751,8 +751,8 @@ const ScreenPreview = () => {
                                 onClick={() => getData(data)}
                               />
                             </Box>
-                          </>
-                        )}
+                          {/* </>
+                        )} */}
                       </Box>
                       // old dialog ui copy
                       // <Box

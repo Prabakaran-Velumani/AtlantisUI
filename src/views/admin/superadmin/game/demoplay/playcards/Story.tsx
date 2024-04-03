@@ -348,8 +348,8 @@ const Story: React.FC<{
                 transition={{ duration: 0.5 }}
               > */}
           <Img className={'dialogue_image'} src={dial} />
-          {!showNote && (
-            <>
+          {/* {!showNote && (
+            <> */}
               <Box position={'relative'}>
                 <Img
                   src={char}
@@ -411,8 +411,8 @@ const Story: React.FC<{
                   onClick={() => getData(data)}
                 />
               </Box>
-            </>
-          )}
+            {/* </>
+          )} */}
               {/* </motion.div> */}
         </Box>
       )}
@@ -590,8 +590,8 @@ const Story: React.FC<{
             />
           )}
           <Img className={'dialogue_image'} src={dial} />
-          {!showNote && (
-            <>
+          {/* {!showNote && (
+            <> */}
               <Box position={'relative'}>
                 <Img
                   src={char}
@@ -652,8 +652,8 @@ const Story: React.FC<{
                   onClick={() => getData(data)}
                 />
               </Box>
-            </>
-          )}
+            {/* </>
+          )} */}
         </Box>
       )}
       {data && type === 'feedback' && (
