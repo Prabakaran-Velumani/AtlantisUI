@@ -1079,6 +1079,25 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
+        if (demoBlocks.hasOwnProperty(nextLevel)) {
+          setProfile((prev: any) => {
+            const data = { ...prev };
+            data.completedLevels = [...data.completedLevels, nextLevel];
+            return data;
+          });
+          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+          setData(demoBlocks[nextLevel]['1']);
+          setFeedbackNavigateNext(false);
+          setCurrentScreenId(6);
+          return false;
+        }
+        else{
+          setType(null);
+          setData(null);
+          setCurrentScreenId(6);
+          return false;
+        }
+        /*
         setProfile((prev: any) => {
           const data = { ...prev };
           data.completedLevels = [...data?.completedLevels, nextLevel];
@@ -1086,7 +1105,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         });
         setFeedbackNavigateNext(false);
         setCurrentScreenId(13);
-        return false;
+        return false;*/
       }
     }
     setType(nextBlock[0]?.blockChoosen);
@@ -1420,7 +1439,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
   const handleOverView = () => {
     setHomeLeaderBoard(true);
-    setCurrentScreenId(4);
+    // setCurrentScreenId(4);
+    setCurrentScreenId(1)
   };
 
   useEffect(() => {
@@ -1871,6 +1891,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         questState={questState}
                         setQuestState={setQuestState}
                         data={data}
+                        type={type}
+                        setType= {setType}
+                        setData={setData}
                         setFeedbackNavigateNext={setFeedbackNavigateNext}
                         getFeedbackData={getFeedbackData}
                         gameInfo={gameInfo}
@@ -2131,7 +2154,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                                       bg={'none'}
                                       _hover={{ bg: 'none' }}
                                       onClick={() => {
-                                        setCurrentScreenId(12);
+                                        // setCurrentScreenId(12);
+                                        setCurrentScreenId(1);
                                         setIsGetsPlayAudioConfirmation(true);
                                       }}
                                     ></Button>

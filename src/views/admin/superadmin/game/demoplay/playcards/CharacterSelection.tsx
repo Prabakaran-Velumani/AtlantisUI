@@ -142,10 +142,15 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 
   const selectPlayerClick = () => {
     setSelectedPlayer(players[i]);
+    if(playerInfo.name=== '')
+    {
+      setProfileData((prev:any)=>({...prev,name:'Guest'}));
+    }
     if (Object.keys(demoBlocks).length > 1) {
       setCurrentScreenId(13);
     } else {
-      setCurrentScreenId(1);
+      // setCurrentScreenId(1);
+      setCurrentScreenId(2);
     }
   };
 
@@ -333,7 +338,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                   onClick={() => setI(i === 0 ? players.length - 1 : i - 1)}
                 ></Button>
                 <Box w={'25%'} position={'relative'}>
-                  <input className="player_name" placeholder={'Enter Your Name'} value={playerInfo.name} onChange={(e:any)=>setProfileData((prev:any)=>({...prev,name:e.target.value}))}/>                 
+                  <input className="player_name"  value={playerInfo.name ? playerInfo.name: 'Guest'} onChange={(e:any)=>setProfileData((prev:any)=>({...prev,name:e.target.value}))}/>                 
                 </Box>
                 <Button
                   className="btns right-btn"

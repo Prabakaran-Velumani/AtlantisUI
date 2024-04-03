@@ -96,63 +96,54 @@ const ChapterPage: React.FC<{
       gameQuest.map((item: any, index: number) => {
         const questNoAsString = item.gameQuestNo.toString();
         if (profile.completedLevels.includes(questNoAsString)) {
+          const scores = profile?.score;
+
+          const sums: any = {};
+          scores.forEach((score: any) => {
+            const quest = score.quest;
+            if (!sums[quest]) {
+              sums[quest] = 0;
+            }
+            sums[quest] += score.score;
+          });
+          const getFinalscores = Object.entries(sums).map(([quest, score]) => ({ quest, score }));
+          const getscores = getFinalscores.find((row: any) => row.quest == item.gameQuestNo);
+          const finalscore = getscores?.score;
           if (formData?.gameDisableOptionalReplays === 'false') {
             if (item?.gameIsSetMinPassScore === 'true') {
-
               const getminpassscore = item?.gameMinScore;
-              const scores = profile?.score;
-
-              const sums: any = {};
-              scores.forEach((score: any) => {
-                const quest = score.quest;
-                if (!sums[quest]) {
-                  sums[quest] = 0;
-                }
-                sums[quest] += score.score;
-              });
-              const getFinalscores = Object.entries(sums).map(([quest, score]) => ({ quest, score }));
-              const getscores = getFinalscores.find((row: any) => row.quest == item.gameQuestNo);
-              const finalscore = getscores?.score;
               if (finalscore >= getminpassscore && finalscore < item?.gameDistinctionScore) {
-
                 setQuestState((prevquestdataList: any) => ({
                   ...prevquestdataList,
                   [item.gameQuestNo]: 'replayallowed'
-
                 }));
-
               } else {
                 setQuestState((prevquestdataList: any) => ({
                   ...prevquestdataList,
                   [item.gameQuestNo]: 'Started'
-
                 }));
               }
             }
             else {
-              setQuestState((prevquestdataList: any) => ({
+              // console.log('finalscore',finalscore)
+              if(finalscore !== undefined)
+              {
+                setQuestState((prevquestdataList: any) => ({
                 ...prevquestdataList,
-                [item.gameQuestNo]: 'replayallowed'
-
-              }));
-
+                [item.gameQuestNo]: 'completed'
+               }));
+              }
+              else
+              {
+                setQuestState((prevquestdataList: any) => ({
+                  ...prevquestdataList,
+                  [item.gameQuestNo]: 'Started'
+  
+                 }));
+              }
             }
           }
           else {
-
-            const scores = profile?.score;
-
-            const sums: any = {};
-            scores.forEach((score: any) => {
-              const quest = score.quest;
-              if (!sums[quest]) {
-                sums[quest] = 0;
-              }
-              sums[quest] += score.score;
-            });
-            const getFinalscores = Object.entries(sums).map(([quest, score]) => ({ quest, score }));
-            const getscores = getFinalscores.find((row: any) => row.quest == item.gameQuestNo);
-            const finalscore = getscores?.score;
             if (finalscore !== undefined) {
               setQuestState((prevquestdataList: any) => ({
                 ...prevquestdataList,
@@ -185,7 +176,7 @@ const ChapterPage: React.FC<{
 
 
     }, [profile]);
-
+// console.log('questState',questState)
     const handleChapter = (it: any) => {
       const Completionpage = Object.entries(questState).map(([questId, status]) => ({ questId, status }));
       const OpenStraigntCompletionPage = Completionpage.find((row: any) => row.questId === it && row.status === 'completed');
@@ -199,7 +190,8 @@ const ChapterPage: React.FC<{
       }
       else {
         if (profile.completedLevels.includes(it)) {
-          setCurrentScreenId(1);
+          // setCurrentScreenId(1);
+          setCurrentScreenId(2);
           setProfile((prev: any) => ({
             ...prev,
             currentQuest: it,

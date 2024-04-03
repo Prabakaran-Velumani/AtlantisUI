@@ -16,7 +16,10 @@ const Completion: React.FC<{
   CompKeyCount?: any;
   preview?: any;
   questState: any;
+  setType: any;
+  setData:any;
   setQuestState: any;
+  type:any
   getFeedbackData: any;
   setCurrentScreenId?: any;
   getData?: any;
@@ -36,6 +39,9 @@ const Completion: React.FC<{
   formData,
   imageSrc,
   gameInfo,
+  setType,
+  setData,
+  type,
   questState,
   setQuestState,
   compliData,
@@ -152,6 +158,7 @@ const Completion: React.FC<{
       })
       const Completionpage = Object.entries(questState).map(([questId, status]) => ({ questId, status }));
       const OpenStraigntCompletionPage = Completionpage.find((row: any) => row.questId === profile?.currentQuest && row.status === 'completed');
+      // console.log('OpenStraigntCompletionPage',OpenStraigntCompletionPage ,'gameInfo?.gameData?.gameIsShowInteractionFeedBack',gameInfo?.gameData?.gameIsShowInteractionFeedBack ,'gameInfo?.gameData?.gameIsShowLeaderboard',gameInfo?.gameData?.gameIsShowLeaderboard ,'haveNextQuest',haveNextQuest,'currentGameData?.gameIsSetMinPassScore',currentGameData?.gameIsSetMinPassScore);
       if (OpenStraigntCompletionPage !== undefined) {
         setCurrentScreenId(13);
       }
@@ -192,6 +199,52 @@ const Completion: React.FC<{
 
               setCurrentScreenId(8);
               //set to prompt it for replay the game
+            }
+          }
+          else if(data && type)
+          {
+            setCurrentScreenId(13);
+            return false;
+          }
+          else
+          {
+            if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+              setCurrentScreenId(3);
+              return false;
+            } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+              setCurrentScreenId(7);
+              return false;
+            }
+            else{
+              setType(null);
+              setData(null);
+              setCurrentScreenId(5);
+              return false;
+            }
+          }
+          
+        }
+        else
+        {
+          if(data && type)
+          {
+            setCurrentScreenId(13);
+            return false;
+          }
+          else
+          {
+            if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
+              setCurrentScreenId(3);
+              return false;
+            } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+              setCurrentScreenId(7);
+              return false;
+            }
+            else{
+              setType(null);
+              setData(null);
+              setCurrentScreenId(5);
+              return false;
             }
           }
         }
