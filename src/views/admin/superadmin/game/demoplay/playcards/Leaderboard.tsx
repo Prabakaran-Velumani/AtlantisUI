@@ -119,7 +119,6 @@ const LeaderBoard: React.FC<{
     ///Using unShift-ends - AllTimeScore
 
     ///Afrith-modified-ends-09/Mar/24
-
   const handleHome = () =>{
     console.log('handleHome')
     if(homeLeaderBoard)
@@ -147,6 +146,7 @@ const LeaderBoard: React.FC<{
       console.log('gameinfo is not not null')
   }
   }
+  console.log('imageSrc',imageSrc)
   return (
     <>
       {imageSrc && (       
