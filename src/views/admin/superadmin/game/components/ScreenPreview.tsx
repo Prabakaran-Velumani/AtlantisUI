@@ -77,6 +77,7 @@ const ScreenPreview = () => {
   const [demoBlocks, setDemoBlocks] = useState(null);
   const [navi, setNavi] = useState<string>('');
   const [options, setOptions] = useState(null);
+  const [blink, setBlink] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [showNote, setShowNote] = useState(false),
     [first, setFirst] = useState(false);
@@ -97,6 +98,13 @@ const ScreenPreview = () => {
     ref3: "What's one thing you learned about your mindset?",
     ref4: "What's one thing you are committing to change?",
   });
+  useEffect(() => {
+    const blinkInterval = setInterval(() => {
+      setBlink((prevBlink) => !prevBlink);
+    }, 3000); 
+
+    return () => clearInterval(blinkInterval);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -690,13 +698,13 @@ const ScreenPreview = () => {
                                 h={'100px'}
                                 w={'30%'}
                                 left={'5%'}
-                                bottom={'93px'}
+                                bottom={'105px'}
                               />
                               <Text
                                 position={'fixed'}
                                 left={{ base: '17%', md: '18%' }}
-                                bottom={'118px'}
-                                fontSize={{ base: '30px', xl: '2.2vw' }}
+                                bottom={'130px'}
+                                fontSize={{ base: '30px', xl: '2vw' }}
                                 fontWeight={500}
                                 textAlign={'center'}
                                 fontFamily={'AtlantisText'}
@@ -715,7 +723,7 @@ const ScreenPreview = () => {
                               h={'61px'}
                               overflowY={'scroll'}
                               w={'85%'}
-                              fontSize={{ base: '30px', lg: '1.8vw' }}
+                              fontSize={{ base: '19px', lg: '1.8vw' }}
                               bottom={'38px'}
                               fontFamily={'AtlantisContent'}
                             >
@@ -971,11 +979,13 @@ const ScreenPreview = () => {
                                     // onClick={() => prevData(data)}
                                   />
                                   {selectedOption !== null && (
+                                    <Box  className={`blinking-wave ${blink ? 'blink' : ''}`}>
                                     <Img
                                       src={preloadedAssets?.right}
                                       className={'interaction_button'}
                                       onClick={() => getData(data)}
                                     />
+                                    </Box>
                                   )}
                                 </Box>
                               </Box>

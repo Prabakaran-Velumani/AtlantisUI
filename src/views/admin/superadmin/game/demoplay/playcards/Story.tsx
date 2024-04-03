@@ -93,6 +93,15 @@ const Story: React.FC<{
   const userProfile = useContext(ProfileContext);
   const { profile, setProfile } = useContext(ScoreContext);
   const [score, setScore] = useState<any>({ seqId: '', score: null });
+  // const [blink, setBlink] = useState(false);
+  // useEffect(() => {
+
+  //   const blinkInterval = setInterval(() => {
+  //     setBlink(false);
+  //   }, 3000); 
+
+  //   return () => clearInterval(blinkInterval);
+  // }, []);
   useEffect(() => {
     getVoice(data, type);
     setShowNote(true);
@@ -249,35 +258,41 @@ const Story: React.FC<{
             className="story_note_grid"
           >
             <GridItem colSpan={1} position={'relative'}>
-              <Box display={'flex'} justifyContent={'center'}>
-                <Img src={note} className="story_note_image" loading="lazy" />
-                <Box
-                  className={'story_note_content'}
-                  // bg={'blue.300'}
-                >
-                  <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                    <Box className={'story_note_block'}>
-                      <Text textAlign={'center'}>{data?.blockText}</Text>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Box display={'flex'} justifyContent={'center'}>
+                  <Img src={note} className="story_note_image" loading="lazy" />
+                  <Box
+                    className={'story_note_content'}
+                    // bg={'blue.300'}
+                  >
+                    <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                      <Box className={'story_note_block'}>
+                        <Text textAlign={'center'}>{data?.blockText}</Text>
+                      </Box>
+                    </Box>
+                    <Box
+                      w={'100%'}
+                      onClick={() => getData(data)}
+                      mt={'20px'}
+                      display={'flex'}
+                      justifyContent={'center'}
+                      cursor={'pointer'}
+                      position={'fixed'}
+                      top={'70%'}
+                    >
+                      <Img
+                        src={next}
+                        h={'7vh'}
+                        className={'story_note_next_button'}
+                      />
                     </Box>
                   </Box>
-                  <Box
-                    w={'100%'}
-                    onClick={() => getData(data)}
-                    mt={'20px'}
-                    display={'flex'}
-                    justifyContent={'center'}
-                    cursor={'pointer'}
-                    position={'fixed'}
-                    top={'70%'}
-                  >
-                    <Img
-                      src={next}
-                      h={'7vh'}
-                      className={'story_note_next_button'}
-                    />
-                  </Box>
                 </Box>
-              </Box>
+              </motion.div>
             </GridItem>
           </Grid>
         </Box>
@@ -327,6 +342,11 @@ const Story: React.FC<{
               h={'324px'}
             />
           )}
+           {/* <motion.div
+                initial={{ opacity: 0, x: 200 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              > */}
           <Img className={'dialogue_image'} src={dial} />
           {!showNote && (
             <>
@@ -337,12 +357,12 @@ const Story: React.FC<{
                   h={'100px'}
                   w={'30%'}
                   left={'5%'}
-                  bottom={'93px'}
+                  bottom={'105px'}
                 />
                 <Text
                   position={'fixed'}
                   left={'18%'}
-                  bottom={'118px'}
+                  bottom={'130px'}
                   fontSize={{ base: '30px', xl: '2.2vw' }}
                   fontWeight={500}
                   textAlign={'center'}
@@ -360,6 +380,7 @@ const Story: React.FC<{
                 alignItems={'center'}
                 justifyContent={'space-between'}
                 h={'61px'}
+               
                 overflowY={'scroll'}
                 w={'85%'}
                 fontSize={{ base: '30px', lg: '1.8vw' }}
@@ -392,6 +413,7 @@ const Story: React.FC<{
               </Box>
             </>
           )}
+              {/* </motion.div> */}
         </Box>
       )}
       {data && type === 'Interaction' && (
@@ -414,6 +436,11 @@ const Story: React.FC<{
             w={'90%'}
           >
             <GridItem colSpan={1} position={'relative'}>
+            <motion.div
+                initial={{ opacity: 0, x: -100 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+              >
               <Box position={'relative'} className="story_interaction_image">
                 <Img src={parch} w={'auto'} h={'100%'} loading="lazy" />
                 <Box
@@ -452,9 +479,7 @@ const Story: React.FC<{
                     overflowY={'scroll'}
                     marginTop={'15px'}
                   >
-                    <Box
-                      className={'story_intraction_question'}
-                    >
+                    <Box className={'story_intraction_question'}>
                       {data?.blockText}
                     </Box>
                   </Box>
@@ -486,10 +511,7 @@ const Story: React.FC<{
                               h={'4vh'}
                               w={'100%'}
                             />
-                            <Box
-                            
-                              className={'story_interaction_option'}
-                            >
+                            <Box className={'story_interaction_option'}>
                               {item?.qpOptionText}
                             </Box>
                           </Box>
@@ -507,15 +529,17 @@ const Story: React.FC<{
                       onClick={() => prevData(data)}
                     />
                     {option !== null && (
+                       <Box  className={'blinking-wave'} onClick={() => InteractionFunction()} borderRadius={'50%'}>
                       <Img
                         src={right}
-                        className={'interaction_button'}
-                        onClick={() => InteractionFunction()}
+                        className={'interaction_button'}                       
                       />
+                      </Box>
                     )}
                   </Box>
                 </Box>
               </Box>
+              </motion.div>
             </GridItem>
           </Grid>
         </Box>
@@ -575,12 +599,12 @@ const Story: React.FC<{
                   h={'100px'}
                   w={'30%'}
                   left={'5%'}
-                  bottom={'93px'}
+                  bottom={'105px'}
                 />
                 <Text
                   position={'fixed'}
                   left={'18%'}
-                  bottom={'118px'}
+                  bottom={'130px'}
                   fontSize={{ base: '30px', xl: '2.2vw' }}
                   fontWeight={500}
                   textAlign={'center'}

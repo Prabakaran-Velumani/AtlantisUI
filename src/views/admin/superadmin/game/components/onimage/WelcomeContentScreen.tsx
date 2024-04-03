@@ -379,7 +379,7 @@ const WelcomeContentScreen: React.FC<{
       ) : (
         <Box className="welcome-screen">
           <Box className="welcome-screen-box">
-            <Img src={imageSrc} className=" welcome-pad" />
+            <Img src={imageSrc} className="welcome-pad" />
           </Box>
           <Box className='top-title'>
             <Text
