@@ -139,6 +139,7 @@ const Completion: React.FC<{
     };
     fetchDatass();
   }, []);
+  console.log('completion',data);
   // const nextNavigation = (data:any)=>{
 
   //   const currentQuest = data?.blockPrimarySequence.split('.')[0]?? null;

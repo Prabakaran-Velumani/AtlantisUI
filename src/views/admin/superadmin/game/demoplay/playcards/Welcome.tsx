@@ -488,7 +488,7 @@ const Welcome: React.FC<{
                      h={'7vh'}
                      className={'next_potrait'}
                      src={next}
-                     onClick={() => setCurrentScreenId(2)}
+                     onClick={() => setCurrentScreenId(12)}
                    />
                  </Box>
                </Box>

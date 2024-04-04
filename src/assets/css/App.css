@@ -789,7 +789,7 @@ font-family: 'AtlantisText';
   top: 0;
   right: 14%;
   z-index: 999;
-  height: 45px;
+  height: 10vh;
   width: 9%;
   transform: translate(8%, 34%);
   display: flex;
@@ -798,7 +798,7 @@ font-family: 'AtlantisText';
 }
 
 .top-menu-home-section .score-box .text {
-  font-size: 36px;
+  font-size: 5vh;
   font-family: 'Score';
   color: var(--text-color);
   transform: translateY(-4px);
@@ -3514,7 +3514,7 @@ text-transform: capitalize;
 
 .play_screen_content{
   width: calc(90vh - 49vh);
-  height: calc(90vh - 42vh);
+  height: calc(90vh - 45vh);
   position: absolute;
   top: 25%;
   display: flex;
@@ -3527,6 +3527,7 @@ text-transform: capitalize;
   width: 60%;
   letter-spacing: 1px;
   font-size: 4.5vh;
+  display: flex;
 }
 
 .story_interaction_option{
@@ -3619,7 +3620,7 @@ font-size: 4vh
   }
   .play_screen_content{
     width: calc(90vw - 49vw);
-    height: calc(90vw - 42vw);
+    height: calc(90vw - 45vw);
   }
   .interaction_heading_potrait{
     font-size: 3.5vh !important;

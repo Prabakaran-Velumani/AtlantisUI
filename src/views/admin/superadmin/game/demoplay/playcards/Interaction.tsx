@@ -1,10 +1,6 @@
 import React from 'react'
 import { Box, Grid, GridItem, Img, Text } from '@chakra-ui/react';
-import right from 'assets/img/games/right.png';
-import left from 'assets/img/games/left.png';
-import parch from 'assets/img/games/parch.png';
-import on from 'assets/img/games/on.png';
-import off from 'assets/img/games/off.png';
+import { API_SERVER } from 'config/constant';
 
 interface InteractionProps{
     backGroundImg: any;
@@ -16,12 +12,13 @@ interface InteractionProps{
     option: any;
     isScreenshot?: boolean;
     navTrack?:any;
+    preloadedAssets: any;
+    selectedPlayer :any;
 }
 
-const  Interaction :  React.FC<InteractionProps> = ({backGroundImg,data,option, options,optionClick, prevData, InteractionFunction, isScreenshot,navTrack })=> {
+const  Interaction :  React.FC<InteractionProps> = ({backGroundImg,data,option, options,optionClick, prevData, InteractionFunction, isScreenshot,navTrack,preloadedAssets,selectedPlayer })=> {
 
   return (
-
     <Box
     position="relative"
     w={'100%'}
@@ -42,11 +39,32 @@ const  Interaction :  React.FC<InteractionProps> = ({backGroundImg,data,option, 
     >
       <GridItem colSpan={1} position={'relative'}>
         <Box position={'relative'} className="story_interaction_image">
-          <Img src={parch} w={'auto'} h={'100%'} loading="lazy" />
+        {selectedPlayer && (
+            <Img
+              src={`${API_SERVER}/${selectedPlayer}`}
+              position={'fixed'}
+              right={'100px'}
+              bottom={'-20px'}
+              w={'350px'}
+              h={'540px'}
+              loading="lazy"
+            />
+          )}
+          {preloadedAssets?.nonplayerImage && (
+            <Img
+              src={preloadedAssets?.nonplayerImage}
+              position={'fixed'}
+              right={'500px'}
+              bottom={'-20px'}
+              w={'350px'}
+              h={'540px'}
+              loading="lazy"
+            />
+          )}
+          <Img src={preloadedAssets.parch} w={'auto'} h={'100%'} loading="lazy" />
           <Box
             position={'absolute'}
             top={{ base: '5%', md: '6%' }}
-            // h={'80% !important'}
             className="story_interaction_content"
           >
              <Box
@@ -81,7 +99,13 @@ const  Interaction :  React.FC<InteractionProps> = ({backGroundImg,data,option, 
                   >
                     <Box
                       className={'story_intraction_question'}
+                      justifyContent={'flex-start'}
                     >
+                       <Img
+                        src={preloadedAssets.qs}
+                        h={'1em'}
+                        w={'1em'}
+                      />
                 {data?.blockText}
               </Box>
             </Box>
@@ -109,7 +133,7 @@ const  Interaction :  React.FC<InteractionProps> = ({backGroundImg,data,option, 
                       fontFamily={'AtlantisText'}
                     >
                       <Img
-                        src={option === ind ? on : off}
+                        src={option === ind ? preloadedAssets.on : preloadedAssets.off}
                         h={'4vh'}
                         w={'100%'}
                       />
@@ -127,13 +151,13 @@ const  Interaction :  React.FC<InteractionProps> = ({backGroundImg,data,option, 
             >
             {navTrack.length > 1 &&
               <Img
-                src={left}
+                src={preloadedAssets.left}
                 className={'interaction_button'}
                 onClick={() => prevData(data)}
               />}
               {option !== null && (
                 <Img
-                  src={right}
+                  src={preloadedAssets.right}
                   className={'interaction_button'}
                   onClick={() => InteractionFunction()}
                 />

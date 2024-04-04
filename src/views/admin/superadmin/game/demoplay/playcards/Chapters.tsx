@@ -36,6 +36,7 @@ const ChapterPage: React.FC<{
   setData?: any;
   setType?: any;
   setOptions?: any;
+  setFeedbackList?:any;
 }> = ({
   imageSrc,
   demoBlocks,
@@ -49,7 +50,8 @@ const ChapterPage: React.FC<{
   setQuestState,
   setData,
   setType,
-  setOptions
+  setOptions,
+  setFeedbackList
 }) => {
     const [questScores, setQuestScores] = useState(null);
 
@@ -102,23 +104,24 @@ const ChapterPage: React.FC<{
       gameQuest.map((item: any, index: number) => {
         const questNoAsString = item.gameQuestNo.toString();
         if (profile.completedLevels.includes(questNoAsString)) {
+          const scores = profile?.score;
+
+          const sums: any = {};
+          scores.forEach((score: any) => {
+            const quest = score.quest;
+            if (!sums[quest]) {
+              sums[quest] = 0;
+            }
+            sums[quest] += score.score;
+          });
+          const getFinalscores = Object.entries(sums).map(([quest, score]) => ({ quest, score }));
+          const getscores = getFinalscores.find((row: any) => row.quest == item.gameQuestNo);
+          const finalscore = getscores?.score;
           if (formData?.gameDisableOptionalReplays === 'false') {
             if (item?.gameIsSetMinPassScore === 'true') {
 
               const getminpassscore = item?.gameMinScore;
-              const scores = profile?.score;
-
-              const sums: any = {};
-              scores.forEach((score: any) => {
-                const quest = score.quest;
-                if (!sums[quest]) {
-                  sums[quest] = 0;
-                }
-                sums[quest] += score.score;
-              });
-              const getFinalscores = Object.entries(sums).map(([quest, score]) => ({ quest, score }));
-              const getscores = getFinalscores.find((row: any) => row.quest == item.gameQuestNo);
-              const finalscore = getscores?.score;
+              console.log('finalscore >= getminpassscore && finalscore < item?.gameDistinctionScore',finalscore >= getminpassscore ,'....',finalscore < item?.gameDistinctionScore ,'finalscore',finalscore)
               if (finalscore >= getminpassscore && finalscore < item?.gameDistinctionScore) {
 
                 setQuestState((prevquestdataList: any) => ({
@@ -128,37 +131,55 @@ const ChapterPage: React.FC<{
                 }));
 
               } else {
-                setQuestState((prevquestdataList: any) => ({
+                if(finalscore !== undefined)
+                {
+                  setQuestState((prevquestdataList: any) => ({
                   ...prevquestdataList,
-                  [item.gameQuestNo]: 'Started'
-
-                }));
+                  [item.gameQuestNo]: 'replayallowed'
+                 }));
+                 return false;
+                }
+                else
+                {
+                  setQuestState((prevquestdataList: any) => ({
+                    ...prevquestdataList,
+                    [item.gameQuestNo]: 'Started'
+    
+                   }));
+                   return false;
+                }
+  
+                
               }
             }
             else {
-              setQuestState((prevquestdataList: any) => ({
-                ...prevquestdataList,
-                [item.gameQuestNo]: 'replayallowed'
+              // setQuestState((prevquestdataList: any) => ({
+              //   ...prevquestdataList,
+              //   [item.gameQuestNo]: 'replayallowed'
+              // }));
 
-              }));
+              if(finalscore !== undefined)
+              {
+                setQuestState((prevquestdataList: any) => ({
+                ...prevquestdataList,
+                [item.gameQuestNo]: 'completed'
+               }));
+               return false;
+              }
+              else
+              {
+                setQuestState((prevquestdataList: any) => ({
+                  ...prevquestdataList,
+                  [item.gameQuestNo]: 'Started'
+  
+                 }));
+                 return false;
+              }
 
             }
           }
           else {
-
-            const scores = profile?.score;
-
-            const sums: any = {};
-            scores.forEach((score: any) => {
-              const quest = score.quest;
-              if (!sums[quest]) {
-                sums[quest] = 0;
-              }
-              sums[quest] += score.score;
-            });
-            const getFinalscores = Object.entries(sums).map(([quest, score]) => ({ quest, score }));
-            const getscores = getFinalscores.find((row: any) => row.quest == item.gameQuestNo);
-            const finalscore = getscores?.score;
+//Mandatory replay, even though formData?.gameDisableOptionalReplays is false, could allow when the min scroe is not set, or if has min score, then score less than minscore, it could navaigate to replay point
             if (finalscore !== undefined) {
               setQuestState((prevquestdataList: any) => ({
                 ...prevquestdataList,
@@ -174,11 +195,9 @@ const ChapterPage: React.FC<{
 
               }));
             }
-
           }
         }
         else {
-
           setQuestState((prevquestdataList: any) => ({
             ...prevquestdataList,
             [item.gameQuestNo]: 'locked'
@@ -193,19 +212,23 @@ const ChapterPage: React.FC<{
       const OpenStraigntCompletionPage = Completionpage.find((row: any) => row.questId === it && row.status === 'completed');
 
       if (OpenStraigntCompletionPage !== undefined) {
-        setCurrentScreenId(6);
         setProfile((prev: any) => ({
           ...prev,
           currentQuest: it,
         }));
+        setFeedbackList([]);
+        setCurrentScreenId(6);
       }
       else {
         if (profile.completedLevels.includes(it)) {
-          setCurrentScreenId(2);
+          setType(demoBlocks[it]['1']?.blockChoosen);
+          setData(demoBlocks[it]['1']);
+          setFeedbackList([]);
           setProfile((prev: any) => ({
             ...prev,
             currentQuest: it,
           }));
+          setCurrentScreenId(2);
         }
       }
     };
@@ -230,6 +253,7 @@ const ChapterPage: React.FC<{
         opacity: 1,
       },
     };
+    console.log('queststate',questState);
     return (
       <>
         <Box

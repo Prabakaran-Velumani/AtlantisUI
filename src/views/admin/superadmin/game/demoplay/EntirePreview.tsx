@@ -38,21 +38,6 @@ import {
   Grid,
   Stack,
 } from '@chakra-ui/react';
-import next from 'assets/img/screens/next.png';
-import Screen2 from 'assets/img/screens/screen2.png';
-import Screen5 from 'assets/img/screens/screen5.png';
-import Screen1 from 'assets/img/screens/screen1.png';
-import Replay from 'assets/img/screens/Replay.png';
-import Lead from 'assets/img/screens/Leaderboard.png';
-import Login from 'assets/img/games/log_non.png';
-import TopMenu from 'assets/img/games/top-menu.png';
-import Overview from 'assets/img/games/game-overview.png';
-import Setting from 'assets/img/games/settings.png';
-import SettingPad from 'assets/img/games/setting-pad.png';
-import SliderPointer from 'assets/img/games/slider-pointer.png';
-import Okay from 'assets/img/games/OKAY button.png';
-import TooltipImg from 'assets/img/games/tooltip-1.png';
-import TopMenuNDI from 'assets/img/games/top-menu-parts/top-menu-NDI.png';
 
 import { motion } from 'framer-motion';
 import React, {
@@ -75,20 +60,14 @@ import { AiFillMessage } from 'react-icons/ai';
 import Story from './playcards/Story';
 import Welcome from './playcards/Welcome';
 import ThankYou from './playcards/Thankyou';
-// import Screen6 from 'assets/img/screens/screen6.png';
-import Screen6 from 'assets/img/games/thankyou.png';
+import Overview from './playcards/Overview';
 import Reflection from './playcards/Reflection';
-
-import RefScreen1 from 'assets/img/screens/refscreen1.png';
 import Takeway from './playcards/Takeaway';
-import Screen4 from 'assets/img/screens/screen4.png';
 import Completion from './playcards/Completion';
 import ReplayGame from './playcards/ReplayGame';
-import { API_SERVER } from 'config/constant';
 import { getTestAudios } from 'utils/game/gameService';
 import PlayInfo from './playcards/playinfo';
 import LeaderBoard from './playcards/Leaderboard';
-import RefBg from 'assets/img/games/refbg.png';
 import { MdClose } from 'react-icons/md';
 import ProfileScreen from './playcards/ProfileScreen';
 import Characterspage from './playcards/CharacterSelection';
@@ -100,7 +79,7 @@ import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
-// import { isMobile } from 'react-device-detect';
+
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
@@ -326,7 +305,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   useEffect(() => {
-
+    console.log('profile?.currentQuest',profile?.currentQuest)
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
     setData(gameInfo?.blocks[profile?.currentQuest]['1']);
@@ -373,8 +352,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [profile?.currentQuest]);
-
-  console.log('checking', profile);
 
   useEffect(() => {
     if (!gameInfo?.bgMusic) {
@@ -485,17 +462,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
          const currentQuest = current
            ? parseInt(current?.blockPrimarySequence.split('.')[0])
            : null;
-           setCurrentQuestNo(currentQuest);
-           console.log('newTrackSequence', newTrackSequence)
-           
+           setCurrentQuestNo(currentQuest);          
          if (
            prevBlock.length !== 0 &&
            prevBlock[0]?.blockChoosen !== 'Interaction'
            ) {
            /*** Handle the previous track */
-             const removedElement = navTrack.pop();
-             console.log('removedElement',removedElement)
-           
+             const removedElement = navTrack.pop();          
             setNavTrack(navTrack);
            /*** End of Handle the previous track */
      
@@ -512,6 +485,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const getData = (next: any) => {
+    console.log('getData currentQuest', currentQuestNo);
+    
     setIsPrevNavigation(false);
   
 /**** Start Replacing code */
@@ -539,6 +514,9 @@ const currentBlock = next
   : null;
 
 //get the next block details
+// const currentQuest = currentQuestNo
+// const quest = currentQuestNo
+
 const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
 const NextItem = currentBlock != null ? currentBlock + 1 : null;
 
@@ -551,6 +529,7 @@ const currentQuest = next
   ? parseInt(next?.blockPrimarySequence.split('.')[0])
   : null;
 setCurrentQuestNo(currentQuest);
+
 setGame3Position((prev: any) => ({
   ...prev,
   previousBlock: next?.blockPrimarySequence,
@@ -614,6 +593,7 @@ if (
   type === 'response' ||
   type === 'feedback'
 ) {
+  console.log('navi', navi);
   if (navi === 'Repeat Question') {
     const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
     setInteractionOptions(gameInfo, currentBlockinteraction);
@@ -675,7 +655,8 @@ if (
     // setNavTrack([selectedNext[0]?.blockPrimarySequence])
     return false;
   }
-  else {    
+  else {  
+    console.log('selectedNext.lenght <= 0', true)  
     setType(nextBlock[0]?.blockChoosen);
     if(nextBlock[0]?.blockChoosen === 'Interaction')
     {
@@ -702,26 +683,26 @@ if (
       nextBlock: nextBlock[0]?.blockPrimarySequence,
     }));
     setSelectedOption(null);
-    // prevTrack.push(nextBlock[0]?.blockPrimarySequence);
-    // setNavTrack([nextBlock[0]?.blockPrimarySequence])
     return false;
   }
   } else if (navi === 'Complete') {
+    console.log('demoBlocks.hasOwnProperty(nextLevel)', demoBlocks.hasOwnProperty(nextLevel));
+    
     if (demoBlocks.hasOwnProperty(nextLevel)) {
       setProfile((prev: any) => {
         const data = { ...prev };
         data.completedLevels = [...data.completedLevels, nextLevel];
         return data;
       });
+      
       setType(demoBlocks[nextLevel]['1']?.blockChoosen);
       setData(demoBlocks[nextLevel]['1']);
       setCurrentScreenId(6);
       return false;
     } else {
+      setCurrentScreenId(6);
       setType(null);
       setData(null);
-      setCurrentScreenId(6);
-      // setNavTrack([])
       return false;
     }
   } else {
@@ -794,7 +775,7 @@ if (
           return false;
         }
         else if(gameInfo.gameData?.gameIsShowTakeaway == true){
-          setCurrentScreenId(7);//Navigate to Reflection screen
+          setCurrentScreenId(7);//Navigate to takeaway screen
           return false;
         }
         else{
@@ -1204,7 +1185,27 @@ if (
         }));
         setSelectedOption(null);
         return false;
-      } else if (next?.blockShowNavigate === 'Complete') {
+      } 
+      else if (next?.blockShowNavigate === 'Complete') {
+        if (demoBlocks.hasOwnProperty(nextLevel)) {
+          setProfile((prev: any) => {
+            const data = { ...prev };
+            data.completedLevels = [...data.completedLevels, nextLevel];
+            return data;
+          });
+          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+          setData(demoBlocks[nextLevel]['1']);
+          setFeedbackNavigateNext(false);
+          setCurrentScreenId(6);
+          return false;
+        }
+        else{
+          setType(null);
+          setData(null);
+          setCurrentScreenId(6);
+          return false;
+        }
+        /*
         setProfile((prev: any) => {
           const data = { ...prev };
           data.completedLevels = [...data?.completedLevels, nextLevel];
@@ -1212,13 +1213,23 @@ if (
         });
         setFeedbackNavigateNext(false);
         setCurrentScreenId(13);
-        return false;
+        return false;*/
       }
+      // else if (next?.blockShowNavigate === 'Complete') {
+      //   console.log('next?.blockShowNavigate === Complete',next?.blockShowNavigate === 'Complete')
+      //   setProfile((prev: any) => {
+      //     const data = { ...prev };
+      //     data.completedLevels = [...data?.completedLevels, nextLevel];
+      //     return data;
+      //   });
+      //   setFeedbackNavigateNext(false);
+      //   setCurrentScreenId(13);
+      //   return false;
+      // }
     }
     setType(nextBlock[0]?.blockChoosen);
     setData(nextBlock[0]);
     setSelectedOption(null);
-
   };
 
 
@@ -1531,22 +1542,32 @@ const calScore = () =>{
     ? parseInt(data?.blockPrimarySequence.split('.')[0])
     : null;
 const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-  if(demoBlocks.hasOwnProperty(nextLevel)){
+console.log('demoBlocks.hasOwnProperty(nextLevel)',demoBlocks.hasOwnProperty(nextLevel));
+  // if(demoBlocks.hasOwnProperty(nextLevel)){
+  //   setCurrentScreenId(13);
+  //   return false;
+  // }
+  if(data && type){
     setCurrentScreenId(13);
+    return false;
   }
   else{
     if(gameInfo.gameData?.gameIsShowReflectionScreen !== 'false'){
       setCurrentScreenId(3);//Navigate to Reflection screen
+      return false;
     }
     else if(gameInfo.gameData?.gameIsShowTakeaway !== 'false'){
       setCurrentScreenId(7);//Navigate to Takeaway screen
+      return false;
     }
     else{
+      setType(null)
+      setData(null)
       setCurrentScreenId(5);//Navigate to Thank you screen
+      return false;
     }
   }
-  setType(null)
-  setData(null)
+  
   };
   const getAudioForText = async (text: string, voiceId: string) => {
     if (text && voiceId) {
@@ -1583,7 +1604,7 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
   };
   const handleOverView = () => {
     setHomeLeaderBoard(currentScreenId);
-    setCurrentScreenId(4);
+    setCurrentScreenId(15);//overview Screen
   };
 
   useEffect(() => {
@@ -1684,8 +1705,13 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
           ];
         }
       }
+      // console.log('firstPageFeedback[FeedbackcurrentPosition].Optionsoptions',firstPageFeedback[FeedbackcurrentPosition].Options['options'],'......',feedbackList);
       const SelectedoptionsFiltered = optionsFiltered.filter((key: any) => key?.qpOptions == firstPageFeedback[FeedbackcurrentPosition].Options['options']);
+      // console.log('SelectedoptionsFiltered',SelectedoptionsFiltered ,'....',SelectedoptionsFiltered[0].qpOptions);
       const selectoptionfeed = SelectedoptionsFiltered[0].qpOptions ? SelectedoptionsFiltered[0].qpOptions : 'null';
+      
+      
+      // console.log('selectoptionfeed',selectoptionfeed);
       setOptions(optionsFiltered);
       setFeedBackSelectedoptionData(selectoptionfeed);
       setFeedBackoptionData(GetSeqData);
@@ -1697,11 +1723,16 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
       setFeedbackNavigateNext(true);
     }
   };
-  console.log("navTrack", navTrack);
+  // console.log("navTrack", navTrack);
+  console.log('getData currentQuest', currentQuestNo);
+
+  const handleHome =()=>{
+  setCurrentScreenId(1);
+  return true;
+}
 
   return (
     <ProfileContext.Provider value={profileData}>
-      {/* {isMobileView ? ( */}
       <Box id='EntirePreview-wrapper'>
         <Box className='EntirePreview-content'>
           <Box id="container" className="Play-station">
@@ -1709,6 +1740,11 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
               {dontShowTopMenu ? (
                 <>
                   <Img src={preloadedAssets.TopMenu} className="top-menu-img" />
+                  <Img
+                    src={preloadedAssets.home}
+                    className="home-img"
+                    onClick={handleHome}
+                  />
                   <Img
                     src={preloadedAssets.Overview}
                     className="overview-img"
@@ -1834,6 +1870,7 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                             setIsGetsPlayAudioConfirmation
                           }
                         />
+
                       }
                     </>
                   );
@@ -1866,7 +1903,7 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                               setCurrentScreenId={setCurrentScreenId}
                               formData={gameInfo?.gameData}
                               imageSrc={preloadedAssets.backgroundImage}
-                              screen={Screen5}
+                              screen={preloadedAssets.Screen5}
                               preview={true}
                             />
                           </Box>
@@ -1914,6 +1951,7 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                           navTrack={navTrack}
                           setCurrentTrackPointer={setCurrentTrackPointer}
                           gameInfo={gameInfo}
+                          preloadedAssets={preloadedAssets}
                         />
                       )}
                       {/* </motion.div> */}
@@ -1991,7 +2029,7 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                             setHomeLeaderBoard={setHomeLeaderBoard}
                             setCurrentScreenId={setCurrentScreenId}
                             formData={gameInfo?.gameData}
-                            imageSrc={preloadedAssets.Leaderboard}
+                            imageSrc={preloadedAssets.Lead}
                             getData={getData}
                             data={data}
                             gameInfo={gameInfo}
@@ -2049,7 +2087,7 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                         setCurrentScreenId={setCurrentScreenId}
                         formData={gameInfo?.gameData}
                         imageSrc={preloadedAssets.backgroundImage}
-                        screen={Screen1}
+                        screen={preloadedAssets.Screen1}
                         profile={profile}
                         currentQuestNo={currentQuestNo}
                         completionScreenQuestOptions={
@@ -2236,7 +2274,7 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                               position={'relative'}
                               // className={'info_potrait'}
                             >
-                              <Img src={Login} className={'first_play'} />
+                              <Img src={preloadedAssets.Login} className={'first_play'} />
                               <Box className={'play_screen_content'}>
                                 <Box>
                                   <Box
@@ -2280,7 +2318,7 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                                       bg={'none'}
                                       _hover={{ bg: 'none' }}
                                       onClick={() => {
-                                        setCurrentScreenId(12);
+                                        setCurrentScreenId(1);
                                         setIsGetsPlayAudioConfirmation(true);
                                       }}
                                     ></Button>
@@ -2338,6 +2376,7 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                         setType={setType}
                         setOptions={setOptions}
                         gameQuest={gameInfo?.gameQuest}
+                        setFeedbackList={setFeedbackList}
                       />
                       {/* </SimpleGrid> */}
                     </>
@@ -2346,6 +2385,43 @@ const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
                   return (
                     <FeedBackScreen backgroundScreenUrl={preloadedAssets.backgroundImage} first={first} showNote={showNote} isScreenshot={isScreenshot} FeedbackremainingSentences={FeedbackremainingSentences} setisScreenshot={setisScreenshot} options={options} FeedBackselectedoptionData={FeedBackselectedoptionData} FeedBackoptionData={FeedBackoptionData} getFeedbackData={getFeedbackData} data={data} currentScreenId={currentScreenId} getData={getData} profile={profile} />
                   )
+
+                  case 15:
+                  return (
+                    <>
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
+                      >
+                        <Box
+                          backgroundImage={preloadedAssets.backgroundImage}
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                        >
+                          <Box className="Images">
+                            <Overview
+                              formData={gameInfo?.gameData}
+                              imageSrc={preloadedAssets.overview}
+                              preloadedAssets={preloadedAssets}
+                              homeLeaderBoard={homeLeaderBoard}
+                              setCurrentScreenId={setCurrentScreenId}
+                            />
+                          </Box>
+                        </Box>
+                      </Box>
+                    </>
+                  );
 
                 default:
                   console.log(

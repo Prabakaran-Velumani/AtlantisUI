@@ -120,7 +120,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   useEffect(() => {
     const fetch = async () => {
       const resLang = await getGameLanguages(id);
-      if (resLang.status === 'Success') {
+      if (resLang?.status === 'Success') {
         if (resLang?.data.length !== 0) {
           const data = resLang?.data;
           data.unshift({ value: 0, label: 'English' });
@@ -144,6 +144,11 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     setSelectedPlayer(players[i]);
     console.log('Object.keys(demoBlocks).length', Object.keys(demoBlocks).length);
     /**if game has more than one quest, then navigate to chapter selection screen, otherwise navigate to story part direclty */
+    if(playerInfo.name=== '')
+      {
+        setProfileData((prev:any)=>({...prev,name:'Guest'}));
+      }
+    
     if (Object.keys(demoBlocks).length > 1) {
       setCurrentScreenId(13);//navigate to Chapter selection
     } else {
@@ -341,13 +346,13 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     className="btns left-btn"
                     bg={'none'}
                     _hover={{ bg: 'none' }}
-                    onClick={() => setCurrentScreenId(10)}
+                    onClick={() => setCurrentScreenId(1)}
                   ></Button>
                   <Box w={'25%'} position={'relative'}>
                     <input
                       style={{ width: '100%' }}
                       className="player_name"
-                      placeholder={'Enter Your Name'}
+                      placeholder={'Enter Alias Name'}
                       value={playerInfo.name}
                       onChange={(e: any) =>
                         setProfileData((prev: any) => ({

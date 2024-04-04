@@ -110,6 +110,7 @@ const ScreenPreview = () => {
   });
   const [navTrack, setNavTrack] = useState([]);
   const [isPrevNavigation, setIsPrevNavigation] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -302,6 +303,28 @@ const ScreenPreview = () => {
   const preloadedAssets = useMemo(() => {
     return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls };
   }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
+console.log('preloadedAssets',preloadedAssets)
+
+const getSelectedPlayer = useCallback(()=>{
+  let count = 0;
+  const prefix= 'playerCharacterImage_';
+    // Check if any key in the object starts with the given prefix
+    Object.keys(preloadedAssets).forEach(key => {
+      if (key.startsWith(prefix)) {
+        count++;
+      }
+    })
+     // If count is 0, return null or handle the case appropriately
+    if (count === 0) {
+        return null;
+    }
+    const randomIndex = Math.floor(Math.random() * count) + 1;
+    const selectedPlayerKey = `${prefix}${randomIndex}`;
+    setSelectedPlayer(preloadedAssets.selectedPlayerKey);
+  // return preloadedAssets.selectedPlayerKey;
+},[preloadedAssets]);
+
+
 
   useEffect(() => {
     if (gameInfo && preloadedAssets) {
@@ -664,7 +687,6 @@ if (
     window.open(url, '_blank');
   };
   useEffect(() => {
-    console.log('data', data);
     if (data && type) {
       
       /** this logic is used to hanlde the navigation options in both forward and backward navigation */
@@ -772,7 +794,6 @@ if (
   };
   
 const Updatecontent = () => {
-  console.log('*******showTypingEffect', showTypingEffect)
     if (showTypingEffect === false) {
     setShowTypingEffect(true);
   }
@@ -1043,6 +1064,27 @@ const Updatecontent = () => {
                               position={'relative'}
                               className="story_interaction_image"
                             >
+                              {selectedPlayer && (
+                              <Img
+                                src={selectedPlayer}
+                                position={'fixed'}
+                                right={'100px'}
+                                bottom={'-20px'}
+                                w={'350px'}
+                                h={'540px'}
+                                loading="lazy"
+                              />
+                            )}
+                            {preloadedAssets?.nonplayerImage && (
+                              <Img
+                                src={preloadedAssets?.nonplayerImage}
+                                position={'fixed'}
+                                right={'500px'}
+                                bottom={'20px'}
+                                w={'350px'}
+                                h={'540px'}
+                                loading="lazy"
+                              />)} 
                               <Img
                                 src={preloadedAssets?.parch}
                                 w={'auto'}

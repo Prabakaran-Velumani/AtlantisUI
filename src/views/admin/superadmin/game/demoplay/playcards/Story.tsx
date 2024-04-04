@@ -9,16 +9,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 
-import bk from 'assets/img/games/17.png';
-import note from 'assets/img/games/note.png';
-import next from 'assets/img/screens/next.png';
-import dial from 'assets/img/games/Dialogue.png';
-import char from 'assets/img/games/charbox.png';
-import right from 'assets/img/games/right.png';
-import left from 'assets/img/games/left.png';
-import parch from 'assets/img/games/parch.png';
-import on from 'assets/img/games/on.png';
-import off from 'assets/img/games/off.png';
 import React, {
   Suspense,
   useContext,
@@ -77,6 +67,7 @@ const Story: React.FC<{
   navTrack: any;
   setCurrentTrackPointer: any;
   gameInfo:any;
+  preloadedAssets: any;
 }> = ({
   data,
   type,
@@ -107,7 +98,8 @@ const Story: React.FC<{
   setNavTrack,
   navTrack,
   setCurrentTrackPointer,
-  gameInfo
+  gameInfo,
+  preloadedAssets
 }) => {
   const [showNote, setShowNote] = useState(true),
   [first, setFirst] = useState(false);
@@ -120,7 +112,6 @@ const [Navigatenext, setNavigateNext] = useState<any>(false);
 const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
 const [isPlayAudioConfirmation, setIsPlayAudioConfirmation] = useState<boolean>(false);
 const [score, setScore] = useState(null);
-
 useEffect(() => {
   if(data && type){
     getVoice(data, type);
@@ -129,6 +120,7 @@ useEffect(() => {
       setShowNote(false);
       getDataSection(data);
     }, 1000);
+    console.log('profile.quest',profile?.currentQuest);
 
     /** this logic is used to hanlde the navigation options in both forward and backward navigation */
     if(gameInfo.hasOwnProperty('blocks')){
@@ -136,7 +128,7 @@ useEffect(() => {
       if(previousPrimarySeq){
         let currentQuest = previousPrimarySeq.split('.')[0];
         let previousBlock : any = Object.values(gameInfo?.blocks[currentQuest])?.find((row: any)=> {
-          console.log('row', row);
+          // let previousBlock : any = Object.values(gameInfo?.blocks[profile?.currentQuest])?.find((row: any)=> {
           return row.blockPrimarySequence == previousPrimarySeq});
         if(data.blockPrimarySequence != previousPrimarySeq)
         {
@@ -393,7 +385,8 @@ useEffect(() => {
 }, [Navigatenext]);
 
 const getDataSection = (data: any) => {
-  setShowTypingEffect(false);
+  console.log("data", data);
+  showTypingEffect === true && setShowTypingEffect(false);
   setCurrentPosition(0);
   // Note and Dialog
   const content = data?.blockText || '';
@@ -409,6 +402,8 @@ const getDataSection = (data: any) => {
   const concatenatedSentences = [];
   let totalLength = 0;
   // Note and Dialog
+  if(type!== 'response')
+  {
       for (let i = 0; i < newRemainingSentences.length; i++) {
       const sentence = newRemainingSentences[i];
 
@@ -434,7 +429,10 @@ const getDataSection = (data: any) => {
       }
     }
   }
+}
   // Response 
+  if(type==='response')
+  { 
   for (let i = 0; i < newRemainingResponseSentences.length; i++) {
     const ressentence = newRemainingResponseSentences[i];
     if (data && type === 'response') {
@@ -450,26 +448,36 @@ const getDataSection = (data: any) => {
       }
     }
   }
+}
   setRemainingSentences(concatenatedSentences);
-  if (newRemainingSentences.length > 0 ) {
+  console.log('newRemainingSentences.length',newRemainingSentences.length)
+  console.log('newRemainingResponseSentences.length',newRemainingResponseSentences.length)
+  if (newRemainingSentences.length > 0 && type!== 'response') {
+    console.log('hi');
     setCurrentPosition(currentPosition + concatenatedSentences.length);
     setNavigateNext(false);
+    return false;
   }
-  else if (newRemainingResponseSentences.length > 0 ) {
+  if (newRemainingResponseSentences.length > 0 ) {
+    console.log('hellow');
     setCurrentPosition(currentPosition + concatenatedSentences.length);
     setNavigateNext(false);
+    return false;
   } 
-  else {
+  // else {
     // console.log('******isPrevNavigation',isPrevNavigation)
     // if(isPrevNavigation == false)
     // {
       // setCurrentPosition(0);
+      console.log('In ELse')
       setNavigateNext(true);
       setIsPrevNavigation(false);
-  }
+  // }
 };
 
 const Updatecontent = () => {
+  console.log('Updatecontent');
+  console.log('showTypingEffect',showTypingEffect)
   if (showTypingEffect === false) {
     setShowTypingEffect(true);
   }
@@ -487,8 +495,6 @@ const getNoteNextData = ()=>{
   getDataSection(data)
 }
 
-console.log('data.blockPrimarySequence', data.blockPrimarySequence)
-console.log('NavTrack', navTrack)
 
 const SkipContentForBackNavigation = () => {
   if (showTypingEffect === false) {
@@ -524,7 +530,7 @@ const SkipContentForBackNavigation = () => {
           >
             <GridItem colSpan={1} position={'relative'}>
             <Box display={'flex'} justifyContent={'center'}>
-              <Img src={note} className="story_note_image" loading="lazy" />
+              <Img src={preloadedAssets.note} className="story_note_image" loading="lazy" />
               <Box
                 className={'story_note_content'}
                 // bg={'blue.300'}
@@ -546,7 +552,7 @@ const SkipContentForBackNavigation = () => {
                   position={'fixed'}
                   top={'70%'}
                 >
-                  <Img src={next} h={'7vh'} className={'story_note_next_button'} />
+                  <Img src={preloadedAssets.next} h={'7vh'} className={'story_note_next_button'} />
                 </Box>
               </Box>
               </Box>
@@ -561,29 +567,29 @@ const SkipContentForBackNavigation = () => {
           {selectedPlayer && (
             <Img
               src={`${API_SERVER}/${selectedPlayer}`}
-              position={'fixed'}
-              right={'300px'}
+              position={'absolute'}
               bottom={'100px'}
-              w={'200px'}
-              h={'324px'}
+              transform={'translateX(-15vw)'}
+              w={'20vw'}
+              h={'63vh'}
             />
           )}
           {selectedNpc && (
             <Img
               src={selectedNpc}
-              position={'fixed'}
-              right={'500px'}
-              bottom={'100px'}
-              w={'200px'}
-              h={'324px'}
+                position= {'absolute'}
+                bottom={'100px'}
+                width={'24vw'}
+                height={'71vh'}
+                transform={'translateX(15vw)'}
             />
           )}
-          <Img className={'dialogue_image'} src={dial} />
+          <Img className={'dialogue_image'} src={preloadedAssets.dial} />
           {!showNote && (
             <>
               <Box position={'relative'}>
                 <Img
-                  src={char}
+                  src={preloadedAssets.char}
                   position={'fixed'}
                   h={'100px'}
                   w={'30%'}
@@ -632,7 +638,7 @@ const SkipContentForBackNavigation = () => {
               >
               {navTrack.length > 1 &&
                 <Img
-                  src={left}
+                  src={preloadedAssets.left}
                   w={'70px'}
                   h={'50px'}
                   cursor={'pointer'}
@@ -640,7 +646,7 @@ const SkipContentForBackNavigation = () => {
                 />
               }
                 <Img
-                  src={right}
+                  src={preloadedAssets.right}
                   w={'70px'}
                   h={'50px'}
                   cursor={'pointer'}
@@ -652,7 +658,7 @@ const SkipContentForBackNavigation = () => {
         </Box>
       )}
       {data && type === 'Interaction' && (
-        <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick}  prevData={prevData}  InteractionFunction={InteractionFunction} navTrack={navTrack} />
+        <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick}  prevData={prevData}  InteractionFunction={InteractionFunction} navTrack={navTrack} preloadedAssets={preloadedAssets} selectedPlayer={selectedPlayer} />
       )}
       {data && type === 'response' && (
         <Box
@@ -703,12 +709,12 @@ const SkipContentForBackNavigation = () => {
               // transform={'translate(0px, 55px)'}
             />
           )}
-           <Img className={'dialogue_image'} src={dial} />
+           <Img className={'dialogue_image'} src={preloadedAssets.dial} />
           {!showNote && (
             <>
               <Box position={'relative'}>
                 <Img
-                  src={char}
+                  src={preloadedAssets.char}
                   position={'fixed'}
                   h={'100px'}
                   w={'30%'}
@@ -755,13 +761,13 @@ const SkipContentForBackNavigation = () => {
                 w={'95%'}
                 bottom={'0'}
               >
-
                 <Img
-                  src={right}
+                  src={preloadedAssets.right}
                   w={'70px'}
                   h={'50px'}
                   cursor={'pointer'}
-                  onClick={() => {setCurrentPosition(0);getDataSection(data)}}
+                  // onClick={() => {setCurrentPosition(0);getDataSection(data)}}
+                  onClick={() => Updatecontent()}
                 />
               </Box>
             </>
@@ -789,7 +795,7 @@ const SkipContentForBackNavigation = () => {
           >
             <GridItem colSpan={1} position={'relative'}>
               <Box display={'flex'} justifyContent={'center'}>
-                <Img src={feedi} className="story_note_image" loading="lazy" />
+                <Img src={preloadedAssets.feedi} className="story_note_image" loading="lazy" />
                 <Box
                   className={'story_note_content'}
                   // bg={'blue.300'}
@@ -810,7 +816,7 @@ const SkipContentForBackNavigation = () => {
                     top={'70%'}
                   >
                     <Img
-                      src={next}
+                      src={preloadedAssets.next}
                       h={'7vh'}
                       className={'story_note_next_button'}
                     />

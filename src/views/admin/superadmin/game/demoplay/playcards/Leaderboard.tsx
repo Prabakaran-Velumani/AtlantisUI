@@ -121,31 +121,25 @@ const LeaderBoard: React.FC<{
     ///Afrith-modified-ends-09/Mar/24
 
   const handleHome = () =>{
-    console.log('handleHome')
     if(homeLeaderBoard)
     {
       setCurrentScreenId(homeLeaderBoard);
       setHomeLeaderBoard(null);
     }
     else{
-      console.log('homeLeaderBoard is null' )
       if(gameInfo)
       {
         if(gameInfo?.gameData?.gameIsShowReflectionScreen == true){
-          console.log('gameInfo?.gameData?.gameIsShowReflectionScreen == true')
           setCurrentScreenId(3);//Navigate to Reflection screen
         }
         else if(gameInfo?.gameData?.gameIsShowTakeaway == true){
-          console.log('gameInfo?.gameData?.gameIsShowTakeaway == true')
           setCurrentScreenId(7);//Navigate to Takeaway screen
         }
         else{
-          console.log('Thank you screen')
           setCurrentScreenId(5);//Navigate to Thank you screen
         }
       }
-      console.log('gameinfo is not not null')
-  }
+    }
   }
   return (
     <>
@@ -250,7 +244,7 @@ const LeaderBoard: React.FC<{
                                 textAlign={'center'}                               
                                 color={'#D9C7A2'}
                               >
-                                {item.name ? item.name : 'Roman'}
+                                {item.name ? item.name : 'Guest'}
                               </Text>
                             </Box>
                             <Box

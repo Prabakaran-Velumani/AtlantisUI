@@ -92,7 +92,7 @@ const ReplayGame: React.FC<{
                 </Text>
               </Box>
               <Box
-                position={'fixed'}
+                position={'fixed'} 
                 top={'360px'}
                 w={'40%'}
                 display={'flex'}
