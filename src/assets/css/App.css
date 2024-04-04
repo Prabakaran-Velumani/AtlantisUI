@@ -1078,7 +1078,7 @@ font-family: 'AtlantisText';
   align-items: center;
   width: 100%;
   position: absolute;
-  transform: translate(0px, 240px);
+  transform: translate(0px, calc(100vh - 81vh));
   top: 0;
 }
 
@@ -2648,14 +2648,14 @@ transform: translate(-167px, -84px);
     background-position: center;
   }
 
-  .AddScores .Main-Content .Game-Screen .Images .reflection-screen .content-box {
+  /* .AddScores .Main-Content .Game-Screen .Images .reflection-screen .content-box {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     position: absolute;
     transform: translate(0px, 216px);
-  }
+  } */
 
   .reflection-screen .content-ref {
     display: flex;
@@ -3233,8 +3233,26 @@ font-size: 4vh
   width:auto;
   height: 100vh;
 }
-
+.character_toggle_left{
+  width:4vw;
+  height:6vh;
+  transform:rotate(90deg);
+}
+.character_toggle_right{
+  width:4vw;
+  height:6vh;
+  transform:rotate(-90deg);
+}
 @media screen and (orientation: portrait) {
+
+  .character_toggle_left{
+    width:4vh;
+    height:6vw;
+  }
+  .character_toggle_right{
+    width:4vh;
+    height:6vw;
+  }
   .first_play{
     width:auto;
     height: 100vw;

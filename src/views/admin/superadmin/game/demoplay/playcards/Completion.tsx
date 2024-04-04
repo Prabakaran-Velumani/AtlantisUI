@@ -112,167 +112,110 @@ const Completion: React.FC<{
 
   return (
     <>
-      <Box id="container">
-        <Box id="EntirePreview-wrapper">
-          <Box className="EntirePreview-content">
-            <Box h={'100vh !important'} className="Images">
-              <Flex height="100vh" className="EntirePreview">
-                <Box
-                  w={'100%'}
-                  h={'100vh'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                  overflow={'visible'}
-                  style={{ perspective: '1000px' }}
-                  className="Main-Content"
-                >
-                  <Box
-                    backgroundImage={imageSrc}
-                    w={'100% !important'}
-                    h={'100vh'}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'cover'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    className="Game-Screen"
-                  >
-                    <Box className="Images">
-                      <Box className="comple-screen">
-                        <Img src={imageSrc} className="bg-img" />
-                        <Box className="title">
-                          <Text
-                            fontFamily={'AtlantisText'}
-                            textAlign={'center'}
-                          >
-                            {curretQuestOptions?.gameScreenTitle}
-                          </Text>
-                        </Box>
-                        <Box className="content-box">
-                          <Box className="congratulations">
-                            <Box className="content" mt="0px">
-                              {completionScreenQuestOptions[currentQuestNo]
-                                ?.gameIsSetCongratsSingleMessage !== true &&
-                              completionScreenQuestOptions[currentQuestNo]
-                                ?.gameIsSetCongratsScoreWiseMessage !== true
-                                ? completionScreenQuestOptions[currentQuestNo]
-                                    ?.gameCompletedCongratsMessage
-                                : completionScreenQuestOptions[currentQuestNo]
-                                    ?.gameIsSetCongratsScoreWiseMessage === true
-                                ? completionScreenQuestOptions[currentQuestNo]
-                                    ?.gameIsSetMinPassScore &&
-                                  completionScreenQuestOptions[currentQuestNo]
-                                    ?.gameMinScore &&
-                                  completionScreenQuestOptions[currentQuestNo]
-                                    ?.gameMinScore > 0
-                                  ? profile?.score <
-                                    completionScreenQuestOptions[currentQuestNo]
-                                      ?.gameMinScore
-                                    ? completionScreenQuestOptions[
-                                        currentQuestNo
-                                      ]?.gameMinimumScoreCongratsMessage
-                                    : completionScreenQuestOptions[
-                                        currentQuestNo
-                                      ]?.gameIsSetDistinctionScore &&
-                                      profile?.score <
-                                        completionScreenQuestOptions[
-                                          currentQuestNo
-                                        ]?.gameDistinctionScore
-                                    ? completionScreenQuestOptions[
-                                        currentQuestNo
-                                      ]?.gameaboveMinimumScoreCongratsMessage
-                                    : completionScreenQuestOptions[
-                                        currentQuestNo
-                                      ]?.gameIsSetDistinctionScore &&
-                                      profile?.score >=
-                                        completionScreenQuestOptions[
-                                          currentQuestNo
-                                        ]?.gameDistinctionScore
-                                    ? completionScreenQuestOptions[
-                                        currentQuestNo
-                                      ]
-                                        ?.gameAboveDistinctionScoreCongratsMessage
-                                    : completionScreenQuestOptions[
-                                        currentQuestNo
-                                      ]?.gameIsSetCongratsSingleMessage ===
-                                        true &&
-                                      completionScreenQuestOptions[
-                                        currentQuestNo
-                                      ]?.gameCompletedCongratsMessage
-                                  : completionScreenQuestOptions[currentQuestNo]
-                                      ?.gameCompletedCongratsMessage
-                                : completionScreenQuestOptions[currentQuestNo]
-                                    ?.gameCompletedCongratsMessage}
-                            </Box>
-                          </Box>
-                          <Box className="rewards-img-box">
-                            <Img className="rewards-arrow-img" src={rew} />
-                          </Box>
-                          <Box className="points-box">
-                            <Box className="box-1">
-                              <Img src={back} className="box-1_img" />
-                              <Text
-                                className="points-text"
-                                fontFamily={'content'}
-                              >
-                                points
-                              </Text>
-                              <Box className="inside-box-1">
-                                <Img src={point} className="inside-box-1_img" />
-                                <Text
-                                  className="inside-points-text"
-                                  fontFamily={'content'}
-                                >
-                                  {(profile &&
-                                    profile.score &&
-                                    profile.score.length > 0 &&
-                                    profile.score.reduce(
-                                      (
-                                        accumulator: number,
-                                        currentValue: any,
-                                      ) => {
-                                        return currentQuestNo ===
-                                          currentValue.quest
-                                          ? accumulator + currentValue.score
-                                          : accumulator;
-                                      },
-                                      0,
-                                    )) ||
-                                    0}
-                                  /{questScores && questScores[currentQuestNo]}
-                                </Text>
-                              </Box>
-                            </Box>
-
-                            {compliData[CompKeyCount]?.gameIsSetBadge ===
-                              'true' && (
-                              <Box className="box-2">
-                                <Img src={back} className="box-2_img" />
-                                <Text
-                                  className="points-text"
-                                  fontFamily={'content'}
-                                >
-                                  {curretQuestOptions?.gameBadgeName}
-                                </Text>
-                                {curretQuestOptions?.gameBadge && (
-                                  <Img className="inside-img" src={imgb} />
-                                )}{' '}
-                              </Box>
-                            )}
-                          </Box>
-                        </Box>
-                        <Box className="next-btn">
-                          <Img src={next} onClick={() => getData(data)} />
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Box>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Box className="comple-screen">
+          <Img src={imageSrc} className="bg-img" />
+          <Box className="title">
+            <Text fontFamily={'AtlantisText'} textAlign={'center'}>
+              {curretQuestOptions?.gameScreenTitle}
+            </Text>
+          </Box>
+          <Box className="content-box">
+            <Box className="congratulations">
+              <Box className="content" mt="0px">
+                {completionScreenQuestOptions[currentQuestNo]
+                  ?.gameIsSetCongratsSingleMessage !== true &&
+                completionScreenQuestOptions[currentQuestNo]
+                  ?.gameIsSetCongratsScoreWiseMessage !== true
+                  ? completionScreenQuestOptions[currentQuestNo]
+                      ?.gameCompletedCongratsMessage
+                  : completionScreenQuestOptions[currentQuestNo]
+                      ?.gameIsSetCongratsScoreWiseMessage === true
+                  ? completionScreenQuestOptions[currentQuestNo]
+                      ?.gameIsSetMinPassScore &&
+                    completionScreenQuestOptions[currentQuestNo]
+                      ?.gameMinScore &&
+                    completionScreenQuestOptions[currentQuestNo]?.gameMinScore >
+                      0
+                    ? profile?.score <
+                      completionScreenQuestOptions[currentQuestNo]?.gameMinScore
+                      ? completionScreenQuestOptions[currentQuestNo]
+                          ?.gameMinimumScoreCongratsMessage
+                      : completionScreenQuestOptions[currentQuestNo]
+                          ?.gameIsSetDistinctionScore &&
+                        profile?.score <
+                          completionScreenQuestOptions[currentQuestNo]
+                            ?.gameDistinctionScore
+                      ? completionScreenQuestOptions[currentQuestNo]
+                          ?.gameaboveMinimumScoreCongratsMessage
+                      : completionScreenQuestOptions[currentQuestNo]
+                          ?.gameIsSetDistinctionScore &&
+                        profile?.score >=
+                          completionScreenQuestOptions[currentQuestNo]
+                            ?.gameDistinctionScore
+                      ? completionScreenQuestOptions[currentQuestNo]
+                          ?.gameAboveDistinctionScoreCongratsMessage
+                      : completionScreenQuestOptions[currentQuestNo]
+                          ?.gameIsSetCongratsSingleMessage === true &&
+                        completionScreenQuestOptions[currentQuestNo]
+                          ?.gameCompletedCongratsMessage
+                    : completionScreenQuestOptions[currentQuestNo]
+                        ?.gameCompletedCongratsMessage
+                  : completionScreenQuestOptions[currentQuestNo]
+                      ?.gameCompletedCongratsMessage}
+              </Box>
+            </Box>
+            <Box className="rewards-img-box">
+              <Img className="rewards-arrow-img" src={rew} />
+            </Box>
+            <Box className="points-box">
+              <Box className="box-1">
+                <Img src={back} className="box-1_img" />
+                <Text className="points-text" fontFamily={'content'}>
+                  points
+                </Text>
+                <Box className="inside-box-1">
+                  <Img src={point} className="inside-box-1_img" />
+                  <Text className="inside-points-text" fontFamily={'content'}>
+                    {(profile &&
+                      profile.score &&
+                      profile.score.length > 0 &&
+                      profile.score.reduce(
+                        (accumulator: number, currentValue: any) => {
+                          return currentQuestNo === currentValue.quest
+                            ? accumulator + currentValue.score
+                            : accumulator;
+                        },
+                        0,
+                      )) ||
+                      0}
+                    /{questScores && questScores[currentQuestNo]}
+                  </Text>
                 </Box>
-              </Flex>
+              </Box>
+
+              {compliData[CompKeyCount]?.gameIsSetBadge === 'true' && (
+                <Box className="box-2">
+                  <Img src={back} className="box-2_img" />
+                  <Text className="points-text" fontFamily={'content'}>
+                    {curretQuestOptions?.gameBadgeName}
+                  </Text>
+                  {curretQuestOptions?.gameBadge && (
+                    <Img className="inside-img" src={imgb} />
+                  )}{' '}
+                </Box>
+              )}
             </Box>
           </Box>
+          <Box className="next-btn">
+            <Img src={next} onClick={() => getData(data)} />
+          </Box>
         </Box>
-      </Box>
+      </motion.div>
 
       {/* <Box
         position="relative"

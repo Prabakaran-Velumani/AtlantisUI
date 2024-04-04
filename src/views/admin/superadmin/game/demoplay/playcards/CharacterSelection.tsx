@@ -265,15 +265,11 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 >
                   <Img
                     src={Selected}
-                    w="4vw"
-                    h="6vh"
-                    transform={'rotate(90deg)'}
+                    className={'character_toggle_left'}
                   />
                   <Img
                     src={Selected}
-                    w="4vw"
-                    h="6vh"
-                    transform={'rotate(-90deg)'}
+                   className={'character_toggle_right'}
                   />
                 </Box>
               </Box>

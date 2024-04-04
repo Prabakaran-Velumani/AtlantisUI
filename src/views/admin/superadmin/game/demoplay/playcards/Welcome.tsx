@@ -131,32 +131,7 @@ const Welcome: React.FC<{
   const link = extractLink(formData.gameAdditionalWelcomeNote);
   return (
     <>
-      <Box id="container">
-        <Box id="EntirePreview-wrapper">
-          <Box className="EntirePreview-content">
-            <Box h={'100vh !important'} className="Images">
-              <Flex height="100vh" className="EntirePreview">
-                <Box
-                  w={'100%'}
-                  h={'100vh'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                  overflow={'visible'}
-                  style={{ perspective: '1000px' }}
-                  className="Main-Content"
-                >
-                  <Box
-                    backgroundImage={imageSrc}
-                    w={'100% !important'}
-                    h={'100vh'}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'cover'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    className="Game-Screen"
-                  >
-                    <Box className="Images">
+     
                       <motion.div
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -558,14 +533,7 @@ const Welcome: React.FC<{
                         </Box> */}
                         </Box>
                       </motion.div>
-                    </Box>
-                  </Box>
-                </Box>
-              </Flex>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
+                    
 
       {/* <Box
        position="relative"

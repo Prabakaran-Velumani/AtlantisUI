@@ -979,7 +979,7 @@ const ScreenPreview = () => {
                                     // onClick={() => prevData(data)}
                                   />
                                   {selectedOption !== null && (
-                                    <Box  className={`blinking-wave ${blink ? 'blink' : ''}`}>
+                                    <Box className={'blinking-wave'} onClick={() => getData(data)} borderRadius={'50%'}>
                                     <Img
                                       src={preloadedAssets?.right}
                                       className={'interaction_button'}
