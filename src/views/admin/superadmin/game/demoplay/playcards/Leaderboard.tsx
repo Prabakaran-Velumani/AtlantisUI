@@ -119,7 +119,6 @@ const LeaderBoard: React.FC<{
     ///Using unShift-ends - AllTimeScore
 
     ///Afrith-modified-ends-09/Mar/24
-
   const handleHome = () =>{
     if(homeLeaderBoard)
     {
@@ -141,6 +140,7 @@ const LeaderBoard: React.FC<{
       }
     }
   }
+  console.log('imageSrc',imageSrc)
   return (
     <>
       {imageSrc && (       

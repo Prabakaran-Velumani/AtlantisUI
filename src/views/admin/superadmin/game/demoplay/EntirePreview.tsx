@@ -305,7 +305,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   useEffect(() => {
-    console.log('profile?.currentQuest',profile?.currentQuest)
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
     setData(gameInfo?.blocks[profile?.currentQuest]['1']);
@@ -484,11 +483,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       
   };
 
-  const getData = (next: any) => {
-    console.log('getData currentQuest', currentQuestNo);
-    
+  const getData = (next: any) => {    
     setIsPrevNavigation(false);
-  
+
 /**** Start Replacing code */
 if (next?.blockChoosen === 'Interaction') {
   const isDuplicate = feedbackList?.some((item: any) =>
@@ -514,9 +511,6 @@ const currentBlock = next
   : null;
 
 //get the next block details
-// const currentQuest = currentQuestNo
-// const quest = currentQuestNo
-
 const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
 const NextItem = currentBlock != null ? currentBlock + 1 : null;
 
@@ -544,15 +538,6 @@ const nextBlock = next
     .map((key: any) => demoBlocks[quest]?.[key])
   : [];
 
-  /***Record navigation. it helps to navigate backward */
-
-  // if(prevTrack.length == 0){
-  //   prevTrack.push(next?.blockPrimarySequence);
-  // }
-  //   prevTrack.push(nextBlock[0]?.blockPrimarySequence);
-  //   setNavTrack(prevTrack)
-  /***End of Record navigation. it helps to navigate backward */
-
 if (nextBlock[0]?.blockChoosen === 'Interaction') {
   const optionsFiltered = [];
 for (const option of gameInfo.questOptions) {
@@ -571,10 +556,6 @@ if (option?.qpSequence ===  nextBlock[0]?.blockPrimarySequence) {
   }
   setOptions(optionsFiltered);
 }
-// if(type === 'Interaction'){
-//   setNavTrack([]);
-// }
-
 if (
   type === 'Interaction' &&
   resMsg !== ''
@@ -593,7 +574,6 @@ if (
   type === 'response' ||
   type === 'feedback'
 ) {
-  console.log('navi', navi);
   if (navi === 'Repeat Question') {
     const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
     setInteractionOptions(gameInfo, currentBlockinteraction);
@@ -615,9 +595,7 @@ if (
     const selectedNext = Object.keys(demoBlocks[currentQuest])
       .filter((item: any) => {
         return (
-          demoBlocks[currentQuest][item]?.blockSecondaryId ===
-          // parseInt(optionNavigation)
-          parseInt(optionNavigation)
+          demoBlocks[currentQuest][item]?.blockSecondaryId === parseInt(optionNavigation)
         );
       })
       .map((item: any) => {
@@ -625,8 +603,7 @@ if (
       });
     if (selectedNext.length > 0) {
       setType(selectedNext && selectedNext[0]?.blockChoosen);
-
-          if(selectedNext[0]?.blockChoosen === 'Interaction')
+    if(selectedNext[0]?.blockChoosen === 'Interaction')
     {
       const optionsFiltered = [];
       for (const option of gameInfo.questOptions) {
@@ -648,15 +625,12 @@ if (
     setData(selectedNext && selectedNext[0]);
     setGame3Position((prev: any) => ({
       ...prev,
-      nextBlock: selectedNext[0]?.blockPrimarySequence,
+      nextBlock: nextBlock[0]?.blockPrimarySequence,
     }));
     setSelectedOption(null);
-    // prevTrack.push(selectedNext[0]?.blockPrimarySequence);
-    // setNavTrack([selectedNext[0]?.blockPrimarySequence])
     return false;
   }
   else {  
-    console.log('selectedNext.lenght <= 0', true)  
     setType(nextBlock[0]?.blockChoosen);
     if(nextBlock[0]?.blockChoosen === 'Interaction')
     {
@@ -685,9 +659,7 @@ if (
     setSelectedOption(null);
     return false;
   }
-  } else if (navi === 'Complete') {
-    console.log('demoBlocks.hasOwnProperty(nextLevel)', demoBlocks.hasOwnProperty(nextLevel));
-    
+  } else if (navi === 'Complete') {   
     if (demoBlocks.hasOwnProperty(nextLevel)) {
       setProfile((prev: any) => {
         const data = { ...prev };
@@ -713,17 +685,8 @@ if (
   }
 }
 
-/**** Replaced */
+
     if (currentScreenId === 6) {//Completion
-          // const currentQuest = data?.blockPrimarySequence.split('.')[0]?? null;
-          // const currentGameData = gameInfo.gameQuest.find((row:any)=> row.gameQuestNo == profile?.currentQuest);
-          // const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-          // const haveNextQuest = gameInfo.gameQuest.some((row:any)=> (row.gameQuestNo > profile?.currentQuest))
-          // const totalScore = profile?.score.forEach((item:any)=>{
-          // if (item && item.marks) {
-          //   return item.marks.reduce((acc:any, mark:any) => acc + mark, 0);
-          //   }
-          // }) 
           const {currentQuest, currentGameData, nextLevel, haveNextQuest, totalScore} = calScore();
           if(gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') 
           {
@@ -787,13 +750,6 @@ if (
       // }
     }
     if ( currentScreenId === 14) {
-      // if (gameInfo?.gameData?.gameDisableOptionalReplays === 'false') {
-      //   setCurrentScreenId(8);
-      //   return false;
-      // } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-      //   setCurrentScreenId(4);
-      //   return false;
-      // }
       const Nextcurrentquest = profile?.currentQuest;
       const getgameinfoquest = gameInfo?.gameQuest.find((row: any) => row.gameQuestNo == Nextcurrentquest);
       const haveNextQuest = gameInfo.gameQuest.some((row: any) => (row.gameQuestNo == Nextcurrentquest));
@@ -842,50 +798,11 @@ if (
         setCurrentScreenId(7); //takeaway
         return false;
       } else {
-        // if (data && type) {
-        //   setCurrentScreenId(2);
-        //   return false;
-        // } else {
           setType(null);
           setData(null);
           setCurrentScreenId(5);//thank you screen
           return false;
         }
-      // }
-      // else {
-      //   // if(demoBlocks.hasOwnProperty(nextLevel)){
-      //   if (data && type) {
-      //     // setCurrentScreenId(2);
-      //     setFeedbackNavigateNext(false);
-      //     setCurrentScreenId(13);
-      //   //   setType(null);
-      //   // setData(null);
-      //     return false;
-      //   } else {
-      //     if (gameInfo?.gameData?.gameIsShowLeaderboard === 'false') {
-      //       if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-      //         setCurrentScreenId(3);
-      //         return false;
-      //       }
-      //       else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-      //         setCurrentScreenId(7);
-      //         return false;
-      //       }
-      //       else {
-      //         setType(null);
-      //         setData(null);
-      //         setCurrentScreenId(5);
-      //         return false;
-      //       }
-      //     }
-      //     else {
-      //       setType(null);
-      //       setData(null);
-      //       setCurrentScreenId(3);
-      //       return false;
-      //     }
-      // }
-      // }
     }
     if (currentScreenId === 8) {
       if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
@@ -1215,17 +1132,6 @@ if (
         setCurrentScreenId(13);
         return false;*/
       }
-      // else if (next?.blockShowNavigate === 'Complete') {
-      //   console.log('next?.blockShowNavigate === Complete',next?.blockShowNavigate === 'Complete')
-      //   setProfile((prev: any) => {
-      //     const data = { ...prev };
-      //     data.completedLevels = [...data?.completedLevels, nextLevel];
-      //     return data;
-      //   });
-      //   setFeedbackNavigateNext(false);
-      //   setCurrentScreenId(13);
-      //   return false;
-      // }
     }
     setType(nextBlock[0]?.blockChoosen);
     setData(nextBlock[0]);
@@ -1542,12 +1448,7 @@ const calScore = () =>{
     ? parseInt(data?.blockPrimarySequence.split('.')[0])
     : null;
 const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-console.log('demoBlocks.hasOwnProperty(nextLevel)',demoBlocks.hasOwnProperty(nextLevel));
-  // if(demoBlocks.hasOwnProperty(nextLevel)){
-  //   setCurrentScreenId(13);
-  //   return false;
-  // }
-  if(data && type){
+    if(data && type){
     setCurrentScreenId(13);
     return false;
   }
@@ -1705,14 +1606,10 @@ console.log('demoBlocks.hasOwnProperty(nextLevel)',demoBlocks.hasOwnProperty(nex
           ];
         }
       }
-      // console.log('firstPageFeedback[FeedbackcurrentPosition].Optionsoptions',firstPageFeedback[FeedbackcurrentPosition].Options['options'],'......',feedbackList);
+
       const SelectedoptionsFiltered = optionsFiltered.filter((key: any) => key?.qpOptions == firstPageFeedback[FeedbackcurrentPosition].Options['options']);
-      // console.log('SelectedoptionsFiltered',SelectedoptionsFiltered ,'....',SelectedoptionsFiltered[0].qpOptions);
       const selectoptionfeed = SelectedoptionsFiltered[0].qpOptions ? SelectedoptionsFiltered[0].qpOptions : 'null';
-      
-      
-      // console.log('selectoptionfeed',selectoptionfeed);
-      setOptions(optionsFiltered);
+       setOptions(optionsFiltered);
       setFeedBackSelectedoptionData(selectoptionfeed);
       setFeedBackoptionData(GetSeqData);
       setFeedbackCurrentPosition(FeedbackcurrentPosition + 1);
@@ -1723,8 +1620,6 @@ console.log('demoBlocks.hasOwnProperty(nextLevel)',demoBlocks.hasOwnProperty(nex
       setFeedbackNavigateNext(true);
     }
   };
-  // console.log("navTrack", navTrack);
-  console.log('getData currentQuest', currentQuestNo);
 
   const handleHome =()=>{
   setCurrentScreenId(1);
