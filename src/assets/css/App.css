@@ -756,6 +756,14 @@ font-family: 'AtlantisText';
   z-index: 999;
 }
 
+.top-home-menu{
+  position: absolute;
+  top: 0;
+  z-index: 999;
+  height: 63px;
+  width: 4%;
+  transform: translate(44%, 3%);
+}
 .top-menu-home-section .overview-img {
   position: absolute;
   top: 0;
@@ -763,7 +771,6 @@ font-family: 'AtlantisText';
   z-index: 999;
   height: 63px;
   width: 4%;
-  /* transform: translate(-110px, 2px); */
   transform: translate(-150%, 3%);
 }
 

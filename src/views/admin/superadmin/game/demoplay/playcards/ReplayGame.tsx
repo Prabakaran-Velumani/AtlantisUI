@@ -48,21 +48,21 @@ const ReplayGame: React.FC<{
                       // top={'360px'}
                       w={'100%'}
                       display={'flex'}
-                      // justifyContent={formData?.gameMinScore < profile?.score ? 'space-between' : 'center'}
-                      justifyContent={'space-between'}
+                      justifyContent={formData?.gameMinScore < profile?.score ? 'space-between' : 'center'}
+                      // justifyContent={'space-between'}
                     >
                       <Img
                         src={ReplayBtn}
                         className='replay_buttons'
                         onClick={replayGame}
                       />
-                      {/* {formData?.gameMinScore < profile?.score ? ( */}
+                      {formData?.gameMinScore < profile?.score ? (
                         <Img
                           src={next}
                           className='replay_buttons'
                           onClick={() => getData(data)}
                         />
-                      {/* ) : null} */}
+                       ) : null} 
                     </Box>
                   </Box>
                 </Box>

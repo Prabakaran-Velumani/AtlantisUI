@@ -53,6 +53,7 @@ import SliderPointer from 'assets/img/games/slider-pointer.png';
 import Okay from 'assets/img/games/OKAY button.png';
 import TooltipImg from 'assets/img/games/tooltip-1.png';
 import TopMenuNDI from 'assets/img/games/top-menu-parts/top-menu-NDI.png';
+import Home from 'assets/img/games/home.png';
 // import back from 'assets/img/games/back.jpg';
 // import Back from 'assets/img/games/back.jpg';
 // import Okay from 'assets/img/games/o'
@@ -1258,6 +1259,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 {dontShowTopMenu ? (
                   <>
                     <Img src={TopMenu} className="top-menu-img" />
+                    <Img src={Home} className={'top-home-menu'} onClick={()=>setCurrentScreenId(1)} />
                     <Img
                       src={Overview}
                       className="overview-img"
