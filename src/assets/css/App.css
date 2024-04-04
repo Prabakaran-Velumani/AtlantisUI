@@ -3224,7 +3224,12 @@ font-size: 4vh
   color:#D9C7A2;
   letter-spacing:2px
 }
-
+.title_replay{
+  font-family:AtlantisText;
+  font-size: 6.5vh;
+  color:#D9C7A2;
+  letter-spacing:2px
+}
 .character_template{
   height: 90vh;
   width:auto;
@@ -3243,8 +3248,42 @@ font-size: 4vh
   height:6vh;
   transform:rotate(-90deg);
 }
-@media screen and (orientation: portrait) {
 
+.replay_content{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top:20%;
+}
+
+.replay_content_center{
+  height: 42vh;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.replay_buttons{
+  height: 9vh;
+  width: auto;
+  cursor: pointer
+}
+@media screen and (orientation: portrait) {
+  .replay_content_center{
+    height: 42vw;
+  }
+  .bg-replay {
+    height: 75vw;
+  }
+  .replay_buttons{
+    height: 9vw;
+  }
+  .top-menu-home-section .score-box .text {
+    font-size: 2.5vh;
+  }
   .character_toggle_left{
     width:4vh;
     height:6vw;
@@ -4812,7 +4851,11 @@ font-size: 4vh
   width: auto;
   background-position: center;
 }
-
+.bg-replay {
+  height: 75vh;
+  width: auto;
+  background-position: center;
+}
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box {
   /* Ashiq modifying on 11-03-24, when he was in resposnivePreview branch */
   display: flex;

@@ -1230,7 +1230,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   //   return () => window.removeEventListener('resize', handleResize);
   // }, []);
 
-  console.log('resolution---', resolution);
+
   // Afrith-modified-ends-13/Mar/24
 
   // const toggleView = () => {
@@ -1690,6 +1690,65 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         transition={{ duration: 0.3, delay: 0.5 }}
                       > */}
                           <Box
+                            position="relative"
+                            w={'100%'}
+                            height="100vh"
+                            backgroundImage={backgroundScreenUrl}
+                            backgroundSize={'cover'}
+                            backgroundRepeat={'no-repeat'}
+                            className="chapter_potrait"
+                          >
+                            <Grid
+                              templateColumns="repeat(1, 1fr)"
+                              gap={4}
+                              position="absolute"
+                              top="50%"
+                              left="50%"
+                              transform="translate(-50%, -50%)"
+                              className="story_note_grid"
+                            >
+                              <GridItem colSpan={1} position={'relative'}>
+                                <Box display={'flex'} justifyContent={'center'}>
+                                  <Img
+                                    src={feedi}
+                                    className="story_note_image"
+                                    loading="lazy"
+                                  />
+                                  <Box
+                                    className={'story_note_content'}
+                                    // bg={'blue.300'}
+                                  >
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Box className={'story_note_block'}>
+                                        <Text textAlign={'center'}>{feed}</Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={'100%'}
+                                      onClick={() => getData(data)}
+                                      mt={'20px'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                      cursor={'pointer'}
+                                      position={'fixed'}
+                                      top={'70%'}
+                                    >
+                                      <Img
+                                        src={next}
+                                        h={'7vh'}
+                                        className={'story_note_next_button'}
+                                      />
+                                    </Box>
+                                  </Box>
+                                </Box>
+                              </GridItem>
+                            </Grid>
+                          </Box>
+                          {/* <Box
                             w={'100%'}
                             h={'100vh'}
                             display={'flex'}
@@ -1764,7 +1823,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                                 </Box>
                               </Box>
                             </Box>
-                          </Box>
+                          </Box> */}
                           {/* </motion.div> */}
                         </>
                       );
