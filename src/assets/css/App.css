@@ -3225,8 +3225,8 @@ font-size: 4vh
   letter-spacing:2px
 }
 .title_replay{
-  font-family:AtlantisText;
   font-size: 6.5vh;
+  font-family:AtlantisText;
   color:#D9C7A2;
   letter-spacing:2px
 }
@@ -3272,11 +3272,14 @@ font-size: 4vh
   cursor: pointer
 }
 @media screen and (orientation: portrait) {
+  .title_replay{
+    font-size: 6.5vw;
+  }
   .replay_content_center{
     height: 42vw;
   }
   .bg-replay {
-    height: 75vw;
+    height: 75vw !important;
   }
   .replay_buttons{
     height: 9vw;
