@@ -13,10 +13,7 @@ import { useContext } from 'react';
 import { ProfileContext } from '../EntirePreview';
 import { ScoreContext } from '../GamePreview';
 
-
-
 // Afrith-modified-starts-07/Mar/24
-
 const names = [
   { name: 'John', score: 300, allTimeScore: 1000 },
   { name: 'Jane', score: 400, allTimeScore: 800 },
@@ -83,6 +80,8 @@ const LeaderBoard: React.FC<{
   homeLeaderBoard?: any;
   setHomeLeaderBoard?: any;
   setCurrentScreenId?:any;
+  gameInfo?: any;
+  preloadedAssets: any;
 }> = ({
   imageSrc,
   formData,
@@ -91,6 +90,8 @@ const LeaderBoard: React.FC<{
   setCurrentScreenId,
   homeLeaderBoard,
   setHomeLeaderBoard,
+  gameInfo,
+  preloadedAssets
 }) => {
   const content = [1, 2, 3, 4, 5, 6];
 
@@ -98,272 +99,265 @@ const LeaderBoard: React.FC<{
 
     ///Afrith-modified-starts-09/Mar/24
     const profileInfo = useContext(ScoreContext);
-    console.log('profileInfoLB--',profileInfo)
     const mergedUsersPlayers = [playerInfo,...usersWithAllTimeScore];
   
     ///Sorted Using Score-starts for score position
     const sortedUsingScore = [...mergedUsersPlayers].sort((a, b) => b.score - a.score);
-    console.log('soretdUsingScoreLB--',sortedUsingScore)
     ///Sorted Using Score-ends for score position
   
     ///Using unShift-starts - AllTimeScore
     const beforeSorting = [...mergedUsersPlayers].sort((a, b) => b.allTimeScore - a.allTimeScore);
     const sortedUsers = [...mergedUsersPlayers].sort((a, b) => b.allTimeScore - a.allTimeScore);
     const playerIndex = sortedUsers.findIndex(x => x.name === playerInfo.name);
-    console.log('playerIndexLB--',playerIndex)
     if (playerIndex !== -1) {
       // Remove it from its current position
       const unShiftedPlayer = sortedUsers.splice(playerIndex, 1)[0];
-      console.log('unShiftedPlayerLB--',unShiftedPlayer)
       // Add it to the beginning of the array
       sortedUsers.unshift(unShiftedPlayer);
     }
     ///Using unShift-ends - AllTimeScore
-  
-    console.log('userWithAllTimeScoreLB--',usersWithAllTimeScore)
-    console.log('abc--',mergedUsersPlayers)
-    console.log('sortedUsersLB--',sortedUsers)
+
     ///Afrith-modified-ends-09/Mar/24
-
   const handleHome = () =>{
-    setHomeLeaderBoard(false);
-    setCurrentScreenId(10)
+    if(homeLeaderBoard)
+    {
+      setCurrentScreenId(homeLeaderBoard);
+      setHomeLeaderBoard(null);
+    }
+    else{
+      if(gameInfo)
+      {
+        if(gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0){
+          setCurrentScreenId(3);//Navigate to Reflection screen
+        }
+        else if(gameInfo?.gameData?.gameIsShowTakeaway === 'true'){
+          setCurrentScreenId(7);//Navigate to Takeaway screen
+        }
+        else{
+          setCurrentScreenId(5);//Navigate to Thank you screen
+        }
+      }
+    }
   }
-
- 
 
   return (
     <>
       {imageSrc && (       
           <Box className="Leaderboard-screen">
             <Img src={imageSrc} className="leaderboard-img" />
-           
-              <Text className='title'>LeaderBoard</Text>
-              <Box className="content-box">
-                  <Box className="table-heading"
-                    fontFamily={'AtlantisText'}
-                    // color={'#D9C7A2'}
+            <Text className='title'>LeaderBoard</Text>
+            <Box className="content-box">
+                <Box className="table-heading"
+                  fontFamily={'AtlantisText'}
+                  display={'flex'}
+                >
+                  <Box
+                    w={'200px'}
+                    h={'50px'}
                     display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
                   >
+                    <Text color={'#D9C7A2'}>
+                      Name
+                    </Text>
+                  </Box>
+                  <Img
+                    src={preloadedAssets.Separator}
+                    className="dot-img"
+                    w={'10px'}
+                    h={'65px'}
+                    position={'relative'}
+                  />
+                  <Box w={'200px'} h={'50px'}>
+                    {/* Afrith-modified-starts-07/Mar/24 */}
+                    <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                      <Text color={'#D9C7A2'}>Daily</Text>
+                    </Box>
+                    {/* Afrith-modified-ends-07/Mar/24 */}
                     <Box
-                      w={'200px'}
-                      h={'50px'}
+                      w={'100%'}
                       display={'flex'}
-                      justifyContent={'center'}
-                      alignItems={'center'}
+                      justifyContent={'space-between'}
                     >
-                      <Text color={'#D9C7A2'}>
-                        Name
+                      <Text textAlign={'center'} color={'#D9C7A2'}>
+                        Position
+                      </Text>
+                      <Text textAlign={'center'} color={'#D9C7A2'}>
+                        Score
                       </Text>
                     </Box>
-                    <Img
-                      src={Separator}
-                      className="dot-img"
-                      w={'10px'}
-                      h={'65px'}
-                      position={'relative'}
-                    />
-                    <Box w={'200px'} h={'50px'}>
-                      {/* Afrith-modified-starts-07/Mar/24 */}
-                      <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                        <Text color={'#D9C7A2'}>Daily</Text>
-                      </Box>
-                      {/* Afrith-modified-ends-07/Mar/24 */}
-                      <Box
-                        w={'100%'}
-                        display={'flex'}
-                        justifyContent={'space-between'}
-                      >
-                        <Text textAlign={'center'} color={'#D9C7A2'}>
-                          Position
-                        </Text>
-                        <Text textAlign={'center'} color={'#D9C7A2'}>
-                          Score
-                        </Text>
-                      </Box>
-                    </Box>
-                    <Img
-                      src={Separator}
-                      className="dot-img"
-                      w={'10px'}
-                      h={'65px'}
-                      position={'relative'}
-                    />
-                    <Box w={'200px'} h={'50px'}>
-                      <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                        <Text color={'#D9C7A2'}>All Time</Text>
-                      </Box>
-                      <Box
-                        w={'100%'}
-                        display={'flex'}
-                        justifyContent={'space-between'}
-                      >
-                        <Text textAlign={'center'} color={'#D9C7A2'}>
-                          Position
-                        </Text>
-                        <Text textAlign={'center'} color={'#D9C7A2'}>
-                          Score
-                        </Text>
-                      </Box>
-                    </Box>
                   </Box>
-                  <Box>
-                    {/* {content && content.map((it: any, ind: number) => ( */}
-                    {sortedUsers &&
-                      // usersWithAllTimeScore.map((item: any, index: number) => (
-                        sortedUsers.map((item: any, index: number) => (
-                        <Box
-                          className="content-lead"                       
-                          key={index}
-                          _hover={{
-                            filter: 'grayscale(50%)',
-                            transform: 'scale(1.02)',
-                            transition: 'transform 0.3s ease-in-out',
-                            opacity: '0.8',
-                          }}
-                        >
-                          <>
-                            <Img
-                              src={Entry}
-                              className="list-pad"                           
-                              _hover={{ filter: 'grayscale(50%)' }}
-                            />
-                            <Box className='list-wrapper'                           
-                              _hover={{ filter: 'grayscale(50%)' }}
-                            >
-                              <Box w={'30%'}>
-                                <Text
-                                  textAlign={'center'}                               
-                                  color={'#D9C7A2'}
-                                >
-                                  {item.name ? item.name : 'Roman'}
-                                </Text>
-                              </Box>
-                              <Box
-                                w={'30%'}
-                                display={'flex'}
-                                justifyContent={'space-between'}
-                              >
-                                <Text textAlign={'center'} color={'#D9C7A2'}>
-                                  {/* Afrith-modified-starts-09/Mar/24 */}
-                                  {sortedUsingScore ? sortedUsingScore.indexOf(item) + 1 : 0}
-                                  {/* Afrith-modified-ends-09/Mar/24 */}
-                                </Text>
-                                <Text textAlign={'center'} color={'#D9C7A2'}>
-                                  {item.score ? item.score : 0}
-                                </Text>
-                              </Box>
-                              <Box
-                                w={'30%'}
-                                display={'flex'}
-                                justifyContent={'space-between'}
-                              >
-                                <Text textAlign={'center'} color={'#D9C7A2'}>
-                                  {/* Afrith-modified-starts-09/Mar/24 */}
-                                  {item.name === playerInfo?.name ? beforeSorting.indexOf(beforeSorting.find(x => x.name === playerInfo?.name)) + 1 : beforeSorting ? beforeSorting.indexOf(item) + 1  : 0}
-                                  {/* Afrith-modified-ends-09/Mar/24 */}
-                                  {/* {index + 1} */}
-                                </Text>
-                                <Text textAlign={'center'} color={'#D9C7A2'}>
-                                  {item.allTimeScore ? item.allTimeScore : 0}
-                                </Text>
-                              </Box>
-                            </Box>
-                          </>
-                        </Box>
-                      ))}
-                  </Box>                
-                {/* <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
                   <Img
-                    src={right}
-                    w={'50px'}
-                    h={'50px'}
-                    cursor={'pointer'}
-                    onClick={() => getData(data)}
+                    src={preloadedAssets.Separator}
+                    className="dot-img"
+                    w={'10px'}
+                    h={'65px'}
+                    position={'relative'}
                   />
-                </Box> */}
-              </Box>
-              <Box className='top-bar'>
-                <Box className='list-wrapper'
-                  // w={'550px'}
-                  // display={'flex'}
-                  // justifyContent={'space-between'}
-                  // position={'relative'}
-                >                
-                  <Box className='heading-box'>
-                    <Img
-                      src={Label}
-                      className="heading-box-img"
-                      w={'200px'}
-                      h={'60px'}
-                      position={'relative'}
-                    />{' '}
-                    <Box className='heading-box-content'
-                      top={'0'}
-                      fontFamily={'AtlantisText'}
-                      // color={'#D9C7A2'}
-                      fontSize={'x-large'}
-                      position={'absolute'}
+                  <Box w={'200px'} h={'50px'}>
+                    <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                      <Text color={'#D9C7A2'}>All Time</Text>
+                    </Box>
+                    <Box
+                      w={'100%'}
                       display={'flex'}
-                      justifyContent={'center'}
-                      width={'200px'}
-                      mt={'3px'}
+                      justifyContent={'space-between'}
                     >
-                      {/* Afrith-modified-starts-07/Mar/24 */}
-                      <Text>Department</Text>
-                      {/* Afrith-modifed-ends-07/Mar/24 */}
-                      <Img
-                        src={Arrow}
-                        className="dot-img"
-                        mt={'5px'}
-                        ml={'3px'}
-                        w={'30px'}
-                        h={'30px'}
-                        position={'relative'}
-                      />{' '}
+                      <Text textAlign={'center'} color={'#D9C7A2'}>
+                        Position
+                      </Text>
+                      <Text textAlign={'center'} color={'#D9C7A2'}>
+                        Score
+                      </Text>
                     </Box>
                   </Box>
-                  <Box className='heading-box'>
+                </Box>
+                <Box>
+                  {/* {content && content.map((it: any, ind: number) => ( */}
+                  {sortedUsers &&
+                    // usersWithAllTimeScore.map((item: any, index: number) => (
+                      sortedUsers.map((item: any, index: number) => (
+                      <Box
+                        className="content-lead"                       
+                        key={index}
+                        _hover={{
+                          filter: 'grayscale(50%)',
+                          transform: 'scale(1.02)',
+                          transition: 'transform 0.3s ease-in-out',
+                          opacity: '0.8',
+                        }}
+                      >
+                        <>
+                          <Img
+                            src={preloadedAssets.Entry}
+                            className="list-pad"                           
+                            _hover={{ filter: 'grayscale(50%)' }}
+                          />
+                          <Box className='list-wrapper'                           
+                            _hover={{ filter: 'grayscale(50%)' }}
+                          >
+                            <Box w={'30%'}>
+                              <Text
+                                textAlign={'center'}                               
+                                color={'#D9C7A2'}
+                              >
+                                {item.name ? item.name : 'Guest'}
+                              </Text>
+                            </Box>
+                            <Box
+                              w={'30%'}
+                              display={'flex'}
+                              justifyContent={'space-between'}
+                            >
+                              <Text textAlign={'center'} color={'#D9C7A2'}>
+                                {/* Afrith-modified-starts-09/Mar/24 */}
+                                {sortedUsingScore ? sortedUsingScore.indexOf(item) + 1 : 0}
+                                {/* Afrith-modified-ends-09/Mar/24 */}
+                              </Text>
+                              <Text textAlign={'center'} color={'#D9C7A2'}>
+                                {item.score ? item.score : 0}
+                              </Text>
+                            </Box>
+                            <Box
+                              w={'30%'}
+                              display={'flex'}
+                              justifyContent={'space-between'}
+                            >
+                              <Text textAlign={'center'} color={'#D9C7A2'}>
+                                {/* Afrith-modified-starts-09/Mar/24 */}
+                                {item.name === playerInfo?.name ? beforeSorting.indexOf(beforeSorting.find(x => x.name === playerInfo?.name)) + 1 : beforeSorting ? beforeSorting.indexOf(item) + 1  : 0}
+                                {/* Afrith-modified-ends-09/Mar/24 */}
+                                {/* {index + 1} */}
+                              </Text>
+                              <Text textAlign={'center'} color={'#D9C7A2'}>
+                                {item.allTimeScore ? item.allTimeScore : 0}
+                              </Text>
+                            </Box>
+                          </Box>
+                        </>
+                      </Box>
+                    ))}
+                </Box>                
+             
+            </Box>
+            <Box className='top-bar'>
+              <Box className='list-wrapper'
+              >                
+                <Box className='heading-box'>
+                  <Img
+                    src={preloadedAssets.Label}
+                    className="heading-box-img"
+                    w={'200px'}
+                    h={'60px'}
+                    position={'relative'}
+                  />{' '}
+                  <Box className='heading-box-content'
+                    top={'0'}
+                    fontFamily={'AtlantisText'}
+                    // color={'#D9C7A2'}
+                    fontSize={'x-large'}
+                    position={'absolute'}
+                    display={'flex'}
+                    justifyContent={'center'}
+                    width={'200px'}
+                    mt={'3px'}
+                  >
+                     {/* Afrith-modified-starts-07/Mar/24 */}
+                     <Text>Department</Text>
+                    {/* Afrith-modifed-ends-07/Mar/24 */}
                     <Img
-                      src={Label}
-                      className="heading-box-img"
-                      w={'200px'}
-                      h={'60px'}
+                      src={preloadedAssets.Arrow}
+                      className="dot-img"
+                      mt={'5px'}
+                      ml={'3px'}
+                      w={'30px'}
+                      h={'30px'}
                       position={'relative'}
                     />{' '}
-                    <Box className='heading-box-content'
-                      top={'0'}
-                      fontFamily={'AtlantisText'}
-                      // color={'#D9C7A2'}
-                      fontSize={'x-large'}
-                      position={'absolute'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                      width={'200px'}
-                      mt={'3px'}
-                    >
-                      {/* Afrith-modified-starts-07/Mar/24 */}
-                      <Text>Overall</Text>
-                      {/* Afrith-modified-ends-07/Mar/24 */}
-                      <Img
-                        src={Arrow}
-                        className="dot-img"
-                        mt={'5px'}
-                        ml={'3px'}
-                        w={'30px'}
-                        h={'30px'}
-                        position={'relative'}
-                      />{' '}
-                    </Box>
-                  </Box>                
+                  </Box>
                 </Box>
-              </Box>  
-              <Img
-                src={Close}                   
-                className='close-btn'
-                onClick={() =>homeLeaderBoard ? handleHome() : getData(data)}
-              />   
-          </Box>        
+                <Box className='heading-box'>
+                  <Img
+                    src={preloadedAssets.Label}
+                    className="heading-box-img"
+                    w={'200px'}
+                    h={'60px'}
+                    position={'relative'}
+                  />{' '}
+                  <Box className='heading-box-content'
+                    top={'0'}
+                    fontFamily={'AtlantisText'}
+                    // color={'#D9C7A2'}
+                    fontSize={'x-large'}
+                    position={'absolute'}
+                    display={'flex'}
+                    justifyContent={'center'}
+                    width={'200px'}
+                    mt={'3px'}
+                  >
+                    {/* Afrith-modified-starts-07/Mar/24 */}
+                    <Text>Overall</Text>
+                    {/* Afrith-modified-ends-07/Mar/24 */}
+                    <Img
+                      src={preloadedAssets.Arrow}
+                      className="dot-img"
+                      mt={'5px'}
+                      ml={'3px'}
+                      w={'30px'}
+                      h={'30px'}
+                      position={'relative'}
+                    />{' '}
+                  </Box>
+                </Box>                
+              </Box>
+            </Box>  
+            <Img
+              src={preloadedAssets.Close}                   
+              className='close-btn'
+              onClick={() => homeLeaderBoard ? handleHome() : getData(data) }
+            />          
+          </Box>      
       )}
     </>
   );

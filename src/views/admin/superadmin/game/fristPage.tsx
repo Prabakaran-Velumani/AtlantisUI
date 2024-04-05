@@ -34,7 +34,9 @@ import LeanerList from './components/LeanersList'
 import TexttoVoice from './components/SpeeachKit'
 import { createScormConfig, getScormConfig, generateScorm } from 'utils/scorm/scorm';
 // @ts-ignore
-import loadingImage from 'assets/img/games/loading.gif';
+// import loadingImage from 'assets/img/games/loading.gif';
+import loadingImage from 'assets/img/games/loady.gif';
+import {API_SERVER} from 'config/constant';
 import { RiDraftLine } from 'react-icons/ri';
 
 interface Counting {
@@ -120,16 +122,14 @@ const Game: React.FC = () => {
   //   setGameList(result.data);
   // };
 
-
-useEffect(() => {
   const gameGameStage = localStorage.getItem('gameGameStage');
-  if(gameGameStage == 'Review')
+useEffect(() => {
+ 
+  if(gameGameStage === 'Review')
   {
     setTabState('Review');
     setLoadingdata(true);
-    localStorage.removeItem('gameGameStage');
   }
-  
   console.log('gameGameStage',gameGameStage);
   gameLists(tabState);
 }, [tabState]);
@@ -139,8 +139,14 @@ useEffect(() => {
   // }, [tabState]);
 
   useEffect(() => {
+    if(gameGameStage === 'Review')
+    {
+      setTabState('Review');
+      setLoadingdata(true);
+    }
+    console.log('gameGameStage',gameGameStage);
+    gameLists(tabState);
     fetchData();
-
     fetchCount();
   }, []);
   const handleMouse = (i: number) => {
@@ -201,7 +207,14 @@ useEffect(() => {
   const containerRef = useRef(null);
   useEffect(() => {
     // Your code to fetch data or handle tab change
-
+    if(gameGameStage === 'Review')
+    {
+      setTabState('Review');
+      setLoadingdata(true);
+      
+    }
+    gameLists(tabState);
+    console.log('gameGameStage',gameGameStage);
     // Scroll to top when tab changes
     if (containerRef.current) {
       containerRef.current.scrollTop = 0;
@@ -490,10 +503,11 @@ useEffect(() => {
     } else {
 
       setGameList(result.data);
+      localStorage.removeItem('gameGameStage');
     }
 
     setLoadingdata(false);
-
+    
   };
 
   const [scormEdition, setScormEdition] = useState('SCORM 1.2');

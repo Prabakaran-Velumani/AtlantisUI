@@ -50,6 +50,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { preloadedImages } from 'utils/hooks/function';
+import { assetImageSrc } from 'utils/hooks/imageSrc';
 
 import { json, useParams } from 'react-router-dom';
 import {
@@ -57,8 +59,6 @@ import {
   SubmitReview,
   getGameCreatorDemoData,
 } from 'utils/game/gameService';
-// import NoAuth from './NoAuth';
-// import NoAuth from './NoAuth';
 import EntirePreview from './EntirePreview';
 import { API_SERVER } from 'config/constant';
 import { IoIosRefresh } from 'react-icons/io';
@@ -82,7 +82,7 @@ export const ScoreContext = createContext<any>(null);
 const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
-  const InitialScreenId = id ? 10 : 0;
+  const InitialScreenId = id ? 10 : 1; //replace 10 by which screen you want to play
   const [gameInfo, setGameInfo] = useState<any | null>();
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -99,11 +99,19 @@ const GamePreview = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(null);
   const [showGame,setShowGame] = useState(false);
-  // useEffect(() => {
-  //   if(windowWidth < 700)
-  //   {setShowGame(false)}
-  //   else{setShowGame(true);}
-  // },[windowWidth]);
+  const [contentReady, setContentReady] = useState<boolean>(false);
+  const [apiImageSet, setApiImageSet] = useState<any>();
+  const [staticAssetImageUrls, setStaticAssetImageUrls] = useState<any>(null);
+  const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const resolvedResult: any = await preloadedImages(assetImageSrc);
+      setStaticAssetImageUrls(resolvedResult);
+    };
+    fetchData();
+  }, []);
+
   useEffect(() => {
     uuid && fetchGameData();
   }, [uuid]);
@@ -141,20 +149,20 @@ const GamePreview = () => {
   const fetchGameData = async () => {
     const gamedata = await getGameDemoData(uuid);
 
-    if (!gamedata.error && gamedata) {
+    if (!gamedata?.error && gamedata) {
       updateGameInfo(gamedata);
     }
   };
   const fetchCreatorDemoData = async () => {
     const gamedata = await getGameCreatorDemoData(id);
 
-    if (!gamedata.error && gamedata) {
+    if (!gamedata?.error && gamedata) {
       updateCreatorGameInfo(gamedata);
     }
   };
 
   
-  const updateCreatorGameInfo = (info: any) => {
+  const updateCreatorGameInfo = async (info: any) => {
     const {
       gameview,
       image,
@@ -166,8 +174,6 @@ const GamePreview = () => {
     const sortBlockSequence = (blockArray: []) => {
       const transformedArray = blockArray.reduce((result: any, obj: any) => {
         const groupKey = obj?.blockQuestNo.toString();
-        // const seqKey = obj?.blockSecondaryId;
-        // const SplitArray = obj?.blockPrimarySequence.toString()?.split(".")[1];
         const seqKey = obj?.blockPrimarySequence.toString()?.split('.')[1];
         if (!result[groupKey]) {
           result[groupKey] = {};
@@ -205,8 +211,7 @@ const GamePreview = () => {
       };
       return item;
     });
-    console.log('completionOptions', completionOptions);
-    setGameInfo({
+   setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,
       gameHistory: gameview,
@@ -222,13 +227,42 @@ const GamePreview = () => {
       gameNonPlayerUrl:
         info?.assets?.npcUrl && API_SERVER + '/' + info?.assets?.npcUrl,
     });
+    const apiImageSetArr: any = [
+      { assetType: 'backgroundImage', src: image?.gasAssetImage },
+      {
+        assetType: 'nonplayerImage',
+        src: API_SERVER + '/' + info?.assets?.npcUrl,
+      },
+    ];
+
+    let playerCharectorsUrls = info?.assets?.playerCharectorsUrl.map(
+      (item: any, index: number) => {
+        let objValue = API_SERVER + '/' + item;
+        let objKey = `playerCharacterImage_${index}`;
+        apiImageSetArr.push({ assetType: objKey, src: objValue });
+      },
+    );
+    let gameQuestBadges = await Promise.all(
+      info?.assets?.badges.map(
+        async (item: Record<string, string>) => {
+          Object.entries(item).forEach(([key, value]) => {
+            let objkeyValue = key.split('_')[1];
+            let objKey = `Quest_${objkeyValue}`;
+            let objKeyValue = API_SERVER + '/' + value;
+            apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
+          });
+          setApiImageSet(apiImageSetArr);
+          return true;
+        },
+      ),
+    );
   };
 
   /** THis function used to update gameInfo state on initial render and after every submition of a review
    *
    * Should update game info after update, delete, new review submition using this function updateGameInfo
    */
-  const updateGameInfo = (info: any) => {
+  const updateGameInfo = async (info: any) => {
     const {
       gameReviewerId,
       creatorId,
@@ -315,6 +349,36 @@ const GamePreview = () => {
       gameNonPlayerUrl:
         info?.assets?.npcUrl && API_SERVER + '/' + info?.assets?.npcUrl,
     });
+  
+    const apiImageSetArr: any = [
+      { assetType: 'backgroundImage', src: image?.gasAssetImage },
+      {
+        assetType: 'nonplayerImage',
+        src: API_SERVER + '/' + info?.assets?.npcUrl,
+      },
+    ];
+
+    let playerCharectorsUrls = info?.assets?.playerCharectorsUrl.map(
+      (item: any, index: number) => {
+        let objValue = API_SERVER + '/' + item;
+        let objKey = `playerCharacterImage_${index}`;
+        apiImageSetArr.push({ assetType: objKey, src: objValue });
+      },
+    );
+    let gameQuestBadges = await Promise.all(
+      info?.assets?.badges.map(
+        async (item: Record<string, string>) => {
+          Object.entries(item).forEach(([key, value]) => {
+            let objkeyValue = key.split('_')[1];
+            let objKey = `Quest_${objkeyValue}`;
+            let objKeyValue = API_SERVER + '/' + value;
+            apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
+          });
+          setApiImageSet(apiImageSetArr);
+          return true;
+        },
+      ),
+    );
   };
 
   const handleSubmitReview = async (inputdata: any) => {
@@ -394,20 +458,42 @@ const GamePreview = () => {
     return () => clearTimeout(timeout); // Cleanup the timer on component unmount
   }, [timeout]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const resolvedResult: any = await preloadedImages(apiImageSet);
+      setApiUrlAssetImageUrls(resolvedResult);
+    };
+    apiImageSet && fetchData();
+  }, [apiImageSet]);
+
+  const preloadedAssets = useMemo(() => {
+    return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls };
+  }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
+
+  useEffect(() => {
+    if (gameInfo && preloadedAssets) {
+      setContentReady(true);
+    } else {
+      setContentReady(false);
+    }
+  }, [gameInfo, preloadedAssets]);
+
   return (
     <>
-      {gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
+    <Suspense fallback={<h1>Loading please wait...</h1>}>
+        {contentReady && (
+      gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
       gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
         <h1> {'Your are Not Authorized....'}</h1>
       ) : (
         gameInfo?.gameId &&
         (
-        //   !showGame ? (
-        //   <PlayInfo />          
-        // ) : 
-        (
+          // !showGame ? 
+        //   (
+        //   <PlayInfo />
+        // ) :
+         (
           <ScoreContext.Provider value={{ profile, setProfile }}>
-            {/* <Box id="container" onMouseMove={handleMouseMove}> */}
             <Box id="container" >
               {isHovered && (
                 <Icon
@@ -435,11 +521,14 @@ const GamePreview = () => {
                 gameInfo={gameInfo}
                 handleSubmitReview={handleSubmitReview}
                 isReviewDemo={id ? false : true}
+                preloadedAssets={preloadedAssets}
               />
             </Box>
           </ScoreContext.Provider>
         ))
-      )}
+      )
+        )}
+    </Suspense>
     </>
   );
 };

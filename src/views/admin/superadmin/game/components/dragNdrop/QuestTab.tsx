@@ -51,7 +51,8 @@ const QuestTab: React.FC<PropsNote> = ({
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedQuestNo, setSelectedQuestNo] = useState<number | null>(null); // Initialize as null
-
+  const [deletequestgameId, setDeleteQuestGameId] = useState<number | null>(null); // Initialize as null
+  const [QuestTabStateDelete, setQuestTabStateDelete] = useState<any>(false);
   const handleNavigation = (nid: number) => {
     if (nid) {
       setQuestTabState(nid);
@@ -60,15 +61,25 @@ const QuestTab: React.FC<PropsNote> = ({
     }
   };
   const handleDeleteClick = (item: any) => {
-    setSelectedQuestNo(item.gameQuestNo); // Set the selected quest number
-    console.log('selectedQuestNo', item.gameQuestNo, item.gameId);
-    onOpen();
+    if(item.gameQuestNo === 1)
+    {
+      setQuestTabStateDelete(true)
+      onOpen();
+    }
+    else
+    {
+      setQuestTabStateDelete(false)
+      setSelectedQuestNo(item.gameQuestNo); // Set the selected quest number
+      setDeleteQuestGameId(item.gameId);
+      console.log("selectedQuestNo",item.gameQuestNo,item.gameId)
+      onOpen();
+  }
   };
 
   const handleCancelDelete = () => {
     // Close the modal without deleting
     setSelectedQuestNo(null); // Set the selected quest number
-
+    setDeleteQuestGameId(null);
     onClose();
   };
 
@@ -94,89 +105,69 @@ const QuestTab: React.FC<PropsNote> = ({
                 _focus={{ border:'none'}}
                 minW='max-content'
                 flexDirection='column'>
-                {/* <Flex align='center'>
-                      <Text color={textColor} fontSize='lg' fontWeight='500' me='12px'>
-                      Quest {item.gameQuestNo}
+                <Flex align='center'>
+                  <Text color={textColor} fontSize='lg' fontWeight='500' me='12px'>
+                    Quest {item.gameQuestNo}
+                  </Text>
+                  {/* indu modified on 06-02-2024 for ask confirmation for delete */}
+                  <Icon as={MdDelete} fontSize={'md'} color={'grey'} cursor={'pointer'} onClick={() => handleDeleteClick(item)}/>
+
+                  {/* Confirmation Modal */}
+                  <Modal isOpen={isOpen} onClose={onClose} size="md">
+                    <ModalOverlay />
+                    <ModalContent>
+                      { (QuestTabStateDelete===false)? 
+                      <><ModalHeader>
+                        Confirm Deletion</ModalHeader>
+                      <ModalBody>
+                        <Text color={textColor} fontSize="18px" fontWeight="600"
+                        >
+                         
+                           Are you sure you want to delete Quest {selectedQuestNo} ?
+                        </Text>
+
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button color={'#fff'}
+                          bg={'#11047a'}
+                          _hover={{ color: '#fff', bg: '#11047a' }}
+                          mr={'10px'} onClick={() => { deleteQuest(deletequestgameId, selectedQuestNo); onClose(); }} >
+                          Delete
+                        </Button>
+                        <Button color={'#fff'}
+                          bg={'#11047a'}
+                          _hover={{ color: '#fff', bg: '#11047a' }}
+                          mr={'10px'} onClick={handleCancelDelete}>Cancel</Button>
+                      </ModalFooter></>
+                      :<>
+                    <ModalBody>
+                      <Text color={textColor} fontSize="18px" fontWeight="600">
+                       
+                      Please do not delete Quest {selectedQuestNo ?? 1}. You can delete the items associated with it instead.
                       </Text>
-                      <Icon as={MdDelete} fontSize={'md'} color={'grey'} cursor={'pointer'}   onClick={() => deleteQuest(item.gameId,item.gameQuestNo)}   />
-                    </Flex> */}
-                    <Flex align="center">
-                      <Text
-                        color={textColor}
-                        fontSize="lg"
-                        fontWeight="500"
-                        me="12px"
-                      >
-                        Quest {item.gameQuestNo}
-                      </Text>
-                      {/* indu modified on 06-02-2024 for ask confirmation for delete */}
-                      <Tooltip hasArrow label={`Delete Quest ${item.gameQuestNo}`}>
-                        <div>
-                          <Icon
-                            as={MdDelete}
-                            fontSize={'md'}
-                            color={'grey'}
-                            cursor={'pointer'}
-                            onClick={() => handleDeleteClick(item)}
-                          />
-                        </div>
-                      </Tooltip>
-                      {/* Confirmation Modal */}
-                      <Modal isOpen={isOpen} onClose={onClose} size="md">
-                        <ModalOverlay />
-                        <ModalContent>
-                          <ModalHeader>Confirm Deletion</ModalHeader>
-                          <ModalBody>
-                            <Text
-                              color={textColor}
-                              fontSize="18px"
-                              fontWeight="600"
-                            >
-                              Are you sure you want to delete Quest{' '}
-                              {selectedQuestNo}?
-                            </Text>
-                          </ModalBody>
-                          <ModalFooter>
-                            <Button
-                              color={'#fff'}
-                              bg={'#11047a'}
-                              _hover={{ color: '#fff', bg: '#11047a' }}
-                              mr={'10px'}
-                              onClick={() => {
-                                deleteQuest(item.gameId, selectedQuestNo);
-                                onClose();
-                              }}
-                            >
-                              Delete
-                            </Button>
-                            <Button
-                              color={'#fff'}
-                              bg={'#11047a'}
-                              _hover={{ color: '#fff', bg: '#11047a' }}
-                              mr={'10px'}
-                              onClick={handleCancelDelete}
-                            >
-                              Cancel
-                            </Button>
-                          </ModalFooter>
-                        </ModalContent>
-                      </Modal>
-                    </Flex>
-                    <Box
-                      height="4px"
-                      w="100%"
-                      transition="0.1s linear"
-                      bg={
-                        questTabState === item.gameQuestNo
-                          ? 'brand.500'
-                          : 'transparent'
-                      }
-                      mt="15px"
-                      borderRadius="30px"
-                    />
-                  </Tab>
-                )))
-              : null}
+
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color={'#fff'}
+                        bg={'#11047a'}
+                        _hover={{ color: '#fff', bg: '#11047a' }}
+                        mr={'10px'} onClick={() => {onClose()}}>Okey</Button>
+                    </ModalFooter></>
+                     }
+                    </ModalContent>
+                  </Modal>
+                </Flex>
+                <Box
+                  height='4px'
+                  w='100%'
+                  transition='0.1s linear'
+                  bg={questTabState === item.gameQuestNo ? 'brand.500' : 'transparent'}
+                  mt='15px'
+                  borderRadius='30px'
+                />
+              </Tab>
+            ))) : (null)}
+
           </Flex>
         </TabList>
         {/* <TabPanels>

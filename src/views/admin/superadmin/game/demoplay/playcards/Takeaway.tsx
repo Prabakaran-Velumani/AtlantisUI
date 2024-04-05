@@ -14,7 +14,8 @@ const Takeway: React.FC<{
   imageSrc: any;
   getData?: any;
   data?: any;
-}> = ({ formData, imageSrc, getData, data }) => {
+  preloadedAssets: any;
+}> = ({ formData, imageSrc, getData, data,preloadedAssets }) => {
   const content = formData.gameTakeawayContent?.split('\n');
 
   return (
@@ -43,7 +44,7 @@ const Takeway: React.FC<{
                       >
                         <>
                           <Img
-                            src={bull}
+                            src={preloadedAssets.bull}
                             className="dot-img"
                             w={'16px'}
                             h={'16px'}
@@ -57,7 +58,7 @@ const Takeway: React.FC<{
             </Box>
             <Box className='next-btn-box'>
                 <Img
-                  src={nextBtn}                 
+                  src={preloadedAssets.nextBtn}                 
                   onClick={()=>getData(data)}
                 />
               </Box>

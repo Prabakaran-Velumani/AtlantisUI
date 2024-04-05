@@ -4,6 +4,7 @@ import char from '../../assets/img/games/charbox.png';
 import next from '../../assets/img/screens/next.png';
 import back from '../../assets/img/screens/back.png';
 import note from '../../assets/img/games/note.png';
+import home from '../../assets/img/games/home.png';
 import dial from '../../assets/img/games/Dialogue.png';
 import parch from '../../assets/img/games/parch.png';
 import rew from '../../assets/img/screens/Reward Bar.png';
@@ -40,6 +41,7 @@ import Close from '../../assets/img/games/close.png';
 import Arrow from '../../assets/img/games/arrow.png';
 import Separator from '../../assets/img/games/separator.png';
 import ReplayBox from '../../assets/img/screens/ReplayBox.png';
+import overview from '../../assets/img/screens/overview.png';
 import play from '../../assets/img/games/Play.png';
 import ArcheryArrow from '../../assets/img/games/archery-arrow.png';
 import ProfileCard from '../../assets/img/games/profile-card.png';
@@ -53,13 +55,17 @@ import off from '../../assets/img/games/off.png';
 import replayBtn from '../../assets/img/games/ReplayBtn.png';
 import SelectButton from '../../assets/img/games/selectbtn.png';
 import Okay from '../../assets/img/games/Okay.png'
+import write from '../../assets/img/screens/Screens/Writing.png';
 
+
+import TopMenu from '../../assets/img/games/top-menu.png';
+import Overview from '../../assets/img/games/game-overview.png';
+import Setting from '../../assets/img/games/settings.png';
+import SettingPad from '../../assets/img/games/setting-pad.png';
+import SliderPointer from '../../assets/img/games/slider-pointer.png';
 
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
-
-
-
 
  */
 export const assetImageSrc = [
@@ -69,6 +75,7 @@ export const assetImageSrc = [
   { assetType: 'next', src: next },
   { assetType: 'back', src: back },
   { assetType: 'note', src: note },
+  { assetType: 'home', src: home },
   { assetType: 'dial', src: dial },
   { assetType: 'parch', src: parch },
   { assetType: 'rew', src: rew },
@@ -105,6 +112,7 @@ export const assetImageSrc = [
   { assetType: 'Arrow', src: Arrow },
   { assetType: 'Separator', src: Separator },
   { assetType: 'ReplayBox', src: ReplayBox },
+  { assetType: 'overview', src: overview },
   { assetType: 'ArcheryArrow', src: ArcheryArrow },
   { assetType: 'ProfileCard', src: ProfileCard },
   { assetType: 'FormField', src: FormField },
@@ -118,6 +126,12 @@ export const assetImageSrc = [
   { assetType: 'replayBtn', src: replayBtn },
   { assetType: 'SelectButton', src: SelectButton },
   { assetType: 'OkayBtn', src: Okay },
+  { assetType: 'TopMenu', src: TopMenu },
+  { assetType: 'Overview', src: Overview },
+  { assetType: 'Setting', src: Setting },
+  { assetType: 'SettingPad', src: SettingPad },
+  { assetType: 'SliderPointer', src: SliderPointer },
+  { assetType: 'write', src: write },
   
   
   /*file not available but used list

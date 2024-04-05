@@ -93,7 +93,8 @@ import { RootState } from 'store/reducers';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 // @ts-ignore
-import loadingImage from 'assets/img/games/loading.gif';
+// import loadingImage from 'assets/img/games/loading.gif';
+import loadingImage from 'assets/img/games/loady.gif';
 const steps = [
   { title: 'BackGround' },
   { title: 'Non Playing Charater' },
@@ -490,25 +491,29 @@ const GameCreation = () => {
       fetchDefaultSkill();
     }
 
-    if (id) {
-      let previewData: { [key: string]: any } = {
-        gameId: parseInt(id),
-      };
-
-      if (tab) {
-        previewData = { ...previewData, currentTab: tab };
-      }
-
-      if (currentTab) {
-        previewData = { ...previewData, currentSubTab: currentTab };
-      }
-
-      if (questTabState) {
-        previewData = { ...previewData, currentQuest: questTabState };
-      }
-
-      dispatch(updatePreviewData(previewData));
-    } else {
+      if (id) {
+        let previewData: { [key: string]: any } = {
+            gameId: parseInt(id),
+        };
+    
+        if (tab > 2 && tab < 6) {
+            previewData = { ...previewData, currentTab: tab };
+        }
+        else{
+            previewData = { ...previewData, currentTab: 3 };
+        }
+    
+        if (currentTab) {
+            previewData = { ...previewData, currentSubTab: currentTab };
+        }
+    
+        if (questTabState) {
+            previewData = { ...previewData, currentQuest: questTabState };
+        }
+    
+        dispatch(updatePreviewData(previewData));
+    }
+    else{
       dispatch(updatePreviewData(null));
     }
   }, [id]);
@@ -741,10 +746,10 @@ const GameCreation = () => {
     setReviews(reviews?.reviewlist);
     const images = await getCreatorBlocks(id);
     if (images?.status !== 'Success') {
-      console.log(images.message);
+      console.log(images?.message);
     } else {
-      setCblocks(images.data);
-      setQuest(images.quest);
+      setCblocks(images?.data);
+      setQuest(images?.quest);
     }
     const gamedata = await getGameCreatorDemoData(id);
     if (!gamedata.error && gamedata) {
@@ -1048,6 +1053,7 @@ const GameCreation = () => {
   const handleShareReview = () => {
     setEntire(false);
     setShare(true);
+    setPreview(false);
     onOpen();
   };
   const handleShowReview = () => {
@@ -1307,11 +1313,11 @@ const GameCreation = () => {
                   }
                 }
                 if (key.type === 'Interaction') {
-                  // console.log('keyinput', key.type + key.input);
+                  console.log('keyinput', key.type + key.input);
                   var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                   var blockRoll = input[inputkey]?.blockRoll;
                   var interaction = input[inputkey]?.interaction;
-                  //console.log('QuestionsEmotion', QuestionsEmotion);
+                  console.log('QuestionsEmotion1', QuestionsEmotion);
                   //console.log('blockRoll', blockRoll);
                   //console.log('interaction', interaction);
                   if (!interaction) {
@@ -1323,6 +1329,7 @@ const GameCreation = () => {
                     });
                     return false;
                   }
+                  console.log('QuestionsEmotion', QuestionsEmotion);
                   if (!QuestionsEmotion || QuestionsEmotion === undefined) {
                     toast({
                       title: `Questions is Empty On This Sequence ${key.id} `,
@@ -1506,8 +1513,8 @@ const GameCreation = () => {
       setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
     } else if (title1 === 'done') {
       setHeightOfTab(getfirstElementHgt);
-    }
-  }, [tab, listQuest?.length]);
+    }     
+  },[tab, listQuest?.length, questTabState])
 
   //navin
   const handleNext = async () => {
@@ -1519,341 +1526,315 @@ const GameCreation = () => {
       formData.gameBehaviour,
       formData.gameOthers,
     ];
-    // Completion Screen Validation
-    const complidatalength = Object.keys(compliData).length;
-    const getcompliData = Object.keys(compliData);
-    console.log('getcompliData', getcompliData);
-
-    if (complidatalength !== 0) {
-      for (let i = 0; i < complidatalength; i++) {
-        const compkey = getcompliData[i] as unknown as keyof typeof compliData;
-        const compkeyNumber = Number(compkey);
-        console.log(
-          'formDatagameThankYouMessage123Key for entry',
-          i,
-          ':',
-          compkey,
-        );
-        const getgameTotalScore = compliData[compkey].gameTotalScore;
-        if (Array.isArray(getgameTotalScore) && getgameTotalScore.length > 0) {
-          const maxScore = getgameTotalScore[0].maxScore;
-          if (!maxScore) {
-            toast({
-              title: 'Please Enter Total Score.',
-              status: 'error',
-              duration: 3000,
-              isClosable: true,
-            });
-            setCompKeyCount(compkeyNumber);
-            return false;
-          }
-        }
-        if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
-          if (!compliData[compkey]?.gameMinScore) {
-            toast({
-              title: 'Please Enter Minimum Score.',
-              status: 'error',
-              duration: 3000,
-              isClosable: true,
-            });
-            setCompliData((prevInput: any) => ({
-              ...prevInput,
-              [CompKeyCount]: {
-                ...prevInput[CompKeyCount],
-                redBorderForMinScore: true,
-              },
-            }));
-            setCompKeyCount(compkeyNumber);
-            return false;
-          }
-
-          // Reset the red border style for the InputField
-          setCompliData((prevInput: any) => ({
-            ...prevInput,
-            [CompKeyCount]: {
-              ...prevInput[CompKeyCount],
-              redBorderForMinScore: false,
-            },
-          }));
-        }
-        if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
-          if (!compliData[compkey]?.gameDistinctionScore) {
-            toast({
-              title: 'Please Enter Distinction  Score.',
-              status: 'error',
-              duration: 3000,
-              isClosable: true,
-            });
-            setCompKeyCount(compkeyNumber);
-            return false;
-          }
-        }
-        if (compliData[compkey]?.gameIsSetBadge === 'true') {
-          if (!compliData[compkey]?.gameBadge) {
-            toast({
-              title: 'Please Select Badge.',
-              status: 'error',
-              duration: 3000,
-              isClosable: true,
-            });
-            setCompKeyCount(compkeyNumber);
-            return false;
-          }
-          if (!compliData[compkey]?.gameBadgeName) {
-            toast({
-              title: 'Please Fill Badge Name.',
-              status: 'error',
-              duration: 3000,
-              isClosable: true,
-            });
-            setCompKeyCount(compkeyNumber);
-            return false;
-          }
-          if (compliData[compkey]?.gameIsSetCriteriaForBadge === 'true') {
-            if (!compliData[compkey]?.gameAwardBadgeScore) {
-              toast({
-                title: 'Please Set Criteria for Badge .',
-                status: 'error',
-                duration: 3000,
-                isClosable: true,
-              });
-              setCompKeyCount(compkeyNumber);
-              return false;
-            }
-          }
-          if (!compliData[compkey]?.gameScreenTitle) {
-            toast({
-              title: 'Please Screen Title.',
-              status: 'error',
-              duration: 3000,
-              isClosable: true,
-            });
-            setCompKeyCount(compkeyNumber);
-            return false;
-          }
-          if (compliData[compkey]?.gameIsSetCongratsSingleMessage === 'true') {
-            if (!compliData[compkey]?.gameCompletedCongratsMessage) {
-              toast({
-                title: 'Please Set CongratsMessage.',
-                status: 'error',
-                duration: 3000,
-                isClosable: true,
-              });
-              setCompKeyCount(compkeyNumber);
-              return false;
-            }
-          }
-          if (
-            compliData[compkey]?.gameIsSetCongratsScoreWiseMessage === 'true'
-          ) {
-            if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
-              if (!compliData[compkey]?.gameMinimumScoreCongratsMessage) {
-                toast({
-                  title: 'Please Enter Minium Score Congrats Message.',
-                  status: 'error',
-                  duration: 3000,
-                  isClosable: true,
-                });
-                setCompKeyCount(compkeyNumber);
-                return false;
-              }
-              if (!compliData[compkey]?.gameaboveMinimumScoreCongratsMessage) {
-                toast({
-                  title: 'Please Enter Above Minimum Score CongratsMessage.',
-                  status: 'error',
-                  duration: 3000,
-                  isClosable: true,
-                });
-                setCompKeyCount(compkeyNumber);
-                return false;
-              }
-            }
-            if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
-              if (
-                !compliData[compkey]
-                  ?.gameLessthanDistinctionScoreCongratsMessage
-              ) {
-                toast({
-                  title: 'Please Enter Distinction  Score.',
-                  status: 'error',
-                  duration: 3000,
-                  isClosable: true,
-                });
-                setCompKeyCount(compkeyNumber);
-                return false;
-              }
-              if (
-                !compliData[compkey]?.gameAboveDistinctionScoreCongratsMessage
-              ) {
-                toast({
-                  title:
-                    'Please Enter Above Distinction Score CongratsMessage.',
-                  status: 'error',
-                  duration: 3000,
-                  isClosable: true,
-                });
-                setCompKeyCount(compkeyNumber);
-                return false;
-              }
-            }
-          }
-        }
-        // setCurrentTab(compkey);
-        // setCurrentTab(CompKeyCount);
+     // Completion Screen Validation
+const complidatalength = Object.keys(compliData).length;
+const getcompliData = Object.keys(compliData);
+if (complidatalength !== 0) {
+  for (let i = 0; i < complidatalength; i++) {
+    const compkey = getcompliData[i] as unknown as keyof typeof compliData; 
+    const compkeyNumber = Number(compkey);
+    const getgameTotalScore = compliData[compkey].gameTotalScore;
+    if (Array.isArray(getgameTotalScore) && getgameTotalScore.length > 0) {
+      const maxScore = getgameTotalScore[0].maxScore;
+      if (!maxScore) {
+        toast({
+          title: 'Please Enter Total Score.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
         setCompKeyCount(compkeyNumber);
         setCurrentTab(0);
+        return false
+      }
+    }
+    if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
+      if (!compliData[compkey]?.gameMinScore) {
+        toast({
+          title: 'Please Enter Minimum Score.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
         setCompliData((prevInput: any) => ({
           ...prevInput,
           [CompKeyCount]: {
             ...prevInput[CompKeyCount],
+            redBorderForMinScore: true,
           },
         }));
+        setCompKeyCount(compkeyNumber);
+        setCurrentTab(0);
+        return false;
+      }
+
+      // Reset the red border style for the InputField
+      setCompliData((prevInput: any) => ({
+        ...prevInput,
+        [CompKeyCount]: {
+          ...prevInput[CompKeyCount],
+          redBorderForMinScore: false,
+        },
+      }))
+    }
+    if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
+      if (!compliData[compkey]?.gameDistinctionScore) {
+        toast({
+          title: 'Please Enter Distinction  Score.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        setCurrentTab(0);
+        return false
       }
     }
-    // refelection Screen Validation
-    if (formData.gameIsShowReflectionScreen === 'true') {
-      console.log('form length' + formData.gameReflectionQuestion);
-      console.log('reflectionQuestions1pri', reflectionQuestions);
-      if (
-        typeof reflectionQuestions === 'object' &&
-        reflectionQuestions !== null
-      ) {
-        var keys = Object.keys(reflectionQuestions);
+    if (compliData[compkey]?.gameIsSetBadge === 'true') {
+      if (!compliData[compkey]?.gameBadge) {
+        toast({
+          title: 'Please Select Badge.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        setCurrentTab(0);
+        return false
 
-        //newlyadded start
-        if (!keys) {
-          var keys1 = Object.keys(reflectionQuestions);
-        } else {
-          var keys1 = ['ref1', 'ref2', 'ref3', 'ref4'];
+      }
+      if (!compliData[compkey]?.gameBadgeName) {
+        toast({
+          title: 'Please Fill Badge Name.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        setCurrentTab(0);
+        return false
+
+      }
+    }
+      if (compliData[compkey]?.gameIsSetCriteriaForBadge === 'true') {
+        if (!compliData[compkey]?.gameAwardBadgeScore) {
+          toast({
+            title: 'Please Set Criteria for Badge .',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+          setCompKeyCount(compkeyNumber);
+          setCurrentTab(0);
+          return false
         }
 
-        console.log('keysref', keys1);
-        //newlyadded end
-        // Assuming formData.gameReflectionQuestion is the number of questions to check
-        for (var i = 0; i < formData.gameReflectionQuestion; i++) {
-          var key = keys1[i] as unknown as keyof typeof reflectionQuestions; //changes keys1[i] instead of keys[i]
-          var value = reflectionQuestions[key];
-          if (key == 'ref1') {
-            var question = 'Question1';
-          }
-          if (key == 'ref2') {
-            var question = 'Question2';
-          }
-          if (key == 'ref3') {
-            var question = 'Question3';
-          }
-          if (key == 'ref4') {
-            var question = 'Question4';
-          }
+      }
+      if (!compliData[compkey]?.gameScreenTitle) {
+        toast({
+          title: 'Please Screen Title.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setCompKeyCount(compkeyNumber);
+        setCurrentTab(0);
+        return false
+      }
+      if (compliData[compkey]?.gameIsSetCongratsSingleMessage === 'true') {
+        if (!compliData[compkey]?.gameCompletedCongratsMessage) {
 
-          if (!value) {
+          toast({
+            title: 'Please Set CongratsMessage.',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+          setCompKeyCount(compkeyNumber);
+          setCurrentTab(0);
+          return false
+
+        }
+      }
+      if (compliData[compkey]?.gameIsSetCongratsScoreWiseMessage === 'true') {
+
+        if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
+          if (!compliData[compkey]?.gameMinimumScoreCongratsMessage) {
             toast({
-              title: `${question} is empty. Please fill in the ${question} question.`,
+              title: 'Please Enter Minimum Score Congrats Message.',
               status: 'error',
               duration: 3000,
               isClosable: true,
             });
-            setCurrentTab(2);
-            return false;
+            setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
+            return false
+
+          }
+          if (!compliData[compkey]?.gameaboveMinimumScoreCongratsMessage) {
+            toast({
+              title: 'Please Enter Above Minimum Score CongratsMessage.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
+            return false
+
+          }
+        }
+        
+        if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
+          
+          if (!compliData[compkey]?.gameAboveDistinctionScoreCongratsMessage) {
+            toast({
+              title: 'Please Enter Above Distinction Score CongratsMessage.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
+            return false
           }
         }
       }
-    }
-    // Takeaway Screen Validation
-    if (
-      formData.gameIsShowTakeaway === 'true' &&
-      (formData.gameTakeawayContent === null ||
-        formData.gameTakeawayContent === undefined ||
-        formData.gameTakeawayContent === '')
-    ) {
-      toast({
-        title: 'Please Enter TakeAway Content',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      setCurrentTab(3);
-      return false;
-    }
-    // Welcome  Screen Validation
-    if (
-      formData.gameIsShowAdditionalWelcomeNote === 'true' &&
-      (formData.gameAdditionalWelcomeNote === null ||
-        formData.gameAdditionalWelcomeNote === undefined ||
-        formData.gameAdditionalWelcomeNote === '')
-    ) {
-      toast({
-        title: 'Please Add Welcome Note',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      //newlyadded start
-      setFormData({
-        ...formData,
-        gameIsShowAdditionalWelcomeNoteInvalid: 'true',
-      });
-      setCurrentTab(4);
-      //newlyadded End
-      return false;
-    }
-    // Thankyou Screen Validation
-    if (
-      formData.gameThankYouMessage === '' ||
-      formData.gameThankYouMessage === null ||
-      formData.gameThankYouMessage === undefined
-    ) {
-      toast({
-        title: 'Please Fill The ThankYou Box',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      setFormData({
-        ...formData,
-        isfeedbackthankyou: true,
-      });
-      setCurrentTab(5);
-      return false;
-    }
-    // Feedback Screen Validation
+    
+    setCompKeyCount(compkeyNumber);
+    setCurrentTab(0);
+    setCompliData((prevInput: any) => ({
+      ...prevInput,
+      [CompKeyCount]: {
+        ...prevInput[CompKeyCount],
+    
+      },
+    }))
+  }
+}
+// refelection Screen Validation
+if (formData.gameIsShowReflectionScreen === 'true') {
+  console.log("form length" + formData.gameReflectionQuestion);
+console.log('reflectionQuestions1pri',reflectionQuestions);
+  if (typeof reflectionQuestions === 'object' && reflectionQuestions !== null) {
 
-    if (formData.gameIsFeedbackMandatory === 'true') {
-      if (
-        formData.gameQuestion1 === 'true' &&
-        formData.gameQuestionValue1 === ''
-      ) {
+    var keys = Object.keys(reflectionQuestions);
+
+    //newlyadded start
+    if (!keys) {
+      var keys1 = Object.keys(reflectionQuestions);
+    }
+    else {
+      var keys1 = ['ref1', 'ref2', 'ref3', 'ref4'];
+    }
+
+    console.log('keysref', keys1);
+    //newlyadded end
+    // Assuming formData.gameReflectionQuestion is the number of questions to check
+    for (var i = 0; i < formData.gameReflectionQuestion; i++) {
+      var key = keys1[i] as unknown as keyof typeof reflectionQuestions; //changes keys1[i] instead of keys[i]
+      var value = reflectionQuestions[key];
+      if (key == 'ref1') {
+        var question = "Question1";
+      }
+      if (key == 'ref2') {
+        var question = "Question2";
+      }
+      if (key == 'ref3') {
+        var question = "Question3";
+      }
+      if (key == 'ref4') {
+        var question = "Question4";
+      }
+
+
+      if (!value) {
         toast({
-          title: 'Please Enter Question 1',
+          title: `${question} is empty. Please fill in the ${question} question.`,
           status: 'error',
           duration: 3000,
           isClosable: true,
         });
-        return false;
-      } else if (
-        formData.gameQuestion2 === 'true' &&
-        formData.gameQuestionValue2 === ''
-      ) {
-        toast({
-          title: 'Please Enter Question 2',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-        return false;
-      } else if (
-        formData.gameQuestionValue3 === '' ||
-        formData.gameQuestionValue4 === ''
-      ) {
-        toast({
-          title: 'Please Enter Rating Questions',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
+        setCurrentTab(2);
         return false;
       }
     }
+
+  }
+}
+// Takeaway Screen Validation
+if (formData.gameIsShowTakeaway === "true" && (formData.gameTakeawayContent === null || formData.gameTakeawayContent === undefined || formData.gameTakeawayContent === '')) {
+  toast({
+    title: 'Please Enter TakeAway Content',
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  });
+  setCurrentTab(3);
+  return false;
+}
+// Welcome  Screen Validation
+if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAdditionalWelcomeNote === null || formData.gameAdditionalWelcomeNote === undefined || formData.gameAdditionalWelcomeNote === '')) {
+  toast({
+    title: 'Please Add Welcome Note',
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  });
+  //newlyadded start 
+  setFormData({
+    ...formData,
+    gameIsShowAdditionalWelcomeNoteInvalid: 'true',
+  });
+  setCurrentTab(4);
+  //newlyadded End 
+  return false;
+}
+// Thankyou Screen Validation
+if(formData.gameThankYouMessage ==='' || formData.gameThankYouMessage ===null ||formData.gameThankYouMessage ===undefined)
+{
+  toast({
+    title: 'Please Fill The ThankYou Box',
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  })
+  setFormData({
+    ...formData,
+    isfeedbackthankyou: true,
+  });
+  setCurrentTab(5)
+return false;
+}
+// Feedback Screen Validation
+
+if (formData.gameIsFeedbackMandatory === "true") {
+  if (formData.gameQuestion1 === 'true' && formData.gameQuestionValue1 === '') {
+    toast({
+      title: 'Please Enter Question 1',
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    })
+    return false;
+  } else if (formData.gameQuestion2 === 'true' && formData.gameQuestionValue2 === '') {
+    toast({
+      title: 'Please Enter Question 2',
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    })
+    return false;
+  } else if (formData.gameQuestionValue3 === '' || formData.gameQuestionValue4 === '') {
+    toast({
+      title: 'Please Enter Rating Questions',
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    });
+    return false;
+  }
+}
     const countSelectedOptions = selectedOptions.filter(
       (option) =>
         option !== '' &&
@@ -1869,6 +1850,7 @@ const GameCreation = () => {
           duration: 3000,
           isClosable: true,
         });
+        setCurrentTab(5);
         return false;
       }
       if (
@@ -1897,8 +1879,6 @@ const GameCreation = () => {
       return console.log('updateBackground error :' + result?.err);
     }
     if (tab === 5 && result.status === 'Success') {
-      // alert("comnex"+tab);
-      // setOpenQuest(true);
       toast({
         title: 'All Screens are Updated',
         status: 'success',
@@ -1909,11 +1889,10 @@ const GameCreation = () => {
 
       const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
       setFormData(formDataWithoutLastTab);
-      dispatch(updatePreviewData({ isDispatched: true }));
-      setOpenQuest(true);
       const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
+      console.log('idddddddd',MaxBlockQuestNumber)
       if (result.status === 'Success') {
-        const maxQuestNo = MaxBlockQuestNumber?.data?.maxBlockQuestNo;
+        const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
         console.log('Max QuestNo:', maxQuestNo);
         if (maxQuestNo < 5) {
           setOpenQuest(true);
@@ -2109,13 +2088,9 @@ const GameCreation = () => {
                 }
               }
               if (key.type === 'Interaction') {
-                //console.log('keyinput', key.type + key.input);
                 var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                 var blockRoll = input[inputkey]?.blockRoll;
                 var interaction = input[inputkey]?.interaction;
-                //console.log('QuestionsEmotion', QuestionsEmotion);
-                //console.log('blockRoll', blockRoll);
-                //console.log('interaction', interaction);
                 if (!interaction) {
                   setValidation({
                     ...validation,
@@ -2129,6 +2104,7 @@ const GameCreation = () => {
                   });
                   return false;
                 }
+                console.log('QuestionsEmotion', QuestionsEmotion)
                 if (!QuestionsEmotion || QuestionsEmotion === undefined) {
                   toast({
                     title: `Questions is Empty On This Sequence ${key.id} `,
@@ -2225,7 +2201,6 @@ const GameCreation = () => {
                 }
               }
               var hasComplete = inputdataget.some((item: any) => {
-                console.log('hasComplete', hasComplete);
                 return (
                   item &&
                   (item.Notenavigate === 'Complete' ||
@@ -2246,8 +2221,6 @@ const GameCreation = () => {
             }
 
             const apiValidationResult = await getStoryValidtion(id);
-
-            //console.log('apiValidationResult', apiValidationResult);
 
             if (apiValidationResult?.status === 'Failure') {
               // There are empty fields, show an error message
@@ -2281,47 +2254,24 @@ const GameCreation = () => {
       }
     }
     if (tab === 6) {
-      if (
-        formData.gameIntroMusic === '' ||
-        formData.gameIntroMusic === null ||
-        formData.gameIntroMusic === undefined
-      ) {
-        toast({
-          title: 'Please Select Intro music Audio',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-
-        setCurrentTab(6);
-        return false;
-      } else {
-        console.log('tabstage', tab);
-        setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }));
-        localStorage.setItem('gameGameStage', 'Review');
-      }
+      if(formData.gameIntroMusic ==='' || formData.gameIntroMusic ===null ||formData.gameIntroMusic ===undefined)
+{
+  toast({
+    title: 'Please Select Intro music Audio',
+    status: 'error',
+    duration: 3000,
+    isClosable: true,
+  })
+ 
+  setCurrentTab(6)
+return false;
+} else{
+  setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }))
+  localStorage.setItem('gameGameStage','Review');
+}
     }
-    // if (tab === 6) {
-    //   console.log('tabstage',tab);
-    //   setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }))
-    //   localStorage.setItem('gameGameStage','Review');
-    // }
-    // if (tab === 6) {
-    //   setFormData({
-    //     ...formData,
-    //     gameGameStage: 'Review',
-    //   });
-    // }
-    // if(tab<tab)
-    // {
-    //   arrange.gameLastTab = tab;
-    // }
-    // else{
-    //   arrange.gameLastTab= formData?.gameLastTab
-    // }
+   
     let data = JSON.stringify(formData);
-    // console.log('data',tab);
-    // return false;
     if (tab === 1 && !id) {
       try {
         const result = await addgame(formData);
@@ -2347,7 +2297,6 @@ const GameCreation = () => {
             const parsedGameLastTabArray = JSON.parse(
               result.data.gameLastTabArray,
             );
-            //console.log('formdata', parsedGameLastTabArray);
 
             // Update formData with the parsed array
             setFormData({
@@ -2355,7 +2304,6 @@ const GameCreation = () => {
               gameLastTabArray: parsedGameLastTabArray,
             });
             navigate(`/admin/superadmin/game/creation/${result.data.gameId}`);
-            //  window.location.reload();
           }
         }
       } catch (error) {
@@ -2382,13 +2330,9 @@ const GameCreation = () => {
             isClosable: true,
             position: 'bottom-right',
           });
-          //console.log('result?.data', result?.data);
           const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
-
           setFormData(formDataWithoutLastTab);
           setTab(tab + 1);
-
-          // setFormData((prev)=>({...prev,gameLastTab:formData.gameLastTab+1}));
         }
 
         if (tab === 2 && result.status === 'Success') {
@@ -2413,13 +2357,10 @@ const GameCreation = () => {
             isClosable: true,
             position: 'bottom-right',
           });
-          // console.log('asbasflknafkanfknapnakndakndaknkanpAFPAofhEPEFPEAOFPAOEFPAEOHFAOJ[ALMAIGHPIWH  ke]pk3-it=0w4-tw0kfakf]ie0rgjsjg')
           const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
 
           setFormData(formDataWithoutLastTab);
           setTab(tab + 1);
-
-          // setFormData((prev)=>({...prev,gameLastTab:formData.gameLastTab+1}));
         }
 
         if (tab === 4 && result.status === 'Success') {
@@ -2523,11 +2464,8 @@ const GameCreation = () => {
       };
     });
 
-    ///
-    //console.log('selectedCardIndex', selectedCardIndex, i);
 
     if (selectedCardIndex !== i) {
-      //console.log('selectedCardIndex1', selectedCardIndex, i);
       // Select new card and deselect the previously selected one (if any)
       setSelectedCardIndex(i);
       setFormData((prev) => ({
@@ -2535,7 +2473,6 @@ const GameCreation = () => {
         gameBackgroundId: img.gasId,
         gameTitle: img?.temp.tempTitle,
         gameStoryLine: img?.temp.tempStoryLine,
-        // gameTitle:img?.gasAssetName
       }));
       localStorage.setItem('selectedCardIndex', i);
     }
@@ -2580,9 +2517,10 @@ const GameCreation = () => {
       };
     });
   };
-  const handleChange = (e: any) => {
-    const inputValue = e.target.value;
-    const { name, value, checked } = e.target;
+ 
+  const handleEnables =(e:any) =>{
+    const { name,  checked } = e.target;
+    
     const feedbackselectedOptions = [
       formData.gameContent,
       formData.gameRecommendation,
@@ -2591,23 +2529,27 @@ const GameCreation = () => {
       formData.gameBehaviour,
       formData.gameOthers,
     ];
-    const countfbSelectedOptions = feedbackselectedOptions.filter(
-      (option) =>
-        option !== '' &&
-        option !== 'false' &&
-        option !== undefined &&
-        option !== null,
-    ).length;
-    console.log('countfbSelectedOptions', countfbSelectedOptions);
-
+    const countfbSelectedOptions = feedbackselectedOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
+    console.log('countfbSelectedOptions',countfbSelectedOptions);
+   
     if (checked && countfbSelectedOptions >= 4) {
-      return;
-    }
+         return false;
+    } 
+    if(name === 'gameContent' ||
+   name === 'gameRelevance' ||
+   name === 'gameBehaviour' ||
+   name === 'gameOthers' ||
+   name === 'gameGamification' ||
+   name === 'gameRecommendation' ) 
+   {
+    setFormData((prev) => ({ ...prev, [name]: String(checked) }));
+   }
+  }
+  const handleChange = (e: any) => {
+    const inputValue = e.target.value;
+    const { name, value, checked } = e.target;
     if (name === 'gameDuration') {
-      // let duration =
-      //   parseInt(value.split(':')[0], 10) * 60 +
-      //   parseInt(value.split(':')[1], 10);
-      // setFormData((prev) => ({ ...prev, gameDuration: String(duration) }));
+      //No code here
     } else if (
       name === 'gameIsSetMinPassScore' ||
       name === 'gameIsSetDistinctionScore' ||
@@ -2649,31 +2591,21 @@ const GameCreation = () => {
         : setFormData((prev) => ({ ...prev, [name]: 0 }));
     } else if (name === 'gameDownloadedAsScorm') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 1 : 0 }));
-      //console.log('gameDownloadedAsScorm', formData.gameDownloadedAsScorm);
     } else if (name === 'gameDefaultFeedbackForm') {
       setFormData((prev) => ({
         ...prev,
         [name]: checked ? feedBackForm.Yes : feedBackForm.No,
       }));
-      //console.log('gameDefaultFeedbackForm', formData.gameDefaultFeedbackForm);
     } else if (name === 'gameReplayAllowed') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      //console.log('gameReplayAllowed', formData.gameReplayAllowed);
     } else if (name === 'gameLeaderboardAllowed') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      //console.log('gameLeaderboardAllowed', formData.gameLeaderboardAllowed);
     } else if (name === 'gameReflectionpageAllowed') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      // console.log(
-      //   'gameReflectionpageAllowed',
-      //   formData.gameReflectionpageAllowed,
-      // );
     } else if (name === 'gameFeedbackQuestion') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      //console.log('gameFeedbackQuestion', formData.gameFeedbackQuestion);
     } else if (name === 'gameShuffle') {
       setFormData((prev) => ({ ...prev, [name]: checked ? 'true' : 'false' }));
-      //console.log('gameShuffle', formData.gameShuffle);
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -2709,10 +2641,7 @@ const GameCreation = () => {
         // Set to an empty string or any default value
       }));
     }
-    ////////////////////////////////////
-
-    //console.log('formdata', formData);
-  };
+  }
 
   const handlecompletion = (e: any) => {
     const inputValue = e.target.value;
@@ -4441,6 +4370,7 @@ const GameCreation = () => {
                       setCompliData={setCompliData}
                       handleCompletionScreen={handleCompletionScreen}
                       handlecompletion={handlecompletion}
+                      handleEnables={handleEnables}
                     />
                   </>
                 ) : tab === 6 ? (

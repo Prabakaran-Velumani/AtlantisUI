@@ -59,7 +59,7 @@ interface Badge {
   const ThankyouScreen: React.FC<{
       handleChange: (e: any) => void;
       formData: any;
-      
+      handleEnables: (e: any) => void;
       setFormData: React.Dispatch<React.SetStateAction<any>>;
      
     
@@ -67,7 +67,7 @@ interface Badge {
       handleChange,
       formData,
       setFormData,
-      
+      handleEnables
     }) => {
 
       const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
@@ -89,6 +89,7 @@ interface Badge {
         const remainingCharacters = maxChars - inputText.length;
         setCharCount(remainingCharacters);
         handleChange(e);
+        handleEnables(e);
       };
       ///////////////////////ScreenStates////////////////////////////////
       ///Afrith-modified-29-Dec-23
@@ -161,7 +162,7 @@ return (
                   size='md'
                   id="gameContent"
                   name="gameContent"
-                  onChange={handleChange}
+                  onChange={handleEnables}
                 />
               </FormControl>
               <FormControl
@@ -181,7 +182,7 @@ return (
                   size='md'
                   id="gameRecommendation"
                   name="gameRecommendation"
-                  onChange={handleChange}
+                  onChange={handleEnables}
                 />
               </FormControl>
               <FormControl
@@ -201,7 +202,7 @@ return (
                   size='md'
                   id="gameRelevance"
                   name="gameRelevance"
-                  onChange={handleChange}
+                  onChange={handleEnables}
                 />
               </FormControl>
               <FormControl
@@ -221,7 +222,7 @@ return (
                   size='md'
                   id="gameGamification"
                   name="gameGamification"
-                  onChange={handleChange}
+                  onChange={handleEnables}
                 />
               </FormControl>
               <FormControl
@@ -241,7 +242,7 @@ return (
                   size='md'
                   id="gameBehaviour"
                   name="gameBehaviour"
-                  onChange={handleChange}
+                  onChange={handleEnables}
                 />
               </FormControl>
               <FormControl
@@ -261,7 +262,7 @@ return (
                   size='md'
                   id="gameOthers"
                   name="gameOthers"
-                  onChange={handleChange}
+                  onChange={handleEnables}
                 />
               </FormControl>                
             </SimpleGrid>

@@ -103,6 +103,7 @@ const AddScores: React.FC<{
   setCompKeyCount?: any;
   handleCompletionScreen?: any;
   handlecompletion?: any;
+  handleEnables: any;
 }> = ({
   languages,
   setShowFunction,
@@ -146,6 +147,7 @@ const AddScores: React.FC<{
   setCompKeyCount,
   handleCompletionScreen,
   handlecompletion,
+  handleEnables
 }) => {
   /**********navin */
   // brindha start
@@ -550,7 +552,8 @@ const AddScores: React.FC<{
           });
           return false;
         }
-        if (compliData[CompKeyCount]?.gameIsSetCriteriaForBadge === 'true') {
+      }
+      if (compliData[CompKeyCount]?.gameIsSetCriteriaForBadge === 'true') {
           if (!compliData[CompKeyCount]?.gameAwardBadgeScore) {
             toast({
               title: 'Please Set Criteria for Badge .',
@@ -570,9 +573,7 @@ const AddScores: React.FC<{
           });
           return false;
         }
-        if (
-          compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true'
-        ) {
+        if (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' ) {
           if (!compliData[CompKeyCount]?.gameCompletedCongratsMessage) {
             toast({
               title: 'Please Set CongratsMessage.',
@@ -583,9 +584,7 @@ const AddScores: React.FC<{
             return false;
           }
         }
-        if (
-          compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true'
-        ) {
+        if (compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true') {
           if (compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true') {
             if (!compliData[CompKeyCount]?.gameMinimumScoreCongratsMessage) {
               toast({
@@ -596,9 +595,7 @@ const AddScores: React.FC<{
               });
               return false;
             }
-            if (
-              !compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage
-            ) {
+            if (!compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage) {
               toast({
                 title: 'Please Enter Above Minimum Score CongratsMessage.',
                 status: 'error',
@@ -609,20 +606,7 @@ const AddScores: React.FC<{
             }
           }
           if (compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true') {
-            // if(!compliData[CompKeyCount]?.gameLessthanDistinctionScoreCongratsMessage){
-            //   toast({
-            //     title: 'Please Enter Distinction  Score.',
-            //     status: 'error',
-            //     duration: 3000,
-            //     isClosable: true,
-            //   });
-            //   return false
-
-            // }
-            if (
-              !compliData[CompKeyCount]
-                ?.gameAboveDistinctionScoreCongratsMessage
-            ) {
+            if (!compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage) {
               toast({
                 title: 'Please Enter Above Distinction Score CongratsMessage.',
                 status: 'error',
@@ -633,7 +617,7 @@ const AddScores: React.FC<{
             }
           }
         }
-      }
+      
       if (Object.keys(Completion).length - 1 !== CompKeyCount) {
         setCompKeyCount(CompKeyCount + 1);
         setCompliData((prevInput: any) => ({
@@ -1059,6 +1043,7 @@ const AddScores: React.FC<{
                 setFormData={setFormData}
                 formData={formData}
                 handleChange={handleChange}
+                handleEnables={handleEnables}
               />
             )}
           </Box>
@@ -1302,7 +1287,6 @@ const AddScores: React.FC<{
                             </FormLabel>
                             <TextField
                               me="30px"
-                              // label=""
                               placeholder="eg. You can do better..."
                               id="gameMinimumScoreCongratsMessage"
                               name="gameMinimumScoreCongratsMessage"

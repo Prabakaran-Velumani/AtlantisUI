@@ -15,18 +15,39 @@ const ReplayGame: React.FC<{
   replayGame: any;
   setCurrentScreenId: any;
   getData?: any;
+  isOptionalReplay: any;
+  setisOptionalReplay: any;
+  profilescore: any;
+  setisReplay: any;
+  isReplay: any;
   data?: any;
+  gameInfo: any;
+  type?: any;
+  setType: any;
+  setData: any;
+  replayNextHandler: any;
+  preloadedAssets: any;
 }> = ({
   formData,
   imageSrc,
   replayGame,
+  replayNextHandler,
+  setisReplay,
+  setisOptionalReplay,
+  isOptionalReplay,
+  profilescore,
+  gameInfo,
+  setData,
+  setType,
+  isReplay,
   setCurrentScreenId,
   getData,
   data,
+  type,
+  preloadedAssets
 }) => {
   const { profile } = useContext(ScoreContext);
-  console.log(profile.score);
-  //  console.log()
+
   return (
     <>
       {imageSrc && (
@@ -39,30 +60,34 @@ const ReplayGame: React.FC<{
                   <Box className="replay_content_center">
                     <Box className="title_replay">
                       <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
-                        Do You Want Play Again ?
+                        {isReplay === true
+                          ? `Your Are Only ${profilescore} Points Away From A Perfect Score  Would You Like To Replay`
+                          : isOptionalReplay === true
+                          ? `Your Score is to low. So U have to play Again`
+                          : 'Do You Want Play Again ?'}
                       </Text>
                     </Box>
                     <Box
-                      // onClick={() => getData(data)}
-                      // position={'fixed'}
-                      // top={'360px'}
                       w={'100%'}
                       display={'flex'}
-                      justifyContent={formData?.gameMinScore < profile?.score ? 'space-between' : 'center'}
-                      // justifyContent={'space-between'}
+                      justifyContent={
+                        formData?.gameMinScore < profile?.score
+                          ? 'space-between'
+                          : 'center'
+                      }
                     >
-                      <Img
-                        src={ReplayBtn}
-                        className='replay_buttons'
-                        onClick={replayGame}
-                      />
-                      {formData?.gameMinScore < profile?.score ? (
+                      {isReplay === true || isOptionalReplay === true ? (
                         <Img
-                          src={next}
-                          className='replay_buttons'
-                          onClick={() => getData(data)}
+                          src={preloadedAssets.ReplayBtn}
+                          className="replay_buttons"
+                          onClick={replayGame}
                         />
-                       ) : null} 
+                      ) : null}
+                      <Img
+                        src={preloadedAssets.next}
+                        className="replay_buttons"
+                        onClick={() => replayNextHandler(data)}
+                      />
                     </Box>
                   </Box>
                 </Box>

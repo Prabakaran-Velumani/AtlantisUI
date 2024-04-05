@@ -177,14 +177,10 @@ const NoteCompo: React.FC<PropsNote> = ({
 
   const handleMiniNDInewblock = (value?: any, seq?: any, i?: any) => {
     handleNDI(value);
-    if (value != '') {
-      console.log('seqval', seq, 'i', i, 'value', value);
-      handleSelectBlock(
-        { value: currentseq },
-        currentseq,
-        `Note${seq.input}`,
-        `Note${seq.input}`,
-      );
+    if(value !=='')
+    {
+      // console.log('seqval',seq,'i',i, 'value',value);
+      handleSelectBlock({ value: currentseq }, currentseq , `Note${seq.input}`, `Note${seq.input}`);
     }
   };
   const MiniBox1 = (props: {
@@ -435,6 +431,7 @@ const NoteCompo: React.FC<PropsNote> = ({
                           )?.label
                         : input?.[`Note${seq.input}`]?.Notenavigate
                     }
+                    
                   />
                 </div>
               </>

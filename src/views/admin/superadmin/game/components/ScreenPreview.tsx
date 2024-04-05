@@ -1,61 +1,61 @@
 // Chakra Imports
-import { Box, Flex, Text, Img, GridItem, Grid, Modal, ModalOverlay, ModalContent, ModalCloseButton, ModalBody } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Text,
+  Img,
+  Grid,
+  GridItem,
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalOverlay,
+  ModalCloseButton,
+} from '@chakra-ui/react';
 import React, {
   Suspense,
   useEffect,
-  useLayoutEffect,
-  useRef,
   useState,
+  useRef,
+  useMemo,
   useCallback,
 } from 'react';
-import SelectField from 'components/fields/SelectField';
 import TakeAwaysContentScreen from './onimage/TakeAwaysScreen';
-import InitialImg from 'assets/img/games/load.jpg';
-import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 // import Sample from '../../../../assets/img/games/Character_sample.glb';
-import Sample from 'assets/img/games/Character_sample.glb';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import feedi from 'assets/img/screens/feed.png';
-import Screen5 from '../../../../../assets/img/screens/screen5.png';
-import { AiFillMessage } from 'react-icons/ai';
 // import WelcomeContentScreen from './onimage/WelcomeContentScreen';
 import Screen1 from '../../../../../assets/img/screens/screen1.png';
-import leaderboard from '../../../../../assets/img/screens/Leaderboard.png'
+import leaderboard from '../../../../../assets/img/screens/Leaderboard.png';
 
-import Screen2 from '../../../../../assets/img/screens/screen2.png';
 import ReflectionContentScreen from './onimage/ReflectionScreen';
-import RefScreen1 from '../../../../../assets/img/screens/refscreen1.png';
-import Screen4 from '../../../../../assets/img/screens/screen4.png';
 import TyContentScreen from './onimage/TyContentScreen';
-import {
-  getVoiceMessage,
-  getPreview,
-  getGameCreatorDemoData,
-} from 'utils/game/gameService';
-import { useParams } from 'react-router-dom';
+import { getGameCreatorDemoData } from 'utils/game/gameService';
 import TypingEffect from '../demoplay/playcards/Typing';
-import RefBg from 'assets/img/games/refbg.png';
-import { API_SERVER } from 'config/constant';
-import useImagePreloader from 'utils/hooks/useImagePreLoader';
-import { assetImageSrc } from 'utils/hooks/imageSrc';
+import {
+  API_SERVER,
+  Notelength,
+  Dialoglength,
+  Responselength,
+} from 'config/constant';
 import { lazy } from 'react';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
 import { preloadedImages } from 'utils/hooks/function';
-import { FaLeaf } from 'react-icons/fa';
+import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { updatePreviewData } from 'store/preview/previewSlice';
 import LeaderBoard from '../demoplay/playcards/Leaderboard';
 
 const WelcomeContentScreen = lazy(
   () => import('./onimage/WelcomeContentScreen'),
 );
+// const WelcomeContentScreen = lazy(
+//   () => import('./onimage/PreviewWelcomeScreen'),
+// );
 const CompletionContentScreen = lazy(
   () => import('./onimage/CompletionContentScreen'),
 );
 const PreviewEndOfStory = lazy(() => import('./onimage/PreviewEndOfStory'));
-interface Sta { }
 const ScreenPreview = () => {
   const {
     gameId: id,
@@ -73,19 +73,30 @@ const ScreenPreview = () => {
   const [apiImageSet, setApiImageSet] = useState<any>();
   const [staticAssetImageUrls, setStaticAssetImageUrls] = useState<any>(null);
   const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
-  const [preloadedAssets, setPreloadedAssets] = useState<any>();
+  // const [preloadedAssets, setPreloadedAssets] = useState<any>();
   const [demoBlocks, setDemoBlocks] = useState(null);
   const [navi, setNavi] = useState<string>('');
-  const [options, setOptions] = useState(null);
+  const [options, setOptions] = useState([]);
   const [blink, setBlink] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [optionNavigation, setOptionNavigation] = useState(null);
   const [showNote, setShowNote] = useState(false),
     [first, setFirst] = useState(false);
+  const [game3Position, setGame3Position] = useState({
+    previousBlock: '',
+    currentBlock: '',
+    nextBlock: '',
+  });
   const [data, setData] = useState(null);
   const [type, setType] = useState<string>('');
   const [resMsg, setResMsg] = useState<string>('');
+
   const [feed, setFeed] = useState<string>('');
   const [endOfQuest, setEndOfQuest] = useState<boolean>(false);
+  const [currentPosition, setCurrentPosition] = useState(0);
+  const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
+  const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
+  const [Navigatenext, setNavigateNext] = useState<any>(false);
   const reflectionQuestionsdefault = [
     'What were your biggest learnings?',
     'How can you apply these learnings back at work?',
@@ -98,13 +109,9 @@ const ScreenPreview = () => {
     ref3: "What's one thing you learned about your mindset?",
     ref4: "What's one thing you are committing to change?",
   });
-  useEffect(() => {
-    const blinkInterval = setInterval(() => {
-      setBlink((prevBlink) => !prevBlink);
-    }, 3000);
-
-    return () => clearInterval(blinkInterval);
-  }, []);
+  const [navTrack, setNavTrack] = useState([]);
+  const [isPrevNavigation, setIsPrevNavigation] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -124,136 +131,150 @@ const ScreenPreview = () => {
       }
       setData(currentBlock);
     }
+    setCurrentPosition(0);
   }, [gameInfo, isDispatched, activeBlockSeq, currentQuest]);
 
-  const fetchDataFromApi = async () => {
+  const replayQuest = () => {
+    dispatch(updatePreviewData({ activeBlockSeq: 1, isDispatched: true }));
+    setEndOfQuest(false);
+  };
+  const fetchDataFromApi = useCallback(async () => {
     try {
-      const gamedata = await getGameCreatorDemoData(id);
-      if (!gamedata.error && gamedata) {
-        const {
-          gameview,
-          image,
-          lmsblocks,
-          lmsquestionsoptions,
-          gameQuest,
-          ...gameData
-        } = gamedata?.result;
-        const sortBlockSequence = (blockArray: []) => {
-          const transformedArray = blockArray.reduce(
-            (result: any, obj: any) => {
-              const groupKey = obj?.blockQuestNo.toString();
-              const seqKey = obj?.blockPrimarySequence
-                .toString()
-                ?.split('.')[1];
-              if (!result[groupKey]) {
-                result[groupKey] = {};
-              }
-              result[groupKey][seqKey] = obj;
-              return result;
-            },
-            {},
-          );
-          return transformedArray;
-        };
-        const completionOptions = gameQuest.map((qst: any, i: number) => {
-          const item = {
-            gameId: qst.gameId,
-            questNo: qst.gameQuestNo,
-            gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
-            gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
-            gameDistinctionScore: qst.gameDistinctionScore,
-            gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
-            gameIsSetBadge: qst.gameIsSetBadge,
-            gameBadge: qst.gameBadge,
-            gameBadgeName: qst.gameBadgeName,
-            gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
-            gameAwardBadgeScore: qst.gameAwardBadgeScore,
-            gameScreenTitle: qst.gameScreenTitle,
-            gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage,
-            gameIsSetCongratsScoreWiseMessage:
-              qst.gameIsSetCongratsScoreWiseMessage,
-            gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
-            gameMinimumScoreCongratsMessage:
-              qst.gameMinimumScoreCongratsMessage,
-            gameaboveMinimumScoreCongratsMessage:
-              qst.gameaboveMinimumScoreCongratsMessage,
-            gameLessthanDistinctionScoreCongratsMessage:
-              qst.gameLessthanDistinctionScoreCongratsMessage,
-            gameAboveDistinctionScoreCongratsMessage:
-              qst.gameAboveDistinctionScoreCongratsMessage,
+      if (id && isDispatched) {
+        const gamedata = await getGameCreatorDemoData(id);
+        if (!gamedata?.error && gamedata) {
+          const {
+            gameview,
+            image,
+            lmsblocks,
+            lmsquestionsoptions,
+            gameQuest,
+            ...gameData
+          } = gamedata?.result;
+          const sortBlockSequence = (blockArray: []) => {
+            const transformedArray = blockArray.reduce(
+              (result: any, obj: any) => {
+                const groupKey = obj?.blockQuestNo.toString();
+                const seqKey = obj?.blockPrimarySequence
+                  .toString()
+                  ?.split('.')[1];
+                if (!result[groupKey]) {
+                  result[groupKey] = {};
+                }
+                result[groupKey][seqKey] = obj;
+                return result;
+              },
+              {},
+            );
+            return transformedArray;
           };
-          return item;
-        });
+          const completionOptions = gameQuest.map((qst: any, i: number) => {
+            const item = {
+              gameId: qst.gameId,
+              questNo: qst.gameQuestNo,
+              gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
+              gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
+              gameDistinctionScore: qst.gameDistinctionScore,
+              gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
+              gameIsSetBadge: qst.gameIsSetBadge,
+              gameBadge: qst.gameBadge,
+              gameBadgeName: qst.gameBadgeName,
+              gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
+              gameAwardBadgeScore: qst.gameAwardBadgeScore,
+              gameScreenTitle: qst.gameScreenTitle,
+              gameIsSetCongratsSingleMessage:
+                qst.gameIsSetCongratsSingleMessage,
+              gameIsSetCongratsScoreWiseMessage:
+                qst.gameIsSetCongratsScoreWiseMessage,
+              gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
+              gameMinimumScoreCongratsMessage:
+                qst.gameMinimumScoreCongratsMessage,
+              gameaboveMinimumScoreCongratsMessage:
+                qst.gameaboveMinimumScoreCongratsMessage,
+              gameLessthanDistinctionScoreCongratsMessage:
+                qst.gameLessthanDistinctionScoreCongratsMessage,
+              gameAboveDistinctionScoreCongratsMessage:
+                qst.gameAboveDistinctionScoreCongratsMessage,
+            };
+            return item;
+          });
 
-        let reflectionData: any = [];
-        for (let i = 0; i < gamedata?.resultReflection?.length; i++) {
-          let filteredValue = gamedata?.resultReflection.find(
-            (refRow: any) => refRow?.refKey === `ref${i + 1}`,
+          let reflectionData: any = [];
+          for (let i = 0; i < gamedata?.resultReflection?.length; i++) {
+            let filteredValue = gamedata?.resultReflection.find(
+              (refRow: any) => refRow?.refKey == `ref${i + 1}`,
+            );
+            reflectionData[filteredValue?.refKey] = filteredValue?.refQuestion;
+          }
+          setGameInfo({
+            gameId: id,
+            gameData: gameData,
+            gameHistory: gameview,
+            assets: image,
+            blocks: sortBlockSequence(lmsblocks),
+            gameQuest: gameQuest, //used for completion screen
+            completionQuestOptions: completionOptions,
+            questOptions: lmsquestionsoptions,
+            reflectionQuestions:
+              gamedata?.resultReflection.length > 0
+                ? reflectionData
+                : reflectionQuestions,
+            gamePlayers: gamedata?.assets?.playerCharectorsUrl,
+            bgMusic:
+              gamedata?.assets?.bgMusicUrl &&
+              API_SERVER + '/' + gamedata?.assets?.bgMusicUrl,
+            gameNonPlayerUrl:
+              gamedata?.assets?.npcUrl &&
+              API_SERVER + '/' + gamedata?.assets?.npcUrl,
+            badges: await gamedata?.assets?.badges?.map(
+              (path: string) => API_SERVER + '/' + path,
+            ),
+          });
+
+          const apiImageSetArr: any = [
+            { assetType: 'backgroundImage', src: image?.gasAssetImage },
+            {
+              assetType: 'nonplayerImage',
+              src: API_SERVER + '/' + gamedata?.assets?.npcUrl,
+            },
+          ];
+
+          let playerCharectorsUrls = gamedata?.assets?.playerCharectorsUrl.map(
+            (item: any, index: number) => {
+              let objValue = API_SERVER + '/' + item;
+              let objKey = `playerCharacterImage_${index}`;
+              apiImageSetArr.push({ assetType: objKey, src: objValue });
+            },
           );
-          reflectionData[filteredValue?.refKey] = filteredValue?.refQuestion;
+          let gameQuestBadges = await Promise.all(
+            gamedata?.assets?.badges.map(
+              async (item: Record<string, string>) => {
+                Object.entries(item).forEach(([key, value]) => {
+                  let objkeyValue = key.split('_')[1];
+                  let objKey = `Quest_${objkeyValue}`;
+                  let objKeyValue = API_SERVER + '/' + value;
+                  apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
+                });
+                setApiImageSet(apiImageSetArr);
+                return true;
+              },
+            ),
+          );
         }
-        setGameInfo({
-          gameId: id,
-          gameData: gameData,
-          gameHistory: gameview,
-          assets: image,
-          blocks: sortBlockSequence(lmsblocks),
-          gameQuest: gameQuest, //used for completion screen
-          completionQuestOptions: completionOptions,
-          questOptions: lmsquestionsoptions,
-          reflectionQuestions:
-            gamedata?.resultReflection.length > 0
-              ? reflectionData
-              : reflectionQuestions,
-          gamePlayers: gamedata?.assets?.playerCharectorsUrl,
-          bgMusic:
-            gamedata?.assets?.bgMusicUrl &&
-            API_SERVER + '/' + gamedata?.assets?.bgMusicUrl,
-          gameNonPlayerUrl:
-            gamedata?.assets?.npcUrl &&
-            API_SERVER + '/' + gamedata?.assets?.npcUrl,
-          badges: await gamedata?.assets?.badges?.map(
-            (path: string) => API_SERVER + '/' + path,
-          ),
-        });
-
-        const apiImageSetArr: any = [
-          { assetType: 'backgroundImage', src: image?.gasAssetImage },
-          {
-            assetType: 'nonplayerImage',
-            src: API_SERVER + '/' + gamedata?.assets?.npcUrl,
-          },
-        ];
-
-        let playerCharectorsUrls = gamedata?.assets?.playerCharectorsUrl.map(
-          (item: any, index: number) => {
-            let objValue = API_SERVER + '/' + item;
-            let objKey = `playerCharacterImage_${index}`;
-            apiImageSetArr.push({ assetType: objKey, src: objValue });
-          },
-        );
-        let gameQuestBadges = await Promise.all(
-          gamedata?.assets?.badges.map(async (item: Record<string, string>) => {
-            Object.entries(item).forEach(([key, value]) => {
-              let objkeyValue = key.split('_')[1];
-              let objKey = `Quest_${objkeyValue}`;
-              let objKeyValue = API_SERVER + '/' + value;
-              apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
-            });
-            setApiImageSet(apiImageSetArr);
-            return true;
-          }),
-        );
+      } else {
+        console.log('game id is missing...');
       }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };
+  }, [id, isDispatched]);
   const setInteractionOptions = (gameInfo: any, currentBlock: any) => {
     const optionsFiltered = gameInfo?.questOptions.filter(
       (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
     );
-    if (gameInfo?.gameData?.gameShuffle) {
+
+    if (gameInfo?.gameData?.gameShuffle === 'true') {
+
       for (let i = optionsFiltered.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [optionsFiltered[i], optionsFiltered[j]] = [
@@ -261,8 +282,10 @@ const ScreenPreview = () => {
           optionsFiltered[i],
         ];
       }
-      setOptions(optionsFiltered);
     }
+    
+    setOptions(optionsFiltered);
+
   };
 
   useEffect(() => {
@@ -280,11 +303,28 @@ const ScreenPreview = () => {
     apiImageSet && fetchData();
   }, [apiImageSet]);
 
-  useEffect(() => {
-    if (apiUrlAssetImageUrls && staticAssetImageUrls) {
-      setPreloadedAssets({ ...apiUrlAssetImageUrls, ...staticAssetImageUrls });
-    }
+  const preloadedAssets = useMemo(() => {
+    return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls };
   }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
+  
+  const getSelectedPlayer = useCallback(() => {
+    let count = 0;
+    const prefix = 'playerCharacterImage_';
+    // Check if any key in the object starts with the given prefix
+    Object.keys(preloadedAssets).forEach(key => {
+      if (key.startsWith(prefix)) {
+        count++;
+      }
+    })
+    // If count is 0, return null or handle the case appropriately
+    if (count === 0) {
+      return null;
+    }
+    const randomIndex = Math.floor(Math.random() * count) + 1;
+    const selectedPlayerKey = `${prefix}${randomIndex}`;
+    setSelectedPlayer(preloadedAssets.selectedPlayerKey);
+    // return preloadedAssets.selectedPlayerKey;
+  }, [preloadedAssets]);
 
   useEffect(() => {
     if (gameInfo && preloadedAssets) {
@@ -297,18 +337,64 @@ const ScreenPreview = () => {
   useEffect(() => {
     dispatch(updatePreviewData({ isDispatched: false }));
   }, [CompKeyCount]);
+
+  
+  const prevData = (current: any) => {
+    const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
+    const currentBlock = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[1])
+      : null;
+    navTrack.pop(); //clears last index sequence
+    if (navTrack.length > 0) {
+      const newTrackSequence = navTrack[navTrack.length - 1];
+      const prevBlock = current
+        ? Object.keys(demoBlocks[quest] || {})
+          .filter(
+            (key) =>
+              demoBlocks[quest]?.[key]?.blockPrimarySequence ==
+              newTrackSequence,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
+        : [];
+      if (
+        prevBlock.length !== 0 &&
+        prevBlock[0]?.blockChoosen !== 'Interaction'
+      ) {
+        /*** Handle the previous track */
+        const removedElement = navTrack.pop();
+        setNavTrack(navTrack);
+        /*** End of Handle the previous track */
+
+        setType(prevBlock[0]?.blockChoosen);
+        setData(prevBlock[0]);
+        setIsPrevNavigation(true);
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
   const getData = (next: any) => {
+    setIsPrevNavigation(false);
+
+    //get the next block details
+    const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
     const NextItem = currentBlock != null ? currentBlock + 1 : null;
+
     const nextSeq = next
       ? `${next?.blockPrimarySequence.split('.')[0]}.${NextItem}`
       : '';
-    const quest = next ? next?.blockPrimarySequence.split('.')[0] : null;
+    const prevTrack = navTrack;
+
+    const currentQuest = next
+      ? parseInt(next?.blockPrimarySequence.split('.')[0])
+      : null;
 
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
         .filter(
@@ -317,30 +403,35 @@ const ScreenPreview = () => {
         .map((key: any) => demoBlocks[quest]?.[key])
       : [];
 
-    {
-      /* Check wheather has next block or not, if not then show End of Current Quest.
-          Want to play next quest, then switch the current quest in game creation screen */
-    }
-    if (nextBlock.length == 0) {
-      setEndOfQuest(true);
-    } else {
-      setEndOfQuest(false);
+    if (nextBlock[0]?.blockChoosen === 'Interaction') {
+      const optionsFiltered = [];
+      for (const option of gameInfo.questOptions) {
+        if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+          optionsFiltered.push(option);
+        }
+      }
+      if (gameInfo?.gameData?.gameShuffle === 'true') {
+        for (let i = optionsFiltered.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [optionsFiltered[i], optionsFiltered[j]] = [
+            optionsFiltered[j],
+            optionsFiltered[i],
+          ];
+        }
+      }
+      setOptions(optionsFiltered);
     }
 
-    if (nextBlock[0]?.blockChoosen === 'Interaction') {
-      setInteractionOptions(gameInfo, nextBlock[0]);
-    }
     if (
       type === 'Interaction' &&
       resMsg !== ''
-      //&& gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
     ) {
       setType('response');
       return false;
     } else if (
       (type === 'Interaction' || type === 'response') &&
-      feed !== ''
-      // && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Each'
+      feed !== '' &&
+      gameInfo?.gameData?.gameIsShowInteractionFeedBack !== 'Completion'
     ) {
       setType('feedback');
       return false;
@@ -350,7 +441,10 @@ const ScreenPreview = () => {
       type === 'feedback'
     ) {
       if (navi === 'Repeat Question') {
-        setType('Interaction');
+        const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
+        setInteractionOptions(gameInfo, currentBlockinteraction);
+        setType(next?.blockChoosen);
+        setData(next);
         setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
@@ -359,23 +453,86 @@ const ScreenPreview = () => {
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
-        setType(demoBlocks['1']['1']?.blockChoosen);
-        setData(demoBlocks['1']['1']);
+        setType(demoBlocks[quest]['1']?.blockChoosen);
+        setData(demoBlocks[quest]['1']);
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
-        setSelectedOption(null);
-        return false;
-      } else if (navi === 'Complete') {
-        if (demoBlocks.hasOwnProperty(nextLevel)) {
-          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-          setData(demoBlocks[nextLevel]['1']);
-          return false;
-        } else {
-          setType(null);
-          setData(null);
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+          .filter((item: any) => {
+            return (
+              demoBlocks[currentQuest][item]?.blockSecondaryId ===
+              parseInt(optionNavigation)
+            );
+          })
+          .map((item: any) => {
+            return demoBlocks[currentQuest][item];
+          });
+        if (selectedNext.length > 0) {
+          setType(selectedNext && selectedNext[0]?.blockChoosen);
+
+          if (selectedNext[0]?.blockChoosen === 'Interaction') {
+            const optionsFiltered = [];
+            for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence === selectedNext[0]?.blockPrimarySequence) {
+                optionsFiltered.push(option);
+              }
+            }
+            if (gameInfo?.gameData?.gameShuffle === 'true') {
+              for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsFiltered[i], optionsFiltered[j]] = [
+                  optionsFiltered[j],
+                  optionsFiltered[i],
+                ];
+              }
+            }
+            setOptions(optionsFiltered);
+          }
+          setData(selectedNext && selectedNext[0]);
+          setSelectedOption(null);
           return false;
         }
+        else {
+          setType(nextBlock[0]?.blockChoosen);
+          if (nextBlock[0]?.blockChoosen === 'Interaction') {
+            const optionsFiltered = [];
+            for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+                optionsFiltered.push(option);
+              }
+            }
+            if (gameInfo?.gameData?.gameShuffle === 'true') {
+              for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsFiltered[i], optionsFiltered[j]] = [
+                  optionsFiltered[j],
+                  optionsFiltered[i],
+                ];
+              }
+            }
+            setOptions(optionsFiltered);
+          }
+          setData(nextBlock[0]);
+          setSelectedOption(null);
+          return false;
+        }
+      } else if (navi === 'Complete') {
+        // if (demoBlocks.hasOwnProperty(nextLevel)) {
+        setEndOfQuest(true);
+        // setProfile((prev: any) => {
+        //   const data = { ...prev };
+        //   data.completedLevels = [...data.completedLevels, nextLevel];
+        //   return data;
+        // });
+        // setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+        // setData(demoBlocks[nextLevel]['1']);
+        return false;
+        // } else {
+        //   setType(null);
+        //   setData(null);
+        //   return false;
+        // }
       } else {
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
@@ -384,18 +541,6 @@ const ScreenPreview = () => {
       }
     }
 
-    if (nextBlock.length === 0) {
-      if (demoBlocks.hasOwnProperty(nextLevel)) {
-        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-        setData(demoBlocks[nextLevel]['1']);
-        return false;
-      } else {
-        setType(null);
-        setData(null);
-        // onClose();
-        return false;
-      }
-    }
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
         setType(next?.blockChoosen);
@@ -412,8 +557,68 @@ const ScreenPreview = () => {
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Select Block') {
+        const selectedNext = Object.keys(demoBlocks[currentQuest])
+          .filter((item: any) => {
+            return (
+              demoBlocks[currentQuest][item]?.blockSecondaryId ===
+              parseInt(next?.blockLeadTo)
+            );
+          })
+          .map((item: any) => {
+            return demoBlocks[currentQuest][item];
+          });
+        if (selectedNext.length > 0) {
+          setType(selectedNext && selectedNext[0]?.blockChoosen);
+          if (selectedNext[0]?.blockChoosen === 'Interaction') {
+            const optionsFiltered = [];
+            for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence === selectedNext[0]?.blockPrimarySequence) {
+                optionsFiltered.push(option);
+              }
+            }
+            if (gameInfo?.gameData?.gameShuffle === 'true') {
+              for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsFiltered[i], optionsFiltered[j]] = [
+                  optionsFiltered[j],
+                  optionsFiltered[i],
+                ];
+              }
+            }
+            setOptions(optionsFiltered);
+          }
+          setData(selectedNext && selectedNext[0]);
+        }
+        else {
+          setType(nextBlock[0]?.blockChoosen);
+          if (nextBlock[0]?.blockChoosen === 'Interaction') {
+            const optionsFiltered = [];
+            for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+                optionsFiltered.push(option);
+              }
+            }
+            if (gameInfo?.gameData?.gameShuffle === 'true') {
+              for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsFiltered[i], optionsFiltered[j]] = [
+                  optionsFiltered[j],
+                  optionsFiltered[i],
+                ];
+              }
+            }
+            setOptions(optionsFiltered);
+          }
+          setData(nextBlock[0]);
+        }
+        setGame3Position((prev: any) => ({
+          ...prev,
+          nextBlock: selectedNext[0]?.blockPrimarySequence,
+        }));
         setSelectedOption(null);
+        return false;
       } else if (next?.blockShowNavigate === 'Complete') {
+        setEndOfQuest(true);
         return false;
       }
     }
@@ -421,23 +626,161 @@ const ScreenPreview = () => {
     setData(nextBlock[0]);
     setSelectedOption(null);
   };
+
   const handleValidate = (item: any, ind: number) => {
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
     setNavi(item?.qpNavigateShow);
+    setOptionNavigation(item?.qpNextOption);
     setSelectedOption(ind === selectedOption ? null : ind);
   };
+  const handleEntirePrev = async () => {
+    const url = ` /game/creator/demoplay/${id}`;
+    window.open(url, '_blank');
+  };
+  useEffect(() => {
+    if (data && type) {
+
+      /** this logic is used to hanlde the navigation options in both forward and backward navigation */
+      if (gameInfo.hasOwnProperty('blocks')) {
+        let previousPrimarySeq = navTrack[navTrack.length - 1];
+        if (previousPrimarySeq) {
+          let currentQuest = previousPrimarySeq.split('.')[0];
+          let previousBlock: any = Object.values(
+            gameInfo?.blocks[currentQuest],
+          )?.find((row: any) => {
+            return row.blockPrimarySequence == previousPrimarySeq;
+          });
+          if (data.blockPrimarySequence != previousPrimarySeq) {
+            if (previousBlock?.blockChoosen === 'Interaction') {
+              setNavTrack([data.blockPrimarySequence]);
+            } else {
+              const newArray = navTrack;
+              newArray.push(data.blockPrimarySequence);
+              setNavTrack(newArray);
+            }
+          }
+        } else {
+          setNavTrack([data.blockPrimarySequence]);
+        }
+        getDataSection(data);
+      }
+    }
+  }, [data, type]);
+  useEffect(() => {
+    if (Navigatenext === true) {
+      getData(data);
+    }
+  }, [Navigatenext]);
+  const getDataSection = (data: any) => {
+    setShowTypingEffect(false);
+    setCurrentPosition(0);
+    // Note and Dialog
+    const content = data?.blockText || '';
+    const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
+    const newRemainingSentences = sentences.slice(currentPosition);
+
+    // response
+    const Responsecontent = resMsg || '';
+    const Responsesentences = Responsecontent.split(
+      /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+    );
+    const newRemainingResponseSentences = Responsesentences.slice(currentPosition);
+    const concatenatedSentences = [];
+    let totalLength = 0;
+    // Note and Dialog
+    for (let i = 0; i < newRemainingSentences.length; i++) {
+      const sentence = newRemainingSentences[i];
+
+      if (data && type === 'Note') {
+        if (totalLength + sentence.length <= Notelength) {
+          concatenatedSentences.push(sentence);
+          totalLength += sentence.length;
+        } else {
+          concatenatedSentences.push(sentence);
+          break;
+        }
+      }
+      if (data && type === 'Dialog') {
+        if (totalLength + sentence.length <= Dialoglength) {
+          concatenatedSentences.push(sentence);
+          totalLength += sentence.length;
+        } else {
+          if (totalLength + sentence.length >= Dialoglength) {
+            break;
+          }
+          concatenatedSentences.push(sentence);
+          break;
+        }
+      }
+    }
+    // Response 
+    for (let i = 0; i < newRemainingResponseSentences.length; i++) {
+      const ressentence = newRemainingResponseSentences[i];
+      if (data && type === 'response') {
+        if (totalLength + ressentence.length <= Responselength) {
+          concatenatedSentences.push(ressentence);
+          totalLength += ressentence.length;
+        } else {
+          if (totalLength + ressentence.length >= Responselength) {
+            break;
+          }
+          concatenatedSentences.push(ressentence);
+          break;
+        }
+      }
+    }
+    setRemainingSentences(concatenatedSentences);
+    if (newRemainingSentences.length > 0 && type!== 'response') {
+      setCurrentPosition(currentPosition + concatenatedSentences.length);
+      setNavigateNext(false);
+      return false;
+    }
+    if (newRemainingResponseSentences.length > 0 ) {
+      setCurrentPosition(currentPosition + concatenatedSentences.length);
+      setNavigateNext(false);
+      return false;
+    } 
+   
+      setNavigateNext(true);
+      setIsPrevNavigation(false);
+    
+  };
+
+  const Updatecontent = () => {
+    if (showTypingEffect === false) {
+      setShowTypingEffect(true);
+    }
+    else {
+      getDataSection(data);
+    }
+  }
+  useEffect(() => {
+    getDataSection(data);
+  }, []);
   const handleCloseWindow = () => {
     window.close();
   };
-  const replayQuest = () => {
-    dispatch(updatePreviewData({ activeBlockSeq: 1, isDispatched: true }));
-    setEndOfQuest(false);
-  };
+
+  const SkipContentForBackNavigation = () => {
+    if (showTypingEffect === false) {
+      setShowTypingEffect(true);
+    }
+    else {
+      setCurrentPosition(0);
+      prevData(data)
+    }
+  }
+
+  const getNoteNextData = () => {
+    setIsPrevNavigation(false);
+    getDataSection(data)
+  }
+
   return (
     <Box id="container">
-      <Suspense fallback={<h1>Component1 are loading please wait...</h1>}>
-        {contentReady && (
+      <Suspense fallback={<h1>Loading please wait...</h1>}>
+        {(contentReady|| endOfQuest) && (
           <motion.div
             initial={{ opacity: 0, background: '#000' }}
             animate={{ opacity: 1, background: '#0000' }}
@@ -447,6 +790,26 @@ const ScreenPreview = () => {
               <Box className="EntirePreview-content">
                 <Box h={'100vh !important'} className="Images">
                   <Flex height="100vh" className="EntirePreview">
+                    <Button
+                      className="demo-btn"
+                      bg="#11047a"
+                      _hover={{ bg: '#190793' }}
+                      color="#fff"
+                      style={{
+                        position: 'absolute',
+                        top: '2vh',
+                        right: '0vw',
+                        pointerEvents: 'auto',
+                        zIndex: 1, // High z-index value
+                        visibility: 'visible',
+                      }}
+                      mr={'17px'}
+                      mt={'6px'}
+                      ml={'11px'}
+                      onClick={handleEntirePrev}
+                    >
+                      Demo Play
+                    </Button>
                     {currentTab === 3 && (
                       <Box
                         w={'100%'}
@@ -456,10 +819,8 @@ const ScreenPreview = () => {
                         position={'relative'}
                         overflow={'visible'}
                         style={{ perspective: '1000px' }}
-                        className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -467,14 +828,16 @@ const ScreenPreview = () => {
                           alignItems={'center'}
                           justifyContent={'center'}
                           className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
                             {gameInfo && (
                               <WelcomeContentScreen
-                                background={preloadedAssets.backgroundImage}
+                                // backgroundImage={preloadedAssets.backgroundImage}
                                 formData={gameInfo.gameData}
                                 imageSrc={preloadedAssets?.Screen5}
                                 preview={true}
+                                preloadedAssets={preloadedAssets}
                               />
                             )}
                           </Box>
@@ -509,7 +872,6 @@ const ScreenPreview = () => {
                               />
                               <Box
                                 className={'story_note_content'}
-                              // bg={'blue.300'}
                               >
                                 <Box
                                   w={'100%'}
@@ -518,13 +880,13 @@ const ScreenPreview = () => {
                                 >
                                   <Box className={'story_note_block'}>
                                     <Text textAlign={'center'}>
-                                      {data?.blockText}
+                                      {remainingSentences}
                                     </Text>
                                   </Box>
                                 </Box>
                                 <Box
                                   w={'100%'}
-                                  onClick={() => getData(data)}
+                                  onClick={() => getNoteNextData()}
                                   mt={'20px'}
                                   display={'flex'}
                                   justifyContent={'center'}
@@ -543,8 +905,6 @@ const ScreenPreview = () => {
                           </GridItem>
                         </Grid>
                       </Box>
-
-
                     )}
                     {currentTab === 4 && data && type === 'Dialog' && (
                       <Box className="chapter_potrait">
@@ -552,34 +912,12 @@ const ScreenPreview = () => {
                           src={preloadedAssets?.backgroundImage}
                           className="dialogue_screen"
                         />
-                        {/* <Box w={'100%'} h={'100vh'}>
-                           <Canvas camera={{ position: [30, 0, 10] }}>
-                             <directionalLight
-                               position={[5, 5, 5]}
-                               intensity={0.8}
-                               color={0xffccaa}
-                               castShadow
-                             />
-                             <ambientLight intensity={5.5} />
-                             {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
-                        {/* <Background /> */}
-                        {/* <Model /> */}
-                        {/* <mesh 
-                         rotation={[-Math.PI / 2, 0, 0]}
-                         position={[0, -5, 0]}
-                         receiveShadow 
-                       > */}
-                        {/* <planeGeometry args={[100, 100]} />
-                         <shadowMaterial opacity={0.5} />
-                       </mesh> */}
-                        {/* </Canvas>
-                         </Box> */}
-
                         <Img
                           className={'dialogue_image'}
                           src={preloadedAssets?.dial}
                         />
-
+                        {/* {!showNote && (
+                          <> */}
                         <Box position={'relative'}>
                           <Img
                             src={preloadedAssets?.char}
@@ -616,33 +954,43 @@ const ScreenPreview = () => {
                           bottom={'38px'}
                           fontFamily={'AtlantisContent'}
                         >
-                          <TypingEffect text={data?.blockText} speed={50} />
+                          {showTypingEffect === false ? (
+                            <TypingEffect
+                              text={remainingSentences.toString()}
+                              speed={50}
+                              setSpeedIsOver={setShowTypingEffect}
+                            />
+                          ) : (
+                            remainingSentences
+                          )}
                         </Box>
                         <Box
                           display={'flex'}
                           position={'fixed'}
-                          justifyContent={'space-between'}
+                          justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
                           w={'95%'}
                           bottom={'0'}
                         >
-                          <Img
-                            src={preloadedAssets?.left}
-                            w={'70px'}
-                            h={'50px'}
-                            cursor={'pointer'}
-                          //  onClick={() => prevData(data)}
-                          />
+                          {navTrack.length > 1 &&
+                            <Img
+                              src={preloadedAssets?.left}
+                              w={'70px'}
+                              h={'50px'}
+                              cursor={'pointer'}
+                              onClick={() => SkipContentForBackNavigation()}
+                            />
+                          }
                           <Img
                             src={preloadedAssets?.right}
                             w={'70px'}
                             h={'50px'}
                             cursor={'pointer'}
-                            onClick={() => getData(data)}
+                            onClick={() => Updatecontent()}
                           />
                         </Box>
-
+                        {/* </>
+                        )} */}
                       </Box>
-
                     )}
                     {currentTab === 4 && data && type === 'Interaction' && (
                       <Box
@@ -668,6 +1016,27 @@ const ScreenPreview = () => {
                               position={'relative'}
                               className="story_interaction_image"
                             >
+                              {selectedPlayer && (
+                                <Img
+                                  src={selectedPlayer}
+                                  position={'fixed'}
+                                  right={'100px'}
+                                  bottom={'-20px'}
+                                  w={'350px'}
+                                  h={'540px'}
+                                  loading="lazy"
+                                />
+                              )}
+                              {preloadedAssets?.nonplayerImage && (
+                                <Img
+                                  src={preloadedAssets?.nonplayerImage}
+                                  position={'fixed'}
+                                  right={'500px'}
+                                  bottom={'20px'}
+                                  w={'350px'}
+                                  h={'540px'}
+                                  loading="lazy"
+                                />)}
                               <Img
                                 src={preloadedAssets?.parch}
                                 w={'auto'}
@@ -677,7 +1046,6 @@ const ScreenPreview = () => {
                               <Box
                                 position={'absolute'}
                                 top={{ base: '5%', md: '6%' }}
-                                // h={'80% !important'}
                                 className="story_interaction_content"
                               >
                                 <Box
@@ -766,13 +1134,15 @@ const ScreenPreview = () => {
                                 <Box
                                   w={'98%'}
                                   display={'flex'}
-                                  justifyContent={'space-between'}
+                                  justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
                                 >
-                                  <Img
-                                    src={preloadedAssets?.left}
-                                    className={'interaction_button'}
-                                  // onClick={() => prevData(data)}
-                                  />
+                                  {navTrack.length > 1 &&
+                                    <Img
+                                      src={preloadedAssets?.left}
+                                      className={'interaction_button'}
+                                      onClick={() => prevData(data)}
+                                    />
+                                  }
                                   {selectedOption !== null && (
                                     <Box className={'blinking-wave'} onClick={() => getData(data)} borderRadius={'50%'}>
                                       <Img
@@ -837,28 +1207,29 @@ const ScreenPreview = () => {
                               bottom={'38px'}
                               fontFamily={'AtlantisContent'}
                             >
-                              <TypingEffect text={resMsg} speed={50} />
+                              {showTypingEffect === false ? (
+                                <TypingEffect
+                                  text={remainingSentences.toString()}
+                                  speed={50}
+                                  setSpeedIsOver={setShowTypingEffect}
+                                />
+                              ) : (
+                                remainingSentences
+                              )}
                             </Box>
                             <Box
                               display={'flex'}
                               position={'fixed'}
-                              justifyContent={'space-between'}
+                              justifyContent={'end'}
                               w={'95%'}
                               bottom={'0'}
                             >
-                              <Img
-                                src={preloadedAssets?.left}
-                                w={'70px'}
-                                h={'50px'}
-                                cursor={'pointer'}
-                              //  onClick={() => prevData(data)}
-                              />
                               <Img
                                 src={preloadedAssets?.right}
                                 w={'70px'}
                                 h={'50px'}
                                 cursor={'pointer'}
-                                onClick={() => getData(data)}
+                                onClick={() => Updatecontent()}
                               />
                             </Box>
                           </>
@@ -938,7 +1309,6 @@ const ScreenPreview = () => {
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets?.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -946,6 +1316,7 @@ const ScreenPreview = () => {
                           alignItems={'center'}
                           justifyContent={'center'}
                           className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
                             <CompletionContentScreen
@@ -972,7 +1343,6 @@ const ScreenPreview = () => {
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets?.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -980,15 +1350,16 @@ const ScreenPreview = () => {
                           alignItems={'center'}
                           justifyContent={'center'}
                           className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
                             <Box className="LearderBoards">
-
                               <LeaderBoard
                                 formData={gameInfo?.gameData}
-                                imageSrc={leaderboard}
+                                imageSrc={preloadedAssets.Lead}
                                 getData={getData}
                                 data={data}
+                                preloadedAssets={preloadedAssets}
                               />
                             </Box>
                           </Box>
@@ -1006,10 +1377,7 @@ const ScreenPreview = () => {
                         style={{ perspective: '1000px' }}
                         className="Main-Content"
                       >
-                        <Box
-
-                          className="Game-Screen"
-                        >
+                        <Box className="Game-Screen">
                           <Box className="Images">
                             <ReflectionContentScreen
                               preview={true}
@@ -1039,7 +1407,6 @@ const ScreenPreview = () => {
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets?.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -1047,6 +1414,7 @@ const ScreenPreview = () => {
                           alignItems={'center'}
                           justifyContent={'center'}
                           className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
                             <TakeAwaysContentScreen
@@ -1060,38 +1428,36 @@ const ScreenPreview = () => {
                       </Box>
                     )}
                     {currentTab === 5 && currentSubTab === 4 && (
-                      <>
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
+                      >
                         <Box
-                          w={'100%'}
+                          w={'100% !important'}
                           h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
                           alignItems={'center'}
                           justifyContent={'center'}
-                          position={'relative'}
-                          overflow={'visible'}
-                          style={{ perspective: '1000px' }}
-                          className="Main-Content"
+                          className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
                         >
-                          <Box
-                            backgroundImage={preloadedAssets?.backgroundImage}
-                            w={'100% !important'}
-                            h={'100vh'}
-                            backgroundRepeat={'no-repeat'}
-                            backgroundSize={'cover'}
-                            alignItems={'center'}
-                            justifyContent={'center'}
-                            className="Game-Screen"
-                          >
-                            <Box className="Images">
-                              <WelcomeContentScreen
-                                formData={gameInfo.gameData}
-                                imageSrc={preloadedAssets?.Screen5}
-                                preview={true}
-                                preloadedAssets={preloadedAssets}
-                              />
-                            </Box>
+                          <Box className="Images">
+                            <WelcomeContentScreen
+                              formData={gameInfo.gameData}
+                              imageSrc={preloadedAssets?.Screen5}
+                              preview={true}
+                              preloadedAssets={preloadedAssets}
+                            />
                           </Box>
                         </Box>
-                      </>
+                      </Box>
                     )}
                     {currentTab === 5 && currentSubTab === 5 && (
                       <Box
@@ -1105,7 +1471,6 @@ const ScreenPreview = () => {
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets?.backgroundImage}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -1113,6 +1478,7 @@ const ScreenPreview = () => {
                           alignItems={'center'}
                           justifyContent={'center'}
                           className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
                             <TyContentScreen
@@ -1125,6 +1491,7 @@ const ScreenPreview = () => {
                         </Box>
                       </Box>
                     )}
+
                     {endOfQuest && (
                       <Box
                         w={'100%'}

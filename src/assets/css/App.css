@@ -299,7 +299,7 @@ option {
   width: 65%;
   /* new */
   /* height: 800px; */
-  border-radius: 20px;
+  /* border-radius: 20px; */
   /* background: #fff; */
   /* box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08); */
   padding: 20px;
@@ -1170,6 +1170,11 @@ font-family: 'AtlantisText';
   display: flex;
 }
 
+.AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box .content {
+  width: 100%;
+  display: flex;
+}
+
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .bg-img {
   height: 620px;
   /* width: 500px;  */
@@ -1998,10 +2003,10 @@ transform: translate(-167px, -84px);
   font-weight: 300;
 }
 
-.buttonfeel {
-  /* margin-left: 5px;
+/* .buttonfeel { */
+/* margin-left: 5px;
    /* THANK YOU SCREEN */
-}
+/* } */
 
 .AddScores .Main-Content .Game-Screen .Images .section-thankyou-screen {
   position: relative;
@@ -2999,8 +3004,19 @@ transform: translate(-167px, -84px);
   align-items: center;
   justify-content: center;
   color: wheat;
-  font-size: 50px;
+  font-size: 5vh;
 }
+
+.end-screen-text {
+  position: absolute;
+  font-family: AtlantisContent;
+  /* <-- This line has been commented out */
+  text-align: center;
+  color: white;
+  /* zIndex: 999999; */
+  /* <-- This line has been commented out */
+}
+
 
 .eoq-bg-img {
   position: absolute;
@@ -3012,6 +3028,372 @@ transform: translate(-167px, -84px);
 .eoq-replay-img {
   z-index: 2;
 }
+
+.screen-preview-bgimg {
+  justify-content: center !important;
+  align-items: center !important;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.preview-welcome-texture {
+  width: 80%;
+  height: 100%;
+}
+
+.screen-preview-content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: calc((var(--viewport-width))*0.025);
+  font-family: AtlantisText;
+  color: #ffe797;
+  height: 100vh;
+  width: 100%;
+  letter-spacing: 1.2px;
+}
+
+.screen-preview-welcome-grid {
+  display: grid;
+  position: absolute;
+  background-position: center;
+  background-attachment: fixed;
+  height: 41vh;
+  width: 42vw;
+  transform: translateY(14%);
+  overflow-y: auto;
+}
+
+.welcome-screen-head-content {
+  position: absolute;
+  transform: translateY(-20vh);
+  text-align: center;
+}
+
+.learnig-outcome-tit {
+  position: absolute;
+  transform: translate(0.2vw, -9vh);
+  text-wrap: nowrap;
+  color: black;
+  font-size: 0.56em !important;
+}
+
+.welcomescreen-bulletsImg {
+  width: 0.85em;
+  height: 0.85em;
+}
+
+.welcomescreen-content {
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+.welcomescreen-heading {
+  font-size: 1rem;
+}
+
+
+/* style for skill and learning outcome box */
+.screen-preview-welcome-slo-box {
+  width: 22vw;
+  height: 25vh;
+}
+
+.screen-preview-welcome-slo-content {
+  position: absolute;
+  transform: translate(0.55vw, 1.4vh);
+  display: flex;
+  line-height: .5em;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: 15.5vh;
+}
+
+.slo-content {
+  width: 17vw !important;
+  overflow-wrap: break-word;
+  text-align: justify;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 0.68em;
+  padding-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.screen-welcome-rewardswrapper {
+  width: 100%;
+  height: .7em;
+  /* margin-top: 1; */
+  display: flex;
+  justify-content: center;
+}
+
+.screen-welcome-rewardsImg {
+  width: 42vw;
+  height: 2.5vh;
+}
+
+.welcome-additionaltext {
+  width: 40vw;
+}
+
+.welcome-nxtbtn {
+  width: 14vw;
+  height: 10vh;
+}
+
+@media screen and (min-width: 950px) {
+  .screen-preview-content-wrapper {
+    width: 100vw;
+  }
+
+  .preview-welcome-texture {
+    width: 65%;
+    height: 95%;
+  }
+
+  .screen-welcome-rewardswrapper {
+    display: flex;
+    justify-content: center;
+    height: 1.5vh;
+  }
+
+  .welcomescreen-content {
+    font-size: 1.2rem;
+  }
+
+  .welcomescreen-heading {
+    font-size: 1.6rem;
+  }
+
+  .screen-preview-welcome-slo-content p {
+    font-size: 0.94rem;
+  }
+
+  .welcome-additionaltext {
+    width: 45vw;
+  }
+
+  .screen-preview-author {
+    /* transform: translateY(-2.2rem); */
+  }
+
+  .demo-btn {
+    position: absolute;
+    top: 2vh;
+    right: 0vw;
+    pointer-events: auto;
+    /* z-index: 1; */
+    visibility: visible;
+    height: 8vh;
+  }
+
+  .screen-notebox3 {
+    width: 30vw !important;
+    /* height: ; */
+  }
+
+}
+
+@media (orientation: portrait) {
+  /* body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+  #root {
+    /* transform: rotate(90deg);
+    width: 100vh;
+    height: 100vw;
+    overflow: hidden;
+    position: fixed;
+    margin: 0;
+  } */
+
+  .screen-preview-content-wrapper {
+    height: 100vw;
+    width: 100vh;
+    /* transform: translateY(-1.5rem); */
+  }
+
+  .screen-preview-bgimg {
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    height: 100vw;
+    width: 100vh;
+  }
+
+  .preview-welcome-texture {
+    width: 80vh;
+    height: 100vw;
+    font-size: calc((var(--viewport-height))* 0.025);
+    font-family: AtlantisText;
+    color: #ffe797;
+  }
+
+  .screen-preview-welcome-grid {
+    height: 40vw !important;
+    width: 53vh !important;
+    /* transform: translateY(-0.2rem) !important; */
+    place-items: center;
+  }
+
+  .welcome-screen-head-content {
+    position: absolute;
+    transform: translateY(-9vh);
+    text-align: center;
+  }
+
+  .screen-preview-welcome-slo-box {
+    width: 22vh;
+    height: 30vw;
+  }
+
+  .learnig-outcome-tit {
+    position: absolute;
+    transform: translate(0.2vh, -10.3vw);
+    text-wrap: nowrap;
+    color: black;
+    font-size: 0.7em !important;
+  }
+
+  .screen-preview-welcome-slo-content {
+    position: absolute;
+    transform: translate(0.8vh, 0.5vw);
+    height: 17vw;
+    display: flex;
+    margin-top: 5px;
+    /* gap: 10px; */
+    line-height: normal;
+    flex-direction: column;
+    overflow-y: scroll;
+  }
+
+  .slo-content {
+    width: 17vh !important;
+    /* height: 18vw; */
+    overflow-wrap: break-word;
+    text-align: justify;
+    display: flex;
+    justify-content: flex-start;
+    font-size: 0.8em;
+    padding-left: 0.7em;
+    /* margin-top: -0.2em; */
+    margin-right: 0.5em;
+  }
+
+  .screen-welcome-rewardsImg {
+    width: 50vh;
+    height: 2.5vw;
+  }
+
+  .welcomescreen-heading {
+    font-size: 1rem;
+  }
+
+  .welcomescreen-content {
+    font-size: .85rem;
+  }
+
+  .screen-preview-author {
+    transform: translateY(-2.2rem);
+  }
+
+  .welcome-nxtbtn {
+    width: 17vh;
+    height: 10vw;
+  }
+
+  .screen-preview-nxtbtn {
+    position: absolute;
+    transform: translateY(34vw) !important;
+  }
+
+  .screen-preview-welcome-slo-content p {
+    /* font-size: 0.94rem; */
+    font-size: 0.5rem !important;
+    ;
+  }
+
+  .welcome-additionaltext {
+    width: 52vh;
+  }
+
+  .demo-btn {
+    height: 6vw;
+  }
+}
+
+.screen-preview-grid-items {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* .screen-preview-title{
+grid-row: 1 / 2;
+}
+.screen-preview-duration{
+grid-row: 2 / 3;
+} */
+/* .screen-preview-storyline{
+grid-row: 1 / 2;
+} */
+.screen-preview-skill {
+  /* grid-column: 1 /2; */
+  /* grid-row: 4 / 5; */
+}
+
+.screen-preview-outcome {
+  /* grid-column: 2 / 3; */
+  /* grid-row: 4 / 5; */
+}
+
+.screen-preview-earnings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.screen-preview-author {
+  /* grid-row: 6 / 7; */
+  transform: translateY(-0.6rem);
+}
+
+.screen-preview-additional_welcomenote {
+  /* grid-row: 7 / 8; */
+}
+
+.screen-preview-nxtbtn {
+  position: absolute;
+  transform: translateY(32vh);
+}
+
+.screen-preview-heading {
+  font-size: .55em;
+}
+
+.screen-preview-text {
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+
+.text-center {
+  text-align: center;
+}
+
 
 /* Rajesh css works */
 /* player name in character selection */
@@ -3209,7 +3591,7 @@ transform: translate(-167px, -84px);
 
 .play_screen_content {
   width: calc(90vh - 49vh);
-  height: calc(90vh - 42vh);
+  height: calc(90vh - 45vh);
   position: absolute;
   top: 25%;
   display: flex;
@@ -3222,6 +3604,7 @@ transform: translate(-167px, -84px);
   width: 60%;
   letter-spacing: 1px;
   font-size: 4.5vh;
+  display: flex;
 }
 
 .story_interaction_option {
@@ -3303,45 +3686,31 @@ transform: translate(-167px, -84px);
   cursor: pointer
 }
 
-.end-of-quest {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-  color: wheat;
-  font-size: 6vh;
+.narrator_character_image {
+  position: fixed;
+  bottom: 135px;
+  transform: translateX(13vw);
+  width: auto;
+  height: 45vh;
 }
 
-.end-screen-text {
-  position: absolute;
-  font-family: AtlantisContent;
-  /* <-- This line has been commented out */
-  text-align: center;
-  color: white;
-  /* zIndex: 999999; */
-  /* <-- This line has been commented out */
-}
-
-
-.eoq-bg-img {
-  position: absolute;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
-}
-
-.eoq-replay-img {
-  z-index: 2;
+.player_character_image {
+  position: fixed;
+  bottom: 135px;
+  width: auto;
+  height: 45vh;
+  transform: translateX(30vw);
 }
 
 @media screen and (orientation: portrait) {
-  .end-of-quest {
-    transform: rotate(90deg);
-    width: 100vh;
-    height: 100vw;
+  .narrator_character_image {
+    height: 45vw;
+    transform: translateX(13vh);
   }
-
+  .player_character_image {
+    height: 45vw;
+    transform: translateX(30vh);
+  }
   .title_replay {
     font-size: 6.5vw;
   }
@@ -3435,7 +3804,7 @@ transform: translate(-167px, -84px);
 
   .play_screen_content {
     width: calc(90vw - 49vw);
-    height: calc(90vw - 42vw);
+    height: calc(90vw - 45vw);
   }
 
   .interaction_heading_potrait {
@@ -3532,10 +3901,6 @@ transform: translate(-167px, -84px);
     backdrop-filter: blur(10px);
   }
 
-  /* .story_note_image {
-    width: 250px;
-    height: 90vw;
-  } */
   .character_select_area {
     width: calc(90vw - (-34vw));
   }
@@ -4432,7 +4797,7 @@ transform: translate(-167px, -84px);
 
 .EntirePreview .comple-screen .title {
   position: absolute;
-  transform: translateY(-37vh);
+  transform: translateY(-35vh);
 }
 
 .EntirePreview .comple-screen .title p {
@@ -4445,6 +4810,7 @@ transform: translate(-167px, -84px);
 
 .EntirePreview .comple-screen .content-box {
   position: absolute;
+  top: 24%;
   height: 58vh;
   width: calc(58vh - (-2vh));
   display: flex;
@@ -5404,6 +5770,93 @@ transform: translate(-167px, -84px);
   cursor: pointer;
   background-size: contain;
   height: 30px;
+}
+
+.screen-notebox1 {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: visible;
+  perspective: 1000px;
+}
+
+.screen-notebox2 {
+  color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.screen-notebox3 {
+  position: absolute;
+  width: 40vw;
+  height: 80vh;
+  animation: transformnote 1s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes transformnote {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.screen-notebox4 {
+  position: fixed;
+  width: 40%;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.screen-notebox5 {
+  position: absolute !important;
+  width: 100% !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(8vh) !important;
+}
+
+/* can hold upto 200 charectors maximum */
+.screen-notebox6 {
+  width: 64%;
+  text-align: justify;
+  text-overflow: clip;
+  overflow: visible;
+  letter-spacing: 0.5;
+  line-height: 1.5;
+}
+
+.screen-notebox7 {}
+
+.screen-noteimage {
+  width: 100%;
+  height: 100%;
+
+}
+
+.screen-bgImage {
+  width: 100%;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 .EntirePreview .Game-Screen .Images .Thankyou-section .next-btn {

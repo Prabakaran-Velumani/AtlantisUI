@@ -41,12 +41,16 @@ const ReflectionScreen: React.FC<{
   const arrayInfo = [1, 2, 3, 4];
   let i = 0;
   useEffect(() => {
+    const snas = !answers.some((ans:any) => ( ans?.text ==undefined ||  ans.text == '' || ans.text==null ));
+    console.log("!!!!!", snas);
     if (formData?.gameIsLearnerMandatoryQuestion == 'false') {
       setIsFormValid(true);
     } else if (formData.gameIsLearnerMandatoryQuestion == 'true'){
       if(formData?.gameReflectionQuestion &&
-      answers.length == formData?.gameReflectionQuestion
+      answers.length == formData?.gameReflectionQuestion &&
+      !answers.some((ans:any) => ( ans?.text ==undefined ||  ans.text == '' || ans.text==null ))
     ) {
+    
       setIsFormValid(true);
     } else {
       setIsFormValid(false);
@@ -84,10 +88,9 @@ Object.assign(styleflex, {
     <>
       {imageSrc && (
         <Box className="reflection-screen">
-          {/* <Box className="reflection-screen-box"> */}
-            {/* {preview ? null : <Img src={imageSrc} className="bg-img" />} */}
+
             <Img src={imageSrc} className="bg-img" />
-          {/* </Box> */}
+
           {preview ? (
             <Box className='title'
               w={'100%'}
@@ -100,7 +103,6 @@ Object.assign(styleflex, {
                 fontFamily={'AtlantisText'}
                 color={'##D9C7A2'}
                 position={'absolute'}
-                // top={'20px'}
                 fontSize={'2.8rem'}
                 style={{ whiteSpace: 'break-spaces' }}
               >

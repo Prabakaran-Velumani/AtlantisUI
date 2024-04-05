@@ -84,10 +84,11 @@ const WelcomeContentScreen: React.FC<{
       ? formData?.gameLearningOutcome?.split('\n')
       : [];
       setData(dataLearn);
-      console.log(formData?.gameLearningOutcome)
+      // console.log(formData?.gameLearningOutcome)
   }, []);
 
   useEffect(() => {
+     fetch();
     if (profile.gameSkills) {
       const Array = profile.gameSkills.split(',');
       setauthorArray(Array);
@@ -152,7 +153,7 @@ const WelcomeContentScreen: React.FC<{
            >
              {formData.gameTitle}
            </Text>
-           {formData.gameIsShowGameDuration === 'true' && (
+
              <Text
                className="duration"
                fontSize={{
@@ -177,11 +178,9 @@ const WelcomeContentScreen: React.FC<{
                  </span>
                </>
              </Text>
-           )}
          </Box>
          <Box className="content-box" fontFamily={'gametext'}>              
            <Box w={'60%'} className="content">
-             {formData.gameIsShowStoryline === 'true' && (
                <Text
                  className='text'
                  mt={'20px'}
@@ -195,23 +194,15 @@ const WelcomeContentScreen: React.FC<{
                >
                  {formData.gameStoryLine}
                </Text>
-             )}
-             {formData.gameIsShowSkill === 'true' ||
-             formData.gameIsShowLearningOutcome === 'true' ? (
+
                <Img className='rewards-arrow-img' src={rew} mt={'25px'} alt="rew" w={'100%'} h={'20px'} />
-             ) : (
-               ''
-             )}
              <Box
                display={'flex'}
                className={
-                 formData.gameIsShowSkill == 'true' ||
-                 formData.gameIsShowLearningOutcome === 'true'
-                   ? 'rewards-box'
-                   : 'empty-rewards-box'
+                   'rewards-box'
                }
              >
-               {formData.gameIsShowSkill === 'true' && (
+
                  <>
                    <Box className="box-1">
                      <Img src={back} className="bg-img" />
@@ -265,8 +256,6 @@ const WelcomeContentScreen: React.FC<{
                      </Box>
                    </Box>
                  </>
-               )}
-               {formData.gameIsShowLearningOutcome === 'true' && (
                  <>
                    <Box className="box-1">
                      <Img src={back} className="bg-img" />
@@ -322,9 +311,7 @@ const WelcomeContentScreen: React.FC<{
                      </Box>
                    </Box>
                  </>
-               )}
              </Box>
-             {formData.gameIsShowAuhorName === 'true' && (
                  <Box
                    w={'100%'}
                    h={'50px'}
@@ -349,8 +336,6 @@ const WelcomeContentScreen: React.FC<{
                      *Author* <br /> {formData.gameAuthorName}
                    </Text>
                  </Box>
-               )}
-               {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
                  <Box
                    // w={'100%'}
                    // h={'50px'}
@@ -369,7 +354,6 @@ const WelcomeContentScreen: React.FC<{
                      {renderContent()}
                    </Text>
                  </Box>
-               )}
              </Box>             
            </Box>
            <Box className='next-btn'>
@@ -616,7 +600,7 @@ const WelcomeContentScreen: React.FC<{
             <Box className='next-btn'>
               <Img src={next}  />
             </Box>
-        </Box>
+            </Box>
       )}
       </motion.div>
     </>

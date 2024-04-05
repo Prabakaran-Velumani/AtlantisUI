@@ -1,13 +1,13 @@
 import './assets/css/App.css';
 import './assets/css/ResponsiveApp.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import {} from 'react-router-dom';
 import AuthLayout from './layouts/auth';
 import AdminLayout from './layouts/admin';
 import RTLLayout from './layouts/rtl';
 import SignInDefault from '../src/views/auth/signIn/SignInDefault';
 import {
   ChakraProvider,
+  Box
   // extendTheme
 } from '@chakra-ui/react';
 import initialTheme from './theme/theme'; //  { themeGreen }
@@ -19,11 +19,11 @@ import GlbPractise from 'views/admin/games/game/components/GlbPractise';
 import ScreenPreview from 'views/admin/superadmin/game/components/ScreenPreview';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
-import { Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'contexts/auth.context';
 import { logout } from 'store/user/userSlice';
 import { updatePreviewData } from 'store/preview/previewSlice';
+import InteractionScreenShot from 'views/admin/superadmin/game/demoplay/playcards/InteractionScreenShot';
 
 export default function Main() {
   const [currentTheme, setCurrentTheme] = useState(initialTheme);
@@ -64,7 +64,8 @@ useEffect(() => {
   return (
     <ChakraProvider theme={currentTheme}>
       <Routes>
-        {/* <Route path={'game/glbpractise'} element={<GlbPractise />} /> */}
+        {/* <Route path={'game/glbpractise'} element={<InteractionScreenShot 
+        />} /> */}
         <Route path="game/demoplay/:uuid" element={<GamePreview />} />
         <Route path="/game/creator/demoplay/:id" element={<GamePreview />} />
         <Route path="/screen/preview/:id" element={<ScreenPreview />} />
@@ -79,6 +80,7 @@ useEffect(() => {
           path="rtl/*"
           element={<RTLLayout theme={currentTheme} setTheme={setCurrentTheme} />}
         />
+          {/* <Route path="/screen/preview/" element={<OrientationLock />} /> */}
         <Route path="/" element={<Navigate to="/admin" replace />} />
       </Routes>      
     </ChakraProvider>
