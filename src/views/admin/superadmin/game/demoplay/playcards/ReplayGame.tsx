@@ -15,17 +15,18 @@ const ReplayGame: React.FC<{
   replayGame: any;
   setCurrentScreenId: any;
   getData?: any;
-  isOptionalReplay:any;
-  setisOptionalReplay:any;
-  profilescore:any;
-  setisReplay:any;
-  isReplay:any;
+  isOptionalReplay: any;
+  setisOptionalReplay: any;
+  profilescore: any;
+  setisReplay: any;
+  isReplay: any;
   data?: any;
-  gameInfo:any;
-  type?:any;
-  setType:any;
-  setData:any;
+  gameInfo: any;
+  type?: any;
+  setType: any;
+  setData: any;
   replayNextHandler: any;
+  preloadedAssets: any;
 }> = ({
   formData,
   imageSrc,
@@ -43,77 +44,53 @@ const ReplayGame: React.FC<{
   getData,
   data,
   type,
+  preloadedAssets
 }) => {
-   const { profile } = useContext(ScoreContext);
-   
-
-  //  const nextNavigation = (data:any)=>{
-  //    if(data && type)
-  //    {
-  //        setCurrentScreenId(13);
-  //        return false;
-  //    }
-  //    else{
-  //     if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true') {
-  //       setCurrentScreenId(3);
-  //       return false;
-  //     } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
-  //       setCurrentScreenId(7);
-  //       return false;
-  //     }
-  //     else {
-  //       setType(null);
-  //       setData(null);
-  //       setCurrentScreenId(5);
-  //       return false;
-  //     }
-  //    }
-  // }
+  const { profile } = useContext(ScoreContext);
 
   return (
     <>
       {imageSrc && (
         <>
-          <Box className="thankyou-screen">
-            <Box className="thankyou-screen-box">
-              <Img src={imageSrc} className="bg-Img" />
-            </Box>
-            <Box
-              w={'100%'}
-              display={'flex'}
-              justifyContent={'center'}
-              alignItems={'center'}
-              position={'relative'}
-            >
-              <Box className="title" mt={'80px'}>
-                <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
-                  {isReplay === true ? `Your Are Only ${profilescore} Points Away From A Perfect Score  Would You Like To Replay` : (isOptionalReplay === true)?`Your Score is to low. So U have to play Again` : 'Do You Want Play Again ?'}
-                 {/* {isOptionalReplay === true ? `Your Score is to low. So U have to play Again`  : 'Do You Want Play Again ?'}  */}
-                </Text>
-              </Box>
-              <Box
-                position={'fixed'} 
-                top={'360px'}
-                w={'40%'}
-                display={'flex'}
-                justifyContent={'center'}
-              >
-                 {(isReplay === true || isOptionalReplay === true) ?
-                <Img
-                  src={ReplayBtn}
-                  w={'200px'}
-                  h={'60px'}
-                  cursor={'pointer'}
-                  onClick={replayGame}
-                />: null}
-                  <Img
-                    src={next}
-                    w={'200px'}
-                    h={'60px'}
-                    cursor={'pointer'}
-                    onClick={() => replayNextHandler(data)}
-                  />
-               
+          <Box className="takeaway-screen">
+            <Box className="takeaway-screen-box">
+              <Box position={'relative'}>
+                <Img src={imageSrc} className="bg-replay" />
+                <Box className="replay_content">
+                  <Box className="replay_content_center">
+                    <Box className="title_replay">
+                      <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
+                        {isReplay === true
+                          ? `Your Are Only ${profilescore} Points Away From A Perfect Score  Would You Like To Replay`
+                          : isOptionalReplay === true
+                          ? `Your Score is to low. So U have to play Again`
+                          : 'Do You Want Play Again ?'}
+                      </Text>
+                    </Box>
+                    <Box
+                      w={'100%'}
+                      display={'flex'}
+                      justifyContent={
+                        formData?.gameMinScore < profile?.score
+                          ? 'space-between'
+                          : 'center'
+                      }
+                    >
+                      {isReplay === true || isOptionalReplay === true ? (
+                        <Img
+                          src={preloadedAssets.ReplayBtn}
+                          className="replay_buttons"
+                          onClick={replayGame}
+                        />
+                      ) : null}
+                      <Img
+                        src={preloadedAssets.next}
+                        className="replay_buttons"
+                        onClick={() => replayNextHandler(data)}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
               </Box>
             </Box>
           </Box>

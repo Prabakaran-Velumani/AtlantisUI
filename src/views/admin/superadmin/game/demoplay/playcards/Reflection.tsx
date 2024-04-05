@@ -16,7 +16,8 @@ const Reflection: React.FC<{
   data?: any;
   gameInfo?:any;
   setCurrentScreenId?: any;
-}> = ({ formData, reflectionQuestions, imageSrc, preview, getData, data, gameInfo , setCurrentScreenId}) => {
+  preloadedAssets:any;
+}> = ({ formData, reflectionQuestions, imageSrc, preview, getData, data, gameInfo , setCurrentScreenId, preloadedAssets}) => {
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [answers, setAnswers] = useState<any>([]);
 
@@ -44,7 +45,6 @@ const Reflection: React.FC<{
   };
 
   const nextNavigation = ()=>{
-    console.log('gameInfo?.gameData?.gameIsShowTakeaway == true', gameInfo?.gameData?.gameIsShowTakeaway==='true');
     if(gameInfo?.gameData?.gameIsShowTakeaway === 'true'){
       setCurrentScreenId(7);//Navigate to Takeaway screen
     }
@@ -52,6 +52,7 @@ const Reflection: React.FC<{
       setCurrentScreenId(5);//Navigate to Thank you screen
     }
   }
+
   return (
     <>
       {imageSrc && (
@@ -61,8 +62,8 @@ const Reflection: React.FC<{
             {/* <Box className="reflection-screen-box">
             </Box> */}
             <Box className='title'>
-              <Img src={question} />
-              <Text> reflection </Text>
+              <Img src={preloadedAssets.question} />
+              <Text> Reflection </Text>
             </Box>
             <Box className="content-ref">
               <SimpleGrid columns={{ base: 2 }} spacing={2} className="grid">
@@ -87,7 +88,7 @@ const Reflection: React.FC<{
                         lg: '15px',
                       }}
                     >
-                      <Img src={qs} alt="ref" w={'20px'} h={'20px'} />
+                      <Img src={preloadedAssets.qs} alt="ref" w={'20px'} h={'20px'} />
                       <Text
                         fontFamily={'AtlantisText'}
                         color={'black'}
@@ -107,7 +108,7 @@ const Reflection: React.FC<{
                           md: '50px',
                           lg: '100px',
                         }}
-                        src={ref}
+                        src={preloadedAssets.ref}
                       />
                       <Textarea
                         bottom={0}
@@ -143,14 +144,13 @@ const Reflection: React.FC<{
               className='left-right-btn'
             >
               <Box w={'80%'} display={'flex'} justifyContent={'space-between'}>
-                <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+                <Img src={preloadedAssets.left} w={'50px'} h={'50px'} cursor={'pointer'} />
                 {isFormValid && (
                   <Img
-                    src={right}
+                    src={preloadedAssets.right}
                     w={'50px'}
                     h={'50px'}
                     cursor={'pointer'}
-                    // onClick={() => getData(data)}
                     onClick={() => nextNavigation()}
                   />
                 )}

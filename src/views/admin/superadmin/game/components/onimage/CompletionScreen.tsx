@@ -110,8 +110,6 @@ const CompletionScreen: React.FC<{ formData: any; imageSrc: any; selectedBadge: 
             <Box className='content-box'>
               <Box className='congratulations'>
                 <Box className='content' mt="0px">
-                  
-              
                 
                 {/* {compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false' ? (
                   <>{compliData[CompKeyCount]?.gameCompletedCongratsMessage}</>

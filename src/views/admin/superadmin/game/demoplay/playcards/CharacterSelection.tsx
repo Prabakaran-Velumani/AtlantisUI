@@ -67,6 +67,7 @@ interface PlayGamesProps {
   profileData?: any;
   setProfileData?: any;
   demoBlocks?: any;
+  preloadedAssets?: any;
 }
 
 const spokenLanguages = [
@@ -104,6 +105,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   setProfileData,
   demoBlocks,
   formData,
+  preloadedAssets
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
@@ -224,7 +226,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
           <Box className="top-menu-home-section">
             {isLanguage ? (
               <Box className="Setting-box">
-                <Img src={Lang} className="setting-pad" />
+                <Img src={preloadedAssets.Lang} className="setting-pad" />
                 <Box className="vertex">
                   <FormLabel className={'label'} me={'0'}>
                     Language
@@ -234,7 +236,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       // className="formfield"
                       w={'100%'}
                       h={'auto'}
-                      src={FormField}
+                      src={preloadedAssets.FormField}
                       onClick={() => setSelect(!select)}
                     />
                     <Box w={'100%'} position={'absolute'} display={'flex'}  onClick={() => setSelect(!select)} top={'7%'}>
@@ -249,7 +251,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                         </Text>
                       </Box>
                        <Box w={'20%'} >
-                        <Img src={Selected} className={'select'} mt={'18%'} />
+                        <Img src={preloadedAssets.Selected} className={'select'} mt={'18%'} />
                       </Box>
                       {select && (
                         <Box className="dropdown">
@@ -277,7 +279,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       className="okay"
                       onClick={() => setIsLanguage(false)}
                     >
-                      <Img src={Okay} w={'100%'} h={'auto'} />
+                      <Img src={preloadedAssets.Okay} w={'100%'} h={'auto'} />
                     </Button>
                   </Box>
                 </Box>
@@ -307,7 +309,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
           <GridItem colSpan={1} position={'relative'}>
             <Box display={'flex'} justifyContent={'center'}>
               <Img
-                src={Select}
+                src={preloadedAssets.Select}
                 className={'character_template'}
                 loading="lazy"
               />
@@ -319,16 +321,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                   justifyContent={'space-between'}
                 >
                   <Img
-                    src={Selected}
-                    w="4vw"
-                    h="6vh"
-                    transform={'rotate(90deg)'}
+                    src={preloadedAssets.Selected}
+                    className={'character_toggle_left'}
                   />
                   <Img
-                    src={Selected}
-                    w="4vw"
-                    h="6vh"
-                    transform={'rotate(-90deg)'}
+                    src={preloadedAssets.Selected}
+                   className={'character_toggle_right'}
                   />
                 </Box>
               </Box>

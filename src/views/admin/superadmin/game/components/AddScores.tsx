@@ -834,7 +834,7 @@ const AddScores: React.FC<{
           </Text>
         </Box>
         <Flex
-          className="Main-Content"
+          className="Main-Content"  
           mb={'15px'}
           flexDirection={{
             base: 'column',

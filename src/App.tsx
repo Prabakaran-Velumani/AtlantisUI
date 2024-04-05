@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'contexts/auth.context';
 import { logout } from 'store/user/userSlice';
 import { updatePreviewData } from 'store/preview/previewSlice';
+import InteractionScreenShot from 'views/admin/superadmin/game/demoplay/playcards/InteractionScreenShot';
 
 export default function Main() {
   const [currentTheme, setCurrentTheme] = useState(initialTheme);
@@ -63,7 +64,8 @@ useEffect(() => {
   return (
     <ChakraProvider theme={currentTheme}>
       <Routes>
-        {/* <Route path={'game/glbpractise'} element={<GlbPractise />} /> */}
+        {/* <Route path={'game/glbpractise'} element={<InteractionScreenShot 
+        />} /> */}
         <Route path="game/demoplay/:uuid" element={<GamePreview />} />
         <Route path="/game/creator/demoplay/:id" element={<GamePreview />} />
         <Route path="/screen/preview/:id" element={<ScreenPreview />} />

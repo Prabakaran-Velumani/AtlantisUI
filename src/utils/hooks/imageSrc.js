@@ -131,6 +131,7 @@ export const assetImageSrc = [
   { assetType: 'Setting', src: Setting },
   { assetType: 'SettingPad', src: SettingPad },
   { assetType: 'SliderPointer', src: SliderPointer },
+  { assetType: 'write', src: write },
   
   
   /*file not available but used list

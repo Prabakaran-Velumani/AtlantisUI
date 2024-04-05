@@ -84,7 +84,7 @@ const WelcomeScreen: React.FC<{ formData: any; imageSrc: any }> = ({
   useEffect(()=>{
      fetch();
   },[])
-  console.log(formData.gameSkills)
+  
   const link = extractLink(formData.gameAdditionalWelcomeNote);
   return (
     <>

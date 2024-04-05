@@ -87,7 +87,8 @@ const GamePreview = () => {
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [currentScreenId, setCurrentScreenId] =
-    useState<number>(InitialScreenId);
+  // useState<number>(InitialScreenId);
+    useState<number>(14);
   const [profile, setProfile] = useState({
     score: [],
     completedLevels: ['1'],
@@ -148,14 +149,14 @@ const GamePreview = () => {
   const fetchGameData = async () => {
     const gamedata = await getGameDemoData(uuid);
 
-    if (!gamedata.error && gamedata) {
+    if (!gamedata?.error && gamedata) {
       updateGameInfo(gamedata);
     }
   };
   const fetchCreatorDemoData = async () => {
     const gamedata = await getGameCreatorDemoData(id);
 
-    if (!gamedata.error && gamedata) {
+    if (!gamedata?.error && gamedata) {
       updateCreatorGameInfo(gamedata);
     }
   };

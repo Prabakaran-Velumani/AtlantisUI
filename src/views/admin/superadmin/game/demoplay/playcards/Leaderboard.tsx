@@ -13,10 +13,7 @@ import { useContext } from 'react';
 import { ProfileContext } from '../EntirePreview';
 import { ScoreContext } from '../GamePreview';
 
-
-
 // Afrith-modified-starts-07/Mar/24
-
 const names = [
   { name: 'John', score: 300, allTimeScore: 1000 },
   { name: 'Jane', score: 400, allTimeScore: 800 },
@@ -84,6 +81,7 @@ const LeaderBoard: React.FC<{
   setHomeLeaderBoard?: any;
   setCurrentScreenId?:any;
   gameInfo?: any;
+  preloadedAssets: any;
 }> = ({
   imageSrc,
   formData,
@@ -92,7 +90,8 @@ const LeaderBoard: React.FC<{
   setCurrentScreenId,
   homeLeaderBoard,
   setHomeLeaderBoard,
-  gameInfo
+  gameInfo,
+  preloadedAssets
 }) => {
   const content = [1, 2, 3, 4, 5, 6];
 
@@ -128,10 +127,10 @@ const LeaderBoard: React.FC<{
     else{
       if(gameInfo)
       {
-        if(gameInfo?.gameData?.gameIsShowReflectionScreen == true){
+        if(gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0){
           setCurrentScreenId(3);//Navigate to Reflection screen
         }
-        else if(gameInfo?.gameData?.gameIsShowTakeaway == true){
+        else if(gameInfo?.gameData?.gameIsShowTakeaway === 'true'){
           setCurrentScreenId(7);//Navigate to Takeaway screen
         }
         else{
@@ -140,7 +139,7 @@ const LeaderBoard: React.FC<{
       }
     }
   }
-  console.log('imageSrc',imageSrc)
+
   return (
     <>
       {imageSrc && (       
@@ -150,7 +149,6 @@ const LeaderBoard: React.FC<{
             <Box className="content-box">
                 <Box className="table-heading"
                   fontFamily={'AtlantisText'}
-                  // color={'#D9C7A2'}
                   display={'flex'}
                 >
                   <Box
@@ -165,7 +163,7 @@ const LeaderBoard: React.FC<{
                     </Text>
                   </Box>
                   <Img
-                    src={Separator}
+                    src={preloadedAssets.Separator}
                     className="dot-img"
                     w={'10px'}
                     h={'65px'}
@@ -191,7 +189,7 @@ const LeaderBoard: React.FC<{
                     </Box>
                   </Box>
                   <Img
-                    src={Separator}
+                    src={preloadedAssets.Separator}
                     className="dot-img"
                     w={'10px'}
                     h={'65px'}
@@ -232,7 +230,7 @@ const LeaderBoard: React.FC<{
                       >
                         <>
                           <Img
-                            src={Entry}
+                            src={preloadedAssets.Entry}
                             className="list-pad"                           
                             _hover={{ filter: 'grayscale(50%)' }}
                           />
@@ -281,26 +279,14 @@ const LeaderBoard: React.FC<{
                       </Box>
                     ))}
                 </Box>                
-              {/* <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
-                <Img
-                  src={right}
-                  w={'50px'}
-                  h={'50px'}
-                  cursor={'pointer'}
-                  onClick={() => getData(data)}
-                />
-              </Box> */}
+             
             </Box>
             <Box className='top-bar'>
               <Box className='list-wrapper'
-                // w={'550px'}
-                // display={'flex'}
-                // justifyContent={'space-between'}
-                // position={'relative'}
               >                
                 <Box className='heading-box'>
                   <Img
-                    src={Label}
+                    src={preloadedAssets.Label}
                     className="heading-box-img"
                     w={'200px'}
                     h={'60px'}
@@ -321,7 +307,7 @@ const LeaderBoard: React.FC<{
                      <Text>Department</Text>
                     {/* Afrith-modifed-ends-07/Mar/24 */}
                     <Img
-                      src={Arrow}
+                      src={preloadedAssets.Arrow}
                       className="dot-img"
                       mt={'5px'}
                       ml={'3px'}
@@ -333,7 +319,7 @@ const LeaderBoard: React.FC<{
                 </Box>
                 <Box className='heading-box'>
                   <Img
-                    src={Label}
+                    src={preloadedAssets.Label}
                     className="heading-box-img"
                     w={'200px'}
                     h={'60px'}
@@ -354,7 +340,7 @@ const LeaderBoard: React.FC<{
                     <Text>Overall</Text>
                     {/* Afrith-modified-ends-07/Mar/24 */}
                     <Img
-                      src={Arrow}
+                      src={preloadedAssets.Arrow}
                       className="dot-img"
                       mt={'5px'}
                       ml={'3px'}
@@ -367,7 +353,7 @@ const LeaderBoard: React.FC<{
               </Box>
             </Box>  
             <Img
-              src={Close}                   
+              src={preloadedAssets.Close}                   
               className='close-btn'
               onClick={() => homeLeaderBoard ? handleHome() : getData(data) }
             />          

@@ -66,7 +66,7 @@ const Story: React.FC<{
   setNavTrack: any;
   navTrack: any;
   setCurrentTrackPointer: any;
-  gameInfo:any;
+  gameInfo: any;
   preloadedAssets: any;
 }> = ({
   data,
@@ -101,62 +101,60 @@ const Story: React.FC<{
   gameInfo,
   preloadedAssets
 }) => {
-  const [showNote, setShowNote] = useState(true),
-  [first, setFirst] = useState(false);
-// const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
-const userProfile = useContext(ProfileContext);
-const { profile, setProfile } = useContext(ScoreContext);
-const [currentPosition, setCurrentPosition] = useState(0);
-const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
-const [Navigatenext, setNavigateNext] = useState<any>(false);
-const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
-const [isPlayAudioConfirmation, setIsPlayAudioConfirmation] = useState<boolean>(false);
-const [score, setScore] = useState(null);
-useEffect(() => {
-  if(data && type){
-    getVoice(data, type);
-    setShowNote(true);
-    setTimeout(() => {
-      setShowNote(false);
-      getDataSection(data);
-    }, 1000);
-    console.log('profile.quest',profile?.currentQuest);
+    const [showNote, setShowNote] = useState(true),
+      [first, setFirst] = useState(false);
+    // const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
+    const userProfile = useContext(ProfileContext);
+    const { profile, setProfile } = useContext(ScoreContext);
+    const [currentPosition, setCurrentPosition] = useState(0);
+    const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
+    const [Navigatenext, setNavigateNext] = useState<any>(false);
+    const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
+    const [isPlayAudioConfirmation, setIsPlayAudioConfirmation] = useState<boolean>(false);
+    const [score, setScore] = useState(null);
+    useEffect(() => {
+      if (data && type) {
+        getVoice(data, type);
+        setShowNote(true);
+        setTimeout(() => {
+          setShowNote(false);
+          getDataSection(data);
+        }, 1000);
 
-    /** this logic is used to hanlde the navigation options in both forward and backward navigation */
-    if(gameInfo.hasOwnProperty('blocks')){
-      let previousPrimarySeq = navTrack[navTrack.length-1];
-      if(previousPrimarySeq){
-        let currentQuest = previousPrimarySeq.split('.')[0];
-        let previousBlock : any = Object.values(gameInfo?.blocks[currentQuest])?.find((row: any)=> {
-          // let previousBlock : any = Object.values(gameInfo?.blocks[profile?.currentQuest])?.find((row: any)=> {
-          return row.blockPrimarySequence == previousPrimarySeq});
-        if(data.blockPrimarySequence != previousPrimarySeq)
-        {
-        if(previousBlock?.blockChoosen === 'Interaction')
-        {
-          setNavTrack([data.blockPrimarySequence]);
+        /** this logic is used to hanlde the navigation options in both forward and backward navigation */
+        if (gameInfo.hasOwnProperty('blocks')) {
+          let previousPrimarySeq = navTrack[navTrack.length - 1];
+          if (previousPrimarySeq) {
+            let currentQuest = previousPrimarySeq.split('.')[0];
+            let previousBlock: any = Object.values(gameInfo?.blocks[currentQuest])?.find((row: any) => {
+              // let previousBlock : any = Object.values(gameInfo?.blocks[profile?.currentQuest])?.find((row: any)=> {
+              return row.blockPrimarySequence == previousPrimarySeq
+            });
+            if (data.blockPrimarySequence != previousPrimarySeq) {
+              if (previousBlock?.blockChoosen === 'Interaction') {
+                setNavTrack([data.blockPrimarySequence]);
+              }
+              else {
+                const newArray = navTrack;
+                newArray.push(data.blockPrimarySequence);
+                setNavTrack(newArray);
+              }
+            }
+          }
+          else {
+            setNavTrack([data.blockPrimarySequence]);
+          }
         }
-        else{
-          const newArray = navTrack;
-          newArray.push(data.blockPrimarySequence);
-          setNavTrack(newArray);
-        }
       }
-      }
-      else{     
-        setNavTrack([data.blockPrimarySequence]);
-      }
-    }
-  }
-}, [data, type]);
+    }, [data, type]);
 
-useEffect(() => {
-  setFirst(true);
-  setTimeout(() => {
-    setFirst(false);
-    setShowNote(false);
-  }, 1000);
-}, []);
+    useEffect(() => {
+      setFirst(true);
+      setTimeout(() => {
+        setFirst(false);
+        setShowNote(false);
+      }, 1000);
+    }, []);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -278,558 +276,504 @@ useEffect(() => {
     }, [profileData, data]);
 
 
-const getVoice = async (blockInfo: any, blockType: string) => {
-  let text = '';
-  let voiceId = '';
-  /** 
-       * For voice 
-      data.includes('note') =>  Game Narattor
-      data.includes('dialog') =>  data.character
-      data.includes('interaction') => data.blockRoll
-      resMsg => data.blockRoll
-      
-      *For Animations & Emotion & voice Modulation 
-      data.includes('dialog') => data.animation
-      data.includes('interaction') //For Question => data.QuestionsEmotion
-      data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
-        resMsg =>responseObject[]  : responseemotionObject[]
-      */
+    const getVoice = async (blockInfo: any, blockType: string) => {
+      let text = '';
+      let voiceId = '';
+      /** 
+           * For voice 
+          data.includes('note') =>  Game Narattor
+          data.includes('dialog') =>  data.character
+          data.includes('interaction') => data.blockRoll
+          resMsg => data.blockRoll
+          
+          *For Animations & Emotion & voice Modulation 
+          data.includes('dialog') => data.animation
+          data.includes('interaction') //For Question => data.QuestionsEmotion
+          data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
+            resMsg =>responseObject[]  : responseemotionObject[]
+          */
 
-  switch (blockType) {
-    case 'Note':
-      text = blockInfo.blockText;
-      voiceId = voiceIds?.narrator;
-      break;
-    case 'Dialog':
-      text = blockInfo.blockText;
-      voiceId =
-        blockInfo?.blockRoll == '999999'
-          ? voiceIds.NPC
-          : userProfile?.gender == 'Male'
-            ? voiceIds?.playerMale
-            : voiceIds?.playerFemale;
-      break;
-    case 'Interaction':
-      let optionsText = '';
-// Sort the options array based on a unique identifier, such as index
-options.sort((a: any, b: any) => a.index - b.index);
-options.forEach((item: any) => {
-optionsText += '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
-});
-
-text = blockInfo.blockText + optionsText;
-      voiceId =
-        blockInfo?.blockRoll == '999999'
-          ? voiceIds.NPC
-          : userProfile?.gender == 'Male'
-            ? voiceIds?.playerMale
-            : voiceIds?.playerFemale;
-      break;
-    case 'Response':
-      text = resMsg;
-      voiceId =
-        blockInfo?.blockRoll == '999999'
-          ? voiceIds.NPC
-          : userProfile?.gender === 'Male'
-            ? voiceIds?.playerMale
-            : voiceIds?.playerFemale;
-      break;
-    case 'Feedback':
-      text = feed;
-      voiceId =
-        blockInfo?.blockRoll === '999999'
-          ? voiceIds.NPC
-          : userProfile?.gender === 'Male'
-            ? voiceIds?.playerMale
-            : voiceIds?.playerFemale;
-      break;
-  }
-   getAudioForText(text, voiceId);
-};
-
-const InteractionFunction = () => {
-  setIsGetsPlayAudioConfirmation(true);
-  setProfile((prev: any) => {
-    const { seqId, score: newScore } = score;
-    const index = prev.score.findIndex((item: any) => item.seqId === seqId);
-    if (index !== -1) {
-      const updatedScore = [...prev.score];
-      updatedScore[index] = { ...updatedScore[index], score: newScore };
-      return { ...prev, score: updatedScore };
-    } else {
-      const newScoreArray = [
-        ...prev.score,
-        {
-          seqId: seqId,
-          score: newScore,
-          quest: parseInt(seqId.split('.')[0]),
-        },
-      ];
-      return { ...prev, score: newScoreArray };
-    }
-  });
-  getData(data);
-};
-const optionClick = (item: any, ind: any) => {
-  setScore({ seqId: item?.qpSequence, score: parseInt(item?.qpScore) });
-  handleValidate(item, ind);
-};
-
-
-const stylerender = (Navigatenext === true && (data && type === 'Dialog')) ? '' : 'transform 0.3s ease-in-out, translateY 0.3s ease-in-out';
-const styletransform = (Navigatenext === true && (data && type === 'Dialog')) ? '' : `translateY(${showNote ? 200 : 0}px)`;
-useEffect(() => {
-  if (Navigatenext === true) {
-    getData(data);
-  }
-}, [Navigatenext]);
-
-const getDataSection = (data: any) => {
-  console.log("data", data);
-  showTypingEffect === true && setShowTypingEffect(false);
-  setCurrentPosition(0);
-  // Note and Dialog
-  const content = data?.blockText || '';
-  const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
-  const newRemainingSentences = sentences.slice(currentPosition);
-  
-  // response
-  const Responsecontent = resMsg || '';
-  const Responsesentences = Responsecontent.split(
-    /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-  );
-  const newRemainingResponseSentences = Responsesentences.slice(currentPosition);
-  const concatenatedSentences = [];
-  let totalLength = 0;
-  // Note and Dialog
-  if(type!== 'response')
-  {
-      for (let i = 0; i < newRemainingSentences.length; i++) {
-      const sentence = newRemainingSentences[i];
-
-    if (data && type === 'Note') {
-      if (totalLength + sentence.length <= Notelength) {
-        concatenatedSentences.push(sentence);
-        totalLength += sentence.length;
-      } else {
-        concatenatedSentences.push(sentence);
-        break;
-      }
-    }
-    if (data && type === 'Dialog') {
-      if (totalLength + sentence.length <= Dialoglength) {
-        concatenatedSentences.push(sentence);
-        totalLength += sentence.length;
-      } else {
-        if (totalLength + sentence.length >= Dialoglength) {
+      switch (blockType) {
+        case 'Note':
+          text = blockInfo.blockText;
+          voiceId = voiceIds?.narrator;
           break;
-        }
-        concatenatedSentences.push(sentence);
-        break;
-      }
-    }
-  }
-}
-  // Response 
-  if(type==='response')
-  { 
-  for (let i = 0; i < newRemainingResponseSentences.length; i++) {
-    const ressentence = newRemainingResponseSentences[i];
-    if (data && type === 'response') {
-      if (totalLength + ressentence.length <= Responselength) {
-        concatenatedSentences.push(ressentence);
-        totalLength += ressentence.length;
-      } else {
-        if (totalLength + ressentence.length >= Responselength) {
+        case 'Dialog':
+          text = blockInfo.blockText;
+          voiceId =
+            blockInfo?.blockRoll == '999999'
+              ? voiceIds.NPC
+              : userProfile?.gender == 'Male'
+                ? voiceIds?.playerMale
+                : voiceIds?.playerFemale;
           break;
-        }
-        concatenatedSentences.push(ressentence);
-        break;
+        case 'Interaction':
+          let optionsText = '';
+          // Sort the options array based on a unique identifier, such as index
+          options.sort((a: any, b: any) => a.index - b.index);
+          options.forEach((item: any) => {
+            optionsText += '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
+          });
+
+          text = blockInfo.blockText + optionsText;
+          voiceId =
+            blockInfo?.blockRoll == '999999'
+              ? voiceIds.NPC
+              : userProfile?.gender == 'Male'
+                ? voiceIds?.playerMale
+                : voiceIds?.playerFemale;
+          break;
+        case 'Response':
+          text = resMsg;
+          voiceId =
+            blockInfo?.blockRoll == '999999'
+              ? voiceIds.NPC
+              : userProfile?.gender === 'Male'
+                ? voiceIds?.playerMale
+                : voiceIds?.playerFemale;
+          break;
+        case 'Feedback':
+          text = feed;
+          voiceId =
+            blockInfo?.blockRoll === '999999'
+              ? voiceIds.NPC
+              : userProfile?.gender === 'Male'
+                ? voiceIds?.playerMale
+                : voiceIds?.playerFemale;
+          break;
       }
-    }
-  }
-}
-  setRemainingSentences(concatenatedSentences);
-  console.log('newRemainingSentences.length',newRemainingSentences.length)
-  console.log('newRemainingResponseSentences.length',newRemainingResponseSentences.length)
-  if (newRemainingSentences.length > 0 && type!== 'response') {
-    console.log('hi');
-    setCurrentPosition(currentPosition + concatenatedSentences.length);
-    setNavigateNext(false);
-    return false;
-  }
-  if (newRemainingResponseSentences.length > 0 ) {
-    console.log('hellow');
-    setCurrentPosition(currentPosition + concatenatedSentences.length);
-    setNavigateNext(false);
-    return false;
-  } 
-  // else {
-    // console.log('******isPrevNavigation',isPrevNavigation)
-    // if(isPrevNavigation == false)
-    // {
-      // setCurrentPosition(0);
-      console.log('In ELse')
+      getAudioForText(text, voiceId);
+    };
+
+    const InteractionFunction = () => {
+      setIsGetsPlayAudioConfirmation(true);
+      setProfile((prev: any) => {
+        const { seqId, score: newScore } = score;
+        const index = prev.score.findIndex((item: any) => item.seqId === seqId);
+        if (index !== -1) {
+          const updatedScore = [...prev.score];
+          updatedScore[index] = { ...updatedScore[index], score: newScore };
+          return { ...prev, score: updatedScore };
+        } else {
+          const newScoreArray = [
+            ...prev.score,
+            {
+              seqId: seqId,
+              score: newScore,
+              quest: parseInt(seqId.split('.')[0]),
+            },
+          ];
+          return { ...prev, score: newScoreArray };
+        }
+      });
+      getData(data);
+    };
+    const optionClick = (item: any, ind: any) => {
+      setScore({ seqId: item?.qpSequence, score: parseInt(item?.qpScore) });
+      handleValidate(item, ind);
+    };
+
+
+    const stylerender = (Navigatenext === true && (data && type === 'Dialog')) ? '' : 'transform 0.3s ease-in-out, translateY 0.3s ease-in-out';
+    const styletransform = (Navigatenext === true && (data && type === 'Dialog')) ? '' : `translateY(${showNote ? 200 : 0}px)`;
+    useEffect(() => {
+      if (Navigatenext === true) {
+        getData(data);
+      }
+    }, [Navigatenext]);
+
+    const getDataSection = (data: any) => {
+      // console.log("data", data);
+      showTypingEffect === true && setShowTypingEffect(false);
+      setCurrentPosition(0);
+      // Note and Dialog
+      const content = data?.blockText || '';
+      const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
+      const newRemainingSentences = sentences.slice(currentPosition);
+
+      // response
+      const Responsecontent = resMsg || '';
+      const Responsesentences = Responsecontent.split(
+        /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+      );
+      const newRemainingResponseSentences = Responsesentences.slice(currentPosition);
+      const concatenatedSentences = [];
+      let totalLength = 0;
+      // Note and Dialog
+      if (type !== 'response') {
+        for (let i = 0; i < newRemainingSentences.length; i++) {
+          const sentence = newRemainingSentences[i];
+
+          if (data && type === 'Note') {
+            if (totalLength + sentence.length <= Notelength) {
+              concatenatedSentences.push(sentence);
+              totalLength += sentence.length;
+            } else {
+              concatenatedSentences.push(sentence);
+              break;
+            }
+          }
+          if (data && type === 'Dialog') {
+            if (totalLength + sentence.length <= Dialoglength) {
+              concatenatedSentences.push(sentence);
+              totalLength += sentence.length;
+            } else {
+              if (totalLength + sentence.length >= Dialoglength) {
+                break;
+              }
+              concatenatedSentences.push(sentence);
+              break;
+            }
+          }
+        }
+      }
+      // Response 
+      if (type === 'response') {
+        for (let i = 0; i < newRemainingResponseSentences.length; i++) {
+          const ressentence = newRemainingResponseSentences[i];
+          if (data && type === 'response') {
+            if (totalLength + ressentence.length <= Responselength) {
+              concatenatedSentences.push(ressentence);
+              totalLength += ressentence.length;
+            } else {
+              if (totalLength + ressentence.length >= Responselength) {
+                break;
+              }
+              concatenatedSentences.push(ressentence);
+              break;
+            }
+          }
+        }
+      }
+      setRemainingSentences(concatenatedSentences);
+      if (newRemainingSentences.length > 0 && type !== 'response') {
+        setCurrentPosition(currentPosition + concatenatedSentences.length);
+        setNavigateNext(false);
+        return false;
+      }
+      if (newRemainingResponseSentences.length > 0) {
+        setCurrentPosition(currentPosition + concatenatedSentences.length);
+        setNavigateNext(false);
+        return false;
+      }
       setNavigateNext(true);
       setIsPrevNavigation(false);
-  // }
-};
+    };
 
-const Updatecontent = () => {
-  console.log('Updatecontent');
-  console.log('showTypingEffect',showTypingEffect)
-  if (showTypingEffect === false) {
-    setShowTypingEffect(true);
-  }
-  else {
-    getDataSection(data);
-  }
-}
+    const Updatecontent = () => {
+      if (showTypingEffect === false) {
+        setShowTypingEffect(true);
+      }
+      else {
+        getDataSection(data);
+      }
+    }
 
-useEffect(() => {
-  getDataSection(data);
-}, []);
+    useEffect(() => {
+      getDataSection(data);
+    }, []);
 
-const getNoteNextData = ()=>{
-  setIsPrevNavigation(false); 
-  getDataSection(data)
-}
+    const getNoteNextData = () => {
+      setIsPrevNavigation(false);
+      getDataSection(data)
+    }
 
 
-const SkipContentForBackNavigation = () => {
-  if (showTypingEffect === false) {
-    setShowTypingEffect(true);
-  }
-  else {
-    setCurrentPosition(0);
-    prevData(data)
-  }
-}
+    const SkipContentForBackNavigation = () => {
+      if (showTypingEffect === false) {
+        setShowTypingEffect(true);
+      }
+      else {
+        setCurrentPosition(0);
+        prevData(data)
+      }
+    }
 
-  return (
-    <>
-      {data && type === 'Note' && (
-        <Box
-          position="relative"
-          maxW="100%"
-          w={'100vw'}
-          height="100vh"
-          backgroundImage={backGroundImg}
-          backgroundSize={'cover'}
-          backgroundRepeat={'no-repeat'}
-          className="chapter_potrait"
-        >
-          <Grid
-            templateColumns="repeat(1, 1fr)"
-            gap={4}
-            position="absolute"
-            top="50%"
-            left="50%"
-            transform="translate(-50%, -50%)"
-            className="story_note_grid"
+    return (
+      <>
+        {data && type === 'Note' && (
+          <Box
+            position="relative"
+            maxW="100%"
+            w={'100vw'}
+            height="100vh"
+            backgroundImage={backGroundImg}
+            backgroundSize={'cover'}
+            backgroundRepeat={'no-repeat'}
+            className="chapter_potrait"
           >
-            <GridItem colSpan={1} position={'relative'}>
-            <Box display={'flex'} justifyContent={'center'}>
-              <Img src={preloadedAssets.note} className="story_note_image" loading="lazy" />
-              <Box
-                className={'story_note_content'}
-                // bg={'blue.300'}
-              >
-                <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                <Box className={'story_note_block'}>
-                <Text textAlign={'center'}>
-                        {remainingSentences}
-                      </Text>
+            <Grid
+              templateColumns="repeat(1, 1fr)"
+              gap={4}
+              position="absolute"
+              top="50%"
+              left="50%"
+              transform="translate(-50%, -50%)"
+              className="story_note_grid"
+            >
+              <GridItem colSpan={1} position={'relative'}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Box display={'flex'} justifyContent={'center'}>
+                    <Img src={preloadedAssets.note} className="story_note_image" loading="lazy" />
+                    <Box
+                      className={'story_note_content'}
+                    // bg={'blue.300'}
+                    >
+                      <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                        <Box className={'story_note_block'}>
+                          <Text textAlign={'center'}>
+                            {remainingSentences}
+                          </Text>
+                        </Box>
+                      </Box>
+                      <Box
+                        w={'100%'}
+                        onClick={() => getNoteNextData()}
+                        mt={'20px'}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        cursor={'pointer'}
+                        position={'fixed'}
+                        top={'70%'}
+                      >
+                        <Img src={preloadedAssets.next} h={'7vh'} className={'story_note_next_button'} />
+                      </Box>
+                    </Box>
                   </Box>
-                </Box>
-                <Box
-                  w={'100%'}
-                  onClick={() => getNoteNextData()}
-                  mt={'20px'}
-                  display={'flex'}
-                  justifyContent={'center'}
-                  cursor={'pointer'}
-                  position={'fixed'}
-                  top={'70%'}
-                >
-                  <Img src={preloadedAssets.next} h={'7vh'} className={'story_note_next_button'} />
-                </Box>
-              </Box>
-              </Box>
-            </GridItem>
-          </Grid>
-        </Box>
-      )}
-      {data && type === 'Dialog' && (
-        <Box className="chapter_potrait">
-          <Img src={backGroundImg} className="dialogue_screen" />
-         
-          {selectedPlayer && (
-            <Img
-              src={`${API_SERVER}/${selectedPlayer}`}
-              position={'absolute'}
-              bottom={'100px'}
-              transform={'translateX(-15vw)'}
-              w={'20vw'}
-              h={'63vh'}
-            />
-          )}
-          {selectedNpc && (
-            <Img
-              src={selectedNpc}
-                position= {'absolute'}
-                bottom={'100px'}
-                width={'24vw'}
-                height={'71vh'}
-                transform={'translateX(15vw)'}
-            />
-          )}
-          <Img className={'dialogue_image'} src={preloadedAssets.dial} />
-          {!showNote && (
-            <>
-              <Box position={'relative'}>
-                <Img
-                  src={preloadedAssets.char}
-                  position={'fixed'}
-                  h={'100px'}
-                  w={'30%'}
-                  left={'5%'}
-                  bottom={'93px'}
-                />
-                <Text
-                  position={'fixed'}
-                  left={'18%'}
-                  bottom={'118px'}
-                  fontSize={'2.8vw'}
-                  fontWeight={500}
-                  textAlign={'center'}
-                  fontFamily={'AtlantisText'}
-                  color={'#312821'}
-                >
-                  {data.blockRoll === 'Narrator'
-                    ? data.blockRoll
-                    : formData.gameNonPlayerName}
-                </Text>
-              </Box>
-              <Box
-                display={'flex'}
+                </motion.div>
+              </GridItem>
+            </Grid>
+          </Box>
+        )}
+        {data && type === 'Dialog' && (
+          <Box className="chapter_potrait">
+            <Img src={backGroundImg} className="dialogue_screen" />
+            {selectedPlayer && (
+              <Img
+                src={`${API_SERVER}/${selectedPlayer}`}
+                className={'narrator_character_image'}
+              />
+            )}
+            {selectedNpc && (
+              <Img
+                src={selectedNpc}
+                className={'player_character_image'}
+              />
+            )}
+            <Img className={'dialogue_image'} src={preloadedAssets.dial} />
+            <Box position={'relative'}>
+              <Img
+                src={preloadedAssets.char}
                 position={'fixed'}
-                alignItems={'center'}
-                justifyContent={'space-between'}
-                h={'61px'}
-                overflowY={'scroll'}
-                w={'85%'}
+                h={'100px'}
+                w={'30%'}
+                left={'5%'}
+                bottom={'105px'}
+              />
+              <Text
+                position={'fixed'}
+                left={'18%'}
+                bottom={'130px'}
                 fontSize={{ base: '30px', xl: '2.2vw' }}
-                bottom={'38px'}
-                fontFamily={'AtlantisContent'}
+                fontWeight={500}
+                textAlign={'center'}
+                fontFamily={'AtlantisText'}
+                color={'#312821'}
               >
-                {showTypingEffect === false ? <TypingEffect
-                    text={remainingSentences.toString()}
-                    speed={50}
-                    setSpeedIsOver={setShowTypingEffect}
-                  /> : remainingSentences}
-              </Box>
-              <Box
-                display={'flex'}
-                position={'fixed'}
-                justifyContent={navTrack.length > 1 ? 'space-between': 'end'}
-                w={'95%'}
-                bottom={'0'}
-              >
+                {data.blockRoll === 'Narrator'
+                  ? data.blockRoll
+                  : formData.gameNonPlayerName}
+              </Text>
+            </Box>
+            <Box
+              display={'flex'}
+              position={'fixed'}
+              alignItems={'center'}
+              justifyContent={'space-between'}
+              h={'61px'}
+
+              overflowY={'scroll'}
+              w={'85%'}
+              fontSize={{ base: '30px', xl: '2.2vw' }}
+              bottom={'38px'}
+              fontFamily={'AtlantisContent'}
+            >
+              {showTypingEffect === false ? <TypingEffect
+                text={remainingSentences.toString()}
+                speed={50}
+                setSpeedIsOver={setShowTypingEffect}
+              /> : remainingSentences}
+            </Box>
+            <Box
+              display={'flex'}
+              position={'fixed'}
+              justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
+              w={'95%'}
+              bottom={'0'}
+            >
               {navTrack.length > 1 &&
                 <Img
                   src={preloadedAssets.left}
                   w={'70px'}
                   h={'50px'}
                   cursor={'pointer'}
-                  onClick={() => {SkipContentForBackNavigation()}}
+                  onClick={() => { SkipContentForBackNavigation() }}
                 />
               }
-                <Img
-                  src={preloadedAssets.right}
-                  w={'70px'}
-                  h={'50px'}
-                  cursor={'pointer'}
-                  onClick={() => Updatecontent()}
-                />
-              </Box>
-            </>
-          )}
-        </Box>
-      )}
-      {data && type === 'Interaction' && (
-        <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick}  prevData={prevData}  InteractionFunction={InteractionFunction} navTrack={navTrack} preloadedAssets={preloadedAssets} selectedPlayer={selectedPlayer} />
-      )}
-      {data && type === 'response' && (
-        <Box
-          className="chapter_potrait"
-        >
-         <Img src={backGroundImg} className="dialogue_screen" />
-          {/* <Box w={'100%'} h={'100vh'}>
-        <Canvas camera={{ position: [30, 0, 10] }}>
-          <directionalLight
-            position={[5, 5, 5]}
-            intensity={0.8}
-            color={0xffccaa}
-            castShadow
-          />
-          <ambientLight intensity={5.5} />
-          {/* <pointLight position={[5, 5, 5]} color={0xff0000} intensity={1} /> */}
-          {/* <Background /> */}
-          {/* <Model /> */}
-          {/* <mesh 
-      rotation={[-Math.PI / 2, 0, 0]}
-      position={[0, -5, 0]}
-      receiveShadow 
-    > */}
-          {/* <planeGeometry args={[100, 100]} />
-      <shadowMaterial opacity={0.5} />
-    </mesh> */}
-          {/* </Canvas>
-      </Box> */}
-          {selectedPlayer && (
-            <Img
-              src={`${API_SERVER}/${selectedPlayer}`}
-              position={'fixed'}
-              right={'300px'}
-              bottom={'100px'}
-              w={'200px'}
-              h={'324px'}
-              // transform={'translate(0px, 55px)'}
-            />
-          )}
-          {selectedNpc && (
-            <Img
-              src={selectedNpc}
-              position={'fixed'}
-              right={'500px'}
-              bottom={'100px'}
-              w={'200px'}
-              h={'324px'}
-              // transform={'translate(0px, 55px)'}
-            />
-          )}
-           <Img className={'dialogue_image'} src={preloadedAssets.dial} />
-          {!showNote && (
-            <>
-              <Box position={'relative'}>
-                <Img
-                  src={preloadedAssets.char}
-                  position={'fixed'}
-                  h={'100px'}
-                  w={'30%'}
-                  left={'5%'}
-                  bottom={'93px'}
-                />
-                <Text
-                  position={'fixed'}
-                  left={'18%'}
-                  bottom={'118px'}
-                  fontSize={{ base: '30px', xl: '2.2vw' }}
-                  fontWeight={500}
-                  textAlign={'center'}
-                  fontFamily={'AtlantisText'}
-                  color={'#312821'}
-                >
-                  {data.blockRoll === 'Narrator'
-                    ? data.blockRoll
-                    : formData.gameNonPlayerName}
-                </Text>
-              </Box>
-              <Box
-                display={'flex'}
-                position={'fixed'}
-                alignItems={'center'}
-                justifyContent={'space-between'}
-                h={'61px'}
-                overflowY={'scroll'}
-                w={'85%'}
-                fontSize={{ base: '30px', lg: '1.8vw' }}
-                bottom={'38px'}
-                fontFamily={'AtlantisContent'}
-              >
-                {showTypingEffect === false ? <TypingEffect
-                    text={remainingSentences.toString()}
-                    speed={50}
-                    setSpeedIsOver={setShowTypingEffect}
-                  /> : remainingSentences}
-              </Box>
-              <Box
-                display={'flex'}
-                position={'fixed'}
-                justifyContent={'end'}
-                w={'95%'}
-                bottom={'0'}
-              >
-                <Img
-                  src={preloadedAssets.right}
-                  w={'70px'}
-                  h={'50px'}
-                  cursor={'pointer'}
-                  // onClick={() => {setCurrentPosition(0);getDataSection(data)}}
-                  onClick={() => Updatecontent()}
-                />
-              </Box>
-            </>
-          )}
-        </Box>
-      )}
-      {data && type === 'feedback' && (
-        <Box
-        position="relative"
-        w={'100%'}
-        height="100vh"
-        backgroundImage={backGroundImg}
-        backgroundSize={'cover'}
-        backgroundRepeat={'no-repeat'}
-        className="chapter_potrait"
-      >
-          <Grid
-            templateColumns="repeat(1, 1fr)"
-            gap={4}
-            position="absolute"
-            top="50%"
-            left="50%"
-            transform="translate(-50%, -50%)"
-            className="story_note_grid"
+              <Img
+                src={preloadedAssets.right}
+                w={'70px'}
+                h={'50px'}
+                cursor={'pointer'}
+                onClick={() => Updatecontent()}
+              />
+            </Box>
+            {/* </>
+          )} */}
+            {/* </motion.div> */}
+          </Box>
+        )}
+        {data && type === 'Interaction' && (
+          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick} prevData={prevData} InteractionFunction={InteractionFunction} navTrack={navTrack} preloadedAssets={preloadedAssets} selectedPlayer={selectedPlayer} />
+        )}
+        {data && type === 'response' && (
+          <Box
+            className="chapter_potrait"
           >
-            <GridItem colSpan={1} position={'relative'}>
-              <Box display={'flex'} justifyContent={'center'}>
-                <Img src={preloadedAssets.feedi} className="story_note_image" loading="lazy" />
-                <Box
-                  className={'story_note_content'}
+            <Img src={backGroundImg} className="dialogue_screen" />
+            {selectedPlayer && (
+              <Img
+                src={`${API_SERVER}/${selectedPlayer}`}
+                className={'narrator_character_image'}
+              />
+            )}
+            {selectedNpc && (
+              <Img
+                src={selectedNpc}
+                className={'player_character_image'}
+              />
+            )}
+            <Img className={'dialogue_image'} src={preloadedAssets.dial} />
+            <Box position={'relative'}>
+              <Img
+                src={preloadedAssets.char}
+                position={'fixed'}
+                h={'100px'}
+                w={'30%'}
+                left={'5%'}
+                bottom={'105px'}
+              />
+              <Text
+                position={'fixed'}
+                left={'18%'}
+                bottom={'130px'}
+                fontSize={{ base: '30px', xl: '2.2vw' }}
+                fontWeight={500}
+                textAlign={'center'}
+                fontFamily={'AtlantisText'}
+                color={'#312821'}
+              >
+                {data.blockRoll === 'Narrator'
+                  ? data.blockRoll
+                  : formData.gameNonPlayerName}
+              </Text>
+            </Box>
+            <Box
+              display={'flex'}
+              position={'fixed'}
+              alignItems={'center'}
+              justifyContent={'space-between'}
+              h={'61px'}
+              overflowY={'scroll'}
+              w={'85%'}
+              fontSize={{ base: '30px', lg: '1.8vw' }}
+              bottom={'38px'}
+              fontFamily={'AtlantisContent'}
+            >
+              {showTypingEffect === false ? <TypingEffect
+                text={remainingSentences.toString()}
+                speed={50}
+                setSpeedIsOver={setShowTypingEffect}
+              /> : remainingSentences}
+            </Box>
+            <Box
+              display={'flex'}
+              position={'fixed'}
+              justifyContent={'end'}
+              w={'95%'}
+              bottom={'0'}
+            >
+              <Img
+                src={preloadedAssets.right}
+                w={'70px'}
+                h={'50px'}
+                cursor={'pointer'}
+                // onClick={() => {setCurrentPosition(0);getDataSection(data)}}
+                onClick={() => Updatecontent()}
+              />
+            </Box>
+          </Box>
+        )}
+        {data && type === 'feedback' && (
+          <Box
+            position="relative"
+            w={'100%'}
+            height="100vh"
+            backgroundImage={backGroundImg}
+            backgroundSize={'cover'}
+            backgroundRepeat={'no-repeat'}
+            className="chapter_potrait"
+          >
+            <Grid
+              templateColumns="repeat(1, 1fr)"
+              gap={4}
+              position="absolute"
+              top="50%"
+              left="50%"
+              transform="translate(-50%, -50%)"
+              className="story_note_grid"
+            >
+              <GridItem colSpan={1} position={'relative'}>
+                <Box display={'flex'} justifyContent={'center'}>
+                  <Img src={preloadedAssets.feedi} className="story_note_image" loading="lazy" />
+                  <Box
+                    className={'story_note_content'}
                   // bg={'blue.300'}
-                >
-                  <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                    <Box className={'story_note_block'}>
-                      <Text textAlign={'center'}>{feed}</Text>
+                  >
+                    <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                      <Box className={'story_note_block'}>
+                        <Text textAlign={'center'}>{feed}</Text>
+                      </Box>
+                    </Box>
+                    <Box
+                      w={'100%'}
+                      onClick={() => getData(data)}
+                      mt={'20px'}
+                      display={'flex'}
+                      justifyContent={'center'}
+                      cursor={'pointer'}
+                      position={'fixed'}
+                      top={'70%'}
+                    >
+                      <Img
+                        src={preloadedAssets.next}
+                        h={'7vh'}
+                        className={'story_note_next_button'}
+                      />
                     </Box>
                   </Box>
-                  <Box
-                    w={'100%'}
-                    onClick={() => getData(data)}
-                    mt={'20px'}
-                    display={'flex'}
-                    justifyContent={'center'}
-                    cursor={'pointer'}
-                    position={'fixed'}
-                    top={'70%'}
-                  >
-                    <Img
-                      src={preloadedAssets.next}
-                      h={'7vh'}
-                      className={'story_note_next_button'}
-                    />
-                  </Box>
                 </Box>
-              </Box>
-            </GridItem>
-          </Grid>
-        </Box>
-      )}
-    </>
-  );
-};
+              </GridItem>
+            </Grid>
+          </Box>
+        )}
+      </>
+    );
+  };
 const Model: React.FC = () => {
   const groupRef = useRef<any>();
   const gltf = useLoader(GLTFLoader, Sample);

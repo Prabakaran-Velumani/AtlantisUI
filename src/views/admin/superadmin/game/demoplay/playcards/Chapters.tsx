@@ -37,6 +37,7 @@ const ChapterPage: React.FC<{
   setType?: any;
   setOptions?: any;
   setFeedbackList?:any;
+  preloadedAssets?:any;
 }> = ({
   imageSrc,
   demoBlocks,
@@ -51,7 +52,8 @@ const ChapterPage: React.FC<{
   setData,
   setType,
   setOptions,
-  setFeedbackList
+  setFeedbackList,
+  preloadedAssets
 }) => {
     const [questScores, setQuestScores] = useState(null);
 
@@ -277,7 +279,7 @@ const ChapterPage: React.FC<{
           >
             <GridItem colSpan={1} position={'relative'}>
               <Img
-                src={QueueBackground}
+                src={preloadedAssets.QueueBackground}
                 h={'auto'}
                 maxW={'100%'}
                 loading="lazy"
@@ -306,13 +308,13 @@ const ChapterPage: React.FC<{
                                 position={'relative'}
                                 onClick={() => handleChapter(it)}
                               >
-                                <Img src={Demo} width={'98%'} />
+                                <Img src={preloadedAssets.Demo} width={'98%'} />
                                 <Img
                                   className="queue-screen"
                                   position={'absolute'}
                                   left={'-2px'}
                                   top={'-2px'}
-                                  src={QueueScreen}
+                                  src={preloadedAssets.QueueScreen}
                                   zIndex={999}
                                 />
                                 <Box w={'100%'} position={'absolute'} top={'0'}>
@@ -362,12 +364,12 @@ const ChapterPage: React.FC<{
                                 {profile.completedLevels.includes(it) ?
                                   Object.entries(questState).map(([questId, status], index) => (
                                     questId === it && status === 'completed' ?
-                                      (<Img key={index} src={Lock} className="lock" width={'97%'} position={'absolute'} bg={'#2b2828d6'} top={'0'} />)
+                                      (<Img key={index} src={preloadedAssets.Lock} className="lock" width={'97%'} position={'absolute'} bg={'#2b2828d6'} top={'0'} />)
                                       : questId === it && status === 'replayallowed' ? null : questId === it && status === 'locked' ? (
-                                        <Img key={index} src={Lock} className="lock" width={'97%'} position={'absolute'} bg={'#2b2828d6'} top={'0'} />
+                                        <Img key={index} src={preloadedAssets.Lock} className="lock" width={'97%'} position={'absolute'} bg={'#2b2828d6'} top={'0'} />
                                       ) : questId === it && status === 'Started' ? null : null
                                   )) : (
-                                    <Img src={Lock} className="lock" width={'97%'} position={'absolute'} bg={'#2b2828d6'} top={'0'} />
+                                    <Img src={preloadedAssets.Lock} className="lock" width={'97%'} position={'absolute'} bg={'#2b2828d6'} top={'0'} />
                                   )}
 
 

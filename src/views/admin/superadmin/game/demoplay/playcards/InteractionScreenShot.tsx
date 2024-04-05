@@ -13,37 +13,38 @@ import SliderPointer from 'assets/img/games/slider-pointer.png';
 import Close from 'assets/img/games/close.png';
 
 interface InteractionScreenShotProps {
-  data: any;
-  options: any;
-  backGroundImg: any;
-  option: any;
-  profile: any;
-  geTfeedBackoption: any;
-  isScreenshot: any;
+  data?: any;
+  options?: any;
+  backGroundImg?: any;
+  option?: any;
+  profile?: any;
+  geTfeedBackoption?: any;
+  isScreenshot?: any;
+  preloadedAssets?: any;
 }
 
-const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, profile, options, geTfeedBackoption, isScreenshot }) => {
+const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, profile, options, geTfeedBackoption, isScreenshot,preloadedAssets }) => {
 
   return (
-    
-    <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
+    // <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
+      <Modal isOpen={true} onClose={isScreenshot} size={'medium'}>
       <ModalOverlay />
       <ModalContent >
         <ModalBody>
           <Img
-            src={Close}
+            src={preloadedAssets.Close}
             style={{ width: '50px', marginLeft: '97%' }}
             onClick={() => geTfeedBackoption()}
           />
           <Box className="top-menu-home-section">
-            <Img src={TopMenu} className="top-menu-img" style={{ top: '58px', width: '90%' ,filter:'blur(5px)'}} />
+            <Img src={preloadedAssets.TopMenu} className="top-menu-img" style={{ top: '58px', width: '90%' ,filter:'blur(5px)'}} />
             <Img
-              src={Overview}
+              src={preloadedAssets.Overview}
               className="overview-img"
               style={{ marginTop: '57px', marginRight: '174px' ,filter:'blur(5px)'}}
             />
             <Img
-              src={Setting}
+              src={preloadedAssets.Setting}
               className="setting-img"
               style={{ marginTop: '57px', marginRight: '168px',filter:'blur(5px)' }}
             />
@@ -86,7 +87,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
             >
               <GridItem colSpan={1} position={'relative'}>
                 <Box position={'relative'} className="story_interaction_image">
-                  <Img src={parch} w={'100%'} h={'100%'} loading="lazy" />
+                  <Img src={preloadedAssets.parch} w={'100%'} h={'100%'} loading="lazy" />
                   <Box
                     position={'absolute'}
                     top={{ sm: '18px', md: '42px' }}
@@ -128,7 +129,8 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                         fontSize={{ md: '1.5vw', lg: '1.9vw' }}
                         letterSpacing={1}
                       >
-                        {data[0]?.blockText}
+                        {/* {data[0]?.blockText} */}
+                        hello
                       </Box>
                     </Box>
                     <Box
@@ -154,7 +156,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                               fontFamily={'AtlantisText'}
                             >
                               <Img
-                                src={option === item?.qpOptions ? on : off}
+                                src={option === item?.qpOptions ? preloadedAssets.on : preloadedAssets.off}
                                 h={'30px'}
                                 w={'100%'}
                               />
@@ -181,9 +183,8 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
             </Grid>
           </Box>
           </ModalBody>
-      </ModalContent></Modal>
-
-
+      </ModalContent>
+      </Modal>
   )
 }
 

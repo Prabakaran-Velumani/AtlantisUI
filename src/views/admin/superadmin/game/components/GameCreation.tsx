@@ -746,10 +746,10 @@ const GameCreation = () => {
     setReviews(reviews?.reviewlist);
     const images = await getCreatorBlocks(id);
     if (images?.status !== 'Success') {
-      console.log(images.message);
+      console.log(images?.message);
     } else {
-      setCblocks(images.data);
-      setQuest(images.quest);
+      setCblocks(images?.data);
+      setQuest(images?.quest);
     }
     const gamedata = await getGameCreatorDemoData(id);
     if (!gamedata.error && gamedata) {

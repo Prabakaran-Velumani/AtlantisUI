@@ -119,7 +119,6 @@ export default function PlayInfo(props: {
         </ModalBody>
       </ModalContent>
     </Modal>
-     {/* <Img src={ArcheryArrow} className={"intro-arraow"}/> */}
      </>
   );
 }
