@@ -1,54 +1,41 @@
 import React from 'react'
-import {Box, Flex,Text,Img} from '@chakra-ui/react'
+import { Box, Flex, Text, Img } from '@chakra-ui/react'
 import { useDispatch } from 'react-redux';
 import { updatePreviewData } from 'store/preview/previewSlice';
-const PreviewEndOfStory : React.FC<{preloadedAssets: any, setEndOfQuest:any}>= ({preloadedAssets, setEndOfQuest}) => {
-const dispatch = useDispatch();
-  console.log("preloadedAssets");
-console.log(preloadedAssets);
-
-const replayQuest = ()=>{
-  dispatch(updatePreviewData({activeBlockSeq: 1}));
-  setEndOfQuest(false);
-}
+import Replay from 'assets/img/screens/Replay.png';
+const PreviewEndOfStory: React.FC<{ preloadedAssets: any, setEndOfQuest: any ,replayQuest : any }> = ({ preloadedAssets, setEndOfQuest ,replayQuest }) => {
 
   return (
-    <Flex className="end-of-quest" >
-      {/* <Img src={preloadedAssets?.backgroundImage} className='eoq-bg-img' /> */}
-      <Box
+    <Box className="takeaway-screen">
+    <Box className="takeaway-screen-box">
+      <Box position={'relative'}>
+        <Img src={Replay} className="bg-replay" />
+        <Box className="replay_content">
+          <Box className="replay_content_center">
+            <Box className="title_replay">
+              <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
+              End of the current Quest.!
+              </Text>
+              <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
+                Do You Want Play Again ?
+              </Text>
+            </Box>
+            <Box
               w={'100%'}
               display={'flex'}
               justifyContent={'center'}
-              alignItems={'center'}
-              position={'relative'}
             >
-              <Box className="title" mt={'80px'}>
-              <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
-                  End of the current Quest.!
-                </Text>
-                <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
-                  Do You Want Play Again ?
-                </Text>
-              </Box>
-              <Box
-              
-                position={'fixed'}
-                top={'360px'}
-                w={'40%'}
-                display={'flex'}
-                justifyContent={'space-between'}
-                className='eoq-replay-img'
-              >
-                <Img
-                  src={preloadedAssets.ReplayBtn}
-                  w={'200px'}
-                  h={'60px'}
-                  cursor={'pointer'}
-                  onClick={replayQuest}
-                />
-              </Box>
+              <Img
+                src={preloadedAssets?.replayBtn}
+                className='replay_buttons'
+                onClick={replayQuest}
+              />
             </Box>
-    </Flex>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  </Box>
   )
 }
 

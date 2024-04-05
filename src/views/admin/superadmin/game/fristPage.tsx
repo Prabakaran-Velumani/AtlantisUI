@@ -36,6 +36,7 @@ import { createScormConfig, getScormConfig, generateScorm } from 'utils/scorm/sc
 // @ts-ignore
 import loadingImage from 'assets/img/games/loading.gif';
 import { RiDraftLine } from 'react-icons/ri';
+
 interface Counting {
   draftCount: any;
   internalCount: any;
