@@ -56,8 +56,6 @@ import replayBtn from '../../assets/img/games/ReplayBtn.png';
 import SelectButton from '../../assets/img/games/selectbtn.png';
 import Okay from '../../assets/img/games/Okay.png'
 import write from '../../assets/img/screens/Screens/Writing.png';
-
-
 import TopMenu from '../../assets/img/games/top-menu.png';
 import Overview from '../../assets/img/games/game-overview.png';
 import Setting from '../../assets/img/games/settings.png';
@@ -66,7 +64,6 @@ import SliderPointer from '../../assets/img/games/slider-pointer.png';
 
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
-
  */
 export const assetImageSrc = [
   { assetType: 'left', src: left },

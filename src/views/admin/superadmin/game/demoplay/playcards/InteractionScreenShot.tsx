@@ -23,32 +23,38 @@ interface InteractionScreenShotProps {
   preloadedAssets?: any;
 }
 
-const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, profile, options, geTfeedBackoption, isScreenshot,preloadedAssets }) => {
+const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, profile, options, geTfeedBackoption, isScreenshot, preloadedAssets }) => {
 
   return (
-    // <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
-      <Modal isOpen={true} onClose={isScreenshot} size={'medium'}>
+    <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
+    {/* // <Modal isOpen={true} onClose={isScreenshot} size={'medium'}> */}
       <ModalOverlay />
-      <ModalContent >
-        <ModalBody>
+      <ModalContent 
+      className='feedback_screenshot' 
+      backgroundImage={backGroundImg} 
+      backgroundSize={'cover'} 
+      backgroundRepeat={'no-repeat'}
+     
+      >
+        <ModalBody width={'100%'} height={'100%'}  boxShadow={'inset 0px 5px 100px 25px white'} borderRadius={'10px'}>
           <Img
             src={preloadedAssets.Close}
             style={{ width: '50px', marginLeft: '97%' }}
             onClick={() => geTfeedBackoption()}
           />
           <Box className="top-menu-home-section">
-            <Img src={preloadedAssets.TopMenu} className="top-menu-img" style={{ top: '58px', width: '90%' ,filter:'blur(5px)'}} />
+            <Img src={preloadedAssets.TopMenu} className="top-menu-img" style={{ top: '58px', width: '100%'}} />
             <Img
               src={preloadedAssets.Overview}
               className="overview-img"
-              style={{ marginTop: '57px', marginRight: '174px' ,filter:'blur(5px)'}}
+              style={{ marginTop: '57px', marginRight: '174px' }}
             />
             <Img
               src={preloadedAssets.Setting}
               className="setting-img"
-              style={{ marginTop: '57px', marginRight: '168px',filter:'blur(5px)' }}
+              style={{ marginTop: '57px', marginRight: '168px' }}
             />
-            <Box className="score-box" style={{ marginTop: '57px', marginRight: '130px' ,filter:'blur(5px)'}}>
+            <Box className="score-box" style={{ marginTop: '57px', marginRight: '130px' }}>
               <Text className="text">
                 {(profile &&
                   profile.score &&
@@ -63,18 +69,13 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
               </Text>
             </Box>
           </Box>
-          <Box  >
-           <Box
-           position="relative"
-           maxW="100%"
-           w={'100vw'}
-           height="100vh"
-           backgroundImage={backGroundImg}
-           backgroundSize={'cover'}
-           backgroundRepeat={'no-repeat'}
-           className='chapter_potrait'
-           filter='blur(5px)'
-           style={{ width: '93%'}}></Box>
+          <Box
+            position="relative"
+            w={'100%'}
+            height="100vh"
+
+            className='chapter_potrait'
+            style={{ width: '93%' }}>
             <Grid
               templateColumns="repeat(1, 1fr)"
               gap={4}
@@ -182,9 +183,9 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
               </GridItem>
             </Grid>
           </Box>
-          </ModalBody>
+        </ModalBody>
       </ModalContent>
-      </Modal>
+    </Modal>
   )
 }
 

@@ -18,7 +18,7 @@ interface FeedBackScreenShotProps {
     FeedBackoptionData: any;
     feed?: any;
     getFeedbackData: any;
-    profile:any;
+    profile: any;
     setisScreenshot: any;
     preloadedAssets: any;
 }
@@ -83,7 +83,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl
                         transition: 'transform 0.5s ease-in-out',
 
                     }}
-                    // ml={isScreenshot === true ? '-500px' : ''}
+
                     position={'fixed'}
                     w={'40%'}
                     h={'80vh'}
@@ -109,8 +109,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl
                             fontFamily: 'cont',
                         }}
                     >
-                        {/* {feed} */}
-                        {/* {FeedbackremainingSentences} */}
+
                         {currentScreenId === 9 ? <>
                             <Box>
                                 <React.Fragment>{feed}</React.Fragment>
@@ -131,9 +130,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl
                             <>
                                 {FeedbackremainingSentences}
                                 {isScreenshot === true ?
-                                   
-                                                <InteractionScreenShot data={FeedBackoptionData} option={FeedBackselectedoptionData} options={options} backGroundImg={backgroundScreenUrl} profile={profile} geTfeedBackoption={geTfeedBackoption} isScreenshot={isScreenshot} preloadedAssets={preloadedAssets}/>
-
+                                    <InteractionScreenShot data={FeedBackoptionData} option={FeedBackselectedoptionData} options={options} backGroundImg={backgroundScreenUrl} profile={profile} geTfeedBackoption={geTfeedBackoption} isScreenshot={isScreenshot} preloadedAssets={preloadedAssets} />
                                     : ''}
                                 <Box
                                     w={'100%'}
@@ -144,15 +141,13 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({ backgroundScreenUrl
                                     cursor={'pointer'}
                                 >
                                     <Img src={preloadedAssets.next} w={'200px'} h={'60px'} />
-                                </Box></>
-
+                                </Box>
+                            </>
                         }
-
-
-
                     </Box>
                 </Box>
             </Box>
+            {/* <InteractionScreenShot data={FeedBackoptionData} option={FeedBackselectedoptionData} options={options} backGroundImg={backgroundScreenUrl} profile={profile} geTfeedBackoption={geTfeedBackoption} isScreenshot={isScreenshot} preloadedAssets={preloadedAssets} /> */}
             {/* </motion.div> */}
         </>
     );
