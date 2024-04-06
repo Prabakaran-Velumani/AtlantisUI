@@ -595,7 +595,6 @@ const Story: React.FC<{
               alignItems={'center'}
               justifyContent={'space-between'}
               h={'61px'}
-
               overflowY={'scroll'}
               w={'85%'}
               fontSize={{ base: '30px', xl: '2.2vw' }}

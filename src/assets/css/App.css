@@ -3198,7 +3198,15 @@ transform: translate(-167px, -84px);
   }
 
 }
-
+.base_screenshot{
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  z-index: 99999;
+  background-color: #009400;
+}
 @media (orientation: portrait) {
   /* body {
     display: flex;
@@ -3591,7 +3599,7 @@ grid-row: 1 / 2;
 
 .play_screen_content {
   width: calc(90vh - 49vh);
-  height: calc(90vh - 45vh);
+  height: calc(90vh - 42vh);
   position: absolute;
   top: 25%;
   display: flex;
@@ -3804,7 +3812,7 @@ grid-row: 1 / 2;
 
   .play_screen_content {
     width: calc(90vw - 49vw);
-    height: calc(90vw - 45vw);
+    height: calc(90vw - 42vw);
   }
 
   .interaction_heading_potrait {
