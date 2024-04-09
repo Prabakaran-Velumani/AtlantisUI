@@ -7,6 +7,7 @@ import { FaRegFaceMehBlank } from 'react-icons/fa6';
 import { BsEmojiNeutral } from 'react-icons/bs';
 import { RiEmotionHappyLine } from 'react-icons/ri';
 import { FaRegTired } from 'react-icons/fa';
+import next from 'assets/img/screens/next.png'
 import {
   FaHatCowboy,
   FaRegCommentDots,
@@ -49,11 +50,10 @@ const ThankYou: React.FC<{
   return (
     <>
       {imageSrc && (
-        <Box className='Thankyou-section'>
-            <Img src={imageSrc} className="bg-thankyou" />
-          <Box className="thankyou-screen"> 
-            <Box className="thankyou-screen-box">
-            </Box>
+        <Box className="Thankyou-section">
+          <Img src={imageSrc} className="bg-thankyou" />
+          <Box className="thankyou-screen">
+            <Box className="thankyou-screen-box"></Box>
             <Box
               w={'100%'}
               fontFamily={'content'}
@@ -82,7 +82,7 @@ const ThankYou: React.FC<{
                   fontWeight="300"
                   textAlign="center"
                 >
-                  How do you feel about the experience?                 
+                  How do you feel about the experience?
                 </Text>
                 <Box className="collect-learner-feedback">
                   <Box className="grid">
@@ -312,6 +312,9 @@ const ThankYou: React.FC<{
                 </Box>
               </>
             )}
+            <Box w={'100%'} position={'absolute'} display={'flex'} justifyContent={'center'} bottom={'0'}>
+              <Img src={next} className="replay_buttons" />
+            </Box>
           </Box>
         </Box>
       )}

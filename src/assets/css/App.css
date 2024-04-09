@@ -3754,6 +3754,7 @@ grid-row: 1 / 2;
   position: fixed;
   bottom: 135px;
   transform: translateX(13vw);
+  transition: transform 1s ease;
   width: auto;
   height: 45vh;
 }
@@ -3764,6 +3765,7 @@ grid-row: 1 / 2;
   width: auto;
   height: 45vh;
   transform: translateX(30vw);
+  transition: transform 1s ease;
 }
 
 .close_model {
@@ -3806,6 +3808,7 @@ grid-row: 1 / 2;
   .narrator_character_image {
     height: 45vw;
     transform: translateX(13vh);
+    
   }
 
   .player_character_image {

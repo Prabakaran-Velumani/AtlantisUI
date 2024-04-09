@@ -220,7 +220,7 @@ const Welcome: React.FC<{
               <Box
                 display={'flex'}
                 className={
-                  formData.gameIsShowSkill == 'true' ||
+                  formData.gameIsShowSkill === 'true' ||
                   formData.gameIsShowLearningOutcome === 'true'
                     ? 'rewards-box'
                     : 'empty-rewards-box'
