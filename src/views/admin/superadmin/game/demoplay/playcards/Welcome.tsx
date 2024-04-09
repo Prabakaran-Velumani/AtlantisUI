@@ -133,16 +133,13 @@ const Welcome: React.FC<{
   const link = extractLink(formData.gameAdditionalWelcomeNote);
   return (
     <>
-     
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 1 }}
       >
         <Box className="welcome-screen">
-          <Box
-            className="welcome-screen-box"
-          >
+          <Box className="welcome-screen-box">
             <Img src={screen} className="welcome-pad" />
           </Box>
           <Box className="top-title">
@@ -174,10 +171,7 @@ const Welcome: React.FC<{
               >
                 <>
                   {' '}
-                  <Icon
-                    as={FaClock}
-                    style={customStylesicon}
-                  />{' '}
+                  <Icon as={FaClock} style={customStylesicon} />{' '}
                   <span style={customStylesicon}>
                     {formData.gameDuration > 1
                       ? formData.gameDuration + ' mins'
@@ -206,14 +200,20 @@ const Welcome: React.FC<{
               )}
               {formData.gameIsShowSkill === 'true' ||
               formData.gameIsShowLearningOutcome === 'true' ? (
-                <Img
-                  className="rewards-arrow-img"
-                  src={preloadedAssets.rew}
-                  mt={'25px'}
-                  alt="rew"
-                  w={'100%'}
-                  h={'20px'}
-                />
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{delay: 1, duration: 0.5 }}
+                >
+                  <Img
+                    className="rewards-arrow-img"
+                    src={preloadedAssets.rew}
+                    mt={'25px'}
+                    alt="rew"
+                    w={'100%'}
+                    h={'20px'}
+                  />
+                </motion.div>
               ) : (
                 ''
               )}
@@ -252,13 +252,10 @@ const Welcome: React.FC<{
                       >
                         {authorArray
                           .map((authorItem, index) => {
-                            const skillName =
-                              findSkillName(authorItem);
+                            const skillName = findSkillName(authorItem);
                             return skillName;
                           })
-                          .filter(
-                            (skillName) => skillName !== null,
-                          )
+                          .filter((skillName) => skillName !== null)
                           .map((filteredSkillName, index) => (
                             <Box display={'flex'} key={index}>
                               <Img
@@ -272,9 +269,7 @@ const Welcome: React.FC<{
                                   display={'flex'}
                                   w={'50px'}
                                   h={'20px'}
-                                  justifyContent={
-                                    'space-between'
-                                  }
+                                  justifyContent={'space-between'}
                                   font-weight={'300'}
                                   margin-left={'5px'}
                                 >
@@ -290,8 +285,7 @@ const Welcome: React.FC<{
                     </Box>
                   </>
                 )}
-                {formData.gameIsShowLearningOutcome ===
-                  'true' && (
+                {formData.gameIsShowLearningOutcome === 'true' && (
                   <>
                     <Box className="box-1">
                       <Img src={preloadedAssets.back} className="bg-img" />
@@ -317,13 +311,10 @@ const Welcome: React.FC<{
                       >
                         {data &&
                           data.map((it: any, ind: number) => {
-                            const bulletIndex =
-                              it.indexOf('\u2022');
+                            const bulletIndex = it.indexOf('\u2022');
                             const contentAfterBullet =
                               bulletIndex !== -1
-                                ? it
-                                    .slice(bulletIndex + 1)
-                                    .trim()
+                                ? it.slice(bulletIndex + 1).trim()
                                 : it;
                             return (
                               <Box display={'flex'} key={ind}>
@@ -338,9 +329,7 @@ const Welcome: React.FC<{
                                     display={'flex'}
                                     w={'50px'}
                                     h={'20px'}
-                                    justifyContent={
-                                      'space-between'
-                                    }
+                                    justifyContent={'space-between'}
                                     font-weight={'300'}
                                     margin-left={'5px'}
                                   >
@@ -384,8 +373,7 @@ const Welcome: React.FC<{
                   </Text>
                 </Box>
               )}
-              {formData.gameIsShowAdditionalWelcomeNote ===
-                'true' && (
+              {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
                 <Box
                   // w={'100%'}
                   // h={'50px'}

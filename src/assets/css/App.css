@@ -761,6 +761,7 @@ font-family: 'AtlantisText';
   left: 0px;
   width: 100%;
 }
+
 .top-menu-home-section .top-menu-img {
   position: absolute;
   height: 85px;
@@ -3205,7 +3206,7 @@ transform: translate(-167px, -84px);
 
 }
 
-.base_screenshot{
+.base_screenshot {
   width: 100vw;
   height: 100vh;
   max-width: 100%;
@@ -3218,13 +3219,23 @@ transform: translate(-167px, -84px);
   justify-content: center;
   background-color: #009400;
 }
-.feedback_screenshot{
+
+.feedback_screenshot {
   width: 80vw !important;
   height: 80vh !important;
   left: 3% !important;
   top: 4% !important;
 }
+
 @media (orientation: portrait) {
+  .feedback_screenshot {
+    width: 100vh !important;
+    height: 80vw !important;
+    left: -3% !important;
+    top: 30% !important;
+    transform: rotate(90deg) !important;
+  }
+
   /* body {
     display: flex;
     justify-content: center;
@@ -3487,7 +3498,15 @@ grid-row: 1 / 2;
   display: flex;
   justify-content: center;
 }
-
+.chapter_title{
+  font-size: 6vh;
+  width: 100%;
+  font-family: AtlantisText;
+  position: absolute;
+  top: 8%;  
+  display: flex;
+  justify-content: center;
+}
 /* welcome screen image */
 
 .welcome_screen_image {
@@ -3523,6 +3542,17 @@ grid-row: 1 / 2;
   height: 90vh;
   width: 100%;
   max-width: 100%;
+}
+
+.story_interaction_image_screenshot {
+  height: 93%;
+  width: 100%;
+  max-width: 100%;
+}
+
+.story_interaction_image_screenshot_content {
+  width: calc(90vh - (25vh));
+  height: 100%;
 }
 
 .story_interaction_content {
@@ -3588,9 +3618,11 @@ grid-row: 1 / 2;
   justify-content: center;
   position: relative;
 }
+
 .chapter_potrait_screenshot {
+  top: 6%;
   width: 100%;
-  height: 100vh;
+  height: 85%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3620,7 +3652,6 @@ grid-row: 1 / 2;
   width: auto;
   height: 90vh;
 }
-
 
 .play_screen_content {
   width: calc(90vh - 49vh);
@@ -3735,15 +3766,53 @@ grid-row: 1 / 2;
   transform: translateX(30vw);
 }
 
+.close_model {
+  z-index: 9999999;
+  position: relative;
+  width: 4vw;
+  margin-left: 97%
+}
+
+.completed_level{
+  z-index: 99999;
+  position: absolute;
+  bottom: 16%;
+  height: 6vh;
+}
 @media screen and (orientation: portrait) {
+  .quest_title{
+    font-size: 5vw;
+  }
+  .quest_complete{
+    font-size: 2.8vw !important;
+  }
+  .chapter_title{
+    font-size: 6vw;
+  }
+  .close_model{
+    width: 4vh;
+  }
+  .story_interaction_image_screenshot_content {
+    width: calc(90vw - (25vw));
+    height: 100%;
+  }
+
+  .chakra-modal {
+    /* Add styles for portrait mode */
+    max-width: 90%;
+    top: 10%;
+  }
+
   .narrator_character_image {
     height: 45vw;
     transform: translateX(13vh);
   }
+
   .player_character_image {
     height: 45vw;
     transform: translateX(30vh);
   }
+
   .title_replay {
     font-size: 6.5vw;
   }
@@ -3917,10 +3986,13 @@ grid-row: 1 / 2;
     width: 100vh !important;
     height: 100vw !important;
   }
-  .chapter_potrait_screenshot{
+
+  .chapter_potrait_screenshot {
+
     width: 100% !important;
     height: 100% !important;
   }
+
   .story_note_image {
     width: auto;
     height: 90vw;

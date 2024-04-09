@@ -27,12 +27,13 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
 
   return (
     // <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
-    <Modal isOpen={true} onClose={isScreenshot} size={'medium'}>
+    <Modal isOpen={true} onClose={isScreenshot} size={'medium'} >
       <ModalOverlay />
       <ModalContent 
       className='feedback_screenshot' 
       backgroundImage={backGroundImg} 
       backgroundSize={'cover'} 
+      filter={'contrast(70%)'}
       backgroundRepeat={'no-repeat'}
       boxShadow={'inset 0px 5px 100px 25px white'}
       borderRadius={'35px !important'}
@@ -40,8 +41,8 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
         <ModalBody width={'100%'} height={'100%'}>
           <Img
             src={preloadedAssets.Close}            
-            style={{ zIndex: 9999999 ,position: 'relative',width: '50px', marginLeft: '97%' }}
             onClick={() => geTfeedBackoption()}
+            className={'close_model'}
           />
           <Box className="top-menu-home-section-screenshot">
             <Img src={preloadedAssets.TopMenu} borderRadius={'35px 35px 0px 0px'} opacity={0.5} className="top-menu-img" style={{ top: '58px', width: '100%'}} />
@@ -70,10 +71,8 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
               </Text>
             </Box> */}
           </Box>
-          <Box
+          {/* <Box
             position="relative"
-            w={'100%'}
-            height="100%"
             className='chapter_potrait_screenshot'
             >
             <Grid
@@ -85,14 +84,15 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
               transform="translate(-50%, -50%)"
               w={'90%'}            
             >
-              <GridItem colSpan={1} position={'relative'}>
-                <Box position={'relative'} className="story_interaction_image">
-                  <Img src={preloadedAssets.parch} w={'100%'} h={'100%'} loading="lazy" />
+              <GridItem colSpan={1} position={'relative'}> */}
+                <Box  className="story_interaction_image_screenshot">
+                  <Box position={'relative'} h={'100%'}>
+                  <Img src={preloadedAssets.parch} w={'auto'} filter={'contrast(80%)'} h={'100%'} loading="lazy" />
                   <Box
                     position={'absolute'}
-                    top={{ sm: '18px', md: '42px' }}
+                    top={{ sm: '18px', md: '8%' }}
                     h={'80% !important'}
-                    className="story_interaction_image"
+                    className="story_interaction_image_screenshot_content"
                   >
                     <Box
                       textAlign={'center'}
@@ -100,7 +100,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                       justifyContent={'center'}
                       alignItems={'center'}
                       fontWeight={700}
-                      fontSize={{ sm: '1vw', md: '1.5vw', lg: '1.9vw' }}
+                      fontSize={{ md: '1.5vw', lg: '1.9vw' }}
                       fontFamily={'AtlantisText'}
                       lineHeight={1}
                       w={'100%'}
@@ -165,7 +165,6 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                                 display={'flex'}
                                 justifyContent={'center'}
                                 fontSize={{
-                                  sm: '1.3vw',
                                   md: '1.5vw',
                                   lg: '1.9vw',
                                 }}
@@ -178,10 +177,11 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                     </Box>
 
                   </Box>
+                  </Box>
                 </Box>
-              </GridItem>
+              {/* </GridItem>
             </Grid>
-          </Box>
+          </Box> */}
         </ModalBody>
       </ModalContent>
     </Modal>
