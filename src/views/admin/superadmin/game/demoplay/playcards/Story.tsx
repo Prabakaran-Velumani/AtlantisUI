@@ -600,6 +600,15 @@ const Story: React.FC<{
               fontSize={{ base: '30px', xl: '2.2vw' }}
               bottom={'38px'}
               fontFamily={'AtlantisContent'}
+              css={{
+                // Hide scrollbar for webkit-based browsers (Safari, Chrome)
+                '&::-webkit-scrollbar': {
+                  display: 'none',
+                },
+                // Hide scrollbar for Mozilla-based browsers (Firefox)
+                'scrollbar-width': 'none', // For Firefox
+                '-ms-overflow-style': 'none', // For IE and Edge
+              }}
             >
               {showTypingEffect === false ? <TypingEffect
                 text={remainingSentences.toString()}
@@ -687,11 +696,20 @@ const Story: React.FC<{
               alignItems={'center'}
               justifyContent={'space-between'}
               h={'61px'}
-              overflowY={'scroll'}
               w={'85%'}
               fontSize={{ base: '30px', lg: '1.8vw' }}
               bottom={'38px'}
               fontFamily={'AtlantisContent'}
+              overflowY={'scroll'}
+              css={{
+                // Hide scrollbar for webkit-based browsers (Safari, Chrome)
+                '&::-webkit-scrollbar': {
+                  display: 'none',
+                },
+                // Hide scrollbar for Mozilla-based browsers (Firefox)
+                'scrollbar-width': 'none', // For Firefox
+                '-ms-overflow-style': 'none', // For IE and Edge
+              }}
             >
               {showTypingEffect === false ? <TypingEffect
                 text={remainingSentences.toString()}

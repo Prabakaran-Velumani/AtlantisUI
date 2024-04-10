@@ -83,8 +83,17 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                   fontFamily={'AtlantisText'}
                   lineHeight={1}
                   w={'96%'}
-                  overflowY={'scroll'}
                   marginTop={'15px'}
+                  overflowY={'scroll'}
+                  css={{
+                    // Hide scrollbar for webkit-based browsers (Safari, Chrome)
+                    '&::-webkit-scrollbar': {
+                      display: 'none',
+                    },
+                    // Hide scrollbar for Mozilla-based browsers (Firefox)
+                    'scrollbar-width': 'none', // For Firefox
+                    '-ms-overflow-style': 'none', // For IE and Edge
+                  }}
                 >
                   <Box
                     className={'story_intraction_question'}
@@ -99,9 +108,18 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                   w={'100%'}
                   h={'40%'}
                   fontWeight={500}
-                  overflowY={'scroll'}
                   display={'flex'}
                   justifyContent={'center'}
+                  overflowY={'scroll'}
+                  css={{
+                    // Hide scrollbar for webkit-based browsers (Safari, Chrome)
+                    '&::-webkit-scrollbar': {
+                      display: 'none',
+                    },
+                    // Hide scrollbar for Mozilla-based browsers (Firefox)
+                    'scrollbar-width': 'none', // For Firefox
+                    '-ms-overflow-style': 'none', // For IE and Edge
+                  }}
                 >
                   <Box w={'60%'}>
                     {options &&
