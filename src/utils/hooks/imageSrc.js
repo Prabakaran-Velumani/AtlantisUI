@@ -62,7 +62,7 @@ import Setting from '../../assets/img/games/settings.png';
 import SettingPad from '../../assets/img/games/setting-pad.png';
 import SliderPointer from '../../assets/img/games/slider-pointer.png';
 import Lang from 'assets/img/games/lang.png';
-
+import Tooltip from 'assets/img/games/tooltip.png'
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
  */
@@ -131,11 +131,8 @@ export const assetImageSrc = [
   { assetType: 'SliderPointer', src: SliderPointer },
   { assetType: 'write', src: write },
   { assetType: 'Lang', src: Lang },
-  
-  
+  { assetType: 'TooltipImg', src: Tooltip },
   /*file not available but used list
   { assetType: 'write', src: write },
-  
-  
   */
 ];

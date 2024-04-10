@@ -775,7 +775,7 @@ font-family: 'AtlantisText';
   z-index: 999;
   height: 63px;
   width: 4%;
-  transform: translate(44%, 3%);
+  transform: translate(44%, 20%);
 }
 
 .top-menu-home-section .overview-img {
@@ -829,13 +829,13 @@ font-family: 'AtlantisText';
 }
 
 .top-menu-home-section .progress-box {
+  transform: translate(-2%, 29%);
   position: absolute;
   top: 0;
   right: 38%;
   z-index: 999;
   height: 45px;
   width: 3%;
-  transform: translate(-2%, 25%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -856,7 +856,7 @@ font-family: 'AtlantisText';
 
 .top-menu-home-section .progress-box .progressing .level {
   background: linear-gradient(to bottom, #009400, #00000000);
-  height: 32px;
+  height: 4vh;
   width: 8.3%;
   border-radius: 2px;
   margin-right: 3px;
@@ -959,7 +959,7 @@ font-family: 'AtlantisText';
 }
 
 .top-menu-home-section .Setting-box .btns .btn img {
-  height: 5vh;
+  height: 8vh;
   width: auto;
 }
 
@@ -2274,6 +2274,10 @@ transform: translate(-167px, -84px);
 }
 
 @media screen and (max-width: 480px) {
+  .top-menu-home-section .progress-box {
+    height: 35px;
+  }
+
   .NoOfQueue .img-box .img-section .title {
     position: absolute;
     font-size: 25px;
@@ -3497,15 +3501,17 @@ grid-row: 1 / 2;
   display: flex;
   justify-content: center;
 }
-.chapter_title{
+
+.chapter_title {
   font-size: 6vh;
   width: 100%;
   font-family: AtlantisText;
   position: absolute;
-  top: 8%;  
+  top: 8%;
   display: flex;
   justify-content: center;
 }
+
 /* welcome screen image */
 
 .welcome_screen_image {
@@ -3569,6 +3575,16 @@ grid-row: 1 / 2;
   width: 100%;
 }
 
+.story_overview_content {
+  width: 100%;
+  height: 35vh;
+  position: fixed;
+  top: 12%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .story_note_content {
   width: 100%;
   height: 35vh;
@@ -3578,6 +3594,24 @@ grid-row: 1 / 2;
   flex-direction: column;
   justify-content: center;
   /* left: -25px; */
+}
+
+.story_overview_title {
+  text-align: center;
+  font-size: 4vh;
+  font-family: AtlantisText;
+  color: #D9C7A2;
+}
+
+.story_overview_block {
+  width: calc(80vh - 15vh);
+  height: 30vh;
+  overflow-y: auto;
+  font-size: 4vh;
+  font-family: AtlantisText;
+  color: #D9C7A2;
+  display: flex;
+  justify-content: center;
 }
 
 .story_note_block {
@@ -3650,6 +3684,11 @@ grid-row: 1 / 2;
 .story_note_image {
   width: auto;
   height: 90vh;
+}
+
+.story_overview_image {
+  width: auto;
+  height: 80vh;
 }
 
 .play_screen_content {
@@ -3780,40 +3819,100 @@ grid-row: 1 / 2;
   margin-left: 97%
 }
 
-.completed_level{
+.completed_level {
   z-index: 99999;
   position: absolute;
   bottom: 16%;
   height: 6vh;
 }
+
+.story_overView_next_button {
+  position: fixed;
+  top: 5%;
+  /* right: 5% */
+}
+
+.top-menu-home-section .progress-box {
+  position: absolute;
+  top: 0;
+  right: 38%;
+  z-index: 999;
+  height: 65px;
+  width: 3%;
+  transform: translate(-2%, 29%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.top-menu-home-section .progress-box .text {
+  font-size: 2vw;
+  font-family: 'AtlantisText';
+  color: var(--dialog-title-color);
+}
+
+.top-menu-home-section .progress-box .progressing {
+  display: flex;
+  width: 316%;
+  position: absolute;
+  transform: translate(70%, -8%);
+}
+
+.top-menu-home-section .progress-box .progressing .level {
+  background: linear-gradient(to bottom, #009400, #00000000);
+  height: 2vw;
+  width: 8.3%;
+  border-radius: 2px;
+  margin-right: 3px;
+}
+
 @media screen and (orientation: portrait) {
+  .top-menu-home-section .progress-box {
+    transform: translate(-2%, 0%);
+  }
+
+  .top-menu-home-section .progress-box .text {
+    font-size: 2vh;
+  }
+
+  .top-menu-home-section .progress-box .progressing .level {
+    height: 2vw;
+  }
+
   .top-menu-home-section .Setting-box {
-  height: 100vw;
+    height: 100vw;
   }
 
   .top-menu-home-section .Setting-box .btns .btn img {
-    height: 5vw;
+    height: 8vw;
     width: auto;
   }
+
   .top-menu-home-section .Setting-box .volumes.music-volume {
     transform: translateY(calc(85vw - 95vw));
   }
+
   .top-menu-home-section .Setting-box .volumes {
     position: absolute;
     width: calc(90vw - 31vw);
   }
-  .quest_title{
+
+  .quest_title {
     font-size: 5vw;
   }
-  .quest_complete{
+
+  .quest_complete {
     font-size: 2.8vw !important;
   }
-  .chapter_title{
+
+  .chapter_title {
     font-size: 5vw;
   }
-  .close_model{
+
+  .close_model {
     width: 4vh;
   }
+
   .story_interaction_image_screenshot_content {
     width: calc(90vw - (25vw));
     height: 100%;
@@ -3828,7 +3927,7 @@ grid-row: 1 / 2;
   .narrator_character_image {
     height: 45vw;
     transform: translateX(13vh);
-    
+
   }
 
   .player_character_image {
@@ -3927,6 +4026,16 @@ grid-row: 1 / 2;
     font-size: 4vw;
   }
 
+  .story_overview_title {
+    font-size: 4vw;
+  }
+
+  .story_overview_block {
+    width: calc(80vw - 15vw);
+    height: 30vw;
+    font-size: 4vw;
+  }
+
   .play_screen_content {
     width: calc(90vw - 49vw);
     height: calc(90vw - 42vw);
@@ -3938,6 +4047,12 @@ grid-row: 1 / 2;
 
   .story_note_content {
     top: 41%;
+    font-size: 30px !important;
+    height: 20vw !important;
+  }
+
+  .story_overview_content {
+    top: 20%;
     font-size: 30px !important;
     height: 20vw !important;
   }
@@ -4021,6 +4136,11 @@ grid-row: 1 / 2;
     height: 90vw;
   }
 
+  .story_overview_image {
+    width: auto;
+    height: 80vw;
+  }
+
   /* 
   .chapters_list_box {
     top: 70px;
@@ -4089,6 +4209,9 @@ grid-row: 1 / 2;
 }
 
 @media screen and (min-width: 500px) {
+  .top-menu-home-section .progress-box {
+    transform: translate(-2%, -10%);
+  }
 
   /* .player_name {
     position: absolute;
@@ -4164,6 +4287,11 @@ grid-row: 1 / 2;
 }
 
 @media screen and (min-width: 768px) {
+  .top-menu-home-section .progress-box {
+    transform: translate(-2%, -10%);
+    height: 65px;
+  }
+
   /* .player_name {
     position: absolute;
     bottom: -4px;
@@ -4312,6 +4440,15 @@ grid-row: 1 / 2;
 }
 
 @media screen and (min-width: 960px) {
+  .top-menu-home-section .progress-box .progressing .level {
+    height: 2vw;
+  }
+
+  .top-menu-home-section .progress-box {
+    transform: translate(-2%, 29%);
+    height: 45px;
+  }
+
   /* .player_name {
     position: absolute;
     bottom: -6px;
@@ -6005,7 +6142,14 @@ grid-row: 1 / 2;
 
 
 
-
+@media screen and (max-width: 480px) {
+  .top-menu-home-section .progress-box {
+    height: 35px !important;
+  }
+  .top-menu-home-section .progress-box .progressing .level{
+    height: 4vw;
+  }
+}
 
 
 /* For Emergency */

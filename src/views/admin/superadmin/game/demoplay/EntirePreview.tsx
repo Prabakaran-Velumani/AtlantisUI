@@ -452,12 +452,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const newTrackSequence = navTrack[navTrack.length - 1];
       const prevBlock = current
         ? Object.keys(demoBlocks[quest] || {})
-            .filter(
-              (key) =>
-                demoBlocks[quest]?.[key]?.blockPrimarySequence ==
-                newTrackSequence,
-            )
-            .map((key: any) => demoBlocks[quest]?.[key])
+          .filter(
+            (key) =>
+              demoBlocks[quest]?.[key]?.blockPrimarySequence ==
+              newTrackSequence,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
         : [];
 
       const currentQuest = current
@@ -531,10 +531,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
+        .filter(
+          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+        )
+        .map((key: any) => demoBlocks[quest]?.[key])
       : [];
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
@@ -1269,30 +1269,30 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const subTabOptionsForTabIds: Array<{
     [key: string]: Array<{ value: string; label: string }> | null;
   }> = [
-    { '1': null },
-    { '2': null },
-    {
-      '3': [
-        { value: 'Title', label: 'Title' },
-        { value: 'Skill', label: 'Skill' },
-        { value: 'Storyline', label: 'Storyline' },
-        { value: 'Outcomes', label: 'Outcomes' },
-        { value: 'Category', label: 'Category' },
-        { value: 'Author', label: 'Author' },
-      ],
-    },
-    { '4': null },
-    {
-      '5': [
-        { value: '0', label: 'Completion' },
-        { value: '1', label: 'Leaderboard' },
-        { value: '2', label: 'Reflection' },
-        { value: '3', label: 'Takeaway' },
-        { value: '4', label: 'Welcome' },
-        { value: '5', label: 'Thanks' },
-      ],
-    },
-  ];
+      { '1': null },
+      { '2': null },
+      {
+        '3': [
+          { value: 'Title', label: 'Title' },
+          { value: 'Skill', label: 'Skill' },
+          { value: 'Storyline', label: 'Storyline' },
+          { value: 'Outcomes', label: 'Outcomes' },
+          { value: 'Category', label: 'Category' },
+          { value: 'Author', label: 'Author' },
+        ],
+      },
+      { '4': null },
+      {
+        '5': [
+          { value: '0', label: 'Completion' },
+          { value: '1', label: 'Leaderboard' },
+          { value: '2', label: 'Reflection' },
+          { value: '3', label: 'Takeaway' },
+          { value: '4', label: 'Welcome' },
+          { value: '5', label: 'Thanks' },
+        ],
+      },
+    ];
   useEffect(() => {
     if (audioRef.current) {
       if (currentScreenId === 2) {
@@ -1572,7 +1572,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   }, [FeedbackNavigatenext]);
 
-  useEffect(() => {}, [FeedBackoptionData]);
+  useEffect(() => { }, [FeedBackoptionData]);
 
   const getFeedbackData = (getdata: any) => {
     setisScreenshot(true);
@@ -1664,7 +1664,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           </Box>
           <Flex
             height="100vh"
-            className={currentScreenId === 2 ? '' : 'EntirePreview'}
+            className={currentScreenId === 2 || currentScreenId === 15 ? '' : 'EntirePreview'}
           >
             {(() => {
               switch (currentScreenId) {
@@ -2186,7 +2186,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 15:
                   return (
                     <>
-                      <Box
+                      {/* <Box
                         w={'100%'}
                         h={'100vh'}
                         alignItems={'center'}
@@ -2206,17 +2206,18 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           justifyContent={'center'}
                           className="Game-Screen"
                         >
-                          <Box className="Images">
-                            <Overview
-                              formData={gameInfo?.gameData}
-                              imageSrc={preloadedAssets.overview}
-                              preloadedAssets={preloadedAssets}
-                              homeLeaderBoard={homeLeaderBoard}
-                              setCurrentScreenId={setCurrentScreenId}
-                            />
-                          </Box>
+                          <Box className="Images"> */}
+                      <Overview
+                        formData={gameInfo?.gameData}
+                        imageSrc={preloadedAssets.overview}
+                        preloadedAssets={preloadedAssets}
+                        homeLeaderBoard={homeLeaderBoard}
+                        setCurrentScreenId={setCurrentScreenId}
+                        backGroundImg={preloadedAssets.backgroundImage}
+                      />
+                      {/* </Box>
                         </Box>
-                      </Box>
+                      </Box> */}
                     </>
                   );
 

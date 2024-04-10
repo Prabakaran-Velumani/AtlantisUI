@@ -6,7 +6,8 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
-  Text
+  Text,
+  Tooltip,
 } from '@chakra-ui/react';
 import React,{useEffect, useState, useContext} from 'react';
 import { ScoreContext } from '../GamePreview';
@@ -53,91 +54,202 @@ console.log('geFinalscorequest',geFinalscorequest)
 
   return (
     <Box className="top-menu-home-section">
-      {dontShowTopMenu ? (
-        <>
-          <Img src={preloadedAssets.TopMenu} className="top-menu-img" />
-          <Img
-            src={preloadedAssets.home}
-            className={'top-home-menu'}
-            onClick={() => setCurrentScreenId(1)}
-          />
-          <Img
-            src={preloadedAssets.Overview}
-            className="overview-img"
-            onClick={handleOverView}
-          />
-          <Img
-            src={preloadedAssets.Setting}
-            className="setting-img"
-            onClick={() => setIsSettingOpen(true)}
-          />
-          <Box className="score-box">
-            <Text className="text">
-            {/* <Text fontFamily={'AtlantisText'} textAlign={'center'}> */}
-                {geFinalscorequest ? geFinalscorequest : 0}
-            </Text>
-          </Box>
-        </>
-      ) : null}
+              {dontShowTopMenu ? (
+                <>
+                  <Img src={preloadedAssets.TopMenu} className="top-menu-img" />
+                  <Tooltip label="Home"
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    background={'transparent'}
+                    boxShadow={'unset'}
+                    backgroundImage={preloadedAssets.TooltipImg}
+                    backgroundRepeat={'no-repeat'}
+                    backgroundSize={'contain'}
+                    backgroundPosition={'center'}
+                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                    padding={'10px'}
+                    height={'70px'}
+                    w={'150px'}
+                    fontSize={'29px'}
+                    fontFamily={'Atlantis'}
+                    color={'#000'}
+                    overflow={'hidden'}
+                    lineHeight={'25px'}
+                  >
+                  <Img
+                    src={preloadedAssets.home}
+                    className={'top-home-menu'}
+                    onClick={() => setCurrentScreenId(1)}
+                  />
+                  </Tooltip>
+                  <Tooltip label="Progress"
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    background={'transparent'}
+                    boxShadow={'unset'}
+                    backgroundImage={preloadedAssets.TooltipImg}
+                    backgroundRepeat={'no-repeat'}
+                    backgroundSize={'contain'}
+                    backgroundPosition={'center'}
+                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                    padding={'10px'}
+                    height={'70px'}
+                    w={'150px'}
+                    fontSize={'29px'}
+                    fontFamily={'Atlantis'}
+                    color={'#000'}
+                    overflow={'hidden'}
+                    lineHeight={'25px'}
+                  >
 
-      {/* {permission.setting ? */}
-      {isSettingOpen ? (
-        <Box className="Setting-box">
-          <Img src={preloadedAssets.SettingPad} className="setting-pad" />
-          <Box className="music-volume volumes">
-            <Slider
-              aria-label="slider-ex-4"
-              defaultValue={30}
-              name="musicVolume"
-              //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
-            >
-              <SliderTrack
-                className="slider-track"
-                height="15px"
-                borderRadius="80px"
-              >
-                {/* <Img src={VolumeTrack} /> */}
-                <SliderFilledTrack className="filled-volume" bg="pink.500" />
-              </SliderTrack>
-              <SliderThumb
-                boxSize={9}
-                background={'transparent'}
-                left={'calc(100% - 30%)'}
-              >
-                <Img src={preloadedAssets.SliderPointer} />
-              </SliderThumb>
-            </Slider>
-          </Box>
-          <Box className="voice-volume volumes">
-            <Slider
-              aria-label="slider-ex-4"
-              defaultValue={30}
-              name="voiceVolume"
-              // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
-            >
-              <SliderTrack
-                className="slider-track"
-                height="15px"
-                borderRadius="80px"
-              >
-                <SliderFilledTrack className="filled-volume" bg="pink.500" />
-              </SliderTrack>
-              <SliderThumb boxSize={9} background={'transparent'}>
-                <Img src={preloadedAssets.SliderPointer} />
-              </SliderThumb>
-            </Slider>
-          </Box>
-          <Box className="btns">
-            <Button
-              className="okay-btn btn"
-              onClick={() => setIsSettingOpen(false)}
-            >
-              <Img src={preloadedAssets.Okay} />
-            </Button>
-          </Box>
-        </Box>
-      ) : null}
-    </Box>
+                    <Box className='progress-box'>
+                      {/* <Text className='text'>{BlockNo ? Math.floor(progressPercentage) : 0}%</Text> */}
+                      <Text className='text'>{true ? Math.floor(20) : 0}%</Text>
+                      <Box className='progressing'>
+                        {Array.from({ length: Math.floor(20 / 10) }, (_, index) => (
+                          <Box key={index} className='level'></Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  </Tooltip>
+                  <Tooltip label="Overview"
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    background={'transparent'}
+                    boxShadow={'unset'}
+                    backgroundImage={preloadedAssets.TooltipImg}
+                    backgroundRepeat={'no-repeat'}
+                    backgroundSize={'contain'}
+                    backgroundPosition={'center'}
+                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                    padding={'10px'}
+                    height={'70px'}
+                    w={'150px'}
+                    fontSize={'29px'}
+                    fontFamily={'Atlantis'}
+                    color={'#000'}
+                    overflow={'hidden'}
+                    lineHeight={'25px'}
+                  >
+                  <Img
+                    src={preloadedAssets.Overview}
+                    className="overview-img"
+                    onClick={handleOverView}
+                  />
+                  </Tooltip>
+                  <Tooltip label="Settings"
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    background={'transparent'}
+                    boxShadow={'unset'}
+                    backgroundImage={preloadedAssets.TooltipImg}
+                    backgroundRepeat={'no-repeat'}
+                    backgroundSize={'contain'}
+                    backgroundPosition={'center'}
+                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                    padding={'10px'}
+                    height={'70px'}
+                    w={'150px'}
+                    fontSize={'29px'}
+                    fontFamily={'Atlantis'}
+                    color={'#000'}
+                    overflow={'hidden'}
+                    lineHeight={'25px'}
+                  >
+                  <Img
+                    src={preloadedAssets.Setting}
+                    className="setting-img"
+                    onClick={() => setIsSettingOpen(true)}
+                  />
+                  </Tooltip>
+                  <Box className="score-box">
+                    <Text className="text">
+                      {(profile &&
+                        profile.score &&
+                        profile.score.length > 0 &&
+                        profile.score.reduce(
+                          (accumulator: number, currentValue: any) => {
+                            return accumulator + currentValue.score;
+                          },
+                          0,
+                        )) ||
+                        0}
+                    </Text>
+                  </Box>
+                </>
+              ) : null}
+
+              {/* {permission.setting ? */}
+              {isSettingOpen ? (
+                <Box className="Setting-box">
+                  <Img
+                    src={preloadedAssets.SettingPad}
+                    className="setting-pad"
+                  />
+                  <Box className="music-volume volumes">
+                    <Slider
+                      aria-label="slider-ex-4"
+                      defaultValue={30}
+                      name="musicVolume"
+                    //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
+                    >
+                      <SliderTrack
+                        className="slider-track"
+                        height="15px"
+                        borderRadius="80px"
+                      >
+                        {/* <Img src={VolumeTrack} /> */}
+                        <SliderFilledTrack
+                          className="filled-volume"
+                          bg="pink.500"
+                        />
+                      </SliderTrack>
+                      <SliderThumb
+                        boxSize={9}
+                        background={'transparent'}
+                        left={'calc(100% - 30%)'}
+                      >
+                        <Img src={preloadedAssets.SliderPointer} />
+                      </SliderThumb>
+                    </Slider>
+                  </Box>
+                  <Box className="voice-volume volumes">
+                    <Slider
+                      aria-label="slider-ex-4"
+                      defaultValue={30}
+                      name="voiceVolume"
+                    // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
+                    >
+                      <SliderTrack
+                        className="slider-track"
+                        height="15px"
+                        borderRadius="80px"
+                      >
+                        <SliderFilledTrack
+                          className="filled-volume"
+                          bg="pink.500"
+                        />
+                      </SliderTrack>
+                      <SliderThumb boxSize={9} background={'transparent'}>
+                        <Img src={preloadedAssets.SliderPointer} />
+                      </SliderThumb>
+                    </Slider>
+                  </Box>
+                  <Box className="btns">
+                    <Button
+                      className="okay-btn btn"
+                      onClick={() => setIsSettingOpen(false)}
+                    >
+                      <Img src={preloadedAssets.OkayBtn} />
+                    </Button>
+                  </Box>
+                </Box>
+              ) : null}
+            </Box>
   );
 };
 
