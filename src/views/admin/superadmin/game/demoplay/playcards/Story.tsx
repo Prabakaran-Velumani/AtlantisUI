@@ -101,6 +101,8 @@ const Story: React.FC<{
       [first, setFirst] = useState(false);
     // const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
     const userProfile = useContext(ProfileContext);
+    const [getInteraction, setInteraction] = useState(false);
+    const [Contentgetlanguage, setContentlanguage] = useState('');
     const { profile, setProfile } = useContext(ScoreContext);
     const [currentPosition, setCurrentPosition] = useState(0);
     const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
@@ -108,7 +110,7 @@ const Story: React.FC<{
     const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
     // const [SpeedIsOver, setSpeedIsOver] = useState<any>(false);
     const [isPlayAudioConfirmation, setIsPlayAudioConfirmation] = useState<boolean>(false);
-
+    const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
     const [score, setScore] = useState(null);
 
     useEffect(() => {
@@ -132,123 +134,111 @@ const Story: React.FC<{
 
 
     useEffect(() => {
+
+
       const fetchData = async () => {
         if (profileData?.Audiogetlanguage.length !== 0) {
-          // if(AudioOptions.qpOptionId ==='')
-          // {
-          const GetblocktextAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === data?.blockId);
-          if (GetblocktextAudioFiltered.length > 0) {
-            const FilteredFieldName = GetblocktextAudioFiltered.map((item: any) => item.fieldName);
-            if (FilteredFieldName[0] === 'blockText') {
-              const audioUrls = GetblocktextAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
-              const relativePath = audioUrls[0].split('\\uploads\\')[1];
-              const normalizedPath = relativePath.replace(/\\/g, '/');
-              const fullUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-              const responseblockText = await fetch(fullUrl);
-              if (responseblockText.ok) {
-                setAudioObj({
-                  url: fullUrl,
-                  type: 'bgm',
-                  volume: '0.5',
-                  loop: true,
-                  autoplay: true,
-                });
-                setIsGetsPlayAudioConfirmation(true);
+          if (AudioOptions.qpOptionId === '') {
+            const GetblocktextAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === data?.blockId);
+            if (GetblocktextAudioFiltered.length > 0) {
+              const FilteredFieldName = GetblocktextAudioFiltered.map((item: any) => item.fieldName);
+              if (FilteredFieldName[0] === 'blockText') {
+                const audioUrls = GetblocktextAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
+                const normalizedPath = audioUrls[0];
+                const fullUrl = `${API_SERVER}${normalizedPath}`;
+                const responseblockText = await fetch(fullUrl);
+                if (responseblockText.ok) {
+                  setAudioObj({
+                    url: fullUrl,
+                    type: 'bgm',
+                    volume: '0.5',
+                    loop: true,
+                    autoplay: true,
+                  });
+                  setIsGetsPlayAudioConfirmation(true);
+                }
+
+              }
+            }
+          }
+          else {
+            if (AudioOptions.qpOptionId) {
+              const optionAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === AudioOptions?.qpOptionId);
+              if (optionAudioFiltered.length > 0) {
+                const getoptionsAudioFiltered = optionAudioFiltered.filter((key: any) => key?.fieldName === 'qpOptionText');
+                if (getoptionsAudioFiltered.length > 0) {
+                  const QOTaudioUrls = getoptionsAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
+                 
+                  if (QOTaudioUrls.length > 0) {
+
+                    // const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
+                    // const normalizedPath = relativePath.replace(/\\/g, '/');
+                    const normalizedPath = QOTaudioUrls[0];
+                    // const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
+                    const qpOptionTextUrl = `${API_SERVER}${normalizedPath}`;
+                    const responseqpOptionText = await fetch(qpOptionTextUrl);
+                    if (responseqpOptionText.ok) {
+                      setAudioObj({
+                        url: qpOptionTextUrl,
+                        type: 'bgm',
+                        volume: '0.5',
+                        loop: true,
+                        autoplay: true,
+                      });
+                      setIsGetsPlayAudioConfirmation(true);
+                    }
+                    else {
+                      const getAudioFiltered1 = optionAudioFiltered.filter((key: any) => key?.fieldName === "qpOptions");
+                      if (getAudioFiltered1.length > 0) {
+                        const QPaudioUrls = getAudioFiltered1.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
+                        if (QPaudioUrls.length > 0) {
+                          const normalizedPath = QPaudioUrls[0];
+                          const qpOptionsUrl = `${API_SERVER}${normalizedPath}`;
+                          const responsequestoption = await fetch(qpOptionsUrl);
+                          if (responsequestoption.ok) {
+                            setAudioObj({
+                              url: qpOptionsUrl,
+                              type: 'bgm',
+                              volume: '0.5',
+                              loop: true,
+                              autoplay: true,
+                            });
+                            setIsGetsPlayAudioConfirmation(true);
+                          }
+                          else {
+                            setAudioObj({
+                              url: '',
+                              type: 'bgm',
+                              volume: '0.5',
+                              loop: true,
+                              autoplay: true,
+                            });
+                            setIsGetsPlayAudioConfirmation(false);
+                          }
+
+                        }
+                      }
+                    }
+
+                  }
+                }
               }
 
             }
+
           }
-          // }
-          // else{
-          // console.log(' =>', AudioOptions);
-          // if (AudioOptions.qpOptionId) {
-          //   const optionAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === AudioOptions?.qpOptionId);
-          //   console.log('1 =>',optionAudioFiltered,'.....', AudioOptions);
-          //   if (optionAudioFiltered.length > 0) {
-          //     const getoptionsAudioFiltered = optionAudioFiltered.filter((key: any) => key?.fieldName === 'qpOptionText');
-          //     console.log('2 =>',getoptionsAudioFiltered);
-          //     if (getoptionsAudioFiltered.length > 0) {
-          //       const QOTaudioUrls = getoptionsAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
-          //       console.log('3 =>',QOTaudioUrls);
-          //       if (QOTaudioUrls.length > 0) {
-          //         const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
-          //         const normalizedPath = relativePath.replace(/\\/g, '/');
-          //         const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-          //         const responseqpOptionText = await fetch(qpOptionTextUrl);
-          //         console.log('4 =>',responseqpOptionText,qpOptionTextUrl);
-          //         if (responseqpOptionText.ok) {
-          //           setAudioObj({
-          //             url: qpOptionTextUrl,
-          //             type: 'bgm',
-          //             volume: '0.5',
-          //             loop: true,
-          //             autoplay: true,
-          //           });
-          //           setIsGetsPlayAudioConfirmation(true);
-          //         }
-          //         else {
-          //           const getAudioFiltered1 = optionAudioFiltered.filter((key: any) => key?.fieldName === "qpOptions");
-          //           if (getAudioFiltered1.length > 0) {
-          //             const QPaudioUrls = getAudioFiltered1.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
-          //             if (QPaudioUrls.length > 0) {
-          //               const relativePath = QPaudioUrls[0].split('\\uploads\\')[1];
-          //               const normalizedPath = relativePath.replace(/\\/g, '/');
-          //               const qpOptionsUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-          //               const responsequestoption = await fetch(qpOptionsUrl);
-          //               console.log('4 =>',responsequestoption);
-          //               if (responsequestoption.ok) {
-          //                 setAudioObj({
-          //                   url: qpOptionsUrl,
-          //                   type: 'bgm',
-          //                   volume: '0.5',
-          //                   loop: true,
-          //                   autoplay: true,
-          //                 });
-          //                 setIsGetsPlayAudioConfirmation(true);
-          //               }
-          //               else
-          //               {
-          //                 setAudioObj({
-          //                   url: '',
-          //                   type: 'bgm',
-          //                   volume: '0.5',
-          //                   loop: true,
-          //                   autoplay: true,
-          //                 });
-          //                 setIsGetsPlayAudioConfirmation(false);
-          //               }
-
-          //             }
-          //           }
-          //         }
-
-          //       }
-          //     }
-          //   }
-
-          // }
-          //   setAudioObj({
-          //     url: '',
-          //     type: 'bgm',
-          //     volume: '0.5',
-          //     loop: true,
-          //     autoplay: true,
-          //   });
-          //   setIsGetsPlayAudioConfirmation(false);
-
-          // }
 
         }
-        // else {
+        else {
 
-        //   setAudioObj({
-        //     autoplay: false,
-        //   });
-        //   setIsGetsPlayAudioConfirmation(false);
-        // }
+          setAudioObj({
+            autoplay: false,
+          });
+          setIsGetsPlayAudioConfirmation(false);
+        }
       };
       fetchData();
-    }, [profileData, data]);
+    }, [profileData, data,AudioOptions]);
 
 
     const getVoice = async (blockInfo: any, blockType: string) => {
@@ -329,6 +319,7 @@ const Story: React.FC<{
 
     const InteractionFunction = () => {
       setIsGetsPlayAudioConfirmation(true);
+
       setProfile((prev: any) => {
         const { seqId, score: newScore } = score;
         const index = prev.score.findIndex((item: any) => item.seqId === seqId);
@@ -352,6 +343,7 @@ const Story: React.FC<{
     };
     const optionClick = (item: any, ind: any) => {
       setScore({ seqId: item?.qpSequence, score: parseInt(item?.qpScore) });
+      SetAudioOptions(item)
       handleValidate(item, ind);
     };
     const imageRef = useRef(null);
@@ -376,79 +368,159 @@ const Story: React.FC<{
     const getDataSection = (data: any) => {
       setShowTypingEffect(false);
       setCurrentPosition(0);
+      setInteraction(false);
+      if (profileData?.Audiogetlanguage.length !== 0) {
+        // Note and Dialog
+        const Getblocktext = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === data?.blockId);
+        if (Getblocktext.length > 0) {
+          const FilteredFieldName = Getblocktext.map((item: any) => item.fieldName);
+          if (FilteredFieldName[0] === 'blockText') {
 
-      // Note and Dialog
-      const content = data?.blockText || '';
-      const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
-      const newRemainingSentences = sentences.slice(currentPosition);
-      // response
-      const Responsecontent = resMsg || '';
-      const Responsesentences = Responsecontent.split(
-        /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-      );
-      const newRemainingResponseSentences = Responsesentences.slice(currentPosition);
-      const concatenatedSentences = [];
-      let totalLength = 0;
-      // Note and Dialog
-      for (let i = 0; i < newRemainingSentences.length; i++) {
-        const sentence = newRemainingSentences[i];
+            // Note and Dialog
+            const getcontent = Getblocktext[0].content || '';
+            const sentences = getcontent.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
+            const newRemainingSentences = sentences.slice(currentPosition);
+            const concatenatedSentences = [];
+            let totalLength = 0;
+            // Note and Dialog
+            for (let i = 0; i < newRemainingSentences.length; i++) {
+              const sentence = newRemainingSentences[i];
 
 
-        if (data && type === 'Note') {
-          if (totalLength + sentence.length <= Notelength) {
-            concatenatedSentences.push(sentence);
-            totalLength += sentence.length;
-          } else {
-            concatenatedSentences.push(sentence);
-            break;
-          }
-        }
-        if (data && type === 'Dialog') {
-          if (totalLength + sentence.length <= Dialoglength) {
-            concatenatedSentences.push(sentence);
-            totalLength += sentence.length;
-          } else {
-            if (totalLength + sentence.length >= Dialoglength) {
-              break;
+              if (data && type === 'Note') {
+                if (totalLength + sentence.length <= Notelength) {
+                  concatenatedSentences.push(sentence);
+                  totalLength += sentence.length;
+                } else {
+                  concatenatedSentences.push(sentence);
+                  break;
+                }
+              }
+              if (data && type === 'Dialog') {
+                if (totalLength + sentence.length <= Dialoglength) {
+                  concatenatedSentences.push(sentence);
+                  totalLength += sentence.length;
+                } else {
+                  if (totalLength + sentence.length >= Dialoglength) {
+                    break;
+                  }
+                  concatenatedSentences.push(sentence);
+                  break;
+                }
+              }
+              if(data && type === 'Interaction')
+                {
+                  if (profileData?.Audiogetlanguage.length !== 0) {
+                    // Note and Dialog
+                    const Getblocktext = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === data?.blockId);
+                    if (Getblocktext.length > 0) {
+                      const FilteredFieldName = Getblocktext.map((item: any) => item.fieldName);
+                      if (FilteredFieldName[0] === 'blockText') {
+                        if(type==='Interaction')
+                          {
+                            const getcontent = Getblocktext[0].content || '';
+                            setContentlanguage(getcontent);
+                          }
+                      }
+                     
+                    }
+                  }
+                }
+             
             }
-            concatenatedSentences.push(sentence);
-            break;
-          }
-        }
 
+            setRemainingSentences(concatenatedSentences);
 
-      }
-      // Response 
-      for (let i = 0; i < newRemainingResponseSentences.length; i++) {
-        const ressentence = newRemainingResponseSentences[i];
-        if (data && type === 'response') {
-          if (totalLength + ressentence.length <= Responselength) {
-            concatenatedSentences.push(ressentence);
-            totalLength += ressentence.length;
-          } else {
-            if (totalLength + ressentence.length >= Responselength) {
-              break;
+            if (newRemainingSentences.length >= 1) {
+              setCurrentPosition(currentPosition + concatenatedSentences.length);
+              setNavigateNext(false);
             }
-            concatenatedSentences.push(ressentence);
-            break;
+            else {
+              setCurrentPosition(0);
+              setNavigateNext(true);
+              // getData(data);
+            }
           }
+          
         }
-      }
-      setRemainingSentences(concatenatedSentences);
 
-      if (newRemainingSentences.length >= 1) {
-        setCurrentPosition(currentPosition + concatenatedSentences.length);
-        setNavigateNext(false);
-      }
-      if (newRemainingResponseSentences.length >= 1) {
-        setCurrentPosition(currentPosition + concatenatedSentences.length);
-        setNavigateNext(false);
+
       }
       else {
-        setCurrentPosition(0);
-        setNavigateNext(true);
-        // getData(data);
+        // Note and Dialog
+        const content = data?.blockText || '';
+        const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
+        const newRemainingSentences = sentences.slice(currentPosition);
+        // response
+        const Responsecontent = resMsg || '';
+        const Responsesentences = Responsecontent.split(
+          /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+        );
+        const newRemainingResponseSentences = Responsesentences.slice(currentPosition);
+        const concatenatedSentences = [];
+        let totalLength = 0;
+        // Note and Dialog
+        for (let i = 0; i < newRemainingSentences.length; i++) {
+          const sentence = newRemainingSentences[i];
+
+
+          if (data && type === 'Note') {
+            if (totalLength + sentence.length <= Notelength) {
+              concatenatedSentences.push(sentence);
+              totalLength += sentence.length;
+            } else {
+              concatenatedSentences.push(sentence);
+              break;
+            }
+          }
+          if (data && type === 'Dialog') {
+            if (totalLength + sentence.length <= Dialoglength) {
+              concatenatedSentences.push(sentence);
+              totalLength += sentence.length;
+            } else {
+              if (totalLength + sentence.length >= Dialoglength) {
+                break;
+              }
+              concatenatedSentences.push(sentence);
+              break;
+            }
+          }
+
+
+        }
+        // Response 
+        for (let i = 0; i < newRemainingResponseSentences.length; i++) {
+          const ressentence = newRemainingResponseSentences[i];
+          if (data && type === 'response') {
+            if (totalLength + ressentence.length <= Responselength) {
+              concatenatedSentences.push(ressentence);
+              totalLength += ressentence.length;
+            } else {
+              if (totalLength + ressentence.length >= Responselength) {
+                break;
+              }
+              concatenatedSentences.push(ressentence);
+              break;
+            }
+          }
+        }
+        setRemainingSentences(concatenatedSentences);
+
+        if (newRemainingSentences.length >= 1) {
+          setCurrentPosition(currentPosition + concatenatedSentences.length);
+          setNavigateNext(false);
+        }
+        if (newRemainingResponseSentences.length >= 1) {
+          setCurrentPosition(currentPosition + concatenatedSentences.length);
+          setNavigateNext(false);
+        }
+        else {
+          setCurrentPosition(0);
+          setNavigateNext(true);
+          // getData(data);
+        }
       }
+
     };
     const Updatecontent = () => {
       if (showTypingEffect === false) {
@@ -649,7 +721,7 @@ const Story: React.FC<{
         )}
 
         {data && type === 'Interaction' && (
-          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick} prevData={prevData} InteractionFunction={InteractionFunction} />
+          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick} prevData={prevData} InteractionFunction={InteractionFunction} Profiledatalanguage={profileData?.Audiogetlanguage} Contentlanguage={Contentgetlanguage}/>
         )}
         {data && type === 'response' && (
           <Box

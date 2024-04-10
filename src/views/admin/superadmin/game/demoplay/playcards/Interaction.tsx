@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Grid, GridItem, Img, Text } from '@chakra-ui/react';
 import right from 'assets/img/games/right.png';
 import left from 'assets/img/games/left.png';
@@ -11,13 +11,15 @@ interface InteractionProps {
   data: any;
   options: any;
   optionClick: any;
+  Profiledatalanguage?: any;
   prevData: any;
+  Contentlanguage: any;
   InteractionFunction: () => void;
   option: any;
   isScreenshot?: boolean;
 }
 
-const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, options, optionClick, prevData, InteractionFunction, isScreenshot }) => {
+const Interaction: React.FC<InteractionProps> = ({ Contentlanguage, Profiledatalanguage, backGroundImg, data, option, options, optionClick, prevData, InteractionFunction, isScreenshot }) => {
 
   return (
 
@@ -83,7 +85,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                   fontSize={{ md: '1.5vw', lg: '1.9vw' }}
                   letterSpacing={1}
                 >
-                  {data?.blockText}
+                  {Contentlanguage ? Contentlanguage : data?.blockText}
                 </Box>
               </Box>
               <Box

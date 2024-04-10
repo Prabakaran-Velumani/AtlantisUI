@@ -333,12 +333,29 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen ===
       'Interaction'
     ) {
+
       const optionsFiltered = [];
       const primarySequence = gameInfo.blocks[profile.currentQuest]['1'].blockPrimarySequence;
-
       for (const option of gameInfo.questOptions) {
-        if (option?.qpSequence === primarySequence) {
-          optionsFiltered.push(option);
+        if (profileData?.Audiogetlanguage.length > 0) {
+          if (option?.qpSequence === primarySequence) {
+
+            const profilesetlan = profileData?.Audiogetlanguage.find((key: any) => key?.textId === option.qpOptionId);
+
+            if (profilesetlan) {
+              const languagecont = { ...option, qpOptionText: profilesetlan.content }
+              optionsFiltered.push(languagecont);
+            }
+            else {
+              optionsFiltered.push(option);
+            }
+
+          }
+        }
+        else {
+          if (option?.qpSequence === primarySequence) {
+            optionsFiltered.push(option);
+          }
         }
       }
       if (gameInfo?.gameData?.gameShuffle === 'true') {
@@ -423,8 +440,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           audioRef.current.play();
         }
       }
-      catch
-      {
+      catch {
         console.log('Error Required');
       }
 
@@ -549,9 +565,25 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = [];
       for (const option of gameInfo.questOptions) {
-        if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
-          optionsFiltered.push(option);
+        if (profileData?.Audiogetlanguage.length > 0) {
+          if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+
+            const profilesetlan = profileData?.Audiogetlanguage.find((key: any) => key?.textId === option.qpOptionId);
+            if (profilesetlan) {
+              const languagecont = { ...option, qpOptionText: profilesetlan.content }
+              optionsFiltered.push(languagecont);
+            }
+            else {
+              optionsFiltered.push(option);
+            }
+          }
         }
+        else {
+          if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+            optionsFiltered.push(option);
+          }
+        }
+
       }
       if (gameInfo?.gameData?.gameShuffle === 'true') {
         for (let i = optionsFiltered.length - 1; i > 0; i--) {
@@ -616,8 +648,26 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           if (selectedNext[0]?.blockChoosen === 'Interaction') {
             const optionsFiltered = [];
             for (const option of gameInfo.questOptions) {
-              if (option?.qpSequence === selectedNext[0]?.blockPrimarySequence) {
-                optionsFiltered.push(option);
+              if (profileData?.Audiogetlanguage.length > 0) {
+                if (option?.qpSequence === selectedNext[0]?.blockPrimarySequence) {
+
+                  const profilesetlan = profileData?.Audiogetlanguage.find((key: any) => key?.textId === option.qpOptionId);
+
+                  if (profilesetlan) {
+                    const languagecont = { ...option, qpOptionText: profilesetlan.content }
+                    optionsFiltered.push(languagecont);
+                  }
+                  else {
+                    optionsFiltered.push(option);
+                  }
+
+                }
+              }
+              else {
+                if (option?.qpSequence === selectedNext[0]?.blockPrimarySequence) {
+                  optionsFiltered.push(option);
+                }
+
               }
             }
             if (gameInfo?.gameData?.gameShuffle === 'true') {
@@ -642,8 +692,27 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           if (nextBlock[0]?.blockChoosen === 'Interaction') {
             const optionsFiltered = [];
             for (const option of gameInfo.questOptions) {
-              if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
-                optionsFiltered.push(option);
+              if (profileData?.Audiogetlanguage.length > 0) {
+                if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+
+                  const profilesetlan = profileData?.Audiogetlanguage.find((key: any) => key?.textId === option.qpOptionId);
+
+                  if (profilesetlan) {
+                    const languagecont = { ...option, qpOptionText: profilesetlan.content }
+                    optionsFiltered.push(languagecont);
+                  }
+                  else {
+                    optionsFiltered.push(option);
+                  }
+
+                }
+              }
+              else {
+                if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+                  optionsFiltered.push(option);
+
+
+                }
               }
             }
             if (gameInfo?.gameData?.gameShuffle === 'true') {
@@ -1032,10 +1101,31 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setType(selectedNext && selectedNext[0]?.blockChoosen);
           if (selectedNext[0]?.blockChoosen === 'Interaction') {
             const optionsFiltered = [];
+
             for (const option of gameInfo.questOptions) {
-              if (option?.qpSequence === selectedNext[0]?.blockPrimarySequence) {
-                optionsFiltered.push(option);
+              if (profileData?.Audiogetlanguage.length > 0) {
+                if (option?.qpSequence === selectedNext[0]?.blockPrimarySequence) {
+
+                  const profilesetlan = profileData?.Audiogetlanguage.find((key: any) => key?.textId === option.qpOptionId);
+
+                  if (profilesetlan) {
+                    const languagecont = { ...option, qpOptionText: profilesetlan.content }
+                    optionsFiltered.push(languagecont);
+                  }
+                  else {
+                    optionsFiltered.push(option);
+                  }
+
+                }
               }
+              else {
+                if (option?.qpSequence === selectedNext[0]?.blockPrimarySequence) {
+                  optionsFiltered.push(option);
+
+
+                }
+              }
+
             }
             if (gameInfo?.gameData?.gameShuffle === 'true') {
               for (let i = optionsFiltered.length - 1; i > 0; i--) {
@@ -1055,9 +1145,29 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           if (nextBlock[0]?.blockChoosen === 'Interaction') {
             const optionsFiltered = [];
             for (const option of gameInfo.questOptions) {
-              if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
-                optionsFiltered.push(option);
+              if (profileData?.Audiogetlanguage.length > 0) {
+                if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+
+                  const profilesetlan = profileData?.Audiogetlanguage.find((key: any) => key?.textId === option.qpOptionId);
+
+                  if (profilesetlan) {
+                    const languagecont = { ...option, qpOptionText: profilesetlan.content }
+                    optionsFiltered.push(languagecont);
+                  }
+                  else {
+                    optionsFiltered.push(option);
+                  }
+
+                }
               }
+              else {
+                if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+                  optionsFiltered.push(option);
+
+
+                }
+              }
+
             }
             if (gameInfo?.gameData?.gameShuffle === 'true') {
               for (let i = optionsFiltered.length - 1; i > 0; i--) {
@@ -1091,7 +1201,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(6);
           return false;
         }
-        else{
+        else {
           setType(null);
           setData(null);
           setCurrentScreenId(6);
@@ -1120,9 +1230,33 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   );
 
   const setInteractionOptions = (gameInfo: any, currentBlock: any) => {
-    const optionsFiltered = gameInfo?.questOptions.filter(
-      (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
-    );
+    const optionsFiltered = [];
+    for (const option of gameInfo.questOptions) {
+      if (profileData?.Audiogetlanguage.length > 0) {
+        if (option?.qpSequence === currentBlock?.blockPrimarySequence) {
+
+          const profilesetlan = profileData?.Audiogetlanguage.find((key: any) => key?.textId === option.qpOptionId);
+
+          if (profilesetlan) {
+            const languagecont = { ...option, qpOptionText: profilesetlan.content }
+            optionsFiltered.push(languagecont);
+          }
+          else {
+            optionsFiltered.push(option);
+          }
+
+        }
+      }
+      else {
+        if (option?.qpSequence === currentBlock?.blockPrimarySequence) {
+          optionsFiltered.push(option);
+        }
+
+      }
+    }
+    // const optionsFiltered = gameInfo?.questOptions.filter(
+    //   (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
+    // );
     if (gameInfo?.gameData?.gameShuffle === 'true') {
       for (let i = optionsFiltered.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -1439,8 +1573,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
   const handleOverView = () => {
     setHomeLeaderBoard(true);
-    // setCurrentScreenId(4);
-    setCurrentScreenId(1)
+    setCurrentScreenId(4);
+    // setCurrentScreenId(1)
   };
 
   useEffect(() => {
@@ -1892,7 +2026,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         setQuestState={setQuestState}
                         data={data}
                         type={type}
-                        setType= {setType}
+                        setType={setType}
                         setData={setData}
                         setFeedbackNavigateNext={setFeedbackNavigateNext}
                         getFeedbackData={getFeedbackData}
