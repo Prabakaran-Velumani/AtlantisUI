@@ -55,6 +55,7 @@ import Selected from 'assets/img/games/selected.png';
 import { ProfileContext } from '../EntirePreview';
 import { getGameLanguages, getLanguages, getContentRelatedLanguage } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
+import Model from './Model'
 interface PlayGamesProps {
   formData?: any;
   state?: any;
@@ -114,6 +115,8 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const [languages, setLanguages] = useState<any[]>(null);
   // Afrith-modified-starts-08/Mar/24
   const [characterName, setCharacterName] = useState('');
+  const [toggleLeft,setToggleLeft] = useState(false);
+  const [toggleRight,setToggleRight] = useState(false)
   // Afrith-modified-ends-08/Mar/24
   //Afrith-modified-starts-20/Mar/24
   const [gameContentId, setGameContentId] = useState(null);
@@ -321,11 +324,28 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 >
                   <Img
                     src={preloadedAssets.Selected}
-                    className={'character_toggle_left'}
+                    className={`character_toggle_left ${toggleLeft ? 'toggle_effect_on' : 'toggle_effect_off'}`}
+                    onMouseDown={()=>setToggleLeft(true)}
+                    onMouseUp={()=>setToggleLeft(false)}
                   />
+                  <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */}
+                    {/* <Environment preset={"park"} background />   */}
+                    <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
+                    <ambientLight intensity={0.5} />
+                    {/* <OrbitControls   />  */}
+                    <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
+
+                    {/* COMPONENTS */}
+                    <Model />
+                    {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
+                    {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
+                    {/* <Parrot /> */}
+                  </Canvas>
                   <Img
+                    onMouseDown={()=>setToggleRight(true)}
+                    onMouseUp={()=>setToggleRight(false)}
                     src={preloadedAssets.Selected}
-                    className={'character_toggle_right'}
+                    className={`character_toggle_right ${toggleRight ? 'toggle_effect_on' : 'toggle_effect_off'}`}                    
                   />
                 </Box>
               </Box>
@@ -404,47 +424,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   );
 };
 
-const Model: React.FC = () => {
-  const groupRef = useRef<any>();
-  const gltf = useLoader(GLTFLoader, Sample);
 
-  const mixer = new THREE.AnimationMixer(gltf.scene);
-  const action = mixer.clipAction(gltf.animations[1]);
-
-  useFrame((state, delta) => {
-    // Rotate the model on the Y-axis
-    if (groupRef.current) {
-      // groupRef.current.rotation.y += 0.01;
-      groupRef.current.castShadow = true;
-    }
-    mixer.update(delta);
-  });
-  action.play();
-
-  useLayoutEffect(() => {
-    if (groupRef.current) {
-      groupRef.current.traverse((obj: any) => {
-        if (obj.isMesh) {
-          obj.castShadow = true;
-          obj.receiveShadow = true;
-        }
-      });
-    }
-  }, []);
-
-  gltf.scene.traverse((child) => {
-    if (child instanceof THREE.Mesh) {
-      child.material.color.set(0xffccaaf0); // Set your desired color
-      child.material.roughness = 0.4; // Adjust roughness as needed
-      child.material.metalness = 0.8; // Adjust metalness as needed
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-      <primitive object={gltf.scene} scale={[1, 1, 1]} position={[0, -3, 10]} />
-    </group>
-  );
-};
 
 export default Characterspage;

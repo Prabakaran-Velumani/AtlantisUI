@@ -31,10 +31,11 @@ import { motion } from 'framer-motion';
 import { API_SERVER, Notelength, Dialoglength, Responselength } from 'config/constant';
 import { ScoreContext } from '../GamePreview';
 import { Canvas, useFrame, useLoader } from 'react-three-fiber';
-import Sample from 'assets/img/games/agent.glb';
+import Sample from 'assets/img/games/Character_sample.glb';
 import { useLayoutEffect, useRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
+import Model from './Model';
 
 const Story: React.FC<{
   prevData?: any;
@@ -180,7 +181,6 @@ const Story: React.FC<{
                 });
                 setIsGetsPlayAudioConfirmation(true);
               }
-
             }
           }
           // }
@@ -519,6 +519,9 @@ const Story: React.FC<{
                 >
                   <Box display={'flex'} justifyContent={'center'}>
                     <Img src={preloadedAssets.note} className="story_note_image" loading="lazy" />
+                    <Box className={'note_align'}>
+                    <Text textAlign={'center'} className='note_title'>Note</Text>
+                    </Box>
                     <Box
                       className={'story_note_content'}
                     // bg={'blue.300'}
@@ -553,16 +556,39 @@ const Story: React.FC<{
           <Box className="chapter_potrait">
             <Img src={backGroundImg} className="dialogue_screen" />
             {selectedPlayer && (
-              <Img
-                src={`${API_SERVER}/${selectedPlayer}`}
-                className={'narrator_character_image'}
-              />
+              <Box className={'narrator_character_image'}>
+                <Canvas camera={{ position: [0, 1, 9] }} >
+                  {/* For Single view */}
+                  {/* <Environment preset={"park"} background />   */}
+                  <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
+                  <ambientLight intensity={0.5} />
+                  {/* <OrbitControls   />  */}
+                  <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
+                  {/* COMPONENTS */}
+                  <Player />
+                  {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
+                  {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
+                  {/* <Parrot /> */}
+                </Canvas>
+              </Box>
             )}
             {selectedNpc && (
-              <Img
-                src={selectedNpc}
-                className={'player_character_image'}
-              />
+              <Box className={'player_character_image'}>
+                <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */}
+                  {/* <Environment preset={"park"} background />   */}
+                  <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
+                  <ambientLight intensity={0.5} />
+                  {/* <OrbitControls   />  */}
+                  <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
+
+                  {/* COMPONENTS */}
+                  <Model />
+                  {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
+                  {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
+                  {/* <Parrot /> */}
+                </Canvas>
+              </Box>
+
             )}
             <Img className={'dialogue_image'} src={preloadedAssets.dial} />
             <Box position={'relative'}>
@@ -773,19 +799,28 @@ const Story: React.FC<{
       </>
     );
   };
-const Model: React.FC = () => {
+const Player: React.FC = () => {
   const groupRef = useRef<any>();
   const gltf = useLoader(GLTFLoader, Sample);
+  const [isHovered, setIsHovered] = useState<any>(false);
 
   const mixer = new THREE.AnimationMixer(gltf.scene);
-  const action = mixer.clipAction(gltf.animations[3]);
+  const action = mixer.clipAction(gltf.animations[0]);
 
   useFrame((state, delta) => {
+    // Rotate the model on the Y-axis
+
     if (groupRef.current) {
+      // groupRef.current.rotation.y += delta;
+      // groupRef.current.rotation.x += delta;
+      // groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime) * 2;
       groupRef.current.castShadow = true;
     }
+
     mixer.update(delta);
   });
+
+  // !isHovered &&
   action.play();
 
   useLayoutEffect(() => {
@@ -801,38 +836,27 @@ const Model: React.FC = () => {
 
   gltf.scene.traverse((child) => {
     if (child instanceof THREE.Mesh) {
-      child.material.color.set(0xffccaaf0); // Set your desired color
+      // child.material.color.set(0xffccaaf0); // Set your desired color
+      child.material.color.set(0xffffff); // Set your desired color
       child.material.roughness = 0.4; // Adjust roughness as needed
       child.material.metalness = 0.8; // Adjust metalness as needed
+      // child.material.map.format = THREE.RGBAFormat;
     }
   });
 
+  function handleClick() {
+    console.log('Character Click!')
+  }
+
   return (
     <group ref={groupRef}>
-      <primitive object={gltf.scene}  />
+      {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}
+      <primitive object={gltf.scene} position={[0, -1.5, 4]} />   {/* For Single view */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>
+        <planeGeometry args={[100, 500]} />
+        <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />
+      </mesh>
     </group>
-  );
+  )
 };
-
-// const Background: React.FC = () => {
-//   const textureLoader = new THREE.TextureLoader();
-//   const texture = textureLoader.load(bg);
-
-//   const sphereRef = useRef<THREE.Mesh>();
-
-//   // useFrame(() => {
-//   //   // Rotate the background sphere
-//   //   if (sphereRef.current) {
-//   //     // sphereRef.current.rotation.x += 0.005;
-//   //     sphereRef.current.rotation.y += 0.001;
-//   //   }
-//   // });
-
-//   return (
-//     <mesh ref={sphereRef}>
-//       <sphereGeometry args={[500, 60, 30]} />
-//       <meshBasicMaterial map={texture} side={THREE.BackSide} />
-//     </mesh>
-//   );
-// };
 export default Story;

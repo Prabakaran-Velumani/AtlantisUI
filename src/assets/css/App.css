@@ -3756,15 +3756,32 @@ grid-row: 1 / 2;
 .character_toggle_left {
   width: 4vw;
   height: 6vh;
-  transform: rotate(90deg);
+  transform: rotate(90deg) !important;
 }
-
+.toggle_effect_on{
+  transform: scale(1.5);
+  transition: all 1s ease;
+}
+.toggle_effect_off{
+  transform: scale(1);
+  transition: all 1s ease;
+}
 .character_toggle_right {
   width: 4vw;
   height: 6vh;
   transform: rotate(-90deg);
 }
-
+.note_title{
+  font-size: 6.5vh;
+  font-family: AtlantisText;
+  color: #ee2d3d;
+  letter-spacing: 2px
+}
+.note_align{
+  width: 100%;
+  position: fixed;
+  top: 19.5%;
+}
 .replay_content {
   width: 100%;
   display: flex;
@@ -3861,6 +3878,9 @@ grid-row: 1 / 2;
 }
 
 @media screen and (orientation: portrait) {
+  .note_title{
+    font-size: 6.5vw;
+  }
   .top-menu-home-section .progress-box {
     transform: translate(-2%, 0%);
   }
