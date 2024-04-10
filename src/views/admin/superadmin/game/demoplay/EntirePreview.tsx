@@ -79,6 +79,7 @@ import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
+import TopMenuBar from './playcards/TopMenuBar';
 
 interface Review {
   // reviewId: Number;
@@ -159,7 +160,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   setCurrentScore,
   preloadedAssets,
 }) => {
-  console.log('gameInfo', gameInfo)
+  console.log('gameInfo', gameInfo);
   const { colorMode, toggleColorMode } = useColorMode();
 
   const maxTextLength = 80;
@@ -691,8 +692,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         totalScore,
       } = calScore();
       if (gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') {
-        const Completionpage = Object.entries(questState).map(([questId, status]) => ({ questId, status }));
-        const OpenStraigntCompletionPage = Completionpage.find((row: any) => row.questId === profile.currentQuest && row.status === 'completed');
+        const Completionpage = Object.entries(questState).map(
+          ([questId, status]) => ({ questId, status }),
+        );
+        const OpenStraigntCompletionPage = Completionpage.find(
+          (row: any) =>
+            row.questId === profile.currentQuest && row.status === 'completed',
+        );
         if (OpenStraigntCompletionPage !== undefined) {
           setFeedbackList([]);
           setCurrentScreenId(13);
@@ -744,7 +750,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(8); //Navigate to replaygame prompt screen
           return false;
         }
-      } else if (gameInfo.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0 ) {
+      } else if (
+        gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
+        gameInfo?.reflectionQuestions.length > 0
+      ) {
         setCurrentScreenId(3); //Navigate to Reflection screen
         return false;
       } else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
@@ -809,7 +818,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             return false;
           }
         }
-      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0) {
+      } else if (
+        gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+        gameInfo?.reflectionQuestions.length > 0
+      ) {
         setCurrentScreenId(3); //reflection screen
         return false;
       } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
@@ -826,7 +838,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
         setCurrentScreenId(4);
         return false;
-      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0) {
+      } else if (
+        gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+        gameInfo?.reflectionQuestions.length > 0
+      ) {
         setCurrentScreenId(3);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
@@ -889,7 +904,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               setCurrentScreenId(13);
               return false;
             } else {
-              if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0) {
+              if (
+                gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+                gameInfo?.reflectionQuestions.length > 0
+              ) {
                 setCurrentScreenId(3);
                 return false;
               } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
@@ -909,7 +927,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             setCurrentScreenId(13);
             return false;
           } else {
-            if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0) {
+            if (
+              gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+              gameInfo?.reflectionQuestions.length > 0
+            ) {
               setCurrentScreenId(3);
               return false;
             } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
@@ -929,7 +950,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(13);
           return false;
         } else {
-          if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0) {
+          if (
+            gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+            gameInfo?.reflectionQuestions.length > 0
+          ) {
             setCurrentScreenId(3);
             return false;
           } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
@@ -1196,7 +1220,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         : voiceIds?.playerFemale;
     getAudioForText(text, voiceId);
   };
-  
+
   useEffect(() => {
     setFeedBackFromValue();
   }, [currentScreenId]);
@@ -1440,7 +1464,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setCurrentScreenId(13);
       return false;
     } else {
-      if (gameInfo.gameData?.gameIsShowReflectionScreen !== 'false' && gameInfo?.reflectionQuestions.length > 0) {
+      if (
+        gameInfo.gameData?.gameIsShowReflectionScreen !== 'false' &&
+        gameInfo?.reflectionQuestions.length > 0
+      ) {
         setCurrentScreenId(3); //Navigate to Reflection screen
         return false;
       } else if (gameInfo.gameData?.gameIsShowTakeaway !== 'false') {
@@ -1486,10 +1513,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     console.error(
       'Failed to load video because no supported source was found.',
     );
-  };
-  const handleOverView = () => {
-    setHomeLeaderBoard(currentScreenId);
-    setCurrentScreenId(15); //overview Screen
   };
 
   useEffect(() => {
@@ -1628,109 +1651,16 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       <Box id="EntirePreview-wrapper">
         <Box className="EntirePreview-content">
           <Box id="container" className="Play-station">
-            <Box className="top-menu-home-section">
-              {dontShowTopMenu ? (
-                <>
-                  <Img src={preloadedAssets.TopMenu} className="top-menu-img" />
-                  <Img
-                    src={preloadedAssets.home}
-                    className={'top-home-menu'}
-                    onClick={() => setCurrentScreenId(1)}
-                  />
-                  <Img
-                    src={preloadedAssets.Overview}
-                    className="overview-img"
-                    onClick={handleOverView}
-                  />
-                  <Img
-                    src={preloadedAssets.Setting}
-                    className="setting-img"
-                    onClick={() => setIsSettingOpen(true)}
-                  />
-                  <Box className="score-box">
-                    <Text className="text">
-                      {(profile &&
-                        profile.score &&
-                        profile.score.length > 0 &&
-                        profile.score.reduce(
-                          (accumulator: number, currentValue: any) => {
-                            return accumulator + currentValue.score;
-                          },
-                          0,
-                        )) ||
-                        0}
-                    </Text>
-                  </Box>
-                </>
-              ) : null}
-
-              {/* {permission.setting ? */}
-              {isSettingOpen ? (
-                <Box className="Setting-box">
-                  <Img
-                    src={preloadedAssets.SettingPad}
-                    className="setting-pad"
-                  />
-                  <Box className="music-volume volumes">
-                    <Slider
-                      aria-label="slider-ex-4"
-                      defaultValue={30}
-                      name="musicVolume"
-                      //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
-                    >
-                      <SliderTrack
-                        className="slider-track"
-                        height="15px"
-                        borderRadius="80px"
-                      >
-                        {/* <Img src={VolumeTrack} /> */}
-                        <SliderFilledTrack
-                          className="filled-volume"
-                          bg="pink.500"
-                        />
-                      </SliderTrack>
-                      <SliderThumb
-                        boxSize={9}
-                        background={'transparent'}
-                        left={'calc(100% - 30%)'}
-                      >
-                        <Img src={preloadedAssets.SliderPointer} />
-                      </SliderThumb>
-                    </Slider>
-                  </Box>
-                  <Box className="voice-volume volumes">
-                    <Slider
-                      aria-label="slider-ex-4"
-                      defaultValue={30}
-                      name="voiceVolume"
-                      // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
-                    >
-                      <SliderTrack
-                        className="slider-track"
-                        height="15px"
-                        borderRadius="80px"
-                      >
-                        <SliderFilledTrack
-                          className="filled-volume"
-                          bg="pink.500"
-                        />
-                      </SliderTrack>
-                      <SliderThumb boxSize={9} background={'transparent'}>
-                        <Img src={preloadedAssets.SliderPointer} />
-                      </SliderThumb>
-                    </Slider>
-                  </Box>
-                  <Box className="btns">
-                    <Button
-                      className="okay-btn btn"
-                      onClick={() => setIsSettingOpen(false)}
-                    >
-                      <Img src={preloadedAssets.Okay} />
-                    </Button>
-                  </Box>
-                </Box>
-              ) : null}
-            </Box>
+            <TopMenuBar
+              dontShowTopMenu={dontShowTopMenu}
+              preloadedAssets={preloadedAssets}
+              currentScreenId={currentScreenId}
+              setCurrentScreenId={setCurrentScreenId}
+              isSettingOpen={isSettingOpen}
+              setIsSettingOpen={setIsSettingOpen}
+              setHomeLeaderBoard={setHomeLeaderBoard}
+              profileData={profileData}
+            />
           </Box>
           <Flex
             height="100vh"
@@ -1963,28 +1893,28 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           className="Game-Screen"
                         >
                           <Box className="Images">
-                          <Completion
-                            questOptions={gameInfo?.questOptions}
-                            getData={getData}
-                            questState={questState}
-                            setQuestState={setQuestState}
-                            data={data}
-                            setFeedbackNavigateNext={setFeedbackNavigateNext}
-                            getFeedbackData={getFeedbackData}
-                            gameInfo={gameInfo}
-                            setCurrentScreenId={setCurrentScreenId}
-                            formData={gameInfo?.gameData}
-                            imageSrc={preloadedAssets.backgroundImage}
-                            screen={preloadedAssets.Screen1}
-                            profile={profile}
-                            currentQuestNo={currentQuestNo}
-                            completionScreenQuestOptions={
-                              gameInfo.completionQuestOptions
-                            }
-                            preloadedAssets={preloadedAssets}
-                          />
+                            <Completion
+                              questOptions={gameInfo?.questOptions}
+                              getData={getData}
+                              questState={questState}
+                              setQuestState={setQuestState}
+                              data={data}
+                              setFeedbackNavigateNext={setFeedbackNavigateNext}
+                              getFeedbackData={getFeedbackData}
+                              gameInfo={gameInfo}
+                              setCurrentScreenId={setCurrentScreenId}
+                              formData={gameInfo?.gameData}
+                              imageSrc={preloadedAssets.backgroundImage}
+                              screen={preloadedAssets.Screen1}
+                              profile={profile}
+                              currentQuestNo={currentQuestNo}
+                              completionScreenQuestOptions={
+                                gameInfo.completionQuestOptions
+                              }
+                              preloadedAssets={preloadedAssets}
+                            />
+                          </Box>
                         </Box>
-                      </Box>
                       </Box>
                     </>
                   );

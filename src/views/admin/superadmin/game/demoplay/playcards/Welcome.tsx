@@ -275,8 +275,8 @@ const Welcome: React.FC<{
                                   justifyContent={
                                     'space-between'
                                   }
-                                  font-weight={'300'}
-                                  margin-left={'5px'}
+                                  fontWeight={'300'}
+                                  marginLeft={'5px'}
                                 >
                                   <Text color={'#D9C7A2'}>
                                     {filteredSkillName}
@@ -341,8 +341,8 @@ const Welcome: React.FC<{
                                     justifyContent={
                                       'space-between'
                                     }
-                                    font-weight={'300'}
-                                    margin-left={'5px'}
+                                    fontWeight={'300'}
+                                    marginLeft={'5px'}
                                   >
                                     <Text color={'#D9C7A2'}>
                                       {contentAfterBullet}

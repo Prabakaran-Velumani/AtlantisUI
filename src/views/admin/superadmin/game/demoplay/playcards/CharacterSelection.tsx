@@ -55,6 +55,9 @@ import Selected from 'assets/img/games/selected.png';
 import { ProfileContext } from '../EntirePreview';
 import { getGameLanguages, getLanguages, getContentRelatedLanguage} from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
+import { OrbitControls } from '@react-three/drei/core/OrbitControls';
+// import {Parrot}  from '../three/Parrot';
+import PlayingCharacter from './PlayingCharacter';
 interface PlayGamesProps {
   formData?: any;
   state?: any;
@@ -190,10 +193,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
             const data = gameContentResult.data;
             setProfileData((prev:any)=>({
               ...prev,
-              content: data.map((x:any)=>({content: x.content})),
-              audioUrls: data.map((x:any)=>({audioUrls: x.audioUrls})),
-              textId:data.map((x:any)=>({textId: x.textId})),
-              fieldName:data.map((x:any)=>({fieldName: x.fieldName})),
+              // content: data.map((x:any)=>({content: x.content})),
+              // audioUrls: data.map((x:any)=>({audioUrls: x.audioUrls})),
+              // textId:data.map((x:any)=>({textId: x.textId})),
+              // fieldName:data.map((x:any)=>({fieldName: x.fieldName})),
               Audiogetlanguage: data.map((x:any) => ({
                 content: x.content,
                 audioUrls: x.audioUrls,
@@ -233,7 +236,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                   </FormLabel>
                   <Box position={'relative'}>
                     <Img
-                      // className="formfield"
+                      className="formfield"
                       w={'100%'}
                       h={'auto'}
                       src={preloadedAssets.FormField}
@@ -279,7 +282,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       className="okay"
                       onClick={() => setIsLanguage(false)}
                     >
-                      <Img src={preloadedAssets.Okay} w={'100%'} h={'auto'} />
+                      <Img src={preloadedAssets.OkayBtn} w={'100%'} h={'auto'} />
                     </Button>
                   </Box>
                 </Box>
@@ -313,6 +316,18 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 className={'character_template'}
                 loading="lazy"
               />
+              <Box className={'character_template'}>
+               <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */} 
+                {/* <Environment preset={"park"} background />   */}
+                <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />          
+                <ambientLight intensity={0.5} />              
+                {/* <OrbitControls   />  */}
+                <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />   
+                <PlayingCharacter />                                        
+                {/* <Parrot /> */}
+              </Canvas>   
+              </Box>
+
               <Box className={'character_select_area'}>
                 <Box
                   w={'30%'}
