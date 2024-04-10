@@ -451,12 +451,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const newTrackSequence = navTrack[navTrack.length - 1];
       const prevBlock = current
         ? Object.keys(demoBlocks[quest] || {})
-            .filter(
-              (key) =>
-                demoBlocks[quest]?.[key]?.blockPrimarySequence ==
-                newTrackSequence,
-            )
-            .map((key: any) => demoBlocks[quest]?.[key])
+          .filter(
+            (key) =>
+              demoBlocks[quest]?.[key]?.blockPrimarySequence ==
+              newTrackSequence,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
         : [];
 
       const currentQuest = current
@@ -530,10 +530,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
+        .filter(
+          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+        )
+        .map((key: any) => demoBlocks[quest]?.[key])
       : [];
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
@@ -744,7 +744,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(8); //Navigate to replaygame prompt screen
           return false;
         }
-      } else if (gameInfo.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0 ) {
+      } else if (gameInfo.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0) {
         setCurrentScreenId(3); //Navigate to Reflection screen
         return false;
       } else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
@@ -1196,7 +1196,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         : voiceIds?.playerFemale;
     getAudioForText(text, voiceId);
   };
-  
+
   useEffect(() => {
     setFeedBackFromValue();
   }, [currentScreenId]);
@@ -1245,30 +1245,30 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const subTabOptionsForTabIds: Array<{
     [key: string]: Array<{ value: string; label: string }> | null;
   }> = [
-    { '1': null },
-    { '2': null },
-    {
-      '3': [
-        { value: 'Title', label: 'Title' },
-        { value: 'Skill', label: 'Skill' },
-        { value: 'Storyline', label: 'Storyline' },
-        { value: 'Outcomes', label: 'Outcomes' },
-        { value: 'Category', label: 'Category' },
-        { value: 'Author', label: 'Author' },
-      ],
-    },
-    { '4': null },
-    {
-      '5': [
-        { value: '0', label: 'Completion' },
-        { value: '1', label: 'Leaderboard' },
-        { value: '2', label: 'Reflection' },
-        { value: '3', label: 'Takeaway' },
-        { value: '4', label: 'Welcome' },
-        { value: '5', label: 'Thanks' },
-      ],
-    },
-  ];
+      { '1': null },
+      { '2': null },
+      {
+        '3': [
+          { value: 'Title', label: 'Title' },
+          { value: 'Skill', label: 'Skill' },
+          { value: 'Storyline', label: 'Storyline' },
+          { value: 'Outcomes', label: 'Outcomes' },
+          { value: 'Category', label: 'Category' },
+          { value: 'Author', label: 'Author' },
+        ],
+      },
+      { '4': null },
+      {
+        '5': [
+          { value: '0', label: 'Completion' },
+          { value: '1', label: 'Leaderboard' },
+          { value: '2', label: 'Reflection' },
+          { value: '3', label: 'Takeaway' },
+          { value: '4', label: 'Welcome' },
+          { value: '5', label: 'Thanks' },
+        ],
+      },
+    ];
   useEffect(() => {
     if (audioRef.current) {
       if (currentScreenId === 2) {
@@ -1549,7 +1549,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   }, [FeedbackNavigatenext]);
 
-  useEffect(() => {}, [FeedBackoptionData]);
+  useEffect(() => { }, [FeedBackoptionData]);
 
   const getFeedbackData = (getdata: any) => {
     setisScreenshot(true);
@@ -1637,6 +1637,37 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     className={'top-home-menu'}
                     onClick={() => setCurrentScreenId(1)}
                   />
+                  <Tooltip label="Progress"
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    background={'transparent'}
+                    boxShadow={'unset'}
+                    backgroundImage={preloadedAssets.TooltipImg}
+                    backgroundRepeat={'no-repeat'}
+                    backgroundSize={'contain'}
+                    backgroundPosition={'center'}
+                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                    padding={'10px'}
+                    height={'70px'}
+                    w={'150px'}
+                    fontSize={'29px'}
+                    fontFamily={'Atlantis'}
+                    color={'#000'}
+                    overflow={'hidden'}
+                    lineHeight={'25px'}
+                  >
+
+                    <Box className='progress-box'>
+                      {/* <Text className='text'>{BlockNo ? Math.floor(progressPercentage) : 0}%</Text> */}
+                      <Text className='text'>{true ? Math.floor(20) : 0}%</Text>
+                      <Box className='progressing'>
+                        {Array.from({ length: Math.floor(20 / 10) }, (_, index) => (
+                          <Box key={index} className='level'></Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  </Tooltip>
                   <Img
                     src={preloadedAssets.Overview}
                     className="overview-img"
@@ -1676,7 +1707,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       aria-label="slider-ex-4"
                       defaultValue={30}
                       name="musicVolume"
-                      //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
+                    //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
                     >
                       <SliderTrack
                         className="slider-track"
@@ -1703,7 +1734,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       aria-label="slider-ex-4"
                       defaultValue={30}
                       name="voiceVolume"
-                      // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
+                    // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
                     >
                       <SliderTrack
                         className="slider-track"
@@ -1725,7 +1756,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       className="okay-btn btn"
                       onClick={() => setIsSettingOpen(false)}
                     >
-                      <Img src={preloadedAssets.Okay} />
+                      <Img src={preloadedAssets.OkayBtn} />
                     </Button>
                   </Box>
                 </Box>
@@ -1734,7 +1765,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           </Box>
           <Flex
             height="100vh"
-            className={currentScreenId === 2 ? '' : 'EntirePreview'}
+            className={currentScreenId === 2 || currentScreenId === 15 ? '' : 'EntirePreview'}
           >
             {(() => {
               switch (currentScreenId) {
@@ -1963,28 +1994,28 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           className="Game-Screen"
                         >
                           <Box className="Images">
-                          <Completion
-                            questOptions={gameInfo?.questOptions}
-                            getData={getData}
-                            questState={questState}
-                            setQuestState={setQuestState}
-                            data={data}
-                            setFeedbackNavigateNext={setFeedbackNavigateNext}
-                            getFeedbackData={getFeedbackData}
-                            gameInfo={gameInfo}
-                            setCurrentScreenId={setCurrentScreenId}
-                            formData={gameInfo?.gameData}
-                            imageSrc={preloadedAssets.backgroundImage}
-                            screen={preloadedAssets.Screen1}
-                            profile={profile}
-                            currentQuestNo={currentQuestNo}
-                            completionScreenQuestOptions={
-                              gameInfo.completionQuestOptions
-                            }
-                            preloadedAssets={preloadedAssets}
-                          />
+                            <Completion
+                              questOptions={gameInfo?.questOptions}
+                              getData={getData}
+                              questState={questState}
+                              setQuestState={setQuestState}
+                              data={data}
+                              setFeedbackNavigateNext={setFeedbackNavigateNext}
+                              getFeedbackData={getFeedbackData}
+                              gameInfo={gameInfo}
+                              setCurrentScreenId={setCurrentScreenId}
+                              formData={gameInfo?.gameData}
+                              imageSrc={preloadedAssets.backgroundImage}
+                              screen={preloadedAssets.Screen1}
+                              profile={profile}
+                              currentQuestNo={currentQuestNo}
+                              completionScreenQuestOptions={
+                                gameInfo.completionQuestOptions
+                              }
+                              preloadedAssets={preloadedAssets}
+                            />
+                          </Box>
                         </Box>
-                      </Box>
                       </Box>
                     </>
                   );
@@ -2256,7 +2287,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 15:
                   return (
                     <>
-                      <Box
+                      {/* <Box
                         w={'100%'}
                         h={'100vh'}
                         alignItems={'center'}
@@ -2276,17 +2307,18 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           justifyContent={'center'}
                           className="Game-Screen"
                         >
-                          <Box className="Images">
-                            <Overview
-                              formData={gameInfo?.gameData}
-                              imageSrc={preloadedAssets.overview}
-                              preloadedAssets={preloadedAssets}
-                              homeLeaderBoard={homeLeaderBoard}
-                              setCurrentScreenId={setCurrentScreenId}
-                            />
-                          </Box>
+                          <Box className="Images"> */}
+                      <Overview
+                        formData={gameInfo?.gameData}
+                        imageSrc={preloadedAssets.overview}
+                        preloadedAssets={preloadedAssets}
+                        homeLeaderBoard={homeLeaderBoard}
+                        setCurrentScreenId={setCurrentScreenId}
+                        backGroundImg={preloadedAssets.backgroundImage}
+                      />
+                      {/* </Box>
                         </Box>
-                      </Box>
+                      </Box> */}
                     </>
                   );
 

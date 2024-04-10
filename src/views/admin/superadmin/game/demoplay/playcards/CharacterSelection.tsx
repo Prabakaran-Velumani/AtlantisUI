@@ -53,7 +53,7 @@ import Selected from 'assets/img/games/selected.png';
 // import { Parrot } from '../three/Parrot';
 // Import ProfileContext from EntirePreview
 import { ProfileContext } from '../EntirePreview';
-import { getGameLanguages, getLanguages, getContentRelatedLanguage} from 'utils/game/gameService';
+import { getGameLanguages, getLanguages, getContentRelatedLanguage } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
 interface PlayGamesProps {
   formData?: any;
@@ -112,12 +112,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const [isLanguage, setIsLanguage] = useState(false);
   const [select, setSelect] = useState(false);
   const [languages, setLanguages] = useState<any[]>(null);
-    // Afrith-modified-starts-08/Mar/24
-    const [characterName, setCharacterName] = useState('');
-    // Afrith-modified-ends-08/Mar/24
-     //Afrith-modified-starts-20/Mar/24
-     const [gameContentId, setGameContentId] = useState(null);
-     //Afrith-modified-ends-20/Mar/24
+  // Afrith-modified-starts-08/Mar/24
+  const [characterName, setCharacterName] = useState('');
+  // Afrith-modified-ends-08/Mar/24
+  //Afrith-modified-starts-20/Mar/24
+  const [gameContentId, setGameContentId] = useState(null);
+  //Afrith-modified-ends-20/Mar/24
   const { id } = useParams();
   useEffect(() => {
     const fetch = async () => {
@@ -146,11 +146,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     setSelectedPlayer(players[i]);
     console.log('Object.keys(demoBlocks).length', Object.keys(demoBlocks).length);
     /**if game has more than one quest, then navigate to chapter selection screen, otherwise navigate to story part direclty */
-    if(playerInfo.name=== '')
-      {
-        setProfileData((prev:any)=>({...prev,name:'Guest'}));
-      }
-    
+    if (playerInfo.name === '') {
+      setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
+    }
+
     if (Object.keys(demoBlocks).length > 1) {
       setCurrentScreenId(13);//navigate to Chapter selection
     } else {
@@ -169,7 +168,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 
   ///Afrith-modified-starts-20/Mar/24
   const currGameId = id; //from useParams
-  const handleProfile = (e: any, lang?: any, langId?:any) => {
+  const handleProfile = (e: any, lang?: any, langId?: any) => {
 
     const { id, value } = e.target;
 
@@ -179,40 +178,40 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       [id]: id === 'name' ? value : lang,
     }));
     setGameContentId(langId);
-    getContentRelatedLanguage(currGameId,langId);
+    getContentRelatedLanguage(currGameId, langId);
   };
 
-    //////////
-    useEffect(() => {
-      const fetchGameContent = async() => {
-          const gameContentResult = await getContentRelatedLanguage(currGameId,gameContentId);
-          if (gameContentResult.status === 'Success'){
-            const data = gameContentResult.data;
-            setProfileData((prev:any)=>({
-              ...prev,
-              content: data.map((x:any)=>({content: x.content})),
-              audioUrls: data.map((x:any)=>({audioUrls: x.audioUrls})),
-              textId:data.map((x:any)=>({textId: x.textId})),
-              fieldName:data.map((x:any)=>({fieldName: x.fieldName})),
-              Audiogetlanguage: data.map((x:any) => ({
-                content: x.content,
-                audioUrls: x.audioUrls,
-                textId: x.textId,
-                fieldName: x.fieldName,
-              })),
-            }))
-          }
-      };
-      fetchGameContent();
-    },[gameContentId])
-    /////////
-    // Afrith-modified-starts-08/Mar/24
-    // const setPlayerName = (value:any) => {
-    //   setCharacterName(value);
-    //   setProfileData((prev:any) => ({...prev, name:value}))
-    // };
-    // Afrith-modified-ends-08/Mar/24
- 
+  //////////
+  useEffect(() => {
+    const fetchGameContent = async () => {
+      const gameContentResult = await getContentRelatedLanguage(currGameId, gameContentId);
+      if (gameContentResult.status === 'Success') {
+        const data = gameContentResult.data;
+        setProfileData((prev: any) => ({
+          ...prev,
+          content: data.map((x: any) => ({ content: x.content })),
+          audioUrls: data.map((x: any) => ({ audioUrls: x.audioUrls })),
+          textId: data.map((x: any) => ({ textId: x.textId })),
+          fieldName: data.map((x: any) => ({ fieldName: x.fieldName })),
+          Audiogetlanguage: data.map((x: any) => ({
+            content: x.content,
+            audioUrls: x.audioUrls,
+            textId: x.textId,
+            fieldName: x.fieldName,
+          })),
+        }))
+      }
+    };
+    fetchGameContent();
+  }, [gameContentId])
+  /////////
+  // Afrith-modified-starts-08/Mar/24
+  // const setPlayerName = (value:any) => {
+  //   setCharacterName(value);
+  //   setProfileData((prev:any) => ({...prev, name:value}))
+  // };
+  // Afrith-modified-ends-08/Mar/24
+
   const innerBoxWidth = useBreakpointValue({
     base: '95%',
     lg: '95%',
@@ -239,18 +238,18 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       src={preloadedAssets.FormField}
                       onClick={() => setSelect(!select)}
                     />
-                    <Box w={'100%'} position={'absolute'} display={'flex'}  onClick={() => setSelect(!select)} top={'7%'}>
+                    <Box w={'100%'} position={'absolute'} display={'flex'} onClick={() => setSelect(!select)} top={'7%'}>
                       <Box w={'80%'} display={'flex'} justifyContent={'center'} >
                         <Text
                           // transform={'translate(0px,25px)'}
                           // textAlign={'center'}
-                          onClick={() => setSelect(!select)}                        
-                          className ={'choosen_lang'}
+                          onClick={() => setSelect(!select)}
+                          className={'choosen_lang'}
                         >
                           {profileData?.language}
                         </Text>
                       </Box>
-                       <Box w={'20%'} >
+                      <Box w={'20%'} >
                         <Img src={preloadedAssets.Selected} className={'select'} mt={'18%'} />
                       </Box>
                       {select && (
@@ -326,7 +325,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                   />
                   <Img
                     src={preloadedAssets.Selected}
-                   className={'character_toggle_right'}
+                    className={'character_toggle_right'}
                   />
                 </Box>
               </Box>
@@ -369,6 +368,35 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 </Box>
               </Box>
             </Box>
+            {/* <Box
+              position={'fixed'}
+    
+              // left={0}
+              right={'0px'}
+              bottom={0}
+              zIndex={999}
+              w={'100vw'}
+              h={'100vh'}
+            >
+              <Canvas
+                camera={{ position: [3, 3, 10] }}
+              // style={{ width: '50%', height: '50vh'}}
+              >
+                <directionalLight
+                  position={[5, 5, 5]}
+                  intensity={0.8}
+                  color={0xffccaa}
+                  castShadow
+                />
+                <ambientLight intensity={5.5} />
+                <pointLight
+                  position={[5, 5, 5]}
+                  color={0xff0000}
+                  intensity={1}
+                />
+                <Model />
+              </Canvas>
+            </Box> */}
           </GridItem>
         </Grid>
       </Box>
