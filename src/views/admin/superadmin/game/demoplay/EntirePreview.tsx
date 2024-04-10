@@ -1632,11 +1632,32 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               {dontShowTopMenu ? (
                 <>
                   <Img src={preloadedAssets.TopMenu} className="top-menu-img" />
+                  <Tooltip label="Home"
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    background={'transparent'}
+                    boxShadow={'unset'}
+                    backgroundImage={preloadedAssets.TooltipImg}
+                    backgroundRepeat={'no-repeat'}
+                    backgroundSize={'contain'}
+                    backgroundPosition={'center'}
+                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                    padding={'10px'}
+                    height={'70px'}
+                    w={'150px'}
+                    fontSize={'29px'}
+                    fontFamily={'Atlantis'}
+                    color={'#000'}
+                    overflow={'hidden'}
+                    lineHeight={'25px'}
+                  >
                   <Img
                     src={preloadedAssets.home}
                     className={'top-home-menu'}
                     onClick={() => setCurrentScreenId(1)}
                   />
+                  </Tooltip>
                   <Tooltip label="Progress"
                     display={'flex'}
                     justifyContent={'center'}
@@ -1668,16 +1689,58 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       </Box>
                     </Box>
                   </Tooltip>
+                  <Tooltip label="Overview"
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    background={'transparent'}
+                    boxShadow={'unset'}
+                    backgroundImage={preloadedAssets.TooltipImg}
+                    backgroundRepeat={'no-repeat'}
+                    backgroundSize={'contain'}
+                    backgroundPosition={'center'}
+                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                    padding={'10px'}
+                    height={'70px'}
+                    w={'150px'}
+                    fontSize={'29px'}
+                    fontFamily={'Atlantis'}
+                    color={'#000'}
+                    overflow={'hidden'}
+                    lineHeight={'25px'}
+                  >
                   <Img
                     src={preloadedAssets.Overview}
                     className="overview-img"
                     onClick={handleOverView}
                   />
+                  </Tooltip>
+                  <Tooltip label="Settings"
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    background={'transparent'}
+                    boxShadow={'unset'}
+                    backgroundImage={preloadedAssets.TooltipImg}
+                    backgroundRepeat={'no-repeat'}
+                    backgroundSize={'contain'}
+                    backgroundPosition={'center'}
+                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                    padding={'10px'}
+                    height={'70px'}
+                    w={'150px'}
+                    fontSize={'29px'}
+                    fontFamily={'Atlantis'}
+                    color={'#000'}
+                    overflow={'hidden'}
+                    lineHeight={'25px'}
+                  >
                   <Img
                     src={preloadedAssets.Setting}
                     className="setting-img"
                     onClick={() => setIsSettingOpen(true)}
                   />
+                  </Tooltip>
                   <Box className="score-box">
                     <Text className="text">
                       {(profile &&
