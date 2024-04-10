@@ -413,16 +413,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [audio]);
 
   useEffect(() => {
+    console.log('audioObj',audioObj);
     // Check if audioRef exists and audioObj.url is not empty
     if (audioRef.current && audioObj.url !== '') {
       // Pause the audio playback if it's currently playing
-      if (!audioRef.current.paused) {
+      if (!audioRef.current?.paused) {
         audioRef.current.pause();
       }
       // Update the audio source and play if necessary
       audioRef.current.src = audioObj.url;
       try {
-        if (audioObj.autoplay) {
+        if (audioObj.autoplay || isGetsPlayAudioConfirmation) {
           audioRef.current.play();
         }
       } catch {
@@ -522,7 +523,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
 
-    setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
+    // setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
@@ -554,6 +555,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         )
         .map((key: any) => demoBlocks[quest]?.[key])
       : [];
+      console.log('nextBlock', nextBlock);
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = [];

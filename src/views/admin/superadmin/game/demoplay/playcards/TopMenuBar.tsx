@@ -112,9 +112,10 @@ console.log('gameInfo',gameInfo.gameQuest)
 
                     <Box className='progress-box'>
                       {/* <Text className='text'>{BlockNo ? Math.floor(progressPercentage) : 0}%</Text> */}
-                      <Text className='text'>{true ? Math.floor(currentScreenId ===2 ? (geFinalscorequest / (gameInfo?.gameQuest?.gameTotalScore ?? 1000)) : ((parseInt(profile?.currentQuest)-1) - gameInfo?.gameQuest?.length)) : 0}%</Text>
+                      <Text className='text'>{true ? Math.floor(currentScreenId ===2 ? (geFinalscorequest / (gameInfo?.gameQuest?.gameTotalScore ?? 1000)) : (((parseInt(profile?.currentQuest)-1) > 0) ? ((parseInt(profile?.currentQuest)-1) - gameInfo?.gameQuest?.length) : 0)) : 0} % </Text>
                       <Box className='progressing'>
-                        {Array.from({ length: Math.floor(currentScreenId === 2 ? (parseInt(geFinalscorequest) / (parseInt(gameInfo?.gameQuest?.gameTotalScore) ?? 1000)) : ((parseInt(profile?.currentQuest)-1)-gameInfo?.gameQuest?.length))}, (_, index) => (
+                        {Array.from({ length: Math.floor(currentScreenId === 2 ? 
+                                  ((parseInt(geFinalscorequest) / (parseInt(gameInfo?.gameQuest?.gameTotalScore) ?? 1000))) : (((parseInt(profile?.currentQuest)-1) > 0) ? ((parseInt(profile?.currentQuest)-1)-gameInfo?.gameQuest?.length) : 0))}, (_, index) => (
                           <Box key={index} className='level'></Box>
                         ))}
                       </Box>

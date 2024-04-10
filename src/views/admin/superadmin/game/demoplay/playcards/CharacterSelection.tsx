@@ -180,13 +180,15 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       ...prev,
       [id]: id === 'name' ? value : lang,
     }));
+    console.log('langId', langId);
     setGameContentId(langId);
-    getContentRelatedLanguage(currGameId, langId);
+    // getContentRelatedLanguage(currGameId, langId);
   };
 
     //////////
     useEffect(() => {
       const fetchGameContent = async() => {
+        
           const gameContentResult = await getContentRelatedLanguage(currGameId,gameContentId);
           if (gameContentResult.status === 'Success'){
             const data = gameContentResult.data;
@@ -205,7 +207,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
             }))
           }
       };
-      fetchGameContent();
+      if(gameContentId){
+        fetchGameContent();
+      }
+      console.log('gameContentId',gameContentId)
     },[gameContentId])
     /////////
     // Afrith-modified-starts-08/Mar/24
@@ -266,7 +271,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                                 _hover={{ bgColor: '#377498' }}
                                 id={'language'}
                                 onClick={(e: any) =>
-                                  handleProfile(e, lang.label)
+                                  handleProfile(e, lang.label, lang.value)
                                 }
                               >
                                 {lang.label}

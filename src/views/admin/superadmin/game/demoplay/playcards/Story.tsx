@@ -176,9 +176,9 @@ const Story: React.FC<{
                 if (responseblockText.ok) {
                   setAudioObj({
                     url: fullUrl,
-                    type: 'bgm',
+                    type: 'api',
                     volume: '0.5',
-                    loop: true,
+                    loop: false,
                     autoplay: true,
                   });
                   setIsGetsPlayAudioConfirmation(true);
@@ -206,9 +206,9 @@ const Story: React.FC<{
                     if (responseqpOptionText.ok) {
                       setAudioObj({
                         url: qpOptionTextUrl,
-                        type: 'bgm',
+                        type: 'api',
                         volume: '0.5',
-                        loop: true,
+                        loop: false,
                         autoplay: true,
                       });
                       setIsGetsPlayAudioConfirmation(true);
@@ -224,9 +224,9 @@ const Story: React.FC<{
                           if (responsequestoption.ok) {
                             setAudioObj({
                               url: qpOptionsUrl,
-                              type: 'bgm',
+                              type: 'api',
                               volume: '0.5',
-                              loop: true,
+                              loop: false,
                               autoplay: true,
                             });
                             setIsGetsPlayAudioConfirmation(true);
