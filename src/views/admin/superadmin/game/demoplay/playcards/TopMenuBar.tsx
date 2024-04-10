@@ -21,6 +21,7 @@ interface TopMenuProps {
   setIsSettingOpen: (opt: boolean) => void;
   setHomeLeaderBoard: (id: number) => void;
   profileData: any;
+  gameInfo: any;
 }
 
 const TopMenuBar: React.FC<TopMenuProps> = ({
@@ -31,7 +32,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
   isSettingOpen,
   setIsSettingOpen,
   setHomeLeaderBoard,
-  profileData
+  profileData,
+  gameInfo
 }) => {
     const [geFinalscorequest, SetFinalscore] = useState(null);
     const { profile, setProfile } = useContext<{ profile: any, setProfile: any }>(ScoreContext);
@@ -51,6 +53,10 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     setCurrentScreenId(15); //overview Screen
   };
 console.log('geFinalscorequest',geFinalscorequest)
+console.log('profileData',profileData)
+console.log('profile',profile)
+console.log('gameInfo',gameInfo.gameQuest)
+
 
   return (
     <Box className="top-menu-home-section">
@@ -106,9 +112,9 @@ console.log('geFinalscorequest',geFinalscorequest)
 
                     <Box className='progress-box'>
                       {/* <Text className='text'>{BlockNo ? Math.floor(progressPercentage) : 0}%</Text> */}
-                      <Text className='text'>{true ? Math.floor(20) : 0}%</Text>
+                      <Text className='text'>{true ? Math.floor(currentScreenId ===2 ? (geFinalscorequest / (gameInfo?.gameQuest?.gameTotalScore ?? 1000)) : ((parseInt(profile?.currentQuest)-1) - gameInfo?.gameQuest?.length)) : 0}%</Text>
                       <Box className='progressing'>
-                        {Array.from({ length: Math.floor(20 / 10) }, (_, index) => (
+                        {Array.from({ length: Math.floor(currentScreenId === 2 ? (parseInt(geFinalscorequest) / (parseInt(gameInfo?.gameQuest?.gameTotalScore) ?? 1000)) : ((parseInt(profile?.currentQuest)-1)-gameInfo?.gameQuest?.length))}, (_, index) => (
                           <Box key={index} className='level'></Box>
                         ))}
                       </Box>

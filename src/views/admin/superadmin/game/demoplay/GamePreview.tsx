@@ -157,9 +157,7 @@ const GamePreview = () => {
     if (!gamedata?.error && gamedata) {
       updateCreatorGameInfo(gamedata);
     }
-  };
-
-  
+  };  
   const updateCreatorGameInfo = async (info: any) => {
     const {
       gameview,

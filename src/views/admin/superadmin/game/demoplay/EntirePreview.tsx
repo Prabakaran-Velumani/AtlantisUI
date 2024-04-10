@@ -1660,6 +1660,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               setIsSettingOpen={setIsSettingOpen}
               setHomeLeaderBoard={setHomeLeaderBoard}
               profileData={profileData}
+              gameInfo={gameInfo}
             />
           </Box>
           <Flex

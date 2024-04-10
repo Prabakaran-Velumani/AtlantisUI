@@ -192,10 +192,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
             const data = gameContentResult.data;
             setProfileData((prev:any)=>({
               ...prev,
-              // content: data.map((x:any)=>({content: x.content})),
-              // audioUrls: data.map((x:any)=>({audioUrls: x.audioUrls})),
-              // textId:data.map((x:any)=>({textId: x.textId})),
-              // fieldName:data.map((x:any)=>({fieldName: x.fieldName})),
+              content: data.map((x:any)=>({content: x.content})),
+              audioUrls: data.map((x:any)=>({audioUrls: x.audioUrls})),
+              textId:data.map((x:any)=>({textId: x.textId})),
+              fieldName:data.map((x:any)=>({fieldName: x.fieldName})),
               Audiogetlanguage: data.map((x:any) => ({
                 content: x.content,
                 audioUrls: x.audioUrls,

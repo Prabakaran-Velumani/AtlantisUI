@@ -3617,13 +3617,22 @@ grid-row: 1 / 2;
 .story_note_block {
   width: calc(90vh - 40vh);
   height: 20vh;
-  overflow-y: auto;
+  /* overflow-y: auto; */
+  overflow-y: scroll;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none;  /* Hide scrollbar for IE */
   font-size: 4vh;
   font-family: 'AtlantisContent', sans-serif;
   color: #D9C7A2;
   display: flex;
   justify-content: center;
 }
+
+.story_note_block::-webkit-scrollbar {
+  display: none;
+}
+
+
 
 /* .story_interaction_content {
   width: 35%;
