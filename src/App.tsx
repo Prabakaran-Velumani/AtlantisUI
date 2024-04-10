@@ -64,8 +64,6 @@ useEffect(() => {
   return (
     <ChakraProvider theme={currentTheme}>
       <Routes>
-        {/* <Route path={'game/glbpractise'} element={<InteractionScreenShot 
-        />} /> */}
         <Route path="game/demoplay/:uuid" element={<GamePreview />} />
         <Route path="/game/creator/demoplay/:id" element={<GamePreview />} />
         <Route path="/screen/preview/:id" element={<ScreenPreview />} />

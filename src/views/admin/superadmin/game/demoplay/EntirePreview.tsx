@@ -2094,7 +2094,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                                   >
                                     <Button
                                       w={'90%'}
-                                      h={{ sm: '20px', md: '30px' }}
+                                      h={'5vh'}
                                       bg={'none'}
                                       _hover={{ bg: 'none' }}
                                       onClick={() => {

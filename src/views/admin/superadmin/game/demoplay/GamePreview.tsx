@@ -379,7 +379,6 @@ const GamePreview = () => {
     );
   };
 
-  
   const handleSubmitReview = async (inputdata: any) => {
     /** Sample post data
    * {"data" :{

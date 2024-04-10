@@ -27,7 +27,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
       backgroundImage={backGroundImg}
       backgroundSize={'cover'}
       backgroundRepeat={'no-repeat'}
-      className='chapter_potrait'
+      className="chapter_potrait"
     >
       <Grid
         templateColumns="repeat(1, 1fr)"
@@ -38,7 +38,6 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
         transform="translate(-50%, -50%)"
         w={'90%'}
       >
-
         <GridItem colSpan={1} position={'relative'}>
           <motion.div
             initial={{ opacity: 0, x: -100 }}
@@ -46,7 +45,12 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
             transition={{ duration: 0.5 }}
           >
             <Box position={'relative'} className="story_interaction_image">
-              <Img src={preloadedAssets.parch} w={'auto'} h={'100%'} loading="lazy" />
+              <Img
+                src={preloadedAssets.parch}
+                w={'auto'}
+                h={'100%'}
+                loading="lazy"
+              />
               <Box
                 position={'absolute'}
                 top={{ base: '5%', md: '6%' }}
@@ -86,11 +90,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                     className={'story_intraction_question'}
                     justifyContent={'flex-start'}
                   >
-                    <Img
-                      src={preloadedAssets.qs}
-                      h={'1em'}
-                      w={'1em'}
-                    />
+                    <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
                     {data?.blockText}
                   </Box>
                 </Box>
@@ -118,7 +118,11 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                           fontFamily={'AtlantisText'}
                         >
                           <Img
-                            src={option === ind ? preloadedAssets.on : preloadedAssets.off}
+                            src={
+                              option === ind
+                                ? preloadedAssets.on
+                                : preloadedAssets.off
+                            }
                             h={'4vh'}
                             w={'100%'}
                           />
@@ -134,19 +138,25 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                   display={'flex'}
                   justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
                 >
-                  {navTrack.length > 1 &&
+                  {navTrack.length > 1 && (
                     <Img
                       src={preloadedAssets.left}
                       className={'interaction_button'}
                       onClick={() => prevData(data)}
-                    />}
+                    />
+                  )}
                   {option !== null && (
-                    <Box className={'blinking-wave'} onClick={() => InteractionFunction()} borderRadius={'50%'}>
+                    <Box
+                      className={'blinking-wave'}
+                      onClick={() => InteractionFunction()}
+                      borderRadius={'50%'}
+                    >
                       <Img
                         src={preloadedAssets.right}
                         className={'interaction_button'}
                         onClick={() => InteractionFunction()}
-                      /></Box>
+                      />
+                    </Box>
                   )}
                 </Box>
               </Box>
@@ -154,22 +164,22 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
           </motion.div>
         </GridItem>
       </Grid>
-            {selectedPlayer && (
-                <Img
-                  src={`${API_SERVER}/${selectedPlayer}`}
-                  className={'narrator_character_image'}
-                  loading="lazy"
-                />
-              )}
-              {preloadedAssets?.nonplayerImage && (
-                <Img
-                  src={preloadedAssets?.nonplayerImage}
-                  className={'player_character_image'}
-                  loading="lazy"
-                />
-              )}
+      {selectedPlayer && (
+        <Img
+          src={`${API_SERVER}/${selectedPlayer}`}
+          className={'narrator_character_image'}
+          loading="lazy"
+        />
+      )}
+      {preloadedAssets?.nonplayerImage && (
+        <Img
+          src={preloadedAssets?.nonplayerImage}
+          className={'player_character_image'}
+          loading="lazy"
+        />
+      )}
     </Box>
-  )
+  );
 }
 
 export default Interaction;

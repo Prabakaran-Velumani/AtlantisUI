@@ -26,25 +26,27 @@ interface InteractionScreenShotProps {
 const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, profile, options, geTfeedBackoption, isScreenshot, preloadedAssets }) => {
 
   return (
-    <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
-    {/* // <Modal isOpen={true} onClose={isScreenshot} size={'medium'}> */}
+    // <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
+    <Modal isOpen={true} onClose={isScreenshot} size={'medium'} >
       <ModalOverlay />
       <ModalContent 
       className='feedback_screenshot' 
       backgroundImage={backGroundImg} 
       backgroundSize={'cover'} 
+      filter={'contrast(70%)'}
       backgroundRepeat={'no-repeat'}
-     
+      boxShadow={'inset 0px 5px 100px 25px white'}
+      borderRadius={'35px !important'}
       >
-        <ModalBody width={'100%'} height={'100%'}  boxShadow={'inset 0px 5px 100px 25px white'} borderRadius={'10px'}>
+        <ModalBody width={'100%'} height={'100%'}>
           <Img
-            src={preloadedAssets.Close}
-            style={{ width: '50px', marginLeft: '97%' }}
+            src={preloadedAssets.Close}            
             onClick={() => geTfeedBackoption()}
+            className={'close_model'}
           />
-          <Box className="top-menu-home-section">
-            <Img src={preloadedAssets.TopMenu} className="top-menu-img" style={{ top: '58px', width: '100%'}} />
-            <Img
+          <Box className="top-menu-home-section-screenshot">
+            <Img src={preloadedAssets.TopMenu} borderRadius={'35px 35px 0px 0px'} opacity={0.5} className="top-menu-img" style={{ top: '58px', width: '100%'}} />
+            {/* <Img
               src={preloadedAssets.Overview}
               className="overview-img"
               style={{ marginTop: '57px', marginRight: '174px' }}
@@ -53,8 +55,8 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
               src={preloadedAssets.Setting}
               className="setting-img"
               style={{ marginTop: '57px', marginRight: '168px' }}
-            />
-            <Box className="score-box" style={{ marginTop: '57px', marginRight: '130px' }}>
+            /> */}
+            {/* <Box className="score-box" style={{ marginTop: '57px', marginRight: '130px' }}>
               <Text className="text">
                 {(profile &&
                   profile.score &&
@@ -67,33 +69,30 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                   )) ||
                   0}
               </Text>
-            </Box>
+            </Box> */}
           </Box>
-          <Box
+          {/* <Box
             position="relative"
-            w={'100%'}
-            height="100vh"
-
-            className='chapter_potrait'
-            style={{ width: '93%' }}>
+            className='chapter_potrait_screenshot'
+            >
             <Grid
               templateColumns="repeat(1, 1fr)"
-              gap={4}
+              gap={4} 
               position="absolute"
               top="50%"
               left="50%"
               transform="translate(-50%, -50%)"
-              w={'90%'}
-            // ml={'500px'}
+              w={'90%'}            
             >
-              <GridItem colSpan={1} position={'relative'}>
-                <Box position={'relative'} className="story_interaction_image">
-                  <Img src={preloadedAssets.parch} w={'100%'} h={'100%'} loading="lazy" />
+              <GridItem colSpan={1} position={'relative'}> */}
+                <Box  className="story_interaction_image_screenshot">
+                  <Box position={'relative'} h={'100%'}>
+                  <Img src={preloadedAssets.parch} w={'auto'} filter={'contrast(80%)'} h={'100%'} loading="lazy" />
                   <Box
                     position={'absolute'}
-                    top={{ sm: '18px', md: '42px' }}
+                    top={{ sm: '18px', md: '8%' }}
                     h={'80% !important'}
-                    className="story_interaction_image"
+                    className="story_interaction_image_screenshot_content"
                   >
                     <Box
                       textAlign={'center'}
@@ -101,7 +100,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                       justifyContent={'center'}
                       alignItems={'center'}
                       fontWeight={700}
-                      fontSize={{ sm: '1vw', md: '1.5vw', lg: '1.9vw' }}
+                      fontSize={{ md: '1.5vw', lg: '1.9vw' }}
                       fontFamily={'AtlantisText'}
                       lineHeight={1}
                       w={'100%'}
@@ -166,7 +165,6 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                                 display={'flex'}
                                 justifyContent={'center'}
                                 fontSize={{
-                                  sm: '1.3vw',
                                   md: '1.5vw',
                                   lg: '1.9vw',
                                 }}
@@ -179,10 +177,11 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                     </Box>
 
                   </Box>
+                  </Box>
                 </Box>
-              </GridItem>
+              {/* </GridItem>
             </Grid>
-          </Box>
+          </Box> */}
         </ModalBody>
       </ModalContent>
     </Modal>

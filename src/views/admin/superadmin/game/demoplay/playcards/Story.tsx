@@ -31,7 +31,7 @@ import { motion } from 'framer-motion';
 import { API_SERVER, Notelength, Dialoglength, Responselength } from 'config/constant';
 import { ScoreContext } from '../GamePreview';
 import { Canvas, useFrame, useLoader } from 'react-three-fiber';
-import Sample from 'assets/img/games/collector.glb';
+import Sample from 'assets/img/games/agent.glb';
 import { useLayoutEffect, useRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
@@ -595,7 +595,6 @@ const Story: React.FC<{
               alignItems={'center'}
               justifyContent={'space-between'}
               h={'61px'}
-
               overflowY={'scroll'}
               w={'85%'}
               fontSize={{ base: '30px', xl: '2.2vw' }}
@@ -810,7 +809,7 @@ const Model: React.FC = () => {
 
   return (
     <group ref={groupRef}>
-      <primitive object={gltf.scene} scale={[1, 1, 1]} position={[0, 20, -2]} />
+      <primitive object={gltf.scene}  />
     </group>
   );
 };
