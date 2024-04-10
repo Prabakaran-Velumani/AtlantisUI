@@ -13,7 +13,10 @@ const Completion: React.FC<{
   CompKeyCount?: any;
   preview?: any;
   questState: any;
+  setType: any;
+  setData:any;
   setQuestState: any;
+  type:any
   getFeedbackData: any;
   setCurrentScreenId?: any;
   getData?: any;
@@ -33,6 +36,9 @@ const Completion: React.FC<{
   formData,
   imageSrc,
   gameInfo,
+  setType,
+  setData,
+  type,
   questState,
   setQuestState,
   compliData,

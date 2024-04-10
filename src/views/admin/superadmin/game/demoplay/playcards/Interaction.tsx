@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Grid, GridItem, Img, Text } from '@chakra-ui/react';
 import { API_SERVER } from 'config/constant';
 import { motion } from 'framer-motion';
@@ -8,7 +8,9 @@ interface InteractionProps {
   data: any;
   options: any;
   optionClick: any;
+  Profiledatalanguage?: any;
   prevData: any;
+  Contentlanguage: any;
   InteractionFunction: () => void;
   option: any;
   isScreenshot?: boolean;
@@ -17,7 +19,7 @@ interface InteractionProps {
   selectedPlayer: any;
 }
 
-const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, options, optionClick, prevData, InteractionFunction, isScreenshot, navTrack, preloadedAssets, selectedPlayer}) => {
+const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, options, optionClick, prevData, InteractionFunction, isScreenshot, navTrack, preloadedAssets, selectedPlayer, Contentlanguage, Profiledatalanguage}) => {
 
   return (
     <Box
@@ -100,7 +102,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                     justifyContent={'flex-start'}
                   >
                     <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
-                    {data?.blockText}
+                    {Contentlanguage ? Contentlanguage : data?.blockText}
                   </Box>
                 </Box>
                 <Box
