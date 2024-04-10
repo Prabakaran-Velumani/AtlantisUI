@@ -112,7 +112,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
-  const [isLanguage, setIsLanguage] = useState(false);
+  const [isLanguage, setIsLanguage] = useState(null);
   const [select, setSelect] = useState(false);
   const [languages, setLanguages] = useState<any[]>(null);
     // Afrith-modified-starts-08/Mar/24
@@ -224,7 +224,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   });
   return (
     <>
-      {formData && formData?.gameLanguageId !== null ? (
+      {formData && (formData?.gameLanguageId !== null) && (isLanguage !==null) ? (
         <Box id="container" className="Play-station">
           <Box className="top-menu-home-section">
             {isLanguage ? (
@@ -316,17 +316,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 className={'character_template'}
                 loading="lazy"
               />
-              <Box className={'character_template'}>
-               <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */} 
-                {/* <Environment preset={"park"} background />   */}
-                <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />          
-                <ambientLight intensity={0.5} />              
-                {/* <OrbitControls   />  */}
-                <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />   
-                <PlayingCharacter />                                        
-                {/* <Parrot /> */}
-              </Canvas>   
-              </Box>
+             
 
               <Box className={'character_select_area'}>
                 <Box
@@ -339,6 +329,17 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     src={preloadedAssets.Selected}
                     className={'character_toggle_left'}
                   />
+                   {/* <Box className={'character_template'}> */}
+               <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */} 
+                {/* <Environment preset={"park"} background />   */}
+                <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />          
+                <ambientLight intensity={0.5} />              
+                {/* <OrbitControls   />  */}
+                <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />   
+                <PlayingCharacter />                                        
+                {/* <Parrot /> */}
+              </Canvas>   
+              {/* </Box> */}
                   <Img
                     src={preloadedAssets.Selected}
                    className={'character_toggle_right'}

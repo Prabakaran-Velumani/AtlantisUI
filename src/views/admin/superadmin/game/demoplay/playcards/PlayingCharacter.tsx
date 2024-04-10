@@ -77,8 +77,8 @@ const PlayingChracter: React.FC = () => {
     return (    
       <group ref={groupRef}>      
         {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}        
-        <primitive object={gltf.scene} position={[0, -2.5 , 0]} />   {/* For Single view */} 
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={()=> setIsHovered(true)} onPointerLeave={()=> setIsHovered(false)}>            
+        <primitive object={gltf.scene} position={[0, -2.5 , 0]} scale={[1,1,2.5]}/>   {/* For Single view */} 
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={()=> setIsHovered(true)} onPointerLeave={()=> setIsHovered(false)} >            
           <planeGeometry args={[100, 500]} />
           <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />
         </mesh>    
