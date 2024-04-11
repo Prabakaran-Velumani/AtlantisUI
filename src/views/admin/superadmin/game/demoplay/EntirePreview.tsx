@@ -2268,7 +2268,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           <Box className="Images">
                             <ThankYou
                               formData={gameInfo?.gameData}
-                              imageSrc={preloadedAssets.Screen6}
+                              imageSrc={preloadedAssets.Thankyou}
                             />
                           </Box>
                         </Box>
