@@ -160,7 +160,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   setCurrentScore,
   preloadedAssets,
 }) => {
-  console.log('gameInfo', gameInfo);
   const { colorMode, toggleColorMode } = useColorMode();
 
   const maxTextLength = 80;
@@ -413,7 +412,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [audio]);
 
   useEffect(() => {
-    console.log('audioObj',audioObj);
     // Check if audioRef exists and audioObj.url is not empty
     if (audioRef.current && audioObj.url !== '') {
       // Pause the audio playback if it's currently playing
@@ -437,6 +435,30 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
   }, [audioObj]);
+
+  // useEffect(() => {
+  //   // Check if the audio type is 'api'
+  //   if (audioObj.type === 'api') {
+  //     // Check if the current audio reference exists
+  //     if (audioRef.current) {
+  //       // Add an event listener to the 'ended' event of the audio element
+  //       audioRef.current.addEventListener('ended', handleAudioEnded);
+  //     }
+  //   }
+
+  //   // Cleanup function to remove the event listener when the component unmounts or when the audioRef changes
+  //   return () => {
+  //     if (audioRef.current) {
+  //       audioRef.current.removeEventListener('ended', handleAudioEnded);
+  //     }
+  //   };
+  // }, [audioObj.type, audioRef.current]); // Watch for changes in audioObj.type and audioRef.current
+
+  // Event handler for when the audio playback ends
+  const handleAudioEnded = () => {
+    // Set the current audio reference to null
+    audioRef.current = null;
+  };
 
   useEffect(() => {
     if (gameInfo) {
@@ -503,7 +525,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const getData = (next: any) => {
+    setAudioObj(null);
     setIsPrevNavigation(false);
+    console.log('gameInfo', demoBlocks);
     if (next?.blockChoosen === 'Interaction') {
       const isDuplicate = feedbackList?.some(
         (item: any) =>
@@ -512,14 +536,18 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       );
 
       if (!isDuplicate) {
-        setFeedbackList((prevFeedbackList) => [
-          ...prevFeedbackList,
-          {
-            feedbackcontent: feed,
-            Seq: next?.blockPrimarySequence,
-            Options: getSelectedOptions,
-          },
-        ]);
+        if (feed !== '') {
+          setFeedbackList((prevFeedbackList) => [
+            ...prevFeedbackList,
+            {
+              feedbackcontent: feed,
+              Seq: next?.blockPrimarySequence,
+              Options: getSelectedOptions,
+            },
+          ]);
+        }
+
+        console.log('feed', feed, '...', feedbackList.length)
       }
     }
 
@@ -555,7 +583,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         )
         .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-      console.log('nextBlock', nextBlock);
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = [];
@@ -625,6 +652,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
+        console.log('655',next)
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -728,10 +756,47 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           return false;
         }
       } else if (navi === 'Complete') {
+        const Nextcurrentquest = next?.blockQuestNo;
+        const getgameinfoquest = gameInfo?.gameQuest.find(
+          (row: any) => row.gameQuestNo == Nextcurrentquest,
+        );
+        if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
+          if (demoBlocks.hasOwnProperty(nextLevel)) {
+            setProfile((prev: any) => {
+              const data = { ...prev };
+              if(!profile.completedLevels.includes(currentQuest))
+                {
+                  data.completedLevels = [...data.completedLevels, nextLevel];
+                }
+              
+              return data;
+            });
+  
+            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+            setData(demoBlocks[nextLevel]['1']);
+            setCurrentScreenId(6);
+            return false;
+          } else {
+            setCurrentScreenId(6);
+            setType(null);
+            setData(null);
+            return false;
+          }
+        }
+        else{
+          setisOptionalReplay(true);
+          setCurrentScreenId(8);
+          return false;
+        }
+       /*
         if (demoBlocks.hasOwnProperty(nextLevel)) {
           setProfile((prev: any) => {
             const data = { ...prev };
-            data.completedLevels = [...data.completedLevels, nextLevel];
+            if(!profile.completedLevels.includes(currentQuest))
+              {
+                data.completedLevels = [...data.completedLevels, nextLevel];
+              }
+            
             return data;
           });
 
@@ -745,6 +810,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setData(null);
           return false;
         }
+        */
       } else {
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
@@ -775,10 +841,55 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(13);
           return false;
         }
-        getFeedbackData(data);
-        setFeedbackNavigateNext(false);
-        setCurrentScreenId(14); //Navigate to together all feedback
-        return false;
+        if (feedbackList.length !== 0) {
+          getFeedbackData(data);
+          setFeedbackNavigateNext(false);
+          setCurrentScreenId(14); //Navigate to together all feedback
+          return false;
+        }
+        else {
+          if (demoBlocks.hasOwnProperty(nextLevel))
+            {
+              setProfile((prev: any) => {
+                const data = { ...prev };
+                if(!profile.completedLevels.includes(currentQuest))
+                  {
+                    data.completedLevels = [...data.completedLevels, nextLevel];
+                  }
+                
+                return data;
+              });
+    
+              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+              setData(demoBlocks[nextLevel]['1']);
+              setCurrentScreenId(13);
+              return false;
+            }
+             else {
+            if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+              setCurrentScreenId(4); //Navigate to leaderboard
+              return false;
+            }
+            else if(gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
+            gameInfo?.reflectionQuestions.length > 0){
+              setCurrentScreenId(3); //Navigate to Reflection screen
+              return false;
+            }
+            else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
+              setCurrentScreenId(7); //Navigate to takeaway screen
+              return false;
+            }
+            else{
+              setType(null);
+              setData(null);
+              setCurrentScreenId(5);
+              return false;
+            }
+           
+          }
+        }
+
+
       } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
         setCurrentScreenId(4); //Navigate to leaderboard
         return false;
@@ -846,7 +957,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const haveNextQuest = gameInfo.gameQuest.some(
         (row: any) => row.gameQuestNo == Nextcurrentquest,
       );
-
       if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
         setCurrentScreenId(4); //leaderboard
         return false;
@@ -879,8 +989,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             finalscore < getgameinfoquest?.gameDistinctionScore &&
             gameInfo.gameData?.gameDisableOptionalReplays === 'false'
           ) {
-            setisOptionalReplay(false);
-            setisReplay(true);
+            setisOptionalReplay(true);
+            setisReplay(false);
             Setprofilescore(finalscore);
             setCurrentScreenId(8);
             return false;
@@ -964,8 +1074,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             finalscore < getgameinfoquest?.gameDistinctionScore &&
             gameInfo.gameData?.gameDisableOptionalReplays === 'false'
           ) {
-            setisOptionalReplay(false);
-            setisReplay(true);
+            setisOptionalReplay(true);
+            setisReplay(false);
             Setprofilescore(finalscore);
             setCurrentScreenId(8);
             return false;
@@ -1043,7 +1153,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setCurrentScreenId(5);
       return false;
     }
+    console.log('7777')
     if (nextBlock.length === 0) {
+      console.log('1124')
       const Nextcurrentquest = next?.blockQuestNo;
       const getgameinfoquest = gameInfo?.gameQuest.find(
         (row: any) => row.gameQuestNo == Nextcurrentquest,
@@ -1070,16 +1182,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         );
         const finalscore = getscores?.score;
         if (finalscore < getminpassscore) {
-          setisReplay(false);
+          setisReplay(true);
           Setprofilescore(finalscore);
-          setisOptionalReplay(true);
+          setisOptionalReplay(false);
           setCurrentScreenId(8);
           return false;
         } else {
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
-              data.completedLevels = [...data.completedLevels, nextLevel];
+              if(!profile.completedLevels.includes(currentQuest))
+                {
+                  data.completedLevels = [...data.completedLevels, nextLevel];
+                }
               return data;
             });
             setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -1097,7 +1212,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         if (demoBlocks.hasOwnProperty(nextLevel)) {
           setProfile((prev: any) => {
             const data = { ...prev };
-            data.completedLevels = [...data.completedLevels, nextLevel];
+            if(!profile.completedLevels.includes(currentQuest))
+              {
+                data.completedLevels = [...data.completedLevels, nextLevel];
+              }
             return data;
           });
           setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -1114,8 +1232,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
+        const currentBlockinteraction =
+          gameInfo?.blocks[currentQuest][currentBlock];
+        setInteractionOptions(gameInfo, currentBlockinteraction);
         setType(next?.blockChoosen);
         setData(next);
+        setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'New Block') {
         setType(nextBlock[0]?.blockChoosen);
@@ -1130,6 +1252,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Select Block') {
+        console.log('1220',next)
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -1234,7 +1357,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         if (demoBlocks.hasOwnProperty(nextLevel)) {
           setProfile((prev: any) => {
             const data = { ...prev };
-            data.completedLevels = [...data.completedLevels, nextLevel];
+            if(!profile.completedLevels.includes(currentQuest))
+              {
+                data.completedLevels = [...data.completedLevels, nextLevel];
+              }
             return data;
           });
           setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -1335,6 +1461,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   // validate the choosed option
   const handleValidate = (item: any, ind: number) => {
+    console.log('item', item)
     setCurrentScore(parseInt(item?.qpScore));
     setResMsg(item?.qpResponse);
     setFeed(item?.qpFeedback);
@@ -1352,7 +1479,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       profileData?.gender === 'Male'
         ? voiceIds?.playerMale
         : voiceIds?.playerFemale;
-    getAudioForText(text, voiceId);
+    // getAudioForText(text, voiceId);
   };
 
   useEffect(() => {
@@ -1585,8 +1712,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const replayGame = () => {
-    setType(gameInfo?.blocks['1']['1']?.blockChoosen);
-    setData(gameInfo?.blocks['1']['1']);
+    setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
+    setData(gameInfo?.blocks[profile?.currentQuest]['1']);
     setCurrentScreenId(2);
   };
   const replayNextHandler = (data: any) => {
@@ -1594,10 +1721,24 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ? parseInt(data?.blockPrimarySequence.split('.')[0])
       : null;
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-    if (data && type) {
-      setCurrentScreenId(13);
-      return false;
-    } else {
+    console.log('nextLevel',nextLevel)
+    if (demoBlocks.hasOwnProperty(nextLevel))
+      {
+        setProfile((prev: any) => {
+          const data = { ...prev };
+          if(!profile.completedLevels.includes(currentQuest))
+            {
+              data.completedLevels = [...data.completedLevels, nextLevel];
+            }
+          
+          return data;
+        });
+        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+        setData(demoBlocks[nextLevel]['1']);
+        setCurrentScreenId(13);
+        return false;
+      }
+     else {
       if (
         gameInfo.gameData?.gameIsShowReflectionScreen !== 'false' &&
         gameInfo?.reflectionQuestions.length > 0
@@ -1615,33 +1756,33 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
   };
-  const getAudioForText = async (text: string, voiceId: string) => {
-    if (text && voiceId) {
-      const send = {
-        text: text,
-        model_id: 'eleven_multilingual_v2',
-        voice_settings: {
-          stability: 0.8,
-          similarity_boost: 0.5,
-        },
-      };
+  // const getAudioForText = async (text: string, voiceId: string) => {
+  //   if (text && voiceId) {
+  //     const send = {
+  //       text: text,
+  //       model_id: 'eleven_multilingual_v2',
+  //       voice_settings: {
+  //         stability: 0.8,
+  //         similarity_boost: 0.5,
+  //       },
+  //     };
 
-      const data = JSON.stringify(send);
-      /** Working API for getting voice for the text */
-      const res = await getVoiceMessage(voiceId, data);
-      /** Working API for getting voice for the text */
-      const contentType = res.headers.get('Content-Type');
-      if (contentType && contentType.includes('audio/mpeg')) {
-        // const blob = new Blob([res], { type: 'audio/mpeg' });
-        let blob = await res.blob();
-        const audioApiUrl = URL.createObjectURL(blob);
-        setAudio(audioApiUrl);
-        blob = null;
-      } else {
-        return console.log('Audio file Missing');
-      }
-    }
-  };
+  //     const data = JSON.stringify(send);
+  //     /** Working API for getting voice for the text */
+  //     const res = await getVoiceMessage(voiceId, data);
+  //     /** Working API for getting voice for the text */
+  //     const contentType = res.headers.get('Content-Type');
+  //     if (contentType && contentType.includes('audio/mpeg')) {
+  //       // const blob = new Blob([res], { type: 'audio/mpeg' });
+  //       let blob = await res.blob();
+  //       const audioApiUrl = URL.createObjectURL(blob);
+  //       setAudio(audioApiUrl);
+  //       blob = null;
+  //     } else {
+  //       return console.log('Audio file Missing');
+  //     }
+  //   }
+  // };
 
   const handleAudioError = () => {
     console.error(
@@ -1795,11 +1936,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               setHomeLeaderBoard={setHomeLeaderBoard}
               profileData={profileData}
               gameInfo={gameInfo}
+              demoBlocks={demoBlocks}
+              data={data}
             />
           </Box>
           <Flex
             height="100vh"
-            className={currentScreenId === 2 || currentScreenId === 15 ? '' : 'EntirePreview'}
+            className={currentScreenId === 2 || currentScreenId === 15  ? '' : 'EntirePreview'}
           >
             {(() => {
               switch (currentScreenId) {
@@ -1881,7 +2024,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           option={selectedOption}
                           profileData={profileData}
                           setAudio={setAudio}
-                          getAudioForText={getAudioForText}
+                          // getAudioForText={getAudioForText}
                           voiceIds={voiceIds}
                           setAudioObj={setAudioObj}
                           setIsGetsPlayAudioConfirmation={

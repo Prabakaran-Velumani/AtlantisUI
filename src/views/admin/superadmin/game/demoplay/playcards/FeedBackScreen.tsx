@@ -88,7 +88,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                 >
                   <Box w={'100%'} display={'flex'} justifyContent={'center'}>
                     <Box className={'story_note_block'}>
-                      <Text textAlign={'center'}>{feed}</Text>
+                      <Text textAlign={'center'}>{currentScreenId === 9 ? feed : FeedbackremainingSentences}</Text>
                     </Box>
                   </Box>
                   <Box
@@ -112,26 +112,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
             </GridItem>
           </Grid>
         </Box>
-        {currentScreenId === 9 ? (
-          <>
-            <Box>
-              <React.Fragment>{feed}</React.Fragment>
-            </Box>
-            <Box
-              w={'100%'}
-              onClick={() => getData(data)}
-              mt={'20px'}
-              display={'flex'}
-              justifyContent={'center'}
-              cursor={'pointer'}
-            >
-              <Img src={preloadedAssets.next} w={'200px'} h={'60px'} />
-            </Box>
-          </>
-        ) : (
-          <>
-            {FeedbackremainingSentences}
-            {isScreenshot === true ? (
+        {currentScreenId === 14 &&  isScreenshot === true && (
               <InteractionScreenShot
                 data={FeedBackoptionData}
                 option={FeedBackselectedoptionData}
@@ -142,11 +123,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                 isScreenshot={isScreenshot}
                 preloadedAssets={preloadedAssets}
               />
-            ) : (
-              ''
-            )}
-          </>
-        )}
+            )} 
       </>
     </>
   );

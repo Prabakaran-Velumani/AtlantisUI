@@ -134,9 +134,9 @@ const Characterspage: React.FC<PlayGamesProps> = ({
             ...prev,
             language: data[0]?.label,
           }));
-          setTimeout(() => {
-            setIsLanguage(true);
-          }, 1500);
+          setIsLanguage(true);
+          // setTimeout(() => {
+          // }, 1500);
         }
       }
     };

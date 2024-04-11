@@ -22,6 +22,8 @@ interface TopMenuProps {
   setHomeLeaderBoard: (id: number) => void;
   profileData: any;
   gameInfo: any;
+  demoBlocks: any;
+  data:any;
 }
 
 const TopMenuBar: React.FC<TopMenuProps> = ({
@@ -33,14 +35,17 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
   setIsSettingOpen,
   setHomeLeaderBoard,
   profileData,
-  gameInfo
+  gameInfo,
+  demoBlocks,
+  data
 }) => {
     const [geFinalscorequest, SetFinalscore] = useState(null);
     const { profile, setProfile } = useContext<{ profile: any, setProfile: any }>(ScoreContext);
-
+    const [progressPercent, setProgressPercent] = useState<any>(0);
+    
     useEffect(() => {
         const scores = profile?.score;
-        const sums = scores.reduce((accumulator: { [key: string]: number }, score: any) => {
+        const sums = scores?.reduce((accumulator: { [key: string]: number }, score: any) => {
             const quest = score.quest;
             accumulator[quest] = (accumulator[quest] || 0) + score.score;
             return accumulator;
@@ -52,11 +57,40 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     setHomeLeaderBoard(currentScreenId);
     setCurrentScreenId(15); //overview Screen
   };
-console.log('geFinalscorequest',geFinalscorequest)
-console.log('profileData',profileData)
-console.log('profile',profile)
-console.log('gameInfo',gameInfo.gameQuest)
 
+useEffect(()=>{
+
+  const progressResult = ()=>{
+  //calculate Progress based on screen, Need to show different progress for current screen is in story, progress of the current quest, unless  show the entire game progress
+  if(currentScreenId === 2) {
+    const currentQuestBlocks = demoBlocks[profile?.currentQuest];
+    const totalblockCount = Object.keys(currentQuestBlocks).length;
+    const keyWithValueOfCurrentBlock = Object.keys(currentQuestBlocks).find((key: any) => {
+      const obj = currentQuestBlocks[key];
+      const blockPrimarySequence = obj?.blockPrimarySequence;
+      if (blockPrimarySequence) {
+          const hasMatchingSequence = blockPrimarySequence.trim() === (data?.blockPrimarySequence || '').trim();
+          return hasMatchingSequence;
+      }
+      return false;
+  });
+    const progressBarRatio:any = keyWithValueOfCurrentBlock && (parseInt(keyWithValueOfCurrentBlock) > 0 ? (parseInt(keyWithValueOfCurrentBlock)-1)/totalblockCount: 0 );
+    setProgressPercent(progressBarRatio && progressBarRatio > 0 ? progressBarRatio :0 );
+  }
+  else{
+    const completedQuest = profile?.completedLevels.length-1;
+    console.log('profile?.completedLevels', profile?.completedLevels)
+    let gameProgress = 0;
+    if(completedQuest > 0)
+      { 
+        gameProgress = completedQuest/gameInfo?.gameQuest?.length;
+      }
+      setProgressPercent(gameProgress && gameProgress > 0 ? gameProgress :0 );
+  }
+  }
+
+  progressResult();
+},[data, currentScreenId])
 
   return (
     <Box className="top-menu-home-section">
@@ -112,10 +146,15 @@ console.log('gameInfo',gameInfo.gameQuest)
 
                     <Box className='progress-box'>
                       {/* <Text className='text'>{BlockNo ? Math.floor(progressPercentage) : 0}%</Text> */}
-                      <Text className='text'>{true ? Math.floor(currentScreenId ===2 ? (geFinalscorequest / (gameInfo?.gameQuest?.gameTotalScore ?? 1000)) : (((parseInt(profile?.currentQuest)-1) > 0) ? ((parseInt(profile?.currentQuest)-1) - gameInfo?.gameQuest?.length) : 0)) : 0} % </Text>
-                      <Box className='progressing'>
+                      <Text className='text'>{Math.floor(progressPercent*100)}%</Text>
+                      {/* <Box className='progressing'>
                         {Array.from({ length: Math.floor(currentScreenId === 2 ? 
-                                  ((parseInt(geFinalscorequest) / (parseInt(gameInfo?.gameQuest?.gameTotalScore) ?? 1000))) : (((parseInt(profile?.currentQuest)-1) > 0) ? ((parseInt(profile?.currentQuest)-1)-gameInfo?.gameQuest?.length) : 0))}, (_, index) => (
+                                  ((parseInt(geFinalscorequest) / (parseInt(gameInfo?.gameQuest?.gameTotalScore) ?? 1000))) : (((parseInt(profile?.currentQuest)-1) > 0) ? ((parseInt(profile?.currentQuest)-1)-gameInfo?.gameQuest?.length) : 0))}, (_, index) => (  
+                          <Box key={index} className='level'></Box>
+                        ))}
+                      </Box> */}
+                      <Box className='progressing'>
+                        {Array.from({ length: Math.floor(progressPercent*100/10)}, (_, index) => (  
                           <Box key={index} className='level'></Box>
                         ))}
                       </Box>

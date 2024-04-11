@@ -111,26 +111,18 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                       </Box>
                     </Box>
                     <Box
-                      textAlign={'center'}
-                      h={'25%'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                      alignItems={'center'}
-                      fontWeight={500}
-                      fontFamily={'AtlantisText'}
-                      lineHeight={1}
-                      w={'96%'}
-                      overflowY={'scroll'}
-                      marginTop={'15px'}
-                      color={'black'}
+                      className='story_screenshot_interaction_question'
                     >
                       <Box
+                       className='screenshot_content'
                         w={'60%'}
                         fontSize={{ md: '1.5vw', lg: '1.9vw' }}
                         letterSpacing={1}
+                        justifyContent={'flex-start'}
                       >
-                        {/* {data[0]?.blockText} */}
-                        hello
+                        <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
+                        {data[0]?.blockText}
+                        
                       </Box>
                     </Box>
                     <Box
@@ -141,6 +133,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                       overflowY={'scroll'}
                       display={'flex'}
                       justifyContent={'center'}
+                      className={'screenshot_interaction_options'}
                     >
                       <Box w={'60%'}>
                         {options &&

@@ -474,6 +474,7 @@ const GamePreview = () => {
     }
   }, [gameInfo, preloadedAssets]);
 
+  console.log('gameInfo *****',gameInfo)
   return (
     <>
     <Suspense fallback={<h1>Loading please wait...</h1>}>

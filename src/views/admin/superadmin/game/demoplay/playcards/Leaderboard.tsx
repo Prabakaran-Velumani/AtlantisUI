@@ -96,6 +96,7 @@ const LeaderBoard: React.FC<{
   const content = [1, 2, 3, 4, 5, 6];
 
   const playerInfo = useContext(ProfileContext);
+  const { profile } = useContext(ScoreContext);
 
     ///Afrith-modified-starts-09/Mar/24
     const profileInfo = useContext(ScoreContext);
