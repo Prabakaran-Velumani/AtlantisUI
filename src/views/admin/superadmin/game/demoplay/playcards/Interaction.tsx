@@ -174,9 +174,8 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
             <ambientLight intensity={0.5} />
             {/* <OrbitControls   />  */}
             <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
-
             {/* COMPONENTS */}
-            <Model />
+            <Model position={[0, -1.5 , 4]}/>
             {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
             {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
             {/* <Parrot /> */}

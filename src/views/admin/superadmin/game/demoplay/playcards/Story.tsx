@@ -31,7 +31,7 @@ import { motion } from 'framer-motion';
 import { API_SERVER, Notelength, Dialoglength, Responselength } from 'config/constant';
 import { ScoreContext } from '../GamePreview';
 import { Canvas, useFrame, useLoader } from 'react-three-fiber';
-import Sample from 'assets/img/games/Character_sample.glb';
+import Sample from 'assets/img/games/Merlin.glb';
 import { useLayoutEffect, useRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
@@ -555,23 +555,20 @@ const Story: React.FC<{
         {data && type === 'Dialog' && (
           <Box className="chapter_potrait">
             <Img src={backGroundImg} className="dialogue_screen" />
-            {selectedPlayer && (
+            {/* {selectedPlayer && (
               <Box className={'narrator_character_image'}>
                 <Canvas camera={{ position: [0, 1, 9] }} >
-                  {/* For Single view */}
-                  {/* <Environment preset={"park"} background />   */}
+                 
                   <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
                   <ambientLight intensity={0.5} />
-                  {/* <OrbitControls   />  */}
+                  
                   <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
-                  {/* COMPONENTS */}
+                 
                   <Player />
-                  {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
-                  {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
-                  {/* <Parrot /> */}
+                  
                 </Canvas>
               </Box>
-            )}
+            )} */}
             {selectedNpc && (
               <Box className={'player_character_image'}>
                 <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */}
@@ -582,7 +579,8 @@ const Story: React.FC<{
                   <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
 
                   {/* COMPONENTS */}
-                  <Model />
+                  <Player />
+                  <Model position={[3, -1.5 , 4]}/>
                   {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
                   {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
                   {/* <Parrot /> */}
@@ -805,7 +803,7 @@ const Player: React.FC = () => {
   const [isHovered, setIsHovered] = useState<any>(false);
 
   const mixer = new THREE.AnimationMixer(gltf.scene);
-  const action = mixer.clipAction(gltf.animations[0]);
+  const action = mixer.clipAction(gltf.animations[1]);
 
   useFrame((state, delta) => {
     // Rotate the model on the Y-axis
@@ -851,11 +849,11 @@ const Player: React.FC = () => {
   return (
     <group ref={groupRef}>
       {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}
-      <primitive object={gltf.scene} position={[0, -1.5, 4]} />   {/* For Single view */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>
+      <primitive object={gltf.scene} position={[5, -5, -1]} />   {/* For Single view */}
+      {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>
         <planeGeometry args={[100, 500]} />
         <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />
-      </mesh>
+      </mesh> */}
     </group>
   )
 };
