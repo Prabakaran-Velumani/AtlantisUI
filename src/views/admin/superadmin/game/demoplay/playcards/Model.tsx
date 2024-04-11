@@ -19,13 +19,13 @@ import React, {
   // import { Parrot } from '../three/Parrot';
   // Import ProfileContext from EntirePreview
   
- const Model: React.FC<{position:any}> = ({position}) => {
+ const Model: React.FC<{position:any,rotation?:any}> = ({position,rotation}) => {
     const groupRef = useRef<any>();
     const gltf = useLoader(GLTFLoader, Sample);  
     const [isHovered, setIsHovered] = useState<any>(false);    
     
     const mixer = new THREE.AnimationMixer(gltf.scene);  
-    const action = mixer.clipAction(gltf.animations[1]);    
+    const action = mixer.clipAction(gltf.animations[0]);    
   
     useFrame((state, delta) => {
       // Rotate the model on the Y-axis
@@ -71,7 +71,7 @@ import React, {
     return (    
       <group ref={groupRef}>      
         {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}        
-        <primitive object={gltf.scene} position={position} />   {/* For Single view */} 
+        <primitive object={gltf.scene} position={position} rotation={rotation} />   {/* For Single view */} 
         {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={()=> setIsHovered(true)} onPointerLeave={()=> setIsHovered(false)}>            
           <planeGeometry args={[100, 500]} />
           <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />

@@ -1652,11 +1652,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     overflow={'hidden'}
                     lineHeight={'25px'}
                   >
-                  <Img
-                    src={preloadedAssets.home}
-                    className={'top-home-menu'}
-                    onClick={() => setCurrentScreenId(1)}
-                  />
+                    <Img
+                      src={preloadedAssets.home}
+                      className={'top-home-menu'}
+                      onClick={() => setCurrentScreenId(1)}
+                    />
                   </Tooltip>
                   <Tooltip label="Progress"
                     display={'flex'}
@@ -1681,9 +1681,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
                     <Box className='progress-box'>
                       {/* <Text className='text'>{BlockNo ? Math.floor(progressPercentage) : 0}%</Text> */}
-                      <Text className='text'>{true ? Math.floor(20) : 0}%</Text>
+                      <Text className='text'>{true ? Math.floor(50) : 0}%</Text>
                       <Box className='progressing'>
-                        {Array.from({ length: Math.floor(20 / 10) }, (_, index) => (
+                        {Array.from({ length: Math.floor(50 / 10) }, (_, index) => (
                           <Box key={index} className='level'></Box>
                         ))}
                       </Box>
@@ -1709,11 +1709,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     overflow={'hidden'}
                     lineHeight={'25px'}
                   >
-                  <Img
-                    src={preloadedAssets.Overview}
-                    className="overview-img"
-                    onClick={handleOverView}
-                  />
+                    <Img
+                      src={preloadedAssets.Overview}
+                      className="overview-img"
+                      onClick={handleOverView}
+                    />
                   </Tooltip>
                   <Tooltip label="Settings"
                     display={'flex'}
@@ -1735,11 +1735,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     overflow={'hidden'}
                     lineHeight={'25px'}
                   >
-                  <Img
-                    src={preloadedAssets.Setting}
-                    className="setting-img"
-                    onClick={() => setIsSettingOpen(true)}
-                  />
+                    <Img
+                      src={preloadedAssets.Setting}
+                      className="setting-img"
+                      onClick={() => setIsSettingOpen(true)}
+                    />
                   </Tooltip>
                   <Box className="score-box">
                     <Text className="text">

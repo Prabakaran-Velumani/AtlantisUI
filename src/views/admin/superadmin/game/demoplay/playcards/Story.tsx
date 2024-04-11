@@ -580,7 +580,7 @@ const Story: React.FC<{
 
                   {/* COMPONENTS */}
                   <Player />
-                  <Model position={[3, -1.5 , 4]}/>
+                  <Model position={[-3, -1.8, 5]} rotation={[0,1,0]}/>
                   {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
                   {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
                   {/* <Parrot /> */}
@@ -803,7 +803,7 @@ const Player: React.FC = () => {
   const [isHovered, setIsHovered] = useState<any>(false);
 
   const mixer = new THREE.AnimationMixer(gltf.scene);
-  const action = mixer.clipAction(gltf.animations[1]);
+  const action = mixer.clipAction(gltf.animations[10]);
 
   useFrame((state, delta) => {
     // Rotate the model on the Y-axis
@@ -849,7 +849,7 @@ const Player: React.FC = () => {
   return (
     <group ref={groupRef}>
       {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}
-      <primitive object={gltf.scene} position={[5, -5, -1]} />   {/* For Single view */}
+      <primitive object={gltf.scene} position={[5, -5, 0]} rotation={[0,-1,0]} />   {/* For Single view */}
       {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>
         <planeGeometry args={[100, 500]} />
         <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />
