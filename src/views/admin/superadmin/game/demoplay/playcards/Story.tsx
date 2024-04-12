@@ -520,7 +520,7 @@ const Story: React.FC<{
                   <Box display={'flex'} justifyContent={'center'}>
                     <Img src={preloadedAssets.note} className="story_note_image" loading="lazy" />
                     <Box className={'note_align'}>
-                    <Text textAlign={'center'} className='note_title'>Note</Text>
+                      <Text textAlign={'center'} className='note_title'>Note</Text>
                     </Box>
                     <Box
                       className={'story_note_content'}
@@ -555,20 +555,6 @@ const Story: React.FC<{
         {data && type === 'Dialog' && (
           <Box className="chapter_potrait">
             <Img src={backGroundImg} className="dialogue_screen" />
-            {/* {selectedPlayer && (
-              <Box className={'narrator_character_image'}>
-                <Canvas camera={{ position: [0, 1, 9] }} >
-                 
-                  <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
-                  <ambientLight intensity={0.5} />
-                  
-                  <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
-                 
-                  <Player />
-                  
-                </Canvas>
-              </Box>
-            )} */}
             {selectedNpc && (
               <Box className={'player_character_image'}>
                 <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */}
@@ -580,13 +566,12 @@ const Story: React.FC<{
 
                   {/* COMPONENTS */}
                   <Player />
-                  <Model position={[-3, -1.8, 5]} rotation={[0,1,0]}/>
+                  <Model position={[-3, -1.8, 5]} rotation={[0, 1, 0]} />
                   {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
                   {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
                   {/* <Parrot /> */}
                 </Canvas>
               </Box>
-
             )}
             <Img className={'dialogue_image'} src={preloadedAssets.dial} />
             <Box position={'relative'}>
@@ -625,11 +610,13 @@ const Story: React.FC<{
               bottom={'38px'}
               fontFamily={'AtlantisContent'}
             >
-              {showTypingEffect === false ? <TypingEffect
-                text={remainingSentences.toString()}
-                speed={50}
-                setSpeedIsOver={setShowTypingEffect}
-              /> : remainingSentences}
+              <Box transform={'translateY(16%)'}>
+                {showTypingEffect === false ? <TypingEffect
+                  text={remainingSentences.toString()}
+                  speed={50}
+                  setSpeedIsOver={setShowTypingEffect}
+                /> : remainingSentences}
+              </Box>
             </Box>
             <Box
               display={'flex'}
@@ -716,12 +703,15 @@ const Story: React.FC<{
               fontSize={{ base: '30px', lg: '1.8vw' }}
               bottom={'38px'}
               fontFamily={'AtlantisContent'}
+
             >
-              {showTypingEffect === false ? <TypingEffect
-                text={remainingSentences.toString()}
-                speed={50}
-                setSpeedIsOver={setShowTypingEffect}
-              /> : remainingSentences}
+              <Box transform={'translateY(16%)'}>
+                {showTypingEffect === false ? <TypingEffect
+                  text={remainingSentences.toString()}
+                  speed={50}
+                  setSpeedIsOver={setShowTypingEffect}
+                /> : remainingSentences}
+              </Box>
             </Box>
             <Box
               display={'flex'}
@@ -849,7 +839,7 @@ const Player: React.FC = () => {
   return (
     <group ref={groupRef}>
       {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}
-      <primitive object={gltf.scene} position={[5, -5, 0]} rotation={[0,-1,0]} />   {/* For Single view */}
+      <primitive object={gltf.scene} position={[5, -5, 0]} rotation={[0, -1, 0]} />   {/* For Single view */}
       {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>
         <planeGeometry args={[100, 500]} />
         <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />

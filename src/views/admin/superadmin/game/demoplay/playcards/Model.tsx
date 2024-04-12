@@ -19,13 +19,13 @@ import React, {
   // import { Parrot } from '../three/Parrot';
   // Import ProfileContext from EntirePreview
   
- const Model: React.FC<{position:any,rotation?:any}> = ({position,rotation}) => {
+ const Model: React.FC<{isSpeaking?:any,position:any,rotation?:any}> = ({isSpeaking,position,rotation}) => {
     const groupRef = useRef<any>();
     const gltf = useLoader(GLTFLoader, Sample);  
     const [isHovered, setIsHovered] = useState<any>(false);    
     
     const mixer = new THREE.AnimationMixer(gltf.scene);  
-    const action = mixer.clipAction(gltf.animations[0]);    
+    const action = mixer.clipAction(gltf.animations[isSpeaking ? 0 : 1]);    
   
     useFrame((state, delta) => {
       // Rotate the model on the Y-axis

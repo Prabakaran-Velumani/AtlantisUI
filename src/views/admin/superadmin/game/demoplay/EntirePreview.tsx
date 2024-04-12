@@ -79,7 +79,7 @@ import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
-
+import VolumeTrack from 'assets/img/games/volume-track.png'
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
@@ -1382,17 +1382,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   // const toast = useToast();
   const handleReview = (e: any) => {
-    // console.log('toast before')
-    // toast({
-    //   title: 'Toast Title',
-    //   description: 'Toast Description',
-    //   status: 'success',
-    //   duration: 3000,
-    //   isClosable: true,
-    //   position: 'top-right',
-
-    // });
-    // console.log('toast after')
     setReviewInput((prev: Review) => ({ ...prev, review: e.target.value }));
   };
   const resetInputFields = () => {
@@ -1778,17 +1767,33 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         borderRadius="80px"
                       >
                         {/* <Img src={VolumeTrack} /> */}
-                        <SliderFilledTrack
-                          className="filled-volume"
-                          bg="pink.500"
-                        />
+                        <Box position="relative">
+                          <Img w={'100%'} h={'auto'} src={VolumeTrack} alt="Volume Track" />
+                          <Box
+                            position="absolute"
+                            top="47%"
+                            left="45%"
+                            transform="translate(-50%, -50%)"
+                            width="86%"
+                          >
+                            <SliderFilledTrack className="filled-volume" bg="pink.500" />
+                          </Box>
+                        </Box>
+                        {/* <Box w={'100%'} h={'15px'} display={'flex'} justifyContent={'center'}>
+                          <Box w={'75%'}>
+                            <SliderFilledTrack
+                              className="filled-volume"
+                              bg="pink.500"
+                            />
+                          </Box>
+                        </Box> */}
                       </SliderTrack>
                       <SliderThumb
-                        boxSize={9}
+                        boxSize={10}
                         background={'transparent'}
-                        left={'calc(100% - 30%)'}
+                        // left={'calc(100% - 30%)'}
                       >
-                        <Img src={preloadedAssets.SliderPointer} />
+                        <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
                       </SliderThumb>
                     </Slider>
                   </Box>
@@ -1804,13 +1809,25 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         height="15px"
                         borderRadius="80px"
                       >
-                        <SliderFilledTrack
+                         <Box position="relative">
+                          <Img w={'100%'} h={'auto'} src={VolumeTrack} alt="Volume Track" />
+                          <Box
+                            position="absolute"
+                            top="47%"
+                            left="45%"
+                            transform="translate(-50%, -50%)"
+                            width="86%"
+                          >
+                            <SliderFilledTrack className="filled-volume" bg="pink.500" />
+                          </Box>
+                        </Box>
+                        {/* <SliderFilledTrack
                           className="filled-volume"
                           bg="pink.500"
-                        />
+                        /> */}
                       </SliderTrack>
                       <SliderThumb boxSize={9} background={'transparent'}>
-                        <Img src={preloadedAssets.SliderPointer} />
+                        <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
                       </SliderThumb>
                     </Slider>
                   </Box>
