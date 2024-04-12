@@ -148,6 +148,10 @@ const Completion: React.FC<{
     fetchDatass();
   }, []);
 
+  const getcompletionquest = currentQuestNo - 1;
+
+
+
   return (
     <>
       <motion.div
@@ -165,45 +169,46 @@ const Completion: React.FC<{
           <Box className="content-box">
             <Box className="congratulations">
               <Box className="content" mt="0px">
-                {completionScreenQuestOptions[currentQuestNo]
-                  ?.gameIsSetCongratsSingleMessage !== true &&
-                completionScreenQuestOptions[currentQuestNo]
-                  ?.gameIsSetCongratsScoreWiseMessage !== true
-                  ? completionScreenQuestOptions[currentQuestNo]
+              {
+                completionScreenQuestOptions[getcompletionquest]
+                  ?.gameIsSetCongratsSingleMessage !== 'true' &&
+                completionScreenQuestOptions[getcompletionquest]
+                  ?.gameIsSetCongratsScoreWiseMessage !== 'true'
+                  ? completionScreenQuestOptions[getcompletionquest]
                       ?.gameCompletedCongratsMessage
-                  : completionScreenQuestOptions[currentQuestNo]
-                      ?.gameIsSetCongratsScoreWiseMessage === true
-                  ? completionScreenQuestOptions[currentQuestNo]
+                  : completionScreenQuestOptions[getcompletionquest]
+                      ?.gameIsSetCongratsScoreWiseMessage === 'true'
+                  ? completionScreenQuestOptions[getcompletionquest]
                       ?.gameIsSetMinPassScore &&
-                    completionScreenQuestOptions[currentQuestNo]
+                    completionScreenQuestOptions[getcompletionquest]
                       ?.gameMinScore &&
-                    completionScreenQuestOptions[currentQuestNo]?.gameMinScore >
+                    completionScreenQuestOptions[getcompletionquest]?.gameMinScore >
                       0
-                    ? profile?.score <
-                      completionScreenQuestOptions[currentQuestNo]?.gameMinScore
-                      ? completionScreenQuestOptions[currentQuestNo]
+                    ? (geFinalscorequest?geFinalscorequest:0) <
+                      completionScreenQuestOptions[getcompletionquest]?.gameMinScore
+                      ? completionScreenQuestOptions[getcompletionquest]
                           ?.gameMinimumScoreCongratsMessage
-                      : completionScreenQuestOptions[currentQuestNo]
+                      : completionScreenQuestOptions[getcompletionquest]
                           ?.gameIsSetDistinctionScore &&
-                        profile?.score <
-                          completionScreenQuestOptions[currentQuestNo]
+                          (geFinalscorequest?geFinalscorequest:0) <
+                          completionScreenQuestOptions[getcompletionquest]
                             ?.gameDistinctionScore
-                      ? completionScreenQuestOptions[currentQuestNo]
+                      ? completionScreenQuestOptions[getcompletionquest]
                           ?.gameaboveMinimumScoreCongratsMessage
-                      : completionScreenQuestOptions[currentQuestNo]
+                      : completionScreenQuestOptions[getcompletionquest]
                           ?.gameIsSetDistinctionScore &&
-                        profile?.score >=
-                          completionScreenQuestOptions[currentQuestNo]
+                         ( geFinalscorequest?geFinalscorequest:0 )>=
+                          completionScreenQuestOptions[getcompletionquest]
                             ?.gameDistinctionScore
-                      ? completionScreenQuestOptions[currentQuestNo]
+                      ? completionScreenQuestOptions[getcompletionquest]
                           ?.gameAboveDistinctionScoreCongratsMessage
-                      : completionScreenQuestOptions[currentQuestNo]
-                          ?.gameIsSetCongratsSingleMessage === true &&
-                        completionScreenQuestOptions[currentQuestNo]
+                      : completionScreenQuestOptions[getcompletionquest]
+                          ?.gameIsSetCongratsSingleMessage === 'true' &&
+                        completionScreenQuestOptions[getcompletionquest]
                           ?.gameCompletedCongratsMessage
-                    : completionScreenQuestOptions[currentQuestNo]
+                    : completionScreenQuestOptions[getcompletionquest]
                         ?.gameCompletedCongratsMessage
-                  : completionScreenQuestOptions[currentQuestNo]
+                  : completionScreenQuestOptions[getcompletionquest]
                       ?.gameCompletedCongratsMessage}
               </Box>
             </Box>

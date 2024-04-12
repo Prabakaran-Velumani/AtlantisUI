@@ -121,13 +121,17 @@ const Story: React.FC<{
     useState<boolean>(false);
   const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
   const [score, setScore] = useState(null);
-  useEffect(() => {
+  const [interactionNext, setInteractionNext] = useState(null);
+  
+
+   useEffect(() => {
     if (data && type) {
       getVoice(data, type);
       setShowNote(true);
       setTimeout(() => {
         setShowNote(false);
       getDataSection(data);
+      interactionNext === true && setInteractionNext(false); //When every render it could be false, only it true when interaction option is submitted
       }, 1000);
 
       /** this logic is used to hanlde the navigation options in both forward and backward navigation */
@@ -154,6 +158,7 @@ const Story: React.FC<{
           setNavTrack([data.blockPrimarySequence]);
         }
       }
+      
     }
   }, [data, type]);
 
@@ -273,6 +278,7 @@ const Story: React.FC<{
       }
     };
     fetchData();
+    
   }, [profileData, data, AudioOptions]);
 
   const getVoice = async (blockInfo: any, blockType: string) => {
@@ -367,8 +373,17 @@ const Story: React.FC<{
         return { ...prev, score: newScoreArray };
       }
     });
-    getData(data);
+    setInteractionNext(true);
   };
+
+  useEffect(()=>{
+    if(interactionNext === true)
+      {
+        getData(data);
+      }
+  },[interactionNext])
+
+
   const optionClick = (item: any, ind: any) => {
     setScore({ seqId: item?.qpSequence, score: parseInt(item?.qpScore) });
     SetAudioOptions(item);
@@ -385,13 +400,13 @@ const Story: React.FC<{
       : `translateY(${showNote ? 200 : 0}px)`;
   useEffect(() => {
     if (Navigatenext === true) {
-      console.log('388');
       getData(data);
     }
   }, [Navigatenext]);
 
   const getDataSection = (data: any) => {
     showTypingEffect === true && setShowTypingEffect(false);
+    type === 'interaction' && setInteractionNext(false);
     setCurrentPosition(0);
     if (profileData?.Audiogetlanguage.length !== 0) {
       const Getblocktext = profileData?.Audiogetlanguage.filter(
