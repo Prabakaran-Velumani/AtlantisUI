@@ -216,6 +216,8 @@ const ChapterPage: React.FC<{
       setFeedbackList([]);
       setCurrentScreenId(6);
     } else {
+      console.log('it', it)
+      console.log('profile.completedLevels.includes(it)', profile.completedLevels.includes(it))
       if (profile.completedLevels.includes(it)) {
         setType(demoBlocks[it]['1']?.blockChoosen);
         setData(demoBlocks[it]['1']);

@@ -152,12 +152,14 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     if (playerInfo.name === '') {
       setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
     }
-
-    if (Object.keys(demoBlocks).length > 1) {
+    
       setCurrentScreenId(13);//navigate to Chapter selection
-    } else {
-      setCurrentScreenId(2);//navigate to story
-    }
+
+    // if (Object.keys(demoBlocks).length > 1) {
+    //   setCurrentScreenId(13);//navigate to Chapter selection
+    // } else {
+    //   setCurrentScreenId(2);//navigate to story
+    // }
   };
 
   // const handleProfile = (e: any, lang?: any) => {

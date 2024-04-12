@@ -471,8 +471,11 @@ const Story: React.FC<{
               setNavigateNext(false);
               return false;
             }
-            setNavigateNext(true);
-            setIsPrevNavigation(false);
+            if(type !=='Interaction')
+              {
+                setNavigateNext(true);
+                setIsPrevNavigation(false);
+              }
           }
 
          
@@ -509,8 +512,11 @@ const Story: React.FC<{
             setNavigateNext(false);
             return false;
           }
-          setNavigateNext(true);
-          setIsPrevNavigation(false);
+          if(type !=='Interaction')
+            {
+              setNavigateNext(true);
+              setIsPrevNavigation(false);
+            }
           }
           
         }
@@ -588,8 +594,11 @@ const Story: React.FC<{
             setNavigateNext(false);
             return false;
           }
-          setNavigateNext(true);
-          setIsPrevNavigation(false);
+          if(type !=='Interaction')
+            {
+              setNavigateNext(true);
+              setIsPrevNavigation(false);
+            }
         }
       }
     } else {
@@ -666,8 +675,11 @@ const Story: React.FC<{
         setNavigateNext(false);
         return false;
       }
-      setNavigateNext(true);
-      setIsPrevNavigation(false);
+      if(type !=='Interaction')
+        {
+          setNavigateNext(true);
+          setIsPrevNavigation(false);
+        }
     }
   };
   const Updatecontent = () => {

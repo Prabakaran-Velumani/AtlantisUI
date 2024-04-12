@@ -578,8 +578,8 @@ const CharacterPreviewTranslate: React.FC<{
     return (
       <>
         <Modal isOpen={isModalOpen2} onClose={handleCloseModal} isCentered>
-          <ModalOverlay zIndex={99999999}/>
-          <ModalContent containerProps={{zIndex:999999999}} position="fixed" overflowY="auto" m={0} w={{sm:'80%',md:'100%'}}>
+          <ModalOverlay zIndex={2}/>
+          <ModalContent containerProps={{zIndex:2}} position="fixed" overflowY="auto" m={0} w={{sm:'80%',md:'100%'}}>
           <ModalHeader>Voices</ModalHeader>
             <ModalCloseButton />
             <ModalBody p={0} pl={'25px'} >
@@ -655,7 +655,7 @@ const CharacterPreviewTranslate: React.FC<{
                                   <>
                                     <SimpleGrid
                                       columns={{ sm: 16, md: 16, xl: 16 }}
-                                      w="100%" border={"1px solid grey"} alignItems="center" style={{ position: 'sticky', top: '0', background: 'white', zIndex: 1000 }}
+                                      w="100%" border={"1px solid grey"} alignItems="center" style={{ position: 'sticky', top: '0', background: 'white', zIndex: 3 }}
                                     >
                                       {/* <Box gridColumn={{ sm: 'span 16',md: 'span 4', xl: 'span 4' }} alignItems="center" mr="0px" borderRight={"1px lightgrey"}  alignItems="center"> */}
                                       {/* <Box gridColumn={{ sm: 'span 16', md: 'span 4', xl: 'span 4' }} alignItems="center" mr="0px" borderRight={"1px lightgrey"} > */}

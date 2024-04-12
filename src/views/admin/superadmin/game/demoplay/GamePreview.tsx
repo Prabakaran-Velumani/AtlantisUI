@@ -184,6 +184,7 @@ const GamePreview = () => {
         gameId: qst.gameId,
         questNo: qst.gameQuestNo,
         gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
+        gameMinScore: qst.gameMinScore,
         gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
         gameDistinctionScore: qst.gameDistinctionScore,
         gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
@@ -293,6 +294,7 @@ const GamePreview = () => {
         gameId: qst.gameId,
         questNo: qst.gameQuestNo,
         gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
+        gameMinScore: qst.gameMinScore,
         gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
         gameDistinctionScore: qst.gameDistinctionScore,
         gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
@@ -330,9 +332,9 @@ const GamePreview = () => {
         ReviewerDeleteStatus: ReviewingCreator
           ? ReviewingCreator?.ctDeleteStatus
           : null,
-        gameQuest: gameQuest, //used for completion screen
-        completionQuestOptions: completionOptions,
-      },
+        },
+      gameQuest: gameQuest, //used for completion screen
+      completionQuestOptions: completionOptions,
       reviews: reviews,
       gameHistory: gameview,
       assets: image,

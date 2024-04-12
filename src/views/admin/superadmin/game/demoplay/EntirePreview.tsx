@@ -527,7 +527,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const getData = (next: any) => {
     setAudioObj(null);
     setIsPrevNavigation(false);
-    console.log('gameInfo', demoBlocks);
+    console.log('demoBlocks', demoBlocks);
+    console.log('next', next);
     if (next?.blockChoosen === 'Interaction') {
       const isDuplicate = feedbackList?.some(
         (item: any) =>
@@ -761,6 +762,82 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           (row: any) => row.gameQuestNo == Nextcurrentquest,
         );
         if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
+          const getminpassscore = getgameinfoquest?.gameMinScore;
+          const scores = profile?.score;
+          const sums: any = {};
+          scores.forEach((score: any) => {
+            const quest = score.quest;
+            if (!sums[quest]) {
+              sums[quest] = 0;
+            }
+            sums[quest] += score.score;
+          });
+  
+          // const getFinalscores = Object.values(sums);
+          const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
+            quest,
+            score,
+          }));
+          const getscores = getFinalscores.find(
+            (row: any) => row.quest == getgameinfoquest.gameQuestNo,
+          );
+          const finalscore = getscores?.score;
+          if (finalscore < getminpassscore) {
+            setisReplay(true);
+            Setprofilescore(finalscore);
+            setisOptionalReplay(false);
+            setCurrentScreenId(8);
+            return false;
+          } else {
+            if (demoBlocks.hasOwnProperty(nextLevel)) {
+              setProfile((prev: any) => {
+                const data = { ...prev };
+                if(!profile.completedLevels.includes(currentQuest))
+                  {
+                    data.completedLevels = [...data.completedLevels, nextLevel];
+                  }
+                
+                return data;
+              });
+    
+              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+              setData(demoBlocks[nextLevel]['1']);
+              setCurrentScreenId(6);
+              return false;
+            } else {
+              setCurrentScreenId(6);
+              setType(null);
+              setData(null);
+              return false;
+            }
+          }
+        }
+        else{
+          if (demoBlocks.hasOwnProperty(nextLevel)) {
+            setProfile((prev: any) => {
+              const data = { ...prev };
+              if(!profile.completedLevels.includes(currentQuest))
+                {
+                  data.completedLevels = [...data.completedLevels, nextLevel];
+                }
+              
+              return data;
+            });
+  
+            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+            setData(demoBlocks[nextLevel]['1']);
+            setCurrentScreenId(6);
+            return false;
+          } else {
+            setCurrentScreenId(6);
+            setType(null);
+            setData(null);
+            return false;
+          }
+         
+        }
+        /*
+        if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
@@ -788,34 +865,23 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(8);
           return false;
         }
-       /*
-        if (demoBlocks.hasOwnProperty(nextLevel)) {
-          setProfile((prev: any) => {
-            const data = { ...prev };
-            if(!profile.completedLevels.includes(currentQuest))
-              {
-                data.completedLevels = [...data.completedLevels, nextLevel];
-              }
-            
-            return data;
-          });
-
-          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-          setData(demoBlocks[nextLevel]['1']);
-          setCurrentScreenId(6);
-          return false;
-        } else {
-          setCurrentScreenId(6);
-          setType(null);
-          setData(null);
-          return false;
-        }
         */
       } else {
-        setType(nextBlock[0]?.blockChoosen);
-        setData(nextBlock[0]);
-        setSelectedOption(null);
-        return false;
+        /** IF a block not has navi option then it leads to next block */
+        if(nextBlock && nextBlock[0]?.blockChoosen)
+          {
+            setType(nextBlock[0]?.blockChoosen);
+            setData(nextBlock[0]);
+            setSelectedOption(null);
+            return false;
+          }
+           /** else leads to first block of the quest */
+          else{
+            setType(demoBlocks[quest]['1']?.blockChoosen);
+            setData(demoBlocks[quest]['1']);
+            setSelectedOption(null);
+            return false;
+          }
       }
     }
 
@@ -1354,7 +1420,63 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
-        if (demoBlocks.hasOwnProperty(nextLevel)) {
+        const Nextcurrentquest = next?.blockQuestNo;
+        const getgameinfoquest = gameInfo?.gameQuest.find(
+          (row: any) => row.gameQuestNo == Nextcurrentquest,
+        );
+        if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
+          const getminpassscore = getgameinfoquest?.gameMinScore;
+          const scores = profile?.score;
+          const sums: any = {};
+          scores.forEach((score: any) => {
+            const quest = score.quest;
+            if (!sums[quest]) {
+              sums[quest] = 0;
+            }
+            sums[quest] += score.score;
+          });
+  
+          // const getFinalscores = Object.values(sums);
+          const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
+            quest,
+            score,
+          }));
+          const getscores = getFinalscores.find(
+            (row: any) => row.quest == getgameinfoquest.gameQuestNo,
+          );
+          const finalscore = getscores?.score;
+          if (finalscore < getminpassscore) {
+            setisReplay(true);
+            Setprofilescore(finalscore);
+            setisOptionalReplay(false);
+            setCurrentScreenId(8);
+            return false;
+          } else {
+            if (demoBlocks.hasOwnProperty(nextLevel)) {
+              setProfile((prev: any) => {
+                const data = { ...prev };
+                if(!profile.completedLevels.includes(currentQuest))
+                  {
+                    data.completedLevels = [...data.completedLevels, nextLevel];
+                  }
+                return data;
+              });
+              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+              setData(demoBlocks[nextLevel]['1']);
+              setFeedbackNavigateNext(false);
+              setCurrentScreenId(6);
+              return false;
+            } else {
+              setType(null);
+              setData(null);
+              setCurrentScreenId(6);
+              return false;
+            }
+          }
+        }
+        else
+        {
+           if (demoBlocks.hasOwnProperty(nextLevel)) {
           setProfile((prev: any) => {
             const data = { ...prev };
             if(!profile.completedLevels.includes(currentQuest))
@@ -1374,20 +1496,29 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(6);
           return false;
         }
-        /*
-        setProfile((prev: any) => {
-          const data = { ...prev };
-          data.completedLevels = [...data?.completedLevels, nextLevel];
-          return data;
-        });
-        setFeedbackNavigateNext(false);
-        setCurrentScreenId(13);
-        return false;*/
-      }
-    }
+        }
     setType(nextBlock[0]?.blockChoosen);
     setData(nextBlock[0]);
     setSelectedOption(null);
+  } else {
+    /** IF a block not has navi option then it leads to next block */
+    if(nextBlock && nextBlock[0]?.blockChoosen)
+      {
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
+        setSelectedOption(null);
+        return false;
+      }
+       /** else leads to first block of the quest */
+      else{
+        setType(demoBlocks[quest]['1']?.blockChoosen);
+        setData(demoBlocks[quest]['1']);
+        setSelectedOption(null);
+        return false;
+      }
+  }
+
+    }
   };
 
   const calScore = () => {
