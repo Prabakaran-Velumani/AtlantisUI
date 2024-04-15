@@ -1,46 +1,9 @@
 import {
-  Button,
-  Badge,
   Box,
-  Flex,
   Icon,
-  Text,
-  Image,
-  useColorModeValue,
-  useColorMode,
-  useDisclosure,
-  SimpleGrid,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  useBreakpointValue,
-  DrawerProps,
-  Img,
-  Menu,
-  MenuButton,
-  MenuList,
-  FormControl,
-  FormLabel,
-  Textarea,
-  MenuItem,
   useToast,
 } from '@chakra-ui/react';
 
-import bk from 'assets/img/games/17.png';
-import note from 'assets/img/games/note.png';
-import next from 'assets/img/screens/next.png';
-import dial from 'assets/img/games/Dialogue.png';
-import char from 'assets/img/games/charbox.png';
-import right from 'assets/img/games/right.png';
-import left from 'assets/img/games/left.png';
-import parch from 'assets/img/games/parch.png';
-import on from 'assets/img/games/on.png';
-import off from 'assets/img/games/off.png';
-import Screen6 from '../../../../../assets/img/screens/screen6.png';
 import React, {
   Suspense,
   createContext,
@@ -49,21 +12,21 @@ import React, {
   useMemo,
   useRef,
   useState,
+  lazy
 } from 'react';
 import { preloadedImages } from 'utils/hooks/function';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
-
 import { json, useParams } from 'react-router-dom';
 import {
   getGameDemoData,
   SubmitReview,
   getGameCreatorDemoData,
 } from 'utils/game/gameService';
-import EntirePreview from './EntirePreview';
 import { API_SERVER } from 'config/constant';
 import { IoIosRefresh } from 'react-icons/io';
 import PlayInfo from './playcards/playinfo';
-
+import CharacterGlb from 'assets/img/games/Character_sample.glb';
+const EntirePreview = lazy(()=> import ('./EntirePreview'));
 const gameScreens = [
   'Completion',
   'Leaderboard',
@@ -104,6 +67,7 @@ const GamePreview = () => {
   
   useEffect(() => {
     const fetchData = async () => {
+      // assetImageSrc['characterGlb'] = CharacterGlb; 
       const resolvedResult: any = await preloadedImages(assetImageSrc);
       setStaticAssetImageUrls(resolvedResult);
     };
@@ -469,14 +433,13 @@ const GamePreview = () => {
   }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
 
   useEffect(() => {
-    if (gameInfo && preloadedAssets) {
+    if (gameInfo && Object.keys(preloadedAssets).length > 0) {
       setContentReady(true);
     } else {
       setContentReady(false);
     }
   }, [gameInfo, preloadedAssets]);
 
-  console.log('gameInfo *****',gameInfo)
   return (
     <>
     <Suspense fallback={<h1>Loading please wait...</h1>}>
@@ -487,10 +450,6 @@ const GamePreview = () => {
       ) : (
         gameInfo?.gameId &&
         (
-          // !showGame ? 
-        //   (
-        //   <PlayInfo />
-        // ) :
          (
           <ScoreContext.Provider value={{ profile, setProfile }}>
             <Box id="container" >

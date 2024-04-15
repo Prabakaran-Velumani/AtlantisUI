@@ -1,25 +1,12 @@
-// Chakra Imports
 import {
   Button,
-  Badge,
   Box,
   Flex,
   Icon,
   Text,
-  Image,
   useColorModeValue,
   useColorMode,
   useDisclosure,
-  SimpleGrid,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  useBreakpointValue,
-  DrawerProps,
   Img,
   Menu,
   MenuButton,
@@ -29,16 +16,10 @@ import {
   Textarea,
   MenuItem,
   Select,
-  Slider,
-  SliderTrack,
-  SliderThumb,
-  SliderFilledTrack,
-  Tooltip,
   GridItem,
   Grid,
-  Stack,
 } from '@chakra-ui/react';
-
+import { lazy } from 'react';
 import { motion } from 'framer-motion';
 import React, {
   Suspense,
@@ -57,29 +38,29 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import feedi from 'assets/img/screens/feed.png';
 import { AiFillMessage } from 'react-icons/ai';
-import Story from './playcards/Story';
-import Welcome from './playcards/Welcome';
-import ThankYou from './playcards/Thankyou';
-import Overview from './playcards/Overview';
-import Reflection from './playcards/Reflection';
-import Takeway from './playcards/Takeaway';
-import Completion from './playcards/Completion';
-import ReplayGame from './playcards/ReplayGame';
 import { getTestAudios } from 'utils/game/gameService';
-import PlayInfo from './playcards/playinfo';
-import LeaderBoard from './playcards/Leaderboard';
 import { MdClose } from 'react-icons/md';
-import ProfileScreen from './playcards/ProfileScreen';
-import Characterspage from './playcards/CharacterSelection';
-import ChapterPage from './playcards/Chapters';
-import FeedBackScreen from './playcards/FeedBackScreen';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
 import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
-import TopMenuBar from './playcards/TopMenuBar';
+const Story  = lazy(() => import('./playcards/Story'));
+const Welcome  = lazy(() => import('./playcards/Welcome'));
+const ThankYou  = lazy(() => import('./playcards/Thankyou'));
+const Overview  = lazy(() => import('./playcards/Overview'));
+const Reflection  = lazy(() => import('./playcards/Reflection'));
+const Takeway  = lazy(() => import('./playcards/Takeaway'));
+const Completion  = lazy(() => import('./playcards/Completion'));
+const ReplayGame  = lazy(() => import('./playcards/ReplayGame'));
+const PlayInfo  = lazy(() => import('./playcards/playinfo'));
+const LeaderBoard  = lazy(() => import('./playcards/Leaderboard'));
+const ProfileScreen  = lazy(() => import('./playcards/ProfileScreen'));
+const Characterspage  = lazy(() => import('./playcards/CharacterSelection'));
+const ChapterPage  = lazy(() => import('./playcards/Chapters'));
+const FeedBackScreen  = lazy(() => import('./playcards/FeedBackScreen'));
+const TopMenuBar = lazy(() => import('./playcards/TopMenuBar'));
 
 interface Review {
   // reviewId: Number;

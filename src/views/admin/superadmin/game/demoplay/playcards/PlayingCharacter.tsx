@@ -11,14 +11,8 @@ import Sample from 'assets/img/games/Character_sample.glb';
 const PlayingChracter: React.FC = () => {
     const groupRef = useRef<any>();
     const gltf = useLoader(GLTFLoader, Sample);  
-    const [isHovered, setIsHovered] = useState<any>(false);    
-    
-    
+    const [isHovered, setIsHovered] = useState<any>(false);       
     const mixer = useRef<THREE.AnimationMixer>();
-    // const mixer = new THREE.AnimationMixer(gltf.scene);  
-    // const action = mixer.clipAction(gltf.animations[0]);    
-
-  
     
     useEffect(() => {
       if(gltf.animations.length > 0){

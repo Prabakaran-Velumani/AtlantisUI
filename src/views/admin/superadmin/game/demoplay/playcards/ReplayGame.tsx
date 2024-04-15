@@ -48,19 +48,10 @@ const ReplayGame: React.FC<{
 }) => {
   const { profile } = useContext(ScoreContext);
   const [replayMessage, setReplayMessage] = useState<string>(null);
-  //profile?.currentQuest;
-  console.log('gameInfo',gameInfo?.gameQuest);
 useEffect(()=>{
   const currentQuestMasterData =  gameInfo?.gameQuest[profile?.currentQuest -1];
-  //  const currentQuestMasterData =  gameInfo?.gameQuest.find((key: any) => key?.gameQuestNo === profile?.currentQuest);
-  console.log('currentQuestMasterData',currentQuestMasterData);
   if(currentQuestMasterData.hasOwnProperty('gameTotalScore') )
     {
-      console.log('profilescore',profilescore)
-      console.log('isOptionalReplay',isOptionalReplay)
-      console.log('isReplay',isReplay)
-      console.log('currentQuestMasterData?.gameTotalScore',currentQuestMasterData?.gameTotalScore)
-
       if(isReplay === true && isOptionalReplay !== true){
         
         const differedScore = currentQuestMasterData?.gameTotalScore ? (parseInt(currentQuestMasterData?.gameTotalScore) - parseInt(profilescore)) : null ;
@@ -75,12 +66,6 @@ useEffect(()=>{
     }
 },[]);
 
-//gameInfo?.gameQuests, isOptionalReplay, isReplay, profile?.currentQuest, profilescore
-console.log('profilescore',profilescore)
-console.log('isOptionalReplay',isOptionalReplay)
-console.log('isReplay',isReplay)
-console.log('replayMessage',replayMessage)
-console.log('preloadedAssets.ReplayBtn',preloadedAssets.ReplayBtn)
 
   return (
     <>
@@ -94,11 +79,6 @@ console.log('preloadedAssets.ReplayBtn',preloadedAssets.ReplayBtn)
                   <Box className="replay_content_center">
                     <Box className="title_replay">
                       <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
-                        {/* {isReplay === true
-                          ? `You are only ${profilescore} points away from a perfect score. Would you like to replay?`
-                          : isOptionalReplay === true
-                          ? `Your Score is to low. So U have to play Again`
-                          : `Would you like to play again?`} */}
                           {replayMessage}
                       </Text>
                     </Box>
@@ -130,11 +110,6 @@ console.log('preloadedAssets.ReplayBtn',preloadedAssets.ReplayBtn)
                         className="replay_buttons"
                         onClick={() => replayNextHandler(data)}
                       /> </>) : null}
-                      {/* <Img
-                        src={preloadedAssets.next}
-                        className="replay_buttons"
-                        onClick={() => replayNextHandler(data)}
-                      /> */}
                     </Box>
                   </Box>
                 </Box>
