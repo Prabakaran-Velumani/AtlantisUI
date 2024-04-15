@@ -66,6 +66,7 @@ import SliderPointer from '../../assets/img/games/slider-pointer.png';
 import Tooltip from 'assets/img/games/tooltip.png';
 import Ans from 'assets/img/games/ANS.png';
 import Fb from 'assets/img/games/FB.png';
+import Completed from 'assets/img/games/COMPLETED.png'
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
  */
@@ -138,4 +139,5 @@ export const assetImageSrc = [
   { assetType: 'ANS', src:Ans},
   { assetType: 'FB', src:Fb},
   { assetType: 'Lang', src:Lang},
+  { assetType: 'Completed', src:Completed},
 ];

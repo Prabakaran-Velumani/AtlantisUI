@@ -3857,8 +3857,9 @@ grid-row: 1 / 2;
 .completed_level {
   z-index: 99999;
   position: absolute;
-  bottom: 16%;
+  bottom: 25px;
   height: 6vh;
+  width: 100%;
 }
 
 .story_overView_next_button {

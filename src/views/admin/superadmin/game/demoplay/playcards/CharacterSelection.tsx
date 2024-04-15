@@ -281,7 +281,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                         className="okay"
                         onClick={() => setIsLanguage(false)}
                       >
-                        <Img src={preloadedAssets.OkayBtn} w={'100%'} h={'auto'} />
+                        <Img src={preloadedAssets?.OkayBtn} w={'100%'} h={'auto'} />
                       </Button>
                     </Box>
                   </Box>

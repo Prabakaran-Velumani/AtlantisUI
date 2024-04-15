@@ -323,9 +323,9 @@ const ChapterPage: React.FC<{
                               </Box>
                               {profile.completedLevels.includes(it) ? (
                                 <Box className={'completed_level'}>
-                                  <Box position={'relative'}>
-                                    <Img w={'auto'} h={'100%'} src={rib} />
-                                    <Text
+                                  <Box position={'relative'} display={'flex'} justifyContent={'center'}> 
+                                    <Img w={'40%'} h={'auto'} src={preloadedAssets?.Completed} />
+                                    {/* <Text
                                       position={'absolute'}
                                       textAlign={'center'}
                                       fontFamily={'AtlantisText'}
@@ -338,7 +338,7 @@ const ChapterPage: React.FC<{
                                       textShadow="-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
                                     >
                                       Completed
-                                    </Text>
+                                    </Text> */}
                                   </Box>
                                 </Box>
                               ) : (
