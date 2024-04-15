@@ -1667,7 +1667,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     overflow={'hidden'}
                     lineHeight={'25px'}
                   >
-
                     <Box className='progress-box'>
                       {/* <Text className='text'>{BlockNo ? Math.floor(progressPercentage) : 0}%</Text> */}
                       <Text className='text'>{true ? Math.floor(50) : 0}%</Text>
@@ -1746,7 +1745,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   </Box>
                 </>
               ) : null}
-
               {/* {permission.setting ? */}
               {isSettingOpen ? (
                 <Box className="Setting-box">
@@ -1791,7 +1789,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       <SliderThumb
                         boxSize={10}
                         background={'transparent'}
-                        // left={'calc(100% - 30%)'}
+                      // left={'calc(100% - 30%)'}
                       >
                         <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
                       </SliderThumb>
@@ -1809,7 +1807,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         height="15px"
                         borderRadius="80px"
                       >
-                         <Box position="relative">
+                        <Box position="relative">
                           <Img w={'100%'} h={'auto'} src={VolumeTrack} alt="Volume Track" />
                           <Box
                             position="absolute"

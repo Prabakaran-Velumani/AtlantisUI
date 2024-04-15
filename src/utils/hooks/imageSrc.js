@@ -56,14 +56,16 @@ import replayBtn from '../../assets/img/games/ReplayBtn.png';
 import SelectButton from '../../assets/img/games/selectbtn.png';
 import Okay from '../../assets/img/games/Okay.png'
 import write from '../../assets/img/screens/Screens/Writing.png';
-
+import feedparch from 'assets/img/games/parchment.png';
 
 import TopMenu from '../../assets/img/games/top-menu.png';
 import Overview from '../../assets/img/games/game-overview.png';
 import Setting from '../../assets/img/games/settings.png';
 import SettingPad from '../../assets/img/games/setting-pad.png';
 import SliderPointer from '../../assets/img/games/slider-pointer.png';
-import Tooltip from 'assets/img/games/tooltip.png'
+import Tooltip from 'assets/img/games/tooltip.png';
+import Ans from 'assets/img/games/ANS.png';
+import Fb from 'assets/img/games/FB.png';
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
 
@@ -133,4 +135,7 @@ export const assetImageSrc = [
   { assetType: 'SliderPointer', src: SliderPointer },
   { assetType: 'write', src: write },
   { assetType: 'TooltipImg', src: Tooltip },
+  { assetType: 'feedparch', src:feedparch},
+  { assetType: 'ANS', src:Ans},
+  { assetType: 'FB', src:Fb},
 ];

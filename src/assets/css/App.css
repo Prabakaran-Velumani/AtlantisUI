@@ -3579,7 +3579,10 @@ grid-row: 1 / 2;
   width: calc(90vh - (25vh));
   height: 100%;
 }
-
+.story_feedback_content{
+  height: 85vh;
+  width: calc(90vh - (15vh))
+}
 .story_interaction_content {
   height: 80vh;
   width: calc(90vh - (9vh))
@@ -3889,7 +3892,11 @@ grid-row: 1 / 2;
   position: absolute;
   transform: translate(70%, -8%);
 }
-
+.feed_list{
+  text-align: center;
+  font-family: 'AtlantisContent';
+  font-size: 3vh;
+}
 .top-menu-home-section .progress-box .progressing .level {
   background: linear-gradient(to bottom, #009400, #00000000);
   height: 2vw;
@@ -3905,8 +3912,18 @@ grid-row: 1 / 2;
   width:auto;
   height: 8vh;
 }
-
+.feedback_content_text{
+  font-size: 3.5vh;
+  font-family: 'AtlantisText';
+  color: var(--dialog-title-color);
+}
 @media screen and (orientation: portrait) {
+  .feed_list{
+    font-size: 3vw;
+  }
+  .feedback_content_text{
+    font-size: 3.5vw;
+  }
   .top-menu-home-section .Setting-box .volumes .slider-track .filled-volume { 
     height: 2vw;
   }
@@ -4248,7 +4265,10 @@ grid-row: 1 / 2;
     height: 80vw;
     width: calc(90vw - (9vw))
   }
-
+  .story_feedback_content{
+    height: 85vw;
+    width: calc(90vw - (15vw))
+  }
   .story_completion_image {
     width: 45%;
     height: 90vw;

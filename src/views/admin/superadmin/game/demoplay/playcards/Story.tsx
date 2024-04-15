@@ -655,17 +655,22 @@ const Story: React.FC<{
             className="chapter_potrait"
           >
             <Img src={backGroundImg} className="dialogue_screen" />
-            {selectedPlayer && (
-              <Img
-                src={`${API_SERVER}/${selectedPlayer}`}
-                className={'narrator_character_image'}
-              />
-            )}
             {selectedNpc && (
-              <Img
-                src={selectedNpc}
-                className={'player_character_image'}
-              />
+              <Box className={'player_character_image'}>
+                <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */}
+                  {/* <Environment preset={"park"} background />   */}
+                  <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
+                  <ambientLight intensity={0.5} />
+                  {/* <OrbitControls   />  */}
+                  <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
+                  {/* COMPONENTS */}
+                  <Player />
+                  <Model position={[-3, -1.8, 5]} rotation={[0, 1, 0]} />
+                  {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
+                  {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
+                  {/* <Parrot /> */}
+                </Canvas>
+              </Box>
             )}
             <Img className={'dialogue_image'} src={preloadedAssets.dial} />
             <Box position={'relative'}>
@@ -785,8 +790,7 @@ const Story: React.FC<{
           </Box>
         )}
       </>
-    );
-  };
+    )};
 const Player: React.FC = () => {
   const groupRef = useRef<any>();
   const gltf = useLoader(GLTFLoader, Sample);

@@ -87,8 +87,8 @@ const GamePreview = () => {
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [currentScreenId, setCurrentScreenId] =
-    useState<number>(InitialScreenId);
-    // useState<number>(13);
+    // useState<number>(InitialScreenId);
+      useState<number>(14);
   const [profile, setProfile] = useState({
     score: [],
     completedLevels: ['1'],
@@ -98,12 +98,12 @@ const GamePreview = () => {
   const toast = useToast();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(null);
-  const [showGame,setShowGame] = useState(false);
+  const [showGame, setShowGame] = useState(false);
   const [contentReady, setContentReady] = useState<boolean>(false);
   const [apiImageSet, setApiImageSet] = useState<any>();
   const [staticAssetImageUrls, setStaticAssetImageUrls] = useState<any>(null);
   const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const resolvedResult: any = await preloadedImages(assetImageSrc);
@@ -121,17 +121,17 @@ const GamePreview = () => {
   }, [id]);
 
   const element = document.getElementById('root');
-  const handleFullScreen = () => {     
+  const handleFullScreen = () => {
     if (element) {
       try {
-        if (document.fullscreenEnabled) {          
-          if (!document.fullscreenElement) {            
+        if (document.fullscreenEnabled) {
+          if (!document.fullscreenElement) {
             element.requestFullscreen()
               .catch((error) => {
-                console.log('Error entering fullscreen mode:', error.message);                
+                console.log('Error entering fullscreen mode:', error.message);
               });
           } else {
-            console.warn('Document is already in fullscreen mode');           
+            console.warn('Document is already in fullscreen mode');
           }
         } else {
           console.error('Fullscreen mode is not supported');
@@ -161,7 +161,7 @@ const GamePreview = () => {
     }
   };
 
-  
+
   const updateCreatorGameInfo = async (info: any) => {
     const {
       gameview,
@@ -211,7 +211,7 @@ const GamePreview = () => {
       };
       return item;
     });
-   setGameInfo({
+    setGameInfo({
       gameId: info?.result?.gameId,
       gameData: gameData,
       gameHistory: gameview,
@@ -349,7 +349,7 @@ const GamePreview = () => {
       gameNonPlayerUrl:
         info?.assets?.npcUrl && API_SERVER + '/' + info?.assets?.npcUrl,
     });
-  
+
     const apiImageSetArr: any = [
       { assetType: 'backgroundImage', src: image?.gasAssetImage },
       {
@@ -474,61 +474,61 @@ const GamePreview = () => {
     if (gameInfo && preloadedAssets) {
       setContentReady(true);
     } else {
-      setContentReady(false);
+      setContentReady(false);                                                
     }
   }, [gameInfo, preloadedAssets]);
 
   return (
     <>
-    <Suspense fallback={<h1>Loading please wait...</h1>}>
-        {contentReady && (
-      gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
-      gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
-        <h1> {'Your are Not Authorized....'}</h1>
-      ) : (
-        gameInfo?.gameId &&
-        (
-          // !showGame ? 
-        //   (
-        //   <PlayInfo />
-        // ) :
-         (
-          <ScoreContext.Provider value={{ profile, setProfile }}>
-            <Box id="container" >
-              {isHovered && (
-                <Icon
-                  as={IoIosRefresh}
-                  position={'fixed'}
-                  top={'20px'}
-                  left={'48%'}
-                  color={'white'}
-                  zIndex={999999}
-                  width={'60px'}
-                  height={'60px'}
-                  padding={'20px'}
-                  borderRadius={'50%'}
-                  bg={'grey'}
-                  cursor={'pointer'}
-                  onClick={() => window.location.reload()}
-                />
-              )}
-              <EntirePreview
-                currentScore={currentScore}
-                setCurrentScore={setCurrentScore}
-                gameScreens={gameScreens}
-                currentScreenId={currentScreenId}
-                setCurrentScreenId={setCurrentScreenId}
-                gameInfo={gameInfo}
-                handleSubmitReview={handleSubmitReview}
-                isReviewDemo={id ? false : true}
-                preloadedAssets={preloadedAssets}
-              />
-            </Box>
-          </ScoreContext.Provider>
-        ))
-      )
-        )}
-    </Suspense>
+      {/* <Suspense fallback={<h1>Loading please wait...</h1>}> */}
+      {contentReady && (
+        gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
+          gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
+          <h1> {'Your are Not Authorized....'}</h1>
+        ) : (
+          gameInfo?.gameId &&
+          (
+            // !showGame ? 
+            //   (
+            //   <PlayInfo />
+            // ) :
+            (
+              <ScoreContext.Provider value={{ profile, setProfile }}>
+                <Box id="container" >
+                  {isHovered && (
+                    <Icon
+                      as={IoIosRefresh}
+                      position={'fixed'}
+                      top={'20px'}
+                      left={'48%'}
+                      color={'white'}
+                      zIndex={999999}
+                      width={'60px'}
+                      height={'60px'}
+                      padding={'20px'}
+                      borderRadius={'50%'}
+                      bg={'grey'}
+                      cursor={'pointer'}
+                      onClick={() => window.location.reload()}
+                    />
+                  )}
+                  <EntirePreview
+                    currentScore={currentScore}
+                    setCurrentScore={setCurrentScore}
+                    gameScreens={gameScreens}
+                    currentScreenId={currentScreenId}
+                    setCurrentScreenId={setCurrentScreenId}
+                    gameInfo={gameInfo}
+                    handleSubmitReview={handleSubmitReview}
+                    isReviewDemo={id ? false : true}
+                    preloadedAssets={preloadedAssets}
+                  />
+                </Box>
+              </ScoreContext.Provider>
+            ))
+        )
+      )}
+      {/* </Suspense> */}
     </>
   );
 };
