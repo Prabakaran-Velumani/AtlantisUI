@@ -51,13 +51,13 @@ import Selected from '../../assets/img/games/selected.png';
 import refsep from '../../assets/img/games/refseparate.png';
 import Login from '../../assets/img/games/log_non.png';
 import on from '../../assets/img/games/on.png';
+import Lang from 'assets/img/games/lang.png'
 import off from '../../assets/img/games/off.png';
 import replayBtn from '../../assets/img/games/ReplayBtn.png';
 import SelectButton from '../../assets/img/games/selectbtn.png';
 import Okay from '../../assets/img/games/Okay.png'
 import write from '../../assets/img/screens/Screens/Writing.png';
 import feedparch from 'assets/img/games/parchment.png';
-
 import TopMenu from '../../assets/img/games/top-menu.png';
 import Overview from '../../assets/img/games/game-overview.png';
 import Setting from '../../assets/img/games/settings.png';
@@ -68,7 +68,6 @@ import Ans from 'assets/img/games/ANS.png';
 import Fb from 'assets/img/games/FB.png';
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
-
  */
 export const assetImageSrc = [
   { assetType: 'left', src: left },
@@ -138,4 +137,5 @@ export const assetImageSrc = [
   { assetType: 'feedparch', src:feedparch},
   { assetType: 'ANS', src:Ans},
   { assetType: 'FB', src:Fb},
+  { assetType: 'Lang', src:Lang},
 ];

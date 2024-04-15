@@ -3910,7 +3910,7 @@ grid-row: 1 / 2;
 }
 .slider_thumb{
   width:auto;
-  height: 8vh;
+  height: 6vh;
 }
 .feedback_content_text{
   font-size: 3.5vh;
@@ -3928,7 +3928,7 @@ grid-row: 1 / 2;
     height: 2vw;
   }
   .slider_thumb{
-    height: 8vw;
+    height: 6vw;
   }
   .top-menu-home-section .Setting-box .volumes .slider-track {
     height: 5vw;
