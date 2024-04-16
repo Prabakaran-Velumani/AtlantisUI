@@ -2267,6 +2267,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         >
                           <Box className="Images">
                             <ThankYou
+                              setCurrentScreenId={setCurrentScreenId}
                               formData={gameInfo?.gameData}
                               imageSrc={preloadedAssets.Thankyou}
                             />

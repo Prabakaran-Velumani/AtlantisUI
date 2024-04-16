@@ -114,7 +114,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                     >
                       <Img src={preloadedAssets?.feedparch} w={'auto'} h={'100%'} />
                       <Box position={'absolute'} top={0} width={'100%'} h={'100%'} display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
-                        <Box className='feed_list'> Interaction {currentScreenId === 14 && FeedbackcurrentPosition+'/'+interactionBlockArray.length}</Box>
+                        <Box className='feed_list'> Interaction {currentScreenId === 14 && FeedbackcurrentPosition && interactionBlockArray && FeedbackcurrentPosition +'/'+interactionBlockArray.length}</Box>
                         <Box w={'70%'} h={'75%'} overflowY={'scroll'} className='feedback_content_text'>
                           {/* <Box display={'flex'}>
                             <Img src={preloadedAssets.qs} h={'1em'} w={'1em'}  />
@@ -201,6 +201,18 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
             )}
           </>
         )} */}
+         {isScreenshot === true && (
+              <InteractionScreenShot
+                data={FeedBackoptionData}
+                option={FeedBackselectedoptionData}
+                options={options}
+                backGroundImg={backgroundScreenUrl}
+                profile={profile}
+                geTfeedBackoption={geTfeedBackoption}
+                isScreenshot={isScreenshot}
+                preloadedAssets={preloadedAssets}
+              />
+            )}
       </>
     </>
   );
