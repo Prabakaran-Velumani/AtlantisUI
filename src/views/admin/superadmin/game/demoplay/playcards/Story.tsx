@@ -28,7 +28,12 @@ import { useParams } from 'react-router-dom';
 // Import ProfileContext from EntirePreview
 import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
-import { API_SERVER, Notelength, Dialoglength, Responselength } from 'config/constant';
+import {
+  API_SERVER,
+  Notelength,
+  Dialoglength,
+  Responselength,
+} from 'config/constant';
 import { ScoreContext } from '../GamePreview';
 import { Canvas, useFrame, useLoader } from 'react-three-fiber';
 import Sample from 'assets/img/games/Merlin.glb';
@@ -58,7 +63,7 @@ const Story: React.FC<{
   setCurrentScreenId: any;
   selectedPlayer: any;
   selectedNpc: any;
-  getAudioForText: any;
+  // getAudioForText: any;
   voiceIds: any;
   windowWidth: any;
   windowHeight: any;
@@ -88,7 +93,7 @@ const Story: React.FC<{
   setIsGetsPlayAudioConfirmation,
   isGetsPlayAudioConfirmation,
   selectedNpc,
-  getAudioForText,
+  // getAudioForText,
   voiceIds,
   currentScore,
   prevData,
@@ -100,19 +105,26 @@ const Story: React.FC<{
   navTrack,
   setCurrentTrackPointer,
   gameInfo,
-  preloadedAssets
+  preloadedAssets,
 }) => {
     const [showNote, setShowNote] = useState(true),
       [first, setFirst] = useState(false);
     // const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
     const userProfile = useContext(ProfileContext);
+    const [getInteraction, setInteraction] = useState(false);
+    const [Contentgetlanguage, setContentlanguage] = useState('');
     const { profile, setProfile } = useContext(ScoreContext);
     const [currentPosition, setCurrentPosition] = useState(0);
     const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
     const [Navigatenext, setNavigateNext] = useState<any>(false);
     const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
-    const [isPlayAudioConfirmation, setIsPlayAudioConfirmation] = useState<boolean>(false);
+    const [isPlayAudioConfirmation, setIsPlayAudioConfirmation] =
+      useState<boolean>(false);
+    const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
     const [score, setScore] = useState(null);
+    const [interactionNext, setInteractionNext] = useState(null);
+
+
     useEffect(() => {
       if (data && type) {
         getVoice(data, type);
@@ -120,6 +132,7 @@ const Story: React.FC<{
         setTimeout(() => {
           setShowNote(false);
           getDataSection(data);
+          interactionNext === true && setInteractionNext(false); //When every render it could be false, only it true when interaction option is submitted
         }, 1000);
 
         /** this logic is used to hanlde the navigation options in both forward and backward navigation */
@@ -127,25 +140,26 @@ const Story: React.FC<{
           let previousPrimarySeq = navTrack[navTrack.length - 1];
           if (previousPrimarySeq) {
             let currentQuest = previousPrimarySeq.split('.')[0];
-            let previousBlock: any = Object.values(gameInfo?.blocks[currentQuest])?.find((row: any) => {
+            let previousBlock: any = Object.values(
+              gameInfo?.blocks[currentQuest],
+            )?.find((row: any) => {
               // let previousBlock : any = Object.values(gameInfo?.blocks[profile?.currentQuest])?.find((row: any)=> {
-              return row.blockPrimarySequence == previousPrimarySeq
+              return row.blockPrimarySequence == previousPrimarySeq;
             });
             if (data.blockPrimarySequence != previousPrimarySeq) {
               if (previousBlock?.blockChoosen === 'Interaction') {
                 setNavTrack([data.blockPrimarySequence]);
-              }
-              else {
+              } else {
                 const newArray = navTrack;
                 newArray.push(data.blockPrimarySequence);
                 setNavTrack(newArray);
               }
             }
-          }
-          else {
+          } else {
             setNavTrack([data.blockPrimarySequence]);
           }
         }
+
       }
     }, [data, type]);
 
@@ -160,138 +174,130 @@ const Story: React.FC<{
     useEffect(() => {
       const fetchData = async () => {
         if (profileData?.Audiogetlanguage.length !== 0) {
-          // if(AudioOptions.qpOptionId ==='')
-          // {
-          const GetblocktextAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === data?.blockId);
-          if (GetblocktextAudioFiltered.length > 0) {
-            const FilteredFieldName = GetblocktextAudioFiltered.map((item: any) => item.fieldName);
-            if (FilteredFieldName[0] === 'blockText') {
-              const audioUrls = GetblocktextAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
-              const relativePath = audioUrls[0].split('\\uploads\\')[1];
-              const normalizedPath = relativePath.replace(/\\/g, '/');
-              const fullUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-              const responseblockText = await fetch(fullUrl);
-              if (responseblockText.ok) {
-                setAudioObj({
-                  url: fullUrl,
-                  type: 'bgm',
-                  volume: '0.5',
-                  loop: true,
-                  autoplay: true,
-                });
-                setIsGetsPlayAudioConfirmation(true);
+          if (AudioOptions.qpOptionId === '') {
+            const GetblocktextAudioFiltered =
+              profileData?.Audiogetlanguage.filter(
+                (key: any) => key?.textId === data?.blockId,
+              );
+            if (GetblocktextAudioFiltered.length > 0) {
+              const FilteredFieldName = GetblocktextAudioFiltered.map(
+                (item: any) => item.fieldName,
+              );
+              if (FilteredFieldName[0] === 'blockText') {
+                const audioUrls = GetblocktextAudioFiltered.map(
+                  (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
+                );
+                const normalizedPath = audioUrls[0];
+                const fullUrl = `${API_SERVER}${normalizedPath}`;
+                const responseblockText = await fetch(fullUrl);
+                if (responseblockText.ok) {
+                  setAudioObj({
+                    url: fullUrl,
+                    type: 'api',
+                    volume: '0.5',
+                    loop: false,
+                    autoplay: true,
+                  });
+                  setIsGetsPlayAudioConfirmation(true);
+                }
+              }
+            }
+          } else {
+            if (AudioOptions.qpOptionId) {
+              const optionAudioFiltered = profileData?.Audiogetlanguage.filter(
+                (key: any) => key?.textId === AudioOptions?.qpOptionId,
+              );
+              if (optionAudioFiltered.length > 0) {
+                const getoptionsAudioFiltered = optionAudioFiltered.filter(
+                  (key: any) => key?.fieldName === 'qpOptionText',
+                );
+                if (getoptionsAudioFiltered.length > 0) {
+                  const QOTaudioUrls = getoptionsAudioFiltered.map(
+                    (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
+                  );
+
+                  if (QOTaudioUrls.length > 0) {
+                    // const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
+                    // const normalizedPath = relativePath.replace(/\\/g, '/');
+                    const normalizedPath = QOTaudioUrls[0];
+                    // const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
+                    const qpOptionTextUrl = `${API_SERVER}${normalizedPath}`;
+                    const responseqpOptionText = await fetch(qpOptionTextUrl);
+                    if (responseqpOptionText.ok) {
+                      setAudioObj({
+                        url: qpOptionTextUrl,
+                        type: 'api',
+                        volume: '0.5',
+                        loop: false,
+                        autoplay: true,
+                      });
+                      setIsGetsPlayAudioConfirmation(true);
+                    } else {
+                      const getAudioFiltered1 = optionAudioFiltered.filter(
+                        (key: any) => key?.fieldName === 'qpOptions',
+                      );
+                      if (getAudioFiltered1.length > 0) {
+                        const QPaudioUrls = getAudioFiltered1.map(
+                          (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
+                        );
+                        if (QPaudioUrls.length > 0) {
+                          const normalizedPath = QPaudioUrls[0];
+                          const qpOptionsUrl = `${API_SERVER}${normalizedPath}`;
+                          const responsequestoption = await fetch(qpOptionsUrl);
+                          if (responsequestoption.ok) {
+                            setAudioObj({
+                              url: qpOptionsUrl,
+                              type: 'api',
+                              volume: '0.5',
+                              loop: false,
+                              autoplay: true,
+                            });
+                            setIsGetsPlayAudioConfirmation(true);
+                          } else {
+                            setAudioObj({
+                              url: '',
+                              type: 'bgm',
+                              volume: '0.5',
+                              loop: true,
+                              autoplay: true,
+                            });
+                            setIsGetsPlayAudioConfirmation(false);
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
-          // }
-          // else{
-          // console.log(' =>', AudioOptions);
-          // if (AudioOptions.qpOptionId) {
-          //   const optionAudioFiltered = profileData?.Audiogetlanguage.filter((key: any) => key?.textId === AudioOptions?.qpOptionId);
-          //   console.log('1 =>',optionAudioFiltered,'.....', AudioOptions);
-          //   if (optionAudioFiltered.length > 0) {
-          //     const getoptionsAudioFiltered = optionAudioFiltered.filter((key: any) => key?.fieldName === 'qpOptionText');
-          //     console.log('2 =>',getoptionsAudioFiltered);
-          //     if (getoptionsAudioFiltered.length > 0) {
-          //       const QOTaudioUrls = getoptionsAudioFiltered.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
-          //       console.log('3 =>',QOTaudioUrls);
-          //       if (QOTaudioUrls.length > 0) {
-          //         const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
-          //         const normalizedPath = relativePath.replace(/\\/g, '/');
-          //         const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-          //         const responseqpOptionText = await fetch(qpOptionTextUrl);
-          //         console.log('4 =>',responseqpOptionText,qpOptionTextUrl);
-          //         if (responseqpOptionText.ok) {
-          //           setAudioObj({
-          //             url: qpOptionTextUrl,
-          //             type: 'bgm',
-          //             volume: '0.5',
-          //             loop: true,
-          //             autoplay: true,
-          //           });
-          //           setIsGetsPlayAudioConfirmation(true);
-          //         }
-          //         else {
-          //           const getAudioFiltered1 = optionAudioFiltered.filter((key: any) => key?.fieldName === "qpOptions");
-          //           if (getAudioFiltered1.length > 0) {
-          //             const QPaudioUrls = getAudioFiltered1.map((item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl);
-          //             if (QPaudioUrls.length > 0) {
-          //               const relativePath = QPaudioUrls[0].split('\\uploads\\')[1];
-          //               const normalizedPath = relativePath.replace(/\\/g, '/');
-          //               const qpOptionsUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-          //               const responsequestoption = await fetch(qpOptionsUrl);
-          //               console.log('4 =>',responsequestoption);
-          //               if (responsequestoption.ok) {
-          //                 setAudioObj({
-          //                   url: qpOptionsUrl,
-          //                   type: 'bgm',
-          //                   volume: '0.5',
-          //                   loop: true,
-          //                   autoplay: true,
-          //                 });
-          //                 setIsGetsPlayAudioConfirmation(true);
-          //               }
-          //               else
-          //               {
-          //                 setAudioObj({
-          //                   url: '',
-          //                   type: 'bgm',
-          //                   volume: '0.5',
-          //                   loop: true,
-          //                   autoplay: true,
-          //                 });
-          //                 setIsGetsPlayAudioConfirmation(false);
-          //               }
-
-          //             }
-          //           }
-          //         }
-
-          //       }
-          //     }
-          //   }
-
-          // }
-          //   setAudioObj({
-          //     url: '',
-          //     type: 'bgm',
-          //     volume: '0.5',
-          //     loop: true,
-          //     autoplay: true,
-          //   });
-          //   setIsGetsPlayAudioConfirmation(false);
-
-          // }
-
+        } else {
+          setAudioObj({
+            autoplay: false,
+          });
+          setIsGetsPlayAudioConfirmation(false);
         }
-        // else {
-
-        //   setAudioObj({
-        //     autoplay: false,
-        //   });
-        //   setIsGetsPlayAudioConfirmation(false);
-        // }
       };
       fetchData();
-    }, [profileData, data]);
 
+    }, [profileData, data, AudioOptions]);
 
     const getVoice = async (blockInfo: any, blockType: string) => {
       let text = '';
       let voiceId = '';
       /** 
-           * For voice 
-          data.includes('note') =>  Game Narattor
-          data.includes('dialog') =>  data.character
-          data.includes('interaction') => data.blockRoll
-          resMsg => data.blockRoll
-          
-          *For Animations & Emotion & voice Modulation 
-          data.includes('dialog') => data.animation
-          data.includes('interaction') //For Question => data.QuestionsEmotion
-          data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
-            resMsg =>responseObject[]  : responseemotionObject[]
-          */
+             * For voice 
+            data.includes('note') =>  Game Narattor
+            data.includes('dialog') =>  data.character
+            data.includes('interaction') => data.blockRoll
+            resMsg => data.blockRoll
+            
+            *For Animations & Emotion & voice Modulation 
+            data.includes('dialog') => data.animation
+            data.includes('interaction') //For Question => data.QuestionsEmotion
+            data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
+              resMsg =>responseObject[]  : responseemotionObject[]
+            */
 
       switch (blockType) {
         case 'Note':
@@ -312,7 +318,8 @@ const Story: React.FC<{
           // Sort the options array based on a unique identifier, such as index
           options.sort((a: any, b: any) => a.index - b.index);
           options.forEach((item: any) => {
-            optionsText += '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
+            optionsText +=
+              '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
           });
 
           text = blockInfo.blockText + optionsText;
@@ -342,11 +349,12 @@ const Story: React.FC<{
                 : voiceIds?.playerFemale;
           break;
       }
-      getAudioForText(text, voiceId);
+      // getAudioForText(text, voiceId);
     };
 
     const InteractionFunction = () => {
       setIsGetsPlayAudioConfirmation(true);
+
       setProfile((prev: any) => {
         const { seqId, score: newScore } = score;
         const index = prev.score.findIndex((item: any) => item.seqId === seqId);
@@ -366,16 +374,30 @@ const Story: React.FC<{
           return { ...prev, score: newScoreArray };
         }
       });
-      getData(data);
+      setInteractionNext(true);
     };
+
+    useEffect(() => {
+      if (interactionNext === true) {
+        getData(data);
+      }
+    }, [interactionNext])
+
+
     const optionClick = (item: any, ind: any) => {
       setScore({ seqId: item?.qpSequence, score: parseInt(item?.qpScore) });
+      SetAudioOptions(item);
       handleValidate(item, ind);
     };
 
-
-    const stylerender = (Navigatenext === true && (data && type === 'Dialog')) ? '' : 'transform 0.3s ease-in-out, translateY 0.3s ease-in-out';
-    const styletransform = (Navigatenext === true && (data && type === 'Dialog')) ? '' : `translateY(${showNote ? 200 : 0}px)`;
+    const stylerender =
+      Navigatenext === true && data && type === 'Dialog'
+        ? ''
+        : 'transform 0.3s ease-in-out, translateY 0.3s ease-in-out';
+    const styletransform =
+      Navigatenext === true && data && type === 'Dialog'
+        ? ''
+        : `translateY(${showNote ? 200 : 0}px)`;
     useEffect(() => {
       if (Navigatenext === true) {
         getData(data);
@@ -383,91 +405,301 @@ const Story: React.FC<{
     }, [Navigatenext]);
 
     const getDataSection = (data: any) => {
-      // console.log("data", data);
       showTypingEffect === true && setShowTypingEffect(false);
+      type === 'interaction' && setInteractionNext(false);
       setCurrentPosition(0);
-      // Note and Dialog
-      const content = data?.blockText || '';
-      const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
-      const newRemainingSentences = sentences.slice(currentPosition);
+      if (profileData?.Audiogetlanguage.length !== 0) {
+        const Getblocktext = profileData?.Audiogetlanguage.filter(
+          (key: any) => key?.textId === data?.blockId,
+        );
+        if (Getblocktext.length > 0) {
+          const FilteredFieldName = Getblocktext.map(
+            (item: any) => item.fieldName,
+          );
+          if (FilteredFieldName[0] === 'blockText') {
+            // Note and Dialog
+            const getcontent = Getblocktext[0].content || '';
+            const sentences = getcontent.split(
+              /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+            );
+            const newRemainingSentences = sentences.slice(currentPosition);
 
-      // response
-      const Responsecontent = resMsg || '';
-      const Responsesentences = Responsecontent.split(
-        /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-      );
-      const newRemainingResponseSentences = Responsesentences.slice(currentPosition);
-      const concatenatedSentences = [];
-      let totalLength = 0;
-      // Note and Dialog
-      if (type !== 'response') {
-        for (let i = 0; i < newRemainingSentences.length; i++) {
-          const sentence = newRemainingSentences[i];
+            // response
+            const Responsecontent = resMsg || '';
+            const Responsesentences = Responsecontent.split(
+              /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+            );
+            const newRemainingResponseSentences =
+              Responsesentences.slice(currentPosition);
+            const concatenatedSentences = [];
+            let totalLength = 0;
+            // Note and Dialog
+            if (type !== 'response') {
+              for (let i = 0; i < newRemainingSentences.length; i++) {
+                const sentence = newRemainingSentences[i];
 
-          if (data && type === 'Note') {
-            if (totalLength + sentence.length <= Notelength) {
-              concatenatedSentences.push(sentence);
-              totalLength += sentence.length;
-            } else {
-              concatenatedSentences.push(sentence);
-              break;
-            }
-          }
-          if (data && type === 'Dialog') {
-            if (totalLength + sentence.length <= Dialoglength) {
-              concatenatedSentences.push(sentence);
-              totalLength += sentence.length;
-            } else {
-              if (totalLength + sentence.length >= Dialoglength) {
-                break;
+                if (data && type === 'Note') {
+                  if (totalLength + sentence.length <= Notelength) {
+                    concatenatedSentences.push(sentence);
+                    totalLength += sentence.length;
+                  } else {
+                    concatenatedSentences.push(sentence);
+                    break;
+                  }
+                }
+                if (data && type === 'Dialog') {
+                  if (totalLength + sentence.length <= Dialoglength) {
+                    concatenatedSentences.push(sentence);
+                    totalLength += sentence.length;
+                  } else {
+                    if (totalLength + sentence.length >= Dialoglength) {
+                      break;
+                    }
+                    concatenatedSentences.push(sentence);
+                    break;
+                  }
+                }
+                if (data && type === 'Interaction') {
+                  if (profileData?.Audiogetlanguage.length !== 0) {
+                    // Note and Dialog
+                    const Getblocktext = profileData?.Audiogetlanguage.filter(
+                      (key: any) => key?.textId === data?.blockId,
+                    );
+                    if (Getblocktext.length > 0) {
+                      const FilteredFieldName = Getblocktext.map(
+                        (item: any) => item.fieldName,
+                      );
+                      if (FilteredFieldName[0] === 'blockText') {
+                        if (type === 'Interaction') {
+                          const getcontent = Getblocktext[0].content || '';
+                          setContentlanguage(getcontent);
+                        }
+                      }
+                    }
+                  }
+                }
               }
-              concatenatedSentences.push(sentence);
-              break;
+              setRemainingSentences(concatenatedSentences);
+
+              if (newRemainingSentences.length > 0 && (type === 'Note' || type === 'Dialog')) {
+                setCurrentPosition(currentPosition + concatenatedSentences.length);
+                setNavigateNext(false);
+                return false;
+              }
+              if (type !== 'Interaction') {
+                setNavigateNext(true);
+                setIsPrevNavigation(false);
+              }
+            }
+
+
+          } else if (FilteredFieldName[0] === 'qpResponse') {
+            // response
+            const ResponseLangcontent = Getblocktext[0].content || '';
+            const Responsesentences = ResponseLangcontent.split(
+              /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+            );
+            const newRemainingResponseSentences =
+              Responsesentences.slice(currentPosition);
+            const concatenatedSentences = [];
+            let totalLength = 0;
+            if (type === 'response') {
+              for (let i = 0; i < newRemainingResponseSentences.length; i++) {
+                const ressentence = newRemainingResponseSentences[i];
+                if (data && type === 'response') {
+                  if (totalLength + ressentence.length <= Responselength) {
+                    concatenatedSentences.push(ressentence);
+                    totalLength += ressentence.length;
+                  } else {
+                    if (totalLength + ressentence.length >= Responselength) {
+                      break;
+                    }
+                    concatenatedSentences.push(ressentence);
+                    break;
+                  }
+                }
+              }
+              setRemainingSentences(concatenatedSentences);
+
+              if (newRemainingResponseSentences.length > 0 && type === 'response') {
+                setCurrentPosition(currentPosition + concatenatedSentences.length);
+                setNavigateNext(false);
+                return false;
+              }
+              if (type !== 'Interaction') {
+                setNavigateNext(true);
+                setIsPrevNavigation(false);
+              }
+            }
+
+          }
+          else {
+            // Note and Dialog
+            const content = data?.blockText || '';
+            const sentences = content.split(
+              /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+            );
+            const newRemainingSentences = sentences.slice(currentPosition);
+
+            // response
+            const Responsecontent = resMsg || '';
+            const Responsesentences = Responsecontent.split(
+              /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+            );
+            const newRemainingResponseSentences =
+              Responsesentences.slice(currentPosition);
+            const concatenatedSentences = [];
+            let totalLength = 0;
+            // Note and Dialog
+            if (type !== 'response') {
+              for (let i = 0; i < newRemainingSentences.length; i++) {
+                const sentence = newRemainingSentences[i];
+
+                if (data && type === 'Note') {
+                  if (totalLength + sentence.length <= Notelength) {
+                    concatenatedSentences.push(sentence);
+                    totalLength += sentence.length;
+                  } else {
+                    concatenatedSentences.push(sentence);
+                    break;
+                  }
+                }
+                if (data && type === 'Dialog') {
+                  if (totalLength + sentence.length <= Dialoglength) {
+                    concatenatedSentences.push(sentence);
+                    totalLength += sentence.length;
+                  } else {
+                    if (totalLength + sentence.length >= Dialoglength) {
+                      break;
+                    }
+                    concatenatedSentences.push(sentence);
+                    break;
+                  }
+                }
+              }
+            }
+            // Response
+            if (type === 'response') {
+              for (let i = 0; i < newRemainingResponseSentences.length; i++) {
+                const ressentence = newRemainingResponseSentences[i];
+                if (data && type === 'response') {
+                  if (totalLength + ressentence.length <= Responselength) {
+                    concatenatedSentences.push(ressentence);
+                    totalLength += ressentence.length;
+                  } else {
+                    if (totalLength + ressentence.length >= Responselength) {
+                      break;
+                    }
+                    concatenatedSentences.push(ressentence);
+                    break;
+                  }
+                }
+              }
+            }
+            setRemainingSentences(concatenatedSentences);
+            if (newRemainingSentences.length > 0 && (type === 'Note' || type === 'Dialog')) {
+              setCurrentPosition(currentPosition + concatenatedSentences.length);
+              setNavigateNext(false);
+              return false;
+            }
+            if (newRemainingResponseSentences.length > 0 && type === 'response') {
+              setCurrentPosition(currentPosition + concatenatedSentences.length);
+              setNavigateNext(false);
+              return false;
+            }
+            if (type !== 'Interaction') {
+              setNavigateNext(true);
+              setIsPrevNavigation(false);
             }
           }
         }
-      }
-      // Response 
-      if (type === 'response') {
-        for (let i = 0; i < newRemainingResponseSentences.length; i++) {
-          const ressentence = newRemainingResponseSentences[i];
-          if (data && type === 'response') {
-            if (totalLength + ressentence.length <= Responselength) {
-              concatenatedSentences.push(ressentence);
-              totalLength += ressentence.length;
-            } else {
-              if (totalLength + ressentence.length >= Responselength) {
+      } else {
+        // Note and Dialog
+        const content = data?.blockText || '';
+        const sentences = content.split(
+          /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+        );
+        const newRemainingSentences = sentences.slice(currentPosition);
+
+        // response
+        const Responsecontent = resMsg || '';
+        const Responsesentences = Responsecontent.split(
+          /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+        );
+        const newRemainingResponseSentences =
+          Responsesentences.slice(currentPosition);
+        const concatenatedSentences = [];
+        let totalLength = 0;
+        // Note and Dialog
+        if (type !== 'response') {
+          for (let i = 0; i < newRemainingSentences.length; i++) {
+            const sentence = newRemainingSentences[i];
+
+            if (data && type === 'Note') {
+              if (totalLength + sentence.length <= Notelength) {
+                concatenatedSentences.push(sentence);
+                totalLength += sentence.length;
+              } else {
+                concatenatedSentences.push(sentence);
                 break;
               }
-              concatenatedSentences.push(ressentence);
-              break;
+            }
+            if (data && type === 'Dialog') {
+              if (totalLength + sentence.length <= Dialoglength) {
+                concatenatedSentences.push(sentence);
+                totalLength += sentence.length;
+              } else {
+                if (totalLength + sentence.length >= Dialoglength) {
+                  break;
+                }
+                concatenatedSentences.push(sentence);
+                break;
+              }
             }
           }
         }
+        // Response
+        if (type === 'response') {
+          for (let i = 0; i < newRemainingResponseSentences.length; i++) {
+            const ressentence = newRemainingResponseSentences[i];
+            if (data && type === 'response') {
+              if (totalLength + ressentence.length <= Responselength) {
+                concatenatedSentences.push(ressentence);
+                totalLength += ressentence.length;
+              } else {
+                if (totalLength + ressentence.length >= Responselength) {
+                  break;
+                }
+                concatenatedSentences.push(ressentence);
+                break;
+              }
+            }
+          }
+        }
+        setRemainingSentences(concatenatedSentences);
+        if (newRemainingSentences.length > 0 && (type === 'Note' || type === 'Dialog')) {
+          setCurrentPosition(currentPosition + concatenatedSentences.length);
+          setNavigateNext(false);
+          return false;
+        }
+        if (newRemainingResponseSentences.length > 0 && type === 'response') {
+          setCurrentPosition(currentPosition + concatenatedSentences.length);
+          setNavigateNext(false);
+          return false;
+        }
+        if (type !== 'Interaction') {
+          setNavigateNext(true);
+          setIsPrevNavigation(false);
+        }
       }
-      setRemainingSentences(concatenatedSentences);
-      if (newRemainingSentences.length > 0 && type !== 'response') {
-        setCurrentPosition(currentPosition + concatenatedSentences.length);
-        setNavigateNext(false);
-        return false;
-      }
-      if (newRemainingResponseSentences.length > 0) {
-        setCurrentPosition(currentPosition + concatenatedSentences.length);
-        setNavigateNext(false);
-        return false;
-      }
-      setNavigateNext(true);
-      setIsPrevNavigation(false);
     };
-
     const Updatecontent = () => {
       if (showTypingEffect === false) {
         setShowTypingEffect(true);
-      }
-      else {
+      } else {
         getDataSection(data);
       }
-    }
+    };
 
     useEffect(() => {
       getDataSection(data);
@@ -475,19 +707,17 @@ const Story: React.FC<{
 
     const getNoteNextData = () => {
       setIsPrevNavigation(false);
-      getDataSection(data)
-    }
-
+      getDataSection(data);
+    };
 
     const SkipContentForBackNavigation = () => {
       if (showTypingEffect === false) {
         setShowTypingEffect(true);
-      }
-      else {
+      } else {
         setCurrentPosition(0);
-        prevData(data)
+        prevData(data);
       }
-    }
+    };
 
     return (
       <>
@@ -518,9 +748,16 @@ const Story: React.FC<{
                   transition={{ duration: 0.5 }}
                 >
                   <Box display={'flex'} justifyContent={'center'}>
-                    <Img src={preloadedAssets.note} className="story_note_image" loading="lazy" />
+                    <Img
+                      src={preloadedAssets.note}
+                      className="story_note_image"
+                      loading="lazy"
+                    />
+
                     <Box className={'note_align'}>
-                      <Text textAlign={'center'} className='note_title'>Note</Text>
+                      <Text textAlign={'center'} className="note_title">
+                        Note
+                      </Text>
                     </Box>
                     <Box
                       className={'story_note_content'}
@@ -609,6 +846,15 @@ const Story: React.FC<{
               fontSize={{ base: '30px', xl: '2.2vw' }}
               bottom={'38px'}
               fontFamily={'AtlantisContent'}
+              css={{
+                // Hide scrollbar for webkit-based browsers (Safari, Chrome)
+                '&::-webkit-scrollbar': {
+                  display: 'none',
+                },
+                // Hide scrollbar for Mozilla-based browsers (Firefox)
+                'scrollbar-width': 'none', // For Firefox
+                '-ms-overflow-style': 'none', // For IE and Edge
+              }}
             >
               <Box transform={'translateY(16%)'}>
                 {showTypingEffect === false ? <TypingEffect
@@ -648,29 +894,25 @@ const Story: React.FC<{
           </Box>
         )}
         {data && type === 'Interaction' && (
-          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick} prevData={prevData} InteractionFunction={InteractionFunction} navTrack={navTrack} preloadedAssets={preloadedAssets} selectedPlayer={selectedPlayer} />
+          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick} prevData={prevData} InteractionFunction={InteractionFunction} navTrack={navTrack} preloadedAssets={preloadedAssets} selectedPlayer={selectedPlayer} Contentlanguage={Contentgetlanguage} Profiledatalanguage={profileData?.Audiogetlanguage}
+          />
         )}
         {data && type === 'response' && (
           <Box
             className="chapter_potrait"
           >
             <Img src={backGroundImg} className="dialogue_screen" />
+            {selectedPlayer && (
+              <Img
+                src={`${API_SERVER}/${selectedPlayer}`}
+                className={'narrator_character_image'}
+              />
+            )}
             {selectedNpc && (
-              <Box className={'player_character_image'}>
-                <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */}
-                  {/* <Environment preset={"park"} background />   */}
-                  <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
-                  <ambientLight intensity={0.5} />
-                  {/* <OrbitControls   />  */}
-                  <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
-                  {/* COMPONENTS */}
-                  <Player />
-                  <Model position={[-3, -1.8, 5]} rotation={[0, 1, 0]} />
-                  {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
-                  {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
-                  {/* <Parrot /> */}
-                </Canvas>
-              </Box>
+              <Img
+                src={selectedNpc}
+                className={'player_character_image'}
+              />
             )}
             <Img className={'dialogue_image'} src={preloadedAssets.dial} />
             <Box position={'relative'}>
@@ -708,15 +950,12 @@ const Story: React.FC<{
               fontSize={{ base: '30px', lg: '1.8vw' }}
               bottom={'38px'}
               fontFamily={'AtlantisContent'}
-
             >
-              <Box transform={'translateY(16%)'}>
-                {showTypingEffect === false ? <TypingEffect
-                  text={remainingSentences.toString()}
-                  speed={50}
-                  setSpeedIsOver={setShowTypingEffect}
-                /> : remainingSentences}
-              </Box>
+              {showTypingEffect === false ? <TypingEffect
+                text={remainingSentences.toString()}
+                speed={50}
+                setSpeedIsOver={setShowTypingEffect}
+              /> : remainingSentences}
             </Box>
             <Box
               display={'flex'}
@@ -753,35 +992,66 @@ const Story: React.FC<{
               top="50%"
               left="50%"
               transform="translate(-50%, -50%)"
-              className="story_note_grid"
+              w={'90%'}
             >
               <GridItem colSpan={1} position={'relative'}>
-                <Box display={'flex'} justifyContent={'center'}>
-                  <Img src={preloadedAssets.feedi} className="story_note_image" loading="lazy" />
+                <Box w={'fit-content'} display={'flex'} position={'relative'}>
+                  <Img
+                    src={preloadedAssets.feedi}
+                    className="story_note_image"
+                    loading="lazy"
+                  />
                   <Box
-                    className={'story_note_content'}
-                  // bg={'blue.300'}
+                    position={'absolute'}
+                    top={{ base: '5%', md: '6%' }}
+                    className='story_feedback_content'
                   >
-                    <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                      <Box className={'story_note_block'}>
-                        <Text textAlign={'center'}>{feed}</Text>
+                    <Box display={'flex'} justifyContent={'center'} alignItems={'center'} h={'100%'}>
+                      <Box
+                        w={'90%'}
+                        h={'70%'}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                      >
+                        <Img src={preloadedAssets?.feedparch} w={'auto'} h={'100%'} />
+                        <Box position={'absolute'} top={0} width={'100%'} h={'100%'} display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
+                          <Box className='feed_list'> Interaction </Box>
+                          <Box w={'70%'} h={'75%'} overflowY={'scroll'} className='feedback_content_text'>
+                            {/* <Box display={'flex'}>
+                          <Img src={preloadedAssets.qs} h={'1em'} w={'1em'}  />
+                          This way, you can increase the RGB color intensity of the GLTF/GLB model while using an HDR environment map in your React Three Fiber scene. Adjust the values as needed to achieve the desired color intensity.
+                        </Box>
+                        <Box display={'flex'} mt={'10px'}>
+                          <Img src={preloadedAssets.ANS} h={'1em'} w={'1em'}  />
+                           Adjust the values as needed to achieve the desired color intensity.
+                        </Box> */}
+                            <Box display={'flex'} mt={'10px'}>
+                              <Img src={preloadedAssets.FB} h={'1em'} w={'1em'} />
+                              <Text textAlign={'justify'}>{feed}</Text>
+                            </Box>
+                          </Box>
+                        </Box>
+                        <Box
+                          w={'100%'}
+                          onClick={() => getData(data)}
+                          mt={'20px'}
+                          display={'flex'}
+                          justifyContent={'center'}
+                          cursor={'pointer'}
+                          position={'absolute'}
+                          bottom={'-8%'}
+                        >
+                          <Img
+                            src={preloadedAssets.next}
+                            h={'7vh'}
+                            className={'story_note_next_button'}
+                          />
+                        </Box>
                       </Box>
-                    </Box>
-                    <Box
-                      w={'100%'}
-                      onClick={() => getData(data)}
-                      mt={'20px'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                      cursor={'pointer'}
-                      position={'fixed'}
-                      top={'70%'}
-                    >
-                      <Img
-                        src={preloadedAssets.next}
-                        h={'7vh'}
-                        className={'story_note_next_button'}
-                      />
+                      {/* <Box className={'story_note_block'}> */}
+                      {/* <Text textAlign={'center'}>{feed}</Text> */}
+                      {/* </Box> */}
                     </Box>
                   </Box>
                 </Box>
@@ -790,7 +1060,8 @@ const Story: React.FC<{
           </Box>
         )}
       </>
-    )};
+    );
+  };
 const Player: React.FC = () => {
   const groupRef = useRef<any>();
   const gltf = useLoader(GLTFLoader, Sample);

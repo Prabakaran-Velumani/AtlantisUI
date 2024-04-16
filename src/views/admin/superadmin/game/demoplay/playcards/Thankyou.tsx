@@ -23,9 +23,10 @@ interface Badge {
 }
 
 const ThankYou: React.FC<{
+  setCurrentScreenId: any;
   formData: any;
   imageSrc: any;
-}> = ({ formData, imageSrc }) => {
+}> = ({ formData, imageSrc, setCurrentScreenId }) => {
   const renderContentTy = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
 

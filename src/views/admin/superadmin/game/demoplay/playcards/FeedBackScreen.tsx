@@ -27,22 +27,24 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 import hdr from 'assets/models/bg.hdr';
 interface FeedBackScreenShotProps {
-  backgroundScreenUrl: any;
-  first: any;
-  showNote: any;
-  currentScreenId: any;
-  isScreenshot: any;
-  FeedbackremainingSentences: any;
-  options: any;
-  getData: any;
-  data: any;
-  FeedBackselectedoptionData: any;
-  FeedBackoptionData: any;
-  feed?: any;
-  getFeedbackData: any;
-  profile: any;
-  setisScreenshot: any;
-  preloadedAssets: any;
+    backgroundScreenUrl: any;
+    first: any;
+    showNote: any;
+    currentScreenId: any;
+    isScreenshot: any;
+    FeedbackremainingSentences?: any;
+    options: any;
+    getData: any;
+    data: any;
+    FeedBackselectedoptionData?: any;
+    FeedBackoptionData?: any;
+    feed?: any;
+    getFeedbackData?: any;
+    profile: any;
+    setisScreenshot: any;
+    preloadedAssets: any;
+    FeedbackcurrentPosition?: any;
+    interactionBlockArray?: any;
 }
 const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
   backgroundScreenUrl,
@@ -61,6 +63,8 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
   feed,
   getFeedbackData,
   preloadedAssets,
+  FeedbackcurrentPosition,
+  interactionBlockArray
 }) => {
 
   const geTfeedBackoption = () => {
@@ -110,19 +114,19 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                     >
                       <Img src={preloadedAssets?.feedparch} w={'auto'} h={'100%'} />
                       <Box position={'absolute'} top={0} width={'100%'} h={'100%'} display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
-                        <Box className='feed_list'>Interaction 1/3</Box>
+                        <Box className='feed_list'> Interaction {currentScreenId === 14 && FeedbackcurrentPosition && interactionBlockArray && FeedbackcurrentPosition +'/'+interactionBlockArray.length}</Box>
                         <Box w={'70%'} h={'75%'} overflowY={'scroll'} className='feedback_content_text'>
-                          <Box display={'flex'}>
+                          {/* <Box display={'flex'}>
                             <Img src={preloadedAssets.qs} h={'1em'} w={'1em'}  />
                             This way, you can increase the RGB color intensity of the GLTF/GLB model while using an HDR environment map in your React Three Fiber scene. Adjust the values as needed to achieve the desired color intensity.
                           </Box>
                           <Box display={'flex'} mt={'10px'}>
                             <Img src={preloadedAssets.ANS} h={'1em'} w={'1em'}  />
                              Adjust the values as needed to achieve the desired color intensity.
-                          </Box>
+                          </Box> */}
                           <Box display={'flex'} mt={'10px'}>
                             <Img src={preloadedAssets.FB} h={'1em'} w={'1em'}  />
-                            This way, you can increase the RGB color intensity of the GLTF/GLB model while using an HDR environment map in your React Three Fiber scene. Adjust the values as needed to achieve the desired color intensity.
+                           <Text textAlign={'justify'}>{currentScreenId === 9 ? feed : FeedbackremainingSentences}</Text>
                           </Box>
                         </Box>
                       </Box>
@@ -144,7 +148,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                       </Box>
                     </Box>
                     {/* <Box className={'story_note_block'}> */}
-                    <Text textAlign={'center'}>{feed}</Text>
+                    {/* <Text textAlign={'center'}>{feed}</Text> */}
                     {/* </Box> */}
                   </Box>
 
@@ -197,6 +201,18 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
             )}
           </>
         )} */}
+         {isScreenshot === true && (
+              <InteractionScreenShot
+                data={FeedBackoptionData}
+                option={FeedBackselectedoptionData}
+                options={options}
+                backGroundImg={backgroundScreenUrl}
+                profile={profile}
+                geTfeedBackoption={geTfeedBackoption}
+                isScreenshot={isScreenshot}
+                preloadedAssets={preloadedAssets}
+              />
+            )}
       </>
     </>
   );

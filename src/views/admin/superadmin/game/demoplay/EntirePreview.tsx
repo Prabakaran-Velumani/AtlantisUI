@@ -1,25 +1,12 @@
-// Chakra Imports
 import {
   Button,
-  Badge,
   Box,
   Flex,
   Icon,
   Text,
-  Image,
   useColorModeValue,
   useColorMode,
   useDisclosure,
-  SimpleGrid,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  useBreakpointValue,
-  DrawerProps,
   Img,
   Menu,
   MenuButton,
@@ -29,16 +16,10 @@ import {
   Textarea,
   MenuItem,
   Select,
-  Slider,
-  SliderTrack,
-  SliderThumb,
-  SliderFilledTrack,
-  Tooltip,
   GridItem,
   Grid,
-  Stack,
 } from '@chakra-ui/react';
-
+import { lazy } from 'react';
 import { motion } from 'framer-motion';
 import React, {
   Suspense,
@@ -57,29 +38,31 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import feedi from 'assets/img/screens/feed.png';
 import { AiFillMessage } from 'react-icons/ai';
-import Story from './playcards/Story';
-import Welcome from './playcards/Welcome';
-import ThankYou from './playcards/Thankyou';
-import Overview from './playcards/Overview';
-import Reflection from './playcards/Reflection';
-import Takeway from './playcards/Takeaway';
-import Completion from './playcards/Completion';
-import ReplayGame from './playcards/ReplayGame';
 import { getTestAudios } from 'utils/game/gameService';
-import PlayInfo from './playcards/playinfo';
-import LeaderBoard from './playcards/Leaderboard';
 import { MdClose } from 'react-icons/md';
-import ProfileScreen from './playcards/ProfileScreen';
-import Characterspage from './playcards/CharacterSelection';
-import ChapterPage from './playcards/Chapters';
-import FeedBackScreen from './playcards/FeedBackScreen';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
 import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
-import VolumeTrack from 'assets/img/games/volume-track.png'
+const Story  = lazy(() => import('./playcards/Story'));
+const Welcome  = lazy(() => import('./playcards/Welcome'));
+const ThankYou  = lazy(() => import('./playcards/Thankyou'));
+const Overview  = lazy(() => import('./playcards/Overview'));
+const Reflection  = lazy(() => import('./playcards/Reflection'));
+const Takeway  = lazy(() => import('./playcards/Takeaway'));
+const Completion  = lazy(() => import('./playcards/Completion'));
+const ReplayGame  = lazy(() => import('./playcards/ReplayGame'));
+const PlayInfo  = lazy(() => import('./playcards/playinfo'));
+const LeaderBoard  = lazy(() => import('./playcards/Leaderboard'));
+const ProfileScreen  = lazy(() => import('./playcards/ProfileScreen'));
+const Characterspage  = lazy(() => import('./playcards/CharacterSelection'));
+const ChapterPage  = lazy(() => import('./playcards/Chapters'));
+const FeedBackScreen  = lazy(() => import('./playcards/FeedBackScreen'));
+const TopMenuBar = lazy(() => import('./playcards/TopMenuBar'));
+const GameIntroScreen = lazy(() => import('./playcards/GameIntroScreen'));
+
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
@@ -159,7 +142,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   setCurrentScore,
   preloadedAssets,
 }) => {
-  console.log('gameInfo', gameInfo)
   const { colorMode, toggleColorMode } = useColorMode();
 
   const maxTextLength = 80;
@@ -193,6 +175,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [filteredTabOptions, setFilteredTabOptions] = useState([]);
   // Feed back after completion
   const [FeedbackcurrentPosition, setFeedbackCurrentPosition] = useState(0);
+  const [interactionBlockArray, setInterActionBlockArray] = useState<any | []>([]);
   const [FeedbackremainingSentences, setFeedbackRemainingSentences] = useState<
     any[]
   >([]);
@@ -321,8 +304,26 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         gameInfo.blocks[profile.currentQuest]['1'].blockPrimarySequence;
 
       for (const option of gameInfo.questOptions) {
-        if (option?.qpSequence === primarySequence) {
-          optionsFiltered.push(option);
+        if (profileData?.Audiogetlanguage.length > 0) {
+          if (option?.qpSequence === primarySequence) {
+            const profilesetlan = profileData?.Audiogetlanguage.find(
+              (key: any) => key?.textId === option.qpOptionId,
+            );
+
+            if (profilesetlan) {
+              const languagecont = {
+                ...option,
+                qpOptionText: profilesetlan.content,
+              };
+              optionsFiltered.push(languagecont);
+            } else {
+              optionsFiltered.push(option);
+            }
+          }
+        } else {
+          if (option?.qpSequence === primarySequence) {
+            optionsFiltered.push(option);
+          }
         }
       }
       if (gameInfo?.gameData?.gameShuffle === 'true') {
@@ -397,13 +398,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     // Check if audioRef exists and audioObj.url is not empty
     if (audioRef.current && audioObj.url !== '') {
       // Pause the audio playback if it's currently playing
-      if (!audioRef.current.paused) {
+      if (!audioRef.current?.paused) {
         audioRef.current.pause();
       }
       // Update the audio source and play if necessary
       audioRef.current.src = audioObj.url;
       try {
-        if (audioObj.autoplay) {
+        if (audioObj.autoplay || isGetsPlayAudioConfirmation) {
           audioRef.current.play();
         }
       } catch {
@@ -417,6 +418,30 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
   }, [audioObj]);
+
+  // useEffect(() => {
+  //   // Check if the audio type is 'api'
+  //   if (audioObj.type === 'api') {
+  //     // Check if the current audio reference exists
+  //     if (audioRef.current) {
+  //       // Add an event listener to the 'ended' event of the audio element
+  //       audioRef.current.addEventListener('ended', handleAudioEnded);
+  //     }
+  //   }
+
+  //   // Cleanup function to remove the event listener when the component unmounts or when the audioRef changes
+  //   return () => {
+  //     if (audioRef.current) {
+  //       audioRef.current.removeEventListener('ended', handleAudioEnded);
+  //     }
+  //   };
+  // }, [audioObj.type, audioRef.current]); // Watch for changes in audioObj.type and audioRef.current
+
+  // Event handler for when the audio playback ends
+  const handleAudioEnded = () => {
+    // Set the current audio reference to null
+    audioRef.current = null;
+  };
 
   useEffect(() => {
     if (gameInfo) {
@@ -451,12 +476,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const newTrackSequence = navTrack[navTrack.length - 1];
       const prevBlock = current
         ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) =>
-              demoBlocks[quest]?.[key]?.blockPrimarySequence ==
-              newTrackSequence,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
+            .filter(
+              (key) =>
+                demoBlocks[quest]?.[key]?.blockPrimarySequence ==
+                newTrackSequence,
+            )
+            .map((key: any) => demoBlocks[quest]?.[key])
         : [];
 
       const currentQuest = current
@@ -483,7 +508,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const getData = (next: any) => {
+    setAudioObj(null);
     setIsPrevNavigation(false);
+    console.log('demoBlocks', demoBlocks);
+    console.log('next', next);
     if (next?.blockChoosen === 'Interaction') {
       const isDuplicate = feedbackList?.some(
         (item: any) =>
@@ -492,18 +520,22 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       );
 
       if (!isDuplicate) {
-        setFeedbackList((prevFeedbackList) => [
-          ...prevFeedbackList,
-          {
-            feedbackcontent: feed,
-            Seq: next?.blockPrimarySequence,
-            Options: getSelectedOptions,
-          },
-        ]);
+        if (feed !== '') {
+          setFeedbackList((prevFeedbackList) => [
+            ...prevFeedbackList,
+            {
+              feedbackcontent: feed,
+              Seq: next?.blockPrimarySequence,
+              Options: getSelectedOptions,
+            },
+          ]);
+        }
+
+        console.log('feed', feed, '...', feedbackList.length);
       }
     }
 
-    setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
+    // setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
@@ -530,17 +562,34 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
-        .filter(
-          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-        )
-        .map((key: any) => demoBlocks[quest]?.[key])
+          .filter(
+            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
       : [];
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = [];
       for (const option of gameInfo.questOptions) {
-        if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
-          optionsFiltered.push(option);
+        if (profileData?.Audiogetlanguage.length > 0) {
+          if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+            const profilesetlan = profileData?.Audiogetlanguage.find(
+              (key: any) => key?.textId === option.qpOptionId,
+            );
+            if (profilesetlan) {
+              const languagecont = {
+                ...option,
+                qpOptionText: profilesetlan.content,
+              };
+              optionsFiltered.push(languagecont);
+            } else {
+              optionsFiltered.push(option);
+            }
+          }
+        } else {
+          if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+            optionsFiltered.push(option);
+          }
         }
       }
       if (gameInfo?.gameData?.gameShuffle === 'true') {
@@ -588,6 +637,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
+        console.log('655', next);
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -603,10 +653,30 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           if (selectedNext[0]?.blockChoosen === 'Interaction') {
             const optionsFiltered = [];
             for (const option of gameInfo.questOptions) {
-              if (
-                option?.qpSequence === selectedNext[0]?.blockPrimarySequence
-              ) {
-                optionsFiltered.push(option);
+              if (profileData?.Audiogetlanguage.length > 0) {
+                if (
+                  option?.qpSequence === selectedNext[0]?.blockPrimarySequence
+                ) {
+                  const profilesetlan = profileData?.Audiogetlanguage.find(
+                    (key: any) => key?.textId === option.qpOptionId,
+                  );
+
+                  if (profilesetlan) {
+                    const languagecont = {
+                      ...option,
+                      qpOptionText: profilesetlan.content,
+                    };
+                    optionsFiltered.push(languagecont);
+                  } else {
+                    optionsFiltered.push(option);
+                  }
+                }
+              } else {
+                if (
+                  option?.qpSequence === selectedNext[0]?.blockPrimarySequence
+                ) {
+                  optionsFiltered.push(option);
+                }
               }
             }
             if (gameInfo?.gameData?.gameShuffle === 'true') {
@@ -632,8 +702,26 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           if (nextBlock[0]?.blockChoosen === 'Interaction') {
             const optionsFiltered = [];
             for (const option of gameInfo.questOptions) {
-              if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
-                optionsFiltered.push(option);
+              if (profileData?.Audiogetlanguage.length > 0) {
+                if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+                  const profilesetlan = profileData?.Audiogetlanguage.find(
+                    (key: any) => key?.textId === option.qpOptionId,
+                  );
+
+                  if (profilesetlan) {
+                    const languagecont = {
+                      ...option,
+                      qpOptionText: profilesetlan.content,
+                    };
+                    optionsFiltered.push(languagecont);
+                  } else {
+                    optionsFiltered.push(option);
+                  }
+                }
+              } else {
+                if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+                  optionsFiltered.push(option);
+                }
               }
             }
             if (gameInfo?.gameData?.gameShuffle === 'true') {
@@ -656,28 +744,146 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           return false;
         }
       } else if (navi === 'Complete') {
-        if (demoBlocks.hasOwnProperty(nextLevel)) {
-          setProfile((prev: any) => {
-            const data = { ...prev };
-            data.completedLevels = [...data.completedLevels, nextLevel];
-            return data;
+        const Nextcurrentquest = next?.blockQuestNo;
+        const getgameinfoquest = gameInfo?.gameQuest.find(
+          (row: any) => row.gameQuestNo == Nextcurrentquest,
+        );
+        if (getgameinfoquest?.gameIsSetCongratsScoreWiseMessage === 'true') {
+          if (demoBlocks.hasOwnProperty(nextLevel)) {
+            setProfile((prev: any) => {
+              const data = { ...prev };
+              if (!profile.completedLevels.includes(currentQuest)) {
+                data.completedLevels = [...data.completedLevels, nextLevel];
+              }
+
+              return data;
+            });
+
+            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+            setData(demoBlocks[nextLevel]['1']);
+            setCurrentScreenId(6);
+            return false;
+          } else {
+            setCurrentScreenId(6);
+            setType(null);
+            setData(null);
+            return false;
+          }
+        } else if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
+          const getminpassscore = getgameinfoquest?.gameMinScore;
+          const scores = profile?.score;
+          const sums: any = {};
+          scores.forEach((score: any) => {
+            const quest = score.quest;
+            if (!sums[quest]) {
+              sums[quest] = 0;
+            }
+            sums[quest] += score.score;
           });
 
-          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-          setData(demoBlocks[nextLevel]['1']);
-          setCurrentScreenId(6);
-          return false;
+          // const getFinalscores = Object.values(sums);
+          const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
+            quest,
+            score,
+          }));
+          const getscores = getFinalscores.find(
+            (row: any) => row.quest == getgameinfoquest.gameQuestNo,
+          );
+          const finalscore = getscores?.score;
+          if (finalscore < getminpassscore) {
+            setisReplay(true);
+            Setprofilescore(finalscore);
+            setisOptionalReplay(false);
+            setCurrentScreenId(8);
+            return false;
+          } else {
+            if (demoBlocks.hasOwnProperty(nextLevel)) {
+              setProfile((prev: any) => {
+                const data = { ...prev };
+                if (!profile.completedLevels.includes(currentQuest)) {
+                  data.completedLevels = [...data.completedLevels, nextLevel];
+                }
+
+                return data;
+              });
+
+              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+              setData(demoBlocks[nextLevel]['1']);
+              setCurrentScreenId(6);
+              return false;
+            } else {
+              setCurrentScreenId(6);
+              setType(null);
+              setData(null);
+              return false;
+            }
+          }
         } else {
-          setCurrentScreenId(6);
-          setType(null);
-          setData(null);
+          if (demoBlocks.hasOwnProperty(nextLevel)) {
+            setProfile((prev: any) => {
+              const data = { ...prev };
+              if (!profile.completedLevels.includes(currentQuest)) {
+                data.completedLevels = [...data.completedLevels, nextLevel];
+              }
+
+              return data;
+            });
+
+            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+            setData(demoBlocks[nextLevel]['1']);
+            setCurrentScreenId(6);
+            return false;
+          } else {
+            setCurrentScreenId(6);
+            setType(null);
+            setData(null);
+            return false;
+          }
+        }
+        /*
+        if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
+          if (demoBlocks.hasOwnProperty(nextLevel)) {
+            setProfile((prev: any) => {
+              const data = { ...prev };
+              if(!profile.completedLevels.includes(currentQuest))
+                {
+                  data.completedLevels = [...data.completedLevels, nextLevel];
+                }
+              
+              return data;
+            });
+  
+            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+            setData(demoBlocks[nextLevel]['1']);
+            setCurrentScreenId(6);
+            return false;
+          } else {
+            setCurrentScreenId(6);
+            setType(null);
+            setData(null);
+            return false;
+          }
+        }
+        else{
+          setisOptionalReplay(true);
+          setCurrentScreenId(8);
           return false;
         }
+        */
       } else {
-        setType(nextBlock[0]?.blockChoosen);
-        setData(nextBlock[0]);
-        setSelectedOption(null);
-        return false;
+        /** IF a block not has navi option then it leads to next block */
+        if (nextBlock && nextBlock[0]?.blockChoosen) {
+          setType(nextBlock[0]?.blockChoosen);
+          setData(nextBlock[0]);
+          setSelectedOption(null);
+          return false;
+        } else {
+        /** else leads to first block of the quest */
+          setType(demoBlocks[quest]['1']?.blockChoosen);
+          setData(demoBlocks[quest]['1']);
+          setSelectedOption(null);
+          return false;
+        }
       }
     }
 
@@ -691,17 +897,59 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         totalScore,
       } = calScore();
       if (gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') {
-        const Completionpage = Object.entries(questState).map(([questId, status]) => ({ questId, status }));
-        const OpenStraigntCompletionPage = Completionpage.find((row: any) => row.questId === profile.currentQuest && row.status === 'completed');
+        const Completionpage = Object.entries(questState).map(
+          ([questId, status]) => ({ questId, status }),
+        );
+        const OpenStraigntCompletionPage = Completionpage.find(
+          (row: any) =>
+            row.questId === profile.currentQuest && row.status === 'completed',
+        );
         if (OpenStraigntCompletionPage !== undefined) {
           setFeedbackList([]);
           setCurrentScreenId(13);
           return false;
         }
-        getFeedbackData(data);
-        setFeedbackNavigateNext(false);
-        setCurrentScreenId(14); //Navigate to together all feedback
-        return false;
+        if (feedbackList.length !== 0) {
+          getFeedbackData(data);
+          setFeedbackNavigateNext(false);
+          setCurrentScreenId(14); //Navigate to together all feedback
+          return false;
+        } else {
+          if (demoBlocks.hasOwnProperty(nextLevel)) {
+            setProfile((prev: any) => {
+              const data = { ...prev };
+              if (!profile.completedLevels.includes(currentQuest)) {
+                data.completedLevels = [...data.completedLevels, nextLevel];
+              }
+
+              return data;
+            });
+
+            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+            setData(demoBlocks[nextLevel]['1']);
+            setCurrentScreenId(13);
+            return false;
+          } else {
+            if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+              setCurrentScreenId(4); //Navigate to leaderboard
+              return false;
+            } else if (
+              gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
+              gameInfo?.reflectionQuestions.length > 0
+            ) {
+              setCurrentScreenId(3); //Navigate to Reflection screen
+              return false;
+            } else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
+              setCurrentScreenId(7); //Navigate to takeaway screen
+              return false;
+            } else {
+              setType(null);
+              setData(null);
+              setCurrentScreenId(5);
+              return false;
+            }
+          }
+        }
       } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
         setCurrentScreenId(4); //Navigate to leaderboard
         return false;
@@ -744,7 +992,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(8); //Navigate to replaygame prompt screen
           return false;
         }
-      } else if (gameInfo.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0) {
+      } else if (
+        gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
+        gameInfo?.reflectionQuestions.length > 0
+      ) {
         setCurrentScreenId(3); //Navigate to Reflection screen
         return false;
       } else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
@@ -766,7 +1017,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const haveNextQuest = gameInfo.gameQuest.some(
         (row: any) => row.gameQuestNo == Nextcurrentquest,
       );
-
       if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
         setCurrentScreenId(4); //leaderboard
         return false;
@@ -799,8 +1049,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             finalscore < getgameinfoquest?.gameDistinctionScore &&
             gameInfo.gameData?.gameDisableOptionalReplays === 'false'
           ) {
-            setisOptionalReplay(false);
-            setisReplay(true);
+            setisOptionalReplay(true);
+            setisReplay(false);
             Setprofilescore(finalscore);
             setCurrentScreenId(8);
             return false;
@@ -809,7 +1059,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             return false;
           }
         }
-      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0) {
+      } else if (
+        gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+        gameInfo?.reflectionQuestions.length > 0
+      ) {
         setCurrentScreenId(3); //reflection screen
         return false;
       } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
@@ -826,7 +1079,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
         setCurrentScreenId(4);
         return false;
-      } else if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0) {
+      } else if (
+        gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+        gameInfo?.reflectionQuestions.length > 0
+      ) {
         setCurrentScreenId(3);
         return false;
       } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
@@ -878,8 +1134,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             finalscore < getgameinfoquest?.gameDistinctionScore &&
             gameInfo.gameData?.gameDisableOptionalReplays === 'false'
           ) {
-            setisOptionalReplay(false);
-            setisReplay(true);
+            setisOptionalReplay(true);
+            setisReplay(false);
             Setprofilescore(finalscore);
             setCurrentScreenId(8);
             return false;
@@ -889,7 +1145,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               setCurrentScreenId(13);
               return false;
             } else {
-              if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0) {
+              if (
+                gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+                gameInfo?.reflectionQuestions.length > 0
+              ) {
                 setCurrentScreenId(3);
                 return false;
               } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
@@ -909,7 +1168,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             setCurrentScreenId(13);
             return false;
           } else {
-            if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0) {
+            if (
+              gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+              gameInfo?.reflectionQuestions.length > 0
+            ) {
               setCurrentScreenId(3);
               return false;
             } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
@@ -929,7 +1191,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(13);
           return false;
         } else {
-          if (gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' && gameInfo?.reflectionQuestions.length > 0) {
+          if (
+            gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+            gameInfo?.reflectionQuestions.length > 0
+          ) {
             setCurrentScreenId(3);
             return false;
           } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
@@ -948,7 +1213,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setCurrentScreenId(5);
       return false;
     }
+    console.log('7777');
     if (nextBlock.length === 0) {
+      console.log('1124');
       const Nextcurrentquest = next?.blockQuestNo;
       const getgameinfoquest = gameInfo?.gameQuest.find(
         (row: any) => row.gameQuestNo == Nextcurrentquest,
@@ -975,16 +1242,18 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         );
         const finalscore = getscores?.score;
         if (finalscore < getminpassscore) {
-          setisReplay(false);
+          setisReplay(true);
           Setprofilescore(finalscore);
-          setisOptionalReplay(true);
+          setisOptionalReplay(false);
           setCurrentScreenId(8);
           return false;
         } else {
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
-              data.completedLevels = [...data.completedLevels, nextLevel];
+              if (!profile.completedLevels.includes(currentQuest)) {
+                data.completedLevels = [...data.completedLevels, nextLevel];
+              }
               return data;
             });
             setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -1002,7 +1271,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         if (demoBlocks.hasOwnProperty(nextLevel)) {
           setProfile((prev: any) => {
             const data = { ...prev };
-            data.completedLevels = [...data.completedLevels, nextLevel];
+            if (!profile.completedLevels.includes(currentQuest)) {
+              data.completedLevels = [...data.completedLevels, nextLevel];
+            }
             return data;
           });
           setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -1019,8 +1290,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
+        const currentBlockinteraction =
+          gameInfo?.blocks[currentQuest][currentBlock];
+        setInteractionOptions(gameInfo, currentBlockinteraction);
         setType(next?.blockChoosen);
         setData(next);
+        setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'New Block') {
         setType(nextBlock[0]?.blockChoosen);
@@ -1035,6 +1310,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Select Block') {
+        console.log('1220', next);
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -1049,11 +1325,32 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setType(selectedNext && selectedNext[0]?.blockChoosen);
           if (selectedNext[0]?.blockChoosen === 'Interaction') {
             const optionsFiltered = [];
+
             for (const option of gameInfo.questOptions) {
-              if (
-                option?.qpSequence === selectedNext[0]?.blockPrimarySequence
-              ) {
-                optionsFiltered.push(option);
+              if (profileData?.Audiogetlanguage.length > 0) {
+                if (
+                  option?.qpSequence === selectedNext[0]?.blockPrimarySequence
+                ) {
+                  const profilesetlan = profileData?.Audiogetlanguage.find(
+                    (key: any) => key?.textId === option.qpOptionId,
+                  );
+
+                  if (profilesetlan) {
+                    const languagecont = {
+                      ...option,
+                      qpOptionText: profilesetlan.content,
+                    };
+                    optionsFiltered.push(languagecont);
+                  } else {
+                    optionsFiltered.push(option);
+                  }
+                }
+              } else {
+                if (
+                  option?.qpSequence === selectedNext[0]?.blockPrimarySequence
+                ) {
+                  optionsFiltered.push(option);
+                }
               }
             }
             if (gameInfo?.gameData?.gameShuffle === 'true') {
@@ -1073,8 +1370,26 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           if (nextBlock[0]?.blockChoosen === 'Interaction') {
             const optionsFiltered = [];
             for (const option of gameInfo.questOptions) {
-              if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
-                optionsFiltered.push(option);
+              if (profileData?.Audiogetlanguage.length > 0) {
+                if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+                  const profilesetlan = profileData?.Audiogetlanguage.find(
+                    (key: any) => key?.textId === option.qpOptionId,
+                  );
+
+                  if (profilesetlan) {
+                    const languagecont = {
+                      ...option,
+                      qpOptionText: profilesetlan.content,
+                    };
+                    optionsFiltered.push(languagecont);
+                  } else {
+                    optionsFiltered.push(option);
+                  }
+                }
+              } else {
+                if (option?.qpSequence === nextBlock[0]?.blockPrimarySequence) {
+                  optionsFiltered.push(option);
+                }
               }
             }
             if (gameInfo?.gameData?.gameShuffle === 'true') {
@@ -1097,37 +1412,118 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
-        if (demoBlocks.hasOwnProperty(nextLevel)) {
-          setProfile((prev: any) => {
-            const data = { ...prev };
-            data.completedLevels = [...data.completedLevels, nextLevel];
-            return data;
+        const Nextcurrentquest = next?.blockQuestNo;
+        const getgameinfoquest = gameInfo?.gameQuest.find(
+          (row: any) => row.gameQuestNo == Nextcurrentquest,
+        );
+        if (getgameinfoquest?.gameIsSetCongratsScoreWiseMessage === 'true') {
+          if (demoBlocks.hasOwnProperty(nextLevel)) {
+            setProfile((prev: any) => {
+              const data = { ...prev };
+              if (!profile.completedLevels.includes(currentQuest)) {
+                data.completedLevels = [...data.completedLevels, nextLevel];
+              }
+              return data;
+            });
+            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+            setData(demoBlocks[nextLevel]['1']);
+            setFeedbackNavigateNext(false);
+            setCurrentScreenId(6);
+            return false;
+          } else {
+            setType(null);
+            setData(null);
+            setCurrentScreenId(6);
+            return false;
+          }
+        } else if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
+          const getminpassscore = getgameinfoquest?.gameMinScore;
+          const scores = profile?.score;
+          const sums: any = {};
+          scores.forEach((score: any) => {
+            const quest = score.quest;
+            if (!sums[quest]) {
+              sums[quest] = 0;
+            }
+            sums[quest] += score.score;
           });
-          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-          setData(demoBlocks[nextLevel]['1']);
-          setFeedbackNavigateNext(false);
-          setCurrentScreenId(6);
+
+          // const getFinalscores = Object.values(sums);
+          const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
+            quest,
+            score,
+          }));
+          const getscores = getFinalscores.find(
+            (row: any) => row.quest == getgameinfoquest.gameQuestNo,
+          );
+          const finalscore = getscores?.score;
+          if (finalscore < getminpassscore) {
+            setisReplay(true);
+            Setprofilescore(finalscore);
+            setisOptionalReplay(false);
+            setCurrentScreenId(8);
+            return false;
+          } else {
+            if (demoBlocks.hasOwnProperty(nextLevel)) {
+              setProfile((prev: any) => {
+                const data = { ...prev };
+                if (!profile.completedLevels.includes(currentQuest)) {
+                  data.completedLevels = [...data.completedLevels, nextLevel];
+                }
+                return data;
+              });
+              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+              setData(demoBlocks[nextLevel]['1']);
+              setFeedbackNavigateNext(false);
+              setCurrentScreenId(6);
+              return false;
+            } else {
+              setType(null);
+              setData(null);
+              setCurrentScreenId(6);
+              return false;
+            }
+          }
+        } else {
+          if (demoBlocks.hasOwnProperty(nextLevel)) {
+            setProfile((prev: any) => {
+              const data = { ...prev };
+              if (!profile.completedLevels.includes(currentQuest)) {
+                data.completedLevels = [...data.completedLevels, nextLevel];
+              }
+              return data;
+            });
+            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+            setData(demoBlocks[nextLevel]['1']);
+            setFeedbackNavigateNext(false);
+            setCurrentScreenId(6);
+            return false;
+          } else {
+            setType(null);
+            setData(null);
+            setCurrentScreenId(6);
+            return false;
+          }
+        }
+        setType(nextBlock[0]?.blockChoosen);
+        setData(nextBlock[0]);
+        setSelectedOption(null);
+      } else {
+        /** IF a block not has navi option then it leads to next block */
+        if (nextBlock && nextBlock[0]?.blockChoosen) {
+          setType(nextBlock[0]?.blockChoosen);
+          setData(nextBlock[0]);
+          setSelectedOption(null);
           return false;
         } else {
-          setType(null);
-          setData(null);
-          setCurrentScreenId(6);
+        /** else leads to first block of the quest */
+          setType(demoBlocks[quest]['1']?.blockChoosen);
+          setData(demoBlocks[quest]['1']);
+          setSelectedOption(null);
           return false;
         }
-        /*
-        setProfile((prev: any) => {
-          const data = { ...prev };
-          data.completedLevels = [...data?.completedLevels, nextLevel];
-          return data;
-        });
-        setFeedbackNavigateNext(false);
-        setCurrentScreenId(13);
-        return false;*/
       }
     }
-    setType(nextBlock[0]?.blockChoosen);
-    setData(nextBlock[0]);
-    setSelectedOption(null);
   };
 
   const calScore = () => {
@@ -1160,9 +1556,33 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   );
 
   const setInteractionOptions = (gameInfo: any, currentBlock: any) => {
-    const optionsFiltered = gameInfo?.questOptions.filter(
-      (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
-    );
+    const optionsFiltered = [];
+    for (const option of gameInfo.questOptions) {
+      if (profileData?.Audiogetlanguage.length > 0) {
+        if (option?.qpSequence === currentBlock?.blockPrimarySequence) {
+          const profilesetlan = profileData?.Audiogetlanguage.find(
+            (key: any) => key?.textId === option.qpOptionId,
+          );
+
+          if (profilesetlan) {
+            const languagecont = {
+              ...option,
+              qpOptionText: profilesetlan.content,
+            };
+            optionsFiltered.push(languagecont);
+          } else {
+            optionsFiltered.push(option);
+          }
+        }
+      } else {
+        if (option?.qpSequence === currentBlock?.blockPrimarySequence) {
+          optionsFiltered.push(option);
+        }
+      }
+    }
+    // const optionsFiltered = gameInfo?.questOptions.filter(
+    //   (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
+    // );
     if (gameInfo?.gameData?.gameShuffle === 'true') {
       for (let i = optionsFiltered.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -1194,7 +1614,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       profileData?.gender === 'Male'
         ? voiceIds?.playerMale
         : voiceIds?.playerFemale;
-    getAudioForText(text, voiceId);
+    // getAudioForText(text, voiceId);
   };
 
   useEffect(() => {
@@ -1245,30 +1665,30 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const subTabOptionsForTabIds: Array<{
     [key: string]: Array<{ value: string; label: string }> | null;
   }> = [
-      { '1': null },
-      { '2': null },
-      {
-        '3': [
-          { value: 'Title', label: 'Title' },
-          { value: 'Skill', label: 'Skill' },
-          { value: 'Storyline', label: 'Storyline' },
-          { value: 'Outcomes', label: 'Outcomes' },
-          { value: 'Category', label: 'Category' },
-          { value: 'Author', label: 'Author' },
-        ],
-      },
-      { '4': null },
-      {
-        '5': [
-          { value: '0', label: 'Completion' },
-          { value: '1', label: 'Leaderboard' },
-          { value: '2', label: 'Reflection' },
-          { value: '3', label: 'Takeaway' },
-          { value: '4', label: 'Welcome' },
-          { value: '5', label: 'Thanks' },
-        ],
-      },
-    ];
+    { '1': null },
+    { '2': null },
+    {
+      '3': [
+        { value: 'Title', label: 'Title' },
+        { value: 'Skill', label: 'Skill' },
+        { value: 'Storyline', label: 'Storyline' },
+        { value: 'Outcomes', label: 'Outcomes' },
+        { value: 'Category', label: 'Category' },
+        { value: 'Author', label: 'Author' },
+      ],
+    },
+    { '4': null },
+    {
+      '5': [
+        { value: '0', label: 'Completion' },
+        { value: '1', label: 'Leaderboard' },
+        { value: '2', label: 'Reflection' },
+        { value: '3', label: 'Takeaway' },
+        { value: '4', label: 'Welcome' },
+        { value: '5', label: 'Thanks' },
+      ],
+    },
+  ];
   useEffect(() => {
     if (audioRef.current) {
       if (currentScreenId === 2) {
@@ -1416,8 +1836,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const replayGame = () => {
-    setType(gameInfo?.blocks['1']['1']?.blockChoosen);
-    setData(gameInfo?.blocks['1']['1']);
+    setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
+    setData(gameInfo?.blocks[profile?.currentQuest]['1']);
     setCurrentScreenId(2);
   };
   const replayNextHandler = (data: any) => {
@@ -1425,11 +1845,25 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ? parseInt(data?.blockPrimarySequence.split('.')[0])
       : null;
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-    if (data && type) {
+    console.log('nextLevel', nextLevel);
+    if (demoBlocks.hasOwnProperty(nextLevel)) {
+      setProfile((prev: any) => {
+        const data = { ...prev };
+        if (!profile.completedLevels.includes(currentQuest)) {
+          data.completedLevels = [...data.completedLevels, nextLevel];
+        }
+
+        return data;
+      });
+      setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+      setData(demoBlocks[nextLevel]['1']);
       setCurrentScreenId(13);
       return false;
     } else {
-      if (gameInfo.gameData?.gameIsShowReflectionScreen !== 'false' && gameInfo?.reflectionQuestions.length > 0) {
+      if (
+        gameInfo.gameData?.gameIsShowReflectionScreen !== 'false' &&
+        gameInfo?.reflectionQuestions.length > 0
+      ) {
         setCurrentScreenId(3); //Navigate to Reflection screen
         return false;
       } else if (gameInfo.gameData?.gameIsShowTakeaway !== 'false') {
@@ -1443,42 +1877,38 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
   };
-  const getAudioForText = async (text: string, voiceId: string) => {
-    if (text && voiceId) {
-      const send = {
-        text: text,
-        model_id: 'eleven_multilingual_v2',
-        voice_settings: {
-          stability: 0.8,
-          similarity_boost: 0.5,
-        },
-      };
+  // const getAudioForText = async (text: string, voiceId: string) => {
+  //   if (text && voiceId) {
+  //     const send = {
+  //       text: text,
+  //       model_id: 'eleven_multilingual_v2',
+  //       voice_settings: {
+  //         stability: 0.8,
+  //         similarity_boost: 0.5,
+  //       },
+  //     };
 
-      const data = JSON.stringify(send);
-      /** Working API for getting voice for the text */
-      const res = await getVoiceMessage(voiceId, data);
-      /** Working API for getting voice for the text */
-      const contentType = res.headers.get('Content-Type');
-      if (contentType && contentType.includes('audio/mpeg')) {
-        // const blob = new Blob([res], { type: 'audio/mpeg' });
-        let blob = await res.blob();
-        const audioApiUrl = URL.createObjectURL(blob);
-        setAudio(audioApiUrl);
-        blob = null;
-      } else {
-        return console.log('Audio file Missing');
-      }
-    }
-  };
+  //     const data = JSON.stringify(send);
+  //     /** Working API for getting voice for the text */
+  //     const res = await getVoiceMessage(voiceId, data);
+  //     /** Working API for getting voice for the text */
+  //     const contentType = res.headers.get('Content-Type');
+  //     if (contentType && contentType.includes('audio/mpeg')) {
+  //       // const blob = new Blob([res], { type: 'audio/mpeg' });
+  //       let blob = await res.blob();
+  //       const audioApiUrl = URL.createObjectURL(blob);
+  //       setAudio(audioApiUrl);
+  //       blob = null;
+  //     } else {
+  //       return console.log('Audio file Missing');
+  //     }
+  //   }
+  // };
 
   const handleAudioError = () => {
     console.error(
       'Failed to load video because no supported source was found.',
     );
-  };
-  const handleOverView = () => {
-    setHomeLeaderBoard(currentScreenId);
-    setCurrentScreenId(15); //overview Screen
   };
 
   useEffect(() => {
@@ -1538,7 +1968,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   }, [FeedbackNavigatenext]);
 
-  useEffect(() => { }, [FeedBackoptionData]);
+  useEffect(() => {}, [FeedBackoptionData]);
 
   const getFeedbackData = (getdata: any) => {
     setisScreenshot(true);
@@ -1567,6 +1997,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           getArray.push(getgameinfoblockchoosen[key]);
         }
       }
+      setInterActionBlockArray(getArray);//Prabakaran worked. Newly added
 
       const GetSeqData = getArray.filter((item: any) => {
         return (
@@ -1617,235 +2048,29 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       <Box id="EntirePreview-wrapper">
         <Box className="EntirePreview-content">
           <Box id="container" className="Play-station">
-            <Box className="top-menu-home-section">
-              {dontShowTopMenu ? (
-                <>
-                  <Img src={preloadedAssets.TopMenu} className="top-menu-img" />
-                  <Tooltip label="Home"
-                    display={'flex'}
-                    justifyContent={'center'}
-                    alignItems={'center'}
-                    background={'transparent'}
-                    boxShadow={'unset'}
-                    backgroundImage={preloadedAssets.TooltipImg}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'contain'}
-                    backgroundPosition={'center'}
-                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
-                    padding={'10px'}
-                    height={'70px'}
-                    w={'150px'}
-                    fontSize={'29px'}
-                    fontFamily={'Atlantis'}
-                    color={'#000'}
-                    overflow={'hidden'}
-                    lineHeight={'25px'}
-                  >
-                    <Img
-                      src={preloadedAssets.home}
-                      className={'top-home-menu'}
-                      onClick={() => setCurrentScreenId(1)}
-                    />
-                  </Tooltip>
-                  <Tooltip label="Progress"
-                    display={'flex'}
-                    justifyContent={'center'}
-                    alignItems={'center'}
-                    background={'transparent'}
-                    boxShadow={'unset'}
-                    backgroundImage={preloadedAssets.TooltipImg}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'contain'}
-                    backgroundPosition={'center'}
-                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
-                    padding={'10px'}
-                    height={'70px'}
-                    w={'150px'}
-                    fontSize={'29px'}
-                    fontFamily={'Atlantis'}
-                    color={'#000'}
-                    overflow={'hidden'}
-                    lineHeight={'25px'}
-                  >
-                    <Box className='progress-box'>
-                      {/* <Text className='text'>{BlockNo ? Math.floor(progressPercentage) : 0}%</Text> */}
-                      <Text className='text'>{true ? Math.floor(50) : 0}%</Text>
-                      <Box className='progressing'>
-                      {/* <SimpleGrid columns={10}> */}
-                        {Array.from({ length: Math.floor(50 / 10) }, (_, index) => (
-                          <Box key={index} className='level'></Box>
-                        ))}
-                        {/* </SimpleGrid> */}
-                      </Box>
-                    </Box>
-                  </Tooltip>
-                  <Tooltip label="Overview"
-                    display={'flex'}
-                    justifyContent={'center'}
-                    alignItems={'center'}
-                    background={'transparent'}
-                    boxShadow={'unset'}
-                    backgroundImage={preloadedAssets.TooltipImg}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'contain'}
-                    backgroundPosition={'center'}
-                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
-                    padding={'10px'}
-                    height={'70px'}
-                    w={'150px'}
-                    fontSize={'29px'}
-                    fontFamily={'Atlantis'}
-                    color={'#000'}
-                    overflow={'hidden'}
-                    lineHeight={'25px'}
-                  >
-                    <Img
-                      src={preloadedAssets.Overview}
-                      className="overview-img"
-                      onClick={handleOverView}
-                    />
-                  </Tooltip>
-                  <Tooltip label="Settings"
-                    display={'flex'}
-                    justifyContent={'center'}
-                    alignItems={'center'}
-                    background={'transparent'}
-                    boxShadow={'unset'}
-                    backgroundImage={preloadedAssets.TooltipImg}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'contain'}
-                    backgroundPosition={'center'}
-                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
-                    padding={'10px'}
-                    height={'70px'}
-                    w={'150px'}
-                    fontSize={'29px'}
-                    fontFamily={'Atlantis'}
-                    color={'#000'}
-                    overflow={'hidden'}
-                    lineHeight={'25px'}
-                  >
-                    <Img
-                      src={preloadedAssets.Setting}
-                      className="setting-img"
-                      onClick={() => setIsSettingOpen(true)}
-                    />
-                  </Tooltip>
-                  <Box className="score-box">
-                    <Text className="text">
-                      {(profile &&
-                        profile.score &&
-                        profile.score.length > 0 &&
-                        profile.score.reduce(
-                          (accumulator: number, currentValue: any) => {
-                            return accumulator + currentValue.score;
-                          },
-                          0,
-                        )) ||
-                        0}
-                    </Text>
-                  </Box>
-                </>
-              ) : null}
-              {/* {permission.setting ? */}
-              {isSettingOpen ? (
-                <Box className="Setting-box">
-                  <Img
-                    src={preloadedAssets.SettingPad}
-                    className="setting-pad"
-                  />
-                  <Box className="music-volume volumes">
-                    <Slider
-                      aria-label="slider-ex-4"
-                      defaultValue={30}
-                      name="musicVolume"
-                    //  onChange={handleMusicVolume} value={rangeValue?.musicVolume}
-                    >
-                      <SliderTrack
-                        className="slider-track"
-                        height="15px"
-                        borderRadius="80px"
-                      >
-                        {/* <Img src={VolumeTrack} /> */}
-                        <Box position="relative">
-                          <Img w={'100%'} h={'auto'} src={VolumeTrack} alt="Volume Track" />
-                          <Box
-                            position="absolute"
-                            top="47%"
-                            left="45%"
-                            transform="translate(-50%, -50%)"
-                            width="86%"
-                          >
-                            <SliderFilledTrack className="filled-volume" bg="pink.500" />
-                          </Box>
-                        </Box>
-                        {/* <Box w={'100%'} h={'15px'} display={'flex'} justifyContent={'center'}>
-                          <Box w={'75%'}>
-                            <SliderFilledTrack
-                              className="filled-volume"
-                              bg="pink.500"
-                            />
-                          </Box>
-                        </Box> */}
-                      </SliderTrack>
-                      <SliderThumb
-                        boxSize={10}
-                        background={'transparent'}
-                      // left={'calc(100% - 30%)'}
-                      >
-                        <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
-                      </SliderThumb>
-                    </Slider>
-                  </Box>
-                  <Box className="voice-volume volumes">
-                    <Slider
-                      aria-label="slider-ex-4"
-                      defaultValue={30}
-                      name="voiceVolume"
-                    // onChange={handleVoiceVolume} value={rangeValue?.voiceVolume}
-                    >
-                      <SliderTrack
-                        className="slider-track"
-                        height="15px"
-                        borderRadius="80px"
-                      >
-                        <Box position="relative">
-                          <Img w={'100%'} h={'auto'} src={VolumeTrack} alt="Volume Track" />
-                          <Box
-                            position="absolute"
-                            top="47%"
-                            left="45%"
-                            transform="translate(-50%, -50%)"
-                            width="86%"
-                          >
-                            <SliderFilledTrack className="filled-volume" bg="pink.500" />
-                          </Box>
-                        </Box>
-                        {/* <SliderFilledTrack
-                          className="filled-volume"
-                          bg="pink.500"
-                        /> */}
-                      </SliderTrack>
-                      <SliderThumb boxSize={9} background={'transparent'}>
-                        <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
-                      </SliderThumb>
-                    </Slider>
-                  </Box>
-                  <Box className="btns">
-                    <Button
-                      className="okay-btn btn"
-                      onClick={() => setIsSettingOpen(false)}
-                    >
-                      <Img src={preloadedAssets.OkayBtn} />
-                    </Button>
-                  </Box>
-                </Box>
-              ) : null}
-            </Box>
+            <TopMenuBar
+              dontShowTopMenu={dontShowTopMenu}
+              preloadedAssets={preloadedAssets}
+              currentScreenId={currentScreenId}
+              setCurrentScreenId={setCurrentScreenId}
+              isSettingOpen={isSettingOpen}
+              setIsSettingOpen={setIsSettingOpen}
+              setHomeLeaderBoard={setHomeLeaderBoard}
+              profileData={profileData}
+              gameInfo={gameInfo}
+              demoBlocks={demoBlocks}
+              data={data}
+              setAudioObj={setAudioObj}
+              audioObj={audioObj}
+            />
           </Box>
           <Flex
             height="100vh"
-            className={currentScreenId === 2 || currentScreenId === 15 ? '' : 'EntirePreview'}
+            className={
+              currentScreenId === 2 || currentScreenId === 15
+                ? ''
+                : 'EntirePreview'
+            }
           >
             {(() => {
               switch (currentScreenId) {
@@ -1927,7 +2152,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           option={selectedOption}
                           profileData={profileData}
                           setAudio={setAudio}
-                          getAudioForText={getAudioForText}
+                          // getAudioForText={getAudioForText}
                           voiceIds={voiceIds}
                           setAudioObj={setAudioObj}
                           setIsGetsPlayAudioConfirmation={
@@ -2042,6 +2267,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         >
                           <Box className="Images">
                             <ThankYou
+                              setCurrentScreenId={setCurrentScreenId}
                               formData={gameInfo?.gameData}
                               imageSrc={preloadedAssets?.Thankyou}
                             />
@@ -2093,6 +2319,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                                 gameInfo.completionQuestOptions
                               }
                               preloadedAssets={preloadedAssets}
+                              setType={setType}
+                              setData={setData}
+                              type={type}
                             />
                           </Box>
                         </Box>
@@ -2202,95 +2431,98 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       getData={getData}
                       profile={profile}
                       preloadedAssets={preloadedAssets}
+                      FeedbackcurrentPosition={FeedbackcurrentPosition}
+                      interactionBlockArray = {interactionBlockArray}
                     />
                   );
                 case 10:
                   return (
-                    <>
-                      <Box
-                        position="relative"
-                        maxW="100%"
-                        w={'100vw'}
-                        height="100vh"
-                        backgroundImage={preloadedAssets.backgroundImage}
-                        backgroundSize={'cover'}
-                        backgroundRepeat={'no-repeat'}
-                        className="chapter_potrait"
-                      >
-                        <Grid
-                          templateColumns="repeat(1, 1fr)"
-                          gap={4}
-                          position="absolute"
-                          top="50%"
-                          left="50%"
-                          transform="translate(-50%, -50%)"
-                          className="story_note_grid"
-                        >
-                          <GridItem colSpan={1}>
-                            <Box
-                              display={'flex'}
-                              justifyContent={'center'}
-                              position={'relative'}
-                            >
-                              <Img
-                                src={preloadedAssets.Login}
-                                className={'first_play'}
-                              />
-                              <Box className={'play_screen_content'}>
-                                <Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                  >
-                                    <Text className={'play_screen_heading'}>
-                                      Atlantis
-                                    </Text>
-                                  </Box>
-                                </Box>
-                                <Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                  >
-                                    <Text className={'play_screen_text'}>
-                                      Welcome To
-                                    </Text>
-                                  </Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                    mb={{ base: 0, lg: 2 }}
-                                  >
-                                    <Text className={'play_screen_text'}>
-                                      The Demo Play
-                                    </Text>
-                                  </Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                  >
-                                    <Button
-                                      w={'90%'}
-                                      h={'5vh'}
-                                      bg={'none'}
-                                      _hover={{ bg: 'none' }}
-                                      onClick={() => {
-                                        setCurrentScreenId(1);
-                                        setIsGetsPlayAudioConfirmation(true);
-                                      }}
-                                    ></Button>
-                                  </Box>
-                                </Box>
-                              </Box>
-                            </Box>
-                          </GridItem>
-                        </Grid>
-                      </Box>
-                    </>
+                    // <>
+                    //   <Box
+                    //     position="relative"
+                    //     maxW="100%"
+                    //     w={'100vw'}
+                    //     height="100vh"
+                    //     backgroundImage={preloadedAssets.backgroundImage}
+                    //     backgroundSize={'cover'}
+                    //     backgroundRepeat={'no-repeat'}
+                    //     className="chapter_potrait"
+                    //   >
+                    //     <Grid
+                    //       templateColumns="repeat(1, 1fr)"
+                    //       gap={4}
+                    //       position="absolute"
+                    //       top="50%"
+                    //       left="50%"
+                    //       transform="translate(-50%, -50%)"
+                    //       className="story_note_grid"
+                    //     >
+                    //       <GridItem colSpan={1}>
+                    //         <Box
+                    //           display={'flex'}
+                    //           justifyContent={'center'}
+                    //           position={'relative'}
+                    //         >
+                    //           <Img
+                    //             src={preloadedAssets.Login}
+                    //             className={'first_play'}
+                    //           />
+                    //           <Box className={'play_screen_content'}>
+                    //             <Box>
+                    //               <Box
+                    //                 w={'100%'}
+                    //                 display={'flex'}
+                    //                 justifyContent={'center'}
+                    //               >
+                    //                 <Text className={'play_screen_heading'}>
+                    //                   Atlantis
+                    //                 </Text>
+                    //               </Box>
+                    //             </Box>
+                    //             <Box>
+                    //               <Box
+                    //                 w={'100%'}
+                    //                 display={'flex'}
+                    //                 justifyContent={'center'}
+                    //               >
+                    //                 <Text className={'play_screen_text'}>
+                    //                   Welcome To
+                    //                 </Text>
+                    //               </Box>
+                    //               <Box
+                    //                 w={'100%'}
+                    //                 display={'flex'}
+                    //                 justifyContent={'center'}
+                    //                 mb={{ base: 0, lg: 2 }}
+                    //               >
+                    //                 <Text className={'play_screen_text'}>
+                    //                   The Demo Play
+                    //                 </Text>
+                    //               </Box>
+                    //               <Box
+                    //                 w={'100%'}
+                    //                 display={'flex'}
+                    //                 justifyContent={'center'}
+                    //               >
+                    //                 <Button
+                    //                   w={'90%'}
+                    //                   h={'5vh'}
+                    //                   bg={'none'}
+                    //                   _hover={{ bg: 'none' }}
+                    //                   onClick={() => {
+                    //                     setCurrentScreenId(1);
+                    //                     setIsGetsPlayAudioConfirmation(true);
+                    //                   }}
+                    //                 ></Button>
+                    //               </Box>
+                    //             </Box>
+                    //           </Box>
+                    //         </Box>
+                    //       </GridItem>
+                    //     </Grid>
+                    //   </Box>
+                    // </>
+                    <GameIntroScreen preloadedAssets={preloadedAssets} setCurrentScreenId={setCurrentScreenId} setIsGetsPlayAudioConfirmation={setIsGetsPlayAudioConfirmation} ></GameIntroScreen>
                   );
                 case 11:
                   return (

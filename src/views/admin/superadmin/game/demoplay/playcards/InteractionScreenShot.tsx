@@ -111,6 +111,68 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                   </Box>
                 </Box>
                 <Box
+                  className='story_screenshot_interaction_question'
+                >
+                  <Box
+                    className='screenshot_content'
+                    w={'60%'}
+                    fontSize={{ md: '1.5vw', lg: '1.9vw' }}
+                    letterSpacing={1}
+                    justifyContent={'flex-start'}
+                  >
+                    <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
+                    <Text textAlign={'justify'}>
+                      {data[0]?.blockText}
+                    </Text>
+                  </Box>
+                </Box>
+                <Box
+                  mt={'10px'}
+                  w={'100%'}
+                  h={'40%'}
+                  fontWeight={500}
+                  overflowY={'scroll'}
+                  display={'flex'}
+                  justifyContent={'center'}
+                  className={'screenshot_interaction_options'}
+                >
+                  <Box w={'60%'}>
+                    {options &&
+                      options.map((item: any, ind: number) => (
+                        <Box
+                          w={'100%'}
+                          mb={'10px'}
+                          lineHeight={1}
+                          key={ind}
+                          color={option === item?.qpOptions ? 'purple' : 'black'}
+                          textAlign={'center'}
+                          cursor={'pointer'}
+                          fontFamily={'AtlantisText'}
+                        >
+                          <Img
+                            src={option === item?.qpOptions ? preloadedAssets.on : preloadedAssets.off}
+                            h={'30px'}
+                            w={'100%'}
+                          />
+                          <Box
+                            w={'100%'}
+                            display={'flex'}
+                            justifyContent={'center'}
+                            fontSize={{
+                              md: '1.5vw',
+                              lg: '1.9vw',
+                            }}
+                          >
+                            {item?.qpOptionText}
+                          </Box>
+                        </Box>
+                      ))}
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+          {/* <Box
                   textAlign={'center'}
                   h={'25%'}
                   display={'flex'}
@@ -174,11 +236,11 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                         </Box>
                       ))}
                   </Box>
-                </Box>
+                </Box> */}
 
-              </Box>
+          {/* </Box>
             </Box>
-          </Box>
+          </Box> */}
           {/* </GridItem>
             </Grid>
           </Box> */}

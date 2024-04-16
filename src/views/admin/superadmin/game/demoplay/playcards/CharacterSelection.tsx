@@ -55,6 +55,9 @@ import Selected from 'assets/img/games/selected.png';
 import { ProfileContext } from '../EntirePreview';
 import { getGameLanguages, getLanguages, getContentRelatedLanguage } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
+import { OrbitControls } from '@react-three/drei/core/OrbitControls';
+// import {Parrot}  from '../three/Parrot';
+import PlayingCharacter from './PlayingCharacter';
 import Model from './Model'
 interface PlayGamesProps {
   formData?: any;
@@ -110,7 +113,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
-  const [isLanguage, setIsLanguage] = useState(false);
+  const [isLanguage, setIsLanguage] = useState(null);
   const [select, setSelect] = useState(false);
   const [languages, setLanguages] = useState<any[]>(null);
   // Afrith-modified-starts-08/Mar/24
@@ -134,9 +137,9 @@ const Characterspage: React.FC<PlayGamesProps> = ({
             ...prev,
             language: data[0]?.label,
           }));
-          setTimeout(() => {
-            setIsLanguage(true);
-          }, 1500);
+          setIsLanguage(true);
+          // setTimeout(() => {
+          // }, 1500);
         }
       }
     };
@@ -152,12 +155,14 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     if (playerInfo.name === '') {
       setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
     }
-
-    if (Object.keys(demoBlocks).length > 1) {
+    
       setCurrentScreenId(13);//navigate to Chapter selection
-    } else {
-      setCurrentScreenId(2);//navigate to story
-    }
+
+    // if (Object.keys(demoBlocks).length > 1) {
+    //   setCurrentScreenId(13);//navigate to Chapter selection
+    // } else {
+    //   setCurrentScreenId(2);//navigate to story
+    // }
   };
 
   // const handleProfile = (e: any, lang?: any) => {
@@ -180,41 +185,46 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       ...prev,
       [id]: id === 'name' ? value : lang,
     }));
+    console.log('langId', langId);
     setGameContentId(langId);
-    getContentRelatedLanguage(currGameId, langId);
+    // getContentRelatedLanguage(currGameId, langId);
   };
 
-  //////////
-  useEffect(() => {
-    const fetchGameContent = async () => {
-      const gameContentResult = await getContentRelatedLanguage(currGameId, gameContentId);
-      if (gameContentResult.status === 'Success') {
-        const data = gameContentResult.data;
-        setProfileData((prev: any) => ({
-          ...prev,
-          content: data.map((x: any) => ({ content: x.content })),
-          audioUrls: data.map((x: any) => ({ audioUrls: x.audioUrls })),
-          textId: data.map((x: any) => ({ textId: x.textId })),
-          fieldName: data.map((x: any) => ({ fieldName: x.fieldName })),
-          Audiogetlanguage: data.map((x: any) => ({
-            content: x.content,
-            audioUrls: x.audioUrls,
-            textId: x.textId,
-            fieldName: x.fieldName,
-          })),
-        }))
+    //////////
+    useEffect(() => {
+      const fetchGameContent = async() => {
+        
+          const gameContentResult = await getContentRelatedLanguage(currGameId,gameContentId);
+          if (gameContentResult.status === 'Success'){
+            const data = gameContentResult.data;
+            setProfileData((prev:any)=>({
+              ...prev,
+              content: data.map((x:any)=>({content: x.content})),
+              audioUrls: data.map((x:any)=>({audioUrls: x.audioUrls})),
+              textId:data.map((x:any)=>({textId: x.textId})),
+              fieldName:data.map((x:any)=>({fieldName: x.fieldName})),
+              Audiogetlanguage: data.map((x:any) => ({
+                content: x.content,
+                audioUrls: x.audioUrls,
+                textId: x.textId,
+                fieldName: x.fieldName,
+              })),
+            }))
+          }
+      };
+      if(gameContentId){
+        fetchGameContent();
       }
-    };
-    fetchGameContent();
-  }, [gameContentId])
-  /////////
-  // Afrith-modified-starts-08/Mar/24
-  // const setPlayerName = (value:any) => {
-  //   setCharacterName(value);
-  //   setProfileData((prev:any) => ({...prev, name:value}))
-  // };
-  // Afrith-modified-ends-08/Mar/24
-
+      console.log('gameContentId',gameContentId)
+    },[gameContentId])
+    /////////
+    // Afrith-modified-starts-08/Mar/24
+    // const setPlayerName = (value:any) => {
+    //   setCharacterName(value);
+    //   setProfileData((prev:any) => ({...prev, name:value}))
+    // };
+    // Afrith-modified-ends-08/Mar/24
+ 
   const innerBoxWidth = useBreakpointValue({
     base: '95%',
     lg: '95%',
@@ -223,72 +233,72 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   });
   return (
     <>
-      {formData && formData?.gameLanguageId !== null ? (
-          <Box id="container" className="Play-station">
-            <Box className="top-menu-home-section">
-              {isLanguage ? (
-                <Box className="Setting-box">
-                  <Img src={preloadedAssets.Lang} className="setting-pad" />
-                  <Box className="vertex">
-                    <FormLabel className={'label'} me={'0'}>
-                      Language
-                    </FormLabel>
-                    <Box position={'relative'}>
-                      <Img
-                        // className="formfield"
-                        w={'100%'}
-                        h={'auto'}
-                        src={preloadedAssets.FormField}
-                        onClick={() => setSelect(!select)}
-                      />
-                      <Box w={'100%'} position={'absolute'} display={'flex'} onClick={() => setSelect(!select)} top={'7%'}>
-                        <Box w={'80%'} display={'flex'} justifyContent={'center'} >
-                          <Text
-                            // transform={'translate(0px,25px)'}
-                            // textAlign={'center'}
-                            onClick={() => setSelect(!select)}
-                            className={'choosen_lang'}
-                          >
-                            {profileData?.language}
-                          </Text>
-                        </Box>
-                        <Box w={'20%'} >
-                          <Img src={preloadedAssets.Selected} className={'select'} mt={'18%'} />
-                        </Box>
-                        {select && (
-                          <Box className="dropdown">
-                            {languages &&
-                              languages.map((lang: any, num: any) => (
-                                <Text
-                                  className={'choosen_langs'}
-                                  ml={'5px'}
-                                  key={num}
-                                  _hover={{ bgColor: '#377498' }}
-                                  id={'language'}
-                                  onClick={(e: any) =>
-                                    handleProfile(e, lang.label)
-                                  }
-                                >
-                                  {lang.label}
-                                </Text>
-                              ))}
-                          </Box>
-                        )}
+      {formData && (formData?.gameLanguageId !== null) && (isLanguage !==null) ? (
+        <Box id="container" className="Play-station">
+          <Box className="top-menu-home-section">
+            {isLanguage ? (
+              <Box className="Setting-box">
+                <Img src={preloadedAssets.Lang} className="setting-pad" />
+                <Box className="vertex">
+                  <FormLabel className={'label'} me={'0'}>
+                    Language
+                  </FormLabel>
+                  <Box position={'relative'}>
+                    <Img
+                      className="formfield"
+                      w={'100%'}
+                      h={'auto'}
+                      src={preloadedAssets.FormField}
+                      onClick={() => setSelect(!select)}
+                    />
+                    <Box w={'100%'} position={'absolute'} display={'flex'} onClick={() => setSelect(!select)} top={'7%'}>
+                      <Box w={'80%'} display={'flex'} justifyContent={'center'} >
+                        <Text
+                          // transform={'translate(0px,25px)'}
+                          // textAlign={'center'}
+                          onClick={() => setSelect(!select)}
+                          className={'choosen_lang'}
+                        >
+                          {profileData?.language}
+                        </Text>
                       </Box>
-                    </Box>
-                    <Box display={'flex'} justifyContent={'center'} w={'100%'}>
-                      <Button
-                        className="okay"
-                        onClick={() => setIsLanguage(false)}
-                      >
-                        <Img src={preloadedAssets?.OkayBtn} w={'100%'} h={'auto'} />
-                      </Button>
+                      <Box w={'20%'} >
+                        <Img src={preloadedAssets.Selected} className={'select'} mt={'18%'} />
+                      </Box>
+                      {select && (
+                        <Box className="dropdown">
+                          {languages &&
+                            languages.map((lang: any, num: any) => (
+                              <Text
+                                className={'choosen_langs'}
+                                ml={'5px'}
+                                key={num}
+                                _hover={{ bgColor: '#377498' }}
+                                id={'language'}
+                                onClick={(e: any) =>
+                                  handleProfile(e, lang.label, lang.value)
+                                }
+                              >
+                                {lang.label}
+                              </Text>
+                            ))}
+                        </Box>
+                      )}
                     </Box>
                   </Box>
+                  <Box display={'flex'} justifyContent={'center'} w={'100%'}>
+                    <Button
+                      className="okay"
+                      onClick={() => setIsLanguage(false)}
+                    >
+                      <Img src={preloadedAssets.OkayBtn} w={'100%'} h={'auto'} />
+                    </Button>
+                  </Box>
                 </Box>
-              ) : null}
-            </Box>
+              </Box>
+            ) : null}
           </Box>
+        </Box>
       ) : null}
         <Box
           position="relative"
