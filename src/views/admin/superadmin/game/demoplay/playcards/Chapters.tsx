@@ -208,10 +208,11 @@ const ChapterPage: React.FC<{
     );
 
     if (OpenStraigntCompletionPage !== undefined) {
-      setProfile((prev: any) => ({
-        ...prev,
-        currentQuest: it,
-      }));
+          setProfile((prev: any) => ({
+            ...prev,
+            currentQuest: it,
+          }));
+     
       setFeedbackList([]);
       setCurrentScreenId(6);
     } else {
@@ -321,7 +322,8 @@ const ChapterPage: React.FC<{
                                   Quest {num + 1}
                                 </Text>
                               </Box>
-                              {profile.completedLevels.includes(it) ? (
+                              {/* {profile.completedLevels.includes(it) ? ( */}
+                              {(questState[it] === 'completed' || questState[it] === 'replayallowed') ? (
                                 <Box className={'completed_level'}>
                                   <Box position={'relative'} display={'flex'} justifyContent={'center'}> 
                                     <Img w={'40%'} h={'auto'} src={preloadedAssets?.Completed} />

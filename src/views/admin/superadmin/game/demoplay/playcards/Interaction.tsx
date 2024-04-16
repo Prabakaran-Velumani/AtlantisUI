@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState,useEffect } from 'react'
 import { Box, Grid, GridItem, Img, Text } from '@chakra-ui/react';
 import { API_SERVER } from 'config/constant';
 import { motion } from 'framer-motion';
@@ -13,7 +13,9 @@ interface InteractionProps {
   data: any;
   options: any;
   optionClick: any;
+  Profiledatalanguage?: any;
   prevData: any;
+  Contentlanguage: any;
   InteractionFunction: () => void;
   option: any;
   isScreenshot?: boolean;
@@ -22,7 +24,7 @@ interface InteractionProps {
   selectedPlayer: any;
 }
 
-const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, options, optionClick, prevData, InteractionFunction, isScreenshot, navTrack, preloadedAssets, selectedPlayer }) => {
+const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, options, optionClick, prevData, InteractionFunction, isScreenshot, navTrack, preloadedAssets, selectedPlayer, Contentlanguage, Profiledatalanguage}) => {
 
   return (
     <Box
@@ -88,16 +90,25 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                   fontFamily={'AtlantisText'}
                   lineHeight={1}
                   w={'96%'}
-                  overflowY={'scroll'}
                   marginTop={'15px'}
                   position={'relative'}
+                  overflowY={'scroll'}
+                  css={{
+                    // Hide scrollbar for webkit-based browsers (Safari, Chrome)
+                    '&::-webkit-scrollbar': {
+                      display: 'none',
+                    },
+                    // Hide scrollbar for Mozilla-based browsers (Firefox)
+                    'scrollbar-width': 'none', // For Firefox
+                    '-ms-overflow-style': 'none', // For IE and Edge
+                  }}
                 >
                   <Box
                     className={'story_intraction_question'}
                     justifyContent={'flex-start'}
                   >
                     <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
-                    {data?.blockText}
+                    {Contentlanguage ? Contentlanguage : data?.blockText}
                   </Box>
                 </Box>
                 <Box
@@ -105,9 +116,18 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                   w={'100%'}
                   h={'40%'}
                   fontWeight={500}
-                  overflowY={'scroll'}
                   display={'flex'}
                   justifyContent={'center'}
+                  overflowY={'scroll'}
+                  css={{
+                    // Hide scrollbar for webkit-based browsers (Safari, Chrome)
+                    '&::-webkit-scrollbar': {
+                      display: 'none',
+                    },
+                    // Hide scrollbar for Mozilla-based browsers (Firefox)
+                    'scrollbar-width': 'none', // For Firefox
+                    '-ms-overflow-style': 'none', // For IE and Edge
+                  }}
                 >
                   <Box w={'60%'}>
                     {options &&

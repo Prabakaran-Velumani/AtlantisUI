@@ -85,29 +85,91 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
               w={'90%'}            
             >
               <GridItem colSpan={1} position={'relative'}> */}
-          <Box className="story_interaction_image_screenshot">
-            <Box position={'relative'} h={'100%'}>
-              <Img src={preloadedAssets.parch} w={'auto'} filter={'contrast(80%)'} h={'100%'} loading="lazy" />
-              <Box
-                position={'absolute'}
-                top={{ sm: '18px', md: '8%' }}
-                h={'80% !important'}
-                className="story_interaction_image_screenshot_content"
-              >
-                <Box
-                  textAlign={'center'}
-                  display={'flex'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  fontWeight={700}
-                  fontSize={{ md: '1.5vw', lg: '1.9vw' }}
-                  fontFamily={'AtlantisText'}
-                  lineHeight={1}
-                  w={'100%'}
-                  h={'5%'}
-                >
-                  <Box w={'80%'}>
-                    Interactions...!{' '}
+                <Box  className="story_interaction_image_screenshot">
+                  <Box position={'relative'} h={'100%'}>
+                  <Img src={preloadedAssets.parch} w={'auto'} filter={'contrast(80%)'} h={'100%'} loading="lazy" />
+                  <Box
+                    position={'absolute'}
+                    top={{ sm: '18px', md: '8%' }}
+                    h={'80% !important'}
+                    className="story_interaction_image_screenshot_content"
+                  >
+                    <Box
+                      textAlign={'center'}
+                      display={'flex'}
+                      justifyContent={'center'}
+                      alignItems={'center'}
+                      fontWeight={700}
+                      fontSize={{ md: '1.5vw', lg: '1.9vw' }}
+                      fontFamily={'AtlantisText'}
+                      lineHeight={1}
+                      w={'100%'}
+                      h={'5%'}
+                    >
+                      <Box w={'80%'}>
+                        Interactions...!{' '}
+                      </Box>
+                    </Box>
+                    <Box
+                      className='story_screenshot_interaction_question'
+                    >
+                      <Box
+                       className='screenshot_content'
+                        w={'60%'}
+                        fontSize={{ md: '1.5vw', lg: '1.9vw' }}
+                        letterSpacing={1}
+                        justifyContent={'flex-start'}
+                      >
+                        <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
+                        {data[0]?.blockText}
+                        
+                      </Box>
+                    </Box>
+                    <Box
+                      mt={'10px'}
+                      w={'100%'}
+                      h={'40%'}
+                      fontWeight={500}
+                      overflowY={'scroll'}
+                      display={'flex'}
+                      justifyContent={'center'}
+                      className={'screenshot_interaction_options'}
+                    >
+                      <Box w={'60%'}>
+                        {options &&
+                          options.map((item: any, ind: number) => (
+                            <Box
+                              w={'100%'}
+                              mb={'10px'}
+                              lineHeight={1}
+                              key={ind}
+                              color={option === item?.qpOptions ? 'purple' : 'black'}
+                              textAlign={'center'}
+                              cursor={'pointer'}
+                              fontFamily={'AtlantisText'}
+                            >
+                              <Img
+                                src={option === item?.qpOptions ? preloadedAssets.on : preloadedAssets.off}
+                                h={'30px'}
+                                w={'100%'}
+                              />
+                              <Box
+                                w={'100%'}
+                                display={'flex'}
+                                justifyContent={'center'}
+                                fontSize={{
+                                  md: '1.5vw',
+                                  lg: '1.9vw',
+                                }}
+                              >
+                                {item?.qpOptionText}
+                              </Box>
+                            </Box>
+                          ))}
+                      </Box>
+                    </Box>
+
+                  </Box>
                   </Box>
                 </Box>
                 <Box
@@ -176,9 +238,9 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                   </Box>
                 </Box>
 
-              </Box>
+              {/* </Box>
             </Box>
-          </Box>
+          </Box> */}
           {/* </GridItem>
             </Grid>
           </Box> */}

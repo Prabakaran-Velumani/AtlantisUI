@@ -36,6 +36,7 @@ import { createScormConfig, getScormConfig, generateScorm } from 'utils/scorm/sc
 // @ts-ignore
 // import loadingImage from 'assets/img/games/loading.gif';
 import loadingImage from 'assets/img/games/loady.gif';
+
 import {API_SERVER} from 'config/constant';
 import { RiDraftLine } from 'react-icons/ri';
 

@@ -52,8 +52,7 @@ const handleLogout = () => {
 // checking token expiration
 useEffect(() => {
   const user: any = JSON.parse(localStorage.getItem('user'));
-  console.log('user',user);
-  if (user) {
+    if (user) {
     const decodedJwt = parseJwt(user?.token);
     if (decodedJwt.exp * 1000 < Date.now()) {
       handleLogout();
