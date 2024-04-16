@@ -58,7 +58,7 @@ const Takeway: React.FC<{
             </Box>
             <Box className='next-btn-box'>
                 <Img
-                  src={preloadedAssets.nextBtn}                 
+                  src={preloadedAssets.next}                 
                   onClick={()=>getData(data)}
                 />
               </Box>

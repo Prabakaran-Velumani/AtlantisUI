@@ -67,6 +67,7 @@ import Tooltip from 'assets/img/games/tooltip.png';
 import Ans from 'assets/img/games/ANS.png';
 import Fb from 'assets/img/games/FB.png';
 import Completed from 'assets/img/games/COMPLETED.png'
+import Thankyou from 'assets/img/games/thankyou.png';
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
  */
@@ -140,4 +141,6 @@ export const assetImageSrc = [
   { assetType: 'FB', src:Fb},
   { assetType: 'Lang', src:Lang},
   { assetType: 'Completed', src:Completed},
+  { assetType: 'Thankyou', src:Thankyou},
+  
 ];
