@@ -43,10 +43,6 @@ const ImagePreview: React.FC<{ fetchImg?: any, isOpen?: any, onOpen?: any, onClo
 
   // const drawerSize = useBreakpointValue({ base: '100%', lg: '400px' });
 
- 
-  console.log('fetech', fetchImg);
-  console.log('onOpen', onOpen);
-  
   const [showFullText, setShowFullText] = useState(false);
   const maxTextLength = 80; // Maximum characters to display before truncating
 
@@ -54,36 +50,14 @@ const ImagePreview: React.FC<{ fetchImg?: any, isOpen?: any, onOpen?: any, onClo
     setShowFullText(!showFullText);
   };
 
-  // const textContent =fetchImg.stroyline;
-
-  // const truncatedText = showFullText ? textContent : `${textContent.slice(0, maxTextLength)}...`;
-  
-
-//////////////Changes - 12-Dec-23//////////////////
-// function handle() {
-//   // console.log('valuesImagePreview--',values);
-//   if(values === 'Selected'){
-//     setValues('Select')
-//   } 
-//   else if(values === 'Select'){
-//     setValues('Selected')
-//   }
-// }
-
-//////////
 const handle = () => {
   if (!selectedCardIndex) {
 setValues('Selected')
     onClose(); 
-    console.log('if---',selectedCardIndex);
-    console.log('if2---',values);
-    
   }
   else if(selectedCardIndex){
     onClose();
     setValues('Select')
-    console.log('ifELSE',values);
-    console.log('ifELSE2---',selectedCardIndex);
   }
   
 };

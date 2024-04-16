@@ -120,7 +120,13 @@ export default function HeaderLinks(props: {
           </Text>
         </Text> */}
       </>
-      <Box display={path.startsWith('/admin/superadmin/game/creation')||path.startsWith('/admin/superadmin/game/template')||path.startsWith('/admin/game/preview/') ? 'none':'flex'}>
+      <Box display={{
+         base: 'flex',
+         sm: 'flex',
+         md: 'flex', 
+         lg:  path.startsWith('/admin/superadmin/game/template') || path.startsWith('/admin/game/preview/') ? 'none' : 'flex'
+      }} 
+      alignItems={'center'} >
       <SidebarResponsive routes={routes} />
       </Box>
       {/* <Menu>
@@ -250,7 +256,7 @@ export default function HeaderLinks(props: {
         setTheme={setTheme}
       /> */}
 
-      <Menu>
+      {/* <Menu>
         <MenuButton p="0px">
           <Avatar
             _hover={{ cursor: 'pointer' }}
@@ -301,7 +307,7 @@ export default function HeaderLinks(props: {
     null
   )
 } 
-            {/* <MenuItem
+            <MenuItem
               _hover={{ bg: 'none' }}
               _focus={{ bg: 'none' }}
               borderRadius="8px"
@@ -316,7 +322,7 @@ export default function HeaderLinks(props: {
               px="14px"
             >
               <Text fontSize="sm">Newsletter Settings</Text>
-            </MenuItem> */}
+            </MenuItem>
             {(user && user.token) && 
             <MenuItem
               _hover={{ bg: 'none' }}
@@ -330,7 +336,7 @@ export default function HeaderLinks(props: {
             </MenuItem>}
           </Flex>
         </MenuList>
-      </Menu>
+      </Menu> */}
     </Flex>
   );
 }

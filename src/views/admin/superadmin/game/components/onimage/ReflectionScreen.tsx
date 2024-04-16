@@ -1,107 +1,247 @@
-
-
 import {
-    AlertDialog,
-    AlertDialogBody,
-    AlertDialogCloseButton,
-    AlertDialogContent,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogOverlay,
-    Box,
-    Button,
-    Flex,
-    FormControl,
-    FormLabel,
-    Grid,
-    GridItem,
-    HStack,
-    Icon,
-    Img,
-    Radio,
-    RadioGroup,
-    SimpleGrid,
-    Stack,
-    Switch,
-    Tab,
-    TabList,
-    TabPanel,
-    TabPanels,
-    Tabs,
-    Text,
-    useColorModeValue,
-    useDisclosure,
-    useTheme,
-    useToast,
-    // brindha start
-    Select,
-    Textarea,
-    Link,
-    Slider,
-    Image,
-    IconButton
-    // brindha end
-  } from '@chakra-ui/react';
-  import React, { useEffect, useRef, useState } from 'react';
-  import { gameDuplicateQuestionEntirely, getImages, updateGame } from 'utils/game/gameService';
-  import Card from 'components/card/Card';
-  import InputField from 'components/fields/InputField';
-  import BadgeImages from '../BadgeImages'
-  import { MdClose, MdOutlineCloudUpload } from 'react-icons/md';
-  import TextField from 'components/fields/TextField';
-  import ref from 'assets/img/screens/refquestions.png';
-  import qs from 'assets/img/screens/QS.png';
-  interface Badge {
-    gasId: number;
-    gasAssetImage: string;
-    gasAssetName: string;
-  }
+  Box,
+  Img,
+  SimpleGrid,
+  Text,
+  Textarea,
+  GridItem
+} from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import ref from 'assets/img/screens/refquestions.png';
+import qs from 'assets/img/screens/QS.png';
+import question from 'assets/img/games/question.png';
+import right from 'assets/img/games/right.png';
+import left from 'assets/img/games/left.png';
+import refsep from 'assets/img/games/refseparate.png';
+import next from 'assets/img/screens/next.png';
 
- 
-    const ReflectionScreen: React.FC<{formData: any;
-      reflectionQuestions:any;imageSrc:any;reflectionQuestionsdefault:any,preview:any}> = ({formData,reflectionQuestions,imageSrc,reflectionQuestionsdefault,preview}) => {
-     console.log("reflectionQuestions-123",formData.gameReflectionQuestion)
+interface Badge {
+  gasId: number;
+  gasAssetImage: string;
+  gasAssetName: string;
+}
 
-     const arrayInfo = [1,2,3,4]
-     let i=0;
-     
+const ReflectionScreen: React.FC<{
+  formData: any;
+  reflectionQuestions: any;
+  imageSrc: any;
+  reflectionQuestionsdefault: any;
+  preview: any;
+  preloadedAssets?: any;
+}> = ({
+  formData,
+  reflectionQuestions,
+  imageSrc,
+  reflectionQuestionsdefault,
+  preview,
+  preloadedAssets,
+}) => {
+  const [answers, setAnswers] = useState<any>([]);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
+  const arrayInfo = [1, 2, 3, 4];
+  let i = 0;
+  useEffect(() => {
+    const snas = !answers.some((ans:any) => ( ans?.text ==undefined ||  ans.text == '' || ans.text==null ));
+    console.log("!!!!!", snas);
+    if (formData?.gameIsLearnerMandatoryQuestion == 'false') {
+      setIsFormValid(true);
+    } else if (formData.gameIsLearnerMandatoryQuestion == 'true'){
+      if(formData?.gameReflectionQuestion &&
+      answers.length == formData?.gameReflectionQuestion &&
+      !answers.some((ans:any) => ( ans?.text ==undefined ||  ans.text == '' || ans.text==null ))
+    ) {
+    
+      setIsFormValid(true);
+    } else {
+      setIsFormValid(false);
+    }
+    }
+    else{
+      setIsFormValid(true);
+    }
+  }, [answers, formData.gameIsLearnerMandatoryQuestion]);
+
+  const updateAnswer = (e: any, index: any) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[index] = { ...updatedAnswers[index], text: e.target.value };
+    setAnswers(updatedAnswers);
+  };
+  const arrayInfoQn = formData.gameReflectionQuestion;
+  const styleflex = {};
+
+if (arrayInfoQn === 1) {
+Object.assign(styleflex, {
+ display: 'flex',
+ justifyContent: 'center',
+});
+} else if (arrayInfoQn === 3) {
+// Apply your styling for arrayInfo 3, for example:
+Object.assign(styleflex, {
+ display: 'grid',
+ gridTemplateColumns: 'repeat(2, 1fr)', // Two columns
+ gap: '2px',
+ placeItems: 'center',
+});
+}
 
   return (
-   <>
-    {imageSrc && (
-        // <SimpleGrid columns={1}>
-        <Box className='reflection-screen'>
-          <Box  className='reflection-screen-box'
-            // w={{base:'100%',sm:'100%',md:'100%',lg:'90%'}}
-            // ml={{base:'10px',sm:'10px',md:'20px',lg:'28px'}} 
-            // h={{base:'250px',sm:'450px',md:'550px',lg:'450px'}}
-            // backgroundImage={imageSrc}
-            // backgroundRepeat={'no-repeat'}
-            // backgroundSize={'contain'}
-            // display={'flex'}
-            // justifyContent={'center'}
-            // alignItems={'center'}
-          >
-            <Img src={imageSrc} className='bg-img' />           
-          </Box>
-          <Box className='content-box' >
-            <SimpleGrid columns={{base:2}} spacing={2} className='grid'>
-              {Array.from({ length: formData.gameReflectionQuestion }, (_, index) => (
+    <>
+      {imageSrc && (
+        <Box className="reflection-screen">
 
-                <Box>
-                <Box w={{base:'150px',sm:'100px',md:'150px',lg:'180px'}} lineHeight={1} display={'flex'} wordBreak="break-all" fontFamily={'content'} fontSize={{base:'8px',sm:'12px',md:'13px',lg:'15px'}}>                  
-                  <Img src={qs} alt='ref' w={'20px'} h={'20px'} />
-                  <Text className='text drop' style={{ whiteSpace: 'break-spaces' }}>{` ${reflectionQuestions[`ref${index + 1}`]?.padEnd(90, ' ') || reflectionQuestionsdefault[index]?.padEnd(90, ' ')}`}</Text>
+            <Img src={imageSrc} className="bg-img" />
+
+          {preview ? (
+            <Box className='title'
+              w={'100%'}
+              display={'flex'}
+              justifyContent={'center'}
+              position={'relative'}
+            >
+              <Img src={question} w={'320px'} h={'100px'} />
+              <Text
+                fontFamily={'AtlantisText'}
+                color={'##D9C7A2'}
+                position={'absolute'}
+                fontSize={'2.8rem'}
+                style={{ whiteSpace: 'break-spaces' }}
+              >
+                REFLECTION
+              </Text>
+            </Box>
+          ) : null}
+          <Box
+            className={preview ? 'content-ref' : 'content-box'}
+            position={'relative'}
+          >
+            <SimpleGrid
+              columns={{ base: 2 }}
+              spacing={2}
+              className="grid"
+              gap="20"
+            >
+              {Array.from(
+                { length: formData.gameReflectionQuestion },
+                (_, index) => (
+                  <GridItem key={index} colSpan={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? { base: 2 } : {}}>
+                    <Box  className='heading-wrapper'
+                      w={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? {base:'150px',sm:'300px',md:'350px',lg:'380px'} : {base:'150px',sm:'100px',md:'150px',lg:'180px'}} 
+                      lineHeight={1}
+                      display={'flex'}
+                      wordBreak="break-all"
+                      fontFamily={'content'}
+                      fontSize={{
+                        base: '8px',
+                        sm: '12px',
+                        md: '13px',
+                        lg: '15px',
+                      }}
+                    >
+                      <Img src={qs} alt="ref" w={'20px'} h={'20px'} />
+                      {preview ? (
+                        <Text
+                          className="text drop"
+                          style={{ whiteSpace: 'break-spaces' }}
+                        >
+                          {` ${
+                            reflectionQuestions[`ref${index + 1}`]?.padEnd(
+                              90,
+                              ' ',
+                            ) ||
+                            reflectionQuestionsdefault[index]?.padEnd(90, ' ')
+                          }`}
+                        </Text>
+                      ) : (
+                        <Text
+                          className="text drop"
+                          style={{ whiteSpace: 'break-spaces' }}
+                        >
+                          {` ${
+                            reflectionQuestions[`ref${index + 1}`]?.padEnd(
+                              90,
+                              ' ',
+                            ) ||
+                            reflectionQuestionsdefault[index]?.padEnd(90, ' ')
+                          }`}
+                        </Text>
+                      )}
+                    </Box>
+                    <Box position={'relative'} className='input-wrapper'>
+                      <Img
+                        w={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ?  '420px'  : '200px'} 
+                        h={{
+                          base: '20px',
+                          sm: '40px',
+                          md: '70px',
+                          lg: '50px',
+                        }}
+                        padding-top={'20px'}
+                        src={ref}
+                      />
+                      {preview ? (
+                        <Textarea
+                          padding-top={'20px'}
+                          bottom={0}
+                          outline={'none'}
+                          focusBorderColor="none"
+                          border={'none'}
+                          position={'absolute'}
+                          w={'350px'}
+                          color={'#D9C7A2'}
+                          h={{
+                            base: '20px',
+                            sm: '30px',
+                            md: '50px',
+                            lg: '100px',
+                          }}
+                          _focus={{ boxShadow: 'none', border: 'none' }}
+                          fontFamily={'AtlantisText'}
+                          value={answers[index]?.text}
+                          onChange={(e: any) => updateAnswer(e, index)}
+                        />
+                      ) : null}
                   </Box>
-                  <Img w={'200px'} h={{base:'20px',sm:'30px',md:'50px',lg:'50px'}} src={ref} />
-                  </Box>
-              ))}
+                  </GridItem>
+                ),
+              )}
             </SimpleGrid>
+            {preview ? (
+              // <Img
+              //   src={refsep}
+              //   w={'10px'}
+              //   h={'auto'}
+              //   position={'absolute'}
+              //   top={'0px'}
+              // />
+              <></>
+            ) : null}
           </Box>
-        </Box>        
-      // </SimpleGrid>
-    )}
-   </>
+          {preview ? (
+            <Box
+              w={'100%'}
+              display={'flex'}
+              justifyContent={'center'}
+              position={'absolute'}
+              bottom={'0'}
+              className='left-right-btn'
+            >
+              <Box w={'80%'} display={'flex'} justifyContent={'space-between'}>
+                <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
+                {isFormValid && (
+                  <Img
+                    src={right}
+                    w={'50px'}
+                    h={'50px'}
+                    cursor={'pointer'}
+                  />
+                )}
+              </Box>
+            </Box>
+            
+          ) : null}
+        </Box>
+      )}
+    </>
   );
-}
+};
 export default ReflectionScreen;

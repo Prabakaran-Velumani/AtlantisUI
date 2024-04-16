@@ -116,7 +116,7 @@ const [handleSeletAttr,setHandleSeletAttr] = useState<boolean>(true);
       borderRadius: '15px', // Adjust the border radius here
       height: '45px',
       padding :'0 !important',
-      maxWidth:'92%',
+      maxWidth:'100%',
     }),
     // Add more style modifications as needed
   };
@@ -365,152 +365,154 @@ const [handleSeletAttr,setHandleSeletAttr] = useState<boolean>(true);
   };
   return (
     <>
-      <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>   
-        <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'absolute'} alignItems={'center'}></Card>   
-        <Card mb={{ base: '0px', xl: '20px' }} width={'70%'} marginTop={'120px'}>
-          <Flex direction="column" ms="10px">
-          <Text color={textColorPrimary} fontSize="2xl" fontWeight="700" mb="20px">
-              Company {id ? 'Updation' : 'Creation'}
-            </Text>
-          </Flex>
-          <SimpleGrid
-            columns={{ sm: 1, md: 2 }}
-            spacing={{ base: '20px', xl: '20px' }}
-          >
-            <InputField
-              mb="0px"
-              me="30px"
-              id="comapanyAdminName"
-              label="Company Name"
-              placeholder="eg. Oliver"
-              name="cpCompanyName"
-              isRequired={true}
-              value={form?.cpCompanyName}
-              onChange={handleInput}
-              ref={cpCompanyNameRef}
-              // border={validation}
-
-             
-            />
-            <InputField
-              mb="0px"
-              me="30px"
-              id="comapanyAdminName"
-              label="Company Admin Name"
-              placeholder="eg. Joseph"
-              value={form?.cpAdminName}
-              name="cpAdminName"
-              isRequired={true}
-              onChange={handleInput}
-               ref={cpAdminNameRef}
-              // border={validation}
-            />
-            <InputField
-              mb="0px"
-              id="comapanymail"
-              label="Company Mail"
-              placeholder="eg. mail@sample.com"
-              name="cpAdminMail"
-              isRequired={true}
-              value={form?.cpAdminMail}
-              onChange={handleInput}
-              disabled={id ? true : false}
-              ref={cpAdminMailRef}
-              // border={validation}
-
-            />
-            {countries && (
-              <>
-                <Box>
-                  <FormLabel fontSize='sm' fontWeight='bold' color={textColorPrimary}>Country<span style={{ color: 'red' }}>*</span></FormLabel>
-
-                  <Select
-                    id="companyCountry"
-                    name="cpCountry"
-                    options={countries}
-                    value={countries.find(item => item.value === form?.cpCountry)}
-                    onChange={(val) =>
-                      setForm((prev: any) => ({ ...prev, cpCountry: val.value }))
-                    }
-                    styles={customStyles}
-                  />
-                </Box>
-              </>
-            )}
-            
-
-          
-           <SelectField
-              mb="0px"
-              me="30px"
-              id="companyIndustry"
-              isRequired={true}
-              label="Company Industry"
-              placeholder="Select Industry"
-              name="cpIndustry"
-              value={
-                mappedIndustryOptions.find(
-                  (option) => option.value.toString() === form?.cpIndustry.toString()
-                )
-              }
-              onChange={handleChangeIndustry}
-              options={mappedIndustryOptions}
-              ref={cpIndustryRef}
-              // onSelectRefChange={handleSelectRefChange} 
-              handleSeletAttr={handleSeletAttr}
-           
-            />
-          
-            
-            <Box>
-              <FormLabel fontSize='sm' fontWeight='bold' color={textColorPrimary}>Status<span style={{ color: 'red' }}>*</span></FormLabel>
-              <Select
-                id="comapanyActiveStatus"
-                name="cpStatus"
-                options={status}
-                value={status.find(item => item.value === form?.cpStatus)}
-                onChange={(val) =>
-                  setForm((prev: any) => ({ ...prev, cpStatus: val.value }))
-                }
-                styles={customStyles}
-              />
-            </Box>
-          </SimpleGrid>
-          {/* <Button
-            mt="20px"
-            padding={2}
-            background="#3311db"
-            color="#fff"
-            w={70}
-            onClick={save}
-          >
-            Save
-          </Button> */}
-          <Flex justify="space-between">
-            <Button
-               variant="light"
-               fontSize="sm"
-               borderRadius="16px"
-               w={{ base: '128px', md: '148px' }}
-               h="46px"
-               mt="20px"
-              onClick={handleBack}
+      <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'75px'} position={'relative'}>   
+        <Card alignItems={'center'}>       
+          <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={{base: '170', sm: '170', md: '300', lg: '300'}} position={'relative'} alignItems={'center'}></Card>   
+          <Card mb={{ base: '0px', xl: '20px' }} width={{base: '95%', md: '70%'}} marginTop={'-120px'}>
+            <Flex direction="column">
+              <Text color={textColorPrimary} fontSize="2xl" fontWeight="700" mb="20px">
+                Company {id ? 'Updation' : 'Creation'}
+              </Text>
+            </Flex>
+            <SimpleGrid
+              columns={{ sm: 1, md: 2 }}
+              spacing={{ base: '20px', xl: '25px' }}
             >
-              Cancel
-            </Button>
-            <Button
+              <InputField
+                mb="0px"                
+                id="comapanyAdminName"
+                label="Company Name"
+                placeholder="eg. Oliver"
+                name="cpCompanyName"
+                isRequired={true}
+                value={form?.cpCompanyName}
+                onChange={handleInput}
+                ref={cpCompanyNameRef}
+                // border={validation}
+
+              
+              />
+              <InputField
+                mb="0px"                
+                id="comapanyAdminName"
+                label="Company Admin Name"
+                placeholder="eg. Joseph"
+                value={form?.cpAdminName}
+                name="cpAdminName"
+                isRequired={true}
+                onChange={handleInput}
+                ref={cpAdminNameRef}
+                // border={validation}
+              />
+              <InputField
+                mb="0px"
+                id="comapanymail"
+                label="Company Mail"
+                placeholder="eg. mail@sample.com"
+                name="cpAdminMail"
+                isRequired={true}
+                value={form?.cpAdminMail}
+                onChange={handleInput}
+                disabled={id ? true : false}
+                ref={cpAdminMailRef}
+                // border={validation}
+
+              />
+              {countries && (
+                <>
+                  <Box>
+                    <FormLabel fontSize='sm' fontWeight='bold' color={textColorPrimary}>Country<span style={{ color: 'red' }}>*</span></FormLabel>
+
+                    <Select
+                      id="companyCountry"
+                      name="cpCountry"
+                      options={countries}
+                      value={countries.find(item => item.value === form?.cpCountry)}
+                      onChange={(val) =>
+                        setForm((prev: any) => ({ ...prev, cpCountry: val.value }))
+                      }
+                      styles={customStyles}
+                    />
+                  </Box>
+                </>
+              )}
+              
+
+            
+            <SelectField
+                mb="0px"                
+                id="companyIndustry"
+                isRequired={true}
+                label="Company Industry"
+                placeholder="Select Industry"
+                name="cpIndustry"
+                value={
+                  mappedIndustryOptions.find(
+                    (option) => option.value.toString() === form?.cpIndustry.toString()
+                  )
+                }
+                onChange={handleChangeIndustry}
+                options={mappedIndustryOptions}
+                ref={cpIndustryRef}
+                // onSelectRefChange={handleSelectRefChange} 
+                handleSeletAttr={handleSeletAttr}
+            
+              />
+            
+              
+              <Box>
+                <FormLabel fontSize='sm' fontWeight='bold' color={textColorPrimary}>Status<span style={{ color: 'red' }}>*</span></FormLabel>
+                <Select
+                  id="comapanyActiveStatus"
+                  name="cpStatus"
+                  options={status}
+                  value={status.find(item => item.value === form?.cpStatus)}
+                  onChange={(val) =>
+                    setForm((prev: any) => ({ ...prev, cpStatus: val.value }))
+                  }
+                  styles={customStyles}
+                />
+              </Box>
+            </SimpleGrid>
+            {/* <Button
               mt="20px"
-              variant="darkBrand"
-              fontSize="sm"
-              borderRadius="16px"
-              w={{ base: '128px', md: '148px' }}
-              h="46px"
-              ms="auto"
+              padding={2}
+              background="#3311db"
+              color="#fff"
+              w={70}
               onClick={save}
             >
-              {id ? 'Update' : 'Save'}
-            </Button>
-          </Flex>
+              Save
+            </Button> */}
+            <Flex justify="space-between">
+              <Button
+                fontSize="sm"
+                borderRadius="16px"
+                border={'1px solid #00000024'}
+                w={{ base: '128px', md: '148px' }}
+                h="46px"
+                mt="20px"
+                mr="20px"
+                bg={'transparent'}
+                _hover={{bg: '#11047a', color: '#fff'}}
+                onClick={handleBack}
+              >
+                Cancel
+              </Button>
+              <Button
+               mt="20px"
+                variant="darkBrand"
+                fontSize="sm"
+                borderRadius="16px"
+                w={{ base: '128px', md: '148px' }}
+                h="46px"
+                // ms="auto"
+                onClick={save}
+              >
+                {id ? 'Update' : 'Save'}
+              </Button>
+            </Flex>
+          </Card>
         </Card>
       </Box>
       {alert ? <OnToast msg={msg} status={toastStatus} setAlert={setAlert}

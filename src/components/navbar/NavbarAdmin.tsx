@@ -13,7 +13,7 @@ import {
 import { useState, useEffect } from 'react';
 import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
 import { useLocation } from 'react-router-dom';
-const usePath=()=>{
+const usePath = () => {
   const location = useLocation()
   return location.pathname;
 }
@@ -27,7 +27,7 @@ export default function AdminNavbar(props: {
   [x: string]: any;
 }) {
   const [scrolled, setScrolled] = useState(false);
-  
+
   const path = usePath();
   useEffect(() => {
     window.addEventListener('scroll', changeNavbar);
@@ -64,7 +64,6 @@ export default function AdminNavbar(props: {
   };
   return (
     <Box
-    
       position={navbarPosition}
       boxShadow={navbarShadow}
       bg={navbarBg}
@@ -81,11 +80,18 @@ export default function AdminNavbar(props: {
       transition-property="box-shadow, background-color, filter, border"
       transitionTimingFunction="linear, linear, linear, linear"
       alignItems={{ xl: 'center' }}
-      display={
-        path.startsWith('/admin/superadmin/game/creation') || path.startsWith('/admin/superadmin/game/template') || path.startsWith('/admin/game/preview/')
-          ? 'none'
-          : (secondary ? 'block' : 'flex')
-      }
+      display={{
+        base: 'block',
+        sm: 'block',
+        md: 'block',
+        lg:
+          path.startsWith('/admin/superadmin/game/template') ||
+          path.startsWith('/admin/game/preview/')
+            ? 'none'
+            : secondary
+            ? 'block'
+            : 'flex',
+      }}
       minH="75px"
       justifyContent={{ xl: 'center' }}
       lineHeight="25.6px"
@@ -102,7 +108,6 @@ export default function AdminNavbar(props: {
       }}
       pt="8px"
       top={{ base: '12px', md: '16px', xl: '18px' }}
-      
       // '2xl': 'calc(100vw - 80px)',
       w={
         mini === false
@@ -111,7 +116,11 @@ export default function AdminNavbar(props: {
               md: 'calc(100vw - 8%)',
               lg: 'calc(100vw - 6%)',
               xl: 'calc(100vw - 350px)',
-              '2xl':path.startsWith('/admin/superadmin/game/template')||path.startsWith('/admin/game/preview/') ? 'calc(100vw - 120px)': 'calc(100vw - 300px)',
+              '2xl':
+                path.startsWith('/admin/superadmin/game/template') ||
+                path.startsWith('/admin/game/preview/')
+                  ? 'calc(100vw - 120px)'
+                  : '',
             }
           : mini === true && hovered === true
           ? {
@@ -132,14 +141,39 @@ export default function AdminNavbar(props: {
     >
       <Flex
         w="100%"
-        flexDirection={{
-          sm: 'column',
-          md: 'row',
-        }}
+        flexDirection={'row'}
         alignItems={{ xl: 'center' }}
         mb={gap}
       >
-        <Box mb={{ sm: '8px', md: '0px' }} display={path.startsWith('/admin/superadmin/game/creation')||path.startsWith('/admin/superadmin/game/template')||path.startsWith('/admin/game/preview/') ? 'none':'block'} >
+        <Box
+          mb={{ sm: '8px', md: '0px' }}
+          display={{
+            base:
+              path.startsWith('/admin/superadmin/game/creation') ||
+              path.startsWith('/admin/superadmin/game/template') ||
+              path.startsWith('/admin/game/preview/')
+                ? 'none'
+                : 'block',
+            sm:
+              path.startsWith('/admin/superadmin/game/creation') ||
+              path.startsWith('/admin/superadmin/game/template') ||
+              path.startsWith('/admin/game/preview/')
+                ? 'none'
+                : 'block',
+            md:
+              path.startsWith('/admin/superadmin/game/creation') ||
+              path.startsWith('/admin/superadmin/game/template') ||
+              path.startsWith('/admin/game/preview/')
+                ? 'none'
+                : 'block',
+            lg:
+              path.startsWith('/admin/superadmin/game/creation') ||
+              path.startsWith('/admin/superadmin/game/template') ||
+              path.startsWith('/admin/game/preview/')
+                ? 'none'
+                : 'block',
+          }}
+        >
           <Breadcrumb mb="3">
             <BreadcrumbItem color={secondaryText} fontSize="sm">
               <BreadcrumbLink href="#" color={secondaryText}>
@@ -174,7 +208,18 @@ export default function AdminNavbar(props: {
             {brandText}
           </Link>
         </Box>
-        {/* <Box ms="auto" w={{ sm: '100%', md: 'unset' }}>
+        <Box
+          ms="auto"
+          w={{ sm: 'unset', md: 'unset' }}
+          display={{
+            base: 'flex',
+            sm: 'flex',
+            md: 'flex',
+            lg: 'flex',
+            xl: 'none',
+          }}
+          alignItems={'center'}
+        >
           <AdminNavbarLinks
             mini={mini}
             setMini={setMini}
@@ -182,7 +227,7 @@ export default function AdminNavbar(props: {
             setTheme={setTheme}
             secondary={props.secondary}
           />
-        </Box> */}
+        </Box>
       </Flex>
     </Box>
   );

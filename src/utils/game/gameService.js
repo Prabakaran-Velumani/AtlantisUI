@@ -414,6 +414,82 @@ export async function getLanguages(){
     }
 }
 
+export async function getGameLanguages(id){
+  try{
+      const response = await fetch(`${API_SERVER}${urls.gameLanguages}${id}`,getMethod);
+      const result = await response.json();
+      return result;
+  }
+  catch (err) {
+      console.log('editLanguage Error:', err.message);
+    }
+}
+///Afrith-modified-starts-20/Mar/24
+export async function getContentRelatedLanguage(currGameId,langId){
+  try{
+    const response = await fetch(`${API_SERVER}${urls.getContentRelatedLanguage}${currGameId}/${langId}`,getMethod);
+    const result = await response.json();
+    return result;
+}
+catch (err) {
+    console.log('editLanguage Error:', err.message);
+  }
+}
+///Afrith-modified-ends-20/Mar/24
+export async function getSelectedLanguages(id) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getSelectedLanguages}${id}`,getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getSelectedLanguages Error:', err);
+  }
+}
+export async function getBlockData(id, translationId) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getBlockData}${id}/${translationId}`, getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getBlockData Error:', err);
+  }
+}
+export async function getQuestionOptions(id, translationId) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getQuestionOptions}${id}/${translationId}`, getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getQuestionOptions Error:', err);
+  }
+}
+export async function getQuestionResponse(id, translationId) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getQuestionResponse}${id}/${translationId}`, getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getQuestionResponse Error:', err);
+  }
+}
+export async function getGameStoryLine(id, translationId) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getGameStoryLine}${id}/${translationId}`, getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getGameStoryLine Error:', err);
+  }
+}
+export async function getMaxBlockQuestNo(id) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getMaxBlockQuestNo}${id}`,getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getMaxBlockQuestNo Error:', err);
+  }
+}
 export async function getCreatedLanguages(data){
   try{
 
@@ -538,5 +614,15 @@ export async function getGameCreatorDemoData(id) {
     return result;
   } catch (err) {
     console.log('getCreator Error:', err);
+  }
+}
+
+export async function getQuestionOptionsText(id, translationId) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getQuestionOptionsText}${id}/${translationId}`, getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getQuestionOptionsText Error:', err);
   }
 }

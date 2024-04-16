@@ -1,41 +1,53 @@
 // Chakra Imports
-import { Box, Flex, Img, Text, useToast } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Grid,
+  GridItem,
+  Img,
+  Text,
+  useToast,
+} from '@chakra-ui/react';
 
-import bk from 'assets/img/games/17.png';
-import note from 'assets/img/games/note.png';
-import next from 'assets/img/screens/next.png';
-import dial from 'assets/img/games/Dialogue.png';
-import char from 'assets/img/games/charbox.png';
-import right from 'assets/img/games/right.png';
-import left from 'assets/img/games/left.png';
-import parch from 'assets/img/games/parch.png';
-import on from 'assets/img/games/on.png';
-import off from 'assets/img/games/off.png';
 import React, {
   Suspense,
   useContext,
   useEffect,
-  useLayoutEffect,
-  useRef,
+  // useLayoutEffect,
+  // useRef,
   useState,
 } from 'react';
 
-import { Canvas, useLoader, useFrame } from 'react-three-fiber';
+// import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 
 import feedi from 'assets/img/screens/feed.png';
+import Interaction from './Interaction';
 import TypingEffect from './Typing';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
 // Import ProfileContext from EntirePreview
 import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
-import { API_SERVER } from 'config/constant';
+import {
+  API_SERVER,
+  Notelength,
+  Dialoglength,
+  Responselength,
+} from 'config/constant';
 import { ScoreContext } from '../GamePreview';
+import { Canvas, useFrame, useLoader } from 'react-three-fiber';
+import Sample from 'assets/img/games/Merlin.glb';
+import { useLayoutEffect, useRef } from 'react';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import * as THREE from 'three';
+import Model from './Model';
 
 const Story: React.FC<{
-  currentScore:any;
+  prevData?: any;
+  currentScore: any;
   data: any;
   type: any;
+  profileData: any;
   backGroundImg: any;
   getData: any;
   option: any;
@@ -43,48 +55,115 @@ const Story: React.FC<{
   handleValidate: any;
   resMsg: any;
   feed: any;
+  setIsGetsPlayAudioConfirmation: any;
+  isGetsPlayAudioConfirmation: any;
   formData: any;
   setAudio: any;
+  setAudioObj: any;
   setCurrentScreenId: any;
   selectedPlayer: any;
   selectedNpc: any;
-  getAudioForText: any;
+  // getAudioForText: any;
   voiceIds: any;
+  windowWidth: any;
+  windowHeight: any;
+  setIsPrevNavigation: any;
+  isPrevNavigation: any;
+  setNavTrack: any;
+  navTrack: any;
+  setCurrentTrackPointer: any;
+  gameInfo: any;
+  preloadedAssets: any;
 }> = ({
   data,
   type,
   resMsg,
   feed,
   getData,
+  profileData,
   option,
   options,
+  setAudioObj,
   handleValidate,
   backGroundImg,
   formData,
   setCurrentScreenId,
   setAudio,
   selectedPlayer,
+  setIsGetsPlayAudioConfirmation,
+  isGetsPlayAudioConfirmation,
   selectedNpc,
-  getAudioForText,
+  // getAudioForText,
   voiceIds,
   currentScore,
+  prevData,
+  windowWidth,
+  windowHeight,
+  setIsPrevNavigation,
+  isPrevNavigation,
+  setNavTrack,
+  navTrack,
+  setCurrentTrackPointer,
+  gameInfo,
+  preloadedAssets,
 }) => {
   const [showNote, setShowNote] = useState(true),
     [first, setFirst] = useState(false);
-
+  // const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
   const userProfile = useContext(ProfileContext);
- const { profile ,setProfile } = useContext(ScoreContext);
- 
-  useEffect(() => {
-    getVoice(data, type);
-    setShowNote(true);
-    setTimeout(() => {
-      setShowNote(false);
-    }, 1000);
+  const [getInteraction, setInteraction] = useState(false);
+  const [Contentgetlanguage, setContentlanguage] = useState('');
+  const { profile, setProfile } = useContext(ScoreContext);
+  const [currentPosition, setCurrentPosition] = useState(0);
+  const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
+  const [Navigatenext, setNavigateNext] = useState<any>(false);
+  const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
+  const [isPlayAudioConfirmation, setIsPlayAudioConfirmation] =
+    useState<boolean>(false);
+  const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
+  const [score, setScore] = useState(null);
+  const [interactionNext, setInteractionNext] = useState(null);
+  
+
+   useEffect(() => {
+    if (data && type) {
+      getVoice(data, type);
+      setShowNote(true);
+      setTimeout(() => {
+        setShowNote(false);
+      getDataSection(data);
+      interactionNext === true && setInteractionNext(false); //When every render it could be false, only it true when interaction option is submitted
+      }, 1000);
+
+      /** this logic is used to hanlde the navigation options in both forward and backward navigation */
+      if (gameInfo.hasOwnProperty('blocks')) {
+        let previousPrimarySeq = navTrack[navTrack.length - 1];
+        if (previousPrimarySeq) {
+          let currentQuest = previousPrimarySeq.split('.')[0];
+          let previousBlock: any = Object.values(
+            gameInfo?.blocks[currentQuest],
+          )?.find((row: any) => {
+            // let previousBlock : any = Object.values(gameInfo?.blocks[profile?.currentQuest])?.find((row: any)=> {
+            return row.blockPrimarySequence == previousPrimarySeq;
+          });
+          if (data.blockPrimarySequence != previousPrimarySeq) {
+            if (previousBlock?.blockChoosen === 'Interaction') {
+              setNavTrack([data.blockPrimarySequence]);
+            } else {
+              const newArray = navTrack;
+              newArray.push(data.blockPrimarySequence);
+              setNavTrack(newArray);
+            }
+          }
+        } else {
+          setNavTrack([data.blockPrimarySequence]);
+        }
+      }
+      
+    }
   }, [data, type]);
 
   useEffect(() => {
-    setShowNote(true);
     setFirst(true);
     setTimeout(() => {
       setFirst(false);
@@ -92,24 +171,133 @@ const Story: React.FC<{
     }, 1000);
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (profileData?.Audiogetlanguage.length !== 0) {
+        if (AudioOptions.qpOptionId === '') {
+          const GetblocktextAudioFiltered =
+            profileData?.Audiogetlanguage.filter(
+              (key: any) => key?.textId === data?.blockId,
+            );
+          if (GetblocktextAudioFiltered.length > 0) {
+            const FilteredFieldName = GetblocktextAudioFiltered.map(
+              (item: any) => item.fieldName,
+            );
+            if (FilteredFieldName[0] === 'blockText') {
+              const audioUrls = GetblocktextAudioFiltered.map(
+                (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
+              );
+              const normalizedPath = audioUrls[0];
+              const fullUrl = `${API_SERVER}${normalizedPath}`;
+              const responseblockText = await fetch(fullUrl);
+              if (responseblockText.ok) {
+                setAudioObj({
+                  url: fullUrl,
+                  type: 'api',
+                  volume: '0.5',
+                  loop: false,
+                  autoplay: true,
+                });
+                setIsGetsPlayAudioConfirmation(true);
+              }
+            }
+          }
+        } else {
+          if (AudioOptions.qpOptionId) {
+            const optionAudioFiltered = profileData?.Audiogetlanguage.filter(
+              (key: any) => key?.textId === AudioOptions?.qpOptionId,
+            );
+            if (optionAudioFiltered.length > 0) {
+              const getoptionsAudioFiltered = optionAudioFiltered.filter(
+                (key: any) => key?.fieldName === 'qpOptionText',
+              );
+              if (getoptionsAudioFiltered.length > 0) {
+                const QOTaudioUrls = getoptionsAudioFiltered.map(
+                  (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
+                );
 
+                if (QOTaudioUrls.length > 0) {
+                  // const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
+                  // const normalizedPath = relativePath.replace(/\\/g, '/');
+                  const normalizedPath = QOTaudioUrls[0];
+                  // const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
+                  const qpOptionTextUrl = `${API_SERVER}${normalizedPath}`;
+                  const responseqpOptionText = await fetch(qpOptionTextUrl);
+                  if (responseqpOptionText.ok) {
+                    setAudioObj({
+                      url: qpOptionTextUrl,
+                      type: 'api',
+                      volume: '0.5',
+                      loop: false,
+                      autoplay: true,
+                    });
+                    setIsGetsPlayAudioConfirmation(true);
+                  } else {
+                    const getAudioFiltered1 = optionAudioFiltered.filter(
+                      (key: any) => key?.fieldName === 'qpOptions',
+                    );
+                    if (getAudioFiltered1.length > 0) {
+                      const QPaudioUrls = getAudioFiltered1.map(
+                        (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
+                      );
+                      if (QPaudioUrls.length > 0) {
+                        const normalizedPath = QPaudioUrls[0];
+                        const qpOptionsUrl = `${API_SERVER}${normalizedPath}`;
+                        const responsequestoption = await fetch(qpOptionsUrl);
+                        if (responsequestoption.ok) {
+                          setAudioObj({
+                            url: qpOptionsUrl,
+                            type: 'api',
+                            volume: '0.5',
+                            loop: false,
+                            autoplay: true,
+                          });
+                          setIsGetsPlayAudioConfirmation(true);
+                        } else {
+                          setAudioObj({
+                            url: '',
+                            type: 'bgm',
+                            volume: '0.5',
+                            loop: true,
+                            autoplay: true,
+                          });
+                          setIsGetsPlayAudioConfirmation(false);
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      } else {
+        setAudioObj({
+          autoplay: false,
+        });
+        setIsGetsPlayAudioConfirmation(false);
+      }
+    };
+    fetchData();
+    
+  }, [profileData, data, AudioOptions]);
 
   const getVoice = async (blockInfo: any, blockType: string) => {
     let text = '';
     let voiceId = '';
     /** 
-         * For voice 
-        data.includes('note') =>  Game Narattor
-        data.includes('dialog') =>  data.character
-        data.includes('interaction') => data.blockRoll
-        resMsg => data.blockRoll
-        
-        *For Animations & Emotion & voice Modulation 
-        data.includes('dialog') => data.animation
-        data.includes('interaction') //For Question => data.QuestionsEmotion
-        data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
-          resMsg =>responseObject[]  : responseemotionObject[]
-        */
+           * For voice 
+          data.includes('note') =>  Game Narattor
+          data.includes('dialog') =>  data.character
+          data.includes('interaction') => data.blockRoll
+          resMsg => data.blockRoll
+          
+          *For Animations & Emotion & voice Modulation 
+          data.includes('dialog') => data.animation
+          data.includes('interaction') //For Question => data.QuestionsEmotion
+          data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
+            resMsg =>responseObject[]  : responseemotionObject[]
+          */
 
     switch (blockType) {
       case 'Note':
@@ -127,17 +315,14 @@ const Story: React.FC<{
         break;
       case 'Interaction':
         let optionsText = '';
-        console.log('options', options);
+        // Sort the options array based on a unique identifier, such as index
+        options.sort((a: any, b: any) => a.index - b.index);
         options.forEach((item: any) => {
           optionsText +=
             '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
         });
+
         text = blockInfo.blockText + optionsText;
-        console.log(
-          "userProfile?.gender == 'Male'",
-          userProfile?.gender == 'Male',
-        );
-        console.log('blockInfo?.blockRoll ', blockInfo?.blockRoll);
         voiceId =
           blockInfo?.blockRoll == '999999'
             ? voiceIds.NPC
@@ -157,694 +342,758 @@ const Story: React.FC<{
       case 'Feedback':
         text = feed;
         voiceId =
-          blockInfo?.blockRoll == '999999'
+          blockInfo?.blockRoll === '999999'
             ? voiceIds.NPC
             : userProfile?.gender === 'Male'
             ? voiceIds?.playerMale
             : voiceIds?.playerFemale;
         break;
     }
-    getAudioForText(text, voiceId);
+    // getAudioForText(text, voiceId);
   };
 
-  const InteractionFunction = () =>{
-    setProfile((prev: any) => ({
-      score: type === 'Interaction' ? prev.score : prev.score + currentScore,
-    }));
-    getData(data)
-  }
-  console.log(profile);
+  const InteractionFunction = () => {
+    setIsGetsPlayAudioConfirmation(true);
+
+    setProfile((prev: any) => {
+      const { seqId, score: newScore } = score;
+      const index = prev.score.findIndex((item: any) => item.seqId === seqId);
+      if (index !== -1) {
+        const updatedScore = [...prev.score];
+        updatedScore[index] = { ...updatedScore[index], score: newScore };
+        return { ...prev, score: updatedScore };
+      } else {
+        const newScoreArray = [
+          ...prev.score,
+          {
+            seqId: seqId,
+            score: newScore,
+            quest: parseInt(seqId.split('.')[0]),
+          },
+        ];
+        return { ...prev, score: newScoreArray };
+      }
+    });
+    setInteractionNext(true);
+  };
+
+  useEffect(()=>{
+    if(interactionNext === true)
+      {
+        getData(data);
+      }
+  },[interactionNext])
+
+
+  const optionClick = (item: any, ind: any) => {
+    setScore({ seqId: item?.qpSequence, score: parseInt(item?.qpScore) });
+    SetAudioOptions(item);
+    handleValidate(item, ind);
+  };
+
+  const stylerender =
+    Navigatenext === true && data && type === 'Dialog'
+      ? ''
+      : 'transform 0.3s ease-in-out, translateY 0.3s ease-in-out';
+  const styletransform =
+    Navigatenext === true && data && type === 'Dialog'
+      ? ''
+      : `translateY(${showNote ? 200 : 0}px)`;
+  useEffect(() => {
+    if (Navigatenext === true) {
+      getData(data);
+    }
+  }, [Navigatenext]);
+
+  const getDataSection = (data: any) => {
+    showTypingEffect === true && setShowTypingEffect(false);
+    type === 'interaction' && setInteractionNext(false);
+    setCurrentPosition(0);
+    if (profileData?.Audiogetlanguage.length !== 0) {
+      const Getblocktext = profileData?.Audiogetlanguage.filter(
+        (key: any) => key?.textId === data?.blockId,
+      );
+      if (Getblocktext.length > 0) {
+        const FilteredFieldName = Getblocktext.map(
+          (item: any) => item.fieldName,
+        );
+        if (FilteredFieldName[0] === 'blockText') {
+          // Note and Dialog
+          const getcontent = Getblocktext[0].content || '';
+          const sentences = getcontent.split(
+            /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+          );
+          const newRemainingSentences = sentences.slice(currentPosition);
+
+          // response
+          const Responsecontent = resMsg || '';
+          const Responsesentences = Responsecontent.split(
+            /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+          );
+          const newRemainingResponseSentences =
+            Responsesentences.slice(currentPosition);
+          const concatenatedSentences = [];
+          let totalLength = 0;
+          // Note and Dialog
+          if (type !== 'response') {
+            for (let i = 0; i < newRemainingSentences.length; i++) {
+              const sentence = newRemainingSentences[i];
+
+              if (data && type === 'Note') {
+                if (totalLength + sentence.length <= Notelength) {
+                  concatenatedSentences.push(sentence);
+                  totalLength += sentence.length;
+                } else {
+                  concatenatedSentences.push(sentence);
+                  break;
+                }
+              }
+              if (data && type === 'Dialog') {
+                if (totalLength + sentence.length <= Dialoglength) {
+                  concatenatedSentences.push(sentence);
+                  totalLength += sentence.length;
+                } else {
+                  if (totalLength + sentence.length >= Dialoglength) {
+                    break;
+                  }
+                  concatenatedSentences.push(sentence);
+                  break;
+                }
+              }
+              if (data && type === 'Interaction') {
+                if (profileData?.Audiogetlanguage.length !== 0) {
+                  // Note and Dialog
+                  const Getblocktext = profileData?.Audiogetlanguage.filter(
+                    (key: any) => key?.textId === data?.blockId,
+                  );
+                  if (Getblocktext.length > 0) {
+                    const FilteredFieldName = Getblocktext.map(
+                      (item: any) => item.fieldName,
+                    );
+                    if (FilteredFieldName[0] === 'blockText') {
+                      if (type === 'Interaction') {
+                        const getcontent = Getblocktext[0].content || '';
+                        setContentlanguage(getcontent);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            setRemainingSentences(concatenatedSentences);
+
+            if (newRemainingSentences.length > 0 && (type === 'Note' || type === 'Dialog')) {
+              setCurrentPosition(currentPosition + concatenatedSentences.length);
+              setNavigateNext(false);
+              return false;
+            }
+            if(type !=='Interaction')
+              {
+                setNavigateNext(true);
+                setIsPrevNavigation(false);
+              }
+          }
+
+         
+        } else if (FilteredFieldName[0] === 'qpResponse') {
+          // response
+          const ResponseLangcontent = Getblocktext[0].content || '';
+          const Responsesentences = ResponseLangcontent.split(
+            /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+          );
+          const newRemainingResponseSentences =
+            Responsesentences.slice(currentPosition);
+          const concatenatedSentences = [];
+          let totalLength = 0;
+          if (type === 'response') {
+            for (let i = 0; i < newRemainingResponseSentences.length; i++) {
+              const ressentence = newRemainingResponseSentences[i];
+              if (data && type === 'response') {
+                if (totalLength + ressentence.length <= Responselength) {
+                  concatenatedSentences.push(ressentence);
+                  totalLength += ressentence.length;
+                } else {
+                  if (totalLength + ressentence.length >= Responselength) {
+                    break;
+                  }
+                  concatenatedSentences.push(ressentence);
+                  break;
+                }
+              }
+            }
+            setRemainingSentences(concatenatedSentences);
+
+          if (newRemainingResponseSentences.length > 0 && type === 'response') {
+            setCurrentPosition(currentPosition + concatenatedSentences.length);
+            setNavigateNext(false);
+            return false;
+          }
+          if(type !=='Interaction')
+            {
+              setNavigateNext(true);
+              setIsPrevNavigation(false);
+            }
+          }
+          
+        }
+        else {
+          // Note and Dialog
+          const content = data?.blockText || '';
+          const sentences = content.split(
+            /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+          );
+          const newRemainingSentences = sentences.slice(currentPosition);
+    
+          // response
+          const Responsecontent = resMsg || '';
+          const Responsesentences = Responsecontent.split(
+            /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+          );
+          const newRemainingResponseSentences =
+            Responsesentences.slice(currentPosition);
+          const concatenatedSentences = [];
+          let totalLength = 0;
+          // Note and Dialog
+          if (type !== 'response') {
+            for (let i = 0; i < newRemainingSentences.length; i++) {
+              const sentence = newRemainingSentences[i];
+    
+              if (data && type === 'Note') {
+                if (totalLength + sentence.length <= Notelength) {
+                  concatenatedSentences.push(sentence);
+                  totalLength += sentence.length;
+                } else {
+                  concatenatedSentences.push(sentence);
+                  break;
+                }
+              }
+              if (data && type === 'Dialog') {
+                if (totalLength + sentence.length <= Dialoglength) {
+                  concatenatedSentences.push(sentence);
+                  totalLength += sentence.length;
+                } else {
+                  if (totalLength + sentence.length >= Dialoglength) {
+                    break;
+                  }
+                  concatenatedSentences.push(sentence);
+                  break;
+                }
+              }
+            }
+          }
+          // Response
+          if (type === 'response') {
+            for (let i = 0; i < newRemainingResponseSentences.length; i++) {
+              const ressentence = newRemainingResponseSentences[i];
+              if (data && type === 'response') {
+                if (totalLength + ressentence.length <= Responselength) {
+                  concatenatedSentences.push(ressentence);
+                  totalLength += ressentence.length;
+                } else {
+                  if (totalLength + ressentence.length >= Responselength) {
+                    break;
+                  }
+                  concatenatedSentences.push(ressentence);
+                  break;
+                }
+              }
+            }
+          }
+          setRemainingSentences(concatenatedSentences);
+          if (newRemainingSentences.length > 0 && (type === 'Note' || type === 'Dialog')) {
+            setCurrentPosition(currentPosition + concatenatedSentences.length);
+            setNavigateNext(false);
+            return false;
+          }
+          if (newRemainingResponseSentences.length > 0 && type === 'response') {
+            setCurrentPosition(currentPosition + concatenatedSentences.length);
+            setNavigateNext(false);
+            return false;
+          }
+          if(type !=='Interaction')
+            {
+              setNavigateNext(true);
+              setIsPrevNavigation(false);
+            }
+        }
+      }
+    } else {
+      // Note and Dialog
+      const content = data?.blockText || '';
+      const sentences = content.split(
+        /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+      );
+      const newRemainingSentences = sentences.slice(currentPosition);
+
+      // response
+      const Responsecontent = resMsg || '';
+      const Responsesentences = Responsecontent.split(
+        /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
+      );
+      const newRemainingResponseSentences =
+        Responsesentences.slice(currentPosition);
+      const concatenatedSentences = [];
+      let totalLength = 0;
+      // Note and Dialog
+      if (type !== 'response') {
+        for (let i = 0; i < newRemainingSentences.length; i++) {
+          const sentence = newRemainingSentences[i];
+
+          if (data && type === 'Note') {
+            if (totalLength + sentence.length <= Notelength) {
+              concatenatedSentences.push(sentence);
+              totalLength += sentence.length;
+            } else {
+              concatenatedSentences.push(sentence);
+              break;
+            }
+          }
+          if (data && type === 'Dialog') {
+            if (totalLength + sentence.length <= Dialoglength) {
+              concatenatedSentences.push(sentence);
+              totalLength += sentence.length;
+            } else {
+              if (totalLength + sentence.length >= Dialoglength) {
+                break;
+              }
+              concatenatedSentences.push(sentence);
+              break;
+            }
+          }
+        }
+      }
+      // Response
+      if (type === 'response') {
+        for (let i = 0; i < newRemainingResponseSentences.length; i++) {
+          const ressentence = newRemainingResponseSentences[i];
+          if (data && type === 'response') {
+            if (totalLength + ressentence.length <= Responselength) {
+              concatenatedSentences.push(ressentence);
+              totalLength += ressentence.length;
+            } else {
+              if (totalLength + ressentence.length >= Responselength) {
+                break;
+              }
+              concatenatedSentences.push(ressentence);
+              break;
+            }
+          }
+        }
+      }
+      setRemainingSentences(concatenatedSentences);
+      if (newRemainingSentences.length > 0 && (type === 'Note' || type === 'Dialog')) {
+        setCurrentPosition(currentPosition + concatenatedSentences.length);
+        setNavigateNext(false);
+        return false;
+      }
+      if (newRemainingResponseSentences.length > 0 && type === 'response') {
+        setCurrentPosition(currentPosition + concatenatedSentences.length);
+        setNavigateNext(false);
+        return false;
+      }
+      if(type !=='Interaction')
+        {
+          setNavigateNext(true);
+          setIsPrevNavigation(false);
+        }
+    }
+  };
+  const Updatecontent = () => {
+    if (showTypingEffect === false) {
+      setShowTypingEffect(true);
+    } else {
+      getDataSection(data);
+    }
+  };
+
+  useEffect(() => {
+    getDataSection(data);
+  }, []);
+
+  const getNoteNextData = () => {
+    setIsPrevNavigation(false);
+    getDataSection(data);
+  };
+
+  const SkipContentForBackNavigation = () => {
+    if (showTypingEffect === false) {
+      setShowTypingEffect(true);
+    } else {
+      setCurrentPosition(0);
+      prevData(data);
+    }
+  };
+
   return (
     <>
       {data && type === 'Note' && (
         <Box
-          w={'100%'}
-          h={'100vh'}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          position={'relative'}
-          overflow={'visible'}
-          style={{ perspective: '1000px' }}
+          position="relative"
+          maxW="100%"
+          w={'100vw'}
+          height="100vh"
+          backgroundImage={backGroundImg}
+          backgroundSize={'cover'}
+          backgroundRepeat={'no-repeat'}
+          className="chapter_potrait"
         >
-          <Box
-            color={'rgba(0, 0, 0, 0.5)'}
-            backgroundImage={backGroundImg}
-            w={'100%'}
-            h={'100vh'}
-            backgroundRepeat={'no-repeat'}
-            backgroundSize={'cover'}
-            transform={`scale(${first ? 1 : 1.3}) translateY(${
-              first ? 0 : -10
-            }%) translateX(${first ? 0 : -10}%)`}
-            transition={'transform 0.9s ease-in-out'}
+          <Grid
+            templateColumns="repeat(1, 1fr)"
+            gap={4}
+            position="absolute"
+            top="50%"
+            left="50%"
+            transform="translate(-50%, -50%)"
+            className="story_note_grid"
           >
-            <Box
-              position={'fixed'}
-              top={'200px'}
-              // left={0}
-              right={'0px'}
-              bottom={0}
-              zIndex={999}
-              w={'300px'}
-            >
-              {/* <Canvas
-                camera={{ position: [3, 3, 10] }}
-                
+            <GridItem colSpan={1} position={'relative'}>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
               >
-                <directionalLight
-                  position={[5, 5, 5]}
-                  intensity={0.8}
-                  color={0xffccaa}
-                  castShadow
-                />
-                <ambientLight intensity={5.5} />
-                <pointLight
-                  position={[5, 5, 5]}
-                  color={0xff0000}
-                  intensity={1}
-                />
-              
-                <mesh
-                  rotation={[-Math.PI / 2, 0, 0]}
-                  position={[0, -5, 0]}
-                  receiveShadow
-                >
-                  <planeGeometry args={[100, 100]} />
-                  <shadowMaterial opacity={0.5} />
-                </mesh>
-              </Canvas> */}
-            </Box>
-          </Box>
-          {/* <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 100, damping: 10 }}
-          > */}
-          <Box
-            style={{
-              transform: `scale(${showNote ? 0.2 : 1})`,
-              transition: 'transform 0.5s ease-in-out',
-            }}
-            position={'fixed'}
-            w={'40%'}
-            h={'80vh'}
-            display={'flex'}
-            flexDirection={'column'}
-            justifyContent={'center'}
-            alignItems={'center'}
-          >
-            <Img w={'100%'} h={'80vh'} src={note} />
-            <Box
-              position={'fixed'}
-              overflowY={'scroll'}
-              transform={'translate(0px, 45px)'}
-              w={'50%'}
-              mt={'10px'}
-              display={'flex'}
-              flexDirection={'column'}
-              textAlign={'center'}
-              justifyContent={'center'}
-              style={{
-                fontWeight: '900',
-                color: '#D9C7A2',
-                fontSize: '18px',
-                fontFamily: 'AtlantisContent',
-                lineHeight: 1,
-              }}
-            >
-              <Box
-                w={'100%'}
-                overflowY={'scroll'}
-                h={'100px'}
-                display={'flex'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                mt={'20px'}
-              >
-                {data?.blockText}
-              </Box>
-              <Box
-                w={'100%'}
-                onClick={() => getData(data)}
-                mt={'20px'}
-                display={'flex'}
-                justifyContent={'center'}
-                cursor={'pointer'}
-              >
-                <Img src={next} w={'200px'} h={'60px'} />
-              </Box>
-            </Box>
-          </Box>
-          {/* </motion.div> */}
-        </Box>
-      )}
-      {data && type === 'Dialog' && (
-        <Box
-          w={'100%'}
-          h={'100vh'}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          position={'relative'}
-        >
-          <Img
-            src={backGroundImg}
-            maxW={'100%'}
-            maxH={'100%'}
-            w={'100%'}
-            h={'100vh'}
-            transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
-            transition={'transform 0.9s ease-in-out'}
-          />
-          {selectedPlayer && (
-            <Img
-              src={`${API_SERVER}/${selectedPlayer}`}
-              position={'fixed'}
-              right={'300px'}
-              bottom={'100px'}
-              w={'200px'}
-              h={'324px'}
-              // transform={'translate(0px, 55px)'}
-            />
-          )}
-          {selectedNpc && (
-            <Img
-              src={selectedNpc}
-              position={'fixed'}
-              right={'500px'}
-              bottom={'100px'}
-              w={'200px'}
-              h={'324px'}
-              // transform={'translate(0px, 55px)'}
-            />
-          )}
-          <Img
-            style={{
-              transform: `translateY(${showNote ? 200 : 0}px)`,
-              transition:
-                'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-            }}
-            position={'fixed'}
-            maxW={'100%'}
-            maxH={'100%'}
-            w={'100%'}
-            h={'240px'}
-            bottom={'0'}
-            src={dial}
-          />
-          {!showNote && (
-            <>
-              <Box position={'relative'}>
-                <Img
-                  src={char}
-                  position={'fixed'}
-                  h={'70px'}
-                  w={'25%'}
-                  left={'13%'}
-                  bottom={'150px'}
-                />
-                <Text
-                  position={'fixed'}
-                  left={'24%'}
-                  bottom={'167px'}
-                  fontSize={'25'}
-                  fontWeight={700}
-                  textAlign={'center'}
-                  fontFamily={'AtlantisText'}
-                >
-                  {data.blockRoll === 'Narrator'
-                    ? data.blockRoll
-                    : formData.gameNonPlayerName}
-                </Text>
-              </Box>
-              <Box
-                display={'flex'}
-                position={'fixed'}
-                justifyContent={'space-between'}
-                w={'75%'}
-                bottom={'55px'}
-                fontFamily={'AtlantisContent'}
-                fontSize={'21px'}
-              >
-                <TypingEffect text={data?.blockText} speed={50} />
-              </Box>
-              <Box
-                display={'flex'}
-                position={'fixed'}
-                justifyContent={'space-between'}
-                w={'80%'}
-                bottom={'0'}
-              >
-                <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
-                <Img
-                  src={right}
-                  w={'50px'}
-                  h={'50px'}
-                  cursor={'pointer'}
-                  onClick={() => getData(data)}
-                />
-              </Box>
-            </>
-          )}
-        </Box>
-      )}
-      {data && type === 'Interaction' && (
-        <Box
-          w={'100%'}
-          h={'100vh'}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          position={'relative'}
-        >
-          <Img
-            src={backGroundImg}
-            maxW={'100%'}
-            maxH={'100%'}
-            w={'100%'}
-            h={'100vh'}
-            transform={`scale(1.5}) translateY(-10%) translateX(${
-              showNote ? -200 : 0
-            }px)`}
-            transition={'transform 0.9s ease-in-out'}
-          />
-          {selectedPlayer && (
-            <Img
-              src={`${API_SERVER}/${selectedPlayer}`}
-              position={'fixed'}
-              right={'300px'}
-              bottom={'100px'}
-              w={'200px'}
-              h={'auto'}
-              transform={'translate(100px, 0px)'}
-              transition={'transform 2s ease-in-out'}
-            />
-          )}
-          {selectedNpc && (
-            <Img
-              src={selectedNpc}
-              position={'fixed'}
-              right={'500px'}
-              bottom={'100px'}
-              w={'200px'}
-              h={'auto'}
-              transform={'translate(100px, 0px)'}
-              transition={'transform 2s ease-in-out'}
-            />
-          )}
-          <Box
-            style={{
-              transform: `translateX(${showNote ? -200 : 0}px) scale(1.2)`,
-              transition:
-                'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-            }}
-            backgroundImage={parch}
-            position={'fixed'}
-            w={{ sm: '350px', md: '500px' }}
-            h={{ sm: '50vh', md: ' 550px' }}
-            // top={'4vh'}
-            left={{ sm: '60px', md: '180px' }}
-            backgroundSize={'contain'}
-            backgroundRepeat={'no-repeat'}
-          >
-            <Box
-              textAlign={'center'}
-              h={'100px'}
-              display={'flex'}
-              justifyContent={'center'}
-              alignItems={'center'}
-              fontWeight={700}
-              fontFamily={'AtlantisText'}
-              lineHeight={1}
-              w={'100%'}
-            >
-              <Box w={'50%'} fontSize={'21px'}>
-                Here You Can Answer the Interactions...!{' '}
-              </Box>
-            </Box>
-            <Box
-              textAlign={'center'}
-              h={'100px'}
-              display={'flex'}
-              justifyContent={'center'}
-              alignItems={'center'}
-              fontWeight={500}
-              fontFamily={'AtlantisText'}
-              lineHeight={1}
-              w={'96%'}
-              overflowY={'scroll'}
-            >
-              <Box w={'60%'} fontSize={'20px'} letterSpacing={1}>
-                {data?.blockText}
-              </Box>
-            </Box>
-            <Box
-              mt={'10px'}
-              w={{ sm: '200px', md: '400px' }}
-              fontWeight={500}
-              ml={'17%'}
-              h={'220px'}
-              overflowY={'scroll'}
-            >
-              {options &&
-                options.map((item: any, ind: number) => (
-                  <Box
-                    mb={'10px'}
-                    w={'80%'}
-                    lineHeight={1}
-                    key={ind}
-                    color={option === ind ? 'purple' : ''}
-                    textAlign={'center'}
-                    cursor={'pointer'}
-                    onClick={() => handleValidate(item, ind)}
-                    fontFamily={'AtlantisText'}
-                    fontSize={'20px'}
-                  >
-                    <Img src={option === ind ? on : off} h={'30px'} w={'95%'} />
-                    {item?.qpOptionText}
+                <Box display={'flex'} justifyContent={'center'}>
+                  <Img
+                    src={preloadedAssets.note}
+                    className="story_note_image"
+                    loading="lazy"
+                  />
+
+                  <Box className={'note_align'}>
+                    <Text textAlign={'center'} className="note_title">
+                      Note
+                    </Text>
                   </Box>
-                ))}
+                  <Box
+                    className={'story_note_content'}
+                    // bg={'blue.300'}
+                    >
+                      <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                        <Box className={'story_note_block'}>
+                          <Text textAlign={'center'}>
+                            {remainingSentences}
+                          </Text>
+                        </Box>
+                      </Box>
+                      <Box
+                        w={'100%'}
+                        onClick={() => getNoteNextData()}
+                        mt={'20px'}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        cursor={'pointer'}
+                        position={'fixed'}
+                        top={'70%'}
+                      >
+                        <Img src={preloadedAssets.next} h={'7vh'} className={'story_note_next_button'} />
+                      </Box>
+                    </Box>
+                  </Box>
+                </motion.div>
+              </GridItem>
+            </Grid>
+          </Box>
+        )}
+        {data && type === 'Dialog' && (
+          <Box className="chapter_potrait">
+            <Img src={backGroundImg} className="dialogue_screen" />
+            {selectedNpc && (
+              <Box className={'player_character_image'}>
+                <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */}
+                  {/* <Environment preset={"park"} background />   */}
+                  <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
+                  <ambientLight intensity={0.5} />
+                  {/* <OrbitControls   />  */}
+                  <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
+
+                  {/* COMPONENTS */}
+                  <Player />
+                  <Model position={[-3, -1.8, 5]} rotation={[0, 1, 0]} />
+                  {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
+                  {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
+                  {/* <Parrot /> */}
+                </Canvas>
+              </Box>
+            )}
+            <Img className={'dialogue_image'} src={preloadedAssets.dial} />
+            <Box position={'relative'}>
+              <Img
+                src={preloadedAssets.char}
+                position={'fixed'}
+                h={'100px'}
+                w={'30%'}
+                left={'5%'}
+                bottom={'105px'}
+              />
+              <Text
+                position={'fixed'}
+                left={'18%'}
+                bottom={'130px'}
+                fontSize={{ base: '30px', xl: '2.2vw' }}
+                fontWeight={500}
+                textAlign={'center'}
+                fontFamily={'AtlantisText'}
+                color={'#312821'}
+              >
+                {data.blockRoll === 'Narrator'
+                  ? data.blockRoll
+                  : formData.gameNonPlayerName}
+              </Text>
             </Box>
             <Box
               display={'flex'}
               position={'fixed'}
+              alignItems={'center'}
               justifyContent={'space-between'}
-              w={'508px'}
-              left={'-10px'}
-            >
-              <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
-              {option !== null && (
-                <Img
-                  src={right}
-                  w={'50px'}
-                  h={'50px'}
-                  cursor={'pointer'}
-                  onClick={() => InteractionFunction()}
-                />
-              )}
-            </Box>
-          </Box>
-        </Box>
-      )}
-      {data && type === 'response' && (
-        <Box
-          w={'100%'}
-          h={'100vh'}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          position={'relative'}
-        >
-          <Img
-            src={backGroundImg}
-            maxW={'100%'}
-            maxH={'100%'}
-            w={'100%'}
-            h={'100vh'}
-            transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
-            transition={'transform 0.9s ease-in-out'}
-          />
-          {selectedPlayer && (
-            <Img
-              src={`${API_SERVER}/${selectedPlayer}`}
-              position={'fixed'}
-              right={'300px'}
-              bottom={'100px'}
-              w={'200px'}
-              h={'324px'}
-              // transform={'translate(0px, 55px)'}
-            />
-          )}
-          {selectedNpc && (
-            <Img
-              src={selectedNpc}
-              position={'fixed'}
-              right={'500px'}
-              bottom={'100px'}
-              w={'200px'}
-              h={'324px'}
-              // transform={'translate(0px, 55px)'}
-            />
-          )}
-          <Img
-            style={{
-              transform: `translateY(${showNote ? 200 : 0}px)`,
-              transition:
-                'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-            }}
-            position={'fixed'}
-            maxW={'100%'}
-            maxH={'100%'}
-            w={'100%'}
-            h={'240px'}
-            bottom={'0'}
-            src={dial}
-          />
-          {!showNote && (
-            <>
-              <Box position={'relative'}>
-                <Img
-                  src={char}
-                  position={'fixed'}
-                  h={'70px'}
-                  w={'25%'}
-                  left={'13%'}
-                  bottom={'150px'}
-                />
-                <Text
-                  position={'fixed'}
-                  left={'24%'}
-                  bottom={'167px'}
-                  fontSize={'25'}
-                  fontWeight={700}
-                  textAlign={'center'}
-                  fontFamily={'AtlantisText'}
-                >
-                  {data.blockRoll === 'Narrator'
-                    ? data.blockRoll
-                    : formData.gameNonPlayerName}
-                </Text>
-              </Box>
-              <Box
-                display={'flex'}
-                position={'fixed'}
-                justifyContent={'space-between'}
-                w={'75%'}
-                bottom={'55px'}
-                fontFamily={'AtlantisContent'}
-                fontSize={'21px'}
-              >
-                <TypingEffect text={resMsg} speed={50} />
-              </Box>
-              <Box
-                display={'flex'}
-                position={'fixed'}
-                justifyContent={'space-between'}
-                w={'80%'}
-                bottom={'0'}
-              >
-                <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
-                <Img
-                  src={right}
-                  w={'50px'}
-                  h={'50px'}
-                  cursor={'pointer'}
-                  onClick={() => getData(data)}
-                />
-              </Box>
-            </>
-          )}
-        </Box>
-        // <Box
-        //   w={'100%'}
-        //   h={'100vh'}
-        //   display={'flex'}
-        //   alignItems={'center'}
-        //   justifyContent={'center'}
-        //   position={'relative'}
-        // >
-        //   <Img
-        //     src={backGroundImg}
-        //     maxW={'100%'}
-        //     maxH={'100%'}
-        //     w={'100%'}
-        //     h={'100vh'}
-        //     transform={'scale(1.3}) translateY(-10%) translateX(-10%)'}
-        //     transition={'transform 0.9s ease-in-out'}
-        //   />
-        //   <Img
-        //     style={{
-        //       transform: `translateY(${showNote ? 200 : 0}px)`,
-        //       transition:
-        //         'transform 0.3s ease-in-out, translateY 0.3s ease-in-out',
-        //     }}
-        //     position={'fixed'}
-        //     maxW={'100%'}
-        //     maxH={'100%'}
-        //     w={'100%'}
-        //     h={'240px'}
-        //     bottom={'0'}
-        //     src={dial}
-        //   />
-        //   {!showNote && (
-        //     <>
-        //       <Box
-        //         backgroundImage={char}
-        //         position={'fixed'}
-        //         h={'70px'}
-        //         w={'25%'}
-        //         left={'13%'}
-        //         fontSize={'25'}
-        //         display={'flex'}
-        //         alignItems={'center'}
-        //         justifyContent={'center'}
-        //         fontWeight={700}
-        //         textAlign={'center'}
-        //         bottom={'150px'}
-        //         backgroundRepeat={'no-repeat'}
-        //         backgroundSize={'contain'}
-        //         fontFamily={'albuma'}
-        //       >
-        //         Logan
-        //         {/* {data.character === '999999'
-        //             ? 'Player'
-        //             : data.character === '99999'
-        //             ? 'Narrator'
-        //             : formData.gameNonPlayerName} */}
-        //       </Box>
-        //       <Box
-        //         display={'flex'}
-        //         position={'fixed'}
-        //         justifyContent={'space-between'}
-        //         w={'75%'}
-        //         bottom={'55px'}
-        //         fontFamily={'cont'}
-        //       >
-        //         {resMsg}
-        //       </Box>
-        //       <Box
-        //         display={'flex'}
-        //         position={'fixed'}
-        //         justifyContent={'space-between'}
-        //         w={'80%'}
-        //         bottom={'0'}
-        //       >
-        //         <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
-        //         <Img
-        //           src={right}
-        //           w={'50px'}
-        //           h={'50px'}
-        //           cursor={'pointer'}
-        //           onClick={() => getData(data)}
-        //         />
-        //       </Box>
-        //     </>
-        //   )}
-        // </Box>
-      )}
-      {data && type === 'feedback' && (
-        <Box
-          w={'100%'}
-          h={'100vh'}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          position={'relative'}
-          overflow={'visible'}
-          style={{ perspective: '1000px' }}
-        >
-          <Box
-            backgroundImage={backGroundImg}
-            w={'100%'}
-            h={'100vh'}
-            backgroundRepeat={'no-repeat'}
-            backgroundSize={'cover'}
-            transform={`scale(${first ? 1 : 1.3}) translateY(${
-              first ? 0 : -10
-            }%) translateX(${first ? 0 : -10}%)`}
-            transition={'transform 0.9s ease-in-out'}
-          >
-            <Box
-              position={'fixed'}
-              top={'200px'}
-              right={'0px'}
-              bottom={0}
-              zIndex={999}
-              w={'300px'}
-            >
-              {/* <Canvas
-                camera={{ position: [3, 3, 10] }}
-                
-              >
-                <directionalLight
-                  position={[5, 5, 5]}
-                  intensity={0.8}
-                  color={0xffccaa}
-                  castShadow
-                />
-                <ambientLight intensity={5.5} />
-                <pointLight
-                  position={[5, 5, 5]}
-                  color={0xff0000}
-                  intensity={1}
-                />
-              
-                <mesh
-                  rotation={[-Math.PI / 2, 0, 0]}
-                  position={[0, -5, 0]}
-                  receiveShadow
-                >
-                  <planeGeometry args={[100, 100]} />
-                  <shadowMaterial opacity={0.5} />
-                </mesh>
-              </Canvas> */}
-            </Box>
-          </Box>
-          <Box
-            style={{
-              transform: `scale(${showNote ? 0.2 : 1})`,
-              transition: 'transform 0.5s ease-in-out',
-            }}
-            position={'fixed'}
-            w={'40%'}
-            h={'80vh'}
-            display={'flex'}
-            flexDirection={'column'}
-            justifyContent={'center'}
-            alignItems={'center'}
-          >
-            <Img w={'90%'} h={'80vh'} src={feedi} />
-            <Box
-              position={'fixed'}
-              w={'50%'}
-              mt={'10px'}
-              display={'flex'}
-              flexDirection={'column'}
-              textAlign={'center'}
-              justifyContent={'center'}
-              style={{
-                fontWeight: '900',
-                color: '#D9C7A2',
+              h={'61px'}
+              overflowY={'scroll'}
+              w={'85%'}
+              fontSize={{ base: '30px', xl: '2.2vw' }}
+              bottom={'38px'}
+              fontFamily={'AtlantisContent'}
+              css={{
+                // Hide scrollbar for webkit-based browsers (Safari, Chrome)
+                '&::-webkit-scrollbar': {
+                  display: 'none',
+                },
+                // Hide scrollbar for Mozilla-based browsers (Firefox)
+                'scrollbar-width': 'none', // For Firefox
+                '-ms-overflow-style': 'none', // For IE and Edge
               }}
             >
-              {feed}
-              <Box
-                w={'100%'}
-                onClick={() => getData(data)}
-                mt={'20px'}
-                display={'flex'}
-                justifyContent={'center'}
-                cursor={'pointer'}
-                transform={'translate(0px, 100px)'}
-              >
-                <Img src={next} w={'200px'} h={'60px'} />
+              <Box transform={'translateY(16%)'}>
+                {showTypingEffect === false ? <TypingEffect
+                  text={remainingSentences.toString()}
+                  speed={50}
+                  setSpeedIsOver={setShowTypingEffect}
+                /> : remainingSentences}
               </Box>
             </Box>
+            <Box
+              display={'flex'}
+              position={'fixed'}
+              justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
+              w={'95%'}
+              bottom={'0'}
+            >
+              {navTrack.length > 1 &&
+                <Img
+                  src={preloadedAssets.left}
+                  w={'70px'}
+                  h={'50px'}
+                  cursor={'pointer'}
+                  onClick={() => { SkipContentForBackNavigation() }}
+                />
+              }
+              <Img
+                src={preloadedAssets.right}
+                w={'70px'}
+                h={'50px'}
+                cursor={'pointer'}
+                onClick={() => Updatecontent()}
+              />
+            </Box>
+            {/* </>
+          )} */}
+            {/* </motion.div> */}
           </Box>
-        </Box>
-      )}
-    </>
-  );
+        )}
+        {data && type === 'Interaction' && (
+          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick} prevData={prevData} InteractionFunction={InteractionFunction} navTrack={navTrack} preloadedAssets={preloadedAssets} selectedPlayer={selectedPlayer}  Contentlanguage={Contentgetlanguage} Profiledatalanguage={profileData?.Audiogetlanguage}
+        />
+        )}
+        {data && type === 'response' && (
+          <Box
+            className="chapter_potrait"
+          >
+            <Img src={backGroundImg} className="dialogue_screen" />
+            {selectedPlayer && (
+              <Img
+                src={`${API_SERVER}/${selectedPlayer}`}
+                className={'narrator_character_image'}
+              />
+            )}
+            {selectedNpc && (
+              <Img
+                src={selectedNpc}
+                className={'player_character_image'}
+              />
+            )}
+            <Img className={'dialogue_image'} src={preloadedAssets.dial} />
+            <Box position={'relative'}>
+              <Img
+                src={preloadedAssets.char}
+                position={'fixed'}
+                h={'100px'}
+                w={'30%'}
+                left={'5%'}
+                bottom={'105px'}
+              />
+              <Text
+                position={'fixed'}
+                left={'18%'}
+                bottom={'130px'}
+                fontSize={{ base: '30px', xl: '2.2vw' }}
+                fontWeight={500}
+                textAlign={'center'}
+                fontFamily={'AtlantisText'}
+                color={'#312821'}
+              >
+                {data.blockRoll === 'Narrator'
+                  ? data.blockRoll
+                  : formData.gameNonPlayerName}
+              </Text>
+            </Box>
+            <Box
+              display={'flex'}
+              position={'fixed'}
+              alignItems={'center'}
+              justifyContent={'space-between'}
+              h={'61px'}
+              overflowY={'scroll'}
+              w={'85%'}
+              fontSize={{ base: '30px', lg: '1.8vw' }}
+              bottom={'38px'}
+              fontFamily={'AtlantisContent'}
+            >
+              {showTypingEffect === false ? <TypingEffect
+                text={remainingSentences.toString()}
+                speed={50}
+                setSpeedIsOver={setShowTypingEffect}
+              /> : remainingSentences}
+            </Box>
+            <Box
+              display={'flex'}
+              position={'fixed'}
+              justifyContent={'end'}
+              w={'95%'}
+              bottom={'0'}
+            >
+              <Img
+                src={preloadedAssets.right}
+                w={'70px'}
+                h={'50px'}
+                cursor={'pointer'}
+                // onClick={() => {setCurrentPosition(0);getDataSection(data)}}
+                onClick={() => Updatecontent()}
+              />
+            </Box>
+          </Box>
+        )}
+        {data && type === 'feedback' && (
+          <Box
+            position="relative"
+            w={'100%'}
+            height="100vh"
+            backgroundImage={backGroundImg}
+            backgroundSize={'cover'}
+            backgroundRepeat={'no-repeat'}
+            className="chapter_potrait"
+          >
+            <Grid
+              templateColumns="repeat(1, 1fr)"
+              gap={4}
+              position="absolute"
+              top="50%"
+              left="50%"
+              transform="translate(-50%, -50%)"
+              className="story_note_grid"
+            >
+              <GridItem colSpan={1} position={'relative'}>
+                <Box display={'flex'} justifyContent={'center'}>
+                  <Img src={preloadedAssets.feedi} className="story_note_image" loading="lazy" />
+                  <Box
+                    className={'story_note_content'}
+                  // bg={'blue.300'}
+                  >
+                    <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                      <Box className={'story_note_block'}>
+                        <Text textAlign={'center'}>{feed}</Text>
+                      </Box>
+                    </Box>
+                    <Box
+                      w={'100%'}
+                      onClick={() => getData(data)}
+                      mt={'20px'}
+                      display={'flex'}
+                      justifyContent={'center'}
+                      cursor={'pointer'}
+                      position={'fixed'}
+                      top={'70%'}
+                    >
+                      <Img
+                        src={preloadedAssets.next}
+                        h={'7vh'}
+                        className={'story_note_next_button'}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+              </GridItem>
+            </Grid>
+          </Box>
+        )}
+      </>
+    );
+  };
+  const Player: React.FC = () => {
+    const groupRef = useRef<any>();
+    const gltf = useLoader(GLTFLoader, Sample);
+    const [isHovered, setIsHovered] = useState<any>(false);
+  
+    const mixer = new THREE.AnimationMixer(gltf.scene);
+    const action = mixer.clipAction(gltf.animations[10]);
+  
+    useFrame((state, delta) => {
+      // Rotate the model on the Y-axis
+  
+      if (groupRef.current) {
+        // groupRef.current.rotation.y += delta;
+        // groupRef.current.rotation.x += delta;
+        // groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime) * 2;
+        groupRef.current.castShadow = true;
+      }
+  
+      mixer.update(delta);
+    });
+  
+    // !isHovered &&
+    action.play();
+  
+    useLayoutEffect(() => {
+      if (groupRef.current) {
+        groupRef.current.traverse((obj: any) => {
+          if (obj.isMesh) {
+            obj.castShadow = true;
+            obj.receiveShadow = true;
+          }
+        });
+      }
+    }, []);
+  
+    gltf.scene.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        // child.material.color.set(0xffccaaf0); // Set your desired color
+        child.material.color.set(0xffffff); // Set your desired color
+        child.material.roughness = 0.4; // Adjust roughness as needed
+        child.material.metalness = 0.8; // Adjust metalness as needed
+        // child.material.map.format = THREE.RGBAFormat;
+      }
+    });
+
+  function handleClick() {
+    console.log('Character Click!')
+  }
+
+  return (
+    <group ref={groupRef}>
+      {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}
+      <primitive object={gltf.scene} position={[5, -5, 0]} rotation={[0, -1, 0]} />   {/* For Single view */}
+      {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>
+        <planeGeometry args={[100, 500]} />
+        <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />
+      </mesh> */}
+    </group>
+  )
 };
 export default Story;

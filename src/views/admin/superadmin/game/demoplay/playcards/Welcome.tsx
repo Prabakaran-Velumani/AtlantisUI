@@ -1,5 +1,8 @@
 import {
   Box,
+  Flex,
+  Grid,
+  GridItem,
   Icon,
   Img,
   Text,
@@ -16,6 +19,7 @@ import next from 'assets/img/screens/next.png';
 import { useParams } from 'react-router-dom';
 import { FaClock } from 'react-icons/fa';
 import { MotionConfig } from 'framer-motion';
+import { preloadedImages } from 'utils/hooks/function';
 // import AudioEffect from './Audio';
 interface Badge {
   gasId: number;
@@ -38,7 +42,9 @@ const Welcome: React.FC<{
   imageSrc: any;
   preview: any;
   intro: any;
-}> = ({ formData, imageSrc, preview, setCurrentScreenId, intro }) => {
+  screen: any;
+  preloadedAssets:any;
+}> = ({ formData, imageSrc, preview, setCurrentScreenId, intro, screen, preloadedAssets }) => {
   const { id } = useParams();
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);
@@ -115,41 +121,265 @@ const Welcome: React.FC<{
       ? formData?.gameLearningOutcome?.split('\n')
       : '';
 
+  const extractLink = (text: any) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    if (text) {
+      const urls = text?.match(urlRegex);
+
+      return urls ? urls[0] : null;
+    }
+    return null;
+  };
+  const link = extractLink(formData.gameAdditionalWelcomeNote);
   return (
     <>
-      {true && (
-        <>
-          <Box className="welcome-screen">
-            <Box
-              className="welcome-screen-box"
-              // style={{
-              //   transform: `scale(${showComplete ? 0.2 : 1})`,
-              //   transition: 'transform 0.5s ease-in-out',
-              // }}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{delay: 0.5, duration: 1 }}
+      >
+        <Box className="welcome-screen">
+          <Box className="welcome-screen-box">
+            <Img src={screen} className="welcome-pad" />
+          </Box>
+          <Box className="top-title">
+            <Text
+              className="title"
+              fontSize={{
+                base: '13px',
+                sm: '13px',
+                md: '15px',
+                lg: '20px',
+              }}
             >
-              {' '}
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: 'spring', stiffness: 100, damping: 10 }}
+              {formData.gameTitle}
+            </Text>
+            {formData.gameIsShowGameDuration === 'true' && (
+              <Text
+                className="duration"
+                fontSize={{
+                  base: '11px',
+                  sm: '12px',
+                  md: '13px',
+                  lg: '15px',
+                }}
+                mt={'2px'}
+                fontFamily={'content'}
+                position={'absolute'}
+                display={'flex'}
+                alignItems={'center'}
               >
-                <Img src={imageSrc} className="bg-welcome" />
-              </motion.div>
-            </Box>
-            {!showComplete && (
-              <Box className="content-box" fontFamily={'gametext'}>
+                <>
+                  {' '}
+                  <Icon as={FaClock} style={customStylesicon} />{' '}
+                  <span style={customStylesicon}>
+                    {formData.gameDuration > 1
+                      ? formData.gameDuration + ' mins'
+                      : 'Few mins'}
+                  </span>
+                </>
+              </Text>
+            )}
+          </Box>
+          <Box className="content-box" fontFamily={'gametext'}>
+            <Box w={'60%'} className="content">
+              {formData.gameIsShowStoryline === 'true' && (
                 <Text
-                  className="title"
+                  className="text"
+                  mt={'20px'}
                   fontSize={{
-                    base: '13px',
-                    sm: '13px',
-                    md: '15px',
-                    lg: '20px',
+                    base: '11px',
+                    sm: '12px',
+                    md: '13px',
+                    lg: '15px',
                   }}
+                  fontFamily={'content'}
                 >
-                  {formData.gameTitle}
+                  {formData.gameStoryLine}
                 </Text>
-                {formData.gameIsShowGameDuration === 'true' && (
+              )}
+              {formData.gameIsShowSkill === 'true' ||
+              formData.gameIsShowLearningOutcome === 'true' ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{delay: 1, duration: 0.5 }}
+                >
+                  <Img
+                    className="rewards-arrow-img"
+                    src={preloadedAssets.rew}
+                    mt={'25px'}
+                    alt="rew"
+                    w={'100%'}
+                    h={'20px'}
+                  />
+                </motion.div>
+              ) : (
+                ''
+              )}
+              <Box
+                display={'flex'}
+                className={
+                  formData.gameIsShowSkill === 'true' ||
+                  formData.gameIsShowLearningOutcome === 'true'
+                    ? 'rewards-box'
+                    : 'empty-rewards-box'
+                }
+              >
+                {formData.gameIsShowSkill === 'true' && (
+                  <>
+                    <Box className="box-1">
+                      <Img src={preloadedAssets.back} className="bg-img" />
+                      <Text
+                        className="skill-text"
+                        style={{ textAlign: 'center' }}
+                        fontFamily={'content'}
+                        color={'black'}
+                      >
+                        Skills
+                      </Text>
+                      <Box
+                        className="inside-box"
+                        transform={'translate(-2px, -125px)'}
+                        mt={'10px'}
+                        w={'100%'}
+                        h={'60px'}
+                        overflowY={'scroll'}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                        flexDirection={'column'}
+                      >
+                        {authorArray
+                          .map((authorItem, index) => {
+                            const skillName = findSkillName(authorItem);
+                            return skillName;
+                          })
+                          .filter((skillName) => skillName !== null)
+                          .map((filteredSkillName, index) => (
+                            <Box display={'flex'} key={index}>
+                              <Img
+                                src={preloadedAssets.write}
+                                w={'25px'}
+                                h={'25px'}
+                              />
+                              <Box>
+                                <Box
+                                  className="text-wrapper"
+                                  display={'flex'}
+                                  w={'50px'}
+                                  h={'20px'}
+                                  justifyContent={'space-between'}
+                                  font-weight={'300'}
+                                  margin-left={'5px'}
+                                >
+                                  <Text color={'#D9C7A2'}>
+                                    {filteredSkillName}
+                                  </Text>
+                                  <Text></Text>
+                                </Box>
+                              </Box>
+                            </Box>
+                          ))}
+                      </Box>
+                    </Box>
+                  </>
+                )}
+                {formData.gameIsShowLearningOutcome === 'true' && (
+                  <>
+                    <Box className="box-1">
+                      <Img src={preloadedAssets.back} className="bg-img" />
+                      <Text
+                        className="skill-text"
+                        style={{ textAlign: 'center' }}
+                        fontFamily={'content'}
+                        color={'black'}
+                      >
+                        Learning Outcomes
+                      </Text>
+                      <Box
+                        className="inside-box"
+                        transform={'translate(-2px, -125px)'}
+                        mt={'10px'}
+                        w={'100%'}
+                        h={'60px'}
+                        overflowY={'scroll'}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                        flexDirection={'column'}
+                      >
+                        {data &&
+                          data.map((it: any, ind: number) => {
+                            const bulletIndex = it.indexOf('\u2022');
+                            const contentAfterBullet =
+                              bulletIndex !== -1
+                                ? it.slice(bulletIndex + 1).trim()
+                                : it;
+                            return (
+                              <Box display={'flex'} key={ind}>
+                                <Img
+                                  src={preloadedAssets.write}
+                                  w={'25px'}
+                                  h={'25px'}
+                                />
+                                <Box>
+                                  <Box
+                                    className="text-wrapper"
+                                    display={'flex'}
+                                    w={'50px'}
+                                    h={'20px'}
+                                    justifyContent={'space-between'}
+                                    font-weight={'300'}
+                                    margin-left={'5px'}
+                                  >
+                                    <Text color={'#D9C7A2'}>
+                                      {contentAfterBullet}
+                                    </Text>
+                                    <Text></Text>
+                                  </Box>
+                                </Box>
+                              </Box>
+                            );
+                          })}
+                      </Box>
+                    </Box>
+                  </>
+                )}
+              </Box>
+              {formData.gameIsShowAuhorName === 'true' && (
+                <Box
+                  w={'100%'}
+                  h={'50px'}
+                  position={'relative'}
+                  className="author"
+                >
+                  <Text
+                    position={'absolute'}
+                    right={'0px'}
+                    left={'0px'}
+                    bottom={'0px'}
+                    top={'20px'}
+                    fontSize={{
+                      base: '11px',
+                      sm: '12px',
+                      md: '13px',
+                      lg: '15px',
+                    }}
+                    fontFamily={'content'}
+                    color={'black'}
+                  >
+                    *Author* <br /> {formData.gameAuthorName}
+                  </Text>
+                </Box>
+              )}
+              {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
+                <Box
+                  // w={'100%'}
+                  // h={'50px'}
+                  // position={'relative'}
+                  className="renderContent"
+                >
                   <Text
                     fontSize={{
                       base: '11px',
@@ -157,257 +387,22 @@ const Welcome: React.FC<{
                       md: '13px',
                       lg: '15px',
                     }}
-                    // mt={'2px'}
                     fontFamily={'content'}
-                    position={'absolute'}
-                    display={'flex'}
-                    alignItems={'center'}
                   >
-                    {/* Game Duration : {(formData.gameDuration > 1)?formData.gameDuration+"mins":"1mins"}*/}
-                    <>
-                      {' '}
-                      <Icon as={FaClock} style={customStylesicon} />{' '}
-                      <span style={customStylesicon}>
-                        {formData.gameDuration > 1
-                          ? formData.gameDuration + ' mins'
-                          : 'Few mins'}
-                      </span>
-                    </>
+                    {renderContent()}
                   </Text>
-                )}
-                <Box
-                  w={'60%'}
-                  className="content"
-                  width={'440px !important'}
-                  overflowY={'scroll'}
-                  mt={'25px'}
-                >
-                  {formData.gameIsShowStoryline === 'true' && (
-                    <Text
-                      mt={'20px'}
-                      fontSize={{
-                        base: '11px',
-                        sm: '12px',
-                        md: '13px',
-                        lg: '15px',
-                      }}
-                      fontFamily={'content'}
-                    >
-                      {formData.gameStoryLine}
-                    </Text>
-                  )}
-                  {formData.gameIsShowSkill === 'true' ||
-                  formData.gameIsShowLearningOutcome === 'true' ? (
-                    <Img
-                      src={rew}
-                      mt={'25px'}
-                      alt="rew"
-                      w={'100%'}
-                      h={'20px'}
-                    />
-                  ) : (
-                    ''
-                  )}
-                  <Box
-                    display={'flex'}
-                    className={
-                      formData.gameIsShowSkill === 'true' ||
-                      formData.gameIsShowLearningOutcome === 'true'
-                        ? 'rewards-box'
-                        : 'empty-rewards-box'
-                    }
-                  >
-                    {formData.gameIsShowSkill === 'true' && (
-                      <>
-                        <Box className="box-1">
-                          <Img src={back} className="bg-img" />
-                          <Text
-                            className="skill-text"
-                            style={{ textAlign: 'center' }}
-                            fontFamily={'content'}
-                            color={'black'}
-                          >
-                            Skills
-                          </Text>
-                          <Box
-                            transform={'translate(-2px, -125px)'}
-                            mt={'10px'}
-                            w={'100%'}
-                            h={'60px'}
-                            overflowY={'scroll'}
-                            display={'flex'}
-                            justifyContent={'center'}
-                            alignItems={'center'}
-                            flexDirection={'column'}
-                          >
-                            {authorArray
-                              .map((authorItem, index) => {
-                                const skillName = findSkillName(authorItem);
-                                return skillName;
-                              })
-                              .filter((skillName) => skillName !== null)
-                              .map((filteredSkillName, index) => (
-                                <Box display={'flex'} key={index}>
-                                  <Img
-                                    src={write}
-                                    w={'25px'}
-                                    h={'25px'}
-                                    mt={index === 0 ? '10px' : ''}
-                                  />
-                                  <Box>
-                                    <Box
-                                      display={'flex'}
-                                      w={'50px'}
-                                      h={'20px'}
-                                      justifyContent={'space-between'}
-                                      fontWeight={'300'}
-                                      margin-left={'5px'}
-                                      mt={index === 0 ? '10px' : ''}
-                                    >
-                                      <Text color={'#D9C7A2'}>
-                                        {filteredSkillName}
-                                      </Text>
-                                      <Text></Text>
-                                    </Box>
-                                  </Box>
-                                </Box>
-                              ))}
-                          </Box>
-                        </Box>
-                      </>
-                    )}
-                    {formData.gameIsShowLearningOutcome === 'true' && (
-                      <>
-                        <Box className="box-1">
-                          <Img src={back} className="bg-img" />
-                          <Text
-                            className="skill-text"
-                            style={{ textAlign: 'center' }}
-                            fontFamily={'content'}
-                            color={'black'}
-                          >
-                            Learning Outcomes
-                          </Text>
-                          <Box
-                            transform={'translate(-2px, -125px)'}
-                            mt={'10px'}
-                            w={'100%'}
-                            h={'60px'}
-                            overflowY={'scroll'}
-                            display={'flex'}
-                            justifyContent={'center'}
-                            alignItems={'center'}
-                            flexDirection={'column'}
-                          >
-                            {data &&
-                              data.map((it: any, ind: number) => {
-                                const bulletIndex = it.indexOf('\u2022');
-                                const contentAfterBullet =
-                                  bulletIndex !== -1
-                                    ? it.slice(bulletIndex + 1).trim()
-                                    : it;
-                                return (
-                                  <Box display={'flex'} key={ind}>
-                                    <Img
-                                      src={write}
-                                      w={'25px'}
-                                      h={'25px'}
-                                      mt={ind === 0 ? '10px' : ''}
-                                    />
-                                    <Box>
-                                      <Box
-                                        display={'flex'}
-                                        w={'50px'}
-                                        h={'20px'}
-                                        justifyContent={'space-between'}
-                                        fontWeight={'300'}
-                                        marginLeft={'5px'}
-                                        lineHeight={0.9}
-                                        mt={ind === 0 ? '10px' : ''}
-                                      >
-                                        <Text color={'#D9C7A2'}>
-                                          {contentAfterBullet}
-                                        </Text>
-                                        <Text></Text>
-                                      </Box>
-                                    </Box>
-                                  </Box>
-                                );
-                              })}
-                          </Box>
-                        </Box>
-                      </>
-                    )}
-                  </Box>
-
-                  {formData.gameIsShowAuhorName === 'true' && (
-                    <Box
-                      w={'100%'}
-                      h={'50px'}
-                      position={'relative'}
-                      className="author"
-                    >
-                      <Text
-                        position={'absolute'}
-                        right={'0px'}
-                        left={'0px'}
-                        bottom={'0px'}
-                        top={'20px'}
-                        fontSize={{
-                          base: '11px',
-                          sm: '12px',
-                          md: '13px',
-                          lg: '15px',
-                        }}
-                        fontFamily={'content'}
-                        color={'black'}
-                      >
-                        *Author* <br /> {formData.gameAuthorName}
-                      </Text>
-                    </Box>
-                  )}
-                  {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
-                    <Box
-                      w={'100%'}
-                      h={'50px'}
-                      position={'relative'}
-                      className="renderContent"
-                    >
-                      <Text
-                        fontSize={{
-                          base: '11px',
-                          sm: '12px',
-                          md: '13px',
-                          lg: '15px',
-                        }}
-                        fontFamily={'content'}
-                      >
-                        {renderContent()}
-                      </Text>
-                    </Box>
-                  )}
-                  <Box
-                    className="next-btn-welcome"
-                    w={'100%'}
-                    display={'flex'}
-                    justifyContent={'center'}
-                    alignItems={'flex-start'}
-                  >
-                    <Img
-                      // transform={'scale(1.3)'}
-                      w={'100px'}
-                      h={'41px'}
-                      src={next}
-                      onClick={() => setCurrentScreenId(2)}
-                      // cursor={'pointer'}
-                    />
-                  </Box>
                 </Box>
-              </Box>
-            )}
+              )}
+            </Box>
           </Box>
-        </>
-      )}
+          <Box className="next-btn">
+            <Img
+              src={preloadedAssets.next}
+              onClick={() => setCurrentScreenId(12)}
+            />
+          </Box>
+        </Box>
+      </motion.div>
     </>
   );
 };

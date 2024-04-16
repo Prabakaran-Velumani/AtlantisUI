@@ -1,5 +1,5 @@
 // Chakra Imports
-import { Button, Icon, useColorMode } from '@chakra-ui/react';
+import { Button, Icon, Tooltip, useColorMode } from '@chakra-ui/react';
 // Custom Icons
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 
@@ -9,6 +9,7 @@ export default function FixedPlugin(props: { [x: string]: any }) {
   let bgButton = 'linear(to-b, brand.400, brand.600)';
 
   return (
+    <Tooltip label={colorMode == 'dark' ? 'Light Theme' : 'Dark Theme'}>
     <Button
       {...rest}
       h="60px"
@@ -34,5 +35,6 @@ export default function FixedPlugin(props: { [x: string]: any }) {
         as={colorMode === 'light' ? IoMdMoon : IoMdSunny}
       />
     </Button>
+    </Tooltip>
   );
 }

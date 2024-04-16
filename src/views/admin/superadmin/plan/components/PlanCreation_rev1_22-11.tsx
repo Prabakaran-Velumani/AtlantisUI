@@ -241,14 +241,13 @@ const Plan: React.FC = () => {
   console.log('formData.plPlanType', formData.plPlanType);
   return (
     <>
-      <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'100px'} position={'relative'}>  
+      <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'75px'} position={'relative'}>  
         <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'absolute'} alignItems={'center'}></Card>    
         <Card mb={{ base: '0px', xl: '20px' }} width={'70%'} marginTop={'120px'} >
           <Flex direction="column" mb="40px" ms="10px">
             <Text fontSize="xl" color={textColorPrimary} fontWeight="bold">
               Plan {id ? 'Updation' : 'Creation'}
             </Text>
-
           </Flex>
           <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '20px' }}>
             <InputField

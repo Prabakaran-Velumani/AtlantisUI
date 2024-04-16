@@ -9,7 +9,7 @@ coverage/
 # Express.js
 dist/
 .env
-
+.glb
 # Visual Studio Code
 .vscode/
 

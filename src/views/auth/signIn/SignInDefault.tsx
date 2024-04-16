@@ -36,6 +36,7 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  Tooltip,
   useColorModeValue,
 } from '@chakra-ui/react';
 // Custom components
@@ -52,6 +53,9 @@ import { useAuth } from 'contexts/auth.context';
 import { useNavigate } from 'react-router-dom';
 import { adminLogin } from 'utils/admin/adminService';
 import OnToast from 'components/alerts/toast';
+import { useDispatch} from 'react-redux';
+import {login} from 'store/user/userSlice';
+
 function SignIn() {
   // Chakra color mode
   const textColor = useColorModeValue('navy.700', 'white');
@@ -81,6 +85,7 @@ function SignIn() {
   const [toastStatus, setToastStatus] = useState<string>('');
   const token = localStorage.getItem('user');
   const { user, setUser } = useAuth();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleClick = () => setShow(!show);
@@ -106,11 +111,11 @@ function SignIn() {
       setAlert(true);
       return false; 
     } 
-    let valid = {data:result?.data,token:result?.token,role:result?.role};
+    let valid = {data:result?.data,token:result?.token,role:result?.role,expiration:result?.expiration};
     let user = JSON.stringify(valid);
-    setUser(user);
-    localStorage.setItem('user',user);
     
+    setUser(user);
+    localStorage.setItem('user',user);    
     navigate('/admin/dashboards');
     window.location.reload();
   };
@@ -132,7 +137,7 @@ function SignIn() {
         flexDirection="column"
       >
         <Box me="auto">
-          <Heading color={textColor} fontSize="36px" mb="10px">
+          <Heading color={textColor} fontSize="36px" mb="15px">
             Sign In
           </Heading>
           {/* <Text
@@ -251,14 +256,16 @@ function SignIn() {
                   onChange={handleChange}
                   value={formData?.password}
                 />
-                <InputRightElement display="flex" alignItems="center" mt="4px">
-                  <Icon
-                    color={textColorSecondary}
-                    _hover={{ cursor: 'pointer' }}
-                    as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-                    onClick={handleClick}
-                  />
-                </InputRightElement>
+                <Tooltip label={show ? 'Hide Password' : 'Show Password'}>
+                  <InputRightElement display="flex" alignItems="center" mt="4px">
+                    <Icon
+                      color={textColorSecondary}
+                      _hover={{ cursor: 'pointer' }}
+                      as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
+                      onClick={handleClick}
+                    />
+                  </InputRightElement>
+                </Tooltip>
               </InputGroup>
               <Flex justifyContent="space-between" align="center" mb="24px">
                 <FormControl display="flex" alignItems="center">

@@ -1,5 +1,5 @@
 import { Img, Text, SimpleGrid, Box, Input, Textarea } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 /* for reflection question inside the image */
 import ref from 'assets/img/screens/refquestions.png';
@@ -14,39 +14,63 @@ const Reflection: React.FC<{
   preview?: any;
   getData?: any;
   data?: any;
-}> = ({ formData, reflectionQuestions, imageSrc, preview, getData, data }) => {
+  gameInfo?:any;
+  setCurrentScreenId?: any;
+  preloadedAssets:any;
+}> = ({ formData, reflectionQuestions, imageSrc, preview, getData, data, gameInfo , setCurrentScreenId, preloadedAssets}) => {
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
+  const [answers, setAnswers] = useState<any>([]);
+
+  useEffect(() => {
+    if (
+      formData?.gameIsLearnerMandatoryQuestion &&
+      formData?.gameReflectionQuestion &&
+      answers.length == formData?.gameReflectionQuestion
+    ) {
+      let validate = answers.some(
+        (obj: any) => obj.text == undefined || obj.text == '',
+      );
+      validate ? setIsFormValid(false) : setIsFormValid(true);
+    } else {
+      formData?.gameIsLearnerMandatoryQuestion
+        ? setIsFormValid(false)
+        : setIsFormValid(true);
+    }
+  }, [answers]);
+
+  const updateAnswer = (e: any, index: any) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[index] = { ...updatedAnswers[index], text: e.target.value };
+    setAnswers(updatedAnswers);
+  };
+
+  const nextNavigation = ()=>{
+    if(gameInfo?.gameData?.gameIsShowTakeaway === 'true'){
+      setCurrentScreenId(7);//Navigate to Takeaway screen
+    }
+    else{
+      setCurrentScreenId(5);//Navigate to Thank you screen
+    }
+  }
+
   return (
     <>
       {imageSrc && (
         <>
-          <Box className="reflection-screen">
-            <Box className="reflection-screen-box">
-              {/* <Img src={imageSrc} className="bg-ref" /> */}
-            </Box>
-            <Box
-              w={'100%'}
-              display={'flex'}
-              justifyContent={'center'}
-              position={'relative'}
-            >
-              <Img src={question} w={'320px'} h={'100px'} />
-              <Text
-                fontFamily={'AtlantisText'}
-                color={'##D9C7A2'}
-                // className="text drop"
-                position={'absolute'}
-                top={'20px'}
-                fontSize={'3rem'}
-                style={{ whiteSpace: 'break-spaces' }}
-              >
-                reflection
-              </Text>
+          <Box className="reflection-screen"> 
+              <Img src={imageSrc} className="bg-img" />
+            {/* <Box className="reflection-screen-box">
+            </Box> */}
+            <Box className='title'>
+              <Img src={preloadedAssets.question} />
+              <Text> Reflection </Text>
             </Box>
             <Box className="content-ref">
               <SimpleGrid columns={{ base: 2 }} spacing={2} className="grid">
                 {reflectionQuestions.map((item: any, index: number) => (
-                  <Box>
-                    <Box
+                  <>
+                  <Box key={index}>
+                    <Box className='heading-wrapper'
                       w={{
                         base: '150px',
                         sm: '100px',
@@ -64,7 +88,7 @@ const Reflection: React.FC<{
                         lg: '15px',
                       }}
                     >
-                      <Img src={qs} alt="ref" w={'20px'} h={'20px'} />
+                      <Img src={preloadedAssets.qs} alt="ref" w={'20px'} h={'20px'} />
                       <Text
                         fontFamily={'AtlantisText'}
                         color={'black'}
@@ -75,7 +99,7 @@ const Reflection: React.FC<{
                         {item?.refQuestion}
                       </Text>
                     </Box>
-                    <Box position={'relative'}>
+                    <Box position={'relative'} className='input-wrapper'>
                       <Img
                         w={'350px'}
                         h={{
@@ -84,7 +108,7 @@ const Reflection: React.FC<{
                           md: '50px',
                           lg: '100px',
                         }}
-                        src={ref}
+                        src={preloadedAssets.ref}
                       />
                       <Textarea
                         bottom={0}
@@ -102,9 +126,12 @@ const Reflection: React.FC<{
                         }}
                         _focus={{ boxShadow: 'none', border: 'none' }}
                         fontFamily={'AtlantisText'}
+                        value={answers[index]?.text}
+                        onChange={(e: any) => updateAnswer(e, index)}
                       />
                     </Box>
                   </Box>
+                  </>
                 ))}
               </SimpleGrid>
             </Box>
@@ -114,16 +141,19 @@ const Reflection: React.FC<{
               justifyContent={'center'}
               position={'absolute'}
               bottom={'0'}
+              className='left-right-btn'
             >
               <Box w={'80%'} display={'flex'} justifyContent={'space-between'}>
-                <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
-                <Img
-                  src={right}
-                  w={'50px'}
-                  h={'50px'}
-                  cursor={'pointer'}
-                  onClick={() => getData(data)}
-                />
+                <Img src={preloadedAssets.left} w={'50px'} h={'50px'} cursor={'pointer'} />
+                {isFormValid && (
+                  <Img
+                    src={preloadedAssets.right}
+                    w={'50px'}
+                    h={'50px'}
+                    cursor={'pointer'}
+                    onClick={() => nextNavigation()}
+                  />
+                )}
               </Box>
             </Box>
           </Box>

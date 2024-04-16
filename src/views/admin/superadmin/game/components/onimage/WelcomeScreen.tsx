@@ -52,6 +52,8 @@ import InputField from 'components/fields/InputField';
 import BadgeImages from '../BadgeImages';
 import { MdClose, MdOutlineCloudUpload } from 'react-icons/md';
 import TextField from 'components/fields/TextField';
+import next from 'assets/img/screens/next.png';
+
 interface Badge {
   gasId: number;
   gasAssetImage: string;
@@ -82,39 +84,16 @@ const WelcomeScreen: React.FC<{ formData: any; imageSrc: any }> = ({
   useEffect(()=>{
      fetch();
   },[])
-  console.log(formData.gameSkills)
+  
   const link = extractLink(formData.gameAdditionalWelcomeNote);
   return (
     <>
       { imageSrc && (
         <Box className='welcome-screen'>
-          <Box className='welcome-screen-box'
-            // w={{ base: '100%', sm: '100%', md: '100%', lg: '90%' }}
-            // ml={{ base: '10px', sm: '10px', md: '20px', lg: '28px' }}
-            // h={{ base: '150px', sm: '450px', md: '550px', lg: '450px' }}
-            // backgroundImage={imageSrc}
-            // backgroundRepeat={'no-repeat'}
-            // backgroundSize={'contain'}
-            // fontFamily={'content'}
-            // // color="#D9C7A2"
-            // display={'flex'}
-            // justifyContent={'center'}
-            // alignItems={'center'}
-          >
+          <Box className='welcome-screen-box'>
              <Img src={imageSrc} className='bg-img' />
           </Box>
-          <Box className='content-box'
-            // h={'250px'}
-            // color="#D9C7A2"
-            fontFamily={'gametext'}
-            // w={'100%'}
-            // mt={{ base: '0px', sm: '0px', md: '10px', lg: '20px' }}
-            // lineHeight={1}
-            // display={'flex'}
-            // justifyContent={'center'}
-            // alignItems={'flex-start'}
-            // textAlign={'center'}
-          >
+          <Box className='content-box' fontFamily={'gametext'}>
             <Box w={'60%'}  className='content'>
               <Text
                 fontSize={{
@@ -209,7 +188,9 @@ const WelcomeScreen: React.FC<{ formData: any; imageSrc: any }> = ({
                 </Text>
               )}
             </Box>
+           
           </Box>
+          
         </Box>        
       )}
 

@@ -60,11 +60,9 @@ import { RiArrowDownSFill } from 'react-icons/ri';
 import { MdOutlineBarChart, MdPerson, MdFileCopy,MdGamepad,MdBook } from 'react-icons/md';
 import { useEffect, useState } from 'react';
 import { noofCompany } from 'utils/dashboard/dashboardService';
-
-
-// type CountUpProps = {  
-//   end: string;
-// }
+import {useAuth}  from 'contexts/auth.context';
+import {login} from 'store/user/userSlice';
+import { useDispatch } from 'react-redux';
 
 interface YourStateType {
   totalCompany: any;
@@ -98,7 +96,11 @@ export default function Default() {
   const iconBg = useColorModeValue('secondaryGray.300', 'navy.700');
   const iconColor = useColorModeValue('brand.500', 'white');
   const paleGray = useColorModeValue('#DFE6F6', 'whiteAlpha.100');
+  const { user, setUser } = useAuth();
+  const dispatch = useDispatch();
 
+
+  dispatch(login(user));
 
 useEffect(()=>{
  const fetchData= async () =>{
@@ -124,14 +126,12 @@ useEffect(()=>{
 fetchData();
 },[]);
 
-console.log('outp', result);
-
 
 
 return (
   <Flex
     direction={{ base: 'column', xl: 'row' }}
-    pt={{ base: '130px', md: '80px', xl: '80px' }}
+    pt={{ base: '70px', md: '80px', xl: '80px' }}
   >
     <Flex direction="column" width="stretch">
       <Grid

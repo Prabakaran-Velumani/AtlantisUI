@@ -8,29 +8,24 @@ import React from 'react';
 
 import bull from 'assets/img/screens/bullet.png';
 import right from 'assets/img/games/right.png';
+import nextBtn from 'assets/img/screens/next.png';
 const Takeway: React.FC<{
   formData: any;
   imageSrc: any;
   getData?: any;
   data?: any;
-}> = ({ formData, imageSrc, getData,
-  data }) => {
+  preloadedAssets: any;
+}> = ({ formData, imageSrc, getData, data,preloadedAssets }) => {
   const content = formData.gameTakeawayContent?.split('\n');
 
   return (
     <>
       {imageSrc && (
-        <Box className="takeaway-screen">
+        <Box className="takeaway-screen"> 
           <Box className="takeaway-screen-box">
             <Img src={imageSrc} className="bg-take" />
             <Box
-              className="content-box"
-              width={'633px !important'}
-              overflowY={'scroll'}
-              position={'absolute'}
-              display={'flex'}
-              flexDirection={'column'}
-              justifyContent={'space-between'}
+              className="content-box"             
             >
               <Box>
                 {content &&
@@ -45,10 +40,11 @@ const Takeway: React.FC<{
                         className="content"
                         fontFamily={'AtlantisText'}
                         color={'#D9C7A2'}
+                        key={ind}
                       >
                         <>
                           <Img
-                            src={bull}
+                            src={preloadedAssets.bull}
                             className="dot-img"
                             w={'16px'}
                             h={'16px'}
@@ -58,17 +54,14 @@ const Takeway: React.FC<{
                       </Box>
                     );
                   })}
-              </Box>
-              <Box w={'100%'} display={'flex'} justifyContent={'flex-end'}>
+              </Box>              
+            </Box>
+            <Box className='next-btn-box'>
                 <Img
-                  src={right}
-                  w={'50px'}
-                  h={'50px'}
-                  cursor={'pointer'}
-                    onClick={()=>getData(data)}
+                  src={preloadedAssets.NextBtn}                 
+                  onClick={()=>getData(data)}
                 />
               </Box>
-            </Box>
           </Box>
         </Box>
       )}

@@ -61,7 +61,7 @@ export default function Settings() {
   return (
     <FormControl>
       <Card>
-        <Flex direction="column" mb="40px" ms="10px">
+        <Flex direction="column" mb="40px">
           <Text fontSize="xl" color={textColorPrimary} fontWeight="bold">
             Change password
           </Text>
@@ -95,7 +95,7 @@ export default function Settings() {
         </FormControl>
         <Button
           variant="brand"
-          minW="183px"
+          minW={{base:'100%',sm:'100%',md:"183px"}}
           fontSize="sm"
           fontWeight="500"
           ms="auto"

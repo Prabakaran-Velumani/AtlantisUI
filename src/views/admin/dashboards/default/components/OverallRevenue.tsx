@@ -43,7 +43,7 @@ export default function OverallRevenue(props: { [x: string]: any ,count:number})
       mb={{ base: '20px', lg: '0px' }}
       {...rest}
     >
-      <Flex justify="space-between" px="20px" pt="5px" w="100%">
+      <Flex justify="space-between" px={{base:'0px',sm:"20px"}} pt="5px" w="100%">
         <Flex align="center" w="100%">
           <Flex flexDirection="column" me="20px">
             <Text
@@ -70,7 +70,7 @@ export default function OverallRevenue(props: { [x: string]: any ,count:number})
             </Text>
           </Flex>
         </Flex>
-        <Select
+        {/* <Select
           fontSize="sm"
           variant="subtle"
           defaultValue="monthly"
@@ -80,7 +80,7 @@ export default function OverallRevenue(props: { [x: string]: any ,count:number})
           <option value="daily">Daily</option>
           <option value="monthly">Monthly</option>
           <option value="yearly">Yearly</option>
-        </Select>
+        </Select> */}
       </Flex>
       <Box minH="260px" mt="auto" w="100%">
         <LineChart

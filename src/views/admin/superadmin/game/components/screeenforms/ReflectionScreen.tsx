@@ -242,6 +242,10 @@ return (
           onChange={(e:any) => handleTextReflectionChange( e,index+1)}
           value={reflectionQuestions[`ref${index + 1}`]} // Access the specific question using the index
           maxLength={90}
+          style={{
+            border: formData.gameIsShowReflectionScreen === 'true' && !reflectionQuestions[`ref${index + 1}`] ? '1px solid red' : '1px solid #ced4da',
+            // Add other styles as needed
+          }}
           />
           <p>{characterCount[index]} characters left</p>
         </div>

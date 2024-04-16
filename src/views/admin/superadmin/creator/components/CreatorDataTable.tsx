@@ -3,9 +3,16 @@ import {
   IconButton,
   InputGroup,
   InputLeftElement,
+  Tooltip,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useTable, useSortBy, useGlobalFilter, usePagination, TableInstance } from 'react-table';
+import {
+  useTable,
+  useSortBy,
+  useGlobalFilter,
+  usePagination,
+  TableInstance,
+} from 'react-table';
 import { Navigate, useNavigate } from 'react-router-dom';
 import SelectField from 'components/fields/SelectField';
 import { SearchIcon } from '@chakra-ui/icons';
@@ -16,7 +23,7 @@ import {
   Table,
   Thead,
   Tbody,
-  Tr,   
+  Tr,
   Th,
   Td,
   Input,
@@ -26,9 +33,13 @@ import {
   SimpleGrid,
 } from '@chakra-ui/react';
 import Card from 'components/card/Card';
-import { getAllCreator, getCompanyList,getSelectCreator } from 'utils/creator/creator';
+import {
+  getAllCreator,
+  getCompanyList,
+  getSelectCreator,
+} from 'utils/creator/creator';
 import { getPlanName } from 'utils/plan/plan';
- 
+
 // type RowObj = {
 //   sNo: number;
 //   creatorName: string;
@@ -43,17 +54,17 @@ type RowObj = {
   companyName: string;
   CreatorName: string;
   CreatorMail: string;
-  planexpiry:string;
+  planexpiry: string;
   renewplan: any;
-  planduration:string;
+  planduration: string;
   // creatorAge: number;
   // creatorGender:string;
   // creatorDesignation: string;
-  status:string;
-  plan:string;
+  status: string;
+  plan: string;
   validity: string;
   action: any;
-}
+};
 interface CreatorData {
   ctId: number;
   ctName: string;
@@ -64,9 +75,10 @@ interface CreatorData {
   ctPlanValidity: string;
   ctCountry: number;
   // ctAge:number;
-  ctStatus:string;
-  ctPlanId:string;
-  ctCompanyId:string;validityLogs?: ValidityLog[];
+  ctStatus: string;
+  ctPlanId: string;
+  ctCompanyId: string;
+  validityLogs?: ValidityLog[];
 }
 interface ValidityLog {
   phCreatorId: number;
@@ -103,13 +115,14 @@ interface CustomCreatorDataTableProps {
   setApiData: React.Dispatch<React.SetStateAction<CreatorData[]>>;
   // Other props as needed
 }
-const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiData}) => {
-
+const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({
+  data,
+  setApiData,
+}) => {
   const storage = JSON.parse(localStorage.getItem('user'));
- 
 
   let storageCreatorId = '';
-  const UserRole=storage.data.role;
+  const UserRole = storage.data.role;
   if (storage.data.role === 'Creator') {
     storageCreatorId = storage.data.id;
   }
@@ -117,20 +130,20 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiD
     value: string;
     label: string;
     CompanyId: string;
-}      
+  }
   const [lastPage, setLastPage] = useState<any>();
   const [companyOptions, setCompanyOptions] = useState([]);
-  const [selected,setSelected] = useState({companyId:'',planId:''});
+  const [selected, setSelected] = useState({ companyId: '', planId: '' });
   const [plan, setplan] = useState<planType[]>([]);
-  const navigate = useNavigate();                            
-  const handleNavigate= () => {
+  const navigate = useNavigate();
+  const handleNavigate = () => {
     navigate('creation');
-  } 
+  };
   const mappedPlanOptions = Array.isArray(plan)
     ? plan.map((plan) => ({
-      value: plan.plId, // Convert to string if necessary
-      label: plan.plPlanName,
-    }))
+        value: plan.plId, // Convert to string if necessary
+        label: plan.plPlanName,
+      }))
     : [];
   const options: OptionType[] = [
     { value: 'Days', label: 'Days' },
@@ -139,7 +152,7 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiD
   ];
   const searchIconColor = useColorModeValue('gray.700', 'white');
   let menuBg = useColorModeValue('white', 'navy.800');
-   const shadow = useColorModeValue(
+  const shadow = useColorModeValue(
     '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
     '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
   );
@@ -155,17 +168,17 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiD
       { Header: 'Validity', accessor: 'validity' },
 
       { Header: 'Expiry Date', accessor: 'planexpiry' },
-     
+
       // { Header: 'Age', accessor: 'creatorAge' },
       // { Header: 'Gender', accessor: 'creatorGender' },
       // { Header: 'creatorDesignation', accessor: 'creatorDesignation' },
-      
+
       { Header: 'Renew Plan', accessor: 'renewplan' },
       { Header: 'Status', accessor: 'status' },
 
-      { Header: '', accessor: 'action' },
+      { Header: 'Action', accessor: 'action' },
     ],
-    []
+    [],
   );
 
   const {
@@ -190,7 +203,7 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiD
     },
     useGlobalFilter,
     useSortBy,
-    usePagination
+    usePagination,
   );
 
   useEffect(() => {
@@ -198,101 +211,94 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiD
     setLastPage(Math.floor(data.length / pageSize));
   }, []);
 
-        const totalPages = Math.ceil(data.length / pageSize);
-  
-        const handleGoPage = (pageNumber: number) => {
-          // Ensure the page number is within valid range
-          if (pageNumber >= 0 && pageNumber < totalPages) {
-            gotoPage(pageNumber);
-          }
-        };
+  const totalPages = Math.ceil(data.length / pageSize);
 
-        const getPageNumbers = () => {
-          const pageCount = 5; // Adjust the number of visible page numbers as needed
-          const currentPage = pageIndex + 1;
-          const pages = [];
-      
-          if (totalPages <= pageCount) {
-            // Display all pages if total pages are less than or equal to the page count
-            for (let i = 0; i < totalPages; i++) {
-              pages.push(i + 1);
-            }
-          } else {
-            // Display a range of pages with three dots in between
-            const start = Math.max(1, currentPage - Math.floor(pageCount / 2));
-            const end = Math.min(totalPages, start + pageCount - 1);
-      
-            if (start > 1) {
-              pages.push(1, '...'); // Display first page and three dots if not in the initial range
-            }
-      
-            for (let i = start; i <= end; i++) {
-              pages.push(i);
-            }
-      
-            if (end < totalPages) {
-              pages.push('...', totalPages); // Display three dots and last page if not in the final range
-            }
-          }
-      
-          return pages;
-        };        
-        useEffect(() => {
-          const fetchData = async () => {
-            try {
-              const company = await getCompanyList();
-              if (company?.status !== 'Success')
-                return console.log('getCountries Error :', company?.message);
-              setCompanyOptions(company?.data);
-              const plans = await getPlanName(); // Replace with your actual function to get plan names
-              if (plans?.status !== 'Success')
-                return console.log('getPlanNames Error:', plans?.message);
-              setplan(plans.data);
-              const creator = await getSelectCreator(); // Replace with your actual function to get plan names
-              if (creator?.status !== 'Success')
-                return console.log('getPlanNames Error:', creator?.message);
-                if (storage.data.role === 'Creator') {
-                  const selectCreatorData: OptionTypecon[] = creator?.data || [];
-                  const foundItem = selectCreatorData.find(item => item.value === storageCreatorId);
-                  setSelected({ ...selected, companyId: foundItem?.CompanyId });
-                  }
+  const handleGoPage = (pageNumber: number) => {
+    // Ensure the page number is within valid range
+    if (pageNumber >= 0 && pageNumber < totalPages) {
+      gotoPage(pageNumber);
+    }
+  };
 
+  const getPageNumbers = () => {
+    const pageCount = 5; // Adjust the number of visible page numbers as needed
+    const currentPage = pageIndex + 1;
+    const pages = [];
 
+    if (totalPages <= pageCount) {
+      // Display all pages if total pages are less than or equal to the page count
+      for (let i = 0; i < totalPages; i++) {
+        pages.push(i + 1);
+      }
+    } else {
+      // Display a range of pages with three dots in between
+      const start = Math.max(1, currentPage - Math.floor(pageCount / 2));
+      const end = Math.min(totalPages, start + pageCount - 1);
 
-            } catch (error) {
-              console.error('An error occurred while fetching data:', error);
-            }
-          };
-      
-          fetchData();
-        }, []);
-        const handleCompanyChange = (selectedOption: OptionType | null) => {
-          setSelected({ ...selected, companyId: selectedOption.value });
-        };
-        const handlePlanChange = (selectedOption: OptionType | null) => {
-          setSelected({ ...selected, planId: selectedOption.value });
-        };
-        const handleClick = async () => {
-          let data = JSON.stringify(selected);
-          const result = await getAllCreator(data);
-          if (result?.status !== 'Success') return setApiData([]);
-          setApiData(result?.data);
+      if (start > 1) {
+        pages.push(1, '...'); // Display first page and three dots if not in the initial range
+      }
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+
+      if (end < totalPages) {
+        pages.push('...', totalPages); // Display three dots and last page if not in the final range
+      }
+    }
+
+    return pages;
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const company = await getCompanyList();
+        if (company?.status !== 'Success')
+          return console.log('getCountries Error :', company?.message);
+        setCompanyOptions(company?.data);
+        const plans = await getPlanName(); // Replace with your actual function to get plan names
+        if (plans?.status !== 'Success')
+          return console.log('getPlanNames Error:', plans?.message);
+        setplan(plans.data);
+        const creator = await getSelectCreator(); // Replace with your actual function to get plan names
+        if (creator?.status !== 'Success')
+          return console.log('getPlanNames Error:', creator?.message);
+        if (storage.data.role === 'Creator') {
+          const selectCreatorData: OptionTypecon[] = creator?.data || [];
+          const foundItem = selectCreatorData.find(
+            (item) => item.value === storageCreatorId,
+          );
+          setSelected({ ...selected, companyId: foundItem?.CompanyId });
         }
-        
-      useEffect(() => {
-        handleClick();
-      }, [selected.companyId,selected.planId]);
+      } catch (error) {
+        console.error('An error occurred while fetching data:', error);
+      }
+    };
 
+    fetchData();
+  }, []);
+  const handleCompanyChange = (selectedOption: OptionType | null) => {
+    setSelected({ ...selected, companyId: selectedOption.value });
+  };
+  const handlePlanChange = (selectedOption: OptionType | null) => {
+    setSelected({ ...selected, planId: selectedOption.value });
+  };
+  const handleClick = async () => {
+    let data = JSON.stringify(selected);
+    const result = await getAllCreator(data);
+    if (result?.status !== 'Success') return setApiData([]);
+    setApiData(result?.data);
+  };
+
+  useEffect(() => {
+    handleClick();
+  }, [selected.companyId, selected.planId]);
 
   return (
     <>
-   
       <Card mt={'20px'} width={'100%'}>
-        <SimpleGrid
-          columns={{ base: 1, md: 3, lg: 3 }}         
-          
-          spacing={6}
-        >
+        <SimpleGrid columns={{ base: 1, md: 3, lg: 3 }} spacing={6}>
           <SelectField
             mb="0px"
             id="ctCompanyId"
@@ -336,91 +342,104 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiD
         justifyContent="flex-end"
         align={'center'}
         mb={'10px'}
-        p={'20px'}
+        p={{ sm: '20px 0px', md: '20px' }}
       >
-      <Flex
-      w={{ sm: '100%', md: 'auto' }}
-
-      alignItems="center"
-      flexDirection="row"
-      bg={menuBg}
-      flexWrap={{ base: 'wrap', md: 'nowrap' }}
-      p="10px"
-      borderRadius="999px"
-      boxShadow={shadow}
-    >
-        <InputGroup w={{ base: '100%', md: '200px' }} >
-      <InputLeftElement
-        children={
-          <IconButton
-            aria-label="search"
-            bg="inherit"
-            borderRadius="inherit"
-            _active={{
-              bg: 'inherit',
-              transform: 'none',
-              borderColor: 'transparent',
-            }}
-            _hover={{
-              background: 'none',
-            }}
-            _focus={{
-              background: 'none',
-              boxShadow: 'none',
-            }}
-            icon={<SearchIcon color={searchIconColor} w="15px" h="15px" />}
-          />
-        }
-      />
-          <Input
-            type="text"
-            placeholder="Search..."
-            value={globalFilter || ''}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            bg={'#f9f9f9'}
-            borderRadius={'14px'}
-            w={{ base: '200px', xl: '300px' }}
-          />
-       
-          </InputGroup>
-          <Button
-         ml={10}
-          padding={2}
-          boxShadow={'3px 4px 12px #2e292940'}
-          _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
-          background="#3311db"
-          color="#fff"
-          w={70}
-          onClick={handleNavigate}
+        <Flex
+          w={{ sm: '100%', md: 'auto' }}
+          alignItems="center"
+          flexDirection={{base:'column',sm:'column',md:"row"}}
+          bg={menuBg}
+          flexWrap={{ base: 'wrap', md: 'nowrap' }}
+          p="10px"
+          borderRadius="20px"
+          boxShadow={shadow}
+          justifyContent={'space-between'}
         >
-          New
-        </Button>
-       
+          <InputGroup w={{ base: '100%', sm: '100%', md: '200px' }}>
+            <InputLeftElement
+              children={
+                <IconButton
+                  aria-label="search"
+                  bg="inherit"
+                  borderRadius="inherit"
+                  _active={{
+                    bg: 'inherit',
+                    transform: 'none',
+                    borderColor: 'transparent',
+                  }}
+                  _hover={{
+                    background: 'none',
+                  }}
+                  _focus={{
+                    background: 'none',
+                    boxShadow: 'none',
+                  }}
+                  icon={
+                    <SearchIcon color={searchIconColor} w="15px" h="15px" />
+                  }
+                />
+              }
+            />
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={globalFilter || ''}
+              onChange={(e) => setGlobalFilter(e.target.value)}
+              bg={'#f9f9f9'}
+              borderRadius={'14px'}
+              w={{ base: '100%', sm: '100%', xl: '300px' }}
+            />
+          </InputGroup>
+          <Tooltip
+            label="Create a New Creator"
+            hasArrow
+            placement="right-start"
+          >
+          <Button
+            ml={{ sm: 0, md: 10 }}
+            mt={{sm:5,md:0}}
+            padding={2}
+            boxShadow={'3px 4px 12px #2e292940'}
+            _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
+            background="#3311db"
+            color="#fff"
+            w={{ sm: '100%', md: 70 }}
+            onClick={handleNavigate}
+          >
+            New
+          </Button>
+          </Tooltip>
         </Flex>
-       
       </Flex>
       {/* <Card mb={{ base: '0px', xl: '20px' }} mt={'20px'} boxShadow={'1px 1px 12px #2e292914'} p={'10px 0'}> */}
-      <Box overflowX={{ sm: 'scroll', xl: 'scroll'}} padding="20px">
-      {/* <Box overflowX={{ sm: 'scroll', xl: 'scroll'}} > */}
+      <Box
+        overflowX={{ sm: 'scroll', xl: 'scroll' }}
+        padding="2px"
+        borderRadius={'13px 13px 20px 20px'}
+      >
+        {/* <Box overflowX={{ sm: 'scroll', xl: 'scroll'}} > */}
         <Table
           {...getTableProps()}
           variant={'simple'}
           overflowX={{ base: 'auto', xl: 'scroll' }}
+          style={{
+            border: '2px solid #f7f7f7',
+          }}
         >
           {/* <Card> */}
-          <Thead className="thead"  bg={'#E9EDF7'}>
+          <Thead className="thead" bg={'#f9f9f9'}>
             {headerGroups.map((headerGroup) => (
               <Tr
                 {...headerGroup.getHeaderGroupProps()}
                 borderBottom={'2px solid #f7f7f7'}
               >
                 {headerGroup.headers.map((column) => (
-                  <Th 
-                 whiteSpace={'nowrap'}
+                  <Th
+                    whiteSpace={'nowrap'}
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     color={'#191919'}
                     textAlign={'start'}
-                    p={'15px 10px'}
+                    p={'10px 10px'}
                   >
                     {column.render('Header')}
                     <span>
@@ -441,14 +460,14 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiD
               return (
                 <Tr
                   {...row.getRowProps()}
-                  borderBottom={'2px solid #E0E0E0'}
+                  borderBottom={'2px solid #f7f7f7'}
                   _hover={{ bg: '#FAF9F6' }}
                   cursor={'pointer'}
                 >
                   {row.cells.map((cell) => {
                     return (
                       <Td
-                      whiteSpace={'nowrap'}
+                        whiteSpace={'nowrap'}
                         {...cell.getCellProps()}
                         p={'12px'}
                         textAlign={'start'}
@@ -462,15 +481,15 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiD
             })}
           </Tbody>
         </Table>
-      {/* </Box> */}
+        {/* </Box> */}
       </Box>
       <Box
-        pt={'20px'}
+        pt={'20px 5px'}
         display={{ base: 'block', xl: 'flex' }}
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        <Box>
+        <Box mb={5}>
           <Box mr={'10px'} color={'#000'}>
             <span style={{ color: '#20212396' }}>
               Page{' '}
@@ -481,14 +500,15 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiD
           </Box>
         </Box>
         <Box display={{ base: 'flex', xl: 'flex' }}>
-          <Box mr={'10px'}>
+          <Box mr={'10px'} display={'flex'} alignItems={'center'}>
             <Button
               onClick={() => previousPage()}
               disabled={!canPreviousPage}
               bg={'#f3f0f0'}
-              h={'35px'}
+              mr={'5px'}
+              h={'40px'}
               w={'40px'}
-             borderRadius='50%'
+              borderRadius="50%"
               lineHeight="1em"
               flexShrink={0}
               fontWeight={800}
@@ -498,10 +518,10 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiD
             {getPageNumbers().map((page, index) => (
               <Button
                 key={index}
-                h={'35px'}
+                h={'40px'}
                 w={'40px'}
                 mr={'5px'}
-                borderRadius='50%'
+                borderRadius="100px"
                 lineHeight="1em"
                 flexShrink={0}
                 fontWeight={800}
@@ -518,9 +538,9 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiD
               onClick={() => nextPage()}
               disabled={!canNextPage}
               bg={'#f3f0f0'}
-              h={'35px'}
+              h={'40px'}
               w={'40px'}
-              borderRadius='50%'
+              borderRadius="100px"
               lineHeight="1em"
               flexShrink={0}
               fontWeight={800}
@@ -562,7 +582,7 @@ const CreatorDataTable: React.FC<CustomCreatorDataTableProps> = ({ data ,setApiD
           </Box>
         </Box>
       </Box>
-     
+
       {/* </Card> */}
     </>
   );

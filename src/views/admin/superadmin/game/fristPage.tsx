@@ -23,7 +23,7 @@ import NFTBanner from 'assets/img/auth/topbg.jpg'
 import NFT from 'assets/img/nfts/Nft3.png'
 import GameBG from 'assets/img/auth/banner.png'
 import Rocket from 'assets/img/games/rocket1-removebg-preview.png'
-import { MdArrowCircleRight, MdMoreVert } from 'react-icons/md';
+import { MdArrowCircleRight, MdMoreVert, MdOutlinePublic, MdOutlineRocketLaunch } from 'react-icons/md';
 import { VSeparator } from 'components/separator/Separator';
 import GameCard from './components/gameCard';
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
@@ -33,6 +33,13 @@ import OnToast from 'components/alerts/toast';
 import LeanerList from './components/LeanersList'
 import TexttoVoice from './components/SpeeachKit'
 import { createScormConfig, getScormConfig, generateScorm } from 'utils/scorm/scorm';
+// @ts-ignore
+// import loadingImage from 'assets/img/games/loading.gif';
+import loadingImage from 'assets/img/games/loady.gif';
+
+import {API_SERVER} from 'config/constant';
+import { RiDraftLine } from 'react-icons/ri';
+
 interface Counting {
   draftCount: any;
   internalCount: any;
@@ -75,7 +82,7 @@ const Game: React.FC = () => {
     { value: 'Completed/Incomplete', label: 'Completed/Incomplete', isChecked: false },
     { value: 'Passed/Incomplete', label: 'Passed/Incomplete', isChecked: false },
   ]);
-
+  const [loadingdata, setLoadingdata] = useState(false);
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const handleCourse = () => {
     navigate('/admin/superadmin/game/template');
@@ -116,16 +123,31 @@ const Game: React.FC = () => {
   //   setGameList(result.data);
   // };
 
+  const gameGameStage = localStorage.getItem('gameGameStage');
+useEffect(() => {
+ 
+  if(gameGameStage === 'Review')
+  {
+    setTabState('Review');
+    setLoadingdata(true);
+  }
+  console.log('gameGameStage',gameGameStage);
+  gameLists(tabState);
+}, [tabState]);
 
-
+  // useEffect(() => {
+  //   gameLists(tabState);
+  // }, [tabState]);
 
   useEffect(() => {
+    if(gameGameStage === 'Review')
+    {
+      setTabState('Review');
+      setLoadingdata(true);
+    }
+    console.log('gameGameStage',gameGameStage);
     gameLists(tabState);
-  }, [tabState]);
-
-  useEffect(() => {
     fetchData();
-
     fetchCount();
   }, []);
   const handleMouse = (i: number) => {
@@ -183,6 +205,22 @@ const Game: React.FC = () => {
     setIsOpen(true);
 
   }
+  const containerRef = useRef(null);
+  useEffect(() => {
+    // Your code to fetch data or handle tab change
+    if(gameGameStage === 'Review')
+    {
+      setTabState('Review');
+      setLoadingdata(true);
+      
+    }
+    gameLists(tabState);
+    console.log('gameGameStage',gameGameStage);
+    // Scroll to top when tab changes
+    if (containerRef.current) {
+      containerRef.current.scrollTop = 0;
+    }
+  }, [tabState]);
 
   const [isDownloadDialogOpen, setDownloadDialogOpen] = useState(false);
   const [downloadId, setDownloadId] = useState(null);
@@ -457,6 +495,7 @@ const Game: React.FC = () => {
   }, [isConfirm, duplicateId]);
 
   const gameLists = async (type: string) => {
+    setLoadingdata(true);
     const data = '';
     const result = await getAllGame(data, type);
     if (result?.status !== 'Success') {
@@ -465,10 +504,11 @@ const Game: React.FC = () => {
     } else {
 
       setGameList(result.data);
+      localStorage.removeItem('gameGameStage');
     }
 
-
-
+    setLoadingdata(false);
+    
   };
 
   const [scormEdition, setScormEdition] = useState('SCORM 1.2');
@@ -915,41 +955,41 @@ const Game: React.FC = () => {
   return (
     <>
       <Box className='Game' position={'relative'}>
-        <Box mb={{ base: '130px', md: '100px', xl: '100px' }} className='box'></Box>
-        <Card backgroundImage={NFTBanner} backgroundRepeat={'no-repeat'} backgroundSize={'cover'} height={'150px'} width={'100%'} overflow={{ sm: 'auto', xl: 'unset' }}>
-          <Box display={{ base: 'block', xl: 'flex' }} justifyContent="space-between" alignItems={'end'} padding={'20px'}>
-            <Box display={'flex'} flexDirection={'column'} width={'700px'}>
-              <Heading color={'#fff'} pb={'20px'} display={'flex'} alignItems={'center'} >Your Creations<Img src={Rocket} height={'50px'} width={'50px'} ml={'20px'} transform={'rotate(40deg)'} /></Heading>
-              <Text fontSize={'15px'} color={'#fff'} letterSpacing={'1px'}>Developing games that ignite curiosity, turning every challenge into a lesson.</Text>
+        <div ref={containerRef} style={{  }}>
+        <Box mb={{ base: '100px', md: '100px', xl: '100px' }} className='box'></Box>
+        <Card backgroundImage={NFTBanner} backgroundRepeat={'no-repeat'} backgroundSize={'cover'} justifyContent={'center'} height={{sm: 'auto', md: 'auto', lg: '180px'}} width={'100%'} overflow={{ sm: 'auto', xl: 'unset' }}>
+          <Box display={{ base: 'block', xl: 'flex' }} justifyContent="space-between" alignItems={'center'}>
+            <Box display={'flex'} flexDirection={'column'} >
+              <Text fontSize={'1.8rem'} fontWeight={700} color={'#fff'} pb={{sm: '10px', md: '0'}} display={'flex'} alignItems={'center'} >Your Creations<Img src={Rocket} height={'50px'} width={'50px'} ml={'20px'} transform={'rotate(40deg)'} /></Text>
+              <Text fontSize={'15px'} color={'#fff'} letterSpacing={{sm: '.4px',md: '1px' }}>Developing games that ignite curiosity, turning every challenge into a lesson.</Text>
             </Box>
-            <Button
-              mt="10px"
-              mb="15px"
-              mr="10px"
-              padding={5}
-              bg="#fff"
-              color="#3311db"
-              // w={150}
-              onClick={handleCourse}
-            >
-              Create Game
-            </Button>
+            <Box display={'flex'} alignItems={'center'} justifyContent={'start'} mt={{base: '15px',sm: '15px', lg: '0'}}>
+              <Button                
+                padding={5}
+                bg="#fff"
+                color="#2b2b2b"
+                // w={150}
+                onClick={handleCourse}
+              >
+                Create Game
+              </Button>
+            </Box>
             {/* <Button mt='10px' mb='15px' padding={2} background='#3311db' color='#fff' w={70} onClick={handleNavigate}>New</Button> */}
           </Box>
 
         </Card>
-        <Card>
-          <Flex gridArea='1 / 1 / 2 / 2' display={{ base: 'block', lg: 'flex' }}>
+        <Card m={'30px 0'}>
+          <Flex gridArea='1 / 1 / 2 / 2' display={{ base: 'block', md:'flex', lg: 'flex' }}>
             <Tabs variant='soft-rounded' colorScheme='brandTabs'>
-              <TabList mx={{ base: '10px', lg: '30px' }} overflowX={{ sm: 'scroll', lg: 'unset' }}>
-                <Flex>
-                  <Tab
-                    pb='0px'
+              <TabList overflowX={{ base: 'auto', sm: 'unset' }}>
+                <Flex width={'100%'} justifyContent={{base: 'space-between', sm: 'space-between'}}>
+                  <Tab                                   
+                    p={'0.5rem 0 0 0'}
                     flexDirection='column'
                     onClick={function () {
                       setTabState('Creation');
                     }}
-                    me='10px'
+                    me={{base: '10px', sm: '10px', md: '30px'}}
                     bg='unset'
                     _selected={{
                       bg: 'none'
@@ -957,10 +997,10 @@ const Game: React.FC = () => {
                     _focus={{ border: 'none' }}
                     minW='max-content'>
                     <Flex align='center'>
-                      <Text color={textColor} fontSize='lg' fontWeight='500' me='12px'>
-                        Draft
+                      <Text color={textColor} display={'flex'} alignItems={'center'} fontSize={{base: '14px', sm: '14px', md: '18px'}} fontWeight='500' me={{base: '7px', sm: '7px', md: '12px'}}>
+                        <Icon as={RiDraftLine} fontSize={'17px'} mr={{base: 1, sm: 1, md: 2}} color={textColor} /> Draft
                       </Text>
-                      <Text color='secondaryGray.600' fontSize='md' fontWeight='400'>
+                      <Text color='secondaryGray.600' fontSize={{base: '13px', sm: '13px', md: '17px'}} fontWeight='400'>
                         {showcount.draftCount}
                       </Text>
                     </Flex>
@@ -977,8 +1017,8 @@ const Game: React.FC = () => {
                     onClick={function () {
                       setTabState('Review');
                     }}
-                    pb='0px'
-                    me='10px'
+                    p={'0.5rem 0 0 0'}
+                    me={{base: '10px', sm: '10px', md: '30px'}}
                     bg='unset'
                     _selected={{
                       bg: 'none'
@@ -987,10 +1027,10 @@ const Game: React.FC = () => {
                     minW='max-content'
                     flexDirection='column'>
                     <Flex align='center'>
-                      <Text color={textColor} fontSize='lg' fontWeight='500' me='12px'>
-                        Launched
+                      <Text color={textColor} display={'flex'} alignItems={'center'} fontSize={{base: '14px', sm: '14px', md: '18px'}} fontWeight='500'  me={{base: '7px', sm: '7px', md: '12px'}}>
+                        <Icon as={MdOutlineRocketLaunch} fontSize={'17px'} mr={{base: 1, sm: 1, md: 2}} color={textColor} /> Launched
                       </Text>
-                      <Text color='secondaryGray.600' fontSize='md' fontWeight='400'>
+                      <Text color='secondaryGray.600' fontSize={{base: '13px', sm: '13px', md: '17px'}} fontWeight='400'>
                         {showcount.internalCount}
                       </Text>
                     </Flex>
@@ -1004,7 +1044,7 @@ const Game: React.FC = () => {
                     />
                   </Tab>
                   <Tab
-                    pb='0px'
+                    p={'0.5rem 0 0 0'}                    
                     flexDirection='column'
                     onClick={function () {
                       setTabState('Launched');
@@ -1016,10 +1056,10 @@ const Game: React.FC = () => {
                     _focus={{ border: 'none' }}
                     minW='max-content'>
                     <Flex align='center'>
-                      <Text color={textColor} fontSize='lg' fontWeight='500' me='12px'>
-                        public
+                      <Text color={textColor} display={'flex'} alignItems={'center'} fontSize={{base: '14px', sm: '14px', md: '18px'}} fontWeight='500'  me={{base: '7px', sm: '7px', md: '12px'}}>
+                        <Icon as={MdOutlinePublic} fontSize={'17px'} mr={{base: 1, sm: 1, md: 2}} color={textColor} /> Public
                       </Text>
-                      <Text color='secondaryGray.600' fontSize='md' fontWeight='400'>
+                      <Text color='secondaryGray.600' fontSize={{base: '13px', sm: '13px', md: '17px'}} fontWeight='400'>
                         {showcount.publicCount}
                       </Text>
                     </Flex>
@@ -1040,11 +1080,12 @@ const Game: React.FC = () => {
 						<TabPanel px='0px'>{panelExample}</TabPanel>
 					</TabPanels> */}
             </Tabs>
-            <VSeparator mx='30px' h='100%' />
+            {/* <VSeparator mx='30px' h='100%' /> */}
 
 
-            <InputGroup w={{ base: '100%', md: '300px' }} ml="auto">
+            <InputGroup w={{ base: '100%', md: '300px' }} mt={{base: '15px', sm: '15px', md: '0'}} ml="auto" alignItems={'center'}>
               <InputLeftElement
+                top={'inherit'}
                 children={
                   <IconButton
                     aria-label="search"
@@ -1073,7 +1114,7 @@ const Game: React.FC = () => {
                 onChange={(e) => setFil(e.target.value)}
                 bg={'#f9f9f9'}
                 borderRadius={'14px'}
-                w={{ base: '200px', xl: '300px' }}
+                w={{ base: '200px', sm: '100%', md: '300px', xl: '300px' }}
               />
               {fil && (
                 <InputRightElement
@@ -1120,7 +1161,11 @@ const Game: React.FC = () => {
           Games
         </Text> */}
           <SimpleGrid columns={{ base: 1, md: 3 }} gap='40px'>
-
+          {loadingdata && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(10px)' }}>
+          <img src={loadingImage} alt="Loading" style={{ width: '10%', maxWidth: '100px', backgroundColor: 'transparent' }}/>
+        </div>
+      )}
             {gamelist &&
               gamelist
                 .filter((item) => {
@@ -1142,8 +1187,8 @@ const Game: React.FC = () => {
                   <GameCard
                     name={game.gameTitle}
                     author={game.gameSkills}
-                    // image={game.gameBackgroundId && game?.image.gasAssetImage}
-                    image={'http://35.183.46.127:5555/uploads/background/29977_1701772077260.jpg'}
+                    image={game.gameBackgroundId && game?.image.gasAssetImage}
+                    // image={'http://35.183.46.127:5555/uploads/background/29977_1701772077260.jpg'}
                     tabState={tabState}
                     id={game.gameId}
                     game={game}
@@ -1160,6 +1205,7 @@ const Game: React.FC = () => {
           </SimpleGrid>
         </Grid>
         {openCourse ? <AddCourse setOpenCourse={setOpenCourse} /> : null}
+        </div>
       </Box>
       {isOpen ? <Popup setIsConfirm={setIsConfirm} setIsOpen={setIsOpen} msg={msgtwo} setmsg={setMsgtwo} /> : null}
       {alert ? <OnToast msg={msg} status={toastStatus} setAlert={setAlert}

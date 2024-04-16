@@ -9,10 +9,11 @@ import {
   useColorModeValue,
   Tag,
   TagLabel,
+  Box,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import Card from 'components/card/Card';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   getGameById,
   getSkills,
@@ -25,6 +26,7 @@ export default function Settings(props: {
   data?: any;
 }) {
   const { id } = useParams();
+  const navigate = useNavigate();
   // eslint-disable-next-line
   const { name, avatar, banner, data } = props;
   // Chakra Color Mode
@@ -51,13 +53,11 @@ export default function Settings(props: {
     if (result?.status !== 'Success') {
       return console.log('getbackruond error:' + result?.message);
     }
-
-    console.log('playpreview', id);
-    const newTab = window.open('', '_blank');
-
+    // const newTab = window.open('', '_self');
     // Navigate the new tab to the desired URL
     // newTab.location.assign(`/admin/game/preview/${id}`);
-    newTab.location.assign(`/game/creator/demoplay/${id}`);
+    // newTab.location.assign(`/game/creator/demoplay/${id}`);
+    navigate(`/game/creator/demoplay/${id}`)
   };
 
   const gameSkill = async () => {
@@ -97,7 +97,7 @@ export default function Settings(props: {
       <Flex
         w="100%"
         bgGradient="linear(to-b, brand.400, brand.600)"
-        minH="127px"
+        minH={{sm:'100px',md:"127px"}}
         borderRadius="16px"
       ></Flex>
       <Avatar
@@ -109,21 +109,23 @@ export default function Settings(props: {
         mt="-43px"
         mb="15px"
       />
+      <Box>
       <Text fontSize="2xl" textColor={textColorPrimary} fontWeight="700">
         {profile.gameTitle}
       </Text>
-      <Flex align="center" mx="auto" px="15px">
+      <Flex justifyContent="center" mx="auto" px="15px">
         <Text
           me="4px"
           color={textColorSecondary}
           fontSize="sm"
           fontWeight="400"
           lineHeight="100%"
+          textAlign={'center'}
         >
           {profile.gameStoryLine}{' '}
         </Text>
       </Flex>
-      <Flex align="right" mx="auto" px="15px">
+      <Flex justifyContent="center" mb="15px" mt="15px" mx="auto" px="15px">
         <Text
           color={textColorSecondary}
           fontSize="sl"
@@ -137,7 +139,7 @@ export default function Settings(props: {
         <Text fontSize="xl" color={textColorPrimary} fontWeight="bold">
           Learning Outcomes :
         </Text>
-        <Text fontSize="md" color={textColorSecondary}>
+        <Text fontSize="md" mb="15px" mt="15px" color={textColorSecondary}>
           {profile.gameLearningOutcome}
         </Text>
       </Flex>
@@ -145,7 +147,7 @@ export default function Settings(props: {
         <Text fontSize="xl" color={textColorPrimary} fontWeight="bold">
           Skills :
         </Text>
-        <Text fontSize="md" color={textColorSecondary}>
+        <Text fontSize="md" mb="15px" mt="15px" color={textColorSecondary}>
           {authorArray
             .map((authorItem, index) => {
               const skillName = findSkillName(authorItem);
@@ -169,23 +171,28 @@ export default function Settings(props: {
         <Text fontSize="xl" color={textColorPrimary} fontWeight="bold">
           Duration :
         </Text>
-        <Text fontSize="md" color={textColorSecondary}></Text>
+        <Text fontSize="md" mb="15px" mt="15px" color={textColorSecondary}></Text>
       </Flex>
-
-      <Flex align="right" mx="auto" px="15px" marginLeft={'80%'}>
+      </Box>
+      <Box w={'100%'} display={'flex'} justifyContent={'center'} mb="15px" mt="15px">
+        <Box w={'80%'} display={'flex'} justifyContent={'flex-end'}>
         <Button
           variant="darkBrand"
           color="white"
           fontSize="sm"
           fontWeight="500"
           borderRadius="70px"
+          w={{sm:'100%', md:'200px'}}
           px="24px"
           py="5px"
           onClick={playPerview}
         >
           See Preview
         </Button>
-      </Flex>
+        </Box>
+      </Box>
+      {/* <Flex align="right" mx="auto" px="15px" marginLeft={'80%'}>
+      </Flex> */}
     </Card>
   );
 }
