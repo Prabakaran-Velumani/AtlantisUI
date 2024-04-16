@@ -1671,9 +1671,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       {/* <Text className='text'>{BlockNo ? Math.floor(progressPercentage) : 0}%</Text> */}
                       <Text className='text'>{true ? Math.floor(50) : 0}%</Text>
                       <Box className='progressing'>
+                      {/* <SimpleGrid columns={10}> */}
                         {Array.from({ length: Math.floor(50 / 10) }, (_, index) => (
                           <Box key={index} className='level'></Box>
                         ))}
+                        {/* </SimpleGrid> */}
                       </Box>
                     </Box>
                   </Tooltip>

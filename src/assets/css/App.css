@@ -5326,11 +5326,11 @@ grid-row: 1 / 2;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: 47vh;
+  height: 42vh;
   width: calc(47vh - (-20vh));
   /* overflow-x: clip; */
   overflow-y: auto;
-  transform: translateY(16%);
+  transform: translateY(19%);
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .top-title {

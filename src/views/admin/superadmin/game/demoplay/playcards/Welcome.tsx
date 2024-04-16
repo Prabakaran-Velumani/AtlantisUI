@@ -143,6 +143,8 @@ const Welcome: React.FC<{
             <Img src={screen} className="welcome-pad" />
           </Box>
           <Box className="top-title">
+          <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+            <Box w='56%'>
             <Text
               className="title"
               fontSize={{
@@ -154,6 +156,8 @@ const Welcome: React.FC<{
             >
               {formData.gameTitle}
             </Text>
+            </Box>
+          </Box>
             {formData.gameIsShowGameDuration === 'true' && (
               <Text
                 className="duration"
