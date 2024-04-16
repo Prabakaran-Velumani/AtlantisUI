@@ -3766,6 +3766,7 @@ grid-row: 1 / 2;
 }
 
 .screenshot_content {
+  display: flex;
   transform: translate(-2px, calc(90vh - 87vh));
 }
 
