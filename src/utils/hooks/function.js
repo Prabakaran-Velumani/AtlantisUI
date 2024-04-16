@@ -24,3 +24,34 @@ export async function preloadedImages(imageList) {
   return preloadedImages;
 }
 
+
+export async function preloadedGLBFiles(glbList) {
+  const preloadedGLBFiles = {};
+
+  // Function to preload a single GLB file
+  async function preloadGLB(url) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Failed to load GLB file: ${url}`);
+      }
+      const buffer = await response.arrayBuffer();
+      return URL.createObjectURL(new Blob([buffer]));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  await Promise.all(
+    glbList.map(async (item) => {
+      try {
+        const preloadedData = await preloadGLB(item.src);
+        preloadedGLBFiles[item.assetType] = preloadedData;
+      } catch (error) {
+        console.error(error);
+      }
+    })
+  );
+
+  return preloadedGLBFiles;
+}

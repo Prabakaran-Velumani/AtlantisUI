@@ -14,7 +14,7 @@ import React, {
   useState,
   lazy
 } from 'react';
-import { preloadedImages } from 'utils/hooks/function';
+import { preloadedImages, preloadedGLBFiles } from 'utils/hooks/function';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { json, useParams } from 'react-router-dom';
 import {
@@ -46,7 +46,7 @@ const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
   const InitialScreenId = id ? 10 : 1; //replace 10: game Intro, 1: welcome screen by which screen you want to play
-  const [gameInfo, setGameInfo] = useState<any | null>();
+  const [gameInfo, setGameInfo] = useState<any | null>(null);
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [currentScreenId, setCurrentScreenId] = useState<number>(InitialScreenId);
@@ -64,14 +64,37 @@ const GamePreview = () => {
   const [apiImageSet, setApiImageSet] = useState<any>();
   const [staticAssetImageUrls, setStaticAssetImageUrls] = useState<any>(null);
   const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
-  
+  const [componentsLoaded, setComponentsLoaded] = useState(false);
+  const [loadedGLBs, setLoadedGLBs]=useState<any>(null);
   useEffect(() => {
     const fetchData = async () => {
       // assetImageSrc['characterGlb'] = CharacterGlb; 
       const resolvedResult: any = await preloadedImages(assetImageSrc);
       setStaticAssetImageUrls(resolvedResult);
     };
+
+    const loadComponents = async () => {
+      // Load all the lazy-loaded components
+      await Promise.all([EntirePreview]);
+      setComponentsLoaded(true);
+    };
+    const loadGlbFiles = async () => {
+      try {
+        // assetImageSrc['characterGlb'] = CharacterGlb; 
+        // { assetType: 'characterGlb', src: characterGlb },
+        const preloadedGLBs:any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: CharacterGlb }]);
+        // Use preloadedGLBs[CharacterGlb] if you need the preloaded GLB data
+        setLoadedGLBs(preloadedGLBs);
+      } catch (error) {
+        console.error('Error preloading GLB file:', error);
+      }
+    };
+
+
     fetchData();
+    loadGlbFiles();
+    loadComponents();
+
   }, []);
 
   useEffect(() => {
@@ -422,6 +445,7 @@ const GamePreview = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      // const glbAndApiImageSet = {...apiImageSet, glb: CharacterGlb};
       const resolvedResult: any = await preloadedImages(apiImageSet);
       setApiUrlAssetImageUrls(resolvedResult);
     };
@@ -429,16 +453,20 @@ const GamePreview = () => {
   }, [apiImageSet]);
 
   const preloadedAssets = useMemo(() => {
-    return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls };
-  }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
+    
+    return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls, ...loadedGLBs };
+  }, [apiUrlAssetImageUrls, staticAssetImageUrls, loadedGLBs]);
 
+  useEffect(()=>{
+    console.log('loadedGLBs',loadedGLBs);
+  },[loadedGLBs])
   useEffect(() => {
-    if (gameInfo && Object.keys(preloadedAssets).length > 0) {
+    if (gameInfo && Object.keys(preloadedAssets).length > 0 && componentsLoaded === true) {
       setContentReady(true);
     } else {
       setContentReady(false);
     }
-  }, [gameInfo, preloadedAssets]);
+  }, [gameInfo, preloadedAssets, componentsLoaded]);
 
   return (
     <>
