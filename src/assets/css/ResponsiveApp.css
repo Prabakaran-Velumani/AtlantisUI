@@ -254,7 +254,7 @@
     height: 100vw !important;   
   }
   .EntirePreview .comple-screen .title {    
-    transform: translateY(-37vw);
+    transform: translateY(-35vw);
   }
   .EntirePreview .comple-screen .title p {
     font-size: 4vw;

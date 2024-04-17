@@ -362,20 +362,17 @@ const styleflex = {};
                                {formData.gameFeedBackLink}
                              </a>
                            </Text>
-                         </div>
-                       
+                         </div>                        
                        </>
                      )}
-                   </Box>
-                 
-                 </Box>
-                 
+                   </Box>                 
+                 </Box>                 
                </>
              )}      
            </Box>         
          </Box>
          <Box className='next-btn'>
-           <Img src={next} />
+           <Img src={next} onClick={()=>setCurrentScreenId(13)}/>
          </Box>
          {/* <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'100px', right:'0' , justifyContent:'center'}}>
            <Img src={next} />

@@ -2595,7 +2595,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       preloadedAssets={preloadedAssets}
                     />
                   );
-
                 case 15:
                   return (
                     <>
@@ -2633,7 +2632,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       </Box> */}
                     </>
                   );
-
                 default:
                   console.log(
                     'game details of the data',

@@ -1,8 +1,4 @@
-import {
-  Box,
-  Icon,
-  useToast,
-} from '@chakra-ui/react';
+import { Box, Icon, useToast } from '@chakra-ui/react';
 
 import React, {
   Suspense,
@@ -12,7 +8,7 @@ import React, {
   useMemo,
   useRef,
   useState,
-  lazy
+  lazy,
 } from 'react';
 import { preloadedImages, preloadedGLBFiles } from 'utils/hooks/function';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
@@ -26,7 +22,8 @@ import { API_SERVER } from 'config/constant';
 import { IoIosRefresh } from 'react-icons/io';
 import PlayInfo from './playcards/playinfo';
 import CharacterGlb from 'assets/img/games/Character_sample.glb';
-const EntirePreview = lazy(()=> import ('./EntirePreview'));
+import { motion } from 'framer-motion'
+const EntirePreview = lazy(() => import('./EntirePreview'));
 const gameScreens = [
   'Completion',
   'Leaderboard',
@@ -51,7 +48,7 @@ const GamePreview = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [currentScreenId, setCurrentScreenId] =
     useState<number>(InitialScreenId);
-      // useState<number>(5);
+  // useState<number>(5);
   const [profile, setProfile] = useState({
     score: [],
     completedLevels: ['1'],
@@ -67,10 +64,10 @@ const GamePreview = () => {
   const [staticAssetImageUrls, setStaticAssetImageUrls] = useState<any>(null);
   const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
   const [componentsLoaded, setComponentsLoaded] = useState(false);
-  const [loadedGLBs, setLoadedGLBs]=useState<any>(null);
+  const [loadedGLBs, setLoadedGLBs] = useState<any>(null);
   useEffect(() => {
     const fetchData = async () => {
-      // assetImageSrc['characterGlb'] = CharacterGlb; 
+      // assetImageSrc['characterGlb'] = CharacterGlb;
       const resolvedResult: any = await preloadedImages(assetImageSrc);
       setStaticAssetImageUrls(resolvedResult);
     };
@@ -82,9 +79,11 @@ const GamePreview = () => {
     };
     const loadGlbFiles = async () => {
       try {
-        // assetImageSrc['characterGlb'] = CharacterGlb; 
+        // assetImageSrc['characterGlb'] = CharacterGlb;
         // { assetType: 'characterGlb', src: characterGlb },
-        const preloadedGLBs:any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: CharacterGlb }]);
+        const preloadedGLBs: any = await preloadedGLBFiles([
+          { assetType: 'characterGlb', src: CharacterGlb },
+        ]);
         // Use preloadedGLBs[CharacterGlb] if you need the preloaded GLB data
         setLoadedGLBs(preloadedGLBs);
       } catch (error) {
@@ -92,11 +91,9 @@ const GamePreview = () => {
       }
     };
 
-
     fetchData();
     loadGlbFiles();
     loadComponents();
-
   }, []);
 
   useEffect(() => {
@@ -104,7 +101,7 @@ const GamePreview = () => {
   }, [uuid]);
   useEffect(() => {
     id && fetchCreatorDemoData();
-    handleFullScreen()
+    handleFullScreen();
   }, [id]);
 
   const element = document.getElementById('root');
@@ -113,10 +110,9 @@ const GamePreview = () => {
       try {
         if (document.fullscreenEnabled) {
           if (!document.fullscreenElement) {
-            element.requestFullscreen()
-              .catch((error) => {
-                console.log('Error entering fullscreen mode:', error.message);
-              });
+            element.requestFullscreen().catch((error) => {
+              console.log('Error entering fullscreen mode:', error.message);
+            });
           } else {
             console.warn('Document is already in fullscreen mode');
           }
@@ -128,7 +124,7 @@ const GamePreview = () => {
         console.error('Error requesting fullscreen:', error);
       }
     }
-  }
+  };
 
   /*** Collect details of a game based on uuid not gameId
    * This API took gameId based on uuid
@@ -146,7 +142,7 @@ const GamePreview = () => {
     if (!gamedata?.error && gamedata) {
       updateCreatorGameInfo(gamedata);
     }
-  };  
+  };
   const updateCreatorGameInfo = async (info: any) => {
     const {
       gameview,
@@ -229,18 +225,16 @@ const GamePreview = () => {
       },
     );
     let gameQuestBadges = await Promise.all(
-      info?.assets?.badges.map(
-        async (item: Record<string, string>) => {
-          Object.entries(item).forEach(([key, value]) => {
-            let objkeyValue = key.split('_')[1];
-            let objKey = `Quest_${objkeyValue}`;
-            let objKeyValue = API_SERVER + '/' + value;
-            apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
-          });
-          setApiImageSet(apiImageSetArr);
-          return true;
-        },
-      ),
+      info?.assets?.badges.map(async (item: Record<string, string>) => {
+        Object.entries(item).forEach(([key, value]) => {
+          let objkeyValue = key.split('_')[1];
+          let objKey = `Quest_${objkeyValue}`;
+          let objKeyValue = API_SERVER + '/' + value;
+          apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
+        });
+        setApiImageSet(apiImageSetArr);
+        return true;
+      }),
     );
   };
 
@@ -321,7 +315,7 @@ const GamePreview = () => {
         ReviewerDeleteStatus: ReviewingCreator
           ? ReviewingCreator?.ctDeleteStatus
           : null,
-        },
+      },
       gameQuest: gameQuest, //used for completion screen
       completionQuestOptions: completionOptions,
       reviews: reviews,
@@ -353,18 +347,16 @@ const GamePreview = () => {
       },
     );
     let gameQuestBadges = await Promise.all(
-      info?.assets?.badges.map(
-        async (item: Record<string, string>) => {
-          Object.entries(item).forEach(([key, value]) => {
-            let objkeyValue = key.split('_')[1];
-            let objKey = `Quest_${objkeyValue}`;
-            let objKeyValue = API_SERVER + '/' + value;
-            apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
-          });
-          setApiImageSet(apiImageSetArr);
-          return true;
-        },
-      ),
+      info?.assets?.badges.map(async (item: Record<string, string>) => {
+        Object.entries(item).forEach(([key, value]) => {
+          let objkeyValue = key.split('_')[1];
+          let objKey = `Quest_${objkeyValue}`;
+          let objKeyValue = API_SERVER + '/' + value;
+          apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
+        });
+        setApiImageSet(apiImageSetArr);
+        return true;
+      }),
     );
   };
 
@@ -455,68 +447,78 @@ const GamePreview = () => {
   }, [apiImageSet]);
 
   const preloadedAssets = useMemo(() => {
-    
     return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls, ...loadedGLBs };
   }, [apiUrlAssetImageUrls, staticAssetImageUrls, loadedGLBs]);
 
-  useEffect(()=>{
-    console.log('loadedGLBs',loadedGLBs);
-  },[loadedGLBs])
   useEffect(() => {
-    if (gameInfo && Object.keys(preloadedAssets).length > 0 && componentsLoaded === true) {
+    console.log('loadedGLBs', loadedGLBs);
+  }, [loadedGLBs]);
+  useEffect(() => {
+    if (
+      gameInfo &&
+      Object.keys(preloadedAssets).length > 0 &&
+      componentsLoaded === true
+    ) {
       setContentReady(true);
     } else {
-      setContentReady(false);                                                
+      setContentReady(false);
     }
   }, [gameInfo, preloadedAssets, componentsLoaded]);
 
   return (
     <>
-    <Suspense fallback={<h1>Loading please wait...</h1>}>
-        {contentReady && (
-      gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
-      gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
-        <h1> {'Your are Not Authorized....'}</h1>
-      ) : (
-        gameInfo?.gameId &&
-        (
-         (
-          <ScoreContext.Provider value={{ profile, setProfile }}>
-            <Box id="container" >
-              {isHovered && (
-                <Icon
-                  as={IoIosRefresh}
-                  position={'fixed'}
-                  top={'20px'}
-                  left={'48%'}
-                  color={'white'}
-                  zIndex={999999}
-                  width={'60px'}
-                  height={'60px'}
-                  padding={'20px'}
-                  borderRadius={'50%'}
-                  bg={'grey'}
-                  cursor={'pointer'}
-                  onClick={() => window.location.reload()}
-                />
-              )}
-              <EntirePreview
-                currentScore={currentScore}
-                setCurrentScore={setCurrentScore}
-                gameScreens={gameScreens}
-                currentScreenId={currentScreenId}
-                setCurrentScreenId={setCurrentScreenId}
-                gameInfo={gameInfo}
-                handleSubmitReview={handleSubmitReview}
-                isReviewDemo={id ? false : true}
-                preloadedAssets={preloadedAssets}
-              />
-            </Box>
-          </ScoreContext.Provider>
-        ))
-      )
-        )}
-    </Suspense>
+      <Suspense fallback={<h1>Loading please wait...</h1>}>
+        {contentReady &&
+          (gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
+          gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
+            <h1> {'Your are Not Authorized....'}</h1>
+          ) : (
+            gameInfo?.gameId && (
+              <ScoreContext.Provider value={{ profile, setProfile }}>
+                {/* <motion.div
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  }}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                > */}
+                  <Box id="container">
+                    {isHovered && (
+                      <Icon
+                        as={IoIosRefresh}
+                        position={'fixed'}
+                        top={'20px'}
+                        left={'48%'}
+                        color={'white'}
+                        zIndex={999999}
+                        width={'60px'}
+                        height={'60px'}
+                        padding={'20px'}
+                        borderRadius={'50%'}
+                        bg={'grey'}
+                        cursor={'pointer'}
+                        onClick={() => window.location.reload()}
+                      />
+                    )}
+                    <EntirePreview
+                      currentScore={currentScore}
+                      setCurrentScore={setCurrentScore}
+                      gameScreens={gameScreens}
+                      currentScreenId={currentScreenId}
+                      setCurrentScreenId={setCurrentScreenId}
+                      gameInfo={gameInfo}
+                      handleSubmitReview={handleSubmitReview}
+                      isReviewDemo={id ? false : true}
+                      preloadedAssets={preloadedAssets}
+                    />
+                  </Box>
+                {/* </motion.div> */}
+              </ScoreContext.Provider>
+            )
+          ))}
+      </Suspense>
     </>
   );
 };

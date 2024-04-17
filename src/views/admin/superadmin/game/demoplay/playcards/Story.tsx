@@ -856,7 +856,7 @@ const Story: React.FC<{
                 '-ms-overflow-style': 'none', // For IE and Edge
               }}
             >
-              <Box transform={'translateY(16%)'}>
+              <Box transform={'translateY(26%)'}>
                 {showTypingEffect === false ? <TypingEffect
                   text={remainingSentences.toString()}
                   speed={50}
@@ -950,6 +950,7 @@ const Story: React.FC<{
               fontSize={{ base: '30px', lg: '1.8vw' }}
               bottom={'38px'}
               fontFamily={'AtlantisContent'}
+              transform={'translateY(26%)'}
             >
               {showTypingEffect === false ? <TypingEffect
                 text={remainingSentences.toString()}

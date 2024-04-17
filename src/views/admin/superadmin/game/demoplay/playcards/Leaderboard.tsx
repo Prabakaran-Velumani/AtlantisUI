@@ -280,7 +280,6 @@ const LeaderBoard: React.FC<{
                       </Box>
                     ))}
                 </Box>                
-             
             </Box>
             <Box className='top-bar'>
               <Box className='list-wrapper'

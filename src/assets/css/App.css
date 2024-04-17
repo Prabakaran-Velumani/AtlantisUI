@@ -3244,18 +3244,19 @@ transform: translate(-167px, -84px);
 }
 
 .feedback_screenshot {
-  width: 80vw !important;
-  height: 80vh !important;
-  left: 3% !important;
-  top: 4% !important;
+  width:  80vw !important;
+  height: 80vh ;
+  left: 3% ;
+  top: -3% ;
 }
 
 @media (orientation: portrait) {
   .feedback_screenshot {
-    width: 100vh !important;
+    width: 56vh !important;
     height: 80vw !important;
     left: -3% !important;
-    top: 30% !important;
+    top: 10% !important;
+    margin: auto !important;
     transform: rotate(90deg) !important;
   }
 
@@ -3884,12 +3885,12 @@ grid-row: 1 / 2;
   transition: transform 1s ease;
 }
 
-.feedback_screenshot {
+/* .feedback_screenshot {
   width: 80vw !important;
   height: 80vh !important;
   left: 3% !important;
   top: -3% !important;
-}
+} */
 
 .close_model {
   z-index: 9999999;
@@ -5569,7 +5570,26 @@ grid-row: 1 / 2;
   overflow-y: auto;
   transform: translateY(19%);
 }
-
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box::-webkit-scrollbar {
+  width: 3vh;
+  /*height: 300px;*/
+  border-radius: 30px;
+  background-size: contain;
+}
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box::-webkit-scrollbar-track {
+  background: url('../img/games/Leaderboard\ Scroll\ Bar.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+  .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box::-webkit-scrollbar-thumb {
+    background: url('../img/games/Leaderboard\ Scroll\ Cross.png');
+    background-repeat: no-repeat;
+    border-radius: 30px;
+    cursor: pointer;
+    background-size: contain;
+    /*height: 300px;*/
+    /* background-size: 26px 63px; */
+  }
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .table-heading {
   display: flex;
   width: 100%;

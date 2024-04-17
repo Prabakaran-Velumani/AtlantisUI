@@ -251,83 +251,97 @@ const ChapterPage: React.FC<{
   console.log('queststate', questState);
   return (
     <>
-      <Box
-        position="relative"
-        maxW="100%"
-        w={'100vw'}
-        height="100vh"
-        backgroundImage={imageSrc}
-        backgroundSize={'cover'}
-        backgroundRepeat={'no-repeat'}
-        className="chapter_potrait"
+      <motion.div
+        initial={{ backgroundColor: 'rgba(0, 0, 0, 2)' }}
+        animate={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
+        transition={{ duration: 2 }}
       >
-        <Grid
-          templateColumns="repeat(1, 1fr)"
-          gap={4}
-          position="absolute"
-          top="50%"
-          left="50%"
-          transform="translate(-50%, -50%)"
-          width="75%"
+        <Box
+          position="relative"
+          maxW="100%"
+          w={'100vw'}
+          height="100vh"
+          backgroundImage={imageSrc}
+          backgroundSize={'cover'}
+          backgroundRepeat={'no-repeat'}
+          className="chapter_potrait"
         >
-          <GridItem colSpan={1} position={'relative'}>
-            <Img
-              src={preloadedAssets.QueueBackground}
-              h={'auto'}
-              maxW={'100%'}
-              loading="lazy"
-            />
-            <Box className="chapter_title">Level</Box>
-            <Box className={'chapters_list_box'}>
-              <Box w={'90%'}>
-                <motion.div
-                  className="container"
-                  variants={container}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={2}>
-                    {demoBlocks &&
-                      Object.keys(demoBlocks).map((it: any, num: number) => {
-                        return (
-                          <motion.div
-                            key={num}
-                            className="item"
-                            variants={item}
-                          >
-                            <Box
-                              position={'relative'}
-                              onClick={() => handleChapter(it)}
+          <Grid
+            templateColumns="repeat(1, 1fr)"
+            gap={4}
+            position="absolute"
+            top="50%"
+            left="50%"
+            transform="translate(-50%, -50%)"
+            width="75%"
+          >
+            <GridItem colSpan={1} position={'relative'}>
+              <Img
+                src={preloadedAssets.QueueBackground}
+                h={'auto'}
+                maxW={'100%'}
+                loading="lazy"
+              />
+              <Box className="chapter_title">Level</Box>
+              <Box className={'chapters_list_box'}>
+                <Box w={'90%'}>
+                  <motion.div
+                    className="container"
+                    variants={container}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={2}>
+                      {demoBlocks &&
+                        Object.keys(demoBlocks).map((it: any, num: number) => {
+                          return (
+                            <motion.div
+                              key={num}
+                              className="item"
+                              variants={item}
                             >
-                              <Img src={preloadedAssets.Demo} width={'98%'} />
-                              <Img
-                                className="queue-screen"
-                                position={'absolute'}
-                                left={'-2px'}
-                                top={'-2px'}
-                                src={preloadedAssets.QueueScreen}
-                                zIndex={999}
-                              />
-                              <Box w={'100%'} position={'absolute'} top={'0'}>
-                                <Text
-                                  textAlign={'center'}
-                                  right={'65px'}
-                                  fontFamily={'AtlantisText'}
-                                  color={'#D9C7A2'}
-                                  zIndex={999999}
-                                  fontSize={'5vh'}
-                                  className={'quest_title'}
-                                  textShadow="-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
-                                >
-                                  Quest {num + 1}
-                                </Text>
-                              </Box>
-                              {/* {profile.completedLevels.includes(it) ? ( */}
-                              {(questState[it] === 'completed' || questState[it] === 'replayallowed') ? (
-                                <Box className={'completed_level'}>
-                                  <Box position={'relative'} display={'flex'} justifyContent={'center'}> 
-                                    <Img w={'40%'} h={'auto'} src={preloadedAssets?.Completed} />
-                                    {/* <Text
+                              <Box
+                                position={'relative'}
+                                onClick={() => handleChapter(it)}
+                              >
+                                <Img src={preloadedAssets.Demo} width={'98%'} />
+                                <Img
+                                  className="queue-screen"
+                                  position={'absolute'}
+                                  left={'-2px'}
+                                  top={'-2px'}
+                                  src={preloadedAssets.QueueScreen}
+                                  zIndex={999}
+                                />
+                                <Box w={'100%'} position={'absolute'} top={'0'}>
+                                  <Text
+                                    textAlign={'center'}
+                                    right={'65px'}
+                                    fontFamily={'AtlantisText'}
+                                    color={'#D9C7A2'}
+                                    zIndex={999999}
+                                    fontSize={'5vh'}
+                                    className={'quest_title'}
+                                    textShadow="-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
+                                  >
+                                    Quest {num + 1}
+                                  </Text>
+                                </Box>
+                                {/* {profile.completedLevels.includes(it) ? ( */}
+                                {questState[it] === 'completed' ||
+                                questState[it] === 'replayallowed' ? (
+                                  <Box className={'completed_level'}>
+                                    <Box
+                                      position={'relative'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Img
+                                        w={'40%'}
+                                        h={'auto'}
+                                        src={preloadedAssets?.Completed}
+                                      />
+                                      {/* <Text
                                       position={'absolute'}
                                       textAlign={'center'}
                                       fontFamily={'AtlantisText'}
@@ -341,94 +355,96 @@ const ChapterPage: React.FC<{
                                     >
                                       Completed
                                     </Text> */}
+                                    </Box>
                                   </Box>
-                                </Box>
-                              ) : (
-                                ''
-                              )}
-                              <Box
-                                w={'100%'}
-                                position={'absolute'}
-                                bottom={'0'}
-                                color={'#D9C7A2'}
-                                fontFamily={'AtlantisText'}
-                                zIndex={999999}
-                              >
-                                <Text
-                                  className="amount-score"
-                                  textAlign={'center'}
-                                >
-                                  {(profile &&
-                                    profile.score &&
-                                    profile.score.length > 0 &&
-                                    profile.score.reduce(
-                                      (
-                                        accumulator: number,
-                                        currentValue: any,
-                                      ) => {
-                                        return currentValue.quest ===
-                                          parseInt(it)
-                                          ? accumulator + currentValue.score
-                                          : accumulator;
-                                      },
-                                      0,
-                                    )) ||
-                                    0}
-                                  /{questScores && questScores[it]}{' '}
-                                  <Icon as={BiMoney} />
-                                </Text>
-                              </Box>
-
-                              {profile.completedLevels.includes(it) ? (
-                                Object.entries(questState).map(
-                                  ([questId, status], index) =>
-                                    questId === it && status === 'completed' ? (
-                                      <Img
-                                        key={index}
-                                        src={preloadedAssets.Lock}
-                                        className="lock"
-                                        width={'97%'}
-                                        position={'absolute'}
-                                        bg={'#2b2828d6'}
-                                        top={'0'}
-                                      />
-                                    ) : questId === it &&
-                                      status ===
-                                        'replayallowed' ? null : questId ===
-                                        it && status === 'locked' ? (
-                                      <Img
-                                        key={index}
-                                        src={preloadedAssets.Lock}
-                                        className="lock"
-                                        width={'97%'}
-                                        position={'absolute'}
-                                        bg={'#2b2828d6'}
-                                        top={'0'}
-                                      />
-                                    ) : questId === it &&
-                                      status === 'Started' ? null : null,
-                                )
-                              ) : (
-                                <Img
-                                  src={preloadedAssets.Lock}
-                                  className="lock"
-                                  width={'97%'}
+                                ) : (
+                                  ''
+                                )}
+                                <Box
+                                  w={'100%'}
                                   position={'absolute'}
-                                  bg={'#2b2828d6'}
-                                  top={'0'}
-                                />
-                              )}
-                            </Box>
-                          </motion.div>
-                        );
-                      })}
-                  </SimpleGrid>
-                </motion.div>
+                                  bottom={'0'}
+                                  color={'#D9C7A2'}
+                                  fontFamily={'AtlantisText'}
+                                  zIndex={999999}
+                                >
+                                  <Text
+                                    className="amount-score"
+                                    textAlign={'center'}
+                                  >
+                                    {(profile &&
+                                      profile.score &&
+                                      profile.score.length > 0 &&
+                                      profile.score.reduce(
+                                        (
+                                          accumulator: number,
+                                          currentValue: any,
+                                        ) => {
+                                          return currentValue.quest ===
+                                            parseInt(it)
+                                            ? accumulator + currentValue.score
+                                            : accumulator;
+                                        },
+                                        0,
+                                      )) ||
+                                      0}
+                                    /{questScores && questScores[it]}{' '}
+                                    <Icon as={BiMoney} />
+                                  </Text>
+                                </Box>
+
+                                {profile.completedLevels.includes(it) ? (
+                                  Object.entries(questState).map(
+                                    ([questId, status], index) =>
+                                      questId === it &&
+                                      status === 'completed' ? (
+                                        <Img
+                                          key={index}
+                                          src={preloadedAssets.Lock}
+                                          className="lock"
+                                          width={'97%'}
+                                          position={'absolute'}
+                                          bg={'#2b2828d6'}
+                                          top={'0'}
+                                        />
+                                      ) : questId === it &&
+                                        status ===
+                                          'replayallowed' ? null : questId ===
+                                          it && status === 'locked' ? (
+                                        <Img
+                                          key={index}
+                                          src={preloadedAssets.Lock}
+                                          className="lock"
+                                          width={'97%'}
+                                          position={'absolute'}
+                                          bg={'#2b2828d6'}
+                                          top={'0'}
+                                        />
+                                      ) : questId === it &&
+                                        status === 'Started' ? null : null,
+                                  )
+                                ) : (
+                                  <Img
+                                    src={preloadedAssets.Lock}
+                                    className="lock"
+                                    width={'97%'}
+                                    position={'absolute'}
+                                    bg={'#2b2828d6'}
+                                    top={'0'}
+                                  />
+                                )}
+                              </Box>
+                            </motion.div>
+                          );
+                        })}
+                    </SimpleGrid>
+                  </motion.div>
+                </Box>
               </Box>
-            </Box>
-          </GridItem>
-        </Grid>
-      </Box>
+            </GridItem>
+          </Grid>
+        </Box>
+      </motion.div>
     </>
   );
 };

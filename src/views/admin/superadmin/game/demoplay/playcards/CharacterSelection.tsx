@@ -233,6 +233,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   });
   return (
     <>
+   
       {formData && (formData?.gameLanguageId !== null) && (isLanguage !==null) ? (
         <Box id="container" className="Play-station">
           <Box className="top-menu-home-section">
@@ -430,6 +431,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
             </GridItem>
           </Grid>
         </Box>
+      
     </>
   );
 };
