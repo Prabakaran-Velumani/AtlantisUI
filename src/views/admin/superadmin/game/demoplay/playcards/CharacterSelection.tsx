@@ -364,6 +364,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                   <Button
                     w={'15%'}
                     bg={'none'}
+                    className='mouse_style'
                     _hover={{ bg: 'none' }}
                     onClick={selectPlayerClick}
                   ></Button>
@@ -371,7 +372,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 <Box className={'character_next'}>
                   <Box className={'character_buttons'}>
                     <Button
-                      className="btns left-btn"
+                      className="btns left-btn mouse_style"
                       bg={'none'}
                       _hover={{ bg: 'none' }}
                       onClick={() => setCurrentScreenId(1)}
@@ -391,8 +392,9 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       />
                     </Box>
                     <Button
-                      className="btns right-btn"
+                      className="btns right-btn mouse_style"
                       bg={'none'}
+                      
                       _hover={{ bg: 'none' }}
                       onClick={selectPlayerClick}
                     ></Button>
@@ -400,8 +402,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 </Box>
               </Box>
               {/* <Box
-              position={'fixed'}
-    
+              position={'fixed'}    
               // left={0}
               right={'0px'}
               bottom={0}

@@ -776,7 +776,7 @@ const Story: React.FC<{
                         mt={'20px'}
                         display={'flex'}
                         justifyContent={'center'}
-                        cursor={'pointer'}
+                        // cursor={'pointer'}
                         position={'fixed'}
                         top={'70%'}
                       >
@@ -876,7 +876,7 @@ const Story: React.FC<{
                   src={preloadedAssets.left}
                   w={'70px'}
                   h={'50px'}
-                  cursor={'pointer'}
+                  // cursor={'pointer'}
                   onClick={() => { SkipContentForBackNavigation() }}
                 />
               }
@@ -884,7 +884,7 @@ const Story: React.FC<{
                 src={preloadedAssets.right}
                 w={'70px'}
                 h={'50px'}
-                cursor={'pointer'}
+                // cursor={'pointer'}
                 onClick={() => Updatecontent()}
               />
             </Box>
@@ -969,7 +969,7 @@ const Story: React.FC<{
                 src={preloadedAssets.right}
                 w={'70px'}
                 h={'50px'}
-                cursor={'pointer'}
+                // cursor={'pointer'}
                 // onClick={() => {setCurrentPosition(0);getDataSection(data)}}
                 onClick={() => Updatecontent()}
               />
@@ -1039,7 +1039,7 @@ const Story: React.FC<{
                           mt={'20px'}
                           display={'flex'}
                           justifyContent={'center'}
-                          cursor={'pointer'}
+                          // cursor={'pointer'}
                           position={'absolute'}
                           bottom={'-8%'}
                         >

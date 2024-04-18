@@ -91,7 +91,7 @@ import { Dispatch } from '@reduxjs/toolkit'; // Import Dispatch type from @redux
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-
+import CenterMode from './MobileProgressBar'
 // @ts-ignore
 // import loadingImage from 'assets/img/games/loading.gif';
 import loadingImage from 'assets/img/games/loady.gif';
@@ -452,7 +452,7 @@ const GameCreation = () => {
   const [CompKeyCount, setCompKeyCount] = useState<any>(0);
   const [prevdata, setPrevdata] = useState();
   const [gameInfo, setGameInfo] = useState<any | null>();
-  const [readMore,setReadMore] = useState(null);
+  const [readMore, setReadMore] = useState(null);
   // const [gameId, setGameId] = useState();
   // const [reviewers, setReviewers] = useState<any[]>([]);
   const { id } = useParams();
@@ -491,29 +491,29 @@ const GameCreation = () => {
       fetchDefaultSkill();
     }
 
-      if (id) {
-        let previewData: { [key: string]: any } = {
-            gameId: parseInt(id),
-        };
-    
-        if (tab > 2 && tab < 6) {
-            previewData = { ...previewData, currentTab: tab };
-        }
-        else{
-            previewData = { ...previewData, currentTab: 3 };
-        }
-    
-        if (currentTab) {
-            previewData = { ...previewData, currentSubTab: currentTab };
-        }
-    
-        if (questTabState) {
-            previewData = { ...previewData, currentQuest: questTabState };
-        }
-    
-        dispatch(updatePreviewData(previewData));
+    if (id) {
+      let previewData: { [key: string]: any } = {
+        gameId: parseInt(id),
+      };
+
+      if (tab > 2 && tab < 6) {
+        previewData = { ...previewData, currentTab: tab };
+      }
+      else {
+        previewData = { ...previewData, currentTab: 3 };
+      }
+
+      if (currentTab) {
+        previewData = { ...previewData, currentSubTab: currentTab };
+      }
+
+      if (questTabState) {
+        previewData = { ...previewData, currentQuest: questTabState };
+      }
+
+      dispatch(updatePreviewData(previewData));
     }
-    else{
+    else {
       dispatch(updatePreviewData(null));
     }
   }, [id]);
@@ -1095,29 +1095,29 @@ const GameCreation = () => {
     if (title6 === 'done') {
       setHeightOfTab(
         getfirstElementHgt +
-          getsecondElementHgt +
-          getThirdElementHgt +
-          getFourElementHgt +
-          getFifthElementHgt +
-          getSixthElementHgt +
-          150,
+        getsecondElementHgt +
+        getThirdElementHgt +
+        getFourElementHgt +
+        getFifthElementHgt +
+        getSixthElementHgt +
+        150,
       );
     } else if (title5 === 'done') {
       setHeightOfTab(
         getfirstElementHgt +
-          getsecondElementHgt +
-          getThirdElementHgt +
-          getFourElementHgt +
-          getFifthElementHgt +
-          120,
+        getsecondElementHgt +
+        getThirdElementHgt +
+        getFourElementHgt +
+        getFifthElementHgt +
+        120,
       );
     } else if (title4 === 'done') {
       setHeightOfTab(
         getfirstElementHgt +
-          getsecondElementHgt +
-          getThirdElementHgt +
-          getFourElementHgt +
-          90,
+        getsecondElementHgt +
+        getThirdElementHgt +
+        getFourElementHgt +
+        90,
       );
     } else if (title3 === 'done') {
       setHeightOfTab(
@@ -1481,29 +1481,29 @@ const GameCreation = () => {
     if (title6 === 'done') {
       setHeightOfTab(
         getfirstElementHgt +
-          getsecondElementHgt +
-          getThirdElementHgt +
-          getFourElementHgt +
-          getFifthElementHgt +
-          getSixthElementHgt +
-          150,
+        getsecondElementHgt +
+        getThirdElementHgt +
+        getFourElementHgt +
+        getFifthElementHgt +
+        getSixthElementHgt +
+        150,
       );
     } else if (title5 === 'done') {
       setHeightOfTab(
         getfirstElementHgt +
-          getsecondElementHgt +
-          getThirdElementHgt +
-          getFourElementHgt +
-          getFifthElementHgt +
-          120,
+        getsecondElementHgt +
+        getThirdElementHgt +
+        getFourElementHgt +
+        getFifthElementHgt +
+        120,
       );
     } else if (title4 === 'done') {
       setHeightOfTab(
         getfirstElementHgt +
-          getsecondElementHgt +
-          getThirdElementHgt +
-          getFourElementHgt +
-          90,
+        getsecondElementHgt +
+        getThirdElementHgt +
+        getFourElementHgt +
+        90,
       );
     } else if (title3 === 'done') {
       setHeightOfTab(
@@ -1513,8 +1513,8 @@ const GameCreation = () => {
       setHeightOfTab(getfirstElementHgt + getsecondElementHgt + 30);
     } else if (title1 === 'done') {
       setHeightOfTab(getfirstElementHgt);
-    }     
-  },[tab, listQuest?.length, questTabState])
+    }
+  }, [tab, listQuest?.length, questTabState])
 
   //navin
   const handleNext = async () => {
@@ -1526,315 +1526,314 @@ const GameCreation = () => {
       formData.gameBehaviour,
       formData.gameOthers,
     ];
-     // Completion Screen Validation
-const complidatalength = Object.keys(compliData).length;
-const getcompliData = Object.keys(compliData);
-if (complidatalength !== 0) {
-  for (let i = 0; i < complidatalength; i++) {
-    const compkey = getcompliData[i] as unknown as keyof typeof compliData; 
-    const compkeyNumber = Number(compkey);
-    const getgameTotalScore = compliData[compkey].gameTotalScore;
-    if (Array.isArray(getgameTotalScore) && getgameTotalScore.length > 0) {
-      const maxScore = getgameTotalScore[0].maxScore;
-      if (!maxScore) {
-        toast({
-          title: 'Please Enter Total Score.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
+    // Completion Screen Validation
+    const complidatalength = Object.keys(compliData).length;
+    const getcompliData = Object.keys(compliData);
+    if (complidatalength !== 0) {
+      for (let i = 0; i < complidatalength; i++) {
+        const compkey = getcompliData[i] as unknown as keyof typeof compliData;
+        const compkeyNumber = Number(compkey);
+        const getgameTotalScore = compliData[compkey].gameTotalScore;
+        if (Array.isArray(getgameTotalScore) && getgameTotalScore.length > 0) {
+          const maxScore = getgameTotalScore[0].maxScore;
+          if (!maxScore) {
+            toast({
+              title: 'Please Enter Total Score.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
+            return false
+          }
+        }
+        if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
+          if (!compliData[compkey]?.gameMinScore) {
+            toast({
+              title: 'Please Enter Minimum Score.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompliData((prevInput: any) => ({
+              ...prevInput,
+              [CompKeyCount]: {
+                ...prevInput[CompKeyCount],
+                redBorderForMinScore: true,
+              },
+            }));
+            setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
+            return false;
+          }
+
+          // Reset the red border style for the InputField
+          setCompliData((prevInput: any) => ({
+            ...prevInput,
+            [CompKeyCount]: {
+              ...prevInput[CompKeyCount],
+              redBorderForMinScore: false,
+            },
+          }))
+        }
+        if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
+          if (!compliData[compkey]?.gameDistinctionScore) {
+            toast({
+              title: 'Please Enter Distinction  Score.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
+            return false
+          }
+        }
+        if (compliData[compkey]?.gameIsSetBadge === 'true') {
+          if (!compliData[compkey]?.gameBadge) {
+            toast({
+              title: 'Please Select Badge.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
+            return false
+
+          }
+          if (!compliData[compkey]?.gameBadgeName) {
+            toast({
+              title: 'Please Fill Badge Name.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
+            return false
+
+          }
+        }
+        if (compliData[compkey]?.gameIsSetCriteriaForBadge === 'true') {
+          if (!compliData[compkey]?.gameAwardBadgeScore) {
+            toast({
+              title: 'Please Set Criteria for Badge .',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
+            return false
+          }
+
+        }
+        if (!compliData[compkey]?.gameScreenTitle) {
+          toast({
+            title: 'Please Screen Title.',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+          setCompKeyCount(compkeyNumber);
+          setCurrentTab(0);
+          return false
+        }
+        if (compliData[compkey]?.gameIsSetCongratsSingleMessage === 'true') {
+          if (!compliData[compkey]?.gameCompletedCongratsMessage) {
+
+            toast({
+              title: 'Please Set CongratsMessage.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCompKeyCount(compkeyNumber);
+            setCurrentTab(0);
+            return false
+
+          }
+        }
+        if (compliData[compkey]?.gameIsSetCongratsScoreWiseMessage === 'true') {
+
+          if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
+            if (!compliData[compkey]?.gameMinimumScoreCongratsMessage) {
+              toast({
+                title: 'Please Enter Minimum Score Congrats Message.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+              });
+              setCompKeyCount(compkeyNumber);
+              setCurrentTab(0);
+              return false
+
+            }
+            if (!compliData[compkey]?.gameaboveMinimumScoreCongratsMessage) {
+              toast({
+                title: 'Please Enter Above Minimum Score CongratsMessage.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+              });
+              setCompKeyCount(compkeyNumber);
+              setCurrentTab(0);
+              return false
+
+            }
+          }
+
+          if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
+
+            if (!compliData[compkey]?.gameAboveDistinctionScoreCongratsMessage) {
+              toast({
+                title: 'Please Enter Above Distinction Score CongratsMessage.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+              });
+              setCompKeyCount(compkeyNumber);
+              setCurrentTab(0);
+              return false
+            }
+          }
+        }
+
         setCompKeyCount(compkeyNumber);
         setCurrentTab(0);
-        return false
-      }
-    }
-    if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
-      if (!compliData[compkey]?.gameMinScore) {
-        toast({
-          title: 'Please Enter Minimum Score.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
         setCompliData((prevInput: any) => ({
           ...prevInput,
           [CompKeyCount]: {
             ...prevInput[CompKeyCount],
-            redBorderForMinScore: true,
+
           },
-        }));
-        setCompKeyCount(compkeyNumber);
-        setCurrentTab(0);
+        }))
+      }
+    }
+    // refelection Screen Validation
+    if (formData.gameIsShowReflectionScreen === 'true') {
+      console.log("form length" + formData.gameReflectionQuestion);
+      console.log('reflectionQuestions1pri', reflectionQuestions);
+      if (typeof reflectionQuestions === 'object' && reflectionQuestions !== null) {
+
+        var keys = Object.keys(reflectionQuestions);
+
+        //newlyadded start
+        if (!keys) {
+          var keys1 = Object.keys(reflectionQuestions);
+        }
+        else {
+          var keys1 = ['ref1', 'ref2', 'ref3', 'ref4'];
+        }
+
+        console.log('keysref', keys1);
+        //newlyadded end
+        // Assuming formData.gameReflectionQuestion is the number of questions to check
+        for (var i = 0; i < formData.gameReflectionQuestion; i++) {
+          var key = keys1[i] as unknown as keyof typeof reflectionQuestions; //changes keys1[i] instead of keys[i]
+          var value = reflectionQuestions[key];
+          if (key == 'ref1') {
+            var question = "Question1";
+          }
+          if (key == 'ref2') {
+            var question = "Question2";
+          }
+          if (key == 'ref3') {
+            var question = "Question3";
+          }
+          if (key == 'ref4') {
+            var question = "Question4";
+          }
+
+
+          if (!value) {
+            toast({
+              title: `${question} is empty. Please fill in the ${question} question.`,
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+            setCurrentTab(2);
+            return false;
+          }
+        }
+
+      }
+    }
+    // Takeaway Screen Validation
+    if (formData.gameIsShowTakeaway === "true" && (formData.gameTakeawayContent === null || formData.gameTakeawayContent === undefined || formData.gameTakeawayContent === '')) {
+      toast({
+        title: 'Please Enter TakeAway Content',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      setCurrentTab(3);
+      return false;
+    }
+    // Welcome  Screen Validation
+    if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAdditionalWelcomeNote === null || formData.gameAdditionalWelcomeNote === undefined || formData.gameAdditionalWelcomeNote === '')) {
+      toast({
+        title: 'Please Add Welcome Note',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      //newlyadded start 
+      setFormData({
+        ...formData,
+        gameIsShowAdditionalWelcomeNoteInvalid: 'true',
+      });
+      setCurrentTab(4);
+      //newlyadded End 
+      return false;
+    }
+    // Thankyou Screen Validation
+    if (formData.gameThankYouMessage === '' || formData.gameThankYouMessage === null || formData.gameThankYouMessage === undefined) {
+      toast({
+        title: 'Please Fill The ThankYou Box',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
+      setFormData({
+        ...formData,
+        isfeedbackthankyou: true,
+      });
+      setCurrentTab(5)
+      return false;
+    }
+    // Feedback Screen Validation
+
+    if (formData.gameIsFeedbackMandatory === "true") {
+      if (formData.gameQuestion1 === 'true' && formData.gameQuestionValue1 === '') {
+        toast({
+          title: 'Please Enter Question 1',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        })
         return false;
-      }
-
-      // Reset the red border style for the InputField
-      setCompliData((prevInput: any) => ({
-        ...prevInput,
-        [CompKeyCount]: {
-          ...prevInput[CompKeyCount],
-          redBorderForMinScore: false,
-        },
-      }))
-    }
-    if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
-      if (!compliData[compkey]?.gameDistinctionScore) {
+      } else if (formData.gameQuestion2 === 'true' && formData.gameQuestionValue2 === '') {
         toast({
-          title: 'Please Enter Distinction  Score.',
+          title: 'Please Enter Question 2',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        })
+        return false;
+      } else if (formData.gameQuestionValue3 === '' || formData.gameQuestionValue4 === '') {
+        toast({
+          title: 'Please Enter Rating Questions',
           status: 'error',
           duration: 3000,
           isClosable: true,
         });
-        setCompKeyCount(compkeyNumber);
-        setCurrentTab(0);
-        return false
-      }
-    }
-    if (compliData[compkey]?.gameIsSetBadge === 'true') {
-      if (!compliData[compkey]?.gameBadge) {
-        toast({
-          title: 'Please Select Badge.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-        setCompKeyCount(compkeyNumber);
-        setCurrentTab(0);
-        return false
-
-      }
-      if (!compliData[compkey]?.gameBadgeName) {
-        toast({
-          title: 'Please Fill Badge Name.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-        setCompKeyCount(compkeyNumber);
-        setCurrentTab(0);
-        return false
-
-      }
-    }
-      if (compliData[compkey]?.gameIsSetCriteriaForBadge === 'true') {
-        if (!compliData[compkey]?.gameAwardBadgeScore) {
-          toast({
-            title: 'Please Set Criteria for Badge .',
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
-          });
-          setCompKeyCount(compkeyNumber);
-          setCurrentTab(0);
-          return false
-        }
-
-      }
-      if (!compliData[compkey]?.gameScreenTitle) {
-        toast({
-          title: 'Please Screen Title.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-        setCompKeyCount(compkeyNumber);
-        setCurrentTab(0);
-        return false
-      }
-      if (compliData[compkey]?.gameIsSetCongratsSingleMessage === 'true') {
-        if (!compliData[compkey]?.gameCompletedCongratsMessage) {
-
-          toast({
-            title: 'Please Set CongratsMessage.',
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
-          });
-          setCompKeyCount(compkeyNumber);
-          setCurrentTab(0);
-          return false
-
-        }
-      }
-      if (compliData[compkey]?.gameIsSetCongratsScoreWiseMessage === 'true') {
-
-        if (compliData[compkey]?.gameIsSetMinPassScore === 'true') {
-          if (!compliData[compkey]?.gameMinimumScoreCongratsMessage) {
-            toast({
-              title: 'Please Enter Minimum Score Congrats Message.',
-              status: 'error',
-              duration: 3000,
-              isClosable: true,
-            });
-            setCompKeyCount(compkeyNumber);
-            setCurrentTab(0);
-            return false
-
-          }
-          if (!compliData[compkey]?.gameaboveMinimumScoreCongratsMessage) {
-            toast({
-              title: 'Please Enter Above Minimum Score CongratsMessage.',
-              status: 'error',
-              duration: 3000,
-              isClosable: true,
-            });
-            setCompKeyCount(compkeyNumber);
-            setCurrentTab(0);
-            return false
-
-          }
-        }
-        
-        if (compliData[compkey]?.gameIsSetDistinctionScore === 'true') {
-          
-          if (!compliData[compkey]?.gameAboveDistinctionScoreCongratsMessage) {
-            toast({
-              title: 'Please Enter Above Distinction Score CongratsMessage.',
-              status: 'error',
-              duration: 3000,
-              isClosable: true,
-            });
-            setCompKeyCount(compkeyNumber);
-            setCurrentTab(0);
-            return false
-          }
-        }
-      }
-    
-    setCompKeyCount(compkeyNumber);
-    setCurrentTab(0);
-    setCompliData((prevInput: any) => ({
-      ...prevInput,
-      [CompKeyCount]: {
-        ...prevInput[CompKeyCount],
-    
-      },
-    }))
-  }
-}
-// refelection Screen Validation
-if (formData.gameIsShowReflectionScreen === 'true') {
-  console.log("form length" + formData.gameReflectionQuestion);
-console.log('reflectionQuestions1pri',reflectionQuestions);
-  if (typeof reflectionQuestions === 'object' && reflectionQuestions !== null) {
-
-    var keys = Object.keys(reflectionQuestions);
-
-    //newlyadded start
-    if (!keys) {
-      var keys1 = Object.keys(reflectionQuestions);
-    }
-    else {
-      var keys1 = ['ref1', 'ref2', 'ref3', 'ref4'];
-    }
-
-    console.log('keysref', keys1);
-    //newlyadded end
-    // Assuming formData.gameReflectionQuestion is the number of questions to check
-    for (var i = 0; i < formData.gameReflectionQuestion; i++) {
-      var key = keys1[i] as unknown as keyof typeof reflectionQuestions; //changes keys1[i] instead of keys[i]
-      var value = reflectionQuestions[key];
-      if (key == 'ref1') {
-        var question = "Question1";
-      }
-      if (key == 'ref2') {
-        var question = "Question2";
-      }
-      if (key == 'ref3') {
-        var question = "Question3";
-      }
-      if (key == 'ref4') {
-        var question = "Question4";
-      }
-
-
-      if (!value) {
-        toast({
-          title: `${question} is empty. Please fill in the ${question} question.`,
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-        setCurrentTab(2);
         return false;
       }
     }
-
-  }
-}
-// Takeaway Screen Validation
-if (formData.gameIsShowTakeaway === "true" && (formData.gameTakeawayContent === null || formData.gameTakeawayContent === undefined || formData.gameTakeawayContent === '')) {
-  toast({
-    title: 'Please Enter TakeAway Content',
-    status: 'error',
-    duration: 3000,
-    isClosable: true,
-  });
-  setCurrentTab(3);
-  return false;
-}
-// Welcome  Screen Validation
-if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAdditionalWelcomeNote === null || formData.gameAdditionalWelcomeNote === undefined || formData.gameAdditionalWelcomeNote === '')) {
-  toast({
-    title: 'Please Add Welcome Note',
-    status: 'error',
-    duration: 3000,
-    isClosable: true,
-  });
-  //newlyadded start 
-  setFormData({
-    ...formData,
-    gameIsShowAdditionalWelcomeNoteInvalid: 'true',
-  });
-  setCurrentTab(4);
-  //newlyadded End 
-  return false;
-}
-// Thankyou Screen Validation
-if(formData.gameThankYouMessage ==='' || formData.gameThankYouMessage ===null ||formData.gameThankYouMessage ===undefined)
-{
-  toast({
-    title: 'Please Fill The ThankYou Box',
-    status: 'error',
-    duration: 3000,
-    isClosable: true,
-  })
-  setFormData({
-    ...formData,
-    isfeedbackthankyou: true,
-  });
-  setCurrentTab(5)
-return false;
-}
-// Feedback Screen Validation
-
-if (formData.gameIsFeedbackMandatory === "true") {
-  if (formData.gameQuestion1 === 'true' && formData.gameQuestionValue1 === '') {
-    toast({
-      title: 'Please Enter Question 1',
-      status: 'error',
-      duration: 3000,
-      isClosable: true,
-    })
-    return false;
-  } else if (formData.gameQuestion2 === 'true' && formData.gameQuestionValue2 === '') {
-    toast({
-      title: 'Please Enter Question 2',
-      status: 'error',
-      duration: 3000,
-      isClosable: true,
-    })
-    return false;
-  } else if (formData.gameQuestionValue3 === '' || formData.gameQuestionValue4 === '') {
-    toast({
-      title: 'Please Enter Rating Questions',
-      status: 'error',
-      duration: 3000,
-      isClosable: true,
-    });
-    return false;
-  }
-}
     const countSelectedOptions = selectedOptions.filter(
       (option) =>
         option !== '' &&
@@ -1890,7 +1889,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
       const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
       setFormData(formDataWithoutLastTab);
       const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
-      console.log('idddddddd',MaxBlockQuestNumber)
+      console.log('idddddddd', MaxBlockQuestNumber)
       if (result.status === 'Success') {
         const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
         console.log('Max QuestNo:', maxQuestNo);
@@ -2254,23 +2253,22 @@ if (formData.gameIsFeedbackMandatory === "true") {
       }
     }
     if (tab === 6) {
-      if(formData.gameIntroMusic ==='' || formData.gameIntroMusic ===null ||formData.gameIntroMusic ===undefined)
-{
-  toast({
-    title: 'Please Select Intro music Audio',
-    status: 'error',
-    duration: 3000,
-    isClosable: true,
-  })
- 
-  setCurrentTab(6)
-return false;
-} else{
-  setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }))
-  localStorage.setItem('gameGameStage','Review');
-}
+      if (formData.gameIntroMusic === '' || formData.gameIntroMusic === null || formData.gameIntroMusic === undefined) {
+        toast({
+          title: 'Please Select Intro music Audio',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        })
+
+        setCurrentTab(6)
+        return false;
+      } else {
+        setFormData((formdata) => ({ ...formdata, gameGameStage: 'Review' }))
+        localStorage.setItem('gameGameStage', 'Review');
+      }
     }
-   
+
     let data = JSON.stringify(formData);
     if (tab === 1 && !id) {
       try {
@@ -2517,10 +2515,10 @@ return false;
       };
     });
   };
- 
-  const handleEnables =(e:any) =>{
-    const { name,  checked } = e.target;
-    
+
+  const handleEnables = (e: any) => {
+    const { name, checked } = e.target;
+
     const feedbackselectedOptions = [
       formData.gameContent,
       formData.gameRecommendation,
@@ -2530,20 +2528,19 @@ return false;
       formData.gameOthers,
     ];
     const countfbSelectedOptions = feedbackselectedOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
-    console.log('countfbSelectedOptions',countfbSelectedOptions);
-   
+    console.log('countfbSelectedOptions', countfbSelectedOptions);
+
     if (checked && countfbSelectedOptions >= 4) {
-         return false;
-    } 
-    if(name === 'gameContent' ||
-   name === 'gameRelevance' ||
-   name === 'gameBehaviour' ||
-   name === 'gameOthers' ||
-   name === 'gameGamification' ||
-   name === 'gameRecommendation' ) 
-   {
-    setFormData((prev) => ({ ...prev, [name]: String(checked) }));
-   }
+      return false;
+    }
+    if (name === 'gameContent' ||
+      name === 'gameRelevance' ||
+      name === 'gameBehaviour' ||
+      name === 'gameOthers' ||
+      name === 'gameGamification' ||
+      name === 'gameRecommendation') {
+      setFormData((prev) => ({ ...prev, [name]: String(checked) }));
+    }
   }
   const handleChange = (e: any) => {
     const inputValue = e.target.value;
@@ -2852,38 +2849,38 @@ return false;
   const stepbgCheck = formData?.gameLastTabArray?.includes(1)
     ? stepCheckActiveColor
     : tab === 1
-    ? 'brand.500'
-    : stepCheckColor;
+      ? 'brand.500'
+      : stepCheckColor;
   const stepPoseCheck = formData?.gameLastTabArray?.includes(2)
     ? stepCheckActiveColor
     : tab === 2
-    ? 'brand.500'
-    : stepCheckColor;
+      ? 'brand.500'
+      : stepCheckColor;
   const stepAboutStoryCheck = formData?.gameLastTabArray?.includes(3)
     ? stepCheckActiveColor
     : tab === 3
-    ? 'brand.500'
-    : stepCheckColor;
+      ? 'brand.500'
+      : stepCheckColor;
   const stepBlockCheck = formData?.gameLastTabArray?.includes(4)
     ? stepCheckActiveColor
     : tab === 4
-    ? 'brand.500'
-    : stepCheckColor;
+      ? 'brand.500'
+      : stepCheckColor;
   const stepScoreCheck = formData?.gameLastTabArray?.includes(5)
     ? stepCheckActiveColor
     : tab === 5
-    ? 'brand.500'
-    : stepCheckColor;
+      ? 'brand.500'
+      : stepCheckColor;
   const stepSummariesCheck = formData?.gameLastTabArray?.includes(6)
     ? stepCheckActiveColor
     : tab === 6
-    ? 'brand.500'
-    : stepCheckColor;
+      ? 'brand.500'
+      : stepCheckColor;
   const stepCompleteCheck = formData?.gameLastTabArray?.includes(7)
     ? stepCheckActiveColor
     : tab === 7
-    ? 'brand.500'
-    : stepCheckColor;
+      ? 'brand.500'
+      : stepCheckColor;
 
   const steps = [
     {
@@ -3444,18 +3441,16 @@ return false;
         case 'ArrowDown':
           setTargetSequence(
             items[
-              indexToFind === items.length - 1 ? items.length : indexToFind + 1
+            indexToFind === items.length - 1 ? items.length : indexToFind + 1
             ],
           );
           setTimeout(() => {
             arrowSeqRef = document.getElementById(
-              `tarSeqRef${
-                items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
+              `tarSeqRef${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
               }`,
             );
             focusSeqRef = document.getElementsByClassName(
-              `${
-                items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
+              `${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
               }`,
             );
             focusSeqRef?.[0]?.classList?.add('non-caret');
@@ -3538,8 +3533,7 @@ return false;
         } else if (event.code === 'ArrowDown') {
           setTimeout(() => {
             focusSeqRef = document.getElementsByClassName(
-              `${
-                items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
+              `${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
               }`,
             );
             focusSeqRef?.[0]?.focus();
@@ -3610,12 +3604,13 @@ return false;
       setWindowWidth(window.innerWidth);
     };
 
-    window.addEventListener('resize', handleResize);   
+    window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
+ 
   return (
     <>
       {loading && (
@@ -3908,8 +3903,13 @@ return false;
             </Card>
           </HStack>
         </GridItem>
+        <GridItem display={{ sm: 'flex', xl: 'none' }} colSpan={5}>
+          <Card w={'100%'} mt={{ base: '65px', xl: '100px' }}>
+            <CenterMode />
+          </Card>
+        </GridItem>
         <GridItem colSpan={{ sm: 5, md: 5, lg: 5, xl: 4 }}>
-          <Box className="game-creation" mt={{ base: '50px', xl: '100px' }} pl={{base: '0', lg: '10px'}}>
+          <Box className="game-creation" mt={{ base: '10px', xl: '100px' }} pl={{ base: '0', lg: '10px' }}>
             <Grid templateColumns="repeat(1, 1fr)" gap={6}>
               <GridItem w="100%" colSpan={2}>
                 {/*******************Changes-14/12/23*************************/}
@@ -3979,7 +3979,7 @@ return false;
                                       : '1px 4px 29px #44445429'
                                   }
                                   transition={'0.3s'}
-                                  // overflow="hidden"
+                                // overflow="hidden"
                                 >
                                   <Box
                                     position={'relative'}
@@ -3995,7 +3995,7 @@ return false;
                                     />
 
                                     {backgroundIndex === i ||
-                                    windowWidth < 768 ? (
+                                      windowWidth < 768 ? (
                                       <Flex
                                         position="absolute"
                                         bottom="0px"
@@ -4122,7 +4122,7 @@ return false;
                                     </Box>
                                     <Box mt={2} mb={2} h={'12px'}>
                                       {backgroundIndex === i ||
-                                      windowWidth < 768 ? (
+                                        windowWidth < 768 ? (
                                         <Tooltip label={img?.temp?.tempStoryLine} placement='top'>
                                           <Text
                                             fontSize={'12px'}
@@ -4141,16 +4141,16 @@ return false;
                                                 ? 'none'
                                                 : '1.5em'
                                             } // Limit to one line (adjust height as needed)
-                                            // overflow={'hidden'}
-                                            // textOverflow={'ellipsis'}
-                                            // whiteSpace={'nowrap'}
+                                          // overflow={'hidden'}
+                                          // textOverflow={'ellipsis'}
+                                          // whiteSpace={'nowrap'}
                                           >
                                             {img?.temp?.tempStoryLine?.length >
-                                            60
+                                              60
                                               ? img?.temp?.tempStoryLine.slice(
-                                                  0,
-                                                  60,
-                                                ) + '...'
+                                                0,
+                                                60,
+                                              ) + '...'
                                               : img?.temp?.tempStoryLine}
                                           </Text>
                                         </Tooltip>
@@ -4436,12 +4436,12 @@ return false;
                       {tab === 1
                         ? 'BackGround'
                         : tab === 2
-                        ? 'Non Playing Character'
-                        : tab === 3
-                        ? 'Overview'
-                        : tab === 5
-                        ? 'Design'
-                        : 'Preference'}
+                          ? 'Non Playing Character'
+                          : tab === 3
+                            ? 'Overview'
+                            : tab === 5
+                              ? 'Design'
+                              : 'Preference'}
                     </FormLabel>
                     <Box w={'360px'} maxH={'50vh'} overflowY={'scroll'}>
                       {reviews && reviews[tab] && reviews[tab]?.length !== 0 ? (
@@ -4488,8 +4488,8 @@ return false;
                                       Posted On :{' '}
                                       {it?.updatedAt
                                         ? new Date(
-                                            it.updatedAt,
-                                          ).toLocaleDateString()
+                                          it.updatedAt,
+                                        ).toLocaleDateString()
                                         : ''}
                                     </Text>
                                   </Box>
@@ -4506,12 +4506,12 @@ return false;
                           {tab === 1
                             ? 'Background'
                             : tab === 2
-                            ? 'Non Playing Character'
-                            : tab === 3
-                            ? 'Overview'
-                            : tab === 5
-                            ? 'Design'
-                            : 'Preference'}
+                              ? 'Non Playing Character'
+                              : tab === 3
+                                ? 'Overview'
+                                : tab === 5
+                                  ? 'Design'
+                                  : 'Preference'}
                         </Box>
                       )}
                     </Box>
@@ -4544,7 +4544,7 @@ return false;
                 sm: '76%',
                 md: '85%',
                 // lg: '76%',
-                xl:'76%'
+                xl: '76%'
               }}
               position={'fixed'}
               top={0}
@@ -4553,7 +4553,7 @@ return false;
               <Box display={'flex'} flexDirection={{ sm: 'column', md: 'row' }}>
                 <Box
                   display={'flex'}
-                justifyContent={{base:'flex-end',xl:tab === 1 ? 'flex-end' : 'space-between'}}
+                  justifyContent={{ base: 'flex-end', xl: tab === 1 ? 'flex-end' : 'space-between' }}
                   // w={{ sm: '75%', md: '60%', xl: '60%', '2xl': '65%' }}
                   w={'100%'}
                 >
@@ -4731,7 +4731,7 @@ return false;
                           </MenuList>
                         </Box>
                       </Menu>
-                    
+
                       {tab !== 1 && tab !== 6 ? (
                         <Select
                           options={[defaultLanguageOption, ...languageOptions]}
@@ -4757,56 +4757,56 @@ return false;
                           }}
                         />
                       ) : null}
-                       <Box display={{base:'none',xl:'flex'}}>         
-                       {tab !== 1 && tab !== 2 ? (
-                        <Button
-                          bg="#11047a"
-                          _hover={{ bg: '#190793' }}
-                          color="#fff"
-                          h={'46px'}
-                          w={'128px'}
-                          display={tab === 7 || tab === 6 ? 'none' : 'block'}
-                          mr={'17px'}
-                          mt={'6px'}
-                          ml={'11px'}
-                          onClick={handleEntirePrev}
-                        >
-                          Preview
-                        </Button>
-                      ) : null}
-                       
-                       {tab === 5 ? (
-                        <Button
-                          bg="#11047a"
-                          _hover={{ bg: '#190793' }}
-                          color="#fff"
-                          h={'46px'}
-                          w={'128px'}
-                          onClick={() => handleNext()}
-                          mr={'33px'}
-                          mt={'7px'}
-                        >
-                          Next
-                        </Button>
-                      ) : (
-                        tab !== 1 &&
-                        tab !== 2 &&
-                        tab !== 5 && (
+                      <Box display={{ base: 'none', xl: 'flex' }}>
+                        {tab !== 1 && tab !== 2 ? (
                           <Button
                             bg="#11047a"
                             _hover={{ bg: '#190793' }}
                             color="#fff"
                             h={'46px'}
                             w={'128px'}
-                            onClick={commonNextFunction}
+                            display={tab === 7 || tab === 6 ? 'none' : 'block'}
+                            mr={'17px'}
+                            mt={'6px'}
+                            ml={'11px'}
+                            onClick={handleEntirePrev}
+                          >
+                            Preview
+                          </Button>
+                        ) : null}
+
+                        {tab === 5 ? (
+                          <Button
+                            bg="#11047a"
+                            _hover={{ bg: '#190793' }}
+                            color="#fff"
+                            h={'46px'}
+                            w={'128px'}
+                            onClick={() => handleNext()}
                             mr={'33px'}
                             mt={'7px'}
                           >
-                            {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
+                            Next
                           </Button>
-                        )
-                      )}
-                        </Box>
+                        ) : (
+                          tab !== 1 &&
+                          tab !== 2 &&
+                          tab !== 5 && (
+                            <Button
+                              bg="#11047a"
+                              _hover={{ bg: '#190793' }}
+                              color="#fff"
+                              h={'46px'}
+                              w={'128px'}
+                              onClick={commonNextFunction}
+                              mr={'33px'}
+                              mt={'7px'}
+                            >
+                              {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
+                            </Button>
+                          )
+                        )}
+                      </Box>
                     </Card>
                   </Flex>
                 </Box>
@@ -4873,7 +4873,7 @@ return false;
                   // top={'24px'}
                   // right={'8px'}
                   zIndex={99}
-                  // background={'#0000 !important'}
+                // background={'#0000 !important'}
                 >
                   {tab !== 1 && (
                     <Flex justify={'flex-start'} alignItems={'center'}>
@@ -4899,10 +4899,10 @@ return false;
                         // bg="#11047a"
                         // _hover={{ bg: '#190793' }}
                         // color="#fff"
-                        color={'#190793'} 
-                border={'1px solid #190793'} 
-                bg={'transparent'} 
-                _hover={{bg: '#11047a', color: '#fff'}}
+                        color={'#190793'}
+                        border={'1px solid #190793'}
+                        bg={'transparent'}
+                        _hover={{ bg: '#11047a', color: '#fff' }}
                         h={'46px'}
                         w={'100%'}
                         display={tab === 7 || tab === 6 ? 'none' : 'block'}

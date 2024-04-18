@@ -79,8 +79,9 @@ const GameIntroScreen : React.FC<GameIntroType> = ({preloadedAssets, setCurrentS
                 <Button
                   w={'90%'}
                   h={'5vh'}
-                  bg={'none'}
+                  bg={'none'}                  
                   _hover={{ bg: 'none' }}
+                  className='mouse_style'
                   onClick={() => {
                     setCurrentScreenId(1);
                     setIsGetsPlayAudioConfirmation(true);

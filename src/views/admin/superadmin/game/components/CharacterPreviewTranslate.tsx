@@ -587,12 +587,9 @@ const CharacterPreviewTranslate: React.FC<{
               <Flex
                 flexDirection="row"
                 justifyContent="Center"
-                alignItems="Center"
-               
+                alignItems="Center"               
                 background="#ffffff"
               >
-             
-                  
                   <Box w={'100%'} h={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'} mb={"0px"}>
                     <Card flex="1" w={'100%'}>
                                          

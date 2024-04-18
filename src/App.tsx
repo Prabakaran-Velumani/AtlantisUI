@@ -1,5 +1,7 @@
 import './assets/css/App.css';
 import './assets/css/ResponsiveApp.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AuthLayout from './layouts/auth';
 import AdminLayout from './layouts/admin';
