@@ -100,7 +100,7 @@ const SimpleSlider:React.FC<{setTab:any,completed?:any,ctab?:any}> = ({setTab,co
   return (
     <>
       <Box h={'130px'} w={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-        <Icon as={FaCircleChevronLeft} w={8} h={8} onClick={handleScrollLeft} />
+        <Icon as={FaCircleChevronLeft} w={8} h={8} onClick={()=>scrollToIndex(centerIndex === 0 ? centerIndex :centerIndex-1)} />
         <Box h={'100%'} w={'100%'} ref={containerRef} display={'flex'} overflowX={'scroll'} sx={{ scrollBehavior: 'smooth', transition: 'overflow-x 1s ease' }}>
           {tabs && tabs.map((tab, i) => (
             <Box key={i} className="mobile_progress" display={'flex'} justifyContent={'center'}>
@@ -113,7 +113,7 @@ const SimpleSlider:React.FC<{setTab:any,completed?:any,ctab?:any}> = ({setTab,co
             </Box>
           ))}
         </Box>
-        <Icon as={FaCircleChevronRight} onClick={handleScrollRight} w={8} h={8} />
+        <Icon as={FaCircleChevronRight} onClick={()=>scrollToIndex(centerIndex === 5 ? centerIndex :centerIndex+1)} w={8} h={8} />
       </Box >
     </>
     // <div className="slider-container">
