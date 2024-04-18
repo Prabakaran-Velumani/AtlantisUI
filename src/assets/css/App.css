@@ -4631,19 +4631,14 @@ grid-row: 1 / 2;
 }
 
 @media screen and (min-width: 768px) {
-  .mobile_progress {
+  .mobile_progress{
     min-width: 33%;
   }
-
+  
   .top-menu-home-section .progress-box {
     transform: translate(-2%, -10%);
     height: 65px;
   }
-
-  /* .player_name {
-    position: absolute;
-    bottom: -4px;
-  } */
 
   /* .character_next {
     bottom: 22px;
