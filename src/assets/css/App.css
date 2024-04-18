@@ -4725,11 +4725,7 @@ grid-row: 1 / 2;
 }
 
 @media screen and (min-width: 768px) {
-  .progress_box{
-    right: 28%;
-    transform: scale(1);
-  }
-  .mobile_progress {
+  .mobile_progress{
     min-width: 33%;
   }
   
