@@ -73,29 +73,7 @@ function SimpleSlider() {
       }
     };
   }, [tabs]);
-  // const settings = {
-  //   dots: true,
-  //   infinite: true,
-  //   speed: 500,
-  //   slidesToShow: 1,
-  //   slidesToScroll: 1
-  // };
-  const handleScrollRight = () => {
-    if (containerRef.current) {
-      containerRef.current.scrollBy({
-        left: 250,
-        behavior: 'smooth',
-      });
-    }
-  };
-  const handleScrollLeft = () => {
-    if (containerRef.current) {
-      containerRef.current.scrollBy({
-        left: -250,
-        behavior: 'smooth',
-      });
-    }
-  };
+  
   const scrollToIndex = (index:any) => { // add your current tab
     if (containerRef.current) {
       const targetElement = containerRef.current.children[index]; // show the current tab
@@ -112,10 +90,11 @@ function SimpleSlider() {
   useEffect(() => {
     scrollToIndex(centerIndex);
   }, [centerIndex]);
+  
   return (
     <>
       <Box h={'130px'} w={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-        <Icon as={FaCircleChevronLeft} w={8} h={8} onClick={handleScrollLeft} />
+        <Icon as={FaCircleChevronLeft} w={8} h={8} onClick={()=>scrollToIndex(centerIndex === 0 ? centerIndex :centerIndex-1)} />
         <Box h={'100%'} w={'100%'} ref={containerRef} display={'flex'} overflowX={'scroll'} sx={{ scrollBehavior: 'smooth', transition: 'overflow-x 1s ease' }}>
           {tabs && tabs.map((tab, i) => (
             <Box key={i} className="mobile_progress" display={'flex'} justifyContent={'center'}>
@@ -128,7 +107,7 @@ function SimpleSlider() {
             </Box>
           ))}
         </Box>
-        <Icon as={FaCircleChevronRight} onClick={handleScrollRight} w={8} h={8} />
+        <Icon as={FaCircleChevronRight} onClick={()=>scrollToIndex(centerIndex === 5 ? centerIndex :centerIndex+1)} w={8} h={8} />
       </Box >
     </>
     // <div className="slider-container">
