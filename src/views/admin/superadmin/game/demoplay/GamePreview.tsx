@@ -46,9 +46,7 @@ const GamePreview = () => {
   const [gameInfo, setGameInfo] = useState<any | null>(null);
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
-  const [currentScreenId, setCurrentScreenId] =
-    useState<number>(InitialScreenId);
-  // useState<number>(14);
+  // const [currentScreenId, setCurrentScreenId] = useState<number>(InitialScreenId);
   const [profile, setProfile] = useState({
     score: [],
     completedLevels: ['1'],
@@ -467,58 +465,52 @@ const GamePreview = () => {
 
   return (
     <>
-      <Suspense fallback={<h1>Loading please wait...</h1>}>
-        {contentReady &&
-          (gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
-          gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
-            <h1> {'Your are Not Authorized....'}</h1>
-          ) : (
-            gameInfo?.gameId && (
-              <ScoreContext.Provider value={{ profile, setProfile }}>
-                {/* <motion.div
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  }}
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                > */}
-                  <Box id="container">
-                    {isHovered && (
-                      <Icon
-                        as={IoIosRefresh}
-                        position={'fixed'}
-                        top={'20px'}
-                        left={'48%'}
-                        color={'white'}
-                        zIndex={999999}
-                        width={'60px'}
-                        height={'60px'}
-                        padding={'20px'}
-                        borderRadius={'50%'}
-                        bg={'grey'}
-                        cursor={'pointer'}
-                        onClick={() => window.location.reload()}
-                      />
-                    )}
-                    <EntirePreview
-                      currentScore={currentScore}
-                      setCurrentScore={setCurrentScore}
-                      gameScreens={gameScreens}
-                      currentScreenId={currentScreenId}
-                      setCurrentScreenId={setCurrentScreenId}
-                      gameInfo={gameInfo}
-                      handleSubmitReview={handleSubmitReview}
-                      isReviewDemo={id ? false : true}
-                      preloadedAssets={preloadedAssets}
-                    />
-                  </Box>
-                {/* </motion.div> */}
-              </ScoreContext.Provider>
-            )
-          ))}
-      </Suspense>
+    <Suspense fallback={<h1>Loading please wait...</h1>}>
+        {contentReady && (
+      gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
+      gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
+        <h1> {'Your are Not Authorized....'}</h1>
+      ) : (
+        gameInfo?.gameId &&
+        (
+         (
+          <ScoreContext.Provider value={{ profile, setProfile }}>
+            <Box id="container" >
+              {isHovered && (
+                <Icon
+                  as={IoIosRefresh}
+                  position={'fixed'}
+                  top={'20px'}
+                  left={'48%'}
+                  color={'white'}
+                  zIndex={999999}
+                  width={'60px'}
+                  height={'60px'}
+                  padding={'20px'}
+                  borderRadius={'50%'}
+                  bg={'grey'}
+                  cursor={'pointer'}
+                  onClick={() => window.location.reload()}
+                />
+              )}
+              <EntirePreview
+                currentScore={currentScore}
+                setCurrentScore={setCurrentScore}
+                gameScreens={gameScreens}
+                // currentScreenId={currentScreenId}
+                // setCurrentScreenId={setCurrentScreenId}
+                gameInfo={gameInfo}
+                handleSubmitReview={handleSubmitReview}
+                isReviewDemo={id ? false : true}
+                preloadedAssets={preloadedAssets}
+                InitialScreenId={InitialScreenId}
+              />
+            </Box>
+          </ScoreContext.Provider>
+        ))
+      )
+        )}
+    </Suspense>
     </>
   );
 };

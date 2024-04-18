@@ -150,14 +150,6 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                           overflowY={'scroll'}
                           className="feedback_content_text"
                         >
-                          {/* <Box display={'flex'}>
-                            <Img src={preloadedAssets.qs} h={'1em'} w={'1em'}  />
-                            This way, you can increase the RGB color intensity of the GLTF/GLB model while using an HDR environment map in your React Three Fiber scene. Adjust the values as needed to achieve the desired color intensity.
-                          </Box>
-                          <Box display={'flex'} mt={'10px'}>
-                            <Img src={preloadedAssets.ANS} h={'1em'} w={'1em'}  />
-                             Adjust the values as needed to achieve the desired color intensity.
-                          </Box> */}
                           <Box display={'flex'} mt={'10px'}>
                             <Img src={preloadedAssets.FB} h={'1em'} w={'1em'} />
                             <Text textAlign={'justify'}>
@@ -180,7 +172,6 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                         <Img
                           src={preloadedAssets.left}
                           className={'interaction_button'}
-                          // onClick={() => prevData(data)}
                         />
                         <Img
                           src={preloadedAssets.right}
@@ -189,59 +180,13 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                         />
                       </Box>
                     </Box>
-                    {/* <Box className={'story_note_block'}> */}
-                    {/* <Text textAlign={'center'}>{feed}</Text> */}
-                    {/* </Box> */}
                   </Box>
                 </Box>
               </Box>
             </GridItem>
           </Grid>
         </Box>
-        {/* <Box className={'player_character_image'} zIndex={999}> */}
-        {/* <Canvas camera={{ position: [0, 1, 9] }} >           
-            <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
-            <ambientLight intensity={0.5} />
-            <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
-            <Player />
-          </Canvas> */}
-        {/* </Box> */}
-        {/* <ThreeScene/> */}
-        {/* {currentScreenId === 9 ? (
-          <>
-            <Box>
-              <React.Fragment>{feed}</React.Fragment>
-            </Box>
-            <Box
-              w={'100%'}
-              onClick={() => getData(data)}
-              mt={'20px'}
-              display={'flex'}
-              justifyContent={'center'}
-              cursor={'pointer'}
-            >
-              <Img src={preloadedAssets.next} w={'200px'} h={'60px'} />
-            </Box>
-          </>
-        ) : (
-          <>
-            {FeedbackremainingSentences}
-            {isScreenshot === true ? (
-              <InteractionScreenShot
-                data={FeedBackoptionData}
-                option={FeedBackselectedoptionData}
-                options={options}
-                backGroundImg={backgroundScreenUrl}
-                profile={profile}
-                geTfeedBackoption={geTfeedBackoption}
-                isScreenshot={isScreenshot}
-                preloadedAssets={preloadedAssets}
-              />
-            ) : (
-              ''
-            )}
-          </>
-        )} */}
+       
         {isScreenshot === true && (
           <InteractionScreenShot
             data={FeedBackoptionData}

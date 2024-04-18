@@ -1182,22 +1182,6 @@ const Story: React.FC<{
                             onClick={() => getData(data)}
                           />
                         </Box>
-                        {/* <Box
-                          w={'100%'}
-                          onClick={() => getData(data)}
-                          mt={'20px'}
-                          display={'flex'}
-                          justifyContent={'center'}
-                         
-                          position={'absolute'}
-                          bottom={'-8%'}
-                        >
-                          <Img
-                            src={preloadedAssets.next}
-                            h={'7vh'}
-                            className={'story_note_next_button'}
-                          />
-                        </Box> */}
                       </Box>
                     </Box>
                   </Box>
