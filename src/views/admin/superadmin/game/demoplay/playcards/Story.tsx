@@ -981,57 +981,89 @@ const Story: React.FC<{
           </Box>
         )}
         {data && type === 'feedback' && (
-          <Box
-            position="relative"
-            w={'100%'}
-            height="100vh"
-            backgroundImage={backGroundImg}
-            backgroundSize={'cover'}
-            backgroundRepeat={'no-repeat'}
-            className="chapter_potrait"
-          >
-            <Grid
-              templateColumns="repeat(1, 1fr)"
-              gap={4}
-              position="absolute"
-              top="50%"
-              left="50%"
-              transform="translate(-50%, -50%)"
-              className="story_note_grid"
-            >
-              <GridItem colSpan={1} position={'relative'}>
-                <Box display={'flex'} justifyContent={'center'}>
-                  <Img src={preloadedAssets.feedi} className="story_note_image" loading="lazy" />
-                  <Box
-                    className={'story_note_content'}
-                  // bg={'blue.300'}
-                  >
-                    <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                      <Box className={'story_note_block'}>
-                        <Text textAlign={'center'}>{feed}</Text>
-                      </Box>
-                    </Box>
-                    <Box
-                      w={'100%'}
-                      onClick={() => getData(data)}
-                      mt={'20px'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                      cursor={'pointer'}
-                      position={'fixed'}
-                      top={'70%'}
-                    >
-                      <Img
-                        src={preloadedAssets.next}
-                        h={'7vh'}
-                        className={'story_note_next_button'}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              </GridItem>
-            </Grid>
-          </Box>
+           <Box
+           position="relative"
+           w={'100%'}
+           height="100vh"
+           backgroundImage={backGroundImg}
+           backgroundSize={'cover'}
+           backgroundRepeat={'no-repeat'}
+           className="chapter_potrait"
+         >
+           <Grid
+             templateColumns="repeat(1, 1fr)"
+             gap={4}
+             position="absolute"
+             top="50%"
+             left="50%"
+             transform="translate(-50%, -50%)"
+             w={'90%'}
+           >
+             <GridItem colSpan={1} position={'relative'}>
+               <Box w={'fit-content'} display={'flex'} position={'relative'}>
+                 <Img
+                   src={preloadedAssets.feedi}
+                   className="story_note_image"
+                   loading="lazy"
+                 />
+                 <Box
+                   position={'absolute'}
+                   top={{ base: '5%', md: '6%' }}
+                   className='story_feedback_content'
+                 >
+                   <Box display={'flex'} justifyContent={'center'} alignItems={'center'} h={'100%'}>
+                     <Box
+                       w={'90%'}
+                       h={'70%'}
+                       display={'flex'}
+                       justifyContent={'center'}
+                       position={'relative'}
+                     >
+                       <Img src={preloadedAssets?.feedparch} w={'auto'} h={'100%'} />
+                       <Box position={'absolute'} top={0} width={'100%'} h={'100%'} display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
+                         <Box className='feed_list'> Interaction </Box>
+                         <Box w={'70%'} h={'75%'} overflowY={'scroll'} className='feedback_content_text'>
+                           {/* <Box display={'flex'}>
+                             <Img src={preloadedAssets.qs} h={'1em'} w={'1em'}  />
+                             This way, you can increase the RGB color intensity of the GLTF/GLB model while using an HDR environment map in your React Three Fiber scene. Adjust the values as needed to achieve the desired color intensity.
+                           </Box>
+                           <Box display={'flex'} mt={'10px'}>
+                             <Img src={preloadedAssets.ANS} h={'1em'} w={'1em'}  />
+                              Adjust the values as needed to achieve the desired color intensity.
+                           </Box> */}
+                           <Box display={'flex'} mt={'10px'}>
+                             <Img src={preloadedAssets.FB} h={'1em'} w={'1em'}  />
+                            <Text textAlign={'justify'}>{feed}</Text>
+                           </Box>
+                         </Box>
+                       </Box>
+                       <Box
+                         w={'100%'}
+                         onClick={() => getData(data)}
+                         mt={'20px'}
+                         display={'flex'}
+                         justifyContent={'center'}
+                         cursor={'pointer'}
+                         position={'absolute'}
+                         bottom={'-8%'}
+                       >
+                         <Img
+                           src={preloadedAssets.next}
+                           h={'7vh'}
+                           className={'story_note_next_button'}
+                         />
+                       </Box>
+                     </Box>
+                     {/* <Box className={'story_note_block'}> */}
+                     {/* <Text textAlign={'center'}>{feed}</Text> */}
+                     {/* </Box> */}
+                   </Box>
+ 
+                 </Box>
+               </Box>
+             </GridItem>
+           </Grid>
+         </Box>
         )}
       </>
     );

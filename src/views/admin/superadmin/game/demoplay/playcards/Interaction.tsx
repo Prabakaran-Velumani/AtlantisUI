@@ -108,7 +108,9 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                     justifyContent={'flex-start'}
                   >
                     <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
+                    <Text textAlign={'justify'}>
                     {Contentlanguage ? Contentlanguage : data?.blockText}
+                    </Text>
                   </Box>
                 </Box>
                 <Box

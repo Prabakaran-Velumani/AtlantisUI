@@ -75,14 +75,15 @@ interface Review {
 
 interface ShowPreviewProps {
   gameScreens: string[];
-  currentScreenId: number;
-  setCurrentScreenId: React.Dispatch<React.SetStateAction<number>>;
+  // currentScreenId: number;
+  // setCurrentScreenId: React.Dispatch<React.SetStateAction<number>>;
   gameInfo: any;
   handleSubmitReview: (data: any) => Promise<boolean>;
   isReviewDemo: boolean;
   currentScore: any;
   setCurrentScore: any;
   preloadedAssets: any;
+  InitialScreenId: number;
 }
 
 type TabAttributeSet = {
@@ -133,14 +134,15 @@ export const ProfileContext = createContext<ProfileDataType>({
 
 const EntirePreview: React.FC<ShowPreviewProps> = ({
   gameScreens,
-  currentScreenId,
-  setCurrentScreenId,
+  // currentScreenId,
+  // setCurrentScreenId,
   gameInfo,
   handleSubmitReview,
   isReviewDemo,
   currentScore,
   setCurrentScore,
   preloadedAssets,
+  InitialScreenId
 }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -277,6 +279,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   // const [isMobileView, setIsMobileView] = useState(isMobile);
   const [navTrack, setNavTrack] = useState([]);
   const [currentTrackPointer, setCurrentTrackPointer] = useState(0);
+  const [currentScreenId, setCurrentScreenId] = useState<number>(InitialScreenId);
 
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
@@ -2268,7 +2271,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           <Box className="Images">
                             <ThankYou
                               formData={gameInfo?.gameData}
-                              imageSrc={preloadedAssets.Screen6}
+                              imageSrc={preloadedAssets.ThankYou}
                             />
                           </Box>
                         </Box>

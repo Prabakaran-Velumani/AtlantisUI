@@ -49,7 +49,7 @@ const GamePreview = () => {
   const [gameInfo, setGameInfo] = useState<any | null>(null);
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
-  const [currentScreenId, setCurrentScreenId] = useState<number>(InitialScreenId);
+  // const [currentScreenId, setCurrentScreenId] = useState<number>(InitialScreenId);
   const [profile, setProfile] = useState({
     score: [],
     completedLevels: ['1'],
@@ -502,12 +502,13 @@ const GamePreview = () => {
                 currentScore={currentScore}
                 setCurrentScore={setCurrentScore}
                 gameScreens={gameScreens}
-                currentScreenId={currentScreenId}
-                setCurrentScreenId={setCurrentScreenId}
+                // currentScreenId={currentScreenId}
+                // setCurrentScreenId={setCurrentScreenId}
                 gameInfo={gameInfo}
                 handleSubmitReview={handleSubmitReview}
                 isReviewDemo={id ? false : true}
                 preloadedAssets={preloadedAssets}
+                InitialScreenId={InitialScreenId}
               />
             </Box>
           </ScoreContext.Provider>

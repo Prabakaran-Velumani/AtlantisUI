@@ -172,7 +172,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                   </Box>
                   </Box>
                 </Box>
-                <Box
+                {/* <Box
                   textAlign={'center'}
                   h={'25%'}
                   display={'flex'}
@@ -236,7 +236,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                         </Box>
                       ))}
                   </Box>
-                </Box>
+                </Box> */}
 
               {/* </Box>
             </Box>

@@ -3834,7 +3834,7 @@ grid-row: 1 / 2;
 .note_title{
   font-size: 6.5vh;
   font-family: AtlantisText;
-  color: #ee2d3d;
+  color: (--dialog-title-color);
   letter-spacing: 2px
 }
 .note_align{

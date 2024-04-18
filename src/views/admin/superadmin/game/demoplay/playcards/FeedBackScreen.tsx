@@ -201,6 +201,18 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
             )}
           </>
         )} */}
+         {isScreenshot === true && (
+              <InteractionScreenShot
+                data={FeedBackoptionData}
+                option={FeedBackselectedoptionData}
+                options={options}
+                backGroundImg={backgroundScreenUrl}
+                profile={profile}
+                geTfeedBackoption={geTfeedBackoption}
+                isScreenshot={isScreenshot}
+                preloadedAssets={preloadedAssets}
+              />
+            )}
       </>
     </>
   );
