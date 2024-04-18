@@ -121,7 +121,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
- 
+
   const [select, setSelect] = useState(false);
   const [languages, setLanguages] = useState<any[]>(null);
   // Afrith-modified-starts-08/Mar/24
@@ -133,7 +133,11 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const [gameContentId, setGameContentId] = useState(null);
   //Afrith-modified-ends-20/Mar/24
   const { id } = useParams();
-  const gender = [{label:'Male',value:'Male'},{label:'FeMale',value:'FeMale'},{label:'Others',value:'Others'}]
+  const gender = [
+    { label: 'Male', value: 'Male' },
+    { label: 'FeMale', value: 'FeMale' },
+    { label: 'Others', value: 'Others' },
+  ];
   useEffect(() => {
     const fetch = async () => {
       const resLang = await getGameLanguages(id);
@@ -163,7 +167,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     if (playerInfo.name === '') {
       setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
     }
-    setCurrentScreenId(13); 
+    setCurrentScreenId(13);
     //navigate to Chapter selection
 
     // if (Object.keys(demoBlocks).length > 1) {
