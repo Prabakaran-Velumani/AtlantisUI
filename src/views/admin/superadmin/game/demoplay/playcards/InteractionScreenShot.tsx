@@ -168,7 +168,6 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                           ))}
                       </Box>
                     </Box>
-
                   </Box>
                   </Box>
                 </Box>
