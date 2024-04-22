@@ -26,7 +26,8 @@ const ThankYou: React.FC<{
   setCurrentScreenId: any;
   formData: any;
   imageSrc: any;
-}> = ({ formData, imageSrc, setCurrentScreenId }) => {
+  preloadedAssets: any;
+}> = ({ formData, imageSrc, setCurrentScreenId, preloadedAssets }) => {
   const renderContentTy = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
 
@@ -61,8 +62,7 @@ const ThankYou: React.FC<{
     formData.gameOthers,
   ];
   const countfbOptions = feedbackOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
-  console.log('countfbOptions', countfbOptions);
-  // ------------------------------------------Mohana
+    // ------------------------------------------Mohana
 
   const propertiesToCheck = [
     'gameContent',
@@ -85,7 +85,6 @@ const ThankYou: React.FC<{
   // ----------------------------------------------------
   const styleflex = {};
 
-
   if (countfbOptions === 1) {
     Object.assign(styleflex, {
       display: 'flex',
@@ -93,11 +92,13 @@ const ThankYou: React.FC<{
       justifyContent: 'center',
     });
   }
+  console.log('imageSrc', imageSrc);
+  console.log('preloadedAssets', preloadedAssets.Thankyou);
   return (
     <>
-      {imageSrc && (
+      {preloadedAssets.Thankyou && (
         <Box className='section-thankyou-screen Thankyou-section'>
-          <Img src={imageSrc} className="bg-img bg-thankyou" />
+          <Img src={preloadedAssets.Thankyou} className="bg-img bg-thankyou" />
           {/* <Box className="thankyou-screen-box">
          </Box> */}
           <Box className="thankyou-screen">
