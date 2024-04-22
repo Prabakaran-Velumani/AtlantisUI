@@ -6,9 +6,7 @@ interface GameIntroType {
   setCurrentScreenId: (id: number) => void;
   setIsGetsPlayAudioConfirmation: (value: boolean) => void;
 }
-
-const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentScreenId, setIsGetsPlayAudioConfirmation }) => {
-
+const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentScreenId, setIsGetsPlayAudioConfirmation }) => {  
   return (
     <Box
       position="relative"

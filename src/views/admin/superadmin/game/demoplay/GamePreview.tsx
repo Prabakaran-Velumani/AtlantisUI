@@ -22,8 +22,11 @@ import { API_SERVER } from 'config/constant';
 import { IoIosRefresh } from 'react-icons/io';
 import PlayInfo from './playcards/playinfo';
 import CharacterGlb from 'assets/img/games/Character_sample.glb';
-import { motion } from 'framer-motion'
-const EntirePreview = lazy(() => import('./EntirePreview'));
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
+
+const EntirePreview = lazy(()=> import ('./EntirePreview'));
 const gameScreens = [
   'Completion',
   'Leaderboard',
@@ -42,7 +45,7 @@ export const ScoreContext = createContext<any>(null);
 const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
-  const InitialScreenId = id ? 10 : 1; //replace 10: game Intro, 1: welcome screen by which screen you want to play
+  const InitialScreenId = id ? 5 : 1; //replace 10: game Intro, 1: welcome screen by which screen you want to play
   const [gameInfo, setGameInfo] = useState<any | null>(null);
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -62,7 +65,9 @@ const GamePreview = () => {
   const [staticAssetImageUrls, setStaticAssetImageUrls] = useState<any>(null);
   const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
   const [componentsLoaded, setComponentsLoaded] = useState(false);
-  const [loadedGLBs, setLoadedGLBs] = useState<any>(null);
+  const [loadedGLBs, setLoadedGLBs]=useState<any>(null);
+  const user: any = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     const fetchData = async () => {
       // assetImageSrc['characterGlb'] = CharacterGlb;
@@ -83,7 +88,13 @@ const GamePreview = () => {
           { assetType: 'characterGlb', src: CharacterGlb },
         ]);
         // Use preloadedGLBs[CharacterGlb] if you need the preloaded GLB data
-        setLoadedGLBs(preloadedGLBs);
+        
+        const loader = new GLTFLoader();
+        const parsedGlbArray =  [];
+        loader.parse(preloadedGLBs, '', (gltf) => {
+          // parsedGlbArray = preloadedGLBs
+        });
+        // setLoadedGLBs(gltf.scene);
       } catch (error) {
         console.error('Error preloading GLB file:', error);
       }

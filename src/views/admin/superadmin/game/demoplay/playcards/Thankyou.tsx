@@ -26,7 +26,8 @@ const ThankYou: React.FC<{
   setCurrentScreenId: any;
   formData: any;
   imageSrc: any;
-}> = ({ formData, imageSrc, setCurrentScreenId }) => {
+  preloadedAssets: any;
+}> = ({ formData, imageSrc, setCurrentScreenId, preloadedAssets }) => {
   const renderContentTy = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
 
@@ -53,16 +54,15 @@ const ThankYou: React.FC<{
     return <React.Fragment>{contentWithLinks}</React.Fragment>;
   };
   const feedbackOptions = [
-  formData.gameContent,
-  formData.gameRecommendation,
-  formData.gameRelevance,
-  formData.gameGamification,
-  formData.gameBehaviour,
-  formData.gameOthers,
-];
-const countfbOptions = feedbackOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
-console.log('countfbOptions',countfbOptions);
-// ------------------------------------------Mohana
+    formData.gameContent,
+    formData.gameRecommendation,
+    formData.gameRelevance,
+    formData.gameGamification,
+    formData.gameBehaviour,
+    formData.gameOthers,
+  ];
+  const countfbOptions = feedbackOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
+    // ------------------------------------------Mohana
 
   const propertiesToCheck = [
     'gameContent',
@@ -85,21 +85,19 @@ console.log('countfbOptions',countfbOptions);
 // ----------------------------------------------------
 const styleflex = {};
 
-
   if (countfbOptions === 1) {
     Object.assign(styleflex, {
       display: 'flex',
       flexDirection: 'row', // Display in a column for 1 or 3 divs
       justifyContent: 'center',
     });
-  } 
+  }
+
   return (
     <>
-      {imageSrc && (
-         <Box className='section-thankyou-screen Thankyou-section'>
-         <Img src={imageSrc} className="bg-img bg-thankyou" />
-         {/* <Box className="thankyou-screen-box">
-         </Box> */}
+      {preloadedAssets.Thankyou && (
+        <Box className='section-thankyou-screen Thankyou-section'>
+          <Img src={preloadedAssets.Thankyou} className="bg-img bg-thankyou" />
          <Box className="thankyou-screen">
            <Box className='content'>
              <Box

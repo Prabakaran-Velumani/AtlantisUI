@@ -516,8 +516,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const getData = (next: any) => {
     setAudioObj(null);
     setIsPrevNavigation(false);
-    console.log('demoBlocks', demoBlocks);
-    console.log('next', next);
     if (next?.blockChoosen === 'Interaction') {
       const isDuplicate = feedbackList?.some(
         (item: any) =>
@@ -536,8 +534,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             },
           ]);
         }
-
-        console.log('feed', feed, '...', feedbackList.length);
       }
     }
 
@@ -643,7 +639,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'Select Block') {
-        console.log('655', next);
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -1215,9 +1210,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setCurrentScreenId(5);
       return false;
     }
-    console.log('7777');
     if (nextBlock.length === 0) {
-      console.log('1124');
       const Nextcurrentquest = next?.blockQuestNo;
       const getgameinfoquest = gameInfo?.gameQuest.find(
         (row: any) => row.gameQuestNo == Nextcurrentquest,
@@ -1312,7 +1305,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Select Block') {
-        console.log('1220', next);
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -1847,7 +1839,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ? parseInt(data?.blockPrimarySequence.split('.')[0])
       : null;
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-    console.log('nextLevel', nextLevel);
     if (demoBlocks.hasOwnProperty(nextLevel)) {
       setProfile((prev: any) => {
         const data = { ...prev };
@@ -2293,7 +2284,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             <ThankYou
                               setCurrentScreenId={setCurrentScreenId}
                               formData={gameInfo?.gameData}
-                              imageSrc={preloadedAssets?.Thankyou}
+                              imageSrc={preloadedAssets.ThankYou}
+                              preloadedAssets = {preloadedAssets}
                             />
                           </Box>
                         </Box>
