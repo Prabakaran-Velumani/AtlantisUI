@@ -1,8 +1,6 @@
 import { Box, Icon, Text } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
-import Slider from "react-slick";
-import Card from 'components/card/Card'
 import { FaCubes, FaRobot } from "react-icons/fa";
 import { MdOutlineSubtitles, MdTune } from "react-icons/md";
 import { GiBlackBook } from "react-icons/gi";
@@ -43,58 +41,66 @@ function SimpleSlider() {
   ];
   const containerRef = useRef(null);
   const [centerIndex, setCenterIndex] = useState(0);
-  useEffect(() => {
-    const handleScroll = () => {
-      if (containerRef.current) {
-        const containerWidth = containerRef.current.offsetWidth;
-        const scrollLeft = containerRef.current.scrollLeft;
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (containerRef.current) {
+  //       const containerWidth = containerRef.current.offsetWidth;
+  //       const scrollLeft = containerRef.current.scrollLeft;
 
-        const distances = tabs.map((_, index) => {
-          const item = containerRef.current.children[index];
-          const itemWidth = item.offsetWidth;
-          const itemLeft = item.offsetLeft;
-          const center = scrollLeft + containerWidth / 2;
-          const distance = Math.abs(itemLeft + itemWidth / 2 - center);
-          return distance;
-        });
+  //       const distances = tabs.map((_, index) => {
+  //         const item = containerRef.current.children[index];
+  //         const itemWidth = item.offsetWidth;
+  //         const itemLeft = item.offsetLeft;
+  //         const center = scrollLeft + containerWidth / 2;
+  //         const distance = Math.abs(itemLeft + itemWidth / 2 - center);
+  //         return distance;
+  //       });
 
-        const closestIndex = distances.indexOf(Math.min(...distances));
-        setCenterIndex(closestIndex);
-      }
-    };
+  //       const closestIndex = distances.indexOf(Math.min(...distances));
+  //       setCenterIndex(closestIndex);
+  //     }
+  //   };
 
-    if (containerRef.current) {
-      containerRef.current.addEventListener('scroll', handleScroll, { passive: true });
-    }
+  //   if (containerRef.current) {
+  //     containerRef.current.addEventListener('scroll', handleScroll, { passive: true });
+  //   }
 
-    return () => {
-      if (containerRef.current) {
-        containerRef.current.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [tabs]);
+  //   return () => {
+  //     if (containerRef.current) {
+  //       containerRef.current.removeEventListener('scroll', handleScroll);
+  //     }
+  //   };
+  // }, [tabs]);
   
-  const scrollToIndex = (index:any) => { // add your current tab
-    if (containerRef.current) {
-      const targetElement = containerRef.current.children[index]; // show the current tab
- 
-      if (targetElement) {
-        targetElement.scrollIntoView({
-          behavior: 'smooth',
-          inline: 'center',
-        });
-      }
+  const scrollToIndex = (index:any) => {
+    const container = containerRef.current;
+    const tabWidth = container.scrollWidth / tabs.length;
+    if (container) {
+      container.scrollTo({
+        left: tabWidth * index,
+        behavior: 'smooth',
+      });
     }
   };
 
-  useEffect(() => {
-    scrollToIndex(centerIndex);
-  }, [centerIndex]);
+  // useEffect(() => {
+  //   scrollToIndex(centerIndex);
+  // }, [centerIndex]);
   
+  const handleScrollLeft = () => {
+    setCenterIndex(centerIndex === 0 ? centerIndex : centerIndex - 1)
+    scrollToIndex(centerIndex === 0 ? centerIndex : centerIndex - 1);
+  };
+
+  const handleScrollRight = () => {
+    setCenterIndex(centerIndex === 5 ? centerIndex : centerIndex + 1)
+    // console.log(centerIndex === 5 ? centerIndex : centerIndex + 1);
+    scrollToIndex(centerIndex === 5 ? centerIndex : centerIndex + 1);
+  };
   return (
     <>
       <Box h={'130px'} w={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-        <Icon as={FaCircleChevronLeft} w={8} h={8} onClick={()=>scrollToIndex(centerIndex === 0 ? centerIndex :centerIndex-1)} />
+        <Icon as={FaCircleChevronLeft} w={8} h={8} onClick={handleScrollLeft} />
         <Box h={'100%'} w={'100%'} ref={containerRef} display={'flex'} overflowX={'scroll'} sx={{ scrollBehavior: 'smooth', transition: 'overflow-x 1s ease' }}>
           {tabs && tabs.map((tab, i) => (
             <Box key={i} className="mobile_progress" display={'flex'} justifyContent={'center'}>
@@ -107,7 +113,7 @@ function SimpleSlider() {
             </Box>
           ))}
         </Box>
-        <Icon as={FaCircleChevronRight} onClick={()=>scrollToIndex(centerIndex === 5 ? centerIndex :centerIndex+1)} w={8} h={8} />
+        <Icon as={FaCircleChevronRight} onClick={handleScrollRight} w={8} h={8} />
       </Box >
     </>
     // <div className="slider-container">
