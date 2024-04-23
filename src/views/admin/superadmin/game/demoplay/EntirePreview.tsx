@@ -125,6 +125,28 @@ interface ProfileDataType {
   fieldName?: any;
 }
 
+
+// case 0: // play info
+// case 1: // case 1 welcome screen
+// case 2: // case 2 Story
+// case 3: // case 3 Reflection
+// case 4: // case 4 LeaderBoard
+// case 5: // case 5 Thankyou
+// case 6: // case 6 Completion
+// case 7: // case 7 takeaway
+// case 8: // case 8 Replaygame
+// case 9: // case 9 feedback
+// case 10:// case 10 Game Intro / login
+// case 11:// case 11 Profilescreen
+// case 12:// case 12 Character select
+// case 13:// case 13 Chapter select
+// case 14:// case 14 feedback together
+// case 15:// case 15 Chapter select
+
+
+
+const skipScreenList = [0, 8, 11, 12, 13,15];
+
 export const ProfileContext = createContext<ProfileDataType>({
   name: '',
   gender: '',
@@ -469,6 +491,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       currentScreenId === 1 &&
       isGetsPlayAudioConfirmation &&
       setAudio(gameInfo?.bgMusic ?? '');
+
   }, [currentScreenId, gameInfo]);
 
   const prevData = (current: any) => {
@@ -514,6 +537,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const getData = (next: any) => {
+    console.log('getData', next)
     setAudioObj(null);
     setIsPrevNavigation(false);
     if (next?.blockChoosen === 'Interaction') {
@@ -1618,10 +1642,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const setFeedBackFromValue = () => {
     switch (currentScreenId) {
       case 0:
-        setReviewTabOptions([1, 3, 5]); //GameInto screen
+        setReviewTabOptions([1, 5]); //GameInto screen
         break;
       case 1:
-        setReviewTabOptions([1, 3, 5]); //Welcome
+        // setReviewTabOptions([1, 3, 5]); //Welcome
+        setReviewTabOptions([1, 5]); //Welcome
         break;
       case 2:
         setReviewTabOptions([1, 2, 4]); //Story
@@ -1641,8 +1666,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       case 7:
         setReviewTabOptions([1, 5]); //TakeAway
         break;
-      default:
-        setReviewTabOptions([1, 2, 3, 4, 5]); //All
+      case 9:
+        setReviewTabOptions([1, 2, 4]); //Feedback after Each interaction
+        break;
+      case 14:
+        setReviewTabOptions([1, 2, 4]); //Feedback after Completion All together
+        break;
+
+      // default:
+      //   setReviewTabOptions([1, 2, 3, 4, 5]); //All
     }
   };
 
@@ -1691,32 +1723,50 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         audioRef.current.play();
       }
     }
+    setReviewInput((prev: any)=>({...prev,  review: '', tabId: null, tabAttribute: '',  tabAttributeValue: ''}));
+    isMenuOpen && setIsMenuOpen(false);
   }, [currentScreenId]);
-  useEffect(() => {
+  useEffect(() => {        
     if (reviewInput?.tabId) {
-      if (reviewInput?.tabId === 5) {
+      if (reviewInput?.tabId == 5) {
+        if(currentScreenId === 6 )
+          {
+            setReviewInput((prev: Review) => ({
+              ...prev,
+              tabAttribute: 'screenId',
+              tabAttributeValue: Tab5attribute.indexOf(Number(currentScreenId)).toString()+'@'+profile?.currentQuest,
+            }));
+          }else{
+            setReviewInput((prev: Review) => ({
+              ...prev,
+              tabAttribute: 'screenId',
+              tabAttributeValue: Tab5attribute.indexOf(Number(currentScreenId)).toString(),
+            }));
+          }
+
         setReviewSubTabOptions([]);
-        setReviewInput((prev: Review) => ({
-          ...prev,
-          tabAttribute: 'screenId',
-          tabAttributeValue: Tab5attribute.indexOf(
-            Number(currentScreenId),
-          ).toString(),
-        }));
-      } else if (reviewInput?.tabId === 4) {
-        //for Story Tab
-        const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
-        setReviewSubTabOptions([]);
-        setReviewInput((prev: Review) => ({
-          ...prev,
-          tabAttribute: 'blockSeqId',
-          tabAttributeValue: blockSeqId,
-        }));
+        
+      } else if (reviewInput?.tabId == 4) {
+        //for Story Tab *******
+        if(currentScreenId == 9 || currentScreenId == 14){
+          const blockSeqId = currentScreenId == 9 ? (data.blockQuestNo + '@' + data.blockSecondaryId) : (FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition-1 : FeedbackcurrentPosition].blockQuestNo + '@' + FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition-1 : FeedbackcurrentPosition].blockSecondaryId);
+          setReviewInput((prev: Review) => ({
+            ...prev,
+            tabAttribute: 'blockSeqId',
+            tabAttributeValue: blockSeqId,
+          }));
+        }
+      else{
+              const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
+              setReviewSubTabOptions([]);
+              setReviewInput((prev: Review) => ({...prev,tabAttribute: 'blockSeqId',tabAttributeValue: blockSeqId}));
+            }
       } else {
-        const subOptions = subTabOptionsForTabIds.find(
-          (item: any) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
-        );
-        setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
+          const subOptions = subTabOptionsForTabIds.find(
+            (item: any) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
+          );
+          setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
+        
       }
       /** To hide the sub tab options and set the subtab selection based on the current screen it here */
     }
@@ -2662,7 +2712,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               }
             })()}
           </Flex>
-          {isReviewDemo && (
+
+          {isReviewDemo && !skipScreenList?.includes(currentScreenId) && (
             <Menu isOpen={isMenuOpen}>
               <MenuButton
                 p="0px"
@@ -2678,8 +2729,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   as={AiFillMessage}
                   bg={'#3311db'}
                   color={'#fff'}
-                  w="70px"
-                  h="70px"
+                  w="60px"
+                  h="60px"
                   borderRadius={'50%'}
                   p={'15px'}
                   me="10px"
