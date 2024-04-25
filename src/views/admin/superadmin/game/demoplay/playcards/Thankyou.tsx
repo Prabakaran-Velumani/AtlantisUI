@@ -92,8 +92,7 @@ const ThankYou: React.FC<{
       justifyContent: 'center',
     });
   }
-  console.log('imageSrc', imageSrc);
-  console.log('preloadedAssets', preloadedAssets.Thankyou);
+
   return (
     <>
       {preloadedAssets.Thankyou && (

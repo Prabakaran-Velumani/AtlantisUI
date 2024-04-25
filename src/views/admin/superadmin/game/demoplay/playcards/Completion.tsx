@@ -150,8 +150,6 @@ const Completion: React.FC<{
 
   const getcompletionquest = currentQuestNo - 1;
 
-
-
   return (
     <>
       <motion.div
@@ -238,9 +236,20 @@ const Completion: React.FC<{
                   <Text className="points-text" fontFamily={'content'}>
                     {curretQuestOptions?.gameBadgeName}
                   </Text>
-                  {curretQuestOptions?.gameBadge && (
+                  {curretQuestOptions?.gameBadge && 
+                  curretQuestOptions?.gameIsSetCriteriaForBadge ==='true' && curretQuestOptions?.gameAwardBadgeScore <= profile.score.reduce((acc : any, cur:any) => {
+                    if (cur.quest === currentQuestNo) {
+                        return acc + cur.score;
+                    } else {
+                        return acc;
+                    }
+                }, 0) ?
+                  (
                     <Img className="inside-img" src={preloadedAssets[`Quest_${profile.currentQuest}`]} />
-                  )}{' '}
+                  )
+                  : <Img className="inside-img" src={preloadedAssets[`Quest_${profile.currentQuest}-shadow`]} />
+
+                }{' '}
                 </Box>
               )}
             </Box>

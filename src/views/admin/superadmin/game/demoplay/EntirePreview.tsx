@@ -2678,6 +2678,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       </Box> */}
                     </>
                   );
+                  break;
 
                 default:
                   console.log(

@@ -49,7 +49,7 @@ export const ScoreContext = createContext<any>(null);
 const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
-  const InitialScreenId = id ? 5 : 1; //replace 10: game Intro, 1: welcome screen by which screen you want to play
+  const InitialScreenId = id ? 10 : 1; //replace 10: game Intro, 1: welcome screen by which screen you want to play
   const [gameInfo, setGameInfo] = useState<any | null>(null);
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -70,7 +70,7 @@ const GamePreview = () => {
   const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
   const [componentsLoaded, setComponentsLoaded] = useState(false);
   const [loadedGLBs, setLoadedGLBs]=useState<any>(null);
-const user: any = JSON.parse(localStorage.getItem('user'));
+  const user: any = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -245,7 +245,10 @@ const user: any = JSON.parse(localStorage.getItem('user'));
             let objkeyValue = key.split('_')[1];
             let objKey = `Quest_${objkeyValue}`;
             let objKeyValue = API_SERVER + '/' + value;
+            let badgeUrl =  value.split('.');
+            const shadowBadgeUrl = badgeUrl[0]+'-shadow.'+badgeUrl[1];
             apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
+            apiImageSetArr.push({ assetType: objKey+'-shadow', src: API_SERVER + '/' +shadowBadgeUrl });
           });
           setApiImageSet(apiImageSetArr);
           return true;
@@ -370,8 +373,11 @@ const user: any = JSON.parse(localStorage.getItem('user'));
             let objKey = `Quest_${objkeyValue}`;
             let objKeyValue = API_SERVER + '/' + value;
             apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
+            let badgeUrl =  value.split('.');
+            const shadowBadgeUrl = badgeUrl[0]+'-shadow.'+badgeUrl[1];
+            apiImageSetArr.push({ assetType: objKey+'-shadow', src:  API_SERVER + '/' + shadowBadgeUrl });
           });
-          setApiImageSet(apiImageSetArr);
+          setApiImageSet(apiImageSetArr);          
           return true;
         },
       ),
@@ -470,7 +476,7 @@ const user: any = JSON.parse(localStorage.getItem('user'));
   }, [apiUrlAssetImageUrls, staticAssetImageUrls, loadedGLBs]);
 
   useEffect(()=>{
-    console.log('loadedGLBs',loadedGLBs);
+    // console.log('loadedGLBs',loadedGLBs);
   },[loadedGLBs])
   useEffect(() => {
     if (gameInfo && Object.keys(preloadedAssets).length > 0 && componentsLoaded === true) {

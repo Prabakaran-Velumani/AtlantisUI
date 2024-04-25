@@ -83,7 +83,7 @@ useEffect(()=>{
   }
   else{
     const completedQuest = profile?.completedLevels.length-1;
-    console.log('profile?.completedLevels', profile?.completedLevels)
+    // console.log('profile?.completedLevels', profile?.completedLevels)
     let gameProgress = 0;
     if(completedQuest > 0)
       { 
@@ -97,7 +97,7 @@ useEffect(()=>{
 },[data, currentScreenId])
 
 const handleMusicVolume = (vol: any)=>{
-  console.log('Volume : ', vol);
+  // console.log('Volume : ', vol);
   setAudioObj((prev: any)=>({...prev, "volume": vol}));
 }
 
@@ -251,7 +251,9 @@ const handleMusicVolume = (vol: any)=>{
                       aria-label="slider-ex-4"
                       defaultValue={30}
                       name="musicVolume"
-                      onChangeEnd={(val) => {handleMusicVolume(val); console.log("Music Volume Level ---", val);}}
+                      onChangeEnd={(val) => {handleMusicVolume(val); 
+                        //console.log("Music Volume Level ---", val);
+                      }}
                       value={audioObj.volume ?? 0}
                     >
                       <SliderTrack

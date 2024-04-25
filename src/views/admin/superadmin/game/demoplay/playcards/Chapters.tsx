@@ -125,14 +125,14 @@ const ChapterPage: React.FC<{
         if (formData?.gameDisableOptionalReplays === 'false') {
           if (item?.gameIsSetMinPassScore === 'true') {
             const getminpassscore = item?.gameMinScore;
-            console.log(
-              'finalscore >= getminpassscore && finalscore < item?.gameDistinctionScore',
-              finalscore >= getminpassscore,
-              '....',
-              finalscore < item?.gameDistinctionScore,
-              'finalscore',
-              finalscore,
-            );
+            // console.log(
+            //   'finalscore >= getminpassscore && finalscore < item?.gameDistinctionScore',
+            //   finalscore >= getminpassscore,
+            //   '....',
+            //   finalscore < item?.gameDistinctionScore,
+            //   'finalscore',
+            //   finalscore,
+            // );
             if (
               finalscore >= getminpassscore &&
               finalscore < item?.gameDistinctionScore
@@ -248,7 +248,7 @@ const ChapterPage: React.FC<{
       opacity: 1,
     },
   };
-  console.log('queststate', questState);
+  
   return (
     <>
       <Box

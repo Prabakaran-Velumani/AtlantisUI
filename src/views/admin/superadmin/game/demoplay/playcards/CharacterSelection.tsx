@@ -150,7 +150,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 
   const selectPlayerClick = () => {
     setSelectedPlayer(players[i]);
-    console.log('Object.keys(demoBlocks).length', Object.keys(demoBlocks).length);
+    // console.log('Object.keys(demoBlocks).length', Object.keys(demoBlocks).length);
     /**if game has more than one quest, then navigate to chapter selection screen, otherwise navigate to story part direclty */
     if (playerInfo.name === '') {
       setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
@@ -185,7 +185,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       ...prev,
       [id]: id === 'name' ? value : lang,
     }));
-    console.log('langId', langId);
+    // console.log('langId', langId);
     setGameContentId(langId);
     // getContentRelatedLanguage(currGameId, langId);
   };
@@ -215,7 +215,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       if(gameContentId){
         fetchGameContent();
       }
-      console.log('gameContentId',gameContentId)
+      // console.log('gameContentId',gameContentId)
     },[gameContentId])
     /////////
     // Afrith-modified-starts-08/Mar/24
