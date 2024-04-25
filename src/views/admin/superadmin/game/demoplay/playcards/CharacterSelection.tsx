@@ -195,7 +195,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       ...prev,
       [id]: id === 'name' ? value : lang,
     }));
-    console.log('langId', langId);
+    // console.log('langId', langId);
     setGameContentId(langId);
     // getContentRelatedLanguage(currGameId, langId);
   };
@@ -229,13 +229,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     }
     console.log('gameContentId', gameContentId);
   }, [gameContentId]);
-  /////////
-  // Afrith-modified-starts-08/Mar/24
-  // const setPlayerName = (value:any) => {
-  //   setCharacterName(value);
-  //   setProfileData((prev:any) => ({...prev, name:value}))
-  // };
-  // Afrith-modified-ends-08/Mar/24
 
   const innerBoxWidth = useBreakpointValue({
     base: '95%',

@@ -2702,6 +2702,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       </Box> */}
                     </>
                   );
+                  break;
+
                 default:
                   console.log(
                     'game details of the data',

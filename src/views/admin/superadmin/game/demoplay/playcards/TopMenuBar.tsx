@@ -78,29 +78,33 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
             const hasMatchingSequence = blockPrimarySequence.trim() === (data?.blockPrimarySequence || '').trim();
             return hasMatchingSequence;
           }
-          return false;
-        });
-        const progressBarRatio: any = keyWithValueOfCurrentBlock && (parseInt(keyWithValueOfCurrentBlock) > 0 ? (parseInt(keyWithValueOfCurrentBlock) - 1) / totalblockCount : 0);
-        setProgressPercent(progressBarRatio && progressBarRatio > 0 ? progressBarRatio : 0);
+      //     return false;
+      //   });
+      //   const progressBarRatio: any = keyWithValueOfCurrentBlock && (parseInt(keyWithValueOfCurrentBlock) > 0 ? (parseInt(keyWithValueOfCurrentBlock) - 1) / totalblockCount : 0);
+      //   setProgressPercent(progressBarRatio && progressBarRatio > 0 ? progressBarRatio : 0);
+      // }
+      return false;
+  });
+    const progressBarRatio:any = keyWithValueOfCurrentBlock && (parseInt(keyWithValueOfCurrentBlock) > 0 ? (parseInt(keyWithValueOfCurrentBlock)-1)/totalblockCount: 0 );
+    setProgressPercent(progressBarRatio && progressBarRatio > 0 ? progressBarRatio :0 );
       }
-      else {
-        const completedQuest = profile?.completedLevels.length - 1;
-        console.log('profile?.completedLevels', profile?.completedLevels)
+      else{
+        const completedQuest = profile?.completedLevels.length-1;
+        // console.log('profile?.completedLevels', profile?.completedLevels)
         let gameProgress = 0;
-        if (completedQuest > 0) {
-          gameProgress = completedQuest / gameInfo?.gameQuest?.length;
+        if(completedQuest > 0)
+          { 
+            gameProgress = completedQuest/gameInfo?.gameQuest?.length;
+          }
         }
-        setProgressPercent(gameProgress && gameProgress > 0 ? gameProgress : 0);
       }
-    }
-
     progressResult();
   }, [data, currentScreenId])
 
-  const handleMusicVolume = (vol: any) => {
-    console.log('Volume : ', vol);
-    setAudioObj((prev: any) => ({ ...prev, "volume": vol }));
-  }
+const handleMusicVolume = (vol: any)=>{
+  // console.log('Volume : ', vol);
+  setAudioObj((prev: any)=>({...prev, "volume": vol}));
+}
 
 
   return (
