@@ -277,7 +277,7 @@ const ChapterPage: React.FC<{
               maxW={'100%'}
               loading="lazy"
             />
-            <Box className="chapter_title">Level</Box>
+            <Box className="chapter_title">Quest</Box>
             <Box className={'chapters_list_box'}>
               <Box w={'90%'}>
                 <motion.div

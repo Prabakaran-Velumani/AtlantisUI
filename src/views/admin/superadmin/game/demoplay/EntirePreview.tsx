@@ -46,6 +46,7 @@ import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
+import ReplayPoints from './playcards/ReplayPoints';
 const Story  = lazy(() => import('./playcards/Story'));
 const Welcome  = lazy(() => import('./playcards/Welcome'));
 const ThankYou  = lazy(() => import('./playcards/Thankyou'));
@@ -654,9 +655,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
-        setType(demoBlocks[quest]['1']?.blockChoosen);
-        setData(demoBlocks[quest]['1']);
+        // setType(demoBlocks[quest]['1']?.blockChoosen);
+        // setData(demoBlocks[quest]['1']);
         setSelectedOption(null);
+        setCurrentScreenId(16);
         return false;
       } else if (navi === 'Select Block') {
         const selectedNext = Object.keys(demoBlocks[currentQuest])
@@ -1324,9 +1326,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Replay Point') {
-        setType(demoBlocks['1']['1']?.blockChoosen);
-        setData(demoBlocks['1']['1']);
+        // setType(demoBlocks['1']['1']?.blockChoosen);
+        // setData(demoBlocks['1']['1']);
         setSelectedOption(null);
+        setCurrentScreenId(16);
         return false;
       } else if (next?.blockShowNavigate === 'Select Block') {
         const selectedNext = Object.keys(demoBlocks[currentQuest])
@@ -2642,28 +2645,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
                 case 15:
                   return (
-                    <>
-                      {/* <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box
-                          backgroundImage={preloadedAssets.backgroundImage}
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
-                          className="Game-Screen"
-                        >
-                          <Box className="Images"> */}
                       <Overview
                         formData={gameInfo?.gameData}
                         imageSrc={preloadedAssets.overview}
@@ -2672,12 +2653,21 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         setCurrentScreenId={setCurrentScreenId}
                         backGroundImg={preloadedAssets.backgroundImage}
                       />
-                      {/* </Box>
-                        </Box>
-                      </Box> */}
-                    </>
                   );
                   break;
+                
+                  case 16:
+                    return (
+                        <ReplayPoints
+                        setData={setData}
+                        setType={setType}
+                        preloadedAssets={preloadedAssets}
+                        demoBlocks={demoBlocks}
+                        profile={profile}
+                        setCurrentScreenId={setCurrentScreenId}
+                        />                      
+                    );
+                    break;  
 
                 default:
                   console.log(

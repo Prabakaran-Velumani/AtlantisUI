@@ -19,6 +19,7 @@ import {
   SimpleGrid,
   Text,
   useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
 import { MdClose } from 'react-icons/md';
 import { motion, useAnimation } from 'framer-motion';
@@ -38,11 +39,7 @@ import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import SelectButton from 'assets/img/games/selectbtn.png';
-import Lang from 'assets/img/games/lang.png';
-import Okay from 'assets/img/games/OKAY button.png';
-import FormField from 'assets/img/games/formfield.png';
-import Selected from 'assets/img/games/selected.png';
+
 // import { useGLTF } from '@react-three/drei';
 // import { Environment, OrbitControls } from '@react-three/drei';
 // import { FBXLoader } from 'three/addons/loaders/FBXLoader';
@@ -125,6 +122,8 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const [gameContentId, setGameContentId] = useState(null);
   //Afrith-modified-ends-20/Mar/24
   const { id } = useParams();
+  const toast = useToast();
+
   useEffect(() => {
     const fetch = async () => {
       const resLang = await getGameLanguages(id);
@@ -149,14 +148,33 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const playerInfo = useContext(ProfileContext);
 
   const selectPlayerClick = () => {
+    const i = 0; // Assuming you are referring to a specific player index
     setSelectedPlayer(players[i]);
-    // console.log('Object.keys(demoBlocks).length', Object.keys(demoBlocks).length);
-    /**if game has more than one quest, then navigate to chapter selection screen, otherwise navigate to story part direclty */
-    if (playerInfo.name === '') {
-      setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
+    // Check if the alias name is empty or does not meet the length requirements
+    if (playerInfo.name.trim() === '') {
+        toast({
+          title: 'Alias name is empty! Please enter an alias name.',
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+          position: 'top-right',
+        });
+        return;
+    } else if (playerInfo.name.trim().length < 5 || playerInfo.name.trim().length > 15) {
+        toast({
+          title: 'Alias name must be between 5 and 15 letters.',
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+          position: 'top-right',
+        });
+        return;
     }
+
+    // Set the selected player
+    setSelectedPlayer(players[i]);
     
-      setCurrentScreenId(13);//navigate to Chapter selection
+    setCurrentScreenId(13);//navigate to Chapter selection
 
     // if (Object.keys(demoBlocks).length > 1) {
     //   setCurrentScreenId(13);//navigate to Chapter selection
