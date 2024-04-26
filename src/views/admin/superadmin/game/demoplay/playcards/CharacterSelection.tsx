@@ -19,6 +19,7 @@ import {
   SimpleGrid,
   Text,
   useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
 import { MdClose } from 'react-icons/md';
 import { motion, useAnimation } from 'framer-motion';
@@ -38,11 +39,7 @@ import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import SelectButton from 'assets/img/games/selectbtn.png';
-import Lang from 'assets/img/games/lang.png';
-import Okay from 'assets/img/games/OKAY button.png';
-import FormField from 'assets/img/games/formfield.png';
-import Selected from 'assets/img/games/selected.png';
+
 // import { useGLTF } from '@react-three/drei';
 // import { Environment, OrbitControls } from '@react-three/drei';
 // import { FBXLoader } from 'three/addons/loaders/FBXLoader';
@@ -119,18 +116,13 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   setIsLanguage,
   isLanguage,
 }) => {
-  //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
   const [select, setSelect] = useState(false);
   const [languages, setLanguages] = useState<any[]>(null);
-  // Afrith-modified-starts-08/Mar/24
   const [characterName, setCharacterName] = useState('');
   const [toggleLeft, setToggleLeft] = useState(false);
   const [toggleRight, setToggleRight] = useState(false);
-  // Afrith-modified-ends-08/Mar/24
-  //Afrith-modified-starts-20/Mar/24
   const [gameContentId, setGameContentId] = useState(null);
-  //Afrith-modified-ends-20/Mar/24
   const { id } = useParams();
   const gender = [
     { label: 'Male', value: 'Male' },
@@ -150,8 +142,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
             language: data[0]?.label,
           }));
           setIsLanguage(true);
-          // setTimeout(() => {
-          // }, 1500);
         }
       }
     };
@@ -161,6 +151,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const playerInfo = useContext(ProfileContext);
 
   const selectPlayerClick = () => {
+    const i = 0; // Assuming you are referring to a specific player index
     setSelectedPlayer(players[i]);
     /**if game has more than one quest, then navigate to chapter selection screen, otherwise navigate to story part direclty */
     if (playerInfo.name === '') {
@@ -168,24 +159,9 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     }
     setCurrentScreenId(13);
     //navigate to Chapter selection
-
-    // if (Object.keys(demoBlocks).length > 1) {
-    //   setCurrentScreenId(13);//navigate to Chapter selection
-    // } else {
-    //   setCurrentScreenId(2);//navigate to story
-    // }
   };
 
-  // const handleProfile = (e: any, lang?: any) => {
-  //   const { id, value } = e.target;
-  //   setSelect(false);
-  //   setProfileData((prev: any) => ({
-  //     ...prev,
-  //     [id]: id === 'name' ? value : lang,
-  //   }));
-  // };
-
-  ///Afrith-modified-starts-20/Mar/24
+ 
   const currGameId = id; //from useParams
   const handleProfile = (e: any, lang?: any, langId?: any) => {
     const { id, value } = e.target;
@@ -195,12 +171,9 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       ...prev,
       [id]: id === 'name' ? value : lang,
     }));
-    // console.log('langId', langId);
     setGameContentId(langId);
-    // getContentRelatedLanguage(currGameId, langId);
   };
 
-  //////////
   useEffect(() => {
     const fetchGameContent = async () => {
       const gameContentResult = await getContentRelatedLanguage(
@@ -227,7 +200,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     if (gameContentId) {
       fetchGameContent();
     }
-    console.log('gameContentId', gameContentId);
   }, [gameContentId]);
 
   const innerBoxWidth = useBreakpointValue({
