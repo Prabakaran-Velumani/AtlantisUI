@@ -226,14 +226,21 @@ const handleMusicVolume = (vol: any)=>{
                     <Text className="text">
                       {(profile &&
                         profile.score &&
-                        profile.score.length > 0 &&
-                        profile.score.reduce(
-                          (accumulator: number, currentValue: any) => {
-                            return accumulator + currentValue.score;
-                          },
-                          0,
-                        )) ||
-                        0}
+                        profile.score.length > 0 ?
+                        (profile.score.reduce((acc : any, cur:any) => {
+                          if(currentScreenId === 2)
+                            {
+                            if (cur.quest == profile.currentQuest) {
+                              return acc + cur.score;
+
+                          } else {
+                              return acc;
+                          }
+                        }
+                        else{
+                          return acc + cur.score;
+                        }
+                      }, 0)) : 0)}
                     </Text>
                   </Box>
                 </>

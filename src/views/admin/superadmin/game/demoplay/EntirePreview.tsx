@@ -534,7 +534,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const getData = (next: any) => {
-    console.log('getData', next)
     setAudioObj(null);
     setIsPrevNavigation(false);
     if (next?.blockChoosen === 'Interaction') {
