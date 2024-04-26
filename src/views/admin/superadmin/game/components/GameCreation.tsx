@@ -2513,6 +2513,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
     }
     let data = JSON.stringify(formData);
     // alert("cn"+tab);
+    console.log('1871', data);
     const result = await updateGame(id, data);
     if (result?.status !== 'Success') {
       toast({
@@ -3057,6 +3058,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       }
     } else {
       try {
+        console.log('2315' ,data);
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
           toast({
@@ -3842,6 +3844,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
   const debouncedSubmitGame = useCallback(
     debounce(async (data: any) => {
       try {
+        console.log('3024', data);
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
         } else {

@@ -234,16 +234,23 @@ const handleMusicVolume = (vol: any)=>{
                       <Img src={preloadedAssets?.Scorebox} h={'100%'} width={'auto'} />
                       <Box position={'absolute'} display={'flex'} justifyContent={'center'} alignItems={'center'} top={0} left={'26%'} w={'68%'} h={'100%'}>
                         <Text className="score_text">
-                          {(profile &&
-                            profile.score &&
-                            profile.score.length > 0 &&
-                            profile.score.reduce(
-                              (accumulator: number, currentValue: any) => {
-                                return accumulator + currentValue.score;
-                              },
-                              0,
-                            )) ||
-                            0}
+                        {(profile &&
+                        profile.score &&
+                        profile.score.length > 0 ?
+                        (profile.score.reduce((acc : any, cur:any) => {
+                          if(currentScreenId === 2)
+                            {
+                            if (cur.quest == profile.currentQuest) {
+                              return acc + cur.score;
+
+                          } else {
+                              return acc;
+                          }
+                        }
+                        else{
+                          return acc + cur.score;
+                        }
+                      }, 0)) : 0)}
                         </Text>
                       </Box>
                     </Box>
@@ -361,14 +368,6 @@ const handleMusicVolume = (vol: any)=>{
                       <SliderFilledTrack className="filled-volume" bg="pink.500" />
                     </Box>
                   </Box>
-                  {/* <Box w={'100%'} h={'15px'} display={'flex'} justifyContent={'center'}>
-                          <Box w={'75%'}>
-                            <SliderFilledTrack
-                              className="filled-volume"
-                              bg="pink.500"
-                            />
-                          </Box>
-                        </Box> */}
                 </SliderTrack>
                 <SliderThumb
                   boxSize={10}
