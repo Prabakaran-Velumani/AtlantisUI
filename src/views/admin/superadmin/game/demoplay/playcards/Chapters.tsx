@@ -125,14 +125,7 @@ const ChapterPage: React.FC<{
         if (formData?.gameDisableOptionalReplays === 'false') {
           if (item?.gameIsSetMinPassScore === 'true') {
             const getminpassscore = item?.gameMinScore;
-            // console.log(
-            //   'finalscore >= getminpassscore && finalscore < item?.gameDistinctionScore',
-            //   finalscore >= getminpassscore,
-            //   '....',
-            //   finalscore < item?.gameDistinctionScore,
-            //   'finalscore',
-            //   finalscore,
-            // );
+
             if (
               finalscore >= getminpassscore &&
               finalscore < item?.gameDistinctionScore
@@ -200,6 +193,10 @@ const ChapterPage: React.FC<{
   }, [profile]);
 
   const handleChapter = (it: any) => {
+    /**** Control the Chapter selection based on the quest Status and replay allowed and mandatatory replay etc., 
+     * For Preview and Review it doesn't require this. Allow to navigate to any available quests
+     *
+     * Commant line starts here
     const Completionpage = Object.entries(questState).map(
       ([questId, status]) => ({ questId, status }),
     );
@@ -216,17 +213,23 @@ const ChapterPage: React.FC<{
       setFeedbackList([]);
       setCurrentScreenId(6);
     } else {
-      if (profile.completedLevels.includes(it)) {
+    
+       if (profile.completedLevels.includes(it)) {
+          
+      * Commant line ends here
+      */
         setType(demoBlocks[it]['1']?.blockChoosen);
         setData(demoBlocks[it]['1']);
         setFeedbackList([]);
+        const updatedCompletedLevels = new Set([...profile.completedLevels, it])      
         setProfile((prev: any) => ({
           ...prev,
           currentQuest: it,
+          completedLevels: [...updatedCompletedLevels]
         }));
         setCurrentScreenId(2);
-      }
-    }
+    /**  }
+    * Uncomment this line when uncomment restrict the quest entry logic} */
   };
 
   const container = {
@@ -358,7 +361,7 @@ const ChapterPage: React.FC<{
                                   className="amount-score"
                                   textAlign={'center'}
                                 >
-                                  {(profile &&
+                                  {/* {(profile &&
                                     profile.score &&
                                     profile.score.length > 0 &&
                                     profile.score.reduce(
@@ -373,9 +376,10 @@ const ChapterPage: React.FC<{
                                       },
                                       0,
                                     )) ||
-                                    0}
-                                  /{questScores && questScores[it]}{' '}
+                                    0} */}
+                                  {profile.playerGrandTotal[it] ?? 0}/{questScores && questScores[it]}{' '}
                                   <Icon as={BiMoney} />
+                                  <Img src={preloadedAssets.MoneyIcon} zIndex={5}/>
                                 </Text>
                               </Box>
 

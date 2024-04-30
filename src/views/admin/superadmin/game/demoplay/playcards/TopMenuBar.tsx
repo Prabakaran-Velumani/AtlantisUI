@@ -9,7 +9,7 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react';
-import React,{useEffect, useState, useContext} from 'react';
+import React,{useEffect, useState, useContext, useMemo} from 'react';
 import { ScoreContext } from '../GamePreview';
 
 interface TopMenuProps {
@@ -26,6 +26,7 @@ interface TopMenuProps {
   data:any;
   setAudioObj: (obj:any)=>void;
   audioObj: any;
+  questState:any;
 }
 
 const TopMenuBar: React.FC<TopMenuProps> = ({
@@ -41,7 +42,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
   demoBlocks,
   data,
   setAudioObj,
-  audioObj
+  audioObj,
+  questState
 }) => {
     const [geFinalscorequest, SetFinalscore] = useState(null);
     const { profile, setProfile } = useContext<{ profile: any, setProfile: any }>(ScoreContext);
@@ -63,7 +65,6 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
   };
 
 useEffect(()=>{
-
   const progressResult = ()=>{
   //calculate Progress based on screen, Need to show different progress for current screen is in story, progress of the current quest, unless  show the entire game progress
   if(currentScreenId === 2) {
@@ -82,8 +83,17 @@ useEffect(()=>{
     setProgressPercent(progressBarRatio && progressBarRatio > 0 ? progressBarRatio :0 );
   }
   else{
-    const completedQuest = profile?.completedLevels.length-1;
-    // console.log('profile?.completedLevels', profile?.completedLevels)
+    const uniqueQuestIds = [...new Set(profile?.completedLevels)]; //returns ['1', '2', '3'] if it has ['1','2','2','3']
+
+    //collect the actually completed quest list to show the the progress
+    const completedQuestList = uniqueQuestIds.filter((quest: any) => {
+      const isCurrentQuestCompleted = Object.entries(questState).some(([key, value]: [any, any]) => {
+          return key === quest && ['replayallowed', 'completed'].includes(value);
+      });
+      return isCurrentQuestCompleted;
+  });
+
+    const completedQuest = completedQuestList.length ;
     let gameProgress = 0;
     if(completedQuest > 0)
       { 
@@ -94,13 +104,30 @@ useEffect(()=>{
   }
 
   progressResult();
-},[data, currentScreenId])
+},[data, currentScreenId, questState])
 
 const handleMusicVolume = (vol: any)=>{
-  // console.log('Volume : ', vol);
   setAudioObj((prev: any)=>({...prev, "volume": vol}));
 }
 
+const totalPoints = useMemo(() => {
+  let total: number = 0;
+  if ([2, 4, 6, 8, 9, 14].includes(currentScreenId)) {
+    const scoreArray = questState[parseInt(profile?.currentQuest)] == 'Started' ? profile?.score : profile?.replayScore;
+    if (scoreArray?.length > 0) {
+      total = scoreArray.reduce((acc: number, cur: any) => {
+        if (cur.quest == profile.currentQuest) {
+          return acc + cur.score;
+        } else {
+          return acc;
+        }
+      }, 0);
+    }
+  } else {
+    total = profile.score.reduce((acc: number, cur: any) => acc + cur.score, 0);
+  }
+  return total;
+}, [profile.score, profile.replayScore, currentScreenId]);
 
   return (
     <Box className="top-menu-home-section">
@@ -223,8 +250,8 @@ const handleMusicVolume = (vol: any)=>{
                   />
                   </Tooltip>
                   <Box className="score-box">
-                    <Text className="text">
-                      {(profile &&
+                    <Text className="text"> 
+                      {/* {(profile &&
                         profile.score &&
                         profile.score.length > 0 ?
                         (profile.score.reduce((acc : any, cur:any) => {
@@ -240,7 +267,9 @@ const handleMusicVolume = (vol: any)=>{
                         else{
                           return acc + cur.score;
                         }
-                      }, 0)) : 0)}
+                      }, 0)) : 0)} */}
+
+                      {totalPoints}
                     </Text>
                   </Box>
                 </>

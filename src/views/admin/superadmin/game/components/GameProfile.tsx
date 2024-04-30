@@ -19,6 +19,8 @@ import {
   getSkills,
   MaintainGameView,
 } from 'utils/game/gameService';
+import {DemoPlayRoutePath} from 'config/constant';
+
 export default function Settings(props: {
   name: string;
   avatar: string;
@@ -53,11 +55,7 @@ export default function Settings(props: {
     if (result?.status !== 'Success') {
       return console.log('getbackruond error:' + result?.message);
     }
-    // const newTab = window.open('', '_self');
-    // Navigate the new tab to the desired URL
-    // newTab.location.assign(`/admin/game/preview/${id}`);
-    // newTab.location.assign(`/game/creator/demoplay/${id}`);
-    navigate(`/game/creator/demoplay/${id}`)
+    navigate(`${DemoPlayRoutePath+id}`);
   };
 
   const gameSkill = async () => {

@@ -162,7 +162,8 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                                   lg: '1.9vw',
                                 }}
                               >
-                                {item?.qpOptionText}
+                                {/* {item?.qpOptionText} */}
+                                {`${String.fromCharCode(65 + ind)}). ${item?.qpOptionText}`}
                               </Box>
                             </Box>
                           ))}
