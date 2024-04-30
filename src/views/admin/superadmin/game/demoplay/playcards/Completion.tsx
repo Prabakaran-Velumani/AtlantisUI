@@ -62,7 +62,8 @@ const Completion: React.FC<{
       (quest: any) => quest.questNo == profile?.currentQuest,
     ),
   );
-  const [geFinalscorequest, SetFinalscore] = useState(null);
+  
+  const [geFinalscorequest, SetFinalscore] = useState(profile.playerGrandTotal[parseInt(profile.currentQuest)]);
   const [questScores, setQuestScores] = useState(null);
   // const { profile, setProfile } = useContext(ScoreContext);
   useEffect(() => {
@@ -71,6 +72,7 @@ const Completion: React.FC<{
       setShowComplete(false);
     }, 1000);
   }, []);
+
   useEffect(() => {
     const groupedByQuest: any = {};
     questOptions.forEach((item: any) => {
@@ -103,52 +105,68 @@ const Completion: React.FC<{
     }
     setQuestScores(maxScoresByQuest);
   }, []);
-  useEffect(() => {
-    const scores = profile?.score;
-    const sums: any = {};
-    scores.forEach((score: any) => {
-      const quest = score.quest;
-      if (!sums[quest]) {
-        sums[quest] = 0;
-      }
-      sums[quest] += score.score;
-    });
+  // useEffect(() => {
+  //   /** this functionality moves to parent component */
+    
+  //   const scores = questState =='Started' ? profile?.score : profile?.replayScore;
+  //   const sums: any = {};
+  //   scores.forEach((score: any) => {
+  //     const quest = score.quest;
+  //     if (!sums[quest]) {
+  //       sums[quest] = 0;
+  //     }
+  //     sums[quest] += score.score;
+  //   });
 
-    // const getFinalscores = Object.values(sums);
-    const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
-      quest,
-      score,
-    }));
-    const getscores = getFinalscores.find(
-      (row: any) => row.quest == profile?.currentQuest,
-    );
-    const finalscore = getscores?.score;
-    if (finalscore !== undefined) {
-      SetFinalscore(finalscore);
-    }
-    const fetchDatass = async () => {
-      if (curretQuestOptions?.gameBadge) {
-        /** here 4 is to refer gasAssetType at asset table */
-        const result = await getImages(4);
+  //   // const getFinalscores = Object.values(sums);
+  //   const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
+  //     quest,
+  //     score,
+  //   }));
+  //   const getscores = getFinalscores.find(
+  //     (row: any) => row.quest == profile?.currentQuest,
+  //   );
+  //   const finalscore = getscores?.score;
+  //   if (finalscore !== undefined) {
+  //     SetFinalscore(finalscore);
+  //   }
 
-        if (result?.status !== 'Success') {
-          console.error('getbackground error:' + result?.message);
-          return;
-        }
-        const selectedGasId = curretQuestOptions?.gameBadge;
-        const selectedGasImage = result?.data.find(
-          (gas: any) => gas.gasId == selectedGasId,
-        );
+  //   /** Already has badge images in preloadedAssets as Quest_1 or Quest_1-shadow */
+  //   const fetchDatass = async () => {
+  //     if (curretQuestOptions?.gameBadge) {
+  //       /** here 4 is to refer gasAssetType at asset table */
+  //       const result = await getImages(4);
 
-        const imageUrl =
-          selectedGasImage?.gasAssetImage || 'defaultImageURL.jpg';
-        setbImg(imageUrl);
-      }
-    };
-    fetchDatass();
-  }, []);
+  //       if (result?.status !== 'Success') {
+  //         console.error('getbackground error:' + result?.message);
+  //         return;
+  //       }
+  //       const selectedGasId = curretQuestOptions?.gameBadge;
+  //       const selectedGasImage = result?.data.find(
+  //         (gas: any) => gas.gasId == selectedGasId,
+  //       );
+
+  //       const imageUrl =
+  //         selectedGasImage?.gasAssetImage || 'defaultImageURL.jpg';
+  //       setbImg(imageUrl);
+  //     }
+  //   };
+  //   fetchDatass();
+  // }, []);
 
   const getcompletionquest = currentQuestNo - 1;
+
+
+  /** This useEffect Only hanldes the total within the quest total */
+useEffect(()=>{
+const questTotalScore = Object.entries(profile?.playerGrandTotal).reduce((totalScore: number, [key, value]: [any, any]) => {
+  if (key == profile.currentQuest) {
+      return totalScore + value;
+  }
+  return totalScore;
+}, 0);
+  SetFinalscore(questTotalScore);
+},[profile.score])
 
   return (
     <>
@@ -225,7 +243,7 @@ const Completion: React.FC<{
                     className="inside-box-1_img"
                   />
                   <Text className="inside-points-text" fontFamily={'content'}>
-                       {geFinalscorequest ? geFinalscorequest : 0}{'/'}{questScores && questScores[profile?.currentQuest]}
+                       {geFinalscorequest <= 0 ? 0 : geFinalscorequest}{'/'}{questScores && questScores[profile?.currentQuest]}
                   </Text>
                 </Box>
               </Box>

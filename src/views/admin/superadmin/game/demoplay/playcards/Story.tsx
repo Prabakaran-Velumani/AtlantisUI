@@ -93,6 +93,7 @@ const Story: React.FC<{
   setCurrentTrackPointer: any;
   gameInfo: any;
   preloadedAssets: any;
+  questState:any;
 }> = ({
   data,
   type,
@@ -112,7 +113,6 @@ const Story: React.FC<{
   setIsGetsPlayAudioConfirmation,
   isGetsPlayAudioConfirmation,
   selectedNpc,
-  // getAudioForText,
   voiceIds,
   currentScore,
   prevData,
@@ -125,7 +125,6 @@ const Story: React.FC<{
   setCurrentTrackPointer,
   gameInfo,
   preloadedAssets,
-  // formData,
   imageSrc,
   replayGame,
   replayNextHandler,
@@ -133,19 +132,13 @@ const Story: React.FC<{
   setisOptionalReplay,
   isOptionalReplay,
   profilescore,
-  // gameInfo,
   setData,
   setType,
   isReplay,
-  // setCurrentScreenId,
-  // getData,
-  // data,
-  // type,
-  // preloadedAssets,
+  questState
 }) => {
     const [showNote, setShowNote] = useState(true),
       [first, setFirst] = useState(false);
-    // const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
     const userProfile = useContext(ProfileContext);
     const [getInteraction, setInteraction] = useState(false);
     const [Contentgetlanguage, setContentlanguage] = useState('');
@@ -387,26 +380,51 @@ const Story: React.FC<{
 
     const InteractionFunction = () => {
       setIsGetsPlayAudioConfirmation(true);
-
-      setProfile((prev: any) => {
-        const { seqId, score: newScore } = score;
-        const index = prev.score.findIndex((item: any) => item.seqId === seqId);
-        if (index !== -1) {
-          const updatedScore = [...prev.score];
-          updatedScore[index] = { ...updatedScore[index], score: newScore };
-          return { ...prev, score: updatedScore };
-        } else {
-          const newScoreArray = [
-            ...prev.score,
-            {
-              seqId: seqId,
-              score: newScore,
-              quest: parseInt(seqId.split('.')[0]),
-            },
-          ];
-          return { ...prev, score: newScoreArray };
-        }
-      });
+      if(questState[profile?.currentQuest] === 'Started')
+      {
+        setProfile((prev: any) => {
+          const { seqId, score: newScore } = score;
+          const index = prev.score.findIndex((item: any) => item.seqId === seqId);
+          if (index !== -1) {
+            const updatedScore = [...prev.score];
+            updatedScore[index] = { ...updatedScore[index], score: newScore };
+            return { ...prev, score: updatedScore };
+          } else {
+            const newScoreArray = [
+              ...prev.score,
+              {
+                seqId: seqId,
+                score: newScore,
+                quest: parseInt(seqId.split('.')[0]),
+              },
+            ];
+            
+            return { ...prev, score: newScoreArray };
+          }
+        });
+      }
+      else{
+        // update the replayScore when a player want to replay. Scores were hanlded seperatly, after Quest completion, if the calculated total score is lesser than replay score total then replace the score by replayscore, other wise score not changed, then reset the replayscore to {}
+        setProfile((prev: any) => {
+          const { seqId, score: newScore } = score;
+          const index = prev.replayScore.findIndex((item: any) => item.seqId === seqId);
+          if (index !== -1) {
+            const updatedScore = [...prev.replayScore];
+            updatedScore[index] = { ...updatedScore[index], score: newScore };
+            return { ...prev, replayScore: updatedScore };
+          } else {
+            const newScoreArray = [
+              ...prev.replayScore,
+              {
+                seqId: seqId,
+                score: newScore,
+                quest: parseInt(seqId.split('.')[0]),
+              },
+            ];
+            return { ...prev, replayScore: newScoreArray };
+          }
+        });
+      }
       setInteractionNext(true);
     };
 
@@ -898,9 +916,7 @@ const Story: React.FC<{
                   fontFamily={'AtlantisText'}
                   color={'#312821'}
                 >
-                  {data.blockRoll === 'Narrator'
-                    ? data.blockRoll
-                    : formData.gameNonPlayerName}
+                  {data.blockRoll === 'Narrator' ? data.blockRoll : (data.blockRoll=== '999999' ? formData.gameNonPlayerName : profileData.name)}
                 </Box>
               </Box>
               {/* <Text
@@ -1021,33 +1037,9 @@ const Story: React.FC<{
                   fontFamily={'AtlantisText'}
                   color={'#312821'}
                 >
-                  {data.blockRoll === 'Narrator'
-                    ? data.blockRoll
-                    : formData.gameNonPlayerName}
+                  {data.blockResponseRoll === 'Narrator' ? data.blockResponseRoll : (data.blockResponseRoll === '999999' ? profileData.name  : formData.gameNonPlayerName)}
                 </Box>
               </Box>
-              {/* <Img
-                src={preloadedAssets.char}
-                position={'fixed'}
-                h={'100px'}
-                w={'30%'}
-                left={'5%'}
-                bottom={'105px'}
-              />
-              <Text
-                position={'fixed'}
-                left={'18%'}
-                bottom={'130px'}
-                fontSize={{ base: '30px', xl: '2.2vw' }}
-                fontWeight={500}
-                textAlign={'center'}
-                fontFamily={'AtlantisText'}
-                color={'#312821'}
-              >
-                {data.blockRoll === 'Narrator'
-                  ? data.blockRoll
-                  : formData.gameNonPlayerName}
-              </Text> */}
             </Box>
             <Box
               display={'flex'}

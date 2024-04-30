@@ -54,6 +54,9 @@ const GamePreview = () => {
     score: [],
     completedLevels: ['1'],
     currentQuest: 1,
+    replayScore:[],
+    playerGrandTotal:{},
+    todayEarnedScore: [{quest:1, score:0, earnedDate: ""}],  
   });
   const [currentScore, setCurrentScore] = useState(0);
   const toast = useToast();

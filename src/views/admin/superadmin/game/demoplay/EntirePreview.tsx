@@ -73,7 +73,7 @@ interface Review {
   tabId: Number | null;
   tabAttribute: String | null;
   tabAttributeValue: String | null;
-}
+  }
 
 interface ShowPreviewProps {
   gameScreens: string[];
@@ -127,6 +127,10 @@ interface ProfileDataType {
 }
 
 
+interface QuestState {
+  [key: string]: string;
+}
+
 // case 0: // play info
 // case 1: // case 1 welcome screen
 // case 2: // case 2 Story
@@ -166,8 +170,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   currentScore,
   setCurrentScore,
   preloadedAssets,
-  InitialScreenId
-}) => {
+  InitialScreenId,
+  }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const maxTextLength = 80;
@@ -199,7 +203,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [getSelectedOptions, SetgetSelectedOptions] = useState({});
   /** This state handles the Review Form Tab and Sub Tab options */
   const [reviewTabOptions, setReviewTabOptions] = useState([]);
-  const [questState, setQuestState] = useState({});
+  const [questState, setQuestState] = useState<QuestState>({});
   const [filteredTabOptions, setFilteredTabOptions] = useState([]);
   // Feed back after completion
   const [FeedbackcurrentPosition, setFeedbackCurrentPosition] = useState(0);
@@ -386,6 +390,69 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     };
   }, [profile?.currentQuest]);
 
+
+useEffect(()=>{
+  const calculatePlayerGrandTotal= async ()=>{ 
+  const scores = questState[profile?.currentQuest] == 'Started' ? profile?.score : (profile?.replayScore.length > 0 ? profile?.replayScore : profile?.score);
+  let total: number = 0;
+  
+  if(currentScreenId == 13){ //For chapter Selection Screen
+    if(scores.length > 0)
+      {
+        const total = scores.reduce((acc:any, row: any) => {
+          const quest = profile?.currentQuest;
+          if (row.quest == quest) {
+            return acc + row.score;
+          }
+          else{
+            return acc;
+          }
+        }, 0);
+  
+        setProfile((prev: any)=>({...prev, playerGrandTotal: {...prev?.playerGrandTotal, [profile?.currentQuest]: total }}));
+      }
+  }
+  else if ([2, 4, 6, 8, 9, 14].includes(currentScreenId)) //for story, completion screen, feedback, replay etc.,
+  {
+    const scoreArray = questState[parseInt(profile?.currentQuest)] == 'Started' ? profile?.score :  profile?.replayScore;
+      if (scoreArray?.length > 0) {
+        total = scoreArray.reduce((acc: number, cur: any) => {
+        if (cur.quest == profile.currentQuest) {
+          return acc + cur.score;
+        } else {
+          return acc;
+        }
+      }, 0);
+      setProfile((prev: any)=>({...prev, playerGrandTotal: {...prev?.playerGrandTotal, [profile?.currentQuest] : total} }));
+    }
+  }
+    return;
+  }
+  
+  //Get the Navigated Sequeance to calculate the max score for a Quest
+    const calculateQuestGrandTotal= async ()=>{ 
+      const scores = questState[profile?.currentQuest] === 'Started' ? profile?.score : profile?.replayScore;
+      // if(scores.length > 0)
+      //   {
+      //     const total = scores.reduce((acc:any, row: any) => {
+      //       const quest = profile?.currentQuest;
+      //       if (row.quest == quest) {
+      //         return acc + row.score;
+      //       }
+      //       else{
+      //         return acc;
+      //       }
+      //     }, 0);
+    
+      //     setProfile((prev: any)=>({...prev, playerGrandTotal: {...prev?.playerGrandTotal, [parseInt(profile?.currentQuest)]: total }}));
+      //   }
+        return;
+      }
+  calculatePlayerGrandTotal();
+  // calculateQuestGrandTotal();
+
+},[profile.score, profile.replayScore, currentScreenId])
+
   useEffect(() => {
     if (!gameInfo?.bgMusic) {
       fetchDefaultBgMusic();
@@ -536,6 +603,54 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       return false;
     }
   };
+
+  const checkAndUpdateScores =async ()=>{
+    const currentQuest = profile.currentQuest;
+    if(questState[currentQuest] !=='Started')
+              {
+              const calcQuestGrandTotal = async (scores:any, currentQuestNo:any = null)=>{
+                if(scores?.length <= 0)
+                {
+                  return 0;
+                }
+                if(currentQuestNo!=null)
+                {
+                  // Sum score of a quest
+                  const totalScore = scores.reduce((total: number, sc: any) => {
+                    if (sc.quest == currentQuestNo) {
+                        return total + sc.score;
+                    } else {
+                        return total;
+                    }
+                  }, 0);
+                  return totalScore; // Return the total score
+                }
+                  else{
+                    //Sum up all the scores
+                   return scores.reduce((total:number, sc:any) => total + sc.score, 0);
+                  }
+              }
+              const scoreTotal = await calcQuestGrandTotal(profile.score, profile.currentQuest);
+              const replayScoreTotal = await calcQuestGrandTotal(profile.replayScore, profile.currentQuest);
+              if(scoreTotal < replayScoreTotal)
+              {
+                const currentQuestRemovedScoreArr=profile.score.filter((item: any)=>(item.quest != profile.currentQuest));
+                let concatenatedScoreArr: any[] = [];
+                if (profile.replayScore.length > 0) {
+                  concatenatedScoreArr = profile.replayScore.filter((item: any) => (item.quest == profile.currentQuest));
+                }
+                if (currentQuestRemovedScoreArr.length > 0) {
+                    concatenatedScoreArr = [...concatenatedScoreArr, ...currentQuestRemovedScoreArr];
+                }
+                const currentQuestRemovedReplayScoreArr=profile.replayScore.filter((item: any)=>(item.quest != profile.currentQuest));
+                setProfile((prev:any)=>({...prev, score: concatenatedScoreArr, replayScore: currentQuestRemovedReplayScoreArr}))
+              }
+              else{
+                const currentQuestRemovedReplayScoreArr=profile.replayScore.filter((item: any)=>(item.quest != profile.currentQuest));
+                setProfile((prev:any)=>({...prev, replayScore: currentQuestRemovedReplayScoreArr}))
+              }
+            }
+    }
 
   const getData = (next: any) => {
     setAudioObj(null);
@@ -770,6 +885,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           return false;
         }
       } else if (navi === 'Complete') {
+
+        //check the replay Quest score is higher than score in profile context
+        checkAndUpdateScores();
+
+
         const Nextcurrentquest = next?.blockQuestNo;
         const getgameinfoquest = gameInfo?.gameQuest.find(
           (row: any) => row.gameQuestNo == Nextcurrentquest,
@@ -1432,6 +1552,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
+          //check the replay Quest score is higher than score in profile context
+          checkAndUpdateScores();
+
+
         const Nextcurrentquest = next?.blockQuestNo;
         const getgameinfoquest = gameInfo?.gameQuest.find(
           (row: any) => row.gameQuestNo == Nextcurrentquest,
@@ -1950,6 +2074,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   //   }
   // };
 
+
+  useEffect(()=>{
+    console.log("profile",profile);
+  },[profile])
   const handleAudioError = () => {
     console.error(
       'Failed to load video because no supported source was found.',
@@ -2088,6 +2216,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     return true;
   };
 
+// useEffect(()=>{
+//   setProfile((prev: any)=>({...prev, 'questState': questState}));
+// },[questState])
+
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="EntirePreview-wrapper">
@@ -2108,6 +2240,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               data={data}
               setAudioObj={setAudioObj}
               audioObj={audioObj}
+              questState={questState}
             />
           </Box>
           <Flex
@@ -2218,8 +2351,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           preloadedAssets={preloadedAssets}
                           replayGame={replayGame}
                           replayNextHandler={replayNextHandler}
-                          // type={type}
-                          // gameInfo={gameInfo}
                           setType={setType}
                           setData={setData}
                           isOptionalReplay={isOptionalReplay}
@@ -2227,12 +2358,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           setisReplay={setisReplay}
                           profilescore={profilescore}
                           isReplay={isReplay}
-                          // setCurrentScreenId={setCurrentScreenId}
-                          // formData={gameInfo?.gameData}
                           imageSrc={preloadedAssets.Replay}
-                          // getData={getData}
-                          // data={data}
-                          // preloadedAssets={preloadedAssets}
+                          questState={questState}
                         />
                       )}
                     </>
@@ -2303,6 +2430,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             data={data}
                             gameInfo={gameInfo}
                             preloadedAssets={preloadedAssets}
+                            profile={profile}
                           />
                         </Box>
                       </Box>

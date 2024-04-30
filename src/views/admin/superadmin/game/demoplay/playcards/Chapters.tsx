@@ -125,14 +125,7 @@ const ChapterPage: React.FC<{
         if (formData?.gameDisableOptionalReplays === 'false') {
           if (item?.gameIsSetMinPassScore === 'true') {
             const getminpassscore = item?.gameMinScore;
-            // console.log(
-            //   'finalscore >= getminpassscore && finalscore < item?.gameDistinctionScore',
-            //   finalscore >= getminpassscore,
-            //   '....',
-            //   finalscore < item?.gameDistinctionScore,
-            //   'finalscore',
-            //   finalscore,
-            // );
+
             if (
               finalscore >= getminpassscore &&
               finalscore < item?.gameDistinctionScore
@@ -157,11 +150,6 @@ const ChapterPage: React.FC<{
               }
             }
           } else {
-            // setQuestState((prevquestdataList: any) => ({
-            //   ...prevquestdataList,
-            //   [item.gameQuestNo]: 'replayallowed'
-            // }));
-
             if (finalscore !== undefined) {
               setQuestState((prevquestdataList: any) => ({
                 ...prevquestdataList,
@@ -200,6 +188,10 @@ const ChapterPage: React.FC<{
   }, [profile]);
 
   const handleChapter = (it: any) => {
+    /**** Control the Chapter selection based on the quest Status and replay allowed and mandatatory replay etc., 
+     * For Preview and Review it doesn't require this. Allow to navigate to any available quests
+     *
+     * Commant line starts here
     const Completionpage = Object.entries(questState).map(
       ([questId, status]) => ({ questId, status }),
     );
@@ -216,17 +208,23 @@ const ChapterPage: React.FC<{
       setFeedbackList([]);
       setCurrentScreenId(6);
     } else {
-      if (profile.completedLevels.includes(it)) {
+    
+       if (profile.completedLevels.includes(it)) {
+          
+      * Commant line ends here
+      */
         setType(demoBlocks[it]['1']?.blockChoosen);
         setData(demoBlocks[it]['1']);
         setFeedbackList([]);
+        const updatedCompletedLevels = new Set([...profile.completedLevels, it])      
         setProfile((prev: any) => ({
           ...prev,
           currentQuest: it,
+          completedLevels: [...updatedCompletedLevels]
         }));
         setCurrentScreenId(2);
-      }
-    }
+    /**  }
+    * Uncomment this line when uncomment restrict the quest entry logic} */
   };
 
   const container = {
@@ -342,20 +340,6 @@ const ChapterPage: React.FC<{
                                         h={'auto'}
                                         src={preloadedAssets?.Completed}
                                       />
-                                      {/* <Text
-                                      position={'absolute'}
-                                      textAlign={'center'}
-                                      fontFamily={'AtlantisText'}
-                                      color={'#D9C7A2'}
-                                      zIndex={999999}
-                                      right={'43%'}
-                                      bottom={'52%'}
-                                      fontSize={'2.8vh'}
-                                      className={'quest_complete'}
-                                      textShadow="-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
-                                    >
-                                      Completed
-                                    </Text> */}
                                     </Box>
                                   </Box>
                                 ) : (
@@ -373,24 +357,8 @@ const ChapterPage: React.FC<{
                                     className="amount-score"
                                     textAlign={'center'}
                                   >
-                                    {(profile &&
-                                      profile.score &&
-                                      profile.score.length > 0 &&
-                                      profile.score.reduce(
-                                        (
-                                          accumulator: number,
-                                          currentValue: any,
-                                        ) => {
-                                          return currentValue.quest ===
-                                            parseInt(it)
-                                            ? accumulator + currentValue.score
-                                            : accumulator;
-                                        },
-                                        0,
-                                      )) ||
-                                      0}
-                                    /{questScores && questScores[it]}{' '}
-                                    <Icon as={BiMoney} />
+                                   {profile.playerGrandTotal[it] ?? 0}/{questScores && questScores[it]}{' '}
+                                   <Img src={preloadedAssets.MoneyIcon} zIndex={5}/>
                                   </Text>
                                 </Box>
 

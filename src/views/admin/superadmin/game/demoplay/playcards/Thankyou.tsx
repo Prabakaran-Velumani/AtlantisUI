@@ -78,11 +78,9 @@ const ThankYou: React.FC<{
   
   var thirdValue="";
   if (trueValuesArray.length >= 3) {
-       thirdValue = trueValuesArray[2];
-        console.log("Third Positioned Value:", thirdValue);
+    thirdValue = trueValuesArray[2];
   }
-  // alert(thirdValue);
-// ----------------------------------------------------
+  
 const styleflex = {};
 
   if (countfbOptions === 1) {

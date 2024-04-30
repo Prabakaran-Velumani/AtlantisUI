@@ -15,4 +15,5 @@ export const Notelength = 150;
 export const Dialoglength = 300;
 export const Responselength = 300;
 
+export const DemoPlayRoutePath = '/game/creator/demoplay/';
 
