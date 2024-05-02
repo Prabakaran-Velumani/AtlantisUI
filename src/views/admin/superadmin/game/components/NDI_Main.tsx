@@ -2453,10 +2453,10 @@ console.log("blockroll",blockroll)
                                   // }
                                   transition={'0.1s linear'}
 
-                                  // border={{ base: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
-                                  // sm: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
-                                  // lg: seq.id === targetSequence?.id ? '3px solid #3311db unset unset unset' : 'unset',
-                                  // }}
+                                // border={{ base: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
+                                // sm: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
+                                // lg: seq.id === targetSequence?.id ? '3px solid #3311db unset unset unset' : 'unset',
+                                // }}
 
                                   // borderLeft={ seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'}
                                   borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
