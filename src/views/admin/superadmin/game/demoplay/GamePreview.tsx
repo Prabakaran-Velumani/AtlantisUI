@@ -21,6 +21,7 @@ import {
   getGameDemoData,
   SubmitReview,
   getGameCreatorDemoData,
+  updatePreviewlogs
 } from 'utils/game/gameService';
 import { API_SERVER } from 'config/constant';
 import { IoIosRefresh } from 'react-icons/io';
@@ -30,7 +31,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 
-const EntirePreview = lazy(()=> import ('./EntirePreview'));
+const EntirePreview = lazy(() => import('./EntirePreview'));
 const gameScreens = [
   'Completion',
   'Leaderboard',
@@ -49,7 +50,7 @@ export const ScoreContext = createContext<any>(null);
 const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
-  const InitialScreenId = id ? 5 : 1; //replace 10: game Intro, 1: welcome screen by which screen you want to play
+  const InitialScreenId = id ? 10 : 1; //replace 10: game Intro, 1: welcome screen by which screen you want to play
   const [gameInfo, setGameInfo] = useState<any | null>(null);
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -69,9 +70,115 @@ const GamePreview = () => {
   const [staticAssetImageUrls, setStaticAssetImageUrls] = useState<any>(null);
   const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
   const [componentsLoaded, setComponentsLoaded] = useState(false);
-  const [loadedGLBs, setLoadedGLBs]=useState<any>(null);
-const user: any = JSON.parse(localStorage.getItem('user'));
+  const [loadedGLBs, setLoadedGLBs] = useState<any>(null);
+  // Newly added start
+  const [prevnaviseq, setprevNaviseq] = useState([]);
+  const [LastActivityseq, setLastActivityseq] = useState([]);
+  const [prevSelectedOptionseq, setprevSelectedOptionseq] = useState([]);
+  const [prevScreenId, setprevScreenId] = useState([]);
+  const [previewLogsData, setPreviewLogsData] = useState<any>(null);
+  const [prevprofileData, setprevProfileData] = useState({
+    name: '',
+    gender: '',
+    language: '',
+    score: '',
+    allTimeScore: 250,
+    Audiogetlanguage: [],
+  });
+  const [getPrevLogDatas, setPreLogDatas] = useState({
+    previewLogId: '',
+    playerId: '',
+    playerType: '',
+    previewGameId: '',
+    nevigatedSeq: [],
+    screenIdSeq: [],
+    lastActiveBlockSeq: '',
+    selectedOptions: '',
+    previewProfile: '',
+    lastModifiedBlockSeq: '',
+    lastBlockModifiedDate:'',
+    updatedAt:'',
+  });
+  //End
+  const user: any = JSON.parse(localStorage.getItem('user'));
+  // newly Added for Previous data 
+  const fetchPreviewLogsData = async () => {
+    try {
+      if (gameInfo?.gameId) {
+        const data = {
+          gameId: gameInfo?.gameId ?? null,
+          playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
+          type: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null
+        };
+        if (data?.gameId === null && data?.playerId === null && data?.type === null) {
+          console.error('User data not available.');
+          return false;
+        }
+        const userDataString = JSON.stringify(data);
+        const updatePreviewLogsResponse = await updatePreviewlogs(userDataString);
+        setPreLogDatas({
+          previewLogId: updatePreviewLogsResponse.data.previewLogId,
+          playerId: updatePreviewLogsResponse.data.playerId,
+          playerType: updatePreviewLogsResponse.data.playerType,
+          previewGameId: updatePreviewLogsResponse.data.previewGameId,
+          nevigatedSeq: updatePreviewLogsResponse.data.nevigatedSeq ? JSON.parse(updatePreviewLogsResponse.data.nevigatedSeq): [],
+          screenIdSeq: updatePreviewLogsResponse.data.screenIdSeq ? JSON.parse(updatePreviewLogsResponse.data.screenIdSeq) :[],
+          lastActiveBlockSeq: updatePreviewLogsResponse.data.lastActiveBlockSeq,
+          selectedOptions: updatePreviewLogsResponse.data.selectedOptions ? JSON.parse(updatePreviewLogsResponse.data.selectedOptions) :[],
+          previewProfile: updatePreviewLogsResponse.data.previewProfile ? JSON.parse(updatePreviewLogsResponse.data.previewProfile) : [],
+          lastModifiedBlockSeq: updatePreviewLogsResponse.data.lastModifiedBlockSeq,
+          lastBlockModifiedDate:updatePreviewLogsResponse.data.lastBlockModifiedDate,
+          updatedAt:updatePreviewLogsResponse.data.updatedAt,
+        });
+        return updatePreviewLogsResponse;
 
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      return false;
+    }
+  };
+  useEffect(() => {
+    const fetchPreviewLogs = async () => {
+      const Reponse = await fetchPreviewLogsData();
+      if (Reponse) {
+        setPreviewLogsData(Reponse);
+      }
+    }
+    console.log('125');
+    fetchPreviewLogs();
+  }, [gameInfo]);
+  useEffect(() => {
+    const fetchPreviewLogs = async () => {
+      const Reponse = await fetchPreviewLogsData();
+    }
+
+    fetchPreviewLogs();
+  }, [previewLogsData]);
+  // End 
+/*
+  useEffect(() => {
+
+    const UpdatePreviousdata = async () => {
+      const data = {
+        previewLogId: getPrevLogDatas.previewLogId,
+        playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
+        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
+        previewGameId: gameInfo?.gameId ?? null,
+        nevigatedSeq: (prevnaviseq.length > 0 || prevnaviseq.length !== undefined) && prevnaviseq ? getPrevLogDatas.nevigatedSeq : JSON.stringify(prevnaviseq),
+        lastActiveBlockSeq: LastActivityseq?.length > 0 ? JSON.stringify(LastActivityseq) : getPrevLogDatas.lastActiveBlockSeq,
+        selectedOptions: (prevSelectedOptionseq.length > 0 || prevSelectedOptionseq.length !== undefined) && prevSelectedOptionseq ? getPrevLogDatas.selectedOptions : prevSelectedOptionseq,
+        previewProfile: prevprofileData,
+      };
+      const previousDataString = JSON.stringify(data);
+      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
+      setPreviewLogsData(updatePreviewLogsResponse);
+    }
+    UpdatePreviousdata();
+
+  }, [prevnaviseq, LastActivityseq, prevSelectedOptionseq]);
+  */
+ 
   useEffect(() => {
     const fetchData = async () => {
       // assetImageSrc['characterGlb'] = CharacterGlb; 
@@ -88,11 +195,11 @@ const user: any = JSON.parse(localStorage.getItem('user'));
       try {
         // assetImageSrc['characterGlb'] = CharacterGlb; 
         // { assetType: 'characterGlb', src: characterGlb },
-        const preloadedGLBs:any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: CharacterGlb }]);
+        const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: CharacterGlb }]);
         // Use preloadedGLBs[CharacterGlb] if you need the preloaded GLB data
-        
+
         const loader = new GLTFLoader();
-        const parsedGlbArray =  [];
+        const parsedGlbArray = [];
         loader.parse(preloadedGLBs, '', (gltf) => {
           // parsedGlbArray = preloadedGLBs
         });
@@ -156,7 +263,7 @@ const user: any = JSON.parse(localStorage.getItem('user'));
     if (!gamedata?.error && gamedata) {
       updateCreatorGameInfo(gamedata);
     }
-  };  
+  };
   const updateCreatorGameInfo = async (info: any) => {
     const {
       gameview,
@@ -331,7 +438,7 @@ const user: any = JSON.parse(localStorage.getItem('user'));
         ReviewerDeleteStatus: ReviewingCreator
           ? ReviewingCreator?.ctDeleteStatus
           : null,
-        },
+      },
       gameQuest: gameQuest, //used for completion screen
       completionQuestOptions: completionOptions,
       reviews: reviews,
@@ -465,69 +572,85 @@ const user: any = JSON.parse(localStorage.getItem('user'));
   }, [apiImageSet]);
 
   const preloadedAssets = useMemo(() => {
-    
+
     return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls, ...loadedGLBs };
   }, [apiUrlAssetImageUrls, staticAssetImageUrls, loadedGLBs]);
 
-  useEffect(()=>{
-    console.log('loadedGLBs',loadedGLBs);
-  },[loadedGLBs])
+  useEffect(() => {
+    console.log('loadedGLBs', loadedGLBs);
+  }, [loadedGLBs])
   useEffect(() => {
     if (gameInfo && Object.keys(preloadedAssets).length > 0 && componentsLoaded === true) {
       setContentReady(true);
     } else {
-      setContentReady(false);                                                
+      setContentReady(false);
     }
   }, [gameInfo, preloadedAssets, componentsLoaded]);
 
   return (
     <>
-    <Suspense fallback={<h1>Loading please wait...</h1>}>
+      <Suspense fallback={<h1>Loading please wait...</h1>}>
         {contentReady && (
-      gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
-      gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
-        <h1> {'Your are Not Authorized....'}</h1>
-      ) : (
-        gameInfo?.gameId &&
-        (
-         (
-          <ScoreContext.Provider value={{ profile, setProfile }}>
-            <Box id="container" >
-              {isHovered && (
-                <Icon
-                  as={IoIosRefresh}
-                  position={'fixed'}
-                  top={'20px'}
-                  left={'48%'}
-                  color={'white'}
-                  zIndex={999999}
-                  width={'60px'}
-                  height={'60px'}
-                  padding={'20px'}
-                  borderRadius={'50%'}
-                  bg={'grey'}
-                  cursor={'pointer'}
-                  onClick={() => window.location.reload()}
-                />
-              )}
-              <EntirePreview
-                currentScore={currentScore}
-                setCurrentScore={setCurrentScore}
-                gameScreens={gameScreens}
-                // currentScreenId={currentScreenId}
-                // setCurrentScreenId={setCurrentScreenId}
-                gameInfo={gameInfo}
-                handleSubmitReview={handleSubmitReview}
-                isReviewDemo={id ? false : true}
-                preloadedAssets={preloadedAssets}
-                InitialScreenId={InitialScreenId}
-              />
-            </Box>
-          </ScoreContext.Provider>
-        ))
-      )
+          gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
+            gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
+            <h1> {'Your are Not Authorized....'}</h1>
+          ) : (
+            gameInfo?.gameId &&
+            (
+              (
+                <ScoreContext.Provider value={{ profile, setProfile }}>
+                  <Box id="container" >
+                    {isHovered && (
+                      <Icon
+                        as={IoIosRefresh}
+                        position={'fixed'}
+                        top={'20px'}
+                        left={'48%'}
+                        color={'white'}
+                        zIndex={999999}
+                        width={'60px'}
+                        height={'60px'}
+                        padding={'20px'}
+                        borderRadius={'50%'}
+                        bg={'grey'}
+                        cursor={'pointer'}
+                        onClick={() => window.location.reload()}
+                      />
+                    )}
+                    <EntirePreview
+                      currentScore={currentScore}
+                      setCurrentScore={setCurrentScore}
+                      gameScreens={gameScreens}
+                      // currentScreenId={currentScreenId}
+                      // setCurrentScreenId={setCurrentScreenId}
+                      //Newly Added start
+                      prevnaviseq={prevnaviseq}
+                      setprevNaviseq={setprevNaviseq}
+                      LastActivityseq={LastActivityseq}
+                      setLastActivityseq={setLastActivityseq}
+                      prevSelectedOptionseq={prevSelectedOptionseq}
+                      setprevSelectedOptionseq={setprevSelectedOptionseq}
+                      prevScreenId={prevScreenId}
+                      setprevScreenId={setprevScreenId}
+                      setprevProfileData={setprevProfileData}
+                      prevprofileData={prevprofileData}
+                      previewLogsData={previewLogsData}
+                      setPreviewLogsData={setPreviewLogsData}
+                      setPreLogDatas={setPreLogDatas}
+                      getPrevLogDatas={getPrevLogDatas}
+                      //End
+                      gameInfo={gameInfo}
+                      handleSubmitReview={handleSubmitReview}
+                      isReviewDemo={id ? false : true}
+                      preloadedAssets={preloadedAssets}
+                      InitialScreenId={InitialScreenId}
+                    />
+                  </Box>
+                </ScoreContext.Provider>
+              ))
+          )
         )}
-    </Suspense>
+      </Suspense>
     </>
   );
 };

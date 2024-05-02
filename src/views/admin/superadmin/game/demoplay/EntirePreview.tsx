@@ -38,7 +38,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import feedi from 'assets/img/screens/feed.png';
 import { AiFillMessage } from 'react-icons/ai';
-import { getTestAudios } from 'utils/game/gameService';
+import { getTestAudios, updatePreviewlogs } from 'utils/game/gameService';
 import { MdClose } from 'react-icons/md';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
@@ -46,23 +46,23 @@ import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
-const Story  = lazy(() => import('./playcards/Story'));
-const Welcome  = lazy(() => import('./playcards/Welcome'));
-const ThankYou  = lazy(() => import('./playcards/Thankyou'));
-const Overview  = lazy(() => import('./playcards/Overview'));
-const Reflection  = lazy(() => import('./playcards/Reflection'));
-const Takeway  = lazy(() => import('./playcards/Takeaway'));
-const Completion  = lazy(() => import('./playcards/Completion'));
-const ReplayGame  = lazy(() => import('./playcards/ReplayGame'));
-const PlayInfo  = lazy(() => import('./playcards/playinfo'));
-const LeaderBoard  = lazy(() => import('./playcards/Leaderboard'));
-const ProfileScreen  = lazy(() => import('./playcards/ProfileScreen'));
-const Characterspage  = lazy(() => import('./playcards/CharacterSelection'));
-const ChapterPage  = lazy(() => import('./playcards/Chapters'));
-const FeedBackScreen  = lazy(() => import('./playcards/FeedBackScreen'));
+const Story = lazy(() => import('./playcards/Story'));
+const Welcome = lazy(() => import('./playcards/Welcome'));
+const ThankYou = lazy(() => import('./playcards/Thankyou'));
+const Overview = lazy(() => import('./playcards/Overview'));
+const Reflection = lazy(() => import('./playcards/Reflection'));
+const Takeway = lazy(() => import('./playcards/Takeaway'));
+const Completion = lazy(() => import('./playcards/Completion'));
+const ReplayGame = lazy(() => import('./playcards/ReplayGame'));
+const PlayInfo = lazy(() => import('./playcards/playinfo'));
+const LeaderBoard = lazy(() => import('./playcards/Leaderboard'));
+const ProfileScreen = lazy(() => import('./playcards/ProfileScreen'));
+const Characterspage = lazy(() => import('./playcards/CharacterSelection'));
+const ChapterPage = lazy(() => import('./playcards/Chapters'));
+const FeedBackScreen = lazy(() => import('./playcards/FeedBackScreen'));
 const TopMenuBar = lazy(() => import('./playcards/TopMenuBar'));
 const GameIntroScreen = lazy(() => import('./playcards/GameIntroScreen'));
-
+const ModelPopup = lazy(() => import('./playcards/ModelPopup'));
 interface Review {
   // reviewId: Number;
   reviewerId: String | null;
@@ -84,6 +84,22 @@ interface ShowPreviewProps {
   setCurrentScore: any;
   preloadedAssets: any;
   InitialScreenId: number;
+  prevnaviseq?: any;
+  setprevNaviseq?: any;
+  LastActivityseq?: any;
+  setLastActivityseq?: any;
+  prevSelectedOptionseq?: any;
+  setprevSelectedOptionseq?: any;
+  prevScreenId?: any;
+  setprevScreenId?: any;
+  setprevProfileData?: any;
+  setPreviewLogsData?: any;
+  previewLogsData?: any;
+  setPreviewLogsId?: any;
+  getPreviewLogsId?: any;
+  setPreLogDatas?: any;
+  prevprofileData?: any;
+  getPrevLogDatas?: any;
 }
 
 type TabAttributeSet = {
@@ -122,6 +138,7 @@ interface ProfileDataType {
   audioUrls?: any;
   textId?: any;
   fieldName?: any;
+
 }
 
 
@@ -144,7 +161,7 @@ interface ProfileDataType {
 
 
 
-const skipScreenList = [0, 8, 11, 12, 13,15];
+const skipScreenList = [0, 8, 11, 12, 13, 15];
 
 export const ProfileContext = createContext<ProfileDataType>({
   name: '',
@@ -164,8 +181,23 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   currentScore,
   setCurrentScore,
   preloadedAssets,
-  InitialScreenId
+  InitialScreenId,
+  prevnaviseq,
+  setprevNaviseq,
+  LastActivityseq,
+  setLastActivityseq,
+  prevSelectedOptionseq,
+  setprevSelectedOptionseq,
+  prevScreenId,
+  setprevScreenId,
+  setprevProfileData,
+  prevprofileData,
+  setPreviewLogsData,
+  previewLogsData,
+  getPrevLogDatas,
+  setPreLogDatas,
 }) => {
+  const user: any = JSON.parse(localStorage.getItem('user'));
   const { colorMode, toggleColorMode } = useColorMode();
 
   const maxTextLength = 80;
@@ -193,6 +225,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [optionNavigation, setOptionNavigation] = useState(null);
   const [getSelectedOptions, SetgetSelectedOptions] = useState({});
+
   /** This state handles the Review Form Tab and Sub Tab options */
   const [reviewTabOptions, setReviewTabOptions] = useState([]);
   const [questState, setQuestState] = useState({});
@@ -272,9 +305,18 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const gameScore = useContext(ScoreContext);
   const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0;
 
+
   useEffect(() => {
     setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
   }, [scoreComp]);
+  useEffect(() => {
+    const totalEarnScore = profile?.score.reduce((acc: any, obj: any) => acc + parseInt(obj.score), 0);
+    setprevProfileData((prev: any) => ({ ...prev, score: totalEarnScore }));
+    setPreLogDatas((prev: any) => ({
+      ...prev,
+      previewProfile: { ...prev.previewProfile, score: totalEarnScore }
+    }));
+  }, [profile?.score]);
 
   const [profileData, setProfileData] = useState({
     name: '',
@@ -316,6 +358,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   useEffect(() => {
+    console.log('currentScreenId ***', currentScreenId);
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
     setData(gameInfo?.blocks[profile?.currentQuest]['1']);
@@ -377,9 +420,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
+
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
+
   }, [profile?.currentQuest]);
 
   useEffect(() => {
@@ -397,6 +442,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           autoplay: true,
         });
     }
+
   }, [gameInfo]);
 
   useEffect(() => {
@@ -502,12 +548,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const newTrackSequence = navTrack[navTrack.length - 1];
       const prevBlock = current
         ? Object.keys(demoBlocks[quest] || {})
-            .filter(
-              (key) =>
-                demoBlocks[quest]?.[key]?.blockPrimarySequence ==
-                newTrackSequence,
-            )
-            .map((key: any) => demoBlocks[quest]?.[key])
+          .filter(
+            (key) =>
+              demoBlocks[quest]?.[key]?.blockPrimarySequence ==
+              newTrackSequence,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
         : [];
 
       const currentQuest = current
@@ -557,7 +603,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         }
       }
     }
-
+    SetPreviouseStored(next);
     // setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -585,10 +631,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
+        .filter(
+          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+        )
+        .map((key: any) => demoBlocks[quest]?.[key])
       : [];
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
@@ -900,7 +946,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setSelectedOption(null);
           return false;
         } else {
-        /** else leads to first block of the quest */
+          /** else leads to first block of the quest */
           setType(demoBlocks[quest]['1']?.blockChoosen);
           setData(demoBlocks[quest]['1']);
           setSelectedOption(null);
@@ -1535,7 +1581,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setSelectedOption(null);
           return false;
         } else {
-        /** else leads to first block of the quest */
+          /** else leads to first block of the quest */
           setType(demoBlocks[quest]['1']?.blockChoosen);
           setData(demoBlocks[quest]['1']);
           setSelectedOption(null);
@@ -1627,6 +1673,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       options: item.qpOptions,
       optionText: item.qpOptionText,
     });
+    setOptionSelectId(item.qpOptionId);
     const voiceId =
       // data?.blockRoll == '999999'
       //   ? voiceIds.NPC :
@@ -1635,11 +1682,33 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         : voiceIds?.playerFemale;
     // getAudioForText(text, voiceId);
   };
-
+  //Newly Added start 02.05.2024
+  const [ModelControl, setModelControl] =
+    useState<boolean>(false); // for model show
+  const [LastModified, setLastModified] =
+    useState<boolean>(false); // for last modified 
+  const [isStoryScreen, isSetStoryScreen] = useState<boolean>(false);
+  const [OptionSelectId, setOptionSelectId] = useState(null);
+  //02.05.2024 End
+  // const [ModelControl,setModelControl] = useEffect<Boolean>(false);
   useEffect(() => {
     setFeedBackFromValue();
+
+    const screens = [1, 10, 13, 12]
+    if (!screens.includes(currentScreenId)) {
+      const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+      if (screenIdset !== currentScreenId) {
+        setPreLogDatas((prev: any) => ({
+          ...prev,
+          screenIdSeq: [...prev.screenIdSeq, currentScreenId]
+        }));
+      }
+
+    }
+
   }, [currentScreenId]);
 
+  console.log('prevScreenId ***', prevScreenId);
   const setFeedBackFromValue = () => {
     switch (currentScreenId) {
       case 0:
@@ -1692,30 +1761,30 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const subTabOptionsForTabIds: Array<{
     [key: string]: Array<{ value: string; label: string }> | null;
   }> = [
-    { '1': null },
-    { '2': null },
-    {
-      '3': [
-        { value: 'Title', label: 'Title' },
-        { value: 'Skill', label: 'Skill' },
-        { value: 'Storyline', label: 'Storyline' },
-        { value: 'Outcomes', label: 'Outcomes' },
-        { value: 'Category', label: 'Category' },
-        { value: 'Author', label: 'Author' },
-      ],
-    },
-    { '4': null },
-    {
-      '5': [
-        { value: '0', label: 'Completion' },
-        { value: '1', label: 'Leaderboard' },
-        { value: '2', label: 'Reflection' },
-        { value: '3', label: 'Takeaway' },
-        { value: '4', label: 'Welcome' },
-        { value: '5', label: 'Thanks' },
-      ],
-    },
-  ];
+      { '1': null },
+      { '2': null },
+      {
+        '3': [
+          { value: 'Title', label: 'Title' },
+          { value: 'Skill', label: 'Skill' },
+          { value: 'Storyline', label: 'Storyline' },
+          { value: 'Outcomes', label: 'Outcomes' },
+          { value: 'Category', label: 'Category' },
+          { value: 'Author', label: 'Author' },
+        ],
+      },
+      { '4': null },
+      {
+        '5': [
+          { value: '0', label: 'Completion' },
+          { value: '1', label: 'Leaderboard' },
+          { value: '2', label: 'Reflection' },
+          { value: '3', label: 'Takeaway' },
+          { value: '4', label: 'Welcome' },
+          { value: '5', label: 'Thanks' },
+        ],
+      },
+    ];
   useEffect(() => {
     if (audioRef.current) {
       if (currentScreenId === 2) {
@@ -1724,50 +1793,51 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         audioRef.current.play();
       }
     }
-    setReviewInput((prev: any)=>({...prev,  review: '', tabId: null, tabAttribute: '',  tabAttributeValue: ''}));
+    setReviewInput((prev: any) => ({ ...prev, review: '', tabId: null, tabAttribute: '', tabAttributeValue: '' }));
     isMenuOpen && setIsMenuOpen(false);
+
+
   }, [currentScreenId]);
-  useEffect(() => {        
+  useEffect(() => {
     if (reviewInput?.tabId) {
       if (reviewInput?.tabId == 5) {
-        if(currentScreenId === 6 )
-          {
-            setReviewInput((prev: Review) => ({
-              ...prev,
-              tabAttribute: 'screenId',
-              tabAttributeValue: Tab5attribute.indexOf(Number(currentScreenId)).toString()+'@'+profile?.currentQuest,
-            }));
-          }else{
-            setReviewInput((prev: Review) => ({
-              ...prev,
-              tabAttribute: 'screenId',
-              tabAttributeValue: Tab5attribute.indexOf(Number(currentScreenId)).toString(),
-            }));
-          }
+        if (currentScreenId === 6) {
+          setReviewInput((prev: Review) => ({
+            ...prev,
+            tabAttribute: 'screenId',
+            tabAttributeValue: Tab5attribute.indexOf(Number(currentScreenId)).toString() + '@' + profile?.currentQuest,
+          }));
+        } else {
+          setReviewInput((prev: Review) => ({
+            ...prev,
+            tabAttribute: 'screenId',
+            tabAttributeValue: Tab5attribute.indexOf(Number(currentScreenId)).toString(),
+          }));
+        }
 
         setReviewSubTabOptions([]);
-        
+
       } else if (reviewInput?.tabId == 4) {
         //for Story Tab *******
-        if(currentScreenId == 9 || currentScreenId == 14){
-          const blockSeqId = currentScreenId == 9 ? (data.blockQuestNo + '@' + data.blockSecondaryId) : (FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition-1 : FeedbackcurrentPosition].blockQuestNo + '@' + FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition-1 : FeedbackcurrentPosition].blockSecondaryId);
+        if (currentScreenId == 9 || currentScreenId == 14) {
+          const blockSeqId = currentScreenId == 9 ? (data.blockQuestNo + '@' + data.blockSecondaryId) : (FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition - 1 : FeedbackcurrentPosition].blockQuestNo + '@' + FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition - 1 : FeedbackcurrentPosition].blockSecondaryId);
           setReviewInput((prev: Review) => ({
             ...prev,
             tabAttribute: 'blockSeqId',
             tabAttributeValue: blockSeqId,
           }));
         }
-      else{
-              const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
-              setReviewSubTabOptions([]);
-              setReviewInput((prev: Review) => ({...prev,tabAttribute: 'blockSeqId',tabAttributeValue: blockSeqId}));
-            }
+        else {
+          const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
+          setReviewSubTabOptions([]);
+          setReviewInput((prev: Review) => ({ ...prev, tabAttribute: 'blockSeqId', tabAttributeValue: blockSeqId }));
+        }
       } else {
-          const subOptions = subTabOptionsForTabIds.find(
-            (item: any) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
-          );
-          setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
-        
+        const subOptions = subTabOptionsForTabIds.find(
+          (item: any) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
+        );
+        setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
+
       }
       /** To hide the sub tab options and set the subtab selection based on the current screen it here */
     }
@@ -2012,7 +2082,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   }, [FeedbackNavigatenext]);
 
-  useEffect(() => {}, [FeedBackoptionData]);
+  // useEffect(()=>
+  // {
+  //   if(data!==null)
+  //     {
+  //         SetPreviouseStored(data);
+  //     }
+
+  // },[data]);
+  // useEffect(() => {}, [FeedBackoptionData]);
 
   const getFeedbackData = (getdata: any) => {
     setisScreenshot(true);
@@ -2081,12 +2159,232 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setFeedbackNavigateNext(true);
     }
   };
-
+  /*
+  useEffect(() => {
+    const screenUpdatePreviousdata = async () => {
+      const data = {
+        previewLogId: getPrevLogDatas.previewLogId,
+        playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
+        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
+        previewGameId: gameInfo?.gameId ?? null,
+        screenIdSeq: prevScreenId?.length > 0 ? prevScreenId : null,
+      };
+      const previousDataString = JSON.stringify(data);
+      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
+      setPreviewLogsData(updatePreviewLogsResponse);
+    }
+    screenUpdatePreviousdata();
+  }, [prevScreenId]);
+  useEffect(() => {
+    const prenaviUpdatePreviousdata = async () => {
+      const data = {
+        previewLogId: getPrevLogDatas.previewLogId,
+        playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
+        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
+        previewGameId: gameInfo?.gameId ?? null,
+        nevigatedSeq: (prevnaviseq.length > 0 || prevnaviseq.length !== undefined) && prevnaviseq ? getPrevLogDatas.nevigatedSeq : JSON.stringify(prevnaviseq),
+      };
+      const previousDataString = JSON.stringify(data);
+      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
+      setPreviewLogsData(updatePreviewLogsResponse);
+    }
+    prenaviUpdatePreviousdata();
+  }, [prevnaviseq]);
+  useEffect(() => {
+    const LastActUpdatePreviousdata = async () => {
+      const data = {
+        previewLogId: getPrevLogDatas.previewLogId,
+        playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
+        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
+        previewGameId: gameInfo?.gameId ?? null,
+        lastActiveBlockSeq: LastActivityseq?.length > 0 ? JSON.stringify(LastActivityseq) : getPrevLogDatas.lastActiveBlockSeq,
+      };
+      const previousDataString = JSON.stringify(data);
+      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
+      setPreviewLogsData(updatePreviewLogsResponse);
+    }
+    LastActUpdatePreviousdata();
+  }, [LastActivityseq]);
+  useEffect(() => {
+    const selectoptionUpdatePreviousdata = async () => {
+      const data = {
+        previewLogId: getPrevLogDatas.previewLogId,
+        playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
+        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
+        previewGameId: gameInfo?.gameId ?? null,
+        selectedOptions: (prevSelectedOptionseq.length > 0 || prevSelectedOptionseq.length !== undefined) && prevSelectedOptionseq ? getPrevLogDatas.selectedOptions : prevSelectedOptionseq,
+      };
+      const previousDataString = JSON.stringify(data);
+      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
+      setPreviewLogsData(updatePreviewLogsResponse);
+    }
+    selectoptionUpdatePreviousdata();
+  }, [prevSelectedOptionseq]);
+  useEffect(() => {
+    const profileUpdatePreviousdata = async () => {
+      const data = {
+        previewLogId: getPrevLogDatas.previewLogId,
+        playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
+        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
+        previewGameId: gameInfo?.gameId ?? null,
+        previewProfile: prevprofileData,
+      };
+      const previousDataString = JSON.stringify(data);
+      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
+      setPreviewLogsData(updatePreviewLogsResponse);
+    }
+    profileUpdatePreviousdata();
+  }, [prevprofileData]);
+  */
   const handleHome = () => {
     setCurrentScreenId(1);
     return true;
   };
+  useEffect(() => {
+    const updatepreviousdatas = async () => {
 
+
+      const data = {
+        previewLogId: getPrevLogDatas.previewLogId,
+        playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
+        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
+        previewGameId: gameInfo?.gameId ?? null,
+        nevigatedSeq: getPrevLogDatas.nevigatedSeq,
+        screenIdSeq: getPrevLogDatas.screenIdSeq,
+        lastActiveBlockSeq: getPrevLogDatas.lastActiveBlockSeq,
+        selectedOptions: getPrevLogDatas.selectedOptions,
+        previewProfile: getPrevLogDatas.previewProfile,
+      };
+
+
+      const previousDataString = JSON.stringify(data);
+      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
+      console.log('updatePreviewLogsResponse 97878787', updatePreviewLogsResponse);
+    }
+    updatepreviousdatas();
+  }, [getPrevLogDatas]);
+  //  Newly Added  for prviouse stored 
+  const SetPreviouseStored = (currentdata: any) => {
+    console.log('currentdata', currentdata);
+    if (currentdata !== null) {
+      const currentQuest = currentdata
+        ? parseInt(currentdata?.blockPrimarySequence.split('.')[0])
+        : null;
+      /*******************************Navegate Seq stored start************************************************ */
+      if (currentQuest === parseInt(profile.currentQuest)) {
+        if (getPrevLogDatas.nevigatedSeq[profile?.currentQuest]) {
+          if (!getPrevLogDatas.nevigatedSeq[profile?.currentQuest].includes(currentdata.blockPrimarySequence)) {
+
+            setPreLogDatas((prev: any) => ({
+              ...prev,
+              nevigatedSeq: { ...prev.nevigatedSeq, [profile?.currentQuest]: [...(prev.nevigatedSeq[profile?.currentQuest] || []), currentdata.blockPrimarySequence] }
+            }));
+            // setprevNaviseq((prev: any) => ({
+            //   ...prev,
+            //   [profile?.currentQuest]: [...prev[profile?.currentQuest], currentdata.blockPrimarySequence]
+            // }));
+          }
+
+        }
+        else {
+          setPreLogDatas((prev: any) => ({
+            ...prev,
+            nevigatedSeq: { ...prev.nevigatedSeq, [profile?.currentQuest]: [currentdata.blockPrimarySequence] }
+          }));
+          // setprevNaviseq((prev: any) => ({
+          //   ...prev,
+          //   [profile?.currentQuest]: [currentdata.blockPrimarySequence]
+          // }));
+
+        }
+
+      }
+      /*
+      else {
+        setPreLogDatas((prev:any) => ({
+          ...prev,
+          nevigatedSeq: {...prev.nevigatedSeq, [currentQuest]: [currentdata.blockPrimarySequence]}
+        }));
+        // setprevNaviseq((prev: any) => ({
+        //   ...prev,
+        //   [currentQuest]: [currentdata.blockPrimarySequence]
+        // }));
+
+      }*/
+      /*******************************Selected option Seq stored start ***************************** */
+      if (currentdata?.blockChoosen === 'Interaction') {
+        if (currentQuest === parseInt(profile.currentQuest)) {
+          if (getPrevLogDatas.selectedOptions[profile?.currentQuest]) {
+            const existingIndex = getPrevLogDatas.selectedOptions[profile?.currentQuest]?.findIndex((item: any) => item.blockId === currentdata.blockId);
+            console.log('existingIndex', existingIndex);
+            if (existingIndex !== -1) {
+              const updatedOptions = [...getPrevLogDatas.selectedOptions[profile?.currentQuest]];
+              console.log();
+              updatedOptions[existingIndex] = { blockId: currentdata.blockId, optionId: OptionSelectId };
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: updatedOptions }
+              }));
+              // setprevSelectedOptionseq((prev: any) => ({
+              //   ...prev,
+              //   [profile?.currentQuest]: updatedOptions
+              // }));
+            }
+            else {
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [...prev.selectedOptions[profile?.currentQuest], { blockId: currentdata.blockId, optionId: OptionSelectId }] }
+              }));
+              // setprevSelectedOptionseq((prev: any) => ({
+              //   ...prev,
+              //   [profile?.currentQuest]: [...prev[profile?.currentQuest], { id: currentdata.blockId, option: getSelectedOptions }]
+              // }));
+            }
+
+          }
+          else {
+            setPreLogDatas((prev: any) => ({
+              ...prev,
+              selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [{ blockId: currentdata.blockId, optionId: OptionSelectId }] }
+            }));
+            // setprevSelectedOptionseq((prev: any) => ({
+            //   ...prev,
+            //   [profile?.currentQuest]: [{ id: currentdata.blockId, option: getSelectedOptions }]
+            // }));
+
+          }
+
+        }
+        else {
+          setPreLogDatas((prev: any) => ({
+            ...prev,
+            selectedOptions: { [profile?.currentQuest]: [{ blockId: currentdata.blockId, optionId: OptionSelectId }] }
+          }));
+          // setprevSelectedOptionseq((prev: any) => ({
+          //   ...prev,
+          //   [profile?.currentQuest]: [{ id: currentdata.blockId, option: getSelectedOptions }]
+          // }));
+
+        }
+
+      }
+      /*******************************last Activity Seq  start ***************************** */
+      if (currentQuest === parseInt(profile.currentQuest)) {
+        setPreLogDatas((prev: any) => ({
+          ...prev,
+          lastActiveBlockSeq: currentdata.blockId
+        }));
+        // setLastActivityseq([currentdata.blockId]);
+
+      }
+      console.log('prevnaviseq inside', prevnaviseq, '.....', prevSelectedOptionseq, 'LastActivityseq', LastActivityseq, '.....', profile?.score);
+
+    }
+
+
+  }
+
+  console.log('prevnaviseq', prevnaviseq, '.....', prevSelectedOptionseq, 'LastActivityseq', LastActivityseq, '.....', profile?.score);
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="EntirePreview-wrapper">
@@ -2160,12 +2458,16 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           <Box className="Images" h={'100vh !important'}>
                             <Welcome
                               intro={audio}
+                              currentScreenId={currentScreenId}
+                              setprevScreenId={setprevScreenId}
                               setCurrentScreenId={setCurrentScreenId}
                               formData={gameInfo?.gameData}
                               imageSrc={preloadedAssets.backgroundImage}
                               screen={preloadedAssets.Screen5}
                               preview={true}
                               preloadedAssets={preloadedAssets}
+                              setPreLogDatas={setPreLogDatas}
+                              getPrevLogDatas={getPrevLogDatas}
                             />
                           </Box>
                         </Box>
@@ -2314,7 +2616,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                               setCurrentScreenId={setCurrentScreenId}
                               formData={gameInfo?.gameData}
                               imageSrc={preloadedAssets.ThankYou}
-                              preloadedAssets = {preloadedAssets}
+                              preloadedAssets={preloadedAssets}
                             />
                           </Box>
                         </Box>
@@ -2477,97 +2779,99 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       profile={profile}
                       preloadedAssets={preloadedAssets}
                       FeedbackcurrentPosition={FeedbackcurrentPosition}
-                      interactionBlockArray = {interactionBlockArray}
+                      interactionBlockArray={interactionBlockArray}
                     />
                   );
                 case 10:
                   return (
-                    // <>
-                    //   <Box
-                    //     position="relative"
-                    //     maxW="100%"
-                    //     w={'100vw'}
-                    //     height="100vh"
-                    //     backgroundImage={preloadedAssets.backgroundImage}
-                    //     backgroundSize={'cover'}
-                    //     backgroundRepeat={'no-repeat'}
-                    //     className="chapter_potrait"
-                    //   >
-                    //     <Grid
-                    //       templateColumns="repeat(1, 1fr)"
-                    //       gap={4}
-                    //       position="absolute"
-                    //       top="50%"
-                    //       left="50%"
-                    //       transform="translate(-50%, -50%)"
-                    //       className="story_note_grid"
-                    //     >
-                    //       <GridItem colSpan={1}>
-                    //         <Box
-                    //           display={'flex'}
-                    //           justifyContent={'center'}
-                    //           position={'relative'}
-                    //         >
-                    //           <Img
-                    //             src={preloadedAssets.Login}
-                    //             className={'first_play'}
-                    //           />
-                    //           <Box className={'play_screen_content'}>
-                    //             <Box>
-                    //               <Box
-                    //                 w={'100%'}
-                    //                 display={'flex'}
-                    //                 justifyContent={'center'}
-                    //               >
-                    //                 <Text className={'play_screen_heading'}>
-                    //                   Atlantis
-                    //                 </Text>
-                    //               </Box>
-                    //             </Box>
-                    //             <Box>
-                    //               <Box
-                    //                 w={'100%'}
-                    //                 display={'flex'}
-                    //                 justifyContent={'center'}
-                    //               >
-                    //                 <Text className={'play_screen_text'}>
-                    //                   Welcome To
-                    //                 </Text>
-                    //               </Box>
-                    //               <Box
-                    //                 w={'100%'}
-                    //                 display={'flex'}
-                    //                 justifyContent={'center'}
-                    //                 mb={{ base: 0, lg: 2 }}
-                    //               >
-                    //                 <Text className={'play_screen_text'}>
-                    //                   The Demo Play
-                    //                 </Text>
-                    //               </Box>
-                    //               <Box
-                    //                 w={'100%'}
-                    //                 display={'flex'}
-                    //                 justifyContent={'center'}
-                    //               >
-                    //                 <Button
-                    //                   w={'90%'}
-                    //                   h={'5vh'}
-                    //                   bg={'none'}
-                    //                   _hover={{ bg: 'none' }}
-                    //                   onClick={() => {
-                    //                     setCurrentScreenId(1);
-                    //                     setIsGetsPlayAudioConfirmation(true);
-                    //                   }}
-                    //                 ></Button>
-                    //               </Box>
-                    //             </Box>
-                    //           </Box>
-                    //         </Box>
-                    //       </GridItem>
-                    //     </Grid>
-                    //   </Box>
-                    // </>
-                    <GameIntroScreen preloadedAssets={preloadedAssets} setCurrentScreenId={setCurrentScreenId} setIsGetsPlayAudioConfirmation={setIsGetsPlayAudioConfirmation} ></GameIntroScreen>
+                    /*
+                    <>
+                      <Box
+                        position="relative"
+                        maxW="100%"
+                        w={'100vw'}
+                        height="100vh"
+                        backgroundImage={preloadedAssets.backgroundImage}
+                        backgroundSize={'cover'}
+                        backgroundRepeat={'no-repeat'}
+                        className="chapter_potrait"
+                      >
+                        <Grid
+                          templateColumns="repeat(1, 1fr)"
+                          gap={4}
+                          position="absolute"
+                          top="50%"
+                          left="50%"
+                          transform="translate(-50%, -50%)"
+                          className="story_note_grid"
+                        >
+                          <GridItem colSpan={1}>
+                            <Box
+                              display={'flex'}
+                              justifyContent={'center'}
+                              position={'relative'}
+                            >
+                              <Img
+                                src={preloadedAssets.Login}
+                                className={'first_play'}
+                              />
+                              <Box className={'play_screen_content'}>
+                                <Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Text className={'play_screen_heading'}>
+                                      Atlantis
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Text className={'play_screen_text'}>
+                                      Welcome To
+                                    </Text>
+                                  </Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                    mb={{ base: 0, lg: 2 }}
+                                  >
+                                    <Text className={'play_screen_text'}>
+                                      The Demo Play
+                                    </Text>
+                                  </Box>
+                                  <Box
+                                    w={'100%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                  >
+                                    <Button
+                                      w={'90%'}
+                                      h={'5vh'}
+                                      bg={'none'}
+                                      _hover={{ bg: 'none' }}
+                                      onClick={() => {
+                                        setCurrentScreenId(1);
+                                        setIsGetsPlayAudioConfirmation(true);
+                                      }}
+                                    ></Button>
+                                  </Box>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </GridItem>
+                        </Grid>
+                      </Box>
+                    </>
+                    */
+                    <GameIntroScreen preloadedAssets={preloadedAssets} setCurrentScreenId={setCurrentScreenId} setIsGetsPlayAudioConfirmation={setIsGetsPlayAudioConfirmation} setPreLogDatas={setPreLogDatas} getPrevLogDatas={getPrevLogDatas} setprevScreenId={setprevScreenId} currentScreenId={currentScreenId} setModelControl={setModelControl} gameInfo={gameInfo.gameData} setLastModified={setLastModified} ></GameIntroScreen>
                   );
                 case 11:
                   return (
@@ -2578,7 +2882,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         profileData={profileData}
                         formData={gameInfo?.gameData}
                         setProfileData={setProfileData}
+                        setprevProfileData={setprevProfileData}
+                        setPreLogDatas={setPreLogDatas}
                         preloadedAssets={preloadedAssets}
+                        getPrevLogDatas={getPrevLogDatas}
                       />
                     </>
                   );
@@ -2588,6 +2895,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       <Characterspage
                         profileData={profileData}
                         setProfileData={setProfileData}
+                        setprevScreenId={setprevScreenId}
+                        currentScreenId={currentScreenId}
+                        setprevProfileData={setprevProfileData}
                         setSelectedPlayer={setSelectedPlayer}
                         players={gameInfo?.gamePlayers}
                         formData={gameInfo?.gameData}
@@ -2595,6 +2905,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         setCurrentScreenId={setCurrentScreenId}
                         demoBlocks={demoBlocks}
                         preloadedAssets={preloadedAssets}
+                        setPreLogDatas={setPreLogDatas}
+                        getPrevLogDatas={getPrevLogDatas}
                       />
                     </>
                   );
@@ -2617,6 +2929,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         gameQuest={gameInfo?.gameQuest}
                         setFeedbackList={setFeedbackList}
                         preloadedAssets={preloadedAssets}
+                        SetPreviouseStored={SetPreviouseStored}
+                        setprevScreenId={setprevScreenId}
+                        currentScreenId={currentScreenId}
+                        setPreLogDatas={setPreLogDatas}
+                        getPrevLogDatas={getPrevLogDatas}
                       />
                     </>
                   );
@@ -2688,6 +3005,42 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   return <h1>Loading Screen </h1>;
               }
             })()}
+            {ModelControl === true ?
+
+              <>
+                <Box
+                  w={'100%'}
+                  h={'100vh'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  position={'relative'}
+                  overflow={'visible'}
+                  style={{ perspective: '1000px' }}
+                  className="Main-Content"
+                >
+                  <Box
+                    backgroundImage={preloadedAssets.backgroundImage}
+                    w={'100% !important'}
+                    h={'100vh'}
+                    backgroundRepeat={'no-repeat'}
+                    backgroundSize={'cover'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    className="Game-Screen"
+                  >
+                    <Box className="Images">
+                      <ModelPopup ModelControl={ModelControl} setModelControl={setModelControl} backGroundImg={preloadedAssets.backgroundImage} preloadedAssets={preloadedAssets} getPrevLogDatas={getPrevLogDatas} setCurrentScreenId={setCurrentScreenId} setLastModified={setLastModified} LastModified={LastModified} setData={setData} setType={setType} gameInfo={gameInfo.blocks}
+                        setOptions={setOptions} gameInfoquest={gameInfo.questOptions} gameinfodata={gameInfo.gameData.gameShuffle} isSetStoryScreen={isSetStoryScreen} isStoryScreen={isStoryScreen}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+
+
+              </>
+              : null
+            }
+
           </Flex>
 
           {isReviewDemo && !skipScreenList?.includes(currentScreenId) && (

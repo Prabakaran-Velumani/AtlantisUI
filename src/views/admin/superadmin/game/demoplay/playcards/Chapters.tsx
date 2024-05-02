@@ -38,6 +38,11 @@ const ChapterPage: React.FC<{
   setOptions?: any;
   setFeedbackList?: any;
   preloadedAssets?: any;
+  SetPreviouseStored?:any;
+  setprevScreenId:any;
+  currentScreenId:any;
+  setPreLogDatas:any;
+  getPrevLogDatas:any;
 }> = ({
   imageSrc,
   demoBlocks,
@@ -54,6 +59,10 @@ const ChapterPage: React.FC<{
   setOptions,
   setFeedbackList,
   preloadedAssets,
+  SetPreviouseStored,
+  setprevScreenId,currentScreenId,
+  setPreLogDatas,
+  getPrevLogDatas
 }) => {
   const [questScores, setQuestScores] = useState(null);
 
@@ -200,6 +209,15 @@ const ChapterPage: React.FC<{
   }, [profile]);
 
   const handleChapter = (it: any) => {
+    const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
+    if(screenIdset !== currentScreenId)
+      {
+        setPreLogDatas((prev:any) => ({
+      ...prev,
+      screenIdSeq: [...prev.screenIdSeq, currentScreenId]
+    }));
+      }
+    
     const Completionpage = Object.entries(questState).map(
       ([questId, status]) => ({ questId, status }),
     );
@@ -225,6 +243,7 @@ const ChapterPage: React.FC<{
           currentQuest: it,
         }));
         setCurrentScreenId(2);
+        SetPreviouseStored(demoBlocks[it]['1']);
       }
     }
   };
