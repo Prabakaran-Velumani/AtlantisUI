@@ -2034,7 +2034,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                   borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
                                   borderStyle={{ base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid' }}
                                   borderColor={{ base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db' }}
-
                                   background={
                                     seq.input === lastInputName ||
                                       dragData.isDragging === true ||

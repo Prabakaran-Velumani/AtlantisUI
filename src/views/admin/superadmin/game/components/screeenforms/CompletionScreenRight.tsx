@@ -312,7 +312,8 @@ const CompletionScreenRight: React.FC<{
                 mb="10px"
               />
             </FormControl>
-          </Flex><Flex mt={'10px'} >
+          </Flex>
+          <Flex mt={'10px'} >
             {/***********Spacer*****************/}
             {/* <div style={{ width: '20px' }} /> */}
 

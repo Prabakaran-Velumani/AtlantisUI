@@ -1076,14 +1076,15 @@ const AddScores: React.FC<{
                   // label="Screen Title"
                   />
                   <Text
-                    fontSize={14}
+                    fontSize={'12px'}
                     ml="2.5px"
                     color={
                       compliData[CompKeyCount]?.gameScreenTitle?.length >
                         maxCharacters
                         ? 'red'
-                        : 'gray'
+                        : 'grey'
                     }
+                   
                   >
                     {maxCharacters -
                       (compliData[CompKeyCount]?.gameScreenTitle?.length ||
@@ -1234,13 +1235,13 @@ const AddScores: React.FC<{
                           mb="0px"
                         />
                         <Text
-                          fontSize={14}
+                          fontSize={'12px'}
                           ml="2.5px"
                           color={
                             compliData[CompKeyCount]?.gameCompletedCongratsMessage
                               ?.length > maxCharacters2
                               ? 'red'
-                              : 'gray'
+                              : 'grey'
                           }
                         >
                           {maxCharacters2 -
@@ -1294,14 +1295,14 @@ const AddScores: React.FC<{
                                     }}
                                   />
                                   <Text
-                                    fontSize={14}
+                                    fontSize={'12px'}
                                     ml="2.5px"
                                     color={
                                       compliData[CompKeyCount]
                                         ?.gameMinimumScoreCongratsMessage?.length >
                                         maxCharacters2
                                         ? 'red'
-                                        : 'gray'
+                                        : 'grey'
                                     }
                                   >
                                     {maxCharacters2 -
@@ -1359,14 +1360,14 @@ const AddScores: React.FC<{
                                     }}
                                   />
                                   <Text
-                                    fontSize={14}
+                                    fontSize={'12px'}
                                     ml="2.5px"
                                     color={
                                       compliData[CompKeyCount]
                                         ?.gameaboveMinimumScoreCongratsMessage
                                         ?.length > maxCharacters2
                                         ? 'red'
-                                        : 'gray'
+                                        : 'grey'
                                     }
                                   >
                                     {maxCharacters2 -
@@ -1447,14 +1448,14 @@ const AddScores: React.FC<{
                                     }}
                                   />
                                   <Text
-                                    fontSize={14}
+                                    fontSize={'12px'}
                                     ml="2.5px"
                                     color={
                                       compliData[CompKeyCount]
                                         ?.gameAboveDistinctionScoreCongratsMessage
                                         ?.length > maxCharacters2
                                         ? 'red'
-                                        : 'gray'
+                                        : 'grey'
                                     }
                                   >
                                     {maxCharacters2 -
