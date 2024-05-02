@@ -120,7 +120,6 @@ option {
   margin-bottom: 15px; */
   /* margin-left: 15px; */
 }
-
 .block-action-icons {
   /* visibility: hidden; */
   display: flex;
@@ -130,19 +129,16 @@ option {
   margin-bottom: 15px; */
   /* margin-left: 15px; */
 }
-
 .block-compo .block-action-icons svg {
   margin-bottom: 10px;
   height: 0;
   transition: 0.2s ease;
 }
-
 .block-action-icons svg {
   margin-bottom: 10px;
   height: 0;
   transition: 0.2s ease;
 }
-
 /* .react-select{
   padding: 13px 0px 13px 0px;
   height: 100%;
@@ -152,12 +148,10 @@ option {
   width: auto;
   /* transform: translateX(13%); */
 }
-
 .NDI .block-item-type:hover .block-action-icons svg {
   /* visibility: visible; */
   height: 1em;
 }
-
 /* .block-action-icons svg {
   height: 1em;
 } */
@@ -6701,13 +6695,11 @@ grid-row: 1 / 2;
   border-radius: 30px;
   background-size: contain;
 }
-
 .feedback_content_text::-webkit-scrollbar-track {
   background: url('../img/games/scroll.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
-
 .feedback_content_text::-webkit-scrollbar-thumb {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
