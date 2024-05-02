@@ -1,4 +1,4 @@
-import { Box, Button, Icon, Img, Text } from '@chakra-ui/react';
+import { Box, Button, Icon, Img, Text, Textarea } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { ImHappy } from 'react-icons/im';
 import { TfiFaceSad } from 'react-icons/tfi';
@@ -15,6 +15,9 @@ import {
   FaRegThumbsUp,
   FaRegThumbsDown,
 } from 'react-icons/fa';
+import { debounce } from 'lodash';
+
+// import { updatePreviewLogs } from 'utils/game/gameService';
 
 interface Badge {
   gasId: number;
@@ -75,6 +78,7 @@ const ThankYou: React.FC<{
 
   // Filter properties where the value is 'true'
   const trueValuesArray = propertiesToCheck.filter(property => formData[property] === 'true');
+  const  [playerInputs,setPlayerInputs] = useState<string>(null);
 
   var thirdValue = "";
   if (trueValuesArray.length >= 3) {
@@ -93,6 +97,36 @@ const ThankYou: React.FC<{
     });
   }
 
+//  const updateDatabase = async () => {
+//   try { 
+//     const apiResponse = await updatePreviewLogs(playerInputs);
+//     if(apiResponse.status == 200){
+//       console.log("Player's manual Feedback updated");
+//     }
+//     else{
+//       console.log("failed - ",apiResponse?.message);
+//     }
+//     // if (apiResponse) {
+//     //   setPlayerInputs((prevState) => ({
+//     //     ...prevState,
+//     //     reflection: apiResponse.reflection,
+//     //   }));
+//     // }
+//   } catch (error) {
+//     console.error('Error during API call kishore:', error);
+//     console.log("playerInputs",playerInputs);
+
+//   }
+// };
+
+useEffect(()=>{
+  /***
+  const debouncedUpdateDatabase = debounce(updateDatabase, 500); 
+  return ()=>{
+    debouncedUpdateDatabase.cancel();
+  };
+   */
+},[playerInputs])
   return (
     <>
       {preloadedAssets.Thankyou && (
@@ -324,9 +358,28 @@ const ThankYou: React.FC<{
                             }}
                           >
                             <div className="buttonfeel3">
-                              <p>
+                              {/* <p>
                                 <Icon as={FaRegCommentDots} />
-                              </p>
+                              </p> */}
+
+                              <Textarea
+                                    paddingTop="20px"
+                                    outline="none"
+                                    focusBorderColor="none"
+                                    border="none"
+                                    width="350px"
+                                    color="#D9C7A2"
+                                    height={{
+                                      base: '20px',
+                                      sm: '30px',
+                                      md: '50px',
+                                      lg: '100px',
+                                    }}
+                                    _focus={{ boxShadow: 'none', border: 'none' }}
+                                    fontFamily="AtlantisText"
+                                    // onBlur={updateDatabase}
+                                    onChange={(e:any)=>setPlayerInputs(e.target.value)}
+                                  />
                             </div>
                           </div>
                         </div>
@@ -387,3 +440,5 @@ const ThankYou: React.FC<{
   );
 };
 export default ThankYou;
+
+

@@ -119,31 +119,31 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const [toggleRight, setToggleRight] = useState(false)
   // Afrith-modified-ends-08/Mar/24
   //Afrith-modified-starts-20/Mar/24
-  const [gameContentId, setGameContentId] = useState(null);
+  // const [gameContentId, setGameContentId] = useState(null);
   //Afrith-modified-ends-20/Mar/24
-  const { id } = useParams();
+  // const { id } = useParams();
   const toast = useToast();
 
-  useEffect(() => {
-    const fetch = async () => {
-      const resLang = await getGameLanguages(id);
-      if (resLang?.status === 'Success') {
-        if (resLang?.data.length !== 0) {
-          const data = resLang?.data;
-          data.unshift({ value: 0, label: 'English' });
-          setLanguages(data);
-          setProfileData((prev: any) => ({
-            ...prev,
-            language: data[0]?.label,
-          }));
-          setIsLanguage(true);
-          // setTimeout(() => {
-          // }, 1500);
-        }
-      }
-    };
-    fetch();
-  }, []);
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     const resLang = await getGameLanguages(id);
+  //     if (resLang?.status === 'Success') {
+  //       if (resLang?.data.length !== 0) {
+  //         const data = resLang?.data;
+  //         data.unshift({ value: 0, label: 'English' });
+  //         setLanguages(data);
+  //         setProfileData((prev: any) => ({
+  //           ...prev,
+  //           language: data[0]?.label,
+  //         }));
+  //         setIsLanguage(true);
+  //         // setTimeout(() => {
+  //         // }, 1500);
+  //       }
+  //     }
+  //   };
+  //   fetch();
+  // }, []);
 
   const playerInfo = useContext(ProfileContext);
 
@@ -192,7 +192,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   //   }));
   // };
 
-  ///Afrith-modified-starts-20/Mar/24
+  /*** 
   const currGameId = id; //from useParams
   const handleProfile = (e: any, lang?: any, langId?: any) => {
 
@@ -207,7 +207,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     setGameContentId(langId);
     // getContentRelatedLanguage(currGameId, langId);
   };
-
+  
     //////////
     useEffect(() => {
       const fetchGameContent = async() => {
@@ -235,14 +235,8 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       }
       // console.log('gameContentId',gameContentId)
     },[gameContentId])
-    /////////
-    // Afrith-modified-starts-08/Mar/24
-    // const setPlayerName = (value:any) => {
-    //   setCharacterName(value);
-    //   setProfileData((prev:any) => ({...prev, name:value}))
-    // };
-    // Afrith-modified-ends-08/Mar/24
- 
+  */
+
   const innerBoxWidth = useBreakpointValue({
     base: '95%',
     lg: '95%',
@@ -251,7 +245,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   });
   return (
     <>
-      {formData && (formData?.gameLanguageId !== null) && (isLanguage !==null) ? (
+      {/* {formData && (formData?.gameLanguageId !== null) && (isLanguage !==null) ? (
         <Box id="container" className="Play-station">
           <Box className="top-menu-home-section">
             {isLanguage ? (
@@ -317,7 +311,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
             ) : null}
           </Box>
         </Box>
-      ) : null}
+      ) : null} */}
         <Box
           position="relative"
           w={'100%'}

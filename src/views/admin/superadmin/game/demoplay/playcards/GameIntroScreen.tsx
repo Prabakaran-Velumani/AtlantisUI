@@ -1,13 +1,16 @@
-import { Box, Grid, GridItem, Img, Button, Text } from '@chakra-ui/react';
-import React from 'react'
+import { Box, Grid, GridItem, Icon, Img, Button, Text } from '@chakra-ui/react';
+import React from 'react';
+import { FaLanguage } from "react-icons/fa6";
 
 interface GameIntroType {
     preloadedAssets: any;
     setCurrentScreenId: (id:number)=> void;
     setIsGetsPlayAudioConfirmation: (value: boolean)=>void;
+    hasMulitLanguages: boolean;
+    setIsOpenCustomModal: (value: boolean)=> void;
 }
 
-const GameIntroScreen : React.FC<GameIntroType> = ({preloadedAssets, setCurrentScreenId, setIsGetsPlayAudioConfirmation}) => {
+const GameIntroScreen : React.FC<GameIntroType> = ({preloadedAssets, setCurrentScreenId, setIsGetsPlayAudioConfirmation, hasMulitLanguages, setIsOpenCustomModal}) => {
 
     return (
     <Box
@@ -20,6 +23,15 @@ const GameIntroScreen : React.FC<GameIntroType> = ({preloadedAssets, setCurrentS
     backgroundRepeat={'no-repeat'}
     className="chapter_potrait"
   >
+    {hasMulitLanguages &&
+    (
+      <>
+        <Box className="intro_lang_icon" onClick={()=>setIsOpenCustomModal(true)}>
+        <Icon as={FaLanguage} w={"4em"} h={"3em"} />
+        </Box>
+      </>
+    )
+    }
     <Grid
       templateColumns="repeat(1, 1fr)"
       gap={4}

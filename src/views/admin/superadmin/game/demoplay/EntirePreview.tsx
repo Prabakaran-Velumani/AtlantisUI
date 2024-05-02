@@ -1,3 +1,22 @@
+// case 0: // play info
+// case 1: // case 1 welcome screen
+// case 2: // case 2 Story
+// case 3: // case 3 Reflection
+// case 4: // case 4 LeaderBoard
+// case 5: // case 5 Thankyou
+// case 6: // case 6 Completion
+// case 7: // case 7 takeaway
+// case 8: // case 8 Replaygame
+// case 9: // case 9 feedback
+// case 10:// case 10 Game Intro / login
+// case 11:// case 11 Profilescreen
+// case 12:// case 12 Character select
+// case 13:// case 13 Chapter select
+// case 14:// case 14 feedback together
+// case 15:// case 15 Chapter select
+// case 16:// case 16 replay point prompt
+
+
 import {
   Button,
   Box,
@@ -18,6 +37,11 @@ import {
   Select,
   GridItem,
   Grid,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody
 } from '@chakra-ui/react';
 import { lazy } from 'react';
 import { motion } from 'framer-motion';
@@ -40,7 +64,7 @@ import feedi from 'assets/img/screens/feed.png';
 import { AiFillMessage } from 'react-icons/ai';
 import { getTestAudios } from 'utils/game/gameService';
 import { MdClose } from 'react-icons/md';
-import { getVoiceMessage, getPreview } from 'utils/game/gameService';
+import { getVoiceMessage, getPreview, getGameLanguages} from 'utils/game/gameService';
 import { EnumType } from 'typescript';
 import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
@@ -63,6 +87,7 @@ const ChapterPage  = lazy(() => import('./playcards/Chapters'));
 const FeedBackScreen  = lazy(() => import('./playcards/FeedBackScreen'));
 const TopMenuBar = lazy(() => import('./playcards/TopMenuBar'));
 const GameIntroScreen = lazy(() => import('./playcards/GameIntroScreen'));
+const LanguageSelectionPrompt = lazy(() => import('./playcards/LanguageSelectionPrompt'));
 
 interface Review {
   // reviewId: Number;
@@ -130,27 +155,7 @@ interface QuestState {
   [key: string]: string;
 }
 
-// case 0: // play info
-// case 1: // case 1 welcome screen
-// case 2: // case 2 Story
-// case 3: // case 3 Reflection
-// case 4: // case 4 LeaderBoard
-// case 5: // case 5 Thankyou
-// case 6: // case 6 Completion
-// case 7: // case 7 takeaway
-// case 8: // case 8 Replaygame
-// case 9: // case 9 feedback
-// case 10:// case 10 Game Intro / login
-// case 11:// case 11 Profilescreen
-// case 12:// case 12 Character select
-// case 13:// case 13 Chapter select
-// case 14:// case 14 feedback together
-// case 15:// case 15 Chapter select
-
-
-
 const skipScreenList = [0, 8, 11, 12, 13,15];
-
 export const ProfileContext = createContext<ProfileDataType>({
   name: '',
   gender: '',
@@ -175,8 +180,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   const maxTextLength = 80;
   const audioRef = React.useRef(null);
-  // const find = show.find((it: any) => it.gasId === formData.gameBackgroundId);
-  // const img = find.gasAssetImage;
 
   // selected option color change
   const [selectedOption, setSelectedOption] = useState(null);
@@ -276,6 +279,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   // Afrith-modified-starts-07/Mar/24
   const gameScore = useContext(ScoreContext);
   const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0;
+  
 
   useEffect(() => {
     setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
@@ -307,6 +311,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [navTrack, setNavTrack] = useState([]);
   const [currentTrackPointer, setCurrentTrackPointer] = useState(0);
   const [currentScreenId, setCurrentScreenId] = useState<number>(InitialScreenId);
+  const [hasMulitLanguages, setHasMulitLanguages] = useState<boolean>(false); // This state to control the auto Initialization of the Language selection Modal popup
+  const [isOpenCustomModal ,setIsOpenCustomModal] = useState<boolean>(false); //This state to control the opening of Language selection Modal popup by click event 
+  const [gameLanguages ,setGameLanguages] = useState([]);
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
@@ -2086,14 +2094,47 @@ useEffect(()=>{
   };
 
   useEffect(() => {
-    const handleResizeWidth = () => setWindowWidth(window.innerWidth);
-    const handleResizeHeight = () => setWindowHeight(window.innerHeight);
-    window.addEventListener('resize', handleResizeWidth);
-    window.addEventListener('resize', handleResizeHeight);
-    return () => {
-      window.removeEventListener('resize', handleResizeWidth);
-      window.removeEventListener('resize', handleResizeHeight);
+
+    const fetchSupportedLanguages = async () => {
+      if(gameInfo?.gameData?.gameId > 0)
+      {
+      const resLang = await getGameLanguages(gameInfo?.gameData?.gameId);
+      if (resLang?.status === 'Success') {
+        if (resLang?.data.length > 0) {
+          const data = resLang?.data;
+            // const data =[{value: 1, label: 'Tamil'}, {value: 2, label: 'French'}, {value: 5, label: 'Chinesh'}];
+            data.unshift({ value: 0, label: 'English' });
+            setGameLanguages(data);
+            setProfileData((prev: any) => ({
+              ...prev,
+              language: data[0]?.label,
+            }));
+            setHasMulitLanguages(true);
+            setIsOpenCustomModal(true);          
+        }
+        else{
+          setProfileData((prev: any) => ({
+            ...prev,
+            language: "English",
+          }));
+        }
+      }           
+    }
     };
+    fetchSupportedLanguages();
+
+
+    // const handleResizeWidth = () => setWindowWidth(window.innerWidth);
+    // const handleResizeHeight = () => setWindowHeight(window.innerHeight);
+    // window.addEventListener('resize', handleResizeWidth);
+    // window.addEventListener('resize', handleResizeHeight);
+    // return () => {
+    //   window.removeEventListener('resize', handleResizeWidth);
+    //   window.removeEventListener('resize', handleResizeHeight);
+    // };
+
+
+
   }, []);
 
   // Afrith-modified-starts-13/Mar/24
@@ -2704,7 +2745,7 @@ useEffect(()=>{
                     //     </Grid>
                     //   </Box>
                     // </>
-                    <GameIntroScreen preloadedAssets={preloadedAssets} setCurrentScreenId={setCurrentScreenId} setIsGetsPlayAudioConfirmation={setIsGetsPlayAudioConfirmation} ></GameIntroScreen>
+                    <GameIntroScreen preloadedAssets={preloadedAssets} setCurrentScreenId={setCurrentScreenId} setIsGetsPlayAudioConfirmation={setIsGetsPlayAudioConfirmation} hasMulitLanguages={hasMulitLanguages} setIsOpenCustomModal={setIsOpenCustomModal} />
                   );
                 case 11:
                   return (
@@ -2814,7 +2855,9 @@ useEffect(()=>{
               }
             })()}
           </Flex>
-
+          {/* Anonymous User's Review Form Menu 
+            * It works when uuid has UUID
+          */}
           {isReviewDemo && !skipScreenList?.includes(currentScreenId) && (
             <Menu isOpen={isMenuOpen}>
               <MenuButton
@@ -2975,6 +3018,7 @@ useEffect(()=>{
               )}
             </Menu>
           )}
+          {/* Audio Play Ref */}
           {audioObj?.url && (
             <audio
               ref={audioRef}
@@ -2987,6 +3031,9 @@ useEffect(()=>{
               Your browser does not support the audio tag.
             </audio>
           )}
+          {/* Language Transaltion Modal popup */}
+
+          <LanguageSelectionPrompt gameLanguages={gameLanguages} formData={gameInfo?.gameData} preloadedAssets={preloadedAssets} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData} setProfileData={setProfileData} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal}/>
         </Box>
       </Box>
     </ProfileContext.Provider>

@@ -6360,3 +6360,12 @@ grid-row: 1 / 2;
   height: 30px;
 }
 
+.intro_lang_icon
+{
+  /* flex-shrink: 0; */
+  z-index: 1;
+  color: white;
+  position: fixed;
+  top: 1em;
+  right: 2em;
+}
