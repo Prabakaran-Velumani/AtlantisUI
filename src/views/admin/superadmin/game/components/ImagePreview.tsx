@@ -71,18 +71,18 @@ const ImagePreview: React.FC<{ fetchImg?: any, isOpen?: any, onOpen?: any, onClo
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full">
       <ModalOverlay />
-      <ModalContent backgroundColor="#ffffff" pl={'25px'} containerProps={{ zIndex: 999999}}>
+      <ModalContent backgroundColor="#ffffff"  containerProps={{ zIndex: 999999}}>
 
         <ModalCloseButton color={'black'}/>
-        <ModalBody  pt={0} m={0}>
+        <ModalBody>
           <Flex
             flexDirection={{base:'column',lg:"row"}}
-            justifyContent="Center"
+            // justifyContent="Center"
             alignItems="Center"
             height="100vh"
             background="#ffffff" // Adjust the opacity as needed
           >
-            <Box w={'80%'} m={0} pt={'15px'}>
+            <Box w={{base:'100%',lg:'80%'}} m={0} pt={'15px'}>
               {/* Top Content */}
               <Text fontSize={"1.25rem"} color={'#1B2559'} pb={'15px'} fontWeight={'700'}>
                 Preview
@@ -92,7 +92,7 @@ const ImagePreview: React.FC<{ fetchImg?: any, isOpen?: any, onOpen?: any, onClo
                 src={fetchImg.gasAssetImage}
                 alt="Preview"
                 width={{base:'100%',lg:"95%"}}
-                height={{base:'75%',md:'90%',lg:"80%"}}
+                height={{base:'85%',md:'90%',lg:"80%"}}
               />
             </Box>
             <Box m={0} w={{base:'100%',lg:'30%'}} p={0}>
