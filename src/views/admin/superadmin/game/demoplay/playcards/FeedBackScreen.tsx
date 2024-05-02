@@ -20,31 +20,31 @@ import Sample from 'assets/img/games/Merlin.glb';
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 // import * as THREE from 'three';
 import Model from './Model';
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react';
 import room from 'assets/img/games/Compressed.glb';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 import hdr from 'assets/models/bg.hdr';
 interface FeedBackScreenShotProps {
-    backgroundScreenUrl: any;
-    first: any;
-    showNote: any;
-    currentScreenId: any;
-    isScreenshot: any;
-    FeedbackremainingSentences?: any;
-    options: any;
-    getData: any;
-    data: any;
-    FeedBackselectedoptionData?: any;
-    FeedBackoptionData?: any;
-    feed?: any;
-    getFeedbackData?: any;
-    profile: any;
-    setisScreenshot: any;
-    preloadedAssets: any;
-    FeedbackcurrentPosition?: any;
-    interactionBlockArray?: any;
+  backgroundScreenUrl: any;
+  first: any;
+  showNote: any;
+  currentScreenId: any;
+  isScreenshot: any;
+  FeedbackremainingSentences?: any;
+  options: any;
+  getData: any;
+  data: any;
+  FeedBackselectedoptionData?: any;
+  FeedBackoptionData?: any;
+  feed?: any;
+  getFeedbackData?: any;
+  profile: any;
+  setisScreenshot: any;
+  preloadedAssets: any;
+  FeedbackcurrentPosition?: any;
+  interactionBlockArray?: any;
 }
 const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
   backgroundScreenUrl,
@@ -64,9 +64,8 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
   getFeedbackData,
   preloadedAssets,
   FeedbackcurrentPosition,
-  interactionBlockArray
+  interactionBlockArray,
 }) => {
-
   const geTfeedBackoption = () => {
     setisScreenshot(false);
   };
@@ -102,9 +101,14 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                 <Box
                   position={'absolute'}
                   top={{ base: '5%', md: '6%' }}
-                  className='story_feedback_content'
+                  className="story_feedback_content"
                 >
-                  <Box display={'flex'} justifyContent={'center'} alignItems={'center'} h={'100%'}>
+                  <Box
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    h={'100%'}
+                  >
                     <Box
                       w={'90%'}
                       h={'70%'}
@@ -112,10 +116,40 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                       justifyContent={'center'}
                       position={'relative'}
                     >
-                      <Img src={preloadedAssets?.feedparch} w={'auto'} h={'100%'} />
-                      <Box position={'absolute'} top={0} width={'100%'} h={'100%'} display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
-                        <Box className='feed_list'> Interaction {currentScreenId === 14 && FeedbackcurrentPosition && interactionBlockArray && FeedbackcurrentPosition +'/'+interactionBlockArray.length}</Box>
-                        <Box w={'70%'} h={'75%'} overflowY={'scroll'} className='feedback_content_text'>
+                      <Img
+                        src={preloadedAssets?.feedparch}
+                        w={'auto'}
+                        h={'100%'}
+                      />
+                      <Box
+                        position={'absolute'}
+                        top={0}
+                        width={'100%'}
+                        h={'100%'}
+                        display={'flex'}
+                        flexDirection={'column'}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                      >
+                        <Box w={'70%'}>
+                          <Img src={preloadedAssets.on} h={'4vh'} w={'100%'} />
+                        </Box>
+                        <Box className="feed_list">
+                          {' '}
+                          Interaction{' '}
+                          {currentScreenId === 14 &&
+                            FeedbackcurrentPosition &&
+                            interactionBlockArray &&
+                            FeedbackcurrentPosition +
+                              '/' +
+                              interactionBlockArray.length}
+                        </Box>
+                        <Box
+                          w={'70%'}
+                          h={'65%'}
+                          overflowY={'scroll'}
+                          className="feedback_content_text"
+                        >
                           {/* <Box display={'flex'}>
                             <Img src={preloadedAssets.qs} h={'1em'} w={'1em'}  />
                             This way, you can increase the RGB color intensity of the GLTF/GLB model while using an HDR environment map in your React Three Fiber scene. Adjust the values as needed to achieve the desired color intensity.
@@ -125,25 +159,33 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                              Adjust the values as needed to achieve the desired color intensity.
                           </Box> */}
                           <Box display={'flex'} mt={'10px'}>
-                            <Img src={preloadedAssets.FB} h={'1em'} w={'1em'}  />
-                           <Text textAlign={'justify'}>{currentScreenId === 9 ? feed : FeedbackremainingSentences}</Text>
+                            <Img src={preloadedAssets.FB} h={'1em'} w={'1em'} />
+                            <Text textAlign={'justify'}>
+                              {currentScreenId === 9
+                                ? feed
+                                : FeedbackremainingSentences}
+                            </Text>
                           </Box>
                         </Box>
                       </Box>
                       <Box
-                        w={'100%'}
-                        onClick={() => getFeedbackData(data)}
+                        w={'120%'}
                         mt={'20px'}
                         display={'flex'}
-                        justifyContent={'center'}
+                        justifyContent={'space-between'}
                         cursor={'pointer'}
                         position={'absolute'}
                         bottom={'-8%'}
                       >
                         <Img
-                          src={preloadedAssets.next}
-                          h={'7vh'}
-                          className={'story_note_next_button'}
+                          src={preloadedAssets.left}
+                          className={'interaction_button'}
+                          // onClick={() => prevData(data)}
+                        />
+                        <Img
+                          src={preloadedAssets.right}
+                          className={'interaction_button'}
+                          onClick={() => getFeedbackData(data)}
                         />
                       </Box>
                     </Box>
@@ -151,7 +193,6 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                     {/* <Text textAlign={'center'}>{feed}</Text> */}
                     {/* </Box> */}
                   </Box>
-
                 </Box>
               </Box>
             </GridItem>
@@ -201,18 +242,18 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
             )}
           </>
         )} */}
-         {isScreenshot === true && (
-              <InteractionScreenShot
-                data={FeedBackoptionData}
-                option={FeedBackselectedoptionData}
-                options={options}
-                backGroundImg={backgroundScreenUrl}
-                profile={profile}
-                geTfeedBackoption={geTfeedBackoption}
-                isScreenshot={isScreenshot}
-                preloadedAssets={preloadedAssets}
-              />
-            )}
+        {isScreenshot === true && (
+          <InteractionScreenShot
+            data={FeedBackoptionData}
+            option={FeedBackselectedoptionData}
+            options={options}
+            backGroundImg={backgroundScreenUrl}
+            profile={profile}
+            geTfeedBackoption={geTfeedBackoption}
+            isScreenshot={isScreenshot}
+            preloadedAssets={preloadedAssets}
+          />
+        )}
       </>
     </>
   );
@@ -237,30 +278,29 @@ const ThreeScene = () => {
     const light = new THREE.AmbientLight(0x404040);
     scene.add(light);
 
-    new RGBELoader()
-      .setPath('models')
-      .load('bg.hdr', function (texture) {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
-        scene.environment = texture;
-        const loader = new GLTFLoader().setPath('models');
-        loader.load('Compressed.glb', async function (gltf) {
-          gltf.scene.traverse(function (child: any) {/////////////////////
-            if (child.isMesh && child.material.map) {
-              child.material.map.minFilter = THREE.LinearFilter
-              child.material.map.magFilter = THREE.LinearFilter
-            }
-          });
-          const model = gltf.scene;
-          model.rotation.y -= 1.15;
-          model.position.x = -1.88;
-          scene.add(model);
-          setLoading(false);
+    new RGBELoader().setPath('models').load('bg.hdr', function (texture) {
+      texture.mapping = THREE.EquirectangularReflectionMapping;
+      scene.environment = texture;
+      const loader = new GLTFLoader().setPath('models');
+      loader.load('Compressed.glb', async function (gltf) {
+        gltf.scene.traverse(function (child: any) {
+          /////////////////////
+          if (child.isMesh && child.material.map) {
+            child.material.map.minFilter = THREE.LinearFilter;
+            child.material.map.magFilter = THREE.LinearFilter;
+          }
         });
+        const model = gltf.scene;
+        model.rotation.y -= 1.15;
+        model.position.x = -1.88;
+        scene.add(model);
+        setLoading(false);
       });
+    });
     const sizes = {
       width: window.innerWidth,
-      height: window.innerHeight
-    }
+      height: window.innerHeight,
+    };
     window.addEventListener('resize', resizecallback);
     function resizecallback() {
       sizes.width = window.innerWidth;
@@ -272,18 +312,28 @@ const ThreeScene = () => {
     }
 
     const aspectRatio = sizes.width / sizes.height;
-    const camera = new THREE.PerspectiveCamera(65, sizes.width / sizes.height, 1, 1000);
+    const camera = new THREE.PerspectiveCamera(
+      65,
+      sizes.width / sizes.height,
+      1,
+      1000,
+    );
     camera.position.z = 8.9;
     camera.position.y = 1.7;
     scene.add(camera);
-    const cursor = { x: 0, y: 0 }
+    const cursor = { x: 0, y: 0 };
     canvas.addEventListener('mousemove', movecallback, false);
     function movecallback(event: any) {
       cursor.x = (event.clientX / sizes.width) * 2 - 1;
-      cursor.y = - (event.clientY / sizes.height) * 2 + 1;
+      cursor.y = -(event.clientY / sizes.height) * 2 + 1;
     }
 
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      alpha: true,
+      antialias: true,
+      powerPreference: 'high-performance',
+    });
     renderer.setSize(sizes.width, sizes.height);
     renderer.setClearColor(0xffffff, 0);
 
@@ -297,18 +347,16 @@ const ThreeScene = () => {
     function animate() {
       renderer.render(scene, camera);
       window.requestAnimationFrame(animate); // Call again on the next frame
-
     }
     animate();
-
-  }, [])
+  }, []);
   return (
     <div
-      style={{ height: "100%", width: "100%", position: "absolute" }}
+      style={{ height: '100%', width: '100%', position: 'absolute' }}
       ref={refContainer}
     >
       {loading && (
-        <span style={{ position: "absolute", left: "50%", top: "50%" }}>
+        <span style={{ position: 'absolute', left: '50%', top: '50%' }}>
           Loading...
         </span>
       )}
@@ -361,7 +409,7 @@ const ThreeScene = () => {
 //     <group ref={groupRef}>
 //       {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}
 //       <primitive object={HDRMap} />
-//       <primitive object={gltf.scene} position={[-0.2,-1.5, 0.7]} rotation={[-0.1, -1.4, 0]} /> 
+//       <primitive object={gltf.scene} position={[-0.2,-1.5, 0.7]} rotation={[-0.1, -1.4, 0]} />
 //       {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>
 //         <planeGeometry args={[100, 500]} />
 //         <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />

@@ -1,4 +1,4 @@
-import { Box, Icon, Text } from "@chakra-ui/react";
+import { Box, Icon, Text, useColorModeValue } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 import { FaCubes, FaRobot } from "react-icons/fa";
@@ -6,7 +6,7 @@ import { MdOutlineSubtitles, MdTune } from "react-icons/md";
 import { GiBlackBook } from "react-icons/gi";
 import { TbView360 } from "react-icons/tb";
 
-function SimpleSlider() {
+const SimpleSlider:React.FC<{setTab:any,completed?:any,ctab?:any}> = ({setTab,completed,ctab}) => {
   const tabs = [
     {
       name: "BackGround",
@@ -71,7 +71,7 @@ function SimpleSlider() {
   //     }
   //   };
   // }, [tabs]);
-  
+  const iconColor = useColorModeValue('secondaryGray.600', 'white');
   const scrollToIndex = (index:any) => {
     const container = containerRef.current;
     const tabWidth = container.scrollWidth / tabs.length;
@@ -82,7 +82,7 @@ function SimpleSlider() {
       });
     }
   };
-
+ 
   // useEffect(() => {
   //   scrollToIndex(centerIndex);
   // }, [centerIndex]);
@@ -94,9 +94,9 @@ function SimpleSlider() {
 
   const handleScrollRight = () => {
     setCenterIndex(centerIndex === 5 ? centerIndex : centerIndex + 1)
-    // console.log(centerIndex === 5 ? centerIndex : centerIndex + 1);
     scrollToIndex(centerIndex === 5 ? centerIndex : centerIndex + 1);
   };
+
   return (
     <>
       <Box h={'130px'} w={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
@@ -104,11 +104,11 @@ function SimpleSlider() {
         <Box h={'100%'} w={'100%'} ref={containerRef} display={'flex'} overflowX={'scroll'} sx={{ scrollBehavior: 'smooth', transition: 'overflow-x 1s ease' }}>
           {tabs && tabs.map((tab, i) => (
             <Box key={i} className="mobile_progress" display={'flex'} justifyContent={'center'}>
-              <Box display={'flex'} width={'65%'} justifyContent={'center'} flexDirection={'column'}>
+              <Box display={'flex'} width={'65%'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'}>
                 {/* <Card w={'100%'} h={'100%'} as={tab?.icon} borderRadius={'50%'}>
                 </Card> */}
-                <Icon as={tab?.icon} borderRadius={'50px'} p={'10px'} boxShadow={'14px 17px 40px 4px rgba(112, 144, 176, 0.08)'} h={'50%'} w={'auto'}/>
-                <Text mt={'15px'} textAlign={'center'}>{tab?.name}</Text>
+                <Icon as={tab?.icon} color={completed && completed.includes(i+1) ? 'green.500' : iconColor} borderRadius={'50px'} onClick={() => setTab(completed && completed.includes(i+1) ? i+1 : ctab)} p={'10px'} boxShadow={'14px 17px 40px 4px rgba(112, 144, 176, 0.08)'} w={'80px'} h={'80px'}/>
+                <Text mt={'15px'} color={'#1B2559'} fontSize={'md'} fontWeight={'500'} textAlign={'center'}>{tab?.name}</Text>
               </Box>
             </Box>
           ))}

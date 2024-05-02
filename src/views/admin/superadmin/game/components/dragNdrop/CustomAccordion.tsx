@@ -67,7 +67,7 @@ const CustomAccordion = (props: { items: any, setItems: any, sequence?: any, dum
     return (
       <Box className='section'>
           <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="your-droppable-id">
+              <Droppable droppableId="your-droppable-id" >
                   {(provided) => (
                       <div {...provided.droppableProps} ref={provided.innerRef} className='hooky'>
                           {/* {items.map((item, index) => (             */}
@@ -80,7 +80,5 @@ const CustomAccordion = (props: { items: any, setItems: any, sequence?: any, dum
       </Box>
     );
 };
-
-
 
 export default CustomAccordion

@@ -114,7 +114,7 @@ return (
             border: formData.isfeedbackthankyou ? '1px solid red' : '1px solid #ccc',
           }}
         />
-        <p>{msgCharacterCount} characters left</p>
+        <p style={{fontSize:'12px',color:'grey'}}>{msgCharacterCount} characters left</p>
       </SimpleGrid>
       <SimpleGrid columns={{ base: 1, md: 2 }} gap="20px">
         <FormControl

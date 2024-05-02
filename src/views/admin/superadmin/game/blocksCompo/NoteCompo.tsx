@@ -67,6 +67,7 @@ interface PropsNote {
   validation?: any;
   currentseq?: any;
   ShowReview?: any;
+  targetSequence?: any;
 }
 interface Block {
   blockPrimarySequence: string;
@@ -74,6 +75,7 @@ interface Block {
   content: string | undefined; // Adjust the type according to your data structure
 }
 const NoteCompo: React.FC<PropsNote> = ({
+  targetSequence,
   id,
   language,
   seq,
@@ -177,10 +179,14 @@ const NoteCompo: React.FC<PropsNote> = ({
 
   const handleMiniNDInewblock = (value?: any, seq?: any, i?: any) => {
     handleNDI(value);
-    if(value !=='')
-    {
+    if (value !== '') {
       // console.log('seqval',seq,'i',i, 'value',value);
-      handleSelectBlock({ value: currentseq }, currentseq , `Note${seq.input}`, `Note${seq.input}`);
+      handleSelectBlock(
+        { value: currentseq },
+        currentseq,
+        `Note${seq.input}`,
+        `Note${seq.input}`,
+      );
     }
   };
   const MiniBox1 = (props: {
@@ -256,10 +262,11 @@ const NoteCompo: React.FC<PropsNote> = ({
 
   return (
     <Flex
-      className="block-compo"
+      // className="block-compo"
       mb={'20px'}
       padding={'10px 0'}
       alignItems={'start'}
+      overflowY={'hidden'}
     >
       <Box className="block-action-icons">
         <Tooltip hasArrow label="Choose New Block">
@@ -275,7 +282,7 @@ const NoteCompo: React.FC<PropsNote> = ({
             />
           </div>
         </Tooltip>
-        <Tooltip hasArrow label="Add New Note">
+        <Tooltip hasArrow label="Duplicate">
           <div>
             <Icon
               as={BiSolidDuplicate}
@@ -301,17 +308,23 @@ const NoteCompo: React.FC<PropsNote> = ({
           </div>
         </Tooltip>
       </Box>
-      <Box className='box-block' display={'flex'} alignItems={'start'}>
-        <Box className='block-id' mr={'10px'} w={'50px'} fontSize={'17px'} color={'#1b2559'} fontWeight={'700'}>{seq.id}</Box>
-        <Box className='block-character-name' mr={'10px'} w={'150px'}>
-          <button
-            style={customButtonStyles}
-            disabled={true}
-            onClick={() => { }} >
+      <Box
+        className="block-id"
+        mr={'10px'}
+        w={'50px'}
+        fontSize={'17px'}
+        color={'#1b2559'}
+        fontWeight={'700'}
+      >
+        {seq.id}
+      </Box>
+      <Box className="box-block" w={{base:'100%',lg:'auto'}} flexDirection={{base:'column',lg:'row'}} display={'flex'} alignItems={'center'}>
+        <Box className="block-character-name" mr={'10px'} mb={{base:'10px',lg:'0px'}} w={{base:'100%',lg:'150px'}}>
+          <button style={customButtonStyles} disabled={true} onClick={() => { }}>
             <span style={{ textAlign: 'left' }}>Narrator</span>
           </button>
         </Box>
-        <Box className='block-input-text' mr={'10px'} w={'400px'} >
+        <Box className="block-input-text" mr={'10px'}  mb={{base:'10px',lg:'0px'}} w={{base:'100%',lg:'400px'}}>
           <Textarea
             ref={textareaRef}
             placeholder="Note"
@@ -326,7 +339,10 @@ const NoteCompo: React.FC<PropsNote> = ({
                 : input?.[`Note${seq.input}`]?.note
             }
             isRequired={true}
-            minHeight="45px"
+            minHeight="65px"
+            height={
+              seq?.id === targetSequence?.id ? 'auto' : '65px !important'
+            }
             borderRadius={'18px'}
             style={{
               overflow: 'hidden',
@@ -342,102 +358,101 @@ const NoteCompo: React.FC<PropsNote> = ({
             readOnly={true}
           />
         </Box>
-      </Box>
-
-      <Box className="navigation-icon" mr={'40px'} width={'100%'}>
-        <Flex mb={'13px'}>
-          <Box>
-            <Tooltip hasArrow label="Add Navigations">
-              <div>
-                <Menu
-                  tabState={'leadDialog'}
-                  id={seq.input}
-                  for={`Note${seq.input}`}
-                  setNavigation={setNavigation}
-                  handleBlock={handleBlock}
-                  items={items}
-                  seq={seq}
+        <Box className="navigation-icon" h={'100%'} display={'flex'} alignItems={'center'} mr={'40px'} width={'auto'}>
+          <Flex>
+            <Box>
+              <Tooltip hasArrow label="Add Navigations">
+                <div>
+                  <Menu
+                    tabState={'leadDialog'}
+                    id={seq.input}
+                    for={`Note${seq.input}`}
+                    setNavigation={setNavigation}
+                    handleBlock={handleBlock}
+                    items={items}
+                    seq={seq}
+                  />
+                </div>
+              </Tooltip>
+            </Box>
+            <Box
+              ml={'4px'}
+              cursor={'pointer'}
+              display={
+                input?.[`Note${seq.input}`]?.NoteleadShow ? 'block' : 'none'
+              }
+              zIndex={9999}
+            >
+              {input?.[`Note${seq.input}`]?.NoteleadShow === 'New Block' &&
+                !input?.[`Note${seq.input}`]?.Notenavigate ? (
+                // Render content for New Block
+                <>
+                  <MiniBox1 seq={seq} i={index} />
+                </>
+              ) : input?.[`Note${seq.input}`]?.NoteleadShow === 'Select Block' &&
+                !input?.[`Note${seq.input}`]?.Notenavigate ? (
+                // Render select tag for Select Block
+                <Select
+                  placeholder={'Blocks...'}
+                  id="Dialog"
+                  name={`Note${seq.input}`}
+                  menuPortalTarget={document.body}
+                  styles={customStyles}
+                  options={showSelectBlock.filter(
+                    (option: any) => option.value !== seq.input,
+                  )}
+                  isSearchable={true}
+                  className="react-select"
+                  value={
+                    showSelectBlock.find(
+                      (option: any) =>
+                        option.value ===
+                        parseInt(input?.[`Note${seq.input}`]?.Notenavigate, 10),
+                    ) || null
+                  }
+                  onChange={(e: any) =>
+                    handleSelectBlock(
+                      e,
+                      seq.input,
+                      `Note${seq.input}`,
+                      `Note${seq.input}`,
+                    )
+                  }
                 />
-              </div>
-            </Tooltip>
-          </Box>
-          <Box
-            ml={'4px'}
-            cursor={'pointer'}
-            display={
-              input?.[`Note${seq.input}`]?.NoteleadShow ? 'block' : 'none'
-            }
-          >
-            {input?.[`Note${seq.input}`]?.NoteleadShow === 'New Block' &&
-            !input?.[`Note${seq.input}`]?.Notenavigate ? (
-              // Render content for New Block
-              <>
-                <MiniBox1 seq={seq} i={index} />
-              </>
-            ) : input?.[`Note${seq.input}`]?.NoteleadShow === 'Select Block' &&
-              !input?.[`Note${seq.input}`]?.Notenavigate ? (
-              // Render select tag for Select Block
-              <Select
-                placeholder={'Blocks...'}
-                id="Dialog"
-                name={`Note${seq.input}`}
-                menuPortalTarget={document.body}
-                styles={customStyles}
-                options={showSelectBlock.filter(
-                  (option: any) => option.value !== seq.input,
-                )}
-                isSearchable={true}
-                className="react-select"
-                value={
-                  showSelectBlock.find(
-                    (option: any) =>
-                      option.value ===
-                      parseInt(input?.[`Note${seq.input}`]?.Notenavigate, 10),
-                  ) || null
-                }
-                onChange={(e: any) =>
-                  handleSelectBlock(
-                    e,
-                    seq.input,
-                    `Note${seq.input}`,
-                    `Note${seq.input}`,
-                  )
-                }
-              />
-            ) : (
-              // Render content for the 'else' condition
-              <>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <StrightConector
-                    name={
-                      input?.[`Note${seq.input}`]?.NoteleadShow === 'New Block'
-                        ? showSelectBlock.find(
+              ) : (
+                // Render content for the 'else' condition
+                <>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <StrightConector
+                      name={
+                        input?.[`Note${seq.input}`]?.NoteleadShow === 'New Block'
+                          ? showSelectBlock.find(
                             (option: any) =>
                               option.value ===
                               input?.[`Note${seq.input}`]?.Notenavigate,
                           )?.label !== undefined
-                          ? showSelectBlock.find(
+                            ? showSelectBlock.find(
                               (option: any) =>
                                 option.value ===
                                 input?.[`Note${seq.input}`]?.Notenavigate,
                             )?.label
-                          : `${(parseFloat(seq.id) + 0.1).toFixed(1)}`
-                        : input?.[`Note${seq.input}`]?.NoteleadShow ===
-                          'Select Block'
-                        ? showSelectBlock.find(
-                            (option: any) =>
-                              option.value ==
-                              input?.[`Note${seq.input}`]?.Notenavigate,
-                          )?.label
-                        : input?.[`Note${seq.input}`]?.Notenavigate
-                    }
-                    
-                  />
-                </div>
-              </>
-            )}
-          </Box>
-        </Flex>
+                            : `${(parseFloat(seq.id) + 0.1).toFixed(1)}`
+                          : input?.[`Note${seq.input}`]?.NoteleadShow ===
+                            'Select Block'
+                            ? showSelectBlock.find(
+                              (option: any) =>
+                                option.value ==
+                                input?.[`Note${seq.input}`]?.Notenavigate,
+                            )?.label
+                            : input?.[`Note${seq.input}`]?.Notenavigate
+                      }
+                    />
+                  </div>
+                </>
+              )}
+            </Box>
+          </Flex>
+        </Box>
       </Box>
     </Flex>
   );

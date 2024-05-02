@@ -48,7 +48,7 @@ const GamePreview = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [currentScreenId, setCurrentScreenId] =
     useState<number>(InitialScreenId);
-  // useState<number>(5);
+  // useState<number>(14);
   const [profile, setProfile] = useState({
     score: [],
     completedLevels: ['1'],

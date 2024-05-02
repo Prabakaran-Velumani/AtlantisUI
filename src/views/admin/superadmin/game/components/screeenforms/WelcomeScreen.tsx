@@ -259,7 +259,7 @@ const WelcomeScreen: React.FC<{
                     
                   }}
                 />
-                <p>{characterCount} characters left</p>
+                <p style={{fontSize:'12px',color:'grey'}}>{characterCount} characters left</p>
               </div>
             )}
             {/***************Afrith-Modified-Ends-20-12-23***************************/}

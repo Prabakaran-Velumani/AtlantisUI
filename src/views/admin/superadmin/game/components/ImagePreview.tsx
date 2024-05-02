@@ -20,8 +20,8 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  useBreakpointValue, 
-  CloseButton, 
+  useBreakpointValue,
+  CloseButton,
   DrawerProps,
   Img
 } from '@chakra-ui/react';
@@ -32,7 +32,7 @@ import Card from 'components/card/Card';
 
 
 
-const ImagePreview: React.FC<{ fetchImg?: any, isOpen?: any, onOpen?: any, onClose?: any, values?: any, setValues?: any, selectedCardIndex?: any, handleBackground?: any,truncateTex?:any}> = ({fetchImg,isOpen, onOpen, onClose, values, setValues,selectedCardIndex,handleBackground,truncateTex,}) => {
+const ImagePreview: React.FC<{ fetchImg?: any, isOpen?: any, onOpen?: any, onClose?: any, values?: any, setValues?: any, selectedCardIndex?: any, handleBackground?: any, truncateTex?: any }> = ({ fetchImg, isOpen, onOpen, onClose, values, setValues, selectedCardIndex, handleBackground, truncateTex, }) => {
 
   //eslint-disable-next-line
   const { colorMode, toggleColorMode } = useColorMode();
@@ -50,105 +50,100 @@ const ImagePreview: React.FC<{ fetchImg?: any, isOpen?: any, onOpen?: any, onClo
     setShowFullText(!showFullText);
   };
 
-const handle = () => {
-  if (!selectedCardIndex) {
-setValues('Selected')
-    onClose(); 
-  }
-  else if(selectedCardIndex){
-    onClose();
-    setValues('Select')
-  }
-  
-};
-/////////
+  const handle = () => {
+    if (!selectedCardIndex) {
+      setValues('Selected')
+      onClose();
+    }
+    else if (selectedCardIndex) {
+      onClose();
+      setValues('Select')
+    }
+
+  };
+  /////////
 
 
-//////////////Changes - 12-Dec-23//////////////////
+  //////////////Changes - 12-Dec-23//////////////////
 
 
-  
-    return (
-        <Modal isOpen={isOpen} onClose={onClose} size="full">
-        <ModalOverlay />
-        <ModalContent backgroundColor="#ffffff" pl={'25px'}>
-         
-        <ModalCloseButton color={'black'} />
-          <ModalBody pl={'25px'} pt={0} m={0}>
-            <Flex
-            flexDirection="row"
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} size="full">
+      <ModalOverlay />
+      <ModalContent backgroundColor="#ffffff" pl={'25px'} containerProps={{ zIndex: 999999}}>
+
+        <ModalCloseButton color={'black'}/>
+        <ModalBody  pt={0} m={0}>
+          <Flex
+            flexDirection={{base:'column',lg:"row"}}
             justifyContent="Center"
             alignItems="Center"
-            height="100vh" 
-              background="#ffffff" // Adjust the opacity as needed
-            >
-               <Box w={'80%'} m={0} pt={'15px'}>
+            height="100vh"
+            background="#ffffff" // Adjust the opacity as needed
+          >
+            <Box w={'80%'} m={0} pt={'15px'}>
               {/* Top Content */}
               <Text fontSize={"1.25rem"} color={'#1B2559'} pb={'15px'} fontWeight={'700'}>
-              Preview
+                Preview
               </Text>
-               <Image
-               borderRadius={'20px'}
-              src={fetchImg.gasAssetImage}
-              alt="Preview"
-                maxW="95%"
-                maxH="80%"
-            />
-              
+              <Image
+                borderRadius={'20px'}
+                src={fetchImg.gasAssetImage}
+                alt="Preview"
+                width={{base:'100%',lg:"95%"}}
+                height={{base:'75%',md:'90%',lg:"80%"}}
+              />
             </Box>
+            <Box m={0} w={{base:'100%',lg:'30%'}} p={0}>
+              <Card
+                borderRadius={'none'}
+                boxShadow={'5px 5px 20px #c5c5c5'}
+                // alignItems={'center'}
 
-           
-
-<Box m={0} w={'30%'} p={0}>
- <Card   
-                  borderRadius={'none'}
-                    boxShadow={'5px 5px 20px #c5c5c5'}
-                    // alignItems={'center'}
-                    
-                    m={0}
-                  p={5}
-                  >
+                m={0}
+                p={5}
+              >
                 {/* Truncated Text Content */}
-              <Text fontSize={"1.25rem"} color={'#1B2559'} fontWeight={'700'}>
-              Title
-              </Text>
-              <Text fontSize={"1rem"}  style={{ whiteSpace: 'pre-wrap' }}>
-              {fetchImg?.temp?.tempTitle}
-              </Text>
-              <Text fontSize={"1.25rem"} color={'#1B2559'} fontWeight={'700'}>
-              Story Line
-              </Text>
-                <Text fontSize={"1rem"}  style={{ whiteSpace: 'pre-wrap' }}>
-               {fetchImg.temp?.tempStoryLine}
-                {/* {truncateTex(fetchImg.stroyline,400,120)}  */}
+                <Text fontSize={"1.25rem"} color={'#1B2559'} fontWeight={'700'}>
+                  Title
                 </Text>
-                
+                <Text fontSize={"1rem"} style={{ whiteSpace: 'pre-wrap' }}>
+                  {fetchImg?.temp?.tempTitle}
+                </Text>
+                <Text fontSize={"1.25rem"} color={'#1B2559'} fontWeight={'700'}>
+                  Story Line
+                </Text>
+                <Text fontSize={"1rem"} style={{ whiteSpace: 'pre-wrap' }}>
+                  {fetchImg.temp?.tempStoryLine}
+                  {/* {truncateTex(fetchImg.stroyline,400,120)}  */}
+                </Text>
+
                 <Button
-    bg="#3311db"
-    _hover={{ bg: '#3311db' }}
-    color="#fff"
-    fontSize={{ base: '14px', lg: '16px' }}
-    // mt={{ base: 2, lg: 0 }}
-    mt={'20px'}
-    w={'100%'}
-    // float={"right"}
-    onClick={() => handleBackground(fetchImg, fetchImg.i)}
-  >
-  
-    
-      <Text>{selectedCardIndex === fetchImg.i ? 'Selected' : 'Click to select'}</Text>
-  </Button>
-  </Card>
-              </Box>
-              <Box mt={4} alignSelf="flex-end"> {/* Align the button to the right */}
-              {/* Button */}    
+                  bg="#3311db"
+                  _hover={{ bg: '#3311db' }}
+                  color="#fff"
+                  fontSize={{ base: '14px', lg: '16px' }}
+                  // mt={{ base: 2, lg: 0 }}
+                  mt={'20px'}
+                  w={'100%'}
+                  // float={"right"}
+                  onClick={() => handleBackground(fetchImg, fetchImg.i)}
+                >
+
+
+                  <Text>{selectedCardIndex === fetchImg.i ? 'Selected' : 'Click to select'}</Text>
+                </Button>
+              </Card>
             </Box>
-           
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    );
-  };
-  
-  export default ImagePreview;
+            <Box mt={4} alignSelf="flex-end"> {/* Align the button to the right */}
+              {/* Button */}
+            </Box>
+          </Flex>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+};
+
+export default ImagePreview;

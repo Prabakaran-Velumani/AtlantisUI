@@ -21,6 +21,7 @@ import narrator from 'assets/img/games/meeting_room.png';
 import back from 'assets/img/games/narrator.png';
 import { getSkills, getDefaultCat, getDefaultSkill, getGameStoryLine } from "utils/game/gameService"
 import { useParams } from "react-router-dom"
+import { AiOutlineEnter } from "react-icons/ai";
 // import ResizeTextarea from "react-textarea-autosize";
 // import {autosize} from "autosize";
 
@@ -378,125 +379,112 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
           justifyContent="center"
           textAlign="center"
         >
-          <Card w={{sm:'100%',md:'65%'}}  boxShadow={{base:'',md:'1px 4px 29px #44445429'}} p={{base:'0',md:'25px'}}>
-          <Text fontSize={20} textAlign={'start'} fontWeight={800} mb={'20px'}>
-            Game Overview
-          </Text>
-          {/* <Box> */}
-          <SimpleGrid columns={{ base: 1, md: 1 }} >
-            <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
-              Title<Text as='span' color='red.500'>*</Text>
-            </FormLabel>
-            <InputField
-              //ref={textareaRefss}
-              //style={{
-              //...styles.textareaDefaultStyle,
-              //height: formData?.gameTitle ? `${textareaRefss.current?.scrollHeight}px` : '35px',
-              //}}
-
-              id="title"
-              // minHeight="45px"
-              mb="0px"
-              // me="30px"
-
-              //label="Author"
-              //placeholder="eg. Admin"
-              //name="gameAuthorName"
-              width="100%"
-              // value={formData?.gameTitle}
-              // onChange={handleChange}
-              value={languages !== undefined && languages !== null && languages !== '' ? String(title) : formData?.gameTitle}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                // Check if languages is empty
-                if (languages === undefined || languages === null || languages === '') {
-                  // Call the handleChange function
-                  handleChange(e);
-                }
-              }}
-              placeholder="eg. Marketing Strategy"
-              name="gameTitle"
-              onKeyPress={checkvalue}
-              style={{
-                border: formData.isStoryTitleInvalid ? '1px solid red' : '1px solid #ccc',
-              }}
-            >
-
-            </InputField>
-          </SimpleGrid>
-          <SimpleGrid columns={{ base: 1, md: 1 }} mt={'10px'}>
-            <Box>
+          <Card w={{ sm: '100%', md: '65%' }} boxShadow={{ base: '', md: '1px 4px 29px #44445429' }} p={{ base: '0', md: '25px' }}>
+            <Text fontSize={20} textAlign={'start'} fontWeight={800} mb={'20px'}>
+              Game Overview
+            </Text>
+            {/* <Box> */}
+            <SimpleGrid columns={{ base: 1, md: 1 }} >
               <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
-                Skills<Text as='span' color='red.500'>*</Text>
+                Title<Text as='span' color='red.500'>*</Text>
               </FormLabel>
-              <Flex
-                direction='row'
-                p='12px'
-                wrap='wrap'
-                bg='transparent'
-                border='1px solid'
-                borderColor={borderColor}
-                borderRadius='16px'
-                _focus={{ borderColor: 'teal.300' }}
-                minH='30px'
-                maxH='300px !important'
-                h='stretch'
-                cursor='text'
-                style={{ overflowY: 'auto', border: formData.isSkillsInvalid ? '1px solid red' : '1px solid #ccc', }}
-              >
-                {defaultskills && defaultskills?.map((tag: any, index: any) => {
-                  return (
-                    <Tag
-                      fontSize='xs'
-                      h='25px'
-                      mb='6px'
-                      me='6px'
-                      borderRadius='12px'
-                      variant='solid'
-                      // bg={bg}
-                      bg={lightBlue}
-                      key={index}>
-                      {/* <TagLabel w='100%'>{tag.crSkillName}</TagLabel> */}
-                      <TagLabel w='100%' color={textColor}>{tag.crSkillName}</TagLabel>
-                      <TagCloseButton
-                        justifySelf='flex-end'
-                        color='black'
-                        onClick={() => {
-                          // Assuming tag.catName is the id to be removed
-                          const updatedDefaultSkill = defaultskills.filter((element: any) => element.crSkillId !== tag.crSkillId);
-                          console.log('updatedDefaultCat', updatedDefaultSkill);
-                          setDefaultSkills(updatedDefaultSkill);
-                        }}
-                      />
-                    </Tag>
-                  );
-                })}
-                <textarea
-                  // variant='main'
-                  // bg='transparent'
-                  // border='none'
-                  // p='0px'
-                  ref={textareaRef}
-                  onKeyDown={(e: any) => keyPressSkill(e)}
-                  style={
-                    styles.textareaStyle
-                  //   resize: 'none', // This property prevents the textarea from being resized by the user
-                  //   height: '100%', // Set the initial height of the textarea
-                  //   background:'transparent',
-                  // border:'none',
-                  // fontVariant:'main',
-                  // fontSize:'sm'
-                  }></textarea>
-               
-              </Flex>
-              <Text fontSize='xs' color='gray.500' mt='2px' style={{ textAlign: 'left' }}>
-                <b>Note: </b> After Text, you must enter.
-              </Text>
-            </Box>
-          </SimpleGrid>
-          <SimpleGrid columns={{ base: 1, md: 2, ml: 10 }} mt={'20px'}>
-            <Box >
+              <InputField
+                //ref={textareaRefss}
+                //style={{
+                //...styles.textareaDefaultStyle,
+                //height: formData?.gameTitle ? `${textareaRefss.current?.scrollHeight}px` : '35px',
+                //}}
 
-              {/* <TextField
+                id="title"
+                // minHeight="45px"
+                mb="0px"
+                // me="30px"
+
+                //label="Author"
+                //placeholder="eg. Admin"
+                //name="gameAuthorName"
+                width="100%"
+                // value={formData?.gameTitle}
+                // onChange={handleChange}
+                value={languages !== undefined && languages !== null && languages !== '' ? String(title) : formData?.gameTitle}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  // Check if languages is empty
+                  if (languages === undefined || languages === null || languages === '') {
+                    // Call the handleChange function
+                    handleChange(e);
+                  }
+                }}
+                placeholder="eg. Marketing Strategy"
+                name="gameTitle"
+                onKeyPress={checkvalue}
+                style={{
+                  border: formData.isStoryTitleInvalid ? '1px solid red' : '1px solid #ccc',
+                }}
+              >
+
+              </InputField>
+            </SimpleGrid>
+            <SimpleGrid columns={{ base: 1, md: 1 }} mt={'10px'}>
+              <Box>
+                <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
+                  Skills<Text as='span' color='red.500'>*</Text>
+                </FormLabel>
+                <Flex
+                  direction='row'
+                  p='12px'
+                  wrap='wrap'
+                  bg='transparent'
+                  border='1px solid'
+                  borderColor={borderColor}
+                  borderRadius='16px'
+                  _focus={{ borderColor: 'teal.300' }}
+                  minH='30px'
+                  maxH='300px !important'
+                  h='stretch'
+                  cursor='text'
+                  style={{ overflowY: 'auto', border: formData.isSkillsInvalid ? '1px solid red' : '1px solid #ccc', }}
+                >
+                  {defaultskills && defaultskills?.map((tag: any, index: any) => {
+                    return (
+                      <Tag
+                        fontSize='xs'
+                        h='25px'
+                        mb='6px'
+                        me='6px'
+                        borderRadius='12px'
+                        variant='solid'
+                        // bg={bg}
+                        bg={lightBlue}
+                        key={index}>
+                        {/* <TagLabel w='100%'>{tag.crSkillName}</TagLabel> */}
+                        <TagLabel w='100%' color={textColor}>{tag.crSkillName}</TagLabel>
+                        <TagCloseButton
+                          justifySelf='flex-end'
+                          color='black'
+                          onClick={() => {
+                            const updatedDefaultSkill = defaultskills.filter((element: any) => element.crSkillId !== tag.crSkillId);
+                            setDefaultSkills(updatedDefaultSkill);
+                          }}
+                        />
+                      </Tag>
+                    );
+                  })}
+                  <textarea
+                    ref={textareaRef}
+                    onKeyDown={(e: any) => keyPressSkill(e)}
+                    style={styles.textareaStyle}
+                  ></textarea>
+                </Flex>
+                <Text fontSize='xs' color='gray.500' mt='2px' style={{ textAlign: 'left' }}>
+                  <b>Note: </b> Press {' '}<Icon as={AiOutlineEnter} color='gray.500' />{' '} To Add Skill
+                </Text>
+              </Box>
+            </SimpleGrid>
+            <SimpleGrid columns={{ base: 1, md: 2, ml: 10 }} mt={'20px'}>
+              <Box >
+
+                {/* 
+              <TextField
                 mb="10px"
                 id="storyline"
                 label="Storyline"
@@ -511,44 +499,41 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                 // as={ResizeTextarea}
                 // resize="none"
                 // h="70px"
-        
-                
-              /> */}
+              /> 
+              */}
 
-              <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
-                Storyline
-              </FormLabel>
-             
-              <textarea
-                ref={textareaRef}
-                style={styles.textareaDefaultStyle}
-                // onChange={textAreaChange}
-                onChange={(e) => {
-                  // Check if languages is empty
-                  if (languages === undefined || languages === null || languages === '') {
-                    // Call the textAreaChange function
-                    textAreaChange(e);
-                  }
-                }}
+                <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
+                  Storyline
+                </FormLabel>
+                <textarea
+                  ref={textareaRef}
+                  style={styles.textareaDefaultStyle}
+                  // onChange={textAreaChange}
+                  onChange={(e) => {
+                    // Check if languages is empty
+                    if (languages === undefined || languages === null || languages === '') {
+                      // Call the textAreaChange function
+                      textAreaChange(e);
+                    }
+                  }}
+                  // mb="10px"
+                  id="storyline"
+                  // label="Storyline"
+                  placeholder="eg. Embark on the 'Market Mastery Quest' where entrepreneur Alex navigates a virtual realm, mastering marketing strategy through dynamic challenges, rivalries, and ethical choices, aiming to emerge as the ultimate market master. Transforming learning into a thrilling adventure, this game blends strategy and innovation for real-world business success."
+                  name="gameStoryLine"
+                  value={languages !== undefined && languages !== null && languages !== '' ? String(storyLine) : formData?.gameStoryLine}
 
-                // mb="10px"
-                id="storyline"
-                // label="Storyline"
-                placeholder="eg. Embark on the 'Market Mastery Quest' where entrepreneur Alex navigates a virtual realm, mastering marketing strategy through dynamic challenges, rivalries, and ethical choices, aiming to emerge as the ultimate market master. Transforming learning into a thrilling adventure, this game blends strategy and innovation for real-world business success."
-                name="gameStoryLine"
-                value={languages !== undefined && languages !== null && languages !== '' ? String(storyLine) : formData?.gameStoryLine}
+                // value={formData?.gameStoryLine}
+                // onChange={handleChange}
 
-              // value={formData?.gameStoryLine}
-              // onChange={handleChange}
-
-              >
-                {/* {formData?.gameStoryLine} */}
-              </textarea>
-            </Box>
-          </SimpleGrid>
-          <SimpleGrid columns={{ base: 1, md: 2, ml: 10 }} mt={'20px'}>
-            <Box>
-              {/* <TextField
+                >
+                  {/* {formData?.gameStoryLine} */}
+                </textarea>
+              </Box>
+            </SimpleGrid>
+            <SimpleGrid columns={{ base: 1, md: 2, ml: 10 }} mt={'20px'}>
+              <Box>
+                {/* <TextField
               mb="10px"
               // me="30px"
               // width="500px"
@@ -564,7 +549,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                 resize: 'none', // Disable manual resizing
               }}
             /> */}
-              {/* <TextField
+                {/* <TextField
               mb="0px"
               me="30px"
               id="learningOutcome"
@@ -574,69 +559,75 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
               value={formData?.gameLearningOutcome}
               onChange={handleInput}
             /> */}
-              <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
-                Learning Outcomes
-              </FormLabel>
-              <textarea
-                ref={textareaRefs}
-                style={styles.textareaDefaultStyle}
-                onChange={handleInput}
-                // mb="10px"
-                id="learningOutcome"
-                // label="Storyline"
-                placeholder="eg. Problem Solving"
-                name="gameLearningOutcome"
-                value={formData.gameLearningOutcome}
-              // onChange={handleChange}
-              >
-              </textarea>
-            </Box>
-
-          </SimpleGrid>
-          <SimpleGrid columns={{ base: 1, md: 2, ml: 10 }} mt={'20px'}>
-            <Box>
-              <FormControl>
-                <FormLabel fontWeight='bold' fontSize='sm' mb='8px' ml='10px'>
-                  Category<Text as='span' color='red.500'>*</Text>
+                <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
+                  Learning Outcomes
                 </FormLabel>
-                <Select
-                  placeholder="Select category"
-                  name="gameCategoryId"
-                  id="gameCategoryId"
-                  value={formData.gameCategoryId}
-                  onChange={selectHandler}
-                  borderColor={borderColor}
-                  borderRadius='12px'
-                  _focus={{ borderColor: 'teal.300' }}
-                  minH='30px'
-                  cursor='pointer'
-                  fontSize='sm'
-                  style={{
-                    border: formData.isCategoryIdInvalid ? '1px solid red' : '1px solid #ccc',
-                  }}
+                <textarea
+                  ref={textareaRefs}
+                  style={styles.textareaDefaultStyle}
+                  onChange={handleInput}
+                  // mb="10px"
+                  id="learningOutcome"
+                  // label="Storyline"
+                  placeholder="eg. Problem Solving"
+                  name="gameLearningOutcome"
+                  value={formData.gameLearningOutcome}
+                // onChange={handleChange}
                 >
-                  {defaultCat.map((tag) => (
-                    <option key={tag.catId} value={tag.catId}>
-                      {tag.catName}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          </SimpleGrid>
-          <SimpleGrid columns={{ base: 1, md: 1 }} mt={'20px'}>
-            <InputField
-              mb="0px"
-              // me="30px"
-              id="author"
-              label="Author"
-              placeholder="eg. Penelope Sterling"
-              name="gameAuthorName"
-              width="100%"
-              value={formData?.gameAuthorName}
-              onChange={handleChange}
-            />
-          </SimpleGrid>
+                </textarea>
+              </Box>
+
+            </SimpleGrid>
+            <SimpleGrid columns={{ base: 1, md: 2, ml: 10 }} mt={'20px'}>
+              <Box>
+                <FormControl>
+                  <FormLabel fontWeight='bold' fontSize='sm' mb='8px' ml='10px'>
+                    Category<Text as='span' color='red.500'>*</Text>
+                  </FormLabel>
+                  <Select
+                    placeholder="Select category"
+                    name="gameCategoryId"
+                    id="gameCategoryId"
+                    value={formData.gameCategoryId}
+                    onChange={selectHandler}
+                    borderColor={borderColor}
+                    borderRadius='12px'
+                    _focus={{ borderColor: 'teal.300' }}
+                    minH='30px'
+                    cursor='pointer'
+                    fontSize={'0.875rem'}
+                    fontWeight={500}
+                    color={'#1b2559'}
+                    style={{
+                      border: formData.isCategoryIdInvalid ? '1px solid red' : '1px solid #ccc',
+                    }}
+                  >
+                    {defaultCat.map((tag) => (
+                      <option key={tag.catId} style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 500,
+                        color: '#1b2559'
+                      }} value={tag.catId}>
+                        {tag.catName}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            </SimpleGrid>
+            <SimpleGrid columns={{ base: 1, md: 1 }} mt={'20px'}>
+              <InputField
+                mb="0px"
+                // me="30px"
+                id="author"
+                label="Author"
+                placeholder="eg. Penelope Sterling"
+                name="gameAuthorName"
+                width="100%"
+                value={formData?.gameAuthorName}
+                onChange={handleChange}
+              />
+            </SimpleGrid>
           </Card>
         </Flex>
       </Card>
@@ -666,10 +657,14 @@ const styles: { [name: string]: React.CSSProperties } = {
     borderWidth: "1px", // Border width
     borderStyle: "solid", // Border style
     overflow: "hidden", // Hide the scrollbar
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    color: '#1b2559'
   },
   textareaStyle: {
-    padding: 0,
-    width: 500,
+    padding: 2,
+    width: '100%',
+    // marginLeft:'10px',
     display: "block",
     resize: "none",
     backgroundColor: "white",

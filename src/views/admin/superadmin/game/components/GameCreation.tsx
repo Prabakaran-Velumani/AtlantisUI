@@ -596,7 +596,6 @@ const GameCreation = () => {
     label: string;
   }) => {
     // Do something with the selected option
-    console.log('Selected Option:', selectedOption);
 
     // Update the state and access the updated value inside a useEffect hook
     setFormData((prevFormData) => ({
@@ -2798,7 +2797,7 @@ const GameCreation = () => {
     formData && formData?.gameLastTabArray?.includes(3)
       ? stepImgActiveBorder
       : stepImgBorder;
-  const tab4 =
+  const tab4 = 
     formData && formData?.gameLastTabArray?.includes(4)
       ? stepImgActiveBorder
       : stepImgBorder;
@@ -3416,55 +3415,55 @@ const GameCreation = () => {
         setTargetSequence(null);
       }
       switch (event.code) {
-        case 'ArrowUp':
-          setTargetSequence(items[indexToFind === 0 ? 0 : indexToFind - 1]);
-          setTimeout(() => {
-            arrowSeqRef = document.getElementById(
-              `tarSeqRef${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`,
-            );
-            focusSeqRef = document.getElementsByClassName(
-              `${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`,
-            );
-            focusSeqRef?.[0].classList.add('non-caret');
-            focusSeqRef?.[0].focus();
-            focusSeqRef?.[0].setAttribute('readonly', 'true');
-          }, 200);
+        // case 'ArrowUp':
+        //   setTargetSequence(items[indexToFind === 0 ? 0 : indexToFind - 1]);
+        //   setTimeout(() => {
+        //     arrowSeqRef = document.getElementById(
+        //       `tarSeqRef${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`,
+        //     );
+        //     focusSeqRef = document.getElementsByClassName(
+        //       `${items[indexToFind === 0 ? 0 : indexToFind - 1]?.id}`,
+        //     );
+        //     focusSeqRef?.[0].classList.add('non-caret');
+        //     focusSeqRef?.[0].focus();
+        //     focusSeqRef?.[0].setAttribute('readonly', 'true');
+        //   }, 200);
 
-          if (arrowSeqRef) {
-            arrowSeqRef.scrollIntoView({
-              behavior: 'smooth',
-              block: 'center',
-              inline: 'nearest',
-            });
-          }
-          break;
-        case 'ArrowDown':
-          setTargetSequence(
-            items[
-            indexToFind === items.length - 1 ? items.length : indexToFind + 1
-            ],
-          );
-          setTimeout(() => {
-            arrowSeqRef = document.getElementById(
-              `tarSeqRef${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
-              }`,
-            );
-            focusSeqRef = document.getElementsByClassName(
-              `${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
-              }`,
-            );
-            focusSeqRef?.[0]?.classList?.add('non-caret');
-            focusSeqRef?.[0]?.focus();
-            focusSeqRef?.[0]?.setAttribute('readonly', 'true');
-          }, 200);
-          if (arrowSeqRef) {
-            arrowSeqRef.scrollIntoView({
-              behavior: 'smooth',
-              block: 'center',
-              inline: 'nearest',
-            });
-          }
-          break;
+        //   if (arrowSeqRef) {
+        //     arrowSeqRef.scrollIntoView({
+        //       behavior: 'smooth',
+        //       block: 'center',
+        //       inline: 'nearest',
+        //     });
+        //   }
+        //   break;
+        // case 'ArrowDown':
+        //   setTargetSequence(
+        //     items[
+        //     indexToFind === items.length - 1 ? items.length : indexToFind + 1
+        //     ],
+        //   );
+        //   setTimeout(() => {
+        //     arrowSeqRef = document.getElementById(
+        //       `tarSeqRef${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
+        //       }`,
+        //     );
+        //     focusSeqRef = document.getElementsByClassName(
+        //       `${items[indexToFind === items.length ? 0 : indexToFind + 1]?.id
+        //       }`,
+        //     );
+        //     focusSeqRef?.[0]?.classList?.add('non-caret');
+        //     focusSeqRef?.[0]?.focus();
+        //     focusSeqRef?.[0]?.setAttribute('readonly', 'true');
+        //   }, 200);
+        //   if (arrowSeqRef) {
+        //     arrowSeqRef.scrollIntoView({
+        //       behavior: 'smooth',
+        //       block: 'center',
+        //       inline: 'nearest',
+        //     });
+        //   }
+        //   break;
         default:
           break;
       }
@@ -3642,7 +3641,7 @@ const GameCreation = () => {
 
       <Grid templateColumns="repeat(5, 1fr)" gap={2}>
         <GridItem
-          colSpan={{ lg: 0, xl: 1 }}
+          colSpan={{ lg: 0, xl: 0 }}
           display={{
             base: 'none',
             sm: 'none',
@@ -3651,7 +3650,7 @@ const GameCreation = () => {
             xl: 'block',
           }}
         >
-          <HStack borderRadius={'20px'} width={'280px'} overflow={'auto'}>
+          <HStack borderRadius={'20px'} width={'285px'} overflow={'auto'}>
             <Card
               position="fixed"
               flexDirection="column"
@@ -3807,7 +3806,7 @@ const GameCreation = () => {
                   quest={quest}
                   cursor={'pointer'}
                   onClick={() => handleTrans(4)}
-                  mb="30px"
+                  mb="15px"
                   name="Story"
                   tabNo={4}
                   status={tab4}
@@ -3905,7 +3904,7 @@ const GameCreation = () => {
         </GridItem>
         <GridItem display={{ sm: 'flex', xl: 'none' }} colSpan={5}>
           <Card w={'100%'} mt={{ base: '65px', xl: '100px' }}>
-            <CenterMode />
+            <CenterMode setTab={setTab} completed={formData?.gameLastTabArray} ctab={tab}/>
           </Card>
         </GridItem>
         <GridItem colSpan={{ sm: 5, md: 5, lg: 5, xl: 4 }}>
@@ -4011,7 +4010,7 @@ const GameCreation = () => {
                                             'transform 0.5s ease, opacity 0.5s ease',
                                         }}
                                       >
-                                        {/* <Box
+                                        <Box
                                           bg="white"
                                           width="50%"
                                           height="35px"
@@ -4023,14 +4022,15 @@ const GameCreation = () => {
                                           _hover={{
                                             bg: '#f0f0f0',
                                           }}
+                                          onClick={()=>handlePreview(img,backgroundIndex,i)}
                                         >
                                           <span style={{ color: 'black' }}>
                                             Preview
                                           </span>
-                                        </Box> */}
+                                        </Box>
                                         <Box
                                           bg="#11047a"
-                                          width="100%"
+                                          width="50%"
                                           height="35px"
                                           borderBottomRightRadius="10px"
                                           display="flex"
@@ -4067,7 +4067,7 @@ const GameCreation = () => {
                                             'transform 0.5s ease, opacity 0.5s ease',
                                         }}
                                       >
-                                        {/* <Box
+                                        <Box
                                           bg="white"
                                           width="50%"
                                           height="35px"
@@ -4080,7 +4080,7 @@ const GameCreation = () => {
                                           <span style={{ color: 'black' }}>
                                             Preview
                                           </span>
-                                        </Box> */}
+                                        </Box>
                                         <Box
                                           bg="#11047a"
                                           width="100%"
@@ -4732,7 +4732,7 @@ const GameCreation = () => {
                         </Box>
                       </Menu>
 
-                      {tab !== 1 && tab !== 6 ? (
+                      {/* {tab !== 1 && tab !== 6 ? (
                         <Select
                           options={[defaultLanguageOption, ...languageOptions]}
                           // options={languageOptions}
@@ -4756,7 +4756,7 @@ const GameCreation = () => {
                             }),
                           }}
                         />
-                      ) : null}
+                      ) : null} */}
                       <Box display={{ base: 'none', xl: 'flex' }}>
                         {tab !== 1 && tab !== 2 ? (
                           <Button

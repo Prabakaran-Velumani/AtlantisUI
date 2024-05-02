@@ -225,28 +225,29 @@ export default function NFT(props: {
     <Card
       p="20px"
       boxShadow={'1px 4px 29px #44445429'}
-      // border={
-      //   handelAssign.gameNonPlayingCharacterId === id
-      //     ? '2px solid #11047a'
-      //     : '' ||
-      //       (game?.gameDuplicated === 'YES' &&
-      //         game?.gameGameStage === 'Creation' &&
-      //         datePart === getCurrentDate()) ||
-      //       (game?.gameDuplicated !== 'YES' &&
-      //         game?.gameGameStage === 'Creation' &&
-      //         datePart === getCurrentDate()) ||
-      //       (game?.gameDuplicated !== 'YES' &&
-      //         game?.gameGameStage === 'Review' &&
-      //         datePart === getCurrentDate()) ||
-      //       (game?.gameDuplicated !== 'YES' &&
-      //         game?.gameGameStage === 'Launched' &&
-      //         datePart === getCurrentDate())
-      //       ? '5px solid #ADD8E6'
-      //       : 'none'
-      // }
-      // borderColor={
-      //   handelAssign.gameNonPlayingCharacterId === id ? '#11047a' : ''
-      // }
+      border={
+        handelAssign.gameNonPlayingCharacterId === id
+          ? '2px solid #11047a'
+          : '' 
+          // ||
+          //   (game?.gameDuplicated === 'YES' &&
+          //     game?.gameGameStage === 'Creation' &&
+          //     datePart === getCurrentDate()) ||
+          //   (game?.gameDuplicated !== 'YES' &&
+          //     game?.gameGameStage === 'Creation' &&
+          //     datePart === getCurrentDate()) ||
+          //   (game?.gameDuplicated !== 'YES' &&
+          //     game?.gameGameStage === 'Review' &&
+          //     datePart === getCurrentDate()) ||
+          //   (game?.gameDuplicated !== 'YES' &&
+          //     game?.gameGameStage === 'Launched' &&
+          //     datePart === getCurrentDate())
+          //   ? '5px solid #ADD8E6'
+          //   : 'none'
+      }
+      borderColor={
+        handelAssign.gameNonPlayingCharacterId === id ? '#11047a' : ''
+      }
     >
       <Flex direction={{ base: 'column' }} justify="center">
         <Box

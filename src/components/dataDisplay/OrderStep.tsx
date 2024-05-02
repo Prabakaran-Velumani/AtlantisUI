@@ -101,7 +101,6 @@ export default function OrderStep(props: {
 					<Text color={textColor} fontSize='lg' me='6px' fontWeight='600'>
 						{name}
 					</Text>
-
 					<Text color='secondaryGray.600' fontSize='md' fontWeight='400'>
 						{date}
 					</Text>
@@ -114,10 +113,7 @@ export default function OrderStep(props: {
 						w='30px'
 						borderRadius='50%'
 					>
-
 						<Icon borderRadius={'50%'} border='1px solid' h='27px' borderColor={'green.500'} w='29px' bgColor={'transparent'} as={MdCheck} color='green.500' />
-
-
 					</Flex>
 				) : status === 'error' ? (
 					<Flex
@@ -134,15 +130,13 @@ export default function OrderStep(props: {
 					<Icon h='34px' w='34px' color={iconColor} as={MdTimer} />
 				)}
 			</Flex>
-
 			{progressBlockItems && name === 'Story' ? (
 				<Box className='for-tab4' id={`tab${tabNo}`}>
 					{listQuest ? (
 						listQuest.map((item: any, index: number) => (
-							<Flex justifyContent='center' alignItems='center' w='100%' zIndex='2' {...rest} mt={'0px'} key={index}>
+							<Flex justifyContent='center' alignItems='center'  zIndex='2' {...rest} ml={'40px'} key={index}>
 								<Box>
 									<Flex className='QuestList'>
-										{/* indu modified on 06-02-2024 for ask confirmation for delete */}
 										<Icon as={MdDelete} fontSize={'md'} color={'grey'} cursor={'pointer'} onClick={() => { handleDeleteClick(item) }} className='del-icon' />
 										<Modal isOpen={isOpen} onClose={onClose} size="md">
 											<ModalOverlay />
@@ -170,10 +164,8 @@ export default function OrderStep(props: {
 																mr={'10px'} onClick={handleCancelDelete}>Cancel</Button>
 														</ModalFooter></> : <><ModalBody>
 															<Text color={textColor} fontSize="18px" fontWeight="600">
-
 																Please do not delete Quest 1. You can delete the items associated with it instead.
 															</Text>
-
 														</ModalBody>
 														<ModalFooter>
 															<Button color={'#fff'}
@@ -193,15 +185,13 @@ export default function OrderStep(props: {
 												display: 'flex',
 												position: 'relative',
 											}}
+											borderBottom={questTabState === item.gameQuestNo ? '3px solid #422afb':'' }
 											onClick={() => handleNavigation(item.gameQuestNo)}
 										>
 											Quest {item.gameQuestNo}
 										</Text>
 									</Flex>
-
-
 									{Number(item.gameQuestNo) === Number(progressBlockItems[0].questNo) && progressBlockItems?.map((progressItem: any, progressIndex: number) => (
-
 										<div
 											key={progressIndex}
 											style={{
@@ -217,7 +207,6 @@ export default function OrderStep(props: {
 												onClick={() => delSeq(progressItem, progressIndex, progressItem.type)}
 												className='del-icon'
 											/>
-
 											<Text color={textColor} fontSize='sm' me='5px' fontWeight='400' style={{ transform: 'scale(1)' }}>
 												{progressItem.id}
 											</Text>
@@ -226,11 +215,10 @@ export default function OrderStep(props: {
 											</Text>
 										</div>
 									))}
-
 									{Number(item.gameQuestNo) !== Number(progressBlockItems[0].questNo) && Object.entries(listBlockItems)
 										.filter(([key, value]: [string, any]) => value.questNo === item.gameQuestNo)
 										.map(([key, value]: [string, any], i: number) => (
-											<Text key={i} fontSize='sm' me='6px' fontWeight='400' style={{ color: inActive }}>
+											<Text key={i} fontSize='sm' me='6px' ml={'80px'} fontWeight='400' style={{ color: inActive }}>
 												{value.id} {value.type}
 											</Text>
 										))}
@@ -240,18 +228,13 @@ export default function OrderStep(props: {
 					) : (
 						<Box>
 							{progressBlockItems?.map((progressItem: any, progressIndex: number) => (
-
 								<Text key={progressIndex} color={textColor} fontSize='sm' me='6px' fontWeight='400'>
 									{progressItem.id} {progressItem.type}
 								</Text>
-
 							))}
 						</Box>
 					)}
-
-
 				</Box>
-
 			) : null}
 
 		</>

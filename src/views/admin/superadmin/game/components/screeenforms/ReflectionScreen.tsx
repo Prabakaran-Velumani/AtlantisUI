@@ -247,7 +247,7 @@ return (
             // Add other styles as needed
           }}
           />
-          <p>{characterCount[index]} characters left</p>
+          <p style={{fontSize:'12px',color:'grey'}}>{characterCount[index]} characters left</p>
         </div>
       ))}
     </Stack>

@@ -58,17 +58,17 @@ interface Badge {
 }
 
 const CompletionScreenRight: React.FC<{
-  handleChange: (e: any) => void; 
+  handleChange: (e: any) => void;
   formData: any;
-  setSelectedBadge:any;
+  setSelectedBadge: any;
   setFormData: React.Dispatch<React.SetStateAction<any>>;
   setBadge: any;
-  compliData:any;
-  setCompliData:any;                   
-  CompKeyCount:any;
-  handlecompletion:any;
- 
-}> = ({ handleChange, formData,setSelectedBadge, setFormData, setBadge,compliData,setCompliData,CompKeyCount,handlecompletion  }) => {
+  compliData: any;
+  setCompliData: any;
+  CompKeyCount: any;
+  handlecompletion: any;
+
+}> = ({ handleChange, formData, setSelectedBadge, setFormData, setBadge, compliData, setCompliData, CompKeyCount, handlecompletion }) => {
   const searchIconColor = useColorModeValue('gray.700', 'white');
   const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
   const [imgb, setbImg] = useState<any>();
@@ -95,16 +95,16 @@ const CompletionScreenRight: React.FC<{
   const handleBadgeSelection = (badge: Badge) => {
     // setShowBadge(badge.gasAssetImage);
     // setFormData((prev:any)=>({...prev,gameBadgeName:badge.gasAssetName}))
-  
+
     setCompliData((prevInput: any) => {
       return {
-          ...prevInput,
-          [CompKeyCount]: {
-              ...prevInput[CompKeyCount],
-              gameBadge: badge.gasId,
-      gameBadgeName: badge.gasAssetName,
-              
-          }
+        ...prevInput,
+        [CompKeyCount]: {
+          ...prevInput[CompKeyCount],
+          gameBadge: badge.gasId,
+          gameBadgeName: badge.gasAssetName,
+
+        }
       }
     });
 
@@ -113,16 +113,16 @@ const CompletionScreenRight: React.FC<{
     console.log('Selected Image:', badge);
   };
   const handleClear = () => {
-   
+
     setCompliData((prevInput: any) => {
       return {
-          ...prevInput,
-          [CompKeyCount]: {
-              ...prevInput[CompKeyCount],
-              gameBadge: '',
-      gameBadgeName: '',
-              
-          }
+        ...prevInput,
+        [CompKeyCount]: {
+          ...prevInput[CompKeyCount],
+          gameBadge: '',
+          gameBadgeName: '',
+
+        }
       }
     });
 
@@ -132,7 +132,7 @@ const CompletionScreenRight: React.FC<{
   };
   useEffect(() => {
     const fetchDatass = async () => {
-      console.log('image url geting',compliData[CompKeyCount])
+      console.log('image url geting', compliData[CompKeyCount])
       if (compliData[CompKeyCount]?.gameBadge) {
         const result = await getImages(4);
 
@@ -148,7 +148,7 @@ const CompletionScreenRight: React.FC<{
           selectedGasImage?.gasAssetImage || 'defaultImageURL.jpg';
 
         setbImg(imageUrl);
-        
+
       }
     };
 
@@ -189,7 +189,7 @@ const CompletionScreenRight: React.FC<{
                 alignItems="center"
                 justifyContent={'space-between'}
               >
-                <FormLabel mr={2} fontSize="sm" fontWeight="bold">
+                <FormLabel mr={2} fontSize="sm" fontWeight="bold" color={textColorPrimary}>
                   Total Score:<span style={{ color: 'red' }}>*</span>
                 </FormLabel>
                 <InputField
@@ -199,11 +199,11 @@ const CompletionScreenRight: React.FC<{
                   placeholder="eg. 1000"
                   name="gameTotalScore"
                   w="220px"
-                  value={compliData[CompKeyCount]?.gameTotalScore?compliData[CompKeyCount]?.gameTotalScore[0]?.maxScore :''}
+                  value={compliData[CompKeyCount]?.gameTotalScore ? compliData[CompKeyCount]?.gameTotalScore[0]?.maxScore : ''}
                   // onChange={handlecompletion}
                   onKeyPress={handleKeyPresss}
                   readOnly
-                /> 
+                />
               </FormControl>
             </Flex>
           </SimpleGrid>
@@ -214,8 +214,8 @@ const CompletionScreenRight: React.FC<{
               alignItems="center"
               justifyContent={'space-between'}
               width={'50%'}
-              
-              // mt={'10px'}
+
+            // mt={'10px'}
             >
               <FormLabel
                 htmlFor="email-"
@@ -248,7 +248,7 @@ const CompletionScreenRight: React.FC<{
                 h={'40px'}
                 mt={'10px'}
                 mb="10px"
-                // mt={'5px'}
+              // mt={'5px'}
               >
                 <FormLabel
                   htmlFor="email-"
@@ -288,7 +288,7 @@ const CompletionScreenRight: React.FC<{
               width={'50%'}
               mt={'10px'}
               mb="10px"
-              // mt={'10px'}
+            // mt={'10px'}
             >
               <FormLabel
                 htmlFor="email-"
@@ -312,7 +312,7 @@ const CompletionScreenRight: React.FC<{
                 mb="10px"
               />
             </FormControl>
-            </Flex><Flex mt={'10px'} >
+          </Flex><Flex mt={'10px'} >
             {/***********Spacer*****************/}
             {/* <div style={{ width: '20px' }} /> */}
 
@@ -325,7 +325,7 @@ const CompletionScreenRight: React.FC<{
                 h={'40px'}
                 mt={'10px'}
                 mb="10px"
-                // mt={'5px'}
+              // mt={'5px'}
               >
                 <FormLabel
                   htmlFor="email-"
@@ -402,7 +402,7 @@ const CompletionScreenRight: React.FC<{
             justifyContent={'space-between'}
             width={'50%'}
             mt={'20px'}
-            // ml="150px"
+          // ml="150px"
           >
             <FormLabel
               htmlFor="email-"
@@ -456,7 +456,7 @@ const CompletionScreenRight: React.FC<{
                     handleBadgeSelection={handleBadgeSelection}
                   />
                 </FormControl>
-                {compliData[CompKeyCount]?.gameBadge === 0 || compliData[CompKeyCount]?.gameBadge == null ||compliData[CompKeyCount]?.gameBadge == '' ? (
+                {compliData[CompKeyCount]?.gameBadge === 0 || compliData[CompKeyCount]?.gameBadge == null || compliData[CompKeyCount]?.gameBadge == '' ? (
                   <>
                     {/*<input type="file" style={{ display: 'none' }} />
                     <Box
@@ -485,32 +485,34 @@ const CompletionScreenRight: React.FC<{
                       </Text> 
                     </Box>
                     */}
-                      <Box display={'inline-block'}  position={'relative'} mt={'10px'} mb={'10px'} cursor={'pointer'} onClick={() =>handleBadgeImages()}>
-  <input type="file" style={{ width:'100px',
-                      position:'absolute',
-                      display:'none',
-                      textAlign:'right',
-                      
-                      opacity:0,
-                      zIndex:2,
-                      height:'100px' }}/>
-  <Box  position={'absolute'} className={'choosebadge'} top={0} left={0} zIndex={1} backgroundColor= {'#422AFB'}
-    p= {'2px'}
-    borderRadius= {'15px'}
-    pr={'8px'} 
-    pl= {'8px'} display={'flex'}  alignItems="center"
-                  justifyContent={'flex-start'} >
-    <SearchIcon color={'#fff'} w="15px" h="15px"/>
-    <Text fontSize="sm"
-                    //fontWeight="bold"
-                    //color={textColorPrimary}
-                    color={'#fff'}
-                    whiteSpace={'nowrap'} textAlign={'left'}>
+                    <Box display={'inline-block'} position={'relative'} mt={'10px'} mb={'10px'} cursor={'pointer'} onClick={() => handleBadgeImages()}>
+                      <input type="file" style={{
+                        width: '100px',
+                        position: 'absolute',
+                        display: 'none',
+                        textAlign: 'right',
+
+                        opacity: 0,
+                        zIndex: 2,
+                        height: '100px'
+                      }} />
+                      <Box position={'absolute'} className={'choosebadge'} top={0} left={0} zIndex={1} backgroundColor={'#422AFB'}
+                        p={'2px'}
+                        borderRadius={'15px'}
+                        pr={'8px'}
+                        pl={'8px'} display={'flex'} alignItems="center"
+                        justifyContent={'flex-start'} >
+                        <SearchIcon color={'#fff'} w="15px" h="15px" />
+                        <Text fontSize="sm"
+                          //fontWeight="bold"
+                          //color={textColorPrimary}
+                          color={'#fff'}
+                          whiteSpace={'nowrap'} textAlign={'left'}>
                           Choose Badge
                         </Text>
-  </Box>
-</Box> 
-                     
+                      </Box>
+                    </Box>
+
                   </>
                 ) : (
                   <Box position={'relative'}>
@@ -538,17 +540,17 @@ const CompletionScreenRight: React.FC<{
                 alignItems="center"
                 justifyContent={'space-between'}
                 width={'100%'}
-                //mt={'10px'}
+              //mt={'10px'}
               >
                 <FormLabel
-                    fontSize="sm"
-                    fontWeight="bold"
-                    color={textColorPrimary}
-                    mb="0px"
-                    whiteSpace={'nowrap'}
-                  
-                  >
-                  
+                  fontSize="sm"
+                  fontWeight="bold"
+                  color={textColorPrimary}
+                  mb="0px"
+                  whiteSpace={'nowrap'}
+
+                >
+
                   Badge Name:{' '}
                   {compliData[CompKeyCount]?.gameIsSetBadge === 'true' && (
                     <span style={{ color: 'red' }}>*</span>
@@ -583,7 +585,7 @@ const CompletionScreenRight: React.FC<{
                   alignItems="center"
                   justifyContent={'space-between'}
                   width={'50%'}
-                  // mt={'10px'}
+                // mt={'10px'}
                 >
                   <FormLabel
                     htmlFor="email-"
@@ -621,7 +623,7 @@ const CompletionScreenRight: React.FC<{
                       alignItems="center"
                       justifyContent={'space-between'}
                       width={'100%'}
-                      // mt={'10px'}
+                    // mt={'10px'}
                     >
                       <FormLabel>
                         <Text
@@ -629,6 +631,7 @@ const CompletionScreenRight: React.FC<{
                           mt={'15px'}
                           whiteSpace={'nowrap'}
                           fontWeight="bold"
+                          color={textColorPrimary}
                         >
                           Score Greater Than{' '}
                           {compliData[CompKeyCount]?.gameIsSetCriteriaForBadge === 'true' && (

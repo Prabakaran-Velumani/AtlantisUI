@@ -79,9 +79,11 @@ interface PropsDialog {
   validation?: any;
   handleMiniNDI?: any;
   currentseq?: any;
+  targetSequence?: any;
 }
 
 const DialogCompo: React.FC<PropsDialog> = ({
+  targetSequence,
   id,
   language,
   seq,
@@ -156,6 +158,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
       background: 'transparent',
       // height: '45px',
       padding: '0 !important',
+      width: '200px',
       border: validation?.[`dailogAnimation${seq.input}`] && '2px solid red',
     }),
   };
@@ -323,12 +326,13 @@ const DialogCompo: React.FC<PropsDialog> = ({
       {/* {seq.status == 'no' ? 
             (null) :               */}
       <Flex
-        className="block-compo"
+        // className="block-compo"
         borderRadius={'12px'}
         mb={'20px'}
         padding={'10px 0'}
         alignItems={'start'}
         overflowX={'auto'}
+        overflowY={'hidden'}
         marginBottom={'0px'}
         style={{
           backgroundColor: ShowReview
@@ -357,7 +361,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
               />
             </div>
           </Tooltip>
-          <Tooltip hasArrow label="Add New Dialog">
+          <Tooltip hasArrow label="Duplicate">
             <div>
               <Icon
                 as={BiSolidDuplicate}
@@ -383,12 +387,6 @@ const DialogCompo: React.FC<PropsDialog> = ({
             </div>
           </Tooltip>
         </Box>
-        <Box
-          className="box-block"
-          display={'flex'}
-          w={'100%'}
-          alignItems={'start'}
-        >
           <Box
             mr={'10px'}
             w={'50px'}
@@ -398,7 +396,14 @@ const DialogCompo: React.FC<PropsDialog> = ({
           >
             {seq.id}
           </Box>
-          <Box m={'0 10px 10px 0'} w={'150px'}>
+        <Box
+          className="box-block"
+          display={'flex'}
+          w={{base:'100%',lg:'auto'}}
+          alignItems={'center'}
+          flexDirection={{base:'column',lg:'row'}}
+        >
+          <Box m={'0 10px 10px 0'} w={{base:'100%',lg:'150px'}}>
             <Select
               placeholder={'Character...'}
               id="blockRoll"
@@ -420,7 +425,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
               }
             />
           </Box>
-          <Box m={'0 10px 0px 0'} w={'350px'}>
+          <Box m={'0 10px 0px 0'} w={{base:'100%',lg:'400px'}} mb={{base:'10px',lg:'0px'}}>
             <Textarea
               placeholder="Dialog"
               id="Dialog"
@@ -439,7 +444,10 @@ const DialogCompo: React.FC<PropsDialog> = ({
                 overflowY: 'hidden',
                 border: validation?.[`Dialog${seq?.input}`] && '2px solid red',
               }}
-              minHeight="45px"
+              minHeight="65px"
+              height={
+                seq?.id === targetSequence?.id ? 'auto' : '65px !important'
+              }
               ref={textareaRef} // Add a ref to the textarea
               _focusVisible={{
                 borderColor: '#0000',
@@ -451,7 +459,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
             />
           </Box>
           {parseInt(input?.[`Dialog${seq.input}`]?.character, 10) !== 99999 && (
-            <Box mr={'10px'} w={'150px'}>
+            <Box mr={'10px'} w={'200px'}>
               <Select
                 placeholder={'Animate...'}
                 id="Dialog"
@@ -460,6 +468,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
                 styles={customStylesAnimate}
                 options={emotionsOptions}
                 isSearchable={true}
+                isClearable={false}
                 isMulti={true}
                 value={
                   input?.[`Dialog${seq.input}`]?.animation
@@ -478,8 +487,8 @@ const DialogCompo: React.FC<PropsDialog> = ({
               />
             </Box>
           )}
-          <Box className="navigation-icon" mr={'40px'}>
-            <Flex mb={'13px'}>
+          <Box className="navigation-icon" mr={'40px'}  mb={{base:'10px',lg:'0px'}}>
+            <Flex >
               <Box>
                 <Tooltip hasArrow label="Add Navigations" placement='top'>
                   <div>
@@ -526,8 +535,9 @@ const DialogCompo: React.FC<PropsDialog> = ({
                       (option: any) => option.value !== seq.input,
                     )}
                     isSearchable={true}
+                    
                     className="react-select"
-                    value={
+                    value = {
                       showSelectBlock.find(
                         (option: any) =>
                           option.value ===
