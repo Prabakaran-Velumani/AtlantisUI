@@ -41,7 +41,7 @@ import Avatar2 from 'assets/img/avatars/avatar2.png';
 import Avatar3 from 'assets/img/avatars/avatar3.png';
 import { TbHandClick, TbMessages } from 'react-icons/tb';
 import pro from 'assets/img/crm/pro.png';
-import { setStory } from 'utils/game/gameService';
+import { setStory,BlockModifiedLog } from 'utils/game/gameService';
 import NDITabs from './dragNdrop/QuestTab';
 import ChatButton from './ChatButton';
 interface NDIMainProps {
@@ -163,6 +163,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
     [blockNumber, setBlockNumber] = useState<any>(),
     [lastInputName, setLastInputName] = useState<any>();
   const [inputtextValue, setinputtextValue] = useState('');
+  const user: any = JSON.parse(localStorage.getItem('user'));
   console.log('upNextCount', sequence);
   // For Character Options
   const characterOption = [
@@ -182,7 +183,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
     { value: 'talking', label: 'Talking' },
     { value: 'sad', label: 'Sad' },
   ];
-
+ const GameId = id;
   // onClick Function
   const handleNDI = (NDI: any) => {
     const id = `${serias}.${count}`;
@@ -1512,12 +1513,14 @@ const NDIMain: React.FC<NDIMainProps> = ({
   //navin-end
 
   // onChange Function
-  const handleInput = (e: any, i?: any, BlockNum?: any) => {
+  const handleInput = async (e: any, i?: any, BlockNum?: any) => {
     const textarea = e.target;
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
     console.log('textareastyleheight', textarea.style.height);
     setinputtextValue(textarea.value);
+    console.log('????????????', e, '.....', i, '...', BlockNum);
+    
     const getLastDigit = e.target.name.slice(-1);
     const match = e.target.name.match(/([a-zA-Z]+)(\d+)/);
     if (match) {
@@ -1575,7 +1578,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
             ? e.target.value
             : prevInput[interactionKey]?.interaction;
         const questionTitle =
-          e.target.id === 'QuestionTitles'
+          e.target.id === `QuestionTitle${items[i]?.input}`
             ? e.target.value
             : prevInput[interactionKey]?.quesionTitle;
         const SkillTag =
@@ -1705,6 +1708,39 @@ const NDIMain: React.FC<NDIMainProps> = ({
         };
       }
     });
+    //newlyadded start
+    if (BlockNum) {
+      const NoteKey = `Note${items[i]?.input}`;
+      const DialogKey = `Dialog${items[i]?.input}`;
+      const InteractionKey = `Interaction${items[i]?.input}`;
+      let modifiedid,quest = '';
+      console.log('***************',items,'********',input);
+      if (e.target.name == NoteKey) {
+        modifiedid= items[i]?.input;
+        quest= items[i]?.questNo;
+      }
+      if (e.target.name == DialogKey) {
+        modifiedid= items[i]?.input;
+        quest= items[i]?.questNo;
+      }
+      if (e.target.name == InteractionKey) {
+        modifiedid= items[i]?.input;
+        quest= items[i]?.questNo;
+      }
+      const modified = {
+        Input:modifiedid,Quest:quest
+      }
+      const data = {
+        previewGameId: GameId,
+        playerId:user?.data?.id,
+        playerType: user?.data?.id ? 'creator' : null,
+        lastModifiedBlockSeq:modified,
+      }
+      const modifiedDataString = JSON.stringify(data);
+      console.log('data ******',data,'......',user,'....',modifiedDataString);
+       const result = await BlockModifiedLog(modifiedDataString);
+    }
+    //end 
   };
   const handleSelect = (selectedOption: any, e: any, data: string) => {
     const getLastDigit = e.name.slice(-1);
@@ -1983,96 +2019,96 @@ const NDIMain: React.FC<NDIMainProps> = ({
         position={'relative'}
       >
         {/* <Card mb={'20px'}> */}
-          <Text fontSize={22} fontWeight={800} mb={'20px'}>
-            Story
-          </Text>
-          <NDITabs
-            handleGet={handleGet}
-            fetchBlocks={fetchBlocks}
-            listQuest={listQuest}
-            questTabState={questTabState}
-            setQuestTabState={setQuestTabState}
-            deleteQuest={deleteQuest}
-          />
-          <Box className="sequence-lists" mt={'40px'} w={'100%'}>
-            <CustomAccordion
-              items={items}
-              setItems={setItems}
-              sequence={sequence}
-              dummySequence={dummySequence}
-              upNextCount={upNextCount}
-              setAlphabet={setAlphabet}
-              alphabet={alphabet}
-              setBlockItems={setBlockItems}
-            >
-              {(type || items) &&
-                items.map((seq: any, i: number) => {
-                  console.log('off', seq);
+        <Text fontSize={22} fontWeight={800} mb={'20px'}>
+          Story
+        </Text>
+        <NDITabs
+          handleGet={handleGet}
+          fetchBlocks={fetchBlocks}
+          listQuest={listQuest}
+          questTabState={questTabState}
+          setQuestTabState={setQuestTabState}
+          deleteQuest={deleteQuest}
+        />
+        <Box className="sequence-lists" mt={'40px'} w={'100%'}>
+          <CustomAccordion
+            items={items}
+            setItems={setItems}
+            sequence={sequence}
+            dummySequence={dummySequence}
+            upNextCount={upNextCount}
+            setAlphabet={setAlphabet}
+            alphabet={alphabet}
+            setBlockItems={setBlockItems}
+          >
+            {(type || items) &&
+              items.map((seq: any, i: number) => {
+                console.log('off', seq);
+                    
+                return (
+                  <Draggable key={seq.id} draggableId={seq.id} index={i}>
+                    {(provided, dragData) => {
+                      return (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <Box key={i} className='block-item-type'>
+                            {seq.type == 'Note' ? (
+                              <Card
+                                id={`tarSeqRef${seq.id}`}
+                                className='target-block'
+                                position={'relative'}
+                                boxShadow={
+                                  seq.input === lastInputName
+                                    ? '1px 2px 13px #a2a1b00a'
+                                    : 'unset'
+                                }
+                                borderRadius={'20px'}
+                                transition={'0.1s linear'}
+                                borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
+                                borderStyle={{ base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid' }}
+                                borderColor={{ base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db' }}
 
-                  return (
-                    <Draggable key={seq.id} draggableId={seq.id} index={i}>
-                      {(provided, dragData) => {
-                        return (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <Box key={i} className='block-item-type'>
-                              {seq.type == 'Note' ? (
-                                <Card
-                                  id={`tarSeqRef${seq.id}`}
-                                  className='target-block'
-                                  position={'relative'}
-                                  boxShadow={
-                                    seq.input === lastInputName
-                                      ? '1px 2px 13px #a2a1b00a'
-                                      : 'unset'
-                                  }
-                                  borderRadius={'20px'}
-                                  transition={'0.1s linear'}
-                                  borderWidth={{base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px'}}
-                                  borderStyle={{base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid'}}
-                                  borderColor={{base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db'}}
-                                  
-                                  background={
-                                    seq.input === lastInputName ||
+                                background={
+                                  seq.input === lastInputName ||
                                     dragData.isDragging === true ||
                                     seq.id === targetSequence?.id
-                                      ? '#f7f7f5'
-                                      : 'unset'
-                                  }
-                                  _hover={{ background: '#f7f7f5' }}
-                                  zIndex={
-                                    seq.input === lastInputName ? '9' : 'unset'
-                                  }
-                                  tabIndex={0}
-                                  onClick={(e) => handleKeyDown(e, i, seq)}
-                                  onKeyDown={(e) => handleKeyDown(e, i, seq)}
-                                >
-                                  <NoteCompo
- ShowReview={ShowReview}
-                                     seq={seq}
-                                    index={i}
-                                    name={'Note'}
-                                    getSeq={getSeq}
-                                    duplicateSeq={duplicateSeq}
-                                    delSeq={delSeq}
-                                    alphabet={alphabet}
-                                    input={input}
-                                    setNavigation={setNoteNavigation}
-                                    showSelectBlock={showSelectBlock}
-                                    handleBlock={setNotelead}
-                                    handleSelectBlock={handleNoteNavigation}
-                                    items={items}
-                                    setSelectBlock={setNotelead}
-                                    handleInput={(e: any) => handleInput(e, i)}
-                                    handleNDI={handleNDI}
-                                                                        validation={validation}
-                                                                        currentseq={count}
-                                  />
-                                  {/* Review Preview Accordian for Note*/}
-                                  {ShowReview ? (
+                                    ? '#f7f7f5'
+                                    : 'unset'
+                                }
+                                _hover={{ background: '#f7f7f5' }}
+                                zIndex={
+                                  seq.input === lastInputName ? '9' : 'unset'
+                                }
+                                tabIndex={0}
+                                onClick={(e) => handleKeyDown(e, i, seq)}
+                                onKeyDown={(e) => handleKeyDown(e, i, seq)}
+                              >
+                                <NoteCompo
+                                  ShowReview={ShowReview}
+                                  seq={seq}
+                                  index={i}
+                                  name={'Note'}
+                                  getSeq={getSeq}
+                                  duplicateSeq={duplicateSeq}
+                                  delSeq={delSeq}
+                                  alphabet={alphabet}
+                                  input={input}
+                                  setNavigation={setNoteNavigation}
+                                  showSelectBlock={showSelectBlock}
+                                  handleBlock={setNotelead}
+                                  handleSelectBlock={handleNoteNavigation}
+                                  items={items}
+                                  setSelectBlock={setNotelead}
+                                  handleInput={(e: any) => handleInput(e, i, seq.input)}
+                                  handleNDI={handleNDI}
+                                  validation={validation}
+                                  currentseq={count}
+                                />
+                                {/* Review Preview Accordian for Note*/}
+                                {ShowReview ? (
                                   <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
@@ -2130,10 +2166,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                                       />
                                                       <Text ml={'15px'}>
                                                         {reviewer?.emailId ===
-                                                        null
+                                                          null
                                                           ? reviewer
-                                                              ?.ReviewingCreator
-                                                              ?.ctMail
+                                                            ?.ReviewingCreator
+                                                            ?.ctMail
                                                           : reviewer?.emailId}
                                                       </Text>
                                                     </Box>
@@ -2142,8 +2178,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                                         Posted On :
                                                         {value?.updatedAt
                                                           ? new Date(
-                                                              value.updatedAt,
-                                                            ).toLocaleDateString()
+                                                            value.updatedAt,
+                                                          ).toLocaleDateString()
                                                           : ''}
                                                       </Text>
                                                     </Box>
@@ -2161,115 +2197,115 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                               item?.tabAttributeValue ===
                                               `${seq?.questNo}@${seq?.input}`,
                                           ).length === 0) && (
-                                          <Box
-                                            w={'100%'}
-                                            display={'flex'}
-                                            alignItems={'center'}
-                                            justifyContent={'center'}
-                                          >
-                                            <Text>
-                                              No Reviews For This Block
-                                            </Text>
-                                          </Box>
-                                        )}
+                                            <Box
+                                              w={'100%'}
+                                              display={'flex'}
+                                              alignItems={'center'}
+                                              justifyContent={'center'}
+                                            >
+                                              <Text>
+                                                No Reviews For This Block
+                                              </Text>
+                                            </Box>
+                                          )}
                                       </AccordionPanel>
                                     </AccordionItem>
                                   </Accordion>
-                                    ) : (
-                                      ''
-                                  )}
-                                  {seq.id == showMiniBox ? (
-                                    <MiniBox seq={seq} i={i} name={'Note'} />
-                                  ) : null}
-                                </Card>
-                              ) : seq.type == 'Dialog' ? (
-                                <Card
-                                  id={`tarSeqRef${seq.id}`}
-                                  className='target-block'
-                                  position={'relative'}
-                                  boxShadow={
-                                    seq.input === lastInputName
-                                      ? '1px 2px 13px #a2a1b00a'
-                                      : 'unset'
-                                  }
-                                  borderRadius={'20px'}
-                                  // transform={
-                                  //   seq.input === lastInputName
-                                  //     ? 'scale(1.030)'
-                                  //     : 'unset'
-                                  // }
-                                  transition={'0.1s linear'}
+                                ) : (
+                                  ''
+                                )}
+                                {seq.id == showMiniBox ? (
+                                  <MiniBox seq={seq} i={i} name={'Note'} />
+                                ) : null}
+                              </Card>
+                            ) : seq.type == 'Dialog' ? (
+                              <Card
+                                id={`tarSeqRef${seq.id}`}
+                                className='target-block'
+                                position={'relative'}
+                                boxShadow={
+                                  seq.input === lastInputName
+                                    ? '1px 2px 13px #a2a1b00a'
+                                    : 'unset'
+                                }
+                                borderRadius={'20px'}
+                                // transform={
+                                //   seq.input === lastInputName
+                                //     ? 'scale(1.030)'
+                                //     : 'unset'
+                                // }
+                                transition={'0.1s linear'}
 
-                                  borderWidth={{base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px'}}
-                                  borderStyle={{base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid'}}
-                                  borderColor={{base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db'}}
+                                borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
+                                borderStyle={{ base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid' }}
+                                borderColor={{ base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db' }}
 
-                                  background={
-                                    seq.input === lastInputName ||
+                                background={
+                                  seq.input === lastInputName ||
                                     dragData.isDragging === true
-                                      ? '#f7f7f5'
-                                      : 'unset'
-                                  }
-                                  _hover={{ background: '#f7f7f5' }}
-                                  zIndex={
-                                    seq.input === lastInputName ? '9' : 'unset'
-                                  }
-                                  tabIndex={0}
-                                  onClick={(e) => handleKeyDown(e, i, seq)}
-                                  onKeyDown={(e) => handleKeyDown(e, i, seq)}
-                                  style={{
-                                    backgroundColor: ShowReview
-                                      ? reviews && reviews.find((item: any) => {
-                                        const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
-                                        const isMatched = item?.tabAttributeValue === tabAttributeValue;
-                                        console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
-                                        return isMatched;
-                                      })
-                                        ? '#E2E8F0'
-                                        : ''
-                                      : '',    marginBottom: '10px', // Adjust the value as per your requirement
+                                    ? '#f7f7f5'
+                                    : 'unset'
+                                }
+                                _hover={{ background: '#f7f7f5' }}
+                                zIndex={
+                                  seq.input === lastInputName ? '9' : 'unset'
+                                }
+                                tabIndex={0}
+                                onClick={(e) => handleKeyDown(e, i, seq)}
+                                onKeyDown={(e) => handleKeyDown(e, i, seq)}
+                                style={{
+                                  backgroundColor: ShowReview
+                                    ? reviews && reviews.find((item: any) => {
+                                      const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                                      const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                                      console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+                                      return isMatched;
+                                    })
+                                      ? '#E2E8F0'
+                                      : ''
+                                    : '', marginBottom: '10px', // Adjust the value as per your requirement
 
-                                  }}
-                                >
-                                  <DialogCompo
-                                      ShowReview={ShowReview}
-                                    id={id}
-                                    language={formData?.gamelanguageCode}
-                                    seq={seq}
-                                    index={i}
-                                    name={'Dialog'}
-                                    getSeq={getSeq}
-                                    duplicateSeq={duplicateSeq}
-                                    delSeq={delSeq}
-                                    input={input}
-                                    handleInput={(e: any) =>
-                                      handleInput(e, i, seq.input)
-                                    }
-                                    handleSelect={handleSelect}
-                                    characterOption={characterOption}
-                                    dialogOption={dialogOption}
-                                    voicePoseOption={voicePoseOption}
-                                    animateBtn={animateBtn}
-                                    setAnimateBtn={setAnimateBtn}
-                                    handleDialogEmotion={handleDialogEmotion}
-                                    handleDialogVoice={handleDialogVoice}
-                                    formData={formData}
-                                    alphabet={alphabet}
-                                    handleNDI={handleNDI}
-                                    handleBlock={setDialoglead}
-                                    setNavigation={setDialogNavigation}
-                                    handleSelectBlock={handleDialogNavigation}
-                                    items={items}
-                                    handleDialogBlockRoll={
-                                      handleDialogBlockRoll
-                                    }
-                                    showSelectBlock={showSelectBlock}
-                                    setSelectBlock={setSelectBlock}
-                                    validation={validation}
-                                    currentseq={count}
-                                  />
-                                  {/* Accordian For Dialog Blocks */}
-                                  {ShowReview ? (
+                                }}
+                              >
+                                <DialogCompo
+                                  ShowReview={ShowReview}
+                                  id={id}
+                                  language={formData?.gamelanguageCode}
+                                  seq={seq}
+                                  index={i}
+                                  name={'Dialog'}
+                                  getSeq={getSeq}
+                                  duplicateSeq={duplicateSeq}
+                                  delSeq={delSeq}
+                                  input={input}
+                                  handleInput={(e: any) =>
+                                    handleInput(e, i, seq.input)
+                                  }
+                                  handleSelect={handleSelect}
+                                  characterOption={characterOption}
+                                  dialogOption={dialogOption}
+                                  voicePoseOption={voicePoseOption}
+                                  animateBtn={animateBtn}
+                                  setAnimateBtn={setAnimateBtn}
+                                  handleDialogEmotion={handleDialogEmotion}
+                                  handleDialogVoice={handleDialogVoice}
+                                  formData={formData}
+                                  alphabet={alphabet}
+                                  handleNDI={handleNDI}
+                                  handleBlock={setDialoglead}
+                                  setNavigation={setDialogNavigation}
+                                  handleSelectBlock={handleDialogNavigation}
+                                  items={items}
+                                  handleDialogBlockRoll={
+                                    handleDialogBlockRoll
+                                  }
+                                  showSelectBlock={showSelectBlock}
+                                  setSelectBlock={setSelectBlock}
+                                  validation={validation}
+                                  currentseq={count}
+                                />
+                                {/* Accordian For Dialog Blocks */}
+                                {ShowReview ? (
                                   <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
@@ -2327,10 +2363,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                                       />
                                                       <Text ml={'15px'}>
                                                         {reviewer?.emailId ===
-                                                        null
+                                                          null
                                                           ? reviewer
-                                                              ?.ReviewingCreator
-                                                              ?.ctMail
+                                                            ?.ReviewingCreator
+                                                            ?.ctMail
                                                           : reviewer?.emailId}
                                                       </Text>
                                                     </Box>
@@ -2339,8 +2375,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                                         Posted On :
                                                         {value?.updatedAt
                                                           ? new Date(
-                                                              value.updatedAt,
-                                                            ).toLocaleDateString()
+                                                            value.updatedAt,
+                                                          ).toLocaleDateString()
                                                           : ''}
                                                       </Text>
                                                     </Box>
@@ -2358,130 +2394,130 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                               item?.tabAttributeValue ===
                                               `${seq?.questNo}@${seq?.input}`,
                                           ).length === 0) && (
-                                          <Box
-                                            w={'100%'}
-                                            display={'flex'}
-                                            alignItems={'center'}
-                                            justifyContent={'center'}
-                                          >
-                                            <Text>
-                                              No Reviews For This Block
-                                            </Text>
-                                          </Box>
-                                        )}
+                                            <Box
+                                              w={'100%'}
+                                              display={'flex'}
+                                              alignItems={'center'}
+                                              justifyContent={'center'}
+                                            >
+                                              <Text>
+                                                No Reviews For This Block
+                                              </Text>
+                                            </Box>
+                                          )}
                                       </AccordionPanel>
                                     </AccordionItem>
-                                  </Accordion> ) : ''}
-                                  {seq.id == showMiniBox ? (
-                                    <MiniBox seq={seq} i={i} name={'Dialog'} />
-                                  ) : null}
-                                </Card>
-                              ) : seq.type == 'Interaction' ? (
-                                <Card
-                                  id={`tarSeqRef${seq.id}`}
-                                  position={'relative'}
-                                  boxShadow={
-                                    seq.input === lastInputName
-                                      ? '1px 2px 13px #a2a1b00a'
-                                      : 'unset'
-                                  }
-                                  borderRadius={'20px'}
-                                  // transform={
-                                  //   seq.input === lastInputName
-                                  //     ? 'scale(1.030)'
-                                  //     : 'unset'
-                                  // }
-                                  transition={'0.1s linear'}
+                                  </Accordion>) : ''}
+                                {seq.id == showMiniBox ? (
+                                  <MiniBox seq={seq} i={i} name={'Dialog'} />
+                                ) : null}
+                              </Card>
+                            ) : seq.type == 'Interaction' ? (
+                              <Card
+                                id={`tarSeqRef${seq.id}`}
+                                position={'relative'}
+                                boxShadow={
+                                  seq.input === lastInputName
+                                    ? '1px 2px 13px #a2a1b00a'
+                                    : 'unset'
+                                }
+                                borderRadius={'20px'}
+                                // transform={
+                                //   seq.input === lastInputName
+                                //     ? 'scale(1.030)'
+                                //     : 'unset'
+                                // }
+                                transition={'0.1s linear'}
 
-                                  // border={{ base: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
-                                  // sm: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
-                                  // lg: seq.id === targetSequence?.id ? '3px solid #3311db unset unset unset' : 'unset',
-                                  // }}
+                                // border={{ base: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
+                                // sm: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
+                                // lg: seq.id === targetSequence?.id ? '3px solid #3311db unset unset unset' : 'unset',
+                                // }}
 
-                                  // borderLeft={ seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'}
-                                  borderWidth={{base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px'}}
-                                  borderStyle={{base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid'}}
-                                  borderColor={{base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db'}}
-                                  background={
-                                    seq.input === lastInputName ||
+                                // borderLeft={ seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'}
+                                borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
+                                borderStyle={{ base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid' }}
+                                borderColor={{ base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db' }}
+                                background={
+                                  seq.input === lastInputName ||
                                     dragData.isDragging === true
-                                      ? '#f7f7f5'
-                                      : 'unset'
-                                  }
-                                  _hover={{ background: '#f7f7f5' }}
-                                  zIndex={
-                                    seq.input === lastInputName ? '9' : 'unset'
-                                  }
-                                  tabIndex={0}
-                                  onClick={(e) => handleKeyDown(e, i, seq)}
-                                  style={{
-                                    backgroundColor: ShowReview
-                                      ? reviews && reviews.find((item: any) => {
-                                        const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
-                                        const isMatched = item?.tabAttributeValue === tabAttributeValue;
-                                        console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
-                                        return isMatched;
-                                      })
-                                        ? '#E2E8F0'
-                                        : ''
-                                      : '',    marginBottom: '10px', // Adjust the value as per your requirement
+                                    ? '#f7f7f5'
+                                    : 'unset'
+                                }
+                                _hover={{ background: '#f7f7f5' }}
+                                zIndex={
+                                  seq.input === lastInputName ? '9' : 'unset'
+                                }
+                                tabIndex={0}
+                                onClick={(e) => handleKeyDown(e, i, seq)}
+                                style={{
+                                  backgroundColor: ShowReview
+                                    ? reviews && reviews.find((item: any) => {
+                                      const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                                      const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                                      console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+                                      return isMatched;
+                                    })
+                                      ? '#E2E8F0'
+                                      : ''
+                                    : '', marginBottom: '10px', // Adjust the value as per your requirement
 
-                                  }}
-                                  onKeyDown={(e) => handleKeyDown(e, i, seq)}
-                                >
-                                  <InteractionCompo
+                                }}
+                                onKeyDown={(e) => handleKeyDown(e, i, seq)}
+                              >
+                                <InteractionCompo
                                   ShowReview={ShowReview}
-                                    id={id}
-                                    language={formData?.gamelanguageCode}
-                                    seq={seq}
-                                    index={i}
-                                    name={'Interaction'}
-                                    number={number}
-                                    dummySequence={dummySequence}
-                                    getSeq={getSeq}
-                                    duplicateSeq={duplicateSeq}
-                                    delSeq={delSeq}
-                                    input={input}
-                                    handleNDI={handleNDI}
-                                    handleInput={(e: any) =>
-                                      handleInput(e, i, seq.input)
-                                    }
-                                    handleSelect={handleSelect}
-                                    characterOption={characterOption}
-                                    alphabet={alphabet}
-                                    setAlphabet={setAlphabet}
-                                    animateBtn={animateBtn}
-                                    inputtextValue={inputtextValue}
-                                    setAnimateBtn={setAnimateBtn}
-                                    interactionBlock={interactionBlock}
-                                    setInteractionBlock={setInteractionBlock}
-                                    formData={formData}
-                                    handleBlockRoll={handleBlockRoll}
-                                    handleResponseRoll={handleResponseRoll}
-                                    handleQuestionEmotion={
-                                      handleQuestionEmotion
-                                    }
-                                    handleOptionEmotion={handleOptionEmotion}
-                                    handleResponseEmotion={
-                                      handleResponseEmotion
-                                    }
-                                    handleCheckBox={handleCheckBox}
-                                    handleOptionVoice={handleOptionVoice}
-                                    handleQuestionVoice={handleQuestionVoice}
-                                    setNavigation={setNavigation}
-                                    handleSelectBlock={handleSelectBlock}
-                                    handleBlock={handleBlock}
-                                    countalphabet={countalphabet}
-                                    setAlphabetCount={setAlphabetCount}
-                                    items={items}
-                                    handleTagsChange={handleTagsChange}
-                                    showSelectBlock={showSelectBlock}
-                                    setSelectBlock={setSelectBlock}
-                                    validation={validation}
-                                    currentseq={count}
-                                  />
-                                  {/* Accordian for Interaction Blocks */}
-                                  {ShowReview ? (
+                                  id={id}
+                                  language={formData?.gamelanguageCode}
+                                  seq={seq}
+                                  index={i}
+                                  name={'Interaction'}
+                                  number={number}
+                                  dummySequence={dummySequence}
+                                  getSeq={getSeq}
+                                  duplicateSeq={duplicateSeq}
+                                  delSeq={delSeq}
+                                  input={input}
+                                  handleNDI={handleNDI}
+                                  handleInput={(e: any) =>
+                                    handleInput(e, i, seq.input)
+                                  }
+                                  handleSelect={handleSelect}
+                                  characterOption={characterOption}
+                                  alphabet={alphabet}
+                                  setAlphabet={setAlphabet}
+                                  animateBtn={animateBtn}
+                                  inputtextValue={inputtextValue}
+                                  setAnimateBtn={setAnimateBtn}
+                                  interactionBlock={interactionBlock}
+                                  setInteractionBlock={setInteractionBlock}
+                                  formData={formData}
+                                  handleBlockRoll={handleBlockRoll}
+                                  handleResponseRoll={handleResponseRoll}
+                                  handleQuestionEmotion={
+                                    handleQuestionEmotion
+                                  }
+                                  handleOptionEmotion={handleOptionEmotion}
+                                  handleResponseEmotion={
+                                    handleResponseEmotion
+                                  }
+                                  handleCheckBox={handleCheckBox}
+                                  handleOptionVoice={handleOptionVoice}
+                                  handleQuestionVoice={handleQuestionVoice}
+                                  setNavigation={setNavigation}
+                                  handleSelectBlock={handleSelectBlock}
+                                  handleBlock={handleBlock}
+                                  countalphabet={countalphabet}
+                                  setAlphabetCount={setAlphabetCount}
+                                  items={items}
+                                  handleTagsChange={handleTagsChange}
+                                  showSelectBlock={showSelectBlock}
+                                  setSelectBlock={setSelectBlock}
+                                  validation={validation}
+                                  currentseq={count}
+                                />
+                                {/* Accordian for Interaction Blocks */}
+                                {ShowReview ? (
                                   <Accordion allowToggle>
                                     <AccordionItem>
                                       <h2>
@@ -2539,10 +2575,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                                       />
                                                       <Text ml={'15px'}>
                                                         {reviewer?.emailId ===
-                                                        null
+                                                          null
                                                           ? reviewer
-                                                              ?.ReviewingCreator
-                                                              ?.ctMail
+                                                            ?.ReviewingCreator
+                                                            ?.ctMail
                                                           : reviewer?.emailId}
                                                       </Text>
                                                     </Box>
@@ -2551,8 +2587,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                                         Posted On :
                                                         {value?.updatedAt
                                                           ? new Date(
-                                                              value.updatedAt,
-                                                            ).toLocaleDateString()
+                                                            value.updatedAt,
+                                                          ).toLocaleDateString()
                                                           : ''}
                                                       </Text>
                                                     </Box>
@@ -2570,47 +2606,47 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                               item?.tabAttributeValue ===
                                               `${seq?.questNo}@${seq?.input}`,
                                           ).length === 0) && (
-                                          <Box
-                                            w={'100%'}
-                                            display={'flex'}
-                                            alignItems={'center'}
-                                            justifyContent={'center'}
-                                          >
-                                            <Text>
-                                              No Reviews For This Block
-                                            </Text>
-                                          </Box>
-                                        )}
+                                            <Box
+                                              w={'100%'}
+                                              display={'flex'}
+                                              alignItems={'center'}
+                                              justifyContent={'center'}
+                                            >
+                                              <Text>
+                                                No Reviews For This Block
+                                              </Text>
+                                            </Box>
+                                          )}
                                       </AccordionPanel>
                                     </AccordionItem>
                                   </Accordion>)
-: ''}
-                                  {seq.id == showMiniBox ? (
-                                    <MiniBox
-                                      seq={seq}
-                                      i={i}
-                                      name={'Interaction'}
-                                    />
-                                  ) : null}
-                                </Card>
-                              ) : null}
-                            </Box>
-                          </div>
-                        );
-                      }}
-                    </Draggable>
-                  );
-                })}
-            </CustomAccordion>
-          </Box>
+                                  : ''}
+                                {seq.id == showMiniBox ? (
+                                  <MiniBox
+                                    seq={seq}
+                                    i={i}
+                                    name={'Interaction'}
+                                  />
+                                ) : null}
+                              </Card>
+                            ) : null}
+                          </Box>
+                        </div>
+                      );
+                    }}
+                  </Draggable>
+                );
+              })}
+          </CustomAccordion>
+        </Box>
 
-          <Box
-            className="bottom-block"
-            display={'flex'}
-            justifyContent={'center'}
-            alignItems={'center'}
-          >
-            <Tooltip hasArrow label="Add Note">         
+        <Box
+          className="bottom-block"
+          display={'flex'}
+          justifyContent={'center'}
+          alignItems={'center'}
+        >
+          <Tooltip hasArrow label="Add Note">
             <Box
               mr={'20px'}
               p={'20px'}
@@ -2625,11 +2661,11 @@ const NDIMain: React.FC<NDIMainProps> = ({
               filter={'drop-shadow(4px 5px 8px #8080807d)'}
               _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
               onClick={() => handleBottomNDI('Note')}
-            >                    
-                  <Icon as={MdOutlineStickyNote2} fontSize={'23px'} />               
+            >
+              <Icon as={MdOutlineStickyNote2} fontSize={'23px'} />
             </Box>
-              </Tooltip>
-            <Tooltip hasArrow label="Add Dialog">   
+          </Tooltip>
+          <Tooltip hasArrow label="Add Dialog">
             <Box
               mr={'20px'}
               p={'20px'}
@@ -2644,12 +2680,12 @@ const NDIMain: React.FC<NDIMainProps> = ({
               filter={'drop-shadow(4px 5px 8px #8080807d)'}
               _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
               onClick={() => handleBottomNDI('Dialog')}
-            >                          
-                  <Icon as={TbMessages} fontSize={'23px'} />
-                
+            >
+              <Icon as={TbMessages} fontSize={'23px'} />
+
             </Box>
-              </Tooltip>
-            <Tooltip hasArrow label="Add Interaction">
+          </Tooltip>
+          <Tooltip hasArrow label="Add Interaction">
             <Box
               mr={'20px'}
               p={'20px'}
@@ -2664,11 +2700,11 @@ const NDIMain: React.FC<NDIMainProps> = ({
               filter={'drop-shadow(4px 5px 8px #8080807d)'}
               _hover={{ boxShadow: '#7090b01a 0px 18px 22px inset' }}
               onClick={() => handleBottomNDI('Interaction')}
-            >                              
-                  <Icon as={TbHandClick} fontSize={'23px'} />             
+            >
+              <Icon as={TbHandClick} fontSize={'23px'} />
             </Box>
-              </Tooltip>
-          </Box>
+          </Tooltip>
+        </Box>
         {/* </Card> */}
       </Box>
       <ChatButton />

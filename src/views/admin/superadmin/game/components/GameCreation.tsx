@@ -2039,7 +2039,6 @@ if (formData.gameIsFeedbackMandatory === "true") {
         if (items.some((item: any) => item.type === 'Interaction')) {
           if (typeof items === 'object' && items !== null) {
             var inputData = items;
-
             for (var i = 0; i < inputData.length; i++) {
               var key = inputData[i];
               var inputkey = key.type + key.input;
@@ -2048,7 +2047,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
 
               if (key.type === 'Note') {
                 var note = input[inputkey].note;
-
+               
                 if (!note) {
                   setValidation({ ...validation, [`Note${key.input}`]: true });
                   toast({
@@ -2059,6 +2058,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
                   });
                   return false;
                 }
+
               }
               if (key.type === 'Dialog') {
                 var Dialog = input[inputkey]?.dialog;
@@ -2131,20 +2131,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
                   for (const alp of alphabetData?.filter(
                     (alp: any) => key.id === alp.seqs,
                   ) || []) {
-                    if (!input[inputkey]?.optionsObject[alp.option]) {
-                      var option = alp.option;
-                      setValidation({
-                        ...validation,
-                        [`options${key.input}${option}`]: true,
-                      });
-                      toast({
-                        title: `${option} is Empty On This Sequence ${key.id} `,
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                      });
-                      return false;
-                    }
+                    console.log('alphabet check',input[inputkey],'...',input);
                     if (!input[inputkey]?.optionsemotionObject[alp.option]) {
                       var option = alp.option;
                       setValidation({
@@ -2198,6 +2185,30 @@ if (formData.gameIsFeedbackMandatory === "true") {
                       });
                       return false;
                     }
+                    if (!input[inputkey]?.optionsObject[alp.option]) {
+                      var option = alp.option;
+                      setValidation({
+                        ...validation,
+                        [`options${key.input}${option}`]: true,
+                      });
+                      toast({
+                        title: `${option} is Empty On This Sequence ${key.id} `,
+                        status: 'error',
+                        duration: 3000,
+                        isClosable: true,
+                      });
+                      return false;
+                    }
+                    else {
+                      toast({
+                        title: `This ${alp.option} is Empty On This Sequence ${key.id} `,
+                        status: 'error',
+                        duration: 3000,
+                        isClosable: true,
+                      });
+                      return false;
+                    }
+                   
                   }
                 }
               }
@@ -2212,7 +2223,7 @@ if (formData.gameIsFeedbackMandatory === "true") {
               });
               if (!hasComplete) {
                 toast({
-                  title: `At least Any One of the  Select Block as Complete`,
+                  title: `At least Any One of the  Navigate as Complete`,
                   status: 'error',
                   duration: 3000,
                   isClosable: true,
@@ -2430,6 +2441,10 @@ return false;
       }
     }
   };
+  const validateNavigation = (block:any) =>
+    {
+
+    }
   function truncateText(text: any, maxLength: any, maxLineLength: 10) {
     if (text.length <= maxLength) {
       return text;

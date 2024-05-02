@@ -13,17 +13,12 @@ import React, {
   Suspense,
   useContext,
   useEffect,
-  // useLayoutEffect,
-  // useRef,
   useState,
 } from 'react';
 
-// import { Canvas, useLoader, useFrame } from 'react-three-fiber';
-
-import feedi from 'assets/img/screens/feed.png';
 import Interaction from './Interaction';
 import TypingEffect from './Typing';
-import { getVoiceMessage, getPreview } from 'utils/game/gameService';
+// import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
 import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
@@ -115,12 +110,7 @@ const Story: React.FC<{
     const [getInteraction, setInteraction] = useState(false);
     const [Contentgetlanguage, setContentlanguage] = useState('');
     const { profile, setProfile } = useContext(ScoreContext);
-    const [currentPosition, setCurrentPosition] = useState(0);
-    const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
-    const [Navigatenext, setNavigateNext] = useState<any>(false);
     const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
-    const [isPlayAudioConfirmation, setIsPlayAudioConfirmation] =
-      useState<boolean>(false);
     const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
     const [score, setScore] = useState(null);
     const [interactionNext, setInteractionNext] = useState(null);
@@ -130,13 +120,11 @@ const Story: React.FC<{
       if (data && type) {
         getVoice(data, type);
         setShowNote(true);
+        setShowTypingEffect(false);
         setTimeout(() => {
           setShowNote(false);
-          getDataSection(data);
-          interactionNext === true && setInteractionNext(false); //When every render it could be false, only it true when interaction option is submitted
+          interactionNext === true && setInteractionNext(false); 
         }, 1000);
-
-        /** this logic is used to hanlde the navigation options in both forward and backward navigation */
         if (gameInfo.hasOwnProperty('blocks')) {
           let previousPrimarySeq = navTrack[navTrack.length - 1];
           if (previousPrimarySeq) {
@@ -144,7 +132,6 @@ const Story: React.FC<{
             let previousBlock: any = Object.values(
               gameInfo?.blocks[currentQuest],
             )?.find((row: any) => {
-              // let previousBlock : any = Object.values(gameInfo?.blocks[profile?.currentQuest])?.find((row: any)=> {
               return row.blockPrimarySequence == previousPrimarySeq;
             });
             if (data.blockPrimarySequence != previousPrimarySeq) {
@@ -415,331 +402,24 @@ const Story: React.FC<{
       handleValidate(item, ind);
     };
 
-    const stylerender =
-      Navigatenext === true && data && type === 'Dialog'
-        ? ''
-        : 'transform 0.3s ease-in-out, translateY 0.3s ease-in-out';
-    const styletransform =
-      Navigatenext === true && data && type === 'Dialog'
-        ? ''
-        : `translateY(${showNote ? 200 : 0}px)`;
-    useEffect(() => {
-      if (Navigatenext === true) {
-        getData(data);
-      }
-    }, [Navigatenext]);
-
-    const getDataSection = (data: any) => {
-      showTypingEffect === true && setShowTypingEffect(false);
-      type === 'interaction' && setInteractionNext(false);
-      setCurrentPosition(0);
-      if (profileData?.Audiogetlanguage.length !== 0) {
-        const Getblocktext = profileData?.Audiogetlanguage.filter(
-          (key: any) => key?.textId === data?.blockId,
-        );
-        if (Getblocktext.length > 0) {
-          const FilteredFieldName = Getblocktext.map(
-            (item: any) => item.fieldName,
-          );
-          if (FilteredFieldName[0] === 'blockText') {
-            // Note and Dialog
-            const getcontent = Getblocktext[0].content || '';
-            const sentences = getcontent.split(
-              /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-            );
-            const newRemainingSentences = sentences.slice(currentPosition);
-
-            // response
-            const Responsecontent = resMsg || '';
-            const Responsesentences = Responsecontent.split(
-              /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-            );
-            const newRemainingResponseSentences =
-              Responsesentences.slice(currentPosition);
-            const concatenatedSentences = [];
-            let totalLength = 0;
-            // Note and Dialog
-            if (type !== 'response') {
-              for (let i = 0; i < newRemainingSentences.length; i++) {
-                const sentence = newRemainingSentences[i];
-
-                if (data && type === 'Note') {
-                  if (totalLength + sentence.length <= Notelength) {
-                    concatenatedSentences.push(sentence);
-                    totalLength += sentence.length;
-                  } else {
-                    concatenatedSentences.push(sentence);
-                    break;
-                  }
-                }
-                if (data && type === 'Dialog') {
-                  if (totalLength + sentence.length <= Dialoglength) {
-                    concatenatedSentences.push(sentence);
-                    totalLength += sentence.length;
-                  } else {
-                    if (totalLength + sentence.length >= Dialoglength) {
-                      break;
-                    }
-                    concatenatedSentences.push(sentence);
-                    break;
-                  }
-                }
-                if (data && type === 'Interaction') {
-                  if (profileData?.Audiogetlanguage.length !== 0) {
-                    // Note and Dialog
-                    const Getblocktext = profileData?.Audiogetlanguage.filter(
-                      (key: any) => key?.textId === data?.blockId,
-                    );
-                    if (Getblocktext.length > 0) {
-                      const FilteredFieldName = Getblocktext.map(
-                        (item: any) => item.fieldName,
-                      );
-                      if (FilteredFieldName[0] === 'blockText') {
-                        if (type === 'Interaction') {
-                          const getcontent = Getblocktext[0].content || '';
-                          setContentlanguage(getcontent);
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-              setRemainingSentences(concatenatedSentences);
-
-              if (newRemainingSentences.length > 0 && (type === 'Note' || type === 'Dialog')) {
-                setCurrentPosition(currentPosition + concatenatedSentences.length);
-                setNavigateNext(false);
-                return false;
-              }
-              if (type !== 'Interaction') {
-                setNavigateNext(true);
-                setIsPrevNavigation(false);
-              }
-            }
-
-
-          } else if (FilteredFieldName[0] === 'qpResponse') {
-            // response
-            const ResponseLangcontent = Getblocktext[0].content || '';
-            const Responsesentences = ResponseLangcontent.split(
-              /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-            );
-            const newRemainingResponseSentences =
-              Responsesentences.slice(currentPosition);
-            const concatenatedSentences = [];
-            let totalLength = 0;
-            if (type === 'response') {
-              for (let i = 0; i < newRemainingResponseSentences.length; i++) {
-                const ressentence = newRemainingResponseSentences[i];
-                if (data && type === 'response') {
-                  if (totalLength + ressentence.length <= Responselength) {
-                    concatenatedSentences.push(ressentence);
-                    totalLength += ressentence.length;
-                  } else {
-                    if (totalLength + ressentence.length >= Responselength) {
-                      break;
-                    }
-                    concatenatedSentences.push(ressentence);
-                    break;
-                  }
-                }
-              }
-              setRemainingSentences(concatenatedSentences);
-
-              if (newRemainingResponseSentences.length > 0 && type === 'response') {
-                setCurrentPosition(currentPosition + concatenatedSentences.length);
-                setNavigateNext(false);
-                return false;
-              }
-              if (type !== 'Interaction') {
-                setNavigateNext(true);
-                setIsPrevNavigation(false);
-              }
-            }
-
-          }
-          else {
-            // Note and Dialog
-            const content = data?.blockText || '';
-            const sentences = content.split(
-              /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-            );
-            const newRemainingSentences = sentences.slice(currentPosition);
-
-            // response
-            const Responsecontent = resMsg || '';
-            const Responsesentences = Responsecontent.split(
-              /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-            );
-            const newRemainingResponseSentences =
-              Responsesentences.slice(currentPosition);
-            const concatenatedSentences = [];
-            let totalLength = 0;
-            // Note and Dialog
-            if (type !== 'response') {
-              for (let i = 0; i < newRemainingSentences.length; i++) {
-                const sentence = newRemainingSentences[i];
-
-                if (data && type === 'Note') {
-                  if (totalLength + sentence.length <= Notelength) {
-                    concatenatedSentences.push(sentence);
-                    totalLength += sentence.length;
-                  } else {
-                    concatenatedSentences.push(sentence);
-                    break;
-                  }
-                }
-                if (data && type === 'Dialog') {
-                  if (totalLength + sentence.length <= Dialoglength) {
-                    concatenatedSentences.push(sentence);
-                    totalLength += sentence.length;
-                  } else {
-                    if (totalLength + sentence.length >= Dialoglength) {
-                      break;
-                    }
-                    concatenatedSentences.push(sentence);
-                    break;
-                  }
-                }
-              }
-            }
-            // Response
-            if (type === 'response') {
-              for (let i = 0; i < newRemainingResponseSentences.length; i++) {
-                const ressentence = newRemainingResponseSentences[i];
-                if (data && type === 'response') {
-                  if (totalLength + ressentence.length <= Responselength) {
-                    concatenatedSentences.push(ressentence);
-                    totalLength += ressentence.length;
-                  } else {
-                    if (totalLength + ressentence.length >= Responselength) {
-                      break;
-                    }
-                    concatenatedSentences.push(ressentence);
-                    break;
-                  }
-                }
-              }
-            }
-            setRemainingSentences(concatenatedSentences);
-            if (newRemainingSentences.length > 0 && (type === 'Note' || type === 'Dialog')) {
-              setCurrentPosition(currentPosition + concatenatedSentences.length);
-              setNavigateNext(false);
-              return false;
-            }
-            if (newRemainingResponseSentences.length > 0 && type === 'response') {
-              setCurrentPosition(currentPosition + concatenatedSentences.length);
-              setNavigateNext(false);
-              return false;
-            }
-            if (type !== 'Interaction') {
-              setNavigateNext(true);
-              setIsPrevNavigation(false);
-            }
-          }
-        }
-      } else {
-        // Note and Dialog
-        const content = data?.blockText || '';
-        const sentences = content.split(
-          /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-        );
-        const newRemainingSentences = sentences.slice(currentPosition);
-
-        // response
-        const Responsecontent = resMsg || '';
-        const Responsesentences = Responsecontent.split(
-          /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-        );
-        const newRemainingResponseSentences =
-          Responsesentences.slice(currentPosition);
-        const concatenatedSentences = [];
-        let totalLength = 0;
-        // Note and Dialog
-        if (type !== 'response') {
-          for (let i = 0; i < newRemainingSentences.length; i++) {
-            const sentence = newRemainingSentences[i];
-
-            if (data && type === 'Note') {
-              if (totalLength + sentence.length <= Notelength) {
-                concatenatedSentences.push(sentence);
-                totalLength += sentence.length;
-              } else {
-                concatenatedSentences.push(sentence);
-                break;
-              }
-            }
-            if (data && type === 'Dialog') {
-              if (totalLength + sentence.length <= Dialoglength) {
-                concatenatedSentences.push(sentence);
-                totalLength += sentence.length;
-              } else {
-                if (totalLength + sentence.length >= Dialoglength) {
-                  break;
-                }
-                concatenatedSentences.push(sentence);
-                break;
-              }
-            }
-          }
-        }
-        // Response
-        if (type === 'response') {
-          for (let i = 0; i < newRemainingResponseSentences.length; i++) {
-            const ressentence = newRemainingResponseSentences[i];
-            if (data && type === 'response') {
-              if (totalLength + ressentence.length <= Responselength) {
-                concatenatedSentences.push(ressentence);
-                totalLength += ressentence.length;
-              } else {
-                if (totalLength + ressentence.length >= Responselength) {
-                  break;
-                }
-                concatenatedSentences.push(ressentence);
-                break;
-              }
-            }
-          }
-        }
-        setRemainingSentences(concatenatedSentences);
-        if (newRemainingSentences.length > 0 && (type === 'Note' || type === 'Dialog')) {
-          setCurrentPosition(currentPosition + concatenatedSentences.length);
-          setNavigateNext(false);
-          return false;
-        }
-        if (newRemainingResponseSentences.length > 0 && type === 'response') {
-          setCurrentPosition(currentPosition + concatenatedSentences.length);
-          setNavigateNext(false);
-          return false;
-        }
-        if (type !== 'Interaction') {
-          setNavigateNext(true);
-          setIsPrevNavigation(false);
-        }
-      }
-    };
     const Updatecontent = () => {
       if (showTypingEffect === false) {
         setShowTypingEffect(true);
       } else {
-        getDataSection(data);
+        getData(data);
       }
     };
 
-    useEffect(() => {
-      getDataSection(data);
-    }, []);
 
     const getNoteNextData = () => {
       setIsPrevNavigation(false);
-      getDataSection(data);
+      getData(data);
     };
 
     const SkipContentForBackNavigation = () => {
       if (showTypingEffect === false) {
         setShowTypingEffect(true);
       } else {
-        setCurrentPosition(0);
         prevData(data);
       }
     };
@@ -793,7 +473,7 @@ const Story: React.FC<{
                       <Box w={'100%'} display={'flex'} justifyContent={'center'}>
                         <Box className={'story_note_block'}>
                           <Text textAlign={'center'}>
-                            {remainingSentences}
+                            {data?.blockText}
                           </Text>
                         </Box>
                       </Box>
@@ -883,10 +563,10 @@ const Story: React.FC<{
             >
               <Box transform={'translateY(16%)'}>
                 {showTypingEffect === false ? <TypingEffect
-                  text={remainingSentences.toString()}
+                  text={data?.blockText}
                   speed={50}
                   setSpeedIsOver={setShowTypingEffect}
-                /> : remainingSentences}
+                /> : data?.blockText}
               </Box>
             </Box>
             <Box
@@ -975,10 +655,10 @@ const Story: React.FC<{
               fontFamily={'AtlantisContent'}
             >
               {showTypingEffect === false ? <TypingEffect
-                text={remainingSentences.toString()}
+                text={resMsg}
                 speed={50}
                 setSpeedIsOver={setShowTypingEffect}
-              /> : remainingSentences}
+              /> : resMsg}
             </Box>
             <Box
               display={'flex'}
@@ -992,7 +672,6 @@ const Story: React.FC<{
                 w={'70px'}
                 h={'50px'}
                 cursor={'pointer'}
-                // onClick={() => {setCurrentPosition(0);getDataSection(data)}}
                 onClick={() => Updatecontent()}
               />
             </Box>

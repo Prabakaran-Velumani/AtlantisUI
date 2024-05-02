@@ -67,8 +67,13 @@ interface PlayGamesProps {
   setSelectedPlayer?: any;
   profileData?: any;
   setProfileData?: any;
+  setprevProfileData?:any;
   demoBlocks?: any;
   preloadedAssets?: any;
+  setprevScreenId:any;
+  currentScreenId:any;
+  setPreLogDatas:any;
+  getPrevLogDatas:any;
 }
 
 const spokenLanguages = [
@@ -104,9 +109,13 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   setSelectedPlayer,
   profileData,
   setProfileData,
+  setprevProfileData,
   demoBlocks,
   formData,
-  preloadedAssets
+  preloadedAssets,
+  setprevScreenId,currentScreenId,
+  setPreLogDatas,
+  getPrevLogDatas
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
@@ -170,6 +179,15 @@ const Characterspage: React.FC<PlayGamesProps> = ({
         });
         return;
     }
+    
+    const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
+    if(screenIdset !==currentScreenId)
+      {
+        setPreLogDatas((prev:any) => ({
+          ...prev,
+          screenIdSeq: [...prev.screenIdSeq, currentScreenId]
+        }));
+      }
 
     // Set the selected player
     setSelectedPlayer(players[i]);
@@ -243,6 +261,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     xl: '90%',
     xxl: '90%',
   });
+  const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
   return (
     <>
       {/* {formData && (formData?.gameLanguageId !== null) && (isLanguage !==null) ? (
@@ -385,7 +404,17 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       className="btns left-btn"
                       bg={'none'}
                       _hover={{ bg: 'none' }}
-                      onClick={() => setCurrentScreenId(1)}
+                      onClick={() => {setCurrentScreenId(1);
+                       
+                        if(screenIdset !==currentScreenId)
+                          {
+                            setPreLogDatas((prev:any) => ({
+                              ...prev,
+                              screenIdSeq: [...prev.screenIdSeq, currentScreenId]
+                            }));
+                          }
+                       
+                    }}
                     ></Button>
                     <Box w={'25%'} position={'relative'}>
                       <input
@@ -393,12 +422,33 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                         className="player_name"
                         placeholder={'Enter Alias Name'}
                         value={playerInfo.name}
-                        onChange={(e: any) =>
-                          setProfileData((prev: any) => ({
+                        // onChange={{ (e: any) =>
+                        //   setProfileData((prev: any) => ({
+                        //     ...prev,
+                        //     name: e.target.value,
+                        //   })), 
+                        //   setprevProfileData((prev: any) => ({
+                        //     ...prev,
+                        //     name: e.target.value,
+                        //   }))}
+                        // }
+                        onChange={(e:any) => {
+                          // Update profileData state
+                          setProfileData((prev:any) => ({
+                              ...prev,
+                              name: e.target.value,
+                          }));
+                          // Update prevProfileData state
+                          // setprevProfileData((prev:any) => ({
+                          //     ...prev,
+                          //     name: e.target.value,
+                          // }));
+
+                          setPreLogDatas((prev:any) => ({
                             ...prev,
-                            name: e.target.value,
-                          }))
-                        }
+                            previewProfile:{...prev.previewProfile, name: e.target.value,}
+                          }));
+                      }}
                       />
                     </Box>
                     <Button

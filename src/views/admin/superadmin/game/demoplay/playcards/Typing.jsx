@@ -4,11 +4,6 @@ function TypingEffect({ text, speed ,setSpeedIsOver}) {
     const [displayText, setDisplayText] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
         
-    useEffect(()=>{
-      setDisplayText('');
-      setCurrentIndex(0);
-    },[text])
-
     useEffect(() => {
       if (currentIndex < text.length) {
         const timer = setTimeout(() => {
