@@ -25,7 +25,6 @@ import Interaction from './Interaction';
 import TypingEffect from './Typing';
 import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
-// Import ProfileContext from EntirePreview
 import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
 import {
@@ -781,6 +780,8 @@ const Story: React.FC<{
       }
     };
 
+
+    
     return (
       <>
         {optionalReplay && <ReplayGame

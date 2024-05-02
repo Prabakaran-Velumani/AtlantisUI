@@ -1,4 +1,4 @@
-import { Box, Button, Icon, Img, Text } from '@chakra-ui/react';
+import { Box, Button, Icon, Img, Text, Textarea } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { ImHappy } from 'react-icons/im';
 import { TfiFaceSad } from 'react-icons/tfi';
@@ -15,6 +15,9 @@ import {
   FaRegThumbsUp,
   FaRegThumbsDown,
 } from 'react-icons/fa';
+import { debounce } from 'lodash';
+
+// import { updatePreviewLogs } from 'utils/game/gameService';
 
 interface Badge {
   gasId: number;
@@ -75,8 +78,9 @@ const ThankYou: React.FC<{
   
   // Filter properties where the value is 'true'
   const trueValuesArray = propertiesToCheck.filter(property => formData[property] === 'true');
-  
-  var thirdValue="";
+  const  [playerInputs,setPlayerInputs] = useState<string>(null);
+
+  var thirdValue = "";
   if (trueValuesArray.length >= 3) {
     thirdValue = trueValuesArray[2];
   }
@@ -91,6 +95,36 @@ const styleflex = {};
     });
   }
 
+//  const updateDatabase = async () => {
+//   try { 
+//     const apiResponse = await updatePreviewLogs(playerInputs);
+//     if(apiResponse.status == 200){
+//       console.log("Player's manual Feedback updated");
+//     }
+//     else{
+//       console.log("failed - ",apiResponse?.message);
+//     }
+//     // if (apiResponse) {
+//     //   setPlayerInputs((prevState) => ({
+//     //     ...prevState,
+//     //     reflection: apiResponse.reflection,
+//     //   }));
+//     // }
+//   } catch (error) {
+//     console.error('Error during API call kishore:', error);
+//     console.log("playerInputs",playerInputs);
+
+//   }
+// };
+
+useEffect(()=>{
+  /***
+  const debouncedUpdateDatabase = debounce(updateDatabase, 500); 
+  return ()=>{
+    debouncedUpdateDatabase.cancel();
+  };
+   */
+},[playerInputs])
   return (
     <>
       {preloadedAssets.Thankyou && (
@@ -302,350 +336,100 @@ const styleflex = {};
                      {formData.gameOthers === 'true' && (
                      <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameOthers' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
 
-                         <Text
-                           fontSize={16}
-                           fontWeight="300"
-                           letterSpacing="0px"
-                           textAlign="center"
-                           border="2px solid #b3a484"
-                         >
-                           Anything else you'd like to share
-                         </Text>
-                         <div
-                           className="content-div"
-                           style={{
-                             display: 'flex',
-                             justifyContent: 'space-between',
-                             border: '2px solid #b3a484',
-                           }}
-                         >
-                           <div className="buttonfeel3">
-                             <p>
-                               <Icon as={FaRegCommentDots} />
-                             </p>
-                           </div>
-                         </div>
-                       </div>
-                     )}
-                     {formData.gameFeedBack === 'true' && (
-                       <>
-                         <div className="last-item">
-                           <Text
-                             className=""
-                             fontSize={18}
-                             fontWeight="300"
-                             textAlign="center"
-                           >
-                             {' '}
-                             Could you please share your feedback with us on the
-                             below link:
-                           </Text>
-                           <Text
-                             className=""
-                             fontSize={18}
-                             fontWeight="300"
-                             textAlign="center"
-                           >
-                             <a
-                               href={formData.gameFeedBackLink}
-                               style={{
-                                 color: '#caa784',
-                                 textDecoration: 'underline',
-                               }}
-                               target="_blank"
-                               rel="noopener noreferrer"
-                             >
-                               {formData.gameFeedBackLink}
-                             </a>
-                           </Text>
-                         </div>                        
-                       </>
-                     )}
-                   </Box>                 
-                 </Box>                 
-               </>
-             )}      
-           </Box>         
-         </Box>
-         <Box className='next-btn'>
-           <Img src={next} onClick={()=>setCurrentScreenId(13)}/>
-         </Box>
-         {/* <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'100px', right:'0' , justifyContent:'center'}}>
-           <Img src={next} />
-         </Box> */}
-         {/* <Box className='next-btn' style={{ position: 'fixed', bottom: '-1', right: '100' }}>
-           <Img src={next} />
-         </Box> */}
+                          <Text
+                            fontSize={16}
+                            fontWeight="300"
+                            letterSpacing="0px"
+                            textAlign="center"
+                            border="2px solid #b3a484"
+                          >
+                            Anything else you'd like to share
+                          </Text>
+                          <div
+                            className="content-div"
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              border: '2px solid #b3a484',
+                            }}
+                          >
+                            <div className="buttonfeel3">
+                              {/* <p>
+                                <Icon as={FaRegCommentDots} />
+                              </p> */}
+
+                              <Textarea
+                                    paddingTop="20px"
+                                    outline="none"
+                                    focusBorderColor="none"
+                                    border="none"
+                                    width="350px"
+                                    color="#D9C7A2"
+                                    height={{
+                                      base: '20px',
+                                      sm: '30px',
+                                      md: '50px',
+                                      lg: '100px',
+                                    }}
+                                    _focus={{ boxShadow: 'none', border: 'none' }}
+                                    fontFamily="AtlantisText"
+                                    // onBlur={updateDatabase}
+                                    onChange={(e:any)=>setPlayerInputs(e.target.value)}
+                                  />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {formData.gameFeedBack === 'true' && (
+                        <>
+                          <div className="last-item">
+                            <Text
+                              className=""
+                              fontSize={18}
+                              fontWeight="300"
+                              textAlign="center"
+                            >
+                              {' '}
+                              Could you please share your feedback with us on the
+                              below link:
+                            </Text>
+                            <Text
+                              className=""
+                              fontSize={18}
+                              fontWeight="300"
+                              textAlign="center"
+                            >
+                              <a
+                                href={formData.gameFeedBackLink}
+                                style={{
+                                  color: '#caa784',
+                                  textDecoration: 'underline',
+                                }}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {formData.gameFeedBackLink}
+                              </a>
+                            </Text>
+                          </div>
+
+                        </>
+                      )}
+                    </Box>
+                  </Box>
+                </>
+              )}
+            </Box>
+          </Box>
+          <Box className='next-btn'>
+            <Img src={next} onClick={() => setCurrentScreenId(13)} />
+          </Box>
        </Box>
-        // <Box className="Thankyou-section">
-        //   <Img src={imageSrc} className="bg-thankyou" />
-        //   <Box className="thankyou-screen">
-        //     <Box className="thankyou-screen-box"></Box>
-        //     <Box
-        //       w={'100%'}
-        //       fontFamily={'content'}
-        //       display={'flex'}
-        //       justifyContent={'center'}
-        //       alignItems={'center'}
-        //       className="tq-msg"
-        //     >
-        //       <Box
-        //         // h={'100px'}
-        //         // w={'40%'}
-        //         mt={{ base: '0px', sm: '0px', md: '20px', lg: '20px' }}
-        //         lineHeight={1}
-        //         textAlign={'center'}
-        //         color="#D9C7A2"
-        //         fontWeight="300"
-        //       >
-        //         {renderContentTy()}
-        //       </Box>
-        //     </Box>
-        //     {formData.gameIsCollectLearnerFeedback === 'true' && (
-        //       <>
-        //         <Text
-        //           className="about-experience"
-        //           fontSize={18}
-        //           fontWeight="300"
-        //           textAlign="center"
-        //         >
-        //           How do you feel about the experience?
-        //         </Text>
-        //         <Box className="collect-learner-feedback">
-        //           <Box className="grid">
-        //             {formData.gameContent === 'true' && (
-        //               <div className="content-box">
-        //                 <Text
-        //                   fontSize={18}
-        //                   fontWeight="300"
-        //                   textAlign="center"
-        //                   border="2px solid #b3a484"
-        //                 >
-        //                   Content
-        //                 </Text>
-        //                 <div
-        //                   className="content-div"
-        //                   style={{
-        //                     display: 'flex',
-        //                     marginTop: '5px',
-        //                     justifyContent: 'space-between',
-        //                   }}
-        //                 >
-        //                   <div className="buttonfeel">
-        //                     <p>
-        //                       <Icon as={ImHappy} /> I learned something useful
-        //                     </p>
-        //                   </div>
-        //                   <div className="buttonfeel2">
-        //                     <p>
-        //                       <Icon as={TfiFaceSad} /> It wasn't useful
-        //                     </p>
-        //                   </div>
-        //                 </div>
-        //               </div>
-        //             )}
-        //             {formData.gameRelevance === 'true' && (
-        //               <div className="content-box">
-        //                 <Text
-        //                   fontSize={18}
-        //                   fontWeight="300"
-        //                   textAlign="center"
-        //                   border="2px solid #b3a484"
-        //                 >
-        //                   Relevance
-        //                 </Text>
-        //                 <div
-        //                   className="content-div"
-        //                   style={{
-        //                     display: 'flex',
-        //                     justifyContent: 'space-between',
-        //                   }}
-        //                 >
-        //                   <div className="buttonfeel">
-        //                     <p>
-        //                       <Icon as={FaHatCowboy} /> I'll apply what I
-        //                       learned
-        //                     </p>
-        //                   </div>
-        //                   <div className="buttonfeel2">
-        //                     <p>
-        //                       <Icon as={BsEmojiNeutral} /> It's not relevant to
-        //                       me
-        //                     </p>
-        //                   </div>
-        //                 </div>
-        //               </div>
-        //             )}
-        //             {formData.gameBehaviour === 'true' && (
-        //               <div className="content-box">
-        //                 <Text
-        //                   fontSize={18}
-        //                   fontWeight="300"
-        //                   textAlign="center"
-        //                   border="2px solid #b3a484"
-        //                 >
-        //                   Behaviour
-        //                 </Text>
-        //                 <div
-        //                   className="content-div"
-        //                   style={{
-        //                     display: 'flex',
-        //                     justifyContent: 'space-between',
-        //                   }}
-        //                 >
-        //                   <div className="buttonfeel">
-        //                     <p>
-        //                       <Icon as={BsEmojiSunglasses} /> I understood what
-        //                       I can do differentl
-        //                     </p>
-        //                   </div>
-        //                   <div className="buttonfeel2">
-        //                     <p>
-        //                       {' '}
-        //                       <Icon as={FaRegFaceMehBlank} /> I am not sure
-        //                     </p>
-        //                   </div>
-        //                 </div>
-        //               </div>
-        //             )}
-        //             {formData.gameRecommendation === 'true' && (
-        //               <div className="content-box">
-        //                 <Text
-        //                   fontSize={18}
-        //                   fontWeight="300"
-        //                   textAlign="center"
-        //                   border="2px solid #b3a484"
-        //                 >
-        //                   Recommendation
-        //                 </Text>
-        //                 <div
-        //                   className="content-div"
-        //                   style={{
-        //                     display: 'flex',
-        //                     justifyContent: 'space-between',
-        //                   }}
-        //                 >
-        //                   <div className="buttonfeel">
-        //                     <p>
-        //                       {' '}
-        //                       <Icon as={RiEmotionHappyLine} /> I would recommend
-        //                       this game to others
-        //                     </p>
-        //                   </div>
-        //                   <div className="buttonfeel2">
-        //                     <p>
-        //                       {' '}
-        //                       <Icon as={FaRegTired} /> I wouldn't recommend
-        //                     </p>
-        //                   </div>
-        //                 </div>
-        //               </div>
-        //             )}
-        //             {formData.gameGamification === 'true' && (
-        //               <div className="content-box">
-        //                 <Text
-        //                   fontSize={18}
-        //                   fontWeight="300"
-        //                   textAlign="center"
-        //                   border="2px solid #b3a484"
-        //                 >
-        //                   Gamification
-        //                 </Text>
-        //                 <div
-        //                   className="content-div"
-        //                   style={{
-        //                     display: 'flex',
-        //                     justifyContent: 'space-between',
-        //                   }}
-        //                 >
-        //                   <div className="buttonfeel">
-        //                     <p>
-        //                       <Icon as={FaRegThumbsUp} /> I would like to learn
-        //                       via games
-        //                     </p>
-        //                   </div>
-        //                   <div className="buttonfeel2">
-        //                     <p>
-        //                       {' '}
-        //                       <Icon as={FaRegThumbsDown} /> I don't like this
-        //                       format
-        //                     </p>
-        //                   </div>
-        //                 </div>
-        //               </div>
-        //             )}
-        //             {formData.gameOthers === 'true' && (
-        //               <div className="content-box">
-        //                 <Text
-        //                   fontSize={16}
-        //                   fontWeight="300"
-        //                   letterSpacing="0px"
-        //                   textAlign="center"
-        //                   border="2px solid #b3a484"
-        //                 >
-        //                   Anything else you'd like to share
-        //                 </Text>
-        //                 <div
-        //                   className="content-div"
-        //                   style={{
-        //                     display: 'flex',
-        //                     justifyContent: 'space-between',
-        //                     border: '2px solid #b3a484',
-        //                   }}
-        //                 >
-        //                   <div className="buttonfeel3">
-        //                     <p>
-        //                       <Icon as={FaRegCommentDots} />
-        //                     </p>
-        //                   </div>
-        //                 </div>
-        //               </div>
-        //             )}
-        //             {formData.gameFeedBack === 'true' && (
-        //               <>
-        //                 <div className="last-item">
-        //                   <Text
-        //                     className=""
-        //                     fontSize={18}
-        //                     fontWeight="300"
-        //                     textAlign="center"
-        //                   >
-        //                     {' '}
-        //                     Could you please share your feedback with us on the
-        //                     below link:
-        //                   </Text>
-        //                   <Text
-        //                     className=""
-        //                     fontSize={18}
-        //                     fontWeight="300"
-        //                     textAlign="center"
-        //                   >
-        //                     <a
-        //                       href={formData.gameFeedBackLink}
-        //                       style={{
-        //                         color: '#caa784',
-        //                         textDecoration: 'underline',
-        //                       }}
-        //                       target="_blank"
-        //                       rel="noopener noreferrer"
-        //                     >
-        //                       {formData.gameFeedBackLink}
-        //                     </a>
-        //                   </Text>
-        //                 </div>
-        //               </>
-        //             )}
-        //           </Box>
-        //         </Box>
-        //       </>
-        //     )}
-        //     <Box w={'100%'} position={'absolute'} display={'flex'} justifyContent={'center'} bottom={'0'}>
-        //       <Img src={next} className="replay_buttons" />
-        //     </Box>
-        //   </Box>
-        // </Box>
+       
       )}
     </>
   );
 };
 export default ThankYou;
+
+
