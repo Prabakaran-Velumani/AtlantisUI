@@ -931,7 +931,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
             height={'100%'}
             w={{ base: '100%', lg: 'auto' }}
             overflow={'hidden'}
-            padding={'5px'}
+            // padding={'5px'}
             display={'flex'}
             // flexDirection={{ base: 'column', lg: 'row' }}
             alignItems={'center'}
@@ -1297,7 +1297,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
                                     style={{
                                       resize: 'none',
                                       overflowY: 'hidden',
-                                      height: inputtextValue,
+                                      height: 'auto',
                                       border: validation?.[
                                         `options${seq.input}${alp.option}`
                                       ]

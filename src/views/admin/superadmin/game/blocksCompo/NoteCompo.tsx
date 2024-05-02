@@ -263,7 +263,7 @@ const NoteCompo: React.FC<PropsNote> = ({
   return (
     <Flex
       // className="block-compo"
-      mb={'20px'}
+      // mb={'20px'}
       padding={'10px 0'}
       alignItems={'start'}
       overflowY={'hidden'}

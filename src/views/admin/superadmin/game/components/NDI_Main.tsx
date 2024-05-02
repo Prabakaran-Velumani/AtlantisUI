@@ -17,6 +17,7 @@ import {
   AccordionPanel,
   useColorModeValue,
   Tooltip,
+  ScaleFade,
 } from '@chakra-ui/react';
 import {
   MdAdd,
@@ -2018,615 +2019,621 @@ const NDIMain: React.FC<NDIMainProps> = ({
                         >
                           <Box key={i} className='block-item-type'>
                             {seq.type === 'Note' ? (
-                              <Card
-                                id={`tarSeqRef${seq.id}`}
-                                className='target-block'
-                                position={'relative'}
-                                boxShadow={
-                                  seq.input === lastInputName
-                                    ? '1px 2px 13px #a2a1b00a'
-                                    : 'unset'
-                                }
-                                borderRadius={'20px'}
-                                transition={'0.1s linear'}
-                                borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
-                                borderStyle={{ base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid' }}
-                                borderColor={{ base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db' }}
-
-                                background={
-                                  seq.input === lastInputName ||
-                                    dragData.isDragging === true ||
-                                    seq.id === targetSequence?.id
-                                    ? '#f7f7f5'
-                                    : 'unset'
-                                }
-                                _hover={{ background: '#f7f7f5' }}
-                                zIndex={
-                                  seq.input === lastInputName ? '9' : 'unset'
-                                }
-                                tabIndex={0}
-                                onClick={(e) => handleKeyDown(e, i, seq)}
-                                onKeyDown={(e) => handleKeyDown(e, i, seq)}
-                                height={seq.id === targetSequence?.id ? '100%' : '170px'}
-                              // overflowY={'hidden'}    
-                              >
-                                <Text color={'gray.400'}>Note</Text>
-                                <NoteCompo
-                                  targetSequence={targetSequence}
-                                  ShowReview={ShowReview}
-                                  seq={seq}
-                                  index={i}
-                                  name={'Note'}
-                                  getSeq={getSeq}
-                                  duplicateSeq={duplicateSeq}
-                                  delSeq={delSeq}
-                                  alphabet={alphabet}
-                                  input={input}
-                                  setNavigation={setNoteNavigation}
-                                  showSelectBlock={showSelectBlock}
-                                  handleBlock={setNotelead}
-                                  handleSelectBlock={handleNoteNavigation}
-                                  items={items}
-                                  setSelectBlock={setNotelead}
-                                  handleInput={(e: any) => handleInput(e, i)}
-                                  handleNDI={handleNDI}
-                                  validation={validation}
-                                  currentseq={count}
-                                />
-                                {/* Review Preview Accordian for Note*/}
-                                {ShowReview ? (
-                                  <Accordion allowToggle>
-                                    <AccordionItem>
-                                      <h2>
-                                        <AccordionButton>
-                                          <Box
-                                            as="span"
-                                            // flex="1"
-                                            w={'100%'}
-                                            display={'flex'}
-                                            justifyContent={'space-between'}
-                                            textAlign="left"
-                                            fontSize={'0.875rem'}
-                                            color={textColor}
-                                          >
-                                            <Text>
-                                              See All Reviews
-                                            </Text>
-                                            <Text>
-                                              Read{`(3)`} UnRead{`(10)`}
-                                            </Text>
-                                          </Box>
-                                          <AccordionIcon />
-                                        </AccordionButton>
-                                      </h2>
-                                      <AccordionPanel pb={4}>
-                                        {reviews &&
-                                          reviews
-                                            .filter(
-                                              (item: any) =>
-                                                item?.tabAttributeValue ===
-                                                `${seq?.questNo}@${seq?.input}`,
-                                            )
-                                            .map((value: any, ind: number) => {
-                                              const reviewer =
-                                                reviewers &&
-                                                reviewers.find(
-                                                  (rev: any) =>
-                                                    rev?.gameReviewerId ===
-                                                    value?.gameReviewerId,
-                                                );
-                                              return (
-                                                <>
-                                                  <Box
-                                                    w={'100%'}
-                                                    display={'flex'}
-                                                    justifyContent={
-                                                      'space-between'
-                                                    }
-                                                    key={ind}
-                                                  >
-                                                    <Box
-                                                      w={'100%'}
-                                                      display={'flex'}
-                                                      alignItems={'center'}
-                                                    >
-                                                      <Img
-                                                        src={pro}
-                                                        w={'40px'}
-                                                        h={'40px'}
-                                                        alt="pro"
-                                                        borderRadius={'50%'}
-                                                      />
-                                                      <Text ml={'15px'}>
-                                                        {reviewer?.emailId ===
-                                                          null
-                                                          ? reviewer
-                                                            ?.ReviewingCreator
-                                                            ?.ctMail
-                                                          : reviewer?.emailId}
-                                                      </Text>
-                                                    </Box>
-                                                    <Box whiteSpace={'nowrap'}>
-                                                      <Text fontSize={'14'}>
-                                                        Posted On :
-                                                        {value?.updatedAt
-                                                          ? new Date(
-                                                            value.updatedAt,
-                                                          ).toLocaleDateString()
-                                                          : ''}
-                                                      </Text>
-                                                    </Box>
-                                                  </Box>
-                                                  <Box mb={'10px'} mt={'10px'}>
-                                                    {value?.review}
-                                                  </Box>
-                                                </>
-                                              );
-                                            })}
-                                        {(!reviews ||
-                                          reviews.length === 0 ||
-                                          reviews.filter(
-                                            (item: any) =>
-                                              item?.tabAttributeValue ===
-                                              `${seq?.questNo}@${seq?.input}`,
-                                          ).length === 0) && (
-                                            <Box
-                                              w={'100%'}
-                                              display={'flex'}
-                                              alignItems={'center'}
-                                              justifyContent={'center'}
-                                            >
-                                              <Text>
-                                                No Reviews For This Block
-                                              </Text>
-                                            </Box>
-                                          )}
-                                      </AccordionPanel>
-                                    </AccordionItem>
-                                  </Accordion>
-                                ) : (
-                                  ''
-                                )}
-                                {seq.id == showMiniBox ? (
-                                  <MiniBox seq={seq} i={i} name={'Note'} />
-                                ) : null}
-                              </Card>
-                            ) : seq.type === 'Dialog' ? (
-                              <Card
-                                id={`tarSeqRef${seq.id}`}
-                                className='target-block'
-                                position={'relative'}
-                                boxShadow={
-                                  seq.input === lastInputName
-                                    ? '1px 2px 13px #a2a1b00a'
-                                    : 'unset'
-                                }
-                                borderRadius={'20px'}
-                                // transform={
-                                //   seq.input === lastInputName
-                                //     ? 'scale(1.030)'
-                                //     : 'unset'
-                                // }
-                                transition={'0.1s linear'}
-
-                                borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
-                                borderStyle={{ base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid' }}
-                                borderColor={{ base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db' }}
-
-                                background={
-                                  seq.input === lastInputName ||
-                                    dragData.isDragging === true
-                                    ? '#f7f7f5'
-                                    : 'unset'
-                                }
-                                _hover={{ background: '#f7f7f5' }}
-                                zIndex={
-                                  seq.input === lastInputName ? '9' : 'unset'
-                                }
-                                tabIndex={0}
-                                onClick={(e) => handleKeyDown(e, i, seq)}
-                                onKeyDown={(e) => handleKeyDown(e, i, seq)}
-                                style={{
-                                  backgroundColor: ShowReview
-                                    ? reviews && reviews.find((item: any) => {
-                                      const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
-                                      const isMatched = item?.tabAttributeValue === tabAttributeValue;
-                                      console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
-                                      return isMatched;
-                                    })
-                                      ? '#E2E8F0'
-                                      : ''
-                                    : '', marginBottom: '10px', // Adjust the value as per your requirement
-
-                                }}
-                                height={seq.id === targetSequence?.id ? '100%' : '170px'}
-                              // overflowY={'hidden'}    
-                              >
-                                <Text color={'gray.400'}>Dialog</Text>
-                                <DialogCompo
-                                  ShowReview={ShowReview}
-                                  id={id}
-                                  language={formData?.gamelanguageCode}
-                                  seq={seq}
-                                  targetSequence={targetSequence}
-                                  index={i}
-                                  name={'Dialog'}
-                                  getSeq={getSeq}
-                                  duplicateSeq={duplicateSeq}
-                                  delSeq={delSeq}
-                                  input={input}
-                                  handleInput={(e: any) =>
-                                    handleInput(e, i, seq.input)
+                              <ScaleFade initialScale={0.9} in={true}>
+                                <Card
+                                  id={`tarSeqRef${seq.id}`}
+                                  className='target-block'
+                                  position={'relative'}
+                                  boxShadow={
+                                    seq.input === lastInputName
+                                      ? '1px 2px 13px #a2a1b00a'
+                                      : 'unset'
                                   }
-                                  handleSelect={handleSelect}
-                                  characterOption={characterOption}
-                                  dialogOption={dialogOption}
-                                  voicePoseOption={voicePoseOption}
-                                  animateBtn={animateBtn}
-                                  setAnimateBtn={setAnimateBtn}
-                                  handleDialogEmotion={handleDialogEmotion}
-                                  handleDialogVoice={handleDialogVoice}
-                                  formData={formData}
-                                  alphabet={alphabet}
-                                  handleNDI={handleNDI}
-                                  handleBlock={setDialoglead}
-                                  setNavigation={setDialogNavigation}
-                                  handleSelectBlock={handleDialogNavigation}
-                                  items={items}
-                                  handleDialogBlockRoll={
-                                    handleDialogBlockRoll
-                                  }
-                                  showSelectBlock={showSelectBlock}
-                                  setSelectBlock={setSelectBlock}
-                                  validation={validation}
-                                  currentseq={count}
-                                />
-                                {/* Accordian For Dialog Blocks */}
-                                {ShowReview ? (
-                                  <Accordion allowToggle>
-                                    <AccordionItem>
-                                      <h2>
-                                        <AccordionButton>
-                                          <Box
-                                            as="span"
-                                            // flex="1"
-                                            w={'100%'}
-                                            display={'flex'}
-                                            justifyContent={'space-between'}
-                                            textAlign="left"
-                                            fontSize={'0.875rem'}
-                                            color={textColor}
-                                          >
-                                            <Text>
-                                              See All Reviews
-                                            </Text>
-                                            <Text>
-                                              Read{`(3)`} UnRead{`(10)`}
-                                            </Text>
-                                          </Box>
-                                          <AccordionIcon />
-                                        </AccordionButton>
-                                      </h2>
+                                  borderRadius={'20px'}
+                                  transition={'0.1s linear'}
+                                  borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
+                                  borderStyle={{ base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid' }}
+                                  borderColor={{ base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db' }}
 
-                                      <AccordionPanel pb={4}>
-                                        {reviews &&
-                                          reviews
-                                            .filter(
-                                              (item: any) =>
-                                                item?.tabAttributeValue ===
-                                                `${seq?.questNo}@${seq?.input}`,
-                                            )
-                                            .map((value: any, ind: number) => {
-                                              const reviewer =
-                                                reviewers &&
-                                                reviewers.find(
-                                                  (rev: any) =>
-                                                    rev?.gameReviewerId ===
-                                                    value?.gameReviewerId,
-                                                );
-                                              return (
-                                                <>
-                                                  <Box
-                                                    w={'100%'}
-                                                    display={'flex'}
-                                                    justifyContent={
-                                                      'space-between'
-                                                    }
-                                                    key={ind}
-                                                  >
-                                                    <Box
-                                                      w={'100%'}
-                                                      display={'flex'}
-                                                      alignItems={'center'}
-                                                    >
-                                                      <Img
-                                                        src={pro}
-                                                        w={'40px'}
-                                                        h={'40px'}
-                                                        alt="pro"
-                                                        borderRadius={'50%'}
-                                                      />
-                                                      <Text ml={'15px'}>
-                                                        {reviewer?.emailId ===
-                                                          null
-                                                          ? reviewer
-                                                            ?.ReviewingCreator
-                                                            ?.ctMail
-                                                          : reviewer?.emailId}
-                                                      </Text>
-                                                    </Box>
-                                                    <Box whiteSpace={'nowrap'}>
-                                                      <Text fontSize={'14'}>
-                                                        Posted On :
-                                                        {value?.updatedAt
-                                                          ? new Date(
-                                                            value.updatedAt,
-                                                          ).toLocaleDateString()
-                                                          : ''}
-                                                      </Text>
-                                                    </Box>
-                                                  </Box>
-                                                  <Box mb={'10px'} mt={'10px'}>
-                                                    {value?.review}
-                                                  </Box>
-                                                </>
-                                              );
-                                            })}
-                                        {(!reviews ||
-                                          reviews.length === 0 ||
-                                          reviews.filter(
-                                            (item: any) =>
-                                              item?.tabAttributeValue ===
-                                              `${seq?.questNo}@${seq?.input}`,
-                                          ).length === 0) && (
-                                            <Box
-                                              w={'100%'}
-                                              display={'flex'}
-                                              alignItems={'center'}
-                                              justifyContent={'center'}
-                                            >
-                                              <Text>
-                                                No Reviews For This Block
-                                              </Text>
-                                            </Box>
-                                          )}
-                                      </AccordionPanel>
-                                    </AccordionItem>
-                                  </Accordion>) : ''}
-                                {seq.id == showMiniBox ? (
-                                  <MiniBox seq={seq} i={i} name={'Dialog'} />
-                                ) : null}
-                              </Card>
-                            ) : seq.type === 'Interaction' ? (
-                              <Card
-                                id={`tarSeqRef${seq.id}`}
-                                position={'relative'}
-                                boxShadow={
-                                  seq.input === lastInputName
-                                    ? '1px 2px 13px #a2a1b00a'
-                                    : 'unset'
-                                }
-                                borderRadius={'20px'}
-                                // transform={
-                                //   seq.input === lastInputName
-                                //     ? 'scale(1.030)'
-                                //     : 'unset'
-                                // }
-                                transition={'0.1s linear'}
-
-                                // border={{ base: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
-                                // sm: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
-                                // lg: seq.id === targetSequence?.id ? '3px solid #3311db unset unset unset' : 'unset',
-                                // }}
-
-                                // borderLeft={ seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'}
-                                borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
-                                borderStyle={{ base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid' }}
-                                borderColor={{ base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db' }}
-                                background={
-                                  seq.input === lastInputName ||
-                                    dragData.isDragging === true
-                                    ? '#f7f7f5'
-                                    : 'unset'
-                                }
-                                _hover={{ background: '#f7f7f5' }}
-                                zIndex={
-                                  seq.input === lastInputName ? '9' : 'unset'
-                                }
-                                tabIndex={0}
-                                onClick={(e) => handleKeyDown(e, i, seq)}
-                                style={{
-                                  backgroundColor: ShowReview
-                                    ? reviews && reviews.find((item: any) => {
-                                      const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
-                                      const isMatched = item?.tabAttributeValue === tabAttributeValue;
-                                      console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
-                                      return isMatched;
-                                    })
-                                      ? '#E2E8F0'
-                                      : ''
-                                    : '', marginBottom: '10px', // Adjust the value as per your requirement
-                                  transition: 'height 1s ease',
-                                }}
-                                onKeyDown={(e) => handleKeyDown(e, i, seq)}
-                                height={seq.id === targetSequence?.id ? '100%' : '170px'}
-                              // overflowX={'scroll'}
-                              // overflowY={'hidden'}                        
-                              >
-                                <Text color={'gray.400'}>Interaction</Text>
-                                <InteractionCompo
-                                  ShowReview={ShowReview}
-                                  id={id}
-                                  language={formData?.gamelanguageCode}
-                                  seq={seq}
-                                  targetSequence={targetSequence}
-                                  index={i}
-                                  name={'Interaction'}
-                                  number={number}
-                                  dummySequence={dummySequence}
-                                  getSeq={getSeq}
-                                  duplicateSeq={duplicateSeq}
-                                  delSeq={delSeq}
-                                  input={input}
-                                  handleNDI={handleNDI}
-                                  handleInput={(e: any) =>
-                                    handleInput(e, i, seq.input)
+                                  background={
+                                    seq.input === lastInputName ||
+                                      dragData.isDragging === true ||
+                                      seq.id === targetSequence?.id
+                                      ? '#f7f7f5'
+                                      : 'unset'
                                   }
-                                  handleSelect={handleSelect}
-                                  characterOption={characterOption}
-                                  alphabet={alphabet}
-                                  setAlphabet={setAlphabet}
-                                  animateBtn={animateBtn}
-                                  inputtextValue={inputtextValue}
-                                  setAnimateBtn={setAnimateBtn}
-                                  interactionBlock={interactionBlock}
-                                  setInteractionBlock={setInteractionBlock}
-                                  formData={formData}
-                                  handleBlockRoll={handleBlockRoll}
-                                  handleResponseRoll={handleResponseRoll}
-                                  handleQuestionEmotion={
-                                    handleQuestionEmotion
+                                  _hover={{ background: '#f7f7f5' }}
+                                  zIndex={
+                                    seq.input === lastInputName ? '9' : 'unset'
                                   }
-                                  handleOptionEmotion={handleOptionEmotion}
-                                  handleResponseEmotion={
-                                    handleResponseEmotion
-                                  }
-                                  handleCheckBox={handleCheckBox}
-                                  handleOptionVoice={handleOptionVoice}
-                                  handleQuestionVoice={handleQuestionVoice}
-                                  setNavigation={setNavigation}
-                                  handleSelectBlock={handleSelectBlock}
-                                  handleBlock={handleBlock}
-                                  countalphabet={countalphabet}
-                                  setAlphabetCount={setAlphabetCount}
-                                  items={items}
-                                  handleTagsChange={handleTagsChange}
-                                  showSelectBlock={showSelectBlock}
-                                  setSelectBlock={setSelectBlock}
-                                  validation={validation}
-                                  currentseq={count}
-                                />
-                                {/* Accordian for Interaction Blocks */}
-                                {ShowReview ? (
-                                  <Accordion allowToggle>
-                                    <AccordionItem>
-                                      <h2>
-                                        <AccordionButton>
-                                          <Box
-                                            as="span"
-                                            // flex="1"
-                                            w={'100%'}
-                                            display={'flex'}
-                                            justifyContent={'space-between'}
-                                            textAlign="left"
-                                            fontSize={'0.875rem'}
-                                            color={textColor}
-                                          >
-                                            <Text>
-                                              See All Reviews
-                                            </Text>
-                                            <Text>
-                                              Read{`(3)`} UnRead{`(10)`}
-                                            </Text>
-                                          </Box>
-                                          <AccordionIcon />
-                                        </AccordionButton>
-                                      </h2>
-
-                                      <AccordionPanel pb={4}>
-                                        {reviews &&
-                                          reviews
-                                            .filter(
-                                              (item: any) =>
-                                                item?.tabAttributeValue ===
-                                                `${seq?.questNo}@${seq?.input}`,
-                                            )
-                                            .map((value: any, ind: number) => {
-                                              const reviewer =
-                                                reviewers &&
-                                                reviewers.find(
-                                                  (rev: any) =>
-                                                    rev?.gameReviewerId ===
-                                                    value?.gameReviewerId,
-                                                );
-                                              return (
-                                                <>
-                                                  <Box
-                                                    w={'100%'}
-                                                    display={'flex'}
-                                                    justifyContent={
-                                                      'space-between'
-                                                    }
-                                                    key={ind}
-                                                  >
-                                                    <Box
-                                                      w={'100%'}
-                                                      display={'flex'}
-                                                      alignItems={'center'}
-                                                    >
-                                                      <Img
-                                                        src={pro}
-                                                        w={'40px'}
-                                                        h={'40px'}
-                                                        alt="pro"
-                                                        borderRadius={'50%'}
-                                                      />
-                                                      <Text ml={'15px'}>
-                                                        {reviewer?.emailId ===
-                                                          null
-                                                          ? reviewer
-                                                            ?.ReviewingCreator
-                                                            ?.ctMail
-                                                          : reviewer?.emailId}
-                                                      </Text>
-                                                    </Box>
-                                                    <Box whiteSpace={'nowrap'}>
-                                                      <Text fontSize={'14'}>
-                                                        Posted On :
-                                                        {value?.updatedAt
-                                                          ? new Date(
-                                                            value.updatedAt,
-                                                          ).toLocaleDateString()
-                                                          : ''}
-                                                      </Text>
-                                                    </Box>
-                                                  </Box>
-                                                  <Box mb={'10px'} mt={'10px'}>
-                                                    {value?.review}
-                                                  </Box>
-                                                </>
-                                              );
-                                            })}
-                                        {(!reviews ||
-                                          reviews.length === 0 ||
-                                          reviews.filter(
-                                            (item: any) =>
-                                              item?.tabAttributeValue ===
-                                              `${seq?.questNo}@${seq?.input}`,
-                                          ).length === 0) && (
-                                            <Box
-                                              w={'100%'}
-                                              display={'flex'}
-                                              alignItems={'center'}
-                                              justifyContent={'center'}
-                                            >
-                                              <Text>
-                                                No Reviews For This Block
-                                              </Text>
-                                            </Box>
-                                          )}
-                                      </AccordionPanel>
-                                    </AccordionItem>
-                                  </Accordion>)
-                                  : ''}
-                                {seq.id == showMiniBox ? (
-                                  <MiniBox
+                                  tabIndex={0}
+                                  onClick={(e) => handleKeyDown(e, i, seq)}
+                                  onKeyDown={(e) => handleKeyDown(e, i, seq)}
+                                  height={seq.id === targetSequence?.id ? '100%' : '170px'}
+                                // overflowY={'hidden'}    
+                                >
+                                  <Text color={'gray.400'}>Note</Text>
+                                  <NoteCompo
+                                    targetSequence={targetSequence}
+                                    ShowReview={ShowReview}
                                     seq={seq}
-                                    i={i}
-                                    name={'Interaction'}
+                                    index={i}
+                                    name={'Note'}
+                                    getSeq={getSeq}
+                                    duplicateSeq={duplicateSeq}
+                                    delSeq={delSeq}
+                                    alphabet={alphabet}
+                                    input={input}
+                                    setNavigation={setNoteNavigation}
+                                    showSelectBlock={showSelectBlock}
+                                    handleBlock={setNotelead}
+                                    handleSelectBlock={handleNoteNavigation}
+                                    items={items}
+                                    setSelectBlock={setNotelead}
+                                    handleInput={(e: any) => handleInput(e, i)}
+                                    handleNDI={handleNDI}
+                                    validation={validation}
+                                    currentseq={count}
                                   />
-                                ) : null}
-                              </Card>
+                                  {/* Review Preview Accordian for Note*/}
+                                  {ShowReview ? (
+                                    <Accordion allowToggle>
+                                      <AccordionItem>
+                                        <h2>
+                                          <AccordionButton>
+                                            <Box
+                                              as="span"
+                                              // flex="1"
+                                              w={'100%'}
+                                              display={'flex'}
+                                              justifyContent={'space-between'}
+                                              textAlign="left"
+                                              fontSize={'0.875rem'}
+                                              color={textColor}
+                                            >
+                                              <Text>
+                                                See All Reviews
+                                              </Text>
+                                              <Text>
+                                                Read{`(3)`} UnRead{`(10)`}
+                                              </Text>
+                                            </Box>
+                                            <AccordionIcon />
+                                          </AccordionButton>
+                                        </h2>
+                                        <AccordionPanel pb={4}>
+                                          {reviews &&
+                                            reviews
+                                              .filter(
+                                                (item: any) =>
+                                                  item?.tabAttributeValue ===
+                                                  `${seq?.questNo}@${seq?.input}`,
+                                              )
+                                              .map((value: any, ind: number) => {
+                                                const reviewer =
+                                                  reviewers &&
+                                                  reviewers.find(
+                                                    (rev: any) =>
+                                                      rev?.gameReviewerId ===
+                                                      value?.gameReviewerId,
+                                                  );
+                                                return (
+                                                  <>
+                                                    <Box
+                                                      w={'100%'}
+                                                      display={'flex'}
+                                                      justifyContent={
+                                                        'space-between'
+                                                      }
+                                                      key={ind}
+                                                    >
+                                                      <Box
+                                                        w={'100%'}
+                                                        display={'flex'}
+                                                        alignItems={'center'}
+                                                      >
+                                                        <Img
+                                                          src={pro}
+                                                          w={'40px'}
+                                                          h={'40px'}
+                                                          alt="pro"
+                                                          borderRadius={'50%'}
+                                                        />
+                                                        <Text ml={'15px'}>
+                                                          {reviewer?.emailId ===
+                                                            null
+                                                            ? reviewer
+                                                              ?.ReviewingCreator
+                                                              ?.ctMail
+                                                            : reviewer?.emailId}
+                                                        </Text>
+                                                      </Box>
+                                                      <Box whiteSpace={'nowrap'}>
+                                                        <Text fontSize={'14'}>
+                                                          Posted On :
+                                                          {value?.updatedAt
+                                                            ? new Date(
+                                                              value.updatedAt,
+                                                            ).toLocaleDateString()
+                                                            : ''}
+                                                        </Text>
+                                                      </Box>
+                                                    </Box>
+                                                    <Box mb={'10px'} mt={'10px'}>
+                                                      {value?.review}
+                                                    </Box>
+                                                  </>
+                                                );
+                                              })}
+                                          {(!reviews ||
+                                            reviews.length === 0 ||
+                                            reviews.filter(
+                                              (item: any) =>
+                                                item?.tabAttributeValue ===
+                                                `${seq?.questNo}@${seq?.input}`,
+                                            ).length === 0) && (
+                                              <Box
+                                                w={'100%'}
+                                                display={'flex'}
+                                                alignItems={'center'}
+                                                justifyContent={'center'}
+                                              >
+                                                <Text>
+                                                  No Reviews For This Block
+                                                </Text>
+                                              </Box>
+                                            )}
+                                        </AccordionPanel>
+                                      </AccordionItem>
+                                    </Accordion>
+                                  ) : (
+                                    ''
+                                  )}
+                                  {seq.id == showMiniBox ? (
+                                    <MiniBox seq={seq} i={i} name={'Note'} />
+                                  ) : null}
+                                </Card>
+                              </ScaleFade>
+                            ) : seq.type === 'Dialog' ? (
+                              <ScaleFade initialScale={0.9} in={true}>
+                                <Card
+                                  id={`tarSeqRef${seq.id}`}
+                                  className='target-block'
+                                  position={'relative'}
+                                  boxShadow={
+                                    seq.input === lastInputName
+                                      ? '1px 2px 13px #a2a1b00a'
+                                      : 'unset'
+                                  }
+                                  borderRadius={'20px'}
+                                  // transform={
+                                  //   seq.input === lastInputName
+                                  //     ? 'scale(1.030)'
+                                  //     : 'unset'
+                                  // }
+                                  transition={'0.1s linear'}
+
+                                  borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
+                                  borderStyle={{ base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid' }}
+                                  borderColor={{ base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db' }}
+
+                                  background={
+                                    seq.input === lastInputName ||
+                                      dragData.isDragging === true
+                                      ? '#f7f7f5'
+                                      : 'unset'
+                                  }
+                                  _hover={{ background: '#f7f7f5' }}
+                                  zIndex={
+                                    seq.input === lastInputName ? '9' : 'unset'
+                                  }
+                                  tabIndex={0}
+                                  onClick={(e) => handleKeyDown(e, i, seq)}
+                                  onKeyDown={(e) => handleKeyDown(e, i, seq)}
+                                  style={{
+                                    backgroundColor: ShowReview
+                                      ? reviews && reviews.find((item: any) => {
+                                        const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                                        const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                                        console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+                                        return isMatched;
+                                      })
+                                        ? '#E2E8F0'
+                                        : ''
+                                      : '', marginBottom: '10px', // Adjust the value as per your requirement
+
+                                  }}
+                                  height={seq.id === targetSequence?.id ? '100%' : '170px'}
+                                // overflowY={'hidden'}    
+                                >
+                                  <Text color={'gray.400'}>Dialog</Text>
+                                  <DialogCompo
+                                    ShowReview={ShowReview}
+                                    id={id}
+                                    language={formData?.gamelanguageCode}
+                                    seq={seq}
+                                    targetSequence={targetSequence}
+                                    index={i}
+                                    name={'Dialog'}
+                                    getSeq={getSeq}
+                                    duplicateSeq={duplicateSeq}
+                                    delSeq={delSeq}
+                                    input={input}
+                                    handleInput={(e: any) =>
+                                      handleInput(e, i, seq.input)
+                                    }
+                                    handleSelect={handleSelect}
+                                    characterOption={characterOption}
+                                    dialogOption={dialogOption}
+                                    voicePoseOption={voicePoseOption}
+                                    animateBtn={animateBtn}
+                                    setAnimateBtn={setAnimateBtn}
+                                    handleDialogEmotion={handleDialogEmotion}
+                                    handleDialogVoice={handleDialogVoice}
+                                    formData={formData}
+                                    alphabet={alphabet}
+                                    handleNDI={handleNDI}
+                                    handleBlock={setDialoglead}
+                                    setNavigation={setDialogNavigation}
+                                    handleSelectBlock={handleDialogNavigation}
+                                    items={items}
+                                    handleDialogBlockRoll={
+                                      handleDialogBlockRoll
+                                    }
+                                    showSelectBlock={showSelectBlock}
+                                    setSelectBlock={setSelectBlock}
+                                    validation={validation}
+                                    currentseq={count}
+                                  />
+                                  {/* Accordian For Dialog Blocks */}
+                                  {ShowReview ? (
+                                    <Accordion allowToggle>
+                                      <AccordionItem>
+                                        <h2>
+                                          <AccordionButton>
+                                            <Box
+                                              as="span"
+                                              // flex="1"
+                                              w={'100%'}
+                                              display={'flex'}
+                                              justifyContent={'space-between'}
+                                              textAlign="left"
+                                              fontSize={'0.875rem'}
+                                              color={textColor}
+                                            >
+                                              <Text>
+                                                See All Reviews
+                                              </Text>
+                                              <Text>
+                                                Read{`(3)`} UnRead{`(10)`}
+                                              </Text>
+                                            </Box>
+                                            <AccordionIcon />
+                                          </AccordionButton>
+                                        </h2>
+
+                                        <AccordionPanel pb={4}>
+                                          {reviews &&
+                                            reviews
+                                              .filter(
+                                                (item: any) =>
+                                                  item?.tabAttributeValue ===
+                                                  `${seq?.questNo}@${seq?.input}`,
+                                              )
+                                              .map((value: any, ind: number) => {
+                                                const reviewer =
+                                                  reviewers &&
+                                                  reviewers.find(
+                                                    (rev: any) =>
+                                                      rev?.gameReviewerId ===
+                                                      value?.gameReviewerId,
+                                                  );
+                                                return (
+                                                  <>
+                                                    <Box
+                                                      w={'100%'}
+                                                      display={'flex'}
+                                                      justifyContent={
+                                                        'space-between'
+                                                      }
+                                                      key={ind}
+                                                    >
+                                                      <Box
+                                                        w={'100%'}
+                                                        display={'flex'}
+                                                        alignItems={'center'}
+                                                      >
+                                                        <Img
+                                                          src={pro}
+                                                          w={'40px'}
+                                                          h={'40px'}
+                                                          alt="pro"
+                                                          borderRadius={'50%'}
+                                                        />
+                                                        <Text ml={'15px'}>
+                                                          {reviewer?.emailId ===
+                                                            null
+                                                            ? reviewer
+                                                              ?.ReviewingCreator
+                                                              ?.ctMail
+                                                            : reviewer?.emailId}
+                                                        </Text>
+                                                      </Box>
+                                                      <Box whiteSpace={'nowrap'}>
+                                                        <Text fontSize={'14'}>
+                                                          Posted On :
+                                                          {value?.updatedAt
+                                                            ? new Date(
+                                                              value.updatedAt,
+                                                            ).toLocaleDateString()
+                                                            : ''}
+                                                        </Text>
+                                                      </Box>
+                                                    </Box>
+                                                    <Box mb={'10px'} mt={'10px'}>
+                                                      {value?.review}
+                                                    </Box>
+                                                  </>
+                                                );
+                                              })}
+                                          {(!reviews ||
+                                            reviews.length === 0 ||
+                                            reviews.filter(
+                                              (item: any) =>
+                                                item?.tabAttributeValue ===
+                                                `${seq?.questNo}@${seq?.input}`,
+                                            ).length === 0) && (
+                                              <Box
+                                                w={'100%'}
+                                                display={'flex'}
+                                                alignItems={'center'}
+                                                justifyContent={'center'}
+                                              >
+                                                <Text>
+                                                  No Reviews For This Block
+                                                </Text>
+                                              </Box>
+                                            )}
+                                        </AccordionPanel>
+                                      </AccordionItem>
+                                    </Accordion>) : ''}
+                                  {seq.id == showMiniBox ? (
+                                    <MiniBox seq={seq} i={i} name={'Dialog'} />
+                                  ) : null}
+                                </Card>
+                              </ScaleFade>
+                            ) : seq.type === 'Interaction' ? (
+                              <ScaleFade initialScale={0.9} in={true}>
+                                <Card
+                                  id={`tarSeqRef${seq.id}`}
+                                  position={'relative'}
+                                  boxShadow={
+                                    seq.input === lastInputName
+                                      ? '1px 2px 13px #a2a1b00a'
+                                      : 'unset'
+                                  }
+                                  borderRadius={'20px'}
+                                  // transform={
+                                  //   seq.input === lastInputName
+                                  //     ? 'scale(1.030)'
+                                  //     : 'unset'
+                                  // }
+                                  transition={'0.1s linear'}
+
+                                  // border={{ base: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
+                                  // sm: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
+                                  // lg: seq.id === targetSequence?.id ? '3px solid #3311db unset unset unset' : 'unset',
+                                  // }}
+
+                                  // borderLeft={ seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'}
+                                  borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
+                                  borderStyle={{ base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid' }}
+                                  borderColor={{ base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db' }}
+                                  background={
+                                    seq.input === lastInputName ||
+                                      dragData.isDragging === true
+                                      ? '#f7f7f5'
+                                      : 'unset'
+                                  }
+                                  _hover={{ background: '#f7f7f5' }}
+                                  zIndex={
+                                    seq.input === lastInputName ? '9' : 'unset'
+                                  }
+                                  tabIndex={0}
+                                  onClick={(e) => handleKeyDown(e, i, seq)}
+                                  style={{
+                                    backgroundColor: ShowReview
+                                      ? reviews && reviews.find((item: any) => {
+                                        const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
+                                        const isMatched = item?.tabAttributeValue === tabAttributeValue;
+                                        console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
+                                        return isMatched;
+                                      })
+                                        ? '#E2E8F0'
+                                        : ''
+                                      : '', marginBottom: '10px', // Adjust the value as per your requirement
+                                    transition: 'height 1s ease',
+                                  }}
+                                  onKeyDown={(e) => handleKeyDown(e, i, seq)}
+                                  height={seq.id === targetSequence?.id ? '100%' : '170px'}
+                                // overflowX={'scroll'}
+                                // overflowY={'hidden'}                        
+                                >
+                                  <Text color={'gray.400'}>Interaction</Text>
+                                  <InteractionCompo
+                                    ShowReview={ShowReview}
+                                    id={id}
+                                    language={formData?.gamelanguageCode}
+                                    seq={seq}
+                                    targetSequence={targetSequence}
+                                    index={i}
+                                    name={'Interaction'}
+                                    number={number}
+                                    dummySequence={dummySequence}
+                                    getSeq={getSeq}
+                                    duplicateSeq={duplicateSeq}
+                                    delSeq={delSeq}
+                                    input={input}
+                                    handleNDI={handleNDI}
+                                    handleInput={(e: any) =>
+                                      handleInput(e, i, seq.input)
+                                    }
+                                    handleSelect={handleSelect}
+                                    characterOption={characterOption}
+                                    alphabet={alphabet}
+                                    setAlphabet={setAlphabet}
+                                    animateBtn={animateBtn}
+                                    inputtextValue={inputtextValue}
+                                    setAnimateBtn={setAnimateBtn}
+                                    interactionBlock={interactionBlock}
+                                    setInteractionBlock={setInteractionBlock}
+                                    formData={formData}
+                                    handleBlockRoll={handleBlockRoll}
+                                    handleResponseRoll={handleResponseRoll}
+                                    handleQuestionEmotion={
+                                      handleQuestionEmotion
+                                    }
+                                    handleOptionEmotion={handleOptionEmotion}
+                                    handleResponseEmotion={
+                                      handleResponseEmotion
+                                    }
+                                    handleCheckBox={handleCheckBox}
+                                    handleOptionVoice={handleOptionVoice}
+                                    handleQuestionVoice={handleQuestionVoice}
+                                    setNavigation={setNavigation}
+                                    handleSelectBlock={handleSelectBlock}
+                                    handleBlock={handleBlock}
+                                    countalphabet={countalphabet}
+                                    setAlphabetCount={setAlphabetCount}
+                                    items={items}
+                                    handleTagsChange={handleTagsChange}
+                                    showSelectBlock={showSelectBlock}
+                                    setSelectBlock={setSelectBlock}
+                                    validation={validation}
+                                    currentseq={count}
+                                  />
+                                  {/* Accordian for Interaction Blocks */}
+                                  {ShowReview ? (
+                                    <Accordion allowToggle>
+                                      <AccordionItem>
+                                        <h2>
+                                          <AccordionButton>
+                                            <Box
+                                              as="span"
+                                              // flex="1"
+                                              w={'100%'}
+                                              display={'flex'}
+                                              justifyContent={'space-between'}
+                                              textAlign="left"
+                                              fontSize={'0.875rem'}
+                                              color={textColor}
+                                            >
+                                              <Text>
+                                                See All Reviews
+                                              </Text>
+                                              <Text>
+                                                Read{`(3)`} UnRead{`(10)`}
+                                              </Text>
+                                            </Box>
+                                            <AccordionIcon />
+                                          </AccordionButton>
+                                        </h2>
+
+                                        <AccordionPanel pb={4}>
+                                          {reviews &&
+                                            reviews
+                                              .filter(
+                                                (item: any) =>
+                                                  item?.tabAttributeValue ===
+                                                  `${seq?.questNo}@${seq?.input}`,
+                                              )
+                                              .map((value: any, ind: number) => {
+                                                const reviewer =
+                                                  reviewers &&
+                                                  reviewers.find(
+                                                    (rev: any) =>
+                                                      rev?.gameReviewerId ===
+                                                      value?.gameReviewerId,
+                                                  );
+                                                return (
+                                                  <>
+                                                    <Box
+                                                      w={'100%'}
+                                                      display={'flex'}
+                                                      justifyContent={
+                                                        'space-between'
+                                                      }
+                                                      key={ind}
+                                                    >
+                                                      <Box
+                                                        w={'100%'}
+                                                        display={'flex'}
+                                                        alignItems={'center'}
+                                                      >
+                                                        <Img
+                                                          src={pro}
+                                                          w={'40px'}
+                                                          h={'40px'}
+                                                          alt="pro"
+                                                          borderRadius={'50%'}
+                                                        />
+                                                        <Text ml={'15px'}>
+                                                          {reviewer?.emailId ===
+                                                            null
+                                                            ? reviewer
+                                                              ?.ReviewingCreator
+                                                              ?.ctMail
+                                                            : reviewer?.emailId}
+                                                        </Text>
+                                                      </Box>
+                                                      <Box whiteSpace={'nowrap'}>
+                                                        <Text fontSize={'14'}>
+                                                          Posted On :
+                                                          {value?.updatedAt
+                                                            ? new Date(
+                                                              value.updatedAt,
+                                                            ).toLocaleDateString()
+                                                            : ''}
+                                                        </Text>
+                                                      </Box>
+                                                    </Box>
+                                                    <Box mb={'10px'} mt={'10px'}>
+                                                      {value?.review}
+                                                    </Box>
+                                                  </>
+                                                );
+                                              })}
+                                          {(!reviews ||
+                                            reviews.length === 0 ||
+                                            reviews.filter(
+                                              (item: any) =>
+                                                item?.tabAttributeValue ===
+                                                `${seq?.questNo}@${seq?.input}`,
+                                            ).length === 0) && (
+                                              <Box
+                                                w={'100%'}
+                                                display={'flex'}
+                                                alignItems={'center'}
+                                                justifyContent={'center'}
+                                              >
+                                                <Text>
+                                                  No Reviews For This Block
+                                                </Text>
+                                              </Box>
+                                            )}
+                                        </AccordionPanel>
+                                      </AccordionItem>
+                                    </Accordion>)
+                                    : ''}
+                                  {seq.id == showMiniBox ? (
+                                    <MiniBox
+                                      seq={seq}
+                                      i={i}
+                                      name={'Interaction'}
+                                    />
+                                  ) : null}
+                                </Card>
+                              </ScaleFade>
                             ) : null}
                           </Box>
                         </div>

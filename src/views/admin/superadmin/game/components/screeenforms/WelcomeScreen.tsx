@@ -243,7 +243,6 @@ const WelcomeScreen: React.FC<{
             {/*************Afrith-Modified-20-12-23********************/}
             {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
               <div>
-                
                 <TextField
                   disabled={formData?.gameIsShowAdditionalWelcomeNote === 'true' ? false : true}
                   mb="0px"

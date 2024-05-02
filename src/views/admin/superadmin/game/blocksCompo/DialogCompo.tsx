@@ -145,7 +145,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
       borderColor: 'inherit',
       background: 'transparent',
       // height: '45px',
-      width: '130px',
+      width: '150px',
       padding: '0 !important',
     }),
   };
