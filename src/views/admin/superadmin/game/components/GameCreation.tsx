@@ -2684,7 +2684,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
         if (items.some((item: any) => item.type === 'Interaction')) {
           if (typeof items === 'object' && items !== null) {
             var inputData = items;
-
             for (var i = 0; i < inputData.length; i++) {
               var key = inputData[i];
               var inputkey = key.type + key.input;
@@ -2693,7 +2692,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
 
               if (key.type === 'Note') {
                 var note = input[inputkey].note;
-
+               
                 if (!note) {
                   setValidation({ ...validation, [`Note${key.input}`]: true });
                   toast({
@@ -2848,20 +2847,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                   for (const alp of alphabetData?.filter(
                     (alp: any) => key.id === alp.seqs,
                   ) || []) {
-                    if (!input[inputkey]?.optionsObject[alp.option]) {
-                      var option = alp.option;
-                      setValidation({
-                        ...validation,
-                        [`options${key.input}${option}`]: true,
-                      });
-                      toast({
-                        title: `${option} is Empty On This Sequence ${key.id} `,
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                      });
-                      return false;
-                    }
+                    console.log('alphabet check',input[inputkey],'...',input);
                     if (!input[inputkey]?.optionsemotionObject[alp.option]) {
                       var option = alp.option;
                       setValidation({
@@ -2916,14 +2902,8 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                       return false;
                     }
                      // Lokie Work Here
-                    console.log('Inputs',input[inputkey]);
-                    console.log('Object',input[inputkey]?.navigateObjects);
-                    console.log('Alpha',input[inputkey]?.navigateObjects[alp.option]);
-
-                    if (input[inputkey]?.navigateshowObjects && input[inputkey]?.navigateshowObjects[alp?.option] !== '') {
-                                           
+                    if (input[inputkey]?.navigateshowObjects && input[inputkey]?.navigateshowObjects[alp?.option] !== '') {                                           
                       if (input[inputkey]?.navigateshowObjects[alp?.option] === 'New Block' || input[inputkey]?.navigateshowObjects[alp?.option] === 'Select Block' || input[inputkey]?.navigateshowObjects[alp?.option] === undefined ) {
-                      
                         if (!input[inputkey]?.navigateObjects[alp.option]) {
                           toast({
                             title: `${alp.option} is Empty On This Sequence ${key.id} `,
@@ -2959,7 +2939,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
               });
               if (!hasComplete) {
                 toast({
-                  title: `At least Any One of the  Select Block as Complete`,
+                  title: `At least Any One of the  Navigate as Complete`,
                   status: 'error',
                   duration: 3000,
                   isClosable: true,
@@ -3176,6 +3156,10 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       }
     }
   };
+  const validateNavigation = (block:any) =>
+    {
+
+    }
   function truncateText(text: any, maxLength: any, maxLineLength: 10) {
     if (text.length <= maxLength) {
       return text;

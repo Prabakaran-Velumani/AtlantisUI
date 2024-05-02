@@ -129,6 +129,11 @@ export const urls = {
   completionscreen: '/game/completionscreen/',
   getTotalMinofWords: '/game/getTotalMinofWords/',
   Compliupdate: '/game/Compliupdate/',
+  
+  /*********************Previous Data Stored ************************ */
+  updatePreviewlogs:'/preview/logs',
+  BlockModifiedLog :'/preview/blocklog',
+
   /****************************Scorm ********************************/
   generateScorm: '/scorm/generateScorm/',
   createScormConfig: '/scorm/createScormConfig/',

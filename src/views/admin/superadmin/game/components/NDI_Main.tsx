@@ -42,7 +42,7 @@ import Avatar2 from 'assets/img/avatars/avatar2.png';
 import Avatar3 from 'assets/img/avatars/avatar3.png';
 import { TbHandClick, TbMessages } from 'react-icons/tb';
 import pro from 'assets/img/crm/pro.png';
-import { setStory } from 'utils/game/gameService';
+import { setStory,BlockModifiedLog } from 'utils/game/gameService';
 import NDITabs from './dragNdrop/QuestTab';
 import ChatButton from './ChatButton';
 interface NDIMainProps {
@@ -164,6 +164,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
     [blockNumber, setBlockNumber] = useState<any>(),
     [lastInputName, setLastInputName] = useState<any>();
   const [inputtextValue, setinputtextValue] = useState('');
+  const user: any = JSON.parse(localStorage.getItem('user'));
   console.log('upNextCount', sequence);
   // For Character Options
   const characterOption = [
@@ -183,7 +184,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
     { value: 'talking', label: 'Talking' },
     { value: 'sad', label: 'Sad' },
   ];
-
+ const GameId = id;
   // onClick Function
   const handleNDI = (NDI: any) => {
     const id = `${serias}.${count}`;
@@ -1534,12 +1535,14 @@ console.log("blockroll",blockroll)
   //navin-end
 
   // onChange Function
-  const handleInput = (e: any, i?: any, BlockNum?: any) => {
+  const handleInput = async (e: any, i?: any, BlockNum?: any) => {
     const textarea = e.target;
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
     console.log('textareastyleheight', textarea.style.height);
     setinputtextValue(textarea.value);
+    console.log('????????????', e, '.....', i, '...', BlockNum);
+    
     const getLastDigit = e.target.name.slice(-1);
     const match = e.target.name.match(/([a-zA-Z]+)(\d+)/);
     if (match) {
@@ -1729,6 +1732,39 @@ console.log("blockroll",blockroll)
         };
       }
     });
+    //newlyadded start
+    if (BlockNum) {
+      const NoteKey = `Note${items[i]?.input}`;
+      const DialogKey = `Dialog${items[i]?.input}`;
+      const InteractionKey = `Interaction${items[i]?.input}`;
+      let modifiedid,quest = '';
+      console.log('***************',items,'********',input);
+      if (e.target.name == NoteKey) {
+        modifiedid= items[i]?.input;
+        quest= items[i]?.questNo;
+      }
+      if (e.target.name == DialogKey) {
+        modifiedid= items[i]?.input;
+        quest= items[i]?.questNo;
+      }
+      if (e.target.name == InteractionKey) {
+        modifiedid= items[i]?.input;
+        quest= items[i]?.questNo;
+      }
+      const modified = {
+        Input:modifiedid,Quest:quest
+      }
+      const data = {
+        previewGameId: GameId,
+        playerId:user?.data?.id,
+        playerType: user?.data?.id ? 'creator' : null,
+        lastModifiedBlockSeq:modified,
+      }
+      const modifiedDataString = JSON.stringify(data);
+      console.log('data ******',data,'......',user,'....',modifiedDataString);
+       const result = await BlockModifiedLog(modifiedDataString);
+    }
+    //end 
   };
   const handleSelect = (selectedOption: any, e: any, data: string) => {
     const getLastDigit = e.name.slice(-1);

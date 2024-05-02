@@ -637,3 +637,23 @@ export async function getLanguagescount(id) {
   }
 }
 // nivetha end 
+
+export async function updatePreviewlogs(userDataString) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.updatePreviewlogs}`,putMethod(userDataString));
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getCreator Error:', err);
+  }
+}
+
+export async function BlockModifiedLog(userDataString) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.BlockModifiedLog}`,putMethod(userDataString));
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getCreator Error:', err);
+  }
+}

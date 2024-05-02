@@ -71,10 +71,13 @@ interface PlayGamesProps {
   setSelectedPlayer?: any;
   profileData?: any;
   setProfileData?: any;
+  setprevProfileData?:any;
   demoBlocks?: any;
   preloadedAssets?: any;
-  isLanguage?: any;
-  setIsLanguage?: any;
+  setprevScreenId:any;
+  currentScreenId:any;
+  setPreLogDatas:any;
+  getPrevLogDatas:any;
 }
 
 const spokenLanguages = [
@@ -110,11 +113,13 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   setSelectedPlayer,
   profileData,
   setProfileData,
+  setprevProfileData,
   demoBlocks,
   formData,
   preloadedAssets,
-  setIsLanguage,
-  isLanguage,
+  setprevScreenId,currentScreenId,
+  setPreLogDatas,
+  getPrevLogDatas
 }) => {
   const [i, setI] = useState(0);
   const [select, setSelect] = useState(false);
@@ -132,8 +137,19 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     if (playerInfo.name === '') {
       setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
     }
-    setCurrentScreenId(13);
-    //navigate to Chapter selection
+    
+    const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
+    if(screenIdset !==currentScreenId)
+      {
+        setPreLogDatas((prev:any) => ({
+          ...prev,
+          screenIdSeq: [...prev.screenIdSeq, currentScreenId]
+        }));
+      }
+
+    // Set the selected player
+    setSelectedPlayer(players[i]);    
+    setCurrentScreenId(13);//navigate to Chapter selection
   };
 
 
@@ -143,6 +159,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     xl: '90%',
     xxl: '90%',
   });
+  const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
   return (
     <>
       <Box
@@ -243,12 +260,16 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       className="player_name"
                       placeholder={'Enter Alias Name'}
                       value={playerInfo.name}
-                      onChange={(e: any) =>
-                        setProfileData((prev: any) => ({
+                      onChange={(e:any) => {
+                        setProfileData((prev:any) => ({
+                            ...prev,
+                            name: e.target.value,
+                        }));
+                        setPreLogDatas((prev:any) => ({
                           ...prev,
-                          name: e.target.value,
-                        }))
-                      }
+                          previewProfile:{...prev.previewProfile, name: e.target.value,}
+                        }));
+                    }}
                     />
                   </Box>
                   <Button

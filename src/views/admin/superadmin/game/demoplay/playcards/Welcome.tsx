@@ -25,6 +25,7 @@ interface Badge {
   gasId: number;
   gasAssetImage: string;
   gasAssetName: string;
+
 }
 
 const extractLink = (text: any) => {
@@ -43,8 +44,12 @@ const Welcome: React.FC<{
   preview: any;
   intro: any;
   screen: any;
-  preloadedAssets: any;
-}> = ({ formData, imageSrc, preview, setCurrentScreenId, intro, screen, preloadedAssets }) => {
+  preloadedAssets:any;
+  setprevScreenId:any;
+  currentScreenId:any;
+  setPreLogDatas:any;
+  getPrevLogDatas:any;
+}> = ({ formData, imageSrc, preview, setCurrentScreenId, intro, screen, preloadedAssets,currentScreenId,setprevScreenId,setPreLogDatas,getPrevLogDatas }) => {
   const { id } = useParams();
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);
@@ -131,6 +136,8 @@ const Welcome: React.FC<{
     return null;
   };
   const link = extractLink(formData.gameAdditionalWelcomeNote);
+  const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
+  
   return (
     <>
       <motion.div
@@ -388,7 +395,17 @@ const Welcome: React.FC<{
           <Box className="next-btn">
             <Img
               src={preloadedAssets.next}
-              onClick={() => setCurrentScreenId(12)}
+              onClick={() =>{
+                setCurrentScreenId(12); 
+                if(screenIdset !==  currentScreenId)
+                  {
+                     setPreLogDatas((prev:any) => ({
+                  ...prev,
+                  screenIdSeq: [...prev.screenIdSeq, currentScreenId]
+                   }));
+                  }
+               
+            }}
             />
           </Box>
         </Box>

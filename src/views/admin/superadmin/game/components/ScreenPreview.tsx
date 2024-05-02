@@ -93,8 +93,6 @@ const ScreenPreview = () => {
 
   const [feed, setFeed] = useState<string>('');
   const [endOfQuest, setEndOfQuest] = useState<boolean>(false);
-  const [currentPosition, setCurrentPosition] = useState(0);
-  const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
   const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
   const [Navigatenext, setNavigateNext] = useState<any>(false);
   const reflectionQuestionsdefault = [
@@ -131,7 +129,6 @@ const ScreenPreview = () => {
       }
       setData(currentBlock);
     }
-    setCurrentPosition(0);
   }, [gameInfo, isDispatched, activeBlockSeq, currentQuest]);
 
   const replayQuest = () => {
@@ -663,8 +660,8 @@ const ScreenPreview = () => {
         } else {
           setNavTrack([data.blockPrimarySequence]);
         }
-        getDataSection(data);
       }
+      setShowTypingEffect(false);
     }
   }, [data, type]);
   useEffect(() => {
@@ -672,92 +669,15 @@ const ScreenPreview = () => {
       getData(data);
     }
   }, [Navigatenext]);
-  const getDataSection = (data: any) => {
-    setShowTypingEffect(false);
-    setCurrentPosition(0);
-    // Note and Dialog
-    const content = data?.blockText || '';
-    const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
-    const newRemainingSentences = sentences.slice(currentPosition);
-
-    // response
-    const Responsecontent = resMsg || '';
-    const Responsesentences = Responsecontent.split(
-      /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-    );
-    const newRemainingResponseSentences = Responsesentences.slice(currentPosition);
-    const concatenatedSentences = [];
-    let totalLength = 0;
-    // Note and Dialog
-    for (let i = 0; i < newRemainingSentences.length; i++) {
-      const sentence = newRemainingSentences[i];
-
-      if (data && type === 'Note') {
-        if (totalLength + sentence.length <= Notelength) {
-          concatenatedSentences.push(sentence);
-          totalLength += sentence.length;
-        } else {
-          concatenatedSentences.push(sentence);
-          break;
-        }
-      }
-      if (data && type === 'Dialog') {
-        if (totalLength + sentence.length <= Dialoglength) {
-          concatenatedSentences.push(sentence);
-          totalLength += sentence.length;
-        } else {
-          if (totalLength + sentence.length >= Dialoglength) {
-            break;
-          }
-          concatenatedSentences.push(sentence);
-          break;
-        }
-      }
-    }
-    // Response 
-    for (let i = 0; i < newRemainingResponseSentences.length; i++) {
-      const ressentence = newRemainingResponseSentences[i];
-      if (data && type === 'response') {
-        if (totalLength + ressentence.length <= Responselength) {
-          concatenatedSentences.push(ressentence);
-          totalLength += ressentence.length;
-        } else {
-          if (totalLength + ressentence.length >= Responselength) {
-            break;
-          }
-          concatenatedSentences.push(ressentence);
-          break;
-        }
-      }
-    }
-    setRemainingSentences(concatenatedSentences);
-    if (newRemainingSentences.length > 0 && type!== 'response') {
-      setCurrentPosition(currentPosition + concatenatedSentences.length);
-      setNavigateNext(false);
-      return false;
-    }
-    if (newRemainingResponseSentences.length > 0 ) {
-      setCurrentPosition(currentPosition + concatenatedSentences.length);
-      setNavigateNext(false);
-      return false;
-    } 
-   
-      setNavigateNext(true);
-      setIsPrevNavigation(false);
-    
-  };
 
   const Updatecontent = () => {
     if (showTypingEffect === false) {
       setShowTypingEffect(true);
     }
     else {
-      getDataSection(data);
+      getData(data);
     }
   }
-  useEffect(() => {
-    getDataSection(data);
-  }, []);
   const handleCloseWindow = () => {
     window.close();
   };
@@ -767,14 +687,13 @@ const ScreenPreview = () => {
       setShowTypingEffect(true);
     }
     else {
-      setCurrentPosition(0);
       prevData(data)
     }
   }
 
   const getNoteNextData = () => {
     setIsPrevNavigation(false);
-    getDataSection(data)
+    getData(data)
   }
 
   return (
@@ -880,7 +799,7 @@ const ScreenPreview = () => {
                                 >
                                   <Box className={'story_note_block'}>
                                     <Text textAlign={'center'}>
-                                      {remainingSentences}
+                                      {data?.blockText}
                                     </Text>
                                   </Box>
                                 </Box>
@@ -956,12 +875,12 @@ const ScreenPreview = () => {
                         >
                           {showTypingEffect === false ? (
                             <TypingEffect
-                              text={remainingSentences.toString()}
+                              text={data?.blockText}
                               speed={50}
                               setSpeedIsOver={setShowTypingEffect}
                             />
                           ) : (
-                            remainingSentences
+                            data?.blockText
                           )}
                         </Box>
                         <Box
@@ -1210,12 +1129,12 @@ const ScreenPreview = () => {
                             >
                               {showTypingEffect === false ? (
                                 <TypingEffect
-                                  text={remainingSentences.toString()}
+                                  text={resMsg}
                                   speed={50}
                                   setSpeedIsOver={setShowTypingEffect}
                                 />
                               ) : (
-                                remainingSentences
+                                resMsg
                               )}
                             </Box>
                             <Box

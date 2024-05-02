@@ -38,6 +38,11 @@ const ChapterPage: React.FC<{
   setOptions?: any;
   setFeedbackList?: any;
   preloadedAssets?: any;
+  SetPreviouseStored?:any;
+  setprevScreenId:any;
+  currentScreenId:any;
+  setPreLogDatas:any;
+  getPrevLogDatas:any;
 }> = ({
   imageSrc,
   demoBlocks,
@@ -54,6 +59,10 @@ const ChapterPage: React.FC<{
   setOptions,
   setFeedbackList,
   preloadedAssets,
+  SetPreviouseStored,
+  setprevScreenId,currentScreenId,
+  setPreLogDatas,
+  getPrevLogDatas
 }) => {
   const [questScores, setQuestScores] = useState(null);
 
@@ -213,6 +222,16 @@ const ChapterPage: React.FC<{
           
       * Commant line ends here
       */
+
+        const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
+        if(screenIdset !== currentScreenId)
+          {
+            setPreLogDatas((prev:any) => ({
+          ...prev,
+          screenIdSeq: [...prev.screenIdSeq, currentScreenId]
+        }));
+          }
+
         setType(demoBlocks[it]['1']?.blockChoosen);
         setData(demoBlocks[it]['1']);
         setFeedbackList([]);
@@ -225,6 +244,9 @@ const ChapterPage: React.FC<{
         setCurrentScreenId(2);
     /**  }
     * Uncomment this line when uncomment restrict the quest entry logic} */
+    SetPreviouseStored(demoBlocks[it]['1']);
+  // }
+  // }
   };
 
   const container = {
