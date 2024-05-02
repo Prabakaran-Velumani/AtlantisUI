@@ -3987,6 +3987,14 @@ grid-row: 1 / 2;
   font-family: 'AtlantisText';
   color: var(--dialog-title-color);
 }
+.scroll_hide::-webkit-scrollbar{
+  display: none;
+}
+
+.scroll_hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 @media screen and (orientation: portrait) {
   .feed_list{
     font-size: 3vw;

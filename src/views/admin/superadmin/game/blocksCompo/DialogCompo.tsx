@@ -333,6 +333,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
         alignItems={'start'}
         overflowX={'auto'}
         overflowY={'hidden'}
+        className='scroll_hide'
         marginBottom={'0px'}
         style={{
           backgroundColor: ShowReview

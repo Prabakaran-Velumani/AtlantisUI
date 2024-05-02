@@ -882,7 +882,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
           </Button>
         </Box>
       )}
-      <Box id={`${seq.id}`} w={'auto'} height={'100%'} overflowX={seq?.id === targetSequence?.id ? 'scroll' : 'hidden'} overflowY={'hidden'}>
+      <Box id={`${seq.id}`} w={'auto'} height={'100%'} overflowX={seq?.id === targetSequence?.id ? 'scroll' : 'hidden'} className='scroll_hide' overflowY={'hidden'}>
         <Box w={'100vw'} display={'flex'}>
           <Box className="block-action-icons">
             <Tooltip hasArrow label="Choose New Block">
