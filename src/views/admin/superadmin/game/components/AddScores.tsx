@@ -1519,7 +1519,7 @@ const AddScores: React.FC<{
                                         ?.gameAboveDistinctionScoreCongratsMessage
                                         ?.length > maxCharacters2
                                         ? 'red'
-                                        : 'gray'
+                                        : 'grey'
                                     }
                                   >
                                     {maxCharacters2 -
