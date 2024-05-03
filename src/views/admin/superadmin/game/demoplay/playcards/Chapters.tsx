@@ -383,23 +383,7 @@ const ChapterPage: React.FC<{
                                   className="amount-score"
                                   textAlign={'center'}
                                 >
-                                  {/* {(profile &&
-                                    profile.score &&
-                                    profile.score.length > 0 &&
-                                    profile.score.reduce(
-                                      (
-                                        accumulator: number,
-                                        currentValue: any,
-                                      ) => {
-                                        return currentValue.quest ===
-                                          parseInt(it)
-                                          ? accumulator + currentValue.score
-                                          : accumulator;
-                                      },
-                                      0,
-                                    )) ||
-                                    0} */}
-                                  {profile.playerGrandTotal[it] ?? 0}/{questScores && questScores[it]}{' '}
+                                  {profile.playerGrandTotal[it] ?? 0}/{questScores &&  questScores[it] !==null && questScores[it] > 0  ? questScores[it] : 0}{' '}
                                   <Icon as={BiMoney} />
                                   <Img src={preloadedAssets.MoneyIcon} zIndex={5}/>
                                 </Text>

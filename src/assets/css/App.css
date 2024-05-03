@@ -3527,7 +3527,7 @@ grid-row: 1 / 2;
   width: 100%;
   font-family: AtlantisText;
   position: absolute;
-  top: 8%;
+  top: 10%;
   display: flex;
   justify-content: center;
 }

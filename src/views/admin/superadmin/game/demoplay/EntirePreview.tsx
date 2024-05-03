@@ -16,7 +16,6 @@
 // case 15:// case 15 Chapter select
 // case 16:// case 16 replay point prompt
 
-
 import {
   Button,
   Box,
@@ -41,7 +40,7 @@ import {
   ModalOverlay,
   ModalContent,
   ModalCloseButton,
-  ModalBody
+  ModalBody,
 } from '@chakra-ui/react';
 import { lazy } from 'react';
 import { motion } from 'framer-motion';
@@ -64,7 +63,11 @@ import feedi from 'assets/img/screens/feed.png';
 import { AiFillMessage } from 'react-icons/ai';
 import { getTestAudios, updatePreviewlogs } from 'utils/game/gameService';
 import { MdClose } from 'react-icons/md';
-import { getVoiceMessage, getPreview, getGameLanguages} from 'utils/game/gameService';
+import {
+  getVoiceMessage,
+  getPreview,
+  getGameLanguages,
+} from 'utils/game/gameService';
 import { EnumType } from 'typescript';
 import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
@@ -88,8 +91,9 @@ const TopMenuBar = lazy(() => import('./playcards/TopMenuBar'));
 const GameIntroScreen = lazy(() => import('./playcards/GameIntroScreen'));
 const ModelPopup = lazy(() => import('./playcards/ModelPopup'));
 const ReplayPoints = lazy(() => import('./playcards/ReplayPoints'));
-const LanguageSelectionPrompt = lazy(() => import('./playcards/LanguageSelectionPrompt'));
-
+const LanguageSelectionPrompt = lazy(
+  () => import('./playcards/LanguageSelectionPrompt'),
+);
 
 interface Review {
   // reviewId: Number;
@@ -99,12 +103,10 @@ interface Review {
   tabId: Number | null;
   tabAttribute: String | null;
   tabAttributeValue: String | null;
-  }
+}
 
 interface ShowPreviewProps {
   gameScreens: string[];
-  // currentScreenId: number;
-  // setCurrentScreenId: React.Dispatch<React.SetStateAction<number>>;
   gameInfo: any;
   handleSubmitReview: (data: any) => Promise<boolean>;
   isReviewDemo: boolean;
@@ -157,24 +159,18 @@ interface ProfileDataType {
   name?: string;
   gender?: string;
   language?: any;
-  // Afrith-modified-starts-07/Mar/24
   score?: any;
   allTimeScore?: any;
-  // Afrith-modified-starts-07/Mar/24
-
   content?: any;
   audioUrls?: any;
   textId?: any;
   fieldName?: any;
-
 }
-
-
 interface QuestState {
   [key: string]: string;
 }
 
-const skipScreenList = [0, 8, 11, 12, 13,15];
+const skipScreenList = [0, 8, 11, 12, 13, 15];
 export const ProfileContext = createContext<ProfileDataType>({
   name: '',
   gender: '',
@@ -185,8 +181,6 @@ export const ProfileContext = createContext<ProfileDataType>({
 
 const EntirePreview: React.FC<ShowPreviewProps> = ({
   gameScreens,
-  // currentScreenId,
-  // setCurrentScreenId,
   gameInfo,
   handleSubmitReview,
   isReviewDemo,
@@ -211,7 +205,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 }) => {
   const user: any = JSON.parse(localStorage.getItem('user'));
   const { colorMode, toggleColorMode } = useColorMode();
-
   const maxTextLength = 80;
   const audioRef = React.useRef(null);
 
@@ -242,7 +235,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [filteredTabOptions, setFilteredTabOptions] = useState([]);
   // Feed back after completion
   const [FeedbackcurrentPosition, setFeedbackCurrentPosition] = useState(0);
-  const [interactionBlockArray, setInterActionBlockArray] = useState<any | []>([]);
+  const [interactionBlockArray, setInterActionBlockArray] = useState<any | []>(
+    [],
+  );
   const [FeedbackremainingSentences, setFeedbackRemainingSentences] = useState<
     any[]
   >([]);
@@ -287,7 +282,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [nextBlockAudioUrl, setNextBlockAudioUrl] = useState<string>('');
   const [windowWidth, setWindowWidth] = useState(null);
   const [windowHeight, setWindowHeight] = useState(null);
-
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [game3Position, setGame3Position] = useState({
     previousBlock: '',
@@ -296,7 +290,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   });
   const [currentStoryBlockSeq, setCurrentStoryBlockSeq] =
     useState<string>(null);
-
   const [demoBlocks, setDemoBlocks] = useState(null);
   const Tab5attribute = [6, 4, 3, 7, 1, 5];
   const userProfile = useContext(ProfileContext);
@@ -311,21 +304,21 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
   ];
   const [isPrevNavigation, setIsPrevNavigation] = useState(false);
-  // Afrith-modified-starts-07/Mar/24
   const gameScore = useContext(ScoreContext);
   const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0;
-  
-
 
   useEffect(() => {
     setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
   }, [scoreComp]);
   useEffect(() => {
-    const totalEarnScore = profile?.score.reduce((acc: any, obj: any) => acc + parseInt(obj.score), 0);
+    const totalEarnScore = profile?.score.reduce(
+      (acc: any, obj: any) => acc + parseInt(obj.score),
+      0,
+    );
     setprevProfileData((prev: any) => ({ ...prev, score: totalEarnScore }));
     setPreLogDatas((prev: any) => ({
       ...prev,
-      previewProfile: { ...prev.previewProfile, score: totalEarnScore }
+      previewProfile: { ...prev.previewProfile, score: totalEarnScore },
     }));
   }, [profile?.score]);
 
@@ -342,8 +335,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     Audiogetlanguage: [],
   });
 
-  // Afrith-modified-ends-07/Mar/24
-
   const [voiceIds, setVoiceIds] = useState<any>();
   const [feedbackList, setFeedbackList] = useState([]);
   const [interactionCount, setinteractionCount] = useState(null);
@@ -351,14 +342,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     useState<boolean>(false);
   const [reflectionAnswers, setReflectionAnswers] = useState([]);
   const [resolution, setResolution] = useState(null);
-  // const [isMobileView, setIsMobileView] = useState(isMobile);
   const [navTrack, setNavTrack] = useState([]);
   const [currentTrackPointer, setCurrentTrackPointer] = useState(0);
-  const [currentScreenId, setCurrentScreenId] = useState<number>(InitialScreenId);
+  const [currentScreenId, setCurrentScreenId] =
+    useState<number>(InitialScreenId);
   const [hasMulitLanguages, setHasMulitLanguages] = useState<boolean>(false); // This state to control the auto Initialization of the Language selection Modal popup
-  const [isOpenCustomModal ,setIsOpenCustomModal] = useState<boolean>(false); //This state to control the opening of Language selection Modal popup by click event 
-  const [gameLanguages ,setGameLanguages] = useState([]);
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isOpenCustomModal, setIsOpenCustomModal] = useState<boolean>(false); //This state to control the opening of Language selection Modal popup by click event
+  const [gameLanguages, setGameLanguages] = useState([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
@@ -373,7 +364,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   useEffect(() => {
-    console.log('currentScreenId ***', currentScreenId);
     setDemoBlocks(gameInfo?.blocks);
     setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
     setData(gameInfo?.blocks[profile?.currentQuest]['1']);
@@ -439,51 +429,70 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-
   }, [profile?.currentQuest]);
 
+  useEffect(() => {
+    const calculatePlayerGrandTotal = async () => {
+      const scores =
+        questState[profile?.currentQuest] == 'Started'
+          ? profile?.score
+          : profile?.replayScore.length > 0
+          ? profile?.replayScore
+          : profile?.score;
+      let total: number = 0;
 
-useEffect(()=>{
-  const calculatePlayerGrandTotal= async ()=>{ 
-  const scores = questState[profile?.currentQuest] == 'Started' ? profile?.score : (profile?.replayScore.length > 0 ? profile?.replayScore : profile?.score);
-  let total: number = 0;
-  
-  if(currentScreenId == 13){ //For chapter Selection Screen
-    if(scores.length > 0)
-      {
-        const total = scores.reduce((acc:any, row: any) => {
-          const quest = profile?.currentQuest;
-          if (row.quest == quest) {
-            return acc + row.score;
-          }
-          else{
-            return acc;
-          }
-        }, 0);
-  
-        setProfile((prev: any)=>({...prev, playerGrandTotal: {...prev?.playerGrandTotal, [profile?.currentQuest]: total }}));
-      }
-  }
-  else if ([2, 4, 6, 8, 9, 14].includes(currentScreenId)) //for story, completion screen, feedback, replay etc.,
-  {
-    const scoreArray = questState[parseInt(profile?.currentQuest)] == 'Started' ? profile?.score :  profile?.replayScore;
-      if (scoreArray?.length > 0) {
-        total = scoreArray.reduce((acc: number, cur: any) => {
-        if (cur.quest == profile.currentQuest) {
-          return acc + cur.score;
-        } else {
-          return acc;
+      if (currentScreenId == 13) {
+        //For chapter Selection Screen
+        if (scores.length > 0) {
+          const total = scores.reduce((acc: any, row: any) => {
+            const quest = profile?.currentQuest;
+            if (row.quest == quest) {
+              return acc + row.score;
+            } else {
+              return acc;
+            }
+          }, 0);
+
+          setProfile((prev: any) => ({
+            ...prev,
+            playerGrandTotal: {
+              ...prev?.playerGrandTotal,
+              [profile?.currentQuest]: total,
+            },
+          }));
         }
-      }, 0);
-      setProfile((prev: any)=>({...prev, playerGrandTotal: {...prev?.playerGrandTotal, [profile?.currentQuest] : total} }));
-    }
-  }
-    return;
-  }
-  
-  //Get the Navigated Sequeance to calculate the max score for a Quest
-    const calculateQuestGrandTotal= async ()=>{ 
-      const scores = questState[profile?.currentQuest] === 'Started' ? profile?.score : profile?.replayScore;
+      } else if ([2, 4, 6, 8, 9, 14].includes(currentScreenId)) {
+        //for story, completion screen, feedback, replay etc.,
+        const scoreArray =
+          questState[parseInt(profile?.currentQuest)] == 'Started'
+            ? profile?.score
+            : profile?.replayScore;
+        if (scoreArray?.length > 0) {
+          total = scoreArray.reduce((acc: number, cur: any) => {
+            if (cur.quest == profile.currentQuest) {
+              return acc + cur.score;
+            } else {
+              return acc;
+            }
+          }, 0);
+          setProfile((prev: any) => ({
+            ...prev,
+            playerGrandTotal: {
+              ...prev?.playerGrandTotal,
+              [profile?.currentQuest]: total,
+            },
+          }));
+        }
+      }
+      return;
+    };
+
+    //Get the Navigated Sequeance to calculate the max score for a Quest
+    const calculateQuestGrandTotal = async () => {
+      const scores =
+        questState[profile?.currentQuest] === 'Started'
+          ? profile?.score
+          : profile?.replayScore;
       // if(scores.length > 0)
       //   {
       //     const total = scores.reduce((acc:any, row: any) => {
@@ -495,15 +504,14 @@ useEffect(()=>{
       //         return acc;
       //       }
       //     }, 0);
-    
+
       //     setProfile((prev: any)=>({...prev, playerGrandTotal: {...prev?.playerGrandTotal, [parseInt(profile?.currentQuest)]: total }}));
       //   }
-        return;
-      }
-  calculatePlayerGrandTotal();
-  // calculateQuestGrandTotal();
-
-},[profile.score, profile.replayScore, currentScreenId])
+      return;
+    };
+    calculatePlayerGrandTotal();
+    // calculateQuestGrandTotal();
+  }, [profile.score, profile.replayScore, currentScreenId]);
 
   useEffect(() => {
     if (!gameInfo?.bgMusic) {
@@ -520,7 +528,6 @@ useEffect(()=>{
           autoplay: true,
         });
     }
-
   }, [gameInfo]);
 
   useEffect(() => {
@@ -612,7 +619,6 @@ useEffect(()=>{
       currentScreenId === 1 &&
       isGetsPlayAudioConfirmation &&
       setAudio(gameInfo?.bgMusic ?? '');
-
   }, [currentScreenId, gameInfo]);
 
   const prevData = (current: any) => {
@@ -626,12 +632,12 @@ useEffect(()=>{
       const newTrackSequence = navTrack[navTrack.length - 1];
       const prevBlock = current
         ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) =>
-              demoBlocks[quest]?.[key]?.blockPrimarySequence ==
-              newTrackSequence,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
+            .filter(
+              (key) =>
+                demoBlocks[quest]?.[key]?.blockPrimarySequence ==
+                newTrackSequence,
+            )
+            .map((key: any) => demoBlocks[quest]?.[key])
         : [];
 
       const currentQuest = current
@@ -657,53 +663,74 @@ useEffect(()=>{
     }
   };
 
-  const checkAndUpdateScores =async ()=>{
+  const checkAndUpdateScores = async () => {
     const currentQuest = profile.currentQuest;
-    if(questState[currentQuest] !=='Started')
-              {
-              const calcQuestGrandTotal = async (scores:any, currentQuestNo:any = null)=>{
-                if(scores?.length <= 0)
-                {
-                  return 0;
-                }
-                if(currentQuestNo!=null)
-                {
-                  // Sum score of a quest
-                  const totalScore = scores.reduce((total: number, sc: any) => {
-                    if (sc.quest == currentQuestNo) {
-                        return total + sc.score;
-                    } else {
-                        return total;
-                    }
-                  }, 0);
-                  return totalScore; // Return the total score
-                }
-                  else{
-                    //Sum up all the scores
-                   return scores.reduce((total:number, sc:any) => total + sc.score, 0);
-                  }
-              }
-              const scoreTotal = await calcQuestGrandTotal(profile.score, profile.currentQuest);
-              const replayScoreTotal = await calcQuestGrandTotal(profile.replayScore, profile.currentQuest);
-              if(scoreTotal < replayScoreTotal)
-              {
-                const currentQuestRemovedScoreArr=profile.score.filter((item: any)=>(item.quest != profile.currentQuest));
-                let concatenatedScoreArr: any[] = [];
-                if (profile.replayScore.length > 0) {
-                  concatenatedScoreArr = profile.replayScore.filter((item: any) => (item.quest == profile.currentQuest));
-                }
-                if (currentQuestRemovedScoreArr.length > 0) {
-                    concatenatedScoreArr = [...concatenatedScoreArr, ...currentQuestRemovedScoreArr];
-                }
-                const currentQuestRemovedReplayScoreArr=profile.replayScore.filter((item: any)=>(item.quest != profile.currentQuest));
-                setProfile((prev:any)=>({...prev, score: concatenatedScoreArr, replayScore: currentQuestRemovedReplayScoreArr}))
-              }
-              else{
-                const currentQuestRemovedReplayScoreArr=profile.replayScore.filter((item: any)=>(item.quest != profile.currentQuest));
-                setProfile((prev:any)=>({...prev, replayScore: currentQuestRemovedReplayScoreArr}))
-              }
+    if (questState[currentQuest] !== 'Started') {
+      const calcQuestGrandTotal = async (
+        scores: any,
+        currentQuestNo: any = null,
+      ) => {
+        if (scores?.length <= 0) {
+          return 0;
+        }
+        if (currentQuestNo != null) {
+          // Sum score of a quest
+          const totalScore = scores.reduce((total: number, sc: any) => {
+            if (sc.quest == currentQuestNo) {
+              return total + sc.score;
+            } else {
+              return total;
             }
+          }, 0);
+          return totalScore; // Return the total score
+        } else {
+          //Sum up all the scores
+          return scores.reduce((total: number, sc: any) => total + sc.score, 0);
+        }
+      };
+      const scoreTotal = await calcQuestGrandTotal(
+        profile.score,
+        profile.currentQuest,
+      );
+      const replayScoreTotal = await calcQuestGrandTotal(
+        profile.replayScore,
+        profile.currentQuest,
+      );
+      if (scoreTotal < replayScoreTotal) {
+        const currentQuestRemovedScoreArr = profile.score.filter(
+          (item: any) => item.quest != profile.currentQuest,
+        );
+        let concatenatedScoreArr: any[] = [];
+        if (profile.replayScore.length > 0) {
+          concatenatedScoreArr = profile.replayScore.filter(
+            (item: any) => item.quest == profile.currentQuest,
+          );
+        }
+        if (currentQuestRemovedScoreArr.length > 0) {
+          concatenatedScoreArr = [
+            ...concatenatedScoreArr,
+            ...currentQuestRemovedScoreArr,
+          ];
+        }
+        const currentQuestRemovedReplayScoreArr = profile.replayScore.filter(
+          (item: any) => item.quest != profile.currentQuest,
+        );
+        setProfile((prev: any) => ({
+          ...prev,
+          score: concatenatedScoreArr,
+          replayScore: currentQuestRemovedReplayScoreArr,
+        }));
+      } else {
+        const currentQuestRemovedReplayScoreArr = profile.replayScore.filter(
+          (item: any) => item.quest != profile.currentQuest,
+        );
+        setProfile((prev: any) => ({
+          ...prev,
+          replayScore: currentQuestRemovedReplayScoreArr,
+        }));
+      }
     }
+  };
 
   const getData = (next: any) => {
     setAudioObj(null);
@@ -756,10 +783,10 @@ useEffect(()=>{
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
-        .filter(
-          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-        )
-        .map((key: any) => demoBlocks[quest]?.[key])
+          .filter(
+            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
       : [];
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
@@ -938,10 +965,8 @@ useEffect(()=>{
           return false;
         }
       } else if (navi === 'Complete') {
-
         //check the replay Quest score is higher than score in profile context
         checkAndUpdateScores();
-
 
         const Nextcurrentquest = next?.blockQuestNo;
         const getgameinfoquest = gameInfo?.gameQuest.find(
@@ -1609,9 +1634,8 @@ useEffect(()=>{
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
-          //check the replay Quest score is higher than score in profile context
-          checkAndUpdateScores();
-
+        //check the replay Quest score is higher than score in profile context
+        checkAndUpdateScores();
 
         const Nextcurrentquest = next?.blockQuestNo;
         const getgameinfoquest = gameInfo?.gameQuest.find(
@@ -1819,10 +1843,8 @@ useEffect(()=>{
     // getAudioForText(text, voiceId);
   };
   //Newly Added start 02.05.2024
-  const [ModelControl, setModelControl] =
-    useState<boolean>(false); // for model show
-  const [LastModified, setLastModified] =
-    useState<boolean>(false); // for last modified 
+  const [ModelControl, setModelControl] = useState<boolean>(false); // for model show
+  const [LastModified, setLastModified] = useState<boolean>(false); // for last modified
   const [isStoryScreen, isSetStoryScreen] = useState<boolean>(false);
   const [OptionSelectId, setOptionSelectId] = useState(null);
   //02.05.2024 End
@@ -1830,21 +1852,19 @@ useEffect(()=>{
   useEffect(() => {
     setFeedBackFromValue();
 
-    const screens = [1, 10, 13, 12]
+    const screens = [1, 10, 13, 12];
     if (!screens.includes(currentScreenId)) {
-      const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+      const screenIdset =
+        getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
       if (screenIdset !== currentScreenId) {
         setPreLogDatas((prev: any) => ({
           ...prev,
-          screenIdSeq: [...prev.screenIdSeq, currentScreenId]
+          screenIdSeq: [...prev.screenIdSeq, currentScreenId],
         }));
       }
-
     }
-
   }, [currentScreenId]);
 
-  console.log('prevScreenId ***', prevScreenId);
   const setFeedBackFromValue = () => {
     switch (currentScreenId) {
       case 0:
@@ -1897,30 +1917,30 @@ useEffect(()=>{
   const subTabOptionsForTabIds: Array<{
     [key: string]: Array<{ value: string; label: string }> | null;
   }> = [
-      { '1': null },
-      { '2': null },
-      {
-        '3': [
-          { value: 'Title', label: 'Title' },
-          { value: 'Skill', label: 'Skill' },
-          { value: 'Storyline', label: 'Storyline' },
-          { value: 'Outcomes', label: 'Outcomes' },
-          { value: 'Category', label: 'Category' },
-          { value: 'Author', label: 'Author' },
-        ],
-      },
-      { '4': null },
-      {
-        '5': [
-          { value: '0', label: 'Completion' },
-          { value: '1', label: 'Leaderboard' },
-          { value: '2', label: 'Reflection' },
-          { value: '3', label: 'Takeaway' },
-          { value: '4', label: 'Welcome' },
-          { value: '5', label: 'Thanks' },
-        ],
-      },
-    ];
+    { '1': null },
+    { '2': null },
+    {
+      '3': [
+        { value: 'Title', label: 'Title' },
+        { value: 'Skill', label: 'Skill' },
+        { value: 'Storyline', label: 'Storyline' },
+        { value: 'Outcomes', label: 'Outcomes' },
+        { value: 'Category', label: 'Category' },
+        { value: 'Author', label: 'Author' },
+      ],
+    },
+    { '4': null },
+    {
+      '5': [
+        { value: '0', label: 'Completion' },
+        { value: '1', label: 'Leaderboard' },
+        { value: '2', label: 'Reflection' },
+        { value: '3', label: 'Takeaway' },
+        { value: '4', label: 'Welcome' },
+        { value: '5', label: 'Thanks' },
+      ],
+    },
+  ];
   useEffect(() => {
     if (audioRef.current) {
       if (currentScreenId === 2) {
@@ -1929,10 +1949,14 @@ useEffect(()=>{
         audioRef.current.play();
       }
     }
-    setReviewInput((prev: any) => ({ ...prev, review: '', tabId: null, tabAttribute: '', tabAttributeValue: '' }));
+    setReviewInput((prev: any) => ({
+      ...prev,
+      review: '',
+      tabId: null,
+      tabAttribute: '',
+      tabAttributeValue: '',
+    }));
     isMenuOpen && setIsMenuOpen(false);
-
-
   }, [currentScreenId]);
   useEffect(() => {
     if (reviewInput?.tabId) {
@@ -1941,39 +1965,58 @@ useEffect(()=>{
           setReviewInput((prev: Review) => ({
             ...prev,
             tabAttribute: 'screenId',
-            tabAttributeValue: Tab5attribute.indexOf(Number(currentScreenId)).toString() + '@' + profile?.currentQuest,
+            tabAttributeValue:
+              Tab5attribute.indexOf(Number(currentScreenId)).toString() +
+              '@' +
+              profile?.currentQuest,
           }));
         } else {
           setReviewInput((prev: Review) => ({
             ...prev,
             tabAttribute: 'screenId',
-            tabAttributeValue: Tab5attribute.indexOf(Number(currentScreenId)).toString(),
+            tabAttributeValue: Tab5attribute.indexOf(
+              Number(currentScreenId),
+            ).toString(),
           }));
         }
 
         setReviewSubTabOptions([]);
-
       } else if (reviewInput?.tabId == 4) {
         //for Story Tab *******
         if (currentScreenId == 9 || currentScreenId == 14) {
-          const blockSeqId = currentScreenId == 9 ? (data.blockQuestNo + '@' + data.blockSecondaryId) : (FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition - 1 : FeedbackcurrentPosition].blockQuestNo + '@' + FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition - 1 : FeedbackcurrentPosition].blockSecondaryId);
+          const blockSeqId =
+            currentScreenId == 9
+              ? data.blockQuestNo + '@' + data.blockSecondaryId
+              : FeedBackoptionData[
+                  FeedbackcurrentPosition > 0
+                    ? FeedbackcurrentPosition - 1
+                    : FeedbackcurrentPosition
+                ].blockQuestNo +
+                '@' +
+                FeedBackoptionData[
+                  FeedbackcurrentPosition > 0
+                    ? FeedbackcurrentPosition - 1
+                    : FeedbackcurrentPosition
+                ].blockSecondaryId;
+          setReviewInput((prev: Review) => ({
+            ...prev,
+            tabAttribute: 'blockSeqId',
+            tabAttributeValue: blockSeqId,
+          }));
+        } else {
+          const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
+          setReviewSubTabOptions([]);
           setReviewInput((prev: Review) => ({
             ...prev,
             tabAttribute: 'blockSeqId',
             tabAttributeValue: blockSeqId,
           }));
         }
-        else {
-          const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
-          setReviewSubTabOptions([]);
-          setReviewInput((prev: Review) => ({ ...prev, tabAttribute: 'blockSeqId', tabAttributeValue: blockSeqId }));
-        }
       } else {
         const subOptions = subTabOptionsForTabIds.find(
           (item: any) => Object.keys(item)[0] === reviewInput?.tabId.toString(),
         );
         setReviewSubTabOptions(subOptions[reviewInput?.tabId.toString()]);
-
       }
       /** To hide the sub tab options and set the subtab selection based on the current screen it here */
     }
@@ -2155,10 +2198,9 @@ useEffect(()=>{
   //   }
   // };
 
-
-  useEffect(()=>{
-    console.log("profile",profile);
-  },[profile])
+  useEffect(() => {
+    console.log('profile', profile);
+  }, [profile]);
   const handleAudioError = () => {
     console.error(
       'Failed to load video because no supported source was found.',
@@ -2166,14 +2208,12 @@ useEffect(()=>{
   };
 
   useEffect(() => {
-
     const fetchSupportedLanguages = async () => {
-      if(gameInfo?.gameData?.gameId > 0)
-      {
-      const resLang = await getGameLanguages(gameInfo?.gameData?.gameId);
-      if (resLang?.status === 'Success') {
-        if (resLang?.data.length > 0) {
-          const data = resLang?.data;
+      if (gameInfo?.gameData?.gameId > 0) {
+        const resLang = await getGameLanguages(gameInfo?.gameData?.gameId);
+        if (resLang?.status === 'Success') {
+          if (resLang?.data.length > 0) {
+            const data = resLang?.data;
             // const data =[{value: 1, label: 'Tamil'}, {value: 2, label: 'French'}, {value: 5, label: 'Chinesh'}];
             data.unshift({ value: 0, label: 'English' });
             setGameLanguages(data);
@@ -2181,21 +2221,23 @@ useEffect(()=>{
               ...prev,
               language: data[0]?.label,
             }));
-            setPreLogDatas((prev:any) => ({
+            setPreLogDatas((prev: any) => ({
               ...prev,
-              previewProfile:{...prev.previewProfile, language: data[0]?.label,}
+              previewProfile: {
+                ...prev.previewProfile,
+                language: data[0]?.label,
+              },
             }));
             setHasMulitLanguages(true);
-            setIsOpenCustomModal(true);          
+            setIsOpenCustomModal(true);
+          } else {
+            setProfileData((prev: any) => ({
+              ...prev,
+              language: 'English',
+            }));
+          }
         }
-        else{
-          setProfileData((prev: any) => ({
-            ...prev,
-            language: "English",
-          }));
-        }
-      }           
-    }
+      }
     };
     fetchSupportedLanguages();
   }, []);
@@ -2283,7 +2325,7 @@ useEffect(()=>{
           getArray.push(getgameinfoblockchoosen[key]);
         }
       }
-      setInterActionBlockArray(getArray);//Prabakaran worked. Newly added
+      setInterActionBlockArray(getArray); //Prabakaran worked. Newly added
 
       const GetSeqData = getArray.filter((item: any) => {
         return (
@@ -2406,12 +2448,14 @@ useEffect(()=>{
   };
   useEffect(() => {
     const updatepreviousdatas = async () => {
-
-
       const data = {
         previewLogId: getPrevLogDatas.previewLogId,
         playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
-        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
+        playerType: gameInfo?.reviewer?.ReviewerId
+          ? 'reviewer'
+          : user?.data?.id
+          ? 'creator'
+          : null,
         previewGameId: gameInfo?.gameId ?? null,
         nevigatedSeq: getPrevLogDatas.nevigatedSeq,
         screenIdSeq: getPrevLogDatas.screenIdSeq,
@@ -2420,16 +2464,15 @@ useEffect(()=>{
         previewProfile: getPrevLogDatas.previewProfile,
       };
 
-
       const previousDataString = JSON.stringify(data);
-      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
-      console.log('updatePreviewLogsResponse 97878787', updatePreviewLogsResponse);
-    }
+      const updatePreviewLogsResponse = await updatePreviewlogs(
+        previousDataString,
+      );
+    };
     updatepreviousdatas();
   }, [getPrevLogDatas]);
-  //  Newly Added  for prviouse stored 
+  //  Newly Added  for prviouse stored
   const SetPreviouseStored = (currentdata: any) => {
-    console.log('currentdata', currentdata);
     if (currentdata !== null) {
       const currentQuest = currentdata
         ? parseInt(currentdata?.blockPrimarySequence.split('.')[0])
@@ -2437,31 +2480,39 @@ useEffect(()=>{
       /*******************************Navegate Seq stored start************************************************ */
       if (currentQuest === parseInt(profile.currentQuest)) {
         if (getPrevLogDatas.nevigatedSeq[profile?.currentQuest]) {
-          if (!getPrevLogDatas.nevigatedSeq[profile?.currentQuest].includes(currentdata.blockPrimarySequence)) {
-
+          if (
+            !getPrevLogDatas.nevigatedSeq[profile?.currentQuest].includes(
+              currentdata.blockPrimarySequence,
+            )
+          ) {
             setPreLogDatas((prev: any) => ({
               ...prev,
-              nevigatedSeq: { ...prev.nevigatedSeq, [profile?.currentQuest]: [...(prev.nevigatedSeq[profile?.currentQuest] || []), currentdata.blockPrimarySequence] }
+              nevigatedSeq: {
+                ...prev.nevigatedSeq,
+                [profile?.currentQuest]: [
+                  ...(prev.nevigatedSeq[profile?.currentQuest] || []),
+                  currentdata.blockPrimarySequence,
+                ],
+              },
             }));
             // setprevNaviseq((prev: any) => ({
             //   ...prev,
             //   [profile?.currentQuest]: [...prev[profile?.currentQuest], currentdata.blockPrimarySequence]
             // }));
           }
-
-        }
-        else {
+        } else {
           setPreLogDatas((prev: any) => ({
             ...prev,
-            nevigatedSeq: { ...prev.nevigatedSeq, [profile?.currentQuest]: [currentdata.blockPrimarySequence] }
+            nevigatedSeq: {
+              ...prev.nevigatedSeq,
+              [profile?.currentQuest]: [currentdata.blockPrimarySequence],
+            },
           }));
           // setprevNaviseq((prev: any) => ({
           //   ...prev,
           //   [profile?.currentQuest]: [currentdata.blockPrimarySequence]
           // }));
-
         }
-
       }
       /*
       else {
@@ -2479,76 +2530,84 @@ useEffect(()=>{
       if (currentdata?.blockChoosen === 'Interaction') {
         if (currentQuest === parseInt(profile.currentQuest)) {
           if (getPrevLogDatas.selectedOptions[profile?.currentQuest]) {
-            const existingIndex = getPrevLogDatas.selectedOptions[profile?.currentQuest]?.findIndex((item: any) => item.blockId === currentdata.blockId);
-            console.log('existingIndex', existingIndex);
+            const existingIndex = getPrevLogDatas.selectedOptions[
+              profile?.currentQuest
+            ]?.findIndex((item: any) => item.blockId === currentdata.blockId);
             if (existingIndex !== -1) {
-              const updatedOptions = [...getPrevLogDatas.selectedOptions[profile?.currentQuest]];
-              console.log();
-              updatedOptions[existingIndex] = { blockId: currentdata.blockId, optionId: OptionSelectId };
+              const updatedOptions = [
+                ...getPrevLogDatas.selectedOptions[profile?.currentQuest],
+              ];
+              updatedOptions[existingIndex] = {
+                blockId: currentdata.blockId,
+                optionId: OptionSelectId,
+              };
               setPreLogDatas((prev: any) => ({
                 ...prev,
-                selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: updatedOptions }
+                selectedOptions: {
+                  ...prev.selectedOptions,
+                  [profile?.currentQuest]: updatedOptions,
+                },
               }));
               // setprevSelectedOptionseq((prev: any) => ({
               //   ...prev,
               //   [profile?.currentQuest]: updatedOptions
               // }));
-            }
-            else {
+            } else {
               setPreLogDatas((prev: any) => ({
                 ...prev,
-                selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [...prev.selectedOptions[profile?.currentQuest], { blockId: currentdata.blockId, optionId: OptionSelectId }] }
+                selectedOptions: {
+                  ...prev.selectedOptions,
+                  [profile?.currentQuest]: [
+                    ...prev.selectedOptions[profile?.currentQuest],
+                    { blockId: currentdata.blockId, optionId: OptionSelectId },
+                  ],
+                },
               }));
               // setprevSelectedOptionseq((prev: any) => ({
               //   ...prev,
               //   [profile?.currentQuest]: [...prev[profile?.currentQuest], { id: currentdata.blockId, option: getSelectedOptions }]
               // }));
             }
-
-          }
-          else {
+          } else {
             setPreLogDatas((prev: any) => ({
               ...prev,
-              selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [{ blockId: currentdata.blockId, optionId: OptionSelectId }] }
+              selectedOptions: {
+                ...prev.selectedOptions,
+                [profile?.currentQuest]: [
+                  { blockId: currentdata.blockId, optionId: OptionSelectId },
+                ],
+              },
             }));
             // setprevSelectedOptionseq((prev: any) => ({
             //   ...prev,
             //   [profile?.currentQuest]: [{ id: currentdata.blockId, option: getSelectedOptions }]
             // }));
-
           }
-
-        }
-        else {
+        } else {
           setPreLogDatas((prev: any) => ({
             ...prev,
-            selectedOptions: { [profile?.currentQuest]: [{ blockId: currentdata.blockId, optionId: OptionSelectId }] }
+            selectedOptions: {
+              [profile?.currentQuest]: [
+                { blockId: currentdata.blockId, optionId: OptionSelectId },
+              ],
+            },
           }));
           // setprevSelectedOptionseq((prev: any) => ({
           //   ...prev,
           //   [profile?.currentQuest]: [{ id: currentdata.blockId, option: getSelectedOptions }]
           // }));
-
         }
-
       }
       /*******************************last Activity Seq  start ***************************** */
       if (currentQuest === parseInt(profile.currentQuest)) {
         setPreLogDatas((prev: any) => ({
           ...prev,
-          lastActiveBlockSeq: currentdata.blockId
+          lastActiveBlockSeq: currentdata.blockId,
         }));
-        // setLastActivityseq([currentdata.blockId]);
-
       }
-      console.log('prevnaviseq inside', prevnaviseq, '.....', prevSelectedOptionseq, 'LastActivityseq', LastActivityseq, '.....', profile?.score);
-
     }
+  };
 
-
-  }
-
-  console.log('prevnaviseq', prevnaviseq, '.....', prevSelectedOptionseq, 'LastActivityseq', LastActivityseq, '.....', profile?.score);
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="EntirePreview-wrapper">
@@ -2784,6 +2843,8 @@ useEffect(()=>{
                               formData={gameInfo?.gameData}
                               imageSrc={preloadedAssets.ThankYou}
                               preloadedAssets={preloadedAssets}
+                              getPrevLogDatas={getPrevLogDatas}
+                              setPreLogDatas={setPreLogDatas}
                             />
                           </Box>
                         </Box>
@@ -2951,94 +3012,21 @@ useEffect(()=>{
                   );
                 case 10:
                   return (
-                    /*
-                    <>
-                      <Box
-                        position="relative"
-                        maxW="100%"
-                        w={'100vw'}
-                        height="100vh"
-                        backgroundImage={preloadedAssets.backgroundImage}
-                        backgroundSize={'cover'}
-                        backgroundRepeat={'no-repeat'}
-                        className="chapter_potrait"
-                      >
-                        <Grid
-                          templateColumns="repeat(1, 1fr)"
-                          gap={4}
-                          position="absolute"
-                          top="50%"
-                          left="50%"
-                          transform="translate(-50%, -50%)"
-                          className="story_note_grid"
-                        >
-                          <GridItem colSpan={1}>
-                            <Box
-                              display={'flex'}
-                              justifyContent={'center'}
-                              position={'relative'}
-                            >
-                              <Img
-                                src={preloadedAssets.Login}
-                                className={'first_play'}
-                              />
-                              <Box className={'play_screen_content'}>
-                                <Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                  >
-                                    <Text className={'play_screen_heading'}>
-                                      Atlantis
-                                    </Text>
-                                  </Box>
-                                </Box>
-                                <Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                  >
-                                    <Text className={'play_screen_text'}>
-                                      Welcome To
-                                    </Text>
-                                  </Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                    mb={{ base: 0, lg: 2 }}
-                                  >
-                                    <Text className={'play_screen_text'}>
-                                      The Demo Play
-                                    </Text>
-                                  </Box>
-                                  <Box
-                                    w={'100%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                  >
-                                    <Button
-                                      w={'90%'}
-                                      h={'5vh'}
-                                      bg={'none'}
-                                      _hover={{ bg: 'none' }}
-                                      onClick={() => {
-                                        setCurrentScreenId(1);
-                                        setIsGetsPlayAudioConfirmation(true);
-                                      }}
-                                    ></Button>
-                                  </Box>
-                                </Box>
-                              </Box>
-                            </Box>
-                          </GridItem>
-                        </Grid>
-                      </Box>
-                    </>
-                    */
-                    <GameIntroScreen preloadedAssets={preloadedAssets} setCurrentScreenId={setCurrentScreenId} setIsGetsPlayAudioConfirmation={setIsGetsPlayAudioConfirmation} setPreLogDatas={setPreLogDatas} getPrevLogDatas={getPrevLogDatas} setprevScreenId={setprevScreenId} currentScreenId={currentScreenId} setModelControl={setModelControl} gameInfo={gameInfo.gameData} setLastModified={setLastModified}  hasMulitLanguages={hasMulitLanguages} setIsOpenCustomModal={setIsOpenCustomModal} 
+                    <GameIntroScreen
+                      preloadedAssets={preloadedAssets}
+                      setCurrentScreenId={setCurrentScreenId}
+                      setIsGetsPlayAudioConfirmation={
+                        setIsGetsPlayAudioConfirmation
+                      }
+                      setPreLogDatas={setPreLogDatas}
+                      getPrevLogDatas={getPrevLogDatas}
+                      setprevScreenId={setprevScreenId}
+                      currentScreenId={currentScreenId}
+                      setModelControl={setModelControl}
+                      gameInfo={gameInfo.gameData}
+                      setLastModified={setLastModified}
+                      hasMulitLanguages={hasMulitLanguages}
+                      setIsOpenCustomModal={setIsOpenCustomModal}
                     ></GameIntroScreen>
                   );
                 case 11:
@@ -3128,29 +3116,29 @@ useEffect(()=>{
 
                 case 15:
                   return (
-                      <Overview
-                        formData={gameInfo?.gameData}
-                        imageSrc={preloadedAssets.overview}
-                        preloadedAssets={preloadedAssets}
-                        homeLeaderBoard={homeLeaderBoard}
-                        setCurrentScreenId={setCurrentScreenId}
-                        backGroundImg={preloadedAssets.backgroundImage}
-                      />
+                    <Overview
+                      formData={gameInfo?.gameData}
+                      imageSrc={preloadedAssets.overview}
+                      preloadedAssets={preloadedAssets}
+                      homeLeaderBoard={homeLeaderBoard}
+                      setCurrentScreenId={setCurrentScreenId}
+                      backGroundImg={preloadedAssets.backgroundImage}
+                    />
                   );
                   break;
-                
-                  case 16:
-                    return (
-                        <ReplayPoints
-                        setData={setData}
-                        setType={setType}
-                        preloadedAssets={preloadedAssets}
-                        demoBlocks={demoBlocks}
-                        profile={profile}
-                        setCurrentScreenId={setCurrentScreenId}
-                        />                      
-                    );
-                    break;  
+
+                case 16:
+                  return (
+                    <ReplayPoints
+                      setData={setData}
+                      setType={setType}
+                      preloadedAssets={preloadedAssets}
+                      demoBlocks={demoBlocks}
+                      profile={profile}
+                      setCurrentScreenId={setCurrentScreenId}
+                    />
+                  );
+                  break;
 
                 default:
                   console.log(
@@ -3158,11 +3146,10 @@ useEffect(()=>{
                     gameInfo?.gameData,
                     currentScreenId,
                   );
-                  return <h1>Loading Screen </h1>;
+                  return <h1>Loading Screen .... Default case </h1>;
               }
             })()}
-            {ModelControl === true ?
-
+            {ModelControl === true ? (
               <>
                 <Box
                   w={'100%'}
@@ -3185,22 +3172,33 @@ useEffect(()=>{
                     className="Game-Screen"
                   >
                     <Box className="Images">
-                      <ModelPopup ModelControl={ModelControl} setModelControl={setModelControl} backGroundImg={preloadedAssets.backgroundImage} preloadedAssets={preloadedAssets} getPrevLogDatas={getPrevLogDatas} setCurrentScreenId={setCurrentScreenId} setLastModified={setLastModified} LastModified={LastModified} setData={setData} setType={setType} gameInfo={gameInfo.blocks}
-                        setOptions={setOptions} gameInfoquest={gameInfo.questOptions} gameinfodata={gameInfo.gameData.gameShuffle} isSetStoryScreen={isSetStoryScreen} isStoryScreen={isStoryScreen}
+                      <ModelPopup
+                        ModelControl={ModelControl}
+                        setModelControl={setModelControl}
+                        backGroundImg={preloadedAssets.backgroundImage}
+                        preloadedAssets={preloadedAssets}
+                        getPrevLogDatas={getPrevLogDatas}
+                        setCurrentScreenId={setCurrentScreenId}
+                        setLastModified={setLastModified}
+                        LastModified={LastModified}
+                        setData={setData}
+                        setType={setType}
+                        gameInfo={gameInfo.blocks}
+                        setOptions={setOptions}
+                        gameInfoquest={gameInfo.questOptions}
+                        gameinfodata={gameInfo.gameData.gameShuffle}
+                        isSetStoryScreen={isSetStoryScreen}
+                        isStoryScreen={isStoryScreen}
                       />
                     </Box>
                   </Box>
                 </Box>
-
-
               </>
-              : null
-            }
-
+            ) : null}
           </Flex>
-          {/* Anonymous User's Review Form Menu 
-            * It works when uuid has UUID
-          */}
+          {/* Anonymous User's Review Form Menu
+           * It works when uuid has UUID
+           */}
           {isReviewDemo && !skipScreenList?.includes(currentScreenId) && (
             <Menu isOpen={isMenuOpen}>
               <MenuButton
@@ -3376,7 +3374,17 @@ useEffect(()=>{
           )}
           {/* Language Transaltion Modal popup */}
 
-          <LanguageSelectionPrompt gameLanguages={gameLanguages} formData={gameInfo?.gameData} preloadedAssets={preloadedAssets} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData} setProfileData={setProfileData} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal}/>
+          <LanguageSelectionPrompt
+            gameLanguages={gameLanguages}
+            formData={gameInfo?.gameData}
+            preloadedAssets={preloadedAssets}
+            hasMulitLanguages={hasMulitLanguages}
+            setHasMulitLanguages={setHasMulitLanguages}
+            profileData={profileData}
+            setProfileData={setProfileData}
+            setIsOpenCustomModal={setIsOpenCustomModal}
+            isOpenCustomModal={isOpenCustomModal}
+          />
         </Box>
       </Box>
     </ProfileContext.Provider>

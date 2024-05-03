@@ -596,7 +596,7 @@ const GameCreation = () => {
     label: string;
   }) => {
     // Do something with the selected option
-    console.log('Selected Option:', selectedOption);
+    // console.log('Selected Option:', selectedOption);
 
     // Update the state and access the updated value inside a useEffect hook
     setFormData((prevFormData) => ({
@@ -789,14 +789,12 @@ const GameCreation = () => {
         // else{setTab(parseInt(lastValue)+1);}
         if (tab === 6) {
           setTab(6);
-          console.log('parseinthi');
         } else {
           if (parseInt(lastValue) + 1 >= 6) {
             setTab(6);
           } else {
             setTab(parseInt(lastValue) + 1);
           }
-          console.log('parseinthi1', tab);
         }
       }
     }
@@ -3634,6 +3632,9 @@ return false;
     };
   }, []);
 
+console.log("*************"+(tab !== 1 && tab !== 2) && (tab === 3 && (formData.gameIsShowSkill || formData.gameIsShowLearningOutcome || formData.gameIsShowAuhorName || formData.gameIsShowStoryline || formData.gameIsShowGameDuration || formData.gameIsShowAdditionalWelcomeNote)))
+
+
   return (
     <>
       {loading && (
@@ -4776,14 +4777,16 @@ return false;
                         />
                       ) : null}
                        <Box display={{base:'none',xl:'flex'}}>         
-                       {tab !== 1 && tab !== 2 ? (
+                  
+                  {(tab >2 && tab < 6) && (tab === 3 ? (formData.gameIsShowSkill === "true" || formData.gameIsShowLearningOutcome=== "true" || formData.gameIsShowAuhorName=== "true" || formData.gameIsShowStoryline=== "true" || formData.gameIsShowGameDuration=== "true" || formData.gameIsShowAdditionalWelcomeNote=== "true"): true) ? (
                         <Button
                           bg="#11047a"
                           _hover={{ bg: '#190793' }}
                           color="#fff"
                           h={'46px'}
                           w={'128px'}
-                          display={tab === 7 || tab === 6 ? 'none' : 'block'}
+                          // display={tab === 7 || tab === 6 ? 'none' : 'block'}
+                          display={'block'}
                           mr={'17px'}
                           mt={'6px'}
                           ml={'11px'}
@@ -4911,16 +4914,16 @@ return false;
                       />
                     </Flex>
                   )}
-                  {tab !== 1 && tab !== 2 ? (
+                  
+                  {(tab !== 1 && tab !== 2 && (tab === 3 && formData.gameIsShowSkill || formData.gameIsShowLearningOutcome || formData.gameIsShowAuhorName || formData.gameIsShowStoryline ||
+                    formData.gameIsShowGameDuration || formData.gameIsShowAdditionalWelcomeNote)) ?
+                           (
                     <Box display={'flex'} alignItems={'center'} w={'60%'}>
                       <Button
-                        // bg="#11047a"
-                        // _hover={{ bg: '#190793' }}
-                        // color="#fff"
                         color={'#190793'} 
-                border={'1px solid #190793'} 
-                bg={'transparent'} 
-                _hover={{bg: '#11047a', color: '#fff'}}
+                        border={'1px solid #190793'} 
+                        bg={'transparent'} 
+                        _hover={{bg: '#11047a', color: '#fff'}}
                         h={'46px'}
                         w={'100%'}
                         display={tab === 7 || tab === 6 ? 'none' : 'block'}
@@ -4928,6 +4931,7 @@ return false;
                         mt={'6px'}
                         ml={'11px'}
                         onClick={handleEntirePrev}
+
                       >
                         Preview
                       </Button>

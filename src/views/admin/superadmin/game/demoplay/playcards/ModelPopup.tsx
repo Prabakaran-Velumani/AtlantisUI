@@ -43,14 +43,13 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, pr
   const NextScreen = () => {
     setModelControl(false);
     setLastModified(false);
+    setCurrentScreenId(1);
   }
   const continueScreen = () => {
     if (LastModified === true) {
       const getLastModifiedid = getPrevLogDatas.lastModifiedBlockSeq;
       const getLastModifieddata = new Date(getPrevLogDatas.lastBlockModifiedDate).getTime();
       const getupdatedAt = new Date(getPrevLogDatas.updatedAt).getTime();
-      // const getdifferent = getLastModifieddata - getupdatedAt;
-      // console.log(getLastModifieddata,'...........',getupdatedAt,'.....',getdifferent ,'...',getPrevLogDatas.lastBlockModifiedDate,'.....',getPrevLogDatas.updatedAt);
       if (getLastModifieddata > getupdatedAt) {
         let filteredData: any;
         for (const key in gameInfo) {
@@ -100,7 +99,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, pr
       }
       else
       {
-        console.log('getPrevLogDatas', getPrevLogDatas);
         if (getPrevLogDatas.screenIdSeq) {
           const screenlast = getPrevLogDatas.screenIdSeq;
           const getLastScreenId = screenlast[screenlast.length - 1];
@@ -121,7 +119,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, pr
 
     }
     else {
-      console.log('getPrevLogDatas', getPrevLogDatas);
       if (getPrevLogDatas.screenIdSeq.length > 0) {
         const screenlast = getPrevLogDatas.screenIdSeq;
         const getLastScreenId = screenlast[screenlast.length - 1];
@@ -144,7 +141,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, pr
   }
   const handleChange = (e: any) => {
     const { name, value, checked } = e.target;
-    console.log('name **********', name);
     if (name === 'lastpausedQuest' && checked) {
       SetQuestScreen(true);
       SetQuestSelectionPage(false);
@@ -166,15 +162,12 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, pr
   }
   const HandleScreen = () => {
     if (QuestScreen === true) {
-      console.log('.....142......', getPrevLogDatas.nevigatedSeq, '....', getPrevLogDatas.nevigatedSeq.length);
       if (getPrevLogDatas.nevigatedSeq) {
         const getnevigatedSeq = getPrevLogDatas.nevigatedSeq;
         const convertArray = Object.keys(getnevigatedSeq);
         const getLastquest = convertArray[convertArray.length - 1];
-        console.log('getLastquest', getLastquest);
         const findseq = getnevigatedSeq[getLastquest];
         const getLastSeq = findseq[getnevigatedSeq[getLastquest].length - 1];
-        console.log('.....151......', getLastSeq, 'findseq', findseq);
         let SetLastSeqData: any;
         for (const key in gameInfo[getLastquest]) {
           const data = gameInfo[getLastquest][key];
