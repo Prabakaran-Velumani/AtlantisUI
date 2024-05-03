@@ -1,4 +1,4 @@
-import { Box, Button, FormLabel, Img, useToast, Text, Modal, ModalBody, ModalOverlay, ModalCloseButton, ModalContent, useDisclosure, Input } from '@chakra-ui/react';
+import { Box, Button, FormLabel, Img, useToast, Text, Modal, ModalBody, ModalOverlay, ModalCloseButton, ModalContent, useDisclosure } from '@chakra-ui/react';
 import React,{useState, useEffect} from 'react'
 import { getContentRelatedLanguage } from 'utils/game/gameService';
 
@@ -13,13 +13,11 @@ type languageProps = {
     isOpenCustomModal: boolean;
     setIsOpenCustomModal: (value: boolean)=> void;
 }
-const gender = ['Male', 'female'];
 
 const LanguageSelectionPrompt : React.FC<languageProps> = ({formData, preloadedAssets, gameLanguages, hasMulitLanguages, setHasMulitLanguages, profileData,setProfileData, setIsOpenCustomModal, isOpenCustomModal}) => {
 const [select, setSelect] = useState<boolean>(false);
 const [gameContentId, setGameContentId] = useState(null);
 const {isOpen, onOpen, onClose} = useDisclosure();
-
 
 const handleProfile = (e: any, lang?: any, langId?: any) => {
     const { id, value } = e.target;
@@ -70,16 +68,6 @@ return (
             {hasMulitLanguages && (
               <Box className="Setting-box">
                 <Img src={preloadedAssets.Lang} className="setting-pad" />
-                <Box className="nick-name" mb={'20px'}>
-                    <FormLabel>Alias Name</FormLabel>
-                    <Img className="formfield" src={preloadedAssets.FormField} />
-                    <Input
-                      type={'text'}
-                      id={'name'}
-                      onChange={(e: any) => handleProfile(e)}
-                    />
-                  </Box>
-
                 <Box className="vertex">
                   <FormLabel className={'label'} me={'0'}>
                     Language

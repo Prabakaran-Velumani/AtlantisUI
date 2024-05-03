@@ -97,6 +97,7 @@ const GamePreview = () => {
     lastModifiedBlockSeq: '',
     lastBlockModifiedDate:'',
     updatedAt:'',
+    playerInputs:''
   });
   //End
   const user: any = JSON.parse(localStorage.getItem('user'));
@@ -128,6 +129,7 @@ const GamePreview = () => {
           lastModifiedBlockSeq: updatePreviewLogsResponse.data.lastModifiedBlockSeq,
           lastBlockModifiedDate:updatePreviewLogsResponse.data.lastBlockModifiedDate,
           updatedAt:updatePreviewLogsResponse.data.updatedAt,
+          playerInputs: updatePreviewLogsResponse.data.playerInputs,
         });
         return updatePreviewLogsResponse;
 

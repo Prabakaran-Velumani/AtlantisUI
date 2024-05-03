@@ -803,14 +803,12 @@ setlanguageCount(CountResult?.data?.count)
         // else{setTab(parseInt(lastValue)+1);}
         if (tab === 6) {
           setTab(6);
-          console.log('parseinthi');
         } else {
           if (parseInt(lastValue) + 1 >= 6) {
             setTab(6);
           } else {
             setTab(parseInt(lastValue) + 1);
           }
-          console.log('parseinthi1', tab);
         }
       }
     }
@@ -5574,99 +5572,65 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                           }}
                         />
                       ) : null}
-                      <Box display={{ base: 'none', xl: 'flex' }}>
-                        {tab !== 1 && tab !== 2 ? (
+                       <Box display={{base:'none',xl:'flex'}}>         
+                  
+                  {(tab >2 && tab < 6) && (tab === 3 ? (formData.gameIsShowSkill === "true" || formData.gameIsShowLearningOutcome=== "true" || formData.gameIsShowAuhorName=== "true" || formData.gameIsShowStoryline=== "true" || formData.gameIsShowGameDuration=== "true" || formData.gameIsShowAdditionalWelcomeNote=== "true"): true) ? (
+                        <Button
+                          bg="#11047a"
+                          _hover={{ bg: '#190793' }}
+                          color="#fff"
+                          h={'46px'}
+                          w={'128px'}
+                          display={'block'}
+                          mr={'17px'}
+                          mt={'6px'}
+                          ml={'11px'}
+                          onClick={handleEntirePrev}
+                        >
+                          Preview
+                        </Button>
+                      ) : null}
+                       
+                       {tab === 5 ? (
+                        <Button
+                          bg="#11047a"
+                          _hover={{ bg: '#190793' }}
+                          color="#fff"
+                          h={'46px'}
+                          w={'128px'}
+                          onClick={() => handleNext()}
+                          mr={'33px'}
+                          mt={'7px'}
+                        >
+                          Next
+                        </Button>
+                      ) : (
+                        tab !== 1 &&
+                        tab !== 2 &&
+                        tab !== 5 && (
                           <Button
                             bg="#11047a"
                             _hover={{ bg: '#190793' }}
                             color="#fff"
                             h={'46px'}
                             w={'128px'}
-                            display={tab === 7 || tab === 6 ? 'none' : 'block'}
-                            mr={'17px'}
-                            mt={'6px'}
-                            ml={'11px'}
-                            onClick={handleEntirePrev}
-                          >
-                            Preview
-                          </Button>
-                        ) : null}
-
-                        {tab === 5 ? (
-                          <Button
-                            bg="#11047a"
-                            _hover={{ bg: '#190793' }}
-                            color="#fff"
-                            h={'46px'}
-                            w={'128px'}
-                            onClick={() => handleNext()}
+                            onClick={commonNextFunction}
                             mr={'33px'}
                             mt={'7px'}
                           >
-                            Next
+                            {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
                           </Button>
-                        ) : (
-                          tab !== 1 &&
-                          tab !== 2 &&
-                          tab !== 5 && (
-                            <Button
-                              bg="#11047a"
-                              _hover={{ bg: '#190793' }}
-                              color="#fff"
-                              h={'46px'}
-                              w={'128px'}
-                              onClick={commonNextFunction}
-                              mr={'33px'}
-                              mt={'7px'}
-                            >
-                              {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
-                            </Button>
-                          )
-                        )}
+                        )
+                      )}
                       </Box>
                     </Card>
                   </Flex>
                 </Box>
-                {/* <Box
-                  display={{
-                    base: 'none',
-                    sm: 'none',
-                    md: 'none',
-                    lg: 'none',
-                    xl: 'flex',
-                  }}
-                  w={{ sm: '120%', md: '40%', lg: '25%' }}
-                  justifyContent={'center'}
-                >
-                  <Flex justify="center">
-                    <Card
-                      display={'flex'}
-                      p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
-                      justifyContent={
-                        tab === 1 || tab === 2 ? 'end' : 'flex-end'
-                      }
-                      flexDirection="row"
-                      h="95px"
-                      boxShadow={'1px 3px 14px #0000'}
-                      // position={'fixed'}
-                      // top={'24px'}
-                      // right={'8px'}
-                      zIndex={99}
-                      background={'#0000 !important'}
-                    >
-                     
-                     
-                    </Card>
-                  </Flex>
-                </Box> */}
               </Box>
             </Box>
             <Box
               display={{
                 base: tab === 1 ? 'none' : 'flex',
-                // sm: 'flex',
-                // md: 'flex',
-                // lg: 'flex',
                 xl: 'none',
               }}
               width={'100vw'}
@@ -5680,17 +5644,12 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                 <Card
                   display={'flex'}
                   borderRadius={'none'}
-                  // p={{ base: '0px 20px', sm: '0px 20px', md: '20px' }}
                   justifyContent={'space-between'}
                   flexDirection="row"
                   h="90px"
                   w={'100%'}
                   boxShadow={'1px 3px 14px #0000'}
-                  // position={'fixed'}
-                  // top={'24px'}
-                  // right={'8px'}
                   zIndex={99}
-                // background={'#0000 !important'}
                 >
                   {tab !== 1 && (
                     <Flex justify={'flex-start'} alignItems={'center'}>
@@ -5701,25 +5660,22 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                         size={46} // Adjust the size as needed
                         color="#11047a"
                         style={{
-                          // position: 'fixed',
-                          // top: '43px',
-                          // left: '350px',
                           zIndex: 99,
                           cursor: 'pointer',
                         }}
                       />
                     </Flex>
                   )}
-                  {tab !== 1 && tab !== 2 ? (
+                  
+                  {(tab !== 1 && tab !== 2 && (tab === 3 && formData.gameIsShowSkill || formData.gameIsShowLearningOutcome || formData.gameIsShowAuhorName || formData.gameIsShowStoryline ||
+                    formData.gameIsShowGameDuration || formData.gameIsShowAdditionalWelcomeNote)) ?
+                           (
                     <Box display={'flex'} alignItems={'center'} w={'60%'}>
                       <Button
-                        // bg="#11047a"
-                        // _hover={{ bg: '#190793' }}
-                        // color="#fff"
-                        color={'#190793'}
-                        border={'1px solid #190793'}
-                        bg={'transparent'}
-                        _hover={{ bg: '#11047a', color: '#fff' }}
+                        color={'#190793'} 
+                        border={'1px solid #190793'} 
+                        bg={'transparent'} 
+                        _hover={{bg: '#11047a', color: '#fff'}}
                         h={'46px'}
                         w={'100%'}
                         display={tab === 7 || tab === 6 ? 'none' : 'block'}
@@ -5727,6 +5683,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                         mt={'6px'}
                         ml={'11px'}
                         onClick={handleEntirePrev}
+
                       >
                         Preview
                       </Button>
@@ -5739,9 +5696,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                         size={46} // Adjust the size as needed
                         color="#11047a"
                         style={{
-                          // position: 'fixed',
-                          // top: '43px',
-                          // left: '350px',
                           zIndex: 99,
                           cursor: 'pointer',
                         }}
@@ -5761,9 +5715,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                             padding: '5px',
                             borderRadius: '50%',
                             backgroundColor: '#11047A',
-                            // position: 'fixed',
-                            // top: '43px',
-                            // left: '350px',
                             zIndex: 99,
                             cursor: 'pointer',
                           }}
@@ -5776,27 +5727,12 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                           size={46} // Adjust the size as needed
                           color="#11047a"
                           style={{
-                            // position: 'fixed',
-                            // top: '43px',
-                            // left: '350px',
                             zIndex: 99,
                             cursor: 'pointer',
                           }}
                         />
                       </Flex>
                     ))
-                    // <Button
-                    //   bg="#11047a"
-                    //   _hover={{ bg: '#190793' }}
-                    //   color="#fff"
-                    //   h={'46px'}
-                    //   w={'128px'}
-                    //   onClick={commonNextFunction}
-                    //   mr={'33px'}
-                    //   mt={'7px'}
-                    // >
-                    //   {tab === 6 || tab === 7 ? 'Launch' : 'Next'}
-                    // </Button>
                   )}
                 </Card>
               </Flex>

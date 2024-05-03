@@ -63,6 +63,8 @@ const Completion: React.FC<{
     ),
   );
   
+console.log("curretQuestOptions", curretQuestOptions);
+
   const [geFinalscorequest, SetFinalscore] = useState(profile.playerGrandTotal[parseInt(profile.currentQuest)]);
   const [questScores, setQuestScores] = useState(null);
   // const { profile, setProfile } = useContext(ScoreContext);
@@ -243,7 +245,7 @@ const questTotalScore = Object.entries(profile?.playerGrandTotal).reduce((totalS
                     className="inside-box-1_img"
                   />
                   <Text className="inside-points-text" fontFamily={'content'}>
-                       {geFinalscorequest <= 0 ? 0 : geFinalscorequest}{'/'}{questScores && questScores[profile?.currentQuest]}
+                       {geFinalscorequest <= 0 ? 0 : geFinalscorequest}{'/'}{questScores && questScores[profile?.currentQuest] ? questScores[profile?.currentQuest] : 0 }
                   </Text>
                 </Box>
               </Box>

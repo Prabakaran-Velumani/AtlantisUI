@@ -30,7 +30,9 @@ const ThankYou: React.FC<{
   formData: any;
   imageSrc: any;
   preloadedAssets: any;
-}> = ({ formData, imageSrc, setCurrentScreenId, preloadedAssets }) => {
+  setPreLogDatas: (value: any)=>void;
+  getPrevLogDatas: any;
+}> = ({ formData, imageSrc, setCurrentScreenId, preloadedAssets,  setPreLogDatas, getPrevLogDatas}) => {
   const renderContentTy = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
 
@@ -117,14 +119,17 @@ const styleflex = {};
 //   }
 // };
 
+const updateDatabase = async ()=>{
+  setPreLogDatas((prev: any)=>({...prev, 'playerInputs': playerInputs}))
+};
+
 useEffect(()=>{
-  /***
-  const debouncedUpdateDatabase = debounce(updateDatabase, 500); 
+  const debouncedUpdateDatabase = debounce(updateDatabase, 1000); 
   return ()=>{
     debouncedUpdateDatabase.cancel();
   };
-   */
 },[playerInputs])
+
   return (
     <>
       {preloadedAssets.Thankyou && (

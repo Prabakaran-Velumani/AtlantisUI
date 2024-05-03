@@ -71,13 +71,13 @@ interface PlayGamesProps {
   setSelectedPlayer?: any;
   profileData?: any;
   setProfileData?: any;
-  setprevProfileData?:any;
+  setprevProfileData?: any;
   demoBlocks?: any;
   preloadedAssets?: any;
-  setprevScreenId:any;
-  currentScreenId:any;
-  setPreLogDatas:any;
-  getPrevLogDatas:any;
+  setprevScreenId: any;
+  currentScreenId: any;
+  setPreLogDatas: any;
+  getPrevLogDatas: any;
 }
 
 const spokenLanguages = [
@@ -117,9 +117,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   demoBlocks,
   formData,
   preloadedAssets,
-  setprevScreenId,currentScreenId,
+  setprevScreenId,
+  currentScreenId,
   setPreLogDatas,
-  getPrevLogDatas
+  getPrevLogDatas,
 }) => {
   const [i, setI] = useState(0);
   const [select, setSelect] = useState(false);
@@ -137,15 +138,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     if (playerInfo.name === '') {
       setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
     }
-    
-    const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
-    if(screenIdset !==currentScreenId)
-      {
-        setPreLogDatas((prev:any) => ({
-          ...prev,
-          screenIdSeq: [...prev.screenIdSeq, currentScreenId]
-        }));
-      }
 
     // Set the selected player
     setSelectedPlayer(players[i]);    
@@ -159,7 +151,8 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     xl: '90%',
     xxl: '90%',
   });
-  const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
+  const screenIdset =
+    getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
   return (
     <>
       <Box
@@ -250,26 +243,38 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     className="btns left-btn mouse_style"
                     bg={'none'}
                     _hover={{ bg: 'none' }}
-                    onClick={() => setCurrentScreenId(1)}
+                    onClick={() => {
+                      setCurrentScreenId(1);
+
+                      if (screenIdset !== currentScreenId) {
+                        setPreLogDatas((prev: any) => ({
+                          ...prev,
+                          screenIdSeq: [...prev.screenIdSeq, currentScreenId],
+                        }));
+                      }
+                    }}
                   ></Button>
                   <Box w={'25%'} position={'relative'}>
                     <input
-                      style={{
-                        width: '100%',
-                      }}
+                      style={{ width: '100%' }}
                       className="player_name"
                       placeholder={'Enter Alias Name'}
                       value={playerInfo.name}
-                      onChange={(e:any) => {
-                        setProfileData((prev:any) => ({
-                            ...prev,
-                            name: e.target.value,
-                        }));
-                        setPreLogDatas((prev:any) => ({
+                      onChange={(e: any) => {
+                        // Update profileData state
+                        setProfileData((prev: any) => ({
                           ...prev,
-                          previewProfile:{...prev.previewProfile, name: e.target.value,}
+                          name: e.target.value,
                         }));
-                    }}
+
+                        setPreLogDatas((prev: any) => ({
+                          ...prev,
+                          previewProfile: {
+                            ...prev.previewProfile,
+                            name: e.target.value,
+                          },
+                        }));
+                      }}
                     />
                   </Box>
                   <Button
