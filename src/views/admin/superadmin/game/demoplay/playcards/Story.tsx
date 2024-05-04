@@ -1107,11 +1107,7 @@ const Story: React.FC<{
                           mt={'20px'}
                           display={'flex'}
                           justifyContent={'center'}
-<<<<<<< HEAD
                          
-=======
-                          // cursor={'pointer'}
->>>>>>> ae98650 (changes for mobile progress bar)
                           position={'absolute'}
                           bottom={'-8%'}
                         >
