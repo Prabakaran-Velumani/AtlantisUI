@@ -120,6 +120,7 @@ option {
   margin-bottom: 15px; */
   /* margin-left: 15px; */
 }
+
 .block-action-icons {
   /* visibility: hidden; */
   display: flex;
@@ -129,29 +130,34 @@ option {
   margin-bottom: 15px; */
   /* margin-left: 15px; */
 }
+
 .block-compo .block-action-icons svg {
   margin-bottom: 10px;
   height: 0;
   transition: 0.2s ease;
 }
+
 .block-action-icons svg {
   margin-bottom: 10px;
   height: 0;
   transition: 0.2s ease;
 }
+
 /* .react-select{
   padding: 13px 0px 13px 0px;
   height: 100%;
 } */
-.options_interaction{
+.options_interaction {
   display: flex;
   width: auto;
   /* transform: translateX(13%); */
 }
+
 .NDI .block-item-type:hover .block-action-icons svg {
   /* visibility: visible; */
   height: 1em;
 }
+
 /* .block-action-icons svg {
   height: 1em;
 } */
@@ -206,7 +212,7 @@ option {
 }
 
 .AddScores .Main-Content {
-  margin-bottom: 100px;
+  margin-bottom: 30px;
 }
 
 .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content::-webkit-scrollbar {
@@ -222,11 +228,13 @@ option {
   border-radius: 30px;
   background-size: contain;
 }
+
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box::-webkit-scrollbar-track {
   background: url('../img/games/scroll.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
+
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box::-webkit-scrollbar-thumb {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
@@ -235,6 +243,7 @@ option {
   background-size: contain;
   height: 30px;
 }
+
 .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content::-webkit-scrollbar-track {
   background: url('../img/games/scroll.png');
   background-repeat: no-repeat;
@@ -317,7 +326,25 @@ option {
   background-size: contain;
   /*height: 300px;*/
 }
-
+.takeaway_content::-webkit-scrollbar {
+  width: 16px;
+  /*height: 300px;*/
+  border-radius: 30px;
+  background-size: contain;
+} 
+.takeaway_content::-webkit-scrollbar-track {
+  background: url('../img/games/scroll.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.takeaway_content::-webkit-scrollbar-thumb {
+  background: url('../img/games/cross.png');
+  background-repeat: no-repeat;
+  border-radius: 30px;
+  cursor: pointer;
+  background-size: contain;
+  /*height: 300px;*/
+}
 @font-face {
   font-family: 'Score';
   src: url(../fonts/COLCBL_.TTF);
@@ -373,6 +400,7 @@ background: beige; */
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100%;
 }
 
 .AddScores .Main-Content .Game-Screen .Images .LearderBoards-Img {
@@ -540,7 +568,7 @@ font-family: 'AtlantisText';
   width: 100%;
   display: flex;
   justify-content: center;
-  height: 93px;
+  height: auto;
 }
 
 .points-box {
@@ -583,7 +611,7 @@ font-family: 'AtlantisText';
   position: absolute;
   top: 0;
   /* transform: translate(47px, -117px);  modify */
-  transform: translate(0, 8px);
+  transform: translate(0, 6px);
   font-family: 'AtlantisText';
   letter-spacing: 0.5px;
   text-align: center;
@@ -611,8 +639,8 @@ font-family: 'AtlantisText';
 
 .AddScores .Main-Content .Game-Screen .Images .points-box .box-1 {
   position: relative;
-  width: 185px;
-  height: 165px;
+  width: 145px;
+  height: 135px;
   display: flex;
   justify-content: center;
 }
@@ -664,8 +692,8 @@ font-family: 'AtlantisText';
 
 .AddScores .Main-Content .Game-Screen .Images .points-box .box-2 {
   position: relative;
-  width: 185px;
-  height: 165px;
+  width: 145px;
+  height: 135px;
   display: flex;
   justify-content: center;
 }
@@ -677,7 +705,7 @@ font-family: 'AtlantisText';
   /*font-size: clamp(17px, 2vw, 17px);*/
   top: 0;
   /* transform: translate(47px, -117px);  modify */
-  transform: translate(0, 13px);
+  transform: translate(0, 8px);
   width: 67%;
   text-align: center;
   font-family: 'AtlantisText';
@@ -1278,6 +1306,7 @@ font-family: 'AtlantisText';
   overflow-wrap: break-word;
   /* Break the word if it exceeds the width */
 }
+
 
 .AddScores .Main-Content .Game-Screen .Images .takeaway-screen .content-box .content p {
   width: 100%;
@@ -3268,10 +3297,10 @@ transform: translate(-167px, -84px);
 }
 
 .feedback_screenshot {
-  width:  80vw !important;
-  height: 80vh ;
-  left: 3% ;
-  top: -3% ;
+  width: 80vw !important;
+  height: 80vh;
+  left: 3%;
+  top: -3%;
 }
 
 @media (orientation: portrait) {
@@ -3604,10 +3633,12 @@ grid-row: 1 / 2;
   width: calc(90vh - (25vh));
   height: 100%;
 }
-.story_feedback_content{
+
+.story_feedback_content {
   height: 85vh;
   width: calc(90vh - (15vh))
 }
+
 .story_interaction_content {
   height: 80vh;
   width: calc(90vh - (9vh))
@@ -3761,18 +3792,20 @@ grid-row: 1 / 2;
 }
 
 .story_intraction_question {
-  transform:translateY(34%);
+  transform: translateY(34%);
   width: 60%;
   letter-spacing: 1px;
   font-size: 4.5vh;
   display: flex;
 }
-.screenshot_interaction_options{
+
+.screenshot_interaction_options {
   scrollbar-width: none;
   /* Hide scrollbar for Firefox */
   -ms-overflow-style: none;
   /* Hide scrollbar for IE */
 }
+
 .story_screenshot_interaction_question {
   text-align: center;
   height: 25%;
@@ -3784,8 +3817,10 @@ grid-row: 1 / 2;
   line-height: 1;
   width: 96%;
   overflow-y: scroll;
-  scrollbar-width: none;  /* Hide scrollbar for Firefox */
-  -ms-overflow-style: none;  /* Hide scrollbar for IE */
+  scrollbar-width: none;
+  /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none;
+  /* Hide scrollbar for IE */
   margin-top: 30px;
   color: black;
 }
@@ -3844,30 +3879,36 @@ grid-row: 1 / 2;
   height: 6vh;
   transform: rotate(90deg) !important;
 }
-.toggle_effect_on{
+
+.toggle_effect_on {
   transform: scale(1.5);
   transition: all 1s ease;
 }
-.toggle_effect_off{
+
+.toggle_effect_off {
   transform: scale(1);
   transition: all 1s ease;
 }
+
 .character_toggle_right {
   width: 4vw;
   height: 6vh;
   transform: rotate(-90deg);
 }
-.note_title{
+
+.note_title {
   font-size: 6.5vh;
   font-family: AtlantisText;
   color: (--dialog-title-color);
   letter-spacing: 2px
 }
-.note_align{
+
+.note_align {
   width: 100%;
   position: fixed;
   top: 19.5%;
 }
+
 .replay_content {
   width: 100%;
   display: flex;
@@ -3962,11 +4003,13 @@ grid-row: 1 / 2;
   position: absolute;
   transform: translate(70%, -8%);
 }
-.feed_list{
+
+.feed_list {
   text-align: center;
   font-family: 'AtlantisContent';
   font-size: 3vh;
 }
+
 .top-menu-home-section .progress-box .progressing .level {
   background: linear-gradient(to bottom, #e43ee4, #00000000);
   height: 2vw;
@@ -3974,29 +4017,35 @@ grid-row: 1 / 2;
   border-radius: 2px;
   margin-right: 3px;
 }
-.custom_canvas{
+
+.custom_canvas {
   width: 100%;
   height: 100%;
 }
-.slider_thumb{
-  width:auto;
+
+.slider_thumb {
+  width: auto;
   height: 6vh;
 }
-.feedback_content_text{
+
+.feedback_content_text {
   font-size: 3.5vh;
   font-family: 'AtlantisText';
   color: var(--dialog-title-color);
 }
-.scroll_hide::-webkit-scrollbar{
+
+.scroll_hide::-webkit-scrollbar {
   display: none;
 }
 
 .scroll_hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
-.game_progressbar{
+.game_progressbar {
   height: 35px;
   width: 13.3vw;
   position: absolute;
@@ -4004,43 +4053,59 @@ grid-row: 1 / 2;
   top: 15px;
   z-index: 9999;
 }
-.game_progress_text{
+
+.game_progress_text {
   text-align: center;
   font-size: 1.8vw;
   font-family: 'AtlantisText';
   color: var(--dialog-title-color);
 }
+
+.takeaway_content {
+  width: 80%;
+  height: 100%;
+  overflow-y: auto;
+}
+
 @media screen and (orientation: portrait) {
-  .game_progressbar{
+  .game_progressbar {
     height: 4vw;
     width: 13.3vh;
   }
-  .game_progress_text{
+
+  .game_progress_text {
     font-size: 1.8vh;
   }
-  .feed_list{
+
+  .feed_list {
     font-size: 3vw;
   }
-  .feedback_content_text{
+
+  .feedback_content_text {
     font-size: 3.5vw;
   }
-  .top-menu-home-section .Setting-box .volumes .slider-track .filled-volume { 
+
+  .top-menu-home-section .Setting-box .volumes .slider-track .filled-volume {
     height: 2vw;
   }
-  .slider_thumb{
+
+  .slider_thumb {
     height: 6vw;
   }
+
   .top-menu-home-section .Setting-box .volumes .slider-track {
     height: 5vw;
   }
 
-  .custom_canvas{
-  width: 100% ;
-  height: 42vw !important;
-}
-  .note_title{
+  .custom_canvas {
+    width: 100%;
+    height: 42vw !important;
+  }
+
+  .note_title {
     font-size: 6.5vw;
   }
+
   .top-menu-home-section .progress-box {
     transform: translate(-2%, 0%);
   }
@@ -4210,9 +4275,11 @@ grid-row: 1 / 2;
     height: 30vw;
     font-size: 4vw;
   }
+
   .top-menu-home-section .Setting-box .volumes.voice-volume {
     transform: translateY(10vw);
   }
+
   .play_screen_content {
     width: calc(90vw - 49vw);
     height: calc(90vw - 42vw);
@@ -4239,7 +4306,7 @@ grid-row: 1 / 2;
   }
 
   .story_intraction_question {
-    transform:translateY(34%);
+    transform: translateY(34%);
     font-size: 4.5vw;
   }
 
@@ -4369,10 +4436,12 @@ grid-row: 1 / 2;
     height: 80vw;
     width: calc(90vw - (9vw))
   }
-  .story_feedback_content{
+
+  .story_feedback_content {
     height: 85vw;
     width: calc(90vw - (15vw))
   }
+
   .story_completion_image {
     width: 45%;
     height: 90vw;
@@ -4391,13 +4460,16 @@ grid-row: 1 / 2;
     height: 100vw !important;
   } */
 }
-.mobile_progress{
+
+.mobile_progress {
   min-width: 100%;
 }
+
 @media screen and (min-width: 500px) {
-  .mobile_progress{
+  .mobile_progress {
     min-width: 50%;
   }
+
   .top-menu-home-section .progress-box {
     transform: translate(-2%, -10%);
   }
@@ -4476,9 +4548,10 @@ grid-row: 1 / 2;
 }
 
 @media screen and (min-width: 768px) {
-  .mobile_progress{
+  .mobile_progress {
     min-width: 33%;
   }
+
   .top-menu-home-section .progress-box {
     transform: translate(-2%, -10%);
     height: 65px;
@@ -4559,9 +4632,10 @@ grid-row: 1 / 2;
 }
 
 @media screen and (min-width: 900px) {
-  .mobile_progress{
-    min-width:25%;
+  .mobile_progress {
+    min-width: 25%;
   }
+
   /* .top-menu-home-section .Setting-box .setting-pad {
     height: 100%;
     width: 550px;
@@ -5194,10 +5268,12 @@ grid-row: 1 / 2;
 .EntirePreview {
   cursor: var(--cursor-new) !important;
 }
-.EntirePreview-content{
+
+.EntirePreview-content {
   cursor: var(--cursor-new) !important;
 }
-.mouse_style{
+
+.mouse_style {
   cursor: var(--cursor-new) !important;
 }
 
@@ -5496,6 +5572,14 @@ grid-row: 1 / 2;
   letter-spacing: 1px;
 }
 
+.welcome_note {
+  font-size: 1.5rem;
+  font-family: 'AtlantisText';
+  color: var(--atlantis-text-color);
+  text-align: center;
+  line-height: 25px;
+}
+
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-arrow-img {
   margin-top: 2%;
   width: auto;
@@ -5643,26 +5727,30 @@ grid-row: 1 / 2;
   overflow-y: auto;
   transform: translateY(19%);
 }
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box::-webkit-scrollbar {
   width: 3vh;
   /*height: 300px;*/
   border-radius: 30px;
   background-size: contain;
 }
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box::-webkit-scrollbar-track {
   background: url('../img/games/Leaderboard\ Scroll\ Bar.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
-  .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box::-webkit-scrollbar-thumb {
-    background: url('../img/games/Leaderboard\ Scroll\ Cross.png');
-    background-repeat: no-repeat;
-    border-radius: 30px;
-    cursor: pointer;
-    background-size: contain;
-    /*height: 300px;*/
-    /* background-size: 26px 63px; */
-  }
+
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box::-webkit-scrollbar-thumb {
+  background: url('../img/games/Leaderboard\ Scroll\ Cross.png');
+  background-repeat: no-repeat;
+  border-radius: 30px;
+  cursor: pointer;
+  background-size: contain;
+  /*height: 300px;*/
+  /* background-size: 26px 63px; */
+}
+
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .table-heading {
   display: flex;
   width: 100%;
@@ -6460,11 +6548,13 @@ grid-row: 1 / 2;
   border-radius: 30px;
   background-size: contain;
 }
+
 .feedback_content_text::-webkit-scrollbar-track {
   background: url('../img/games/scroll.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
+
 .feedback_content_text::-webkit-scrollbar-thumb {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
