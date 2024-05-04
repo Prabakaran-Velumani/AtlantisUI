@@ -69,6 +69,7 @@ import Fb from 'assets/img/games/FB.png';
 import Completed from 'assets/img/games/COMPLETED.png'
 import VolumeTrack from 'assets/img/games/volume-track.png'
 import Thankyou from 'assets/img/games/thankyou.png';
+import SkillLearn from 'assets/img/screens/Skills & Learning outcome.png'
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
  */
@@ -143,5 +144,5 @@ export const assetImageSrc = [
   { assetType: 'FB', src:Fb},
   { assetType: 'Completed', src:Completed},
   { assetType: 'Thankyou', src:Thankyou},
-  
+  { assetType: 'SkillLearn', src:SkillLearn},
 ];

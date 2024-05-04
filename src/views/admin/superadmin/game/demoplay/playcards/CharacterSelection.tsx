@@ -233,7 +233,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   });
   return (
     <>
-   
       {formData && (formData?.gameLanguageId !== null) && (isLanguage !==null) ? (
         <Box id="container" className="Play-station">
           <Box className="top-menu-home-section">
@@ -328,7 +327,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 />
                 <Box className={'character_select_area'}>
                   <Box
-                    w={'30%'}
+                    w={'55%'}
                     display={'flex'}
                     alignItems={'center'}
                     justifyContent={'space-between'}
@@ -379,7 +378,9 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     ></Button>
                     <Box w={'25%'} position={'relative'}>
                       <input
-                        style={{ width: '100%' }}
+                        style={{ width: '100%' ,
+                        // backgroundColor:'#e600055c'
+                      }}
                         className="player_name"
                         placeholder={'Enter Alias Name'}
                         value={playerInfo.name}

@@ -824,7 +824,7 @@ const Story: React.FC<{
                 position={'fixed'}
                 left={'18%'}
                 bottom={'130px'}
-                fontSize={{ base: '30px', xl: '2.2vw' }}
+                fontSize={{ base: '30px', xl: '2vw' }}
                 fontWeight={500}
                 textAlign={'center'}
                 fontFamily={'AtlantisText'}
@@ -843,7 +843,7 @@ const Story: React.FC<{
               h={'61px'}
               overflowY={'scroll'}
               w={'85%'}
-              fontSize={{ base: '30px', xl: '2.2vw' }}
+              fontSize={'3vh'}
               bottom={'38px'}
               fontFamily={'AtlantisContent'}
               css={{
@@ -947,7 +947,7 @@ const Story: React.FC<{
               h={'61px'}
               overflowY={'scroll'}
               w={'85%'}
-              fontSize={{ base: '30px', lg: '1.8vw' }}
+              fontSize={'3vh'}
               bottom={'38px'}
               fontFamily={'AtlantisContent'}
               transform={'translateY(26%)'}

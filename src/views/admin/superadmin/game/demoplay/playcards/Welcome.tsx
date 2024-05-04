@@ -43,7 +43,7 @@ const Welcome: React.FC<{
   preview: any;
   intro: any;
   screen: any;
-  preloadedAssets:any;
+  preloadedAssets: any;
 }> = ({ formData, imageSrc, preview, setCurrentScreenId, intro, screen, preloadedAssets }) => {
   const { id } = useParams();
   const [profile, setProfile] = useState<any>([]);
@@ -136,28 +136,28 @@ const Welcome: React.FC<{
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{delay: 0.5, duration: 1 }}
+        transition={{ delay: 0.5, duration: 1 }}
       >
         <Box className="welcome-screen">
           <Box className="welcome-screen-box">
             <Img src={screen} className="welcome-pad" />
           </Box>
           <Box className="top-title">
-          <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-            <Box w='56%'>
-            <Text
-              className="title"
-              fontSize={{
-                base: '13px',
-                sm: '13px',
-                md: '15px',
-                lg: '20px',
-              }}
-            >
-              {formData.gameTitle}
-            </Text>
+            <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+              <Box w='56%'>
+                <Text
+                  className="title"
+                  fontSize={{
+                    base: '13px',
+                    sm: '13px',
+                    md: '15px',
+                    lg: '20px',
+                  }}
+                >
+                  {formData.gameTitle}
+                </Text>
+              </Box>
             </Box>
-          </Box>
             {formData.gameIsShowGameDuration === 'true' && (
               <Text
                 className="duration"
@@ -203,11 +203,11 @@ const Welcome: React.FC<{
                 </Text>
               )}
               {formData.gameIsShowSkill === 'true' ||
-              formData.gameIsShowLearningOutcome === 'true' ? (
+                formData.gameIsShowLearningOutcome === 'true' ? (
                 <motion.div
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{delay: 1, duration: 0.5 }}
+                  transition={{ delay: 1, duration: 0.5 }}
                 >
                   <Img
                     className="rewards-arrow-img"
@@ -222,10 +222,10 @@ const Welcome: React.FC<{
                 ''
               )}
               <Box
-                display={'flex'}
+                // display={'flex'}
                 className={
                   formData.gameIsShowSkill === 'true' ||
-                  formData.gameIsShowLearningOutcome === 'true'
+                    formData.gameIsShowLearningOutcome === 'true'
                     ? 'rewards-box'
                     : 'empty-rewards-box'
                 }
@@ -234,14 +234,23 @@ const Welcome: React.FC<{
                   <>
                     <Box className="box-1">
                       <Img src={preloadedAssets.back} className="bg-img" />
-                      <Text
+                      <Img
+                        className="rewards-arrow-img"
+                        display={'block !important'}
+                        src={preloadedAssets.SkillLearn}
+                        mt={'25px'}
+                        alt="rew"
+                        w={'100%'}
+                        h={'auto'}
+                      />
+                    {/* <Text
                         className="skill-text"
                         style={{ textAlign: 'center' }}
                         fontFamily={'content'}
                         color={'black'}
-                      >
+                        >
                         Skills
-                      </Text>
+                      </Text> */}
                       <Box
                         className="inside-box"
                         transform={'translate(-2px, -125px)'}
@@ -293,14 +302,23 @@ const Welcome: React.FC<{
                   <>
                     <Box className="box-1">
                       <Img src={preloadedAssets.back} className="bg-img" />
-                      <Text
+                      <Img
+                        className="rewards-arrow-img"
+                        display={'block !important'}
+                        src={preloadedAssets.SkillLearn}
+                        mt={'25px'}
+                        alt="rew"
+                        w={'100%'}
+                        h={'auto'}
+                      />
+                      {/* <Text
                         className="skill-text"
                         style={{ textAlign: 'center' }}
                         fontFamily={'content'}
                         color={'black'}
                       >
                         Learning Outcomes
-                      </Text>
+                      </Text> */}
                       <Box
                         className="inside-box"
                         transform={'translate(-2px, -125px)'}

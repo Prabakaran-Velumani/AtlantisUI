@@ -204,7 +204,7 @@
     height: 100vw;    
   } 
   .EntirePreview .Game-Screen .Images .welcome-screen .top-title {    
-    top: 24vw;
+    top: 21vw;
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .top-title .title {
     font-size: 3.5vw;  
@@ -282,7 +282,7 @@
     transform: unset !important;
   }
   .EntirePreview .comple-screen .content-box .points-box .box-1 .inside-box-1 .inside-box-1_img {    
-    height: 8vw;
+    height: 10.5vw;
   }
   .EntirePreview .comple-screen .content-box .points-box .box-1 .inside-box-1 .inside-points-text {    
     font-size: 3vw;           

@@ -46,20 +46,20 @@ import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
-const Story  = lazy(() => import('./playcards/Story'));
-const Welcome  = lazy(() => import('./playcards/Welcome'));
-const ThankYou  = lazy(() => import('./playcards/Thankyou'));
-const Overview  = lazy(() => import('./playcards/Overview'));
-const Reflection  = lazy(() => import('./playcards/Reflection'));
-const Takeway  = lazy(() => import('./playcards/Takeaway'));
-const Completion  = lazy(() => import('./playcards/Completion'));
-const ReplayGame  = lazy(() => import('./playcards/ReplayGame'));
-const PlayInfo  = lazy(() => import('./playcards/playinfo'));
-const LeaderBoard  = lazy(() => import('./playcards/Leaderboard'));
-const ProfileScreen  = lazy(() => import('./playcards/ProfileScreen'));
-const Characterspage  = lazy(() => import('./playcards/CharacterSelection'));
-const ChapterPage  = lazy(() => import('./playcards/Chapters'));
-const FeedBackScreen  = lazy(() => import('./playcards/FeedBackScreen'));
+const Story = lazy(() => import('./playcards/Story'));
+const Welcome = lazy(() => import('./playcards/Welcome'));
+const ThankYou = lazy(() => import('./playcards/Thankyou'));
+const Overview = lazy(() => import('./playcards/Overview'));
+const Reflection = lazy(() => import('./playcards/Reflection'));
+const Takeway = lazy(() => import('./playcards/Takeaway'));
+const Completion = lazy(() => import('./playcards/Completion'));
+const ReplayGame = lazy(() => import('./playcards/ReplayGame'));
+const PlayInfo = lazy(() => import('./playcards/playinfo'));
+const LeaderBoard = lazy(() => import('./playcards/Leaderboard'));
+const ProfileScreen = lazy(() => import('./playcards/ProfileScreen'));
+const Characterspage = lazy(() => import('./playcards/CharacterSelection'));
+const ChapterPage = lazy(() => import('./playcards/Chapters'));
+const FeedBackScreen = lazy(() => import('./playcards/FeedBackScreen'));
 const TopMenuBar = lazy(() => import('./playcards/TopMenuBar'));
 const GameIntroScreen = lazy(() => import('./playcards/GameIntroScreen'));
 
@@ -476,12 +476,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const newTrackSequence = navTrack[navTrack.length - 1];
       const prevBlock = current
         ? Object.keys(demoBlocks[quest] || {})
-            .filter(
-              (key) =>
-                demoBlocks[quest]?.[key]?.blockPrimarySequence ==
-                newTrackSequence,
-            )
-            .map((key: any) => demoBlocks[quest]?.[key])
+          .filter(
+            (key) =>
+              demoBlocks[quest]?.[key]?.blockPrimarySequence ==
+              newTrackSequence,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
         : [];
 
       const currentQuest = current
@@ -562,10 +562,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
+        .filter(
+          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+        )
+        .map((key: any) => demoBlocks[quest]?.[key])
       : [];
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
@@ -755,10 +755,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               if (!profile.completedLevels.includes(currentQuest)) {
                 data.completedLevels = [...data.completedLevels, nextLevel];
               }
-
               return data;
             });
-
             setType(demoBlocks[nextLevel]['1']?.blockChoosen);
             setData(demoBlocks[nextLevel]['1']);
             setCurrentScreenId(6);
@@ -825,10 +823,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               if (!profile.completedLevels.includes(currentQuest)) {
                 data.completedLevels = [...data.completedLevels, nextLevel];
               }
-
               return data;
             });
-
             setType(demoBlocks[nextLevel]['1']?.blockChoosen);
             setData(demoBlocks[nextLevel]['1']);
             setCurrentScreenId(6);
@@ -878,7 +874,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setSelectedOption(null);
           return false;
         } else {
-        /** else leads to first block of the quest */
+          /** else leads to first block of the quest */
           setType(demoBlocks[quest]['1']?.blockChoosen);
           setData(demoBlocks[quest]['1']);
           setSelectedOption(null);
@@ -1516,7 +1512,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setSelectedOption(null);
           return false;
         } else {
-        /** else leads to first block of the quest */
+          /** else leads to first block of the quest */
           setType(demoBlocks[quest]['1']?.blockChoosen);
           setData(demoBlocks[quest]['1']);
           setSelectedOption(null);
@@ -1665,30 +1661,30 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const subTabOptionsForTabIds: Array<{
     [key: string]: Array<{ value: string; label: string }> | null;
   }> = [
-    { '1': null },
-    { '2': null },
-    {
-      '3': [
-        { value: 'Title', label: 'Title' },
-        { value: 'Skill', label: 'Skill' },
-        { value: 'Storyline', label: 'Storyline' },
-        { value: 'Outcomes', label: 'Outcomes' },
-        { value: 'Category', label: 'Category' },
-        { value: 'Author', label: 'Author' },
-      ],
-    },
-    { '4': null },
-    {
-      '5': [
-        { value: '0', label: 'Completion' },
-        { value: '1', label: 'Leaderboard' },
-        { value: '2', label: 'Reflection' },
-        { value: '3', label: 'Takeaway' },
-        { value: '4', label: 'Welcome' },
-        { value: '5', label: 'Thanks' },
-      ],
-    },
-  ];
+      { '1': null },
+      { '2': null },
+      {
+        '3': [
+          { value: 'Title', label: 'Title' },
+          { value: 'Skill', label: 'Skill' },
+          { value: 'Storyline', label: 'Storyline' },
+          { value: 'Outcomes', label: 'Outcomes' },
+          { value: 'Category', label: 'Category' },
+          { value: 'Author', label: 'Author' },
+        ],
+      },
+      { '4': null },
+      {
+        '5': [
+          { value: '0', label: 'Completion' },
+          { value: '1', label: 'Leaderboard' },
+          { value: '2', label: 'Reflection' },
+          { value: '3', label: 'Takeaway' },
+          { value: '4', label: 'Welcome' },
+          { value: '5', label: 'Thanks' },
+        ],
+      },
+    ];
   useEffect(() => {
     if (audioRef.current) {
       if (currentScreenId === 2) {
@@ -1968,7 +1964,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   }, [FeedbackNavigatenext]);
 
-  useEffect(() => {}, [FeedBackoptionData]);
+  useEffect(() => { }, [FeedBackoptionData]);
 
   const getFeedbackData = (getdata: any) => {
     setisScreenshot(true);
@@ -2432,7 +2428,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       profile={profile}
                       preloadedAssets={preloadedAssets}
                       FeedbackcurrentPosition={FeedbackcurrentPosition}
-                      interactionBlockArray = {interactionBlockArray}
+                      interactionBlockArray={interactionBlockArray}
                     />
                   );
                 case 10:
@@ -2642,14 +2638,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               }
             })()}
           </Flex>
-
           {isReviewDemo && (
             <Menu isOpen={isMenuOpen}>
               <MenuButton
                 p="0px"
                 bg={'brandScheme'}
                 position={'fixed'}
-                bottom={'0'}
+                bottom={'70px'}
                 right={'5px'}
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
                   handleMenubtn(e)
