@@ -412,6 +412,7 @@ const WelcomeContentScreen: React.FC<{
                           md: '15px',
                           lg: '20px',
                         }}
+                        textAlign='center'
                       >
                         {formData.gameTitle}
                       </Text>
@@ -445,12 +446,16 @@ const WelcomeContentScreen: React.FC<{
                     </Box>
                     <Box
                       className="content-box"
-                      fontFamily={'gametext'}
+                      fontFamily={'AtlantisText'}
                       display={'flex'}
                       justifyContent={'center'}
-                      height={'50%'}   
+                      height={'50%'}
                     >
-                      <Box w={'60%'} className="welcome_content" overflow={'auto'}>
+                      <Box
+                        w={'60%'}
+                        className="welcome_content"
+                        overflow={'auto'}
+                      >
                         {formData.gameIsShowStoryline === 'true' && (
                           <Text
                             className="text_welcome"
@@ -461,7 +466,7 @@ const WelcomeContentScreen: React.FC<{
                               md: '13px',
                               lg: '15px',
                             }}
-                            fontFamily={'content'}
+                            // fontFamily={'content'}
                           >
                             {formData.gameStoryLine}
                           </Text>
@@ -510,25 +515,10 @@ const WelcomeContentScreen: React.FC<{
                                   w={'100%'}
                                   h={'auto'}
                                 />
-                                {/* <Text
-                        className="skill-text"
-                        style={{ textAlign: 'center' }}
-                        fontFamily={'content'}
-                        color={'black'}
-                        >
-                        Skills
-                      </Text> */}
                                 <Box
                                   className="inside-box"
-                                  // transform={'translate(-2px, -125px)'}
                                   mt={'10px'}
                                   w={'100%'}
-                                  // h={'60px'}
-                                  // overflowY={'scroll'}
-                                  // display={'flex'}
-                                  // justifyContent={'center'}
-                                  // alignItems={'center'}
-                                  // flexDirection={'column'}
                                 >
                                   {authorArray
                                     .map((authorItem, index) => {
@@ -544,7 +534,7 @@ const WelcomeContentScreen: React.FC<{
                                           w={'25px'}
                                           h={'25px'}
                                         />
-                                        <Box>
+                                        <Box ml={'10px'}>
                                           <Box
                                             className="text-wrapper"
                                             display={'flex'}
@@ -554,7 +544,10 @@ const WelcomeContentScreen: React.FC<{
                                             font-weight={'300'}
                                             margin-left={'5px'}
                                           >
-                                            <Text color={'#D9C7A2'}>
+                                            <Text
+                                              color={'#D9C7A2'}
+                                              letterSpacing={'1px'}
+                                            >
                                               {filteredSkillName}
                                             </Text>
                                             <Text></Text>
@@ -569,10 +562,6 @@ const WelcomeContentScreen: React.FC<{
                           {formData.gameIsShowLearningOutcome === 'true' && (
                             <>
                               <Box className="box-1">
-                                {/* <Img
-                                src={back}
-                                className="bg-img"
-                              /> */}
                                 <Img
                                   className="rewards-arrow-img"
                                   display={'block !important'}
@@ -582,25 +571,10 @@ const WelcomeContentScreen: React.FC<{
                                   w={'100%'}
                                   h={'auto'}
                                 />
-                                {/* <Text
-                        className="skill-text"
-                        style={{ textAlign: 'center' }}
-                        fontFamily={'content'}
-                        color={'black'}
-                      >
-                        Learning Outcomes
-                      </Text> */}
                                 <Box
                                   className="inside-box"
-                                  // transform={'translate(-2px, -125px)'}
                                   mt={'10px'}
                                   w={'100%'}
-                                  // h={'60px'}
-                                  // overflowY={'scroll'}
-                                  // display={'flex'}
-                                  // justifyContent={'center'}
-                                  // alignItems={'center'}
-                                  // flexDirection={'column'}
                                 >
                                   {data &&
                                     data.map((it: any, ind: number) => {
@@ -616,7 +590,7 @@ const WelcomeContentScreen: React.FC<{
                                             w={'25px'}
                                             h={'25px'}
                                           />
-                                          <Box>
+                                          <Box ml={'10px'}>
                                             <Box
                                               className="text-wrapper"
                                               display={'flex'}
@@ -626,7 +600,10 @@ const WelcomeContentScreen: React.FC<{
                                               font-weight={'300'}
                                               margin-left={'5px'}
                                             >
-                                              <Text color={'#D9C7A2'}>
+                                              <Text
+                                                color={'#D9C7A2'}
+                                                letterSpacing={'1px'}
+                                              >
                                                 {contentAfterBullet}
                                               </Text>
                                               <Text></Text>
@@ -651,19 +628,14 @@ const WelcomeContentScreen: React.FC<{
                             className="author"
                           >
                             <Text
-                              // position={'absolute'}
-                              // right={'0px'}
-                              // left={'0px'}
-                              // bottom={'0px'}
-                              // top={'20px'}
                               fontSize={{
                                 base: '11px',
                                 sm: '12px',
                                 md: '13px',
                                 lg: '15px',
                               }}
-                              fontFamily={'content'}
-                              // color={'black'}
+                              textAlign={'center'}
+                              letterSpacing={'1px'}
                             >
                               *Author* <br /> {formData.gameAuthorName}
                             </Text>
@@ -671,13 +643,7 @@ const WelcomeContentScreen: React.FC<{
                         )}
                         {formData.gameIsShowAdditionalWelcomeNote ===
                           'true' && (
-                          <Box
-                            // w={'100%'}
-                            // h={'50px'}
-                            // position={'relative'}
-                            className="text_cont"
-                            textAlign={'center'}
-                          >
+                          <Box className="text_cont" textAlign={'center'}>
                             <Text
                               fontSize={{
                                 base: '11px',
@@ -685,7 +651,7 @@ const WelcomeContentScreen: React.FC<{
                                 md: '13px',
                                 lg: '15px',
                               }}
-                              fontFamily={'content'}
+                              letterSpacing={'1px'}
                             >
                               {renderContent()}
                             </Text>
@@ -693,11 +659,16 @@ const WelcomeContentScreen: React.FC<{
                         )}
                       </Box>
                     </Box>
-                    <Box w={'100%'} mt='5px' display={'flex'} justifyContent={'center'}>
+                    <Box
+                      w={'100%'}
+                      mt="5px"
+                      display={'flex'}
+                      justifyContent={'center'}
+                    >
                       <Img
                         src={next}
-                        h={'3.5vh'}
-                        w='auto'
+                        h={'2.5rem'}
+                        w="auto"
                         // onClick={() => setCurrentScreenId(12)}
                       />
                     </Box>

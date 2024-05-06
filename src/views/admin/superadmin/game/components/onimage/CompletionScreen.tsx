@@ -171,7 +171,7 @@ const CompletionScreen: React.FC<{
                       )}
                     </Box>
                     <Box mt={'35px'} w={'100%'} display={'flex'} justifyContent={'center'}> 
-                      <Img src={next} w={'auto'} h={'4vh'} />
+                      <Img src={next} w={'auto'} h={'2.5rem'} />
                     </Box>
                   </Box>
                 </Box>
@@ -184,8 +184,6 @@ const CompletionScreen: React.FC<{
               {/* <Box className='content-box'>
                 <Box className='congratulations'>
                   <Box className='content' mt="0px">
-
-
                     {((compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' || compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === undefined) && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') ? (
                       <>{compliData[CompKeyCount]?.gameCompletedCongratsMessage || "Congratulations! You have Completed..."}</>
                     ) : <></>}
