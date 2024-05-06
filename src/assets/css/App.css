@@ -326,6 +326,7 @@ option {
   background-size: contain;
   /*height: 300px;*/
 }
+
 .takeaway_content::-webkit-scrollbar {
   width: 16px;
   /*height: 300px;*/
@@ -338,6 +339,7 @@ option {
   background-repeat: no-repeat;
   background-size: contain;
 }
+
 .takeaway_content::-webkit-scrollbar-thumb {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
@@ -346,6 +348,7 @@ option {
   background-size: contain;
   /*height: 300px;*/
 }
+
 @font-face {
   font-family: 'Score';
   src: url(../fonts/COLCBL_.TTF);
