@@ -326,17 +326,20 @@ option {
   background-size: contain;
   /*height: 300px;*/
 }
+
 .takeaway_content::-webkit-scrollbar {
   width: 16px;
   /*height: 300px;*/
   border-radius: 30px;
   background-size: contain;
-} 
+}
+
 .takeaway_content::-webkit-scrollbar-track {
   background: url('../img/games/scroll.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
+
 .takeaway_content::-webkit-scrollbar-thumb {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
@@ -345,6 +348,7 @@ option {
   background-size: contain;
   /*height: 300px;*/
 }
+
 @font-face {
   font-family: 'Score';
   src: url(../fonts/COLCBL_.TTF);
@@ -5572,6 +5576,18 @@ grid-row: 1 / 2;
   letter-spacing: 1px;
 }
 
+.text_welcome {
+  font-size: 4vh;
+  font-family: 'AtlantisText';
+  color: var(--atlantis-text-color);
+  margin-top: 1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  letter-spacing: 1px;
+}
+
 .welcome_note {
   font-size: 1.5rem;
   font-family: 'AtlantisText';
@@ -5664,6 +5680,12 @@ grid-row: 1 / 2;
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .renderContent p {
+  font-size: 3.5vh;
+  font-family: 'AtlantisText';
+  color: var(--atlantis-text-color);
+}
+
+.text_cont {
   font-size: 3.5vh;
   font-family: 'AtlantisText';
   color: var(--atlantis-text-color);
@@ -6138,8 +6160,37 @@ grid-row: 1 / 2;
   font-family: 'AtlantisText';
   letter-spacing: 0.8px;
   color: var(--atlantis-text-color);
-  /* transform: translate(0, 155px); modify */
   font-size: 4vh;
+  /* transform: translate(0, 155px); modify */
+}
+
+.ty_tq_msg {
+  font-family: 'AtlantisText';
+  letter-spacing: 0.8px;
+  color: var(--atlantis-text-color);
+  font-size: 1.2rem;
+}
+
+.about_experience {
+  font-size: 4.5vh;
+  color: #bdac88;
+  font-family: 'AtlantisText';
+  margin-top: 10px;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.collect_learner_feedback {
+  width: 100%;
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  flex-flow: wrap;
+  margin-top: 10px;
+  color: var(--atlantis-text-color);
 }
 
 .EntirePreview .Game-Screen .Images .thankyou-screen .tq-msg div {
@@ -6256,6 +6307,13 @@ grid-row: 1 / 2;
     height: 280px;   */
 }
 
+.grid {
+  display: grid;
+  grid-gap: 1.3rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+}
+
 .EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box>p {
   font-size: 4vh;
 }
@@ -6263,6 +6321,10 @@ grid-row: 1 / 2;
 .EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .last-item {
   grid-column: span 2;
   /* This makes the item span across both columns */
+}
+
+.last_item{
+  grid-column: span 2;
 }
 
 .EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .last-item p {
@@ -6349,7 +6411,54 @@ grid-row: 1 / 2;
   background-size: contain;
   height: 30px;
 }
+.thankyou_scroll_content{
+  width: 80% ;
+  height:100% ; 
+  overflow:auto ;
+}
 
+.welcome_content::-webkit-scrollbar {
+  width: 18px;
+  height: 18px;
+  border-radius: 30px;
+  background-size: contain;
+}
+
+.welcome_content::-webkit-scrollbar-track {
+  background: url('../img/games/scroll.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.welcome_content::-webkit-scrollbar-thumb {
+  background: url('../img/games/cross.png');
+  background-repeat: no-repeat;
+  border-radius: 30px;
+  cursor: pointer;
+  background-size: contain;
+  height: 30px;
+}
+.thankyou_scroll_content::-webkit-scrollbar {
+  width: 18px;
+  height: 18px;
+  border-radius: 30px;
+  background-size: contain;
+}
+
+.thankyou_scroll_content::-webkit-scrollbar-track {
+  background: url('../img/games/scroll.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.thankyou_scroll_content::-webkit-scrollbar-thumb {
+  background: url('../img/games/cross.png');
+  background-repeat: no-repeat;
+  border-radius: 30px;
+  cursor: pointer;
+  background-size: contain;
+  height: 30px;
+}
 .screen-notebox1 {
   width: 100%;
   height: 100vh;

@@ -253,15 +253,15 @@ const Welcome: React.FC<{
                       </Text> */}
                       <Box
                         className="inside-box"
-                        transform={'translate(-2px, -125px)'}
+                        // transform={'translate(-2px, -125px)'}
                         mt={'10px'}
                         w={'100%'}
-                        h={'60px'}
-                        overflowY={'scroll'}
-                        display={'flex'}
-                        justifyContent={'center'}
-                        alignItems={'center'}
-                        flexDirection={'column'}
+                        // h={'60px'}
+                        // overflowY={'scroll'}
+                        // display={'flex'}
+                        // justifyContent={'center'}
+                        // alignItems={'center'}
+                        // flexDirection={'column'}
                       >
                         {authorArray
                           .map((authorItem, index) => {
@@ -321,15 +321,15 @@ const Welcome: React.FC<{
                       </Text> */}
                       <Box
                         className="inside-box"
-                        transform={'translate(-2px, -125px)'}
+                        // transform={'translate(-2px, -125px)'}
                         mt={'10px'}
                         w={'100%'}
-                        h={'60px'}
-                        overflowY={'scroll'}
-                        display={'flex'}
-                        justifyContent={'center'}
-                        alignItems={'center'}
-                        flexDirection={'column'}
+                        // h={'60px'}
+                        // overflowY={'scroll'}
+                        // display={'flex'}
+                        // justifyContent={'center'}
+                        // alignItems={'center'}
+                        // flexDirection={'column'}
                       >
                         {data &&
                           data.map((it: any, ind: number) => {
