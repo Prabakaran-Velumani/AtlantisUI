@@ -273,6 +273,9 @@ const ChapterPage: React.FC<{
       opacity: 1,
     },
   };
+
+
+
   
   return (
     <>

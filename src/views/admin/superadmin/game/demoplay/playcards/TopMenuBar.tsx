@@ -27,6 +27,7 @@ interface TopMenuProps {
   setAudioObj: (obj:any)=>void;
   audioObj: any;
   questState:any;
+  setIsOpenCustomModal: (value: boolean)=> void;
 }
 
 const TopMenuBar: React.FC<TopMenuProps> = ({
@@ -43,7 +44,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
   data,
   setAudioObj,
   audioObj,
-  questState
+  questState,
+  setIsOpenCustomModal
 }) => {
     const [geFinalscorequest, SetFinalscore] = useState(null);
     const { profile, setProfile } = useContext<{ profile: any, setProfile: any }>(ScoreContext);
@@ -160,6 +162,39 @@ const totalPoints = useMemo(() => {
                     onClick={() => setCurrentScreenId(1)}
                   />
                   </Tooltip>
+
+                {/***** Profile Screen *****/}
+                <Tooltip label="Home"
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    background={'transparent'}
+                    boxShadow={'unset'}
+                    backgroundImage={preloadedAssets.TooltipImg}
+                    backgroundRepeat={'no-repeat'}
+                    backgroundSize={'contain'}
+                    backgroundPosition={'center'}
+                    filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                    padding={'10px'}
+                    height={'70px'}
+                    w={'150px'}
+                    fontSize={'29px'}
+                    fontFamily={'Atlantis'}
+                    color={'#000'}
+                    overflow={'hidden'}
+                    lineHeight={'25px'}
+                  >
+                  <Img
+                    src={preloadedAssets.profile}
+                    className={'top-home-menu'}
+                    onClick={() => setIsOpenCustomModal(true)}
+                  />
+                  </Tooltip>
+
+
+
+
+
                   <Tooltip label="Progress"
                     display={'flex'}
                     justifyContent={'center'}
@@ -359,7 +394,7 @@ const totalPoints = useMemo(() => {
                   <Box className="btns">
                     <Button
                       className="okay-btn btn"
-                      onClick={() => setIsSettingOpen(false)}
+                      onClick={() => {setIsSettingOpen(false);}}
                     >
                       <Img src={preloadedAssets.OkayBtn} />
                     </Button>

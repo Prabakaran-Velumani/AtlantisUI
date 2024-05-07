@@ -150,7 +150,6 @@ const GamePreview = () => {
         setPreviewLogsData(Reponse);
       }
     }
-    console.log('125');
     fetchPreviewLogs();
   }, [gameInfo]);
   useEffect(() => {
@@ -175,12 +174,13 @@ const GamePreview = () => {
       setComponentsLoaded(true);
     };
     const loadGlbFiles = async () => {
+      console.log("in loadGlbFiles function")
       try {
         // assetImageSrc['characterGlb'] = CharacterGlb; 
         // { assetType: 'characterGlb', src: characterGlb },
         const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: CharacterGlb }]);
         // Use preloadedGLBs[CharacterGlb] if you need the preloaded GLB data
-
+        console.log("preloadedGLBs", preloadedGLBs)
         const loader = new GLTFLoader();
         const parsedGlbArray = [];
         loader.parse(preloadedGLBs, '', (gltf) => {
@@ -192,12 +192,13 @@ const GamePreview = () => {
       }
     };
 
-
     fetchData();
     loadGlbFiles();
     loadComponents();
 
   }, []);
+
+console.log("componentsLoaded", componentsLoaded)
 
   useEffect(() => {
     uuid && fetchGameData();
@@ -553,15 +554,19 @@ const GamePreview = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      try {
       // const glbAndApiImageSet = {...apiImageSet, glb: CharacterGlb};
       const resolvedResult: any = await preloadedImages(apiImageSet);
       setApiUrlAssetImageUrls(resolvedResult);
+    } catch (error) {
+      console.error('Error preloading images:', error);
+    }
     };
     apiImageSet && fetchData();
   }, [apiImageSet]);
 
   const preloadedAssets = useMemo(() => {
-
+    console.log("loadedGLBs", loadedGLBs);
     return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls, ...loadedGLBs };
   }, [apiUrlAssetImageUrls, staticAssetImageUrls, loadedGLBs]);
 

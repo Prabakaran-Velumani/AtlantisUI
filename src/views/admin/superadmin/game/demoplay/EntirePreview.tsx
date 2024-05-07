@@ -91,9 +91,8 @@ const TopMenuBar = lazy(() => import('./playcards/TopMenuBar'));
 const GameIntroScreen = lazy(() => import('./playcards/GameIntroScreen'));
 const ModelPopup = lazy(() => import('./playcards/ModelPopup'));
 const ReplayPoints = lazy(() => import('./playcards/ReplayPoints'));
-const LanguageSelectionPrompt = lazy(
-  () => import('./playcards/LanguageSelectionPrompt'),
-);
+const LanguageSelectionPrompt = lazy(() => import('./playcards/LanguageSelectionPrompt'));
+const PromptScreen = lazy(() => import('./playcards/PromptScreen'));
 
 interface Review {
   // reviewId: Number;
@@ -346,7 +345,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [currentTrackPointer, setCurrentTrackPointer] = useState(0);
   const [currentScreenId, setCurrentScreenId] =
     useState<number>(InitialScreenId);
-  const [hasMulitLanguages, setHasMulitLanguages] = useState<boolean>(false); // This state to control the auto Initialization of the Language selection Modal popup
+  const [hasMulitLanguages, setHasMulitLanguages] = useState<boolean>(true); // This state to control the auto Initialization of the Language selection Modal popup
   const [isOpenCustomModal, setIsOpenCustomModal] = useState<boolean>(false); //This state to control the opening of Language selection Modal popup by click event
   const [gameLanguages, setGameLanguages] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -2208,6 +2207,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   useEffect(() => {
+    console.log("$$$$$$$ --- getPrevLogDatas", getPrevLogDatas);
     const fetchSupportedLanguages = async () => {
       if (gameInfo?.gameData?.gameId > 0) {
         const resLang = await getGameLanguages(gameInfo?.gameData?.gameId);
@@ -2215,21 +2215,22 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           if (resLang?.data.length > 0) {
             const data = resLang?.data;
             // const data =[{value: 1, label: 'Tamil'}, {value: 2, label: 'French'}, {value: 5, label: 'Chinesh'}];
-            data.unshift({ value: 0, label: 'English' });
             setGameLanguages(data);
-            setProfileData((prev: any) => ({
-              ...prev,
-              language: data[0]?.label,
-            }));
-            setPreLogDatas((prev: any) => ({
-              ...prev,
-              previewProfile: {
-                ...prev.previewProfile,
-                language: data[0]?.label,
-              },
-            }));
+            // setProfileData((prev: any) => ({
+              data.unshift({ value: 0, label: 'English' });
+              //   ...prev,
+            //   language: data[0]?.value,
+            // }));
+            // setPreLogDatas((prev: any) => ({
+            //   ...prev,
+            //   previewProfile: {
+            //     ...prev.previewProfile,
+            //     language: data[0]?.value,
+            //   },
+            // }));
+           
             setHasMulitLanguages(true);
-            setIsOpenCustomModal(true);
+            // setIsOpenCustomModal(true);
           } else {
             setProfileData((prev: any) => ({
               ...prev,
@@ -2241,6 +2242,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     };
     fetchSupportedLanguages();
   }, []);
+  
+
 
   // Afrith-modified-starts-13/Mar/24
 
@@ -2471,7 +2474,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     };
     updatepreviousdatas();
   }, [getPrevLogDatas]);
-  //  Newly Added  for prviouse stored
+
+
+//  Newly Added  for prviouse stored
   const SetPreviouseStored = (currentdata: any) => {
     if (currentdata !== null) {
       const currentQuest = currentdata
@@ -2608,6 +2613,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   };
 
+
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="EntirePreview-wrapper">
@@ -2628,6 +2634,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               setAudioObj={setAudioObj}
               audioObj={audioObj}
               questState={questState}
+              setIsOpenCustomModal={setIsOpenCustomModal}
             />
           </Box>
           <Flex
@@ -3374,7 +3381,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           )}
           {/* Language Transaltion Modal popup */}
 
-          <LanguageSelectionPrompt
+          {/* <LanguageSelectionPrompt
             gameLanguages={gameLanguages}
             formData={gameInfo?.gameData}
             preloadedAssets={preloadedAssets}
@@ -3384,7 +3391,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             setProfileData={setProfileData}
             setIsOpenCustomModal={setIsOpenCustomModal}
             isOpenCustomModal={isOpenCustomModal}
-          />
+          /> */}
+          
+            <PromptScreen preloadedAssets={preloadedAssets} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData}
+            setProfileData={setProfileData}  gameLanguages={gameLanguages} formData={gameInfo?.gameData} setPreLogDatas={setPreLogDatas} getPrevLogDatas={getPrevLogDatas} currentScreenId={currentScreenId}/>
+          
         </Box>
       </Box>
     </ProfileContext.Provider>

@@ -70,6 +70,7 @@ import Completed from 'assets/img/games/COMPLETED.png'
 import VolumeTrack from 'assets/img/games/volume-track.png'
 import Thankyou from 'assets/img/games/thankyou.png';
 import MoneyIcon from 'assets/img/games/MoneyIcon.png';
+import profile from '../../assets/img/games/profile.png';
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
  */
@@ -146,6 +147,7 @@ export const assetImageSrc = [
   { assetType: 'VolumeTrack', src:VolumeTrack},
   { assetType: 'Thankyou', src:Thankyou},
   { assetType: 'MoneyIcon', src:MoneyIcon},
+  { assetType: 'profile', src:profile},
   /*file not available but used list
   { assetType: 'write', src: write },
   */

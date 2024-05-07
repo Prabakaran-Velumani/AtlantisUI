@@ -123,41 +123,41 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   getPrevLogDatas,
 }) => {
   const [i, setI] = useState(0);
-  const [isLanguage, setIsLanguage] = useState(null);
-  const [select, setSelect] = useState(false);
-  const [languages, setLanguages] = useState<any[]>(null);
-  const [characterName, setCharacterName] = useState('');
+  // const [isLanguage, setIsLanguage] = useState(null);
+  // const [select, setSelect] = useState(false);
+  // const [languages, setLanguages] = useState<any[]>(null);
+  // const [characterName, setCharacterName] = useState('');
   const [toggleLeft, setToggleLeft] = useState(false);
   const [toggleRight, setToggleRight] = useState(false);
   const toast = useToast();
-  const playerInfo = useContext(ProfileContext);
+  // const playerInfo = useContext(ProfileContext);
 
   const selectPlayerClick = () => {
     const i = 0; // Assuming you are referring to a specific player index
     setSelectedPlayer(players[i]);
     // Check if the alias name is empty or does not meet the length requirements
-    if (playerInfo.name.trim() === '') {
-      toast({
-        title: 'Alias name is empty! Please enter an alias name.',
-        status: 'error',
-        duration: 2000,
-        isClosable: true,
-        position: 'top-right',
-      });
-      return;
-    } else if (
-      playerInfo.name.trim().length < 3 ||
-      playerInfo.name.trim().length >= 15
-    ) {
-      toast({
-        title: 'Alias name must be between 3 and 15 letters.',
-        status: 'error',
-        duration: 2000,
-        isClosable: true,
-        position: 'top-right',
-      });
-      return;
-    }
+    // if (playerInfo.name.trim() === '') {
+    //   toast({
+    //     title: 'Alias name is empty! Please enter an alias name.',
+    //     status: 'error',
+    //     duration: 2000,
+    //     isClosable: true,
+    //     position: 'top-right',
+    //   });
+    //   return;
+    // } else if (
+    //   playerInfo.name.trim().length < 3 ||
+    //   playerInfo.name.trim().length >= 15
+    // ) {
+    //   toast({
+    //     title: 'Alias name must be between 3 and 15 letters.',
+    //     status: 'error',
+    //     duration: 2000,
+    //     isClosable: true,
+    //     position: 'top-right',
+    //   });
+    //   return;
+    // }
     const screenIdset =
       getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
     if (screenIdset !== currentScreenId) {
@@ -180,6 +180,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   });
   const screenIdset =
     getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+
+    console.log("preLogData",getPrevLogDatas)
+    console.log("profileData",profileData)
+
   return (
     <>
       <Box
@@ -280,12 +284,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     }}
                   ></Button>
                   <Box w={'25%'} position={'relative'}>
-                    <input
+                    {/* <input
                       style={{ width: '100%' }}
                       className="player_name"
                       placeholder={'Enter Alias Name'}
                       value={playerInfo.name}
-                      onChange={(e: any) => {
+                       onChange={(e: any) => {
                         // Update profileData state
                         setProfileData((prev: any) => ({
                           ...prev,
@@ -299,8 +303,16 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                             name: e.target.value,
                           },
                         }));
-                      }}
-                    />
+                       }}
+                    /> */}
+
+                    <FormLabel
+                      style={{ width: '100%' }}
+                      className="player_name"
+                      textAlign={"center"} 
+                    > 
+                    {profileData.name} 
+                      </FormLabel>
                   </Box>
                   <Button
                     className="btns right-btn"

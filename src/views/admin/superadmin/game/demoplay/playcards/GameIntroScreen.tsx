@@ -83,13 +83,13 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
       backgroundRepeat={'no-repeat'}
       className="chapter_potrait"
     >
-       {hasMulitLanguages && (
+       {/* {hasMulitLanguages && (
       <>
         <Box className="intro_lang_icon" onClick={()=>setIsOpenCustomModal(true)}>
         <Icon as={FaLanguage} w={"4em"} h={"3em"} />
         </Box>
       </>
-      )}
+      )} */}
       <Grid
         templateColumns="repeat(1, 1fr)"
         gap={4}
