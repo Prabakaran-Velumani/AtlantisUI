@@ -76,6 +76,7 @@ import Profile from 'assets/img/games/profile.png';
 import Continue from 'assets/img/games/Continue.png'
 import StarsBg from 'assets/img/screens/Stars.png';
 import MoneyIcon from 'assets/img/games/MoneyIcon.png';
+import profile from '../../assets/img/games/profile.png';
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
  */
@@ -158,6 +159,7 @@ export const assetImageSrc = [
   { assetType: 'Thankyou', src:Thankyou},
   { assetType: 'SkillLearn', src:SkillLearn},
   { assetType: 'MoneyIcon', src:MoneyIcon},
+  { assetType: 'profile', src:profile},
   /*file not available but used list
   { assetType: 'write', src: write },
   */

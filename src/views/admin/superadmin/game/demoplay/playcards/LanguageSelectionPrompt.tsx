@@ -64,13 +64,19 @@ return (
         <ModalOverlay />
         <ModalContent>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody
+          bgImage={`url(${preloadedAssets.Lang})`}
+          bgSize="cover"
+          bgPosition="center"
+          bgRepeat="no-repeat"
+        >
         <Box id="container" className="Play-station">
-          <Box className="top-menu-home-section">
+          {/* <Box className="top-menu-home-section"> */}
+          <Box>
             {hasMulitLanguages && (
-              <Box className="Setting-box">
-                <Img src={preloadedAssets.Lang} className="setting-pad" />
-                <Box className="nick-name" mb={'20px'}>
+              <Box className="Setting-box vertex">
+                {/* <Img src={preloadedAssets.Lang} className="setting-pad" /> */}
+                {/* <Box className="nick-name " mb={'20px'}>
                     <FormLabel>Alias Name</FormLabel>
                     <Img className="formfield" src={preloadedAssets.FormField} />
                     <Input
@@ -80,7 +86,8 @@ return (
                     />
                   </Box>
 
-                <Box className="vertex">
+                {// <Box className="vertex"> }
+                <Box>
                   <FormLabel className={'label'} me={'0'}>
                     Language
                   </FormLabel>
@@ -131,7 +138,18 @@ return (
                       <Img src={preloadedAssets.OkayBtn} w={'100%'} h={'auto'} />
                     </Button>
                   </Box>
-                </Box>
+                </Box> */}
+              <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem, unde similique distinctio perferendis illo alias molestiae temporibus eaque aspernatur, provident aliquam doloremque dicta velit! Numquam eveniet eligendi voluptatem at dolorem!
+              Natus ipsum laboriosam consequatur molestiae nulla quam quidem a iure consequuntur molestias cumque necessitatibus repudiandae ex numquam, sint itaque expedita incidunt neque fugit, tempore provident eligendi quod officiis esse. Placeat.
+              Facilis distinctio rem cupiditate temporibus. Architecto optio laborum fugit aliquid maiores aliquam qui inventore nihil mollitia nesciunt voluptatum ratione, consectetur nam labore eveniet eaque? Dolor et exercitationem quisquam eos unde.
+              Dolorum, ex animi necessitatibus tempore ipsam expedita qui placeat facilis minus adipisci laboriosam fuga magnam magni non iusto temporibus ad consequuntur commodi mollitia natus vero! Laborum alias distinctio omnis animi.
+              Consectetur optio vitae pariatur eos eaque quis ea ipsum? Excepturi atque consectetur expedita, illum sequi ex, reprehenderit illo minus voluptatibus, sit molestiae. Tenetur vitae fugit, optio incidunt tempora commodi impedit.
+              Odit voluptas ab cupiditate hic, iure praesentium esse quas obcaecati consectetur. Laborum mollitia soluta a eum at totam quos facere architecto? Animi eum blanditiis doloribus at fuga est consectetur quisquam.
+              Error natus culpa rem vel accusantium repellat corrupti quisquam aperiam totam cumque, ex mollitia quaerat debitis, ipsa facere. Iusto corrupti libero sunt. Earum quam dicta ullam, pariatur nulla provident eius.
+              Cumque doloribus ipsam maxime asperiores numquam quibusdam ipsa. Vitae nemo ratione vero quasi rem. Debitis expedita, rem iusto necessitatibus minus, tenetur, sint repellendus dolorum dolores rerum enim? Similique, earum perspiciatis!</Text>
+
+
+
               </Box>
             )}
           </Box>

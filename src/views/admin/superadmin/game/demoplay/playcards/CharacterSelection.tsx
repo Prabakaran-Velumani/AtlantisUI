@@ -123,20 +123,20 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   getPrevLogDatas,
 }) => {
   const [i, setI] = useState(0);
-  const [select, setSelect] = useState(false);
-  const [languages, setLanguages] = useState<any[]>(null);
-  const [characterName, setCharacterName] = useState('');
   const [toggleLeft, setToggleLeft] = useState(false);
   const [toggleRight, setToggleRight] = useState(false)
   const toast = useToast();
-  const playerInfo = useContext(ProfileContext);
 
   const selectPlayerClick = () => {
     const i = 0; // Assuming you are referring to a specific player index
     setSelectedPlayer(players[i]);
-    /**if game has more than one quest, then navigate to chapter selection screen, otherwise navigate to story part direclty */
-    if (playerInfo.name === '') {
-      setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
+    const screenIdset =
+      getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+    if (screenIdset !== currentScreenId) {
+      setPreLogDatas((prev: any) => ({
+        ...prev,
+        screenIdSeq: [...prev.screenIdSeq, currentScreenId],
+      }));
     }
 
     // Set the selected player
@@ -153,6 +153,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   });
   const screenIdset =
     getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+
+    console.log("preLogData",getPrevLogDatas)
+    console.log("profileData",profileData)
+
   return (
     <>
       <Box
@@ -255,12 +259,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     }}
                   ></Button>
                   <Box w={'25%'} position={'relative'}>
-                    <input
+                    {/* <input
                       style={{ width: '100%' }}
                       className="player_name"
                       placeholder={'Enter Alias Name'}
                       value={playerInfo.name}
-                      onChange={(e: any) => {
+                       onChange={(e: any) => {
                         // Update profileData state
                         setProfileData((prev: any) => ({
                           ...prev,
@@ -274,8 +278,16 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                             name: e.target.value,
                           },
                         }));
-                      }}
-                    />
+                       }}
+                    /> */}
+
+                    <FormLabel
+                      style={{ width: '100%' }}
+                      className="player_name"
+                      textAlign={"center"} 
+                    > 
+                    {profileData.name} 
+                      </FormLabel>
                   </Box>
                   <Button
                     className="btns right-btn mouse_style"

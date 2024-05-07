@@ -28,6 +28,7 @@ interface TopMenuProps {
   audioObj: any;
   setIsLanguage: any;
   questState:any;
+  setIsOpenCustomModal: (value: boolean)=> void;
 }
 
 const TopMenuBar: React.FC<TopMenuProps> = ({
@@ -45,7 +46,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
   data,
   setAudioObj,
   audioObj,
-  questState
+  questState,
+  setIsOpenCustomModal
 }) => {
   const [geFinalscorequest, SetFinalscore] = useState(null);
   const { profile, setProfile } = useContext<{ profile: any, setProfile: any }>(ScoreContext);
@@ -194,7 +196,7 @@ const totalPoints = useMemo(() => {
                     height={'70%'}
                     position={'relative'}
                     zIndex={9999}
-                    onClick={() => setCurrentScreenId(1)}
+                    onClick={() => setIsOpenCustomModal(true)}
                   />
                 </Tooltip>
               </Box>
