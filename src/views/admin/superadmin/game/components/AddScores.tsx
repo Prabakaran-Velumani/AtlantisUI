@@ -37,7 +37,7 @@ import Screen2 from '../../../../../assets/img/screens/screen2.png';
 import Screen3 from '../../../../../assets/img/screens/screen3.png';
 import Screen4 from '../../../../../assets/img/screens/screen4.png';
 import Screen5 from '../../../../../assets/img/screens/screen5.png';
-import Screen6 from '../../../../../assets/img/screens/screen6.png';
+import Screen6 from '../../../../../assets/img/games/thankyou.png';
 // brindha start
 
 import { useNavigate, useParams } from 'react-router-dom';

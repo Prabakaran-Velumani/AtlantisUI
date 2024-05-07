@@ -144,7 +144,7 @@ const Welcome: React.FC<{
           </Box>
           <Box className="top-title">
             <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-              <Box w='56%'>
+              <Box w='51%'>
                 <Text
                   className="title"
                   fontSize={{
@@ -390,6 +390,7 @@ const Welcome: React.FC<{
                     }}
                     fontFamily={'content'}
                     color={'black'}
+                    textAlign={'center'}
                   >
                     *Author* <br /> {formData.gameAuthorName}
                   </Text>

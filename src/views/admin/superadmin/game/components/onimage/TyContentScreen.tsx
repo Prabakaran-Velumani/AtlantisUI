@@ -515,8 +515,8 @@ const TyContentScreen: React.FC<{
                 alignItems={'center'}
                 flexDirection={'column'}
                 w={'100%'}
-                h={'33%'}
-                top={{ base: '37.5%', '2xl': '41.5%' }}
+                h={'37%'}
+                top={{ base: '34.5%', '2xl': '35.5%' }}
                 fontFamily={'AtlantisText'}
               >
                 <Box  className={'thankyou_scroll_content'}>

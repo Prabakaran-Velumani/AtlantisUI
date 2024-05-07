@@ -460,12 +460,7 @@ const WelcomeContentScreen: React.FC<{
                           <Text
                             className="text_welcome"
                             mt={'20px'}
-                            fontSize={{
-                              base: '11px',
-                              sm: '12px',
-                              md: '13px',
-                              lg: '15px',
-                            }}
+                            fontSize={'1rem'}
                             // fontFamily={'content'}
                           >
                             {formData.gameStoryLine}
@@ -502,10 +497,6 @@ const WelcomeContentScreen: React.FC<{
                           {formData.gameIsShowSkill === 'true' && (
                             <>
                               <Box className="box-1">
-                                {/* <Img
-                                src={back}
-                                className="bg-img"
-                              /> */}
                                 <Img
                                   className="rewards-arrow-img"
                                   display={'block !important'}
@@ -538,8 +529,6 @@ const WelcomeContentScreen: React.FC<{
                                           <Box
                                             className="text-wrapper"
                                             display={'flex'}
-                                            // w={'50px'}
-                                            // h={'20px'}
                                             justifyContent={'space-between'}
                                             font-weight={'300'}
                                             margin-left={'5px'}
@@ -628,12 +617,7 @@ const WelcomeContentScreen: React.FC<{
                             className="author"
                           >
                             <Text
-                              fontSize={{
-                                base: '11px',
-                                sm: '12px',
-                                md: '13px',
-                                lg: '15px',
-                              }}
+                              fontSize={'1rem'}
                               textAlign={'center'}
                               letterSpacing={'1px'}
                             >
@@ -645,12 +629,7 @@ const WelcomeContentScreen: React.FC<{
                           'true' && (
                           <Box className="text_cont" textAlign={'center'}>
                             <Text
-                              fontSize={{
-                                base: '11px',
-                                sm: '12px',
-                                md: '13px',
-                                lg: '15px',
-                              }}
+                              fontSize={'1rem'}
                               letterSpacing={'1px'}
                             >
                               {renderContent()}
@@ -669,7 +648,6 @@ const WelcomeContentScreen: React.FC<{
                         src={next}
                         h={'2.5rem'}
                         w="auto"
-                        // onClick={() => setCurrentScreenId(12)}
                       />
                     </Box>
                   </Box>

@@ -156,6 +156,8 @@ const ReflectionScreen: React.FC<{
                                 className="text drop"
                                 style={{ whiteSpace: 'break-spaces' }}
                                 fontFamily={'AtlantisText'}
+                                fontSize={'1rem'}
+                                letterSpacing={'0.5px'}
                               >
                                 {` ${reflectionQuestions[`ref${index + 1}`]?.padEnd(
                                   90,

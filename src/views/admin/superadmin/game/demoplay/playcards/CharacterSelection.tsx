@@ -394,8 +394,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     </Box>
                     <Button
                       className="btns right-btn mouse_style"
-                      bg={'none'}
-                      
+                      bg={'none'}                      
                       _hover={{ bg: 'none' }}
                       onClick={selectPlayerClick}
                     ></Button>

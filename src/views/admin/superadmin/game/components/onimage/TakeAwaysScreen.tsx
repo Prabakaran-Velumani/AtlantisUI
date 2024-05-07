@@ -29,7 +29,7 @@ const TakewayScreen: React.FC<{
           >
             <Box w={'auto'} position={'relative'} h={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
               <Img src={imageSrc} h={'auto'} w={'100%'}  transition={'transform 0.3s ease'} transform={{lg:'scale(1)','2xl':'scale(1.3)'}} />
-              <Box position={'absolute'}  transition={'transform 0.3s ease'} transform={{lg:'scale(1)','2xl':'scale(1.25)'}} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'} w={'100%'} h={'41%'} top={{base:'37.5%','2xl':'41.5%'}} fontFamily={'AtlantisText'}>
+              <Box position={'absolute'}  transition={'transform 0.3s ease'} transform={{lg:'scale(1)','2xl':'scale(1.25)'}} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'} w={'100%'} h={'40%'} top={{base:'35.5%','2xl':'38%'}} fontFamily={'AtlantisText'}>
                 <Box className='takeaway_content'>
                   {data &&
                     data.map((it: any, ind: number) => {
@@ -44,7 +44,7 @@ const TakewayScreen: React.FC<{
                             w={'16px'}
                             h={'16px'}
                           />
-                          <Text ml={'5px'} fontSize={'1.2rem'} color={'#D9C7A2'} fontFamily={'AtlantisContent'} overflowWrap={'anywhere'} letterSpacing={'1px'}>
+                          <Text ml={'5px'} fontSize={'1rem'} color={'#D9C7A2'} fontFamily={'AtlantisContent'} overflowWrap={'anywhere'} letterSpacing={'1px'}>
                             {contentAfterBullet}
                           </Text>
                         </Box>
@@ -52,7 +52,7 @@ const TakewayScreen: React.FC<{
                     })}
                 </Box>
                 <Box w={'100%'} display={'flex'} justifyContent={'center'} mt={'15px'}>
-                  <Img src={preloadedAssets?.next ?? next} h={'4vh'} w={'auto'} />
+                  <Img src={preloadedAssets?.next ?? next} h={'2rem'} w={'auto'} />
                 </Box>
               </Box>
             </Box>
