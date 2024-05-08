@@ -2,61 +2,22 @@
 
 import {
   Box,
-  Checkbox,
-  Flex,
   Modal,
-  Input,
   Button,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalOverlay,
-  Progress,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  TagLabel,
-  Tag,
-  TagCloseButton,
-  Tr,
   useColorModeValue,
   useToast,
-  Img,
 } from '@chakra-ui/react';
 import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
   SortingState,
-  useReactTable,
 } from '@tanstack/react-table';
 // Custom components
 
 import * as React from 'react';
-import TextField from 'components/fields/TextField';
-import { sentFeedbackEmails } from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
-import { addReviewers } from 'utils/reviews/reviews';
-import ReplayBox from 'assets/img/screens/ReplayBox.png';
-import play from 'assets/img/games/Play.png';
-import ArcheryArrow from 'assets/img/games/archery-arrow.png';
-// Assets
-
-// type RowObj = {
-//   name: [string, boolean];
-//   progress: string;
-//   quantity: number;
-//   date: string;
-//   info: boolean;
-// };
-
-// const columnHelper = createColumnHelper<RowObj>();
-
-// const columns = columnsDataCheck;
 export default function PlayInfo(props: {
   // tableData: any;
   onOpen?: any;
@@ -66,16 +27,7 @@ export default function PlayInfo(props: {
   setIsGetsPlayAudioConfirmation?: any;
 }) {
   const { onOpen, onClose, isOpen,startDemo, setIsGetsPlayAudioConfirmation } = props;
-  const [sorting, setSorting] = React.useState<SortingState>([]);
   const textColor = useColorModeValue('secondaryGray.900', 'white');
-  const iconColor = useColorModeValue('secondaryGray.500', 'white');
-  const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
-  const { id } = useParams();
-  const toast = useToast();
-
-  let lightBlue = useColorModeValue('#3311db5c', '#3311db5c');
-
-  const submitEmails = async () => {};
   return (
     <>
     <Modal isOpen={true} onClose={onClose} size="lg" isCentered>

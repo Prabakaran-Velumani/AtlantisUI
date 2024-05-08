@@ -1,9 +1,6 @@
 import React, {
-  Suspense,
   useContext,
   useEffect,
-  useLayoutEffect,
-  useRef,
   useState,
 } from 'react';
 import {
@@ -71,7 +68,6 @@ interface PlayGamesProps {
   setSelectedPlayer?: any;
   profileData?: any;
   setProfileData?: any;
-  setprevProfileData?: any;
   demoBlocks?: any;
   preloadedAssets?: any;
   setprevScreenId: any;
@@ -113,7 +109,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   setSelectedPlayer,
   profileData,
   setProfileData,
-  setprevProfileData,
   demoBlocks,
   formData,
   preloadedAssets,
@@ -135,29 +130,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const selectPlayerClick = () => {
     const i = 0; // Assuming you are referring to a specific player index
     setSelectedPlayer(players[i]);
-    // Check if the alias name is empty or does not meet the length requirements
-    // if (playerInfo.name.trim() === '') {
-    //   toast({
-    //     title: 'Alias name is empty! Please enter an alias name.',
-    //     status: 'error',
-    //     duration: 2000,
-    //     isClosable: true,
-    //     position: 'top-right',
-    //   });
-    //   return;
-    // } else if (
-    //   playerInfo.name.trim().length < 3 ||
-    //   playerInfo.name.trim().length >= 15
-    // ) {
-    //   toast({
-    //     title: 'Alias name must be between 3 and 15 letters.',
-    //     status: 'error',
-    //     duration: 2000,
-    //     isClosable: true,
-    //     position: 'top-right',
-    //   });
-    //   return;
-    // }
+  
     const screenIdset =
       getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
     if (screenIdset !== currentScreenId) {
@@ -284,28 +257,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     }}
                   ></Button>
                   <Box w={'25%'} position={'relative'}>
-                    {/* <input
-                      style={{ width: '100%' }}
-                      className="player_name"
-                      placeholder={'Enter Alias Name'}
-                      value={playerInfo.name}
-                       onChange={(e: any) => {
-                        // Update profileData state
-                        setProfileData((prev: any) => ({
-                          ...prev,
-                          name: e.target.value,
-                        }));
-
-                        setPreLogDatas((prev: any) => ({
-                          ...prev,
-                          previewProfile: {
-                            ...prev.previewProfile,
-                            name: e.target.value,
-                          },
-                        }));
-                       }}
-                    /> */}
-
                     <FormLabel
                       style={{ width: '100%' }}
                       className="player_name"

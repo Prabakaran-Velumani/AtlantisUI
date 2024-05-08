@@ -29,6 +29,7 @@ const Completion: React.FC<{
   questOptions: any;
   currentQuestNo: any;
   preloadedAssets: any;
+  questWiseMaxTotal:any;
 }> = ({
   setCurrentScreenId,
   preview,
@@ -54,6 +55,7 @@ const Completion: React.FC<{
   questOptions,
   currentQuestNo,
   preloadedAssets,
+  questWiseMaxTotal,
 }) => {
   const [imgb, setbImg] = useState<any>();
   const [showComplete, setShowComplete] = useState(false);
@@ -66,7 +68,7 @@ const Completion: React.FC<{
 console.log("curretQuestOptions", curretQuestOptions);
 
   const [geFinalscorequest, SetFinalscore] = useState(profile.playerGrandTotal[parseInt(profile.currentQuest)]);
-  const [questScores, setQuestScores] = useState(null);
+  const [questScores, setQuestScores] = useState(questWiseMaxTotal);
   // const { profile, setProfile } = useContext(ScoreContext);
   useEffect(() => {
     setShowComplete(true);

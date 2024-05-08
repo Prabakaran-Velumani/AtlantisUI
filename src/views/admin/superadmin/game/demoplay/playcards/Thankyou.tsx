@@ -11,9 +11,6 @@ import next from 'assets/img/screens/next.png'
 import Feedback from 'assets/img/screens/Feedback.png';
 import {
   FaHatCowboy,
-  FaRegCommentDots,
-  FaRegThumbsUp,
-  FaRegThumbsDown,
 } from 'react-icons/fa';
 import { debounce } from 'lodash';
 
