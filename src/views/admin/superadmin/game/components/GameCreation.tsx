@@ -2921,16 +2921,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                         }
                       }
                     }
-                    // else {
-                    //   toast({
-                    //     title: `This ${alp.option} is Empty On This Sequence ${key.id} `,
-                    //     status: 'error',
-                    //     duration: 3000,
-                    //     isClosable: true,
-                    //   });
-                    //   return false;
-                    // }
-                   
                   }
                 }
               }

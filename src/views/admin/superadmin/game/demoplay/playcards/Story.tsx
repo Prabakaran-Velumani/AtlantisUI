@@ -736,7 +736,6 @@ const Story: React.FC<{
                 h={'50px'}
                 cursor={'pointer'}
               onClick={() => { SkipContentForBackNavigation() }}
-              // onClick={() => prevData(data)}
               />
               <Img
                 src={preloadedAssets.right}
@@ -776,14 +775,9 @@ const Story: React.FC<{
                   <Box
                     position={'absolute'}
                     top={{ base: '5%', md: '6%' }}
-                    className="story_feedback_content"
+                    className='story_feedback_content'
                   >
-                    <Box
-                      display={'flex'}
-                      justifyContent={'center'}
-                      alignItems={'center'}
-                      h={'100%'}
-                    >
+                    <Box display={'flex'} justifyContent={'center'} alignItems={'center'} h={'100%'}>
                       <Box
                         w={'90%'}
                         h={'70%'}
@@ -854,7 +848,6 @@ const Story: React.FC<{
                       </Box>
                       </Box>
                     </Box>
-
                   </Box>
                 </Box>
               </GridItem>
