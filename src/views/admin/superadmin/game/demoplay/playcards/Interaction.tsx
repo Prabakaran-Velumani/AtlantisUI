@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState,useEffect } from 'react'
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react'
 import { Box, Grid, GridItem, Img, Text } from '@chakra-ui/react';
 import { API_SERVER } from 'config/constant';
 import { motion } from 'framer-motion';
@@ -13,18 +13,29 @@ interface InteractionProps {
   data: any;
   options: any;
   optionClick: any;
-  Profiledatalanguage?: any;
-  prevData: any;
-  Contentlanguage: any;
   InteractionFunction: () => void;
   option: any;
-  isScreenshot?: boolean;
   navTrack?: any;
   preloadedAssets: any;
   selectedPlayer: any;
+  LastModiPrevData: any;
+  RepeatSelectOption: any;
+  RepeatPrevOption:any;
 }
 
-const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, options, optionClick, prevData, InteractionFunction, isScreenshot, navTrack, preloadedAssets, selectedPlayer, Contentlanguage, Profiledatalanguage}) => {
+const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, options, optionClick, InteractionFunction, navTrack, preloadedAssets, selectedPlayer, LastModiPrevData, RepeatSelectOption, RepeatPrevOption }) => {
+  const [prevSelectOption, setprevselectoptions] = useState<any>();
+  useEffect(() => {
+    if (RepeatSelectOption === true) {
+        if (RepeatPrevOption.length > 0) {
+          const prevoptionseleted = RepeatPrevOption;
+          // return;
+          setprevselectoptions(prevoptionseleted);
+        }
+      
+    }
+
+  }, [RepeatSelectOption]);
 
   return (
     <Box
@@ -49,7 +60,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
           <motion.div
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{duration: 0.3}}
+            transition={{ duration: 0.3 }}
           >
             <Box position={'relative'} className="story_interaction_image">
               <Img
@@ -109,7 +120,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                   >
                     <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
                     <Text textAlign={'justify'}>
-                    {Contentlanguage ? Contentlanguage : data?.blockText}
+                      {data?.blockText}
                     </Text>
                   </Box>
                 </Box>
@@ -134,29 +145,55 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                   <Box w={'60%'}>
                     {options &&
                       options.map((item: any, ind: number) => (
+
                         <Box
                           w={'100%'}
                           mb={'10px'}
                           lineHeight={1}
                           key={ind}
-                          color={option === ind ? 'purple' : ''}
-                          textAlign={'center'}
-                          cursor={'pointer'}
-                          onClick={() => optionClick(item, ind)}
-                          fontFamily={'AtlantisText'}
+                          color={prevSelectOption?.some((prev: any) => prev === item.qpOptions)
+                            ? 'white'
+                            : option === ind ? 'purple' : ''}
+                          style={
+                            prevSelectOption?.some((prev: any) => prev === item.qpOptions)
+                              ? {
+                                backgroundColor: "#df555533",
+                                backgroundSize: 'cover',
+                                opacity: 0.7,
+                                border: 'snow',
+                                borderRadius: '8%',
+                              }
+                              : {}
+                          }
                         >
-                          <Img
-                            src={
-                              option === ind
-                                ? preloadedAssets.on
-                                : preloadedAssets.off
-                            }
-                            h={'4vh'}
+                          <Box
                             w={'100%'}
-                          />
-                          <Box className={'story_interaction_option'}>
-                            {/* {item?.qpOptionText} */}
-                            {`${String.fromCharCode(65 + ind)}). ${item?.qpOptionText}`}
+                            mb={'10px'}
+                            lineHeight={1}
+                            key={ind}
+                            color={option === ind ? 'purple' : ''}
+                            textAlign={'center'}
+                            cursor={'pointer'}
+                            onClick={() => {
+                              if (!prevSelectOption || !prevSelectOption.some((prev: any) => prev === item.qpOptions)) {
+                                optionClick(item, ind);
+                              }
+                            }}
+                            fontFamily={'AtlantisText'}
+                          >
+                            <Img
+                              src={
+                                prevSelectOption?.some((prev: any) => prev === item.qpOptions)
+                                  ? preloadedAssets.on
+                                  : option === ind ? preloadedAssets.on : preloadedAssets.off
+                              }
+                              h={'4vh'}
+                              w={'100%'}
+                            />
+                            <Box className={'story_interaction_option'}>
+                              {/* {item?.qpOptionText} */}
+                              {`${String.fromCharCode(65 + ind)}). ${item?.qpOptionText}`}
+                            </Box>
                           </Box>
                         </Box>
                       ))}
@@ -167,17 +204,23 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                   display={'flex'}
                   justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
                 >
-                  {navTrack.length > 1 && (
+                  {/* {navTrack.length > 1 && (
                     <Img
                       src={preloadedAssets.left}
                       className={'interaction_button'}
                       onClick={() => prevData(data)}
                     />
-                  )}
+                  )} */}
+                  <Img
+                    src={preloadedAssets.left}
+                    className={'interaction_button'}
+                    onClick={() => { LastModiPrevData(data) }}
+                  />
+
                   {option !== null && (
                     <Box
                       className={'blinking-wave'}
-                      onClick={() => InteractionFunction()}
+                      // onClick={() => InteractionFunction()}
                       borderRadius={'50%'}
                     >
                       <Img

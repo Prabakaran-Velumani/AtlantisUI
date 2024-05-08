@@ -38,7 +38,6 @@ const ChapterPage: React.FC<{
   setOptions?: any;
   setFeedbackList?: any;
   preloadedAssets?: any;
-  SetPreviouseStored?:any;
   setprevScreenId:any;
   currentScreenId:any;
   setPreLogDatas:any;
@@ -59,7 +58,6 @@ const ChapterPage: React.FC<{
   setOptions,
   setFeedbackList,
   preloadedAssets,
-  SetPreviouseStored,
   setprevScreenId,currentScreenId,
   setPreLogDatas,
   getPrevLogDatas
@@ -249,7 +247,6 @@ const ChapterPage: React.FC<{
         setCurrentScreenId(2);
     /**  }
     * Uncomment this line when uncomment restrict the quest entry logic} */
-    SetPreviouseStored(demoBlocks[it]['1']);
   // }
   // }
   };

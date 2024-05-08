@@ -487,6 +487,7 @@ const GameCreation = () => {
   };
 
   useEffect(() => {
+    console.log('defaultskills.length',defaultskills.length);
     if (defaultskills.length === 0 && id) {
       fetchDefaultSkill();
     }
@@ -502,7 +503,7 @@ const GameCreation = () => {
         else{
             previewData = { ...previewData, currentTab: 3 };
         }
-    
+        console.log('previewData ***',previewData);
         if (currentTab) {
             previewData = { ...previewData, currentSubTab: currentTab };
         }
@@ -560,9 +561,10 @@ const GameCreation = () => {
   const defaultLanguageOption = { label: 'English', value: '' };
   useEffect(() => {
     const fetchLanguages = async () => {
+      const ChooseLangId = formData?.gameLanguageId;
       try {
         const selectedLanguagesResult = await getSelectedLanguages(id);
-
+        
         if (
           selectedLanguagesResult &&
           selectedLanguagesResult.data &&
@@ -572,10 +574,16 @@ const GameCreation = () => {
             (language: SelectedLanguageEntry) => ({
               value: language['translationId'],
               label: language['lmsMultiLanguageSupport.language_name'],
+              selected: language['translationId'] === ChooseLangId
             }),
           );
-
+ console.log('*******',options,'...',ChooseLangId);
           setLanguageOptions(options);
+          setLanguage(options.value);
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            gamelanguageCode: options.value, // Replace 'gamelanguageId' with the appropriate property name
+          }));
         } else {
           console.error(
             'Error: Selected languages data is missing or in unexpected format.',
@@ -2199,15 +2207,15 @@ if (formData.gameIsFeedbackMandatory === "true") {
                       });
                       return false;
                     }
-                    else {
-                      toast({
-                        title: `This ${alp.option} is Empty On This Sequence ${key.id} `,
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                      });
-                      return false;
-                    }
+                    // else {
+                    //   toast({
+                    //     title: `This ${alp.option} is Empty On This Sequence ${key.id} `,
+                    //     status: 'error',
+                    //     duration: 3000,
+                    //     isClosable: true,
+                    //   });
+                    //   return false;
+                    // }
                    
                   }
                 }
@@ -4758,6 +4766,7 @@ return false;
                           placeholder="Language.."
                           onChange={handleSelectChange}
                           onMenuOpen={() => setMenuOpen(true)}
+                          value={languageOptions.find(option => option.selected)}
                           styles={{
                             control: (base) => ({
                               ...base,

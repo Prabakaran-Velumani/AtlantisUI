@@ -80,14 +80,6 @@ const GamePreview = () => {
   const [prevSelectedOptionseq, setprevSelectedOptionseq] = useState([]);
   const [prevScreenId, setprevScreenId] = useState([]);
   const [previewLogsData, setPreviewLogsData] = useState<any>(null);
-  const [prevprofileData, setprevProfileData] = useState({
-    name: '',
-    gender: '',
-    language: '',
-    score: '',
-    allTimeScore: 250,
-    Audiogetlanguage: [],
-  });
   const [getPrevLogDatas, setPreLogDatas] = useState({
     previewLogId: '',
     playerId: '',
@@ -148,7 +140,6 @@ const GamePreview = () => {
         setPreviewLogsData(Reponse);
       }
     }
-    console.log('125');
     fetchPreviewLogs();
   }, [gameInfo]);
   useEffect(() => {
@@ -484,7 +475,6 @@ const GamePreview = () => {
    }
 } 
    */
-
     if (!inputdata.reviewerId || !inputdata.reviewGameId) {
       toast({
         title: 'You are Unauthorized..!',
@@ -494,7 +484,8 @@ const GamePreview = () => {
         position: 'top-right',
       });
       return false;
-    } else if (!inputdata.tabId) {
+    } 
+    else if (!inputdata.tabId) {
       toast({
         title: 'Select Feedback Options',
         status: 'error',
@@ -608,22 +599,8 @@ const GamePreview = () => {
                     <EntirePreview
                       currentScore={currentScore}
                       setCurrentScore={setCurrentScore}
-                      gameScreens={gameScreens}
-                      // currentScreenId={currentScreenId}
-                      // setCurrentScreenId={setCurrentScreenId}
                       //Newly Added states for preview activity track
-                      prevnaviseq={prevnaviseq}
-                      setprevNaviseq={setprevNaviseq}
-                      LastActivityseq={LastActivityseq}
-                      setLastActivityseq={setLastActivityseq}
-                      prevSelectedOptionseq={prevSelectedOptionseq}
-                      setprevSelectedOptionseq={setprevSelectedOptionseq}
-                      prevScreenId={prevScreenId}
                       setprevScreenId={setprevScreenId}
-                      setprevProfileData={setprevProfileData}
-                      prevprofileData={prevprofileData}
-                      previewLogsData={previewLogsData}
-                      setPreviewLogsData={setPreviewLogsData}
                       setPreLogDatas={setPreLogDatas}
                       getPrevLogDatas={getPrevLogDatas}
                       //End - Newly Added states for preview activity track

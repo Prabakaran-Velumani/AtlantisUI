@@ -1,16 +1,13 @@
 // Chakra Imports
 import {
   Box,
-  Flex,
   Grid,
   GridItem,
   Img,
   Text,
-  useToast,
 } from '@chakra-ui/react';
 
 import React, {
-  Suspense,
   useContext,
   useEffect,
   useState,
@@ -19,14 +16,10 @@ import React, {
 import Interaction from './Interaction';
 import TypingEffect from './Typing';
 // import { getVoiceMessage, getPreview } from 'utils/game/gameService';
-import { useParams } from 'react-router-dom';
 import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
 import {
-  API_SERVER,
-  Notelength,
-  Dialoglength,
-  Responselength,
+  API_SERVER
 } from 'config/constant';
 import { ScoreContext } from '../GamePreview';
 import { Canvas, useFrame, useLoader } from 'react-three-fiber';
@@ -37,8 +30,6 @@ import * as THREE from 'three';
 import Model from './Model';
 
 const Story: React.FC<{
-  prevData?: any;
-  currentScore: any;
   data: any;
   type: any;
   profileData: any;
@@ -50,25 +41,22 @@ const Story: React.FC<{
   resMsg: any;
   feed: any;
   setIsGetsPlayAudioConfirmation: any;
-  isGetsPlayAudioConfirmation: any;
   formData: any;
-  setAudio: any;
   setAudioObj: any;
-  setCurrentScreenId: any;
   selectedPlayer: any;
   selectedNpc: any;
-  // getAudioForText: any;
   voiceIds: any;
-  windowWidth: any;
-  windowHeight: any;
   setIsPrevNavigation: any;
-  isPrevNavigation: any;
   setNavTrack: any;
   navTrack: any;
-  setCurrentTrackPointer: any;
   gameInfo: any;
   preloadedAssets: any;
-  questState:any;
+  questState: any;
+  LastModiPrevData: any;
+  setPreLogDatas: any;
+  getPrevLogDatas: any;
+  RepeatSelectOption:any;
+  RepeatPrevOption:any;
 }> = ({
   data,
   type,
@@ -82,33 +70,27 @@ const Story: React.FC<{
   handleValidate,
   backGroundImg,
   formData,
-  setCurrentScreenId,
-  setAudio,
   selectedPlayer,
   setIsGetsPlayAudioConfirmation,
-  isGetsPlayAudioConfirmation,
   selectedNpc,
   // getAudioForText,
   voiceIds,
-  currentScore,
-  prevData,
-  windowWidth,
-  windowHeight,
   setIsPrevNavigation,
-  isPrevNavigation,
   setNavTrack,
   navTrack,
-  setCurrentTrackPointer,
   gameInfo,
   preloadedAssets,
-  questState
+  questState,
+  LastModiPrevData,
+  getPrevLogDatas,
+  setPreLogDatas,
+  RepeatSelectOption,
+  RepeatPrevOption,
 }) => {
     const [showNote, setShowNote] = useState(true),
       [first, setFirst] = useState(false);
     // const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
     const userProfile = useContext(ProfileContext);
-    const [getInteraction, setInteraction] = useState(false);
-    const [Contentgetlanguage, setContentlanguage] = useState('');
     const { profile, setProfile } = useContext(ScoreContext);
     const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
     const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
@@ -123,8 +105,33 @@ const Story: React.FC<{
         setShowTypingEffect(false);
         setTimeout(() => {
           setShowNote(false);
-          interactionNext === true && setInteractionNext(false); 
+          interactionNext === true && setInteractionNext(false);
         }, 1000);
+        const currentQuest = data
+          ? parseInt(data?.blockPrimarySequence.split('.')[0])
+          : null;
+        
+          if (getPrevLogDatas.nevigatedSeq[currentQuest]) {
+            if (!getPrevLogDatas.nevigatedSeq[currentQuest].includes(data.blockPrimarySequence)) {
+    
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                lastActiveBlockSeq: data.blockId,
+                nevigatedSeq: { ...prev.nevigatedSeq, [currentQuest]: [...(prev.nevigatedSeq[currentQuest] || []), data.blockPrimarySequence] }
+                
+              }));
+            }
+    
+          }
+          else {
+            setPreLogDatas((prev: any) => ({
+              ...prev,
+              lastActiveBlockSeq: data.blockId,
+              nevigatedSeq: { ...prev.nevigatedSeq, [currentQuest]: [data.blockPrimarySequence] }
+            }));
+    
+          }
+    
         if (gameInfo.hasOwnProperty('blocks')) {
           let previousPrimarySeq = navTrack[navTrack.length - 1];
           if (previousPrimarySeq) {
@@ -138,10 +145,10 @@ const Story: React.FC<{
               if (previousBlock?.blockChoosen === 'Interaction') {
                 setNavTrack([data.blockPrimarySequence]);
               } else {
-                const newArray = navTrack;
-                newArray.push(data.blockPrimarySequence);
-                setNavTrack(newArray);
-              }
+              const newArray = navTrack;
+              newArray.push(data.blockPrimarySequence);
+              setNavTrack(newArray);
+               }
             }
           } else {
             setNavTrack([data.blockPrimarySequence]);
@@ -341,8 +348,8 @@ const Story: React.FC<{
 
     const InteractionFunction = () => {
       setIsGetsPlayAudioConfirmation(true);
-      if(questState[profile?.currentQuest] === 'Started')
-      {
+      
+      if (questState[profile?.currentQuest] === 'Started') {
         setProfile((prev: any) => {
           const { seqId, score: newScore } = score;
           const index = prev.score.findIndex((item: any) => item.seqId === seqId);
@@ -359,12 +366,12 @@ const Story: React.FC<{
                 quest: parseInt(seqId.split('.')[0]),
               },
             ];
-            
+
             return { ...prev, score: newScoreArray };
           }
         });
       }
-      else{
+      else {
         // update the replayScore when a player want to replay. Scores were hanlded seperatly, after Quest completion, if the calculated total score is lesser than replay score total then replace the score by replayscore, other wise score not changed, then reset the replayscore to {}
         setProfile((prev: any) => {
           const { seqId, score: newScore } = score;
@@ -391,6 +398,7 @@ const Story: React.FC<{
 
     useEffect(() => {
       if (interactionNext === true) {
+        setInteractionNext(false);
         getData(data);
       }
     }, [interactionNext])
@@ -420,12 +428,14 @@ const Story: React.FC<{
       if (showTypingEffect === false) {
         setShowTypingEffect(true);
       } else {
-        prevData(data);
+          LastModiPrevData(data);
+      
       }
+      
     };
 
 
-    
+
     return (
       <>
         {data && type === 'Note' && (
@@ -488,6 +498,26 @@ const Story: React.FC<{
                         top={'70%'}
                       >
                         <Img src={preloadedAssets.next} h={'7vh'} className={'story_note_next_button'} />
+
+                      </Box>
+                      <Box
+                        display={'flex'}
+                        position={'fixed'}
+                        justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
+                        w={'95%'}
+                        bottom={'0'}
+                      >
+
+                        <Img
+                          src={preloadedAssets.left}
+                          w={'70px'}
+                          h={'50px'}
+                          cursor={'pointer'}
+                          // onClick={() => { SkipContentForBackNavigation() }}
+                          onClick={() => {  LastModiPrevData(data)}}
+                        />
+
+
                       </Box>
                     </Box>
                   </Box>
@@ -537,7 +567,7 @@ const Story: React.FC<{
                 fontFamily={'AtlantisText'}
                 color={'#312821'}
               >
-                 {data.blockRoll === 'Narrator' ? data.blockRoll : (data.blockRoll=== '999999' ? formData.gameNonPlayerName : profileData.name)}
+                {data.blockRoll === 'Narrator' ? data.blockRoll : (data.blockRoll === '999999' ? formData.gameNonPlayerName : profileData.name)}
               </Text>
             </Box>
             <Box
@@ -576,7 +606,7 @@ const Story: React.FC<{
               w={'95%'}
               bottom={'0'}
             >
-              {navTrack.length > 1 &&
+              {/* {navTrack.length > 1 &&
                 <Img
                   src={preloadedAssets.left}
                   w={'70px'}
@@ -584,7 +614,14 @@ const Story: React.FC<{
                   cursor={'pointer'}
                   onClick={() => { SkipContentForBackNavigation() }}
                 />
-              }
+              } */}
+              <Img
+                src={preloadedAssets.left}
+                w={'70px'}
+                h={'50px'}
+                cursor={'pointer'}
+                onClick={() => { SkipContentForBackNavigation() }}
+              />
               <Img
                 src={preloadedAssets.right}
                 w={'70px'}
@@ -599,7 +636,7 @@ const Story: React.FC<{
           </Box>
         )}
         {data && type === 'Interaction' && (
-          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick} prevData={prevData} InteractionFunction={InteractionFunction} navTrack={navTrack} preloadedAssets={preloadedAssets} selectedPlayer={selectedPlayer} Contentlanguage={Contentgetlanguage} Profiledatalanguage={profileData?.Audiogetlanguage}
+          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick}  InteractionFunction={InteractionFunction} navTrack={navTrack} preloadedAssets={preloadedAssets} selectedPlayer={selectedPlayer}  LastModiPrevData={LastModiPrevData}  RepeatSelectOption={RepeatSelectOption}  RepeatPrevOption={RepeatPrevOption}
           />
         )}
         {data && type === 'response' && (
@@ -639,7 +676,7 @@ const Story: React.FC<{
                 fontFamily={'AtlantisText'}
                 color={'#312821'}
               >
-               {data.blockResponseRoll === 'Narrator' ? data.blockResponseRoll : (data.blockResponseRoll === '999999' ? profileData.name  : formData.gameNonPlayerName)}
+                {data.blockResponseRoll === 'Narrator' ? data.blockResponseRoll : (data.blockResponseRoll === '999999' ? profileData.name : formData.gameNonPlayerName)}
               </Text>
             </Box>
             <Box
@@ -668,6 +705,14 @@ const Story: React.FC<{
               bottom={'0'}
             >
               <Img
+                src={preloadedAssets.left}
+                w={'70px'}
+                h={'50px'}
+                cursor={'pointer'}
+              onClick={() => { SkipContentForBackNavigation() }}
+              // onClick={() => prevData(data)}
+              />
+              <Img
                 src={preloadedAssets.right}
                 w={'70px'}
                 h={'50px'}
@@ -678,49 +723,49 @@ const Story: React.FC<{
           </Box>
         )}
         {data && type === 'feedback' && (
-           <Box
-           position="relative"
-           w={'100%'}
-           height="100vh"
-           backgroundImage={backGroundImg}
-           backgroundSize={'cover'}
-           backgroundRepeat={'no-repeat'}
-           className="chapter_potrait"
-         >
-           <Grid
-             templateColumns="repeat(1, 1fr)"
-             gap={4}
-             position="absolute"
-             top="50%"
-             left="50%"
-             transform="translate(-50%, -50%)"
-             w={'90%'}
-           >
-             <GridItem colSpan={1} position={'relative'}>
-               <Box w={'fit-content'} display={'flex'} position={'relative'}>
-                 <Img
-                   src={preloadedAssets.feedi}
-                   className="story_note_image"
-                   loading="lazy"
-                 />
-                 <Box
-                   position={'absolute'}
-                   top={{ base: '5%', md: '6%' }}
-                   className='story_feedback_content'
-                 >
-                   <Box display={'flex'} justifyContent={'center'} alignItems={'center'} h={'100%'}>
-                     <Box
-                       w={'90%'}
-                       h={'70%'}
-                       display={'flex'}
-                       justifyContent={'center'}
-                       position={'relative'}
-                     >
-                       <Img src={preloadedAssets?.feedparch} w={'auto'} h={'100%'} />
-                       <Box position={'absolute'} top={0} width={'100%'} h={'100%'} display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
-                         <Box className='feed_list'> Interaction </Box>
-                         <Box w={'70%'} h={'75%'} overflowY={'scroll'} className='feedback_content_text'>
-                           {/* <Box display={'flex'}>
+          <Box
+            position="relative"
+            w={'100%'}
+            height="100vh"
+            backgroundImage={backGroundImg}
+            backgroundSize={'cover'}
+            backgroundRepeat={'no-repeat'}
+            className="chapter_potrait"
+          >
+            <Grid
+              templateColumns="repeat(1, 1fr)"
+              gap={4}
+              position="absolute"
+              top="50%"
+              left="50%"
+              transform="translate(-50%, -50%)"
+              w={'90%'}
+            >
+              <GridItem colSpan={1} position={'relative'}>
+                <Box w={'fit-content'} display={'flex'} position={'relative'}>
+                  <Img
+                    src={preloadedAssets.feedi}
+                    className="story_note_image"
+                    loading="lazy"
+                  />
+                  <Box
+                    position={'absolute'}
+                    top={{ base: '5%', md: '6%' }}
+                    className='story_feedback_content'
+                  >
+                    <Box display={'flex'} justifyContent={'center'} alignItems={'center'} h={'100%'}>
+                      <Box
+                        w={'90%'}
+                        h={'70%'}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                      >
+                        <Img src={preloadedAssets?.feedparch} w={'auto'} h={'100%'} />
+                        <Box position={'absolute'} top={0} width={'100%'} h={'100%'} display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
+                          <Box className='feed_list'> Interaction </Box>
+                          <Box w={'70%'} h={'75%'} overflowY={'scroll'} className='feedback_content_text'>
+                            {/* <Box display={'flex'}>
                              <Img src={preloadedAssets.qs} h={'1em'} w={'1em'}  />
                              This way, you can increase the RGB color intensity of the GLTF/GLB model while using an HDR environment map in your React Three Fiber scene. Adjust the values as needed to achieve the desired color intensity.
                            </Box>
@@ -728,39 +773,58 @@ const Story: React.FC<{
                              <Img src={preloadedAssets.ANS} h={'1em'} w={'1em'}  />
                               Adjust the values as needed to achieve the desired color intensity.
                            </Box> */}
-                           <Box display={'flex'} mt={'10px'}>
-                             <Img src={preloadedAssets.FB} h={'1em'} w={'1em'}  />
-                            <Text textAlign={'justify'}>{feed}</Text>
-                           </Box>
-                         </Box>
-                       </Box>
-                       <Box
-                         w={'100%'}
-                         onClick={() => getData(data)}
-                         mt={'20px'}
-                         display={'flex'}
-                         justifyContent={'center'}
-                         cursor={'pointer'}
-                         position={'absolute'}
-                         bottom={'-8%'}
-                       >
-                         <Img
-                           src={preloadedAssets.next}
-                           h={'7vh'}
-                           className={'story_note_next_button'}
-                         />
-                       </Box>
-                     </Box>
-                     {/* <Box className={'story_note_block'}> */}
-                     {/* <Text textAlign={'center'}>{feed}</Text> */}
-                     {/* </Box> */}
-                   </Box>
- 
-                 </Box>
-               </Box>
-             </GridItem>
-           </Grid>
-         </Box>
+                            <Box display={'flex'} mt={'10px'}>
+                              <Img src={preloadedAssets.FB} h={'1em'} w={'1em'} />
+                              <Text textAlign={'justify'}>{feed}</Text>
+                            </Box>
+                          </Box>
+                        </Box>
+                        <Box
+                          w={'100%'}
+                          onClick={() => getData(data)}
+                          mt={'20px'}
+                          display={'flex'}
+                          justifyContent={'center'}
+                          cursor={'pointer'}
+                          position={'absolute'}
+                          bottom={'-8%'}
+                        >
+                          <Img
+                            src={preloadedAssets.next}
+                            h={'7vh'}
+                            className={'story_note_next_button'}
+                          />
+                        </Box>
+                        <Box
+                        display={'flex'}
+                        position={'fixed'}
+                        justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
+                        w={'95%'}
+                        bottom={'0'}
+                      >
+
+                        <Img
+                          src={preloadedAssets.left}
+                          w={'70px'}
+                          h={'50px'}
+                          cursor={'pointer'}
+                          // onClick={() => { SkipContentForBackNavigation() }}
+                          onClick={() => {  LastModiPrevData(data)}}
+                        />
+
+
+                      </Box>
+                      </Box>
+                      {/* <Box className={'story_note_block'}> */}
+                      {/* <Text textAlign={'center'}>{feed}</Text> */}
+                      {/* </Box> */}
+                    </Box>
+
+                  </Box>
+                </Box>
+              </GridItem>
+            </Grid>
+          </Box>
         )}
       </>
     );
@@ -810,9 +874,9 @@ const Player: React.FC = () => {
     }
   });
 
-  function handleClick() {
-    console.log('Character Click!')
-  }
+  // function handleClick() {
+  //   console.log('Character Click!')
+  // }
 
   return (
     <group ref={groupRef}>

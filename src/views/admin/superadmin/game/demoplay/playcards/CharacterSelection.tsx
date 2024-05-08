@@ -1,9 +1,6 @@
 import React, {
-  Suspense,
   useContext,
   useEffect,
-  useLayoutEffect,
-  useRef,
   useState,
 } from 'react';
 import {
@@ -67,7 +64,6 @@ interface PlayGamesProps {
   setSelectedPlayer?: any;
   profileData?: any;
   setProfileData?: any;
-  setprevProfileData?:any;
   demoBlocks?: any;
   preloadedAssets?: any;
   setprevScreenId:any;
@@ -109,7 +105,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   setSelectedPlayer,
   profileData,
   setProfileData,
-  setprevProfileData,
   demoBlocks,
   formData,
   preloadedAssets,
@@ -169,9 +164,9 @@ const Characterspage: React.FC<PlayGamesProps> = ({
           position: 'top-right',
         });
         return;
-    } else if (playerInfo.name.trim().length < 5 || playerInfo.name.trim().length > 15) {
+    } else if (playerInfo.name.trim().length < 2 || playerInfo.name.trim().length > 15) {
         toast({
-          title: 'Alias name must be between 5 and 15 letters.',
+          title: 'Alias name must be between 3 and 15 letters.',
           status: 'error',
           duration: 2000,
           isClosable: true,
@@ -422,28 +417,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                         className="player_name"
                         placeholder={'Enter Alias Name'}
                         value={playerInfo.name}
-                        // onChange={{ (e: any) =>
-                        //   setProfileData((prev: any) => ({
-                        //     ...prev,
-                        //     name: e.target.value,
-                        //   })), 
-                        //   setprevProfileData((prev: any) => ({
-                        //     ...prev,
-                        //     name: e.target.value,
-                        //   }))}
-                        // }
                         onChange={(e:any) => {
                           // Update profileData state
                           setProfileData((prev:any) => ({
                               ...prev,
                               name: e.target.value,
                           }));
-                          // Update prevProfileData state
-                          // setprevProfileData((prev:any) => ({
-                          //     ...prev,
-                          //     name: e.target.value,
-                          // }));
-
                           setPreLogDatas((prev:any) => ({
                             ...prev,
                             previewProfile:{...prev.previewProfile, name: e.target.value,}

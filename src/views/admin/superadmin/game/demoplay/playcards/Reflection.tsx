@@ -1,23 +1,15 @@
-import { Img, Text, SimpleGrid, Box, Input, Textarea } from '@chakra-ui/react';
+import { Img, Text, SimpleGrid, Box,  Textarea } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 /* for reflection question inside the image */
-import ref from 'assets/img/screens/refquestions.png';
-import qs from 'assets/img/screens/QS.png';
-import right from 'assets/img/games/right.png';
-import left from 'assets/img/games/left.png';
-import question from 'assets/img/games/question.png';
 const Reflection: React.FC<{
   formData: any;
   reflectionQuestions?: any;
   imageSrc: any;
-  preview?: any;
-  getData?: any;
-  data?: any;
   gameInfo?:any;
   setCurrentScreenId?: any;
   preloadedAssets:any;
-}> = ({ formData, reflectionQuestions, imageSrc, preview, getData, data, gameInfo , setCurrentScreenId, preloadedAssets}) => {
+}> = ({ formData, reflectionQuestions, imageSrc, gameInfo , setCurrentScreenId, preloadedAssets}) => {
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [answers, setAnswers] = useState<any>([]);
 

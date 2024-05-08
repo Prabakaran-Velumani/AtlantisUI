@@ -64,8 +64,8 @@ import feedi from 'assets/img/screens/feed.png';
 import { AiFillMessage } from 'react-icons/ai';
 import { getTestAudios, updatePreviewlogs } from 'utils/game/gameService';
 import { MdClose } from 'react-icons/md';
-import { getVoiceMessage, getPreview, getGameLanguages} from 'utils/game/gameService';
-import { EnumType } from 'typescript';
+import { getVoiceMessage, getPreview, getGameLanguages } from 'utils/game/gameService';
+import { EnumType, collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
@@ -92,19 +92,15 @@ const LanguageSelectionPrompt = lazy(() => import('./playcards/LanguageSelection
 
 
 interface Review {
-  // reviewId: Number;
   reviewerId: String | null;
   reviewGameId: String | null;
   review: String | null;
   tabId: Number | null;
   tabAttribute: String | null;
   tabAttributeValue: String | null;
-  }
+}
 
 interface ShowPreviewProps {
-  gameScreens: string[];
-  // currentScreenId: number;
-  // setCurrentScreenId: React.Dispatch<React.SetStateAction<number>>;
   gameInfo: any;
   handleSubmitReview: (data: any) => Promise<boolean>;
   isReviewDemo: boolean;
@@ -112,21 +108,10 @@ interface ShowPreviewProps {
   setCurrentScore: any;
   preloadedAssets: any;
   InitialScreenId: number;
-  prevnaviseq?: any;
-  setprevNaviseq?: any;
-  LastActivityseq?: any;
-  setLastActivityseq?: any;
-  prevSelectedOptionseq?: any;
-  setprevSelectedOptionseq?: any;
-  prevScreenId?: any;
   setprevScreenId?: any;
-  setprevProfileData?: any;
-  setPreviewLogsData?: any;
-  previewLogsData?: any;
   setPreviewLogsId?: any;
   getPreviewLogsId?: any;
   setPreLogDatas?: any;
-  prevprofileData?: any;
   getPrevLogDatas?: any;
 }
 
@@ -157,11 +142,8 @@ interface ProfileDataType {
   name?: string;
   gender?: string;
   language?: any;
-  // Afrith-modified-starts-07/Mar/24
   score?: any;
   allTimeScore?: any;
-  // Afrith-modified-starts-07/Mar/24
-
   content?: any;
   audioUrls?: any;
   textId?: any;
@@ -174,7 +156,7 @@ interface QuestState {
   [key: string]: string;
 }
 
-const skipScreenList = [0, 8, 11, 12, 13,15];
+const skipScreenList = [0, 8, 11, 12, 13, 15];
 export const ProfileContext = createContext<ProfileDataType>({
   name: '',
   gender: '',
@@ -182,11 +164,8 @@ export const ProfileContext = createContext<ProfileDataType>({
   score: 350,
   allTimeScore: 950,
 });
-
+type QuestWiseMaxTotal = { [key: number]: number };
 const EntirePreview: React.FC<ShowPreviewProps> = ({
-  gameScreens,
-  // currentScreenId,
-  // setCurrentScreenId,
   gameInfo,
   handleSubmitReview,
   isReviewDemo,
@@ -194,18 +173,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   setCurrentScore,
   preloadedAssets,
   InitialScreenId,
-  prevnaviseq,
-  setprevNaviseq,
-  LastActivityseq,
-  setLastActivityseq,
-  prevSelectedOptionseq,
-  setprevSelectedOptionseq,
-  prevScreenId,
   setprevScreenId,
-  setprevProfileData,
-  prevprofileData,
-  setPreviewLogsData,
-  previewLogsData,
   getPrevLogDatas,
   setPreLogDatas,
 }) => {
@@ -224,7 +192,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   // handle the transition effect
   const [showNote, setShowNote] = useState(false),
     [first, setFirst] = useState(false);
-  const [intOpt, setIntOpt] = useState([]);
   // type to render component ( conditional render)
   const [type, setType] = useState<string>('');
   // handle the choosed option's response message and feedback content and navigation
@@ -234,7 +201,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [options, setOptions] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [optionNavigation, setOptionNavigation] = useState(null);
-  const [getSelectedOptions, SetgetSelectedOptions] = useState({});
+  const [getSelectedOptions, SetgetSelectedOptions] = useState<any>({});
 
   /** This state handles the Review Form Tab and Sub Tab options */
   const [reviewTabOptions, setReviewTabOptions] = useState([]);
@@ -314,7 +281,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   // Afrith-modified-starts-07/Mar/24
   const gameScore = useContext(ScoreContext);
   const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0;
-  
+  const [questWiseMaxTotal, setQuestWiseMaxTotal] = useState<QuestWiseMaxTotal>();
 
 
   useEffect(() => {
@@ -322,7 +289,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [scoreComp]);
   useEffect(() => {
     const totalEarnScore = profile?.score.reduce((acc: any, obj: any) => acc + parseInt(obj.score), 0);
-    setprevProfileData((prev: any) => ({ ...prev, score: totalEarnScore }));
     setPreLogDatas((prev: any) => ({
       ...prev,
       previewProfile: { ...prev.previewProfile, score: totalEarnScore }
@@ -356,10 +322,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [currentTrackPointer, setCurrentTrackPointer] = useState(0);
   const [currentScreenId, setCurrentScreenId] = useState<number>(InitialScreenId);
   const [hasMulitLanguages, setHasMulitLanguages] = useState<boolean>(false); // This state to control the auto Initialization of the Language selection Modal popup
-  const [isOpenCustomModal ,setIsOpenCustomModal] = useState<boolean>(false); //This state to control the opening of Language selection Modal popup by click event 
-  const [gameLanguages ,setGameLanguages] = useState([]);
+  const [isOpenCustomModal, setIsOpenCustomModal] = useState<boolean>(false); //This state to control the opening of Language selection Modal popup by click event 
+  const [gameLanguages, setGameLanguages] = useState([]);
+  const [NavigateBlockEmpty, setNavigateBlockEmpty] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const [RepeatSelectOption, setRepeatSelectOption] = useState<boolean>(false);
+  const [RepeatPrevOption, setRepeatPrevOption] = useState<any>([]);
+  const [modelScreen, setModelScreen] = useState<Boolean>(false);
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
     if (res?.status === 'success' && res?.url)
@@ -373,53 +343,55 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   useEffect(() => {
-    console.log('currentScreenId ***', currentScreenId);
     setDemoBlocks(gameInfo?.blocks);
-    setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
-    setData(gameInfo?.blocks[profile?.currentQuest]['1']);
+    if (data === null) {
+      setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
+      setData(gameInfo?.blocks[profile?.currentQuest]['1']);
+      if (
+        gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen ===
+        'Interaction'
+      ) {
+        const optionsFiltered = [];
+        const primarySequence =
+          gameInfo.blocks[profile.currentQuest]['1'].blockPrimarySequence;
 
-    if (
-      gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen ===
-      'Interaction'
-    ) {
-      const optionsFiltered = [];
-      const primarySequence =
-        gameInfo.blocks[profile.currentQuest]['1'].blockPrimarySequence;
+        for (const option of gameInfo.questOptions) {
+          if (profileData?.Audiogetlanguage.length > 0) {
+            if (option?.qpSequence === primarySequence) {
+              const profilesetlan = profileData?.Audiogetlanguage.find(
+                (key: any) => key?.textId === option.qpOptionId,
+              );
 
-      for (const option of gameInfo.questOptions) {
-        if (profileData?.Audiogetlanguage.length > 0) {
-          if (option?.qpSequence === primarySequence) {
-            const profilesetlan = profileData?.Audiogetlanguage.find(
-              (key: any) => key?.textId === option.qpOptionId,
-            );
-
-            if (profilesetlan) {
-              const languagecont = {
-                ...option,
-                qpOptionText: profilesetlan.content,
-              };
-              optionsFiltered.push(languagecont);
-            } else {
+              if (profilesetlan) {
+                const languagecont = {
+                  ...option,
+                  qpOptionText: profilesetlan.content,
+                };
+                optionsFiltered.push(languagecont);
+              } else {
+                optionsFiltered.push(option);
+              }
+            }
+          } else {
+            if (option?.qpSequence === primarySequence) {
               optionsFiltered.push(option);
             }
           }
-        } else {
-          if (option?.qpSequence === primarySequence) {
-            optionsFiltered.push(option);
+        }
+        if (gameInfo?.gameData?.gameShuffle === 'true') {
+          for (let i = optionsFiltered.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [optionsFiltered[i], optionsFiltered[j]] = [
+              optionsFiltered[j],
+              optionsFiltered[i],
+            ]; // Swap elements at indices i and j
           }
         }
+        setOptions(optionsFiltered);
       }
-      if (gameInfo?.gameData?.gameShuffle === 'true') {
-        for (let i = optionsFiltered.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [optionsFiltered[i], optionsFiltered[j]] = [
-            optionsFiltered[j],
-            optionsFiltered[i],
-          ]; // Swap elements at indices i and j
-        }
-      }
-      setOptions(optionsFiltered);
     }
+
+
 
     const handleVisibilityChange = () => {
       if (document.hidden) {
@@ -443,67 +415,129 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [profile?.currentQuest]);
 
 
-useEffect(()=>{
-  const calculatePlayerGrandTotal= async ()=>{ 
-  const scores = questState[profile?.currentQuest] == 'Started' ? profile?.score : (profile?.replayScore.length > 0 ? profile?.replayScore : profile?.score);
-  let total: number = 0;
-  
-  if(currentScreenId == 13){ //For chapter Selection Screen
-    if(scores.length > 0)
-      {
-        const total = scores.reduce((acc:any, row: any) => {
-          const quest = profile?.currentQuest;
-          if (row.quest == quest) {
-            return acc + row.score;
-          }
-          else{
-            return acc;
-          }
-        }, 0);
-  
-        setProfile((prev: any)=>({...prev, playerGrandTotal: {...prev?.playerGrandTotal, [profile?.currentQuest]: total }}));
-      }
-  }
-  else if ([2, 4, 6, 8, 9, 14].includes(currentScreenId)) //for story, completion screen, feedback, replay etc.,
-  {
-    const scoreArray = questState[parseInt(profile?.currentQuest)] == 'Started' ? profile?.score :  profile?.replayScore;
-      if (scoreArray?.length > 0) {
-        total = scoreArray.reduce((acc: number, cur: any) => {
-        if (cur.quest == profile.currentQuest) {
-          return acc + cur.score;
-        } else {
-          return acc;
-        }
-      }, 0);
-      setProfile((prev: any)=>({...prev, playerGrandTotal: {...prev?.playerGrandTotal, [profile?.currentQuest] : total} }));
-    }
-  }
-    return;
-  }
-  
-  //Get the Navigated Sequeance to calculate the max score for a Quest
-    const calculateQuestGrandTotal= async ()=>{ 
-      const scores = questState[profile?.currentQuest] === 'Started' ? profile?.score : profile?.replayScore;
-      // if(scores.length > 0)
-      //   {
-      //     const total = scores.reduce((acc:any, row: any) => {
-      //       const quest = profile?.currentQuest;
-      //       if (row.quest == quest) {
-      //         return acc + row.score;
-      //       }
-      //       else{
-      //         return acc;
-      //       }
-      //     }, 0);
-    
-      //     setProfile((prev: any)=>({...prev, playerGrandTotal: {...prev?.playerGrandTotal, [parseInt(profile?.currentQuest)]: total }}));
-      //   }
-        return;
-      }
-  calculatePlayerGrandTotal();
-  // calculateQuestGrandTotal();
+  useEffect(() => {
+    const calculatePlayerGrandTotal = async () => {
+      const scores = questState[profile?.currentQuest] == 'Started' ? profile?.score : (profile?.replayScore.length > 0 ? profile?.replayScore : profile?.score);
+      let total: number = 0;
 
-},[profile.score, profile.replayScore, currentScreenId])
+      if (currentScreenId == 13) { //For chapter Selection Screen
+        if (scores.length > 0) {
+          const total = scores.reduce((acc: any, row: any) => {
+            const quest = profile?.currentQuest;
+            if (row.quest == quest) {
+              return acc + row.score;
+            }
+            else {
+              return acc;
+            }
+          }, 0);
+
+          setProfile((prev: any) => ({ ...prev, playerGrandTotal: { ...prev?.playerGrandTotal, [profile?.currentQuest]: total } }));
+        }
+      }
+      else if ([2, 4, 6, 8, 9, 14].includes(currentScreenId)) //for story, completion screen, feedback, replay etc.,
+      {
+        const scoreArray = questState[parseInt(profile?.currentQuest)] == 'Started' ? profile?.score : profile?.replayScore;
+        if (scoreArray?.length > 0) {
+          total = scoreArray.reduce((acc: number, cur: any) => {
+            if (cur.quest == profile.currentQuest) {
+              return acc + cur.score;
+            } else {
+              return acc;
+            }
+          }, 0);
+          setProfile((prev: any) => ({ ...prev, playerGrandTotal: { ...prev?.playerGrandTotal, [profile?.currentQuest]: total } }));
+        }
+      }
+      return;
+    }
+
+    //Get the Navigated Sequeance to calculate the max score for a Quest
+    const calculateQuestGrandTotal = async () => {
+      let GrandMaximumscore: any = null;
+
+      const questStatus = questState[profile?.currentQuest];
+      console.log("*****questStatus", questStatus);
+      /** options - Players selected options like [{quest:'1', score:200, 'seq':'1.1' },...] */
+      // Check if options are provided
+      if (options) {
+
+
+        let currentScores;
+
+        const questStatus = questState[profile?.currentQuest];
+
+        if (questStatus === 'completed') {
+          // If the quest is completed, compare the scores
+          if (profile?.score !== null && profile?.replayScore !== null) {
+            currentScores = profile.score > profile.replayScore ? profile.score : profile.replayScore;
+          } else {
+            console.log(" *****Invalid score or replayScore provided for completed quest.");
+            return; // Exit function if either score or replayScore is not provided for completed quest
+          }
+        } else if (questStatus === 'Started') {
+          // If the quest is started, consider the score
+          if (questStatus === 'Started') {
+            currentScores = profile?.score !== null ? profile.score : null; //null or currentScores or replayScore
+            console.log(" *****Current Scores:", currentScores);
+          } else {
+            console.log(" *****Invalid score provided for started quest.");
+            return; // Exit function if score is not provided for started quest
+          }
+        } else {
+          console.log(" *****Invalid quest status:", questStatus);
+          return; // Exit function if the quest status is neither "completed" nor "Started"
+        }
+
+
+
+
+
+
+
+        // Check if currentScores is an array before mapping
+        const currentQuestseqId = Array.isArray(currentScores) ? currentScores.map(item => item.seqId) : [];
+
+        console.log("*****currentQuestseqId:", currentQuestseqId);
+
+        // Check if currentScores is an array and has items  const qpScoreEntries = filteredOptions.map(option => ({ qpScore: option.qpScore }));
+        if (Array.isArray(currentScores) && currentScores.length > 0) {
+          // Map currentScores to extract scores
+          const scores = currentScores.map(item => item.score);
+
+          const result = currentQuestseqId.map(seqId => {
+            const QuestNo = seqId.split('.')[0];
+            console.log("profile.currentQuest", profile.currentQuest)
+            console.log("QuestNo", QuestNo)
+            if (QuestNo == profile.currentQuest) {
+              const filteredOptions = gameInfo?.questOptions?.filter((option: any) => option.qpSequence == seqId);
+
+              const qpScoresOption = filteredOptions.map((option: any) => parseInt(option.qpScore));
+              qpScoresOption.sort((a: any, b: any) => b - a);
+              // GrandMaximumscore.push(qpScoresOption[0]);
+              GrandMaximumscore += qpScoresOption[0];
+            }
+            console.log("GrandMaximumscore", GrandMaximumscore);
+
+          })
+
+        } else {
+          console.log("*****Options are not provided.");
+        }
+
+        //[{1: 500}, {2: 200}]
+
+        setQuestWiseMaxTotal((prev: any) => {
+          return ({ ...prev, [profile?.currentQuest]: GrandMaximumscore })
+        });
+        return GrandMaximumscore;
+      }
+    };
+    calculateQuestGrandTotal();
+    calculatePlayerGrandTotal();
+    // calculateQuestGrandTotal();
+
+  }, [profile.score, profile.replayScore, currentScreenId])
 
   useEffect(() => {
     if (!gameInfo?.bgMusic) {
@@ -639,7 +673,8 @@ useEffect(()=>{
         : null;
       setCurrentQuestNo(currentQuest);
       if (
-        prevBlock.length !== 0 &&
+        prevBlock.length !== 0
+        &&
         prevBlock[0]?.blockChoosen !== 'Interaction'
       ) {
         /*** Handle the previous track */
@@ -649,6 +684,7 @@ useEffect(()=>{
 
         setType(prevBlock[0]?.blockChoosen);
         setData(prevBlock[0]);
+
         setIsPrevNavigation(true);
         return false;
       }
@@ -656,59 +692,640 @@ useEffect(()=>{
       return false;
     }
   };
+  // This Function For LastModified Previous
 
-  const checkAndUpdateScores =async ()=>{
-    const currentQuest = profile.currentQuest;
-    if(questState[currentQuest] !=='Started')
-              {
-              const calcQuestGrandTotal = async (scores:any, currentQuestNo:any = null)=>{
-                if(scores?.length <= 0)
-                {
-                  return 0;
+  const LastModiPrevData = (current: any) => {
+    const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
+    const lastSeq = getPrevLogDatas.nevigatedSeq[current.blockQuestNo];
+    const secondLastSeq = lastSeq[lastSeq.length - 2];
+    const currentBlock = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[1])
+      : null;
+    const previousItem = currentBlock != null ? currentBlock - 1 : null;
+    const prevSeq = current
+      ? `${current?.blockPrimarySequence.split('.')[0]}.${previousItem}`
+      : '';
+    const currentQuest = current
+      ? parseInt(current?.blockPrimarySequence.split('.')[0])
+      : null;
+    setCurrentQuestNo(currentQuest);
+    if (type !== 'Interaction') {
+      if (type === 'response' && resMsg !== '') {
+        setType(current?.blockChoosen);
+        setData(current);
+        if (current?.blockChoosen === 'Interaction') {
+          const optionsFiltered = [];
+          for (const option of gameInfo.questOptions) {
+            if (option?.qpSequence === current?.blockPrimarySequence) {
+              optionsFiltered.push(option);
+            }
+          }
+          if (gameInfo?.gameData?.gameShuffle === 'true') {
+            for (let i = optionsFiltered.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [optionsFiltered[i], optionsFiltered[j]] = [
+                optionsFiltered[j],
+                optionsFiltered[i],
+              ];
+            }
+          }
+          setOptions(optionsFiltered);
+          return false;
+        }
+      }
+      if (type === 'feedback' && feed !== '' && resMsg !== '') {
+        setType('response');
+        setData(current);
+        setResMsg(resMsg);
+        return false;
+      }
+      if (type === 'feedback' && feed !== '' && resMsg === '') {
+        setType(current?.blockChoosen);
+        setData(current);
+        if (current?.blockChoosen === 'Interaction') {
+          const optionsFiltered = [];
+          for (const option of gameInfo.questOptions) {
+            if (option?.qpSequence === current?.blockPrimarySequence) {
+              optionsFiltered.push(option);
+            }
+          }
+          if (gameInfo?.gameData?.gameShuffle === 'true') {
+            for (let i = optionsFiltered.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [optionsFiltered[i], optionsFiltered[j]] = [
+                optionsFiltered[j],
+                optionsFiltered[i],
+              ];
+            }
+          }
+          setOptions(optionsFiltered);
+          return false;
+        }
+      }
+    }
+    const newTrackSequence = navTrack[navTrack.length - 1];
+    // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 767',newTrackSequence)
+    const navPrevBlock = current
+        ? Object.keys(demoBlocks[quest] || {})
+          .filter(
+            (key) =>
+              demoBlocks[quest]?.[key]?.blockPrimarySequence ==
+              newTrackSequence,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
+        : [];
+        // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 777',navPrevBlock)
+    if(navPrevBlock.length !== 0 && navPrevBlock!== undefined)
+      {
+        // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 780',navPrevBlock[0],'...',navPrevBlock[0].blockLeadTo == current.blockSecondaryId,'...',navPrevBlock[0].blockLeadTo ,'...', current.blockSecondaryId)
+       
+        if(navPrevBlock[0].blockLeadTo == current.blockSecondaryId)
+          {
+            navTrack.pop();
+            const  lastPrevNavTrack = navTrack[navTrack.length - 1];
+            const prevousBlock = current
+            ? Object.keys(demoBlocks[quest] || {})
+              .filter(
+                (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === lastPrevNavTrack,
+              )
+              .map((key: any) => demoBlocks[quest]?.[key])
+            : [];
+          if (prevousBlock.length !== 0) {
+            setType(prevousBlock[0]?.blockChoosen);
+            setData(prevousBlock[0]);
+            if (prevousBlock[0]?.blockChoosen === 'Interaction') {
+              const optionsFiltered = [];
+              for (const option of gameInfo.questOptions) {
+                if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
+                  optionsFiltered.push(option);
                 }
-                if(currentQuestNo!=null)
-                {
-                  // Sum score of a quest
-                  const totalScore = scores.reduce((total: number, sc: any) => {
-                    if (sc.quest == currentQuestNo) {
-                        return total + sc.score;
-                    } else {
-                        return total;
-                    }
-                  }, 0);
-                  return totalScore; // Return the total score
+              }
+              if (gameInfo?.gameData?.gameShuffle === 'true') {
+                for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                  const j = Math.floor(Math.random() * (i + 1));
+                  [optionsFiltered[i], optionsFiltered[j]] = [
+                    optionsFiltered[j],
+                    optionsFiltered[i],
+                  ];
                 }
-                  else{
-                    //Sum up all the scores
-                   return scores.reduce((total:number, sc:any) => total + sc.score, 0);
+              }
+              setOptions(optionsFiltered);
+            }
+
+            let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
+            const lastElementSeq = updateNavigateSeq.pop();
+            if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+              updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
+            }
+            setPreLogDatas((prev: any) => ({
+              ...prev,
+              lastBlockModifiedDate: null,
+              lastModifiedBlockSeq: null,
+              lastActiveBlockSeq: prevousBlock[0].blockId,
+              nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
+            }));
+            return false;
+          }
+          }
+          else{
+            let getSeqprevious: any = [];
+            const getdemoblocksseq: any = Object.entries(demoBlocks[quest]);
+            for (const blocks of getdemoblocksseq) {
+              const blockId = blocks[1].blockId;
+              if (blocks[1].blockLeadTo == current.blockSecondaryId) {
+                getSeqprevious.push(blocks[1].blockPrimarySequence);
+              }
+        
+              for (const optionsnavi of gameInfo.questOptions) {
+                if (optionsnavi.qpQuestionId == blockId) {
+                  if (optionsnavi.qpNextOption == current.blockSecondaryId) {
+                    getSeqprevious.push(blocks[1].blockPrimarySequence);
                   }
-              }
-              const scoreTotal = await calcQuestGrandTotal(profile.score, profile.currentQuest);
-              const replayScoreTotal = await calcQuestGrandTotal(profile.replayScore, profile.currentQuest);
-              if(scoreTotal < replayScoreTotal)
-              {
-                const currentQuestRemovedScoreArr=profile.score.filter((item: any)=>(item.quest != profile.currentQuest));
-                let concatenatedScoreArr: any[] = [];
-                if (profile.replayScore.length > 0) {
-                  concatenatedScoreArr = profile.replayScore.filter((item: any) => (item.quest == profile.currentQuest));
                 }
-                if (currentQuestRemovedScoreArr.length > 0) {
-                    concatenatedScoreArr = [...concatenatedScoreArr, ...currentQuestRemovedScoreArr];
-                }
-                const currentQuestRemovedReplayScoreArr=profile.replayScore.filter((item: any)=>(item.quest != profile.currentQuest));
-                setProfile((prev:any)=>({...prev, score: concatenatedScoreArr, replayScore: currentQuestRemovedReplayScoreArr}))
+        
               }
-              else{
-                const currentQuestRemovedReplayScoreArr=profile.replayScore.filter((item: any)=>(item.quest != profile.currentQuest));
-                setProfile((prev:any)=>({...prev, replayScore: currentQuestRemovedReplayScoreArr}))
+        
+            }
+        
+            if (getSeqprevious.length > 0) {
+              getSeqprevious.push(current.blockPrimarySequence);
+            }
+            getSeqprevious.sort((a: any, b: any) => a - b);
+            const currentIndex = getSeqprevious.indexOf(current.blockPrimarySequence);
+            if (current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence) {
+              if (currentIndex !== -1) {
+                if (currentIndex > 0) {
+                  // Retrieve the previous sequence value
+                  const previousSeq = getSeqprevious[currentIndex - 1];
+                  const prevousBlock = current
+                    ? Object.keys(demoBlocks[quest] || {})
+                      .filter(
+                        (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === previousSeq,
+                      )
+                      .map((key: any) => demoBlocks[quest]?.[key])
+                    : [];
+                  if (prevousBlock.length !== 0) {
+                    setType(prevousBlock[0]?.blockChoosen);
+                    setData(prevousBlock[0]);
+                    if (prevousBlock[0]?.blockChoosen === 'Interaction') {
+                      const optionsFiltered = [];
+                      for (const option of gameInfo.questOptions) {
+                        if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
+                          optionsFiltered.push(option);
+                        }
+                      }
+                      if (gameInfo?.gameData?.gameShuffle === 'true') {
+                        for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                          const j = Math.floor(Math.random() * (i + 1));
+                          [optionsFiltered[i], optionsFiltered[j]] = [
+                            optionsFiltered[j],
+                            optionsFiltered[i],
+                          ];
+                        }
+                      }
+                      setOptions(optionsFiltered);
+                    }
+        
+                    let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
+                    const lastElementSeq = updateNavigateSeq.pop();
+                    if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                      updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
+                    }
+                    setPreLogDatas((prev: any) => ({
+                      ...prev,
+                      lastBlockModifiedDate: null,
+                      lastModifiedBlockSeq: null,
+                      lastActiveBlockSeq: prevousBlock[0].blockId,
+                      nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
+                    }));
+                    return false;
+                  }
+                  else {
+                    let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[current.blockQuestNo]];
+                    const lastElementSeq = updateNavigateSeq.pop();
+                    if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                      updateNavigateSeq.push(current.blockPrimarySequence);
+                    }
+                    setPreLogDatas((prev: any) => ({
+                      ...prev,
+                      lastBlockModifiedDate: null,
+                      lastModifiedBlockSeq: null,
+                      lastActiveBlockSeq: current.blockId,
+                      nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
+                    }));
+                    return false;
+                  }
+                } else {
+                  // If no previous found, retrieve the next sequence
+                  const nextSeq = getSeqprevious[currentIndex + 1];
+                  const prevousBlock = current
+                    ? Object.keys(demoBlocks[quest] || {})
+                      .filter(
+                        (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+                      )
+                      .map((key: any) => demoBlocks[quest]?.[key])
+                    : [];
+                  if (prevousBlock.length !== 0) {
+                    setType(prevousBlock[0]?.blockChoosen);
+                    setData(prevousBlock[0]);
+                    if (prevousBlock[0]?.blockChoosen === 'Interaction') {
+                      const optionsFiltered = [];
+                      for (const option of gameInfo.questOptions) {
+                        if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
+                          optionsFiltered.push(option);
+                        }
+                      }
+                      if (gameInfo?.gameData?.gameShuffle === 'true') {
+                        for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                          const j = Math.floor(Math.random() * (i + 1));
+                          [optionsFiltered[i], optionsFiltered[j]] = [
+                            optionsFiltered[j],
+                            optionsFiltered[i],
+                          ];
+                        }
+                      }
+                      setOptions(optionsFiltered);
+                    }
+        
+                    let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
+                    const lastElementSeq = updateNavigateSeq.pop();
+                    if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                      updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
+                    }
+        
+                    setPreLogDatas((prev: any) => ({
+                      ...prev,
+                      lastBlockModifiedDate: null,
+                      lastModifiedBlockSeq: null,
+                      lastActiveBlockSeq: prevousBlock[0].blockId,
+                      nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
+                    }));
+                    return false;
+                  }
+                  else {
+                    let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[current.blockQuestNo]];
+                    const lastElementSeq = updateNavigateSeq.pop();
+                    if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                      updateNavigateSeq.push(current.blockPrimarySequence);
+                    }
+                    setPreLogDatas((prev: any) => ({
+                      ...prev,
+                      lastBlockModifiedDate: null,
+                      lastModifiedBlockSeq: null,
+                      lastActiveBlockSeq: current.blockId,
+                      nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
+                    }));
+                    return false;
+                  }
+                }
+              } else {
+                const prevousBlock = current
+                  ? Object.keys(demoBlocks[quest] || {})
+                    .filter(
+                      (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+                    )
+                    .map((key: any) => demoBlocks[quest]?.[key])
+                  : [];
+                if (prevousBlock.length !== 0) {
+                  setType(prevousBlock[0]?.blockChoosen);
+                  setData(prevousBlock[0]);
+                  if (prevousBlock[0]?.blockChoosen === 'Interaction') {
+                    const optionsFiltered = [];
+                    for (const option of gameInfo.questOptions) {
+                      if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
+                        optionsFiltered.push(option);
+                      }
+                    }
+                    if (gameInfo?.gameData?.gameShuffle === 'true') {
+                      for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [optionsFiltered[i], optionsFiltered[j]] = [
+                          optionsFiltered[j],
+                          optionsFiltered[i],
+                        ];
+                      }
+                    }
+                    setOptions(optionsFiltered);
+                  }
+        
+                  let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
+                  const lastElementSeq = updateNavigateSeq.pop();
+                  if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                    updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
+                  }
+        
+                  setPreLogDatas((prev: any) => ({
+                    ...prev,
+                    lastBlockModifiedDate: null,
+                    lastModifiedBlockSeq: null,
+                    lastActiveBlockSeq: prevousBlock[0].blockId,
+                    nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
+                  }));
+                  return false;
+                }
+                else {
+                  let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[current.blockQuestNo]];
+                  const lastElementSeq = updateNavigateSeq.pop();
+                  if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                    updateNavigateSeq.push(current.blockPrimarySequence);
+                  }
+                  setPreLogDatas((prev: any) => ({
+                    ...prev,
+                    lastBlockModifiedDate: null,
+                    lastModifiedBlockSeq: null,
+                    lastActiveBlockSeq: current.blockId,
+                    nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
+                  }));
+                  return false;
+                }
               }
             }
-    }
+            else {
+              setModelScreen(true);
+              setCurrentScreenId(16);
+              return false;
+            }
+          }
+      }
+      else
+      {
+        let getSeqprevious: any = [];
+        const getdemoblocksseq: any = Object.entries(demoBlocks[quest]);
+        for (const blocks of getdemoblocksseq) {
+          const blockId = blocks[1].blockId;
+          // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 345',blockId);
+          if (blocks[1].blockLeadTo == current.blockSecondaryId) {
+            getSeqprevious.push(blocks[1].blockPrimarySequence);
+          }
+    
+          for (const optionsnavi of gameInfo.questOptions) {
+            if (optionsnavi.qpQuestionId == blockId) {
+              if (optionsnavi.qpNextOption == current.blockSecondaryId) {
+                getSeqprevious.push(blocks[1].blockPrimarySequence);
+              }
+            }
+    
+          }
+    
+        }
+    
+        if (getSeqprevious.length > 0) {
+          getSeqprevious.push(current.blockPrimarySequence);
+        }
+        getSeqprevious.sort((a: any, b: any) => a - b);
+        const currentIndex = getSeqprevious.indexOf(current.blockPrimarySequence);
+        if (current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence) {
+          if (currentIndex !== -1) {
+            if (currentIndex > 0) {
+              // Retrieve the previous sequence value
+              const previousSeq = getSeqprevious[currentIndex - 1];
+              const prevousBlock = current
+                ? Object.keys(demoBlocks[quest] || {})
+                  .filter(
+                    (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === previousSeq,
+                  )
+                  .map((key: any) => demoBlocks[quest]?.[key])
+                : [];
+              if (prevousBlock.length !== 0) {
+                setType(prevousBlock[0]?.blockChoosen);
+                setData(prevousBlock[0]);
+                if (prevousBlock[0]?.blockChoosen === 'Interaction') {
+                  const optionsFiltered = [];
+                  for (const option of gameInfo.questOptions) {
+                    if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
+                      optionsFiltered.push(option);
+                    }
+                  }
+                  if (gameInfo?.gameData?.gameShuffle === 'true') {
+                    for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                      const j = Math.floor(Math.random() * (i + 1));
+                      [optionsFiltered[i], optionsFiltered[j]] = [
+                        optionsFiltered[j],
+                        optionsFiltered[i],
+                      ];
+                    }
+                  }
+                  setOptions(optionsFiltered);
+                }
+    
+                let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
+                const lastElementSeq = updateNavigateSeq.pop();
+                if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                  updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
+                }
+                setPreLogDatas((prev: any) => ({
+                  ...prev,
+                  lastBlockModifiedDate: null,
+                  lastModifiedBlockSeq: null,
+                  lastActiveBlockSeq: prevousBlock[0].blockId,
+                  nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
+                }));
+                return false;
+              }
+              else {
+                let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[current.blockQuestNo]];
+                const lastElementSeq = updateNavigateSeq.pop();
+                if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                  updateNavigateSeq.push(current.blockPrimarySequence);
+                }
+                setPreLogDatas((prev: any) => ({
+                  ...prev,
+                  lastBlockModifiedDate: null,
+                  lastModifiedBlockSeq: null,
+                  lastActiveBlockSeq: current.blockId,
+                  nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
+                }));
+                return false;
+              }
+            } else {
+              // If no previous found, retrieve the next sequence
+              const nextSeq = getSeqprevious[currentIndex + 1];
+              const prevousBlock = current
+                ? Object.keys(demoBlocks[quest] || {})
+                  .filter(
+                    (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+                  )
+                  .map((key: any) => demoBlocks[quest]?.[key])
+                : [];
+              if (prevousBlock.length !== 0) {
+                setType(prevousBlock[0]?.blockChoosen);
+                setData(prevousBlock[0]);
+                if (prevousBlock[0]?.blockChoosen === 'Interaction') {
+                  const optionsFiltered = [];
+                  for (const option of gameInfo.questOptions) {
+                    if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
+                      optionsFiltered.push(option);
+                    }
+                  }
+                  if (gameInfo?.gameData?.gameShuffle === 'true') {
+                    for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                      const j = Math.floor(Math.random() * (i + 1));
+                      [optionsFiltered[i], optionsFiltered[j]] = [
+                        optionsFiltered[j],
+                        optionsFiltered[i],
+                      ];
+                    }
+                  }
+                  setOptions(optionsFiltered);
+                }
+    
+                let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
+                const lastElementSeq = updateNavigateSeq.pop();
+                if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                  updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
+                }
+    
+                setPreLogDatas((prev: any) => ({
+                  ...prev,
+                  lastBlockModifiedDate: null,
+                  lastModifiedBlockSeq: null,
+                  lastActiveBlockSeq: prevousBlock[0].blockId,
+                  nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
+                }));
+                return false;
+              }
+              else {
+                let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[current.blockQuestNo]];
+                const lastElementSeq = updateNavigateSeq.pop();
+                if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                  updateNavigateSeq.push(current.blockPrimarySequence);
+                }
+                setPreLogDatas((prev: any) => ({
+                  ...prev,
+                  lastBlockModifiedDate: null,
+                  lastModifiedBlockSeq: null,
+                  lastActiveBlockSeq: current.blockId,
+                  nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
+                }));
+                return false;
+              }
+            }
+          } else {
+            const prevousBlock = current
+              ? Object.keys(demoBlocks[quest] || {})
+                .filter(
+                  (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+                )
+                .map((key: any) => demoBlocks[quest]?.[key])
+              : [];
+            if (prevousBlock.length !== 0) {
+              setType(prevousBlock[0]?.blockChoosen);
+              setData(prevousBlock[0]);
+              if (prevousBlock[0]?.blockChoosen === 'Interaction') {
+                const optionsFiltered = [];
+                for (const option of gameInfo.questOptions) {
+                  if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
+                    optionsFiltered.push(option);
+                  }
+                }
+                if (gameInfo?.gameData?.gameShuffle === 'true') {
+                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsFiltered[i], optionsFiltered[j]] = [
+                      optionsFiltered[j],
+                      optionsFiltered[i],
+                    ];
+                  }
+                }
+                setOptions(optionsFiltered);
+              }
+    
+              let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
+              const lastElementSeq = updateNavigateSeq.pop();
+              if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
+              }
+    
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                lastBlockModifiedDate: null,
+                lastModifiedBlockSeq: null,
+                lastActiveBlockSeq: prevousBlock[0].blockId,
+                nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
+              }));
+              return false;
+            }
+            else {
+              let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[current.blockQuestNo]];
+              const lastElementSeq = updateNavigateSeq.pop();
+              if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                updateNavigateSeq.push(current.blockPrimarySequence);
+              }
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                lastBlockModifiedDate: null,
+                lastModifiedBlockSeq: null,
+                lastActiveBlockSeq: current.blockId,
+                nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
+              }));
+              return false;
+            }
+          }
+        }
+        else {
+          setModelScreen(true);
+          setCurrentScreenId(16);
+          return false;
+        }
+      }
+    
 
+   
+
+
+
+  }
+
+  const checkAndUpdateScores = async () => {
+    const currentQuest = profile.currentQuest;
+    if (questState[currentQuest] !== 'Started') {
+      const calcQuestGrandTotal = async (scores: any, currentQuestNo: any = null) => {
+        if (scores?.length <= 0) {
+          return 0;
+        }
+        if (currentQuestNo != null) {
+          // Sum score of a quest
+          const totalScore = scores.reduce((total: number, sc: any) => {
+            if (sc.quest == currentQuestNo) {
+              return total + sc.score;
+            } else {
+              return total;
+            }
+          }, 0);
+          return totalScore; // Return the total score
+        }
+        else {
+          //Sum up all the scores
+          return scores.reduce((total: number, sc: any) => total + sc.score, 0);
+        }
+      }
+      const scoreTotal = await calcQuestGrandTotal(profile.score, profile.currentQuest);
+      const replayScoreTotal = await calcQuestGrandTotal(profile.replayScore, profile.currentQuest);
+      if (scoreTotal < replayScoreTotal) {
+        const currentQuestRemovedScoreArr = profile.score.filter((item: any) => (item.quest != profile.currentQuest));
+        let concatenatedScoreArr: any[] = [];
+        if (profile.replayScore.length > 0) {
+          concatenatedScoreArr = profile.replayScore.filter((item: any) => (item.quest == profile.currentQuest));
+        }
+        if (currentQuestRemovedScoreArr.length > 0) {
+          concatenatedScoreArr = [...concatenatedScoreArr, ...currentQuestRemovedScoreArr];
+        }
+        const currentQuestRemovedReplayScoreArr = profile.replayScore.filter((item: any) => (item.quest != profile.currentQuest));
+        setProfile((prev: any) => ({ ...prev, score: concatenatedScoreArr, replayScore: currentQuestRemovedReplayScoreArr }))
+      }
+      else {
+        const currentQuestRemovedReplayScoreArr = profile.replayScore.filter((item: any) => (item.quest != profile.currentQuest));
+        setProfile((prev: any) => ({ ...prev, replayScore: currentQuestRemovedReplayScoreArr }))
+      }
+    }
+  }
   const getData = (next: any) => {
+    console.log('next', next);
+    setRepeatSelectOption(false);
     setAudioObj(null);
     setIsPrevNavigation(false);
     if (next?.blockChoosen === 'Interaction') {
+      console.log('feedbackList 12',feedbackList.length,'..',feedbackList);
       const isDuplicate = feedbackList?.some(
         (item: any) =>
           item.Seq === next?.blockPrimarySequence &&
@@ -729,6 +1346,7 @@ useEffect(()=>{
       }
     }
     SetPreviouseStored(next);
+
     // setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -812,12 +1430,35 @@ useEffect(()=>{
       type === 'response' ||
       type === 'feedback'
     ) {
+      if (next?.blockChoosen === 'Interaction') {
+        if (navi !== 'Repeat Question') {
+          setRepeatPrevOption([]);
+        }
+      }
       if (navi === 'Repeat Question') {
-        const currentBlockinteraction =
-          gameInfo?.blocks[currentQuest][currentBlock];
-        setInteractionOptions(gameInfo, currentBlockinteraction);
+        setRepeatSelectOption(true);
+        RepeatPrevOption.push(getSelectedOptions.options);
+        setRepeatPrevOption(RepeatPrevOption);
         setType(next?.blockChoosen);
         setData(next);
+        if (next?.blockChoosen === 'Interaction') {
+          const optionsFiltered = [];
+          for (const option of gameInfo.questOptions) {
+            if (option?.qpSequence === next?.blockPrimarySequence) {
+              optionsFiltered.push(option);
+            }
+          }
+          if (gameInfo?.gameData?.gameShuffle === 'true') {
+            for (let i = optionsFiltered.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [optionsFiltered[i], optionsFiltered[j]] = [
+                optionsFiltered[j],
+                optionsFiltered[i],
+              ];
+            }
+          }
+          setOptions(optionsFiltered);
+        }
         setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
@@ -941,13 +1582,12 @@ useEffect(()=>{
 
         //check the replay Quest score is higher than score in profile context
         checkAndUpdateScores();
-
-
         const Nextcurrentquest = next?.blockQuestNo;
         const getgameinfoquest = gameInfo?.gameQuest.find(
           (row: any) => row.gameQuestNo == Nextcurrentquest,
         );
-        if (getgameinfoquest?.gameIsSetCongratsScoreWiseMessage === 'true') {
+        //this place no need to check this condition .....
+        /*if (getgameinfoquest?.gameIsSetCongratsScoreWiseMessage === 'true') {
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
@@ -968,7 +1608,8 @@ useEffect(()=>{
             setData(null);
             return false;
           }
-        } else if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
+        } else */
+        if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = getgameinfoquest?.gameMinScore;
           const scores = profile?.score;
           const sums: any = {};
@@ -989,7 +1630,7 @@ useEffect(()=>{
             (row: any) => row.quest == getgameinfoquest.gameQuestNo,
           );
           const finalscore = getscores?.score;
-          if (finalscore < getminpassscore) {
+          if (finalscore < getminpassscore ) {
             setisReplay(true);
             Setprofilescore(finalscore);
             setisOptionalReplay(false);
@@ -1078,6 +1719,7 @@ useEffect(()=>{
           return false;
         } else {
           /** else leads to first block of the quest */
+          setNavigateBlockEmpty(true);
           setType(demoBlocks[quest]['1']?.blockChoosen);
           setData(demoBlocks[quest]['1']);
           setSelectedOption(null);
@@ -1095,61 +1737,62 @@ useEffect(()=>{
         haveNextQuest,
         totalScore,
       } = calScore();
-      if (gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') {
-        const Completionpage = Object.entries(questState).map(
-          ([questId, status]) => ({ questId, status }),
-        );
-        const OpenStraigntCompletionPage = Completionpage.find(
-          (row: any) =>
-            row.questId === profile.currentQuest && row.status === 'completed',
-        );
-        if (OpenStraigntCompletionPage !== undefined) {
-          setFeedbackList([]);
-          setCurrentScreenId(13);
-          return false;
-        }
-        if (feedbackList.length !== 0) {
-          getFeedbackData(data);
-          setFeedbackNavigateNext(false);
-          setCurrentScreenId(14); //Navigate to together all feedback
-          return false;
-        } else {
-          if (demoBlocks.hasOwnProperty(nextLevel)) {
-            setProfile((prev: any) => {
-              const data = { ...prev };
-              if (!profile.completedLevels.includes(currentQuest)) {
-                data.completedLevels = [...data.completedLevels, nextLevel];
-              }
+      // if (gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') {
+      //   const Completionpage = Object.entries(questState).map(
+      //     ([questId, status]) => ({ questId, status }),
+      //   );
+      //   const OpenStraigntCompletionPage = Completionpage.find(
+      //     (row: any) =>
+      //       row.questId === profile.currentQuest && row.status === 'completed',
+      //   );
+      //   if (OpenStraigntCompletionPage !== undefined) {
+      //     setFeedbackList([]);
+      //     setCurrentScreenId(13);
+      //     return false;
+      //   }
+      //   if (feedbackList.length !== 0) {
+      //     getFeedbackData(data);
+      //     setFeedbackNavigateNext(false);
+      //     setCurrentScreenId(14); //Navigate to together all feedback
+      //     return false;
+      //   } else {
+      //     if (demoBlocks.hasOwnProperty(nextLevel)) {
+      //       setProfile((prev: any) => {
+      //         const data = { ...prev };
+      //         if (!profile.completedLevels.includes(currentQuest)) {
+      //           data.completedLevels = [...data.completedLevels, nextLevel];
+      //         }
 
-              return data;
-            });
+      //         return data;
+      //       });
 
-            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-            setData(demoBlocks[nextLevel]['1']);
-            setCurrentScreenId(13);
-            return false;
-          } else {
-            if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-              setCurrentScreenId(4); //Navigate to leaderboard
-              return false;
-            } else if (
-              gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
-              gameInfo?.reflectionQuestions.length > 0
-            ) {
-              setCurrentScreenId(3); //Navigate to Reflection screen
-              return false;
-            } else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
-              setCurrentScreenId(7); //Navigate to takeaway screen
-              return false;
-            } else {
-              setType(null);
-              setData(null);
-              setCurrentScreenId(5);
-              return false;
-            }
-          }
-        }
-      } else if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+      //       setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+      //       setData(demoBlocks[nextLevel]['1']);
+      //       setCurrentScreenId(13);
+      //       return false;
+      //     } else {
+      //       if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+      //         setCurrentScreenId(4); //Navigate to leaderboard
+      //         return false;
+      //       } else if (
+      //         gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
+      //         gameInfo?.reflectionQuestions.length > 0
+      //       ) {
+      //         setCurrentScreenId(3); //Navigate to Reflection screen
+      //         return false;
+      //       } else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
+      //         setCurrentScreenId(7); //Navigate to takeaway screen
+      //         return false;
+      //       } else {
+      //         setType(null);
+      //         setData(null);
+      //         setCurrentScreenId(5);
+      //         return false;
+      //       }
+      //     }
+      //   }
+      // } 
+      if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
         setCurrentScreenId(4); //Navigate to leaderboard
         return false;
       } else if (haveNextQuest) {
@@ -1187,10 +1830,12 @@ useEffect(()=>{
             setCurrentScreenId(13); //Navigate to Character Selection screen
             return false;
           }
-        } else if (gameInfo.gameData?.gameDisableOptionalReplays === 'false') {
+        }
+        // Dont Want to Check This Condition
+        /*else if (gameInfo.gameData?.gameDisableOptionalReplays === 'false') {
           setCurrentScreenId(8); //Navigate to replaygame prompt screen
           return false;
-        }
+        }*/
       } else if (
         gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
         gameInfo?.reflectionQuestions.length > 0
@@ -1216,48 +1861,123 @@ useEffect(()=>{
       const haveNextQuest = gameInfo.gameQuest.some(
         (row: any) => row.gameQuestNo == Nextcurrentquest,
       );
-      if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-        setCurrentScreenId(4); //leaderboard
-        return false;
-      } else if (gameInfo?.gameData?.gameDisableOptionalReplays === 'false') {
-        setCurrentScreenId(8); //replay game
-        return false;
-      } else if (haveNextQuest) {
-        if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
-          const getminpassscore = getgameinfoquest?.gameMinScore;
-          const scores = profile?.score;
-          const sums: any = {};
-          scores.forEach((score: any) => {
-            const quest = score.quest;
-            if (!sums[quest]) {
-              sums[quest] = 0;
-            }
-            sums[quest] += score.score;
-          });
+      /* if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+         setCurrentScreenId(4); //leaderboard
+         return false;
+       } else */
+      if (gameInfo?.gameData?.gameDisableOptionalReplays === 'false') {
+        //   setCurrentScreenId(8); //replay game
+        //   return false;
+        // } else 
+        if (haveNextQuest) {
+          console.log('1582');
+          if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
+            console.log('1584');
+            const getminpassscore = getgameinfoquest?.gameMinScore;
+            const scores = profile?.score;
+            const sums: any = {};
+            scores.forEach((score: any) => {
+              const quest = score.quest;
+              if (!sums[quest]) {
+                sums[quest] = 0;
+              }
+              sums[quest] += score.score;
+            });
 
-          const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
-            quest,
-            score,
-          }));
-          const getscores = getFinalscores.find(
-            (row: any) => row.quest == getgameinfoquest?.gameQuestNo,
-          );
-          const finalscore = getscores?.score;
-          if (
-            finalscore >= getminpassscore &&
-            finalscore < getgameinfoquest?.gameDistinctionScore &&
-            gameInfo.gameData?.gameDisableOptionalReplays === 'false'
-          ) {
-            setisOptionalReplay(true);
-            setisReplay(false);
-            Setprofilescore(finalscore);
-            setCurrentScreenId(8);
-            return false;
-          } else {
-            setCurrentScreenId(13); //Navigate to Chapter Selection screen
-            return false;
+            const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
+              quest,
+              score,
+            }));
+            const getscores = getFinalscores.find(
+              (row: any) => row.quest == getgameinfoquest?.gameQuestNo,
+            );
+            const finalscore = getscores?.score;
+            if (
+              finalscore >= getminpassscore &&
+              finalscore < getgameinfoquest?.gameDistinctionScore &&
+              gameInfo.gameData?.gameDisableOptionalReplays === 'false'
+            ) {
+              console.log('1609');
+              setisOptionalReplay(true);
+              setisReplay(false);
+              Setprofilescore(finalscore);
+              setCurrentScreenId(8);
+              return false;
+            } else {
+              if (demoBlocks.hasOwnProperty(nextLevel)) {
+                console.log('1617');
+                setProfile((prev: any) => {
+                  const data = { ...prev };
+                  if (!profile.completedLevels.includes(currentQuest)) {
+                    data.completedLevels = [...data.completedLevels, nextLevel];
+                  }
+
+                  return data;
+                });
+                setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                setData(demoBlocks[nextLevel]['1']);
+                setCurrentScreenId(13);
+                return false;
+              }
+              else {
+                if (
+                  gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+                  gameInfo?.reflectionQuestions.length > 0
+                ) {
+                  setCurrentScreenId(3); //reflection screen
+                  return false;
+                } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+                  setCurrentScreenId(7); //takeaway
+                  return false;
+                } else {
+                  setType(null);
+                  setData(null);
+                  setCurrentScreenId(5); //thank you screen
+                  return false;
+                }
+              }
+              // setCurrentScreenId(13); //Navigate to Chapter Selection screen
+              // return false;
+            }
+          }
+          else {
+            if (data && type) {
+              setFeedbackNavigateNext(false);
+              setCurrentScreenId(13);
+              return false;
+            } else {
+              if (
+                gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+                gameInfo?.reflectionQuestions.length > 0
+              ) {
+                setCurrentScreenId(3);
+                return false;
+              } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+                setCurrentScreenId(7);
+                return false;
+              } else {
+                setType(null);
+                setData(null);
+                setCurrentScreenId(5);
+                return false;
+              }
+            }
           }
         }
+      } else if (demoBlocks.hasOwnProperty(nextLevel)) {
+        console.log('1654');
+        setProfile((prev: any) => {
+          const data = { ...prev };
+          if (!profile.completedLevels.includes(currentQuest)) {
+            data.completedLevels = [...data.completedLevels, nextLevel];
+          }
+
+          return data;
+        });
+        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+        setData(demoBlocks[nextLevel]['1']);
+        setCurrentScreenId(13);
+        return false;
       } else if (
         gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
         gameInfo?.reflectionQuestions.length > 0
@@ -1300,6 +2020,27 @@ useEffect(()=>{
       }
     }
     if (currentScreenId === 4) {
+      if (gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') {
+        const Completionpage = Object.entries(questState).map(
+          ([questId, status]) => ({ questId, status }),
+        );
+        // const OpenStraigntCompletionPage = Completionpage.find(
+        //   (row: any) =>
+        //     row.questId === profile.currentQuest && row.status === 'completed',
+        // );
+        // if (OpenStraigntCompletionPage !== undefined) {
+        //   setFeedbackList([]);
+        //   setCurrentScreenId(13);
+        //   return false;
+        // }
+        if (feedbackList.length !== 0) {
+          getFeedbackData(data);
+          setFeedbackNavigateNext(false);
+          setCurrentScreenId(14); //Navigate to together all feedback
+          return false;
+        }
+      }
+
       const Nextcurrentquest = profile?.currentQuest;
       const getgameinfoquest = gameInfo?.gameQuest.find(
         (row: any) => row.gameQuestNo == Nextcurrentquest,
@@ -1438,7 +2179,8 @@ useEffect(()=>{
           (row: any) => row.quest == getgameinfoquest.gameQuestNo,
         );
         const finalscore = getscores?.score;
-        if (finalscore < getminpassscore) {
+
+        if ((finalscore < getminpassscore) ) {
           setisReplay(true);
           Setprofilescore(finalscore);
           setisOptionalReplay(false);
@@ -1609,35 +2351,36 @@ useEffect(()=>{
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
-          //check the replay Quest score is higher than score in profile context
-          checkAndUpdateScores();
-
+        //check the replay Quest score is higher than score in profile context
+        checkAndUpdateScores();
 
         const Nextcurrentquest = next?.blockQuestNo;
         const getgameinfoquest = gameInfo?.gameQuest.find(
           (row: any) => row.gameQuestNo == Nextcurrentquest,
         );
-        if (getgameinfoquest?.gameIsSetCongratsScoreWiseMessage === 'true') {
-          if (demoBlocks.hasOwnProperty(nextLevel)) {
-            setProfile((prev: any) => {
-              const data = { ...prev };
-              if (!profile.completedLevels.includes(currentQuest)) {
-                data.completedLevels = [...data.completedLevels, nextLevel];
-              }
-              return data;
-            });
-            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-            setData(demoBlocks[nextLevel]['1']);
-            setFeedbackNavigateNext(false);
-            setCurrentScreenId(6);
-            return false;
-          } else {
-            setType(null);
-            setData(null);
-            setCurrentScreenId(6);
-            return false;
-          }
-        } else if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
+        //this place no need to check this condition .....
+        /* if (getgameinfoquest?.gameIsSetCongratsScoreWiseMessage === 'true') {
+           if (demoBlocks.hasOwnProperty(nextLevel)) {
+             setProfile((prev: any) => {
+               const data = { ...prev };
+               if (!profile.completedLevels.includes(currentQuest)) {
+                 data.completedLevels = [...data.completedLevels, nextLevel];
+               }
+               return data;
+             });
+             setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+             setData(demoBlocks[nextLevel]['1']);
+             setFeedbackNavigateNext(false);
+             setCurrentScreenId(6);
+             return false;
+           } else {
+             setType(null);
+             setData(null);
+             setCurrentScreenId(6);
+             return false;
+           }
+         } else */
+        if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = getgameinfoquest?.gameMinScore;
           const scores = profile?.score;
           const sums: any = {};
@@ -1658,7 +2401,7 @@ useEffect(()=>{
             (row: any) => row.quest == getgameinfoquest.gameQuestNo,
           );
           const finalscore = getscores?.score;
-          if (finalscore < getminpassscore) {
+          if (finalscore < getminpassscore ) {
             setisReplay(true);
             Setprofilescore(finalscore);
             setisOptionalReplay(false);
@@ -1706,9 +2449,6 @@ useEffect(()=>{
             return false;
           }
         }
-        setType(nextBlock[0]?.blockChoosen);
-        setData(nextBlock[0]);
-        setSelectedOption(null);
       } else {
         /** IF a block not has navi option then it leads to next block */
         if (nextBlock && nextBlock[0]?.blockChoosen) {
@@ -1718,6 +2458,7 @@ useEffect(()=>{
           return false;
         } else {
           /** else leads to first block of the quest */
+          setNavigateBlockEmpty(true);
           setType(demoBlocks[quest]['1']?.blockChoosen);
           setData(demoBlocks[quest]['1']);
           setSelectedOption(null);
@@ -1725,6 +2466,14 @@ useEffect(()=>{
         }
       }
     }
+    else {
+      setNavigateBlockEmpty(true);
+      setType(demoBlocks[quest]['1']?.blockChoosen);
+      setData(demoBlocks[quest]['1']);
+      setSelectedOption(null);
+      return false;
+    }
+
   };
 
   const calScore = () => {
@@ -1844,7 +2593,6 @@ useEffect(()=>{
 
   }, [currentScreenId]);
 
-  console.log('prevScreenId ***', prevScreenId);
   const setFeedBackFromValue = () => {
     switch (currentScreenId) {
       case 0:
@@ -2092,40 +2840,42 @@ useEffect(()=>{
     setCurrentScreenId(2);
   };
   const replayNextHandler = (data: any) => {
-    const currentQuest = data
-      ? parseInt(data?.blockPrimarySequence.split('.')[0])
-      : null;
-    const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
-    if (demoBlocks.hasOwnProperty(nextLevel)) {
-      setProfile((prev: any) => {
-        const data = { ...prev };
-        if (!profile.completedLevels.includes(currentQuest)) {
-          data.completedLevels = [...data.completedLevels, nextLevel];
-        }
+    // const currentQuest = data
+    //   ? parseInt(data?.blockPrimarySequence.split('.')[0])
+    //   : null;
+    // const nextLevel = currentQuest != null ? currentQuest === Object.keys(demoBlocks).length ? currentQuest : String(currentQuest + 1) : null;
+    // if (demoBlocks.hasOwnProperty(nextLevel)) {
+    //   setProfile((prev: any) => {
+    //     const data = { ...prev };
+    //     if (!profile.completedLevels.includes(currentQuest)) {
+    //       data.completedLevels = [...data.completedLevels, nextLevel];
+    //     }
 
-        return data;
-      });
-      setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-      setData(demoBlocks[nextLevel]['1']);
-      setCurrentScreenId(13);
-      return false;
-    } else {
-      if (
-        gameInfo.gameData?.gameIsShowReflectionScreen !== 'false' &&
-        gameInfo?.reflectionQuestions.length > 0
-      ) {
-        setCurrentScreenId(3); //Navigate to Reflection screen
-        return false;
-      } else if (gameInfo.gameData?.gameIsShowTakeaway !== 'false') {
-        setCurrentScreenId(7); //Navigate to Takeaway screen
-        return false;
-      } else {
-        setType(null);
-        setData(null);
-        setCurrentScreenId(5); //Navigate to Thank you screen
-        return false;
-      }
-    }
+    //     return data;
+    //   });
+    //   setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+    //   setData(demoBlocks[nextLevel]['1']);
+    //   setCurrentScreenId(13);
+    //   return false;
+    // } else {
+    //   if (
+    //     gameInfo.gameData?.gameIsShowReflectionScreen !== 'false' &&
+    //     gameInfo?.reflectionQuestions.length > 0
+    //   ) {
+    //     setCurrentScreenId(3); //Navigate to Reflection screen
+    //     return false;
+    //   } else if (gameInfo.gameData?.gameIsShowTakeaway !== 'false') {
+    //     setCurrentScreenId(7); //Navigate to Takeaway screen
+    //     return false;
+    //   } else {
+    //     setType(null);
+    //     setData(null);
+    //     setCurrentScreenId(5); //Navigate to Thank you screen
+    //     return false;
+    //   }
+    // }
+    setCurrentScreenId(4);
+    return false;
   };
   // const getAudioForText = async (text: string, voiceId: string) => {
   //   if (text && voiceId) {
@@ -2155,10 +2905,10 @@ useEffect(()=>{
   //   }
   // };
 
-
-  useEffect(()=>{
-    console.log("profile",profile);
-  },[profile])
+  /*
+    useEffect(() => {
+      console.log("profile", profile);
+    }, [profile])*/
   const handleAudioError = () => {
     console.error(
       'Failed to load video because no supported source was found.',
@@ -2168,12 +2918,11 @@ useEffect(()=>{
   useEffect(() => {
 
     const fetchSupportedLanguages = async () => {
-      if(gameInfo?.gameData?.gameId > 0)
-      {
-      const resLang = await getGameLanguages(gameInfo?.gameData?.gameId);
-      if (resLang?.status === 'Success') {
-        if (resLang?.data.length > 0) {
-          const data = resLang?.data;
+      if (gameInfo?.gameData?.gameId > 0) {
+        const resLang = await getGameLanguages(gameInfo?.gameData?.gameId);
+        if (resLang?.status === 'Success') {
+          if (resLang?.data.length > 0) {
+            const data = resLang?.data;
             // const data =[{value: 1, label: 'Tamil'}, {value: 2, label: 'French'}, {value: 5, label: 'Chinesh'}];
             data.unshift({ value: 0, label: 'English' });
             setGameLanguages(data);
@@ -2181,21 +2930,21 @@ useEffect(()=>{
               ...prev,
               language: data[0]?.label,
             }));
-            setPreLogDatas((prev:any) => ({
+            setPreLogDatas((prev: any) => ({
               ...prev,
-              previewProfile:{...prev.previewProfile, language: data[0]?.label,}
+              previewProfile: { ...prev.previewProfile, language: data[0]?.label, }
             }));
             setHasMulitLanguages(true);
-            setIsOpenCustomModal(true);          
+            setIsOpenCustomModal(true);
+          }
+          else {
+            setProfileData((prev: any) => ({
+              ...prev,
+              language: "English",
+            }));
+          }
         }
-        else{
-          setProfileData((prev: any) => ({
-            ...prev,
-            language: "English",
-          }));
-        }
-      }           
-    }
+      }
     };
     fetchSupportedLanguages();
   }, []);
@@ -2244,17 +2993,10 @@ useEffect(()=>{
     if (FeedbackNavigatenext === true) {
       getData(data);
     }
+    console.log('FeedbackNavigatenext 9',FeedbackNavigatenext)
   }, [FeedbackNavigatenext]);
 
-  // useEffect(()=>
-  // {
-  //   if(data!==null)
-  //     {
-  //         SetPreviouseStored(data);
-  //     }
 
-  // },[data]);
-  // useEffect(() => {}, [FeedBackoptionData]);
 
   const getFeedbackData = (getdata: any) => {
     setisScreenshot(true);
@@ -2318,88 +3060,13 @@ useEffect(()=>{
       setFeedbackCurrentPosition(FeedbackcurrentPosition + 1);
       setFeedbackRemainingSentences(newRemainingSentences);
     } else {
+      console.log('FeedbackNavigatenext',FeedbackNavigatenext);
       setFeedbackList([]);
       setFeedbackCurrentPosition(0);
       setFeedbackNavigateNext(true);
     }
   };
-  /*
-  useEffect(() => {
-    const screenUpdatePreviousdata = async () => {
-      const data = {
-        previewLogId: getPrevLogDatas.previewLogId,
-        playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
-        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
-        previewGameId: gameInfo?.gameId ?? null,
-        screenIdSeq: prevScreenId?.length > 0 ? prevScreenId : null,
-      };
-      const previousDataString = JSON.stringify(data);
-      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
-      setPreviewLogsData(updatePreviewLogsResponse);
-    }
-    screenUpdatePreviousdata();
-  }, [prevScreenId]);
-  useEffect(() => {
-    const prenaviUpdatePreviousdata = async () => {
-      const data = {
-        previewLogId: getPrevLogDatas.previewLogId,
-        playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
-        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
-        previewGameId: gameInfo?.gameId ?? null,
-        nevigatedSeq: (prevnaviseq.length > 0 || prevnaviseq.length !== undefined) && prevnaviseq ? getPrevLogDatas.nevigatedSeq : JSON.stringify(prevnaviseq),
-      };
-      const previousDataString = JSON.stringify(data);
-      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
-      setPreviewLogsData(updatePreviewLogsResponse);
-    }
-    prenaviUpdatePreviousdata();
-  }, [prevnaviseq]);
-  useEffect(() => {
-    const LastActUpdatePreviousdata = async () => {
-      const data = {
-        previewLogId: getPrevLogDatas.previewLogId,
-        playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
-        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
-        previewGameId: gameInfo?.gameId ?? null,
-        lastActiveBlockSeq: LastActivityseq?.length > 0 ? JSON.stringify(LastActivityseq) : getPrevLogDatas.lastActiveBlockSeq,
-      };
-      const previousDataString = JSON.stringify(data);
-      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
-      setPreviewLogsData(updatePreviewLogsResponse);
-    }
-    LastActUpdatePreviousdata();
-  }, [LastActivityseq]);
-  useEffect(() => {
-    const selectoptionUpdatePreviousdata = async () => {
-      const data = {
-        previewLogId: getPrevLogDatas.previewLogId,
-        playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
-        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
-        previewGameId: gameInfo?.gameId ?? null,
-        selectedOptions: (prevSelectedOptionseq.length > 0 || prevSelectedOptionseq.length !== undefined) && prevSelectedOptionseq ? getPrevLogDatas.selectedOptions : prevSelectedOptionseq,
-      };
-      const previousDataString = JSON.stringify(data);
-      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
-      setPreviewLogsData(updatePreviewLogsResponse);
-    }
-    selectoptionUpdatePreviousdata();
-  }, [prevSelectedOptionseq]);
-  useEffect(() => {
-    const profileUpdatePreviousdata = async () => {
-      const data = {
-        previewLogId: getPrevLogDatas.previewLogId,
-        playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
-        playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null,
-        previewGameId: gameInfo?.gameId ?? null,
-        previewProfile: prevprofileData,
-      };
-      const previousDataString = JSON.stringify(data);
-      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
-      setPreviewLogsData(updatePreviewLogsResponse);
-    }
-    profileUpdatePreviousdata();
-  }, [prevprofileData]);
-  */
+
   const handleHome = () => {
     setCurrentScreenId(1);
     return true;
@@ -2418,103 +3085,49 @@ useEffect(()=>{
         lastActiveBlockSeq: getPrevLogDatas.lastActiveBlockSeq,
         selectedOptions: getPrevLogDatas.selectedOptions,
         previewProfile: getPrevLogDatas.previewProfile,
+        lastBlockModifiedDate: getPrevLogDatas.lastBlockModifiedDate,
+        lastModifiedBlockSeq: getPrevLogDatas.lastModifiedBlockSeq,
       };
 
 
       const previousDataString = JSON.stringify(data);
       const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
-      console.log('updatePreviewLogsResponse 97878787', updatePreviewLogsResponse);
     }
     updatepreviousdatas();
   }, [getPrevLogDatas]);
   //  Newly Added  for prviouse stored 
   const SetPreviouseStored = (currentdata: any) => {
-    console.log('currentdata', currentdata);
     if (currentdata !== null) {
       const currentQuest = currentdata
         ? parseInt(currentdata?.blockPrimarySequence.split('.')[0])
         : null;
-      /*******************************Navegate Seq stored start************************************************ */
-      if (currentQuest === parseInt(profile.currentQuest)) {
-        if (getPrevLogDatas.nevigatedSeq[profile?.currentQuest]) {
-          if (!getPrevLogDatas.nevigatedSeq[profile?.currentQuest].includes(currentdata.blockPrimarySequence)) {
-
-            setPreLogDatas((prev: any) => ({
-              ...prev,
-              nevigatedSeq: { ...prev.nevigatedSeq, [profile?.currentQuest]: [...(prev.nevigatedSeq[profile?.currentQuest] || []), currentdata.blockPrimarySequence] }
-            }));
-            // setprevNaviseq((prev: any) => ({
-            //   ...prev,
-            //   [profile?.currentQuest]: [...prev[profile?.currentQuest], currentdata.blockPrimarySequence]
-            // }));
-          }
-
-        }
-        else {
-          setPreLogDatas((prev: any) => ({
-            ...prev,
-            nevigatedSeq: { ...prev.nevigatedSeq, [profile?.currentQuest]: [currentdata.blockPrimarySequence] }
-          }));
-          // setprevNaviseq((prev: any) => ({
-          //   ...prev,
-          //   [profile?.currentQuest]: [currentdata.blockPrimarySequence]
-          // }));
-
-        }
-
-      }
-      /*
-      else {
-        setPreLogDatas((prev:any) => ({
-          ...prev,
-          nevigatedSeq: {...prev.nevigatedSeq, [currentQuest]: [currentdata.blockPrimarySequence]}
-        }));
-        // setprevNaviseq((prev: any) => ({
-        //   ...prev,
-        //   [currentQuest]: [currentdata.blockPrimarySequence]
-        // }));
-
-      }*/
-      /*******************************Selected option Seq stored start ***************************** */
       if (currentdata?.blockChoosen === 'Interaction') {
         if (currentQuest === parseInt(profile.currentQuest)) {
           if (getPrevLogDatas.selectedOptions[profile?.currentQuest]) {
             const existingIndex = getPrevLogDatas.selectedOptions[profile?.currentQuest]?.findIndex((item: any) => item.blockId === currentdata.blockId);
-            console.log('existingIndex', existingIndex);
+
             if (existingIndex !== -1) {
               const updatedOptions = [...getPrevLogDatas.selectedOptions[profile?.currentQuest]];
-              console.log();
+
               updatedOptions[existingIndex] = { blockId: currentdata.blockId, optionId: OptionSelectId };
               setPreLogDatas((prev: any) => ({
                 ...prev,
                 selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: updatedOptions }
               }));
-              // setprevSelectedOptionseq((prev: any) => ({
-              //   ...prev,
-              //   [profile?.currentQuest]: updatedOptions
-              // }));
             }
             else {
               setPreLogDatas((prev: any) => ({
                 ...prev,
-                selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [...prev.selectedOptions[profile?.currentQuest], { blockId: currentdata.blockId, optionId: OptionSelectId }] }
+                selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [...prev.selectedOptions[profile?.currentQuest], { blockId: currentdata.blockId, optionId: [OptionSelectId] }] }
               }));
-              // setprevSelectedOptionseq((prev: any) => ({
-              //   ...prev,
-              //   [profile?.currentQuest]: [...prev[profile?.currentQuest], { id: currentdata.blockId, option: getSelectedOptions }]
-              // }));
             }
 
           }
           else {
             setPreLogDatas((prev: any) => ({
               ...prev,
-              selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [{ blockId: currentdata.blockId, optionId: OptionSelectId }] }
+              selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [{ blockId: currentdata.blockId, optionId: [OptionSelectId] }] }
             }));
-            // setprevSelectedOptionseq((prev: any) => ({
-            //   ...prev,
-            //   [profile?.currentQuest]: [{ id: currentdata.blockId, option: getSelectedOptions }]
-            // }));
 
           }
 
@@ -2524,31 +3137,16 @@ useEffect(()=>{
             ...prev,
             selectedOptions: { [profile?.currentQuest]: [{ blockId: currentdata.blockId, optionId: OptionSelectId }] }
           }));
-          // setprevSelectedOptionseq((prev: any) => ({
-          //   ...prev,
-          //   [profile?.currentQuest]: [{ id: currentdata.blockId, option: getSelectedOptions }]
-          // }));
 
         }
 
       }
-      /*******************************last Activity Seq  start ***************************** */
-      if (currentQuest === parseInt(profile.currentQuest)) {
-        setPreLogDatas((prev: any) => ({
-          ...prev,
-          lastActiveBlockSeq: currentdata.blockId
-        }));
-        // setLastActivityseq([currentdata.blockId]);
-
-      }
-      console.log('prevnaviseq inside', prevnaviseq, '.....', prevSelectedOptionseq, 'LastActivityseq', LastActivityseq, '.....', profile?.score);
 
     }
 
 
   }
-
-  console.log('prevnaviseq', prevnaviseq, '.....', prevSelectedOptionseq, 'LastActivityseq', LastActivityseq, '.....', profile?.score);
+console.log('feedbackList',feedbackList);
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="EntirePreview-wrapper">
@@ -2644,17 +3242,12 @@ useEffect(()=>{
                     <>
                       {data && type && (
                         <Story
-                          windowWidth={windowWidth}
-                          windowHeight={windowHeight}
-                          prevData={prevData}
-                          currentScore={currentScore}
                           selectedNpc={gameInfo?.gameNonPlayerUrl}
                           selectedPlayer={selectedPlayer}
                           formData={gameInfo?.gameData}
                           backGroundImg={preloadedAssets.backgroundImage}
                           data={data}
                           type={type}
-                          setCurrentScreenId={setCurrentScreenId}
                           handleValidate={handleValidate}
                           resMsg={resMsg}
                           feed={feed}
@@ -2662,24 +3255,22 @@ useEffect(()=>{
                           options={options}
                           option={selectedOption}
                           profileData={profileData}
-                          setAudio={setAudio}
-                          // getAudioForText={getAudioForText}
                           voiceIds={voiceIds}
                           setAudioObj={setAudioObj}
                           setIsGetsPlayAudioConfirmation={
                             setIsGetsPlayAudioConfirmation
                           }
-                          isGetsPlayAudioConfirmation={
-                            isGetsPlayAudioConfirmation
-                          }
-                          isPrevNavigation={isPrevNavigation}
                           setIsPrevNavigation={setIsPrevNavigation}
                           setNavTrack={setNavTrack}
                           navTrack={navTrack}
-                          setCurrentTrackPointer={setCurrentTrackPointer}
                           gameInfo={gameInfo}
                           preloadedAssets={preloadedAssets}
                           questState={questState}
+                          LastModiPrevData={LastModiPrevData}
+                          setPreLogDatas={setPreLogDatas}
+                          getPrevLogDatas={getPrevLogDatas}
+                          RepeatSelectOption={RepeatSelectOption}
+                          RepeatPrevOption={RepeatPrevOption}
                         />
                       )}
                     </>
@@ -2702,8 +3293,6 @@ useEffect(()=>{
                             <Reflection
                               formData={gameInfo?.gameData}
                               imageSrc={preloadedAssets.RefBg}
-                              getData={getData}
-                              data={data}
                               reflectionQuestions={
                                 gameInfo?.reflectionQuestions
                               }
@@ -2749,7 +3338,6 @@ useEffect(()=>{
                             data={data}
                             gameInfo={gameInfo}
                             preloadedAssets={preloadedAssets}
-                            profile={profile}
                           />
                         </Box>
                       </Box>
@@ -2836,6 +3424,7 @@ useEffect(()=>{
                               setType={setType}
                               setData={setData}
                               type={type}
+                              questWiseMaxTotal={questWiseMaxTotal}/// Pass questWiseMaxTotal as a prop
                             />
                           </Box>
                         </Box>
@@ -3038,7 +3627,7 @@ useEffect(()=>{
                       </Box>
                     </>
                     */
-                    <GameIntroScreen preloadedAssets={preloadedAssets} setCurrentScreenId={setCurrentScreenId} setIsGetsPlayAudioConfirmation={setIsGetsPlayAudioConfirmation} setPreLogDatas={setPreLogDatas} getPrevLogDatas={getPrevLogDatas} setprevScreenId={setprevScreenId} currentScreenId={currentScreenId} setModelControl={setModelControl} gameInfo={gameInfo.gameData} setLastModified={setLastModified}  hasMulitLanguages={hasMulitLanguages} setIsOpenCustomModal={setIsOpenCustomModal} 
+                    <GameIntroScreen preloadedAssets={preloadedAssets} setCurrentScreenId={setCurrentScreenId} setIsGetsPlayAudioConfirmation={setIsGetsPlayAudioConfirmation} setPreLogDatas={setPreLogDatas} getPrevLogDatas={getPrevLogDatas} setprevScreenId={setprevScreenId} currentScreenId={currentScreenId} setModelControl={setModelControl} gameInfo={gameInfo.gameData} setLastModified={setLastModified} hasMulitLanguages={hasMulitLanguages} setIsOpenCustomModal={setIsOpenCustomModal}
                     ></GameIntroScreen>
                   );
                 case 11:
@@ -3050,7 +3639,6 @@ useEffect(()=>{
                         profileData={profileData}
                         formData={gameInfo?.gameData}
                         setProfileData={setProfileData}
-                        setprevProfileData={setprevProfileData}
                         setPreLogDatas={setPreLogDatas}
                         preloadedAssets={preloadedAssets}
                         getPrevLogDatas={getPrevLogDatas}
@@ -3065,7 +3653,6 @@ useEffect(()=>{
                         setProfileData={setProfileData}
                         setprevScreenId={setprevScreenId}
                         currentScreenId={currentScreenId}
-                        setprevProfileData={setprevProfileData}
                         setSelectedPlayer={setSelectedPlayer}
                         players={gameInfo?.gamePlayers}
                         formData={gameInfo?.gameData}
@@ -3097,7 +3684,6 @@ useEffect(()=>{
                         gameQuest={gameInfo?.gameQuest}
                         setFeedbackList={setFeedbackList}
                         preloadedAssets={preloadedAssets}
-                        SetPreviouseStored={SetPreviouseStored}
                         setprevScreenId={setprevScreenId}
                         currentScreenId={currentScreenId}
                         setPreLogDatas={setPreLogDatas}
@@ -3128,29 +3714,31 @@ useEffect(()=>{
 
                 case 15:
                   return (
-                      <Overview
-                        formData={gameInfo?.gameData}
-                        imageSrc={preloadedAssets.overview}
-                        preloadedAssets={preloadedAssets}
-                        homeLeaderBoard={homeLeaderBoard}
-                        setCurrentScreenId={setCurrentScreenId}
-                        backGroundImg={preloadedAssets.backgroundImage}
-                      />
+                    <Overview
+                      formData={gameInfo?.gameData}
+                      imageSrc={preloadedAssets.overview}
+                      preloadedAssets={preloadedAssets}
+                      homeLeaderBoard={homeLeaderBoard}
+                      setCurrentScreenId={setCurrentScreenId}
+                      backGroundImg={preloadedAssets.backgroundImage}
+                    />
                   );
                   break;
-                
-                  case 16:
-                    return (
-                        <ReplayPoints
-                        setData={setData}
-                        setType={setType}
-                        preloadedAssets={preloadedAssets}
-                        demoBlocks={demoBlocks}
-                        profile={profile}
-                        setCurrentScreenId={setCurrentScreenId}
-                        />                      
-                    );
-                    break;  
+
+                case 16:
+                  return (
+                    <ReplayPoints
+                      setData={setData}
+                      setType={setType}
+                      preloadedAssets={preloadedAssets}
+                      demoBlocks={demoBlocks}
+                      profile={profile}
+                      setCurrentScreenId={setCurrentScreenId}
+                      setModelScreen={setModelScreen}
+                      modelScreen={modelScreen}
+                    />
+                  );
+                  break;
 
                 default:
                   console.log(
@@ -3161,7 +3749,7 @@ useEffect(()=>{
                   return <h1>Loading Screen </h1>;
               }
             })()}
-            {ModelControl === true ?
+            {ModelControl === true || NavigateBlockEmpty === true ?
 
               <>
                 <Box
@@ -3186,7 +3774,7 @@ useEffect(()=>{
                   >
                     <Box className="Images">
                       <ModelPopup ModelControl={ModelControl} setModelControl={setModelControl} backGroundImg={preloadedAssets.backgroundImage} preloadedAssets={preloadedAssets} getPrevLogDatas={getPrevLogDatas} setCurrentScreenId={setCurrentScreenId} setLastModified={setLastModified} LastModified={LastModified} setData={setData} setType={setType} gameInfo={gameInfo.blocks}
-                        setOptions={setOptions} gameInfoquest={gameInfo.questOptions} gameinfodata={gameInfo.gameData.gameShuffle} isSetStoryScreen={isSetStoryScreen} isStoryScreen={isStoryScreen}
+                        setOptions={setOptions} gameInfoquest={gameInfo.questOptions} gameinfodata={gameInfo.gameData.gameShuffle} isSetStoryScreen={isSetStoryScreen} isStoryScreen={isStoryScreen} setPreLogDatas={setPreLogDatas} NavigateBlockEmpty={NavigateBlockEmpty} setNavigateBlockEmpty={setNavigateBlockEmpty}
                       />
                     </Box>
                   </Box>
@@ -3376,7 +3964,7 @@ useEffect(()=>{
           )}
           {/* Language Transaltion Modal popup */}
 
-          <LanguageSelectionPrompt gameLanguages={gameLanguages} formData={gameInfo?.gameData} preloadedAssets={preloadedAssets} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData} setProfileData={setProfileData} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal}/>
+          <LanguageSelectionPrompt gameLanguages={gameLanguages} formData={gameInfo?.gameData} preloadedAssets={preloadedAssets} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData} setProfileData={setProfileData} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal} />
         </Box>
       </Box>
     </ProfileContext.Provider>
