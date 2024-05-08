@@ -983,7 +983,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   }
                   setOptions(optionsFiltered);
                 }
-
                 let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
                 const lastElementSeq = updateNavigateSeq.pop();
                 if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
@@ -1044,13 +1043,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   }
                   setOptions(optionsFiltered);
                 }
-
                 let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
                 const lastElementSeq = updateNavigateSeq.pop();
                 if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
                   updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
                 }
-
                 setPreLogDatas((prev: any) => ({
                   ...prev,
                   lastBlockModifiedDate: null,
@@ -1105,13 +1102,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 }
                 setOptions(optionsFiltered);
               }
-
               let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
               const lastElementSeq = updateNavigateSeq.pop();
               if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
                 updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
               }
-
               setPreLogDatas((prev: any) => ({
                 ...prev,
                 lastBlockModifiedDate: null,
@@ -1421,6 +1416,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setRepeatSelectOption(false);
     setIsPrevNavigation(false);
     if (next?.blockChoosen === 'Interaction') {
+      console.log('feedbackList 12',feedbackList.length,'..',feedbackList);
       const isDuplicate = feedbackList?.some(
         (item: any) =>
           item.Seq === next?.blockPrimarySequence &&
@@ -1724,7 +1720,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             (row: any) => row.quest == getgameinfoquest.gameQuestNo,
           );
           const finalscore = getscores?.score;
-          if (finalscore < getminpassscore) {
+          if (finalscore < getminpassscore ) {
             setisReplay(true);
             Setprofilescore(finalscore);
             setisOptionalReplay(false);
@@ -2493,7 +2489,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             (row: any) => row.quest == getgameinfoquest.gameQuestNo,
           );
           const finalscore = getscores?.score;
-          if (finalscore < getminpassscore) {
+          if (finalscore < getminpassscore ) {
             setisReplay(true);
             Setprofilescore(finalscore);
             setisOptionalReplay(false);

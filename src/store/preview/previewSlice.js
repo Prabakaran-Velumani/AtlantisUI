@@ -16,10 +16,12 @@ name: 'preview',
 initialState,
 reducers:{
     updatePreviewData : (state, action)=>{
+        console.log('action 12*****4',action,'....',state);
         if(!action.payload){
             return initialState;
         }
         const newState = { ...state, ...action.payload };
+        console.log('action 12****',newState);
             return newState;
     }
 },

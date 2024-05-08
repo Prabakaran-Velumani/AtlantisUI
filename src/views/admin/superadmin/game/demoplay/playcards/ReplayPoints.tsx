@@ -83,11 +83,10 @@ const ReplayPoints: React.FC<{
                 </Box>
               </Box>
             </Box>
-          </Box>
-        </>
-      )}
-    </>
-  );
-};
+          </>
+        )}
+      </>
+    );
+  };
 
 export default ReplayPoints;
