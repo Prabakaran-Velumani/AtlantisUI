@@ -60,6 +60,7 @@ const CompletionContentScreen: React.FC<{
       }
     };
     fetchDatass();
+    console.log('compliData ...',compliData);
   }, [compliData]);
 
   return (

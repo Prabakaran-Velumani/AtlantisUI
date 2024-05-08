@@ -1,16 +1,13 @@
 // Chakra Imports
 import {
   Box,
-  Flex,
   Grid,
   GridItem,
   Img,
   Text,
-  useToast,
 } from '@chakra-ui/react';
 
 import React, {
-  Suspense,
   useContext,
   useEffect,
   useState,
@@ -19,14 +16,10 @@ import React, {
 import Interaction from './Interaction';
 import TypingEffect from './Typing';
 // import { getVoiceMessage, getPreview } from 'utils/game/gameService';
-import { useParams } from 'react-router-dom';
 import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
 import {
-  API_SERVER,
-  Notelength,
-  Dialoglength,
-  Responselength,
+  API_SERVER
 } from 'config/constant';
 import { ScoreContext } from '../GamePreview';
 import { Canvas, useFrame, useLoader } from 'react-three-fiber';
@@ -38,26 +31,18 @@ import Model from './Model';
 import ReplayGame from './ReplayGame';
 
 const Story: React.FC<{
-  // formData?: any;
   imageSrc?: any;
   replayGame: any;
-  // setCurrentScreenId: any;
-  // getData?: any;
   isOptionalReplay: any;
   setisOptionalReplay: any;
   profilescore: any;
   setisReplay: any;
   isReplay: any;
-  // data?: any;
-  // gameInfo: any;
-  // type?: any;
   setType: any;
   setData: any;
   replayNextHandler: any;
-  // preloadedAssets: any;
-
   prevData?: any;
-  currentScore: any;
+  currentScore?: any;
   data: any;
   type: any;
   profileData: any;
@@ -69,25 +54,22 @@ const Story: React.FC<{
   resMsg: any;
   feed: any;
   setIsGetsPlayAudioConfirmation: any;
-  isGetsPlayAudioConfirmation: any;
   formData: any;
-  setAudio: any;
   setAudioObj: any;
-  setCurrentScreenId: any;
   selectedPlayer: any;
   selectedNpc: any;
-  // getAudioForText: any;
   voiceIds: any;
-  windowWidth: any;
-  windowHeight: any;
   setIsPrevNavigation: any;
-  isPrevNavigation: any;
   setNavTrack: any;
   navTrack: any;
-  setCurrentTrackPointer: any;
   gameInfo: any;
   preloadedAssets: any;
-  questState:any;
+  questState: any;
+  LastModiPrevData: any;
+  setPreLogDatas: any;
+  getPrevLogDatas: any;
+  RepeatSelectOption:any;
+  RepeatPrevOption:any;
 }> = ({
   data,
   type,
@@ -101,27 +83,20 @@ const Story: React.FC<{
   handleValidate,
   backGroundImg,
   formData,
-  setCurrentScreenId,
-  setAudio,
   selectedPlayer,
   setIsGetsPlayAudioConfirmation,
-  isGetsPlayAudioConfirmation,
   selectedNpc,
   voiceIds,
-  currentScore,
-  prevData,
-  windowWidth,
-  windowHeight,
   setIsPrevNavigation,
-  isPrevNavigation,
   setNavTrack,
   navTrack,
-  setCurrentTrackPointer,
   gameInfo,
   preloadedAssets,
   imageSrc,
   replayGame,
   replayNextHandler,
+  prevData,
+  currentScore,
   setisReplay,
   setisOptionalReplay,
   isOptionalReplay,
@@ -129,13 +104,16 @@ const Story: React.FC<{
   setData,
   setType,
   isReplay,
-  questState
+  questState,
+  LastModiPrevData,
+  getPrevLogDatas,
+  setPreLogDatas,
+  RepeatSelectOption,
+  RepeatPrevOption,
 }) => {
     const [showNote, setShowNote] = useState(true),
       [first, setFirst] = useState(false);
     const userProfile = useContext(ProfileContext);
-    const [getInteraction, setInteraction] = useState(false);
-    const [Contentgetlanguage, setContentlanguage] = useState('');
     const { profile, setProfile } = useContext(ScoreContext);
     const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
     const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
@@ -149,8 +127,33 @@ const Story: React.FC<{
         setShowTypingEffect(false);
         setTimeout(() => {
           setShowNote(false);
-          interactionNext === true && setInteractionNext(false); 
+          interactionNext === true && setInteractionNext(false);
         }, 1000);
+        const currentQuest = data
+          ? parseInt(data?.blockPrimarySequence.split('.')[0])
+          : null;
+        
+          if (getPrevLogDatas.nevigatedSeq[currentQuest]) {
+            if (!getPrevLogDatas.nevigatedSeq[currentQuest].includes(data.blockPrimarySequence)) {
+    
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                lastActiveBlockSeq: data.blockId,
+                nevigatedSeq: { ...prev.nevigatedSeq, [currentQuest]: [...(prev.nevigatedSeq[currentQuest] || []), data.blockPrimarySequence] }
+                
+              }));
+            }
+    
+          }
+          else {
+            setPreLogDatas((prev: any) => ({
+              ...prev,
+              lastActiveBlockSeq: data.blockId,
+              nevigatedSeq: { ...prev.nevigatedSeq, [currentQuest]: [data.blockPrimarySequence] }
+            }));
+    
+          }
+    
         if (gameInfo.hasOwnProperty('blocks')) {
           let previousPrimarySeq = navTrack[navTrack.length - 1];
           if (previousPrimarySeq) {
@@ -164,10 +167,10 @@ const Story: React.FC<{
               if (previousBlock?.blockChoosen === 'Interaction') {
                 setNavTrack([data.blockPrimarySequence]);
               } else {
-                const newArray = navTrack;
-                newArray.push(data.blockPrimarySequence);
-                setNavTrack(newArray);
-              }
+              const newArray = navTrack;
+              newArray.push(data.blockPrimarySequence);
+              setNavTrack(newArray);
+               }
             }
           } else {
             setNavTrack([data.blockPrimarySequence]);
@@ -366,8 +369,8 @@ const Story: React.FC<{
 
     const InteractionFunction = () => {
       setIsGetsPlayAudioConfirmation(true);
-      if(questState[profile?.currentQuest] === 'Started')
-      {
+      
+      if (questState[profile?.currentQuest] === 'Started') {
         setProfile((prev: any) => {
           const { seqId, score: newScore } = score;
           const index = prev.score.findIndex((item: any) => item.seqId === seqId);
@@ -384,12 +387,12 @@ const Story: React.FC<{
                 quest: parseInt(seqId.split('.')[0]),
               },
             ];
-            
+
             return { ...prev, score: newScoreArray };
           }
         });
       }
-      else{
+      else {
         // update the replayScore when a player want to replay. Scores were hanlded seperatly, after Quest completion, if the calculated total score is lesser than replay score total then replace the score by replayscore, other wise score not changed, then reset the replayscore to {}
         setProfile((prev: any) => {
           const { seqId, score: newScore } = score;
@@ -416,6 +419,7 @@ const Story: React.FC<{
 
     useEffect(() => {
       if (interactionNext === true) {
+        setInteractionNext(false);
         getData(data);
       }
     }, [interactionNext]);
@@ -444,12 +448,14 @@ const Story: React.FC<{
       if (showTypingEffect === false) {
         setShowTypingEffect(true);
       } else {
-        prevData(data);
+          LastModiPrevData(data);
+      
       }
+      
     };
 
 
-    
+
     return (
       <>
         {optionalReplay && <ReplayGame
@@ -465,7 +471,7 @@ const Story: React.FC<{
           setisReplay={setisReplay}
           profilescore={profilescore}
           isReplay={isReplay}
-          setCurrentScreenId={setCurrentScreenId}
+          // setCurrentScreenId={setCurrentScreenId}
           formData={gameInfo?.gameData}
           imageSrc={preloadedAssets.Replay}
           getData={getData}
@@ -530,10 +536,22 @@ const Story: React.FC<{
                         position={'fixed'}
                         top={'70%'}
                       >
+                        <Img src={preloadedAssets.next} h={'7vh'} className={'story_note_next_button'} />
+
+                      </Box>
+                      <Box
+                        display={'flex'}
+                        position={'fixed'}
+                        justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
+                        w={'95%'}
+                        bottom={'0'}
+                      >
                         <Img
-                          src={preloadedAssets.next}
-                          h={'7vh'}
-                          className={'story_note_next_button'}
+                          src={preloadedAssets.left}
+                          w={'70px'}
+                          h={'50px'}
+                          cursor={'pointer'}
+                          onClick={() => {  LastModiPrevData(data)}}
                         />
                       </Box>
                     </Box>
@@ -590,14 +608,6 @@ const Story: React.FC<{
                   {data.blockRoll === 'Narrator' ? data.blockRoll : (data.blockRoll=== '999999' ? formData.gameNonPlayerName : profileData.name)}
                 </Box>
               </Box>
-              {/* <Text
-                position={'fixed'}
-                left={'18%'}
-                bottom={'130px'}
-               
-              >
-                
-              </Text> */}
             </Box>
             <Box
               display={'flex'}
@@ -635,17 +645,13 @@ const Story: React.FC<{
               w={'95%'}
               bottom={'0'}
             >
-              {navTrack.length > 1 && (
-                <Img
-                  src={preloadedAssets.left}
-                  w={'70px'}
-                  h={'50px'}
-                  // cursor={'pointer'}
-                  onClick={() => {
-                    SkipContentForBackNavigation();
-                  }}
-                />
-              )}
+              <Img
+                src={preloadedAssets.left}
+                w={'70px'}
+                h={'50px'}
+                cursor={'pointer'}
+                onClick={() => { SkipContentForBackNavigation() }}
+              />
               <Img
                 src={preloadedAssets.right}
                 w={'70px'}
@@ -660,19 +666,7 @@ const Story: React.FC<{
           </Box>
         )}
         {data && type === 'Interaction' && (
-          <Interaction
-            backGroundImg={backGroundImg}
-            data={data}
-            option={option}
-            options={options}
-            optionClick={optionClick}
-            prevData={prevData}
-            InteractionFunction={InteractionFunction}
-            navTrack={navTrack}
-            preloadedAssets={preloadedAssets}
-            selectedPlayer={selectedPlayer}
-            Contentlanguage={Contentgetlanguage}
-            Profiledatalanguage={profileData?.Audiogetlanguage}
+          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick}  InteractionFunction={InteractionFunction} navTrack={navTrack} preloadedAssets={preloadedAssets} selectedPlayer={selectedPlayer}  LastModiPrevData={LastModiPrevData}  RepeatSelectOption={RepeatSelectOption}  RepeatPrevOption={RepeatPrevOption}
           />
         )}
         {data && type === 'response' && (
@@ -734,6 +728,14 @@ const Story: React.FC<{
               w={'95%'}
               bottom={'0'}
             >
+              <Img
+                src={preloadedAssets.left}
+                w={'70px'}
+                h={'50px'}
+                cursor={'pointer'}
+              onClick={() => { SkipContentForBackNavigation() }}
+              // onClick={() => prevData(data)}
+              />
               <Img
                 src={preloadedAssets.right}
                 w={'70px'}
@@ -817,26 +819,40 @@ const Story: React.FC<{
                         </Box>
                         <Box
                           w={'120%'}
+                          onClick={() => getData(data)}
                           mt={'20px'}
                           display={'flex'}
-                          justifyContent={'space-between'}
-                          cursor={'pointer'}
+                          justifyContent={'center'}
                           position={'absolute'}
                           bottom={'-8%'}
                         >
                           <Img
-                            src={preloadedAssets.left}
-                            className={'interaction_button'}
-                          // onClick={() => prevData(data)}
-                          />
-                          <Img
-                            src={preloadedAssets.right}
-                            className={'interaction_button'}
-                            onClick={() => getData(data)}
+                            src={preloadedAssets.next}
+                            h={'7vh'}
+                            className={'story_note_next_button'}
                           />
                         </Box>
+                        <Box
+                        display={'flex'}
+                        position={'fixed'}
+                        justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
+                        w={'95%'}
+                        bottom={'0'}
+                      >
+
+                        <Img
+                          src={preloadedAssets.left}
+                          w={'70px'}
+                          h={'50px'}
+                          cursor={'pointer'}
+                          onClick={() => {  LastModiPrevData(data)}}
+                        />
+
+
+                      </Box>
                       </Box>
                     </Box>
+
                   </Box>
                 </Box>
               </GridItem>
@@ -891,10 +907,6 @@ const Player: React.FC = () => {
       // child.material.map.format = THREE.RGBAFormat;
     }
   });
-
-  function handleClick() {
-    console.log('Character Click!');
-  }
 
   return (
     <group ref={groupRef}>

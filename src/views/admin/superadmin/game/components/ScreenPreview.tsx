@@ -258,6 +258,9 @@ const ScreenPreview = () => {
             ),
           );
         }
+        else{
+          console.log('gamedata',gamedata,'....',id);
+        }
       } else {
         console.log('game id is missing...');
       }
@@ -280,7 +283,7 @@ const ScreenPreview = () => {
         ];
       }
     }
-    
+
     setOptions(optionsFiltered);
 
   };
@@ -303,7 +306,7 @@ const ScreenPreview = () => {
   const preloadedAssets = useMemo(() => {
     return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls };
   }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
-  
+
   const getSelectedPlayer = useCallback(() => {
     let count = 0;
     const prefix = 'playerCharacterImage_';
@@ -322,7 +325,7 @@ const ScreenPreview = () => {
     setSelectedPlayer(preloadedAssets.selectedPlayerKey);
     // return preloadedAssets.selectedPlayerKey;
   }, [preloadedAssets]);
-
+  console.log('gameInfo', gameInfo,'......',preloadedAssets)
   useEffect(() => {
     if (gameInfo && preloadedAssets) {
       setContentReady(true);
@@ -335,7 +338,7 @@ const ScreenPreview = () => {
     dispatch(updatePreviewData({ isDispatched: false }));
   }, [CompKeyCount]);
 
-  
+
   const prevData = (current: any) => {
     const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
     const currentBlock = current
@@ -695,11 +698,12 @@ const ScreenPreview = () => {
     setIsPrevNavigation(false);
     getData(data)
   }
-
+  console.log('data && type', data, '...', type, '...', data === null);
   return (
+
     <Box id="container">
       <Suspense fallback={<h1>Loading please wait...</h1>}>
-        {(contentReady|| endOfQuest) && (
+        {(contentReady || endOfQuest) && (
           <motion.div
             initial={{ opacity: 0, background: '#000' }}
             animate={{ opacity: 1, background: '#0000' }}
@@ -729,6 +733,40 @@ const ScreenPreview = () => {
                     >
                       Demo Play
                     </Button>
+                    {(currentTab === 1 || currentTab === 2 || currentTab === 3) && (
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
+                      >
+                        <Box
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
+                        >
+                          <Box className="Images">
+                            <Text
+                              fontSize={{
+                                base: '13px',
+                                sm: '13px',
+                                md: '15px',
+                                lg: '20px',
+                              }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available</Text>
+                          </Box>
+                        </Box>
+                      </Box>
+                    )}
+                    {/*                     
                     {currentTab === 3 && (
                       <Box
                         w={'100%'}
@@ -750,15 +788,50 @@ const ScreenPreview = () => {
                           backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
-                            {gameInfo && (
-                              <WelcomeContentScreen
-                                // backgroundImage={preloadedAssets.backgroundImage}
-                                formData={gameInfo.gameData}
-                                imageSrc={preloadedAssets?.Screen5}
-                                preview={true}
-                                preloadedAssets={preloadedAssets}
-                              />
-                            )}
+
+                            <WelcomeContentScreen
+                              // backgroundImage={preloadedAssets.backgroundImage}
+                              formData={gameInfo.gameData}
+                              imageSrc={preloadedAssets?.Screen5}
+                              preview={true}
+                              preloadedAssets={preloadedAssets}
+                            />
+
+                          </Box>
+                        </Box>
+                      </Box>
+                    )} */}
+                    {currentTab === 4 && data === null && (
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
+                      >
+                        <Box
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
+                        >
+                          <Box className="Images">
+                            <Text
+                              fontSize={{
+                                base: '13px',
+                                sm: '13px',
+                                md: '15px',
+                                lg: '20px',
+                              }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available("No Preview Yet
+                              Kindly add blocks to your story to generate the preview.
+                              ")</Text>
                           </Box>
                         </Box>
                       </Box>
@@ -1274,13 +1347,20 @@ const ScreenPreview = () => {
                         >
                           <Box className="Images">
                             <Box className="LearderBoards">
-                              <LeaderBoard
+                              {gameInfo.gameData.gameIsShowLeaderboard === "true" ? <LeaderBoard
                                 formData={gameInfo?.gameData}
                                 imageSrc={preloadedAssets.Lead}
                                 getData={getData}
                                 data={data}
                                 preloadedAssets={preloadedAssets}
-                              />
+                              /> : <Box><Text
+                                fontSize={{
+                                  base: '13px',
+                                  sm: '13px',
+                                  md: '15px',
+                                  lg: '20px',
+                                }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available ("The Leadboard screen preview will appear once you complete the story and head to the design section to Enable the Leadboard Screen.")</Text></Box>}
+
                             </Box>
                           </Box>
                         </Box>
@@ -1299,7 +1379,7 @@ const ScreenPreview = () => {
                       >
                         <Box className="Game-Screen">
                           <Box className="Images">
-                            <ReflectionContentScreen
+                            {gameInfo.gameData.gameIsShowReflectionScreen === "true" ? <ReflectionContentScreen
                               preview={true}
                               formData={gameInfo.gameData}
                               imageSrc={preloadedAssets?.RefBg}
@@ -1310,7 +1390,39 @@ const ScreenPreview = () => {
                                 reflectionQuestionsdefault
                               }
                               preloadedAssets={preloadedAssets}
-                            />
+                            /> :
+                              <Box
+                                w={'100%'}
+                                h={'100vh'}
+                                alignItems={'center'}
+                                justifyContent={'center'}
+                                position={'relative'}
+                                overflow={'visible'}
+                                style={{ perspective: '1000px' }}
+                                className="Main-Content"
+                              >
+                                <Box
+                                  w={'100% !important'}
+                                  h={'100vh'}
+                                  backgroundRepeat={'no-repeat'}
+                                  backgroundSize={'cover'}
+                                  alignItems={'center'}
+                                  justifyContent={'center'}
+                                  className="Game-Screen"
+                                  backgroundImage={preloadedAssets.backgroundImage}
+                                >
+                                  <Box className="Images">
+                                    <Text
+                                      fontSize={{
+                                        base: '13px',
+                                        sm: '13px',
+                                        md: '15px',
+                                        lg: '20px',
+                                      }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available("The Reflection screen preview will appear once you complete the story and head to the design section to enable the Reflection screen.")</Text>
+                                  </Box>
+                                </Box>
+                              </Box>
+                            }
                           </Box>
                         </Box>
                       </Box>
@@ -1337,12 +1449,19 @@ const ScreenPreview = () => {
                           backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
-                            <TakeAwaysContentScreen
+                            {gameInfo.gameData.gameIsShowTakeaway === "true" ? <TakeAwaysContentScreen
                               preview={true}
                               formData={gameInfo.gameData}
                               imageSrc={preloadedAssets?.Screen4}
                               preloadedAssets={preloadedAssets}
-                            />
+                            /> : <Box><Text
+                              fontSize={{
+                                base: '13px',
+                                sm: '13px',
+                                md: '15px',
+                                lg: '20px',
+                              }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available ("The Takeaway screen preview will appear once you complete the story and head to the design section to create the Takeaway screen.")</Text></Box>}
+
                           </Box>
                         </Box>
                       </Box>
@@ -1369,6 +1488,7 @@ const ScreenPreview = () => {
                           backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
+
                             <WelcomeContentScreen
                               formData={gameInfo.gameData}
                               imageSrc={preloadedAssets?.Screen5}
@@ -1411,6 +1531,39 @@ const ScreenPreview = () => {
                         </Box>
                       </Box>
                     )}
+                    {currentTab === 6 && currentSubTab === 5 && (
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
+                      >
+                        <Box
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
+                        >
+                          <Box className="Images">
+                            <Text
+                              fontSize={{
+                                base: '13px',
+                                sm: '13px',
+                                md: '15px',
+                                lg: '20px',
+                              }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available</Text>
+                          </Box>
+                        </Box>
+                      </Box>
+                    )}
 
                     {endOfQuest && (
                       <Box
@@ -1449,6 +1602,56 @@ const ScreenPreview = () => {
             </Box>
           </motion.div>
         )}
+        {gameInfo === undefined &&
+          (
+            <motion.div
+              initial={{ opacity: 0, background: '#000' }}
+              animate={{ opacity: 1, background: '#0000' }}
+              transition={{ duration: 1, delay: 0.5 }}
+            >
+              <Box id="EntirePreview-wrapper">
+                <Box className="EntirePreview-content">
+                  <Box h={'100vh !important'} className="Images">
+                    <Flex height="100vh" className="EntirePreview">
+                    <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
+                      >
+                        <Box
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
+                        >
+                          <Box className="Images">
+                            <Text
+                              fontSize={{
+                                base: '13px',
+                                sm: '13px',
+                                md: '15px',
+                                lg: '20px',
+                              }} style={{ textAlign: 'center' }}>Preview Is Not Available ("No Preview Yet
+                              Kindly add blocks to your story to generate the preview.")</Text>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Flex>
+                  </Box>
+                </Box>
+              </Box>
+
+            </motion.div>
+          )}
       </Suspense>
     </Box>
   );

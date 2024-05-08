@@ -24,7 +24,6 @@ reducers:{
     }
 },
 extraReducers(builder) {
-    
 },
 })
 

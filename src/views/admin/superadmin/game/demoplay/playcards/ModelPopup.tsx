@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Box, Button, Grid, GridItem, Img, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Switch, Text } from '@chakra-ui/react';
 import right from 'assets/img/games/right.png';
 import left from 'assets/img/games/left.png';
@@ -11,7 +11,7 @@ import Setting from 'assets/img/games/settings.png';
 import SettingPad from 'assets/img/games/setting-pad.png';
 import SliderPointer from 'assets/img/games/slider-pointer.png';
 import Close from 'assets/img/games/close.png';
-
+import { ScoreContext } from '../GamePreview';
 interface ModelPopupProps {
   data?: any;
   options?: any;
@@ -34,13 +34,25 @@ interface ModelPopupProps {
   gameinfodata: any;
   isStoryScreen: any;
   isSetStoryScreen: any;
+  setPreLogDatas: any;
+  setNavigateBlockEmpty: any;
+  NavigateBlockEmpty: any;
 }
 
-const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, profile, options, geTfeedBackoption, ModelControl, preloadedAssets, setModelControl, getPrevLogDatas, setCurrentScreenId, setLastModified, LastModified, setType, setData, gameInfo, setOptions, gameInfoquest, gameinfodata, isStoryScreen, isSetStoryScreen }) => {
+const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, options, geTfeedBackoption, ModelControl, preloadedAssets, setModelControl, getPrevLogDatas, setCurrentScreenId, setLastModified, LastModified, setType, setData, gameInfo, setOptions, gameInfoquest, gameinfodata, isStoryScreen, isSetStoryScreen, setPreLogDatas, setNavigateBlockEmpty, NavigateBlockEmpty }) => {
   const [QuestScreen, SetQuestScreen] = useState<boolean>(false);
   const [QuestSelectionPage, SetQuestSelectionPage] = useState<boolean>(false);
   const [PlayAgain, SetPlayAgain] = useState<boolean>(false);
+  const { profile, setProfile } = useContext(ScoreContext);
   const NextScreen = () => {
+    setPreLogDatas((prev: any) => ({
+      ...prev,
+      nevigatedSeq: [],
+      screenIdSeq: [],
+      lastActiveBlockSeq: '',
+      selectedOptions: '',
+      previewProfile: '',
+    }));
     setModelControl(false);
     setLastModified(false);
     setCurrentScreenId(1);
@@ -48,74 +60,72 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, pr
   const continueScreen = () => {
     if (LastModified === true) {
       const getLastModifiedid = getPrevLogDatas.lastModifiedBlockSeq;
-      const getLastModifieddata = new Date(getPrevLogDatas.lastBlockModifiedDate).getTime();
-      const getupdatedAt = new Date(getPrevLogDatas.updatedAt).getTime();
-      if (getLastModifieddata > getupdatedAt) {
-        let filteredData: any;
-        for (const key in gameInfo) {
-          const innerObj = gameInfo[key];
-          for (const innerKey in innerObj) {
-            const data = innerObj[innerKey];
-            if (data.blockId == getLastModifiedid) {
-              filteredData = data;
-              break;
-            }
-          }
-          if (filteredData) {
+      let filteredData: any;
+      for (const key in gameInfo) {
+        const innerObj = gameInfo[key];
+        for (const innerKey in innerObj) {
+          const data = innerObj[innerKey];
+          if (data.blockId == getLastModifiedid) {
+            filteredData = data;
             break;
           }
         }
-        setData(filteredData);
-        setType(filteredData.blockChoosen);
-        if (
-          filteredData.blockChoosen ===
-          'Interaction'
-        ) {
-          const optionsFiltered = [];
-          const primarySequence = filteredData.blockPrimarySequence;
-
-          for (const option of gameInfoquest) {
-
-            if (option?.qpSequence === primarySequence) {
-              optionsFiltered.push(option);
-            }
-
-          }
-          if (gameinfodata === 'true') {
-            for (let i = optionsFiltered.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [optionsFiltered[i], optionsFiltered[j]] = [
-                optionsFiltered[j],
-                optionsFiltered[i],
-              ]; // Swap elements at indices i and j
-            }
-          }
-          setOptions(optionsFiltered);
-        }
-        setCurrentScreenId(2);
-        setModelControl(false); // for model show
-        setLastModified(false); // for last modified 
-        return false;
-      }
-      else
-      {
-        if (getPrevLogDatas.screenIdSeq) {
-          const screenlast = getPrevLogDatas.screenIdSeq;
-          const getLastScreenId = screenlast[screenlast.length - 1];
-          if (getLastScreenId == 2) {
-            setLastModified(false);
-            isSetStoryScreen(true);
-            return false;
-          }
-          else {
-            setCurrentScreenId(getLastScreenId);
-            setLastModified(false);
-            setModelControl(false);
-            return false;
-          }
-  
+        if (filteredData) {
+          break;
         }
       }
+      if (getPrevLogDatas.nevigatedSeq) {
+        const getnevigatedSeq = getPrevLogDatas.nevigatedSeq;
+        const convertArray = Object.keys(getnevigatedSeq);
+        if (convertArray.length > 0) {
+          setProfile((prev: any) => ({
+            ...prev,
+            currentQuest: filteredData.blockQuestNo,
+            completedLevels: [convertArray]
+          }));
+        }
+        else
+        {
+          setProfile((prev: any) => ({
+            ...prev,
+            currentQuest: filteredData.blockQuestNo,
+            completedLevels: ["1"]
+          }));
+        }
+      }
+      setData(filteredData);
+      setType(filteredData.blockChoosen);
+      if (
+        filteredData.blockChoosen ===
+        'Interaction'
+      ) {
+        const optionsFiltered = [];
+        const primarySequence = filteredData.blockPrimarySequence;
+
+        for (const option of gameInfoquest) {
+
+          if (option?.qpSequence === primarySequence) {
+            optionsFiltered.push(option);
+          }
+
+        }
+        if (gameinfodata === 'true') {
+          for (let i = optionsFiltered.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [optionsFiltered[i], optionsFiltered[j]] = [
+              optionsFiltered[j],
+              optionsFiltered[i],
+            ]; // Swap elements at indices i and j
+          }
+        }
+        setOptions(optionsFiltered);
+      }
+      setCurrentScreenId(2);
+      setModelControl(false); // for model show
+      setLastModified(false); // for last modified 
+      return false;
+
+
 
     }
     else {
@@ -142,7 +152,9 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, pr
   const handleChange = (e: any) => {
     const { name, value, checked } = e.target;
     if (name === 'lastpausedQuest' && checked) {
+
       SetQuestScreen(true);
+
       SetQuestSelectionPage(false);
       SetPlayAgain(false);
       return false;
@@ -177,6 +189,22 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, pr
           }
 
         }
+        //  return;
+        if(convertArray.length > 0)
+          {
+            setProfile((prev: any) => ({
+              ...prev,
+              currentQuest: SetLastSeqData.blockQuestNo,
+              completedLevels: [convertArray]
+            }));
+          }
+          else{
+            setProfile((prev: any) => ({
+              ...prev,
+              currentQuest: SetLastSeqData.blockQuestNo,
+              completedLevels: ["1"]
+            }));
+          }
         setData(SetLastSeqData);
         setType(SetLastSeqData.blockChoosen);
         if (
@@ -205,19 +233,29 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, pr
           setOptions(optionsFiltered);
         }
         setModelControl(false);
+        isSetStoryScreen(false);
         setCurrentScreenId(2);
         return false;
       }
     }
     else if (QuestSelectionPage === true) {
       setModelControl(false);
+      isSetStoryScreen(false);
       setCurrentScreenId(13);
       return false;
     }
     else if (PlayAgain === true) {
       setModelControl(false);
+      isSetStoryScreen(false);
       return false;
     }
+  }
+  const HandleBlockScreen = () => {
+    setNavigateBlockEmpty(false);
+    // setType(demoBlocks[quest]['1']?.blockChoosen);
+    // setData(demoBlocks[quest]['1']);
+    // setSelectedOption(null);
+    return false;
   }
   return (
     // <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
@@ -299,7 +337,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, pr
                             onChange={handleChange}
                           />
                         </Box>
-                      </> : '  Do you want to continue from the screen where you last paused?'}
+                      </> : NavigateBlockEmpty === true ? 'Dont have any blocks. So, navigate to the first block.' : '  Do you want to continue from the screen where you last paused?'}
 
                   </Box>
                 </Box>
@@ -341,7 +379,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, pr
               src={preloadedAssets.replayBtn}
               className="replay_buttons"
             /> */}
-            {isStoryScreen === false ? <> <Button onClick={() => { continueScreen() }}> Yes</Button>
+            {NavigateBlockEmpty === true ? <Button onClick={() => { HandleBlockScreen() }} > Ok</Button> : isStoryScreen === false ? <> <Button onClick={() => { continueScreen() }}> Yes</Button>
               <Button onClick={() => { NextScreen() }} > No</Button></> : <Button onClick={() => { HandleScreen() }} > Ok</Button>}
 
             {/* <Img

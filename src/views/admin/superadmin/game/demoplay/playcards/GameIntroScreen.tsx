@@ -27,14 +27,12 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
       const getplayerid = getPrevLogDatas.playerId;
       if (getplayerid === gameInfo.gameCreatedUserId) {
         const getLastModifiedid = getPrevLogDatas.lastModifiedBlockSeq;
-        console.log('gamedata', getLastModifiedid);
         if (getLastModifiedid !== null) {
           setLastModified(true);
           setModelControl(true);
           return false;
         }
         else {
-          console.log('getPrevLogDatas.screenIdSeq', getPrevLogDatas.screenIdSeq.length)
           if (getPrevLogDatas.screenIdSeq.length > 0) {
             setModelControl(true);
             return false;
@@ -48,6 +46,7 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
         }
       }
     }
+
     const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
     if (screenIdset !== currentScreenId) {
       setPreLogDatas((prev: any) => ({
@@ -55,7 +54,7 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
         screenIdSeq: [...prev.screenIdSeq, currentScreenId]
       }));
     }
-
+  
     // const screens1 = [1];
     // if (!screens1.includes(currentScreenId)) {
     //   console.log('getPrevLogDatas.screenIdSeq ***', getPrevLogDatas.screenIdSeq);

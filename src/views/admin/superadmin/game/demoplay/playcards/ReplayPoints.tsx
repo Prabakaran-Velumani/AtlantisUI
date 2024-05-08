@@ -1,9 +1,4 @@
-
-
-
-
-
-import { Box, Icon, Img, Text } from '@chakra-ui/react';
+import { Box, Button, Icon, Img, Text } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import ReplayBtn from 'assets/img/games/ReplayBtn.png';
 import next from 'assets/img/screens/next.png';
@@ -20,8 +15,9 @@ const ReplayPoints: React.FC<{
   preloadedAssets: any;
   demoBlocks: any;
   profile: any;
-  setCurrentScreenId: (id: number)=>void;
-  modalType?: string;
+  setCurrentScreenId: (id: number) => void;
+  setModelScreen: any;
+  modelScreen: any;
 }> = ({
   setData,
   setType,
@@ -29,56 +25,59 @@ const ReplayPoints: React.FC<{
   demoBlocks,
   profile,
   setCurrentScreenId,
-  modalType
+  setModelScreen,
+  modelScreen,
 }) => {
-//modalType=>{screenId:number | null, reason:"noPreviousNaviagation"}  // if block has no previous block navigation
-//modalType=>{screenId:null, reason:"replayPoint"} //if a block navigate to replay point
-    const handleReplayButtonClick = () => {
-        
-      console.log('demoBlocks', demoBlocks['1']['1']);
-      console.log('profile', profile);
-    
-
-      
-      // setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
-      // setData(gameInfo?.blocks[profile?.currentQuest]['1']);
-
-      setType(demoBlocks[profile?.currentQuest]['1']?.blockChoosen);
-      setData(demoBlocks[profile?.currentQuest]['1']);
-      setCurrentScreenId(2);
-       
+  //modalType=>{screenId:number | null, reason:"noPreviousNaviagation"}  // if block has no previous block navigation
+  //modalType=>{screenId:null, reason:"replayPoint"} //if a block navigate to replay point
+  const handleReplayButtonClick = () => {
+    setType(demoBlocks[profile?.currentQuest]['1']?.blockChoosen);
+    setData(demoBlocks[profile?.currentQuest]['1']);
+    setCurrentScreenId(2);
   };
-
+  const handleOk = () => {
+    setModelScreen(false);
+    setCurrentScreenId(13);
+    return false;
+  };
+  const handleCancel = () => {
+    setModelScreen(false);
+    setCurrentScreenId(2);
+  };
   return (
-
     <>
       {preloadedAssets.backgroundImage && (
         <>
           <Box className="takeaway-screen">
             <Box className="takeaway-screen-box">
               <Box position={'relative'}>
-                <Img src={preloadedAssets.backgroundImage} className="bg-replay" />
+                <Img
+                  src={preloadedAssets.backgroundImage}
+                  className="bg-replay"
+                />
                 <Box className="replay_content">
                   <Box className="replay_content_center">
                     <Box className="title_replay">
                       <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
-                               {/* {modalType.reason === 'noPreviousNaviagation' && "You don't have any block to navigate, Do you want to go to Chapter Screen..!"}
-                               
-                               {modalType.reason ===  replayPoint &&  "You have been redirected to replay point. Click replay button to continue...!"} */}
-                               {"You have been redirected to replay point. Click replay button to continue...!"}
+                        {modelScreen === true
+                          ? 'No previous block Do You want to redirect to Chapter Selection'
+                          : 'You have been redirected to replay point. Click replay button to continue...!'}
                       </Text>
                     </Box>
-                    <Box
-                      w={'100%'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                    >
-                      <Img
-                        src={preloadedAssets.replayBtn}
-                        className="replay_buttons"
-                        onClick={handleReplayButtonClick}
-                              />              
-                     
+                    <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                      {modelScreen === true ? (
+                        <>
+                          {' '}
+                          <Button onClick={handleOk}> ok</Button>
+                          <Button onClick={handleCancel}> Cancel</Button>
+                        </>
+                      ) : (
+                        <Img
+                          src={preloadedAssets.replayBtn}
+                          className="replay_buttons"
+                          onClick={handleReplayButtonClick}
+                        />
+                      )}
                     </Box>
                   </Box>
                 </Box>
