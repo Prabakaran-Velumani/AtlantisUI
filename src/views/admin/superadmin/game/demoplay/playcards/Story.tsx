@@ -12,7 +12,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-
+ 
 import Interaction from './Interaction';
 import TypingEffect from './Typing';
 // import { getVoiceMessage, getPreview } from 'utils/game/gameService';
