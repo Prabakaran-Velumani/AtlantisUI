@@ -1,21 +1,3 @@
-// case 0: // play info
-// case 1: // case 1 welcome screen
-// case 2: // case 2 Story
-// case 3: // case 3 Reflection
-// case 4: // case 4 LeaderBoard
-// case 5: // case 5 Thankyou
-// case 6: // case 6 Completion
-// case 7: // case 7 takeaway
-// case 8: // case 8 Replaygame
-// case 9: // case 9 feedback
-// case 10:// case 10 Game Intro / login
-// case 11:// case 11 Profilescreen
-// case 12:// case 12 Character select
-// case 13:// case 13 Chapter select
-// case 14:// case 14 feedback together
-// case 15:// case 15 Chapter select
-// case 16:// case 16 replay point prompt
-
 import {
   Button,
   Box,
@@ -241,20 +223,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [audio, setAudio] = useState<string>('');
-  type EnumType = 'bgm' | 'api';
-  const [audioObj, setAudioObj] = useState<{
-    url: string;
-    type: EnumType;
-    volume: string;
-    loop: boolean;
-    autoplay: boolean;
-  }>({
-    url: '',
-    type: 'bgm',
-    volume: '0.5',
-    loop: true,
-    autoplay: true,
-  });
   const [audioVolume, setAudioVolume] = useState<any>(0.5);
   const [nextBlockAudioUrl, setNextBlockAudioUrl] = useState<string>('');
   const [windowWidth, setWindowWidth] = useState(null);
@@ -303,8 +271,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       (acc: any, obj: any) => acc + parseInt(obj.score),
       0,
     );
-    // setprevProfileData((prev: any) => ({ ...prev, score: totalEarnScore }));
-    // const totalEarnScore = profile?.score.reduce((acc: any, obj: any) => acc + parseInt(obj.score), 0);
+    
     setPreLogDatas((prev: any) => ({
       ...prev,
       previewProfile: { ...prev.previewProfile, score: totalEarnScore },
@@ -343,16 +310,39 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [RepeatSelectOption, setRepeatSelectOption] = useState<boolean>(false);
   const [RepeatPrevOption, setRepeatPrevOption] = useState<any>([]);
   const [modelScreen, setModelScreen] = useState<Boolean>(false);
+
+  /******************************This for controll backgroud bgm and voice 09.05.2024**********************************/
+  const EnumType = {
+    BGM: 'bgm',
+    VOICE: 'voice',
+  };
+  const backgroundBgmRef = useRef<HTMLAudioElement>(null);
+  const voiceRef = useRef<HTMLAudioElement>(null);
+  const [audioObj, setAudioObj] = useState<{
+    url: string;
+    type: string;
+    volume: string;
+    loop: boolean;
+    autoplay: boolean;
+  }>({
+    url: '',
+    type: EnumType.BGM,
+    volume: '0.5',
+    loop: true, // Background loops
+    autoplay: true,
+  });
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
-    if (res?.status === 'success' && res?.url)
+    if (res?.status === 'success' && res?.url) {
+      console.log('currentscreenid 359',currentScreenId);
       setAudioObj({
         url: res?.url,
-        type: 'bgm',
+        type: EnumType.BGM,
         volume: '0.5',
-        loop: true,
+        loop: true, // Voice doesn't loop
         autoplay: true,
       });
+    }
   };
 
   useEffect(() => {
@@ -488,81 +478,97 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     if (!gameInfo?.bgMusic) {
       fetchDefaultBgMusic();
     } else if (gameInfo?.bgMusic) {
-      currentScreenId > 0 &&
-        currentScreenId === 1 &&
-        isGetsPlayAudioConfirmation &&
+      // currentScreenId > 0 &&
+      //   currentScreenId === 1 &&
+      //   isGetsPlayAudioConfirmation &&
+      //   setAudioObj({
+      //     url: gameInfo?.bgMusic,
+      //     type: 'bgm',
+      //     volume: '0.5',
+      //     loop: true,
+      //     autoplay: true,
+      //   });
+      const screens = [1, 3, 4, 5, 6, 7, 11, 12, 13]
+      console.log('currentscreenid 589',currentScreenId);
+      if (screens.includes(currentScreenId) && currentScreenId!== 2) {
         setAudioObj({
           url: gameInfo?.bgMusic,
-          type: 'bgm',
+          type: EnumType.BGM,
           volume: '0.5',
-          loop: true,
+          loop: true, // Voice doesn't loop
           autoplay: true,
         });
+      }
     }
   }, [gameInfo]);
 
   useEffect(() => {
-    setAudioObj({
-      url: gameInfo?.bgMusic,
-      type: 'bgm',
-      volume: '0.5',
-      loop: true,
-      autoplay: true,
-    });
+    // setAudioObj({
+    //   url: gameInfo?.bgMusic,
+    //   type: 'bgm',
+    //   volume: '0.5',
+    //   loop: true,
+    //   autoplay: true,
+    // });
   }, [isGetsPlayAudioConfirmation]);
 
   useEffect(() => {
+    // setAudioObj({
+    //   url: audio,
+    //   type: 'api',
+    //   volume: '0.5',
+    //   loop: false,
+    //   autoplay: true,
+    // });
+    console.log('currentscreenid 620',currentScreenId);
     setAudioObj({
       url: audio,
-      type: 'api',
+      type: EnumType.BGM,
       volume: '0.5',
-      loop: false,
+      loop: true, // Voice doesn't loop
       autoplay: true,
     });
   }, [audio]);
 
   useEffect(() => {
-    // Check if audioRef exists and audioObj.url is not empty
-    if (audioRef.current && audioObj.url !== '') {
-      // Pause the audio playback if it's currently playing
-      if (!audioRef.current?.paused) {
-        audioRef.current.pause();
-      }
-      // Update the audio source and play if necessary
-      audioRef.current.src = audioObj.url;
-      try {
-        if (audioObj.autoplay || isGetsPlayAudioConfirmation) {
-          audioRef.current.play();
-        }
-      } catch {
-        console.log('Error Required');
-      }
-    } else {
-      // Stop the audio playback and set audioRef.current to null
+
+    const handleAudio = (audioRef: React.RefObject<HTMLAudioElement>, audio: any) => {
       if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
+        audioRef.current.src = audio.url;
+        audioRef.current.volume = parseFloat(audio.volume);
+        audioRef.current.loop = audio.loop;
+        audioRef.current.autoplay = audio.autoplay;
+        console.log('audio.url',audio.url);
+
+        // Play or pause audio based on the autoplay property
+        if (audioObj.autoplay) {
+          if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
+            backgroundBgmRef.current.play().catch(error => {
+              // Handle play promise rejection
+              console.error('Error playing background BGM:', error);
+            });
+          } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
+            voiceRef.current.play().catch(error => {
+              // Handle play promise rejection
+              console.error('Error playing voice:', error);
+            });
+          }
+        } else {
+          if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
+            backgroundBgmRef.current.pause();
+          } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
+            voiceRef.current.pause();
+          }
+        }
       }
+    };
+
+    if (audioObj.type === EnumType.BGM) {
+      handleAudio(backgroundBgmRef, audioObj);
+    } else if (audioObj.type === EnumType.VOICE) {
+      handleAudio(voiceRef, audioObj);
     }
   }, [audioObj]);
-
-  // useEffect(() => {
-  //   // Check if the audio type is 'api'
-  //   if (audioObj.type === 'api') {
-  //     // Check if the current audio reference exists
-  //     if (audioRef.current) {
-  //       // Add an event listener to the 'ended' event of the audio element
-  //       audioRef.current.addEventListener('ended', handleAudioEnded);
-  //     }
-  //   }
-
-  //   // Cleanup function to remove the event listener when the component unmounts or when the audioRef changes
-  //   return () => {
-  //     if (audioRef.current) {
-  //       audioRef.current.removeEventListener('ended', handleAudioEnded);
-  //     }
-  //   };
-  // }, [audioObj.type, audioRef.current]); // Watch for changes in audioObj.type and audioRef.current
 
   // Event handler for when the audio playback ends
   const handleAudioEnded = () => {
@@ -586,10 +592,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [gameInfo?.gameData]);
 
   useEffect(() => {
-    currentScreenId > 0 &&
-      currentScreenId === 1 &&
-      isGetsPlayAudioConfirmation &&
-      setAudio(gameInfo?.bgMusic ?? '');
+    currentScreenId!== 2 &&
+       setAudio(gameInfo?.bgMusic ?? '');
   }, [currentScreenId, gameInfo]);
 
   const prevData = (current: any) => {
@@ -775,311 +779,83 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
     const newTrackSequence = navTrack[navTrack.length - 1];
-    // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 767',newTrackSequence)
     const navPrevBlock = current
-        ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) =>
-              demoBlocks[quest]?.[key]?.blockPrimarySequence ==
-              newTrackSequence,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
-        : [];
-        // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 777',navPrevBlock)
-    if(navPrevBlock.length !== 0 && navPrevBlock!== undefined)
-      {
-        // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 780',navPrevBlock[0],'...',navPrevBlock[0].blockLeadTo == current.blockSecondaryId,'...',navPrevBlock[0].blockLeadTo ,'...', current.blockSecondaryId)
-       
-        if(navPrevBlock[0].blockLeadTo == current.blockSecondaryId)
-          {
-            navTrack.pop();
-            const  lastPrevNavTrack = navTrack[navTrack.length - 1];
-            const prevousBlock = current
-            ? Object.keys(demoBlocks[quest] || {})
-              .filter(
-                (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === lastPrevNavTrack,
-              )
-              .map((key: any) => demoBlocks[quest]?.[key])
-            : [];
-          if (prevousBlock.length !== 0) {
-            setType(prevousBlock[0]?.blockChoosen);
-            setData(prevousBlock[0]);
-            if (prevousBlock[0]?.blockChoosen === 'Interaction') {
-              const optionsFiltered = [];
-              for (const option of gameInfo.questOptions) {
-                if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
-                  optionsFiltered.push(option);
-                }
+      ? Object.keys(demoBlocks[quest] || {})
+        .filter(
+          (key) =>
+            demoBlocks[quest]?.[key]?.blockPrimarySequence ==
+            newTrackSequence,
+        )
+        .map((key: any) => demoBlocks[quest]?.[key])
+      : [];
+    if (navPrevBlock.length !== 0 && navPrevBlock !== undefined) {
+      if (navPrevBlock[0].blockLeadTo == current.blockSecondaryId) {
+        navTrack.pop();
+        const lastPrevNavTrack = navTrack[navTrack.length - 1];
+        const prevousBlock = current
+          ? Object.keys(demoBlocks[quest] || {})
+            .filter(
+              (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === lastPrevNavTrack,
+            )
+            .map((key: any) => demoBlocks[quest]?.[key])
+          : [];
+        if (prevousBlock.length !== 0) {
+          setType(prevousBlock[0]?.blockChoosen);
+          setData(prevousBlock[0]);
+          if (prevousBlock[0]?.blockChoosen === 'Interaction') {
+            const optionsFiltered = [];
+            for (const option of gameInfo.questOptions) {
+              if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
+                optionsFiltered.push(option);
               }
-              if (gameInfo?.gameData?.gameShuffle === 'true') {
-                for (let i = optionsFiltered.length - 1; i > 0; i--) {
-                  const j = Math.floor(Math.random() * (i + 1));
-                  [optionsFiltered[i], optionsFiltered[j]] = [
-                    optionsFiltered[j],
-                    optionsFiltered[i],
-                  ];
-                }
-              }
-              setOptions(optionsFiltered);
             }
+            if (gameInfo?.gameData?.gameShuffle === 'true') {
+              for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsFiltered[i], optionsFiltered[j]] = [
+                  optionsFiltered[j],
+                  optionsFiltered[i],
+                ];
+              }
+            }
+            setOptions(optionsFiltered);
+          }
 
-            let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
-            const lastElementSeq = updateNavigateSeq.pop();
-            if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
-              updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
-            }
-            setPreLogDatas((prev: any) => ({
-              ...prev,
-              lastBlockModifiedDate: null,
-              lastModifiedBlockSeq: null,
-              lastActiveBlockSeq: prevousBlock[0].blockId,
-              nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
-            }));
-            return false;
+          let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
+          const lastElementSeq = updateNavigateSeq.pop();
+          if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+            updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
           }
-          }
-          else{
-            let getSeqprevious: any = [];
-            const getdemoblocksseq: any = Object.entries(demoBlocks[quest]);
-            for (const blocks of getdemoblocksseq) {
-              const blockId = blocks[1].blockId;
-              if (blocks[1].blockLeadTo == current.blockSecondaryId) {
-                getSeqprevious.push(blocks[1].blockPrimarySequence);
-              }
-        
-              for (const optionsnavi of gameInfo.questOptions) {
-                if (optionsnavi.qpQuestionId == blockId) {
-                  if (optionsnavi.qpNextOption == current.blockSecondaryId) {
-                    getSeqprevious.push(blocks[1].blockPrimarySequence);
-                  }
-                }
-        
-              }
-        
-            }
-        
-            if (getSeqprevious.length > 0) {
-              getSeqprevious.push(current.blockPrimarySequence);
-            }
-            getSeqprevious.sort((a: any, b: any) => a - b);
-            const currentIndex = getSeqprevious.indexOf(current.blockPrimarySequence);
-            if (current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence) {
-              if (currentIndex !== -1) {
-                if (currentIndex > 0) {
-                  // Retrieve the previous sequence value
-                  const previousSeq = getSeqprevious[currentIndex - 1];
-                  const prevousBlock = current
-                    ? Object.keys(demoBlocks[quest] || {})
-                      .filter(
-                        (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === previousSeq,
-                      )
-                      .map((key: any) => demoBlocks[quest]?.[key])
-                    : [];
-                  if (prevousBlock.length !== 0) {
-                    setType(prevousBlock[0]?.blockChoosen);
-                    setData(prevousBlock[0]);
-                    if (prevousBlock[0]?.blockChoosen === 'Interaction') {
-                      const optionsFiltered = [];
-                      for (const option of gameInfo.questOptions) {
-                        if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
-                          optionsFiltered.push(option);
-                        }
-                      }
-                      if (gameInfo?.gameData?.gameShuffle === 'true') {
-                        for (let i = optionsFiltered.length - 1; i > 0; i--) {
-                          const j = Math.floor(Math.random() * (i + 1));
-                          [optionsFiltered[i], optionsFiltered[j]] = [
-                            optionsFiltered[j],
-                            optionsFiltered[i],
-                          ];
-                        }
-                      }
-                      setOptions(optionsFiltered);
-                    }
-        
-                    let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
-                    const lastElementSeq = updateNavigateSeq.pop();
-                    if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
-                      updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
-                    }
-                    setPreLogDatas((prev: any) => ({
-                      ...prev,
-                      lastBlockModifiedDate: null,
-                      lastModifiedBlockSeq: null,
-                      lastActiveBlockSeq: prevousBlock[0].blockId,
-                      nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
-                    }));
-                    return false;
-                  }
-                  else {
-                    let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[current.blockQuestNo]];
-                    const lastElementSeq = updateNavigateSeq.pop();
-                    if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
-                      updateNavigateSeq.push(current.blockPrimarySequence);
-                    }
-                    setPreLogDatas((prev: any) => ({
-                      ...prev,
-                      lastBlockModifiedDate: null,
-                      lastModifiedBlockSeq: null,
-                      lastActiveBlockSeq: current.blockId,
-                      nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
-                    }));
-                    return false;
-                  }
-                } else {
-                  // If no previous found, retrieve the next sequence
-                  const nextSeq = getSeqprevious[currentIndex + 1];
-                  const prevousBlock = current
-                    ? Object.keys(demoBlocks[quest] || {})
-                      .filter(
-                        (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-                      )
-                      .map((key: any) => demoBlocks[quest]?.[key])
-                    : [];
-                  if (prevousBlock.length !== 0) {
-                    setType(prevousBlock[0]?.blockChoosen);
-                    setData(prevousBlock[0]);
-                    if (prevousBlock[0]?.blockChoosen === 'Interaction') {
-                      const optionsFiltered = [];
-                      for (const option of gameInfo.questOptions) {
-                        if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
-                          optionsFiltered.push(option);
-                        }
-                      }
-                      if (gameInfo?.gameData?.gameShuffle === 'true') {
-                        for (let i = optionsFiltered.length - 1; i > 0; i--) {
-                          const j = Math.floor(Math.random() * (i + 1));
-                          [optionsFiltered[i], optionsFiltered[j]] = [
-                            optionsFiltered[j],
-                            optionsFiltered[i],
-                          ];
-                        }
-                      }
-                      setOptions(optionsFiltered);
-                    }
-        
-                    let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
-                    const lastElementSeq = updateNavigateSeq.pop();
-                    if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
-                      updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
-                    }
-        
-                    setPreLogDatas((prev: any) => ({
-                      ...prev,
-                      lastBlockModifiedDate: null,
-                      lastModifiedBlockSeq: null,
-                      lastActiveBlockSeq: prevousBlock[0].blockId,
-                      nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
-                    }));
-                    return false;
-                  }
-                  else {
-                    let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[current.blockQuestNo]];
-                    const lastElementSeq = updateNavigateSeq.pop();
-                    if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
-                      updateNavigateSeq.push(current.blockPrimarySequence);
-                    }
-                    setPreLogDatas((prev: any) => ({
-                      ...prev,
-                      lastBlockModifiedDate: null,
-                      lastModifiedBlockSeq: null,
-                      lastActiveBlockSeq: current.blockId,
-                      nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
-                    }));
-                    return false;
-                  }
-                }
-              } else {
-                const prevousBlock = current
-                  ? Object.keys(demoBlocks[quest] || {})
-                    .filter(
-                      (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
-                    )
-                    .map((key: any) => demoBlocks[quest]?.[key])
-                  : [];
-                if (prevousBlock.length !== 0) {
-                  setType(prevousBlock[0]?.blockChoosen);
-                  setData(prevousBlock[0]);
-                  if (prevousBlock[0]?.blockChoosen === 'Interaction') {
-                    const optionsFiltered = [];
-                    for (const option of gameInfo.questOptions) {
-                      if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
-                        optionsFiltered.push(option);
-                      }
-                    }
-                    if (gameInfo?.gameData?.gameShuffle === 'true') {
-                      for (let i = optionsFiltered.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [optionsFiltered[i], optionsFiltered[j]] = [
-                          optionsFiltered[j],
-                          optionsFiltered[i],
-                        ];
-                      }
-                    }
-                    setOptions(optionsFiltered);
-                  }
-        
-                  let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
-                  const lastElementSeq = updateNavigateSeq.pop();
-                  if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
-                    updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
-                  }
-        
-                  setPreLogDatas((prev: any) => ({
-                    ...prev,
-                    lastBlockModifiedDate: null,
-                    lastModifiedBlockSeq: null,
-                    lastActiveBlockSeq: prevousBlock[0].blockId,
-                    nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
-                  }));
-                  return false;
-                }
-                else {
-                  let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[current.blockQuestNo]];
-                  const lastElementSeq = updateNavigateSeq.pop();
-                  if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
-                    updateNavigateSeq.push(current.blockPrimarySequence);
-                  }
-                  setPreLogDatas((prev: any) => ({
-                    ...prev,
-                    lastBlockModifiedDate: null,
-                    lastModifiedBlockSeq: null,
-                    lastActiveBlockSeq: current.blockId,
-                    nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
-                  }));
-                  return false;
-                }
-              }
-            }
-            else {
-              setModelScreen(true);
-              setCurrentScreenId(16);
-              return false;
-            }
-          }
+          setPreLogDatas((prev: any) => ({
+            ...prev,
+            lastBlockModifiedDate: null,
+            lastModifiedBlockSeq: null,
+            lastActiveBlockSeq: prevousBlock[0].blockId,
+            nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
+          }));
+          return false;
+        }
       }
-      else
-      {
+      else {
         let getSeqprevious: any = [];
         const getdemoblocksseq: any = Object.entries(demoBlocks[quest]);
         for (const blocks of getdemoblocksseq) {
           const blockId = blocks[1].blockId;
-          // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 345',blockId);
           if (blocks[1].blockLeadTo == current.blockSecondaryId) {
             getSeqprevious.push(blocks[1].blockPrimarySequence);
           }
-    
+
           for (const optionsnavi of gameInfo.questOptions) {
             if (optionsnavi.qpQuestionId == blockId) {
               if (optionsnavi.qpNextOption == current.blockSecondaryId) {
                 getSeqprevious.push(blocks[1].blockPrimarySequence);
               }
             }
-    
+
           }
-    
+
         }
-    
+
         if (getSeqprevious.length > 0) {
           getSeqprevious.push(current.blockPrimarySequence);
         }
@@ -1118,7 +894,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   }
                   setOptions(optionsFiltered);
                 }
-    
+
                 let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
                 const lastElementSeq = updateNavigateSeq.pop();
                 if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
@@ -1179,13 +955,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   }
                   setOptions(optionsFiltered);
                 }
-    
+
                 let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
                 const lastElementSeq = updateNavigateSeq.pop();
                 if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
                   updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
                 }
-    
+
                 setPreLogDatas((prev: any) => ({
                   ...prev,
                   lastBlockModifiedDate: null,
@@ -1240,13 +1016,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 }
                 setOptions(optionsFiltered);
               }
-    
+
               let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
               const lastElementSeq = updateNavigateSeq.pop();
               if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
                 updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
               }
-    
+
               setPreLogDatas((prev: any) => ({
                 ...prev,
                 lastBlockModifiedDate: null,
@@ -1279,9 +1055,230 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           return false;
         }
       }
-    
+    }
+    else {
+      let getSeqprevious: any = [];
+      const getdemoblocksseq: any = Object.entries(demoBlocks[quest]);
+      for (const blocks of getdemoblocksseq) {
+        const blockId = blocks[1].blockId;
+        // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 345',blockId);
+        if (blocks[1].blockLeadTo == current.blockSecondaryId) {
+          getSeqprevious.push(blocks[1].blockPrimarySequence);
+        }
 
-   
+        for (const optionsnavi of gameInfo.questOptions) {
+          if (optionsnavi.qpQuestionId == blockId) {
+            if (optionsnavi.qpNextOption == current.blockSecondaryId) {
+              getSeqprevious.push(blocks[1].blockPrimarySequence);
+            }
+          }
+
+        }
+
+      }
+
+      if (getSeqprevious.length > 0) {
+        getSeqprevious.push(current.blockPrimarySequence);
+      }
+      getSeqprevious.sort((a: any, b: any) => a - b);
+      const currentIndex = getSeqprevious.indexOf(current.blockPrimarySequence);
+      if (current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence) {
+        if (currentIndex !== -1) {
+          if (currentIndex > 0) {
+            // Retrieve the previous sequence value
+            const previousSeq = getSeqprevious[currentIndex - 1];
+            const prevousBlock = current
+              ? Object.keys(demoBlocks[quest] || {})
+                .filter(
+                  (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === previousSeq,
+                )
+                .map((key: any) => demoBlocks[quest]?.[key])
+              : [];
+            if (prevousBlock.length !== 0) {
+              setType(prevousBlock[0]?.blockChoosen);
+              setData(prevousBlock[0]);
+              if (prevousBlock[0]?.blockChoosen === 'Interaction') {
+                const optionsFiltered = [];
+                for (const option of gameInfo.questOptions) {
+                  if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
+                    optionsFiltered.push(option);
+                  }
+                }
+                if (gameInfo?.gameData?.gameShuffle === 'true') {
+                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsFiltered[i], optionsFiltered[j]] = [
+                      optionsFiltered[j],
+                      optionsFiltered[i],
+                    ];
+                  }
+                }
+                setOptions(optionsFiltered);
+              }
+
+              let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
+              const lastElementSeq = updateNavigateSeq.pop();
+              if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
+              }
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                lastBlockModifiedDate: null,
+                lastModifiedBlockSeq: null,
+                lastActiveBlockSeq: prevousBlock[0].blockId,
+                nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
+              }));
+              return false;
+            }
+            else {
+              let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[current.blockQuestNo]];
+              const lastElementSeq = updateNavigateSeq.pop();
+              if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                updateNavigateSeq.push(current.blockPrimarySequence);
+              }
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                lastBlockModifiedDate: null,
+                lastModifiedBlockSeq: null,
+                lastActiveBlockSeq: current.blockId,
+                nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
+              }));
+              return false;
+            }
+          } else {
+            // If no previous found, retrieve the next sequence
+            const nextSeq = getSeqprevious[currentIndex + 1];
+            const prevousBlock = current
+              ? Object.keys(demoBlocks[quest] || {})
+                .filter(
+                  (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+                )
+                .map((key: any) => demoBlocks[quest]?.[key])
+              : [];
+            if (prevousBlock.length !== 0) {
+              setType(prevousBlock[0]?.blockChoosen);
+              setData(prevousBlock[0]);
+              if (prevousBlock[0]?.blockChoosen === 'Interaction') {
+                const optionsFiltered = [];
+                for (const option of gameInfo.questOptions) {
+                  if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
+                    optionsFiltered.push(option);
+                  }
+                }
+                if (gameInfo?.gameData?.gameShuffle === 'true') {
+                  for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsFiltered[i], optionsFiltered[j]] = [
+                      optionsFiltered[j],
+                      optionsFiltered[i],
+                    ];
+                  }
+                }
+                setOptions(optionsFiltered);
+              }
+
+              let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
+              const lastElementSeq = updateNavigateSeq.pop();
+              if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
+              }
+
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                lastBlockModifiedDate: null,
+                lastModifiedBlockSeq: null,
+                lastActiveBlockSeq: prevousBlock[0].blockId,
+                nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
+              }));
+              return false;
+            }
+            else {
+              let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[current.blockQuestNo]];
+              const lastElementSeq = updateNavigateSeq.pop();
+              if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+                updateNavigateSeq.push(current.blockPrimarySequence);
+              }
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                lastBlockModifiedDate: null,
+                lastModifiedBlockSeq: null,
+                lastActiveBlockSeq: current.blockId,
+                nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
+              }));
+              return false;
+            }
+          }
+        } else {
+          const prevousBlock = current
+            ? Object.keys(demoBlocks[quest] || {})
+              .filter(
+                (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === prevSeq,
+              )
+              .map((key: any) => demoBlocks[quest]?.[key])
+            : [];
+          if (prevousBlock.length !== 0) {
+            setType(prevousBlock[0]?.blockChoosen);
+            setData(prevousBlock[0]);
+            if (prevousBlock[0]?.blockChoosen === 'Interaction') {
+              const optionsFiltered = [];
+              for (const option of gameInfo.questOptions) {
+                if (option?.qpSequence === prevousBlock[0]?.blockPrimarySequence) {
+                  optionsFiltered.push(option);
+                }
+              }
+              if (gameInfo?.gameData?.gameShuffle === 'true') {
+                for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                  const j = Math.floor(Math.random() * (i + 1));
+                  [optionsFiltered[i], optionsFiltered[j]] = [
+                    optionsFiltered[j],
+                    optionsFiltered[i],
+                  ];
+                }
+              }
+              setOptions(optionsFiltered);
+            }
+
+            let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[prevousBlock[0].blockQuestNo]];
+            const lastElementSeq = updateNavigateSeq.pop();
+            if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+              updateNavigateSeq.push(prevousBlock[0].blockPrimarySequence);
+            }
+
+            setPreLogDatas((prev: any) => ({
+              ...prev,
+              lastBlockModifiedDate: null,
+              lastModifiedBlockSeq: null,
+              lastActiveBlockSeq: prevousBlock[0].blockId,
+              nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
+            }));
+            return false;
+          }
+          else {
+            let updateNavigateSeq: any = [...getPrevLogDatas.nevigatedSeq[current.blockQuestNo]];
+            const lastElementSeq = updateNavigateSeq.pop();
+            if (secondLastSeq != updateNavigateSeq[updateNavigateSeq.length - 1]) {
+              updateNavigateSeq.push(current.blockPrimarySequence);
+            }
+            setPreLogDatas((prev: any) => ({
+              ...prev,
+              lastBlockModifiedDate: null,
+              lastModifiedBlockSeq: null,
+              lastActiveBlockSeq: current.blockId,
+              nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
+            }));
+            return false;
+          }
+        }
+      }
+      else {
+        setModelScreen(true);
+        setCurrentScreenId(16);
+        return false;
+      }
+    }
+
+
+
 
 
 
@@ -1332,12 +1329,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   //   }
   // }
   const getData = (next: any) => {
-    console.log('next', next);
     setRepeatSelectOption(false);
-    setAudioObj(null);
     setIsPrevNavigation(false);
     if (next?.blockChoosen === 'Interaction') {
-      console.log('feedbackList 12',feedbackList.length,'..',feedbackList);
       const isDuplicate = feedbackList?.some(
         (item: any) =>
           item.Seq === next?.blockPrimarySequence &&
@@ -1639,7 +1633,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             (row: any) => row.quest == getgameinfoquest.gameQuestNo,
           );
           const finalscore = getscores?.score;
-          if (finalscore < getminpassscore ) {
+          if (finalscore < getminpassscore) {
             setisReplay(true);
             Setprofilescore(finalscore);
             setisOptionalReplay(false);
@@ -1877,7 +1871,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         //   return false;
         // } else 
         if (haveNextQuest) {
-          console.log('1582');
           if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
             console.log('1584');
             const getminpassscore = getgameinfoquest?.gameMinScore;
@@ -1972,7 +1965,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           }
         }
       } else if (demoBlocks.hasOwnProperty(nextLevel)) {
-        console.log('1654');
         setProfile((prev: any) => {
           const data = { ...prev };
           if (!profile.completedLevels.includes(currentQuest)) {
@@ -2187,7 +2179,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         );
         const finalscore = getscores?.score;
 
-        if ((finalscore < getminpassscore) ) {
+        if ((finalscore < getminpassscore)) {
           setisReplay(true);
           Setprofilescore(finalscore);
           setisOptionalReplay(false);
@@ -2408,7 +2400,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             (row: any) => row.quest == getgameinfoquest.gameQuestNo,
           );
           const finalscore = getscores?.score;
-          if (finalscore < getminpassscore ) {
+          if (finalscore < getminpassscore) {
             setisReplay(true);
             Setprofilescore(finalscore);
             setisOptionalReplay(false);
@@ -2576,7 +2568,33 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   useEffect(() => {
-    
+    if (voiceRef.current) {
+      voiceRef.current.pause();
+    }
+    const backGroundBgmscreens = [1, 3, 4, 5, 6, 7, 11, 12, 13];
+    if (currentScreenId !== 2 && backGroundBgmscreens.includes(currentScreenId)) {
+      console.log('currentscreenid 2675',currentScreenId);
+      if (backgroundBgmRef.current) {
+        backgroundBgmRef.current.play(); // Play background BGM
+      }
+      if (voiceRef.current) {
+        voiceRef.current.pause(); // Pause voice
+      }
+
+    }
+    if(currentScreenId === 2 || currentScreenId === 0)
+      {
+        if (backgroundBgmRef.current) {
+          backgroundBgmRef.current.pause(); // pause background BGM
+        }
+        if(voiceRef.current)
+          {
+            voiceRef.current.play();
+          }
+        
+      }
+
+
     setFeedBackFromValue();
 
     const screens = [1, 10, 13, 12];
@@ -2988,7 +3006,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     if (FeedbackNavigatenext === true) {
       getData(data);
     }
-    console.log('FeedbackNavigatenext 9',FeedbackNavigatenext)
+    console.log('FeedbackNavigatenext 9', FeedbackNavigatenext)
   }, [FeedbackNavigatenext]);
 
   const getFeedbackData = (getdata: any) => {
@@ -3053,7 +3071,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setFeedbackCurrentPosition(FeedbackcurrentPosition + 1);
       setFeedbackRemainingSentences(newRemainingSentences);
     } else {
-      console.log('FeedbackNavigatenext',FeedbackNavigatenext);
+      console.log('FeedbackNavigatenext', FeedbackNavigatenext);
       setFeedbackList([]);
       setFeedbackCurrentPosition(0);
       setFeedbackNavigateNext(true);
@@ -3143,7 +3161,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   };
 
-console.log("isSpeaking --->>", isSpeaking);
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="EntirePreview-wrapper">
@@ -3889,7 +3906,7 @@ console.log("isSpeaking --->>", isSpeaking);
             </Menu>
           )}
           {/* Audio Play Ref */}
-          {audioObj?.url && (
+          {/* {audioObj?.url && (
             <audio
               ref={audioRef}
               controls
@@ -3898,6 +3915,20 @@ console.log("isSpeaking --->>", isSpeaking);
               onError={handleAudioError}
             >
               <source src={audioObj?.url} type="audio/mpeg" />
+              Your browser does not support the audio tag.
+            </audio>
+          )}*/ }
+          {audioObj.type === EnumType.BGM && (
+            <audio ref={backgroundBgmRef} loop={audioObj.loop} style={{ display: 'none' }}>
+              <source src={audioObj.url} type="audio/mpeg" />
+              Your browser does not support the audio tag.
+            </audio>
+          )}
+
+          {/* Voice */}
+          {audioObj.type === EnumType.VOICE && (
+            <audio ref={voiceRef} style={{ display: 'none' }}>
+              <source src={audioObj.url} type="audio/mpeg" />
               Your browser does not support the audio tag.
             </audio>
           )}

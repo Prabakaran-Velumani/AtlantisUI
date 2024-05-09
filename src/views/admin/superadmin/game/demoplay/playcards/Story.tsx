@@ -122,7 +122,7 @@ const Story: React.FC<{
     const [optionalReplay, setOptionalReplay] = useState(false);
     useEffect(() => {
       if (data && type) {
-        getVoice(data, type);
+        // getVoice(data, type);
         setShowNote(true);
         setShowTypingEffect(false);
         setTimeout(() => {
@@ -186,7 +186,8 @@ const Story: React.FC<{
         setShowNote(false);
       }, 1000);
     }, []);
-
+    console.log('profileData',profileData);
+/*
     useEffect(() => {
       const fetchData = async () => {
         if (profileData?.Audiogetlanguage.length !== 0) {
@@ -296,24 +297,25 @@ const Story: React.FC<{
       };
       fetchData();
     }, [profileData, data, AudioOptions]);
-
+    */
+/*
     const getVoice = async (blockInfo: any, blockType: string) => {
       let text = '';
       let voiceId = '';
       /** 
-               * For voice 
-              data.includes('note') =>  Game Narattor
-              data.includes('dialog') =>  data.character
-              data.includes('interaction') => data.blockRoll
-              resMsg => data.blockRoll
-              
-              *For Animations & Emotion & voice Modulation 
-              data.includes('dialog') => data.animation
-              data.includes('interaction') //For Question => data.QuestionsEmotion
-              data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
-                resMsg =>responseObject[]  : responseemotionObject[]
-              */
-
+             * For voice 
+            data.includes('note') =>  Game Narattor
+            data.includes('dialog') =>  data.character
+            data.includes('interaction') => data.blockRoll
+            resMsg => data.blockRoll
+            
+            *For Animations & Emotion & voice Modulation 
+            data.includes('dialog') => data.animation
+            data.includes('interaction') //For Question => data.QuestionsEmotion
+            data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
+              resMsg =>responseObject[]  : responseemotionObject[]
+            */
+           /*
       switch (blockType) {
         case 'Note':
           text = blockInfo.blockText;
@@ -366,7 +368,7 @@ const Story: React.FC<{
       }
       // getAudioForText(text, voiceId);
     };
-
+*/
     const InteractionFunction = () => {
       setIsGetsPlayAudioConfirmation(true);
       
