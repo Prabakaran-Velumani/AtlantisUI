@@ -1416,7 +1416,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setRepeatSelectOption(false);
     setIsPrevNavigation(false);
     if (next?.blockChoosen === 'Interaction') {
-      console.log('feedbackList 12',feedbackList.length,'..',feedbackList);
       const isDuplicate = feedbackList?.some(
         (item: any) =>
           item.Seq === next?.blockPrimarySequence &&
@@ -1720,7 +1719,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             (row: any) => row.quest == getgameinfoquest.gameQuestNo,
           );
           const finalscore = getscores?.score;
-          if (finalscore < getminpassscore ) {
+          if (finalscore < getminpassscore) {
             setisReplay(true);
             Setprofilescore(finalscore);
             setisOptionalReplay(false);
@@ -2489,7 +2488,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             (row: any) => row.quest == getgameinfoquest.gameQuestNo,
           );
           const finalscore = getscores?.score;
-          if (finalscore < getminpassscore ) {
+          if (finalscore < getminpassscore) {
             setisReplay(true);
             Setprofilescore(finalscore);
             setisOptionalReplay(false);
