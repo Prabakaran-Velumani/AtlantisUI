@@ -100,7 +100,7 @@ const Story: React.FC<{
 
     useEffect(() => {
       if (data && type) {
-        getVoice(data, type);
+        // getVoice(data, type);
         setShowNote(true);
         setShowTypingEffect(false);
         setTimeout(() => {
@@ -164,7 +164,8 @@ const Story: React.FC<{
         setShowNote(false);
       }, 1000);
     }, []);
-
+    console.log('profileData',profileData);
+/*
     useEffect(() => {
       const fetchData = async () => {
         if (profileData?.Audiogetlanguage.length !== 0) {
@@ -275,7 +276,8 @@ const Story: React.FC<{
       fetchData();
 
     }, [profileData, data, AudioOptions]);
-
+    */
+/*
     const getVoice = async (blockInfo: any, blockType: string) => {
       let text = '';
       let voiceId = '';
@@ -292,7 +294,7 @@ const Story: React.FC<{
             data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
               resMsg =>responseObject[]  : responseemotionObject[]
             */
-
+           /*
       switch (blockType) {
         case 'Note':
           text = blockInfo.blockText;
@@ -345,7 +347,7 @@ const Story: React.FC<{
       }
       // getAudioForText(text, voiceId);
     };
-
+*/
     const InteractionFunction = () => {
       setIsGetsPlayAudioConfirmation(true);
       
