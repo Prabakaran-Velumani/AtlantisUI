@@ -53,12 +53,16 @@ import Selected from 'assets/img/games/selected.png';
 // import { Parrot } from '../three/Parrot';
 // Import ProfileContext from EntirePreview
 import { ProfileContext } from '../EntirePreview';
-import { getGameLanguages, getLanguages, getContentRelatedLanguage } from 'utils/game/gameService';
+import {
+  getGameLanguages,
+  getLanguages,
+  getContentRelatedLanguage,
+} from 'utils/game/gameService';
 import { useParams } from 'react-router-dom';
 import { OrbitControls } from '@react-three/drei/core/OrbitControls';
 // import {Parrot}  from '../three/Parrot';
 import PlayingCharacter from './PlayingCharacter';
-import Model from './Model'
+import Model from './Model';
 interface PlayGamesProps {
   formData?: any;
   state?: any;
@@ -109,7 +113,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   setProfileData,
   demoBlocks,
   formData,
-  preloadedAssets
+  preloadedAssets,
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
@@ -119,7 +123,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   // Afrith-modified-starts-08/Mar/24
   const [characterName, setCharacterName] = useState('');
   const [toggleLeft, setToggleLeft] = useState(false);
-  const [toggleRight, setToggleRight] = useState(false)
+  const [toggleRight, setToggleRight] = useState(false);
   // Afrith-modified-ends-08/Mar/24
   //Afrith-modified-starts-20/Mar/24
   const [gameContentId, setGameContentId] = useState(null);
@@ -150,13 +154,16 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 
   const selectPlayerClick = () => {
     setSelectedPlayer(players[i]);
-    console.log('Object.keys(demoBlocks).length', Object.keys(demoBlocks).length);
+    console.log(
+      'Object.keys(demoBlocks).length',
+      Object.keys(demoBlocks).length,
+    );
     /**if game has more than one quest, then navigate to chapter selection screen, otherwise navigate to story part direclty */
     if (playerInfo.name === '') {
       setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
     }
-    
-      setCurrentScreenId(13);//navigate to Chapter selection
+
+    setCurrentScreenId(13); //navigate to Chapter selection
 
     // if (Object.keys(demoBlocks).length > 1) {
     //   setCurrentScreenId(13);//navigate to Chapter selection
@@ -177,7 +184,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   ///Afrith-modified-starts-20/Mar/24
   const currGameId = id; //from useParams
   const handleProfile = (e: any, lang?: any, langId?: any) => {
-
     const { id, value } = e.target;
 
     setSelect(false);
@@ -190,41 +196,43 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     // getContentRelatedLanguage(currGameId, langId);
   };
 
-    //////////
-    useEffect(() => {
-      const fetchGameContent = async() => {
-        
-          const gameContentResult = await getContentRelatedLanguage(currGameId,gameContentId);
-          if (gameContentResult.status === 'Success'){
-            const data = gameContentResult.data;
-            setProfileData((prev:any)=>({
-              ...prev,
-              content: data.map((x:any)=>({content: x.content})),
-              audioUrls: data.map((x:any)=>({audioUrls: x.audioUrls})),
-              textId:data.map((x:any)=>({textId: x.textId})),
-              fieldName:data.map((x:any)=>({fieldName: x.fieldName})),
-              Audiogetlanguage: data.map((x:any) => ({
-                content: x.content,
-                audioUrls: x.audioUrls,
-                textId: x.textId,
-                fieldName: x.fieldName,
-              })),
-            }))
-          }
-      };
-      if(gameContentId){
-        fetchGameContent();
+  //////////
+  useEffect(() => {
+    const fetchGameContent = async () => {
+      const gameContentResult = await getContentRelatedLanguage(
+        currGameId,
+        gameContentId,
+      );
+      if (gameContentResult.status === 'Success') {
+        const data = gameContentResult.data;
+        setProfileData((prev: any) => ({
+          ...prev,
+          content: data.map((x: any) => ({ content: x.content })),
+          audioUrls: data.map((x: any) => ({ audioUrls: x.audioUrls })),
+          textId: data.map((x: any) => ({ textId: x.textId })),
+          fieldName: data.map((x: any) => ({ fieldName: x.fieldName })),
+          Audiogetlanguage: data.map((x: any) => ({
+            content: x.content,
+            audioUrls: x.audioUrls,
+            textId: x.textId,
+            fieldName: x.fieldName,
+          })),
+        }));
       }
-      console.log('gameContentId',gameContentId)
-    },[gameContentId])
-    /////////
-    // Afrith-modified-starts-08/Mar/24
-    // const setPlayerName = (value:any) => {
-    //   setCharacterName(value);
-    //   setProfileData((prev:any) => ({...prev, name:value}))
-    // };
-    // Afrith-modified-ends-08/Mar/24
- 
+    };
+    if (gameContentId) {
+      fetchGameContent();
+    }
+    console.log('gameContentId', gameContentId);
+  }, [gameContentId]);
+  /////////
+  // Afrith-modified-starts-08/Mar/24
+  // const setPlayerName = (value:any) => {
+  //   setCharacterName(value);
+  //   setProfileData((prev:any) => ({...prev, name:value}))
+  // };
+  // Afrith-modified-ends-08/Mar/24
+
   const innerBoxWidth = useBreakpointValue({
     base: '95%',
     lg: '95%',
@@ -233,7 +241,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   });
   return (
     <>
-      {formData && (formData?.gameLanguageId !== null) && (isLanguage !==null) ? (
+      {formData && formData?.gameLanguageId !== null && isLanguage !== null ? (
         <Box id="container" className="Play-station">
           <Box className="top-menu-home-section">
             {isLanguage ? (
@@ -251,8 +259,90 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       src={preloadedAssets.FormField}
                       onClick={() => setSelect(!select)}
                     />
-                    <Box w={'100%'} position={'absolute'} display={'flex'} onClick={() => setSelect(!select)} top={'7%'}>
-                      <Box w={'80%'} display={'flex'} justifyContent={'center'} >
+                    <Box
+                      w={'100%'}
+                      position={'absolute'}
+                      display={'flex'}
+                      onClick={() => setSelect(!select)}
+                      top={'7%'}
+                    >
+                      <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                        {/* <Text
+                          onClick={() => setSelect(!select)}
+                          className={'choosen_lang'}
+                        >
+                          {profileData?.language}
+                        </Text> */}
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box position={'relative'}>
+                    <Img
+                      className="formfield"
+                      w={'100%'}
+                      h={'auto'}
+                      src={preloadedAssets.FormField}
+                      onClick={() => setSelect(!select)}
+                    />
+                    <Box
+                      w={'100%'}
+                      position={'absolute'}
+                      display={'flex'}
+                      onClick={() => setSelect(!select)}
+                      top={'7%'}
+                    >
+                      <Box w={'80%'} display={'flex'} justifyContent={'center'}>
+                        <Text
+                          onClick={() => setSelect(!select)}
+                          className={'choosen_lang'}
+                        >
+                          {profileData?.language}
+                        </Text>
+                      </Box>
+                      <Box w={'20%'}>
+                        <Img
+                          src={preloadedAssets.Selected}
+                          className={'select'}
+                          mt={'18%'}
+                        />
+                      </Box>
+                      {select && (
+                        <Box className="dropdown">
+                          {languages &&
+                            languages.map((lang: any, num: any) => (
+                              <Text
+                                className={'choosen_langs'}
+                                ml={'5px'}
+                                key={num}
+                                _hover={{ bgColor: '#377498' }}
+                                id={'language'}
+                                onClick={(e: any) =>
+                                  handleProfile(e, lang.label, lang.value)
+                                }
+                              >
+                                {lang.label}
+                              </Text>
+                            ))}
+                        </Box>
+                      )}
+                    </Box>
+                  </Box>
+                  <Box position={'relative'}>
+                    <Img
+                      className="formfield"
+                      w={'100%'}
+                      h={'auto'}
+                      src={preloadedAssets.FormField}
+                      onClick={() => setSelect(!select)}
+                    />
+                    <Box
+                      w={'100%'}
+                      position={'absolute'}
+                      display={'flex'}
+                      onClick={() => setSelect(!select)}
+                      top={'7%'}
+                    >
+                      <Box w={'80%'} display={'flex'} justifyContent={'center'}>
                         <Text
                           // transform={'translate(0px,25px)'}
                           // textAlign={'center'}
@@ -262,8 +352,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                           {profileData?.language}
                         </Text>
                       </Box>
-                      <Box w={'20%'} >
-                        <Img src={preloadedAssets.Selected} className={'select'} mt={'18%'} />
+                      <Box w={'20%'}>
+                        <Img
+                          src={preloadedAssets.Selected}
+                          className={'select'}
+                          mt={'18%'}
+                        />
                       </Box>
                       {select && (
                         <Box className="dropdown">
@@ -291,7 +385,11 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       className="okay"
                       onClick={() => setIsLanguage(false)}
                     >
-                      <Img src={preloadedAssets.OkayBtn} w={'100%'} h={'auto'} />
+                      <Img
+                        src={preloadedAssets.OkayBtn}
+                        w={'100%'}
+                        h={'auto'}
+                      />
                     </Button>
                   </Box>
                 </Box>
@@ -300,108 +398,121 @@ const Characterspage: React.FC<PlayGamesProps> = ({
           </Box>
         </Box>
       ) : null}
-        <Box
-          position="relative"
-          w={'100%'}
-          height="100vh"
-          backgroundImage={imageSrc}
-          backgroundSize={'cover'}
-          backgroundRepeat={'no-repeat'}
-          className="CharacterScreen chapter_potrait"
+      <Box
+        position="relative"
+        w={'100%'}
+        height="100vh"
+        backgroundImage={imageSrc}
+        backgroundSize={'cover'}
+        backgroundRepeat={'no-repeat'}
+        className="CharacterScreen chapter_potrait"
+      >
+        <Grid
+          templateColumns="repeat(1, 1fr)"
+          gap={4}
+          position="absolute"
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+          width="100%"
         >
-          <Grid
-            templateColumns="repeat(1, 1fr)"
-            gap={4}
-            position="absolute"
-            top="50%"
-            left="50%"
-            transform="translate(-50%, -50%)"
-            width="100%"
-          >
-            <GridItem colSpan={1} position={'relative'}>
-              <Box display={'flex'} justifyContent={'center'}>
-                <Img
-                  src={preloadedAssets.Select}
-                  className={'character_template'}
-                  loading="lazy"
-                />
-                <Box className={'character_select_area'}>
-                  <Box
-                    w={'55%'}
-                    display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'space-between'}
+          <GridItem colSpan={1} position={'relative'}>
+            <Box display={'flex'} justifyContent={'center'}>
+              <Img
+                src={preloadedAssets.Select}
+                className={'character_template'}
+                loading="lazy"
+              />
+              <Box className={'character_select_area'}>
+                <Box
+                  w={'55%'}
+                  display={'flex'}
+                  alignItems={'center'}
+                  justifyContent={'space-between'}
+                >
+                  <Img
+                    src={preloadedAssets.Selected}
+                    className={`character_toggle_left ${
+                      toggleLeft ? 'toggle_effect_on' : 'toggle_effect_off'
+                    }`}
+                    onMouseDown={() => setToggleLeft(true)}
+                    onMouseUp={() => setToggleLeft(false)}
+                  />
+                  <Canvas
+                    camera={{ position: [0, 1, 9] }}
+                    dpr={window.devicePixelRatio}
                   >
-                    <Img
-                      src={preloadedAssets.Selected}
-                      className={`character_toggle_left ${toggleLeft ? 'toggle_effect_on' : 'toggle_effect_off'}`}
-                      onMouseDown={() => setToggleLeft(true)}
-                      onMouseUp={() => setToggleLeft(false)}
+                    {' '}
+                    {/* For Single view */}
+                    {/* <Environment preset={"park"} background />   */}
+                    <directionalLight
+                      position={[2.0, 78.0, 100]}
+                      intensity={0.8}
+                      color={'ffffff'}
+                      castShadow
                     />
-                    <Canvas camera={{ position: [0, 1, 9] }} dpr={window.devicePixelRatio}> {/* For Single view */}
-                      {/* <Environment preset={"park"} background />   */}
-                      <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
-                      <ambientLight intensity={0.5} />
-                      {/* <OrbitControls   />  */}
-                      <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
-
-                      {/* COMPONENTS */}
-                      <Model position={[0, -1.5, 4]} />
-                      {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
-                      {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
-                      {/* <Parrot /> */}
-                    </Canvas>
-                    <Img
-                      onMouseDown={() => setToggleRight(true)}
-                      onMouseUp={() => setToggleRight(false)}
-                      src={preloadedAssets.Selected}
-                      className={`character_toggle_right ${toggleRight ? 'toggle_effect_on' : 'toggle_effect_off'}`}
+                    <ambientLight intensity={0.5} />
+                    {/* <OrbitControls   />  */}
+                    <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
+                    {/* COMPONENTS */}
+                    <Model position={[0, -1.5, 4]} />
+                    {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
+                    {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
+                    {/* <Parrot /> */}
+                  </Canvas>
+                  <Img
+                    onMouseDown={() => setToggleRight(true)}
+                    onMouseUp={() => setToggleRight(false)}
+                    src={preloadedAssets.Selected}
+                    className={`character_toggle_right ${
+                      toggleRight ? 'toggle_effect_on' : 'toggle_effect_off'
+                    }`}
+                  />
+                </Box>
+              </Box>
+              <Box className={'select_player'}>
+                <Button
+                  w={'15%'}
+                  bg={'none'}
+                  className="mouse_style"
+                  _hover={{ bg: 'none' }}
+                  onClick={selectPlayerClick}
+                ></Button>
+              </Box>
+              <Box className={'character_next'}>
+                <Box className={'character_buttons'}>
+                  <Button
+                    className="btns left-btn mouse_style"
+                    bg={'none'}
+                    _hover={{ bg: 'none' }}
+                    onClick={() => setCurrentScreenId(1)}
+                  ></Button>
+                  <Box w={'25%'} position={'relative'}>
+                    <input
+                      style={{
+                        width: '100%',
+                      }}
+                      className="player_name"
+                      placeholder={'Enter Alias Name'}
+                      value={playerInfo.name}
+                      onChange={(e: any) =>
+                        setProfileData((prev: any) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
                     />
                   </Box>
-                </Box>
-                <Box className={'select_player'}>
                   <Button
-                    w={'15%'}
+                    className="btns right-btn mouse_style"
                     bg={'none'}
-                    className='mouse_style'
                     _hover={{ bg: 'none' }}
                     onClick={selectPlayerClick}
                   ></Button>
                 </Box>
-                <Box className={'character_next'}>
-                  <Box className={'character_buttons'}>
-                    <Button
-                      className="btns left-btn mouse_style"
-                      bg={'none'}
-                      _hover={{ bg: 'none' }}
-                      onClick={() => setCurrentScreenId(1)}
-                    ></Button>
-                    <Box w={'25%'} position={'relative'}>
-                      <input
-                        style={{ width: '100%' ,
-                        // backgroundColor:'#e600055c'
-                      }}
-                        className="player_name"
-                        placeholder={'Enter Alias Name'}
-                        value={playerInfo.name}
-                        onChange={(e: any) =>
-                          setProfileData((prev: any) => ({
-                            ...prev,
-                            name: e.target.value,
-                          }))
-                        }
-                      />
-                    </Box>
-                    <Button
-                      className="btns right-btn mouse_style"
-                      bg={'none'}                      
-                      _hover={{ bg: 'none' }}
-                      onClick={selectPlayerClick}
-                    ></Button>
-                  </Box>
-                </Box>
               </Box>
-              {/* <Box
+            </Box>
+            {/* <Box
               position={'fixed'}    
               // left={0}
               right={'0px'}
@@ -429,14 +540,11 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 <Model />
               </Canvas>
             </Box> */}
-            </GridItem>
-          </Grid>
-        </Box>
-      
+          </GridItem>
+        </Grid>
+      </Box>
     </>
   );
 };
-
-
 
 export default Characterspage;

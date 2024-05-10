@@ -186,13 +186,17 @@ const ReflectionScreen: React.FC<{
                               <Textarea
                                 padding-top={'20px'}
                                 bottom={0}
+                                // noOfLines={2}
                                 outline={'none'}
                                 focusBorderColor="none"
                                 border={'none'}
                                 position={'absolute'}
                                 w={'100%'}
                                 color={'#D9C7A2'}
-                                h={'100%'}
+                                minH={0}
+                                // h={'100%'}
+                                resize={'none'}
+                                h={'50px'}
                                 _focus={{ boxShadow: 'none', border: 'none' }}
                                 fontFamily={'AtlantisText'}
                                 value={answers[index]?.text}
