@@ -64,7 +64,7 @@ import feedi from 'assets/img/screens/feed.png';
 import { AiFillMessage } from 'react-icons/ai';
 import { getTestAudios, updatePreviewlogs } from 'utils/game/gameService';
 import { MdClose } from 'react-icons/md';
-import { getVoiceMessage, getPreview, getGameLanguages } from 'utils/game/gameService';
+import { getVoiceMessage, getPreview, getGameLanguages,getContentRelatedLanguage } from 'utils/game/gameService';
 import { EnumType, collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
@@ -89,6 +89,7 @@ const GameIntroScreen = lazy(() => import('./playcards/GameIntroScreen'));
 const ModelPopup = lazy(() => import('./playcards/ModelPopup'));
 const ReplayPoints = lazy(() => import('./playcards/ReplayPoints'));
 const LanguageSelectionPrompt = lazy(() => import('./playcards/LanguageSelectionPrompt'));
+const PromptScreen = lazy(() => import('./playcards/PromptScreen'));
 
 
 interface Review {
@@ -284,19 +285,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const gameScore = useContext(ScoreContext);
   const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0;
   const [questWiseMaxTotal, setQuestWiseMaxTotal] = useState<QuestWiseMaxTotal>();
-
-
-  useEffect(() => {
-    setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
-  }, [scoreComp]);
-  useEffect(() => {
-    const totalEarnScore = profile?.score.reduce((acc: any, obj: any) => acc + parseInt(obj.score), 0);
-    setPreLogDatas((prev: any) => ({
-      ...prev,
-      previewProfile: { ...prev.previewProfile, score: totalEarnScore }
-    }));
-  }, [profile?.score]);
-
+  const [Total,setTotal]=useState<number>(0);
+  // const [ProfileItems,setProfileItems]=useState<any>(null);
+  const [playerTodayScore,setPlayerTodayScore]=useState<any>(null);
   const [profileData, setProfileData] = useState({
     name: '',
     gender: '',
@@ -309,6 +300,87 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     fieldName: '',
     Audiogetlanguage: [],
   });
+
+  useEffect(() => {
+    setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
+  }, [scoreComp]);
+  // useEffect(() => {
+    
+  //   const totalEarnScore = profile?.score.reduce((acc: any, obj: any) => acc + parseInt(obj.score), 0);
+  //   setPreLogDatas((prev: any) => ({
+  //     ...prev,
+  //     previewProfile: { ...prev.previewProfile, score: totalEarnScore }
+  //   }));
+  // }, [profile?.score]);
+  useEffect(() => {
+      const currentDate = new Date();
+      // Get day, month, and year
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const year = currentDate.getFullYear();
+      
+      // Format date as DD-MM-YYYY
+      const formattedDate = `${day}-${month}-${year}`;
+  //  scoreEarnedDate: profile?.score.map((item: any) => item.scoreEarnedDate)
+  const toDayScore = profile?.score.reduce((total: any, acc:any) => {
+    if(acc.scoreEarnedDate === formattedDate)
+      {
+        return total+acc.score;
+      }
+    else{
+      return total;
+    }
+  },0);
+    console.log("toDayScore", toDayScore)
+      const totalEarnScore = profile?.score.reduce((acc: any, obj: any) => acc + parseInt(obj.score), 0);
+      setPreLogDatas((prev: any) => ({
+        ...prev,
+        previewProfile: { ...prev.previewProfile, score: profile.score
+         }
+      }));
+      
+  setPlayerTodayScore(toDayScore)
+    }, [profile?.score]);
+  // This for  Translation content based on lang 09.05.2024
+  useEffect(() => {
+    const fetchGameContent = async() => {
+    const gameContentResult = await getContentRelatedLanguage(gameInfo?.gameData.gameId,profileData.language);
+    if (gameContentResult.status === 'Success'){
+      const data = gameContentResult.data;
+      setProfileData((prev:any)=>({
+        ...prev,
+        Audiogetlanguage: data.map((x:any) => ({
+          content: x.content,
+          audioUrls: x.audioUrls,
+          textId: x.textId,
+          fieldName: x.fieldName,
+        })),
+      }))
+    }
+};
+if(profileData.language!==''){
+  fetchGameContent();
+}
+  //  if(profileData.language!=='')
+  //   {
+  //     const gameContentResult = await getContentRelatedLanguage(gameInfo?.gameData.gameId,profileData.language);
+  //     if (gameContentResult.status === 'Success'){
+  //       const data = gameContentResult.data;
+  //       setProfileData((prev:any)=>({
+  //         ...prev,
+  //         Audiogetlanguage: data.map((x:any) => ({
+  //           content: x.content,
+  //           audioUrls: x.audioUrls,
+  //           textId: x.textId,
+  //           fieldName: x.fieldName,
+  //         })),
+  //       }))
+  //     }
+  //   }
+  }, [profileData?.language]);
+  useEffect(() => {
+    setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
+  }, [scoreComp]);
 
   // Afrith-modified-ends-07/Mar/24
 
@@ -588,7 +660,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       //   });
       const screens = [1, 3, 4, 5, 6, 7, 11, 12, 13]
       console.log('currentscreenid 589',currentScreenId);
-      if (screens.includes(currentScreenId) && currentScreenId!== 2) {
+      if (screens.includes(currentScreenId) && (![2,10,0].includes(currentScreenId))) {
         setAudioObj({
           url: gameInfo?.bgMusic,
           type: EnumType.BGM,
@@ -620,13 +692,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     //   autoplay: true,
     // });
     console.log('currentscreenid 620',currentScreenId);
-    setAudioObj({
-      url: audio,
-      type: EnumType.BGM,
-      volume: '0.5',
-      loop: true, // Voice doesn't loop
-      autoplay: true,
-    });
+    if(![2,10,0].includes(currentScreenId))
+      {
+         setAudioObj({
+          url: audio,
+          type: EnumType.BGM,
+          volume: '0.5',
+          loop: true, // Voice doesn't loop
+          autoplay: true,
+        });
+      }
+   
   }, [audio]);
 
   useEffect(() => {
@@ -735,7 +811,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     // currentScreenId > 0 &&
     //   currentScreenId === 1 &&
     //   isGetsPlayAudioConfirmation &&
-    currentScreenId!== 2 &&
+   (![2,10,0].includes(currentScreenId)) &&
        setAudio(gameInfo?.bgMusic ?? '');
 
 
@@ -2665,8 +2741,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       voiceRef.current.pause();
     }
     const backGroundBgmscreens = [1, 3, 4, 5, 6, 7, 11, 12, 13];
-    if (currentScreenId !== 2 && backGroundBgmscreens.includes(currentScreenId)) {
+    if (![2,10,0].includes(currentScreenId) && backGroundBgmscreens.includes(currentScreenId)) {
       console.log('currentscreenid 2675',currentScreenId);
+      setAudioObj({
+        url: audio,
+        type: EnumType.BGM,
+        volume: '0.5',
+        loop: true, // Voice doesn't loop
+        autoplay: true,
+      });
       if (backgroundBgmRef.current) {
         backgroundBgmRef.current.play(); // Play background BGM
       }
@@ -2675,7 +2758,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
 
     }
-    if(currentScreenId === 2 || currentScreenId === 0)
+    if(currentScreenId === 2)
       {
         if (backgroundBgmRef.current) {
           backgroundBgmRef.current.pause(); // pause background BGM
@@ -3449,6 +3532,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             data={data}
                             gameInfo={gameInfo}
                             preloadedAssets={preloadedAssets}
+                            setPlayerTodayScore={setPlayerTodayScore}
+                            playerTodayScore={playerTodayScore}
                           />
                         </Box>
                       </Box>
@@ -4089,7 +4174,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           )}
           {/* Language Transaltion Modal popup */}
 
-          <LanguageSelectionPrompt gameLanguages={gameLanguages} formData={gameInfo?.gameData} preloadedAssets={preloadedAssets} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData} setProfileData={setProfileData} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal} />
+          {/* <LanguageSelectionPrompt gameLanguages={gameLanguages} formData={gameInfo?.gameData} preloadedAssets={preloadedAssets} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData} setProfileData={setProfileData} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal} /> */}
+          <PromptScreen preloadedAssets={preloadedAssets} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData}
+            setProfileData={setProfileData}  gameLanguages={gameLanguages} formData={gameInfo?.gameData} setPreLogDatas={setPreLogDatas} getPrevLogDatas={getPrevLogDatas} currentScreenId={currentScreenId}/>
+            
         </Box>
       </Box>
     </ProfileContext.Provider>

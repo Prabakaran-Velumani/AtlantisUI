@@ -96,7 +96,10 @@ const Story: React.FC<{
     const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
     const [score, setScore] = useState(null);
     const [interactionNext, setInteractionNext] = useState(null);
-
+    const EnumType = {
+      BGM: 'bgm',
+      VOICE: 'voice',
+    };
 
     useEffect(() => {
       if (data && type) {
@@ -107,6 +110,7 @@ const Story: React.FC<{
           setShowNote(false);
           interactionNext === true && setInteractionNext(false);
         }, 1000);
+        SetAudioOptions({ qpOptionId: '' });
         const currentQuest = data
           ? parseInt(data?.blockPrimarySequence.split('.')[0])
           : null;
@@ -165,11 +169,18 @@ const Story: React.FC<{
       }, 1000);
     }, []);
     console.log('profileData',profileData);
-/*
+
     useEffect(() => {
       const fetchData = async () => {
         if (profileData?.Audiogetlanguage.length !== 0) {
           if (AudioOptions.qpOptionId === '') {
+            setAudioObj({
+              url: '',
+              type: EnumType.VOICE,
+              volume: '0.5',
+              loop: false, // Voice doesn't loop
+              autoplay: true, // Autoplay is disabled
+            });
             const GetblocktextAudioFiltered =
               profileData?.Audiogetlanguage.filter(
                 (key: any) => key?.textId === data?.blockId,
@@ -184,26 +195,37 @@ const Story: React.FC<{
                 );
                 const normalizedPath = audioUrls[0];
                 const fullUrl = `${API_SERVER}${normalizedPath}`;
+                console.log('...',fullUrl);
                 const responseblockText = await fetch(fullUrl);
+                console.log('responseblockText',responseblockText);
                 if (responseblockText.ok) {
                   setAudioObj({
                     url: fullUrl,
-                    type: 'api',
+                    type: EnumType.VOICE,
                     volume: '0.5',
-                    loop: false,
-                    autoplay: true,
+                    loop: false, // Voice doesn't loop
+                    autoplay: true, // Autoplay is disabled
                   });
-                  setIsGetsPlayAudioConfirmation(true);
                 }
               }
             }
           } else {
             if (AudioOptions.qpOptionId) {
+              setAudioObj({
+                url: '',
+                type: EnumType.VOICE,
+                volume: '0.5',
+                loop: false, // Voice doesn't loop
+                autoplay: true, // Autoplay is disabled
+              });
               const optionAudioFiltered = profileData?.Audiogetlanguage.filter(
                 (key: any) => key?.textId === AudioOptions?.qpOptionId,
               );
               if (optionAudioFiltered.length > 0) {
                 const getoptionsAudioFiltered = optionAudioFiltered.filter(
+                  (key: any) => key?.fieldName === 'qpOptionText',
+                );
+                const responseAudioFiltered = optionAudioFiltered.filter(
                   (key: any) => key?.fieldName === 'qpOptionText',
                 );
                 if (getoptionsAudioFiltered.length > 0) {
@@ -221,12 +243,11 @@ const Story: React.FC<{
                     if (responseqpOptionText.ok) {
                       setAudioObj({
                         url: qpOptionTextUrl,
-                        type: 'api',
+                        type: EnumType.VOICE,
                         volume: '0.5',
                         loop: false,
                         autoplay: true,
                       });
-                      setIsGetsPlayAudioConfirmation(true);
                     } else {
                       const getAudioFiltered1 = optionAudioFiltered.filter(
                         (key: any) => key?.fieldName === 'qpOptions',
@@ -242,41 +263,48 @@ const Story: React.FC<{
                           if (responsequestoption.ok) {
                             setAudioObj({
                               url: qpOptionsUrl,
-                              type: 'api',
+                              type: EnumType.VOICE,
                               volume: '0.5',
                               loop: false,
                               autoplay: true,
                             });
-                            setIsGetsPlayAudioConfirmation(true);
-                          } else {
-                            setAudioObj({
-                              url: '',
-                              type: 'bgm',
-                              volume: '0.5',
-                              loop: true,
-                              autoplay: true,
-                            });
-                            setIsGetsPlayAudioConfirmation(false);
                           }
                         }
                       }
                     }
                   }
                 }
+                if(responseAudioFiltered.length > 0)
+                  {
+                    const QResTaudioUrls = responseAudioFiltered.map(
+                      (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
+                    );
+  
+                    if (QResTaudioUrls.length > 0) {
+                      const normalizedPath = QResTaudioUrls[0];
+                    // const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
+                    const qRespOptionTextUrl = `${API_SERVER}${normalizedPath}`;
+                    const responseqpOptionText = await fetch(qRespOptionTextUrl);
+                    if (responseqpOptionText.ok) {
+                      setAudioObj({
+                        url: qRespOptionTextUrl,
+                        type: EnumType.VOICE,
+                        volume: '0.5',
+                        loop: false,
+                        autoplay: true,
+                      });
+                    }
+                    }
+                  }
               }
             }
           }
-        } else {
-          setAudioObj({
-            autoplay: false,
-          });
-          setIsGetsPlayAudioConfirmation(false);
-        }
+        } 
       };
       fetchData();
 
-    }, [profileData, data, AudioOptions]);
-    */
+    }, [data,AudioOptions]);
+    
 /*
     const getVoice = async (blockInfo: any, blockType: string) => {
       let text = '';
@@ -350,6 +378,14 @@ const Story: React.FC<{
 */
     const InteractionFunction = () => {
       setIsGetsPlayAudioConfirmation(true);
+        
+      /**Get current data mm-dd-yyyy */
+      const currentDateTime = new Date();
+      const day:String = String(currentDateTime.getDate()).padStart(2, '0');
+      const month:String = String(currentDateTime.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const year:String = String(currentDateTime.getFullYear());
+      
+      const currentDate = `${day}-${month}-${year}`;
       
       if (questState[profile?.currentQuest] === 'Started') {
         setProfile((prev: any) => {
@@ -366,6 +402,7 @@ const Story: React.FC<{
                 seqId: seqId,
                 score: newScore,
                 quest: parseInt(seqId.split('.')[0]),
+                scoreEarnedDate: currentDate,
               },
             ];
 
@@ -389,6 +426,7 @@ const Story: React.FC<{
                 seqId: seqId,
                 score: newScore,
                 quest: parseInt(seqId.split('.')[0]),
+                scoreEarnedDate: currentDate,
               },
             ];
             return { ...prev, replayScore: newScoreArray };

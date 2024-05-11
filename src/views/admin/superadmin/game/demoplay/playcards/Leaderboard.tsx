@@ -15,7 +15,7 @@ import { useContext, useState, useEffect } from 'react';
 import { ProfileContext } from '../EntirePreview';
 import { ScoreContext } from '../GamePreview';
 
-// Afrith-modified-starts-07/Mar/24
+/** Temporary user Data to list */
 const names = [
   { name: 'John', score: 300, allTimeScore: 1000 },
   { name: 'Jane', score: 400, allTimeScore: 800 },
@@ -80,6 +80,8 @@ const LeaderBoard: React.FC<{
   setCurrentScreenId?: any;
   gameInfo?: any;
   preloadedAssets: any;
+  setPlayerTodayScore?: any;
+  playerTodayScore?: any;
 }> = ({
   imageSrc,
   formData,
@@ -89,41 +91,42 @@ const LeaderBoard: React.FC<{
   homeLeaderBoard,
   setHomeLeaderBoard,
   gameInfo,
-  preloadedAssets
-}) => {
+  preloadedAssets,
+  setPlayerTodayScore,
+  playerTodayScore,
 
+}) => {
     const [shuffledUsers, setShuffledUsers] = useState<any[]>([]);
     const [allTimeClicked, setAllTimeClicked] = useState(false);
     const [newSortedUserss, setNewSortedUserss] = useState<any[]>([]);
     const [sortedUsers, setSortedUsers] = useState<any[]>([]);
     const playerInfo = useContext(ProfileContext);
-    const[sortAse,setSortAse]=useState({daily:true,allTime:true});
+    const { profile, setProfile } = useContext(ScoreContext);
+    const [sortAse, setSortAse] = useState({ daily: true, allTime: true });
 
     useEffect(() => {
-    //Sorted Users alltimeScore
-  
-  const mergedUsersPlayers = [playerInfo, ...names].sort((a, b) => {
-    // Sort by allTimeScore in descending order
-    if (b.allTimeScore !== a.allTimeScore) {
-        return b.allTimeScore - a.allTimeScore;
-    }
-    // If allTimeScores are equal, sort alphabetically by name
-    return a.name.localeCompare(b.name);
-});
+      //Sorted Users alltimeScore
 
-  
+      const playerScore = { name: playerInfo.name, score: playerTodayScore, allTimeScore: Object.values(profile.playerGrandTotal).reduce((total: number, acc: any) => { return total + parseInt(acc) }, 0) };
+
+      const mergedUsersPlayers = [playerScore, ...names].sort((a, b) => {
+        // Sort by allTimeScore in descending order
+        if (b.allTimeScore !== a.allTimeScore) {
+          return b.allTimeScore - a.allTimeScore;
+        }
+        // If allTimeScores are equal, sort alphabetically by name
+        return a.name.localeCompare(b.name);
+      });
       //Sorted Using Score-starts for score position      
       let sortedUsingScore = [...mergedUsersPlayers].sort((a, b) => {
         // Sort by daily score in descending order
         if (b.score !== a.score) {
-            return b.score - a.score;
-          }
-          // If scores are equal, sort alphabetically by name
-          return a.name.localeCompare(b.name);
-        });
-       
+          return b.score - a.score;
+        }
+        // If scores are equal, sort alphabetically by name
+        return a.name.localeCompare(b.name);
+      });
 
-      
       let dailyPositionIndex = -1;
       sortedUsingScore = sortedUsingScore.map((usrScore: any, index: number) => {
         dailyPositionIndex = index + 1;
@@ -147,8 +150,6 @@ const LeaderBoard: React.FC<{
         sortedUsingScore.unshift(unShiftedPlayer);
         setShuffledUsers(sortedUsingScore);
       }
-
-
     }, []);
 
     const handleHome = () => {
@@ -170,58 +171,58 @@ const LeaderBoard: React.FC<{
         }
       }
     };
-   
+
 
     const handleAllTimeClick = async (type: string) => {
       let newSortedUsers = [...shuffledUsers];
       if (type === 'daily') {
-        setSortAse((prev:any)=>({...prev,daily:!prev.daily}))
-  
-        newSortedUsers = [...shuffledUsers].sort((a:any, b:any) => {
+        setSortAse((prev: any) => ({ ...prev, daily: !prev.daily }))
+
+        newSortedUsers = [...shuffledUsers].sort((a: any, b: any) => {
           if (sortAse.daily) {
-          if (a.score !== b.score) {
-            return a.score - b.score;
+            if (a.score !== b.score) {
+              return a.score - b.score;
+            } else {
+              return b.name.localeCompare(a.name);
+            }
           } else {
-            return b.name.localeCompare(a.name);
+            // Sort by score in descending order
+            if (b.score !== a.score) {
+              return b.score - a.score;
+            } else {
+              return a.name.localeCompare(b.name);
+            }
           }
-        } else {
-          // Sort by score in descending order
-          if (b.score !== a.score) {
-            return b.score - a.score;
-          } else {
-            return a.name.localeCompare(b.name);
-          }
-        }
-      });
-      newSortedUsers = newSortedUsers.map((row: any, index: number) => ({
-        ...row,
-      }));      
-      
+        });
+        newSortedUsers = newSortedUsers.map((row: any, index: number) => ({
+          ...row,
+        }));
+
       } else if (type === 'alltime') {
-        setSortAse((prev:any)=>({...prev,allTime:!prev.allTime}))
+        setSortAse((prev: any) => ({ ...prev, allTime: !prev.allTime }))
         // Sort the users by all-time score
-         newSortedUsers = [...shuffledUsers].sort((a:any, b:any) => {
-           if (sortAse.allTime) {
+        newSortedUsers = [...shuffledUsers].sort((a: any, b: any) => {
+          if (sortAse.allTime) {
             if (b.allTimeScore !== a.allTimeScore) {
               return b.allTimeScore - a.allTimeScore;
             } else {
-                return a.name.localeCompare(b.name);
-              }
-            } else {
-              // Sort by allTimeScore in descending order
-              if (a.allTimeScore !== b.allTimeScore) {
-                return a.allTimeScore - b.allTimeScore;
-              } else {
-                return b.name.localeCompare(a.name);
-              }
+              return a.name.localeCompare(b.name);
             }
-      });
-        
+          } else {
+            // Sort by allTimeScore in descending order
+            if (a.allTimeScore !== b.allTimeScore) {
+              return a.allTimeScore - b.allTimeScore;
+            } else {
+              return b.name.localeCompare(a.name);
+            }
+          }
+        });
+
         newSortedUsers = newSortedUsers.map((row: any, index: number) => ({
           ...row,
-        }));      
+        }));
       }
-    
+
       // If playerData exists, move it to the first position
       const playerData = newSortedUsers.find(user => user.name === playerInfo.name);
       if (playerData) {
@@ -237,11 +238,6 @@ const LeaderBoard: React.FC<{
       // Update the state with the new sorted users
       setShuffledUsers(newSortedUsers);
     }
-
-
-
-
-  
 
     return (
       <>
@@ -276,7 +272,6 @@ const LeaderBoard: React.FC<{
                   position={'relative'}
                 />
                 <Box w={'200px'} h={'50px'}>
-                  {/* Afrith-modified-starts-07/Mar/24 */}
                   <Box w={'100%'} display={'flex'} justifyContent={'center'}>
                     <Text color={'#D9C7A2'}
                       onClick={() => {
@@ -286,7 +281,6 @@ const LeaderBoard: React.FC<{
                       }}
                     >Daily</Text>
                   </Box>
-                  {/* Afrith-modified-ends-07/Mar/24 */}
                   <Box
                     w={'100%'}
                     display={'flex'}
@@ -336,14 +330,7 @@ const LeaderBoard: React.FC<{
                 </Box>
               </Box>
               <Box>
-                {/* {content && content.map((it: any, ind: number) =>  ( */}
-                {/* {sortedUsers &&
-                    // usersWithAllTimeScore.map((item: any, index: number) => (
-                      sortedUsers.map((item: any, index: number) => ( */}
-                {/* {shuffledUsers && shuffledUsers.map((item: any, index: number) => ( */}
-                {/* {sortedUsers && (allTimeClicked ? shuffledUsers : sortedUsers).map((item: any, index: number) => ( */}
-                {/* {sortedUsers && (allTimeClicked ? shuffledUsers : newSortedUserss).map((item: any, index: number) => ( */}
-                
+
                 {shuffledUsers.map((item, index) => (
                   <Box
                     className="content-lead"
@@ -378,15 +365,7 @@ const LeaderBoard: React.FC<{
                           justifyContent={'space-between'}
                         >
                           <Text textAlign={'center'} color={'#D9C7A2'}>
-                            {/* {item.dailyPosition} */}
                             {item.dailyPosition !== undefined ? item.dailyPosition : index + 1}
-                            {/* {allTimeClicked ? item.alltimePosition : item.dailyPosition} */}
-                            {/* {allTimeClicked ? item.overAllPosition : item.dailyPosition} */}
-                            {/* Afrith-modified-starts-09/Mar/24 */}
-                            {/* {allTimeClicked ? sortedUsingScore.indexOf(item) + 1 : sortedUsingScore.indexOf(item) + 1} */}
-                            {/* {score ? score.indexOf(item) + 1 : 0} */}
-                            {/* {item.name === playerInfo?.name ? beforeSorting.indexOf(beforeSorting.find(x => x.name === playerInfo?.name)) + 1 : beforeSorting ? beforeSorting.indexOf(item) + 1  : 0} */}
-                            {/* Afrith-modified-ends-09/Mar/24 */}
                           </Text>
                           <Text textAlign={'center'} color={'#D9C7A2'}>
                             {item.score ? item.score : 0}
@@ -398,16 +377,7 @@ const LeaderBoard: React.FC<{
                           justifyContent={'space-between'}
                         >
                           <Text textAlign={'center'} color={'#D9C7A2'}>
-                            {/* {item.alltimePosition} */}
-
                             {item.alltimePosition !== undefined ? item.alltimePosition : index + 1}
-                            {/* {allTimeClicked ? item.alltimePosition : item.dailyPosition} */}
-                            {/* {allTimeClicked ? item.overAllPosition : item.dailyPosition} */}
-
-                            {/* Afrith-modified-starts-09/Mar/24 */}
-                            {/* {allTimeClicked ? beforeSorting.indexOf(item) + 1 : beforeSorting.indexOf(beforeSorting.find(x => x.name === item.name)) + 1} */}
-                            {/* Afrith-modified-ends-09/Mar/24 */}
-                            {/* {index + 1} */}
                           </Text>
                           <Text textAlign={'center'} color={'#D9C7A2'}>
                             {item.allTimeScore ? item.allTimeScore : 0}
@@ -434,7 +404,6 @@ const LeaderBoard: React.FC<{
                   <Box className='heading-box-content'
                     top={'0'}
                     fontFamily={'AtlantisText'}
-                    // color={'#D9C7A2'}
                     fontSize={'x-large'}
                     position={'absolute'}
                     display={'flex'}
@@ -442,9 +411,7 @@ const LeaderBoard: React.FC<{
                     width={'200px'}
                     mt={'3px'}
                   >
-                    {/* Afrith-modified-starts-07/Mar/24 */}
                     <Text>Department</Text>
-                    {/* Afrith-modifed-ends-07/Mar/24 */}
                     <Img
                       src={preloadedAssets.Arrow}
                       className="dot-img"
@@ -467,7 +434,6 @@ const LeaderBoard: React.FC<{
                   <Box className='heading-box-content'
                     top={'0'}
                     fontFamily={'AtlantisText'}
-                    // color={'#D9C7A2'}
                     fontSize={'x-large'}
                     position={'absolute'}
                     display={'flex'}
@@ -475,9 +441,7 @@ const LeaderBoard: React.FC<{
                     width={'200px'}
                     mt={'3px'}
                   >
-                    {/* Afrith-modified-starts-07/Mar/24 */}
                     <Text>Overall</Text>
-                    {/* Afrith-modified-ends-07/Mar/24 */}
                     <Img
                       src={preloadedAssets.Arrow}
                       className="dot-img"
@@ -496,9 +460,7 @@ const LeaderBoard: React.FC<{
               className='close-btn'
               onClick={() => homeLeaderBoard ? handleHome() : getData(data)}
             />
-            {/* {console.log("Position:", sortedUsingScore ? sortedUsingScore.indexOf(item) + 1 : 0)}         */}
           </Box>
-          //  {console.log("Position:", sortedUsingScore ? sortedUsingScore.indexOf(item) + 1 : 0)}  
         )}
       </>
     );

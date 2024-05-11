@@ -88,8 +88,9 @@ const WelcomeContentScreen: React.FC<{
   }, []);
 
   useEffect(() => {
-     fetch();
+    //  fetch();
     if (profile.gameSkills) {
+      // fetch();
       const Array = profile.gameSkills.split(',');
       setauthorArray(Array);
     }
@@ -127,7 +128,7 @@ const WelcomeContentScreen: React.FC<{
 
     return <React.Fragment>{contentWithLinks}</React.Fragment>;
   };
-  console.log('formdata ',formData,'....',(formData.gameIsShowSkill === "true" || formData.gameIsShowLearningOutcome=== "true" || formData.gameIsShowAuhorName=== "true" || formData.gameIsShowStoryline=== "true" || formData.gameIsShowGameDuration=== "true" || formData.gameIsShowAdditionalWelcomeNote=== "true")?'hi':'hellow','...',imageSrc && preview && currentTab === 3,'...',imageSrc,'...',preview );
+  // console.log('formdata ',formData,'....',(formData.gameIsShowSkill === "true" || formData.gameIsShowLearningOutcome=== "true" || formData.gameIsShowAuhorName=== "true" || formData.gameIsShowStoryline=== "true" || formData.gameIsShowGameDuration=== "true" || formData.gameIsShowAdditionalWelcomeNote=== "true")?'hi':'hellow','...',imageSrc && preview && currentTab === 3,'...',imageSrc,'...',preview );
   return (
     <>
         <motion.div
