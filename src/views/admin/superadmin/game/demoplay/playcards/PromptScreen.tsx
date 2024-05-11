@@ -72,6 +72,7 @@ useEffect(()=>{
 useEffect(()=>{
 if(formState?.name || formData?.gender || formData?.language){
   setProfileData((prev:any) => ({ ...prev, ...formState}));
+  setPreLogDatas((prev:any) => ({...prev,previewProfile:{ ...formState}}))
 }
 console.log("FormState UseEffect")
 },[formState])

@@ -5138,6 +5138,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                       ShowReview={ShowReview}
                       validation={validation}
                       setValidation={setValidation}
+                     
                     />
                   </>
                 ) : tab === 5 ? (

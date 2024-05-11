@@ -258,18 +258,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [LastModified, setLastModified] = useState<boolean>(false); // for last modified
   const [isStoryScreen, isSetStoryScreen] = useState<boolean>(false);
   const [OptionSelectId, setOptionSelectId] = useState(null);
-
-  useEffect(() => {
-    setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
-  }, [scoreComp]);
-  useEffect(() => {
-    const totalEarnScore = profile?.score.reduce((acc: any, obj: any) => acc + parseInt(obj.score), 0);
-    setPreLogDatas((prev: any) => ({
-      ...prev,
-      previewProfile: { ...prev.previewProfile, score: totalEarnScore },
-    }));
-  }, [profile?.score]);
-
+  const [Total,setTotal]=useState<number>(0);
+  const [playerTodayScore,setPlayerTodayScore]=useState<any>(null);
   const [profileData, setProfileData] = useState({
     name: '',
     gender: '',
@@ -282,6 +272,61 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     fieldName: '',
     Audiogetlanguage: [],
   });
+
+  useEffect(() => {
+    setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
+  }, [scoreComp]);
+ 
+  useEffect(() => {
+      const currentDate = new Date();
+      // Get day, month, and year
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const year = currentDate.getFullYear();
+      
+      // Format date as DD-MM-YYYY
+      const formattedDate = `${day}-${month}-${year}`;
+  //  scoreEarnedDate: profile?.score.map((item: any) => item.scoreEarnedDate)
+  const toDayScore = profile?.score.reduce((total: any, acc:any) => {
+    if(acc.scoreEarnedDate === formattedDate)
+      {
+        return total+acc.score;
+      }
+    else{
+      return total;
+    }
+  },0);
+    console.log("toDayScore", toDayScore)
+      const totalEarnScore = profile?.score.reduce((acc: any, obj: any) => acc + parseInt(obj.score), 0);
+      setPreLogDatas((prev: any) => ({
+        ...prev,
+        previewProfile: { ...prev.previewProfile, score: profile.score
+         }
+      }));
+      
+  setPlayerTodayScore(toDayScore)
+    }, [profile?.score]);
+  // This for  Translation content based on lang 09.05.2024
+  useEffect(() => {
+    const fetchGameContent = async() => {
+    const gameContentResult = await getContentRelatedLanguage(gameInfo?.gameData.gameId,profileData.language);
+    if (gameContentResult.status === 'Success'){
+      const data = gameContentResult.data;
+      setProfileData((prev:any)=>({
+        ...prev,
+        Audiogetlanguage: data.map((x:any) => ({
+          content: x.content,
+          audioUrls: x.audioUrls,
+          textId: x.textId,
+          fieldName: x.fieldName,
+        })),
+      }))
+    }
+};
+if(profileData.language!==''){
+  fetchGameContent();
+}
+  }, [profileData?.language]);
 
   const [voiceIds, setVoiceIds] = useState<any>();
   const [feedbackList, setFeedbackList] = useState([]);
@@ -538,7 +583,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       //   });
       const screens = [1, 3, 4, 5, 6, 7, 11, 12, 13]
       console.log('currentscreenid 589',currentScreenId);
-      if (screens.includes(currentScreenId) && currentScreenId!== 2) {
+      if (screens.includes(currentScreenId) && (![2,10,0].includes(currentScreenId))) {
         setAudioObj({
           url: gameInfo?.bgMusic,
           type: EnumType.BGM,
@@ -569,70 +614,21 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     //   autoplay: true,
     // });
     console.log('currentscreenid 620',currentScreenId);
-    setAudioObj({
-      url: audio,
-      type: EnumType.BGM,
-      volume: '0.5',
-      loop: true, // Voice doesn't loop
-      autoplay: true,
-    });
+    if(![2,10,0].includes(currentScreenId))
+      {
+         setAudioObj({
+          url: audio,
+          type: EnumType.BGM,
+          volume: '0.5',
+          loop: true, // Voice doesn't loop
+          autoplay: true,
+        });
+      }
+   
   }, [audio]);
 
   useEffect(() => {
-    /*
-    // Check if audioRef exists and audioObj.url is not empty
-    if (audioRef.current && audioObj.url !== '') {
-      // Pause the audio playback if it's currently playing
-      if (!audioRef.current?.paused) {
-        audioRef.current.pause();
-      }
-      // Update the audio source and play if necessary
-      audioRef.current.src = audioObj.url;
-      try {
-        if (audioObj.autoplay || isGetsPlayAudioConfirmation) {
-          audioRef.current.play();
-        }
-      } catch {
-        console.log('Error Required');
-      }
-    } else {
-      // Stop the audio playback and set audioRef.current to null
-      if (audioRef.current) {
-        audioRef.current.src = audio.url;
-        audioRef.current.volume = parseFloat(audio.volume);
-        audioRef.current.loop = audio.loop;
-        audioRef.current.autoplay = audio.autoplay;
-        console.log('audio.url',audio.url);
-
-        // Play or pause audio based on the autoplay property
-        if (audioObj.autoplay) {
-          if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
-            backgroundBgmRef.current.play().catch(error => {
-              // Handle play promise rejection
-              console.error('Error playing background BGM:', error);
-            });
-          } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current.play().catch(error => {
-              // Handle play promise rejection
-              console.error('Error playing voice:', error);
-            });
-          }
-        } else {
-          if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
-            backgroundBgmRef.current.pause();
-          } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current.pause();
-          }
-        }
-      }
-    };
-
-    if (audioObj.type === EnumType.BGM) {
-      handleAudio(backgroundBgmRef, audioObj);
-    } else if (audioObj.type === EnumType.VOICE) {
-      handleAudio(voiceRef, audioObj);
-    }
-    */
+ 
     const handleAudio = (audioRef: React.RefObject<HTMLAudioElement>, audio: any) => {
       if (audioRef.current) {
         audioRef.current.src = audio.url;
@@ -693,7 +689,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   }, [gameInfo?.gameData]);
 
   useEffect(() => {
-    currentScreenId!== 2 &&
+
+   (![2,10,0].includes(currentScreenId)) &&
        setAudio(gameInfo?.bgMusic ?? '');
   }, [currentScreenId, gameInfo]);
 
@@ -2600,7 +2597,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       voiceRef.current.pause();
     }
     const backGroundBgmscreens = [1, 3, 4, 5, 6, 7, 11, 12, 13];
-    if (currentScreenId !== 2 && backGroundBgmscreens.includes(currentScreenId)) {
+    if (![2,10,0].includes(currentScreenId) && backGroundBgmscreens.includes(currentScreenId)) {
+      console.log('currentscreenid 2675',currentScreenId);
+      setAudioObj({
+        url: audio,
+        type: EnumType.BGM,
+        volume: '0.5',
+        loop: true, // Voice doesn't loop
+        autoplay: true,
+      });
       if (backgroundBgmRef.current) {
         backgroundBgmRef.current.play(); // Play background BGM
       }
@@ -2609,7 +2614,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
 
     }
-    if(currentScreenId === 2 || currentScreenId === 0)
+    if(currentScreenId === 2)
       {
         if (backgroundBgmRef.current) {
           backgroundBgmRef.current.pause(); // pause background BGM
@@ -3379,6 +3384,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             data={data}
                             gameInfo={gameInfo}
                             preloadedAssets={preloadedAssets}
+                            setPlayerTodayScore={setPlayerTodayScore}
+                            playerTodayScore={playerTodayScore}
                           />
                         </Box>
                       </Box>
@@ -3901,19 +3908,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               )}
             </Menu>
           )}
-          {/* Audio Play Ref */}
-          {/* {audioObj?.url && (
-            <audio
-              ref={audioRef}
-              controls
-              style={{ display: 'none' }}
-              loop={audioObj?.loop}
-              onError={handleAudioError}
-            >
-              <source src={audioObj?.url} type="audio/mpeg" />
-              Your browser does not support the audio tag.
-            </audio>
-          )}*/ }
+     
           {audioObj.type === EnumType.BGM && (
             <audio ref={backgroundBgmRef} loop={audioObj.loop} style={{ display: 'none' }}>
               <source src={audioObj.url} type="audio/mpeg" />
@@ -3928,13 +3923,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               Your browser does not support the audio tag.
             </audio>
           )}
-          
-            <PromptScreen preloadedAssets={preloadedAssets} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData}
+          {/* Language Transaltion Modal popup */}
+
+          {/* <LanguageSelectionPrompt gameLanguages={gameLanguages} formData={gameInfo?.gameData} preloadedAssets={preloadedAssets} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData} setProfileData={setProfileData} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal} /> */}
+          <PromptScreen preloadedAssets={preloadedAssets} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData}
             setProfileData={setProfileData}  gameLanguages={gameLanguages} formData={gameInfo?.gameData} setPreLogDatas={setPreLogDatas} getPrevLogDatas={getPrevLogDatas} currentScreenId={currentScreenId}/>
-            <Canvas>
-            <CharacterModal preloadedAssets={preloadedAssets} isSpeaking={isSpeaking}/>
-            </Canvas>
-            <Button onClick={()=>setIsSpeaking(!!!isSpeaking)}>isSpeaking</Button>
+            
         </Box>
       </Box>
     </ProfileContext.Provider>

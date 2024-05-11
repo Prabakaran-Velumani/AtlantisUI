@@ -51,7 +51,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
       screenIdSeq: [],
       lastActiveBlockSeq: '',
       selectedOptions: '',
-      previewProfile: '',
     }));
     setModelControl(false);
     setLastModified(false);

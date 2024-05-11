@@ -81,11 +81,9 @@ const WelcomeContentScreen: React.FC<{
         ? formData?.gameLearningOutcome?.split('\n')
         : [];
     setData(dataLearn);
-    // console.log(formData?.gameLearningOutcome)
   }, []);
 
   useEffect(() => {
-    fetch();
     if (profile.gameSkills) {
       const Array = profile.gameSkills.split(',');
       setauthorArray(Array);
@@ -124,7 +122,6 @@ const WelcomeContentScreen: React.FC<{
 
     return <React.Fragment>{contentWithLinks}</React.Fragment>;
   };
-
   return (
     <>
       <motion.div
