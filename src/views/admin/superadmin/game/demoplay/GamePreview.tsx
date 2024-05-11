@@ -23,6 +23,7 @@ import { API_SERVER } from 'config/constant';
 import { IoIosRefresh } from 'react-icons/io';
 import PlayInfo from './playcards/playinfo';
 import CharacterGlb from 'assets/img/games/Character_sample.glb';
+import Merlin from 'assets/img/games/Merlin.glb';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -174,8 +175,10 @@ const GamePreview = () => {
       try {
         // assetImageSrc['characterGlb'] = CharacterGlb;
         // { assetType: 'characterGlb', src: characterGlb },
-        const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: CharacterGlb }]);
+        // const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: CharacterGlb }]);
+        const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: Merlin }]);
         // Use preloadedGLBs[CharacterGlb] if you need the preloaded GLB data
+        setLoadedGLBs((prev:any)=> ({...prev, preloadedGLBs}))
         console.log("preloadedGLBs", preloadedGLBs)
         const loader = new GLTFLoader();
         const parsedGlbArray = [];
