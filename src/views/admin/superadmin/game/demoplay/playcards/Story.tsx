@@ -510,7 +510,7 @@ const Story: React.FC<{
 
                   {/* COMPONENTS */}
                   <Player />
-                  <Model position={[-3, -1.8, 5]} rotation={[0, 1, 0]} />
+                  <Model position={[-3, -1.8, 5]} rotation={[0, 1, 0]} isSpeaking={false} />
                   {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
                   {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
                   {/* <Parrot /> */}
@@ -771,7 +771,8 @@ const Player: React.FC = () => {
   const [isHovered, setIsHovered] = useState<any>(false);
 
   const mixer = new THREE.AnimationMixer(gltf.scene);
-  const action = mixer.clipAction(gltf.animations[10]);
+  console.log('*****gltf', gltf.animations)
+  const action = mixer.clipAction(gltf.animations[12]);
 
   useFrame((state, delta) => {
     // Rotate the model on the Y-axis

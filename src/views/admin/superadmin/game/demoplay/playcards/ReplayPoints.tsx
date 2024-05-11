@@ -21,15 +21,18 @@ const ReplayPoints: React.FC<{
   demoBlocks: any;
   profile: any;
   setCurrentScreenId: (id: number)=>void;
+  modalType?: string;
 }> = ({
   setData,
   setType,
   preloadedAssets,
   demoBlocks,
   profile,
-  setCurrentScreenId
+  setCurrentScreenId,
+  modalType
 }) => {
-
+//modalType=>{screenId:number | null, reason:"noPreviousNaviagation"}  // if block has no previous block navigation
+//modalType=>{screenId:null, reason:"replayPoint"} //if a block navigate to replay point
     const handleReplayButtonClick = () => {
         
       console.log('demoBlocks', demoBlocks['1']['1']);
@@ -46,10 +49,6 @@ const ReplayPoints: React.FC<{
        
   };
 
-
-  
-
-
   return (
 
     <>
@@ -63,7 +62,10 @@ const ReplayPoints: React.FC<{
                   <Box className="replay_content_center">
                     <Box className="title_replay">
                       <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
-                                { "You have been redirected to replay point. Click replay button to continue...!"}
+                               {/* {modalType.reason === 'noPreviousNaviagation' && "You don't have any block to navigate, Do you want to go to Chapter Screen..!"}
+                               
+                               {modalType.reason ===  replayPoint &&  "You have been redirected to replay point. Click replay button to continue...!"} */}
+                               {"You have been redirected to replay point. Click replay button to continue...!"}
                       </Text>
                     </Box>
                     <Box

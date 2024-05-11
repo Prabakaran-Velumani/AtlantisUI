@@ -93,6 +93,7 @@ const ModelPopup = lazy(() => import('./playcards/ModelPopup'));
 const ReplayPoints = lazy(() => import('./playcards/ReplayPoints'));
 const LanguageSelectionPrompt = lazy(() => import('./playcards/LanguageSelectionPrompt'));
 const PromptScreen = lazy(() => import('./playcards/PromptScreen'));
+const CharacterModal = lazy(() => import ('./playcards/CharacterModal'));
 
 interface Review {
   // reviewId: Number;
@@ -305,7 +306,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [isPrevNavigation, setIsPrevNavigation] = useState(false);
   const gameScore = useContext(ScoreContext);
   const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0;
-
+  const [isSpeaking, setIsSpeaking] = useState(false);
   useEffect(() => {
     setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
   }, [scoreComp]);
@@ -2613,7 +2614,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   };
 
-
+console.log("isSpeaking --->>", isSpeaking);
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="EntirePreview-wrapper">
@@ -3034,6 +3035,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       setLastModified={setLastModified}
                       hasMulitLanguages={hasMulitLanguages}
                       setIsOpenCustomModal={setIsOpenCustomModal}
+                      // CharacterModal={CharacterModal}
                     ></GameIntroScreen>
                   );
                 case 11:
@@ -3395,7 +3397,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           
             <PromptScreen preloadedAssets={preloadedAssets} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData}
             setProfileData={setProfileData}  gameLanguages={gameLanguages} formData={gameInfo?.gameData} setPreLogDatas={setPreLogDatas} getPrevLogDatas={getPrevLogDatas} currentScreenId={currentScreenId}/>
-          
+            <Canvas>
+            <CharacterModal preloadedAssets={preloadedAssets} isSpeaking={isSpeaking}/>
+            </Canvas>
+            <Button onClick={()=>setIsSpeaking(!!!isSpeaking)}>isSpeaking</Button>
         </Box>
       </Box>
     </ProfileContext.Provider>

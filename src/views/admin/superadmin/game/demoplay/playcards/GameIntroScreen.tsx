@@ -1,6 +1,8 @@
 import { Box, Grid, GridItem, Icon, Img, Button, Text } from '@chakra-ui/react';
-import React from 'react';
-import { FaLanguage } from "react-icons/fa6";
+import React,{lazy} from 'react';
+// const CharacterModel = lazy(() => import ('./CharacterModel'));
+
+
 
 interface GameIntroType {
   preloadedAssets: any;
@@ -15,10 +17,10 @@ interface GameIntroType {
   setLastModified: any;
   hasMulitLanguages: boolean;
   setIsOpenCustomModal: (value: boolean)=> void;
+  // CharacterModel: React.FC;
 }
 
-const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentScreenId, setIsGetsPlayAudioConfirmation, setPreLogDatas, getPrevLogDatas, setprevScreenId, currentScreenId, setModelControl, gameInfo, setLastModified, hasMulitLanguages, setIsOpenCustomModal}) => {
-
+const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentScreenId, setIsGetsPlayAudioConfirmation, setPreLogDatas, getPrevLogDatas, setprevScreenId, currentScreenId, setModelControl, gameInfo, setLastModified, hasMulitLanguages, setIsOpenCustomModal }) => {
 
   const Handlemodel = () => {
     // setprevScreenId((prev:any) => ([
@@ -90,6 +92,8 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
         </Box>
       </>
       )} */}
+    {/* <CharacterModel /> */}
+
       <Grid
         templateColumns="repeat(1, 1fr)"
         gap={4}
