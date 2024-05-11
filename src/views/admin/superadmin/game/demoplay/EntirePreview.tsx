@@ -529,7 +529,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       //   });
       const screens = [1, 3, 4, 5, 6, 7, 11, 12, 13]
       console.log('currentscreenid 589',currentScreenId);
-      if (screens.includes(currentScreenId) && currentScreenId!== 2) {
+      if (screens.includes(currentScreenId) && (![2,10,0].includes(currentScreenId))) {
         setAudioObj({
           url: gameInfo?.bgMusic,
           type: EnumType.BGM,
@@ -560,13 +560,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     //   autoplay: true,
     // });
     console.log('currentscreenid 620',currentScreenId);
-    setAudioObj({
-      url: audio,
-      type: EnumType.BGM,
-      volume: '0.5',
-      loop: true, // Voice doesn't loop
-      autoplay: true,
-    });
+    if(![2,10,0].includes(currentScreenId))
+      {
+         setAudioObj({
+          url: audio,
+          type: EnumType.BGM,
+          volume: '0.5',
+          loop: true, // Voice doesn't loop
+          autoplay: true,
+        });
+      }
+   
   }, [audio]);
 
   useEffect(() => {
@@ -675,7 +679,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     // currentScreenId > 0 &&
     //   currentScreenId === 1 &&
     //   isGetsPlayAudioConfirmation &&
-    currentScreenId!== 2 &&
+   (![2,10,0].includes(currentScreenId)) &&
        setAudio(gameInfo?.bgMusic ?? '');
 
 
@@ -2660,8 +2664,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       voiceRef.current.pause();
     }
     const backGroundBgmscreens = [1, 3, 4, 5, 6, 7, 11, 12, 13];
-    if (currentScreenId !== 2 && backGroundBgmscreens.includes(currentScreenId)) {
+    if (![2,10,0].includes(currentScreenId) && backGroundBgmscreens.includes(currentScreenId)) {
       console.log('currentscreenid 2675',currentScreenId);
+      setAudioObj({
+        url: audio,
+        type: EnumType.BGM,
+        volume: '0.5',
+        loop: true, // Voice doesn't loop
+        autoplay: true,
+      });
       if (backgroundBgmRef.current) {
         backgroundBgmRef.current.play(); // Play background BGM
       }
@@ -2670,7 +2681,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
 
     }
-    if(currentScreenId === 2 || currentScreenId === 0)
+    if(currentScreenId === 2)
       {
         if (backgroundBgmRef.current) {
           backgroundBgmRef.current.pause(); // pause background BGM
@@ -3442,6 +3453,8 @@ console.log("isSpeaking --->>", isSpeaking);
                             data={data}
                             gameInfo={gameInfo}
                             preloadedAssets={preloadedAssets}
+                            setPlayerTodayScore={setPlayerTodayScore}
+                            playerTodayScore={playerTodayScore}
                           />
                         </Box>
                       </Box>
