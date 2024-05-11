@@ -44,7 +44,7 @@ const TakewayScreen: React.FC<{
                             w={'16px'}
                             h={'16px'}
                           />
-                          <Text ml={'5px'} fontSize={'1rem'} color={'#D9C7A2'} fontFamily={'AtlantisContent'} overflowWrap={'anywhere'} letterSpacing={'1px'}>
+                          <Text ml={'5px'} fontSize={'1rem'} color={'#D9C7A2'} fontFamily={'AtlantisContent'} overflowWrap={'anywhere'} letterSpacing={'0.4px'}>
                             {contentAfterBullet}
                           </Text>
                         </Box>

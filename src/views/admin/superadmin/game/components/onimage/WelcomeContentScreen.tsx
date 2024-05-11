@@ -402,7 +402,7 @@ const WelcomeContentScreen: React.FC<{
                     flexDirection="column"
                     alignItems="center"
                   >
-                    <Box w="24%">
+                    <Box w="24%" lineHeight='23px'>
                       <Text
                         // className="title"
                         color={'#d9c7a2'}
@@ -446,7 +446,7 @@ const WelcomeContentScreen: React.FC<{
                     </Box>
                     <Box
                       className="content-box"
-                      fontFamily={'AtlantisText'}
+                      fontFamily={'AtlantisContent'}
                       display={'flex'}
                       justifyContent={'center'}
                       height={'50%'}
@@ -459,7 +459,7 @@ const WelcomeContentScreen: React.FC<{
                         {formData.gameIsShowStoryline === 'true' && (
                           <Text
                             className="text_welcome"
-                            mt={'20px'}
+                            // mt={'20px'}
                             fontSize={'1rem'}
                             // fontFamily={'content'}
                           >
@@ -476,7 +476,7 @@ const WelcomeContentScreen: React.FC<{
                             <Img
                               className="rewards-arrow-img"
                               src={rew}
-                              mt={'25px'}
+                              mt={'10px'}
                               alt="rew"
                               w={'100%'}
                               h={'20px'}
@@ -501,7 +501,7 @@ const WelcomeContentScreen: React.FC<{
                                   className="rewards-arrow-img"
                                   display={'block !important'}
                                   src={SkillLearn}
-                                  mt={'25px'}
+                                  mt={'10px'}
                                   alt="rew"
                                   w={'100%'}
                                   h={'auto'}
@@ -555,7 +555,7 @@ const WelcomeContentScreen: React.FC<{
                                   className="rewards-arrow-img"
                                   display={'block !important'}
                                   src={SkillLearn}
-                                  mt={'25px'}
+                                  mt={'10px'}
                                   alt="rew"
                                   w={'100%'}
                                   h={'auto'}

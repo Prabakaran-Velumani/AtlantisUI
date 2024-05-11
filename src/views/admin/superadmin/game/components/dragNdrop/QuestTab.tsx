@@ -97,7 +97,7 @@ const QuestTab: React.FC<PropsNote> = ({
                 pb='0px'
                 pl={'10px'}
                 paddingInline={0}
-                me='20px'
+                me='40px'
                 bg='unset'
                 _selected={{
                   bg: 'none'

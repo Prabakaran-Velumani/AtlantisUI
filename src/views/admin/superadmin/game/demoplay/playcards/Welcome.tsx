@@ -144,7 +144,7 @@ const Welcome: React.FC<{
           </Box>
           <Box className="top-title">
             <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-              <Box w='51%'>
+              <Box w='51%' lineHeight={'40px'}>
                 <Text
                   className="title"
                   fontSize={{
@@ -222,7 +222,6 @@ const Welcome: React.FC<{
                 ''
               )}
               <Box
-                // display={'flex'}
                 className={
                   formData.gameIsShowSkill === 'true' ||
                     formData.gameIsShowLearningOutcome === 'true'
@@ -243,25 +242,10 @@ const Welcome: React.FC<{
                         w={'100%'}
                         h={'auto'}
                       />
-                    {/* <Text
-                        className="skill-text"
-                        style={{ textAlign: 'center' }}
-                        fontFamily={'content'}
-                        color={'black'}
-                        >
-                        Skills
-                      </Text> */}
                       <Box
                         className="inside-box"
-                        // transform={'translate(-2px, -125px)'}
                         mt={'10px'}
                         w={'100%'}
-                        // h={'60px'}
-                        // overflowY={'scroll'}
-                        // display={'flex'}
-                        // justifyContent={'center'}
-                        // alignItems={'center'}
-                        // flexDirection={'column'}
                       >
                         {authorArray
                           .map((authorItem, index) => {
@@ -311,25 +295,10 @@ const Welcome: React.FC<{
                         w={'100%'}
                         h={'auto'}
                       />
-                      {/* <Text
-                        className="skill-text"
-                        style={{ textAlign: 'center' }}
-                        fontFamily={'content'}
-                        color={'black'}
-                      >
-                        Learning Outcomes
-                      </Text> */}
                       <Box
                         className="inside-box"
-                        // transform={'translate(-2px, -125px)'}
                         mt={'10px'}
                         w={'100%'}
-                        // h={'60px'}
-                        // overflowY={'scroll'}
-                        // display={'flex'}
-                        // justifyContent={'center'}
-                        // alignItems={'center'}
-                        // flexDirection={'column'}
                       >
                         {data &&
                           data.map((it: any, ind: number) => {
@@ -398,10 +367,8 @@ const Welcome: React.FC<{
               )}
               {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
                 <Box
-                  // w={'100%'}
-                  // h={'50px'}
-                  // position={'relative'}
                   className="renderContent"
+                  letterSpacing={'1px'}
                 >
                   <Text
                     fontSize={{

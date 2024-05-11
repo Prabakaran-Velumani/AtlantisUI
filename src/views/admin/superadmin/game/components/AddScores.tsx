@@ -880,17 +880,17 @@ const AddScores: React.FC<{
               </Text>
               <Box w={'100%'} h={'auto'} display={'flex'} flexWrap={'wrap'} justifyContent={'center'}>
                 {Object.keys(Completion).map((item: any, i: any) => <Button  color={'#cccccc'} border={'1px solid #cccccc'} bg={'transparent'}
-                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={'32%'} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>Completion{i + 1}</Button>)}
+                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{base:'32%',lg:'20%'}} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>Completion{i + 1}</Button>)}
                 <Button color={'#cccccc'} border={'1px solid #cccccc'} bg={'transparent'}
-                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={'32%'} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>LeaderBoard</Button>
+                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{base:'32%',lg:'20%'}} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>LeaderBoard</Button>
                 <Button color={'#cccccc'} border={'1px solid #cccccc'} bg={'transparent'}
-                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={'32%'} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>Reflection</Button>
+                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{base:'32%',lg:'20%'}} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>Reflection</Button>
                 <Button color={'#cccccc'} border={'1px solid #cccccc'} bg={'transparent'}
-                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={'32%'} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>Welcome</Button>
+                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{base:'32%',lg:'20%'}} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>Welcome</Button>
                 <Button color={'#cccccc'} border={'1px solid #cccccc'} bg={'transparent'}
-                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={'32%'} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>TakeAway</Button>
+                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{base:'32%',lg:'20%'}} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>TakeAway</Button>
                 <Button color={'#cccccc'} border={'1px solid #cccccc'} bg={'transparent'}
-                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={'32%'} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>ThankYou</Button>
+                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{base:'32%',lg:'20%'}} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>ThankYou</Button>
               </Box>
               <DesignImage
                 currentTab={currentTab}

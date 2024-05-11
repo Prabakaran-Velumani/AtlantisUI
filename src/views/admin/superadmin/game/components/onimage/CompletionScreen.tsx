@@ -110,7 +110,7 @@ const CompletionScreen: React.FC<{
             >
               <Box w={'auto'} position={'relative'} h={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
                 <Img src={imageSrc} h={'auto'} w={'100%'} transition={'transform 0.3s ease'} transform={{lg:'scale(1)','2xl':'scale(1.3)'}} />
-                <Box position={'absolute'} w={'100%'} transition={'transform 0.3s ease'} transform={{lg:'scale(1)','2xl':'scale(1.25)'}} h={'70%'} top={'20.5%'} fontFamily={'AtlantisText'} >
+                <Box position={'absolute'} w={'100%'} transition={'transform 0.3s ease'} transform={{lg:'scale(1)','2xl':'scale(1.25)'}} h={'70%'} top={'21.5%'} fontFamily={'AtlantisText'} >
                   <Text textAlign={'center'} fontSize={{ base: '1.2rem', sm: '1.5rem' }}>
                     {compliData[CompKeyCount]?.gameScreenTitle}
                   </Text>

@@ -147,8 +147,7 @@ const TyContentScreen: React.FC<{
     thirdValue = trueValuesArray[2];
     console.log('Third Positioned Value:', thirdValue);
   }
-  // alert(thirdValue);
-  // ----------------------------------------------------
+ 
   const styleflex = {};
 
   if (countfbOptions === 1) {
@@ -529,10 +528,8 @@ const TyContentScreen: React.FC<{
                       alignItems={'center'}
                       className="ty_tq_msg"
                     >
-                      <Box
-                        // h={'100px'}
+                      <Box             
                         w={'80%'}
-                        // mt={{ base: '0px', sm: '0px', md: '20px', lg: '20px' }}
                         lineHeight={1}
                         textAlign={'center'}
                         color="#D9C7A2"
@@ -624,8 +621,8 @@ const TyContentScreen: React.FC<{
                                 style={{
                                   gridColumn:
                                     (thirdValue === 'gameRelevance' &&
-                                      trueValuesArray.length == 3) ||
-                                    trueValuesArray.length == 1
+                                      trueValuesArray.length === 3) ||
+                                    trueValuesArray.length === 1
                                       ? 'span 2'
                                       : '',
                                 }}
@@ -643,6 +640,7 @@ const TyContentScreen: React.FC<{
                                   style={{
                                     display: 'flex',
                                     justifyContent: 'space-between',
+                                    marginTop: '5px',
                                   }}
                                 >
                                   <div
@@ -702,6 +700,7 @@ const TyContentScreen: React.FC<{
                                   style={{
                                     display: 'flex',
                                     justifyContent: 'space-between',
+                                    marginTop: '5px',
                                   }}
                                 >
                                   <div
@@ -761,6 +760,7 @@ const TyContentScreen: React.FC<{
                                   style={{
                                     display: 'flex',
                                     justifyContent: 'space-between',
+                                    marginTop: '5px',
                                   }}
                                 >
                                   <div
@@ -821,6 +821,7 @@ const TyContentScreen: React.FC<{
                                   style={{
                                     display: 'flex',
                                     justifyContent: 'space-between',
+                                    marginTop: '5px',
                                   }}
                                 >
                                   <div
@@ -880,6 +881,7 @@ const TyContentScreen: React.FC<{
                                   style={{
                                     display: 'flex',
                                     justifyContent: 'space-between',
+                                    marginTop: '5px',
                                     border: '2px solid #b3a484',
                                   }}
                                 >

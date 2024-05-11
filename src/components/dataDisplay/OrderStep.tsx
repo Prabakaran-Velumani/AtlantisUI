@@ -134,7 +134,7 @@ export default function OrderStep(props: {
 				<Box className='for-tab4' id={`tab${tabNo}`}>
 					{listQuest ? (
 						listQuest.map((item: any, index: number) => (
-							<Flex justifyContent='center' alignItems='center'  zIndex='2' {...rest} ml={'40px'} key={index}>
+							<Flex  alignItems='center'  zIndex='2' {...rest} ml={'75px'} key={index}>
 								<Box>
 									<Flex className='QuestList'>
 										<Icon as={MdDelete} fontSize={'md'} color={'grey'} cursor={'pointer'} onClick={() => { handleDeleteClick(item) }} className='del-icon' />
@@ -149,7 +149,6 @@ export default function OrderStep(props: {
 															>
 																Are you sure you want to delete Quest {item.gameQuestNo}?
 															</Text>
-
 														</ModalBody>
 														<ModalFooter>
 															<Button color={'#fff'}
@@ -215,13 +214,13 @@ export default function OrderStep(props: {
 											</Text>
 										</div>
 									))}
-									{Number(item.gameQuestNo) !== Number(progressBlockItems[0].questNo) && Object.entries(listBlockItems)
+									{/* {Number(item.gameQuestNo) !== Number(progressBlockItems[0].questNo) && Object.entries(listBlockItems)
 										.filter(([key, value]: [string, any]) => value.questNo === item.gameQuestNo)
 										.map(([key, value]: [string, any], i: number) => (
-											<Text key={i} fontSize='sm' me='6px' ml={'80px'} fontWeight='400' style={{ color: inActive }}>
+											<Text key={i} fontSize='sm' me='6px' ml={'40px'} fontWeight='400' style={{ color: inActive }}>
 												{value.id} {value.type}
 											</Text>
-										))}
+										))} */}
 								</Box>
 							</Flex>
 						))

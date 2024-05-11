@@ -246,12 +246,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
           <Box className="top-menu-home-section">
             {isLanguage ? (
               <Box className="Setting-box">
-                <Img src={preloadedAssets.Lang} className="setting-pad" />
+                <Img src={preloadedAssets.Lang} className="setting-pad" h={'100vh !important'} />
                 <Box className="vertex">
                   <FormLabel className={'label'} me={'0'}>
                     Language
                   </FormLabel>
-                  <Box position={'relative'}>
+                  <Box position={'relative'} mb={'50px'}>
                     <Img
                       className="formfield"
                       w={'100%'}
@@ -276,7 +276,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       </Box>
                     </Box>
                   </Box>
-                  <Box position={'relative'}>
+                  <Box position={'relative'} mb={'50px'}>
                     <Img
                       className="formfield"
                       w={'100%'}
@@ -327,7 +327,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       )}
                     </Box>
                   </Box>
-                  <Box position={'relative'}>
+                  <Box position={'relative'} mb={'50px'}>
                     <Img
                       className="formfield"
                       w={'100%'}
