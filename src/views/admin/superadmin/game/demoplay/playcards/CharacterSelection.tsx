@@ -129,6 +129,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const [gameContentId, setGameContentId] = useState(null);
   //Afrith-modified-ends-20/Mar/24
   const { id } = useParams();
+  const gender = [{label:'Male',value:'Male'},{label:'FeMale',value:'FeMale'},{label:'Others',value:'Others'}]
   useEffect(() => {
     const fetch = async () => {
       const resLang = await getGameLanguages(id);
@@ -246,37 +247,67 @@ const Characterspage: React.FC<PlayGamesProps> = ({
           <Box className="top-menu-home-section">
             {isLanguage ? (
               <Box className="Setting-box">
-                <Img src={preloadedAssets.Lang} className="setting-pad" h={'100vh !important'} />
+                <Img
+                  src={preloadedAssets.Lang}
+                  className="setting-pad"
+                  h={'100vh !important'}
+                />
                 <Box className="vertex">
                   <FormLabel className={'label'} me={'0'}>
-                    Language
+                    Profile
                   </FormLabel>
-                  <Box position={'relative'} mb={'50px'}>
+                  <Box position={'relative'}>
+                    <Text
+                      // onClick={() => setSelect(!select)}
+                      className={'choosen_lang'}
+                      ml={'9% !important'}
+                    >
+                      Name
+                    </Text>
                     <Img
                       className="formfield"
                       w={'100%'}
                       h={'auto'}
                       src={preloadedAssets.FormField}
-                      onClick={() => setSelect(!select)}
+                      // onClick={() => setSelect(!select)}
                     />
                     <Box
                       w={'100%'}
                       position={'absolute'}
                       display={'flex'}
-                      onClick={() => setSelect(!select)}
-                      top={'7%'}
+                      // onClick={() => setSelect(!select)}
+                      top={'100%'}
                     >
-                      <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                        {/* <Text
-                          onClick={() => setSelect(!select)}
-                          className={'choosen_lang'}
-                        >
-                          {profileData?.language}
-                        </Text> */}
+                      <Box
+                        w={'100%'}
+                        display={'flex'}
+                        justifyContent={'center'}
+                      >
+                        <input
+                          style={{
+                            width: '100%',
+                          }}
+                          className="player_profilename"
+                          placeholder={'Enter Alias Name'}
+                          value={playerInfo.name}
+                          onChange={(e: any) =>
+                            setProfileData((prev: any) => ({
+                              ...prev,
+                              name: e.target.value,
+                            }))
+                          }
+                        />
                       </Box>
                     </Box>
                   </Box>
                   <Box position={'relative'} mb={'50px'}>
+                    <Text
+                      onClick={() => setSelect(!select)}
+                      className={'choosen_lang'}
+                      ml={'9% !important'}
+                    >
+                      Gender
+                    </Text>
                     <Img
                       className="formfield"
                       w={'100%'}
@@ -289,7 +320,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       position={'absolute'}
                       display={'flex'}
                       onClick={() => setSelect(!select)}
-                      top={'7%'}
+                      top={'95%'}
                     >
                       <Box w={'80%'} display={'flex'} justifyContent={'center'}>
                         <Text
@@ -308,8 +339,8 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       </Box>
                       {select && (
                         <Box className="dropdown">
-                          {languages &&
-                            languages.map((lang: any, num: any) => (
+                          {gender &&
+                            gender.map((lang: any, num: any) => (
                               <Text
                                 className={'choosen_langs'}
                                 ml={'5px'}
@@ -327,7 +358,14 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       )}
                     </Box>
                   </Box>
-                  <Box position={'relative'} mb={'50px'}>
+                  <Box position={'relative'} mb={'100px'}>
+                    <Text
+                      onClick={() => setSelect(!select)}
+                      className={'choosen_lang'}
+                      ml={'9% !important'}
+                    >
+                      Language
+                    </Text>
                     <Img
                       className="formfield"
                       w={'100%'}
@@ -340,7 +378,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       position={'absolute'}
                       display={'flex'}
                       onClick={() => setSelect(!select)}
-                      top={'7%'}
+                      top={'95%'}
                     >
                       <Box w={'80%'} display={'flex'} justifyContent={'center'}>
                         <Text
