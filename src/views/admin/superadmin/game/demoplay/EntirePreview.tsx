@@ -3710,8 +3710,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   return <h1>Loading Screen .... Default case </h1>;
               }
             })()}
-            {ModelControl === true || NavigateBlockEmpty === true ?
-            (
+            {ModelControl === true || NavigateBlockEmpty === true &&
+
               <>
                 <Box
                   w={'100%'}
@@ -3739,8 +3739,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                     </Box>
                   </Box>
                 </Box>
-              </>
-            ) : null}
+              </>}
           </Flex>
           {/* Anonymous User's Review Form Menu
            * It works when uuid has UUID
@@ -3932,19 +3931,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               Your browser does not support the audio tag.
             </audio>
           )}
-          {/* Language Transaltion Modal popup */}
-
-          {/* <LanguageSelectionPrompt
-            gameLanguages={gameLanguages}
-            formData={gameInfo?.gameData}
-            preloadedAssets={preloadedAssets}
-            hasMulitLanguages={hasMulitLanguages}
-            setHasMulitLanguages={setHasMulitLanguages}
-            profileData={profileData}
-            setProfileData={setProfileData}
-            setIsOpenCustomModal={setIsOpenCustomModal}
-            isOpenCustomModal={isOpenCustomModal}
-          /> */}
           
             <PromptScreen preloadedAssets={preloadedAssets} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData}
             setProfileData={setProfileData}  gameLanguages={gameLanguages} formData={gameInfo?.gameData} setPreLogDatas={setPreLogDatas} getPrevLogDatas={getPrevLogDatas} currentScreenId={currentScreenId}/>

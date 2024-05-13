@@ -5220,7 +5220,8 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                 ) : null}
               </GridItem>
             </Grid>
-            {tab !== 4 && tab !== 6 && ShowReview && (
+            {/* {tab !== 4 && tab !== 6 && ShowReview && ( */}
+            {tab && tab===5 && ShowReview && (
               <Menu>
                 <MenuButton
                   p="0px"
@@ -5255,16 +5256,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                 >
                   <FormControl>
                     <FormLabel fontSize={18} fontWeight={700}>
-                      Feedback For{' '}
-                      {tab === 1
-                        ? 'BackGround'
-                        : tab === 2
-                          ? 'Non Playing Character'
-                          : tab === 3
-                            ? 'Overview'
-                            : tab === 5
-                              ? 'Design'
-                              : 'Preference'}
+                      {'Feedback For Design '}
                     </FormLabel>
                     <Box w={'360px'} maxH={'50vh'} overflowY={'scroll'}>
                       {reviews && reviews[tab] && reviews[tab]?.length !== 0 ? (
@@ -5325,16 +5317,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                           })
                       ) : (
                         <Box mb={'10px'} mt={'10px'}>
-                          No Feedback For{' '}
-                          {tab === 1
-                            ? 'Background'
-                            : tab === 2
-                              ? 'Non Playing Character'
-                              : tab === 3
-                                ? 'Overview'
-                                : tab === 5
-                                  ? 'Design'
-                                  : 'Preference'}
+                         {' No Feedback For Design '}
                         </Box>
                       )}
                     </Box>
@@ -5521,6 +5504,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                                 </Text>
                               </Flex>
                             </MenuItem>
+                            {tab && [4,5].includes(tab) && (
                             <MenuItem
                               transition="0.2s linear"
                               color={textColor}
@@ -5551,6 +5535,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                                 </Text>
                               </Flex>
                             </MenuItem>
+                            )}
                           </MenuList>
                         </Box>
                       </Menu>
