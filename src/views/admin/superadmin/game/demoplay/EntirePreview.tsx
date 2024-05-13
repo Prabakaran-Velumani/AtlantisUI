@@ -149,6 +149,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   // const find = show.find((it: any) => it.gasId === formData.gameBackgroundId);
   // const img = find.gasAssetImage;
 
+  //state added by rajesh for profile screen
+  const [isLanguage, setIsLanguage] = useState(null);
   // selected option color change
   const [selectedOption, setSelectedOption] = useState(null);
   // handle the item
@@ -2045,6 +2047,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         <Box className="EntirePreview-content">
           <Box id="container" className="Play-station">
             <TopMenuBar
+              setIsLanguage={setIsLanguage}
               dontShowTopMenu={dontShowTopMenu}
               preloadedAssets={preloadedAssets}
               currentScreenId={currentScreenId}
@@ -2537,6 +2540,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   return (
                     <>
                       <Characterspage
+                        isLanguage={isLanguage}
+                        setIsLanguage={setIsLanguage}
                         profileData={profileData}
                         setProfileData={setProfileData}
                         setSelectedPlayer={setSelectedPlayer}

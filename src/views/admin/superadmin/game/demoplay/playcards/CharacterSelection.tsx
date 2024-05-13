@@ -76,6 +76,8 @@ interface PlayGamesProps {
   setProfileData?: any;
   demoBlocks?: any;
   preloadedAssets?: any;
+  isLanguage?: any;
+  setIsLanguage?: any;
 }
 
 const spokenLanguages = [
@@ -114,10 +116,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   demoBlocks,
   formData,
   preloadedAssets,
+  setIsLanguage,
+  isLanguage,
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
-  const [isLanguage, setIsLanguage] = useState(null);
+ 
   const [select, setSelect] = useState(false);
   const [languages, setLanguages] = useState<any[]>(null);
   // Afrith-modified-starts-08/Mar/24
@@ -129,6 +133,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const [gameContentId, setGameContentId] = useState(null);
   //Afrith-modified-ends-20/Mar/24
   const { id } = useParams();
+  const gender = [{label:'Male',value:'Male'},{label:'FeMale',value:'FeMale'},{label:'Others',value:'Others'}]
   useEffect(() => {
     const fetch = async () => {
       const resLang = await getGameLanguages(id);
@@ -154,16 +159,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 
   const selectPlayerClick = () => {
     setSelectedPlayer(players[i]);
-    console.log(
-      'Object.keys(demoBlocks).length',
-      Object.keys(demoBlocks).length,
-    );
     /**if game has more than one quest, then navigate to chapter selection screen, otherwise navigate to story part direclty */
     if (playerInfo.name === '') {
       setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
     }
-
-    setCurrentScreenId(13); //navigate to Chapter selection
+    setCurrentScreenId(13); 
+    //navigate to Chapter selection
 
     // if (Object.keys(demoBlocks).length > 1) {
     //   setCurrentScreenId(13);//navigate to Chapter selection
@@ -269,13 +270,25 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       onClick={() => setSelect(!select)}
                       // top={'7%'}
                     >
-                      <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                        {/* <Text
-                          onClick={() => setSelect(!select)}
-                          className={'choosen_lang'}
-                        >
-                          {profileData?.language}
-                        </Text> */}
+                      <Box
+                        w={'100%'}
+                        display={'flex'}
+                        justifyContent={'center'}
+                      >
+                        <input
+                          style={{
+                            width: '100%',
+                          }}
+                          className="player_profilename"
+                          placeholder={'Enter Alias Name'}
+                          value={playerInfo.name}
+                          onChange={(e: any) =>
+                            setProfileData((prev: any) => ({
+                              ...prev,
+                              name: e.target.value,
+                            }))
+                          }
+                        />
                       </Box>
                     </Box>
                   </Box>
@@ -314,8 +327,8 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       </Box>
                       {select && (
                         <Box className="dropdown">
-                          {languages &&
-                            languages.map((lang: any, num: any) => (
+                          {gender &&
+                            gender.map((lang: any, num: any) => (
                               <Text
                                 className={'choosen_langs'}
                                 ml={'5px'}

@@ -849,7 +849,15 @@ font-family: 'AtlantisText';
   z-index: 999;
   height: 63px;
   width: 4%;
-  transform: translate(44%, 20%);
+  transform: translate(5%, 13%);
+}
+.top-profile-menu{
+  position: absolute;
+  top: 0;
+  z-index: 999;
+  height: 63px;
+  width: 4%;
+  transform: translate(110%, 10%);
 }
 
 .top-menu-home-section .overview-img {
@@ -1529,7 +1537,28 @@ transform: translate(-167px, -84px);
   color: #d9c7a2;
   background-color: #062c42;
 }
+.dropdown::-webkit-scrollbar {
+  width: 3vh;
+  /*height: 300px;*/
+  border-radius: 30px;
+  background-size: contain;
+}
 
+.dropdown::-webkit-scrollbar-track {
+  background: url('../img/games/Leaderboard\ Scroll\ Bar.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.dropdown::-webkit-scrollbar-thumb {
+  background: url('../img/games/Leaderboard\ Scroll\ Cross.png');
+  background-repeat: no-repeat;
+  border-radius: 30px;
+  cursor: pointer;
+  background-size: contain;
+  /*height: 300px;*/
+  /* background-size: 26px 63px; */
+}
 .choosen_lang {
   position: relative;
   z-index: 9999999;
@@ -1540,7 +1569,8 @@ transform: translate(-167px, -84px);
 }
 
 .choosen_langs {
-  font-size: 4vh;
+  font-size: 3.5vh;
+  letter-spacing: 1px;
 }
 
 .select {
@@ -3540,7 +3570,10 @@ grid-row: 1 / 2;
   outline: none;
   border: none;
 }
-
+.player_profilename:focus {
+  outline: none;
+  border: none;
+}
 .player_name {
   height: 5vh;
   background-color: transparent;
@@ -3548,10 +3581,20 @@ grid-row: 1 / 2;
   text-align: center;
   position: absolute;
   bottom: -80%;
-  font-size: 1.8rem;
+  font-size: 3.5vh;
   font-family: 'AtlantisText';
 }
-
+.player_profilename{
+  height: 5vh;
+  background-color: transparent;
+  outline: none;
+  text-align: center;
+  /* position: absolute;
+  top: 50px; */
+  font-size: 3.5vh;
+  font-family: 'AtlantisText';
+  color: var(--atlantis-text-color);
+}
 /* character screen next */
 
 .character_next {
