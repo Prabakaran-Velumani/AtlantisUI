@@ -331,7 +331,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       return total;
     }
   },0);
-    console.log("toDayScore", toDayScore)
       const totalEarnScore = profile?.score.reduce((acc: any, obj: any) => acc + parseInt(obj.score), 0);
       setPreLogDatas((prev: any) => ({
         ...prev,
@@ -428,7 +427,6 @@ if(profileData.language!==''){
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
     if (res?.status === 'success' && res?.url) {
-      console.log('currentscreenid 359',currentScreenId);
       setAudioObj({
         url: res?.url,
         type: EnumType.BGM,
@@ -562,7 +560,6 @@ if(profileData.language!==''){
       let GrandMaximumscore: any = null;
 
       const questStatus = questState[profile?.currentQuest];
-      console.log("*****questStatus", questStatus);
       /** options - Players selected options like [{quest:'1', score:200, 'seq':'1.1' },...] */
       // Check if options are provided
       if (options) {
@@ -584,7 +581,6 @@ if(profileData.language!==''){
           // If the quest is started, consider the score
           if (questStatus === 'Started') {
             currentScores = profile?.score !== null ? profile.score : null; //null or currentScores or replayScore
-            console.log(" *****Current Scores:", currentScores);
           } else {
             console.log(" *****Invalid score provided for started quest.");
             return; // Exit function if score is not provided for started quest
@@ -603,8 +599,6 @@ if(profileData.language!==''){
         // Check if currentScores is an array before mapping
         const currentQuestseqId = Array.isArray(currentScores) ? currentScores.map(item => item.seqId) : [];
 
-        console.log("*****currentQuestseqId:", currentQuestseqId);
-
         // Check if currentScores is an array and has items  const qpScoreEntries = filteredOptions.map(option => ({ qpScore: option.qpScore }));
         if (Array.isArray(currentScores) && currentScores.length > 0) {
           // Map currentScores to extract scores
@@ -612,8 +606,6 @@ if(profileData.language!==''){
 
           const result = currentQuestseqId.map(seqId => {
             const QuestNo = seqId.split('.')[0];
-            console.log("profile.currentQuest", profile.currentQuest)
-            console.log("QuestNo", QuestNo)
             if (QuestNo == profile.currentQuest) {
               const filteredOptions = gameInfo?.questOptions?.filter((option: any) => option.qpSequence == seqId);
 
@@ -622,7 +614,6 @@ if(profileData.language!==''){
               // GrandMaximumscore.push(qpScoresOption[0]);
               GrandMaximumscore += qpScoresOption[0];
             }
-            console.log("GrandMaximumscore", GrandMaximumscore);
 
           })
 
@@ -659,7 +650,6 @@ if(profileData.language!==''){
       //     autoplay: true,
       //   });
       const screens = [1, 3, 4, 5, 6, 7, 11, 12, 13]
-      console.log('currentscreenid 589',currentScreenId);
       if (screens.includes(currentScreenId) && (![2,10,0].includes(currentScreenId))) {
         setAudioObj({
           url: gameInfo?.bgMusic,
@@ -691,7 +681,6 @@ if(profileData.language!==''){
     //   loop: false,
     //   autoplay: true,
     // });
-    console.log('currentscreenid 620',currentScreenId);
     if(![2,10,0].includes(currentScreenId))
       {
          setAudioObj({
@@ -736,7 +725,6 @@ if(profileData.language!==''){
         audioRef.current.volume = parseFloat(audio.volume);
         audioRef.current.loop = audio.loop;
         audioRef.current.autoplay = audio.autoplay;
-        console.log('audio.url',audio.url);
 
         // Play or pause audio based on the autoplay property
         if (audioObj.autoplay) {
@@ -932,7 +920,6 @@ if(profileData.language!==''){
       }
     }
     const newTrackSequence = navTrack[navTrack.length - 1];
-    // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 767',newTrackSequence)
     const navPrevBlock = current
       ? Object.keys(demoBlocks[quest] || {})
         .filter(
@@ -942,9 +929,7 @@ if(profileData.language!==''){
         )
         .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-    // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 777',navPrevBlock)
     if (navPrevBlock.length !== 0 && navPrevBlock !== undefined) {
-      // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 780',navPrevBlock[0],'...',navPrevBlock[0].blockLeadTo == current.blockSecondaryId,'...',navPrevBlock[0].blockLeadTo ,'...', current.blockSecondaryId)
 
       if (navPrevBlock[0].blockLeadTo == current.blockSecondaryId) {
         navTrack.pop();
@@ -1218,7 +1203,6 @@ if(profileData.language!==''){
       const getdemoblocksseq: any = Object.entries(demoBlocks[quest]);
       for (const blocks of getdemoblocksseq) {
         const blockId = blocks[1].blockId;
-        // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 345',blockId);
         if (blocks[1].blockLeadTo == current.blockSecondaryId) {
           getSeqprevious.push(blocks[1].blockPrimarySequence);
         }
@@ -2033,7 +2017,6 @@ if(profileData.language!==''){
         // } else 
         if (haveNextQuest) {
           if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
-            console.log('1584');
             const getminpassscore = getgameinfoquest?.gameMinScore;
             const scores = profile?.score;
             const sums: any = {};
@@ -2058,7 +2041,6 @@ if(profileData.language!==''){
               finalscore < getgameinfoquest?.gameDistinctionScore &&
               gameInfo.gameData?.gameDisableOptionalReplays === 'false'
             ) {
-              console.log('1609');
               setisOptionalReplay(true);
               setisReplay(false);
               Setprofilescore(finalscore);
@@ -2066,7 +2048,6 @@ if(profileData.language!==''){
               return false;
             } else {
               if (demoBlocks.hasOwnProperty(nextLevel)) {
-                console.log('1617');
                 setProfile((prev: any) => {
                   const data = { ...prev };
                   if (!profile.completedLevels.includes(currentQuest)) {
@@ -2742,7 +2723,6 @@ if(profileData.language!==''){
     }
     const backGroundBgmscreens = [1, 3, 4, 5, 6, 7, 11, 12, 13];
     if (![2,10,0].includes(currentScreenId) && backGroundBgmscreens.includes(currentScreenId)) {
-      console.log('currentscreenid 2675',currentScreenId);
       setAudioObj({
         url: audio,
         type: EnumType.BGM,
@@ -2898,7 +2878,7 @@ if(profileData.language!==''){
       } else if (reviewInput?.tabId == 4) {
         //for Story Tab *******
         if (currentScreenId == 9 || currentScreenId == 14) {
-          const blockSeqId = currentScreenId == 9 ? (data.blockQuestNo + '@' + data.blockSecondaryId) : (FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition - 1 : FeedbackcurrentPosition].blockQuestNo + '@' + FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition - 1 : FeedbackcurrentPosition].blockSecondaryId);
+          const blockSeqId = currentScreenId == 9 ? (data.blockId) : (FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition - 1 : FeedbackcurrentPosition].blockId);
           setReviewInput((prev: Review) => ({
             ...prev,
             tabAttribute: 'blockSeqId',
@@ -2906,7 +2886,7 @@ if(profileData.language!==''){
           }));
         }
         else {
-          const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
+          const blockSeqId = data.blockId;
           setReviewSubTabOptions([]);
           setReviewInput((prev: Review) => ({ ...prev, tabAttribute: 'blockSeqId', tabAttributeValue: blockSeqId }));
         }
@@ -3187,7 +3167,6 @@ if(profileData.language!==''){
     if (FeedbackNavigatenext === true) {
       getData(data);
     }
-    console.log('FeedbackNavigatenext 9', FeedbackNavigatenext)
   }, [FeedbackNavigatenext]);
 
 
@@ -3254,7 +3233,6 @@ if(profileData.language!==''){
       setFeedbackCurrentPosition(FeedbackcurrentPosition + 1);
       setFeedbackRemainingSentences(newRemainingSentences);
     } else {
-      console.log('FeedbackNavigatenext', FeedbackNavigatenext);
       setFeedbackList([]);
       setFeedbackCurrentPosition(0);
       setFeedbackNavigateNext(true);
