@@ -365,7 +365,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
     if (res?.status === 'success' && res?.url) {
-      console.log('currentscreenid 359',currentScreenId);
       setAudioObj({
         url: res?.url,
         type: EnumType.BGM,
@@ -528,7 +527,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       //     autoplay: true,
       //   });
       const screens = [1, 3, 4, 5, 6, 7, 11, 12, 13]
-      console.log('currentscreenid 589',currentScreenId);
       if (screens.includes(currentScreenId) && (![2,10,0].includes(currentScreenId))) {
         setAudioObj({
           url: gameInfo?.bgMusic,
@@ -559,7 +557,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     //   loop: false,
     //   autoplay: true,
     // });
-    console.log('currentscreenid 620',currentScreenId);
     if(![2,10,0].includes(currentScreenId))
       {
          setAudioObj({
@@ -604,7 +601,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         audioRef.current.volume = parseFloat(audio.volume);
         audioRef.current.loop = audio.loop;
         audioRef.current.autoplay = audio.autoplay;
-        console.log('audio.url',audio.url);
 
         // Play or pause audio based on the autoplay property
         if (audioObj.autoplay) {
@@ -868,7 +864,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
     const newTrackSequence = navTrack[navTrack.length - 1];
-    // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 767',newTrackSequence)
     const navPrevBlock = current
       ? Object.keys(demoBlocks[quest] || {})
         .filter(
@@ -878,9 +873,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         )
         .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-    // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 777',navPrevBlock)
     if (navPrevBlock.length !== 0 && navPrevBlock !== undefined) {
-      // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 780',navPrevBlock[0],'...',navPrevBlock[0].blockLeadTo == current.blockSecondaryId,'...',navPrevBlock[0].blockLeadTo ,'...', current.blockSecondaryId)
 
       if (navPrevBlock[0].blockLeadTo == current.blockSecondaryId) {
         navTrack.pop();
@@ -1149,7 +1142,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const getdemoblocksseq: any = Object.entries(demoBlocks[quest]);
       for (const blocks of getdemoblocksseq) {
         const blockId = blocks[1].blockId;
-        // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 345',blockId);
         if (blocks[1].blockLeadTo == current.blockSecondaryId) {
           getSeqprevious.push(blocks[1].blockPrimarySequence);
         }
@@ -1964,7 +1956,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         // } else 
         if (haveNextQuest) {
           if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
-            console.log('1584');
             const getminpassscore = getgameinfoquest?.gameMinScore;
             const scores = profile?.score;
             const sums: any = {};
@@ -1989,7 +1980,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               finalscore < getgameinfoquest?.gameDistinctionScore &&
               gameInfo.gameData?.gameDisableOptionalReplays === 'false'
             ) {
-              console.log('1609');
               setisOptionalReplay(true);
               setisReplay(false);
               Setprofilescore(finalscore);
@@ -1997,7 +1987,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return false;
             } else {
               if (demoBlocks.hasOwnProperty(nextLevel)) {
-                console.log('1617');
                 setProfile((prev: any) => {
                   const data = { ...prev };
                   if (!profile.completedLevels.includes(currentQuest)) {
@@ -2665,7 +2654,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
     const backGroundBgmscreens = [1, 3, 4, 5, 6, 7, 11, 12, 13];
     if (![2,10,0].includes(currentScreenId) && backGroundBgmscreens.includes(currentScreenId)) {
-      console.log('currentscreenid 2675',currentScreenId);
       setAudioObj({
         url: audio,
         type: EnumType.BGM,
@@ -2828,33 +2816,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       } else if (reviewInput?.tabId == 4) {
         //for Story Tab *******
         if (currentScreenId == 9 || currentScreenId == 14) {
-          const blockSeqId =
-            currentScreenId == 9
-              ? data.blockQuestNo + '@' + data.blockSecondaryId
-              : FeedBackoptionData[
-                  FeedbackcurrentPosition > 0
-                    ? FeedbackcurrentPosition - 1
-                    : FeedbackcurrentPosition
-                ].blockQuestNo +
-                '@' +
-                FeedBackoptionData[
-                  FeedbackcurrentPosition > 0
-                    ? FeedbackcurrentPosition - 1
-                    : FeedbackcurrentPosition
-                ].blockSecondaryId;
+          const blockSeqId = currentScreenId == 9 ? (data.blockId) : (FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition - 1 : FeedbackcurrentPosition].blockId);
           setReviewInput((prev: Review) => ({
             ...prev,
             tabAttribute: 'blockSeqId',
             tabAttributeValue: blockSeqId,
           }));
-        } else {
-          const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
+        }
+        else {
+          const blockSeqId = data.blockId;
           setReviewSubTabOptions([]);
-          setReviewInput((prev: Review) => ({
-            ...prev,
-            tabAttribute: 'blockSeqId',
-            tabAttributeValue: blockSeqId,
-          }));
+          setReviewInput((prev: Review) => ({ ...prev, tabAttribute: 'blockSeqId', tabAttributeValue: blockSeqId }));
         }
       } else {
         const subOptions = subTabOptionsForTabIds.find(
@@ -3105,7 +3077,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     if (FeedbackNavigatenext === true) {
       getData(data);
     }
-    console.log('FeedbackNavigatenext 9', FeedbackNavigatenext)
   }, [FeedbackNavigatenext]);
 
   const getFeedbackData = (getdata: any) => {
@@ -3170,7 +3141,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setFeedbackCurrentPosition(FeedbackcurrentPosition + 1);
       setFeedbackRemainingSentences(newRemainingSentences);
     } else {
-      console.log('FeedbackNavigatenext', FeedbackNavigatenext);
       setFeedbackList([]);
       setFeedbackCurrentPosition(0);
       setFeedbackNavigateNext(true);
