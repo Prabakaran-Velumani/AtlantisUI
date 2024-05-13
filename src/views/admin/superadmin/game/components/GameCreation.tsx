@@ -503,7 +503,6 @@ const GameCreation = () => {
         else{
             previewData = { ...previewData, currentTab: 3 };
         }
-        console.log('previewData ***',previewData);
         if (currentTab) {
             previewData = { ...previewData, currentSubTab: currentTab };
         }
@@ -541,7 +540,6 @@ const GameCreation = () => {
     const setAudioInPage = async () => {
       const res = await getAudio(parseInt(id));
       if (res?.status === 'Success') {
-        // console.log(res.data);
         setSelectedAud(res?.data);
       }
     };
@@ -577,7 +575,6 @@ const GameCreation = () => {
               selected: language['translationId'] === ChooseLangId
             }),
           );
- console.log('*******',options,'...',ChooseLangId);
           setLanguageOptions(options);
           setLanguage(options.value);
           setFormData((prevFormData) => ({
@@ -604,7 +601,6 @@ const GameCreation = () => {
     label: string;
   }) => {
     // Do something with the selected option
-    // console.log('Selected Option:', selectedOption);
 
     // Update the state and access the updated value inside a useEffect hook
     setFormData((prevFormData) => ({
@@ -1319,13 +1315,9 @@ const GameCreation = () => {
                   }
                 }
                 if (key.type === 'Interaction') {
-                  console.log('keyinput', key.type + key.input);
                   var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                   var blockRoll = input[inputkey]?.blockRoll;
                   var interaction = input[inputkey]?.interaction;
-                  console.log('QuestionsEmotion1', QuestionsEmotion);
-                  //console.log('blockRoll', blockRoll);
-                  //console.log('interaction', interaction);
                   if (!interaction) {
                     toast({
                       title: `Interaction is Empty On This Sequence ${key.id} `,
@@ -1335,7 +1327,6 @@ const GameCreation = () => {
                     });
                     return false;
                   }
-                  console.log('QuestionsEmotion', QuestionsEmotion);
                   if (!QuestionsEmotion || QuestionsEmotion === undefined) {
                     toast({
                       title: `Questions is Empty On This Sequence ${key.id} `,
@@ -1473,8 +1464,6 @@ const GameCreation = () => {
     const title4 = taby4?.getAttribute('title');
     const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
     const tab4Height = tab == 4 && getFourElementHgt + getfirstElementHgt;
-    console.log('getFourElementHgttab', questTabState);
-    console.log('getFourElementHgt', getFourElementHgt);
     //tab5
     const tab5 = document.getElementById(`tab5`);
     const title5 = tab5?.getAttribute('title');
@@ -1720,8 +1709,6 @@ if (complidatalength !== 0) {
 }
 // refelection Screen Validation
 if (formData.gameIsShowReflectionScreen === 'true') {
-  console.log("form length" + formData.gameReflectionQuestion);
-console.log('reflectionQuestions1pri',reflectionQuestions);
   if (typeof reflectionQuestions === 'object' && reflectionQuestions !== null) {
 
     var keys = Object.keys(reflectionQuestions);
@@ -1734,7 +1721,6 @@ console.log('reflectionQuestions1pri',reflectionQuestions);
       var keys1 = ['ref1', 'ref2', 'ref3', 'ref4'];
     }
 
-    console.log('keysref', keys1);
     //newlyadded end
     // Assuming formData.gameReflectionQuestion is the number of questions to check
     for (var i = 0; i < formData.gameReflectionQuestion; i++) {
@@ -1874,7 +1860,6 @@ if (formData.gameIsFeedbackMandatory === "true") {
     }
     let data = JSON.stringify(formData);
     // alert("cn"+tab);
-    console.log('1871', data);
     const result = await updateGame(id, data);
     if (result?.status !== 'Success') {
       toast({
@@ -1897,10 +1882,8 @@ if (formData.gameIsFeedbackMandatory === "true") {
       const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
       setFormData(formDataWithoutLastTab);
       const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
-      console.log('idddddddd',MaxBlockQuestNumber)
       if (result.status === 'Success') {
         const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
-        console.log('Max QuestNo:', maxQuestNo);
         if (maxQuestNo < 5) {
           setOpenQuest(true);
         } else {
@@ -2111,7 +2094,6 @@ if (formData.gameIsFeedbackMandatory === "true") {
                   });
                   return false;
                 }
-                console.log('QuestionsEmotion', QuestionsEmotion)
                 if (!QuestionsEmotion || QuestionsEmotion === undefined) {
                   toast({
                     title: `Questions is Empty On This Sequence ${key.id} `,
@@ -2137,7 +2119,6 @@ if (formData.gameIsFeedbackMandatory === "true") {
                   for (const alp of alphabetData?.filter(
                     (alp: any) => key.id === alp.seqs,
                   ) || []) {
-                    console.log('alphabet check',input[inputkey],'...',input);
                     if (!input[inputkey]?.optionsemotionObject[alp.option]) {
                       var option = alp.option;
                       setValidation({
@@ -2329,7 +2310,6 @@ return false;
       }
     } else {
       try {
-        console.log('2315' ,data);
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
           toast({
@@ -2553,7 +2533,6 @@ return false;
       formData.gameOthers,
     ];
     const countfbSelectedOptions = feedbackselectedOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
-    console.log('countfbSelectedOptions',countfbSelectedOptions);
    
     if (checked && countfbSelectedOptions >= 4) {
          return false;
@@ -3042,7 +3021,6 @@ return false;
   const debouncedSubmitGame = useCallback(
     debounce(async (data: any) => {
       try {
-        console.log('3024', data);
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
         } else {
@@ -3874,6 +3852,7 @@ return false;
                   setQuestTabState={setQuestTabState}
                   deleteQuest={deleteQuest}
                   delSeq={delSeq}
+
                 />
                 <OrderStep
                   cursor={'pointer'}
@@ -4351,6 +4330,7 @@ return false;
                       ShowReview={ShowReview}
                       validation={validation}
                       setValidation={setValidation}
+                      listBlockItems={listBlockItems}
                     />
                   </>
                 ) : tab === 5 ? (

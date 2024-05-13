@@ -118,14 +118,11 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   getPrevLogDatas,
 }) => {
   const [i, setI] = useState(0);
-  // const [isLanguage, setIsLanguage] = useState(null);
-  // const [select, setSelect] = useState(false);
-  // const [languages, setLanguages] = useState<any[]>(null);
-  // const [characterName, setCharacterName] = useState('');
+
   const [toggleLeft, setToggleLeft] = useState(false);
   const [toggleRight, setToggleRight] = useState(false);
   const toast = useToast();
-  // const playerInfo = useContext(ProfileContext);
+
 
   const selectPlayerClick = () => {
     const i = 0; // Assuming you are referring to a specific player index
@@ -274,35 +271,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 </Box>
               </Box>
             </Box>
-            {/* <Box
-              position={'fixed'}
-    
-              // left={0}
-              right={'0px'}
-              bottom={0}
-              zIndex={999}
-              w={'100vw'}
-              h={'100vh'}
-            >
-              <Canvas
-                camera={{ position: [3, 3, 10] }}
-              // style={{ width: '50%', height: '50vh'}}
-              >
-                <directionalLight
-                  position={[5, 5, 5]}
-                  intensity={0.8}
-                  color={0xffccaa}
-                  castShadow
-                />
-                <ambientLight intensity={5.5} />
-                <pointLight
-                  position={[5, 5, 5]}
-                  color={0xff0000}
-                  intensity={1}
-                />
-                <Model />
-              </Canvas>
-            </Box> */}
           </GridItem>
         </Grid>
       </Box>

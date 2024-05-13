@@ -67,6 +67,7 @@ import {
   getVoiceMessage,
   getPreview,
   getGameLanguages,
+  getContentRelatedLanguage
 } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
 import { ScoreContext } from './GamePreview';
@@ -289,9 +290,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [LastModified, setLastModified] = useState<boolean>(false); // for last modified
   const [isStoryScreen, isSetStoryScreen] = useState<boolean>(false);
   const [OptionSelectId, setOptionSelectId] = useState(null);
-
-
-
+  const [playerTodayScore,setPlayerTodayScore]=useState<any>(null); //Used to calculate the player's ranking on daily score in leaderboard
 
   useEffect(() => {
     setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
@@ -321,6 +320,62 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     fieldName: '',
     Audiogetlanguage: [],
   });
+
+  useEffect(() => {
+      const currentDate = new Date();
+      // Get day, month, and year
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const year = currentDate.getFullYear();
+      
+      // Format date as DD-MM-YYYY
+      const formattedDate = `${day}-${month}-${year}`;
+  //  scoreEarnedDate: profile?.score.map((item: any) => item.scoreEarnedDate)
+  const toDayScore = profile?.score.reduce((total: any, acc:any) => {
+    if(acc.scoreEarnedDate === formattedDate)
+      {
+        return total+acc.score;
+      }
+    else{
+      return total;
+    }
+  },0);
+      const totalEarnScore = profile?.score.reduce((acc: any, obj: any) => acc + parseInt(obj.score), 0);
+      setPreLogDatas((prev: any) => ({
+        ...prev,
+        previewProfile: { ...prev.previewProfile, score: profile.score
+         }
+      }));
+      
+  setPlayerTodayScore(toDayScore)
+    }, [profile?.score]);
+  // This for  Translation content based on lang 09.05.2024
+  useEffect(() => {
+    const fetchGameContent = async() => {
+    const gameContentResult = await getContentRelatedLanguage(gameInfo?.gameData.gameId,profileData.language);
+    if (gameContentResult.status === 'Success'){
+      const data = gameContentResult.data;
+      setProfileData((prev:any)=>({
+        ...prev,
+        Audiogetlanguage: data.map((x:any) => ({
+          content: x.content,
+          audioUrls: x.audioUrls,
+          textId: x.textId,
+          fieldName: x.fieldName,
+        })),
+      }))
+    }
+};
+  if(profileData.language!==''){
+    fetchGameContent();
+  }
+  }, [profileData?.language]);
+  
+  useEffect(() => {
+    setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
+  }, [scoreComp]);
+
+  // Afrith-modified-ends-07/Mar/24
 
   const [voiceIds, setVoiceIds] = useState<any>();
   const [feedbackList, setFeedbackList] = useState([]);
@@ -365,7 +420,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
     if (res?.status === 'success' && res?.url) {
-      console.log('currentscreenid 359',currentScreenId);
       setAudioObj({
         url: res?.url,
         type: EnumType.BGM,
@@ -528,8 +582,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       //     autoplay: true,
       //   });
       const screens = [1, 3, 4, 5, 6, 7, 11, 12, 13]
-      console.log('currentscreenid 589',currentScreenId);
-      if (screens.includes(currentScreenId) && currentScreenId!== 2) {
+      if (screens.includes(currentScreenId) && (![2,10,0].includes(currentScreenId))) {
         setAudioObj({
           url: gameInfo?.bgMusic,
           type: EnumType.BGM,
@@ -559,48 +612,27 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     //   loop: false,
     //   autoplay: true,
     // });
-    console.log('currentscreenid 620',currentScreenId);
-    setAudioObj({
-      url: audio,
-      type: EnumType.BGM,
-      volume: '0.5',
-      loop: true, // Voice doesn't loop
-      autoplay: true,
-    });
+    if(![2,10,0].includes(currentScreenId))
+      {
+         setAudioObj({
+          url: audio,
+          type: EnumType.BGM,
+          volume: '0.5',
+          loop: true, // Voice doesn't loop
+          autoplay: true,
+        });
+      }
+   
   }, [audio]);
 
   useEffect(() => {
-    /*
-    // Check if audioRef exists and audioObj.url is not empty
-    if (audioRef.current && audioObj.url !== '') {
-      // Pause the audio playback if it's currently playing
-      if (!audioRef.current?.paused) {
-        audioRef.current.pause();
-      }
-      // Update the audio source and play if necessary
-      audioRef.current.src = audioObj.url;
-      try {
-        if (audioObj.autoplay || isGetsPlayAudioConfirmation) {
-          audioRef.current.play();
-        }
-      } catch {
-        console.log('Error Required');
-      }
-    } else {
-      // Stop the audio playback and set audioRef.current to null
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    }
-    */
+
     const handleAudio = (audioRef: React.RefObject<HTMLAudioElement>, audio: any) => {
       if (audioRef.current) {
         audioRef.current.src = audio.url;
         audioRef.current.volume = parseFloat(audio.volume);
         audioRef.current.loop = audio.loop;
         audioRef.current.autoplay = audio.autoplay;
-        console.log('audio.url',audio.url);
 
         // Play or pause audio based on the autoplay property
         if (audioObj.autoplay) {
@@ -675,7 +707,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     // currentScreenId > 0 &&
     //   currentScreenId === 1 &&
     //   isGetsPlayAudioConfirmation &&
-    currentScreenId!== 2 &&
+   (![2,10,0].includes(currentScreenId)) &&
        setAudio(gameInfo?.bgMusic ?? '');
 
 
@@ -864,7 +896,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
     const newTrackSequence = navTrack[navTrack.length - 1];
-    // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 767',newTrackSequence)
     const navPrevBlock = current
       ? Object.keys(demoBlocks[quest] || {})
         .filter(
@@ -874,9 +905,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         )
         .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-    // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 777',navPrevBlock)
     if (navPrevBlock.length !== 0 && navPrevBlock !== undefined) {
-      // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 780',navPrevBlock[0],'...',navPrevBlock[0].blockLeadTo == current.blockSecondaryId,'...',navPrevBlock[0].blockLeadTo ,'...', current.blockSecondaryId)
 
       if (navPrevBlock[0].blockLeadTo == current.blockSecondaryId) {
         navTrack.pop();
@@ -1150,7 +1179,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const getdemoblocksseq: any = Object.entries(demoBlocks[quest]);
       for (const blocks of getdemoblocksseq) {
         const blockId = blocks[1].blockId;
-        // console.log('navPrevBlock[1].blockLeadTo == current.blockSecondaryId 345',blockId);
         if (blocks[1].blockLeadTo == current.blockSecondaryId) {
           getSeqprevious.push(blocks[1].blockPrimarySequence);
         }
@@ -1372,51 +1400,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
 
   }
-/**Commneted function alreay in above area */
 
-  // const checkAndUpdateScores = async () => {
-  //   const currentQuest = profile.currentQuest;
-  //   if (questState[currentQuest] !== 'Started') {
-  //     const calcQuestGrandTotal = async (scores: any, currentQuestNo: any = null) => {
-  //       if (scores?.length <= 0) {
-  //         return 0;
-  //       }
-  //       if (currentQuestNo != null) {
-  //         // Sum score of a quest
-  //         const totalScore = scores.reduce((total: number, sc: any) => {
-  //           if (sc.quest == currentQuestNo) {
-  //             return total + sc.score;
-  //           } else {
-  //             return total;
-  //           }
-  //         }, 0);
-  //         return totalScore; // Return the total score
-  //       }
-  //       else {
-  //         //Sum up all the scores
-  //         return scores.reduce((total: number, sc: any) => total + sc.score, 0);
-  //       }
-  //     }
-  //     const scoreTotal = await calcQuestGrandTotal(profile.score, profile.currentQuest);
-  //     const replayScoreTotal = await calcQuestGrandTotal(profile.replayScore, profile.currentQuest);
-  //     if (scoreTotal < replayScoreTotal) {
-  //       const currentQuestRemovedScoreArr = profile.score.filter((item: any) => (item.quest != profile.currentQuest));
-  //       let concatenatedScoreArr: any[] = [];
-  //       if (profile.replayScore.length > 0) {
-  //         concatenatedScoreArr = profile.replayScore.filter((item: any) => (item.quest == profile.currentQuest));
-  //       }
-  //       if (currentQuestRemovedScoreArr.length > 0) {
-  //         concatenatedScoreArr = [...concatenatedScoreArr, ...currentQuestRemovedScoreArr];
-  //       }
-  //       const currentQuestRemovedReplayScoreArr = profile.replayScore.filter((item: any) => (item.quest != profile.currentQuest));
-  //       setProfile((prev: any) => ({ ...prev, score: concatenatedScoreArr, replayScore: currentQuestRemovedReplayScoreArr }))
-  //     }
-  //     else {
-  //       const currentQuestRemovedReplayScoreArr = profile.replayScore.filter((item: any) => (item.quest != profile.currentQuest));
-  //       setProfile((prev: any) => ({ ...prev, replayScore: currentQuestRemovedReplayScoreArr }))
-  //     }
-  //   }
-  // }
+
   const getData = (next: any) => {
     setRepeatSelectOption(false);
     setIsPrevNavigation(false);
@@ -1965,7 +1950,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         // } else 
         if (haveNextQuest) {
           if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
-            console.log('1584');
             const getminpassscore = getgameinfoquest?.gameMinScore;
             const scores = profile?.score;
             const sums: any = {};
@@ -1990,7 +1974,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               finalscore < getgameinfoquest?.gameDistinctionScore &&
               gameInfo.gameData?.gameDisableOptionalReplays === 'false'
             ) {
-              console.log('1609');
               setisOptionalReplay(true);
               setisReplay(false);
               Setprofilescore(finalscore);
@@ -1998,7 +1981,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return false;
             } else {
               if (demoBlocks.hasOwnProperty(nextLevel)) {
-                console.log('1617');
                 setProfile((prev: any) => {
                   const data = { ...prev };
                   if (!profile.completedLevels.includes(currentQuest)) {
@@ -2659,8 +2641,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         : voiceIds?.playerFemale;
     // getAudioForText(text, voiceId);
   };
-
-  useEffect(() => {
+  
+   
+   useEffect(() => {
     if (voiceRef.current) {
       voiceRef.current.pause();
     }
@@ -2673,7 +2656,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       if (voiceRef.current) {
         voiceRef.current.pause(); // Pause voice
       }
-
     }
     if(currentScreenId === 2 || currentScreenId === 0)
       {
@@ -2683,11 +2665,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         if(voiceRef.current)
           {
             voiceRef.current.play();
-          }
-        
+          }        
       }
- 
-
     setFeedBackFromValue();
 
     const screens = [1, 10, 13, 12];
@@ -2822,33 +2801,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       } else if (reviewInput?.tabId == 4) {
         //for Story Tab *******
         if (currentScreenId == 9 || currentScreenId == 14) {
-          const blockSeqId =
-            currentScreenId == 9
-              ? data.blockQuestNo + '@' + data.blockSecondaryId
-              : FeedBackoptionData[
-                  FeedbackcurrentPosition > 0
-                    ? FeedbackcurrentPosition - 1
-                    : FeedbackcurrentPosition
-                ].blockQuestNo +
-                '@' +
-                FeedBackoptionData[
-                  FeedbackcurrentPosition > 0
-                    ? FeedbackcurrentPosition - 1
-                    : FeedbackcurrentPosition
-                ].blockSecondaryId;
+          const blockSeqId = currentScreenId == 9 ? (data.blockId) : (FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition - 1 : FeedbackcurrentPosition].blockId);
           setReviewInput((prev: Review) => ({
             ...prev,
             tabAttribute: 'blockSeqId',
             tabAttributeValue: blockSeqId,
           }));
-        } else {
-          const blockSeqId = data.blockQuestNo + '@' + data.blockSecondaryId;
+        }
+        else {
+          const blockSeqId = data.blockId;
           setReviewSubTabOptions([]);
-          setReviewInput((prev: Review) => ({
-            ...prev,
-            tabAttribute: 'blockSeqId',
-            tabAttributeValue: blockSeqId,
-          }));
+          setReviewInput((prev: Review) => ({ ...prev, tabAttribute: 'blockSeqId', tabAttributeValue: blockSeqId }));
         }
       } else {
         const subOptions = subTabOptionsForTabIds.find(
@@ -3196,10 +3159,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       };
 
       const previousDataString = JSON.stringify(data);
-      const updatePreviewLogsResponse = await updatePreviewlogs(
-        previousDataString,
-      );
-    };
+      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
+    }
     updatepreviousdatas();
   }, [getPrevLogDatas]);
 
@@ -3447,6 +3408,8 @@ console.log("isSpeaking --->>", isSpeaking);
                             data={data}
                             gameInfo={gameInfo}
                             preloadedAssets={preloadedAssets}
+                            setPlayerTodayScore={setPlayerTodayScore}
+                            playerTodayScore={playerTodayScore}
                           />
                         </Box>
                       </Box>
