@@ -81,6 +81,14 @@ const GamePreview = () => {
   const [prevSelectedOptionseq, setprevSelectedOptionseq] = useState([]);
   const [prevScreenId, setprevScreenId] = useState([]);
   const [previewLogsData, setPreviewLogsData] = useState<any>(null);
+  const [prevprofileData, setprevProfileData] = useState({
+    name: '',
+    gender: '',
+    language: '',
+    score: '',
+    allTimeScore: 250,
+    Audiogetlanguage: [],
+  });
   const [getPrevLogDatas, setPreLogDatas] = useState({
     previewLogId: '',
     playerId: '',
@@ -129,7 +137,6 @@ const GamePreview = () => {
           playerInputs: updatePreviewLogsResponse.data.playerInputs,
         });
         return updatePreviewLogsResponse;
-
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -611,11 +618,25 @@ console.log("componentsLoaded", componentsLoaded)
                     <EntirePreview
                       currentScore={currentScore}
                       setCurrentScore={setCurrentScore}
-                      //Newly Added states for preview activity track
+                      gameScreens={gameScreens}
+                      // currentScreenId={currentScreenId}
+                      // setCurrentScreenId={setCurrentScreenId}
+                      //Newly Added start
+                      prevnaviseq={prevnaviseq}
+                      setprevNaviseq={setprevNaviseq}
+                      LastActivityseq={LastActivityseq}
+                      setLastActivityseq={setLastActivityseq}
+                      prevSelectedOptionseq={prevSelectedOptionseq}
+                      setprevSelectedOptionseq={setprevSelectedOptionseq}
+                      prevScreenId={prevScreenId}
                       setprevScreenId={setprevScreenId}
+                      setprevProfileData={setprevProfileData}
+                      prevprofileData={prevprofileData}
+                      previewLogsData={previewLogsData}
+                      setPreviewLogsData={setPreviewLogsData}
                       setPreLogDatas={setPreLogDatas}
                       getPrevLogDatas={getPrevLogDatas}
-                      //End - Newly Added states for preview activity track
+                      //End
                       gameInfo={gameInfo}
                       handleSubmitReview={handleSubmitReview}
                       isReviewDemo={id ? false : true}

@@ -23,9 +23,6 @@ interface GameIntroType {
 const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentScreenId, setIsGetsPlayAudioConfirmation, setPreLogDatas, getPrevLogDatas, setprevScreenId, currentScreenId, setModelControl, gameInfo, setLastModified, hasMulitLanguages, setIsOpenCustomModal }) => {
 
   const Handlemodel = () => {
-    // setprevScreenId((prev:any) => ([
-    //     ...prev, currentScreenId
-    //   ]));
     if (getPrevLogDatas.playerType === 'creator') {
       const getplayerid = getPrevLogDatas.playerId;
       if (getplayerid === gameInfo.gameCreatedUserId) {
@@ -49,30 +46,14 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
         }
       }
     }
-
     const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
     if (screenIdset !== currentScreenId) {
       setPreLogDatas((prev: any) => ({
         ...prev,
         screenIdSeq: [...prev.screenIdSeq, currentScreenId]
       }));
-    }
-  
-    // const screens1 = [1];
-    // if (!screens1.includes(currentScreenId)) {
-    //   console.log('getPrevLogDatas.screenIdSeq ***', getPrevLogDatas.screenIdSeq);
-    //   if (getPrevLogDatas.screenIdSeq != null) {
-    //     const myArray = JSON.parse(getPrevLogDatas.screenIdSeq);
-    //     const lastValue = myArray[myArray.length - 1];
-    //     console.log('getPrevLogDatas&&&', lastValue, '...', JSON.parse(getPrevLogDatas.screenIdSeq));
-    //     setModelControl(true);
-    //     return false;
-    //   }
-
-    // }
-
-
-  }
+    } 
+}
   return (
     <Box
       position="relative"
@@ -84,15 +65,6 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
       backgroundRepeat={'no-repeat'}
       className="chapter_potrait"
     >
-       {/* {hasMulitLanguages && (
-      <>
-        <Box className="intro_lang_icon" onClick={()=>setIsOpenCustomModal(true)}>
-        <Icon as={FaLanguage} w={"4em"} h={"3em"} />
-        </Box>
-      </>
-      )} */}
-    {/* <CharacterModel /> */}
-
       <Grid
         templateColumns="repeat(1, 1fr)"
         gap={4}

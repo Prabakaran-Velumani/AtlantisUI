@@ -1462,7 +1462,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
     setinputtextValue(textarea.value);
-
     const getLastDigit = e.target.name.slice(-1);
     const match = e.target.name.match(/([a-zA-Z]+)(\d+)/);
     if (match) {

@@ -109,7 +109,7 @@ const Welcome: React.FC<{
     }
     return null;
   };
-  // const link = extractLink(formData.gameAdditionalWelcomeNote);
+  const link = extractLink(formData.gameAdditionalWelcomeNote);
   const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
   
   return (

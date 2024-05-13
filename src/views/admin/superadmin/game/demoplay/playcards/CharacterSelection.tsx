@@ -68,6 +68,7 @@ interface PlayGamesProps {
   setSelectedPlayer?: any;
   profileData?: any;
   setProfileData?: any;
+  setprevProfileData?:any;
   demoBlocks?: any;
   preloadedAssets?: any;
   setprevScreenId: any;
@@ -75,29 +76,6 @@ interface PlayGamesProps {
   setPreLogDatas: any;
   getPrevLogDatas: any;
 }
-
-const spokenLanguages = [
-  'English',
-  'Spanish',
-  'Mandarin Chinese',
-  'Hindi',
-  'French',
-  'Arabic',
-  'Bengali',
-  'Russian',
-  'Portuguese',
-  'Urdu',
-  'Indonesian',
-  'German',
-  'Japanese',
-  'Swahili',
-  'Turkish',
-  'Italian',
-  'Thai',
-  'Dutch',
-  'Korean',
-  'Vietnamese',
-];
 
 const Characterspage: React.FC<PlayGamesProps> = ({
   state,
@@ -109,6 +87,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   setSelectedPlayer,
   profileData,
   setProfileData,
+  setprevProfileData,
   demoBlocks,
   formData,
   preloadedAssets,
@@ -153,9 +132,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   });
   const screenIdset =
     getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
-
-    console.log("preLogData",getPrevLogDatas)
-    console.log("profileData",profileData)
 
   return (
     <>
@@ -274,35 +250,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 </Box>
               </Box>
             </Box>
-            {/* <Box
-              position={'fixed'}
-    
-              // left={0}
-              right={'0px'}
-              bottom={0}
-              zIndex={999}
-              w={'100vw'}
-              h={'100vh'}
-            >
-              <Canvas
-                camera={{ position: [3, 3, 10] }}
-              // style={{ width: '50%', height: '50vh'}}
-              >
-                <directionalLight
-                  position={[5, 5, 5]}
-                  intensity={0.8}
-                  color={0xffccaa}
-                  castShadow
-                />
-                <ambientLight intensity={5.5} />
-                <pointLight
-                  position={[5, 5, 5]}
-                  color={0xff0000}
-                  intensity={1}
-                />
-                <Model />
-              </Canvas>
-            </Box> */}
           </GridItem>
         </Grid>
       </Box>

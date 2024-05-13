@@ -25,6 +25,7 @@ interface ProfileScreenProps {
   formData?: any;
   profileData?: any;
   setProfileData: any;
+  setprevProfileData:any;
   preloadedAssets: any;
   setPreLogDatas:any;
   getPrevLogDatas:any;
