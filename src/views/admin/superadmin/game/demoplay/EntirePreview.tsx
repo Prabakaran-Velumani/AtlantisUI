@@ -3788,7 +3788,7 @@ console.log("isSpeaking --->>", isSpeaking);
                   return <h1>Loading Screen .... Default case </h1>;
               }
             })()}
-            {ModelControl === true || NavigateBlockEmpty === true ?
+            {ModelControl === true || NavigateBlockEmpty === true &&
 
               <>
                 <Box
@@ -3817,8 +3817,7 @@ console.log("isSpeaking --->>", isSpeaking);
                     </Box>
                   </Box>
                 </Box>
-              </>
-            ) : null}
+              </>}
           </Flex>
           {/* Anonymous User's Review Form Menu
            * It works when uuid has UUID

@@ -3640,8 +3640,6 @@ return false;
     };
   }, []);
 
-console.log("*************"+(tab !== 1 && tab !== 2) && (tab === 3 && (formData.gameIsShowSkill || formData.gameIsShowLearningOutcome || formData.gameIsShowAuhorName || formData.gameIsShowStoryline || formData.gameIsShowGameDuration || formData.gameIsShowAdditionalWelcomeNote)))
-
 
   return (
     <>
@@ -4424,7 +4422,8 @@ console.log("*************"+(tab !== 1 && tab !== 2) && (tab === 3 && (formData.
                 ) : null}
               </GridItem>
             </Grid>
-            {tab !== 4 && tab !== 6 && ShowReview && (
+            {/* {tab !== 4 && tab !== 6 && ShowReview && ( */}
+            {tab && tab===5 && ShowReview && (
               <Menu>
                 <MenuButton
                   p="0px"
@@ -4459,8 +4458,8 @@ console.log("*************"+(tab !== 1 && tab !== 2) && (tab === 3 && (formData.
                 >
                   <FormControl>
                     <FormLabel fontSize={18} fontWeight={700}>
-                      Feedback For{' '}
-                      {tab === 1
+                      {'Feedback For Design '}
+                      {/* {tab === 1
                         ? 'BackGround'
                         : tab === 2
                         ? 'Non Playing Character'
@@ -4468,7 +4467,7 @@ console.log("*************"+(tab !== 1 && tab !== 2) && (tab === 3 && (formData.
                         ? 'Overview'
                         : tab === 5
                         ? 'Design'
-                        : 'Preference'}
+                        : 'Preference'} */}
                     </FormLabel>
                     <Box w={'360px'} maxH={'50vh'} overflowY={'scroll'}>
                       {reviews && reviews[tab] && reviews[tab]?.length !== 0 ? (
@@ -4529,8 +4528,8 @@ console.log("*************"+(tab !== 1 && tab !== 2) && (tab === 3 && (formData.
                           })
                       ) : (
                         <Box mb={'10px'} mt={'10px'}>
-                          No Feedback For{' '}
-                          {tab === 1
+                         {' No Feedback For Design '}
+                          {/* {tab === 1
                             ? 'Background'
                             : tab === 2
                             ? 'Non Playing Character'
@@ -4538,7 +4537,7 @@ console.log("*************"+(tab !== 1 && tab !== 2) && (tab === 3 && (formData.
                             ? 'Overview'
                             : tab === 5
                             ? 'Design'
-                            : 'Preference'}
+                            : 'Preference'} */}
                         </Box>
                       )}
                     </Box>
@@ -4725,6 +4724,7 @@ console.log("*************"+(tab !== 1 && tab !== 2) && (tab === 3 && (formData.
                                 </Text>
                               </Flex>
                             </MenuItem>
+                            {tab && [4,5].includes(tab) && (
                             <MenuItem
                               transition="0.2s linear"
                               color={textColor}
@@ -4755,6 +4755,7 @@ console.log("*************"+(tab !== 1 && tab !== 2) && (tab === 3 && (formData.
                                 </Text>
                               </Flex>
                             </MenuItem>
+                            )}
                           </MenuList>
                         </Box>
                       </Menu>
