@@ -973,6 +973,7 @@ font-family: 'AtlantisText';
 .top-menu-home-section .Setting-box .setting-pad {
   height: 90vh;
   width: auto;
+  object-fit: contain;
 }
 
 .top-menu-home-section .Setting-box .volumes {
@@ -981,13 +982,34 @@ font-family: 'AtlantisText';
 }
 
 .vertex {
-  height: 78vh;
+  /* height: 78vh; */
+  height: 54vh;
   width: calc(90vh - 31vh);
   position: absolute;
-  top: 8%;
+  /* top: 8%; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+.Language-heading { 
+  text-align: center !important;
+  text-transform: uppercase;
+  font-size: 4vh;
+  margin-right: 0;
+  font-family: 'AtlantisText';
+  color: #312821;
+  position: absolute;
+  transform: translateY(-38.5vh);
+}
+
+.vertex .field-box {
+  text-align: center;
+}
+
+.vertex .field-name {
+  color: var(--atlantis-text-color);
+  font-size: 4vh;
+  font-family: 'AtlantisText';
 }
 
 .top-menu-home-section .Setting-box .volumes .slider-track {
@@ -3535,7 +3557,8 @@ grid-row: 1 / 2;
 .character_next {
   position: absolute;
   bottom: 9%;
-  width: calc(90vh - (-48vh));
+  /* width: calc(90vh - (-48vh)); */
+  width: 100%;
   display: flex;
   justify-content: center;
 }
@@ -3544,7 +3567,8 @@ grid-row: 1 / 2;
 
 .character_select_area {
   position: absolute;
-  width: calc(90vh - (-35vh));
+  width: calc(90vh - (-18vh));
+  max-width: 73vh;
   top: 34%;
   height: 42%;
   display: flex;
@@ -3563,7 +3587,8 @@ grid-row: 1 / 2;
 .select_player {
   position: absolute;
   bottom: 16.5%;
-  width: calc(90vh - (-34vh));
+  /* width: calc(90vh - (-34vh)); */
+  width: 60%;
   display: flex;
   justify-content: center;
 }
@@ -4235,12 +4260,20 @@ grid-row: 1 / 2;
   }
 
   .vertex {
-    height: 68vw;
+    /* height: 68vw; */
+    height: 53vw;
     width: calc(90vw - 31vw);
+  }
+  .Language-heading {
+    font-size: 4vw;
+    transform: translateY(-34.5vw);
+  }
+  .vertex .field-name {
+    font-size: 4vw;
   }
 
   .top-menu-home-section .Setting-box .setting-pad {
-    height: 90vw;
+    height: 90vw !important;
     width: auto;
   }
 

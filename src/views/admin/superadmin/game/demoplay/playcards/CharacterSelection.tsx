@@ -247,24 +247,27 @@ const Characterspage: React.FC<PlayGamesProps> = ({
             {isLanguage ? (
               <Box className="Setting-box">
                 <Img src={preloadedAssets.Lang} className="setting-pad" h={'100vh !important'} />
-                <Box className="vertex">
-                  <FormLabel className={'label'} me={'0'}>
-                    Language
-                  </FormLabel>
-                  <Box position={'relative'} mb={'50px'}>
+                <Text className={'Language-heading'} me={'0'}>
+                  Language
+                </Text>
+                <Box className="vertex">                  
+                  <Box position={'relative'} className='field-box'>
+                    <label className='field-name'>
+                      Name
+                    </label>
                     <Img
                       className="formfield"
                       w={'100%'}
                       h={'auto'}
                       src={preloadedAssets.FormField}
-                      onClick={() => setSelect(!select)}
+                      // /* onClick={() => setSelect(!select)} */
                     />
                     <Box
                       w={'100%'}
                       position={'absolute'}
                       display={'flex'}
                       onClick={() => setSelect(!select)}
-                      top={'7%'}
+                      // top={'7%'}
                     >
                       <Box w={'100%'} display={'flex'} justifyContent={'center'}>
                         {/* <Text
@@ -276,7 +279,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       </Box>
                     </Box>
                   </Box>
-                  <Box position={'relative'} mb={'50px'}>
+                  <Box position={'relative'} className='field-box'>
+                    <label className='field-name'>
+                      Gender
+                    </label>
                     <Img
                       className="formfield"
                       w={'100%'}
@@ -289,7 +295,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       position={'absolute'}
                       display={'flex'}
                       onClick={() => setSelect(!select)}
-                      top={'7%'}
+                      // top={'7%'}
                     >
                       <Box w={'80%'} display={'flex'} justifyContent={'center'}>
                         <Text
@@ -327,7 +333,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       )}
                     </Box>
                   </Box>
-                  <Box position={'relative'} mb={'50px'}>
+                  <Box position={'relative'} className='field-box'>
+                    <label className='field-name'>
+                      Language
+                    </label>
                     <Img
                       className="formfield"
                       w={'100%'}
@@ -340,7 +349,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       position={'absolute'}
                       display={'flex'}
                       onClick={() => setSelect(!select)}
-                      top={'7%'}
+                      // top={'7%'}
                     >
                       <Box w={'80%'} display={'flex'} justifyContent={'center'}>
                         <Text
