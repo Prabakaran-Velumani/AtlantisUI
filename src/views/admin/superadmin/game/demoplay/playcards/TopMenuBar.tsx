@@ -26,9 +26,11 @@ interface TopMenuProps {
   data: any;
   setAudioObj: (obj: any) => void;
   audioObj: any;
+  setIsLanguage: any;
 }
 
 const TopMenuBar: React.FC<TopMenuProps> = ({
+  setIsLanguage,
   dontShowTopMenu,
   preloadedAssets,
   currentScreenId,
@@ -130,6 +132,32 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
               src={preloadedAssets.home}
               className={'top-home-menu'}
               onClick={() => setCurrentScreenId(1)}
+            />
+          </Tooltip>
+          <Tooltip label="Profile"
+            display={'flex'}
+            justifyContent={'center'}
+            alignItems={'center'}
+            background={'transparent'}
+            boxShadow={'unset'}
+            backgroundImage={preloadedAssets.TooltipImg}
+            backgroundRepeat={'no-repeat'}
+            backgroundSize={'contain'}
+            backgroundPosition={'center'}
+            filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+            padding={'10px'}
+            height={'70px'}
+            w={'150px'}
+            fontSize={'29px'}
+            fontFamily={'Atlantis'}
+            color={'#000'}
+            overflow={'hidden'}
+            lineHeight={'25px'}
+          >
+            <Img
+              src={preloadedAssets.Profile}
+              className={'top-profile-menu'}
+              onClick={() => setIsLanguage(true)}
             />
           </Tooltip>
           <Tooltip label="Progress"
@@ -237,6 +265,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                 )) ||
                 0}
             </Text>
+            
           </Box>
         </>
       ) : null}
@@ -253,7 +282,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
               aria-label="slider-ex-4"
               defaultValue={30}
               name="musicVolume"
-              onChangeEnd={(val) => { handleMusicVolume(val); console.log("Music Volume Level ---", val); }}
+              onChangeEnd={(val) => { handleMusicVolume(val)}}
               value={audioObj.volume ?? 0}
             >
               <SliderTrack

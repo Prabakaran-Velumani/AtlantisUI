@@ -849,7 +849,15 @@ font-family: 'AtlantisText';
   z-index: 999;
   height: 63px;
   width: 4%;
-  transform: translate(44%, 20%);
+  transform: translate(5%, 13%);
+}
+.top-profile-menu{
+  position: absolute;
+  top: 0;
+  z-index: 999;
+  height: 63px;
+  width: 4%;
+  transform: translate(110%, 10%);
 }
 
 .top-menu-home-section .overview-img {

@@ -76,6 +76,8 @@ interface PlayGamesProps {
   setProfileData?: any;
   demoBlocks?: any;
   preloadedAssets?: any;
+  isLanguage?: any;
+  setIsLanguage?: any;
 }
 
 const spokenLanguages = [
@@ -114,10 +116,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   demoBlocks,
   formData,
   preloadedAssets,
+  setIsLanguage,
+  isLanguage,
 }) => {
   //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
-  const [isLanguage, setIsLanguage] = useState(null);
+ 
   const [select, setSelect] = useState(false);
   const [languages, setLanguages] = useState<any[]>(null);
   // Afrith-modified-starts-08/Mar/24
@@ -155,16 +159,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 
   const selectPlayerClick = () => {
     setSelectedPlayer(players[i]);
-    console.log(
-      'Object.keys(demoBlocks).length',
-      Object.keys(demoBlocks).length,
-    );
     /**if game has more than one quest, then navigate to chapter selection screen, otherwise navigate to story part direclty */
     if (playerInfo.name === '') {
       setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
     }
-
-    setCurrentScreenId(13); //navigate to Chapter selection
+    setCurrentScreenId(13); 
+    //navigate to Chapter selection
 
     // if (Object.keys(demoBlocks).length > 1) {
     //   setCurrentScreenId(13);//navigate to Chapter selection

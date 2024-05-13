@@ -70,10 +70,17 @@ import Completed from 'assets/img/games/COMPLETED.png'
 import VolumeTrack from 'assets/img/games/volume-track.png'
 import Thankyou from 'assets/img/games/thankyou.png';
 import SkillLearn from 'assets/img/screens/Skills & Learning outcome.png'
+import ProgressBar from 'assets/img/games/Progress.png';
+import Scorebox from 'assets/img/games/Score.png';
+import Profile from 'assets/img/games/profile.png';
+
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
  */
 export const assetImageSrc = [
+  { assetType: 'Profile', src: Profile },
+  { assetType: 'ProgressBar', src: ProgressBar },
+  { assetType: 'Scorebox', src: Scorebox },
   { assetType: 'left', src: left },
   { assetType: 'right', src: right },
   { assetType: 'char', src: char },
