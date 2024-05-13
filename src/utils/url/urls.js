@@ -169,7 +169,7 @@ getLanguagescount:'/languages/getlanguagecount',
       /****************************Reviews ********************************/
       addReviews:'/gamereview/addreviewers',
       getAllReviews:'/gamereview/getblockreviewlist/',
-   
+      addReadStatus:'/gamereview/readStatus', //........readstatus update api... 
      /******** Game Demo with review ******/
      getGameDemoData : '/game/tryout/',
      addGameReview : "/gamereview/addblockreview",

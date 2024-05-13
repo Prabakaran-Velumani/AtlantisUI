@@ -46,6 +46,7 @@ interface PropsInteraction {
   validation?: any;
   setValidation?: any;
   ShowReview?:any;
+  listBlockItems?:any;
 }
 
 const Customize: React.FC<PropsInteraction> = ({
@@ -89,6 +90,7 @@ const Customize: React.FC<PropsInteraction> = ({
   validation,
   setValidation,
   ShowReview,
+  listBlockItems,
 }) => {
   const [showComponent, setComponent] = useState('CustomList');
   const navigate = useNavigate();
@@ -140,7 +142,8 @@ const Customize: React.FC<PropsInteraction> = ({
           reviewers={reviewers}
           validation={validation}
           setValidation={setValidation}
-          ShowReview={ShowReview}						
+          ShowReview={ShowReview}			
+          listBlockItems={listBlockItems}			
         />
       )}
       {showComponent === 'Note' && (

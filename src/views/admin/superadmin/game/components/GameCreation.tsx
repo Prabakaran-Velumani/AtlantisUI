@@ -490,7 +490,6 @@ const GameCreation = () => {
   };
 
   useEffect(() => {
-    console.log('defaultskills.length',defaultskills.length);
     if (defaultskills.length === 0 && id) {
       fetchDefaultSkill();
     }
@@ -506,7 +505,6 @@ const GameCreation = () => {
         else{
             previewData = { ...previewData, currentTab: 3 };
         }
-        console.log('previewData ***',previewData);
         if (currentTab) {
             previewData = { ...previewData, currentSubTab: currentTab };
         }
@@ -544,7 +542,6 @@ const GameCreation = () => {
     const setAudioInPage = async () => {
       const res = await getAudio(parseInt(id));
       if (res?.status === 'Success') {
-        // console.log(res.data);
         setSelectedAud(res?.data);
       }
     };
@@ -580,7 +577,6 @@ const GameCreation = () => {
               selected: language['translationId'] === ChooseLangId
             }),
           );
- console.log('*******',options,'...',ChooseLangId);
           setLanguageOptions(options);
           setLanguage(options.value);
           setFormData((prevFormData) => ({
@@ -1377,14 +1373,10 @@ setlanguageCount(CountResult?.data?.count)
                   }
                 }
                 if (key.type === 'Interaction') {
-                  console.log('keyinput', key.type + key.input);
                   var QuestionsEmotion = input[inputkey]?.QuestionsEmotion;
                   var blockRoll = input[inputkey]?.blockRoll;
                   var interaction = input[inputkey]?.interaction;
                   var character=input[inputkey]?.character;
-                  console.log('QuestionsEmotion1', QuestionsEmotion);
-                  //console.log('blockRoll', blockRoll);
-                  //console.log('interaction', interaction);
                   if (!interaction) {
                     toast({
                       title: `Interaction is Empty On This Sequence ${key.id} `,
@@ -1394,7 +1386,6 @@ setlanguageCount(CountResult?.data?.count)
                     });
                     return false;
                   }
-                  console.log('QuestionsEmotion', QuestionsEmotion);
            if (blockRoll!=='99999' && blockRoll!==99999 && !QuestionsEmotion ) {
 
                     toast({
@@ -1706,8 +1697,6 @@ if (complidatalength !== 0) {
 }
 // refelection Screen Validation
 if (formData.gameIsShowReflectionScreen === 'true') {
-  console.log("form length" + formData.gameReflectionQuestion);
-console.log('reflectionQuestions1pri',reflectionQuestions);
   if (typeof reflectionQuestions === 'object' && reflectionQuestions !== null) {
 
     var keys = Object.keys(reflectionQuestions);
@@ -1720,7 +1709,6 @@ console.log('reflectionQuestions1pri',reflectionQuestions);
       var keys1 = ['ref1', 'ref2', 'ref3', 'ref4'];
     }
 
-    console.log('keysref', keys1);
     //newlyadded end
     // Assuming formData.gameReflectionQuestion is the number of questions to check
     for (var i = 0; i < formData.gameReflectionQuestion; i++) {
@@ -1806,24 +1794,7 @@ if(formData.gameThankYouMessage ==='' || formData.gameThankYouMessage ===null ||
         setTab(tabs);
       }
     }
-
-    // if (tab != tabs) {
-    //   if (formData.gameLastTabArray.includes(tabs)) {
-    //     setTab(tabs);
-    //   } else {
-    //     console.log('tabs2', tabs);
-    //     const stringContainingNumbers = formData.gameLastTabArray;
-    //     if (typeof stringContainingNumbers === 'string') {
-    //       const numbersArray = (stringContainingNumbers as string).match(/\d+/g);
-    //       const lastValue = numbersArray ? parseInt(numbersArray[numbersArray.length - 1], 10) : null;
-    //       if (tabs === lastValue + 1) {
-    //         setTab(tabs);
-    //       }
-    //     }
-    //   }
-    // }
   };
-  ///navin 15-12
 
   useEffect(() => {
     // Watching Stepper Height
@@ -2519,7 +2490,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
     }
     let data = JSON.stringify(formData);
     // alert("cn"+tab);
-    console.log('1871', data);
     const result = await updateGame(id, data);
     if (result?.status !== 'Success') {
       toast({
@@ -2542,10 +2512,8 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
       setFormData(formDataWithoutLastTab);
       const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
-      console.log('idddddddd', MaxBlockQuestNumber)
       if (result.status === 'Success') {
         const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
-        console.log('Max QuestNo:', maxQuestNo);
         if (maxQuestNo < 5) {
           setOpenQuest(true);
         } else {
@@ -2853,7 +2821,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                   for (const alp of alphabetData?.filter(
                     (alp: any) => key.id === alp.seqs,
                   ) || []) {
-                    console.log('alphabet check',input[inputkey],'...',input);
                     if (!input[inputkey]?.optionsemotionObject[alp.option]) {
                       var option = alp.option;
                       setValidation({
@@ -3034,7 +3001,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       }
     } else {
       try {
-        console.log('2315' ,data);
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
           toast({
@@ -3331,7 +3297,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       formData.gameOthers,
     ];
     const countfbSelectedOptions = feedbackselectedOptions.filter(option => option !== '' && option !== 'false' && option !== undefined && option !== null).length;
-    console.log('countfbSelectedOptions', countfbSelectedOptions);
 
     if (checked && countfbSelectedOptions >= 4) {
       return false;
@@ -3824,7 +3789,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
   const debouncedSubmitGame = useCallback(
     debounce(async (data: any) => {
       try {
-        console.log('3024', data);
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
         } else {
@@ -4655,6 +4619,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                   setQuestTabState={setQuestTabState}
                   deleteQuest={deleteQuest}
                   delSeq={delSeq}
+
                 />
                 <OrderStep
                   cursor={'pointer'}
@@ -5138,7 +5103,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                       ShowReview={ShowReview}
                       validation={validation}
                       setValidation={setValidation}
-                     
+                      listBlockItems={listBlockItems}
                     />
                   </>
                 ) : tab === 5 ? (
