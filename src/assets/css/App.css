@@ -1062,6 +1062,15 @@ font-family: 'AtlantisText';
   flex-direction: column;
   justify-content: space-between;
 }
+.replay-vertex{
+  height: 45vh;
+  width: calc(90vh - 31vh);
+  position: absolute;
+  top: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .top-menu-home-section .Setting-box .volumes .slider-track {
   /* background: url('../img/games/volume-track.png'); */
   background-color: transparent;
