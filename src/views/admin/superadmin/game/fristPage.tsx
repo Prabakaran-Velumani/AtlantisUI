@@ -39,6 +39,7 @@ import loadingImage from 'assets/img/games/loady.gif';
 
 import {API_SERVER} from 'config/constant';
 import { RiDraftLine } from 'react-icons/ri';
+import { HashLoader } from 'react-spinners';
 
 interface Counting {
   draftCount: any;
@@ -1163,7 +1164,8 @@ useEffect(() => {
           <SimpleGrid columns={{ base: 1, md: 3 }} gap='40px'>
           {loadingdata && (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(10px)' }}>
-          <img src={loadingImage} alt="Loading" style={{ width: '10%', maxWidth: '100px', backgroundColor: 'transparent' }}/>
+          {/* <img src={loadingImage} alt="Loading" style={{ width: '10%', maxWidth: '100px', backgroundColor: 'transparent' }}/> */}
+          <HashLoader color="#3b38e0" />
         </div>
       )}
             {gamelist &&
