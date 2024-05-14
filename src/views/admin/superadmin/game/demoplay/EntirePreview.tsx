@@ -46,6 +46,7 @@ import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
+import ReplayScore from './playcards/ReplayScore';
 const Story = lazy(() => import('./playcards/Story'));
 const Welcome = lazy(() => import('./playcards/Welcome'));
 const ThankYou = lazy(() => import('./playcards/Thankyou'));
@@ -2071,6 +2072,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 : 'EntirePreview'
             }
           >
+            { currentScreenId === 2 && <ReplayScore preloadedAssets={preloadedAssets}/>}
             {(() => {
               switch (currentScreenId) {
                 case 0:

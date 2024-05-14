@@ -999,27 +999,15 @@ font-family: 'AtlantisText';
   flex-direction: column;
   justify-content: space-between;
 }
-.Language-heading { 
-  text-align: center !important;
-  text-transform: uppercase;
-  font-size: 4vh;
-  margin-right: 0;
-  font-family: 'AtlantisText';
-  color: #312821;
+.replay-vertex{
+  height: 45vh;
+  width: calc(90vh - 31vh);
   position: absolute;
-  transform: translateY(-38.5vh);
+  top: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-
-.vertex .field-box {
-  text-align: center;
-}
-
-.vertex .field-name {
-  color: var(--atlantis-text-color);
-  font-size: 4vh;
-  font-family: 'AtlantisText';
-}
-
 .top-menu-home-section .Setting-box .volumes .slider-track {
   /* background: url('../img/games/volume-track.png'); */
   background-color: transparent;
