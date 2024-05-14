@@ -95,6 +95,7 @@ import CenterMode from './MobileProgressBar'
 // @ts-ignore
 // import loadingImage from 'assets/img/games/loading.gif';
 import loadingImage from 'assets/img/games/loady.gif';
+import { HashLoader } from 'react-spinners';
 const steps = [
   { title: 'BackGround' },
   { title: 'Non Playing Charater' },
@@ -3627,15 +3628,17 @@ const GameCreation = () => {
             backdropFilter: 'blur(10px)',
           }}
         >
-          <img
+          <HashLoader color="#3b38e0" />
+          {/* <img
             src={loadingImage}
             alt="Loading"
             style={{
-              width: '25%',
-              maxWidth: '200px',
+              width: 'auto',
+              height:'auto',
+              // maxWidth: '200px',
               backgroundColor: 'transparent',
             }}
-          />
+          /> */}
         </div>
       )}
 
