@@ -5,7 +5,7 @@ const ReplayScore: React.FC<{ preloadedAssets?: any, setReplayIsOpen?: any }> = 
   preloadedAssets,
   setReplayIsOpen,
 }) => {
-  const [stat, setStat] = useState('Replay');
+  const [stat, setStat] = useState('Prompt');
   return (
     <>
       <Box id="container" className="Play-station">

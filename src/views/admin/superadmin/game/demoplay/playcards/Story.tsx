@@ -159,7 +159,7 @@ const Story: React.FC<{
     const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
     const [score, setScore] = useState(null);
     const [interactionNext, setInteractionNext] = useState(null);
-    const [optionalReplay, setOptionalReplay] = useState(true);
+    const [optionalReplay, setOptionalReplay] = useState(false);
     useEffect(() => {
       if (data && type) {
         getVoice(data, type);
@@ -765,7 +765,8 @@ const Story: React.FC<{
 
     return (
       <>
-        {optionalReplay && <ReplayGame setOptionalReplay={setOptionalReplay}
+        {optionalReplay && <ReplayGame 
+          setOptionalReplay={setOptionalReplay}
           replayGame={replayGame}
           replayNextHandler={replayNextHandler}
           type={type}
