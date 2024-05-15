@@ -247,6 +247,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
   ];
   const [isPrevNavigation, setIsPrevNavigation] = useState(false);
+
+  const [replayIsOpen,setReplayIsOpen] = useState(true)
   // Afrith-modified-starts-07/Mar/24
   const gameScore = useContext(ScoreContext);
   const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0;
@@ -2072,7 +2074,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 : 'EntirePreview'
             }
           >
-            { currentScreenId === 2 && <ReplayScore preloadedAssets={preloadedAssets}/>}
+            { currentScreenId === 2 && replayIsOpen && <ReplayScore preloadedAssets={preloadedAssets} setReplayIsOpen={setReplayIsOpen} />}
             {(() => {
               switch (currentScreenId) {
                 case 0:
