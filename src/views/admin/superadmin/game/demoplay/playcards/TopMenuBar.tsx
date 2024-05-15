@@ -105,10 +105,210 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
 
   return (
     <Box className="top-menu-home-section">
-      {dontShowTopMenu ? (
+      {dontShowTopMenu && !isSettingOpen  ? (
         <>
-          <Img src={preloadedAssets.TopMenu} className="top-menu-img" />
-          <Tooltip label="Home"
+          <Box w='100%' h='auto' position={'relative'}>
+            <Img src={preloadedAssets.TopMenu} className="top-menu-img" h={'auto !important'} />
+            <Box className='new-top-menu' >
+              <Box w={'10%'} h={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+               
+                <Tooltip label="Home"
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  background={'transparent'}
+                  boxShadow={'unset'}
+                  backgroundImage={preloadedAssets.TooltipImg}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'contain'}
+                  backgroundPosition={'center'}
+                  filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                  padding={'10px'}
+                  height={'70px'}
+                  w={'150px'}
+                  fontSize={'29px'}
+                  fontFamily={'Atlantis'}
+                  color={'#000'}
+                  overflow={'hidden'}
+                  lineHeight={'25px'}
+                >
+                  <Img
+                    src={preloadedAssets.home}
+                    width={'auto'}
+                    height={'70%'}
+                    position={'relative'}
+                    zIndex={9999}
+                    onClick={() => setCurrentScreenId(1)}
+                  />
+                </Tooltip>
+                <Tooltip label="Profile"
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  background={'transparent'}
+                  boxShadow={'unset'}
+                  backgroundImage={preloadedAssets.TooltipImg}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'contain'}
+                  backgroundPosition={'center'}
+                  filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                  padding={'10px'}
+                  height={'70px'}
+                  w={'150px'}
+                  fontSize={'29px'}
+                  fontFamily={'Atlantis'}
+                  color={'#000'}
+                  overflow={'hidden'}
+                  lineHeight={'25px'}
+                >
+                  <Img
+                    src={preloadedAssets.Profile}
+                    width={'auto'}
+                    height={'70%'}
+                    position={'relative'}
+                    zIndex={9999}
+                    onClick={() => setCurrentScreenId(1)}
+                  />
+                </Tooltip>
+              </Box>
+              <Box w={'42.5%'} >
+              <Box w='90%' h={'100%'} display={'flex'} justifyContent={'space-between'} alignItems={'center'} >
+                <Tooltip label="Progress"
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  background={'transparent'}
+                  boxShadow={'unset'}
+                  backgroundImage={preloadedAssets.TooltipImg}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'contain'}
+                  backgroundPosition={'center'}
+                  filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                  padding={'10px'}
+                  height={'70px'}
+                  w={'150px'}
+                  fontSize={'29px'}
+                  fontFamily={'Atlantis'}
+                  color={'#000'}
+                  overflow={'hidden'}
+                  lineHeight={'25px'}
+                >
+                  <Box h={'70%'} w={'auto'} position={'relative'} zIndex={9999}>
+                    <Img src={preloadedAssets?.ProgressBar} h={'100%'} width={'auto'} />
+                    <Box position={'absolute'} display={'flex'} top={0} left={'4%'} w={'90%'} h={'100%'}>
+                      <Box w={'28.5%'} display={'flex'} justifyContent={'center'} alignItems={'center'} h={'100%'}>
+                        <Text textAlign={'center'} className='progress_percentage'>{Math.floor(progressPercent * 100)}%</Text>
+                      </Box>
+                      <Box display={'flex'} alignItems={'center'} w={'70%'} h={'100%'} >
+                        {/* {Array.from({ length: Math.floor(progressPercent * 100 / 10) }, (_, index) => ( */}
+                        {Array.from({ length: Math.floor(0.6 * 100 / 10) }, (_, index) => (
+                          <Box w={'9%'} h={'40%'} ml={'1%'} background={'linear-gradient(to bottom, #009400, #00000000)'}></Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  </Box>
+                </Tooltip>
+                <Tooltip label="Score"
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  background={'transparent'}
+                  boxShadow={'unset'}
+                  backgroundImage={preloadedAssets.TooltipImg}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'contain'}
+                  backgroundPosition={'center'}
+                  filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                  padding={'10px'}
+                  height={'70px'}
+                  w={'150px'}
+                  fontSize={'29px'}
+                  fontFamily={'Atlantis'}
+                  color={'#000'}
+                  overflow={'hidden'}
+                  lineHeight={'25px'}
+                >
+                  <Box h={'70%'} w={'auto'} position={'relative'} zIndex={9999}>
+                    <Img src={preloadedAssets?.Scorebox} h={'100%'} width={'auto'} />
+                    <Box position={'absolute'} display={'flex'} justifyContent={'center'} alignItems={'center'} top={0} left={'26%'} w={'68%'} h={'100%'}>
+                      <Text className="score_text">
+                        {(profile &&
+                          profile.score &&
+                          profile.score.length > 0 &&
+                          profile.score.reduce(
+                            (accumulator: number, currentValue: any) => {
+                              return accumulator + currentValue.score;
+                            },
+                            0,
+                          )) ||
+                          0}
+                      </Text>
+                    </Box>
+                  </Box>
+                </Tooltip>
+                <Tooltip label="Overview"
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  background={'transparent'}
+                  boxShadow={'unset'}
+                  backgroundImage={preloadedAssets.TooltipImg}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'contain'}
+                  backgroundPosition={'center'}
+                  filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                  padding={'10px'}
+                  height={'70px'}
+                  w={'150px'}
+                  fontSize={'29px'}
+                  fontFamily={'Atlantis'}
+                  color={'#000'}
+                  overflow={'hidden'}
+                  lineHeight={'25px'}
+                >
+                  <Img
+                     src={preloadedAssets.Overview}
+                     onClick={handleOverView}
+                    width={'auto'}
+                    height={'70%'}
+                    position={'relative'}
+                    zIndex={9999}
+                  />
+                </Tooltip>
+                <Tooltip label="Settings"
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  background={'transparent'}
+                  boxShadow={'unset'}
+                  backgroundImage={preloadedAssets.TooltipImg}
+                  backgroundRepeat={'no-repeat'}
+                  backgroundSize={'contain'}
+                  backgroundPosition={'center'}
+                  filter={'drop-shadow(0px 2px 5px #1b1a1ab5)'}
+                  padding={'10px'}
+                  height={'70px'}
+                  w={'150px'}
+                  fontSize={'29px'}
+                  fontFamily={'Atlantis'}
+                  color={'#000'}
+                  overflow={'hidden'}
+                  lineHeight={'25px'}
+                >
+                  <Img
+                    src={preloadedAssets.Setting}
+                    onClick={() => setIsSettingOpen(true)}
+                    width={'auto'}
+                    height={'70%'}
+                    position={'relative'}
+                    zIndex={9999}
+                  />
+                </Tooltip>
+              </Box>
+              </Box>
+            </Box>
+          </Box>
+          {/* <Tooltip label="Home"
             display={'flex'}
             justifyContent={'center'}
             alignItems={'center'}
@@ -180,16 +380,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
             overflow={'hidden'}
             lineHeight={'25px'}
           >
-            {/* <Box className='game_progressbar'>
-              <Box w={'100%'} display={'flex'}>
-                <Box w={'25%'} >
-                  <Text className='game_progress_text'>0%</Text>
-                </Box>
-                <Box w={'75%'} h={'100%'}>
-
-                </Box>
-              </Box>
-            </Box> */}
+           
             <Box className={'progress_box'}>
               <Img src={preloadedAssets?.ProgressBar} h={'100%'} width={'auto'} />
               <Box position={'absolute'} display={'flex'} top={0} left={'11px'} w={'90%'} h={'100%'}>
@@ -197,22 +388,13 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                   <Text textAlign={'center'} className='progress_percentage'>{Math.floor(progressPercent * 100)}%</Text>
                 </Box>
                 <Box display={'flex'} alignItems={'center'} w={'70%'} h={'100%'} >
-                  {/* {Array.from({ length: Math.floor(progressPercent * 100 / 10) }, (_, index) => ( */}
-                  {Array.from({ length: Math.floor(0.4 * 100 / 10) }, (_, index) => (
+                  {Array.from({ length: Math.floor(progressPercent * 100 / 10) }, (_, index) => (
                     <Box w={'9%'} h={'40%'} ml={'1px'} background={'linear-gradient(to bottom, #009400, #00000000)'}></Box>
                   ))}
                 </Box>
               </Box>
             </Box>
-            {/* <Box className='progress-box' backgroundImage={preloadedAssets?.ProgressBar} backgroundSize={'contain'} backgroundRepeat={'no-repeat'}>
-              
-              
-              <Box className='progressing'>
-                {Array.from({ length: Math.floor(progressPercent * 100 / 10) }, (_, index) => (
-                  <Box key={index} className='level'></Box>
-                ))}
-              </Box>
-            </Box> */}
+           
           </Tooltip>
           <Tooltip label="Overview"
             display={'flex'}
@@ -235,8 +417,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
             lineHeight={'25px'}
           >
             <Img
+            className="overview-img"
               src={preloadedAssets.Overview}
-              className="overview-img"
               onClick={handleOverView}
             />
           </Tooltip>
@@ -262,8 +444,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
           >
             <Img
               src={preloadedAssets.Setting}
-              className="setting-img"
               onClick={() => setIsSettingOpen(true)}
+              className="setting-img"
             />
           </Tooltip>
           <Box className={'score_box_new'}>
@@ -282,7 +464,26 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                 0}
             </Text>
             </Box>
-          </Box>
+          </Box> */}
+          {/* <Box className='progress-box' backgroundImage={preloadedAssets?.ProgressBar} backgroundSize={'contain'} backgroundRepeat={'no-repeat'}>
+              
+              
+              <Box className='progressing'>
+                {Array.from({ length: Math.floor(progressPercent * 100 / 10) }, (_, index) => (
+                  <Box key={index} className='level'></Box>
+                ))}
+              </Box>
+            </Box> */}
+          {/* <Box className='game_progressbar'>
+              <Box w={'100%'} display={'flex'}>
+                <Box w={'25%'} >
+                  <Text className='game_progress_text'>0%</Text>
+                </Box>
+                <Box w={'75%'} h={'100%'}>
+
+                </Box>
+              </Box>
+            </Box> */}
           {/* <Box className="score-box">
             <Text className="text">
               {(profile &&

@@ -248,7 +248,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   ];
   const [isPrevNavigation, setIsPrevNavigation] = useState(false);
 
-  const [replayIsOpen,setReplayIsOpen] = useState(true)
+  const [replayIsOpen,setReplayIsOpen] = useState(false)
   // Afrith-modified-starts-07/Mar/24
   const gameScore = useContext(ScoreContext);
   const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0;
@@ -2171,6 +2171,23 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           setCurrentTrackPointer={setCurrentTrackPointer}
                           gameInfo={gameInfo}
                           preloadedAssets={preloadedAssets}
+                          replayGame={replayGame}
+                          replayNextHandler={replayNextHandler}
+                          // type={type}
+                          // gameInfo={gameInfo}
+                          setType={setType}
+                          setData={setData}
+                          isOptionalReplay={isOptionalReplay}
+                          setisOptionalReplay={setisOptionalReplay}
+                          setisReplay={setisReplay}
+                          profilescore={profilescore}
+                          isReplay={isReplay}
+                          // setCurrentScreenId={setCurrentScreenId}
+                          // formData={gameInfo?.gameData}
+                          imageSrc={preloadedAssets.Replay}
+                          // getData={getData}
+                          // data={data}
+                          // preloadedAssets={preloadedAssets}
                         />
                       )}
                     </>
