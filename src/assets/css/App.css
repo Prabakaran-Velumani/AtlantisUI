@@ -1064,7 +1064,7 @@ font-family: 'AtlantisText';
 }
 .replay-vertex{
   height: 45vh;
-  width: calc(90vh - 31vh);
+  width: calc(90vh - -8vh);
   position: absolute;
   top: 30%;
   display: flex;
@@ -4734,6 +4734,10 @@ grid-row: 1 / 2;
 }
 
 @media screen and (min-width: 768px) {
+  .progress_box{
+    right: 28%;
+    transform: scale(1);
+  }
   .mobile_progress {
     min-width: 33%;
   }
