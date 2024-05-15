@@ -961,6 +961,7 @@ font-family: 'AtlantisText';
   color: var(--dialog-title-color);
 }
 .progress_percentage{
+  font-size: 1.1vw;
   font-family: 'AtlantisText';
   color: var(--dialog-title-color); 
 }
