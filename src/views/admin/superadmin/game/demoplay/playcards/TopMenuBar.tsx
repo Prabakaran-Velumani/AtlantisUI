@@ -190,15 +190,29 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                 </Box>
               </Box>
             </Box> */}
-            <Box className='progress-box'>
-              <Text className='text'>{Math.floor(progressPercent * 100)}%</Text>
-              {/* <Text className='text'>0%</Text> */}
+            <Box className={'progress_box'}>
+              <Img src={preloadedAssets?.ProgressBar} h={'100%'} width={'auto'} />
+              <Box position={'absolute'} display={'flex'} top={0} left={'11px'} w={'90%'} h={'100%'}>
+                <Box w={'27%'} display={'flex'} justifyContent={'center'} alignItems={'center'} h={'100%'}>
+                  <Text textAlign={'center'} className='progress_percentage'>{Math.floor(progressPercent * 100)}%</Text>
+                </Box>
+                <Box display={'flex'} alignItems={'center'} w={'70%'} h={'100%'} >
+                  {/* {Array.from({ length: Math.floor(progressPercent * 100 / 10) }, (_, index) => ( */}
+                  {Array.from({ length: Math.floor(0.4 * 100 / 10) }, (_, index) => (
+                    <Box w={'9%'} h={'40%'} ml={'1px'} background={'linear-gradient(to bottom, #009400, #00000000)'}></Box>
+                  ))}
+                </Box>
+              </Box>
+            </Box>
+            {/* <Box className='progress-box' backgroundImage={preloadedAssets?.ProgressBar} backgroundSize={'contain'} backgroundRepeat={'no-repeat'}>
+              
+              
               <Box className='progressing'>
                 {Array.from({ length: Math.floor(progressPercent * 100 / 10) }, (_, index) => (
                   <Box key={index} className='level'></Box>
                 ))}
               </Box>
-            </Box>
+            </Box> */}
           </Tooltip>
           <Tooltip label="Overview"
             display={'flex'}
@@ -252,7 +266,24 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
               onClick={() => setIsSettingOpen(true)}
             />
           </Tooltip>
-          <Box className="score-box">
+          <Box className={'score_box_new'}>
+            <Img src={preloadedAssets?.Scorebox} h={'100%'} width={'auto'} />
+            <Box position={'absolute'} display={'flex'} justifyContent={'center'} alignItems={'center'} top={0} left={'45px'} w={'68%'} h={'100%'}>
+            <Text className="score_text">
+              {(profile &&
+                profile.score &&
+                profile.score.length > 0 &&
+                profile.score.reduce(
+                  (accumulator: number, currentValue: any) => {
+                    return accumulator + currentValue.score;
+                  },
+                  0,
+                )) ||
+                0}
+            </Text>
+            </Box>
+          </Box>
+          {/* <Box className="score-box">
             <Text className="text">
               {(profile &&
                 profile.score &&
@@ -265,8 +296,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                 )) ||
                 0}
             </Text>
-            
-          </Box>
+
+          </Box> */}
         </>
       ) : null}
 
@@ -282,7 +313,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
               aria-label="slider-ex-4"
               defaultValue={30}
               name="musicVolume"
-              onChangeEnd={(val) => { handleMusicVolume(val)}}
+              onChangeEnd={(val) => { handleMusicVolume(val) }}
               value={audioObj.volume ?? 0}
             >
               <SliderTrack
