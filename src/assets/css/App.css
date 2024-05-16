@@ -6084,9 +6084,11 @@ grid-row: 1 / 2;
 }
 
 .EntirePreview .Game-Screen .Images .reflection-screen .content-ref .input-wrapper textarea {
-  font-size: 4.5vh;
+  font-size: 3vh;
 }
-
+.EntirePreview .Game-Screen .Images .reflection-screen .content-ref .input-wrapper textarea::-webkit-scrollbar{
+  display: none;
+}
 .EntirePreview .Game-Screen .Images .reflection-screen .content-ref .input-wrapper textarea {
   height: 12vh;
   width: 85%;
