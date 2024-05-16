@@ -422,7 +422,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
               }
               isSearchable={true}
               onChange={(selectedOption: any) =>
-                handleDialogBlockRoll(selectedOption, seq.input)
+                handleDialogBlockRoll(selectedOption, seq.input,`Dialog${seq.input}`)//nivetha
               }
             />
           </Box>

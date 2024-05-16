@@ -626,3 +626,14 @@ export async function getQuestionOptionsText(id, translationId) {
     console.log('getQuestionOptionsText Error:', err);
   }
 }
+ //nivetha
+export async function getLanguagescount(id) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getLanguagescount}/${id}`,getMethod);
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getSelectedLanguages Error:', err);
+  }
+}
+// nivetha end 

@@ -14,7 +14,7 @@ export const urls = {
   companystatus: '/companies/updateStatus/',
   /*******************country*********************** */
   getCountries: '/country/getAllCountries',
-  /*********************creator************************** */
+  /*********************creator************************** */ 
   updateCreator: '/creator/updatecreator/',
   addCreator: '/creator/addcreator',
   getAllCreator: '/creator/getCreator',
@@ -159,6 +159,8 @@ export const urls = {
   getQuestionResponse:'/languages/getQuestionResponse/',
   getQuestionOptions:'/languages/getQuestionOptions/',
 getSelectedLanguages:'/languages/getSelectedLanguages/',
+//nivetha added 1
+getLanguagescount:'/languages/getlanguagecount',
       /****************************Reviews ********************************/
       addReviews:'/gamereview/addreviewers',
       getAllReviews:'/gamereview/getblockreviewlist/',

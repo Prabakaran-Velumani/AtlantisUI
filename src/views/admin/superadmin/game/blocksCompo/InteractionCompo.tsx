@@ -13,7 +13,7 @@ import {
   Button,
   Icon,
   List,
-  ListItem,
+  ListItem, 
   Img,
   Avatar,
   Input,
@@ -192,61 +192,62 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
   const [filteredOptions, setFilteredOptions] = useState<Option[] | null>(null);
   const [ResponseOptions, setResponseOptions] = useState<Option[] | null>(null);
 
-  useEffect(() => {
-    console.log('language', language);
-    // Assume you have a function to get the translation ID dynamicallyz
+  //Commented temporary Block - 14/May/24
+  // useEffect(() => {
+  //   console.log('language', language);
+  //   // Assume you have a function to get the translation ID dynamicallyz
 
-    const fetchData = async () => {
-      try {
-        // Call getBlockData with both game ID and translation ID
-        const fetchedBlockData = await getBlockData(id, language);
-        console.log('fetchedBlockData', fetchedBlockData.data.blockData);
+  //   const fetchData = async () => {
+  //     try {
+  //       // Call getBlockData with both game ID and translation ID
+  //       const fetchedBlockData = await getBlockData(id, language);
+  //       console.log('fetchedBlockData', fetchedBlockData.data.blockData);
 
-        // Find the block with matching blockPrimarySequence and seq.id
-        const matchingBlock = fetchedBlockData.data.blockData.find(
-          (block: any) => block.blockPrimarySequence === seq.id,
-        );
-        console.log('Matching Block Updated1:', matchingBlock);
+  //       // Find the block with matching blockPrimarySequence and seq.id
+  //       const matchingBlock = fetchedBlockData.data.blockData.find(
+  //         (block: any) => block.blockPrimarySequence === seq.id,
+  //       );
+  //       console.log('Matching Block Updated1:', matchingBlock);
 
-        // Update the state variable with the matching block content
-        if (matchingBlock) {
-          setMatchingBlockContent(matchingBlock.content);
-        }
+  //       // Update the state variable with the matching block content
+  //       if (matchingBlock) {
+  //         setMatchingBlockContent(matchingBlock.content);
+  //       }
 
-        // Set the block data in the state
-        // setBlockData(updatedBlockData);
-      } catch (error) {
-        console.error('getBlockData Error:', error);
-      }
-    };
+  //       // Set the block data in the state
+  //       // setBlockData(updatedBlockData);
+  //     } catch (error) {
+  //       console.error('getBlockData Error:', error);
+  //     }
+  //   };
 
-    fetchData();
+  //   fetchData();
 
-    const fetchDataOptionText = async () => {
-      try {
-        const fetchedBlockData = await getQuestionOptionsText(id, language);
-        const filteredOptionsData = fetchedBlockData.optionText.filter(
-          (option: Option) => option.qpSequence === seq.id,
-        );
-        setFilteredOptions(filteredOptionsData);
-      } catch (error) {
-        console.error('getQuestionOptionsText Error:', error);
-      }
-    };
-    fetchDataOptionText();
-    const fetchDataResponse = async () => {
-      try {
-        const fetchedBlockData = await getQuestionResponse(id, language);
-        const filteredOptionsData = fetchedBlockData.optionText.filter(
-          (option: Option) => option.qpSequence === seq.id,
-        );
-        setResponseOptions(filteredOptionsData);
-      } catch (error) {
-        console.error('getQuestionResponse Error:', error);
-      }
-    };
-    fetchDataResponse();
-  }, [language, id, seq.id]);
+  //   const fetchDataOptionText = async () => {
+  //     try {
+  //       const fetchedBlockData = await getQuestionOptionsText(id, language);
+  //       const filteredOptionsData = fetchedBlockData.optionText.filter(
+  //         (option: Option) => option.qpSequence === seq.id,
+  //       );
+  //       setFilteredOptions(filteredOptionsData);
+  //     } catch (error) {
+  //       console.error('getQuestionOptionsText Error:', error);
+  //     }
+  //   };
+  //   fetchDataOptionText();
+  //   const fetchDataResponse = async () => {
+  //     try {
+  //       const fetchedBlockData = await getQuestionResponse(id, language);
+  //       const filteredOptionsData = fetchedBlockData.optionText.filter(
+  //         (option: Option) => option.qpSequence === seq.id,
+  //       );
+  //       setResponseOptions(filteredOptionsData);
+  //     } catch (error) {
+  //       console.error('getQuestionResponse Error:', error);
+  //     }
+  //   };
+  //   fetchDataResponse();
+  // }, [language, id, seq.id]);
 
   useEffect(() => {
     // const alphabet = alphaText.map((item: any)=> `${seq.input}${item}`);
@@ -643,32 +644,31 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
   const [showcount, setShowcount] = useState<any>('');
 
   const handleLeft = () => {
+
     const container = document.getElementById(seq.id);
     if (container) {
-      container.scrollBy({
-        left: -700,
-        behavior: 'smooth' 
-      });
-      if (container.scrollLeft <= 0) {
-        setShowLeftButton(false);
-      }
+        container.scrollLeft -= 700;
+
+
+        if (container.scrollLeft <= 0) {
+            setShowLeftButton(false);
+        }
+
     }
-  };
+};
 
-  const handleRight = () => {
-    const container = document.getElementById(seq.id);
+const handleRight = () => {
+  const container = document.getElementById(seq.id);
 
-    if (container) {
-      container.scrollBy({
-        left: 700,
-        behavior: 'smooth' 
-      });
-      setShowcount(container.scrollLeft + 300);
+  if (container) {
+      container.scrollLeft += 700;
+      setShowcount(container.scrollLeft + 300)
       if (container.scrollLeft > 0) {
-        setShowLeftButton(true);
+          setShowLeftButton(true);
       }
-    }
-  };
+
+  }
+};
   const scrollToElement1 = (id: any) => {
     const element = document.getElementById(id);
     if (element) {
@@ -851,7 +851,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
 
   return (
     <>
-      {showLeftButton && (
+      {/* {showLeftButton && (   commented by nivetha */}
         <Box
           className="goLeft"
           display={'flex'}
@@ -881,7 +881,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
             ></Box>
           </Button>
         </Box>
-      )}
+      {/*  )} */}
       <Box id={`${seq.id}`} w={'auto'} height={'100%'} overflowX={seq?.id === targetSequence?.id ? 'scroll' : 'hidden'} className='scroll_hide' overflowY={'hidden'}>
         <Box w={'100vw'} display={'flex'}>
           <Box className="block-action-icons">
@@ -1385,7 +1385,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
                                       placeholder={`Title${alp.option}`}
                                       id={`OptionTitle${alp.option}`}
                                       name={`Interaction${seq.input}`}
-                                      onChange={handleInput}
+                                       onChange={handleInput}
                                       onKeyDown={handleKeyDown}
                                       onBlur={handleFocusOut}
                                       value={
@@ -1420,6 +1420,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
                                         onChange={handleInput}
                                         onKeyDown={handleKeyDown}
                                         onBlur={handleFocusOut}
+                                        title={alp.option}
                                         value={
                                           input?.[`Interaction${seq.input}`]
                                             ?.optionTitleObject?.[alp.option]

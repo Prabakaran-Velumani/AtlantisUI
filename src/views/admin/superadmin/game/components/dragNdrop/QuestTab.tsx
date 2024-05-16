@@ -61,19 +61,13 @@ const QuestTab: React.FC<PropsNote> = ({
     }
   };
   const handleDeleteClick = (item: any) => {
-    if(item.gameQuestNo === 1)
-    {
-      setQuestTabStateDelete(true)
-      onOpen();
-    }
-    else
-    {
+  
       setQuestTabStateDelete(false)
       setSelectedQuestNo(item.gameQuestNo); // Set the selected quest number
       setDeleteQuestGameId(item.gameId);
       console.log("selectedQuestNo",item.gameQuestNo,item.gameId)
       onOpen();
-  }
+ 
   };
 
   const handleCancelDelete = () => {

@@ -15,7 +15,7 @@ import {
   AccordionButton,
   AccordionIcon,
   AccordionPanel,
-  useColorModeValue,
+  useColorModeValue, 
   Tooltip,
   ScaleFade,
 } from '@chakra-ui/react';
@@ -508,6 +508,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
         const ansObject = oldInteractionKey?.ansObject;
         const feedbackObject = oldInteractionKey?.feedbackObject;
         const responseObject = oldInteractionKey?.responseObject;
+        // Lokie
+        const responseemotionObject = oldInteractionKey?.responseemotionObject;
+        //End Lokie
         const optionTitleObject = oldInteractionKey?.optionTitleObject;
         const optionsemotionObject = oldInteractionKey?.optionsemotionObject;
         const optionsvoiceObject = oldInteractionKey?.optionsvoiceObject;
@@ -524,6 +527,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
             QuestionsVoice: oldInteractionKey?.QuestionsVoice,
             SkillTag: oldInteractionKey?.SkillTag,
             quesionTitle: oldInteractionKey?.quesionTitle,
+             // Lokie
+             responseRoll : oldInteractionKey?.responseRoll,
+             //End Lokie
             optionsObject: {
               A: optionsObject?.A,
               B: optionsObject?.B,
@@ -540,6 +546,13 @@ const NDIMain: React.FC<NDIMainProps> = ({
               B: responseObject?.B,
               C: responseObject?.C,
             },
+                // Lokie
+                responseemotionObject: { 
+                  A: responseemotionObject?.A, 
+                  B: responseemotionObject?.B, 
+                  C: responseemotionObject?.C 
+                },
+                //End Lokie
             optionTitleObject: {
               A: optionTitleObject?.A,
               B: optionTitleObject?.B,
@@ -911,16 +924,24 @@ const NDIMain: React.FC<NDIMainProps> = ({
       };
     });
   };
-  const handleDialogBlockRoll = (selectedOption: any, i: any) => {
+  const handleDialogBlockRoll = (selectedOption: any, i: any,keyvalue: any) => {
+    console.log('!@#SelectedOptionDialog--',selectedOption)
+    console.log('!@#SelectedOptionDialogType--',typeof(selectedOption?.value))
+    console.log('!@#iDialog--',i)
+    console.log('!@#keyvalue--',keyvalue)
+
+
     let key = i - 1;
     setInput((prevInput: any) => {
-      const interactionKey = `Dialog${items[key]?.input}`;
+      // const interactionKey = `Dialog${items[key]?.input}`;
+      const dialogKey = keyvalue;
+      console.log("dialogkey",dialogKey)
       const blockroll = selectedOption.value;
-
+console.log("blockroll",blockroll)
       return {
         ...prevInput,
-        [interactionKey]: {
-          ...prevInput[interactionKey],
+        [dialogKey]: {
+          ...prevInput[dialogKey],
           id: items[i]?.id,
           character: blockroll,
         },
@@ -1575,10 +1596,12 @@ const NDIMain: React.FC<NDIMainProps> = ({
           e.target.id === 'interaction'
             ? e.target.value
             : prevInput[interactionKey]?.interaction;
-        const questionTitle =
-          e.target.id === 'QuestionTitles'
-            ? e.target.value
-            : prevInput[interactionKey]?.quesionTitle;
+        // const questionTitle =
+        //   e.target.id === 'QuestionTitles'
+        //     ? e.target.value
+        //     : prevInput[interactionKey]?.quesionTitle;
+        // Lokie Worked
+        const questionTitle = e.target.id === `QuestionTitle${items[i]?.input}` ? e.target.value : prevInput[interactionKey]?.quesionTitle;
         const SkillTag =
           e.target.id === 'skills'
             ? e.target.value
@@ -1973,7 +1996,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
+ 
   const textColor = useColorModeValue('secondaryGray.900', 'white');
 
   return (
@@ -2011,6 +2034,16 @@ const NDIMain: React.FC<NDIMainProps> = ({
                 return (
                   <Draggable key={seq.id} draggableId={seq.id} index={i}>
                     {(provided, dragData) => {
+                          //Afrith-modified-starts-02/May/24 - drag only in vertical not horizontal
+                          if (provided.draggableProps.style && !Object.isFrozen(provided.draggableProps.style)) {
+                            let transform = provided.draggableProps.style.transform;
+                            if (transform) {
+                              let t = transform.split(",")[1];
+                              provided.draggableProps.style.transform = "translate(0px," + t;
+                            }
+                          }
+                        //Afrith-modified-ends-02/May/24 - drag only in vertical not horizontal
+  
                       return (
                         <div
                           ref={provided.innerRef}
@@ -2038,8 +2071,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     seq.input === lastInputName ||
                                       dragData.isDragging === true ||
                                       seq.id === targetSequence?.id
-                                      ? '#f7f7f5'
-                                      : 'unset'
+                                      ? null //Afrith-modified-starts-02/May/24 - unset previous (Note)block focusing color
+                                      : 'unset'  //Afrith-modified-starts-02/May/24 - unset previous (Note)block focusing color
                                   }
                                   _hover={{ background: '#f7f7f5' }}
                                   zIndex={
@@ -2219,8 +2252,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                   background={
                                     seq.input === lastInputName ||
                                       dragData.isDragging === true
-                                      ? '#f7f7f5'
-                                      : 'unset'
+                                      ? null //Afrith-modified-starts-02/May/24 - unset previous (Note)block focusing color
+                                      : 'unset'  //Afrith-modified-starts-02/May/24 - unset previous (Note)block focusing color
+                                
                                   }
                                   _hover={{ background: '#f7f7f5' }}
                                   zIndex={
@@ -2431,8 +2465,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                   background={
                                     seq.input === lastInputName ||
                                       dragData.isDragging === true
-                                      ? '#f7f7f5'
-                                      : 'unset'
+                                      ? null //Afrith-modified-starts-02/May/24 - unset previous (Note)block focusing color
+                                      : 'unset'  //Afrith-modified-starts-02/May/24 - unset previous (Note)block focusing color
+                                
                                   }
                                   _hover={{ background: '#f7f7f5' }}
                                   zIndex={
