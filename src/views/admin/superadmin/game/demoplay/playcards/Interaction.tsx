@@ -143,7 +143,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                           textAlign={'center'}
                           cursor={'pointer'}
                           onClick={() => optionClick(item, ind)}
-                          fontFamily={'AtlantisText'}
+                          fontFamily={'AtlantisContent'}
                         >
                           <Img
                             src={
