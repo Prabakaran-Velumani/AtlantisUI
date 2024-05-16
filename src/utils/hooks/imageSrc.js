@@ -78,6 +78,7 @@ import Continue from 'assets/img/games/Continue.png'
  import write from '../../assets/img/games/Writing.png';
  */
 export const assetImageSrc = [
+  { assetType: 'VolumeTrack', src: VolumeTrack },
   { assetType: 'Continue', src: Continue },
   { assetType: 'Profile', src: Profile },
   { assetType: 'ProgressBar', src: ProgressBar },
