@@ -5504,7 +5504,7 @@ grid-row: 1 / 2;
 }
 
 .EntirePreview .comple-screen .content-box .congratulations {
-  width: 54%;
+  width: 70%;
   word-break: break-word;
   display: flex;
   justify-content: center;
@@ -5522,6 +5522,7 @@ grid-row: 1 / 2;
   /* letter-spacing: normal; */
   line-height: 1.2;
   width: auto;
+  letter-spacing: 1px;
 }
 
 .EntirePreview .comple-screen .content-box .rewards-img-box {

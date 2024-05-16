@@ -765,7 +765,7 @@ const Story: React.FC<{
 
     return (
       <>
-        {optionalReplay && <ReplayGame 
+        {optionalReplay && <ReplayGame
           setOptionalReplay={setOptionalReplay}
           replayGame={replayGame}
           replayNextHandler={replayNextHandler}
@@ -828,7 +828,7 @@ const Story: React.FC<{
                     >
                       <Box w={'100%'} display={'flex'} justifyContent={'center'}>
                         <Box className={'story_note_block'}>
-                          <Text textAlign={'center'}>{remainingSentences}</Text>
+                          <Text textAlign={'center'} letterSpacing={'normal'}>{remainingSentences}</Text>
                         </Box>
                       </Box>
                       <Box
@@ -883,28 +883,34 @@ const Story: React.FC<{
             )}
             <Img className={'dialogue_image'} src={preloadedAssets.dial} />
             <Box position={'relative'}>
-              <Img
-                src={preloadedAssets.char}
+              <Box
                 position={'fixed'}
                 h={'100px'}
                 w={'30%'}
                 left={'5%'}
                 bottom={'105px'}
-              />
-              <Text
+              >
+                <Img src={preloadedAssets.char} w={'100%'} height={'100%'} />
+                <Box position={'absolute'} top={0} w={'100%'} height={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}
+                  fontSize={{ base: '30px', xl: '2vw' }}
+                  fontWeight={500}
+                  textAlign={'center'}
+                  fontFamily={'AtlantisText'}
+                  color={'#312821'}
+                >
+                  {data.blockRoll === 'Narrator'
+                    ? data.blockRoll
+                    : formData.gameNonPlayerName}
+                </Box>
+              </Box>
+              {/* <Text
                 position={'fixed'}
                 left={'18%'}
                 bottom={'130px'}
-                fontSize={{ base: '30px', xl: '2vw' }}
-                fontWeight={500}
-                textAlign={'center'}
-                fontFamily={'AtlantisText'}
-                color={'#312821'}
+               
               >
-                {data.blockRoll === 'Narrator'
-                  ? data.blockRoll
-                  : formData.gameNonPlayerName}
-              </Text>
+                
+              </Text> */}
             </Box>
             <Box
               display={'flex'}
@@ -1000,7 +1006,27 @@ const Story: React.FC<{
             )}
             <Img className={'dialogue_image'} src={preloadedAssets.dial} />
             <Box position={'relative'}>
-              <Img
+              <Box
+                position={'fixed'}
+                h={'100px'}
+                w={'30%'}
+                left={'5%'}
+                bottom={'105px'}
+              >
+                <Img src={preloadedAssets.char} w={'100%'} height={'100%'} />
+                <Box position={'absolute'} top={0} w={'100%'} height={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}
+                  fontSize={{ base: '30px', xl: '2vw' }}
+                  fontWeight={500}
+                  textAlign={'center'}
+                  fontFamily={'AtlantisText'}
+                  color={'#312821'}
+                >
+                  {data.blockRoll === 'Narrator'
+                    ? data.blockRoll
+                    : formData.gameNonPlayerName}
+                </Box>
+              </Box>
+              {/* <Img
                 src={preloadedAssets.char}
                 position={'fixed'}
                 h={'100px'}
@@ -1021,7 +1047,7 @@ const Story: React.FC<{
                 {data.blockRoll === 'Narrator'
                   ? data.blockRoll
                   : formData.gameNonPlayerName}
-              </Text>
+              </Text> */}
             </Box>
             <Box
               display={'flex'}

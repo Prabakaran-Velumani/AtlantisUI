@@ -1137,6 +1137,29 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
                       <Text>Feedback</Text>
                     </Button>
                   ) : null}
+                     {interactionBlock?.[`Title${seq.input}`] !== seq?.input ? (
+                    <Button
+                      mr={'10px'}
+                      w={'130px'}
+                      p={5}
+                      justifyContent={'start'}
+                      onClick={() => {
+                        setInteractionBlock((prev: any) => {
+                          return { ...prev, [`Title${[seq.input]}`]: seq.input };
+                        });
+                        scrollToElement(`QuestionTitle${seq.input}`);
+                      }}
+                    >
+                      <Icon
+                        as={MdAdd}
+                        bg={'blue'}
+                        color={'#fff'}
+                        borderRadius={'888px'}
+                        mr={'5px'}
+                      />{' '}
+                      <Text>Title</Text>
+                    </Button>
+                  ) : null}
                   {interactionBlock?.[`Skills${seq.input}`] !== seq?.input ? (
                     <Button
                       mr={'10px'}
@@ -1160,29 +1183,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
                       <Text>Skills</Text>
                     </Button>
                   ) : null}
-                  {interactionBlock?.[`Title${seq.input}`] !== seq?.input ? (
-                    <Button
-                      mr={'10px'}
-                      w={'130px'}
-                      p={5}
-                      justifyContent={'start'}
-                      onClick={() => {
-                        setInteractionBlock((prev: any) => {
-                          return { ...prev, [`Title${[seq.input]}`]: seq.input };
-                        });
-                        scrollToElement(`QuestionTitle${seq.input}`);
-                      }}
-                    >
-                      <Icon
-                        as={MdAdd}
-                        bg={'blue'}
-                        color={'#fff'}
-                        borderRadius={'888px'}
-                        mr={'5px'}
-                      />{' '}
-                      <Text>Title</Text>
-                    </Button>
-                  ) : null}
+               
                 </Flex>
               </Box>
             </Box>
