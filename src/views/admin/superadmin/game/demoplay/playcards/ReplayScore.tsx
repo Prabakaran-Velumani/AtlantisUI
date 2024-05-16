@@ -54,26 +54,28 @@ const ReplayScore: React.FC<{ preloadedAssets?: any, setReplayIsOpen?: any }> = 
                 }
                 {stat === 'Prompt' &&
                   <>
-                    <Box className='replay_game_text'> Would you like to resume last played block ?</Box>
+                    <Box className='replay_prompt_text'> Would you like to resume last played block ?</Box>
                     <Box display={'flex'} justifyContent={'center'} w={'100%'}>
                       <Button
-
+                        h={'auto !important'}
                         background={'transparent !important'}
                       >
                         <Img src={preloadedAssets?.Continue} className='replay_game_btn' />
                       </Button>
                     </Box>
-                    <Box className='replay_game_text'>Would you like to resume last edited block ?</Box>
+                    <Box className='replay_prompt_text'>Would you like to resume last edited block ?</Box>
                     <Box display={'flex'} justifyContent={'center'} w={'100%'}>
                       <Button
+                        h={'auto !important'}
                         background={'transparent !important'}
                       >
                         <Img src={preloadedAssets?.Continue} className='replay_game_btn' />
                       </Button>
                     </Box>
-                    <Box className='replay_game_text'>Would you like to play again ?</Box>
+                    <Box className='replay_prompt_text'>Would you like to play again ?</Box>
                     <Box display={'flex'} justifyContent={'center'} w={'100%'}>
                       <Button
+                        h={'auto !important'}
                         background={'transparent !important'}
                       >
                         <Img src={preloadedAssets?.Continue} className='replay_game_btn' />

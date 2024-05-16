@@ -28,7 +28,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
   return (
     // <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
     <Modal isOpen={true} onClose={isScreenshot} size={'medium'} >
-      <ModalOverlay />
+      <ModalOverlay zIndex={9999} />
       <ModalContent
         className='feedback_screenshot'
         backgroundImage={backGroundImg}
@@ -37,6 +37,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
         backgroundRepeat={'no-repeat'}
         boxShadow={'inset 0px 5px 100px 25px white'}
         borderRadius={'35px !important'}
+        containerProps={{zIndex: 99999}}
       >
         <ModalBody width={'100%'} height={'100%'}>
           <Img

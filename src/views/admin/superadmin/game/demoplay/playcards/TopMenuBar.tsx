@@ -200,8 +200,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                         <Text textAlign={'center'} className='progress_percentage'>{Math.floor(progressPercent * 100)}%</Text>
                       </Box>
                       <Box display={'flex'} alignItems={'center'} w={'70%'} h={'100%'} >
-                        {/* {Array.from({ length: Math.floor(progressPercent * 100 / 10) }, (_, index) => ( */}
-                        {Array.from({ length: Math.floor(0.6 * 100 / 10) }, (_, index) => (
+                        {Array.from({ length: Math.floor(progressPercent * 100 / 10) }, (_, index) => (
                           <Box w={'9%'} h={'40%'} ml={'1%'} background={'linear-gradient(to bottom, #009400, #00000000)'}></Box>
                         ))}
                       </Box>

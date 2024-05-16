@@ -492,6 +492,15 @@ left: 260px; */
   text-align: center;
   letter-spacing: 1px;
 }
+.replay_prompt_text{
+  color: #d9c7a2;
+    font-family: 'AtlantisContent';
+    font-size: 5vh;
+    text-align: center;
+    letter-spacing: 1px;
+    /* margin-bottom: 4%; */
+}
+
 /*  */
 .AddScores .Main-Content .Game-Screen .Images .congratulations .content {
   /*  width: 165px;
@@ -921,7 +930,7 @@ font-family: 'AtlantisText';
   /* transform: translateY(-4px); */
 }
 .score_text{
-  font-size: 23px;
+  font-size: 1.5vw;
   font-family: 'Score';
   color: var(--text-color);
 }
@@ -3939,7 +3948,9 @@ grid-row: 1 / 2;
   width: 100%;
   display: flex;
   justify-content: center;
-  font-size: 4vh
+  font-size: 3.5vh;
+  letter-spacing: 1px;
+  line-height: 40px;
 }
 
 .interaction_button {
@@ -4350,6 +4361,9 @@ grid-row: 1 / 2;
   .replay_game_text{
    font-size: 6vw;
   }
+  .replay_prompt_text{
+    font-size: 5vw;
+  }
   .replay-vertex{
     height: 45vw;
     width: calc(90vw - -8vw);
@@ -4443,7 +4457,7 @@ grid-row: 1 / 2;
   }
 
   .story_interaction_option {
-    font-size: 4vw;
+    font-size: 3.5vw;
   }
 
   .story_interaction_image {
@@ -5667,12 +5681,13 @@ grid-row: 1 / 2;
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .top-title .title {
-  font-size: 3.5vh;
+  font-size: 3vh;
   /* width: calc(3vh - -22vh); */
-  font-family: 'AtlantisText';
+  font-family: 'AtlantisContent';
   color: var(--atlantis-text-color);
   text-transform: uppercase;
   text-align: center;
+  letter-spacing: 1px;
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .top-title .duration {
@@ -5694,7 +5709,7 @@ grid-row: 1 / 2;
 
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .text {
   font-size: 4vh;
-  font-family: 'AtlantisText';
+  font-family: 'AtlantisContent';
   color: var(--atlantis-text-color);
   margin-top: 1%;
   display: flex;

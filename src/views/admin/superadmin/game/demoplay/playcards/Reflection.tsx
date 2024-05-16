@@ -125,6 +125,7 @@ const Reflection: React.FC<{
                           lg: '100px',
                         }}
                         _focus={{ boxShadow: 'none', border: 'none' }}
+                        resize={'none'}
                         fontFamily={'AtlantisText'}
                         value={answers[index]?.text}
                         onChange={(e: any) => updateAnswer(e, index)}

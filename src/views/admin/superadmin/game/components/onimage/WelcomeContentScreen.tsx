@@ -393,7 +393,7 @@ const WelcomeContentScreen: React.FC<{
                   w={'100%'}
                   h={'50%'}
                   top={{ base: '29.5%', '2xl': '28.5%' }}
-                  fontFamily={'AtlantisText'}
+                  fontFamily={'AtlantisContent'}
                 >
                   <Box
                     w={'100%'}
