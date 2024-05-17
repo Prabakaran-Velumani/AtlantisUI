@@ -1596,8 +1596,6 @@ transform: translate(-167px, -84px);
   border-radius: 30px;
   cursor: pointer;
   background-size: contain;
-  /*height: 300px;*/
-  /* background-size: 26px 63px; */
 }
 .choosen_lang {
   position: relative;
@@ -3943,11 +3941,44 @@ grid-row: 1 / 2;
   width: 100%;
   display: flex;
   justify-content: center;
-  font-size: 3.5vh;
+  font-size: 3.2vh;
   letter-spacing: 1px;
-  line-height: 40px;
+  line-height: 4vh;
+}
+.story_options_area {
+  margin-top: 10px;
+  width: 100%;
+  height: 40vh; /* Use vh for viewport height */
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
+.story_options_area::-webkit-scrollbar {
+  display: none; /* WebKit browsers */
+}
+/* .story_options_area::-webkit-scrollbar {
+  width: 3vh;
+  border-radius: 30px;
+  background-size: contain;
+}
+
+.story_options_area::-webkit-scrollbar-track {
+  background: url('../img/games/Leaderboard\ Scroll\ Bar.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.story_options_area::-webkit-scrollbar-thumb {
+  background: url('../img/games/Leaderboard\ Scroll\ Cross.png');
+  background-repeat: no-repeat;
+  border-radius: 30px;
+  cursor: pointer;
+  background-size: contain;
+} */
 .interaction_button {
   width: 4vw;
   height: 7vh;
@@ -4451,7 +4482,7 @@ grid-row: 1 / 2;
   }
 
   .story_interaction_option {
-    font-size: 3.5vw;
+    font-size: 3.2vw;
   }
 
   .story_interaction_image {
@@ -5683,6 +5714,7 @@ grid-row: 1 / 2;
   text-transform: uppercase;
   text-align: center;
   letter-spacing: 1px;
+  line-height: normal;
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .top-title .duration {
@@ -6240,8 +6272,6 @@ grid-row: 1 / 2;
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box::-webkit-scrollbar-track-piece {
   display: none;
 }
-
-
 
 
 /********************************* PREVIEW THANKYOU SCREEN *********************************************** */
