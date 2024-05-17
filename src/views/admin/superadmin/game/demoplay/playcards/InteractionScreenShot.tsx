@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Grid, GridItem, Img, Modal, ModalBody, ModalContent, ModalOverlay, Text } from '@chakra-ui/react';
 import right from 'assets/img/games/right.png';
 import left from 'assets/img/games/left.png';
@@ -17,17 +17,28 @@ interface InteractionScreenShotProps {
   options?: any;
   backGroundImg?: any;
   option?: any;
-  profile?: any;
   geTfeedBackoption?: any;
   isScreenshot?: any;
   preloadedAssets?: any;
+  profileData?:any;
 }
 
-const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, profile, options, geTfeedBackoption, isScreenshot, preloadedAssets }) => {
-
+const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, options, geTfeedBackoption, isScreenshot, preloadedAssets ,profileData}) => {
+  const [QuestContentByLanguage, setQuestContentByLanguage] = useState(null);
+  useEffect(() => {
+    const GetblocktextAudioFiltered =
+      profileData?.Audiogetlanguage.filter(
+        (key: any) => key.textId === data[0].blockId,
+      );
+    if (GetblocktextAudioFiltered.length > 0) {
+      const Filteredcontent = GetblocktextAudioFiltered.map(
+        (item: any) => item.content,
+      );
+      setQuestContentByLanguage(Filteredcontent);
+    }
+  }, [data?.blockId]);
   return (
-    // <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
-    <Modal isOpen={true} onClose={isScreenshot} size={'medium'} >
+    <Modal isOpen={true} onClose={isScreenshot} size={'medium'} closeOnOverlayClick={false}>
       <ModalOverlay zIndex={9999} />
       <ModalContent
         className='feedback_screenshot'
@@ -123,7 +134,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                   >
                     <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
                     <Text textAlign={'justify'}>
-                      {data[0]?.blockText}
+                    {QuestContentByLanguage!==null ? QuestContentByLanguage : data[0]?.blockText}
                     </Text>
                   </Box>
                 </Box>

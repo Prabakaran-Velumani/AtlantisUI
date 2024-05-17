@@ -56,6 +56,7 @@ import {
   getSelectedLanguages,
   getMaxBlockQuestNo,
   getLanguagescount,
+  getPreviewLogsData
 } from 'utils/game/gameService';
 import { useNavigate, useParams } from 'react-router-dom';
 import Select from 'react-select';
@@ -87,7 +88,7 @@ import { AiFillMessage } from 'react-icons/ai';
 import { getAllReviews } from 'utils/reviews/reviews';
 import { API_SERVER } from 'config/constant';
 import { useDispatch } from 'react-redux';
-import { updatePreviewData } from '../../../../../store/preview/previewSlice';
+import { updatePreviewData ,createPreviewData} from '../../../../../store/preview/previewSlice';
 import { Dispatch } from '@reduxjs/toolkit'; // Import Dispatch type from @reduxjs/toolkit
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
@@ -463,6 +464,11 @@ const GameCreation = () => {
   const [voices, setVoices] = useState([]);
   const dispatch: Dispatch<any> = useDispatch();
   const [dispatched, setDispatched] = useState(false);
+  //This state for refelection Answer show  and Thankyou feedback in thers textbox;
+  const [RefelectionAnswer, setRefelectionAnswer] = useState<any>([]);
+  const [ThankyouFeedback, setThankyouFeedback] = useState<any>(null);
+  const user: any = JSON.parse(localStorage.getItem('user'));
+
   const voic = async () => {
     const result = await getVoices();
 
@@ -495,25 +501,26 @@ const GameCreation = () => {
     }
 
       if (id) {
-        let previewData: { [key: string]: any } = {
-            gameId: parseInt(id),
-        };
+        // let previewData: { [key: string]: any } = {
+        //     gameId: parseInt(id),
+        // };
+        let PreviewgameId =parseInt(id);
+        // if (tab > 2 && tab < 6) {
+        //     previewData = { ...previewData, currentTab: tab };
+        // }
+        // else{
+        //     previewData = { ...previewData, currentTab: 3 };
+        // }
+        // if (currentTab) {
+        //     previewData = { ...previewData, currentSubTab: currentTab };
+        // }
     
-        if (tab > 2 && tab < 6) {
-            previewData = { ...previewData, currentTab: tab };
-        }
-        else{
-            previewData = { ...previewData, currentTab: 3 };
-        }
-        if (currentTab) {
-            previewData = { ...previewData, currentSubTab: currentTab };
-        }
-    
-        if (questTabState) {
-            previewData = { ...previewData, currentQuest: questTabState };
-        }
-    
-        dispatch(updatePreviewData(previewData));
+        // if (questTabState) {
+        //     previewData = { ...previewData, currentQuest: questTabState };
+        // }
+        // dispatch(updatePreviewData({[parseInt(id)]:{previewData}}));
+        dispatch(createPreviewData(PreviewgameId));
+
     }
     else {
       dispatch(updatePreviewData(null));
@@ -1037,25 +1044,27 @@ setlanguageCount(CountResult?.data?.count)
 
   useEffect(() => {
     dispatch(
-      updatePreviewData({ isDispatched: true, CompKeyCount: CompKeyCount }),
+      updatePreviewData({ isDispatched: true, CompKeyCount: CompKeyCount, gameId:parseInt(id) }),
     );
   }, [CompKeyCount]);
 
   useEffect(() => {
     if (id) {
       const previewData = {
-        gameId: parseInt(id),
+       
+       gameId: parseInt(id),
         currentTab: tab,
         currentSubTab: currentTab,
         currentQuest: questTabState,
       };
       dispatch(updatePreviewData(previewData));
+      
     }
   }, [id, tab, currentTab, questTabState]);
 
   const handleEntirePrev = async () => {
     const previewData = {
-      gameId: parseInt(id),
+    gameId: parseInt(id),
       currentTab: tab,
       currentSubTab: currentTab,
       currentQuest: questTabState,
@@ -3753,8 +3762,11 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
         if (resu.status == 'Success') {
           dispatch(
             updatePreviewData({
-              isDispatched: true,
+             
+                isDispatched: true,
               reflectionPageUpdated: true,
+              gameId:parseInt(id)
+            
             }),
           );
         }
@@ -3792,7 +3804,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
         } else {
-          dispatch(updatePreviewData({ isDispatched: true }));
+          dispatch(updatePreviewData({isDispatched: true ,gameId:parseInt(id) }));
         }
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
@@ -3840,7 +3852,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
         if (result?.status !== 'Success') {
           console.log('data not updated');
         } else {
-          dispatch(updatePreviewData({ isDispatched: true }));
+          dispatch(updatePreviewData({isDispatched: true ,gameId:parseInt(id)}));
         }
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
@@ -4316,7 +4328,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       }
     }
     dispatch(
-      updatePreviewData({ activeBlockSeq: parseInt(seq.id.split('.')[1]) }),
+      updatePreviewData({ activeBlockSeq: parseInt(seq.id.split('.')[1]) ,gameId:parseInt(id) }),
     );
   };
 
@@ -4381,6 +4393,63 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
     return () => {
       window.removeEventListener('resize', handleResize);
     };
+  }, []);
+  useEffect(() => {
+    // Check if playerId is defined before making the API call
+    console.log("data");
+
+    const GameId = id;
+    console.log("GameId", GameId);
+
+    const data = {
+      previewGameId: id,
+      playerId: user?.data?.id,
+      playerType: user?.data?.id ? 'creator' : null,
+
+    }
+    if (data) {
+      const getPreviewLogs = async () => {
+        try {
+          // Make API call to get preview logs data
+          const previewData = JSON.stringify(data)
+          const gameContentResult = await getPreviewLogsData(previewData);
+          if (gameContentResult && gameContentResult.playerInputs) {
+            const { playerInputs } = gameContentResult;
+            const parsedInputs = JSON.parse(playerInputs);
+
+            if (parsedInputs && parsedInputs.Reflection && Array.isArray(parsedInputs.Reflection)) {
+              // Use map to iterate over the Reflection array
+              const reflectionItems = parsedInputs.Reflection.map((reflection: any, index: any) => {
+                const refKey = `ref${index + 1}`; // Generate the key based on index
+                const refValue = reflection[refKey]; // Get the value corresponding to the key
+                // Perform any action with the reflection item (e.g., log it)
+                console.log(`${refKey}: ${refValue}`);
+
+                // Return the processed item if needed
+                return { [refKey]: refValue }; // Return an object with the key and value
+              });
+              setRefelectionAnswer(reflectionItems);
+              // Use reflectionItems as needed within the component
+            }
+            if (parsedInputs && parsedInputs.ThankYou)
+              {
+                console.log('parsedInputs.ThankYou',parsedInputs.ThankYou);
+                const Thankyoufeedback = parsedInputs.ThankYou;
+                setThankyouFeedback(Thankyoufeedback);
+              }
+          }
+
+
+          // Handle the result as needed
+        } catch (error) {
+          // Handle errors
+          console.error("Error fetching preview logs:", error);
+        }
+      };
+
+      // Call the function to get preview logs data
+      getPreviewLogs();
+    }
   }, []);
 
  
@@ -5149,6 +5218,8 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                       handleCompletionScreen={handleCompletionScreen}
                       handlecompletion={handlecompletion}
                       handleEnables={handleEnables}
+                      RefelectionAnswer={RefelectionAnswer}
+                      ThankyouFeedback={ThankyouFeedback}
                     />
                   </>
                 ) : tab === 6 ? (

@@ -28,6 +28,7 @@ const ReflectionScreen: React.FC<{
   reflectionQuestionsdefault: any;
   preview: any;
   preloadedAssets?: any;
+  RefelectionAnswer?:any;
 }> = ({
   formData,
   reflectionQuestions,
@@ -35,6 +36,7 @@ const ReflectionScreen: React.FC<{
   reflectionQuestionsdefault,
   preview,
   preloadedAssets,
+  RefelectionAnswer,
 }) => {
     const [scaleFactor, setScaleFactor] = useState(1);
     const [answers, setAnswers] = useState<any>([]);
@@ -213,155 +215,6 @@ const ReflectionScreen: React.FC<{
               </Box>
             </Box>
           </Box>
-          // <Box className="reflection-screen">
-          //   <Img src={imageSrc} className="bg-img" />
-          //   {preview ? (
-          //     <Box className='title'
-          //       w={'100%'}
-          //       display={'flex'}
-          //       justifyContent={'center'}
-          //       position={'relative'}
-          //     >
-          //       <Img src={question} w={'320px'} h={'100px'} />
-          //       <Text
-          //         fontFamily={'AtlantisText'}
-          //         color={'##D9C7A2'}
-          //         position={'absolute'}
-          //         fontSize={'2.8rem'}
-          //         style={{ whiteSpace: 'break-spaces' }}
-          //       >
-          //         REFLECTION
-          //       </Text>
-          //     </Box>
-          //   ) : null}
-          //   <Box
-          //     className={preview ? 'content-ref' : 'content-box'}
-          //     position={'relative'}
-          //   >
-          //     <SimpleGrid
-          //       columns={{ base: 2 }}
-          //       spacing={2}
-          //       className="grid"
-          //       gap="20"
-          //     >
-          //       {Array.from(
-          //         { length: formData.gameReflectionQuestion },
-          //         (_, index) => (
-          //           <GridItem key={index} colSpan={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? { base: 2 } : {}}>
-          //             <Box className='heading-wrapper'
-          //               w={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? { base: '150px', sm: '300px', md: '350px', lg: '380px' } : { base: '150px', sm: '100px', md: '150px', lg: '180px' }}
-          //               lineHeight={1}
-          //               display={'flex'}
-          //               wordBreak="break-all"
-          //               fontFamily={'content'}
-          //               fontSize={{
-          //                 base: '8px',
-          //                 sm: '12px',
-          //                 md: '13px',
-          //                 lg: '15px',
-          //               }}
-          //             >
-          //               <Img src={qs} alt="ref" w={'20px'} h={'20px'} />
-          //               {preview ? (
-          //                 <Text
-          //                   className="text drop"
-          //                   style={{ whiteSpace: 'break-spaces' }}
-          //                 >
-          //                   {` ${reflectionQuestions[`ref${index + 1}`]?.padEnd(
-          //                     90,
-          //                     ' ',
-          //                   ) ||
-          //                     reflectionQuestionsdefault[index]?.padEnd(90, ' ')
-          //                     }`}
-          //                 </Text>
-          //               ) : (
-          //                 <Text
-          //                   className="text drop"
-          //                   style={{ whiteSpace: 'break-spaces' }}
-          //                 >
-          //                   {` ${reflectionQuestions[`ref${index + 1}`]?.padEnd(
-          //                     90,
-          //                     ' ',
-          //                   ) ||
-          //                     reflectionQuestionsdefault[index]?.padEnd(90, ' ')
-          //                     }`}
-          //                 </Text>
-          //               )}
-          //             </Box>
-          //             <Box position={'relative'} className='input-wrapper'>
-          //               <Img
-          //                 w={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? '420px' : '200px'}
-          //                 h={{
-          //                   base: '20px',
-          //                   sm: '40px',
-          //                   md: '70px',
-          //                   lg: '50px',
-          //                 }}
-          //                 padding-top={'20px'}
-          //                 src={ref}
-          //               />
-          //               {preview ? (
-          //                 <Textarea
-          //                   padding-top={'20px'}
-          //                   bottom={0}
-          //                   outline={'none'}
-          //                   focusBorderColor="none"
-          //                   border={'none'}
-          //                   position={'absolute'}
-          //                   w={'350px'}
-          //                   color={'#D9C7A2'}
-          //                   h={{
-          //                     base: '20px',
-          //                     sm: '30px',
-          //                     md: '50px',
-          //                     lg: '100px',
-          //                   }}
-          //                   _focus={{ boxShadow: 'none', border: 'none' }}
-          //                   fontFamily={'AtlantisText'}
-          //                   value={answers[index]?.text}
-          //                   onChange={(e: any) => updateAnswer(e, index)}
-          //                 />
-          //               ) : null}
-          //             </Box>
-          //           </GridItem>
-          //         ),
-          //       )}
-          //     </SimpleGrid>
-          //     {preview ? (
-          //       // <Img
-          //       //   src={refsep}
-          //       //   w={'10px'}
-          //       //   h={'auto'}
-          //       //   position={'absolute'}
-          //       //   top={'0px'}
-          //       // />
-          //       <></>
-          //     ) : null}
-          //   </Box>
-          //   {preview ? (
-          //     <Box
-          //       w={'100%'}
-          //       display={'flex'}
-          //       justifyContent={'center'}
-          //       position={'absolute'}
-          //       bottom={'0'}
-          //       className='left-right-btn'
-          //     >
-          //       <Box w={'80%'} display={'flex'} justifyContent={'space-between'}>
-          //         <Img src={left} w={'50px'} h={'50px'} cursor={'pointer'} />
-          //         {isFormValid && (
-          //           <Img
-          //             src={right}
-          //             w={'50px'}
-          //             h={'50px'}
-          //             cursor={'pointer'}
-          //           />
-          //         )}
-          //       </Box>
-          //     </Box>
-
-          //   ) : null}
-          // </Box>
         )}
       </>
     );

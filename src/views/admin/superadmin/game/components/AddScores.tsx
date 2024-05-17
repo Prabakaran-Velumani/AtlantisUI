@@ -104,6 +104,8 @@ const AddScores: React.FC<{
   handleCompletionScreen?: any;
   handlecompletion?: any;
   handleEnables: any;
+  RefelectionAnswer:any;
+  ThankyouFeedback:any;
 }> = ({
   languages,
   setShowFunction,
@@ -147,7 +149,9 @@ const AddScores: React.FC<{
   setCompKeyCount,
   handleCompletionScreen,
   handlecompletion,
-  handleEnables
+  handleEnables,
+  RefelectionAnswer,
+  ThankyouFeedback
 }) => {
     /**********navin */
     // brindha start
@@ -994,12 +998,6 @@ const AddScores: React.FC<{
                     bottom={{ base: '0', lg: 'unset' }}>
                     <Icon
                       as={FaChevronCircleRight}
-                      // position="absolute"
-                      // top={currentTab === 0 ? '325px' : currentTab === 1 ? "325px" :"325px"}
-                      // right="10px"
-
-                      // transform="translate(0, -50%)"
-                      // aria-label="Slide Right"
                       fontSize="25px" // Increase icon size here
                       onClick={handleNext}
                     />

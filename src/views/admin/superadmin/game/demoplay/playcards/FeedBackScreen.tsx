@@ -27,24 +27,25 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 import hdr from 'assets/models/bg.hdr';
 interface FeedBackScreenShotProps {
-  backgroundScreenUrl: any;
-  first: any;
-  showNote: any;
-  currentScreenId: any;
-  isScreenshot: any;
-  FeedbackremainingSentences?: any;
-  options: any;
-  getData: any;
-  data: any;
-  FeedBackselectedoptionData?: any;
-  FeedBackoptionData?: any;
-  feed?: any;
-  getFeedbackData?: any;
-  profile: any;
-  setisScreenshot: any;
-  preloadedAssets: any;
-  FeedbackcurrentPosition?: any;
-  interactionBlockArray?: any;
+    backgroundScreenUrl: any;
+    first: any;
+    showNote: any;
+    currentScreenId: any;
+    isScreenshot: any;
+    FeedbackremainingSentences?: any;
+    options: any;
+    getData: any;
+    data: any;
+    FeedBackselectedoptionData?: any;
+    FeedBackoptionData?: any;
+    feed?: any;
+    getFeedbackData?: any;
+    profile: any;
+    setisScreenshot: any;
+    preloadedAssets: any;
+    FeedbackcurrentPosition?: any;
+    interactionBlockArray?: any;
+    profileData?:any
 }
 const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
   backgroundScreenUrl,
@@ -65,6 +66,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
   preloadedAssets,
   FeedbackcurrentPosition,
   interactionBlockArray,
+  profileData
 }) => {
   const geTfeedBackoption = () => {
     setisScreenshot(false);
@@ -186,19 +188,18 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
             </GridItem>
           </Grid>
         </Box>
-       
-        {isScreenshot === true && (
-          <InteractionScreenShot
-            data={FeedBackoptionData}
-            option={FeedBackselectedoptionData}
-            options={options}
-            backGroundImg={backgroundScreenUrl}
-            profile={profile}
-            geTfeedBackoption={geTfeedBackoption}
-            isScreenshot={isScreenshot}
-            preloadedAssets={preloadedAssets}
-          />
-        )}
+         {isScreenshot === true && (
+              <InteractionScreenShot
+                data={FeedBackoptionData}
+                option={FeedBackselectedoptionData}
+                options={options}
+                backGroundImg={backgroundScreenUrl}
+                geTfeedBackoption={geTfeedBackoption}
+                isScreenshot={isScreenshot}
+                preloadedAssets={preloadedAssets}
+                profileData={profileData}
+              />
+            )}
       </>
     </>
   );

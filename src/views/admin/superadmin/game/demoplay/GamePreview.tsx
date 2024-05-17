@@ -57,7 +57,7 @@ const GamePreview = () => {
     completedLevels: ['1'],
     currentQuest: 1,
     replayScore:[],
-    playerGrandTotal:{},
+    playerGrandTotal:{questScores:{}},
     todayEarnedScore: [{quest:1, score:0, earnedDate: ""}],  
   });
   const [currentScore, setCurrentScore] = useState(0);
@@ -122,7 +122,8 @@ const GamePreview = () => {
           lastModifiedBlockSeq: updatePreviewLogsResponse.data.lastModifiedBlockSeq,
           lastBlockModifiedDate:updatePreviewLogsResponse.data.lastBlockModifiedDate,
           updatedAt:updatePreviewLogsResponse.data.updatedAt,
-          playerInputs: updatePreviewLogsResponse.data.playerInputs,
+          playerInputs: updatePreviewLogsResponse.data.playerInputs? JSON.parse(updatePreviewLogsResponse.data.playerInputs) : [],
+          
         });
         return updatePreviewLogsResponse;
 
@@ -163,7 +164,6 @@ const GamePreview = () => {
       setComponentsLoaded(true);
     };
     const loadGlbFiles = async () => {
-      console.log("in loadGlbFiles function")
       try {
         // assetImageSrc['characterGlb'] = CharacterGlb;
         // { assetType: 'characterGlb', src: characterGlb },
@@ -171,7 +171,6 @@ const GamePreview = () => {
         const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: Merlin }]);
         // Use preloadedGLBs[CharacterGlb] if you need the preloaded GLB data
         setLoadedGLBs((prev:any)=> ({...prev, preloadedGLBs}))
-        console.log("preloadedGLBs", preloadedGLBs)
         const loader = new GLTFLoader();
         const parsedGlbArray = [];
         loader.parse(preloadedGLBs, '', (gltf) => {
@@ -188,7 +187,6 @@ const GamePreview = () => {
     loadComponents();
   }, []);
 
-console.log("componentsLoaded", componentsLoaded)
 
   useEffect(() => {
     uuid && fetchGameData();

@@ -9,7 +9,7 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react';
-import React,{useEffect, useState, useContext, useMemo} from 'react';
+import React, { useEffect, useState, useContext, useMemo } from 'react';
 import { ScoreContext } from '../GamePreview';
 import { motion } from 'framer-motion';
 interface TopMenuProps {
@@ -26,13 +26,11 @@ interface TopMenuProps {
   data: any;
   setAudioObj: (obj: any) => void;
   audioObj: any;
-  setIsLanguage: any;
-  questState:any;
-  setIsOpenCustomModal: (value: boolean)=> void;
+  questState: any;
+  setIsOpenCustomModal: (value: boolean) => void;
 }
 
 const TopMenuBar: React.FC<TopMenuProps> = ({
-  setIsLanguage,
   dontShowTopMenu,
   preloadedAssets,
   currentScreenId,
@@ -53,14 +51,21 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
   const { profile, setProfile } = useContext<{ profile: any, setProfile: any }>(ScoreContext);
   const [progressPercent, setProgressPercent] = useState<any>(0);
 
-  useEffect(() => {
-    const scores = profile?.score;
-    const sums = scores?.reduce((accumulator: { [key: string]: number }, score: any) => {
-      const quest = score.quest;
-      accumulator[quest] = (accumulator[quest] || 0) + score.score;
-      return accumulator;
-    }, 0);
-    SetFinalscore(sums);
+  useEffect(() => { 
+    const scores = profile?.score; 
+    if (scores && scores.length > 0) { 
+      const sums = scores?.reduce((accumulator: { [key: string]: number }, score: any) => {
+        const quest = score.quest; 
+        if(accumulator?.[quest] != undefined) 
+          { 
+              accumulator[quest] = (accumulator[quest] || 0) + score.score;
+            return accumulator;
+          }
+         
+      }, 0);
+      SetFinalscore(sums);
+    }
+ 
   }, []);
 
   const handleOverView = () => {
@@ -68,70 +73,69 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     setCurrentScreenId(15); //overview Screen
   };
 
-useEffect(()=>{
-  const progressResult = ()=>{
-  //calculate Progress based on screen, Need to show different progress for current screen is in story, progress of the current quest, unless  show the entire game progress
-  if(currentScreenId === 2) {
-    const currentQuestBlocks = demoBlocks[profile?.currentQuest];
-    const totalblockCount = Object.keys(currentQuestBlocks).length;
-    const keyWithValueOfCurrentBlock = Object.keys(currentQuestBlocks).find((key: any) => {
-      const obj = currentQuestBlocks[key];
-      const blockPrimarySequence = obj?.blockPrimarySequence;
-      if (blockPrimarySequence) {
-          const hasMatchingSequence = blockPrimarySequence.trim() === (data?.blockPrimarySequence || '').trim();
-          return hasMatchingSequence;
+  useEffect(() => {
+    const progressResult = () => {
+      //calculate Progress based on screen, Need to show different progress for current screen is in story, progress of the current quest, unless  show the entire game progress
+      if (currentScreenId === 2) {
+        const currentQuestBlocks = demoBlocks[profile?.currentQuest];
+        const totalblockCount = Object.keys(currentQuestBlocks).length;
+        const keyWithValueOfCurrentBlock = Object.keys(currentQuestBlocks).find((key: any) => {
+          const obj = currentQuestBlocks[key];
+          const blockPrimarySequence = obj?.blockPrimarySequence;
+          if (blockPrimarySequence) {
+            const hasMatchingSequence = blockPrimarySequence.trim() === (data?.blockPrimarySequence || '').trim();
+            return hasMatchingSequence;
+          }
+          return false;
+        });
+        const progressBarRatio: any = keyWithValueOfCurrentBlock && (parseInt(keyWithValueOfCurrentBlock) > 0 ? (parseInt(keyWithValueOfCurrentBlock) - 1) / totalblockCount : 0);
+        setProgressPercent(progressBarRatio && progressBarRatio > 0 ? progressBarRatio : 0);
       }
-      return false;
-  });
-    const progressBarRatio:any = keyWithValueOfCurrentBlock && (parseInt(keyWithValueOfCurrentBlock) > 0 ? (parseInt(keyWithValueOfCurrentBlock)-1)/totalblockCount: 0 );
-    setProgressPercent(progressBarRatio && progressBarRatio > 0 ? progressBarRatio :0 );
-  }
-  else{
-    const uniqueQuestIds = [...new Set(profile?.completedLevels)]; //returns ['1', '2', '3'] if it has ['1','2','2','3']
+      else {
+        const uniqueQuestIds = [...new Set(profile?.completedLevels)]; //returns ['1', '2', '3'] if it has ['1','2','2','3']
 
-    //collect the actually completed quest list to show the the progress
-    const completedQuestList = uniqueQuestIds.filter((quest: any) => {
-      const isCurrentQuestCompleted = Object.entries(questState).some(([key, value]: [any, any]) => {
-          return key === quest && ['replayallowed', 'completed'].includes(value);
-      });
-      return isCurrentQuestCompleted;
-  });
+        //collect the actually completed quest list to show the the progress
+        const completedQuestList = uniqueQuestIds.filter((quest: any) => {
+          const isCurrentQuestCompleted = Object.entries(questState).some(([key, value]: [any, any]) => {
+            return key === quest && ['replayallowed', 'completed'].includes(value);
+          });
+          return isCurrentQuestCompleted;
+        });
 
-    const completedQuest = completedQuestList.length ;
-    let gameProgress = 0;
-    if(completedQuest > 0)
-      { 
-        gameProgress = completedQuest/gameInfo?.gameQuest?.length;
-      }
-      setProgressPercent(gameProgress && gameProgress > 0 ? gameProgress :0 );
-  }
-  }
-
-  progressResult();
-},[data, currentScreenId, questState])
-
-const handleMusicVolume = (vol: any)=>{
-  setAudioObj((prev: any)=>({...prev, "volume": vol}));
-}
-
-const totalPoints = useMemo(() => {
-  let total: number = 0;
-  if ([2, 4, 6, 8, 9, 14].includes(currentScreenId)) {
-    const scoreArray = questState[parseInt(profile?.currentQuest)] == 'Started' ? profile?.score : profile?.replayScore;
-    if (scoreArray?.length > 0) {
-      total = scoreArray.reduce((acc: number, cur: any) => {
-        if (cur.quest == profile.currentQuest) {
-          return acc + cur.score;
-        } else {
-          return acc;
+        const completedQuest = completedQuestList.length;
+        let gameProgress = 0;
+        if (completedQuest > 0) {
+          gameProgress = completedQuest / gameInfo?.gameQuest?.length;
         }
-      }, 0);
+        setProgressPercent(gameProgress && gameProgress > 0 ? gameProgress : 0);
+      }
     }
-  } else {
-    total = profile.score.reduce((acc: number, cur: any) => acc + cur.score, 0);
+
+    progressResult();
+  }, [data, currentScreenId, questState])
+
+  const handleMusicVolume = (vol: any) => {
+    setAudioObj((prev: any) => ({ ...prev, "volume": vol }));
   }
-  return total;
-}, [profile.score, profile.replayScore, currentScreenId]);
+
+  const totalPoints = useMemo(() => {
+    let total: number = 0;
+    if ([2, 4, 6, 8, 9, 14].includes(currentScreenId)) {
+      const scoreArray = questState[parseInt(profile?.currentQuest)] == 'Started' ? profile?.score : profile?.replayScore;
+      if (scoreArray?.length > 0) {
+        total = scoreArray.reduce((acc: number, cur: any) => {
+          if (cur.quest == profile.currentQuest) {
+            return acc + cur.score;
+          } else {
+            return acc;
+          }
+        }, 0);
+      }
+    } else {
+      total = profile.score.reduce((acc: number, cur: any) => acc + cur.score, 0);
+    }
+    return total;
+  }, [profile.score, profile.replayScore, currentScreenId]);
 
   return (
     <Box className="top-menu-home-section">

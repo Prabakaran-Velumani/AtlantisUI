@@ -21,9 +21,10 @@ interface InteractionProps {
   LastModiPrevData: any;
   RepeatSelectOption: any;
   RepeatPrevOption:any;
+  contentByLanguage:any;
 }
 
-const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, options, optionClick, InteractionFunction, navTrack, preloadedAssets, selectedPlayer, LastModiPrevData, RepeatSelectOption, RepeatPrevOption }) => {
+const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, options, optionClick, InteractionFunction, navTrack, preloadedAssets, selectedPlayer, LastModiPrevData, RepeatSelectOption, RepeatPrevOption ,contentByLanguage}) => {
   const [prevSelectOption, setprevselectoptions] = useState<any>();
   useEffect(() => {
     if (RepeatSelectOption === true) {
@@ -33,6 +34,10 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
           setprevselectoptions(prevoptionseleted);
         }
       
+    }
+    else
+    {
+      setprevselectoptions([]);
     }
 
   }, [RepeatSelectOption]);
@@ -120,7 +125,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                   >
                     <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
                     <Text textAlign={'justify'}>
-                      {data?.blockText}
+                      {contentByLanguage!==null? contentByLanguage: data?.blockText}
                     </Text>
                   </Box>
                 </Box>

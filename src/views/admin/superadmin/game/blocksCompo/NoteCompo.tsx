@@ -106,7 +106,6 @@ const NoteCompo: React.FC<PropsNote> = ({
   const [matchingBlockContent, setMatchingBlockContent] = useState('');
 
   useEffect(() => {
-    console.log('language', language);
     // Assume you have a function to get the translation ID dynamicallyz
     const getTranslationId = () => {
       // Use formDataGamelanguageCode as the dynamic translation ID

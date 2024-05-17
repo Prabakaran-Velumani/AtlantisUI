@@ -67,7 +67,7 @@ const Completion: React.FC<{
   
 console.log("curretQuestOptions", curretQuestOptions);
 
-  const [geFinalscorequest, SetFinalscore] = useState(profile.playerGrandTotal[parseInt(profile.currentQuest)]);
+  const [geFinalscorequest, SetFinalscore] = useState(profile.playerGrandTotal.questScores[parseInt(profile.currentQuest)]);
   const [questScores, setQuestScores] = useState(questWiseMaxTotal);
   // const { profile, setProfile } = useContext(ScoreContext);
   useEffect(() => {
@@ -163,7 +163,7 @@ console.log("curretQuestOptions", curretQuestOptions);
 
   /** This useEffect Only hanldes the total within the quest total */
 useEffect(()=>{
-const questTotalScore = Object.entries(profile?.playerGrandTotal).reduce((totalScore: number, [key, value]: [any, any]) => {
+const questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).reduce((totalScore: number, [key, value]: [any, any]) => {
   if (key == profile.currentQuest) {
       return totalScore + value;
   }

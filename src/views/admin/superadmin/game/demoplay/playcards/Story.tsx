@@ -12,7 +12,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
- 
+
 import Interaction from './Interaction';
 import TypingEffect from './Typing';
 // import { getVoiceMessage, getPreview } from 'utils/game/gameService';
@@ -68,8 +68,8 @@ const Story: React.FC<{
   LastModiPrevData: any;
   setPreLogDatas: any;
   getPrevLogDatas: any;
-  RepeatSelectOption:any;
-  RepeatPrevOption:any;
+  RepeatSelectOption: any;
+  RepeatPrevOption: any;
 }> = ({
   data,
   type,
@@ -120,6 +120,7 @@ const Story: React.FC<{
     const [score, setScore] = useState(null);
     const [interactionNext, setInteractionNext] = useState(null);
     const [optionalReplay, setOptionalReplay] = useState(false);
+    const [contentByLanguage, setContentByLanguage] = useState(null);
     const EnumType = {
       BGM: 'bgm',
       VOICE: 'voice',
@@ -137,28 +138,28 @@ const Story: React.FC<{
         const currentQuest = data
           ? parseInt(data?.blockPrimarySequence.split('.')[0])
           : null;
-        
-          if (getPrevLogDatas.nevigatedSeq[currentQuest]) {
-            if (!getPrevLogDatas.nevigatedSeq[currentQuest].includes(data.blockPrimarySequence)) {
-    
-              setPreLogDatas((prev: any) => ({
-                ...prev,
-                lastActiveBlockSeq: data.blockId,
-                nevigatedSeq: { ...prev.nevigatedSeq, [currentQuest]: [...(prev.nevigatedSeq[currentQuest] || []), data.blockPrimarySequence] }
-                
-              }));
-            }
-    
-          }
-          else {
+
+        if (getPrevLogDatas.nevigatedSeq[currentQuest]) {
+          if (!getPrevLogDatas.nevigatedSeq[currentQuest].includes(data.blockPrimarySequence)) {
+
             setPreLogDatas((prev: any) => ({
               ...prev,
               lastActiveBlockSeq: data.blockId,
-              nevigatedSeq: { ...prev.nevigatedSeq, [currentQuest]: [data.blockPrimarySequence] }
+              nevigatedSeq: { ...prev.nevigatedSeq, [currentQuest]: [...(prev.nevigatedSeq[currentQuest] || []), data.blockPrimarySequence] }
+
             }));
-    
           }
-    
+
+        }
+        else {
+          setPreLogDatas((prev: any) => ({
+            ...prev,
+            lastActiveBlockSeq: data.blockId,
+            nevigatedSeq: { ...prev.nevigatedSeq, [currentQuest]: [data.blockPrimarySequence] }
+          }));
+
+        }
+
         if (gameInfo.hasOwnProperty('blocks')) {
           let previousPrimarySeq = navTrack[navTrack.length - 1];
           if (previousPrimarySeq) {
@@ -172,10 +173,10 @@ const Story: React.FC<{
               if (previousBlock?.blockChoosen === 'Interaction') {
                 setNavTrack([data.blockPrimarySequence]);
               } else {
-              const newArray = navTrack;
-              newArray.push(data.blockPrimarySequence);
-              setNavTrack(newArray);
-               }
+                const newArray = navTrack;
+                newArray.push(data.blockPrimarySequence);
+                setNavTrack(newArray);
+              }
             }
           } else {
             setNavTrack([data.blockPrimarySequence]);
@@ -191,7 +192,6 @@ const Story: React.FC<{
         setShowNote(false);
       }, 1000);
     }, []);
-    console.log('profileData',profileData);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -212,24 +212,37 @@ const Story: React.FC<{
               const FilteredFieldName = GetblocktextAudioFiltered.map(
                 (item: any) => item.fieldName,
               );
+              const Filteredcontent = GetblocktextAudioFiltered.map(
+                (item: any) => item.content,
+              );
+              setContentByLanguage(Filteredcontent);
+              console.log('FilteredFieldName', FilteredFieldName);
               if (FilteredFieldName[0] === 'blockText') {
                 const audioUrls = GetblocktextAudioFiltered.map(
-                  (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
+                  (item: any) => item.audioUrls !== '' ? JSON.parse(item.audioUrls)[0]?.audioUrl : item.audioUrls,
                 );
-                const normalizedPath = audioUrls[0];
-                const fullUrl = `${API_SERVER}${normalizedPath}`;
-                console.log('...',fullUrl);
-                const responseblockText = await fetch(fullUrl);
-                console.log('responseblockText',responseblockText);
-                if (responseblockText.ok) {
-                  setAudioObj({
-                    url: fullUrl,
-                    type: EnumType.VOICE,
-                    volume: '0.5',
-                    loop: false, // Voice doesn't loop
-                    autoplay: true, // Autoplay is disabled
-                  });
+                console.log('audioUrls', audioUrls)
+                try {
+                  const normalizedPath = audioUrls[0];
+                  if (normalizedPath !== '') {
+                    const fullUrl = `${API_SERVER}${normalizedPath}`;
+                    const responseblockText = await fetch(fullUrl);
+                    console.log('responseblockText', responseblockText);
+                    if (responseblockText.ok) {
+                      setAudioObj({
+                        url: fullUrl,
+                        type: EnumType.VOICE,
+                        volume: '0.5',
+                        loop: false, // Voice doesn't loop
+                        autoplay: true, // Autoplay is disabled
+                      });
+                    }
+                  }
+                  // Handle the response
+                } catch (error) {
+                  console.error('Error fetching data:', error);
                 }
+
               }
             }
           } else {
@@ -249,167 +262,114 @@ const Story: React.FC<{
                   (key: any) => key?.fieldName === 'qpOptionText',
                 );
                 const responseAudioFiltered = optionAudioFiltered.filter(
-                  (key: any) => key?.fieldName === 'qpOptionText',
+                  (key: any) => key?.fieldName === 'qpResponse',
                 );
+                const FilteredResponsecontent = responseAudioFiltered[0].content;
                 if (getoptionsAudioFiltered.length > 0) {
                   const QOTaudioUrls = getoptionsAudioFiltered.map(
-                    (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
+                    (item: any) => item.audioUrls !== '' ? JSON.parse(item.audioUrls)[0]?.audioUrl : item.audioUrls,
                   );
 
                   if (QOTaudioUrls.length > 0) {
                     // const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
                     // const normalizedPath = relativePath.replace(/\\/g, '/');
-                    const normalizedPath = QOTaudioUrls[0];
-                    // const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-                    const qpOptionTextUrl = `${API_SERVER}${normalizedPath}`;
-                    const responseqpOptionText = await fetch(qpOptionTextUrl);
-                    if (responseqpOptionText.ok) {
-                      setAudioObj({
-                        url: qpOptionTextUrl,
-                        type: EnumType.VOICE,
-                        volume: '0.5',
-                        loop: false,
-                        autoplay: true,
-                      });
-                    } else {
-                      const getAudioFiltered1 = optionAudioFiltered.filter(
-                        (key: any) => key?.fieldName === 'qpOptions',
-                      );
-                      if (getAudioFiltered1.length > 0) {
-                        const QPaudioUrls = getAudioFiltered1.map(
-                          (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
-                        );
-                        if (QPaudioUrls.length > 0) {
-                          const normalizedPath = QPaudioUrls[0];
-                          const qpOptionsUrl = `${API_SERVER}${normalizedPath}`;
-                          const responsequestoption = await fetch(qpOptionsUrl);
-                          if (responsequestoption.ok) {
-                            setAudioObj({
-                              url: qpOptionsUrl,
-                              type: EnumType.VOICE,
-                              volume: '0.5',
-                              loop: false,
-                              autoplay: true,
-                            });
+                    try {
+
+                      const normalizedPath = QOTaudioUrls[0];
+                      // const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
+                      if (normalizedPath !== '') {
+                        const qpOptionTextUrl = `${API_SERVER}${normalizedPath}`;
+                        const responseqpOptionText = await fetch(qpOptionTextUrl);
+                        if (responseqpOptionText.ok) {
+                          setAudioObj({
+                            url: qpOptionTextUrl,
+                            type: EnumType.VOICE,
+                            volume: '0.5',
+                            loop: false,
+                            autoplay: true,
+                          });
+                        }
+                        /*
+                        else {
+                          const getAudioFiltered1 = optionAudioFiltered.filter(
+                            (key: any) => key?.fieldName === 'qpOptions',
+                          );
+                          if (getAudioFiltered1.length > 0) {
+                            const QPaudioUrls = getAudioFiltered1.map(
+                              (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
+                            );
+                            if (QPaudioUrls.length > 0) {
+                              const normalizedPath = QPaudioUrls[0];
+                              const qpOptionsUrl = `${API_SERVER}${normalizedPath}`;
+                              const responsequestoption = await fetch(qpOptionsUrl);
+                              if (responsequestoption.ok) {
+                                setAudioObj({
+                                  url: qpOptionsUrl,
+                                  type: EnumType.VOICE,
+                                  volume: '0.5',
+                                  loop: false,
+                                  autoplay: true,
+                                });
+                              }
+                            }
                           }
                         }
+                        */
                       }
+                    }
+                    catch (error) {
+                      console.error('Error fetching data:', error);
                     }
                   }
                 }
-                if(responseAudioFiltered.length > 0)
-                  {
-                    const QResTaudioUrls = responseAudioFiltered.map(
-                      (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
-                    );
-  
-                    if (QResTaudioUrls.length > 0) {
+                if (responseAudioFiltered.length > 0) {
+                  const QResTaudioUrls = responseAudioFiltered.map(
+                    (item: any) => item.audioUrls !== '' ? JSON.parse(item.audioUrls)[0]?.audioUrl : item.audioUrls,
+                  );
+
+                  if (QResTaudioUrls.length > 0) {
+                    try {
+
                       const normalizedPath = QResTaudioUrls[0];
-                    // const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
-                    const qRespOptionTextUrl = `${API_SERVER}${normalizedPath}`;
-                    const responseqpOptionText = await fetch(qRespOptionTextUrl);
-                    if (responseqpOptionText.ok) {
-                      setAudioObj({
-                        url: qRespOptionTextUrl,
-                        type: EnumType.VOICE,
-                        volume: '0.5',
-                        loop: false,
-                        autoplay: true,
-                      });
+                      if (normalizedPath !== '') {
+                        const qRespOptionTextUrl = `${API_SERVER}${normalizedPath}`;
+                        const responseqpOptionText = await fetch(qRespOptionTextUrl);
+                        if (responseqpOptionText.ok) {
+                          setAudioObj({
+                            url: qRespOptionTextUrl,
+                            type: EnumType.VOICE,
+                            volume: '0.5',
+                            loop: false,
+                            autoplay: true,
+                          });
+                        }
+                      }
+                    } catch (error) {
+                      console.error('Error fetching data:', error);
                     }
-                    }
+
                   }
+                }
               }
             }
           }
-        } 
+        }
       };
       fetchData();
 
-    }, [data,AudioOptions]);
-    
-/*
-    const getVoice = async (blockInfo: any, blockType: string) => {
-      let text = '';
-      let voiceId = '';
-      /** 
-             * For voice 
-            data.includes('note') =>  Game Narattor
-            data.includes('dialog') =>  data.character
-            data.includes('interaction') => data.blockRoll
-            resMsg => data.blockRoll
-            
-            *For Animations & Emotion & voice Modulation 
-            data.includes('dialog') => data.animation
-            data.includes('interaction') //For Question => data.QuestionsEmotion
-            data.includes('interaction') //For Answers  => optionsObject[] : data.optionsemotionObject[]
-              resMsg =>responseObject[]  : responseemotionObject[]
-            */
-           /*
-      switch (blockType) {
-        case 'Note':
-          text = blockInfo.blockText;
-          voiceId = voiceIds?.narrator;
-          break;
-        case 'Dialog':
-          text = blockInfo.blockText;
-          voiceId =
-            blockInfo?.blockRoll == '999999'
-              ? voiceIds.NPC
-              : userProfile?.gender == 'Male'
-                ? voiceIds?.playerMale
-                : voiceIds?.playerFemale;
-          break;
-        case 'Interaction':
-          let optionsText = '';
-          // Sort the options array based on a unique identifier, such as index
-          options.sort((a: any, b: any) => a.index - b.index);
-          options.forEach((item: any) => {
-            optionsText +=
-              '---Option ' + item?.qpOptions + '-' + item?.qpOptionText;
-          });
+    }, [data, AudioOptions]);
 
-          text = blockInfo.blockText + optionsText;
-          voiceId =
-            blockInfo?.blockRoll == '999999'
-              ? voiceIds.NPC
-              : userProfile?.gender == 'Male'
-                ? voiceIds?.playerMale
-                : voiceIds?.playerFemale;
-          break;
-        case 'Response':
-          text = resMsg;
-          voiceId =
-            blockInfo?.blockRoll == '999999'
-              ? voiceIds.NPC
-              : userProfile?.gender === 'Male'
-                ? voiceIds?.playerMale
-                : voiceIds?.playerFemale;
-          break;
-        case 'Feedback':
-          text = feed;
-          voiceId =
-            blockInfo?.blockRoll === '999999'
-              ? voiceIds.NPC
-              : userProfile?.gender === 'Male'
-                ? voiceIds?.playerMale
-                : voiceIds?.playerFemale;
-          break;
-      }
-      // getAudioForText(text, voiceId);
-    };
-*/
     const InteractionFunction = () => {
       setIsGetsPlayAudioConfirmation(true);
-        
+
       /**Get current data mm-dd-yyyy */
       const currentDateTime = new Date();
-      const day:String = String(currentDateTime.getDate()).padStart(2, '0');
-      const month:String = String(currentDateTime.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-      const year:String = String(currentDateTime.getFullYear());
-      
+      const day: String = String(currentDateTime.getDate()).padStart(2, '0');
+      const month: String = String(currentDateTime.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const year: String = String(currentDateTime.getFullYear());
+
       const currentDate = `${day}-${month}-${year}`;
-      
+
       if (questState[profile?.currentQuest] === 'Started') {
         setProfile((prev: any) => {
           const { seqId, score: newScore } = score;
@@ -490,10 +450,10 @@ const Story: React.FC<{
       if (showTypingEffect === false) {
         setShowTypingEffect(true);
       } else {
-          LastModiPrevData(data);
-      
+        LastModiPrevData(data);
+
       }
-      
+
     };
 
 
@@ -563,8 +523,8 @@ const Story: React.FC<{
                     >
                       <Box w={'100%'} display={'flex'} justifyContent={'center'}>
                         <Box className={'story_note_block'}>
-                          <Text textAlign={'center'}  letterSpacing={'normal'}>
-                            {data?.blockText}
+                          <Text textAlign={'center'} letterSpacing={'normal'}>
+                            {contentByLanguage !== null ? contentByLanguage : data?.blockText}
                           </Text>
                         </Box>
                       </Box>
@@ -622,7 +582,7 @@ const Story: React.FC<{
                   {/* <OrbitControls   />  */}
                   <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
                   {/* COMPONENTS */}
-                  <Player />
+                  {/* <Player /> */}
                   <Model position={[-3, -1.8, 5]} rotation={[0, 1, 0]} isSpeaking={false} />
                   {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
                   {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
@@ -647,7 +607,7 @@ const Story: React.FC<{
                   fontFamily={'AtlantisText'}
                   color={'#312821'}
                 >
-                  {data.blockRoll === 'Narrator' ? data.blockRoll : (data.blockRoll=== '999999' ? formData.gameNonPlayerName : profileData.name)}
+                  {data.blockRoll === 'Narrator' ? data.blockRoll : (data.blockRoll === '999999' ? profileData.name  : formData.gameNonPlayerName)}
                 </Box>
               </Box>
             </Box>
@@ -674,10 +634,10 @@ const Story: React.FC<{
             >
               <Box transform={'translateY(26%)'}>
                 {showTypingEffect === false ? <TypingEffect
-                  text={data?.blockText}
+                  text={contentByLanguage !== null ? contentByLanguage : data?.blockText}
                   speed={50}
                   setSpeedIsOver={setShowTypingEffect}
-                /> : data?.blockText}
+                /> : contentByLanguage !== null ? contentByLanguage : data?.blockText}
               </Box>
             </Box>
             <Box
@@ -708,7 +668,7 @@ const Story: React.FC<{
           </Box>
         )}
         {data && type === 'Interaction' && (
-          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick}  InteractionFunction={InteractionFunction} navTrack={navTrack} preloadedAssets={preloadedAssets} selectedPlayer={selectedPlayer}  LastModiPrevData={LastModiPrevData}  RepeatSelectOption={RepeatSelectOption}  RepeatPrevOption={RepeatPrevOption}
+          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick} InteractionFunction={InteractionFunction} navTrack={navTrack} preloadedAssets={preloadedAssets} selectedPlayer={selectedPlayer} LastModiPrevData={LastModiPrevData} RepeatSelectOption={RepeatSelectOption} RepeatPrevOption={RepeatPrevOption} contentByLanguage={contentByLanguage}
           />
         )}
         {data && type === 'response' && (
@@ -869,23 +829,20 @@ const Story: React.FC<{
                           />
                         </Box>
                         <Box
-                        display={'flex'}
-                        position={'fixed'}
-                        justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
-                        w={'95%'}
-                        bottom={'0'}
-                      >
+                          display={'flex'}
+                          position={'fixed'}
+                          justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
+                          w={'95%'}
+                          bottom={'0'}
+                        >
 
                         <Img
                           src={preloadedAssets.left}
                           w={'70px'}
                           h={'50px'}
-                          cursor={'pointer'}
                           onClick={() => {  LastModiPrevData(data)}}
                         />
-
-
-                      </Box>
+                        </Box>
                       </Box>
                     </Box>
                   </Box>

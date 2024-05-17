@@ -101,13 +101,19 @@ const LeaderBoard: React.FC<{
     const [newSortedUserss, setNewSortedUserss] = useState<any[]>([]);
     const [sortedUsers, setSortedUsers] = useState<any[]>([]);
     const playerInfo = useContext(ProfileContext);
-    const { profile, setProfile } = useContext(ScoreContext);
+    const contextValue = useContext(ScoreContext);
+    const { profile, setProfile } = contextValue !== null ? contextValue : { profile: null, setProfile: null };
     const [sortAse, setSortAse] = useState({ daily: true, allTime: true });
-
     useEffect(() => {
       //Sorted Users alltimeScore
-
-      const playerScore = { name: playerInfo.name, score: playerTodayScore, allTimeScore: Object.values(profile.playerGrandTotal).reduce((total: number, acc: any) => { return total + parseInt(acc) }, 0) };
+      let playerScore:any;
+      if(profile!==null)
+        {
+          playerScore = { name: playerInfo.name, score: playerTodayScore, allTimeScore: Object.values(profile.playerGrandTotal?.questScores).reduce((total: number, acc: any) => { return total + parseInt(acc) }, 0) };
+        }
+        else{
+          playerScore = { name: 'Player', score: 100, allTimeScore: 1000};
+        }
 
       const mergedUsersPlayers = [playerScore, ...names].sort((a, b) => {
         // Sort by allTimeScore in descending order
@@ -117,6 +123,7 @@ const LeaderBoard: React.FC<{
         // If allTimeScores are equal, sort alphabetically by name
         return a.name.localeCompare(b.name);
       });
+    
       //Sorted Using Score-starts for score position      
       let sortedUsingScore = [...mergedUsersPlayers].sort((a, b) => {
         // Sort by daily score in descending order
@@ -139,13 +146,18 @@ const LeaderBoard: React.FC<{
         });
         return ({ ...usrScore, dailyPosition: dailyPositionIndex, alltimePosition: alltimePositionIndex });
       })
-
-      const playerIndex = sortedUsingScore.findIndex(x => x.name === playerInfo.name);
-
+      let  playerIndex :any;
+      if(profile!==null)
+        {
+       playerIndex = sortedUsingScore.findIndex(x => x.name === playerInfo.name);
+        }
+        else
+        {
+          playerIndex = sortedUsingScore.findIndex(x => x.name === 'Player');
+        }
       if (playerIndex !== -1) {
         // Remove it from its current position
         const unShiftedPlayer = sortedUsingScore.splice(playerIndex, 1)[0];
-
         // Add it to the beginning of the array
         sortedUsingScore.unshift(unShiftedPlayer);
         setShuffledUsers(sortedUsingScore);

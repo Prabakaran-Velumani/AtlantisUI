@@ -29,7 +29,7 @@ import leaderboard from '../../../../../assets/img/screens/Leaderboard.png';
 
 import ReflectionContentScreen from './onimage/ReflectionScreen';
 import TyContentScreen from './onimage/TyContentScreen';
-import { getGameCreatorDemoData } from 'utils/game/gameService';
+import { getGameCreatorDemoData,getPreviewLogsData } from 'utils/game/gameService';
 import TypingEffect from '../demoplay/playcards/Typing';
 import {
   API_SERVER,
@@ -45,6 +45,7 @@ import { preloadedImages } from 'utils/hooks/function';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { updatePreviewData } from 'store/preview/previewSlice';
 import LeaderBoard from '../demoplay/playcards/Leaderboard';
+import { useParams } from 'react-router-dom';
 
 const WelcomeContentScreen = lazy(
   () => import('./onimage/WelcomeContentScreen'),
@@ -57,8 +58,20 @@ const CompletionContentScreen = lazy(
 );
 const PreviewEndOfStory = lazy(() => import('./onimage/PreviewEndOfStory'));
 const ScreenPreview = () => {
+  const { id } = useParams();
+   const statePreview =useSelector((state: RootState) => (state.preview!==null ? state.preview[parseInt(id)] : null));
+   const InitialState={
+    gameId:id,
+    currentTab: 3,
+  currentSubTab: 0,
+  currentQuest: 1,
+  isDispatched: false,
+  activeBlockSeq: 1,
+  CompKeyCount: 0,
+  reflectionPageUpdated: false
+  } 
   const {
-    gameId: id,
+    gameId:gameid,
     currentTab: currentTab,
     currentSubTab: currentSubTab,
     currentQuest: currentQuest,
@@ -66,7 +79,7 @@ const ScreenPreview = () => {
     isDispatched: isDispatched,
     CompKeyCount: CompKeyCount,
     reflectionPageUpdated: reflectionPageUpdated,
-  } = useSelector((state: RootState) => state.preview);
+  } = statePreview!==null ? statePreview : InitialState;
   const dispatch = useDispatch();
   const [gameInfo, setGameInfo] = useState<any>();
   const [contentReady, setContentReady] = useState<boolean>(false);
@@ -110,7 +123,9 @@ const ScreenPreview = () => {
   const [navTrack, setNavTrack] = useState([]);
   const [isPrevNavigation, setIsPrevNavigation] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
-
+  const [RefelectionAnswer, setRefelectionAnswer] = useState<any>([]);
+  const [ThankyouFeedback, setThankyouFeedback] = useState<any>(null);
+  const user: any = JSON.parse(localStorage.getItem('user'));
   useEffect(() => {
     const fetchData = async () => {
       const resolvedResult: any = await preloadedImages(assetImageSrc);
@@ -132,13 +147,13 @@ const ScreenPreview = () => {
   }, [gameInfo, isDispatched, activeBlockSeq, currentQuest]);
 
   const replayQuest = () => {
-    dispatch(updatePreviewData({ activeBlockSeq: 1, isDispatched: true }));
+    dispatch(updatePreviewData({ activeBlockSeq: 1, isDispatched: true ,gameId:parseInt(id)}));
     setEndOfQuest(false);
   };
   const fetchDataFromApi = useCallback(async () => {
     try {
-      if (id && isDispatched) {
-        const gamedata = await getGameCreatorDemoData(id);
+      if (gameid && isDispatched) {
+        const gamedata = await getGameCreatorDemoData(gameid);
         if (!gamedata?.error && gamedata) {
           const {
             gameview,
@@ -148,6 +163,7 @@ const ScreenPreview = () => {
             gameQuest,
             ...gameData
           } = gamedata?.result;
+          const completionScreenData =gamedata?.data ;
           const sortBlockSequence = (blockArray: []) => {
             const transformedArray = blockArray.reduce(
               (result: any, obj: any) => {
@@ -165,6 +181,7 @@ const ScreenPreview = () => {
             );
             return transformedArray;
           };
+          /*
           const completionOptions = gameQuest.map((qst: any, i: number) => {
             const item = {
               gameId: qst.gameId,
@@ -195,6 +212,38 @@ const ScreenPreview = () => {
             };
             return item;
           });
+          */
+          const completionOptions = Object.entries(completionScreenData).map((qst: any, i: number) => {
+            const item = {
+              gameTotalScore:qst[1].gameTotalScore,
+              gameId: qst[1].gameId,
+              questNo: qst[1].gameQuestNo,
+              gameIsSetMinPassScore: qst[1].gameIsSetMinPassScore,
+              gameIsSetDistinctionScore: qst[1].gameIsSetDistinctionScore,
+              gameDistinctionScore: qst[1].gameDistinctionScore,
+              gameIsSetSkillWiseScore: qst[1].gameIsSetSkillWiseScore,
+              gameIsSetBadge: qst[1].gameIsSetBadge,
+              gameBadge: qst[1].gameBadge,
+              gameBadgeName: qst[1].gameBadgeName,
+              gameIsSetCriteriaForBadge: qst[1].gameIsSetCriteriaForBadge,
+              gameAwardBadgeScore: qst[1].gameAwardBadgeScore,
+              gameScreenTitle: qst[1].gameScreenTitle,
+              gameIsSetCongratsSingleMessage:
+                qst[1].gameIsSetCongratsSingleMessage,
+              gameIsSetCongratsScoreWiseMessage:
+                qst[1].gameIsSetCongratsScoreWiseMessage,
+              gameCompletedCongratsMessage: qst[1].gameCompletedCongratsMessage,
+              gameMinimumScoreCongratsMessage:
+                qst[1].gameMinimumScoreCongratsMessage,
+              gameaboveMinimumScoreCongratsMessage:
+                qst[1].gameaboveMinimumScoreCongratsMessage,
+              gameLessthanDistinctionScoreCongratsMessage:
+                qst[1].gameLessthanDistinctionScoreCongratsMessage,
+              gameAboveDistinctionScoreCongratsMessage:
+                qst[1].gameAboveDistinctionScoreCongratsMessage,
+            };
+            return item;
+          });
 
           let reflectionData: any = [];
           for (let i = 0; i < gamedata?.resultReflection?.length; i++) {
@@ -204,7 +253,7 @@ const ScreenPreview = () => {
             reflectionData[filteredValue?.refKey] = filteredValue?.refQuestion;
           }
           setGameInfo({
-            gameId: id,
+            gameId: gameid,
             gameData: gameData,
             gameHistory: gameview,
             assets: image,
@@ -259,7 +308,7 @@ const ScreenPreview = () => {
           );
         }
         else{
-          console.log('gamedata',gamedata,'....',id);
+          console.log('gamedata',gamedata,'....',gameid);
         }
       } else {
         console.log('game id is missing...');
@@ -267,7 +316,7 @@ const ScreenPreview = () => {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  }, [id, isDispatched]);
+  }, [gameid, isDispatched]);
   const setInteractionOptions = (gameInfo: any, currentBlock: any) => {
     const optionsFiltered = gameInfo?.questOptions.filter(
       (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
@@ -289,11 +338,11 @@ const ScreenPreview = () => {
   };
 
   useEffect(() => {
-    if (id && isDispatched) {
+    if (gameid && isDispatched) {
       fetchDataFromApi();
-      dispatch(updatePreviewData({ isDispatched: false }));
+      dispatch(updatePreviewData({ isDispatched: false , gameId:parseInt(id)}));
     }
-  }, [id, isDispatched]);
+  }, [gameid, isDispatched]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -325,7 +374,6 @@ const ScreenPreview = () => {
     setSelectedPlayer(preloadedAssets.selectedPlayerKey);
     // return preloadedAssets.selectedPlayerKey;
   }, [preloadedAssets]);
-  console.log('gameInfo', gameInfo,'......',preloadedAssets)
   useEffect(() => {
     if (gameInfo && preloadedAssets) {
       setContentReady(true);
@@ -335,7 +383,7 @@ const ScreenPreview = () => {
   }, [gameInfo, preloadedAssets]);
 
   useEffect(() => {
-    dispatch(updatePreviewData({ isDispatched: false }));
+    dispatch(updatePreviewData({ isDispatched: false ,gameId:parseInt(id)}));
   }, [CompKeyCount]);
 
 
@@ -698,7 +746,60 @@ const ScreenPreview = () => {
     setIsPrevNavigation(false);
     getData(data)
   }
-  console.log('data && type', data, '...', type, '...', data === null);
+  useEffect(() => {
+    // Check if playerId is defined before making the API call
+
+
+    const data = {
+      previewGameId: gameid,
+      playerId: user?.data?.id,
+      playerType: user?.data?.id ? 'creator' : null,
+
+    }
+    if (data) {
+      const getPreviewLogs = async () => {
+        try {
+          // Make API call to get preview logs data
+          const previewData = JSON.stringify(data)
+          const gameContentResult = await getPreviewLogsData(previewData);
+          if (gameContentResult && gameContentResult.playerInputs) {
+            const { playerInputs } = gameContentResult;
+            const parsedInputs = JSON.parse(playerInputs);
+
+            if (parsedInputs && parsedInputs.Reflection && Array.isArray(parsedInputs.Reflection)) {
+              // Use map to iterate over the Reflection array
+              const reflectionItems = parsedInputs.Reflection.map((reflection: any, index: any) => {
+                const refKey = `ref${index + 1}`; // Generate the key based on index
+                const refValue = reflection[refKey]; // Get the value corresponding to the key
+                // Perform any action with the reflection item (e.g., log it)
+                console.log(`${refKey}: ${refValue}`);
+
+                // Return the processed item if needed
+                return { [refKey]: refValue }; // Return an object with the key and value
+              });
+              setRefelectionAnswer(reflectionItems);
+              // Use reflectionItems as needed within the component
+            }
+            if (parsedInputs && parsedInputs.ThankYou)
+              {
+                console.log('parsedInputs.ThankYou',parsedInputs.ThankYou);
+                const Thankyoufeedback = parsedInputs.ThankYou;
+                setThankyouFeedback(Thankyoufeedback);
+              }
+          }
+
+
+          // Handle the result as needed
+        } catch (error) {
+          // Handle errors
+          console.error("Error fetching preview logs:", error);
+        }
+      };
+
+      // Call the function to get preview logs data
+      getPreviewLogs();
+    }
+  }, [gameid]);
   return (
 
     <Box id="container">
@@ -1390,6 +1491,7 @@ const ScreenPreview = () => {
                                 reflectionQuestionsdefault
                               }
                               preloadedAssets={preloadedAssets}
+                              RefelectionAnswer={RefelectionAnswer}
                             /> :
                               <Box
                                 w={'100%'}
@@ -1526,6 +1628,7 @@ const ScreenPreview = () => {
                               imageSrc={preloadedAssets?.Screen6}
                               preview={true}
                               preloadedAssets={preloadedAssets}
+                              ThankyouFeedback={ThankyouFeedback}
                             />
                           </Box>
                         </Box>
