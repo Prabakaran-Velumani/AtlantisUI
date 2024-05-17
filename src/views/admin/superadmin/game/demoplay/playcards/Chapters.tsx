@@ -261,7 +261,8 @@ const ChapterPage: React.FC<{
           maxW="100%"
           w={'100vw'}
           height="100vh"
-          backgroundImage={imageSrc}
+          backgroundImage={preloadedAssets.StarsBg}
+          backgroundColor={'#0d161e'}
           backgroundSize={'cover'}
           backgroundRepeat={'no-repeat'}
           className="chapter_potrait"

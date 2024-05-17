@@ -2105,7 +2105,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets.backgroundImage}
+                          backgroundImage={preloadedAssets?.StarsBg}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -2113,6 +2113,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           alignItems={'center'}
                           justifyContent={'center'}
                           className="Game-Screen"
+                          backgroundColor={'#0d161e'}
                         >
                           <Box className="Images" h={'100vh !important'}>
                             <Welcome
@@ -2235,7 +2236,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       className="Main-Content"
                     >
                       <Box
-                        backgroundImage={preloadedAssets.backgroundImage}
+                       backgroundImage={preloadedAssets.StarsBg}
+                       backgroundColor={'#0d161e'}
                         w={'100% !important'}
                         h={'100vh'}
                         backgroundRepeat={'no-repeat'}
@@ -2274,7 +2276,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets.backgroundImage}
+                         backgroundImage={preloadedAssets.StarsBg}
+                         backgroundColor={'#0d161e'}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -2308,7 +2311,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets.backgroundImage}
+                         backgroundImage={preloadedAssets.StarsBg}
+                         backgroundColor={'#0d161e'}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -2360,7 +2364,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         className="Main-Content"
                       >
                         <Box
-                          backgroundImage={preloadedAssets.backgroundImage}
+                          backgroundImage={preloadedAssets.StarsBg}
+                          backgroundColor={'#0d161e'}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
