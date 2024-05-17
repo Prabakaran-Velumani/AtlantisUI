@@ -148,7 +148,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                           color={option === item?.qpOptions ? 'purple' : 'black'}
                           textAlign={'center'}
                           cursor={'pointer'}
-                          fontFamily={'AtlantisText'}
+                          fontFamily={'AtlantisContent'}
                         >
                           <Img
                             src={option === item?.qpOptions ? preloadedAssets.on : preloadedAssets.off}
@@ -156,13 +156,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                             w={'100%'}
                           />
                           <Box
-                            w={'100%'}
-                            display={'flex'}
-                            justifyContent={'center'}
-                            fontSize={{
-                              md: '1.5vw',
-                              lg: '1.9vw',
-                            }}
+                           className='story_interaction_option'
                           >
                             {item?.qpOptionText}
                           </Box>

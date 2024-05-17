@@ -114,22 +114,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                   </Box>
                 </Box>
                 <Box
-                  mt={'10px'}
-                  w={'100%'}
-                  h={'40%'}
-                  fontWeight={500}
-                  display={'flex'}
-                  justifyContent={'center'}
-                  overflowY={'scroll'}
-                  css={{
-                    // Hide scrollbar for webkit-based browsers (Safari, Chrome)
-                    '&::-webkit-scrollbar': {
-                      display: 'none',
-                    },
-                    // Hide scrollbar for Mozilla-based browsers (Firefox)
-                    'scrollbar-width': 'none', // For Firefox
-                    '-ms-overflow-style': 'none', // For IE and Edge
-                  }}
+                  className='story_options_area'
                 >
                   <Box w={'60%'}>
                     {options &&
