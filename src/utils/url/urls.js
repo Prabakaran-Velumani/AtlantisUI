@@ -172,7 +172,10 @@ getSelectedLanguages:'/languages/getSelectedLanguages/',
      getGameDemoData : '/game/tryout/',
      addGameReview : "/gamereview/addblockreview",
      testAudios: '/game/audioTest',
-     getGameCreatorPreview: '/game/creator/demo/' 
+     getGameCreatorPreview: '/game/creator/demo/' ,
+
+/*****************previewlog table get a reocred*************************/
+getPreviewLogsData:'/preview/priviewlogs'
 
 
 

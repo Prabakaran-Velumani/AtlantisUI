@@ -77,7 +77,33 @@ const CompletionContentScreen: React.FC<{
             <Box className='content-box'>
               <Box className="congratulations">
                 <Box className="content" mt="0px">
-                {compliData[CompKeyCount]?.gameCompletedCongratsMessage}
+                  
+                {/* {compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false' ? (
+                  <>{compliData[CompKeyCount]?.gameCompletedCongratsMessage}</>
+                ): <></>}  */}
+    {/* {(compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') ? ( */}
+    {((compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' || compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === undefined ) && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') ? (
+                <>{compliData[CompKeyCount]?.gameCompletedCongratsMessage || "Congratulations! You have Completed..."}</>
+                ): <></>} 
+    {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false' ? (
+                  <>{compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage}</>
+                ): <></>} 
+    {/* {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' ? (
+                  <>{compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage} {compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage === '' || compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage === '' ? '' : '&'} {compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage}</>
+                ): <></>}  */}
+                {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' ? (
+                  <>{compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage} </>
+                ): <></>} 
+    {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' ? (
+                  <>{compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage}</>
+                ): <></>} 
+
+
+
+              {compliData[CompKeyCount]?.gameCompletedCongratsMessage === '' && (
+                  <><div style={{height:'100px'}}></div></>
+                )} 
+                {/* {compliData[CompKeyCount]?.gameCompletedCongratsMessage} */}
                   {/* {
                   compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage !=
                     true &&
@@ -120,27 +146,32 @@ const CompletionContentScreen: React.FC<{
                   <Box className="inside-box-1">
                     <Img src={point} className="inside-box-1_img" />
                     <Text className="inside-points-text" fontFamily={'content'}>
-                      {(compliData[CompKeyCount]?.gameMinScore || 100) +
+                    {(compliData[CompKeyCount]?.gameMinScore || 100) +
                         '/' +
-                        (compliData[CompKeyCount]?.gameTotalScore
-                          ? compliData[CompKeyCount]?.gameTotalScore?.maxScore ||
-                            100
-                          : '')}
+                      (compliData[CompKeyCount]?.gameTotalScore ? (compliData[CompKeyCount]?.gameTotalScore[0]?.maxScore || 100) :'')}
                     </Text>
                   </Box>
                 </Box>
-
                 {compliData[CompKeyCount]?.gameIsSetBadge === 'true' && (
-                  <Box className="box-2">
-                    <Img src={back} className="box-2_img" />
-                    <Text className="points-text" fontFamily={'content'}>
-                      {compliData[CompKeyCount]?.gameBadgeName}
-                    </Text>
-                    {compliData[CompKeyCount]?.gameBadge && (
-                      <Img className="inside-img" src={imgb} />
-                    )}{' '}
-                  </Box>
-                )}
+                      <Box className='box-2'>
+                        <Img src={back} className='box-2_img' />
+                        <Text className='points-text' fontFamily={'content'}                        
+                        >
+                          {compliData[CompKeyCount]?.gameBadgeName}
+                        </Text>
+                        {compliData[CompKeyCount]?.gameBadge && (
+                          <Img
+                            className='inside-img'
+                            src={imgb}
+                            // ml={'23px'}
+                            // mt={'2px'}
+                            // borderRadius={'10px'}
+                            // w={'50px'}
+                            // h={'50px'}
+                            // alt="Selected Badge Image"
+                          />
+                        )}            </Box>
+                    )}
               </Box>
             </Box>
               <Box className="next-btn">

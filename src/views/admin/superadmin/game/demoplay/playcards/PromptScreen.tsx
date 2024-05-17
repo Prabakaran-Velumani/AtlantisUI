@@ -16,19 +16,28 @@ type languageProps = {
     getPrevLogDatas: any;
     currentScreenId: number;
 }
-const genderList = ['Male', 'Female', "Other"];
-const IsErrorInitialState : any = {name: null, language: null, gender: null};
+const genderList = ['Male', 'Female', 'Other'];
+const IsErrorInitialState = { name: '', language: '', gender: '' };
 
+const defaultLanguage = ''; // Default to empty string instead of 0
 const PromptScreen  : React.FC<languageProps> = ({formData, preloadedAssets, gameLanguages, hasMulitLanguages, setHasMulitLanguages, profileData,setProfileData, setIsOpenCustomModal, isOpenCustomModal, setPreLogDatas, getPrevLogDatas, currentScreenId})=> {
 
 const [isLanguageSelected, setIsLanguageSelected] = useState(false); //to handle the dropdown open and hide for language
 const [isGenderSelected, setIsGenderSelected] = useState(false); //to handle the dropdown open and hide for gender
 const [isError, setIsError] = useState(IsErrorInitialState);
-const [formState, setFormState] = useState<any>();
+const [formState, setFormState] = useState<any>({
+  name: '',
+  language: defaultLanguage,
+  gender: '',
+});
 
 
 useEffect(()=>{
-        setFormState({name: getPrevLogDatas?.previewProfile?.name, language:  getPrevLogDatas?.previewProfile?.language, gender: getPrevLogDatas?.previewProfile?.gender});
+        setFormState({
+          name: getPrevLogDatas?.previewProfile?.name || '',
+          language: getPrevLogDatas?.previewProfile?.language || defaultLanguage,
+          gender: getPrevLogDatas?.previewProfile?.gender || '',
+        });
         
   // return ()=>{
   //   setIsLanguageSelected(false);
@@ -76,42 +85,68 @@ if(formState?.name || formData?.gender || formData?.language){
 },[formState])
 
 
+// const handleProfile = (e: any, input?: any) => {
+//   const { id, value } = e.target;
+//   if(id== "gender"){
+//     setIsGenderSelected(false);
+//   }
+//   else if(id== "language"){
+//     setIsLanguageSelected(false);
+//   }
+//   setFormState((prev:any)=> ({...prev, [id]: id=='name' ? value :  input}));
+// };
 const handleProfile = (e: any, input?: any) => {
   const { id, value } = e.target;
-  if(id== "gender"){
+  if (id === 'gender') {
     setIsGenderSelected(false);
-  }
-  else if(id== "language"){
+  } else if (id === 'language') {
     setIsLanguageSelected(false);
   }
-  setFormState((prev:any)=> ({...prev, [id]: id=='name' ? value :  input}));
+  setIsError((prevError) => ({ ...prevError, [id]: '' }));
+  setFormState((prev: any) => ({ ...prev, [id]: id === 'name' ? value : input }));
 };
 
-const handleProfileSubmit=()=>{
-  if(formState?.name ==='')
-    { 
-      setIsError({name: 'Alias name is empty! Please enter an alias name', ...IsErrorInitialState});
-      return false;
-    }
-  else if(formState?.name?.length < 3 || formState?.name?.length > 15){
-    setIsError({name: 'Alias name must be between 3 and 15 letters', ...IsErrorInitialState});
-      return false;
-    }
-  else if(formState?.gender === '' ){
-      setIsError({gender: "Gender field is mandatory", ...IsErrorInitialState});
-      return false;
-    }
-  else if(formState?.language === '' )
-  {
-    setIsError({gender: "Language field is mandatory", ...IsErrorInitialState});
-    return false;
+// const handleProfileSubmit=()=>{
+//   if(formState?.name ==='')
+//     { 
+//       setIsError({name: 'Alias name is empty! Please enter an alias name', ...IsErrorInitialState});
+//       return false;
+//     }
+//   else if(formState?.name?.length < 3 || formState?.name?.length > 15){
+//     setIsError({name: 'Alias name must be between 3 and 15 letters', ...IsErrorInitialState});
+//       return false;
+//     }
+//   else if(formState?.gender === '' ){
+//       setIsError({gender: "Gender field is mandatory", ...IsErrorInitialState});
+//       return false;
+//     }
+//   else if(formState?.language === '' )
+//   {
+//     setIsError({gender: "Language field is mandatory", ...IsErrorInitialState});
+//     return false;
+//   }
+//   setProfileData((prev:any) => ({ ...prev, ...formState}));
+//   setPreLogDatas((prev:any) => ({...prev,previewProfile:{...prev.previewProfile, ...formState}}));
+//   setIsOpenCustomModal(false);
+// }
+
+const handleProfileSubmit = () => {
+  const newErrors = {
+    name: formState.name === '' ? 'Alias name is empty! Please enter an alias name' : '',
+    gender: formState.gender === '' ? 'Gender field is mandatory' : '',
+    language: gameLanguages.length > 0 && formState.language === '' ? 'Language field is mandatory' : '',
+  };
+
+  setIsError(newErrors);
+
+  const isErrorPresent = Object.values(newErrors).some(error => error !== '');
+
+  if (!isErrorPresent) {
+    setProfileData((prev: any) => ({ ...prev, ...formState }));
+    setPreLogDatas((prev: any) => ({ ...prev, previewProfile: { ...prev.previewProfile, ...formState } }));
+    setIsOpenCustomModal(false);
   }
-  setProfileData((prev:any) => ({ ...prev, ...formState}));
-  setPreLogDatas((prev:any) => ({...prev,previewProfile:{...prev.previewProfile, ...formState}}));
-  setIsOpenCustomModal(false);
-}
-
-
+};
   return (
     isOpenCustomModal && 
     (<FormControl>
@@ -137,11 +172,7 @@ const handleProfileSubmit=()=>{
                         onChange={(e: any) => handleProfile(e)}
                         value={formState.name}
                         />
-                         {isError.name!=='' ? (
-                          <FormHelperText>Enter your Alias Name..!</FormHelperText>
-                          ) : (
-                          <FormErrorMessage>{isError.name}</FormErrorMessage>
-                      )}
+                          {isError.name && <FormHelperText color="red">{isError.name}</FormHelperText>}
                     </Box>
 
                     {/** Gender Selection */}
@@ -186,12 +217,13 @@ const handleProfileSubmit=()=>{
                         </Box>
                       )}
                     </Box>
-                    {isError.gender!=='' ? (
+                    {/* {isError.gender!=='' ? (
                           <FormHelperText>Select Player Gender..!</FormHelperText>
                           ) : (
                           <FormErrorMessage>{isError.gender}</FormErrorMessage>
-                      )}
+                      )} */}
                   </Box>
+                  {isError.gender && <FormHelperText color="red">{isError.gender}</FormHelperText>}
                   </Box>
 
 
@@ -214,7 +246,8 @@ const handleProfileSubmit=()=>{
                       <Box w={'80%'} display={'flex'} justifyContent={'center'}>
                         <Text className={'choosen_lang'} z-index={isLanguageSelected ? 0 : 1}>
                         {/* {gameLanguages.find((lan:any)=> lan.value == getPrevLogDatas?.previewProfile?.language)?.label} */}
-                        {gameLanguages.find((lan:any)=> lan.value == formState?.language)?.label}
+                        {/* {gameLanguages.find((lan:any)=> lan.value == formState?.language)?.label} */}
+                        {gameLanguages.length > 0 ? gameLanguages.find((lan: any) => lan.value === formState?.language)?.label : 'English'}
                         </Text>
                       </Box>
                       <Box w={'20%'}>
@@ -222,7 +255,7 @@ const handleProfileSubmit=()=>{
                       </Box>
                       {isLanguageSelected && (
                         <Box className="dropdown" z-index={2}>
-                          {gameLanguages &&
+                          {/* {gameLanguages &&
                             gameLanguages.map((lang: any, num: any) => (
                               <Text
                                 className={'choosen_langs'}
@@ -236,15 +269,28 @@ const handleProfileSubmit=()=>{
                               >
                                 {lang.label}
                               </Text>
-                            ))}
+                            ))} */}
+                            {gameLanguages.length > 0 ? gameLanguages.map((lang: any, num: any) => (
+                            <Text
+                              className={'choosen_langs'}
+                              ml={'5px'}
+                              key={num}
+                              _hover={{ bgColor: '#377498' }}
+                              id={'language'}
+                              onClick={(e: any) => handleProfile(e, lang.value)}
+                            >
+                              {lang.label}
+                            </Text>
+                          )) : null}
                         </Box>
                       )}
                     </Box>
-                    {isError.language!=='' ? (
+                    {/* {isError.language!=='' ? (
                           <FormHelperText>Select Player Gender..!</FormHelperText>
                           ) : (
                           <FormErrorMessage>{isError.language}</FormErrorMessage>
-                      )}
+                      )} */}
+                       {isError.language && <FormHelperText color="red">{isError.language}</FormHelperText>}
                   </Box>
                 </Box>
           

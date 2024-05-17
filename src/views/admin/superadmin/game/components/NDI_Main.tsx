@@ -45,6 +45,10 @@ import { setStory, BlockModifiedLog } from 'utils/game/gameService';
 import NDITabs from './dragNdrop/QuestTab';
 import ChatButton from './ChatButton';
 import { addReadStatus } from 'utils/reviews/reviews';
+import { updatePreviewData } from '../../../../../store/preview/previewSlice';
+import { useDispatch,useSelector } from 'react-redux';
+import { Dispatch } from '@reduxjs/toolkit'; // Import Dispatch type from @reduxjs/toolkit
+import { RootState } from 'store/reducers';
 interface NDIMainProps {
   handleShowComponent?: (componentName: string) => void;
   id?: any;
@@ -175,6 +179,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
   const [inputtextValue, setinputtextValue] = useState('');
   const [blockWiseReviewCount, setBlockWiseReviewCount] = useState<{ [key: string]: { readCount: number, unReadCount: number, Total: number } }>({});
   const user: any = JSON.parse(localStorage.getItem('user'));
+  const previewStoreData = useSelector((state: RootState) => state.preview);
+  const dispatch: Dispatch<any> = useDispatch();
   // For Character Options
   const characterOption = [
     { value: 'player', label: 'Player' },
@@ -572,6 +578,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
   };
   const delSeq = (seq: any, i: any, name: any) => {
     // removeDataBySeqs(seq.id);
+    console.log('dispatch');
+    dispatch(
+      updatePreviewData({ isDispatched: true ,gameId:parseInt(id) }),
+    );
     const filteredNotes = Object.keys(input)
       .filter((noteKey) => input[noteKey].Notenavigate === seq.input)
       .map((noteKey) => {
@@ -623,6 +633,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
       return updatedItems;
     });
     setDeleteseq(true);
+   
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();

@@ -37,9 +37,11 @@ interface ModelPopupProps {
   setPreLogDatas: any;
   setNavigateBlockEmpty: any;
   NavigateBlockEmpty: any;
+  profileData:any;
+  setQuestState:any
 }
 
-const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, options, geTfeedBackoption, ModelControl, preloadedAssets, setModelControl, getPrevLogDatas, setCurrentScreenId, setLastModified, LastModified, setType, setData, gameInfo, setOptions, gameInfoquest, gameinfodata, isStoryScreen, isSetStoryScreen, setPreLogDatas, setNavigateBlockEmpty, NavigateBlockEmpty }) => {
+const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, options, geTfeedBackoption, ModelControl, preloadedAssets, setModelControl, getPrevLogDatas, setCurrentScreenId, setLastModified, LastModified, setType, setData, gameInfo, setOptions, gameInfoquest, gameinfodata, isStoryScreen, isSetStoryScreen, setPreLogDatas, setNavigateBlockEmpty, NavigateBlockEmpty ,profileData,setQuestState}) => {
   const [QuestScreen, SetQuestScreen] = useState<boolean>(false);
   const [QuestSelectionPage, SetQuestSelectionPage] = useState<boolean>(false);
   const [PlayAgain, SetPlayAgain] = useState<boolean>(false);
@@ -51,15 +53,17 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
       screenIdSeq: [],
       lastActiveBlockSeq: '',
       selectedOptions: '',
-      previewProfile: '',
     }));
     setModelControl(false);
     setLastModified(false);
     setCurrentScreenId(1);
+
   }
   const continueScreen = () => {
     if (LastModified === true) {
       const getLastModifiedid = getPrevLogDatas.lastModifiedBlockSeq;
+      // const getLastModifieddata = new Date(getPrevLogDatas.lastBlockModifiedDate).getTime();
+      // const getupdatedAt = new Date(getPrevLogDatas.updatedAt).getTime();
       let filteredData: any;
       for (const key in gameInfo) {
         const innerObj = gameInfo[key];
@@ -81,16 +85,33 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
           setProfile((prev: any) => ({
             ...prev,
             currentQuest: filteredData.blockQuestNo,
-            completedLevels: [convertArray]
+            completedLevels: convertArray,
+            score: getPrevLogDatas.previewProfile?.score,
           }));
+          if(getPrevLogDatas.previewProfile?.score.length > 0)
+            {
+              setQuestState((prevquestdataList: any) => ({
+                ...prevquestdataList,
+                [filteredData.blockQuestNo]: 'completed',
+              }));
+            }
+         
         }
         else
         {
           setProfile((prev: any) => ({
             ...prev,
             currentQuest: filteredData.blockQuestNo,
-            completedLevels: ["1"]
+            completedLevels: ['1'],
+            score: getPrevLogDatas.previewProfile?.score,
           }));
+          if(getPrevLogDatas.previewProfile?.score.length > 0)
+            {
+              setQuestState((prevquestdataList: any) => ({
+                ...prevquestdataList,
+                [filteredData.blockQuestNo]: 'completed',
+              }));
+            }
         }
       }
       setData(filteredData);
@@ -99,15 +120,33 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
         filteredData.blockChoosen ===
         'Interaction'
       ) {
+
         const optionsFiltered = [];
         const primarySequence = filteredData.blockPrimarySequence;
 
         for (const option of gameInfoquest) {
+          if (profileData?.Audiogetlanguage.length > 0) {
+            if (option?.qpSequence === primarySequence) {
+              const profilesetlan = profileData?.Audiogetlanguage.find(
+                (key: any) => key?.textId === option.qpOptionId,
+              );
 
-          if (option?.qpSequence === primarySequence) {
-            optionsFiltered.push(option);
+              if (profilesetlan) {
+                const languagecont = {
+                  ...option,
+                  qpOptionText: profilesetlan.content,
+                };
+                console.log('languagecont',languagecont);
+                optionsFiltered.push(languagecont);
+              } else {
+                optionsFiltered.push(option);
+              }
+            }
+          } else {
+            if (option?.qpSequence === primarySequence) {
+              optionsFiltered.push(option);
+            }
           }
-
         }
         if (gameinfodata === 'true') {
           for (let i = optionsFiltered.length - 1; i > 0; i--) {
@@ -132,12 +171,49 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
       if (getPrevLogDatas.screenIdSeq.length > 0) {
         const screenlast = getPrevLogDatas.screenIdSeq;
         const getLastScreenId = screenlast[screenlast.length - 1];
+        if (getPrevLogDatas.nevigatedSeq) {
+          const getnevigatedSeq = getPrevLogDatas.nevigatedSeq;
+          const convertArray = Object.keys(getnevigatedSeq);
+          if (convertArray.length > 0) {
+            setProfile((prev: any) => ({
+              ...prev,
+              currentQuest: parseInt(convertArray[convertArray.length -1 ]),
+              completedLevels: convertArray,
+              score: getPrevLogDatas.previewProfile?.score,
+            }));
+            if(getPrevLogDatas.previewProfile?.score.length > 0)
+              {
+                setQuestState((prevquestdataList: any) => ({
+                  ...prevquestdataList,
+                  [parseInt(convertArray[convertArray.length -1 ])]: 'completed',
+                }));
+              }
+              else{
+                    setQuestState((prevquestdataList: any) => ({
+                      ...prevquestdataList,
+                      [parseInt(convertArray[convertArray.length -1 ])]: 'Started',
+                    }));
+                  
+              }
+          }
+          else
+          {
+            setProfile((prev: any) => ({
+              ...prev,
+              currentQuest: 1,
+              completedLevels: ['1']
+            })); 
+                  
+              
+          }
+        }
         if (getLastScreenId == 2) {
           setLastModified(false);
           isSetStoryScreen(true);
           return false;
         }
         else {
+
           setCurrentScreenId(getLastScreenId);
           setModelControl(false);
           return false;
@@ -154,7 +230,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
     if (name === 'lastpausedQuest' && checked) {
 
       SetQuestScreen(true);
-
       SetQuestSelectionPage(false);
       SetPlayAgain(false);
       return false;
@@ -189,21 +264,38 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
           }
 
         }
-        //  return;
+        // console.log('score',getPrevLogDatas.previewProfile,'....',getPrevLogDatas.previewProfile?.score) ;//{"score":[{"seqId":"1.1","score":100,"quest":1,"scoreEarnedDate":"15-05-2024"}],"name":"Book","language":0,"gender":"Male"}
+        // return;
         if(convertArray.length > 0)
           {
             setProfile((prev: any) => ({
               ...prev,
               currentQuest: SetLastSeqData.blockQuestNo,
-              completedLevels: [convertArray]
+              completedLevels: convertArray,
+              score: getPrevLogDatas.previewProfile?.score,
             }));
+            if(getPrevLogDatas.previewProfile?.score.length > 0)
+              {
+                setQuestState((prevquestdataList: any) => ({
+                  ...prevquestdataList,
+                  [SetLastSeqData.blockQuestNo]: 'completed',
+                }));
+              }
           }
           else{
             setProfile((prev: any) => ({
               ...prev,
               currentQuest: SetLastSeqData.blockQuestNo,
-              completedLevels: ["1"]
+              completedLevels: ['1'],
+              score: getPrevLogDatas.previewProfile?.score,
             }));
+            if(getPrevLogDatas.previewProfile?.score.length > 0)
+              {
+                setQuestState((prevquestdataList: any) => ({
+                  ...prevquestdataList,
+                  [SetLastSeqData.blockQuestNo]: 'completed',
+                }));
+              }
           }
         setData(SetLastSeqData);
         setType(SetLastSeqData.blockChoosen);
@@ -213,13 +305,30 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
         ) {
           const optionsFiltered = [];
           const primarySequence = getLastSeq;
-
+  
           for (const option of gameInfoquest) {
-
-            if (option?.qpSequence === primarySequence) {
-              optionsFiltered.push(option);
+            if (profileData?.Audiogetlanguage.length > 0) {
+              if (option?.qpSequence === primarySequence) {
+                const profilesetlan = profileData?.Audiogetlanguage.find(
+                  (key: any) => key?.textId === option.qpOptionId,
+                );
+  
+                if (profilesetlan) {
+                  const languagecont = {
+                    ...option,
+                    qpOptionText: profilesetlan.content,
+                  };
+                  console.log('languagecont',languagecont);
+                  optionsFiltered.push(languagecont);
+                } else {
+                  optionsFiltered.push(option);
+                }
+              }
+            } else {
+              if (option?.qpSequence === primarySequence) {
+                optionsFiltered.push(option);
+              }
             }
-
           }
           if (gameinfodata === 'true') {
             for (let i = optionsFiltered.length - 1; i > 0; i--) {
@@ -239,12 +348,46 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
       }
     }
     else if (QuestSelectionPage === true) {
+      if (getPrevLogDatas.nevigatedSeq) {
+        const getnevigatedSeq = getPrevLogDatas.nevigatedSeq;
+        const convertArray = Object.keys(getnevigatedSeq);
+        if (convertArray.length > 0) {
+          setProfile((prev: any) => ({
+            ...prev,
+            currentQuest: parseInt(convertArray[convertArray.length -1 ]),
+            completedLevels: convertArray,
+            score: getPrevLogDatas.previewProfile?.score,
+          }));
+          if(getPrevLogDatas.previewProfile?.score.length > 0)
+            {
+              setQuestState((prevquestdataList: any) => ({
+                ...prevquestdataList,
+                [parseInt(convertArray[convertArray.length -1 ])]: 'completed',
+              }));
+            }
+        }
+        else
+        {
+          setProfile((prev: any) => ({
+            ...prev,
+            currentQuest: 1,
+            completedLevels: ['1'],
+          }));
+        }
+      }
       setModelControl(false);
       isSetStoryScreen(false);
       setCurrentScreenId(13);
       return false;
     }
     else if (PlayAgain === true) {
+      setPreLogDatas((prev: any) => ({
+        ...prev,
+        nevigatedSeq: [],
+        screenIdSeq: [],
+        lastActiveBlockSeq: '',
+        selectedOptions: '',
+      }));
       setModelControl(false);
       isSetStoryScreen(false);
       return false;
@@ -252,144 +395,141 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
   }
   const HandleBlockScreen = () => {
     setNavigateBlockEmpty(false);
-    // setType(demoBlocks[quest]['1']?.blockChoosen);
-    // setData(demoBlocks[quest]['1']);
-    // setSelectedOption(null);
     return false;
   }
   return (
     // <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
-    <Modal isOpen={true} onClose={ModelControl} size={'medium'} >
-      <ModalOverlay />
-      <ModalContent
-        className='feedback_screenshot'
-        backgroundImage={backGroundImg}
-        backgroundSize={'cover'}
-        filter={'contrast(70%)'}
-        backgroundRepeat={'no-repeat'}
-        boxShadow={'inset 0px 5px 100px 25px white'}
-        borderRadius={'35px !important'}
-      >
-        <ModalBody width={'100%'} height={'100%'}>
+    <Modal isOpen={true} onClose={ModelControl} closeOnOverlayClick={false} size={'medium'} >
+    <ModalOverlay />
+    <ModalContent
+      className='feedback_screenshot'
+      backgroundImage={backGroundImg}
+      backgroundSize={'cover'}
+      filter={'contrast(70%)'}
+      backgroundRepeat={'no-repeat'}
+      boxShadow={'inset 0px 5px 100px 25px white'}
+      borderRadius={'35px !important'}
+    >
+      <ModalBody width={'100%'} height={'100%'}>
 
-          <Box className="top-menu-home-section-screenshot">
+        <Box className="top-menu-home-section-screenshot">
 
-          </Box>
+        </Box>
 
-          <Box className="story_interaction_image_screenshot">
-            <Box position={'relative'} h={'100%'}>
+        <Box className="story_interaction_image_screenshot">
+          <Box position={'relative'} h={'100%'}>
+            <Box
+              position={'absolute'}
+              top={{ sm: '18px', md: '8%' }}
+              h={'80% !important'}
+              className="story_interaction_image_screenshot_content"
+            >
               <Box
-                position={'absolute'}
-                top={{ sm: '18px', md: '8%' }}
-                h={'80% !important'}
-                className="story_interaction_image_screenshot_content"
+                textAlign={'center'}
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                fontWeight={700}
+                fontSize={{ md: '1.5vw', lg: '1.9vw' }}
+                fontFamily={'AtlantisText'}
+                lineHeight={1}
+                w={'100%'}
+                h={'5%'}
+              >
+                <Box w={'80%'}>
+                  {LastModified === true ? ' Would you like to view the lastModified sequence?' : isStoryScreen === true ?
+
+                    <><Box style={{ textAlign: 'center' }}>  Choose  Any One Option ?</Box>
+
+                      <Box >
+                        Do you want to continue from the Quest where you last paused?
+                        <Switch
+                          isChecked={QuestScreen === true ? true : false}
+                          color="#fff"
+                          colorScheme="brandScheme"
+                          size="md"
+                          id="lastpausedQuest"
+                          name="lastpausedQuest"
+                          onChange={handleChange}
+                        />
+                      </Box>
+                      <Box >
+                        Would you like to navigate to the Quest Selection page?
+                        <Switch
+                          isChecked={QuestSelectionPage === true ? true : false}
+                          color="#fff"
+                          colorScheme="brandScheme"
+                          size="md"
+                          id="questSelectionPage"
+                          name="questSelectionPage"
+                          onChange={handleChange}
+                        />
+                      </Box>
+                      <Box >
+                        Do you want to Play Again
+                        <Switch
+                          isChecked={PlayAgain === true ? true : false}
+                          color="#fff"
+                          colorScheme="brandScheme"
+                          size="md"
+                          id="playAgain"
+                          name="playAgain"
+                          onChange={handleChange}
+                        />
+                      </Box>
+                    </> : NavigateBlockEmpty === true ? 'Dont have any blocks. So, navigate to the first block.' : '  Do you want to continue from the screen where you last paused?'}
+
+                </Box>
+              </Box>
+              <Box
+                className='story_screenshot_interaction_question'
               >
                 <Box
-                  textAlign={'center'}
-                  display={'flex'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  fontWeight={700}
+                  className='screenshot_content'
+                  w={'60%'}
                   fontSize={{ md: '1.5vw', lg: '1.9vw' }}
-                  fontFamily={'AtlantisText'}
-                  lineHeight={1}
-                  w={'100%'}
-                  h={'5%'}
+                  letterSpacing={1}
+                  justifyContent={'flex-start'}
                 >
-                  <Box w={'80%'}>
-                    {LastModified === true ? ' Would you like to view the lastModified sequence?' : isStoryScreen === true ?
 
-                      <><Box style={{ textAlign: 'center' }}>  Choose  Any One Option ?</Box>
-
-                        <Box >
-                          Do you want to continue from the Quest where you last paused?
-                          <Switch
-                            isChecked={QuestScreen === true ? true : false}
-                            color="#fff"
-                            colorScheme="brandScheme"
-                            size="md"
-                            id="lastpausedQuest"
-                            name="lastpausedQuest"
-                            onChange={handleChange}
-                          />
-                        </Box>
-                        <Box >
-                          Would you like to navigate to the Quest Selection page?
-                          <Switch
-                            isChecked={QuestSelectionPage === true ? true : false}
-                            color="#fff"
-                            colorScheme="brandScheme"
-                            size="md"
-                            id="questSelectionPage"
-                            name="questSelectionPage"
-                            onChange={handleChange}
-                          />
-                        </Box>
-                        <Box >
-                          Do you want to Play Again
-                          <Switch
-                            isChecked={PlayAgain === true ? true : false}
-                            color="#fff"
-                            colorScheme="brandScheme"
-                            size="md"
-                            id="playAgain"
-                            name="playAgain"
-                            onChange={handleChange}
-                          />
-                        </Box>
-                      </> : NavigateBlockEmpty === true ? 'Dont have any blocks. So, navigate to the first block.' : '  Do you want to continue from the screen where you last paused?'}
-
-                  </Box>
                 </Box>
-                <Box
-                  className='story_screenshot_interaction_question'
-                >
-                  <Box
-                    className='screenshot_content'
-                    w={'60%'}
-                    fontSize={{ md: '1.5vw', lg: '1.9vw' }}
-                    letterSpacing={1}
-                    justifyContent={'flex-start'}
-                  >
+              </Box>
+              <Box
+                mt={'10px'}
+                w={'100%'}
+                h={'40%'}
+                fontWeight={500}
+                overflowY={'scroll'}
+                display={'flex'}
+                justifyContent={'center'}
+                className={'screenshot_interaction_options'}
+              >
+                <Box w={'60%'}>
 
-                  </Box>
-                </Box>
-                <Box
-                  mt={'10px'}
-                  w={'100%'}
-                  h={'40%'}
-                  fontWeight={500}
-                  overflowY={'scroll'}
-                  display={'flex'}
-                  justifyContent={'center'}
-                  className={'screenshot_interaction_options'}
-                >
-                  <Box w={'60%'}>
-
-                  </Box>
                 </Box>
               </Box>
             </Box>
           </Box>
+        </Box>
 
-        </ModalBody>
-        <ModalFooter>
-          <>
-            {/* <Img
-              src={preloadedAssets.replayBtn}
-              className="replay_buttons"
-            /> */}
-            {NavigateBlockEmpty === true ? <Button onClick={() => { HandleBlockScreen() }} > Ok</Button> : isStoryScreen === false ? <> <Button onClick={() => { continueScreen() }}> Yes</Button>
-              <Button onClick={() => { NextScreen() }} > No</Button></> : <Button onClick={() => { HandleScreen() }} > Ok</Button>}
+      </ModalBody>
+      <ModalFooter>
+        <>
+          {/* <Img
+            src={preloadedAssets.replayBtn}
+            className="replay_buttons"
+          /> */}
+          {NavigateBlockEmpty === true ? <Button onClick={() => { HandleBlockScreen() }} > Ok</Button> : isStoryScreen === false ? <> <Button onClick={() => { continueScreen() }}> Yes</Button>
+            <Button onClick={() => { NextScreen() }} > No</Button></> : <Button onClick={() => { HandleScreen() }} > Ok</Button>}
 
-            {/* <Img
-              src={preloadedAssets.next}
-              className="replay_buttons"
-            /> */}
-          </>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+          {/* <Img
+            src={preloadedAssets.next}
+            className="replay_buttons"
+          /> */}
+        </>
+      </ModalFooter>
+    </ModalContent>
+  </Modal>
   )
 }
 

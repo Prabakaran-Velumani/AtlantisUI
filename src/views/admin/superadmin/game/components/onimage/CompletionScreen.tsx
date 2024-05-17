@@ -93,6 +93,7 @@ const CompletionScreen: React.FC<{ formData: any; imageSrc: any; selectedBadge: 
     };
 
     fetchDatass(); // Call the asynchronous function
+    console.log('compliData ...',compliData);
   }, [compliData]);
 
   return (

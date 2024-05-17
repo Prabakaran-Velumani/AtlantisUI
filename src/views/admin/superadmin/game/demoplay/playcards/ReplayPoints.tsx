@@ -18,6 +18,9 @@ const ReplayPoints: React.FC<{
   setCurrentScreenId: (id: number) => void;
   setModelScreen: any;
   modelScreen: any;
+  gameInfo:any;
+  profileData:any;
+  setOptions:any;
 }> = ({
   setData,
   setType,
@@ -27,12 +30,51 @@ const ReplayPoints: React.FC<{
   setCurrentScreenId,
   setModelScreen,
   modelScreen,
+  gameInfo,
+  profileData,
+  setOptions,
 }) => {
   //modalType=>{screenId:number | null, reason:"noPreviousNaviagation"}  // if block has no previous block navigation
   //modalType=>{screenId:null, reason:"replayPoint"} //if a block navigate to replay point
   const handleReplayButtonClick = () => {
     setType(demoBlocks[profile?.currentQuest]['1']?.blockChoosen);
     setData(demoBlocks[profile?.currentQuest]['1']);
+    if (demoBlocks[profile?.currentQuest]['1']?.blockChoosen === 'Interaction') {
+    const optionsFiltered = [];
+            for (const option of gameInfo.questOptions) {
+              if (profileData?.Audiogetlanguage.length > 0) {
+                if (option?.qpSequence === demoBlocks[profile?.currentQuest]['1']?.blockPrimarySequence) {
+                  const profilesetlan = profileData?.Audiogetlanguage.find(
+                    (key: any) => key?.textId === option.qpOptionId,
+                  );
+
+                  if (profilesetlan) {
+                    const languagecont = {
+                      ...option,
+                      qpOptionText: profilesetlan.content,
+                    };
+                    optionsFiltered.push(languagecont);
+                  } else {
+                    optionsFiltered.push(option);
+                  }
+                }
+              } else {
+                if (option?.qpSequence === demoBlocks[profile?.currentQuest]['1']?.blockPrimarySequence) {
+                  optionsFiltered.push(option);
+                }
+              }
+            }
+            if (gameInfo?.gameData?.gameShuffle === 'true') {
+              for (let i = optionsFiltered.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsFiltered[i], optionsFiltered[j]] = [
+                  optionsFiltered[j],
+                  optionsFiltered[i],
+                ];
+              }
+            }
+            setOptions(optionsFiltered);
+          }
     setCurrentScreenId(2);
   };
   const handleOk = () => {

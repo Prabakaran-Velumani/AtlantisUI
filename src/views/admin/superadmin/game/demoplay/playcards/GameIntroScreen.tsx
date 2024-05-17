@@ -1,8 +1,6 @@
 import { Box, Grid, GridItem, Icon, Img, Button, Text } from '@chakra-ui/react';
-import React,{lazy} from 'react';
-// const CharacterModel = lazy(() => import ('./CharacterModel'));
-
-
+import React from 'react';
+import { FaLanguage } from "react-icons/fa6";
 
 interface GameIntroType {
   preloadedAssets: any;
@@ -17,46 +15,81 @@ interface GameIntroType {
   setLastModified: any;
   hasMulitLanguages: boolean;
   setIsOpenCustomModal: (value: boolean)=> void;
-  // CharacterModel: React.FC;
 }
 
-const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentScreenId, setIsGetsPlayAudioConfirmation, setPreLogDatas, getPrevLogDatas, setprevScreenId, currentScreenId, setModelControl, gameInfo, setLastModified, hasMulitLanguages, setIsOpenCustomModal }) => {
+const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentScreenId, setIsGetsPlayAudioConfirmation, setPreLogDatas, getPrevLogDatas, setprevScreenId, currentScreenId, setModelControl, gameInfo, setLastModified, hasMulitLanguages, setIsOpenCustomModal}) => {
+
 
   const Handlemodel = () => {
     // setprevScreenId((prev:any) => ([
     //     ...prev, currentScreenId
     //   ]));
+   
+    // const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+    // if (screenIdset !== currentScreenId) {
+    //   setPreLogDatas((prev: any) => ({
+    //     ...prev,
+    //     screenIdSeq: [...prev.screenIdSeq, currentScreenId]
+    //   }));
+    // }
     if (getPrevLogDatas.playerType === 'creator') {
       const getplayerid = getPrevLogDatas.playerId;
       if (getplayerid === gameInfo.gameCreatedUserId) {
         const getLastModifiedid = getPrevLogDatas.lastModifiedBlockSeq;
+        console.log('getPrevLogDatas.playerType',getLastModifiedid)
         if (getLastModifiedid !== null) {
           setLastModified(true);
+          
           setModelControl(true);
           return false;
         }
         else {
           if (getPrevLogDatas.screenIdSeq.length > 0) {
+            console.log('getPrevLogDatas.playerType',getPrevLogDatas.playerType)
             setModelControl(true);
             return false;
           }
           else
           {
             setCurrentScreenId(1);
+
             return false;
           }
 
         }
       }
-    }
+      else
+      {
+        if (getPrevLogDatas.screenIdSeq.length > 0) {
+          console.log('getPrevLogDatas.playerType',getPrevLogDatas.playerType)
+          setModelControl(true);
+          return false;
+        }
+        else
+        {
+          setCurrentScreenId(1);
 
-    const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
-    if (screenIdset !== currentScreenId) {
-      setPreLogDatas((prev: any) => ({
-        ...prev,
-        screenIdSeq: [...prev.screenIdSeq, currentScreenId]
-      }));
+          return false;
+        }
+        
+      }
     }
+    else
+    {
+      if (getPrevLogDatas.screenIdSeq.length > 0) {
+        console.log('getPrevLogDatas.playerType',getPrevLogDatas.playerType)
+        setModelControl(true);
+        return false;
+      }
+      else
+      {
+        setCurrentScreenId(1);
+        return false;
+      }
+
+    }
+    
+
   
     // const screens1 = [1];
     // if (!screens1.includes(currentScreenId)) {
@@ -84,15 +117,13 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
       backgroundRepeat={'no-repeat'}
       className="chapter_potrait"
     >
-       {/* {hasMulitLanguages && (
+       {hasMulitLanguages && (
       <>
         <Box className="intro_lang_icon" onClick={()=>setIsOpenCustomModal(true)}>
         <Icon as={FaLanguage} w={"4em"} h={"3em"} />
         </Box>
       </>
-      )} */}
-    {/* <CharacterModel /> */}
-
+      )}
       <Grid
         templateColumns="repeat(1, 1fr)"
         gap={4}

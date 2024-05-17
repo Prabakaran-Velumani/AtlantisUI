@@ -79,11 +79,13 @@ interface Badge {
   gasAssetName: string;
 }
 
-const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview: any, preloadedAssets?: any }> = ({
+const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview: any, preloadedAssets?: any,
+  ThankyouFeedback:any }> = ({
   formData,
   imageSrc,
   preview,
-  preloadedAssets
+  preloadedAssets,
+  ThankyouFeedback,
 }) => {
   const renderContentTy = () => {
     const linkRegex = /(https?:\/\/[^\s]+)/g;
@@ -386,6 +388,9 @@ const styleflex = {};
                                 <p>
                                   <Icon as={FaRegCommentDots} />
                                 </p>
+                                <div>
+                                <p>{ThankyouFeedback}</p>
+                              </div>
                               </div>
                             </div>
                           </div>
@@ -668,6 +673,9 @@ const styleflex = {};
                             <p>
                               <Icon as={FaRegCommentDots} />
                             </p>
+                            <div>
+                                <p>{ThankyouFeedback}</p>
+                              </div>
                           </div>
                         </div>
                       </div>

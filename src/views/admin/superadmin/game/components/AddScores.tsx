@@ -104,6 +104,8 @@ const AddScores: React.FC<{
   handleCompletionScreen?: any;
   handlecompletion?: any;
   handleEnables: any;
+  RefelectionAnswer:any;
+  ThankyouFeedback:any;
 }> = ({
   languages,
   setShowFunction,
@@ -147,7 +149,9 @@ const AddScores: React.FC<{
   setCompKeyCount,
   handleCompletionScreen,
   handlecompletion,
-  handleEnables
+  handleEnables,
+  RefelectionAnswer,
+  ThankyouFeedback
 }) => {
   /**********navin */
   // brindha start
@@ -893,6 +897,7 @@ const AddScores: React.FC<{
                   imageSrc={ScreenMainImages[currentTab]}
                   reflectionQuestions={reflectionQuestions}
                   reflectionQuestionsdefault={reflectionQuestionsdefault}
+                  RefelectionAnswer={RefelectionAnswer}
                 />
               )}
               {currentTab === 3 && (
@@ -914,6 +919,7 @@ const AddScores: React.FC<{
                   preview={false}
                   formData={formData}
                   imageSrc={ScreenMainImages[currentTab]}
+                  ThankyouFeedback={ThankyouFeedback}
                 />
               )}              
             </Box>

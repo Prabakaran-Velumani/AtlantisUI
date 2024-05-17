@@ -42,6 +42,10 @@ const ChapterPage: React.FC<{
   currentScreenId:any;
   setPreLogDatas:any;
   getPrevLogDatas:any;
+  profileData:any;
+  gameOptionSuffled:any;
+  setRepeatPrevOption:any;
+  setSelectedOption:any;
 }> = ({
   imageSrc,
   demoBlocks,
@@ -60,7 +64,11 @@ const ChapterPage: React.FC<{
   preloadedAssets,
   setprevScreenId,currentScreenId,
   setPreLogDatas,
-  getPrevLogDatas
+  getPrevLogDatas,
+  profileData,
+  gameOptionSuffled,
+  setRepeatPrevOption,
+  setSelectedOption
 }) => {
   const [questScores, setQuestScores] = useState(null);
 
@@ -237,6 +245,52 @@ const ChapterPage: React.FC<{
 
         setType(demoBlocks[it]['1']?.blockChoosen);
         setData(demoBlocks[it]['1']);
+        setRepeatPrevOption([]);
+        setSelectedOption(null);
+        if (
+          demoBlocks[it]['1']?.blockChoosen ===
+          'Interaction'
+        ) {
+
+          const optionsFiltered = [];
+          const primarySequence =
+          demoBlocks[it]['1'].blockPrimarySequence;
+  
+          for (const option of questOptions) {
+            if (profileData?.Audiogetlanguage.length > 0) {
+              if (option?.qpSequence === primarySequence) {
+                const profilesetlan = profileData?.Audiogetlanguage.find(
+                  (key: any) => key?.textId === option.qpOptionId,
+                );
+  
+                if (profilesetlan) {
+                  const languagecont = {
+                    ...option,
+                    qpOptionText: profilesetlan.content,
+                  };
+                  console.log('languagecont',languagecont);
+                  optionsFiltered.push(languagecont);
+                } else {
+                  optionsFiltered.push(option);
+                }
+              }
+            } else {
+              if (option?.qpSequence === primarySequence) {
+                optionsFiltered.push(option);
+              }
+            }
+          }
+          if (gameOptionSuffled === 'true') {
+            for (let i = optionsFiltered.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [optionsFiltered[i], optionsFiltered[j]] = [
+                optionsFiltered[j],
+                optionsFiltered[i],
+              ]; // Swap elements at indices i and j
+            }
+          }
+          setOptions(optionsFiltered);
+        }
         setFeedbackList([]);
         const updatedCompletedLevels = new Set([...profile.completedLevels, it])      
         setProfile((prev: any) => ({
@@ -383,7 +437,7 @@ const ChapterPage: React.FC<{
                                   className="amount-score"
                                   textAlign={'center'}
                                 >
-                                  {profile.playerGrandTotal[it] ?? 0}/{questScores &&  questScores[it] !==null && questScores[it] > 0  ? questScores[it] : 0}{' '}
+                                  {profile.playerGrandTotal ? profile.playerGrandTotal?.questScores[it] ?  profile.playerGrandTotal?.questScores[it] : 0: 0}/{questScores &&  questScores[it] !==null && questScores[it] > 0  ? questScores[it] : 0}{' '}
                                   <Icon as={BiMoney} />
                                   <Img src={preloadedAssets.MoneyIcon} zIndex={5}/>
                                 </Text>

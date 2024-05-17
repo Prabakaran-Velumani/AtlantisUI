@@ -45,6 +45,7 @@ interface FeedBackScreenShotProps {
     preloadedAssets: any;
     FeedbackcurrentPosition?: any;
     interactionBlockArray?: any;
+    profileData?:any
 }
 const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
   backgroundScreenUrl,
@@ -64,7 +65,8 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
   getFeedbackData,
   preloadedAssets,
   FeedbackcurrentPosition,
-  interactionBlockArray
+  interactionBlockArray,
+  profileData
 }) => {
 
   const geTfeedBackoption = () => {
@@ -207,10 +209,10 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                 option={FeedBackselectedoptionData}
                 options={options}
                 backGroundImg={backgroundScreenUrl}
-                profile={profile}
                 geTfeedBackoption={geTfeedBackoption}
                 isScreenshot={isScreenshot}
                 preloadedAssets={preloadedAssets}
+                profileData={profileData}
               />
             )}
       </>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Grid, GridItem, Img, Modal, ModalBody, ModalContent, ModalOverlay, Text } from '@chakra-ui/react';
 import right from 'assets/img/games/right.png';
 import left from 'assets/img/games/left.png';
@@ -17,17 +17,29 @@ interface InteractionScreenShotProps {
   options?: any;
   backGroundImg?: any;
   option?: any;
-  profile?: any;
   geTfeedBackoption?: any;
   isScreenshot?: any;
   preloadedAssets?: any;
+  profileData?:any;
 }
 
-const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, profile, options, geTfeedBackoption, isScreenshot, preloadedAssets }) => {
-
+const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, options, geTfeedBackoption, isScreenshot, preloadedAssets ,profileData}) => {
+  const [QuestContentByLanguage, setQuestContentByLanguage] = useState(null);
+  useEffect(() => {
+    const GetblocktextAudioFiltered =
+      profileData?.Audiogetlanguage.filter(
+        (key: any) => key.textId === data[0].blockId,
+      );
+    if (GetblocktextAudioFiltered.length > 0) {
+      const Filteredcontent = GetblocktextAudioFiltered.map(
+        (item: any) => item.content,
+      );
+      setQuestContentByLanguage(Filteredcontent);
+    }
+  }, [data?.blockId]);
   return (
     // <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
-    <Modal isOpen={true} onClose={isScreenshot} size={'medium'} >
+    <Modal isOpen={true} onClose={isScreenshot} closeOnOverlayClick={false} size={'medium'} >
       <ModalOverlay />
       <ModalContent
         className='feedback_screenshot'
@@ -85,94 +97,94 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
               w={'90%'}            
             >
               <GridItem colSpan={1} position={'relative'}> */}
-                <Box  className="story_interaction_image_screenshot">
-                  <Box position={'relative'} h={'100%'}>
-                  <Img src={preloadedAssets.parch} w={'auto'} filter={'contrast(80%)'} h={'100%'} loading="lazy" />
-                  <Box
-                    position={'absolute'}
-                    top={{ sm: '18px', md: '8%' }}
-                    h={'80% !important'}
-                    className="story_interaction_image_screenshot_content"
-                  >
-                    <Box
-                      textAlign={'center'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                      alignItems={'center'}
-                      fontWeight={700}
-                      fontSize={{ md: '1.5vw', lg: '1.9vw' }}
-                      fontFamily={'AtlantisText'}
-                      lineHeight={1}
-                      w={'100%'}
-                      h={'5%'}
-                    >
-                      <Box w={'80%'}>
-                        Interactions...!{' '}
-                      </Box>
-                    </Box>
-                    <Box
-                      className='story_screenshot_interaction_question'
-                    >
-                      <Box
-                       className='screenshot_content'
-                        w={'60%'}
-                        fontSize={{ md: '1.5vw', lg: '1.9vw' }}
-                        letterSpacing={1}
-                        justifyContent={'flex-start'}
-                      >
-                        <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
-                        {data[0]?.blockText}
-                        
-                      </Box>
-                    </Box>
-                    <Box
-                      mt={'10px'}
-                      w={'100%'}
-                      h={'40%'}
-                      fontWeight={500}
-                      overflowY={'scroll'}
-                      display={'flex'}
-                      justifyContent={'center'}
-                      className={'screenshot_interaction_options'}
-                    >
-                      <Box w={'60%'}>
-                        {options &&
-                          options.map((item: any, ind: number) => (
-                            <Box
-                              w={'100%'}
-                              mb={'10px'}
-                              lineHeight={1}
-                              key={ind}
-                              color={option === item?.qpOptions ? 'purple' : 'black'}
-                              textAlign={'center'}
-                              cursor={'pointer'}
-                              fontFamily={'AtlantisText'}
-                            >
-                              <Img
-                                src={option === item?.qpOptions ? preloadedAssets.on : preloadedAssets.off}
-                                h={'30px'}
-                                w={'100%'}
-                              />
-                              <Box
-                                w={'100%'}
-                                display={'flex'}
-                                justifyContent={'center'}
-                                fontSize={{
-                                  md: '1.5vw',
-                                  lg: '1.9vw',
-                                }}
-                              >
-                                {/* {item?.qpOptionText} */}
-                                {`${String.fromCharCode(65 + ind)}). ${item?.qpOptionText}`}
-                              </Box>
-                            </Box>
-                          ))}
-                      </Box>
-                    </Box>
-                  </Box>
+          <Box className="story_interaction_image_screenshot">
+            <Box position={'relative'} h={'100%'}>
+              <Img src={preloadedAssets.parch} w={'auto'} filter={'contrast(80%)'} h={'100%'} loading="lazy" />
+              <Box
+                position={'absolute'}
+                top={{ sm: '18px', md: '8%' }}
+                h={'80% !important'}
+                className="story_interaction_image_screenshot_content"
+              >
+                <Box
+                  textAlign={'center'}
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  fontWeight={700}
+                  fontSize={{ md: '1.5vw', lg: '1.9vw' }}
+                  fontFamily={'AtlantisText'}
+                  lineHeight={1}
+                  w={'100%'}
+                  h={'5%'}
+                >
+                  <Box w={'80%'}>
+                    Interactions...!{' '}
                   </Box>
                 </Box>
-                {/* <Box
+                <Box
+                  className='story_screenshot_interaction_question'
+                >
+                  <Box
+                    className='screenshot_content'
+                    w={'60%'}
+                    fontSize={{ md: '1.5vw', lg: '1.9vw' }}
+                    letterSpacing={1}
+                    justifyContent={'flex-start'}
+                  >
+                    <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
+                    {QuestContentByLanguage!==null ? QuestContentByLanguage : data[0]?.blockText}
+
+                  </Box>
+                </Box>
+                <Box
+                  mt={'10px'}
+                  w={'100%'}
+                  h={'40%'}
+                  fontWeight={500}
+                  overflowY={'scroll'}
+                  display={'flex'}
+                  justifyContent={'center'}
+                  className={'screenshot_interaction_options'}
+                >
+                  <Box w={'60%'}>
+                    {options &&
+                      options.map((item: any, ind: number) => (
+                        <Box
+                          w={'100%'}
+                          mb={'10px'}
+                          lineHeight={1}
+                          key={ind}
+                          color={option === item?.qpOptions ? 'purple' : 'black'}
+                          textAlign={'center'}
+                          cursor={'pointer'}
+                          fontFamily={'AtlantisText'}
+                        >
+                          <Img
+                            src={option === item?.qpOptions ? preloadedAssets.on : preloadedAssets.off}
+                            h={'30px'}
+                            w={'100%'}
+                          />
+                          <Box
+                            w={'100%'}
+                            display={'flex'}
+                            justifyContent={'center'}
+                            fontSize={{
+                              md: '1.5vw',
+                              lg: '1.9vw',
+                            }}
+                          >
+                            {/* {item?.qpOptionText} */}
+                            {`${String.fromCharCode(65 + ind)}). ${item?.qpOptionText}`}
+                          </Box>
+                        </Box>
+                      ))}
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+          {/* <Box
                   textAlign={'center'}
                   h={'25%'}
                   display={'flex'}
@@ -238,7 +250,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                   </Box>
                 </Box> */}
 
-              {/* </Box>
+          {/* </Box>
             </Box>
           </Box> */}
           {/* </GridItem>

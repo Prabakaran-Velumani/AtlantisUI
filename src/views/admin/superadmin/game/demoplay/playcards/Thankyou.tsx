@@ -77,7 +77,7 @@ const ThankYou: React.FC<{
 
   // Filter properties where the value is 'true'
   const trueValuesArray = propertiesToCheck.filter(property => formData[property] === 'true');
-  const  [playerInputs,setPlayerInputs] = useState<string>(null);
+  const  [userInputs,setUserInputs] = useState<any>([]);
 
   var thirdValue = "";
   if (trueValuesArray.length >= 3) {
@@ -119,16 +119,32 @@ const ThankYou: React.FC<{
 // };
 
 const updateDatabase = async ()=>{
-  setPreLogDatas((prev: any)=>({...prev, 'playerInputs': playerInputs}))
 };
 
 useEffect(()=>{
+  setPreLogDatas((prev: any) => ({
+    ...prev,
+    playerInputs: {
+      ...prev.playerInputs, // Ensure prev.playerInputs exists
+      ThankYou: userInputs // Assign userInputs to ThankYou key
+    }
+  }));
   const debouncedUpdateDatabase = debounce(updateDatabase, 1000); 
   return ()=>{
     debouncedUpdateDatabase.cancel();
   };
-},[playerInputs])
-
+},[userInputs])
+const handleNext =() =>
+  {
+    setPreLogDatas((prev: any) => ({
+      ...prev,
+      playerInputs: {
+        ...prev.playerInputs, // Ensure prev.playerInputs exists
+        ThankYou: userInputs // Assign userInputs to ThankYou key
+      }
+    }));
+    setCurrentScreenId(13);
+  }
   return (
     <>
       {preloadedAssets.Thankyou && (
@@ -380,7 +396,7 @@ useEffect(()=>{
                                     _focus={{ boxShadow: 'none', border: 'none' }}
                                     fontFamily="AtlantisText"
                                     // onBlur={updateDatabase}
-                                    onChange={(e:any)=>setPlayerInputs(e.target.value)}
+                                    onChange={(e:any)=>setUserInputs(e.target.value)}
                                   />
                             </div>
                           </div>
@@ -428,7 +444,7 @@ useEffect(()=>{
             </Box>
           </Box>
           <Box className='next-btn'>
-            <Img src={next} onClick={() => setCurrentScreenId(13)} />
+            <Img src={next} onClick={() => handleNext()} />
           </Box>
           {/* <Box className='next-btn' style={{ position: 'absolute', display:'flex', top:'100px', right:'0' , justifyContent:'center'}}>
            <Img src={next} />

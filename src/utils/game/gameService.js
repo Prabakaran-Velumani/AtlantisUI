@@ -646,3 +646,13 @@ export async function BlockModifiedLog(userDataString) {
     console.log('getCreator Error:', err);
   }
 }
+
+export async function getPreviewLogsData(data) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getPreviewLogsData}`,putMethod(data));
+    const result = await response.json(); 
+    return result;
+  } catch (err) {
+    console.log('getCreator Error:', err);
+  }
+}
