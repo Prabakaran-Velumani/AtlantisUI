@@ -812,6 +812,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
         boxShadow={'1px 1px 17px #69627914'}
         borderRadius={'8px'}
         zIndex={99}
+        right={{base:'-140px',lg:''}}
         className="MiniShowBox"
       >
         <List>
@@ -1746,6 +1747,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
                                         ? 'block'
                                         : 'none'
                                     }
+                                    position={'relative'}
                                   >
                                     <>
                                       {console.log(
