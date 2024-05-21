@@ -204,6 +204,7 @@
   } 
   .EntirePreview .Game-Screen .Images .welcome-screen .top-title {    
     top: 21vw;
+    width: calc(47vw - -20vw);
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .top-title .title {
     font-size: 3.5vw;  

@@ -5713,6 +5713,7 @@ grid-row: 1 / 2;
 .EntirePreview .Game-Screen .Images .welcome-screen .top-title {
   position: absolute;
   top: 21vh;
+  width: calc(47vh - -20vh);
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .top-title .title {
@@ -6136,6 +6137,7 @@ grid-row: 1 / 2;
   transform: translate(10%, -26%);
   padding: 0;
   min-height: unset;
+  letter-spacing: 2px;
 }
 
 .EntirePreview .Game-Screen .Images .reflection-screen .left-right-btn img {
@@ -6334,7 +6336,26 @@ grid-row: 1 / 2;
   position: absolute;
   overflow-y: auto;
 }
+.EntirePreview .Game-Screen .Images .thankyou-screen::-webkit-scrollbar {
+  width: 3vh;
+  /*height: 300px;*/
+  border-radius: 30px;
+  background-size: contain;
+}
 
+.EntirePreview .Game-Screen .Images .thankyou-screen::-webkit-scrollbar-track {
+  background: url('../img/games/Leaderboard\ Scroll\ Bar.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.EntirePreview .Game-Screen .Images .thankyou-screen::-webkit-scrollbar-thumb {
+  background: url('../img/games/Leaderboard\ Scroll\ Cross.png');
+  background-repeat: no-repeat;
+  border-radius: 30px;
+  cursor: pointer;
+  background-size: contain;
+}
 .EntirePreview .Game-Screen .Images .thankyou-screen .content {
   width: 100%;
 }
