@@ -91,6 +91,25 @@ useEffect(()=>{
   }
   },[hasMulitLanguages, currentScreenId])
 
+useEffect(()=>{
+if(formState?.name || formData?.gender || formData?.language){
+  setProfileData((prev:any) => ({ ...prev, ...formState}));
+  setPreLogDatas((prev:any) => ({...prev,previewProfile:{ ...formState,
+    score:getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile.score : []}}))
+}
+},[formState])
+
+
+// const handleProfile = (e: any, input?: any) => {
+//   const { id, value } = e.target;
+//   if(id== "gender"){
+//     setIsGenderSelected(false);
+//   }
+//   else if(id== "language"){
+//     setIsLanguageSelected(false);
+//   }
+//   setFormState((prev:any)=> ({...prev, [id]: id=='name' ? value :  input}));
+// };
 const handleProfile = (e: any, input?: any) => {
   const { id, value } = e.target;
   if (id === 'gender') {
@@ -179,6 +198,7 @@ console.log("isOpenCustomModal", isOpenCustomModal)
                       style={{
                         width: '100%',
                       }}
+                      autoComplete='off'
                       type={'text'}
                       id={'name'}
                       className="player_profilename"

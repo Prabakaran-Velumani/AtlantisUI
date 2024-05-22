@@ -109,8 +109,8 @@ const CompletionScreen: React.FC<{
               alignItems={'center'}
             >
               <Box w={'auto'} position={'relative'} h={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                <Img src={imageSrc} h={'auto'} w={'100%'} transition={'transform 0.3s ease'} transform={{lg:'scale(1)','2xl':'scale(1.3)'}} />
-                <Box position={'absolute'} w={'100%'} transition={'transform 0.3s ease'} transform={{lg:'scale(1)','2xl':'scale(1.25)'}} h={'70%'} top={'21.5%'} fontFamily={'AtlantisText'} >
+                <Img src={imageSrc} h={'auto'} w={'100%'} transition={'transform 0.3s ease'} transform={{ lg: 'scale(1)', '2xl': 'scale(1.3)' }} />
+                <Box position={'absolute'} w={'100%'} transition={'transform 0.3s ease'} transform={{ lg: 'scale(1)', '2xl': 'scale(1.25)' }} h={'70%'} top={'21.5%'} fontFamily={'AtlantisText'} >
                   <Text textAlign={'center'} fontSize={{ base: '1.2rem', sm: '1.5rem' }}>
                     {compliData[CompKeyCount]?.gameScreenTitle}
                   </Text>
@@ -164,13 +164,12 @@ const CompletionScreen: React.FC<{
                             <Img
                               className='inside-img'
                               src={imgb}
-
                             />
                           )}
                         </Box>
                       )}
                     </Box>
-                    <Box mt={'35px'} w={'100%'} display={'flex'} justifyContent={'center'}> 
+                    <Box mt={'35px'} w={'100%'} display={'flex'} justifyContent={'center'}>
                       <Img src={next} w={'auto'} h={'2.5rem'} />
                     </Box>
                   </Box>

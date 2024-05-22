@@ -1,5 +1,4 @@
 // CharacterModal.js
-import { update } from 'lodash';
 import React, { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';

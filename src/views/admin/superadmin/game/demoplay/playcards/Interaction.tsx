@@ -149,11 +149,12 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                           style={
                             prevSelectOption?.some((prev: any) => prev === item.qpOptions)
                               ? {
-                                backgroundColor: "#df555533",
-                                backgroundSize: 'cover',
+                                // backgroundColor: "#df555533",
+                                // backgroundSize: 'cover',
                                 opacity: 0.7,
-                                border: 'snow',
-                                borderRadius: '8%',
+                                // border: 'snow',
+                                // borderRadius: '8%',
+                                color: 'grey',
                               }
                               : {}
                           }
@@ -178,6 +179,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                                   ? preloadedAssets.on
                                   : option === ind ? preloadedAssets.on : preloadedAssets.off
                               }
+                              opacity={prevSelectOption?.some((prev: any) => prev === item.qpOptions) ? 0.5 : 1}
                               h={'4vh'}
                               w={'100%'}
                             />

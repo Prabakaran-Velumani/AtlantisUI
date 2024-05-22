@@ -129,7 +129,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                         justifyContent={'center'}
                         alignItems={'center'}
                       >
-                        <Box w={'70%'}>
+                        <Box w={'70%'} >
                           <Img src={preloadedAssets.on} h={'4vh'} w={'100%'} />
                         </Box>
                         <Box className="feed_list">
@@ -148,8 +148,8 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                           overflowY={'scroll'}
                           className="feedback_content_text"
                         >
-                          <Box display={'flex'} mt={'10px'}>
-                            <Img src={preloadedAssets.FB} h={'1em'} w={'1em'} />
+                          <Box display={'flex'} mt={'10px'} alignItems={'center'}>
+                            <Img src={preloadedAssets.FB} h={'1em'} w={'1em'} mr={'8px'} />
                             <Text textAlign={'justify'}>
                               {currentScreenId === 9
                                 ? feed

@@ -522,7 +522,6 @@ const Story: React.FC<{
               ];
               return { ...prev, replayScore: newScoreArray };
             }
-          
 
         });
       }
@@ -725,28 +724,28 @@ const Story: React.FC<{
                 </Box>
               </Box>
             </Box>
-            <Box
-              display={'flex'}
-              position={'fixed'}
-              alignItems={'center'}
-              justifyContent={'space-between'}
-              h={'61px'}
-              overflowY={'scroll'}
-              w={'85%'}
-              fontSize={'3vh'}
-              bottom={'38px'}
-              fontFamily={'AtlantisContent'}
-              css={{
-                // Hide scrollbar for webkit-based browsers (Safari, Chrome)
-                '&::-webkit-scrollbar': {
-                  display: 'none',
-                },
-                // Hide scrollbar for Mozilla-based browsers (Firefox)
-                'scrollbar-width': 'none', // For Firefox
-                '-ms-overflow-style': 'none', // For IE and Edge
-              }}
+            <Box             
+              className='dialogue_scroll'
+              // position={'fixed'}
+              // h={'61px'}
+              // overflowY={'scroll'}
+              // w={'85%'}
+              // fontSize={'3vh'}
+              // bottom={'38px'}
+              // fontFamily={'AtlantisContent'}
+              // css={{
+              //   // Hide scrollbar for webkit-based browsers (Safari, Chrome)
+              //   '&::-webkit-scrollbar': {
+              //     display: 'none',
+              //   },
+              //   // Hide scrollbar for Mozilla-based browsers (Firefox)
+              //   'scrollbar-width': 'none', // For Firefox
+              //   '-ms-overflow-style': 'none', // For IE and Edge
+              // }}
             >
-              <Box transform={'translateY(26%)'}>
+              <Box 
+              // transform={'translateY(26%)'}
+              >
                 {showTypingEffect === false ? (
                   <TypingEffect
                     text={
@@ -857,17 +856,17 @@ const Story: React.FC<{
               </Box>
             </Box>
             <Box
-              display={'flex'}
+              // display={'flex'}
               position={'fixed'}
-              alignItems={'center'}
-              justifyContent={'space-between'}
+              // alignItems={'center'}
+              // justifyContent={'space-between'}
               h={'61px'}
               overflowY={'scroll'}
               w={'85%'}
               fontSize={'3vh'}
               bottom={'38px'}
               fontFamily={'AtlantisContent'}
-              transform={'translateY(26%)'}
+              // transform={'translateY(26%)'}
             >
               {showTypingEffect === false ? (
                 <TypingEffect
@@ -963,6 +962,9 @@ const Story: React.FC<{
                           justifyContent={'center'}
                           alignItems={'center'}
                         >
+                          <Box w={'70%'}>
+                            <Img src={preloadedAssets.on} h={'4vh'} w={'100%'} />
+                          </Box>
                           <Box className="feed_list"> Interaction </Box>
                           <Box
                             w={'70%'}

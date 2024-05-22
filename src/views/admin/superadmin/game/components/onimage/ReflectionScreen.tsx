@@ -89,19 +89,19 @@ const ReflectionScreen: React.FC<{
 
     useEffect(() => {
       function updateScale() {
-          const screenWidth = window.innerWidth;
-          const scaledWidth = screenWidth - 30; // Adjust 30 according to your needs
-          const newScaleFactor = scaledWidth / screenWidth;
-          setScaleFactor(newScaleFactor);
+        const screenWidth = window.innerWidth;
+        const scaledWidth = screenWidth - 30; // Adjust 30 according to your needs
+        const newScaleFactor = scaledWidth / screenWidth;
+        setScaleFactor(newScaleFactor);
       }
 
       window.addEventListener('resize', updateScale);
       updateScale(); // Call the function initially to set the correct scale
 
       return () => {
-          window.removeEventListener('resize', updateScale);
+        window.removeEventListener('resize', updateScale);
       };
-  }, []);
+    }, []);
     return (
       <>
         {imageSrc && (
@@ -113,8 +113,8 @@ const ReflectionScreen: React.FC<{
             alignItems={'center'}
           >
             <Box w={'auto'} position={'relative'} h={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-              <Img src={imageSrc}  h={'auto'} w={'100%'}  transition={'transform 0.3s ease'} transform={{lg:'scale(1)','2xl':'scale(1.3)'}} />
-              <Box position={'absolute'}  transition={'transform 0.3s ease'} transform={{lg:'scale(1)','2xl':'scale(1.25)'}} display={'flex'} justifyContent={'center'} w={'100%'} h={'30%'} top={'37.5%'} fontFamily={'AtlantisText'}>
+              <Img src={imageSrc} h={'auto'} w={'100%'} transition={'transform 0.3s ease'} transform={{ lg: 'scale(1)', '2xl': 'scale(1.3)' }} />
+              <Box position={'absolute'} transition={'transform 0.3s ease'} transform={{ lg: 'scale(1)', '2xl': 'scale(1.25)' }} display={'flex'} justifyContent={'center'} w={'100%'} h={'30%'} top={'37.5%'} fontFamily={'AtlantisText'}>
                 <Box w={'80%'}>
                   <SimpleGrid
                     columns={{ base: 2 }}
@@ -185,25 +185,25 @@ const ReflectionScreen: React.FC<{
                               src={ref}
                             />
                             {/* {preview ? ( */}
-                              <Textarea
-                                padding-top={'20px'}
-                                bottom={0}
-                                // noOfLines={2}
-                                outline={'none'}
-                                focusBorderColor="none"
-                                border={'none'}
-                                position={'absolute'}
-                                w={'100%'}
-                                color={'#D9C7A2'}
-                                minH={0}
-                                // h={'100%'}
-                                resize={'none'}
-                                h={'50px'}
-                                _focus={{ boxShadow: 'none', border: 'none' }}
-                                fontFamily={'AtlantisText'}
-                                value={answers[index]?.text}
-                                onChange={(e: any) => updateAnswer(e, index)}
-                              />
+                            <Textarea
+                              padding-top={'20px'}
+                              bottom={0}
+                              // noOfLines={2}
+                              outline={'none'}
+                              focusBorderColor="none"
+                              border={'none'}
+                              position={'absolute'}
+                              w={'100%'}
+                              color={'#D9C7A2'}
+                              minH={0}
+                              // h={'100%'}
+                              resize={'none'}
+                              h={'50px'}
+                              _focus={{ boxShadow: 'none', border: 'none' }}
+                              fontFamily={'AtlantisText'}
+                              value={answers[index]?.text}
+                              onChange={(e: any) => updateAnswer(e, index)}
+                            />
                             {/* ) : null} */}
                           </Box>
                         </Box>
