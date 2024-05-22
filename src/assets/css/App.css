@@ -4292,6 +4292,16 @@ bottom: 38px;
 font-family: 'AtlantisContent';
 }
 
+.dialogue_scroll{
+position: fixed;
+height: 61px;
+overflow-y: scroll;
+width: 85%;
+font-size: 3vh;
+bottom: 38px;
+font-family: 'AtlantisContent';
+}
+
 @media screen and (orientation: portrait) {
   .story_options_area{
     height: 35vw;
@@ -5819,7 +5829,6 @@ font-family: 'AtlantisContent';
   width : calc(47vh - -20vh);
   position: absolute;
   top: 21vh;
-  width: calc(47vh - -20vh);
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .top-title .title {
@@ -6455,26 +6464,7 @@ font-family: 'AtlantisContent';
   position: absolute;
   overflow-y: auto;
 }
-.EntirePreview .Game-Screen .Images .thankyou-screen::-webkit-scrollbar {
-  width: 3vh;
-  /*height: 300px;*/
-  border-radius: 30px;
-  background-size: contain;
-}
 
-.EntirePreview .Game-Screen .Images .thankyou-screen::-webkit-scrollbar-track {
-  background: url('../img/games/Leaderboard\ Scroll\ Bar.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-.EntirePreview .Game-Screen .Images .thankyou-screen::-webkit-scrollbar-thumb {
-  background: url('../img/games/Leaderboard\ Scroll\ Cross.png');
-  background-repeat: no-repeat;
-  border-radius: 30px;
-  cursor: pointer;
-  background-size: contain;
-}
 .EntirePreview .Game-Screen .Images .thankyou-screen .content {
   width: 100%;
 }
