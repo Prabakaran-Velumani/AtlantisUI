@@ -369,8 +369,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                 aria-label="slider-ex-4"
                 defaultValue={30}
                 name="musicVolume"
-                onChangeEnd={(val) => { handleMusicVolume(val) }}
-                value={audioObj.volume ?? 0}
+                // onChangeEnd={(val) => { handleMusicVolume(val) }}
+                // value={audioObj.volume ?? 0}
               >
                 <SliderTrack
                   className="slider-track"
@@ -387,16 +387,16 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                       width="86%"
                     >
                       <SliderFilledTrack className="filled-volume" bg="pink.500" />
+                      <SliderThumb
+                        boxSize={10}
+                        background={'transparent'}                        
+                      // left={'calc(100% - 30%)'}
+                      >
+                        <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
+                      </SliderThumb>
                     </Box>
                   </Box>
-                </SliderTrack>
-                <SliderThumb
-                  boxSize={10}
-                  background={'transparent'}
-                // left={'calc(100% - 30%)'}
-                >
-                  <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
-                </SliderThumb>
+                </SliderTrack>                
               </Slider>
             </Box>
             <Box className="voice-volume volumes">
@@ -420,12 +420,13 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                       width="86%"
                     >
                       <SliderFilledTrack className="filled-volume" bg="pink.500" />
+                      <SliderThumb boxSize={10} background={'transparent'} >
+                        <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
+                      </SliderThumb>
                     </Box>
                   </Box>
                 </SliderTrack>
-                <SliderThumb boxSize={9} background={'transparent'}>
-                  <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
-                </SliderThumb>
+                
               </Slider>
             </Box>
             <Box className="btns">
