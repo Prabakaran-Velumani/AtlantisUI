@@ -349,7 +349,7 @@ const LeaderBoard: React.FC<{
                     key={index}
                     _hover={{
                       filter: 'grayscale(50%)',
-                      transform: 'scale(1.02)',
+                      transform: 'scale(1.0)',
                       transition: 'transform 0.3s ease-in-out',
                       opacity: '0.8',
                     }}
