@@ -12,6 +12,7 @@ import SettingPad from 'assets/img/games/setting-pad.png';
 import SliderPointer from 'assets/img/games/slider-pointer.png';
 import Close from 'assets/img/games/close.png';
 import { ScoreContext } from '../GamePreview';
+import { motion } from 'framer-motion';
 interface ModelPopupProps {
   data?: any;
   options?: any;
@@ -38,10 +39,12 @@ interface ModelPopupProps {
   setNavigateBlockEmpty: any;
   NavigateBlockEmpty: any;
   profileData:any;
-  setQuestState:any
+  setQuestState:any;
+  setReplayState:any;
+  setReplayIsOpen:any;
 }
 
-const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, options, geTfeedBackoption, ModelControl, preloadedAssets, setModelControl, getPrevLogDatas, setCurrentScreenId, setLastModified, LastModified, setType, setData, gameInfo, setOptions, gameInfoquest, gameinfodata, isStoryScreen, isSetStoryScreen, setPreLogDatas, setNavigateBlockEmpty, NavigateBlockEmpty ,profileData,setQuestState}) => {
+const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, options, geTfeedBackoption, ModelControl, preloadedAssets, setModelControl, getPrevLogDatas, setCurrentScreenId, setLastModified, LastModified, setType, setData, gameInfo, setOptions, gameInfoquest, gameinfodata, isStoryScreen, isSetStoryScreen, setPreLogDatas, setNavigateBlockEmpty, NavigateBlockEmpty ,profileData,setQuestState,setReplayState,setReplayIsOpen}) => {
   const [QuestScreen, SetQuestScreen] = useState<boolean>(false);
   const [QuestSelectionPage, SetQuestSelectionPage] = useState<boolean>(false);
   const [PlayAgain, SetPlayAgain] = useState<boolean>(false);
@@ -88,7 +91,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
             completedLevels: convertArray,
             score: getPrevLogDatas.previewProfile?.score,
           }));
-          if(getPrevLogDatas.previewProfile?.score.length > 0)
+          if(getPrevLogDatas.previewProfile?.score?.length > 0)
             {
               setQuestState((prevquestdataList: any) => ({
                 ...prevquestdataList,
@@ -105,7 +108,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
             completedLevels: ['1'],
             score: getPrevLogDatas.previewProfile?.score,
           }));
-          if(getPrevLogDatas.previewProfile?.score.length > 0)
+          if(getPrevLogDatas.previewProfile?.score?.length > 0)
             {
               setQuestState((prevquestdataList: any) => ({
                 ...prevquestdataList,
@@ -181,7 +184,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
               completedLevels: convertArray,
               score: getPrevLogDatas.previewProfile?.score,
             }));
-            if(getPrevLogDatas.previewProfile?.score.length > 0)
+            if(getPrevLogDatas.previewProfile?.score?.length > 0)
               {
                 setQuestState((prevquestdataList: any) => ({
                   ...prevquestdataList,
@@ -207,9 +210,14 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
               
           }
         }
-        if (getLastScreenId == 2) {
+        if (getLastScreenId === 2) {
+        
           setLastModified(false);
-          isSetStoryScreen(true);
+          //isSetStoryScreen(true);
+          setReplayState('Prompt');
+          setModelControl(false);
+          setReplayIsOpen(true);
+          console.log('replayState');
           return false;
         }
         else {
@@ -274,7 +282,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
               completedLevels: convertArray,
               score: getPrevLogDatas.previewProfile?.score,
             }));
-            if(getPrevLogDatas.previewProfile?.score.length > 0)
+            if(getPrevLogDatas.previewProfile?.score?.length > 0)
               {
                 setQuestState((prevquestdataList: any) => ({
                   ...prevquestdataList,
@@ -289,7 +297,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
               completedLevels: ['1'],
               score: getPrevLogDatas.previewProfile?.score,
             }));
-            if(getPrevLogDatas.previewProfile?.score.length > 0)
+            if(getPrevLogDatas.previewProfile?.score?.length > 0)
               {
                 setQuestState((prevquestdataList: any) => ({
                   ...prevquestdataList,
@@ -342,7 +350,8 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
           setOptions(optionsFiltered);
         }
         setModelControl(false);
-        isSetStoryScreen(false);
+        //isSetStoryScreen(false);
+        // setReplayState(null)
         setCurrentScreenId(2);
         return false;
       }
@@ -358,7 +367,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
             completedLevels: convertArray,
             score: getPrevLogDatas.previewProfile?.score,
           }));
-          if(getPrevLogDatas.previewProfile?.score.length > 0)
+          if(getPrevLogDatas.previewProfile?.score?.length > 0)
             {
               setQuestState((prevquestdataList: any) => ({
                 ...prevquestdataList,
@@ -376,7 +385,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
         }
       }
       setModelControl(false);
-      isSetStoryScreen(false);
+      //isSetStoryScreen(false);
       setCurrentScreenId(13);
       return false;
     }
@@ -389,7 +398,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
         selectedOptions: '',
       }));
       setModelControl(false);
-      isSetStoryScreen(false);
+      //isSetStoryScreen(false);
       return false;
     }
   }
@@ -398,7 +407,81 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
     return false;
   }
   return (
-    // <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
+    <>
+      <Box id="container" className="Play-station">
+        <Box className="top-menu-home-section">
+          <Box className="Setting-box">
+            <motion.div
+              initial={{ scale: 0.5 }}
+              animate={{ scale: 1 }}
+              transition={{
+                type: 'spring',
+                stiffness: 300,
+                damping: 20,
+              }}
+              style={{
+                width: '100%',
+                height: '100%',
+                // backgroundColor: 'coral',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Img src={preloadedAssets?.Replay} className="setting-pad" />
+              <Box className="replay-vertex">
+                <Box
+                  w={'100%'}
+                  h={'100%'}
+                  display={'flex'}
+                  flexDirection={'column'}
+                  justifyContent={'space-between'}
+                >
+                  <Box className="replay_game_text">
+                 { LastModified === true ? ' Would you like to view the lastModified sequence?' : NavigateBlockEmpty === true ? 'Dont have any blocks. So, navigate to the first block.' : '  Do you want to continue from the screen where you last paused?'}
+                  </Box>
+              
+                  <Box
+                    display={'flex'}
+                    justifyContent={'space-between'}
+                    w={'100%'}
+                  >
+                    { NavigateBlockEmpty === true ?  
+                    <Button background={'transparent !important'}>
+                      <Img
+                        src={preloadedAssets?.OkayBtn}
+                        className="replay_game_btn"
+                        onClick={HandleBlockScreen}
+                      />
+                    </Button> 
+                    : 
+                    <>
+                    <Button background={'transparent !important'}>
+                      <Img
+                        src={preloadedAssets?.cancel}
+                        
+                        onClick={NextScreen}
+                        className="replay_game_btn_cancel"
+                      />
+                    </Button>
+                    <Button background={'transparent !important'}>
+                      <Img
+                        src={preloadedAssets?.OkayBtn}
+                        className="replay_game_btn"
+                        onClick={continueScreen}
+                      />
+                    </Button>
+                    </>
+                    
+                   } 
+                  </Box>
+                </Box>
+              </Box>
+            </motion.div>
+          </Box>
+        </Box>
+      </Box>
+      {/* 
     <Modal isOpen={true} onClose={ModelControl} closeOnOverlayClick={false} size={'medium'} >
     <ModalOverlay />
     <ModalContent
@@ -437,7 +520,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
                 h={'5%'}
               >
                 <Box w={'80%'}>
-                  {LastModified === true ? ' Would you like to view the lastModified sequence?' : isStoryScreen === true ?
+                  {LastModified === true ? 'Would you like to view the lastModified sequence?' : isStoryScreen === true ?
 
                     <><Box style={{ textAlign: 'center' }}>  Choose  Any One Option ?</Box>
 
@@ -518,19 +601,24 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
           {/* <Img
             src={preloadedAssets.replayBtn}
             className="replay_buttons"
-          /> */}
+          /> 
+
+
+
           {NavigateBlockEmpty === true ? <Button onClick={() => { HandleBlockScreen() }} > Ok</Button> : isStoryScreen === false ? <> <Button onClick={() => { continueScreen() }}> Yes</Button>
             <Button onClick={() => { NextScreen() }} > No</Button></> : <Button onClick={() => { HandleScreen() }} > Ok</Button>}
 
           {/* <Img
             src={preloadedAssets.next}
             className="replay_buttons"
-          /> */}
+          /> 
         </>
       </ModalFooter>
     </ModalContent>
-  </Modal>
-  )
+  </Modal> 
+  */}
+    </>
+  );
 }
 
 export default ModelPopup;

@@ -191,7 +191,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                 <Box
                   w={'98%'}
                   display={'flex'}
-                  justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
+                  justifyContent={'space-between'}
                 >
                   {/* {navTrack.length > 1 && (
                     <Img

@@ -22,13 +22,13 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
 
   const Handlemodel = () => {
     if (getPrevLogDatas.playerType === 'creator') {
+      console.log('hellow')
       const getplayerid = getPrevLogDatas.playerId;
       if (getplayerid === gameInfo.gameCreatedUserId) {
         const getLastModifiedid = getPrevLogDatas.lastModifiedBlockSeq;
         console.log('getPrevLogDatas.playerType',getLastModifiedid)
         if (getLastModifiedid !== null) {
           setLastModified(true);
-          
           setModelControl(true);
           return false;
         }

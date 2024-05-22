@@ -1,26 +1,14 @@
 // Chakra Imports
-import {
-  Box,
-  Grid,
-  GridItem,
-  Img,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Grid, GridItem, Img, Text } from '@chakra-ui/react';
 
-import React, {
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import Interaction from './Interaction';
 import TypingEffect from './Typing';
 // import { getVoiceMessage, getPreview } from 'utils/game/gameService';
 import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
-import {
-  API_SERVER
-} from 'config/constant';
+import { API_SERVER } from 'config/constant';
 import { ScoreContext } from '../GamePreview';
 import { Canvas, useFrame, useLoader } from 'react-three-fiber';
 import Sample from 'assets/img/games/Merlin.glb';
@@ -140,24 +128,32 @@ const Story: React.FC<{
           : null;
 
         if (getPrevLogDatas.nevigatedSeq[currentQuest]) {
-          if (!getPrevLogDatas.nevigatedSeq[currentQuest].includes(data.blockPrimarySequence)) {
-
+          if (
+            !getPrevLogDatas.nevigatedSeq[currentQuest].includes(
+              data.blockPrimarySequence,
+            )
+          ) {
             setPreLogDatas((prev: any) => ({
               ...prev,
-              lastActiveBlockSeq: data.blockId,
-              nevigatedSeq: { ...prev.nevigatedSeq, [currentQuest]: [...(prev.nevigatedSeq[currentQuest] || []), data.blockPrimarySequence] }
-
+              lastActiveBlockSeq: {currentQuest:data.blockId},
+              nevigatedSeq: {
+                ...prev.nevigatedSeq,
+                [currentQuest]: [
+                  ...(prev.nevigatedSeq[currentQuest] || []),
+                  data.blockPrimarySequence,
+                ],
+              },
             }));
           }
-
-        }
-        else {
+        } else {
           setPreLogDatas((prev: any) => ({
             ...prev,
-            lastActiveBlockSeq: data.blockId,
-            nevigatedSeq: { ...prev.nevigatedSeq, [currentQuest]: [data.blockPrimarySequence] }
+            lastActiveBlockSeq: {currentQuest:data.blockId},
+            nevigatedSeq: {
+              ...prev.nevigatedSeq,
+              [currentQuest]: [data.blockPrimarySequence],
+            },
           }));
-
         }
 
         if (gameInfo.hasOwnProperty('blocks')) {
@@ -170,13 +166,9 @@ const Story: React.FC<{
               return row.blockPrimarySequence == previousPrimarySeq;
             });
             if (data.blockPrimarySequence != previousPrimarySeq) {
-              if (previousBlock?.blockChoosen === 'Interaction') {
-                setNavTrack([data.blockPrimarySequence]);
-              } else {
-                const newArray = navTrack;
-                newArray.push(data.blockPrimarySequence);
-                setNavTrack(newArray);
-              }
+              const newArray = navTrack;
+              newArray.push(data.blockPrimarySequence);
+              setNavTrack(newArray);
             }
           } else {
             setNavTrack([data.blockPrimarySequence]);
@@ -218,10 +210,12 @@ const Story: React.FC<{
               setContentByLanguage(Filteredcontent);
               console.log('FilteredFieldName', FilteredFieldName);
               if (FilteredFieldName[0] === 'blockText') {
-                const audioUrls = GetblocktextAudioFiltered.map(
-                  (item: any) => item.audioUrls !== '' ? JSON.parse(item.audioUrls)[0]?.audioUrl : item.audioUrls,
+                const audioUrls = GetblocktextAudioFiltered.map((item: any) =>
+                  item.audioUrls !== ''
+                    ? JSON.parse(item.audioUrls)[0]?.audioUrl
+                    : item.audioUrls,
                 );
-                console.log('audioUrls', audioUrls)
+                console.log('audioUrls', audioUrls);
                 try {
                   const normalizedPath = audioUrls[0];
                   if (normalizedPath !== '') {
@@ -242,7 +236,6 @@ const Story: React.FC<{
                 } catch (error) {
                   console.error('Error fetching data:', error);
                 }
-
               }
             }
           } else {
@@ -266,15 +259,16 @@ const Story: React.FC<{
                 );
                 const FilteredResponsecontent = responseAudioFiltered[0].content;
                 if (getoptionsAudioFiltered.length > 0) {
-                  const QOTaudioUrls = getoptionsAudioFiltered.map(
-                    (item: any) => item.audioUrls !== '' ? JSON.parse(item.audioUrls)[0]?.audioUrl : item.audioUrls,
+                  const QOTaudioUrls = getoptionsAudioFiltered.map((item: any) =>
+                    item.audioUrls !== ''
+                      ? JSON.parse(item.audioUrls)[0]?.audioUrl
+                      : item.audioUrls,
                   );
 
                   if (QOTaudioUrls.length > 0) {
                     // const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
                     // const normalizedPath = relativePath.replace(/\\/g, '/');
                     try {
-
                       const normalizedPath = QOTaudioUrls[0];
                       // const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
                       if (normalizedPath !== '') {
@@ -290,50 +284,52 @@ const Story: React.FC<{
                           });
                         }
                         /*
-                        else {
-                          const getAudioFiltered1 = optionAudioFiltered.filter(
-                            (key: any) => key?.fieldName === 'qpOptions',
-                          );
-                          if (getAudioFiltered1.length > 0) {
-                            const QPaudioUrls = getAudioFiltered1.map(
-                              (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
+                          else {
+                            const getAudioFiltered1 = optionAudioFiltered.filter(
+                              (key: any) => key?.fieldName === 'qpOptions',
                             );
-                            if (QPaudioUrls.length > 0) {
-                              const normalizedPath = QPaudioUrls[0];
-                              const qpOptionsUrl = `${API_SERVER}${normalizedPath}`;
-                              const responsequestoption = await fetch(qpOptionsUrl);
-                              if (responsequestoption.ok) {
-                                setAudioObj({
-                                  url: qpOptionsUrl,
-                                  type: EnumType.VOICE,
-                                  volume: '0.5',
-                                  loop: false,
-                                  autoplay: true,
-                                });
+                            if (getAudioFiltered1.length > 0) {
+                              const QPaudioUrls = getAudioFiltered1.map(
+                                (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
+                              );
+                              if (QPaudioUrls.length > 0) {
+                                const normalizedPath = QPaudioUrls[0];
+                                const qpOptionsUrl = `${API_SERVER}${normalizedPath}`;
+                                const responsequestoption = await fetch(qpOptionsUrl);
+                                if (responsequestoption.ok) {
+                                  setAudioObj({
+                                    url: qpOptionsUrl,
+                                    type: EnumType.VOICE,
+                                    volume: '0.5',
+                                    loop: false,
+                                    autoplay: true,
+                                  });
+                                }
                               }
                             }
                           }
-                        }
-                        */
+                          */
                       }
-                    }
-                    catch (error) {
+                    } catch (error) {
                       console.error('Error fetching data:', error);
                     }
                   }
                 }
                 if (responseAudioFiltered.length > 0) {
-                  const QResTaudioUrls = responseAudioFiltered.map(
-                    (item: any) => item.audioUrls !== '' ? JSON.parse(item.audioUrls)[0]?.audioUrl : item.audioUrls,
+                  const QResTaudioUrls = responseAudioFiltered.map((item: any) =>
+                    item.audioUrls !== ''
+                      ? JSON.parse(item.audioUrls)[0]?.audioUrl
+                      : item.audioUrls,
                   );
 
                   if (QResTaudioUrls.length > 0) {
                     try {
-
                       const normalizedPath = QResTaudioUrls[0];
                       if (normalizedPath !== '') {
                         const qRespOptionTextUrl = `${API_SERVER}${normalizedPath}`;
-                        const responseqpOptionText = await fetch(qRespOptionTextUrl);
+                        const responseqpOptionText = await fetch(
+                          qRespOptionTextUrl,
+                        );
                         if (responseqpOptionText.ok) {
                           setAudioObj({
                             url: qRespOptionTextUrl,
@@ -347,7 +343,6 @@ const Story: React.FC<{
                     } catch (error) {
                       console.error('Error fetching data:', error);
                     }
-
                   }
                 }
               }
@@ -356,7 +351,6 @@ const Story: React.FC<{
         }
       };
       fetchData();
-
     }, [data, AudioOptions]);
 
     const InteractionFunction = () => {
@@ -365,7 +359,10 @@ const Story: React.FC<{
       /**Get current data mm-dd-yyyy */
       const currentDateTime = new Date();
       const day: String = String(currentDateTime.getDate()).padStart(2, '0');
-      const month: String = String(currentDateTime.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const month: String = String(currentDateTime.getMonth() + 1).padStart(
+        2,
+        '0',
+      ); // Months are zero-based
       const year: String = String(currentDateTime.getFullYear());
 
       const currentDate = `${day}-${month}-${year}`;
@@ -373,47 +370,53 @@ const Story: React.FC<{
       if (questState[profile?.currentQuest] === 'Started') {
         setProfile((prev: any) => {
           const { seqId, score: newScore } = score;
-          const index = prev.score.findIndex((item: any) => item.seqId === seqId);
-          if (index !== -1) {
-            const updatedScore = [...prev.score];
-            updatedScore[index] = { ...updatedScore[index], score: newScore };
-            return { ...prev, score: updatedScore };
-          } else {
-            const newScoreArray = [
-              ...prev.score,
-              {
-                seqId: seqId,
-                score: newScore,
-                quest: parseInt(seqId.split('.')[0]),
-                scoreEarnedDate: currentDate,
-              },
-            ];
+            const index = prev.score.findIndex((item: any) => item.seqId === seqId);
+            if (index !== -1) {
+              const updatedScore = [...prev.score];
+              updatedScore[index] = { ...updatedScore[index], score: newScore };
+              return { ...prev, score: updatedScore };
+            } 
+          else {
+              const newScoreArray = [
+                ...prev.score,
+                {
+                  seqId: seqId,
+                  score: newScore,
+                  quest: parseInt(seqId.split('.')[0]),
+                  scoreEarnedDate: currentDate,
+                },
+              ];
 
-            return { ...prev, score: newScoreArray };
-          }
+              return { ...prev, score: newScoreArray };
+            }
+         
+
         });
-      }
-      else {
+      } else {
         // update the replayScore when a player want to replay. Scores were hanlded seperatly, after Quest completion, if the calculated total score is lesser than replay score total then replace the score by replayscore, other wise score not changed, then reset the replayscore to {}
         setProfile((prev: any) => {
           const { seqId, score: newScore } = score;
-          const index = prev.replayScore.findIndex((item: any) => item.seqId === seqId);
-          if (index !== -1) {
-            const updatedScore = [...prev.replayScore];
-            updatedScore[index] = { ...updatedScore[index], score: newScore };
-            return { ...prev, replayScore: updatedScore };
-          } else {
-            const newScoreArray = [
-              ...prev.replayScore,
-              {
-                seqId: seqId,
-                score: newScore,
-                quest: parseInt(seqId.split('.')[0]),
-                scoreEarnedDate: currentDate,
-              },
-            ];
-            return { ...prev, replayScore: newScoreArray };
-          }
+            const index = prev.replayScore.findIndex(
+              (item: any) => item.seqId === seqId,
+            );
+            if (index !== -1) {
+              const updatedScore = [...prev.replayScore];
+              updatedScore[index] = { ...updatedScore[index], score: newScore };
+              return { ...prev, replayScore: updatedScore };
+            } else {
+              const newScoreArray = [
+                ...prev.replayScore,
+                {
+                  seqId: seqId,
+                  score: newScore,
+                  quest: parseInt(seqId.split('.')[0]),
+                  scoreEarnedDate: currentDate,
+                },
+              ];
+              return { ...prev, replayScore: newScoreArray };
+            }
+          
+
         });
       }
       setInteractionNext(true);
@@ -440,7 +443,6 @@ const Story: React.FC<{
       }
     };
 
-
     const getNoteNextData = () => {
       setIsPrevNavigation(false);
       getData(data);
@@ -451,34 +453,33 @@ const Story: React.FC<{
         setShowTypingEffect(true);
       } else {
         LastModiPrevData(data);
-
       }
-
     };
-
-
 
     return (
       <>
-        {optionalReplay && <ReplayGame
-          setOptionalReplay={setOptionalReplay}
-          replayGame={replayGame}
-          replayNextHandler={replayNextHandler}
-          type={type}
-          gameInfo={gameInfo}
-          setType={setType}
-          setData={setData}
-          isOptionalReplay={isOptionalReplay}
-          setisOptionalReplay={setisOptionalReplay}
-          setisReplay={setisReplay}
-          profilescore={profilescore}
-          isReplay={isReplay}
-          // setCurrentScreenId={setCurrentScreenId}
-          formData={gameInfo?.gameData}
-          imageSrc={preloadedAssets.Replay}
-          getData={getData}
-          data={data}
-          preloadedAssets={preloadedAssets} />}
+        {optionalReplay && (
+          <ReplayGame
+            setOptionalReplay={setOptionalReplay}
+            replayGame={replayGame}
+            replayNextHandler={replayNextHandler}
+            type={type}
+            gameInfo={gameInfo}
+            setType={setType}
+            setData={setData}
+            isOptionalReplay={isOptionalReplay}
+            setisOptionalReplay={setisOptionalReplay}
+            setisReplay={setisReplay}
+            profilescore={profilescore}
+            isReplay={isReplay}
+            // setCurrentScreenId={setCurrentScreenId}
+            formData={gameInfo?.gameData}
+            imageSrc={preloadedAssets.Replay}
+            getData={getData}
+            data={data}
+            preloadedAssets={preloadedAssets}
+          />
+        )}
         {data && type === 'Note' && (
           <Box
             position="relative"
@@ -524,24 +525,37 @@ const Story: React.FC<{
                       <Box w={'100%'} display={'flex'} justifyContent={'center'}>
                         <Box className={'story_note_block'}>
                           <Text textAlign={'center'} letterSpacing={'normal'}>
-                            {contentByLanguage !== null ? contentByLanguage : data?.blockText}
+                            {contentByLanguage !== null
+                              ? contentByLanguage
+                              : data?.blockText}
                           </Text>
                         </Box>
                       </Box>
                       <Box
-                        w={'100%'}
-                        onClick={() => getNoteNextData()}
-                        mt={'20px'}
+                        width={'100%'}
+                        mt="20px"
+                        position={'fixed'}
+                        top="70%"
                         display={'flex'}
                         justifyContent={'center'}
-                        // cursor={'pointer'}
-                        position={'fixed'}
-                        top={'70%'}
                       >
-                        <Img src={preloadedAssets.next} h={'7vh'} className={'story_note_next_button'} />
-
+                        <Box className="story_block_btns">
+                          <Img
+                            src={preloadedAssets.left}
+                            className={'interaction_button'}
+                            onClick={() =>LastModiPrevData(data)}
+                          />
+                          <Img
+                            src={preloadedAssets.right}
+                            className={'interaction_button'}
+                            onClick={() => {
+                              getNoteNextData()
+                            }}
+                          />
+                          {/* <Img src={preloadedAssets.next} h={'7vh'} className={'story_note_next_button'}  /> */}
+                        </Box>
                       </Box>
-                      <Box
+                      {/* <Box
                         display={'flex'}
                         position={'fixed'}
                         justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
@@ -555,7 +569,7 @@ const Story: React.FC<{
                           cursor={'pointer'}
                           onClick={() => {  LastModiPrevData(data)}}
                         />
-                      </Box>
+                      </Box> */}
                     </Box>
                   </Box>
                 </motion.div>
@@ -583,7 +597,11 @@ const Story: React.FC<{
                   <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
                   {/* COMPONENTS */}
                   {/* <Player /> */}
-                  <Model position={[-3, -1.8, 5]} rotation={[0, 1, 0]} isSpeaking={false} />
+                  <Model
+                    position={[-3, -1.8, 5]}
+                    rotation={[0, 1, 0]}
+                    isSpeaking={false}
+                  />
                   {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
                   {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
                   {/* <Parrot /> */}
@@ -600,14 +618,25 @@ const Story: React.FC<{
                 bottom={'105px'}
               >
                 <Img src={preloadedAssets.char} w={'100%'} height={'100%'} />
-                <Box position={'absolute'} top={0} w={'100%'} height={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}
+                <Box
+                  position={'absolute'}
+                  top={0}
+                  w={'100%'}
+                  height={'100%'}
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
                   fontSize={{ base: '30px', xl: '2vw' }}
                   fontWeight={500}
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
                   color={'#312821'}
                 >
-                  {data.blockRoll === 'Narrator' ? data.blockRoll : (data.blockRoll === '999999' ? profileData.name  : formData.gameNonPlayerName)}
+                  {data.blockRoll === 'Narrator'
+                    ? data.blockRoll
+                    : data.blockRoll === '999999'
+                      ? profileData.name
+                      : formData.gameNonPlayerName}
                 </Box>
               </Box>
             </Box>
@@ -633,17 +662,27 @@ const Story: React.FC<{
               }}
             >
               <Box transform={'translateY(26%)'}>
-                {showTypingEffect === false ? <TypingEffect
-                  text={contentByLanguage !== null ? contentByLanguage : data?.blockText}
-                  speed={50}
-                  setSpeedIsOver={setShowTypingEffect}
-                /> : contentByLanguage !== null ? contentByLanguage : data?.blockText}
+                {showTypingEffect === false ? (
+                  <TypingEffect
+                    text={
+                      contentByLanguage !== null
+                        ? contentByLanguage
+                        : data?.blockText
+                    }
+                    speed={50}
+                    setSpeedIsOver={setShowTypingEffect}
+                  />
+                ) : contentByLanguage !== null ? (
+                  contentByLanguage
+                ) : (
+                  data?.blockText
+                )}
               </Box>
             </Box>
             <Box
               display={'flex'}
               position={'fixed'}
-              justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
+              justifyContent={'space-between'}
               w={'95%'}
               bottom={'0'}
             >
@@ -652,7 +691,9 @@ const Story: React.FC<{
                 w={'70px'}
                 h={'50px'}
                 cursor={'pointer'}
-                onClick={() => { SkipContentForBackNavigation() }}
+                onClick={() => {
+                  SkipContentForBackNavigation();
+                }}
               />
               <Img
                 src={preloadedAssets.right}
@@ -668,7 +709,20 @@ const Story: React.FC<{
           </Box>
         )}
         {data && type === 'Interaction' && (
-          <Interaction backGroundImg={backGroundImg} data={data} option={option} options={options} optionClick={optionClick} InteractionFunction={InteractionFunction} navTrack={navTrack} preloadedAssets={preloadedAssets} selectedPlayer={selectedPlayer} LastModiPrevData={LastModiPrevData} RepeatSelectOption={RepeatSelectOption} RepeatPrevOption={RepeatPrevOption} contentByLanguage={contentByLanguage}
+          <Interaction
+            backGroundImg={backGroundImg}
+            data={data}
+            option={option}
+            options={options}
+            optionClick={optionClick}
+            InteractionFunction={InteractionFunction}
+            navTrack={navTrack}
+            preloadedAssets={preloadedAssets}
+            selectedPlayer={selectedPlayer}
+            LastModiPrevData={LastModiPrevData}
+            RepeatSelectOption={RepeatSelectOption}
+            RepeatPrevOption={RepeatPrevOption}
+            contentByLanguage={contentByLanguage}
           />
         )}
         {data && type === 'response' && (
@@ -693,14 +747,25 @@ const Story: React.FC<{
                 bottom={'105px'}
               >
                 <Img src={preloadedAssets.char} w={'100%'} height={'100%'} />
-                <Box position={'absolute'} top={0} w={'100%'} height={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}
+                <Box
+                  position={'absolute'}
+                  top={0}
+                  w={'100%'}
+                  height={'100%'}
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
                   fontSize={{ base: '30px', xl: '2vw' }}
                   fontWeight={500}
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
                   color={'#312821'}
                 >
-                  {data.blockResponseRoll === 'Narrator' ? data.blockResponseRoll : (data.blockResponseRoll === '999999' ? profileData.name  : formData.gameNonPlayerName)}
+                  {data.blockResponseRoll === 'Narrator'
+                    ? data.blockResponseRoll
+                    : data.blockResponseRoll === '999999'
+                      ? profileData.name
+                      : formData.gameNonPlayerName}
                 </Box>
               </Box>
             </Box>
@@ -717,16 +782,20 @@ const Story: React.FC<{
               fontFamily={'AtlantisContent'}
               transform={'translateY(26%)'}
             >
-              {showTypingEffect === false ? <TypingEffect
-                text={resMsg}
-                speed={50}
-                setSpeedIsOver={setShowTypingEffect}
-              /> : resMsg}
+              {showTypingEffect === false ? (
+                <TypingEffect
+                  text={resMsg}
+                  speed={50}
+                  setSpeedIsOver={setShowTypingEffect}
+                />
+              ) : (
+                resMsg
+              )}
             </Box>
             <Box
               display={'flex'}
               position={'fixed'}
-              justifyContent={'end'}
+              justifyContent={'space-between'}
               w={'95%'}
               bottom={'0'}
             >
@@ -735,7 +804,9 @@ const Story: React.FC<{
                 w={'70px'}
                 h={'50px'}
                 cursor={'pointer'}
-              onClick={() => { SkipContentForBackNavigation() }}
+                onClick={() => {
+                  SkipContentForBackNavigation();
+                }}
               />
               <Img
                 src={preloadedAssets.right}
@@ -775,9 +846,14 @@ const Story: React.FC<{
                   <Box
                     position={'absolute'}
                     top={{ base: '5%', md: '6%' }}
-                    className='story_feedback_content'
+                    className="story_feedback_content"
                   >
-                    <Box display={'flex'} justifyContent={'center'} alignItems={'center'} h={'100%'}>
+                    <Box
+                      display={'flex'}
+                      justifyContent={'center'}
+                      alignItems={'center'}
+                      h={'100%'}
+                    >
                       <Box
                         w={'90%'}
                         h={'70%'}
@@ -815,6 +891,28 @@ const Story: React.FC<{
                         </Box>
                         <Box
                           w={'120%'}
+                          mt={'20px'}
+                          display={'flex'}
+                          justifyContent={'space-between'}
+                          cursor={'pointer'}
+                          position={'absolute'}
+                          bottom={'-8%'}
+                        >
+                          <Img
+                            src={preloadedAssets.left}
+                            className={'interaction_button'}
+                            onClick={() => {
+                              LastModiPrevData(data);
+                            }}
+                          />
+                          <Img
+                            src={preloadedAssets.right}
+                            className={'interaction_button'}
+                            onClick={() => getData(data)}
+                          />
+                        </Box>
+                        {/* <Box
+                          w={'120%'}
                           onClick={() => getData(data)}
                           mt={'20px'}
                           display={'flex'}
@@ -842,7 +940,7 @@ const Story: React.FC<{
                           h={'50px'}
                           onClick={() => {  LastModiPrevData(data)}}
                         />
-                        </Box>
+                        </Box> */}
                       </Box>
                     </Box>
                   </Box>
@@ -860,7 +958,7 @@ const Player: React.FC = () => {
   const [isHovered, setIsHovered] = useState<any>(false);
 
   const mixer = new THREE.AnimationMixer(gltf.scene);
-  console.log('*****gltf', gltf.animations)
+  console.log('*****gltf', gltf.animations);
   const action = mixer.clipAction(gltf.animations[12]);
 
   useFrame((state, delta) => {

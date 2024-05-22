@@ -49,7 +49,7 @@ import {
   getVoiceMessage,
   getPreview,
   getGameLanguages,
-  getContentRelatedLanguage
+  getContentRelatedLanguage,
 } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
 import { ScoreContext } from './GamePreview';
@@ -57,25 +57,27 @@ import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
 import ReplayScore from './playcards/ReplayScore';
-const Story  = lazy(() => import('./playcards/Story'));
-const Welcome  = lazy(() => import('./playcards/Welcome'));
-const ThankYou  = lazy(() => import('./playcards/Thankyou'));
-const Overview  = lazy(() => import('./playcards/Overview'));
-const Reflection  = lazy(() => import('./playcards/Reflection'));
-const Takeway  = lazy(() => import('./playcards/Takeaway'));
-const Completion  = lazy(() => import('./playcards/Completion'));
-const ReplayGame  = lazy(() => import('./playcards/ReplayGame'));
-const PlayInfo  = lazy(() => import('./playcards/playinfo'));
-const LeaderBoard  = lazy(() => import('./playcards/Leaderboard'));
-const ProfileScreen  = lazy(() => import('./playcards/ProfileScreen'));
-const Characterspage  = lazy(() => import('./playcards/CharacterSelection'));
-const ChapterPage  = lazy(() => import('./playcards/Chapters'));
-const FeedBackScreen  = lazy(() => import('./playcards/FeedBackScreen'));
+const Story = lazy(() => import('./playcards/Story'));
+const Welcome = lazy(() => import('./playcards/Welcome'));
+const ThankYou = lazy(() => import('./playcards/Thankyou'));
+const Overview = lazy(() => import('./playcards/Overview'));
+const Reflection = lazy(() => import('./playcards/Reflection'));
+const Takeway = lazy(() => import('./playcards/Takeaway'));
+const Completion = lazy(() => import('./playcards/Completion'));
+const ReplayGame = lazy(() => import('./playcards/ReplayGame'));
+const PlayInfo = lazy(() => import('./playcards/playinfo'));
+const LeaderBoard = lazy(() => import('./playcards/Leaderboard'));
+const ProfileScreen = lazy(() => import('./playcards/ProfileScreen'));
+const Characterspage = lazy(() => import('./playcards/CharacterSelection'));
+const ChapterPage = lazy(() => import('./playcards/Chapters'));
+const FeedBackScreen = lazy(() => import('./playcards/FeedBackScreen'));
 const TopMenuBar = lazy(() => import('./playcards/TopMenuBar'));
 const GameIntroScreen = lazy(() => import('./playcards/GameIntroScreen'));
 const ModelPopup = lazy(() => import('./playcards/ModelPopup'));
 const ReplayPoints = lazy(() => import('./playcards/ReplayPoints'));
-const LanguageSelectionPrompt = lazy(() => import('./playcards/LanguageSelectionPrompt'));
+const LanguageSelectionPrompt = lazy(
+  () => import('./playcards/LanguageSelectionPrompt'),
+);
 const PromptScreen = lazy(() => import('./playcards/PromptScreen'));
 // const CharacterModal = lazy(() => import ('./playcards/CharacterModal'));
 
@@ -250,17 +252,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     { '5': { tabAttribute: 'screenId', tabAttributeValue: '' } },
   ];
   const [isPrevNavigation, setIsPrevNavigation] = useState(false);
-  const [replayIsOpen,setReplayIsOpen] = useState(false)
+  const [replayIsOpen, setReplayIsOpen] = useState(false);
   const gameScore = useContext(ScoreContext);
-  const scoreComp = profile?.score[0]?.score ? profile?.score[0]?.score : 0;
+  console.log('profile?.score.length',profile?.score?.length,'..',profile);
+  const scoreComp = profile?.score!==undefined ? profile?.score?.length > 0 ? profile?.score[0]?.score : 0 : 0;
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [questWiseMaxTotal, setQuestWiseMaxTotal] = useState<QuestWiseMaxTotal>();
+  const [questWiseMaxTotal, setQuestWiseMaxTotal] =
+    useState<QuestWiseMaxTotal>();
   const [ModelControl, setModelControl] = useState<boolean>(false); // for model show
   const [LastModified, setLastModified] = useState<boolean>(false); // for last modified
   const [isStoryScreen, isSetStoryScreen] = useState<boolean>(false);
   const [OptionSelectId, setOptionSelectId] = useState(null);
-  const [Total,setTotal]=useState<number>(0);
-  const [playerTodayScore,setPlayerTodayScore]=useState<any>(null);
+  const [Total, setTotal] = useState<number>(0);
+  const [playerTodayScore, setPlayerTodayScore] = useState<any>(null);
   const [profileData, setProfileData] = useState({
     name: '',
     gender: '',
@@ -273,65 +277,77 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     fieldName: '',
     Audiogetlanguage: [],
   });
-
+  const [replayState, setReplayState] = useState<string>(null);
+  const [optionalReplay, setOptionalReplay] = useState<string>(null);
+  const [isNoteClosed, setIsNoteClosed] = useState(false);
   useEffect(() => {
     setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
   }, [scoreComp]);
- 
+
   useEffect(() => {
-      const currentDate = new Date();
-      // Get day, month, and year
-      const day = String(currentDate.getDate()).padStart(2, '0');
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-      const year = currentDate.getFullYear();
-      
-      // Format date as DD-MM-YYYY
-      const formattedDate = `${day}-${month}-${year}`;
-  //  scoreEarnedDate: profile?.score.map((item: any) => item.scoreEarnedDate)
-  const toDayScore = profile?.score.reduce((total: any, acc:any) => {
-    if(acc.scoreEarnedDate === formattedDate)
+    if(profile.score!==undefined)
       {
-        return total+acc.score;
+         const currentDate = new Date();
+    // Get day, month, and year
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = currentDate.getFullYear();
+
+    // Format date as DD-MM-YYYY
+    const formattedDate = `${day}-${month}-${year}`;
+    //  scoreEarnedDate: profile?.score.map((item: any) => item.scoreEarnedDate)
+    const toDayScore =  profile?.score.reduce((total: any, acc: any) => {
+      if (acc.scoreEarnedDate === formattedDate) {
+        return total + acc.score;
+      } else {
+        return total;
       }
-    else{
-      return total;
-    }
-  },0);
-      const totalEarnScore = profile?.score.reduce((acc: any, obj: any) => acc + parseInt(obj.score), 0);
-      setPreLogDatas((prev: any) => ({
-        ...prev,
-        previewProfile: { ...prev.previewProfile, score: profile.score
-         }
-      }));
-      
-  setPlayerTodayScore(toDayScore)
-    }, [profile?.score]);
+    }, 0);
+    const totalEarnScore = profile?.score.reduce(
+      (acc: any, obj: any) => acc + parseInt(obj.score),
+      0,
+    );
+    setPreLogDatas((prev: any) => ({
+      ...prev,
+      previewProfile: { ...prev.previewProfile, score: profile.score },
+    }));
+
+    setPlayerTodayScore(toDayScore);
+      }
+   
+  }, [profile?.score]);
   // This for  Translation content based on lang 09.05.2024
   useEffect(() => {
-    const fetchGameContent = async() => { 
-     
-      const languageId = getPrevLogDatas?.previewProfile?.language ? getPrevLogDatas?.previewProfile?.language:  profileData.language;
-      if(getPrevLogDatas?.previewProfile?.language)
-        {
-          setProfileData((prev:any) => ({ ...prev,language:getPrevLogDatas?.previewProfile?.language}));
-        }
-    const gameContentResult = await getContentRelatedLanguage(gameInfo?.gameData.gameId,languageId);
-    if (gameContentResult.status === 'Success'){
-      const data = gameContentResult.data;
-      setProfileData((prev:any)=>({
-        ...prev,
-        Audiogetlanguage: data.map((x:any) => ({
-          content: x.content,
-          audioUrls: x.audioUrls,
-          textId: x.textId,
-          fieldName: x.fieldName,
-        })),
-      }))
+    const fetchGameContent = async () => {
+      const languageId = getPrevLogDatas?.previewProfile?.language
+        ? getPrevLogDatas?.previewProfile?.language
+        : profileData.language;
+      if (getPrevLogDatas?.previewProfile?.language) {
+        setProfileData((prev: any) => ({
+          ...prev,
+          language: getPrevLogDatas?.previewProfile?.language,
+        }));
+      }
+      const gameContentResult = await getContentRelatedLanguage(
+        gameInfo?.gameData.gameId,
+        languageId,
+      );
+      if (gameContentResult.status === 'Success') {
+        const data = gameContentResult.data;
+        setProfileData((prev: any) => ({
+          ...prev,
+          Audiogetlanguage: data.map((x: any) => ({
+            content: x.content,
+            audioUrls: x.audioUrls,
+            textId: x.textId,
+            fieldName: x.fieldName,
+          })),
+        }));
+      }
+    };
+    if (profileData.language !== '') {
+      fetchGameContent();
     }
-};
-if(profileData.language!==''){
-  fetchGameContent();
-}
   }, [profileData?.language]);
 
   const [voiceIds, setVoiceIds] = useState<any>();
@@ -343,12 +359,13 @@ if(profileData.language!==''){
   const [resolution, setResolution] = useState(null);
   const [navTrack, setNavTrack] = useState([]);
   const [currentTrackPointer, setCurrentTrackPointer] = useState(0);
-  const [currentScreenId, setCurrentScreenId] = useState<number>(InitialScreenId);
+  const [currentScreenId, setCurrentScreenId] =
+    useState<number>(InitialScreenId);
   const [hasMulitLanguages, setHasMulitLanguages] = useState<boolean>(false); // This state to control the auto Initialization of the Language selection Modal popup
-  const [isOpenCustomModal, setIsOpenCustomModal] = useState<boolean>(false); //This state to control the opening of Language selection Modal popup by click event 
+  const [isOpenCustomModal, setIsOpenCustomModal] = useState<boolean>(false); //This state to control the opening of Language selection Modal popup by click event
   const [gameLanguages, setGameLanguages] = useState([]);
   const [NavigateBlockEmpty, setNavigateBlockEmpty] = useState<boolean>(false);
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [RepeatSelectOption, setRepeatSelectOption] = useState<boolean>(false);
   const [RepeatPrevOption, setRepeatPrevOption] = useState<any>([]);
@@ -388,7 +405,7 @@ if(profileData.language!==''){
   };
   useEffect(() => {
     setDemoBlocks(gameInfo?.blocks);
-    
+
     if (data === null) {
       setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
       setData(gameInfo?.blocks[profile?.currentQuest]['1']);
@@ -437,8 +454,6 @@ if(profileData.language!==''){
       }
     }
 
-
-
     const handleVisibilityChange = () => {
       if (document.hidden) {
         // Pause the audio when the page is hidden
@@ -468,20 +483,19 @@ if(profileData.language!==''){
           ? profile?.replayScore
           : profile?.score;
       let total: number = 0;
-      const questScores:any = {};
-      if (currentScreenId == 13) {
+      const questScores: any = {};
+      if (currentScreenId === 13) {
         //For chapter Selection Screen
-        if (scores.length > 0) {
-         
-
+        if(profile.score!==undefined)
+          {
+             if (scores.length > 0) {
           // Calculate scores for each quest
-          scores.forEach((score:any) => {
+          scores.forEach((score: any) => {
             if (questScores[score.quest]) {
               questScores[score.quest] += score.score;
             } else {
               questScores[score.quest] = score.score;
             }
-            
           });
 
           // const total = scores.reduce((acc: any, row: any) => {
@@ -502,19 +516,21 @@ if(profileData.language!==''){
             },
           }));
         }
-      }
-      else if ([2, 4, 6, 8, 9, 14].includes(currentScreenId)) //for story, completion screen, feedback, replay etc.,
-      {
-        const scoreArray = questState[parseInt(profile?.currentQuest)] == 'Started' ? profile?.score : profile?.replayScore;
+          }
+       
+      } else if ([2, 4, 6, 8, 9, 14].includes(currentScreenId)) {
+        //for story, completion screen, feedback, replay etc.,
+        const scoreArray =
+          questState[parseInt(profile?.currentQuest)] == 'Started'
+            ? profile?.score
+            : profile?.replayScore;
         if (scoreArray?.length > 0) {
-
-          scores.forEach((score:any) => {
+          scores.forEach((score: any) => {
             if (questScores[score.quest]) {
               questScores[score.quest] += score.score;
             } else {
               questScores[score.quest] = score.score;
             }
-            
           });
           // total = scoreArray.reduce((acc: number, cur: any) => {
           //   if (cur.quest == profile.currentQuest) {
@@ -533,7 +549,7 @@ if(profileData.language!==''){
         }
       }
       return;
-    }
+    };
 
     //Get the Navigated Sequeance to calculate the max score for a Quest
     const calculateQuestGrandTotal = async () => {
@@ -548,59 +564,68 @@ if(profileData.language!==''){
         if (questStatus === 'completed') {
           // If the quest is completed, compare the scores
           if (profile?.score !== null && profile?.replayScore !== null) {
-            currentScores = profile.score > profile.replayScore ? profile.score : profile.replayScore;
+            currentScores =
+              profile.score > profile.replayScore
+                ? profile.score
+                : profile.replayScore;
           } else {
-            console.log(" *****Invalid score or replayScore provided for completed quest.");
+            console.log(
+              ' *****Invalid score or replayScore provided for completed quest.',
+            );
             return; // Exit function if either score or replayScore is not provided for completed quest
           }
         } else if (questStatus === 'Started') {
           // If the quest is started, consider the score
           if (questStatus === 'Started') {
-            currentScores = profile?.score !== null ? profile.score : null; //null or currentScores or replayScore
+            currentScores = profile?.score !== null || profile.score!==undefined ? profile.score : null; //null or currentScores or replayScore
           } else {
-            console.log(" *****Invalid score provided for started quest.");
+            console.log(' *****Invalid score provided for started quest.');
             return; // Exit function if score is not provided for started quest
           }
         } else {
-          console.log(" *****Invalid quest status:", questStatus);
+          console.log(' *****Invalid quest status:', questStatus);
           return; // Exit function if the quest status is neither "completed" nor "Started"
         }
         // Check if currentScores is an array before mapping
-        const currentQuestseqId = Array.isArray(currentScores) ? currentScores.map(item => item.seqId) : [];
+        const currentQuestseqId = Array.isArray(currentScores)
+          ? currentScores.map((item) => item.seqId)
+          : [];
 
         // Check if currentScores is an array and has items  const qpScoreEntries = filteredOptions.map(option => ({ qpScore: option.qpScore }));
         if (Array.isArray(currentScores) && currentScores.length > 0) {
           // Map currentScores to extract scores
-          const scores = currentScores.map(item => item.score);
+          const scores = currentScores.map((item) => item.score);
 
-          const result = currentQuestseqId.map(seqId => {
+          const result = currentQuestseqId.map((seqId) => {
             const QuestNo = seqId.split('.')[0];
             if (QuestNo == profile.currentQuest) {
-              const filteredOptions = gameInfo?.questOptions?.filter((option: any) => option.qpSequence == seqId);
+              const filteredOptions = gameInfo?.questOptions?.filter(
+                (option: any) => option.qpSequence == seqId,
+              );
 
-              const qpScoresOption = filteredOptions.map((option: any) => parseInt(option.qpScore));
+              const qpScoresOption = filteredOptions.map((option: any) =>
+                parseInt(option.qpScore),
+              );
               qpScoresOption.sort((a: any, b: any) => b - a);
               // GrandMaximumscore.push(qpScoresOption[0]);
               GrandMaximumscore += qpScoresOption[0];
             }
-
-          })
-
+          });
         } else {
-          console.log("*****Options are not provided.");
+          console.log('*****Options are not provided.');
         }
 
         //[{1: 500}, {2: 200}]
 
         setQuestWiseMaxTotal((prev: any) => {
-          return ({ ...prev, [profile?.currentQuest]: GrandMaximumscore })
+          return { ...prev, [profile?.currentQuest]: GrandMaximumscore };
         });
         return GrandMaximumscore;
       }
     };
     calculateQuestGrandTotal();
     calculatePlayerGrandTotal();
-  }, [profile.score, profile.replayScore, currentScreenId])
+  }, [profile.score, profile.replayScore, currentScreenId]);
 
   useEffect(() => {
     if (!gameInfo?.bgMusic) {
@@ -616,8 +641,11 @@ if(profileData.language!==''){
       //     loop: true,
       //     autoplay: true,
       //   });
-      const screens = [1, 3, 4, 5, 6, 7, 11, 12, 13]
-      if (screens.includes(currentScreenId) && (![2,10,0].includes(currentScreenId))) {
+      const screens = [1, 3, 4, 5, 6, 7, 11, 12, 13];
+      if (
+        screens.includes(currentScreenId) &&
+        ![2, 10, 0].includes(currentScreenId)
+      ) {
         setAudioObj({
           url: gameInfo?.bgMusic,
           type: EnumType.BGM,
@@ -647,22 +675,22 @@ if(profileData.language!==''){
     //   loop: false,
     //   autoplay: true,
     // });
-    if(![2,10,0].includes(currentScreenId))
-      {
-         setAudioObj({
-          url: audio,
-          type: EnumType.BGM,
-          volume: '0.5',
-          loop: true, // Voice doesn't loop
-          autoplay: true,
-        });
-      }
-   
+    if (![2, 10, 0].includes(currentScreenId)) {
+      setAudioObj({
+        url: audio,
+        type: EnumType.BGM,
+        volume: '0.5',
+        loop: true, // Voice doesn't loop
+        autoplay: true,
+      });
+    }
   }, [audio]);
 
   useEffect(() => {
- 
-    const handleAudio = (audioRef: React.RefObject<HTMLAudioElement>, audio: any) => {
+    const handleAudio = (
+      audioRef: React.RefObject<HTMLAudioElement>,
+      audio: any,
+    ) => {
       if (audioRef.current) {
         audioRef.current.src = audio.url;
         audioRef.current.volume = parseFloat(audio.volume);
@@ -672,16 +700,16 @@ if(profileData.language!==''){
         // Play or pause audio based on the autoplay property
         if (audioObj.autoplay) {
           if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
-            try{
-                backgroundBgmRef.current.play().catch(error => {
-                  // Handle play promise rejection
-                  // console.error('Error playing background BGM:', error);
-                });
-              }catch(error) {
-                console.error('Background BGM ref is not available.',error);
+            try {
+              backgroundBgmRef.current.play().catch((error) => {
+                // Handle play promise rejection
+                // console.error('Error playing background BGM:', error);
+              });
+            } catch (error) {
+              console.error('Background BGM ref is not available.', error);
             }
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current.play().catch(error => {
+            voiceRef.current.play().catch((error) => {
               // Handle play promise rejection
               console.error('Error playing voice:', error);
             });
@@ -725,9 +753,7 @@ if(profileData.language!==''){
   }, [gameInfo?.gameData]);
 
   useEffect(() => {
-
-   (![2,10,0].includes(currentScreenId)) &&
-       setAudio(gameInfo?.bgMusic ?? '');
+    ![2, 10, 0].includes(currentScreenId) && setAudio(gameInfo?.bgMusic ?? '');
   }, [currentScreenId, gameInfo]);
 
   const prevData = (current: any) => {
@@ -754,8 +780,7 @@ if(profileData.language!==''){
         : null;
       setCurrentQuestNo(currentQuest);
       if (
-        prevBlock.length !== 0
-        &&
+        prevBlock.length !== 0 &&
         prevBlock[0]?.blockChoosen !== 'Interaction'
       ) {
         /*** Handle the previous track */
@@ -904,10 +929,12 @@ if(profileData.language!==''){
         )
         .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-    if (navPrevBlock.length !== 0 && navPrevBlock !== undefined) {
-
-      if (navPrevBlock[0].blockLeadTo == current.blockSecondaryId) {
+      // console.log('navPrevBlock',navPrevBlock,'...',newTrackSequence,'...',navTrack,'...',navPrevBlock.length,'..',current)
+    if (navPrevBlock.length > 0) {
+// console.log('navPrevBlock[0].blockLeadTo == current.blockSecondaryId',parseInt(navPrevBlock[0].blockLeadTo) == current.blockSecondaryId)
+      if (navPrevBlock[0].blockSecondaryId === current.blockSecondaryId) {
         navTrack.pop();
+        console.log('... 3',current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,'...',current,'..',gameInfo?.blocks[profile?.currentQuest]['1'])
         const lastPrevNavTrack = navTrack[navTrack.length - 1];
         const prevousBlock = current
           ? Object.keys(demoBlocks[quest] || {})
@@ -916,6 +943,7 @@ if(profileData.language!==''){
             )
             .map((key: any) => demoBlocks[quest]?.[key])
           : [];
+          // console.log('lastPrevNavTrack',lastPrevNavTrack,'....',prevousBlock);
         if (prevousBlock.length !== 0) {
           setType(prevousBlock[0]?.blockChoosen);
           setData(prevousBlock[0]);
@@ -977,13 +1005,13 @@ if(profileData.language!==''){
         const getdemoblocksseq: any = Object.entries(demoBlocks[quest]);
         for (const blocks of getdemoblocksseq) {
           const blockId = blocks[1].blockId;
-          if (blocks[1].blockLeadTo == current.blockSecondaryId) {
+          if (blocks[1].blockLeadTo === current.blockSecondaryId) {
             getSeqprevious.push(blocks[1].blockPrimarySequence);
           }
 
           for (const optionsnavi of gameInfo.questOptions) {
-            if (optionsnavi.qpQuestionId == blockId) {
-              if (optionsnavi.qpNextOption == current.blockSecondaryId) {
+            if (optionsnavi.qpQuestionId === blockId) {
+              if (optionsnavi.qpNextOption === current.blockSecondaryId) {
                 getSeqprevious.push(blocks[1].blockPrimarySequence);
               }
             }
@@ -997,6 +1025,7 @@ if(profileData.language!==''){
         }
         getSeqprevious.sort((a: any, b: any) => a - b);
         const currentIndex = getSeqprevious.indexOf(current.blockPrimarySequence);
+        console.log('...',current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,'...',current,'..',gameInfo?.blocks[profile?.currentQuest]['1'])
         if (current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence) {
           if (currentIndex !== -1) {
             if (currentIndex > 0) {
@@ -1256,8 +1285,10 @@ if(profileData.language!==''){
           }
         }
         else {
-          setModelScreen(true);
-          setCurrentScreenId(16);
+          // setModelScreen(true);
+          // setCurrentScreenId(16);
+          setReplayState("redirectToChapter")
+          setReplayIsOpen(true);
           return false;
         }
       }
@@ -1287,6 +1318,7 @@ if(profileData.language!==''){
       }
       getSeqprevious.sort((a: any, b: any) => a - b);
       const currentIndex = getSeqprevious.indexOf(current.blockPrimarySequence);
+      console.log('... 1',current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,'...',current,'..',gameInfo?.blocks[profile?.currentQuest]['1']);
       if (current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence) {
         if (currentIndex !== -1) {
           if (currentIndex > 0) {
@@ -1532,8 +1564,10 @@ if(profileData.language!==''){
         }
       }
       else {
-        setModelScreen(true);
-        setCurrentScreenId(16);
+        // setModelScreen(true);
+        // setCurrentScreenId(16);
+        setReplayState("redirectToChapter")
+        setReplayIsOpen(true);
         return false;
       }
     }
@@ -1545,10 +1579,14 @@ if(profileData.language!==''){
 
   }
 
+
   const checkAndUpdateScores = async () => {
     const currentQuest = profile.currentQuest;
     if (questState[currentQuest] !== 'Started') {
-      const calcQuestGrandTotal = async (scores: any, currentQuestNo: any = null) => {
+      const calcQuestGrandTotal = async (
+        scores: any,
+        currentQuestNo: any = null,
+      ) => {
         if (scores?.length <= 0) {
           return 0;
         }
@@ -1562,34 +1600,57 @@ if(profileData.language!==''){
             }
           }, 0);
           return totalScore; // Return the total score
-        }
-        else {
+        } else {
           //Sum up all the scores
           return scores.reduce((total: number, sc: any) => total + sc.score, 0);
         }
-      }
-      const scoreTotal = await calcQuestGrandTotal(profile.score, profile.currentQuest);
-      const replayScoreTotal = await calcQuestGrandTotal(profile.replayScore, profile.currentQuest);
+      };
+      const scoreTotal = await calcQuestGrandTotal(
+        profile.score,
+        profile.currentQuest,
+      );
+      const replayScoreTotal = await calcQuestGrandTotal(
+        profile.replayScore,
+        profile.currentQuest,
+      );
       if (scoreTotal < replayScoreTotal) {
-        const currentQuestRemovedScoreArr = profile.score.filter((item: any) => (item.quest != profile.currentQuest));
+        const currentQuestRemovedScoreArr = profile.score.filter(
+          (item: any) => item.quest != profile.currentQuest,
+        );
         let concatenatedScoreArr: any[] = [];
         if (profile.replayScore.length > 0) {
-          concatenatedScoreArr = profile.replayScore.filter((item: any) => (item.quest == profile.currentQuest));
+          concatenatedScoreArr = profile.replayScore.filter(
+            (item: any) => item.quest == profile.currentQuest,
+          );
         }
         if (currentQuestRemovedScoreArr.length > 0) {
-          concatenatedScoreArr = [...concatenatedScoreArr, ...currentQuestRemovedScoreArr];
+          concatenatedScoreArr = [
+            ...concatenatedScoreArr,
+            ...currentQuestRemovedScoreArr,
+          ];
         }
-        const currentQuestRemovedReplayScoreArr = profile.replayScore.filter((item: any) => (item.quest != profile.currentQuest));
-        setProfile((prev: any) => ({ ...prev, score: concatenatedScoreArr, replayScore: currentQuestRemovedReplayScoreArr }))
-      }
-      else {
-        const currentQuestRemovedReplayScoreArr = profile.replayScore.filter((item: any) => (item.quest != profile.currentQuest));
-        setProfile((prev: any) => ({ ...prev, replayScore: currentQuestRemovedReplayScoreArr }))
+        const currentQuestRemovedReplayScoreArr = profile.replayScore.filter(
+          (item: any) => item.quest != profile.currentQuest,
+        );
+        setProfile((prev: any) => ({
+          ...prev,
+          score: concatenatedScoreArr,
+          replayScore: currentQuestRemovedReplayScoreArr,
+        }));
+      } else {
+        const currentQuestRemovedReplayScoreArr = profile.replayScore.filter(
+          (item: any) => item.quest != profile.currentQuest,
+        );
+        setProfile((prev: any) => ({
+          ...prev,
+          replayScore: currentQuestRemovedReplayScoreArr,
+        }));
       }
     }
-  }
+  };
+
   const getData = (next: any) => {
-    if (navi === '' || navi !=='Repeat Question') {
+    if (navi === '' || navi !== 'Repeat Question') {
       setRepeatPrevOption([]);
     }
     setRepeatSelectOption(false);
@@ -1648,7 +1709,7 @@ if(profileData.language!==''){
           )
           .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-     
+
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = [];
       for (const option of gameInfo.questOptions) {
@@ -1699,9 +1760,6 @@ if(profileData.language!==''){
       type === 'response' ||
       type === 'feedback'
     ) {
-     
-      
-      
       if (navi === 'Repeat Question') {
         setRepeatSelectOption(true);
         RepeatPrevOption.push(getSelectedOptions.options);
@@ -1788,8 +1846,11 @@ if(profileData.language!==''){
       } else if (navi === 'Replay Point') {
         // setType(demoBlocks[quest]['1']?.blockChoosen);
         // setData(demoBlocks[quest]['1']);
+        // setSelectedOption(null);
+        // setCurrentScreenId(16);
         setSelectedOption(null);
-        setCurrentScreenId(16);
+        setReplayState('replayPointPrompt');
+        setReplayIsOpen(true);
         return false;
       } else if (navi === 'Select Block') {
         const selectedNext = Object.keys(demoBlocks[currentQuest])
@@ -1947,10 +2008,12 @@ if(profileData.language!==''){
           );
           const finalscore = getscores?.score;
           if (finalscore < getminpassscore) {
-            setisReplay(true);
+            // setisReplay(true);
             Setprofilescore(finalscore);
-            setisOptionalReplay(false);
-            setCurrentScreenId(8);
+            // setisOptionalReplay(false);
+            // setCurrentScreenId(8);
+            setReplayState('mandatoryReplay');
+            setReplayIsOpen(true);
             return false;
           } else {
             if (demoBlocks.hasOwnProperty(nextLevel)) {
@@ -2040,7 +2103,10 @@ if(profileData.language!==''){
             const optionsFiltered = [];
             for (const option of gameInfo.questOptions) {
               if (profileData?.Audiogetlanguage.length > 0) {
-                if (option?.qpSequence === demoBlocks[quest]['1']?.blockPrimarySequence) {
+                if (
+                  option?.qpSequence ===
+                  demoBlocks[quest]['1']?.blockPrimarySequence
+                ) {
                   const profilesetlan = profileData?.Audiogetlanguage.find(
                     (key: any) => key?.textId === option.qpOptionId,
                   );
@@ -2056,7 +2122,10 @@ if(profileData.language!==''){
                   }
                 }
               } else {
-                if (option?.qpSequence === demoBlocks[quest]['1'].blockPrimarySequence) {
+                if (
+                  option?.qpSequence ===
+                  demoBlocks[quest]['1'].blockPrimarySequence
+                ) {
                   optionsFiltered.push(option);
                 }
               }
@@ -2141,9 +2210,8 @@ if(profileData.language!==''){
       //       }
       //     }
       //   }
-      // } 
+      // }
       if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-      
         setCurrentScreenId(4); //Navigate to leaderboard
         return false;
       } else if (haveNextQuest) {
@@ -2174,7 +2242,9 @@ if(profileData.language!==''){
             finalscore < currentGameData?.gameDistinctionScore &&
             gameInfo.gameData?.gameDisableOptionalReplays === 'false'
           ) {
-            setCurrentScreenId(8); //Navigate to replaygame prompt screen
+            setReplayState('optionalReplay');
+            setReplayIsOpen(true);
+            // setCurrentScreenId(8); //Navigate to replaygame prompt screen
             return false;
             //set to prompt it for replay the game
           } else {
@@ -2191,8 +2261,7 @@ if(profileData.language!==''){
               setData(demoBlocks[nextLevel]['1']);
               setCurrentScreenId(13);
               return false;
-            }
-            else {
+            } else {
               if (
                 gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
                 gameInfo?.reflectionQuestions.length > 0
@@ -2210,8 +2279,7 @@ if(profileData.language!==''){
               }
             }
           }
-        }
-        else{
+        } else {
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
@@ -2225,8 +2293,7 @@ if(profileData.language!==''){
             setData(demoBlocks[nextLevel]['1']);
             setCurrentScreenId(13);
             return false;
-          }
-          else {
+          } else {
             if (
               gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
               gameInfo?.reflectionQuestions.length > 0
@@ -2286,10 +2353,12 @@ if(profileData.language!==''){
               sums[quest] += score.score;
             });
 
-            const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
-              quest,
-              score,
-            }));
+            const getFinalscores = Object.entries(sums).map(
+              ([quest, score]) => ({
+                quest,
+                score,
+              }),
+            );
             const getscores = getFinalscores.find(
               (row: any) => row.quest == getgameinfoquest?.gameQuestNo,
             );
@@ -2299,10 +2368,12 @@ if(profileData.language!==''){
               finalscore < getgameinfoquest?.gameDistinctionScore &&
               gameInfo.gameData?.gameDisableOptionalReplays === 'false'
             ) {
-              setisOptionalReplay(true);
-              setisReplay(false);
+              // setisOptionalReplay(true);
+              // setisReplay(false);
               Setprofilescore(finalscore);
-              setCurrentScreenId(8);
+              // setCurrentScreenId(8);
+              setReplayState('optionalReplay');
+              setReplayIsOpen(true);
               return false;
             } else {
               if (demoBlocks.hasOwnProperty(nextLevel)) {
@@ -2318,8 +2389,7 @@ if(profileData.language!==''){
                 setData(demoBlocks[nextLevel]['1']);
                 setCurrentScreenId(13);
                 return false;
-              }
-              else {
+              } else {
                 if (
                   gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
                   gameInfo?.reflectionQuestions.length > 0
@@ -2339,8 +2409,7 @@ if(profileData.language!==''){
               // setCurrentScreenId(13); //Navigate to Chapter Selection screen
               // return false;
             }
-          }
-          else {
+          } else {
             if (data && type) {
               setFeedbackNavigateNext(false);
               setCurrentScreenId(13);
@@ -2473,10 +2542,12 @@ if(profileData.language!==''){
             finalscore < getgameinfoquest?.gameDistinctionScore &&
             gameInfo.gameData?.gameDisableOptionalReplays === 'false'
           ) {
-            setisOptionalReplay(true);
-            setisReplay(false);
+            // setisOptionalReplay(true);
+            // setisReplay(false);
             Setprofilescore(finalscore);
-            setCurrentScreenId(8);
+            // setCurrentScreenId(8);
+            setReplayState('optionalReplay');
+            setReplayIsOpen(true);
             return false;
           } else {
             if (data && type) {
@@ -2579,11 +2650,13 @@ if(profileData.language!==''){
         );
         const finalscore = getscores?.score;
 
-        if ((finalscore < getminpassscore)) {
-          setisReplay(true);
+        if (finalscore < getminpassscore) {
+          // setisReplay(true);
           Setprofilescore(finalscore);
-          setisOptionalReplay(false);
-          setCurrentScreenId(8);
+          // setisOptionalReplay(false);
+          // setCurrentScreenId(8);
+          setReplayState('mandatoryReplay');
+          setReplayIsOpen(true);
           return false;
         } else {
           if (demoBlocks.hasOwnProperty(nextLevel)) {
@@ -2646,7 +2719,8 @@ if(profileData.language!==''){
         // setType(demoBlocks['1']['1']?.blockChoosen);
         // setData(demoBlocks['1']['1']);
         setSelectedOption(null);
-        setCurrentScreenId(16);
+        setReplayState('replayPointPrompt');
+        setReplayIsOpen(true);
         return false;
       } else if (next?.blockShowNavigate === 'Select Block') {
         const selectedNext = Object.keys(demoBlocks[currentQuest])
@@ -2801,10 +2875,12 @@ if(profileData.language!==''){
           );
           const finalscore = getscores?.score;
           if (finalscore < getminpassscore) {
-            setisReplay(true);
+            // setisReplay(true);
             Setprofilescore(finalscore);
-            setisOptionalReplay(false);
-            setCurrentScreenId(8);
+            // setisOptionalReplay(false);
+            // setCurrentScreenId(8);
+            setReplayState('mandatoryReplay');
+            setReplayIsOpen(true);
             return false;
           } else {
             if (demoBlocks.hasOwnProperty(nextLevel)) {
@@ -2864,7 +2940,10 @@ if(profileData.language!==''){
             const optionsFiltered = [];
             for (const option of gameInfo.questOptions) {
               if (profileData?.Audiogetlanguage.length > 0) {
-                if (option?.qpSequence === demoBlocks[quest]['1']?.blockPrimarySequence) {
+                if (
+                  option?.qpSequence ===
+                  demoBlocks[quest]['1']?.blockPrimarySequence
+                ) {
                   const profilesetlan = profileData?.Audiogetlanguage.find(
                     (key: any) => key?.textId === option.qpOptionId,
                   );
@@ -2880,7 +2959,10 @@ if(profileData.language!==''){
                   }
                 }
               } else {
-                if (option?.qpSequence === demoBlocks[quest]['1'].blockPrimarySequence) {
+                if (
+                  option?.qpSequence ===
+                  demoBlocks[quest]['1'].blockPrimarySequence
+                ) {
                   optionsFiltered.push(option);
                 }
               }
@@ -2900,8 +2982,7 @@ if(profileData.language!==''){
           return false;
         }
       }
-    }
-    else {
+    } else {
       setNavigateBlockEmpty(true);
       setType(demoBlocks[quest]['1']?.blockChoosen);
       setData(demoBlocks[quest]['1']);
@@ -2909,7 +2990,10 @@ if(profileData.language!==''){
         const optionsFiltered = [];
         for (const option of gameInfo.questOptions) {
           if (profileData?.Audiogetlanguage.length > 0) {
-            if (option?.qpSequence === demoBlocks[quest]['1']?.blockPrimarySequence) {
+            if (
+              option?.qpSequence ===
+              demoBlocks[quest]['1']?.blockPrimarySequence
+            ) {
               const profilesetlan = profileData?.Audiogetlanguage.find(
                 (key: any) => key?.textId === option.qpOptionId,
               );
@@ -2925,7 +3009,9 @@ if(profileData.language!==''){
               }
             }
           } else {
-            if (option?.qpSequence === demoBlocks[quest]['1'].blockPrimarySequence) {
+            if (
+              option?.qpSequence === demoBlocks[quest]['1'].blockPrimarySequence
+            ) {
               optionsFiltered.push(option);
             }
           }
@@ -2944,7 +3030,6 @@ if(profileData.language!==''){
       setSelectedOption(null);
       return false;
     }
-
   };
 
   const calScore = () => {
@@ -3027,10 +3112,9 @@ if(profileData.language!==''){
         (key: any) => key?.fieldName === 'qpResponse',
       );
       const FilteredResponsecontent = responseAudioFiltered[0].content;
-    const resMsgLanguage =FilteredResponsecontent;
-    setResMsg(resMsgLanguage);
-    }
-    else{
+      const resMsgLanguage = FilteredResponsecontent;
+      setResMsg(resMsgLanguage);
+    } else {
       setResMsg(item?.qpResponse);
     }
     setFeed(item?.qpFeedback);
@@ -3056,7 +3140,10 @@ if(profileData.language!==''){
       voiceRef.current.pause();
     }
     const backGroundBgmscreens = [1, 3, 4, 5, 6, 7, 11, 12, 13];
-    if (![2,10,0].includes(currentScreenId) && backGroundBgmscreens.includes(currentScreenId)) {
+    if (
+      ![2, 10, 0].includes(currentScreenId) &&
+      backGroundBgmscreens.includes(currentScreenId)
+    ) {
       setAudioObj({
         url: audio,
         type: EnumType.BGM,
@@ -3065,50 +3152,41 @@ if(profileData.language!==''){
         autoplay: true,
       });
       if (backgroundBgmRef.current) {
-        try{
-
-          backgroundBgmRef.current.play().catch(error => {
+        try {
+          backgroundBgmRef.current.play().catch((error) => {
             // Handle play promise rejection
             // console.error('Error playing background BGM:', error);
-          });; // Play background BGM
-        }
-        catch(error)
-        {
-          console.error('Background BGM ref is not available.',error);
+          }); // Play background BGM
+        } catch (error) {
+          console.error('Background BGM ref is not available.', error);
         }
       }
       if (voiceRef.current) {
         voiceRef.current.pause(); // Pause voice
       }
-
     }
-    if(currentScreenId === 2)
-      {
-        if (backgroundBgmRef.current) {
-          backgroundBgmRef.current.pause(); // pause background BGM
-        }
-        if(voiceRef.current)
-          {
-            voiceRef.current.play();
-          }
-        
+    if (currentScreenId === 2) {
+      if (backgroundBgmRef.current) {
+        backgroundBgmRef.current.pause(); // pause background BGM
       }
- 
+      if (voiceRef.current) {
+        voiceRef.current.play();
+      }
+    }
 
     setFeedBackFromValue();
 
-    const screens = [1,10,12,8,14,9,15,16,0,6,4]
+    const screens = [1, 10, 12, 8, 14, 9, 15, 16, 0, 6, 4];
     if (!screens.includes(currentScreenId)) {
-      const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+      const screenIdset =
+        getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
       if (screenIdset !== currentScreenId) {
         setPreLogDatas((prev: any) => ({
           ...prev,
-          screenIdSeq: [...prev.screenIdSeq, currentScreenId]
+          screenIdSeq: [...prev.screenIdSeq, currentScreenId],
         }));
       }
-
     }
-
   }, [currentScreenId]);
 
   const setFeedBackFromValue = () => {
@@ -3230,17 +3308,27 @@ if(profileData.language!==''){
       } else if (reviewInput?.tabId == 4) {
         //for Story Tab *******
         if (currentScreenId == 9 || currentScreenId == 14) {
-          const blockSeqId = currentScreenId == 9 ? (data.blockId) : (FeedBackoptionData[FeedbackcurrentPosition > 0 ? FeedbackcurrentPosition - 1 : FeedbackcurrentPosition].blockId);
+          const blockSeqId =
+            currentScreenId == 9
+              ? data.blockId
+              : FeedBackoptionData[
+                  FeedbackcurrentPosition > 0
+                    ? FeedbackcurrentPosition - 1
+                    : FeedbackcurrentPosition
+                ].blockId;
           setReviewInput((prev: Review) => ({
             ...prev,
             tabAttribute: 'blockSeqId',
             tabAttributeValue: blockSeqId,
           }));
-        }
-        else {
+        } else {
           const blockSeqId = data.blockId;
           setReviewSubTabOptions([]);
-          setReviewInput((prev: Review) => ({ ...prev, tabAttribute: 'blockSeqId', tabAttributeValue: blockSeqId }));
+          setReviewInput((prev: Review) => ({
+            ...prev,
+            tabAttribute: 'blockSeqId',
+            tabAttributeValue: blockSeqId,
+          }));
         }
       } else {
         const subOptions = subTabOptionsForTabIds.find(
@@ -3402,7 +3490,7 @@ if(profileData.language!==''){
     setCurrentScreenId(4);
     return false;
   };
- 
+
   const handleAudioError = () => {
     console.error(
       'Failed to load video because no supported source was found.',
@@ -3417,8 +3505,8 @@ if(profileData.language!==''){
           if (resLang?.data.length > 0) {
             const data = resLang?.data;
             setGameLanguages(data);
-              data.unshift({ value: 0, label: 'English' });
-           
+            data.unshift({ value: 0, label: 'English' });
+
             setHasMulitLanguages(true);
           } else {
             setProfileData((prev: any) => ({
@@ -3426,8 +3514,14 @@ if(profileData.language!==''){
               language: 'English',
             }));
             setPreLogDatas((prev: any) => ({
+           
               ...prev,
-              previewProfile: { ...prev.previewProfile, language: data[0]?.label, }
+              previewProfile: {
+                ...prev.previewProfile,
+                language: 'English',
+                // language: data[0]?.label,
+              },
+             
             }));
             setHasMulitLanguages(true);
             setIsOpenCustomModal(true);
@@ -3464,21 +3558,19 @@ if(profileData.language!==''){
     }
   };
 
-  const dontShowTopMenu = !([3,4,5,6,7,10].includes(currentScreenId));
-    // currentScreenId !== 7 &&
-    // currentScreenId !== 6 &&
-    // currentScreenId !== 5 &&
-    // currentScreenId !== 4 &&
-    // currentScreenId !== 3 &&
-    // currentScreenId !== 10;
+  const dontShowTopMenu = ![3, 4, 5, 6, 7, 10].includes(currentScreenId);
+  // currentScreenId !== 7 &&
+  // currentScreenId !== 6 &&
+  // currentScreenId !== 5 &&
+  // currentScreenId !== 4 &&
+  // currentScreenId !== 3 &&
+  // currentScreenId !== 10;
 
   useEffect(() => {
     if (FeedbackNavigatenext === true) {
       getData(data);
     }
   }, [FeedbackNavigatenext]);
-
-
 
   const getFeedbackData = (getdata: any) => {
     setisScreenshot(true);
@@ -3515,7 +3607,7 @@ if(profileData.language!==''){
           firstPageFeedback[FeedbackcurrentPosition].Seq
         );
       });
-      const optionsFiltered =[];
+      const optionsFiltered = [];
       for (const option of gameInfo.questOptions) {
         if (profileData?.Audiogetlanguage.length > 0) {
           if (option?.qpSequence === GetSeqData[0]?.blockPrimarySequence) {
@@ -3548,8 +3640,6 @@ if(profileData.language!==''){
           ];
         }
       }
-
-
 
       // const optionsFiltered = gameInfo?.questOptions.filter(
       //   (key: any) => key?.qpSequence === GetSeqData[0]?.blockPrimarySequence,
@@ -3610,13 +3700,14 @@ if(profileData.language!==''){
       };
 
       const previousDataString = JSON.stringify(data);
-      const updatePreviewLogsResponse = await updatePreviewlogs(previousDataString);
-    }
+      const updatePreviewLogsResponse = await updatePreviewlogs(
+        previousDataString,
+      );
+    };
     updatepreviousdatas();
   }, [getPrevLogDatas]);
 
-
-//  Newly Added  for prviouse stored
+  //  Newly Added  for prviouse stored
   const SetPreviouseStored = (currentdata: any) => {
     if (currentdata !== null) {
       const currentQuest = currentdata
@@ -3625,12 +3716,19 @@ if(profileData.language!==''){
       if (currentdata?.blockChoosen === 'Interaction') {
         if (currentQuest === parseInt(profile.currentQuest)) {
           if (getPrevLogDatas.selectedOptions[profile?.currentQuest]) {
-            const existingIndex = getPrevLogDatas.selectedOptions[profile?.currentQuest]?.findIndex((item: any) => item.blockId === currentdata.blockId);
+            const existingIndex = getPrevLogDatas.selectedOptions[
+              profile?.currentQuest
+            ]?.findIndex((item: any) => item.blockId === currentdata.blockId);
 
             if (existingIndex !== -1) {
-              const updatedOptions = [...getPrevLogDatas.selectedOptions[profile?.currentQuest]];
+              const updatedOptions = [
+                ...getPrevLogDatas.selectedOptions[profile?.currentQuest],
+              ];
 
-              updatedOptions[existingIndex] = { blockId: currentdata.blockId, optionId: OptionSelectId };
+              updatedOptions[existingIndex] = {
+                blockId: currentdata.blockId,
+                optionId: OptionSelectId,
+              };
               setPreLogDatas((prev: any) => ({
                 ...prev,
                 selectedOptions: {
@@ -3638,19 +3736,31 @@ if(profileData.language!==''){
                   [profile?.currentQuest]: updatedOptions,
                 },
               }));
-            }
-            else {
+            } else {
               setPreLogDatas((prev: any) => ({
                 ...prev,
-                selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [...prev.selectedOptions[profile?.currentQuest], { blockId: currentdata.blockId, optionId: [OptionSelectId] }] }
+                selectedOptions: {
+                  ...prev.selectedOptions,
+                  [profile?.currentQuest]: [
+                    ...prev.selectedOptions[profile?.currentQuest],
+                    {
+                      blockId: currentdata.blockId,
+                      optionId: [OptionSelectId],
+                    },
+                  ],
+                },
               }));
             }
           } else {
             setPreLogDatas((prev: any) => ({
               ...prev,
-              selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [{ blockId: currentdata.blockId, optionId: [OptionSelectId] }] }
+              selectedOptions: {
+                ...prev.selectedOptions,
+                [profile?.currentQuest]: [
+                  { blockId: currentdata.blockId, optionId: [OptionSelectId] },
+                ],
+              },
             }));
-
           }
         } else {
           setPreLogDatas((prev: any) => ({
@@ -3664,6 +3774,59 @@ if(profileData.language!==''){
         }
       }
     }
+  };
+
+  /** replay prompt functions for replay point & previous navigation to chapter selection screen*/
+
+  const handleReplayButtonClick = () => {
+    console.log('handleReplayButtonClick()');
+    setType(demoBlocks[profile?.currentQuest]['1']?.blockChoosen);
+    setData(demoBlocks[profile?.currentQuest]['1']);
+    if (
+      demoBlocks[profile?.currentQuest]['1']?.blockChoosen === 'Interaction'
+    ) {
+      const optionsFiltered = [];
+      for (const option of gameInfo.questOptions) {
+        if (profileData?.Audiogetlanguage.length > 0) {
+          if (
+            option?.qpSequence ===
+            demoBlocks[profile?.currentQuest]['1']?.blockPrimarySequence
+          ) {
+            const profilesetlan = profileData?.Audiogetlanguage.find(
+              (key: any) => key?.textId === option.qpOptionId,
+            );
+
+            if (profilesetlan) {
+              const languagecont = {
+                ...option,
+                qpOptionText: profilesetlan.content,
+              };
+              optionsFiltered.push(languagecont);
+            } else {
+              optionsFiltered.push(option);
+            }
+          }
+        } else {
+          if (
+            option?.qpSequence ===
+            demoBlocks[profile?.currentQuest]['1']?.blockPrimarySequence
+          ) {
+            optionsFiltered.push(option);
+          }
+        }
+      }
+      if (gameInfo?.gameData?.gameShuffle === 'true') {
+        for (let i = optionsFiltered.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [optionsFiltered[i], optionsFiltered[j]] = [
+            optionsFiltered[j],
+            optionsFiltered[i],
+          ];
+        }
+      }
+      setOptions(optionsFiltered);
+    }
+    setCurrentScreenId(2);
   };
 
   return (
@@ -3697,7 +3860,59 @@ if(profileData.language!==''){
                 : 'EntirePreview'
             }
           >
-            { currentScreenId === 2 && replayIsOpen && <ReplayScore preloadedAssets={preloadedAssets} setReplayIsOpen={setReplayIsOpen} />}
+             {ModelControl === true || NavigateBlockEmpty === true ? (
+              <>
+                <ModelPopup
+                  ModelControl={ModelControl}
+                  setModelControl={setModelControl}
+                  backGroundImg={preloadedAssets.backgroundImage}
+                  preloadedAssets={preloadedAssets}
+                  getPrevLogDatas={getPrevLogDatas}
+                  setCurrentScreenId={setCurrentScreenId}
+                  setLastModified={setLastModified}
+                  LastModified={LastModified}
+                  setData={setData}
+                  setType={setType}
+                  gameInfo={gameInfo.blocks}
+                  setOptions={setOptions}
+                  gameInfoquest={gameInfo.questOptions}
+                  gameinfodata={gameInfo.gameData.gameShuffle}
+                  isSetStoryScreen={isSetStoryScreen}
+                  isStoryScreen={isStoryScreen}
+                  setPreLogDatas={setPreLogDatas}
+                  NavigateBlockEmpty={NavigateBlockEmpty}
+                  setNavigateBlockEmpty={setNavigateBlockEmpty}
+                  profileData={profileData}
+                  setQuestState={setQuestState}
+                  setReplayState={setReplayState}
+                  setReplayIsOpen={setReplayIsOpen}
+                />
+              </>
+            ) : (
+              ''
+            )}
+            {replayIsOpen && (
+              <ReplayScore
+                preloadedAssets={preloadedAssets}
+                setReplayIsOpen={setReplayIsOpen}
+                handleReplayButtonClick={handleReplayButtonClick}
+                replayState={replayState}
+                setCurrentScreenId={setCurrentScreenId}
+                // isReplay={isReplay}
+                gameInfo={gameInfo}
+                // isOptionalReplay={isOptionalReplay}
+                // setOptionalReplay={setOptionalReplay}
+                profilescore={profilescore}
+                getPrevLogDatas={getPrevLogDatas}
+                setData={setData}
+                setType={setType}
+                gameInfoquest={gameInfo.questOptions}
+                gameinfodata={gameInfo.gameData.gameShuffle}
+                profileData={profileData} 
+                setQuestState={setQuestState} setOptions={setOptions}    
+                setPreLogDatas={setPreLogDatas}         
+                 />
+            )}
             {(() => {
               switch (currentScreenId) {
                 case 0:
@@ -3851,8 +4066,8 @@ if(profileData.language!==''){
                       className="Main-Content"
                     >
                       <Box
-                       backgroundImage={preloadedAssets.StarsBg}
-                       backgroundColor={'#0d161e'}
+                        backgroundImage={preloadedAssets.StarsBg}
+                        backgroundColor={'#0d161e'}
                         w={'100% !important'}
                         h={'100vh'}
                         backgroundRepeat={'no-repeat'}
@@ -3893,8 +4108,8 @@ if(profileData.language!==''){
                         className="Main-Content"
                       >
                         <Box
-                         backgroundImage={preloadedAssets.StarsBg}
-                         backgroundColor={'#0d161e'}
+                          backgroundImage={preloadedAssets.StarsBg}
+                          backgroundColor={'#0d161e'}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -3931,8 +4146,8 @@ if(profileData.language!==''){
                         className="Main-Content"
                       >
                         <Box
-                         backgroundImage={preloadedAssets.StarsBg}
-                         backgroundColor={'#0d161e'}
+                          backgroundImage={preloadedAssets.StarsBg}
+                          backgroundColor={'#0d161e'}
                           w={'100% !important'}
                           h={'100vh'}
                           backgroundRepeat={'no-repeat'}
@@ -3964,7 +4179,7 @@ if(profileData.language!==''){
                               setType={setType}
                               setData={setData}
                               type={type}
-                              questWiseMaxTotal={questWiseMaxTotal}/// Pass questWiseMaxTotal as a prop
+                              questWiseMaxTotal={questWiseMaxTotal} /// Pass questWiseMaxTotal as a prop
                             />
                           </Box>
                         </Box>
@@ -4081,7 +4296,21 @@ if(profileData.language!==''){
                   );
                 case 10:
                   return (
-                    <GameIntroScreen preloadedAssets={preloadedAssets} setCurrentScreenId={setCurrentScreenId} setIsGetsPlayAudioConfirmation={setIsGetsPlayAudioConfirmation} setPreLogDatas={setPreLogDatas} getPrevLogDatas={getPrevLogDatas} setprevScreenId={setprevScreenId} currentScreenId={currentScreenId} setModelControl={setModelControl} gameInfo={gameInfo.gameData} setLastModified={setLastModified} hasMulitLanguages={hasMulitLanguages} setIsOpenCustomModal={setIsOpenCustomModal}
+                    <GameIntroScreen
+                      preloadedAssets={preloadedAssets}
+                      setCurrentScreenId={setCurrentScreenId}
+                      setIsGetsPlayAudioConfirmation={
+                        setIsGetsPlayAudioConfirmation
+                      }
+                      setPreLogDatas={setPreLogDatas}
+                      getPrevLogDatas={getPrevLogDatas}
+                      setprevScreenId={setprevScreenId}
+                      currentScreenId={currentScreenId}
+                      setModelControl={setModelControl}
+                      gameInfo={gameInfo.gameData}
+                      setLastModified={setLastModified}
+                      hasMulitLanguages={hasMulitLanguages}
+                      setIsOpenCustomModal={setIsOpenCustomModal}
                     ></GameIntroScreen>
                   );
                 case 11:
@@ -4210,36 +4439,7 @@ if(profileData.language!==''){
                   return <h1>Loading Screen .... Default case </h1>;
               }
             })()}
-            {ModelControl === true || NavigateBlockEmpty === true ?
-
-              <>
-                <Box
-                  w={'100%'}
-                  h={'100vh'}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  position={'relative'}
-                  overflow={'visible'}
-                  style={{ perspective: '1000px' }}
-                  className="Main-Content"
-                >
-                  <Box
-                    backgroundImage={preloadedAssets.backgroundImage}
-                    w={'100% !important'}
-                    h={'100vh'}
-                    backgroundRepeat={'no-repeat'}
-                    backgroundSize={'cover'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    className="Game-Screen"
-                  >
-                    <Box className="Images">
-                      <ModelPopup ModelControl={ModelControl} setModelControl={setModelControl} backGroundImg={preloadedAssets.backgroundImage} preloadedAssets={preloadedAssets} getPrevLogDatas={getPrevLogDatas} setCurrentScreenId={setCurrentScreenId} setLastModified={setLastModified} LastModified={LastModified} setData={setData} setType={setType} gameInfo={gameInfo.blocks} setOptions={setOptions} gameInfoquest={gameInfo.questOptions} gameinfodata={gameInfo.gameData.gameShuffle} isSetStoryScreen={isSetStoryScreen} isStoryScreen={isStoryScreen} setPreLogDatas={setPreLogDatas} NavigateBlockEmpty={NavigateBlockEmpty} setNavigateBlockEmpty={setNavigateBlockEmpty} profileData={profileData}  setQuestState={setQuestState}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              </>:''}
+           
           </Flex>
           {/* Anonymous User's Review Form Menu
            * It works when uuid has UUID
@@ -4404,9 +4604,13 @@ if(profileData.language!==''){
               )}
             </Menu>
           )}
-     
+
           {audioObj.type === EnumType.BGM && (
-            <audio ref={backgroundBgmRef} loop={audioObj.loop} style={{ display: 'none' }}>
+            <audio
+              ref={backgroundBgmRef}
+              loop={audioObj.loop}
+              style={{ display: 'none' }}
+            >
               <source src={audioObj.url} type="audio/mpeg" />
               Your browser does not support the audio tag.
             </audio>
@@ -4422,9 +4626,20 @@ if(profileData.language!==''){
           {/* Language Transaltion Modal popup */}
 
           {/* <LanguageSelectionPrompt gameLanguages={gameLanguages} formData={gameInfo?.gameData} preloadedAssets={preloadedAssets} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData} setProfileData={setProfileData} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal} /> */}
-          <PromptScreen preloadedAssets={preloadedAssets} setIsOpenCustomModal={setIsOpenCustomModal} isOpenCustomModal={isOpenCustomModal} hasMulitLanguages={hasMulitLanguages} setHasMulitLanguages={setHasMulitLanguages} profileData={profileData}
-            setProfileData={setProfileData}  gameLanguages={gameLanguages} formData={gameInfo?.gameData} setPreLogDatas={setPreLogDatas} getPrevLogDatas={getPrevLogDatas} currentScreenId={currentScreenId}/>
-            
+          <PromptScreen
+            preloadedAssets={preloadedAssets}
+            setIsOpenCustomModal={setIsOpenCustomModal}
+            isOpenCustomModal={isOpenCustomModal}
+            hasMulitLanguages={hasMulitLanguages}
+            setHasMulitLanguages={setHasMulitLanguages}
+            profileData={profileData}
+            setProfileData={setProfileData}
+            gameLanguages={gameLanguages}
+            formData={gameInfo?.gameData}
+            setPreLogDatas={setPreLogDatas}
+            getPrevLogDatas={getPrevLogDatas}
+            currentScreenId={currentScreenId}
+          />
         </Box>
       </Box>
     </ProfileContext.Provider>

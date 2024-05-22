@@ -125,7 +125,7 @@ const Welcome: React.FC<{
           </Box>
           <Box className="top-title">
             <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-              <Box w='51%' lineHeight={'40px'}>
+              <Box w='32%' lineHeight={'40px'}>
                 <Text
                   className="title"
                   fontSize={{

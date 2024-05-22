@@ -67,12 +67,18 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     }
  
   }, []);
-
   const handleOverView = () => {
-    setHomeLeaderBoard(currentScreenId);
-    setCurrentScreenId(15); //overview Screen
-  };
-
+    // check a  condtion here 
+    if (currentScreenId === 2) {
+      setHomeLeaderBoard(currentScreenId);
+      setCurrentScreenId(15);
+      return;
+    } else {
+      setHomeLeaderBoard(currentScreenId);
+      setCurrentScreenId(4);
+      return;
+    }
+    };
   useEffect(() => {
     const progressResult = () => {
       //calculate Progress based on screen, Need to show different progress for current screen is in story, progress of the current quest, unless  show the entire game progress
@@ -132,11 +138,12 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
         }, 0);
       }
     } else {
-      total = profile.score.reduce((acc: number, cur: any) => acc + cur.score, 0);
+      total = profile.score!==undefined ? profile.score.reduce((acc: number, cur: any) => acc + cur.score, 0) : 0;
     }
     return total;
   }, [profile.score, profile.replayScore, currentScreenId]);
 
+  console.log('current',currentScreenId)
   return (
     <Box className="top-menu-home-section">
       {dontShowTopMenu && !isSettingOpen ? (
@@ -269,7 +276,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                       </Box>
                     </Box>
                   </Tooltip>
-                  <Tooltip label="Overview"
+                  <Tooltip label={currentScreenId === 2 || currentScreenId === 15 ? "Overview" :'LeaderBoard'}
                     display={'flex'}
                     justifyContent={'center'}
                     alignItems={'center'}
@@ -290,7 +297,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                     lineHeight={'25px'}
                   >
                     <Img
-                      src={preloadedAssets.Overview}
+                      src={currentScreenId === 2 || currentScreenId === 15 ? preloadedAssets.Overview : preloadedAssets.leadBtn}
                       onClick={handleOverView}
                       width={'auto'}
                       height={'70%'}

@@ -148,9 +148,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const screenIdset =
     getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
 
-    console.log("preLogData",getPrevLogDatas)
-    console.log("profileData",profileData)
-
   return (
     <>
       <Box
@@ -257,6 +254,8 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       style={{ width: '100%' }}
                       className="player_name"
                       textAlign={"center"} 
+                      me={0}
+                      mb={1}
                     > 
                     {profileData.name} 
                       </FormLabel>

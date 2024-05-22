@@ -57,6 +57,18 @@ const Reflection: React.FC<{
       setCurrentScreenId(5);//Navigate to Thank you screen
     }
   }
+  const backNavigation = () =>
+    {
+      if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+        setCurrentScreenId(4); //Navigate to leaderboard
+        return false;
+      }
+      else
+      {
+        setCurrentScreenId(13);
+        return false;
+      }
+    }
 
   return (
     <>
@@ -149,7 +161,7 @@ const Reflection: React.FC<{
               className='left-right-btn'
             >
               <Box w={'80%'} display={'flex'} justifyContent={'space-between'}>
-                <Img src={preloadedAssets.left} w={'50px'} h={'50px'} cursor={'pointer'} />
+                <Img src={preloadedAssets.left} w={'50px'} h={'50px'} cursor={'pointer'} onClick={backNavigation}/>
                 {isFormValid && (
                   <Img
                     src={preloadedAssets.right}
