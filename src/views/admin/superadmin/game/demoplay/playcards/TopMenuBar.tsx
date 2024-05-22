@@ -409,77 +409,10 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
               src={preloadedAssets.SettingPad}
               className="setting-pad"
             />
-            {/* <Box className="music-volume volumes">
-              <Slider
-                aria-label="slider-ex-4"
-                defaultValue={30}
-                name="musicVolume"
-                // onChangeEnd={(val) => { handleMusicVolume(val) }}
-                // value={audioObj.volume ?? 0}
-              >
-                <SliderTrack
-                  className="slider-track"
-                  height="15px"
-                  borderRadius="80px"
-                >
-                  <Box position="relative">
-                    <Img w={'100%'} h={'auto'} src={preloadedAssets.VolumeTrack} alt="Volume Track" />
-                    <Box
-                      position="absolute"
-                      top="47%"
-                      left="45%"
-                      transform="translate(-50%, -50%)"
-                      width="86%"
-                    >
-                      <SliderFilledTrack className="filled-volume" bg="pink.500" />
-                      <SliderThumb
-                        boxSize={10}
-                        background={'transparent'}                        
-                      // left={'calc(100% - 30%)'}
-                      >
-                        <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
-                      </SliderThumb>
-                    </Box>
-                  </Box>
-                </SliderTrack>                
-              </Slider>
-            </Box>
-            <Box className="voice-volume volumes">
-              <Slider
-                aria-label="slider-ex-4"
-                defaultValue={30}
-                name="voiceVolume"
-              >
-                <SliderTrack
-                  className="slider-track"
-                  height="15px"
-                  borderRadius="80px"
-                >
-                  <Box position="relative">
-                    <Img w={'100%'} h={'auto'} src={preloadedAssets.VolumeTrack} alt="Volume Track" />
-                    <Box
-                      position="absolute"
-                      top="47%"
-                      left="45%"
-                      transform="translate(-50%, -50%)"
-                      width="86%"
-                    >
-                      <SliderFilledTrack className="filled-volume" bg="pink.500" />
-                      <SliderThumb boxSize={10} background={'transparent'} >
-                        <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
-                      </SliderThumb>
-                    </Box>
-                  </Box>
-                </SliderTrack>
-                
-              </Slider>
-            </Box> */}
+           
              <Box className="music-volume volumes">
               <Slider
                 aria-label="music-volume-slider"
-                // defaultValue={getPrevLogDatas?.audioVolumeValue?.bgVolume ? getPrevLogDatas?.audioVolumeValue?.bgVolume * 100 : 25}
-                // defaultValue={parseFloat(getPrevLogDatas.audioVolumeValue.bgVolume) * 100}
-                // defaultValue={parseFloat(getPrevLogDatas.audioVolumeValue.voVolume) * 100}
                 defaultValue={getPrevLogDatas?.audioVolumeValue?.bgVolume * 100 || 25}
                 onChangeEnd={(value) => handleMusicVolume(value, EnumType.BGM)}
               >
@@ -506,9 +439,6 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
             <Box className="voice-volume volumes">
               <Slider
                 aria-label="slider-ex-4"
-                // defaultValue={getPrevLogDatas?.audioVolumeValue?.voVolume ? getPrevLogDatas?.audioVolumeValue?.voVolume * 100 : 25}
-                //  defaultValue={parseFloat(getPrevLogDatas.audioVolumeValue.bgVolume) * 100}
-                // defaultValue={getPrevLogDatas?.audioVolumeValue?.bgVolume * 100 || 25}
                  defaultValue={getPrevLogDatas?.audioVolumeValue?.voVolume * 100 || 25}
                 onChangeEnd={(value) => handleMusicVolume(value, EnumType.VOICE)}
               >
@@ -526,9 +456,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                     </Box>
                   </Box>
                 </SliderTrack>
-                <SliderThumb boxSize={9} background={'transparent'}>
-                  <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
-                </SliderThumb>
+                
               </Slider>
             </Box>
             <Box className="btns">
