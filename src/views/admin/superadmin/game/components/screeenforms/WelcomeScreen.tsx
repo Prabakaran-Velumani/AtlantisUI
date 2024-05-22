@@ -178,8 +178,8 @@ const WelcomeScreen: React.FC<{
               alignItems="center"
               justifyContent={'space-between'}
               mt="-20px"
-            ><Text fontSize="12px" textColor="grey">{(formData.gameDuration!=="")?
-            (formData.gameDuration > 1)?"Estimated duration. "+formData.gameDuration+" mins":"Estimated duration. Few mins":"Estimated duration  10 mins"}</Text></FormControl>
+            ><Text fontSize="12px" textColor="grey">{(formData.gameDuration !== "") ?
+              (formData.gameDuration > 1) ? "Estimated duration. " + formData.gameDuration + " mins" : "Estimated duration. Few mins" : "Estimated duration  10 mins"}</Text></FormControl>
             <FormControl
               display="flex"
               alignItems="center"
@@ -209,7 +209,7 @@ const WelcomeScreen: React.FC<{
                 <Text> Additional Welcome Note</Text>
 
               </FormLabel>
-              
+
 
               <Switch
                 isChecked={formData.gameIsShowAdditionalWelcomeNote === 'true' ? true : false}
@@ -229,10 +229,10 @@ const WelcomeScreen: React.FC<{
             gap="20px"
             mt={'0px'}
           >
-           <FormLabel fontSize="12px" mt="5px" color="gray" htmlFor="Collection">
-                  An additional Note can be used to set the context or share reference material after the Welcome Screen.
-                </FormLabel>
-                  </SimpleGrid>
+            <FormLabel fontSize="12px" mt="5px" color="gray" htmlFor="Collection">
+              An additional Note can be used to set the context or share reference material after the Welcome Screen.
+            </FormLabel>
+          </SimpleGrid>
           <SimpleGrid
             columns={{ base: 1, md: 1 }}
             gap="20px"
@@ -255,10 +255,10 @@ const WelcomeScreen: React.FC<{
                   onKeyPress={checkvalue}
                   style={{
                     border: formData.gameIsShowAdditionalWelcomeNoteInvalid ? '1px solid red' : '1px solid #ccc',
-                    
+
                   }}
                 />
-                <p style={{fontSize:'12px',color:'grey'}}>{characterCount} characters left</p>
+                <p style={{ fontSize: '12px', color: 'grey' }}>{characterCount} characters left</p>
               </div>
             )}
             {/***************Afrith-Modified-Ends-20-12-23***************************/}

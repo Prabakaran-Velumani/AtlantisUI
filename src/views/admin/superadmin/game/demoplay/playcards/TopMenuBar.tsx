@@ -141,7 +141,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
       total = profile.score!==undefined ? profile.score.reduce((acc: number, cur: any) => acc + cur.score, 0) : 0;
     }
     return total;
-  }, [profile.score, profile.replayScore, currentScreenId]);
+  }, [profile?.score, profile?.replayScore, currentScreenId]);
 
   console.log('current',currentScreenId)
   return (

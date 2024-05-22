@@ -84,7 +84,6 @@ if(formState?.name || formData?.gender || formData?.language){
   setPreLogDatas((prev:any) => ({...prev,previewProfile:{ ...formState,
     score:getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile.score : []}}))
 }
-console.log("FormState UseEffect")
 },[formState])
 
 
@@ -200,6 +199,7 @@ console.log('isOpenCustomModal',isOpenCustomModal)
                       style={{
                         width: '100%',
                       }}
+                      autoComplete='off'
                       type={'text'}
                       id={'name'}
                       className="player_profilename"

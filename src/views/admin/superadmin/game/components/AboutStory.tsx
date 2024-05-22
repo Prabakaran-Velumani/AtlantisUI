@@ -601,8 +601,6 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                   <FormLabel fontWeight='bold' fontSize='sm' mb='8px' ml='10px'>
                     Category<Text as='span' color='red.500'>*</Text>
                   </FormLabel>
-                
-
 <Select
               menuPortalTarget={document.body}
               styles={{
