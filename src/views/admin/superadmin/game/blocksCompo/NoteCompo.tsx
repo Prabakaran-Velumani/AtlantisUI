@@ -106,7 +106,6 @@ const NoteCompo: React.FC<PropsNote> = ({
   const [matchingBlockContent, setMatchingBlockContent] = useState('');
 
   useEffect(() => {
-    console.log('language', language);
     // Assume you have a function to get the translation ID dynamicallyz
     const getTranslationId = () => {
       // Use formDataGamelanguageCode as the dynamic translation ID
@@ -318,13 +317,13 @@ const NoteCompo: React.FC<PropsNote> = ({
       >
         {seq.id}
       </Box>
-      <Box className="box-block" w={{base:'100%',lg:'auto'}} flexDirection={{base:'column',lg:'row'}} display={'flex'} alignItems={'center'}>
-        <Box className="block-character-name" mr={'10px'} mb={{base:'10px',lg:'0px'}} w={{base:'100%',lg:'150px'}}>
+      <Box className="box-block" w={{ base: '100%', lg: 'auto' }} flexDirection={{ base: 'column', lg: 'row' }} display={'flex'} alignItems={'center'}>
+        <Box className="block-character-name" mr={'10px'} mb={{ base: '10px', lg: '0px' }} w={{ base: '100%', lg: '150px' }}>
           <button style={customButtonStyles} disabled={true} onClick={() => { }}>
             <span style={{ textAlign: 'left' }}>Narrator</span>
           </button>
         </Box>
-        <Box className="block-input-text" mr={'10px'}  mb={{base:'10px',lg:'0px'}} w={{base:'100%',lg:'400px'}}>
+        <Box className="block-input-text" mr={'10px'} mb={{ base: '10px', lg: '0px' }} w={{ base: '100%', lg: '400px' }}>
           <Textarea
             ref={textareaRef}
             placeholder="Note"

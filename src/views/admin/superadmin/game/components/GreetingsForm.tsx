@@ -85,6 +85,7 @@ const GreetingsForm: React.FC<{
   setBadge: any;
   selectedAud: any;
   setSelectedAud: any;
+  fetchLanguagescount:() => void;
 }> = ({
   selectedAud,
   setSelectedAud,
@@ -96,6 +97,7 @@ const GreetingsForm: React.FC<{
   updateImageBackGround,
   setFormData,
   setSentAud,
+  fetchLanguagescount,
 }) => {
     const [isOpenSummary, setIsOpenSummary] = useState<any>(false);
     const [tab, setTab] = useState<number>(1);
@@ -231,20 +233,22 @@ const GreetingsForm: React.FC<{
       if (isEmptyObject(updateData)) {
         console.log(updateData);
       } else {
-        let data = JSON.stringify(updateData);
-        // alert(data);
-        const result = await updatelanguages(data);
-        if (result?.status !== 'Success')
-          return console.log('updatelanguages Error :', result?.message);
-        if (result?.status == 'Success') {
-          // alert("success");
-          setDefaultLang(result?.lngchoosen);
-          setSelectedLanguages(result?.data);
-        }
-        if (result?.status == 'AlreadyExist') {
-          setDefaultLang(result?.lngchoosen);
-          setSelectedLanguages(result?.data);
-        }
+        console.log('Temporary Block')
+        // let data = JSON.stringify(updateData);
+        // // alert(data);
+        // const result = await updatelanguages(data);
+        // if (result?.status !== 'Success')
+        //   return console.log('updatelanguages Error :', result?.message);
+        // if (result?.status == 'Success') {
+        //   // alert("success");
+        //   setDefaultLang(result?.lngchoosen);
+        //   setSelectedLanguages(result?.data);
+        // }
+        // if (result?.status == 'AlreadyExist') {
+        //   setDefaultLang(result?.lngchoosen);
+        //   setSelectedLanguages(result?.data);
+        // }
+        return true;
       }
     };
     useEffect(() => {
@@ -255,7 +259,7 @@ const GreetingsForm: React.FC<{
             console.log('getLanguages Error:', result?.message);
             return;
           }
-
+          fetchLanguagescount();
           setLanguageOptions(result?.data);
 
           const filteredLanguages = result?.data?.filter(

@@ -75,10 +75,16 @@ import Scorebox from 'assets/img/games/Score.png';
 import Profile from 'assets/img/games/profile.png';
 import Continue from 'assets/img/games/Continue.png'
 import StarsBg from 'assets/img/screens/Stars.png';
+import MoneyIcon from 'assets/img/games/MoneyIcon.png';
+import profile from '../../assets/img/games/profile.png';
+import cancel from 'assets/img/games/cancel.png';
+import leadBtn from 'assets/img/games/LeadBtn.png';
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
  */
 export const assetImageSrc = [
+  { assetType: 'leadBtn', src: leadBtn }, 
+  { assetType: 'cancel', src: cancel }, 
   { assetType: 'StarsBg', src: StarsBg }, 
   { assetType: 'VolumeTrack', src: VolumeTrack },
   { assetType: 'Continue', src: Continue },
@@ -156,4 +162,9 @@ export const assetImageSrc = [
   { assetType: 'Completed', src:Completed},
   { assetType: 'Thankyou', src:Thankyou},
   { assetType: 'SkillLearn', src:SkillLearn},
+  { assetType: 'MoneyIcon', src:MoneyIcon},
+  { assetType: 'profile', src:profile},
+  /*file not available but used list
+  { assetType: 'write', src: write },
+  */
 ];

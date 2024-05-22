@@ -104,6 +104,8 @@ const AddScores: React.FC<{
   handleCompletionScreen?: any;
   handlecompletion?: any;
   handleEnables: any;
+  RefelectionAnswer:any;
+  ThankyouFeedback:any;
 }> = ({
   languages,
   setShowFunction,
@@ -147,7 +149,9 @@ const AddScores: React.FC<{
   setCompKeyCount,
   handleCompletionScreen,
   handlecompletion,
-  handleEnables
+  handleEnables,
+  RefelectionAnswer,
+  ThankyouFeedback
 }) => {
     /**********navin */
     // brindha start
@@ -794,7 +798,7 @@ const AddScores: React.FC<{
       'Reflection Screen',
       'Take Aways Screen',
       'Welcome Screen',
-      'ThankYou Screen',
+       'ThankYou Screen',
     ];
     const ScreenMainImages = [
       Screen1,
@@ -841,7 +845,13 @@ const AddScores: React.FC<{
         setQuest(selectedOption.value);
       }
     };
+    /*Lokie New Function Add 14.05.2024 */
+    const handleTabsClick = (Tabs: number): void => {
+      setCurrentTab(Tabs);
+      console.log('LokieTabsclick', Tabs);
 
+    };
+    /*End Lokie Work */
     return (
       <>
         <Box className="AddScores">
@@ -879,18 +889,76 @@ const AddScores: React.FC<{
                 /{Object.keys(Completion).length + 5})
               </Text>
               <Box w={'100%'} h={'auto'} display={'flex'} flexWrap={'wrap'} justifyContent={'center'}>
-                {Object.keys(Completion).map((item: any, i: any) => <Button  color={'#cccccc'} border={'1px solid #cccccc'} bg={'transparent'}
-                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{base:'32%',lg:'20%'}} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>Completion{i + 1}</Button>)}
-                <Button color={'#cccccc'} border={'1px solid #cccccc'} bg={'transparent'}
-                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{base:'32%',lg:'20%'}} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>LeaderBoard</Button>
-                <Button color={'#cccccc'} border={'1px solid #cccccc'} bg={'transparent'}
-                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{base:'32%',lg:'20%'}} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>Reflection</Button>
-                <Button color={'#cccccc'} border={'1px solid #cccccc'} bg={'transparent'}
-                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{base:'32%',lg:'20%'}} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>Welcome</Button>
-                <Button color={'#cccccc'} border={'1px solid #cccccc'} bg={'transparent'}
-                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{base:'32%',lg:'20%'}} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>TakeAway</Button>
-                <Button color={'#cccccc'} border={'1px solid #cccccc'} bg={'transparent'}
-                 _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{base:'32%',lg:'20%'}} fontWeight={700} fontSize={'0.875rem !important'}  borderRadius={'8px'} m={'2px'}>ThankYou</Button>
+                {Object.keys(Completion).map((item: any, i: any) => 
+                
+                <Button 
+                color={currentTab === 0 &&  CompKeyCount===i ? '#fff' : '#cccccc'}
+                  border={currentTab === 0 && CompKeyCount===i ? '1px solid #422afb' : '1px solid #cccccc'}
+                  bg={currentTab === 0 &&  CompKeyCount===i? '#422afb' : 'transparent'}
+
+                  _hover={{ bg: '#422afb', color: '#fff' }} size='sm' w={{ base: '32%', lg: '20%' }} fontWeight={700} fontSize={'0.875rem !important'} borderRadius={'8px'} m={'2px'}
+                  onClick={() => {
+                    setCompKeyCount(i);
+                    handleTabsClick(0);
+                  }}
+                  >Completion{i + 1}</Button>)}
+            
+              
+                <Button
+                  color={currentTab === 1 ? '#fff' : '#cccccc'}
+                  border={currentTab === 1 ? '1px solid #422afb' : '1px solid #cccccc'}
+                  bg={currentTab === 1 ? '#422afb' : 'transparent'}
+                  _hover={{ bg: '#422afb', color: '#fff' }}
+                  size='sm'
+                  w={{ base: '32%', lg: '20%' }}
+                  fontWeight={700}
+                  fontSize={'0.875rem !important'}
+                  borderRadius={'8px'}
+                  m={'2px'}
+                  onClick={() => handleTabsClick(1)}>
+                  LeaderBoard
+                </Button>
+                <Button
+                  color={currentTab === 2 ? '#fff' : '#cccccc'}
+                  border={currentTab === 2 ? '1px solid #422afb' : '1px solid #cccccc'}
+                  bg={currentTab === 2 ? '#422afb' : 'transparent'}
+                  _hover={{ bg: '#422afb', color: '#fff' }}
+                  size='sm' w={{ base: '32%', lg: '20%' }}
+                  fontWeight={700} fontSize={'0.875rem !important'}
+                  borderRadius={'8px'} m={'2px'} onClick={() => handleTabsClick(2)}>
+                  Reflection
+                </Button>
+               
+                <Button
+                  color={currentTab === 3 ? '#fff' : '#cccccc'}
+                  border={currentTab === 3 ? '1px solid #422afb' : '1px solid #cccccc'}
+                  bg={currentTab === 3 ? '#422afb' : 'transparent'}
+                  _hover={{ bg: '#422afb', color: '#fff' }}
+                  size='sm' w={{ base: '32%', lg: '20%' }}
+                  fontWeight={700} fontSize={'0.875rem !important'}
+                  borderRadius={'8px'} m={'2px'} onClick={() => handleTabsClick(3)}>
+                  TakeAway
+                </Button>
+                <Button
+                  color={currentTab === 4 ? '#fff' : '#cccccc'}
+                  border={currentTab === 4 ? '1px solid #422afb' : '1px solid #cccccc'}
+                  bg={currentTab === 4 ? '#422afb' : 'transparent'}
+                  _hover={{ bg: '#422afb', color: '#fff' }}
+                  size='sm' w={{ base: '32%', lg: '20%' }}
+                  fontWeight={700} fontSize={'0.875rem !important'}
+                  borderRadius={'8px'} m={'2px'} onClick={() => handleTabsClick(4)}>
+                  Welcome
+                </Button>
+                <Button
+                  color={currentTab === 5 ? '#fff' : '#cccccc'}
+                  border={currentTab === 5 ? '1px solid #422afb' : '1px solid #cccccc'}
+                  bg={currentTab === 5 ? '#422afb' : 'transparent'}
+                  _hover={{ bg: '#422afb', color: '#fff' }}
+                  size='sm' w={{ base: '32%', lg: '20%' }}
+                  fontWeight={700} fontSize={'0.875rem !important'}
+                  borderRadius={'8px'} m={'2px'} onClick={() => handleTabsClick(5)}>
+                  ThankYou
+                </Button>
               </Box>
               <DesignImage
                 currentTab={currentTab}
@@ -930,12 +998,6 @@ const AddScores: React.FC<{
                     bottom={{ base: '0', lg: 'unset' }}>
                     <Icon
                       as={FaChevronCircleRight}
-                      // position="absolute"
-                      // top={currentTab === 0 ? '325px' : currentTab === 1 ? "325px" :"325px"}
-                      // right="10px"
-
-                      // transform="translate(0, -50%)"
-                      // aria-label="Slide Right"
                       fontSize="25px" // Increase icon size here
                       onClick={handleNext}
                     />
@@ -1084,7 +1146,7 @@ const AddScores: React.FC<{
                         ? 'red'
                         : 'grey'
                     }
-                   
+
                   >
                     {maxCharacters -
                       (compliData[CompKeyCount]?.gameScreenTitle?.length ||
@@ -1669,6 +1731,29 @@ const AddScores: React.FC<{
                           By creating a copy of the existing story and modifying
                           it
                         </Radio>
+                        <Box display={showQuest ? 'block' : 'none'} mt={'10px'}>
+                          <Flex alignItems="center">
+                            <label htmlFor="quest">Select a Quest:</label>
+                            <Select
+                              placeholder="Quest..."
+                              id="quest"
+                              name="Quests"
+                              menuPortalTarget={document.body}
+                              styles={customStyles}
+                              options={isQuestDrop}
+                              isSearchable={true}
+                              className="react-select"
+                              value={
+                                isQuestDrop.find(
+                                  (option: any) => option.value === getQuest,
+                                ) || null
+                              }
+                              onChange={(selectedOption: any) =>
+                                handleQuestNo(selectedOption)
+                              }
+                            />
+                          </Flex>
+                        </Box>
                         <Radio
                           value="Scratch"
                           onChange={() => handledropquest('Scratch')}
@@ -1689,29 +1774,7 @@ const AddScores: React.FC<{
                         </Text>
                       </Stack>
                     </RadioGroup>
-                    <Box display={showQuest ? 'block' : 'none'} mt={'10px'}>
-                      <Flex alignItems="center">
-                        <label htmlFor="quest">Select a Quest:</label>
-                        <Select
-                          placeholder="Quest..."
-                          id="quest"
-                          name="Quests"
-                          menuPortalTarget={document.body}
-                          styles={customStyles}
-                          options={isQuestDrop}
-                          isSearchable={true}
-                          className="react-select"
-                          value={
-                            isQuestDrop.find(
-                              (option: any) => option.value === getQuest,
-                            ) || null
-                          }
-                          onChange={(selectedOption: any) =>
-                            handleQuestNo(selectedOption)
-                          }
-                        />
-                      </Flex>
-                    </Box>
+
                   </Box>
                   <Flex justify="end" w="100%" marginTop="15px" p="0 15px">
                     <Button

@@ -25,6 +25,7 @@ interface ProfileScreenProps {
   formData?: any;
   profileData?: any;
   setProfileData: any;
+  setprevProfileData:any;
   preloadedAssets: any;
   setPreLogDatas:any;
   getPrevLogDatas:any;
@@ -36,6 +37,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
   formData,
   profileData,
   setProfileData,
+  setprevProfileData,
   preloadedAssets,
   setPreLogDatas,
   getPrevLogDatas
@@ -56,6 +58,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
       ...prev,
       previewProfile:{...prev.previewProfile, [id]: id === 'name' ? value : lang }
     }));
+    // setprevProfileData((prev:any) => ({ ...prev, [id]: id === 'name' ? value : lang }));
   };
   const spokenLanguages = [
     'English',

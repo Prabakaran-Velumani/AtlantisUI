@@ -38,7 +38,7 @@ export default function OrderStep(props: {
 	delSeq?: any;
 	tabNo?: any;
 }) {
-
+	const[deleteQuestNo,setDeleteQuestNo]=useState(null)//nivetha
 	const [progressBlockItems, setProgressBlockItems] = useState(null);
 	const [questDelete, setQestDelete] = useState(false);
 	const [QuestTabProgressDelete, setQuestTabProgressDelete] = useState<any>(false);
@@ -79,16 +79,14 @@ export default function OrderStep(props: {
 	// console.log('progressBlockItems',progressBlockItems)
 	// console.log('listQuest',listQuest)	
 	const handleDeleteClick = (item: any) => {
-		if (item.gameQuestNo === 1) {
-			setQuestTabProgressDelete(true);
-			onOpen();
-		}
-		else {
-			setQuestTabProgressDelete(false);
-			onOpen();
-		}
+	
+	
+		setDeleteQuestNo(item.gameQuestNo)//nivetha
+		setQuestTabProgressDelete(false);
+		onOpen();
+	
 
-	};
+};
 	const handleCancelDelete = () => {
 		// Close the modal without deleting
 		onClose();
@@ -147,14 +145,14 @@ export default function OrderStep(props: {
 														<ModalBody>
 															<Text color={textColor} fontSize="18px" fontWeight="600"
 															>
-																Are you sure you want to delete Quest {item.gameQuestNo}?
+																Are you sure you want to delete Quest {deleteQuestNo}?
 															</Text>
 														</ModalBody>
 														<ModalFooter>
 															<Button color={'#fff'}
 																bg={'#11047a'}
 																_hover={{ color: '#fff', bg: '#11047a' }}
-																mr={'10px'} onClick={() => { deleteQuest(item.gameId, item.gameQuestNo); onClose(); }} >
+																mr={'10px'} onClick={() => { deleteQuest(item.gameId, deleteQuestNo); onClose(); }} >
 																Delete
 															</Button>
 															<Button color={'#fff'}

@@ -388,23 +388,23 @@ const DialogCompo: React.FC<PropsDialog> = ({
             </div>
           </Tooltip>
         </Box>
-          <Box
-            mr={'10px'}
-            w={'50px'}
-            fontSize={'17px'}
-            color={'#1b2559'}
-            fontWeight={'700'}
-          >
-            {seq.id}
-          </Box>
+        <Box
+          mr={'10px'}
+          w={'50px'}
+          fontSize={'17px'}
+          color={'#1b2559'}
+          fontWeight={'700'}
+        >
+          {seq.id}
+        </Box>
         <Box
           className="box-block"
           display={'flex'}
-          w={{base:'100%',lg:'auto'}}
+          w={{ base: '100%', lg: 'auto' }}
           alignItems={'center'}
-          flexDirection={{base:'column',lg:'row'}}
+          flexDirection={{ base: 'column', lg: 'row' }}
         >
-          <Box m={'0 10px 10px 0'} w={{base:'100%',lg:'150px'}}>
+          <Box m={'0 10px 10px 0'} w={{ base: '100%', lg: '150px' }}>
             <Select
               placeholder={'Character...'}
               id="blockRoll"
@@ -416,17 +416,17 @@ const DialogCompo: React.FC<PropsDialog> = ({
                 options.find((option) =>
                   parseInt(input?.[`Dialog${seq.input}`]?.character, 10)
                     ? option.value ==
-                      parseInt(input?.[`Dialog${seq.input}`]?.character, 10)
+                    parseInt(input?.[`Dialog${seq.input}`]?.character, 10)
                     : '',
                 ) || null
               }
               isSearchable={true}
               onChange={(selectedOption: any) =>
-                handleDialogBlockRoll(selectedOption, seq.input)
+                handleDialogBlockRoll(selectedOption, seq.input, `Dialog${seq.input}`)//nivetha
               }
             />
           </Box>
-          <Box m={'0 10px 0px 0'} w={{base:'100%',lg:'400px'}} mb={{base:'10px',lg:'0px'}}>
+          <Box m={'0 10px 0px 0'} w={{ base: '100%', lg: '400px' }} mb={{ base: '10px', lg: '0px' }}>
             <Textarea
               placeholder="Dialog"
               id="Dialog"
@@ -474,12 +474,12 @@ const DialogCompo: React.FC<PropsDialog> = ({
                 value={
                   input?.[`Dialog${seq.input}`]?.animation
                     ? input?.[`Dialog${seq.input}`]?.animation
-                        .split(',')
-                        .map((value: string) => ({
-                          // Explicitly specify the type as string
-                          value,
-                          label: value,
-                        }))
+                      .split(',')
+                      .map((value: string) => ({
+                        // Explicitly specify the type as string
+                        value,
+                        label: value,
+                      }))
                     : []
                 }
                 onChange={(selectedOption: any) =>
@@ -488,7 +488,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
               />
             </Box>
           )}
-          <Box className="navigation-icon" mr={'40px'}  mb={{base:'10px',lg:'0px'}}>
+          <Box className="navigation-icon" mr={'40px'} mb={{ base: '10px', lg: '0px' }}>
             <Flex >
               <Box>
                 <Tooltip hasArrow label="Add Navigations" placement='top'>
@@ -517,13 +517,13 @@ const DialogCompo: React.FC<PropsDialog> = ({
               >
                 {input?.[`Dialog${seq.input}`]?.DialogleadShow ===
                   'New Block' &&
-                !input?.[`Dialog${seq.input}`]?.Dialognavigate ? (
+                  !input?.[`Dialog${seq.input}`]?.Dialognavigate ? (
                   // Render content for New Block
                   <>
                     <MiniBox3 seq={seq} i={index} />
                   </>
                 ) : input?.[`Dialog${seq.input}`]?.DialogleadShow ===
-                    'Select Block' &&
+                  'Select Block' &&
                   !input?.[`Dialog${seq.input}`]?.Dialognavigate ? (
                   // Render select tag for Select Block
                   <Select
@@ -536,9 +536,9 @@ const DialogCompo: React.FC<PropsDialog> = ({
                       (option: any) => option.value !== seq.input,
                     )}
                     isSearchable={true}
-                    
+
                     className="react-select"
-                    value = {
+                    value={
                       showSelectBlock.find(
                         (option: any) =>
                           option.value ===
@@ -564,27 +564,27 @@ const DialogCompo: React.FC<PropsDialog> = ({
                       <StrightConector
                         name={
                           input?.[`Dialog${seq.input}`]?.DialogleadShow ===
-                          'New Block'
+                            'New Block'
                             ? showSelectBlock.find(
-                                (option: any) =>
-                                  option.value ===
-                                  input?.[`Dialog${seq.input}`]?.Dialognavigate,
-                              )?.label === undefined
+                              (option: any) =>
+                                option.value ===
+                                input?.[`Dialog${seq.input}`]?.Dialognavigate,
+                            )?.label === undefined
                               ? `${(parseFloat(seq.id) + 0.1).toFixed(1)}`
                               : showSelectBlock.find(
-                                  (option: any) =>
-                                    option.value ===
-                                    input?.[`Dialog${seq.input}`]
-                                      ?.Dialognavigate,
-                                )?.label
+                                (option: any) =>
+                                  option.value ===
+                                  input?.[`Dialog${seq.input}`]
+                                    ?.Dialognavigate,
+                              )?.label
                             : input?.[`Dialog${seq.input}`]?.DialogleadShow ===
                               'Select Block'
-                            ? showSelectBlock.find(
+                              ? showSelectBlock.find(
                                 (option: any) =>
                                   option.value ==
                                   input?.[`Dialog${seq.input}`]?.Dialognavigate,
                               )?.label
-                            : input?.[`Dialog${seq.input}`]?.Dialognavigate
+                              : input?.[`Dialog${seq.input}`]?.Dialognavigate
                         }
                       />
                     </div>
@@ -629,7 +629,7 @@ const DialogCompo: React.FC<PropsDialog> = ({
             <Text fontWeight="bold" mb="1rem">
               Animation Images
             </Text>
-            {}
+            { }
             <Img src="" />
           </ModalBody>
           <ModalFooter>

@@ -13,7 +13,7 @@ const ReplayGame: React.FC<{
   formData?: any;
   imageSrc?: any;
   replayGame: any;
-  setCurrentScreenId: any;
+  // setCurrentScreenId: any;
   getData?: any;
   isOptionalReplay: any;
   setisOptionalReplay: any;
@@ -42,7 +42,7 @@ const ReplayGame: React.FC<{
   setData,
   setType,
   isReplay,
-  setCurrentScreenId,
+  // setCurrentScreenId,
   getData,
   data,
   type,

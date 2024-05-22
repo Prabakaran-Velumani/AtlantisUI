@@ -29,7 +29,7 @@ import leaderboard from '../../../../../assets/img/screens/Leaderboard.png';
 
 import ReflectionContentScreen from './onimage/ReflectionScreen';
 import TyContentScreen from './onimage/TyContentScreen';
-import { getGameCreatorDemoData } from 'utils/game/gameService';
+import { getGameCreatorDemoData,getPreviewLogsData } from 'utils/game/gameService';
 import TypingEffect from '../demoplay/playcards/Typing';
 import {
   API_SERVER,
@@ -45,6 +45,7 @@ import { preloadedImages } from 'utils/hooks/function';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { updatePreviewData } from 'store/preview/previewSlice';
 import LeaderBoard from '../demoplay/playcards/Leaderboard';
+import { useParams } from 'react-router-dom';
 
 const WelcomeContentScreen = lazy(
   () => import('./onimage/WelcomeContentScreen'),
@@ -57,8 +58,20 @@ const CompletionContentScreen = lazy(
 );
 const PreviewEndOfStory = lazy(() => import('./onimage/PreviewEndOfStory'));
 const ScreenPreview = () => {
+  const { id } = useParams();
+   const statePreview =useSelector((state: RootState) => (state.preview!==null ? state.preview[parseInt(id)] : null));
+   const InitialState={
+    gameId:id,
+    currentTab: 3,
+  currentSubTab: 0,
+  currentQuest: 1,
+  isDispatched: false,
+  activeBlockSeq: 1,
+  CompKeyCount: 0,
+  reflectionPageUpdated: false
+  } 
   const {
-    gameId: id,
+    gameId:gameid,
     currentTab: currentTab,
     currentSubTab: currentSubTab,
     currentQuest: currentQuest,
@@ -66,7 +79,7 @@ const ScreenPreview = () => {
     isDispatched: isDispatched,
     CompKeyCount: CompKeyCount,
     reflectionPageUpdated: reflectionPageUpdated,
-  } = useSelector((state: RootState) => state.preview);
+  } = statePreview!==null ? statePreview : InitialState;
   const dispatch = useDispatch();
   const [gameInfo, setGameInfo] = useState<any>();
   const [contentReady, setContentReady] = useState<boolean>(false);
@@ -93,8 +106,6 @@ const ScreenPreview = () => {
 
   const [feed, setFeed] = useState<string>('');
   const [endOfQuest, setEndOfQuest] = useState<boolean>(false);
-  const [currentPosition, setCurrentPosition] = useState(0);
-  const [remainingSentences, setRemainingSentences] = useState<any[]>([]);
   const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
   const [Navigatenext, setNavigateNext] = useState<any>(false);
   const reflectionQuestionsdefault = [
@@ -112,7 +123,9 @@ const ScreenPreview = () => {
   const [navTrack, setNavTrack] = useState([]);
   const [isPrevNavigation, setIsPrevNavigation] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
-
+  const [RefelectionAnswer, setRefelectionAnswer] = useState<any>([]);
+  const [ThankyouFeedback, setThankyouFeedback] = useState<any>(null);
+  const user: any = JSON.parse(localStorage.getItem('user'));
   useEffect(() => {
     const fetchData = async () => {
       const resolvedResult: any = await preloadedImages(assetImageSrc);
@@ -131,17 +144,16 @@ const ScreenPreview = () => {
       }
       setData(currentBlock);
     }
-    setCurrentPosition(0);
   }, [gameInfo, isDispatched, activeBlockSeq, currentQuest]);
 
   const replayQuest = () => {
-    dispatch(updatePreviewData({ activeBlockSeq: 1, isDispatched: true }));
+    dispatch(updatePreviewData({ activeBlockSeq: 1, isDispatched: true ,gameId:parseInt(id)}));
     setEndOfQuest(false);
   };
   const fetchDataFromApi = useCallback(async () => {
     try {
-      if (id && isDispatched) {
-        const gamedata = await getGameCreatorDemoData(id);
+      if (gameid && isDispatched) {
+        const gamedata = await getGameCreatorDemoData(gameid);
         if (!gamedata?.error && gamedata) {
           const {
             gameview,
@@ -151,6 +163,7 @@ const ScreenPreview = () => {
             gameQuest,
             ...gameData
           } = gamedata?.result;
+          const completionScreenData =gamedata?.data ;
           const sortBlockSequence = (blockArray: []) => {
             const transformedArray = blockArray.reduce(
               (result: any, obj: any) => {
@@ -168,6 +181,7 @@ const ScreenPreview = () => {
             );
             return transformedArray;
           };
+          /*
           const completionOptions = gameQuest.map((qst: any, i: number) => {
             const item = {
               gameId: qst.gameId,
@@ -198,6 +212,38 @@ const ScreenPreview = () => {
             };
             return item;
           });
+          */
+          const completionOptions = Object.entries(completionScreenData).map((qst: any, i: number) => {
+            const item = {
+              gameTotalScore:qst[1].gameTotalScore,
+              gameId: qst[1].gameId,
+              questNo: qst[1].gameQuestNo,
+              gameIsSetMinPassScore: qst[1].gameIsSetMinPassScore,
+              gameIsSetDistinctionScore: qst[1].gameIsSetDistinctionScore,
+              gameDistinctionScore: qst[1].gameDistinctionScore,
+              gameIsSetSkillWiseScore: qst[1].gameIsSetSkillWiseScore,
+              gameIsSetBadge: qst[1].gameIsSetBadge,
+              gameBadge: qst[1].gameBadge,
+              gameBadgeName: qst[1].gameBadgeName,
+              gameIsSetCriteriaForBadge: qst[1].gameIsSetCriteriaForBadge,
+              gameAwardBadgeScore: qst[1].gameAwardBadgeScore,
+              gameScreenTitle: qst[1].gameScreenTitle,
+              gameIsSetCongratsSingleMessage:
+                qst[1].gameIsSetCongratsSingleMessage,
+              gameIsSetCongratsScoreWiseMessage:
+                qst[1].gameIsSetCongratsScoreWiseMessage,
+              gameCompletedCongratsMessage: qst[1].gameCompletedCongratsMessage,
+              gameMinimumScoreCongratsMessage:
+                qst[1].gameMinimumScoreCongratsMessage,
+              gameaboveMinimumScoreCongratsMessage:
+                qst[1].gameaboveMinimumScoreCongratsMessage,
+              gameLessthanDistinctionScoreCongratsMessage:
+                qst[1].gameLessthanDistinctionScoreCongratsMessage,
+              gameAboveDistinctionScoreCongratsMessage:
+                qst[1].gameAboveDistinctionScoreCongratsMessage,
+            };
+            return item;
+          });
 
           let reflectionData: any = [];
           for (let i = 0; i < gamedata?.resultReflection?.length; i++) {
@@ -207,7 +253,7 @@ const ScreenPreview = () => {
             reflectionData[filteredValue?.refKey] = filteredValue?.refQuestion;
           }
           setGameInfo({
-            gameId: id,
+            gameId: gameid,
             gameData: gameData,
             gameHistory: gameview,
             assets: image,
@@ -261,13 +307,16 @@ const ScreenPreview = () => {
             ),
           );
         }
+        else{
+          console.log('gamedata',gamedata,'....',gameid);
+        }
       } else {
         console.log('game id is missing...');
       }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  }, [id, isDispatched]);
+  }, [gameid, isDispatched]);
   const setInteractionOptions = (gameInfo: any, currentBlock: any) => {
     const optionsFiltered = gameInfo?.questOptions.filter(
       (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
@@ -283,17 +332,17 @@ const ScreenPreview = () => {
         ];
       }
     }
-    
+
     setOptions(optionsFiltered);
 
   };
 
   useEffect(() => {
-    if (id && isDispatched) {
+    if (gameid && isDispatched) {
       fetchDataFromApi();
-      dispatch(updatePreviewData({ isDispatched: false }));
+      dispatch(updatePreviewData({ isDispatched: false , gameId:parseInt(id)}));
     }
-  }, [id, isDispatched]);
+  }, [gameid, isDispatched]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -306,7 +355,7 @@ const ScreenPreview = () => {
   const preloadedAssets = useMemo(() => {
     return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls };
   }, [apiUrlAssetImageUrls, staticAssetImageUrls]);
-  
+
   const getSelectedPlayer = useCallback(() => {
     let count = 0;
     const prefix = 'playerCharacterImage_';
@@ -325,7 +374,6 @@ const ScreenPreview = () => {
     setSelectedPlayer(preloadedAssets.selectedPlayerKey);
     // return preloadedAssets.selectedPlayerKey;
   }, [preloadedAssets]);
-
   useEffect(() => {
     if (gameInfo && preloadedAssets) {
       setContentReady(true);
@@ -335,10 +383,10 @@ const ScreenPreview = () => {
   }, [gameInfo, preloadedAssets]);
 
   useEffect(() => {
-    dispatch(updatePreviewData({ isDispatched: false }));
+    dispatch(updatePreviewData({ isDispatched: false ,gameId:parseInt(id)}));
   }, [CompKeyCount]);
 
-  
+
   const prevData = (current: any) => {
     const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
     const currentBlock = current
@@ -663,8 +711,8 @@ const ScreenPreview = () => {
         } else {
           setNavTrack([data.blockPrimarySequence]);
         }
-        getDataSection(data);
       }
+      setShowTypingEffect(false);
     }
   }, [data, type]);
   useEffect(() => {
@@ -672,92 +720,15 @@ const ScreenPreview = () => {
       getData(data);
     }
   }, [Navigatenext]);
-  const getDataSection = (data: any) => {
-    setShowTypingEffect(false);
-    setCurrentPosition(0);
-    // Note and Dialog
-    const content = data?.blockText || '';
-    const sentences = content.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/);
-    const newRemainingSentences = sentences.slice(currentPosition);
-
-    // response
-    const Responsecontent = resMsg || '';
-    const Responsesentences = Responsecontent.split(
-      /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/,
-    );
-    const newRemainingResponseSentences = Responsesentences.slice(currentPosition);
-    const concatenatedSentences = [];
-    let totalLength = 0;
-    // Note and Dialog
-    for (let i = 0; i < newRemainingSentences.length; i++) {
-      const sentence = newRemainingSentences[i];
-
-      if (data && type === 'Note') {
-        if (totalLength + sentence.length <= Notelength) {
-          concatenatedSentences.push(sentence);
-          totalLength += sentence.length;
-        } else {
-          concatenatedSentences.push(sentence);
-          break;
-        }
-      }
-      if (data && type === 'Dialog') {
-        if (totalLength + sentence.length <= Dialoglength) {
-          concatenatedSentences.push(sentence);
-          totalLength += sentence.length;
-        } else {
-          if (totalLength + sentence.length >= Dialoglength) {
-            break;
-          }
-          concatenatedSentences.push(sentence);
-          break;
-        }
-      }
-    }
-    // Response 
-    for (let i = 0; i < newRemainingResponseSentences.length; i++) {
-      const ressentence = newRemainingResponseSentences[i];
-      if (data && type === 'response') {
-        if (totalLength + ressentence.length <= Responselength) {
-          concatenatedSentences.push(ressentence);
-          totalLength += ressentence.length;
-        } else {
-          if (totalLength + ressentence.length >= Responselength) {
-            break;
-          }
-          concatenatedSentences.push(ressentence);
-          break;
-        }
-      }
-    }
-    setRemainingSentences(concatenatedSentences);
-    if (newRemainingSentences.length > 0 && type!== 'response') {
-      setCurrentPosition(currentPosition + concatenatedSentences.length);
-      setNavigateNext(false);
-      return false;
-    }
-    if (newRemainingResponseSentences.length > 0 ) {
-      setCurrentPosition(currentPosition + concatenatedSentences.length);
-      setNavigateNext(false);
-      return false;
-    } 
-   
-      setNavigateNext(true);
-      setIsPrevNavigation(false);
-    
-  };
 
   const Updatecontent = () => {
     if (showTypingEffect === false) {
       setShowTypingEffect(true);
     }
     else {
-      getDataSection(data);
+      getData(data);
     }
   }
-  useEffect(() => {
-    getDataSection(data);
-  }, []);
   const handleCloseWindow = () => {
     window.close();
   };
@@ -767,20 +738,73 @@ const ScreenPreview = () => {
       setShowTypingEffect(true);
     }
     else {
-      setCurrentPosition(0);
       prevData(data)
     }
   }
 
   const getNoteNextData = () => {
     setIsPrevNavigation(false);
-    getDataSection(data)
+    getData(data)
   }
+  useEffect(() => {
+    // Check if playerId is defined before making the API call
 
+
+    const data = {
+      previewGameId: gameid,
+      playerId: user?.data?.id,
+      playerType: user?.data?.id ? 'creator' : null,
+
+    }
+    if (data) {
+      const getPreviewLogs = async () => {
+        try {
+          // Make API call to get preview logs data
+          const previewData = JSON.stringify(data)
+          const gameContentResult = await getPreviewLogsData(previewData);
+          if (gameContentResult && gameContentResult.playerInputs) {
+            const { playerInputs } = gameContentResult;
+            const parsedInputs = JSON.parse(playerInputs);
+
+            if (parsedInputs && parsedInputs.Reflection && Array.isArray(parsedInputs.Reflection)) {
+              // Use map to iterate over the Reflection array
+              const reflectionItems = parsedInputs.Reflection.map((reflection: any, index: any) => {
+                const refKey = `ref${index + 1}`; // Generate the key based on index
+                const refValue = reflection[refKey]; // Get the value corresponding to the key
+                // Perform any action with the reflection item (e.g., log it)
+                console.log(`${refKey}: ${refValue}`);
+
+                // Return the processed item if needed
+                return { [refKey]: refValue }; // Return an object with the key and value
+              });
+              setRefelectionAnswer(reflectionItems);
+              // Use reflectionItems as needed within the component
+            }
+            if (parsedInputs && parsedInputs.ThankYou)
+              {
+                console.log('parsedInputs.ThankYou',parsedInputs.ThankYou);
+                const Thankyoufeedback = parsedInputs.ThankYou;
+                setThankyouFeedback(Thankyoufeedback);
+              }
+          }
+
+
+          // Handle the result as needed
+        } catch (error) {
+          // Handle errors
+          console.error("Error fetching preview logs:", error);
+        }
+      };
+
+      // Call the function to get preview logs data
+      getPreviewLogs();
+    }
+  }, [gameid]);
   return (
+
     <Box id="container">
       <Suspense fallback={<h1>Loading please wait...</h1>}>
-        {(contentReady|| endOfQuest) && (
+        {(contentReady || endOfQuest) && (
           <motion.div
             initial={{ opacity: 0, background: '#000' }}
             animate={{ opacity: 1, background: '#0000' }}
@@ -810,6 +834,40 @@ const ScreenPreview = () => {
                     >
                       Demo Play
                     </Button>
+                    {(currentTab === 1 || currentTab === 2 || currentTab === 3) && (
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
+                      >
+                        <Box
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
+                        >
+                          <Box className="Images">
+                            <Text
+                              fontSize={{
+                                base: '13px',
+                                sm: '13px',
+                                md: '15px',
+                                lg: '20px',
+                              }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available</Text>
+                          </Box>
+                        </Box>
+                      </Box>
+                    )}
+                    {/*                     
                     {currentTab === 3 && (
                       <Box
                         w={'100%'}
@@ -831,15 +889,50 @@ const ScreenPreview = () => {
                           backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
-                            {gameInfo && (
-                              <WelcomeContentScreen
-                                // backgroundImage={preloadedAssets.backgroundImage}
-                                formData={gameInfo.gameData}
-                                imageSrc={preloadedAssets?.Screen5}
-                                preview={true}
-                                preloadedAssets={preloadedAssets}
-                              />
-                            )}
+
+                            <WelcomeContentScreen
+                              // backgroundImage={preloadedAssets.backgroundImage}
+                              formData={gameInfo.gameData}
+                              imageSrc={preloadedAssets?.Screen5}
+                              preview={true}
+                              preloadedAssets={preloadedAssets}
+                            />
+
+                          </Box>
+                        </Box>
+                      </Box>
+                    )} */}
+                    {currentTab === 4 && data === null && (
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
+                      >
+                        <Box
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
+                        >
+                          <Box className="Images">
+                            <Text
+                              fontSize={{
+                                base: '13px',
+                                sm: '13px',
+                                md: '15px',
+                                lg: '20px',
+                              }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available("No Preview Yet
+                              Kindly add blocks to your story to generate the preview.
+                              ")</Text>
                           </Box>
                         </Box>
                       </Box>
@@ -880,7 +973,7 @@ const ScreenPreview = () => {
                                 >
                                   <Box className={'story_note_block'}>
                                     <Text textAlign={'center'}>
-                                      {remainingSentences}
+                                      {data?.blockText}
                                     </Text>
                                   </Box>
                                 </Box>
@@ -956,12 +1049,12 @@ const ScreenPreview = () => {
                         >
                           {showTypingEffect === false ? (
                             <TypingEffect
-                              text={remainingSentences.toString()}
+                              text={data?.blockText}
                               speed={50}
                               setSpeedIsOver={setShowTypingEffect}
                             />
                           ) : (
-                            remainingSentences
+                            data?.blockText
                           )}
                         </Box>
                         <Box
@@ -1125,7 +1218,8 @@ const ScreenPreview = () => {
                                               'story_interaction_option'
                                             }
                                           >
-                                            {item?.qpOptionText}
+                                            {/* {item?.qpOptionText} */}
+                                            {`${String.fromCharCode(65 + ind)}). ${item?.qpOptionText}`}
                                           </Box>
                                         </Box>
                                       ))}
@@ -1209,12 +1303,12 @@ const ScreenPreview = () => {
                             >
                               {showTypingEffect === false ? (
                                 <TypingEffect
-                                  text={remainingSentences.toString()}
+                                  text={resMsg}
                                   speed={50}
                                   setSpeedIsOver={setShowTypingEffect}
                                 />
                               ) : (
-                                remainingSentences
+                                resMsg
                               )}
                             </Box>
                             <Box
@@ -1354,13 +1448,20 @@ const ScreenPreview = () => {
                         >
                           <Box className="Images">
                             <Box className="LearderBoards">
-                              <LeaderBoard
+                              {gameInfo.gameData.gameIsShowLeaderboard === "true" ? <LeaderBoard
                                 formData={gameInfo?.gameData}
                                 imageSrc={preloadedAssets.Lead}
                                 getData={getData}
                                 data={data}
                                 preloadedAssets={preloadedAssets}
-                              />
+                              /> : <Box><Text
+                                fontSize={{
+                                  base: '13px',
+                                  sm: '13px',
+                                  md: '15px',
+                                  lg: '20px',
+                                }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available ("The Leadboard screen preview will appear once you complete the story and head to the design section to Enable the Leadboard Screen.")</Text></Box>}
+
                             </Box>
                           </Box>
                         </Box>
@@ -1379,7 +1480,7 @@ const ScreenPreview = () => {
                       >
                         <Box className="Game-Screen">
                           <Box className="Images">
-                            <ReflectionContentScreen
+                            {gameInfo.gameData.gameIsShowReflectionScreen === "true" ? <ReflectionContentScreen
                               preview={true}
                               formData={gameInfo.gameData}
                               imageSrc={preloadedAssets?.RefBg}
@@ -1390,7 +1491,40 @@ const ScreenPreview = () => {
                                 reflectionQuestionsdefault
                               }
                               preloadedAssets={preloadedAssets}
-                            />
+                              RefelectionAnswer={RefelectionAnswer}
+                            /> :
+                              <Box
+                                w={'100%'}
+                                h={'100vh'}
+                                alignItems={'center'}
+                                justifyContent={'center'}
+                                position={'relative'}
+                                overflow={'visible'}
+                                style={{ perspective: '1000px' }}
+                                className="Main-Content"
+                              >
+                                <Box
+                                  w={'100% !important'}
+                                  h={'100vh'}
+                                  backgroundRepeat={'no-repeat'}
+                                  backgroundSize={'cover'}
+                                  alignItems={'center'}
+                                  justifyContent={'center'}
+                                  className="Game-Screen"
+                                  backgroundImage={preloadedAssets.backgroundImage}
+                                >
+                                  <Box className="Images">
+                                    <Text
+                                      fontSize={{
+                                        base: '13px',
+                                        sm: '13px',
+                                        md: '15px',
+                                        lg: '20px',
+                                      }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available("The Reflection screen preview will appear once you complete the story and head to the design section to enable the Reflection screen.")</Text>
+                                  </Box>
+                                </Box>
+                              </Box>
+                            }
                           </Box>
                         </Box>
                       </Box>
@@ -1417,12 +1551,19 @@ const ScreenPreview = () => {
                           backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
-                            <TakeAwaysContentScreen
+                            {gameInfo.gameData.gameIsShowTakeaway === "true" ? <TakeAwaysContentScreen
                               preview={true}
                               formData={gameInfo.gameData}
                               imageSrc={preloadedAssets?.Screen4}
                               preloadedAssets={preloadedAssets}
-                            />
+                            /> : <Box><Text
+                              fontSize={{
+                                base: '13px',
+                                sm: '13px',
+                                md: '15px',
+                                lg: '20px',
+                              }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available ("The Takeaway screen preview will appear once you complete the story and head to the design section to create the Takeaway screen.")</Text></Box>}
+
                           </Box>
                         </Box>
                       </Box>
@@ -1449,6 +1590,7 @@ const ScreenPreview = () => {
                           backgroundImage={preloadedAssets.backgroundImage}
                         >
                           <Box className="Images">
+
                             <WelcomeContentScreen
                               formData={gameInfo.gameData}
                               imageSrc={preloadedAssets?.Screen5}
@@ -1486,7 +1628,41 @@ const ScreenPreview = () => {
                               imageSrc={preloadedAssets?.Screen6}
                               preview={true}
                               preloadedAssets={preloadedAssets}
+                              ThankyouFeedback={ThankyouFeedback}
                             />
+                          </Box>
+                        </Box>
+                      </Box>
+                    )}
+                    {currentTab === 6 && currentSubTab === 5 && (
+                      <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
+                      >
+                        <Box
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
+                        >
+                          <Box className="Images">
+                            <Text
+                              fontSize={{
+                                base: '13px',
+                                sm: '13px',
+                                md: '15px',
+                                lg: '20px',
+                              }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available</Text>
                           </Box>
                         </Box>
                       </Box>
@@ -1529,6 +1705,56 @@ const ScreenPreview = () => {
             </Box>
           </motion.div>
         )}
+        {gameInfo === undefined &&
+          (
+            <motion.div
+              initial={{ opacity: 0, background: '#000' }}
+              animate={{ opacity: 1, background: '#0000' }}
+              transition={{ duration: 1, delay: 0.5 }}
+            >
+              <Box id="EntirePreview-wrapper">
+                <Box className="EntirePreview-content">
+                  <Box h={'100vh !important'} className="Images">
+                    <Flex height="100vh" className="EntirePreview">
+                    <Box
+                        w={'100%'}
+                        h={'100vh'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
+                      >
+                        <Box
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                          backgroundImage={preloadedAssets.backgroundImage}
+                        >
+                          <Box className="Images">
+                            <Text
+                              fontSize={{
+                                base: '13px',
+                                sm: '13px',
+                                md: '15px',
+                                lg: '20px',
+                              }} style={{ textAlign: 'center' }}>Preview Is Not Available ("No Preview Yet
+                              Kindly add blocks to your story to generate the preview.")</Text>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Flex>
+                  </Box>
+                </Box>
+              </Box>
+
+            </motion.div>
+          )}
       </Suspense>
     </Box>
   );

@@ -28,7 +28,7 @@ interface Course {
 
 // ...
 
-const AddCourse: React.FC<{ setOpenCourse: any,isOpen?:any,onOpen?:any,onClose?:any }> = ({ setOpenCourse,isOpen,onOpen,onClose }) => {
+const AddCourse: React.FC<{ setOpenCourse: any, isOpen?: any, onOpen?: any, onClose?: any }> = ({ setOpenCourse, isOpen, onOpen, onClose }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [nameInput, setNameInput] = useState<string>('');
   const [descriptionInput, setDescriptionInput] = useState<string>('');
@@ -43,7 +43,7 @@ const AddCourse: React.FC<{ setOpenCourse: any,isOpen?:any,onOpen?:any,onClose?:
   const [input, setInput] = useState<string>('');
   const [alert, setAlert] = useState(false);
   const [msg, setMsg] = useState<string>('');
-  const [tool,setTool] = useState(false);
+  const [tool, setTool] = useState(false);
   const [toastStatus, setToastStatus] = useState<string>('');
   const toast = useToast();
   const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
@@ -150,7 +150,7 @@ const AddCourse: React.FC<{ setOpenCourse: any,isOpen?:any,onOpen?:any,onClose?:
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
- 
+
 
   // modal popup for category
 
@@ -206,108 +206,108 @@ const AddCourse: React.FC<{ setOpenCourse: any,isOpen?:any,onOpen?:any,onClose?:
           right: '0',
         }}
       > */}
-        <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           {/* <ModalHeader>Modal Title</ModalHeader> */}
           {/* <ModalCloseButton /> */}
           <ModalBody>
-          <Box
-                display="flex"
-                flexWrap="wrap"
-                justifyContent="flex-start"
-                w="100%"
-                p="20px 0px"
-              >
-                <Box position={'relative'}>
+            <Box
+              display="flex"
+              flexWrap="wrap"
+              justifyContent="flex-start"
+              w="100%"
+              p="20px 0px"
+            >
+              <Box position={'relative'}>
                 <Text
                   fontSize='xl'
                   fontWeight={'bold'}
                   color={textColorPrimary}
                 >
                   Choose From Existing Categories :
-                  <Icon as={MdInfo} cursor={'pointer'} onMouseEnter={()=>setTool(true)} onMouseLeave={()=>setTool(false)}/>
+                  <Icon as={MdInfo} cursor={'pointer'} onMouseEnter={() => setTool(true)} onMouseLeave={() => setTool(false)} />
                 </Text>
-                </Box>
-            {tool&&<Box p={'0px 10px'} bg={'black'} position={'absolute'} right={'-120px'} top={'30px'}>
-            <Text
-              fontSize='sm'
-              color={'#fff'}  
-              // fontWeight={'bold'}
-              // color={textColorPrimary}
-            >
-              You may choose multiple categories
-            </Text>
-            </Box>}
-                  {/* <span style={{ fontSize:'sm',fontStyle: 'italic', color: '#191919' }}>
+              </Box>
+              {tool && <Box p={'0px 10px'} bg={'black'} position={'absolute'} right={'-120px'} top={'30px'}>
+                <Text
+                  fontSize='sm'
+                  color={'#fff'}
+                // fontWeight={'bold'}
+                // color={textColorPrimary}
+                >
+                  You may choose multiple categories
+                </Text>
+              </Box>}
+              {/* <span style={{ fontSize:'sm',fontStyle: 'italic', color: '#191919' }}>
                     (You may choose multiple categories)
                   </span>{' '} */}
-                <Box p={'20px 0'}>
-                  {categories.map((category) => (
-                    <Button
-                      key={category.value}
-                      margin="0 10px 10px 0"
-                      onClick={() => handleCategoryClick(category)}
-                      color={
-                        selectedCategories.some(
-                          (cat) => cat.value === category.value,
-                        )
-                          ? '#fff'
-                          : ''
-                      }
-                      bg={
-                        selectedCategories.some(
-                          (cat) => cat.value === category.value,
-                        )
-                          ? '#11047a'
-                          : '#f4f7fe'
-                      }
-                      _hover={{
-                        color: selectedCategories.some(
-                          (cat) => cat.value === category.value,
-                        )
-                          ? '#fff'
-                          : '',
-                        bg: selectedCategories.some(
-                          (cat) => cat.value === category.value,
-                        )
-                          ? '#11047a'
-                          : '#f4f7fe',
-                      }}
-                    >
-                      {category.label}
-                    </Button>
-                  ))}
-                </Box>
+              <Box p={'20px 0'}>
+                {categories.map((category) => (
+                  <Button
+                    key={category.value}
+                    margin="0 10px 10px 0"
+                    onClick={() => handleCategoryClick(category)}
+                    color={
+                      selectedCategories.some(
+                        (cat) => cat.value === category.value,
+                      )
+                        ? '#fff'
+                        : ''
+                    }
+                    bg={
+                      selectedCategories.some(
+                        (cat) => cat.value === category.value,
+                      )
+                        ? '#11047a'
+                        : '#f4f7fe'
+                    }
+                    _hover={{
+                      color: selectedCategories.some(
+                        (cat) => cat.value === category.value,
+                      )
+                        ? '#fff'
+                        : '',
+                      bg: selectedCategories.some(
+                        (cat) => cat.value === category.value,
+                      )
+                        ? '#11047a'
+                        : '#f4f7fe',
+                    }}
+                  >
+                    {category.label}
+                  </Button>
+                ))}
               </Box>
-              <Flex justify="space-between" align="center" w="100%">
+            </Box>
+            <Flex justify="space-between" align="center" w="100%">
               <Text fontSize='xl' color={textColorPrimary} fontWeight='bold'>Add New Category</Text>
             </Flex>
             <Box w={'100%'} padding={'10px 0'} display={'flex'} justifyContent={'space-between'} >
-              <Box    
-              width={'70%'}
+              <Box
+                width={'70%'}
               >
-              <InputField
-                // label="Name"
-                onChange={handleChange}
-                value={input}
-              />
+                <InputField
+                  // label="Name"
+                  onChange={handleChange}
+                  value={input}
+                />
               </Box>
-              <Box    
-              mt={'10px'}
-              width={'25%'}
+              <Box
+                mt={'10px'}
+                width={'25%'}
               >
-              <Button
-                onClick={handleSaveCategory}
-                bg="#3311db"
-                color="#fff"
-                _hover={{ bg: '#3311db' }}
-              >
-                Save
-              </Button>
+                <Button
+                  onClick={handleSaveCategory}
+                  bg="#3311db"
+                  color="#fff"
+                  _hover={{ bg: '#3311db' }}
+                >
+                  Save
+                </Button>
               </Box>
             </Box>
-        {/* <Card
+            {/* <Card
           position="fixed"
           top="50%"
           left="50%"
@@ -333,31 +333,31 @@ const AddCourse: React.FC<{ setOpenCourse: any,isOpen?:any,onOpen?:any,onClose?:
           </ModalBody>
 
           <ModalFooter>
-          <Flex justify="end" w="100%" marginTop="15px" p="0 15px">
-            <Button
-              onClick={() => setOpenCourse(false)}
-              bg={'#f4f7fe'}
-              color={'#000'}
-              _hover={{ bg: '#e9edf7' }}
-              mr={'10px'}
-            >
-              Cancel
-            </Button>
-            <Button
-              bg="#3311db"
-              color="#fff"
-              onClick={handleSave}
-              _hover={{ bg: '#3311db' }}
-            >
-              Confirm
-            </Button>
-          </Flex>
+            <Flex justify="end" w="100%" marginTop="15px" p="0 15px">
+              <Button
+                onClick={() => setOpenCourse(false)}
+                bg={'#f4f7fe'}
+                color={'#000'}
+                _hover={{ bg: '#e9edf7' }}
+                mr={'10px'}
+              >
+                Cancel
+              </Button>
+              <Button
+                bg="#3311db"
+                color="#fff"
+                onClick={handleSave}
+                _hover={{ bg: '#3311db' }}
+              >
+                Confirm
+              </Button>
+            </Flex>
           </ModalFooter>
         </ModalContent>
-        </Modal>
-        {alert ? (
-          <OnToast msg={msg} status={toastStatus} setAlert={setAlert} />
-        ) : null}
+      </Modal>
+      {alert ? (
+        <OnToast msg={msg} status={toastStatus} setAlert={setAlert} />
+      ) : null}
       {/* </Flex> */}
     </Box>
   );

@@ -62,39 +62,38 @@ interface Badge {
 
 const extractLink = (text: any) => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-if(text){
-  const urls = text?.match(urlRegex);
+  if (text) {
+    const urls = text?.match(urlRegex);
 
-  return urls ? urls[0] : null;
-}
-return null
+    return urls ? urls[0] : null;
+  }
+  return null
 };
 const WelcomeScreen: React.FC<{ formData: any; imageSrc: any }> = ({
   formData,
   imageSrc,
 }) => {
-  const fetch = async () =>{
+  const fetch = async () => {
     const res = await getSkills();
-    if(res?.status === 'Success')
-    {   
+    if (res?.status === 'Success') {
       console.log(res?.data);
       // setSkills()
     }
   }
-  useEffect(()=>{
-     fetch();
-  },[])
-  
+  useEffect(() => {
+    fetch();
+  }, [])
+
   const link = extractLink(formData.gameAdditionalWelcomeNote);
   return (
     <>
-      { imageSrc && (
+      {imageSrc && (
         <Box className='welcome-screen'>
           <Box className='welcome-screen-box'>
-             <Img src={imageSrc} className='bg-img' />
+            <Img src={imageSrc} className='bg-img' />
           </Box>
           <Box className='content-box' fontFamily={'gametext'}>
-            <Box w={'60%'}  className='content'>
+            <Box w={'60%'} className='content'>
               <Text
                 fontSize={{
                   base: '13px',
@@ -165,33 +164,33 @@ const WelcomeScreen: React.FC<{ formData: any; imageSrc: any }> = ({
               )}
               {formData.gameIsShowAuhorName === 'true' && (
                 <Text
-                fontSize={{
-                  base: '11px',
-                  sm: '12px',
-                  md: '13px',
-                  lg: '15px',
-                }}
+                  fontSize={{
+                    base: '11px',
+                    sm: '12px',
+                    md: '13px',
+                    lg: '15px',
+                  }}
                 >
                   {formData.gameAuthorName}
                 </Text>
               )}
               {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
                 <Text
-                fontSize={{
-                  base: '11px',
-                  sm: '12px',
-                  md: '13px',
-                  lg: '15px',
-                }}
+                  fontSize={{
+                    base: '11px',
+                    sm: '12px',
+                    md: '13px',
+                    lg: '15px',
+                  }}
                 >
                   {formData.gameAdditionalWelcomeNote}
                 </Text>
               )}
             </Box>
-           
+
           </Box>
-          
-        </Box>        
+
+        </Box>
       )}
 
       {/* {formData.gameIsShowSkill === "true" && (

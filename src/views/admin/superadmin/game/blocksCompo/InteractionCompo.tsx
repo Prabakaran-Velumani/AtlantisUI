@@ -192,61 +192,62 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
   const [filteredOptions, setFilteredOptions] = useState<Option[] | null>(null);
   const [ResponseOptions, setResponseOptions] = useState<Option[] | null>(null);
 
-  useEffect(() => {
-    console.log('language', language);
-    // Assume you have a function to get the translation ID dynamicallyz
+  //Commented temporary Block - 14/May/24
+  // useEffect(() => {
+  //   console.log('language', language);
+  //   // Assume you have a function to get the translation ID dynamicallyz
 
-    const fetchData = async () => {
-      try {
-        // Call getBlockData with both game ID and translation ID
-        const fetchedBlockData = await getBlockData(id, language);
-        console.log('fetchedBlockData', fetchedBlockData.data.blockData);
+  //   const fetchData = async () => {
+  //     try {
+  //       // Call getBlockData with both game ID and translation ID
+  //       const fetchedBlockData = await getBlockData(id, language);
+  //       console.log('fetchedBlockData', fetchedBlockData.data.blockData);
 
-        // Find the block with matching blockPrimarySequence and seq.id
-        const matchingBlock = fetchedBlockData.data.blockData.find(
-          (block: any) => block.blockPrimarySequence === seq.id,
-        );
-        console.log('Matching Block Updated1:', matchingBlock);
+  //       // Find the block with matching blockPrimarySequence and seq.id
+  //       const matchingBlock = fetchedBlockData.data.blockData.find(
+  //         (block: any) => block.blockPrimarySequence === seq.id,
+  //       );
+  //       console.log('Matching Block Updated1:', matchingBlock);
 
-        // Update the state variable with the matching block content
-        if (matchingBlock) {
-          setMatchingBlockContent(matchingBlock.content);
-        }
+  //       // Update the state variable with the matching block content
+  //       if (matchingBlock) {
+  //         setMatchingBlockContent(matchingBlock.content);
+  //       }
 
-        // Set the block data in the state
-        // setBlockData(updatedBlockData);
-      } catch (error) {
-        console.error('getBlockData Error:', error);
-      }
-    };
+  //       // Set the block data in the state
+  //       // setBlockData(updatedBlockData);
+  //     } catch (error) {
+  //       console.error('getBlockData Error:', error);
+  //     }
+  //   };
 
-    fetchData();
+  //   fetchData();
 
-    const fetchDataOptionText = async () => {
-      try {
-        const fetchedBlockData = await getQuestionOptionsText(id, language);
-        const filteredOptionsData = fetchedBlockData.optionText.filter(
-          (option: Option) => option.qpSequence === seq.id,
-        );
-        setFilteredOptions(filteredOptionsData);
-      } catch (error) {
-        console.error('getQuestionOptionsText Error:', error);
-      }
-    };
-    fetchDataOptionText();
-    const fetchDataResponse = async () => {
-      try {
-        const fetchedBlockData = await getQuestionResponse(id, language);
-        const filteredOptionsData = fetchedBlockData.optionText.filter(
-          (option: Option) => option.qpSequence === seq.id,
-        );
-        setResponseOptions(filteredOptionsData);
-      } catch (error) {
-        console.error('getQuestionResponse Error:', error);
-      }
-    };
-    fetchDataResponse();
-  }, [language, id, seq.id]);
+  //   const fetchDataOptionText = async () => {
+  //     try {
+  //       const fetchedBlockData = await getQuestionOptionsText(id, language);
+  //       const filteredOptionsData = fetchedBlockData.optionText.filter(
+  //         (option: Option) => option.qpSequence === seq.id,
+  //       );
+  //       setFilteredOptions(filteredOptionsData);
+  //     } catch (error) {
+  //       console.error('getQuestionOptionsText Error:', error);
+  //     }
+  //   };
+  //   fetchDataOptionText();
+  //   const fetchDataResponse = async () => {
+  //     try {
+  //       const fetchedBlockData = await getQuestionResponse(id, language);
+  //       const filteredOptionsData = fetchedBlockData.optionText.filter(
+  //         (option: Option) => option.qpSequence === seq.id,
+  //       );
+  //       setResponseOptions(filteredOptionsData);
+  //     } catch (error) {
+  //       console.error('getQuestionResponse Error:', error);
+  //     }
+  //   };
+  //   fetchDataResponse();
+  // }, [language, id, seq.id]);
 
   useEffect(() => {
     // const alphabet = alphaText.map((item: any)=> `${seq.input}${item}`);
@@ -643,15 +644,16 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
   const [showcount, setShowcount] = useState<any>('');
 
   const handleLeft = () => {
+
     const container = document.getElementById(seq.id);
     if (container) {
-      container.scrollBy({
-        left: -700,
-        behavior: 'smooth' 
-      });
+      container.scrollLeft -= 700;
+
+
       if (container.scrollLeft <= 0) {
         setShowLeftButton(false);
       }
+
     }
   };
 
@@ -659,14 +661,12 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
     const container = document.getElementById(seq.id);
 
     if (container) {
-      container.scrollBy({
-        left: 700,
-        behavior: 'smooth' 
-      });
-      setShowcount(container.scrollLeft + 300);
+      container.scrollLeft += 700;
+      setShowcount(container.scrollLeft + 300)
       if (container.scrollLeft > 0) {
         setShowLeftButton(true);
       }
+
     }
   };
   const scrollToElement1 = (id: any) => {
@@ -812,7 +812,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
         boxShadow={'1px 1px 17px #69627914'}
         borderRadius={'8px'}
         zIndex={99}
-        right={{base:'-140px',lg:''}}
+        right={{ base: '-140px', lg: '' }}
         className="MiniShowBox"
       >
         <List>
@@ -852,37 +852,37 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
 
   return (
     <>
-      {showLeftButton && (
-        <Box
-          className="goLeft"
-          display={'flex'}
-          alignItems={'center'}
-          height={'100%'}
+      {/* {showLeftButton && (   commented by nivetha */}
+      <Box
+        className="goLeft"
+        display={'flex'}
+        alignItems={'center'}
+        height={'100%'}
+        position={'absolute'}
+        left={0}
+      >
+        <Button
+          onClick={handleLeft}
           position={'absolute'}
           left={0}
+          zIndex={9}
+          background={'#0000'}
+          _hover={{ background: '#0000' }}
+          boxShadow={'unset'}
         >
-          <Button
-            onClick={handleLeft}
+          <Icon as={MdArrowBack} color={'#fff'} />
+          <Box
+            content='""'
+            height={'30px'}
+            width={'30px'}
+            borderRadius={'30px'}
+            zIndex={-9}
+            background={'#11047a'}
             position={'absolute'}
-            left={0}
-            zIndex={9}
-            background={'#0000'}
-            _hover={{ background: '#0000' }}
-            boxShadow={'unset'}
-          >
-            <Icon as={MdArrowBack} color={'#fff'} />
-            <Box
-              content='""'
-              height={'30px'}
-              width={'30px'}
-              borderRadius={'30px'}
-              zIndex={-9}
-              background={'#11047a'}
-              position={'absolute'}
-            ></Box>
-          </Button>
-        </Box>
-      )}
+          ></Box>
+        </Button>
+      </Box>
+      {/*  )} */}
       <Box id={`${seq.id}`} w={'auto'} height={'100%'} overflowX={seq?.id === targetSequence?.id ? 'scroll' : 'hidden'} className='scroll_hide' overflowY={'hidden'}>
         <Box w={'100vw'} display={'flex'}>
           <Box className="block-action-icons">
@@ -1138,7 +1138,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
                       <Text>Feedback</Text>
                     </Button>
                   ) : null}
-                     {interactionBlock?.[`Title${seq.input}`] !== seq?.input ? (
+                  {interactionBlock?.[`Title${seq.input}`] !== seq?.input ? (
                     <Button
                       mr={'10px'}
                       w={'130px'}
@@ -1184,7 +1184,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
                       <Text>Skills</Text>
                     </Button>
                   ) : null}
-               
+
                 </Flex>
               </Box>
             </Box>
@@ -1387,7 +1387,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
                                       placeholder={`Title${alp.option}`}
                                       id={`OptionTitle${alp.option}`}
                                       name={`Interaction${seq.input}`}
-                                      onChange={handleInput}
+                                       onChange={handleInput}
                                       onKeyDown={handleKeyDown}
                                       onBlur={handleFocusOut}
                                       value={
@@ -1422,6 +1422,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
                                         onChange={handleInput}
                                         onKeyDown={handleKeyDown}
                                         onBlur={handleFocusOut}
+                                        title={alp.option}
                                         value={
                                           input?.[`Interaction${seq.input}`]
                                             ?.optionTitleObject?.[alp.option]

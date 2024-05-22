@@ -61,19 +61,13 @@ const QuestTab: React.FC<PropsNote> = ({
     }
   };
   const handleDeleteClick = (item: any) => {
-    if(item.gameQuestNo === 1)
-    {
-      setQuestTabStateDelete(true)
-      onOpen();
-    }
-    else
-    {
-      setQuestTabStateDelete(false)
-      setSelectedQuestNo(item.gameQuestNo); // Set the selected quest number
-      setDeleteQuestGameId(item.gameId);
-      console.log("selectedQuestNo",item.gameQuestNo,item.gameId)
-      onOpen();
-  }
+
+    setQuestTabStateDelete(false)
+    setSelectedQuestNo(item.gameQuestNo); // Set the selected quest number
+    setDeleteQuestGameId(item.gameId);
+    console.log("selectedQuestNo", item.gameQuestNo, item.gameId)
+    onOpen();
+
   };
 
   const handleCancelDelete = () => {
@@ -102,7 +96,7 @@ const QuestTab: React.FC<PropsNote> = ({
                 _selected={{
                   bg: 'none'
                 }}
-                _focus={{ border:'none'}}
+                _focus={{ border: 'none' }}
                 minW='max-content'
                 flexDirection='column'>
                 <Flex align='center'>
@@ -110,50 +104,50 @@ const QuestTab: React.FC<PropsNote> = ({
                     Quest {item.gameQuestNo}
                   </Text>
                   {/* indu modified on 06-02-2024 for ask confirmation for delete */}
-                  <Icon as={MdDelete} fontSize={'md'} color={'grey'} cursor={'pointer'} onClick={() => handleDeleteClick(item)}/>
+                  <Icon as={MdDelete} fontSize={'md'} color={'grey'} cursor={'pointer'} onClick={() => handleDeleteClick(item)} />
 
                   {/* Confirmation Modal */}
                   <Modal isOpen={isOpen} onClose={onClose} size="md">
                     <ModalOverlay />
                     <ModalContent>
-                      { (QuestTabStateDelete===false)? 
-                      <><ModalHeader>
-                        Confirm Deletion</ModalHeader>
-                      <ModalBody>
-                        <Text color={textColor} fontSize="18px" fontWeight="600"
-                        >
-                         
-                           Are you sure you want to delete Quest {selectedQuestNo} ?
-                        </Text>
+                      {(QuestTabStateDelete === false) ?
+                        <><ModalHeader>
+                          Confirm Deletion</ModalHeader>
+                          <ModalBody>
+                            <Text color={textColor} fontSize="18px" fontWeight="600"
+                            >
 
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button color={'#fff'}
-                          bg={'#11047a'}
-                          _hover={{ color: '#fff', bg: '#11047a' }}
-                          mr={'10px'} onClick={() => { deleteQuest(deletequestgameId, selectedQuestNo); onClose(); }} >
-                          Delete
-                        </Button>
-                        <Button color={'#fff'}
-                          bg={'#11047a'}
-                          _hover={{ color: '#fff', bg: '#11047a' }}
-                          mr={'10px'} onClick={handleCancelDelete}>Cancel</Button>
-                      </ModalFooter></>
-                      :<>
-                    <ModalBody>
-                      <Text color={textColor} fontSize="18px" fontWeight="600">
-                       
-                      Please do not delete Quest {selectedQuestNo ?? 1}. You can delete the items associated with it instead.
-                      </Text>
+                              Are you sure you want to delete Quest {selectedQuestNo} ?
+                            </Text>
 
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button color={'#fff'}
-                        bg={'#11047a'}
-                        _hover={{ color: '#fff', bg: '#11047a' }}
-                        mr={'10px'} onClick={() => {onClose()}}>Okey</Button>
-                    </ModalFooter></>
-                     }
+                          </ModalBody>
+                          <ModalFooter>
+                            <Button color={'#fff'}
+                              bg={'#11047a'}
+                              _hover={{ color: '#fff', bg: '#11047a' }}
+                              mr={'10px'} onClick={() => { deleteQuest(deletequestgameId, selectedQuestNo); onClose(); }} >
+                              Delete
+                            </Button>
+                            <Button color={'#fff'}
+                              bg={'#11047a'}
+                              _hover={{ color: '#fff', bg: '#11047a' }}
+                              mr={'10px'} onClick={handleCancelDelete}>Cancel</Button>
+                          </ModalFooter></>
+                        : <>
+                          <ModalBody>
+                            <Text color={textColor} fontSize="18px" fontWeight="600">
+
+                              Please do not delete Quest {selectedQuestNo ?? 1}. You can delete the items associated with it instead.
+                            </Text>
+
+                          </ModalBody>
+                          <ModalFooter>
+                            <Button color={'#fff'}
+                              bg={'#11047a'}
+                              _hover={{ color: '#fff', bg: '#11047a' }}
+                              mr={'10px'} onClick={() => { onClose() }}>Okey</Button>
+                          </ModalFooter></>
+                      }
                     </ModalContent>
                   </Modal>
                 </Flex>

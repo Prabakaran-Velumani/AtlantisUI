@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Grid, GridItem, Img, Modal, ModalBody, ModalContent, ModalOverlay, Text } from '@chakra-ui/react';
 import right from 'assets/img/games/right.png';
 import left from 'assets/img/games/left.png';
@@ -17,17 +17,28 @@ interface InteractionScreenShotProps {
   options?: any;
   backGroundImg?: any;
   option?: any;
-  profile?: any;
   geTfeedBackoption?: any;
   isScreenshot?: any;
   preloadedAssets?: any;
+  profileData?:any;
 }
 
-const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, profile, options, geTfeedBackoption, isScreenshot, preloadedAssets }) => {
-
+const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, options, geTfeedBackoption, isScreenshot, preloadedAssets ,profileData}) => {
+  const [QuestContentByLanguage, setQuestContentByLanguage] = useState(null);
+  useEffect(() => {
+    const GetblocktextAudioFiltered =
+      profileData?.Audiogetlanguage.filter(
+        (key: any) => key.textId === data[0].blockId,
+      );
+    if (GetblocktextAudioFiltered.length > 0) {
+      const Filteredcontent = GetblocktextAudioFiltered.map(
+        (item: any) => item.content,
+      );
+      setQuestContentByLanguage(Filteredcontent);
+    }
+  }, [data?.blockId]);
   return (
-    // <Modal isOpen={isScreenshot} onClose={isScreenshot} size={'medium'}>
-    <Modal isOpen={true} onClose={isScreenshot} size={'medium'} >
+    <Modal isOpen={true} onClose={isScreenshot} size={'medium'} closeOnOverlayClick={false}>
       <ModalOverlay zIndex={9999} />
       <ModalContent
         className='feedback_screenshot'
@@ -123,7 +134,7 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                   >
                     <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
                     <Text textAlign={'justify'}>
-                      {data[0]?.blockText}
+                    {QuestContentByLanguage!==null ? QuestContentByLanguage : data[0]?.blockText}
                     </Text>
                   </Box>
                 </Box>
@@ -158,7 +169,8 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                           <Box
                            className='story_interaction_option'
                           >
-                            {item?.qpOptionText}
+                            {/* {item?.qpOptionText} */}
+                            {`${String.fromCharCode(65 + ind)}). ${item?.qpOptionText}`}
                           </Box>
                         </Box>
                       ))}
@@ -167,78 +179,6 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
               </Box>
             </Box>
           </Box>
-          {/* <Box
-                  textAlign={'center'}
-                  h={'25%'}
-                  display={'flex'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  fontWeight={500}
-                  fontFamily={'AtlantisText'}
-                  lineHeight={1}
-                  w={'96%'}
-                  overflowY={'scroll'}
-                  marginTop={'15px'}
-                  color={'black'}
-                >
-                  <Box
-                    w={'60%'}
-                    fontSize={{ md: '1.5vw', lg: '1.9vw' }}
-                    letterSpacing={1}
-                    transform={'translateY(30%)'}
-                  >
-                    {data[0]?.blockText}
-                  </Box>
-                </Box>
-                <Box
-                  mt={'10px'}
-                  w={'100%'}
-                  h={'40%'}
-                  fontWeight={500}
-                  overflowY={'scroll'}
-                  display={'flex'}
-                  justifyContent={'center'}
-                >
-                  <Box w={'60%'}>
-                    {options &&
-                      options.map((item: any, ind: number) => (
-                        <Box
-                          w={'100%'}
-                          mb={'10px'}
-                          lineHeight={1}
-                          key={ind}
-                          color={option === item?.qpOptions ? 'purple' : 'black'}
-                          textAlign={'center'}
-                          cursor={'pointer'}
-                          fontFamily={'AtlantisText'}
-                        >
-                          <Img
-                            src={option === item?.qpOptions ? preloadedAssets.on : preloadedAssets.off}
-                            h={'30px'}
-                            w={'100%'}
-                          />
-                          <Box
-                            w={'100%'}
-                            display={'flex'}
-                            justifyContent={'center'}
-                            fontSize={{
-                              md: '1.5vw',
-                              lg: '1.9vw',
-                            }}
-                          >
-                            {item?.qpOptionText}
-                          </Box>
-                        </Box>
-                      ))}
-                  </Box>
-                </Box> */}
-
-          {/* </Box>
-            </Box>
-          </Box> */}
-          {/* </GridItem>
-            </Grid>
-          </Box> */}
         </ModalBody>
       </ModalContent>
     </Modal>

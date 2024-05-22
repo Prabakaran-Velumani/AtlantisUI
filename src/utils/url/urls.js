@@ -14,7 +14,7 @@ export const urls = {
   companystatus: '/companies/updateStatus/',
   /*******************country*********************** */
   getCountries: '/country/getAllCountries',
-  /*********************creator************************** */
+  /*********************creator************************** */ 
   updateCreator: '/creator/updatecreator/',
   addCreator: '/creator/addcreator',
   getAllCreator: '/creator/getCreator',
@@ -129,6 +129,11 @@ export const urls = {
   completionscreen: '/game/completionscreen/',
   getTotalMinofWords: '/game/getTotalMinofWords/',
   Compliupdate: '/game/Compliupdate/',
+  
+  /*********************Previous Data Stored ************************ */
+  updatePreviewlogs:'/preview/logs',
+  BlockModifiedLog :'/preview/blocklog',
+
   /****************************Scorm ********************************/
   generateScorm: '/scorm/generateScorm/',
   createScormConfig: '/scorm/createScormConfig/',
@@ -159,15 +164,20 @@ export const urls = {
   getQuestionResponse:'/languages/getQuestionResponse/',
   getQuestionOptions:'/languages/getQuestionOptions/',
 getSelectedLanguages:'/languages/getSelectedLanguages/',
+//nivetha added 1
+getLanguagescount:'/languages/getlanguagecount',
       /****************************Reviews ********************************/
       addReviews:'/gamereview/addreviewers',
       getAllReviews:'/gamereview/getblockreviewlist/',
-   
+      addReadStatus:'/gamereview/readStatus', //........readstatus update api... 
      /******** Game Demo with review ******/
      getGameDemoData : '/game/tryout/',
      addGameReview : "/gamereview/addblockreview",
      testAudios: '/game/audioTest',
-     getGameCreatorPreview: '/game/creator/demo/' 
+     getGameCreatorPreview: '/game/creator/demo/' ,
+
+/*****************previewlog table get a reocred*************************/
+getPreviewLogsData:'/preview/priviewlogs'
 
 
 

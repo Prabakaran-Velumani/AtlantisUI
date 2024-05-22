@@ -1,5 +1,5 @@
 import {
-  Box, Button, FormControl, FormLabel, Grid, GridItem, Icon, Img, SimpleGrid, Text, Select, useColorModeValue,
+  Box, Button, FormControl, FormLabel, Grid, GridItem, Icon, Img, SimpleGrid, Text, useColorModeValue,
   useDisclosure, Flex, TagLabel, Tag, TagCloseButton, Input, Textarea,
   Popover,
   PopoverTrigger,
@@ -10,6 +10,7 @@ import {
   PopoverBody,
   Checkbox,
 } from "@chakra-ui/react"
+import Select from 'react-select';
 import InputField from "components/fields/InputField"
 import TextField from "components/fields/TextField"
 import React, { useEffect, useState, useRef } from "react"
@@ -20,6 +21,8 @@ import AddCourse from "./AddCourse"
 import narrator from 'assets/img/games/meeting_room.png';
 import back from 'assets/img/games/narrator.png';
 import { getSkills, getDefaultCat, getDefaultSkill, getGameStoryLine } from "utils/game/gameService"
+import { getallcategory, getCategoryList } from "utils/category/category"
+
 import { useParams } from "react-router-dom"
 import { AiOutlineEnter } from "react-icons/ai";
 // import ResizeTextarea from "react-textarea-autosize";
@@ -32,7 +35,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
   //navin 16-12
   const [openCourse, setOpenCourse] = useState(false),
     // [defaultskills,setDefaultSkills] = useState([]),
-    // [defaultCat,setDefaultCat] = useState([]),
+    [defaultCat, setDefaultCat] = useState([]),
     [skills, setSkills] = useState([]),
     [Catgory, setCatgory] = useState([]),
 
@@ -44,6 +47,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
 
       },
     ]);
+
   const [storyLine, setStoryline] = useState<String>();
   const [title, setTitle] = useState<String>();
   const [nonplayerName, setNonplayerName] = useState<String>();
@@ -55,6 +59,16 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
   //   setDefaultCat(result?.data);
   // }
 
+  //nivetha
+  const fetchCategoryList = async () => {
+    setDefaultCat([]);
+    const result = await getCategoryList();
+    if (result?.status !== 'Success')
+      return console.log('getbackruond error:' + result?.message);
+    setDefaultCat(result?.data);
+
+  };
+  //nivetha end 
   useEffect(() => {
     setFormData((prev: any) => ({
       ...prev,
@@ -88,7 +102,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
       try {
         const gameSkillsArray = JSON.parse(formData.gameSkills);
         console.log('gameSkillsArray', gameSkillsArray);
-        const categoryArray = formData.gameCategoryId;
+        const categoryArray = formData?.gameCategoryId;
         console.log(categoryArray);
         // Now, categoryArray is an array of objects
       } catch (error) {
@@ -100,9 +114,10 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
 
   // console.log('skill,cat',formData.gameSkills,formData.gameCategoryId)
 
-  // useEffect(()=>{
-  //   fetchDefaultcat();
-  // },[])
+  useEffect(() => {
+    // fetchDefaultcat();
+    fetchCategoryList();
+  }, [])
   // console.log('defaultCat',defaultCat);
   let borderColor = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
   let bg = useColorModeValue('brand.500', 'brand.400');
@@ -218,13 +233,19 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
   const { isOpen, onOpen, onClose } = useDisclosure();
 
 
-  const selectHandler = (e: any) => {
+  //nivetha
+  const selectHandler = (selectedOption: any) => {
+    // Check if selectedOption is null (i.e., when clearing the selection)
+    const categoryId = selectedOption ? selectedOption.value : ""; // Assuming value is the property holding the category ID
 
     setFormData((prev: any) => ({
-      ...prev, gameCategoryId: e.target.value,
+      ...prev,
+      gameCategoryId: categoryId,
       isCategoryIdInvalid: false,
-    }))
-  }
+    }));
+  };
+
+  //nivetha end 
   const checkvalue = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const trimmedValue1 = e.currentTarget.value.trim(); // Use currentTarget instead of target
     if (trimmedValue1 !== '') {
@@ -234,12 +255,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
       }));
     }
   };
-  const defaultCat = [
-    { catId: 1, catName: 'Cat1' },
-    { catId: 2, catName: 'Cat2' },
-    { catId: 3, catName: 'Cat3' },
-    // ... other categories
-  ];
+
 
   // const [selectedCategories, setSelectedCategories] = useState([]);
 
@@ -473,6 +489,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                     ref={textareaRef}
                     onKeyDown={(e: any) => keyPressSkill(e)}
                     style={styles.textareaStyle}
+
                   ></textarea>
                 </Flex>
                 <Text fontSize='xs' color='gray.500' mt='2px' style={{ textAlign: 'left' }}>
@@ -585,33 +602,28 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                     Category<Text as='span' color='red.500'>*</Text>
                   </FormLabel>
                   <Select
-                    placeholder="Select category"
-                    name="gameCategoryId"
-                    id="gameCategoryId"
-                    value={formData.gameCategoryId}
-                    onChange={selectHandler}
-                    borderColor={borderColor}
-                    borderRadius='12px'
-                    _focus={{ borderColor: 'teal.300' }}
-                    minH='30px'
-                    cursor='pointer'
-                    fontSize={'0.875rem'}
-                    fontWeight={500}
-                    color={'#1b2559'}
-                    style={{
-                      border: formData.isCategoryIdInvalid ? '1px solid red' : '1px solid #ccc',
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: base => ({ ...base, zIndex: 9999, }), control: (provided: any, state: any) => ({
+                        ...provided,
+                        borderRadius: '15px',
+                        height: '45px',
+                        padding: '0 !important',
+                        width: '100%'
+                        // window.innerWidth < 768 ? '100%' : '300px'
+                      }),
                     }}
-                  >
-                    {defaultCat.map((tag) => (
-                      <option key={tag.catId} style={{
-                        fontSize: '0.875rem',
-                        fontWeight: 500,
-                        color: '#1b2559'
-                      }} value={tag.catId}>
-                        {tag.catName}
-                      </option>
-                    ))}
-                  </Select>
+                    options={defaultCat}
+                    onChange={(selectedOption) => selectHandler(selectedOption)}
+                    isClearable={true} // Optional: allow clearing the selection
+                    isSearchable={true} // Optional: enable searching  
+                    className='react-select'
+                    value={
+                      defaultCat.find((option) => option.value === formData.gameCategoryId) || null
+                    }
+
+                  // styles={customStyle}           
+                  />
                 </FormControl>
               </Box>
             </SimpleGrid>

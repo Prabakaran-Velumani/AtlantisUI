@@ -15,7 +15,7 @@ import {
   AccordionButton,
   AccordionIcon,
   AccordionPanel,
-  useColorModeValue,
+  useColorModeValue, 
   Tooltip,
   ScaleFade,
 } from '@chakra-ui/react';
@@ -42,9 +42,14 @@ import Avatar2 from 'assets/img/avatars/avatar2.png';
 import Avatar3 from 'assets/img/avatars/avatar3.png';
 import { TbHandClick, TbMessages } from 'react-icons/tb';
 import pro from 'assets/img/crm/pro.png';
-import { setStory } from 'utils/game/gameService';
+import { setStory, BlockModifiedLog } from 'utils/game/gameService';
 import NDITabs from './dragNdrop/QuestTab';
 import ChatButton from './ChatButton';
+import { addReadStatus } from 'utils/reviews/reviews';
+import { updatePreviewData } from '../../../../../store/preview/previewSlice';
+import { useDispatch,useSelector } from 'react-redux';
+import { Dispatch } from '@reduxjs/toolkit'; // Import Dispatch type from @reduxjs/toolkit
+import { RootState } from 'store/reducers';
 interface NDIMainProps {
   handleShowComponent?: (componentName: string) => void;
   id?: any;
@@ -87,6 +92,8 @@ interface NDIMainProps {
   validation?: any;
   setValidation?: any;
   ShowReview?: any;
+  setReviews?: (value: any) => void;
+  listBlockItems?: any;
 }
 
 const initial = {
@@ -107,6 +114,10 @@ type ItemType = {
   content: string;
   type: string;
 };
+interface BlockItem {
+  id: string;
+  blockId: any; // Adjust the type as needed
+}
 const NDIMain: React.FC<NDIMainProps> = ({
   id,
   formData,
@@ -148,7 +159,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
   validation,
   setValidation,
   ShowReview,
+  setReviews,
+  listBlockItems,
 }) => {
+  
   const dragRef = useRef<any>();
   const bodyRef = useRef<any>();
   const toast = useToast();
@@ -164,7 +178,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
     [blockNumber, setBlockNumber] = useState<any>(),
     [lastInputName, setLastInputName] = useState<any>();
   const [inputtextValue, setinputtextValue] = useState('');
-  console.log('upNextCount', sequence);
+  const [blockWiseReviewCount, setBlockWiseReviewCount] = useState<{ [key: string]: { readCount: number, unReadCount: number, Total: number } }>({});
+  const user: any = JSON.parse(localStorage.getItem('user'));
+  const previewStoreData = useSelector((state: RootState) => state.preview);
+  const dispatch: Dispatch<any> = useDispatch();
   // For Character Options
   const characterOption = [
     { value: 'player', label: 'Player' },
@@ -183,7 +200,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
     { value: 'talking', label: 'Talking' },
     { value: 'sad', label: 'Sad' },
   ];
-
+  const GameId = id;
   // onClick Function
   const handleNDI = (NDI: any) => {
     const id = `${serias}.${count}`;
@@ -206,7 +223,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     setDummySequence([...dummySequence, id]);
     setUpNextCount([...upNextCount, upNext]);
     setCount(count + 1);
-    console.log('handleNDI', id);
     setInput((prevInput: any) => {
       const noteKey = `Note${count}`;
       const dialogKey = `Dialog${count}`;
@@ -270,11 +286,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
         for (let i = 0; i < 3; i++) {
           // Insert data into the array
           let inc = makcount + i + 1;
-          console.log('secondaryArray', countalphabet, '--', inc);
           secondaryArray.push(inc);
         }
         setAlphabetCount(secondaryArray[2]);
-        console.log('secondaryArray', secondaryArray);
         setAlphabet((prev: any) => [
           ...prev,
           { seqs: id, option: 'A', secondaryId: secondaryArray[0] },
@@ -297,7 +311,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
 
     setItems((prevArray: any) => {
       const nextIndex = i + 1;
-      console.log('prevArray', newArr.input);
       setNumber([...number, newArr.input]);
       return [
         ...prevArray.slice(0, nextIndex),
@@ -323,11 +336,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
         for (let i = 0; i < 3; i++) {
           // Insert data into the array
           let inc = makcount + i + 1;
-          console.log('secondaryArray', countalphabet, '--', inc);
           secondaryArray.push(inc);
         }
         setAlphabetCount(secondaryArray[2]);
-        console.log('secondaryArray', secondaryArray);
         setAlphabet((prev: any) => [
           ...prev,
           { seqs: id, option: 'A', secondaryId: secondaryArray[0] },
@@ -406,7 +417,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
 
     setItems((prevArray: any) => {
       const nextIndex = i + 1;
-      console.log('prevArray', newArr.input);
       setNumber([...number, newArr.input]);
       return [
         ...prevArray.slice(0, nextIndex),
@@ -432,11 +442,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
         for (let i = 0; i < 3; i++) {
           // Insert data into the array
           let inc = makcount + i + 1;
-          console.log('secondaryArray', countalphabet, '--', inc);
           secondaryArray.push(inc);
         }
         setAlphabetCount(secondaryArray[2]);
-        console.log('secondaryArray', secondaryArray);
         setAlphabet((prev: any) => [
           ...prev,
           { seqs: id, option: 'A', secondaryId: secondaryArray[0] },
@@ -501,13 +509,15 @@ const NDIMain: React.FC<NDIMainProps> = ({
         };
       }
       if (seq.type == 'Interaction') {
-        console.log('prevInput', oldInteractionKey);
 
         //Previous Object Data's
         const optionsObject = oldInteractionKey?.optionsObject;
         const ansObject = oldInteractionKey?.ansObject;
         const feedbackObject = oldInteractionKey?.feedbackObject;
         const responseObject = oldInteractionKey?.responseObject;
+        // Lokie
+        const responseemotionObject = oldInteractionKey?.responseemotionObject;
+        //End Lokie
         const optionTitleObject = oldInteractionKey?.optionTitleObject;
         const optionsemotionObject = oldInteractionKey?.optionsemotionObject;
         const optionsvoiceObject = oldInteractionKey?.optionsvoiceObject;
@@ -524,6 +534,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
             QuestionsVoice: oldInteractionKey?.QuestionsVoice,
             SkillTag: oldInteractionKey?.SkillTag,
             quesionTitle: oldInteractionKey?.quesionTitle,
+             // Lokie
+             responseRoll : oldInteractionKey?.responseRoll,
+             //End Lokie
             optionsObject: {
               A: optionsObject?.A,
               B: optionsObject?.B,
@@ -540,6 +553,13 @@ const NDIMain: React.FC<NDIMainProps> = ({
               B: responseObject?.B,
               C: responseObject?.C,
             },
+                // Lokie
+                responseemotionObject: { 
+                  A: responseemotionObject?.A, 
+                  B: responseemotionObject?.B, 
+                  C: responseemotionObject?.C 
+                },
+                //End Lokie
             optionTitleObject: {
               A: optionTitleObject?.A,
               B: optionTitleObject?.B,
@@ -572,8 +592,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
   };
   const delSeq = (seq: any, i: any, name: any) => {
     // removeDataBySeqs(seq.id);
-    console.log('delSeq', seq);
-    console.log('delSeq', seq, i, name, items, input);
+    console.log('dispatch');
+    dispatch(
+      updatePreviewData({ isDispatched: true ,gameId:parseInt(id) }),
+    );
     const filteredNotes = Object.keys(input)
       .filter((noteKey) => input[noteKey].Notenavigate === seq.input)
       .map((noteKey) => {
@@ -581,7 +603,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
         input[noteKey].NoteleadShow = null;
         return input[noteKey];
       });
-    console.log('delseqfilteredNotes', filteredNotes);
     const filteredDialog = Object.keys(input)
       .filter((dialogKey) => input[dialogKey].Dialognavigate === seq.input)
       .map((dialogKey) => {
@@ -589,7 +610,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
         input[dialogKey].DialogleadShow = null;
         return input[dialogKey];
       });
-    console.log('delseqfilteredDialog', filteredDialog);
     const filteredInteraction = Object.keys(input)
       .filter(
         (interactionkey) =>
@@ -600,10 +620,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
       )
       .map((interactionkey) => {
         Object.keys(input[interactionkey].navigateObjects).forEach((option) => {
-          console.log(
-            'delseqinterkeycheck',
-            input[interactionkey].navigateObjects[option],
-          );
+         
           if (input[interactionkey].navigateObjects[option] === seq.input) {
             input[interactionkey].navigateObjects[option] = null;
             input[interactionkey].navigateshowObjects[option] = null;
@@ -611,7 +628,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
         });
         return input[interactionkey];
       });
-    console.log('delseqfilteredInteraction', filteredInteraction);
 
     if (name === 'Interaction') {
       setAlphabet((prevAlphabet: any) => {
@@ -622,7 +638,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
         return updatedAlphabet;
       });
 
-      console.log('roll', seq);
     }
     setItems((previtems: any) => {
       // Use filter to create a new array without items that match the condition
@@ -632,6 +647,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
       return updatedItems;
     });
     setDeleteseq(true);
+   
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -688,11 +704,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
         for (let i = 0; i < 3; i++) {
           // Insert data into the array
           let inc = makcount + i + 1;
-          console.log('secondaryArray', countalphabet, '--', inc);
           secondaryArray.push(inc);
         }
         setAlphabetCount(secondaryArray[2]);
-        console.log('secondaryArray', secondaryArray);
         setAlphabet((prev: any) => [
           ...prev,
           { seqs: id, option: 'A', secondaryId: secondaryArray[0] },
@@ -773,18 +787,15 @@ const NDIMain: React.FC<NDIMainProps> = ({
     setNotify('');
   };
   const handleBottomNDI = (NDI: any) => {
-    console.log('NDI', NDI);
     const sequencial = `${count / 10 + 1}`;
     const upNextSequencial = `${(count + 1) / 10 + 1}`;
     const floatRegex = /^[-+]?(\d*\.\d+|\.\d+)$/;
     const id = `${serias}.${count}`;
-    console.log('id+++', id);
     const upNext = `${serias}.${count + 1}`;
     setUpNext(upNext);
     setType(NDI);
     setShowBox(false);
     setItems((prevItems: any) => {
-      console.log('prevItems', prevItems);
       return [
         ...prevItems,
         {
@@ -812,11 +823,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
         for (let i = 0; i < 3; i++) {
           // Insert data into the array
           let inc = makcount + i + 1;
-          console.log('secondaryArray', countalphabet, '--', inc);
           secondaryArray.push(inc);
         }
         setAlphabetCount(secondaryArray[2]);
-        console.log('secondaryArray', secondaryArray);
         setAlphabet((prev: any) => [
           ...prev,
           { seqs: id, option: 'A', secondaryId: secondaryArray[0] },
@@ -911,16 +920,24 @@ const NDIMain: React.FC<NDIMainProps> = ({
       };
     });
   };
-  const handleDialogBlockRoll = (selectedOption: any, i: any) => {
+  const handleDialogBlockRoll = (selectedOption: any, i: any,keyvalue: any) => {
+    console.log('!@#SelectedOptionDialog--',selectedOption)
+    console.log('!@#SelectedOptionDialogType--',typeof(selectedOption?.value))
+    console.log('!@#iDialog--',i)
+    console.log('!@#keyvalue--',keyvalue)
+
+
     let key = i - 1;
     setInput((prevInput: any) => {
-      const interactionKey = `Dialog${items[key]?.input}`;
+      // const interactionKey = `Dialog${items[key]?.input}`;
+      const dialogKey = keyvalue;
+      console.log("dialogkey",dialogKey)
       const blockroll = selectedOption.value;
-
+console.log("blockroll",blockroll)
       return {
         ...prevInput,
-        [interactionKey]: {
-          ...prevInput[interactionKey],
+        [dialogKey]: {
+          ...prevInput[dialogKey],
           id: items[i]?.id,
           character: blockroll,
         },
@@ -930,7 +947,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
   const handleResponseRoll = (selectedOption: any, i: any, keyvalue: any) => {
     let key = i - 1;
     // console.log('blockroll', items[key].input + '---' + i + '-------' + items);
-    console.log('keyvalue', keyvalue);
     setInput((prevInput: any) => {
       const interactionKey = keyvalue;
       const responseRoll = selectedOption.value;
@@ -950,12 +966,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
 
     // Convert the array of tag names into a string
     const tagsString = tagNames.join(', ');
-    console.log('tags', interaction);
 
     setInput((prevInput: any) => {
       const interactionKey = `${interaction}`;
       const SkillTag = tagsString;
-      console.log('handleQuestionEmotion', SkillTag);
 
       return {
         ...prevInput,
@@ -977,7 +991,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     const resultArray = resultString.split(', ');
     const arrayLength = resultArray.length;
 
-    console.log('handleQuestionEmotion', resultString);
     setValidation({
       ...validation,
       [`QuestionsEmotion${i}`]: selectedOption === '' ? true : false,
@@ -1051,7 +1064,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     setInput((prevInput: any) => {
       const interactionKey = keyvalue;
       const QuestionsVoice = selectedOption.value;
-      console.log('handleQuestionVoice', QuestionsVoice);
 
       return {
         ...prevInput,
@@ -1088,7 +1100,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
             optionemotion === `Option${item.option}`
               ? resultString
               : prevInput[interactionKey]?.optionsemotionObject?.[item.option];
-          console.log('optValue', optionemotion);
           handleValidation(item, validation, setValidation);
           optionsemotionObject[item.option] = optValue;
         });
@@ -1108,7 +1119,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
             [optionEmotionKey]: isValid,
           }));
         }
-        console.log('optionsemotionObject', optionsemotionObject);
         return {
           ...prevInput,
           [interactionKey]: {
@@ -1129,7 +1139,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
   ) => {
     const key = i - 1;
     // console.log(`handle,OptionEmotion - ${items[key]?.input} --- ${i} --- ${selectedOption.value}`);
-    console.log('handleOptionVoice', i);
     setInput((prevInput: any) => {
       const interactionKey = keyvalue;
       const OptionVoice = selectedOption.value;
@@ -1140,10 +1149,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
           optionvoice === `Option${item.option}`
             ? selectedOption.value
             : prevInput[interactionKey]?.optionsvoiceObject?.[item.option];
-        console.log('optValue', optionvoice);
         optionsvoiceObject[item.option] = optValue;
       });
-      console.log('handleOptionVoice', optionsvoiceObject);
       return {
         ...prevInput,
         [interactionKey]: {
@@ -1168,8 +1175,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     const resultString = selectedValues.join(', ');
     const resultArray = resultString.split(', ');
     const arrayLength = resultArray.length;
-
-    console.log('handleQuestionEmotion', resultString);
     if (arrayLength <= 2) {
       setInput((prevInput: any) => {
         const interactionKey = keyvalue;
@@ -1181,10 +1186,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
             responseemotion === `Option${item.option}`
               ? resultString
               : prevInput[interactionKey]?.responseemotionObject?.[item.option];
-          console.log('optValue', responseemotionObject);
           responseemotionObject[item.option] = optValue;
         });
-        console.log('optionsemotionObject', responseemotionObject);
         return {
           ...prevInput,
           [interactionKey]: {
@@ -1205,7 +1208,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
   ) => {
     const isChecked = checked.target.checked;
     const key = i - 1;
-    console.log(`handleCheckBox - ${items[key]?.input} --- ${checked.target}`);
 
     setInput((prevInput: any) => {
       const interactionKey = keyvalue;
@@ -1216,7 +1218,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
           optionright === `Option${item.option}`
             ? checked.target.checked
             : prevInput[interactionKey]?.ansObject?.[item.option];
-        console.log('optValue', ansObject);
         ansObject[item.option] = optValue;
       });
       const checkAnsObject: any = Object.values(ansObject).filter(
@@ -1229,7 +1230,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
         ...validation,
         [`checkbox${i}`]: checkedIsTrue === undefined ? true : false,
       });
-      console.log('optionsemotionObject', ansObject);
       return {
         ...prevInput,
         [interactionKey]: {
@@ -1247,10 +1247,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     foroption: any,
     keyvalue: any,
   ) => {
-    console.log(
-      'menuvalue',
-      menuvalue + '-----------' + i + '------' + foroption,
-    );
     const key = i - 1;
 
     setInput((prevInput: any) => {
@@ -1267,11 +1263,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
           foroption === `Option${item.option}`
             ? menuvalue
             : prevInput[interactionKey]?.navigateshowObjects?.[item.option];
-
-        console.log('optValue', navigateObjects);
         navigateObjects[item.option] = optValue;
         navigateshowObjects[item.option] = optValueS;
-        console.log('navigateshowObjects', navigateshowObjects);
       });
 
       return {
@@ -1291,7 +1284,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     foroption: any,
     keyvalue: any,
   ) => {
-    console.log('handleNoteNavigation', menuvalue);
     let key = i - 1;
 
     setInput((prevInput: any) => {
@@ -1315,7 +1307,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     foroption: any,
     keyvalue: any,
   ) => {
-    console.log('setDialogNavigation', menuvalue);
     let key = i - 1;
     // console.log('blockroll', items[key].input + '---' + i + '-------' + items)
     setInput((prevInput: any) => {
@@ -1339,7 +1330,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     foroption: any,
     keyvalue: any,
   ) => {
-    console.log('setDialoglead', keyvalue);
     let key = i - 1;
     //  console.log('blockroll', items[key].input + '---' + i + '-------' + items)
     setInput((prevInput: any) => {
@@ -1364,7 +1354,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     foroption: any,
     keyvalue: any,
   ) => {
-    console.log('setDialogNavigation', menuvalue);
     let key = i - 1;
 
     setInput((prevInput: any) => {
@@ -1388,7 +1377,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     foroption: any,
     keyvalue: any,
   ) => {
-    console.log('setDialogNavigation', menuvalue);
     let key = i - 1;
     // console.log('blockroll', items[key].input + '---' + i + '-------' + items)
     setInput((prevInput: any) => {
@@ -1412,7 +1400,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     foroption: any,
     keyvalue: any,
   ) => {
-    console.log('setDialoglead', keyvalue);
     let key = i - 1;
     //  console.log('blockroll', items[key].input + '---' + i + '-------' + items)
     setInput((prevInput: any) => {
@@ -1437,7 +1424,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     foroption: any,
     keyvalue: any,
   ) => {
-    console.log('clicked', keyvalue);
 
     // console.log('setBlock', menuvalue + '-----------' + i + '------' + foroption)
     const key = i - 1;
@@ -1452,7 +1438,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
           foroption === `Option${item.option}`
             ? menuvalue
             : prevInput[interactionKey]?.navigateshowObjects?.[item.option];
-        console.log('optValue', navigateshowObjects);
         navigateshowObjects[item.option] = optValue;
         const optValue1 =
           foroption === `Option${item.option}`
@@ -1460,7 +1445,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
             : prevInput[interactionKey]?.navigateObjects?.[item.option];
         navigateObjects[item.option] = optValue1;
       });
-      console.log('navigateshowObjects', navigateshowObjects);
       return {
         ...prevInput,
         [interactionKey]: {
@@ -1472,7 +1456,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
       };
     });
   };
-  console.log('roll', input);
 
   const handleSelectBlock = (
     menuvalue: any,
@@ -1480,10 +1463,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
     foroption: any,
     keyvalue: any,
   ) => {
-    console.log(
-      'menuvalue',
-      menuvalue + '-----------' + i + '------' + foroption,
-    );
     const key = i - 1;
 
     setInput((prevInput: any) => {
@@ -1495,10 +1474,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
           foroption === `Option${item.option}`
             ? menuvalue.value
             : prevInput[interactionKey]?.navigateObjects?.[item.option];
-        console.log('optValue', navigateObjects);
         navigateObjects[item.option] = optValue;
       });
-      console.log('optionsemotionObject', navigateObjects);
       return {
         ...prevInput,
         [interactionKey]: {
@@ -1513,12 +1490,12 @@ const NDIMain: React.FC<NDIMainProps> = ({
   //navin-end
 
   // onChange Function
-  const handleInput = (e: any, i?: any, BlockNum?: any) => {
+  const handleInput = async (e: any, i?: any, BlockNum?: any) => {
     const textarea = e.target;
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
-    console.log('textareastyleheight', textarea.style.height);
     setinputtextValue(textarea.value);
+
     const getLastDigit = e.target.name.slice(-1);
     const match = e.target.name.match(/([a-zA-Z]+)(\d+)/);
     if (match) {
@@ -1536,7 +1513,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
       const interactionKey = `Interaction${items[i]?.input}`;
 
       if (e.target.name == noteKey) {
-        console.log('noteeeeeeee', `Note${BlockNum}`);
         const note =
           e.target.id === 'Note' ? e.target.value : prevInput[noteKey]?.note;
         setValidation({
@@ -1575,10 +1551,12 @@ const NDIMain: React.FC<NDIMainProps> = ({
           e.target.id === 'interaction'
             ? e.target.value
             : prevInput[interactionKey]?.interaction;
-        const questionTitle =
-          e.target.id === 'QuestionTitles'
-            ? e.target.value
-            : prevInput[interactionKey]?.quesionTitle;
+        // const questionTitle =
+        //   e.target.id === 'QuestionTitles'
+        //     ? e.target.value
+        //     : prevInput[interactionKey]?.quesionTitle;
+        // Lokie Worked
+        const questionTitle = e.target.id === `QuestionTitle${items[i]?.input}` ? e.target.value : prevInput[interactionKey]?.quesionTitle;
         const SkillTag =
           e.target.id === 'skills'
             ? e.target.value
@@ -1706,6 +1684,38 @@ const NDIMain: React.FC<NDIMainProps> = ({
         };
       }
     });
+    //newlyadded start
+    if (BlockNum) {
+      const NoteKey = `Note${items[i]?.input}`;
+      const DialogKey = `Dialog${items[i]?.input}`;
+      const InteractionKey = `Interaction${items[i]?.input}`;
+      let modifiedid, quest = '';
+      if (e.target.name == NoteKey) {
+        modifiedid = items[i]?.input;
+        quest = items[i]?.questNo;
+      }
+      if (e.target.name == DialogKey) {
+        modifiedid = items[i]?.input;
+        quest = items[i]?.questNo;
+      }
+      if (e.target.name == InteractionKey) {
+        modifiedid = items[i]?.input;
+        quest = items[i]?.questNo;
+      }
+      const modified = {
+        Input: modifiedid, Quest: quest
+      }
+      const data = {
+        previewGameId: GameId,
+        playerId: user?.data?.id,
+        playerType: user?.data?.id ? 'creator' : null,
+        lastModifiedBlockSeq: modified,
+      }
+      const modifiedDataString = JSON.stringify(data);
+      const result = await BlockModifiedLog(modifiedDataString);
+    }
+
+    //end 
   };
   const handleSelect = (selectedOption: any, e: any, data: string) => {
     const getLastDigit = e.name.slice(-1);
@@ -1765,7 +1775,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
       const correspondingUpdate = updateInteraction.find(
         (updateItem: any) => updateItem?.from === item.seqs,
       );
-      console.log('correspondingUpdate', correspondingUpdate);
       // If a corresponding updateInteraction item is found, update the seqs value
       if (correspondingUpdate) {
         return { ...item, seqs: correspondingUpdate.to };
@@ -1775,14 +1784,10 @@ const NDIMain: React.FC<NDIMainProps> = ({
       return item;
     });
 
-    console.log('sequencial', 'alp', updatedAlphabet);
     setAlphabet(updatedAlphabet);
 
     setItems(updatedItems);
     setBlockItems(updatedItems);
-    // dummySequence(updatedSeq)
-    console.log('updatedSeq', updatedSeq);
-    console.log('updatedItems', updatedItems);
   }, [sequence, dummySequence, id]);
   // upNext count will change based on last Items
   useEffect(() => {
@@ -1905,14 +1910,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
     // Assuming seq.input is the data value to be validated
     if (typeof items === 'object' && items !== null) {
       var inputData = items;
-      console.log('inputData', inputData);
       for (var i = 0; i < inputData.length; i++) {
         var key = inputData[i];
         var inputkey = key.type + key.input;
-
-        console.log('key', key);
-
-        console.log('key1', input[inputkey].note);
         if (key.type === 'Note') {
           var note = input[inputkey].note;
 
@@ -1973,9 +1973,80 @@ const NDIMain: React.FC<NDIMainProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
+ 
   const textColor = useColorModeValue('secondaryGray.900', 'white');
+  //This function use for review read state update 0 to 1 
+  const handleMouseEnter = async (review: any, index: number) => {
+    // console.log("handleMouseEnter reviews",review);
+    try {
 
+      if (review.readStatus === 0) {
+        const sendreviews = JSON.stringify(review);
+        // console.log("gameReviewerId",sendreviews);
+        // Make the API call with the extracted data
+        const res = await addReadStatus(sendreviews);
+        // console.log("res", res);
+        if (res?.status === 200 || res?.status === "Success") {
+          // const updatedReview = {...review, "readStatus": 1}
+          reviews[index] = { ...review, "readStatus": 1 };
+          // console.log updatedReviews
+          const updatedReviews = [...reviews];
+          setReviews(updatedReviews);
+          const filteredReviews = updatedReviews.filter((item: any) => item.tabId === '4');
+          // console.log("filteredReviews",filteredReviews);
+        }
+        // Handle the API response (optional)
+        // console.log('API Response:', res);
+      }
+
+      return;
+
+    } catch (error) {
+      // Handle errors that may occur during the API call
+      console.error('API Error:', error);
+    }
+  };
+  useEffect(() => {
+    if (reviews.length > 0) {
+
+      const blockSeqArray: string[] = [];
+      reviews.forEach((review: any) => {
+        if (review?.tabId === 4 && review?.tabAttribute === "blockSeqId") {
+          const tableSeqId = review?.tabAttributeValue;
+          blockSeqArray.push(tableSeqId)
+        }
+      });
+      const blockSeqSet = new Set(blockSeqArray);
+      // Get all Values
+      const myIterator = blockSeqSet.values();
+      // List all Values
+      for (const seq of myIterator) {
+        getBlockReadUnreadCount(seq);
+      }
+    }
+  }, [reviews])
+  const getBlockReadUnreadCount = async (seqId: string) => {
+    const result = { readCount: 0, unReadCount: 0, Total: 0 }
+  
+    /** get the reviews of blockSeq  */
+    const filteredBlockReviews = reviews && reviews.filter((review: any) => {
+      if (review?.tabId === 4 && review?.tabAttribute === "blockSeqId") {
+        const tableSeqId = review?.tabAttributeValue;
+        if (seqId === tableSeqId) {
+          if (review.readStatus === 0) {
+            result.unReadCount++; 
+          } else {
+            result.readCount++; 
+          }
+          result.Total++;
+          return true;
+        }
+      }
+      return false;
+    })
+    setBlockWiseReviewCount((prev:any) => ({ ...prev, [seqId]: result }));
+    // return result;
+  }
   return (
     <>
       <Box
@@ -2008,9 +2079,21 @@ const NDIMain: React.FC<NDIMainProps> = ({
           >
             {(type || items) &&
               items.map((seq: any, i: number) => {
+                const getBlockId:any = Object.entries<BlockItem>(listBlockItems).find(([key, blocks]) => blocks.id === seq.id);
+                const blockId = getBlockId ? getBlockId[1]?.blockId : null;
                 return (
                   <Draggable key={seq.id} draggableId={seq.id} index={i}>
                     {(provided, dragData) => {
+                          //Afrith-modified-starts-02/May/24 - drag only in vertical not horizontal
+                          if (provided.draggableProps.style && !Object.isFrozen(provided.draggableProps.style)) {
+                            let transform = provided.draggableProps.style.transform;
+                            if (transform) {
+                              let t = transform.split(",")[1];
+                              provided.draggableProps.style.transform = "translate(0px," + t;
+                            }
+                          }
+                        //Afrith-modified-ends-02/May/24 - drag only in vertical not horizontal
+  
                       return (
                         <div
                           ref={provided.innerRef}
@@ -2038,8 +2121,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     seq.input === lastInputName ||
                                       dragData.isDragging === true ||
                                       seq.id === targetSequence?.id
-                                      ? '#f7f7f5'
-                                      : 'unset'
+                                      ? null //Afrith-modified-starts-02/May/24 - unset previous (Note)block focusing color
+                                      : 'unset'  //Afrith-modified-starts-02/May/24 - unset previous (Note)block focusing color
                                   }
                                   _hover={{ background: '#f7f7f5' }}
                                   zIndex={
@@ -2069,7 +2152,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     handleSelectBlock={handleNoteNavigation}
                                     items={items}
                                     setSelectBlock={setNotelead}
-                                    handleInput={(e: any) => handleInput(e, i)}
+                                    handleInput={(e: any) => handleInput(e, i, seq.input)}
                                     handleNDI={handleNDI}
                                     validation={validation}
                                     currentseq={count}
@@ -2093,9 +2176,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                               <Text>
                                                 See All Reviews
                                               </Text>
-                                              <Text>
-                                                Read{`(3)`} UnRead{`(10)`}
-                                              </Text>
+                                              <Text>Read: {blockWiseReviewCount[blockId]?.readCount ?? '0'}</Text>
+                                              <Text>Unread: {blockWiseReviewCount[blockId]?.unReadCount ?? '0'}</Text>
                                             </Box>
                                             <AccordionIcon />
                                           </AccordionButton>
@@ -2105,8 +2187,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                             reviews
                                               .filter(
                                                 (item: any) =>
-                                                  item?.tabAttributeValue ===
-                                                  `${seq?.questNo}@${seq?.input}`,
+                                                  item?.tabAttributeValue === blockId
                                               )
                                               .map((value: any, ind: number) => {
                                                 const reviewer =
@@ -2117,7 +2198,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                                       value?.gameReviewerId,
                                                   );
                                                 return (
-                                                  <>
+                                                  <Box key={ind} onMouseEnter={() => handleMouseEnter(value, ind)}>
                                                     <Box
                                                       w={'100%'}
                                                       display={'flex'}
@@ -2161,33 +2242,34 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                                     <Box mb={'10px'} mt={'10px'}>
                                                       {value?.review}
                                                     </Box>
-                                                  </>
-                                                );
-                                              })}
-                                          {(!reviews ||
-                                            reviews.length === 0 ||
-                                            reviews.filter(
-                                              (item: any) =>
-                                                item?.tabAttributeValue ===
-                                                `${seq?.questNo}@${seq?.input}`,
-                                            ).length === 0) && (
-                                              <Box
-                                                w={'100%'}
-                                                display={'flex'}
-                                                alignItems={'center'}
-                                                justifyContent={'center'}
-                                              >
-                                                <Text>
-                                                  No Reviews For This Block
-                                                </Text>
-                                              </Box>
-                                            )}
-                                        </AccordionPanel>
-                                      </AccordionItem>
-                                    </Accordion>
-                                  ) : (
-                                    ''
-                                  )}
+                                                    </Box>
+                                              );
+                                            })}
+                                        {(!reviews ||
+                                          reviews.length === 0 ||
+                                          reviews.filter(
+                                            (item: any) =>
+                                              item?.tabAttributeValue == blockId
+                                              // `${seq?.questNo}@${seq?.input}`,
+                                          ).length === 0) && (
+                                            <Box
+                                              w={'100%'}
+                                              display={'flex'}
+                                              alignItems={'center'}
+                                              justifyContent={'center'}
+                                            >
+                                              <Text>
+                                                No Reviews For This Block
+                                              </Text>
+                                            </Box>
+                                          )}
+                                      </AccordionPanel>
+                                    </AccordionItem>
+                                  </Accordion>
+                                ) : (
+                                  ''
+                                )}
+
                                   {seq.id == showMiniBox ? (
                                     <MiniBox seq={seq} i={i} name={'Note'} />
                                   ) : null}
@@ -2205,13 +2287,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                       : 'unset'
                                   }
                                   borderRadius={'20px'}
-                                  // transform={
-                                  //   seq.input === lastInputName
-                                  //     ? 'scale(1.030)'
-                                  //     : 'unset'
-                                  // }
                                   transition={'0.1s linear'}
-
                                   borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
                                   borderStyle={{ base: seq.id === targetSequence?.id && 'solid solid solid solid', sm: seq.id === targetSequence?.id && 'solid solid solid solid', lg: seq.id === targetSequence?.id && 'unset unset unset solid' }}
                                   borderColor={{ base: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', sm: seq.id === targetSequence?.id && '#3311db #3311db #3311db #3311db', lg: seq.id === targetSequence?.id && 'unset unset unset #3311db' }}
@@ -2219,8 +2295,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                   background={
                                     seq.input === lastInputName ||
                                       dragData.isDragging === true
-                                      ? '#f7f7f5'
-                                      : 'unset'
+                                      ? null //Afrith-modified-starts-02/May/24 - unset previous (Note)block focusing color
+                                      : 'unset'  //Afrith-modified-starts-02/May/24 - unset previous (Note)block focusing color
+                                
                                   }
                                   _hover={{ background: '#f7f7f5' }}
                                   zIndex={
@@ -2243,7 +2320,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
 
                                   }}
                                   height={seq.id === targetSequence?.id ? '100%' : '170px'}
-                                // overflowY={'hidden'}    
                                 >
                                   <Text color={'gray.400'}>Dialog</Text>
                                   <DialogCompo
@@ -2303,9 +2379,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                               <Text>
                                                 See All Reviews
                                               </Text>
-                                              <Text>
-                                                Read{`(3)`} UnRead{`(10)`}
-                                              </Text>
+                                              <Text>Read: {blockWiseReviewCount[blockId]?.readCount ?? '0'}</Text>
+                                              <Text>Unread: {blockWiseReviewCount[blockId]?.unReadCount ?? '0'}</Text>
                                             </Box>
                                             <AccordionIcon />
                                           </AccordionButton>
@@ -2316,8 +2391,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                             reviews
                                               .filter(
                                                 (item: any) =>
-                                                  item?.tabAttributeValue ===
-                                                  `${seq?.questNo}@${seq?.input}`,
+                                                  item?.tabAttributeValue === blockId
+                                                  // `${seq?.questNo}@${seq?.input}`,
                                               )
                                               .map((value: any, ind: number) => {
                                                 const reviewer =
@@ -2328,7 +2403,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                                       value?.gameReviewerId,
                                                   );
                                                 return (
-                                                  <>
+                                                  <Box key={ind} onMouseEnter={() => handleMouseEnter(value, ind)}>
                                                     <Box
                                                       w={'100%'}
                                                       display={'flex'}
@@ -2372,15 +2447,15 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                                     <Box mb={'10px'} mt={'10px'}>
                                                       {value?.review}
                                                     </Box>
-                                                  </>
+                                                    </Box>
                                                 );
                                               })}
                                           {(!reviews ||
                                             reviews.length === 0 ||
                                             reviews.filter(
                                               (item: any) =>
-                                                item?.tabAttributeValue ===
-                                                `${seq?.questNo}@${seq?.input}`,
+                                                item?.tabAttributeValue ===blockId
+                                                // `${seq?.questNo}@${seq?.input}`,
                                             ).length === 0) && (
                                               <Box
                                                 w={'100%'}
@@ -2412,17 +2487,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                       : 'unset'
                                   }
                                   borderRadius={'20px'}
-                                  // transform={
-                                  //   seq.input === lastInputName
-                                  //     ? 'scale(1.030)'
-                                  //     : 'unset'
-                                  // }
                                   transition={'0.1s linear'}
-
-                                // border={{ base: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
-                                // sm: seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset',
-                                // lg: seq.id === targetSequence?.id ? '3px solid #3311db unset unset unset' : 'unset',
-                                // }}
 
                                   // borderLeft={ seq.id === targetSequence?.id ? '3px solid #3311db' : 'unset'}
                                   borderWidth={{ base: seq.id === targetSequence?.id && '3px 3px 3px 3px', sm: seq.id === targetSequence?.id && '3px 3px 3px 3px', lg: seq.id === targetSequence?.id && '0 0 0 3px' }}
@@ -2431,8 +2496,9 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                   background={
                                     seq.input === lastInputName ||
                                       dragData.isDragging === true
-                                      ? '#f7f7f5'
-                                      : 'unset'
+                                      ? null //Afrith-modified-starts-02/May/24 - unset previous (Note)block focusing color
+                                      : 'unset'  //Afrith-modified-starts-02/May/24 - unset previous (Note)block focusing color
+                                
                                   }
                                   _hover={{ background: '#f7f7f5' }}
                                   zIndex={
@@ -2445,7 +2511,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                       ? reviews && reviews.find((item: any) => {
                                         const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
                                         const isMatched = item?.tabAttributeValue === tabAttributeValue;
-                                        console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
                                         return isMatched;
                                       })
                                         ? '#E2E8F0'
@@ -2454,9 +2519,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                     transition: 'height 1s ease',
                                   }}
                                   onKeyDown={(e) => handleKeyDown(e, i, seq)}
-                                  height={seq.id === targetSequence?.id ? '100%' : '170px'}
-                                // overflowX={'scroll'}
-                                // overflowY={'hidden'}                        
+                                  height={seq.id === targetSequence?.id ? '100%' : '170px'
+                                  }                   
                                 >
                                   <Text color={'gray.400'}>Interaction</Text>
                                   <InteractionCompo
@@ -2531,7 +2595,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                                 See All Reviews
                                               </Text>
                                               <Text>
-                                                Read{`(3)`} UnRead{`(10)`}
+                                              <Text>Read: {blockWiseReviewCount[blockId]?.readCount ?? '0'}</Text>
+                                              <Text>Unread: {blockWiseReviewCount[blockId]?.unReadCount ?? '0'}</Text>
                                               </Text>
                                             </Box>
                                             <AccordionIcon />
@@ -2543,8 +2608,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                             reviews
                                               .filter(
                                                 (item: any) =>
-                                                  item?.tabAttributeValue ===
-                                                  `${seq?.questNo}@${seq?.input}`,
+                                                  item?.tabAttributeValue === blockId
+                                                  // `${seq?.questNo}@${seq?.input}`,
                                               )
                                               .map((value: any, ind: number) => {
                                                 const reviewer =
@@ -2606,8 +2671,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
                                             reviews.length === 0 ||
                                             reviews.filter(
                                               (item: any) =>
-                                                item?.tabAttributeValue ===
-                                                `${seq?.questNo}@${seq?.input}`,
+                                                item?.tabAttributeValue ===blockId
+                                                // `${seq?.questNo}@${seq?.input}`,
                                             ).length === 0) && (
                                               <Box
                                                 w={'100%'}

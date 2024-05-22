@@ -1,8 +1,5 @@
 import {
   Box,
-  Flex,
-  Grid,
-  GridItem,
   Icon,
   Img,
   Text,
@@ -12,30 +9,9 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import { getGameById, getSkills } from 'utils/game/gameService';
 import { motion } from 'framer-motion';
-import rew from 'assets/img/screens/Reward Bar.png';
-import back from 'assets/img/screens/back.png';
-import write from 'assets/img/screens/Writing.png';
-import next from 'assets/img/screens/next.png';
 import { useParams } from 'react-router-dom';
 import { FaClock } from 'react-icons/fa';
-import { MotionConfig } from 'framer-motion';
-import { preloadedImages } from 'utils/hooks/function';
 // import AudioEffect from './Audio';
-interface Badge {
-  gasId: number;
-  gasAssetImage: string;
-  gasAssetName: string;
-}
-
-const extractLink = (text: any) => {
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
-  if (text) {
-    const urls = text?.match(urlRegex);
-
-    return urls ? urls[0] : null;
-  }
-  return null;
-};
 const Welcome: React.FC<{
   setCurrentScreenId: any;
   formData: any;
@@ -43,8 +19,12 @@ const Welcome: React.FC<{
   preview: any;
   intro: any;
   screen: any;
-  preloadedAssets: any;
-}> = ({ formData, imageSrc, preview, setCurrentScreenId, intro, screen, preloadedAssets }) => {
+  preloadedAssets:any;
+  setprevScreenId:any;
+  currentScreenId:any;
+  setPreLogDatas:any;
+  getPrevLogDatas:any;
+}> = ({ formData, imageSrc, preview, setCurrentScreenId, intro, screen, preloadedAssets,currentScreenId,setprevScreenId,setPreLogDatas,getPrevLogDatas }) => {
   const { id } = useParams();
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);
@@ -113,7 +93,6 @@ const Welcome: React.FC<{
     });
     return <React.Fragment>{contentWithLinks}</React.Fragment>;
   };
-  const [isPlay, setIsPlay] = useState(false);
   // const audioRef = React.useRef(null);
 
   const data =
@@ -130,7 +109,9 @@ const Welcome: React.FC<{
     }
     return null;
   };
-  const link = extractLink(formData.gameAdditionalWelcomeNote);
+  // const link = extractLink(formData.gameAdditionalWelcomeNote);
+  const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
+  
   return (
     <>
       <motion.div
@@ -144,7 +125,7 @@ const Welcome: React.FC<{
           </Box>
           <Box className="top-title">
             <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-              <Box w='51%' lineHeight={'40px'}>
+              <Box w='32%' lineHeight={'40px'}>
                 <Text
                   className="title"
                   fontSize={{
@@ -388,7 +369,17 @@ const Welcome: React.FC<{
           <Box className="next-btn">
             <Img
               src={preloadedAssets.next}
-              onClick={() => setCurrentScreenId(12)}
+              onClick={() =>{
+                setCurrentScreenId(12); 
+                if(screenIdset !==  currentScreenId)
+                  {
+                     setPreLogDatas((prev:any) => ({
+                  ...prev,
+                  screenIdSeq: [...prev.screenIdSeq, currentScreenId]
+                   }));
+                  }
+               
+            }}
             />
           </Box>
         </Box>

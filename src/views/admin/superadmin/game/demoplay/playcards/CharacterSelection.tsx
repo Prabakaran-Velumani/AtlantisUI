@@ -1,9 +1,6 @@
 import React, {
-  Suspense,
   useContext,
   useEffect,
-  useLayoutEffect,
-  useRef,
   useState,
 } from 'react';
 import {
@@ -19,6 +16,7 @@ import {
   SimpleGrid,
   Text,
   useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
 import { MdClose } from 'react-icons/md';
 import { motion, useAnimation } from 'framer-motion';
@@ -38,11 +36,7 @@ import { Canvas, useLoader, useFrame } from 'react-three-fiber';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import SelectButton from 'assets/img/games/selectbtn.png';
-import Lang from 'assets/img/games/lang.png';
-import Okay from 'assets/img/games/OKAY button.png';
-import FormField from 'assets/img/games/formfield.png';
-import Selected from 'assets/img/games/selected.png';
+
 // import { useGLTF } from '@react-three/drei';
 // import { Environment, OrbitControls } from '@react-three/drei';
 // import { FBXLoader } from 'three/addons/loaders/FBXLoader';
@@ -76,8 +70,10 @@ interface PlayGamesProps {
   setProfileData?: any;
   demoBlocks?: any;
   preloadedAssets?: any;
-  isLanguage?: any;
-  setIsLanguage?: any;
+  setprevScreenId: any;
+  currentScreenId: any;
+  setPreLogDatas: any;
+  getPrevLogDatas: any;
 }
 
 const spokenLanguages = [
@@ -116,126 +112,32 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   demoBlocks,
   formData,
   preloadedAssets,
-  setIsLanguage,
-  isLanguage,
+  setprevScreenId,
+  currentScreenId,
+  setPreLogDatas,
+  getPrevLogDatas,
 }) => {
-  //   const useData = useContext(DataContext)
   const [i, setI] = useState(0);
-  const [select, setSelect] = useState(false);
-  const [languages, setLanguages] = useState<any[]>(null);
-  // Afrith-modified-starts-08/Mar/24
-  const [characterName, setCharacterName] = useState('');
   const [toggleLeft, setToggleLeft] = useState(false);
-  const [toggleRight, setToggleRight] = useState(false);
-  // Afrith-modified-ends-08/Mar/24
-  //Afrith-modified-starts-20/Mar/24
-  const [gameContentId, setGameContentId] = useState(null);
-  //Afrith-modified-ends-20/Mar/24
-  const { id } = useParams();
-  const gender = [
-    { label: 'Male', value: 'Male' },
-    { label: 'FeMale', value: 'FeMale' },
-    { label: 'Others', value: 'Others' },
-  ];
-  useEffect(() => {
-    const fetch = async () => {
-      const resLang = await getGameLanguages(id);
-      if (resLang?.status === 'Success') {
-        if (resLang?.data.length !== 0) {
-          const data = resLang?.data;
-          data.unshift({ value: 0, label: 'English' });
-          setLanguages(data);
-          setProfileData((prev: any) => ({
-            ...prev,
-            language: data[0]?.label,
-          }));
-          setIsLanguage(true);
-          // setTimeout(() => {
-          // }, 1500);
-        }
-      }
-    };
-    fetch();
-  }, []);
-
-  const playerInfo = useContext(ProfileContext);
+  const [toggleRight, setToggleRight] = useState(false)
+  const toast = useToast();
 
   const selectPlayerClick = () => {
-    setSelectedPlayer(players[i]);
-    /**if game has more than one quest, then navigate to chapter selection screen, otherwise navigate to story part direclty */
-    if (playerInfo.name === '') {
-      setProfileData((prev: any) => ({ ...prev, name: 'Guest' }));
+    const i = 0; // Assuming you are referring to a specific player index
+    const screenIdset =
+      getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+    if (screenIdset !== currentScreenId) {
+      setPreLogDatas((prev: any) => ({
+        ...prev,
+        screenIdSeq: [...prev.screenIdSeq, currentScreenId],
+      }));
     }
-    setCurrentScreenId(13);
-    //navigate to Chapter selection
 
-    // if (Object.keys(demoBlocks).length > 1) {
-    //   setCurrentScreenId(13);//navigate to Chapter selection
-    // } else {
-    //   setCurrentScreenId(2);//navigate to story
-    // }
+    // Set the selected player
+    setSelectedPlayer(players[i]);    
+    setCurrentScreenId(13);//navigate to Chapter selection
   };
 
-  // const handleProfile = (e: any, lang?: any) => {
-  //   const { id, value } = e.target;
-  //   setSelect(false);
-  //   setProfileData((prev: any) => ({
-  //     ...prev,
-  //     [id]: id === 'name' ? value : lang,
-  //   }));
-  // };
-
-  ///Afrith-modified-starts-20/Mar/24
-  const currGameId = id; //from useParams
-  const handleProfile = (e: any, lang?: any, langId?: any) => {
-    const { id, value } = e.target;
-
-    setSelect(false);
-    setProfileData((prev: any) => ({
-      ...prev,
-      [id]: id === 'name' ? value : lang,
-    }));
-    console.log('langId', langId);
-    setGameContentId(langId);
-    // getContentRelatedLanguage(currGameId, langId);
-  };
-
-  //////////
-  useEffect(() => {
-    const fetchGameContent = async () => {
-      const gameContentResult = await getContentRelatedLanguage(
-        currGameId,
-        gameContentId,
-      );
-      if (gameContentResult.status === 'Success') {
-        const data = gameContentResult.data;
-        setProfileData((prev: any) => ({
-          ...prev,
-          content: data.map((x: any) => ({ content: x.content })),
-          audioUrls: data.map((x: any) => ({ audioUrls: x.audioUrls })),
-          textId: data.map((x: any) => ({ textId: x.textId })),
-          fieldName: data.map((x: any) => ({ fieldName: x.fieldName })),
-          Audiogetlanguage: data.map((x: any) => ({
-            content: x.content,
-            audioUrls: x.audioUrls,
-            textId: x.textId,
-            fieldName: x.fieldName,
-          })),
-        }));
-      }
-    };
-    if (gameContentId) {
-      fetchGameContent();
-    }
-    console.log('gameContentId', gameContentId);
-  }, [gameContentId]);
-  /////////
-  // Afrith-modified-starts-08/Mar/24
-  // const setPlayerName = (value:any) => {
-  //   setCharacterName(value);
-  //   setProfileData((prev:any) => ({...prev, name:value}))
-  // };
-  // Afrith-modified-ends-08/Mar/24
 
   const innerBoxWidth = useBreakpointValue({
     base: '95%',
@@ -243,202 +145,11 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     xl: '90%',
     xxl: '90%',
   });
+  const screenIdset =
+    getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+
   return (
     <>
-      {formData && formData?.gameLanguageId !== null && isLanguage !== null ? (
-        <Box id="container" className="Play-station">
-          <Box className="top-menu-home-section">
-            {isLanguage ? (
-              <Box className="Setting-box">
-                <Img
-                  src={preloadedAssets.Lang}
-                  className="setting-pad"
-                  h={'100vh !important'}
-                />
-                <Box className="vertex">
-                  <FormLabel className={'label'} me={'0'}>
-                    Profile
-                  </FormLabel>
-                  <Box position={'relative'}>
-                    <Text
-                      // onClick={() => setSelect(!select)}
-                      className={'choosen_lang'}
-                      ml={'9% !important'}
-                    >
-                      Name
-                    </Text>
-                    <Img
-                      className="formfield"
-                      w={'100%'}
-                      h={'auto'}
-                      src={preloadedAssets.FormField}
-                      // onClick={() => setSelect(!select)}
-                    />
-                    <Box
-                      w={'100%'}
-                      position={'absolute'}
-                      display={'flex'}
-                      // onClick={() => setSelect(!select)}
-                      top={'100%'}
-                    >
-                      <Box
-                        w={'100%'}
-                        display={'flex'}
-                        justifyContent={'center'}
-                      >
-                        <input
-                          style={{
-                            width: '100%',
-                          }}
-                          className="player_profilename"
-                          placeholder={'Enter Alias Name'}
-                          value={playerInfo.name}
-                          onChange={(e: any) =>
-                            setProfileData((prev: any) => ({
-                              ...prev,
-                              name: e.target.value,
-                            }))
-                          }
-                        />
-                      </Box>
-                    </Box>
-                  </Box>
-                  <Box position={'relative'} mb={'50px'}>
-                    <Text
-                      onClick={() => setSelect(!select)}
-                      className={'choosen_lang'}
-                      ml={'9% !important'}
-                    >
-                      Gender
-                    </Text>
-                    <Img
-                      className="formfield"
-                      w={'100%'}
-                      h={'auto'}
-                      src={preloadedAssets.FormField}
-                      onClick={() => setSelect(!select)}
-                    />
-                    <Box
-                      w={'100%'}
-                      position={'absolute'}
-                      display={'flex'}
-                      onClick={() => setSelect(!select)}
-                      top={'95%'}
-                    >
-                      <Box w={'80%'} display={'flex'} justifyContent={'center'}>
-                        <Text
-                          onClick={() => setSelect(!select)}
-                          className={'choosen_lang'}
-                        >
-                          {profileData?.language}
-                        </Text>
-                      </Box>
-                      <Box w={'20%'}>
-                        <Img
-                          src={preloadedAssets.Selected}
-                          className={'select'}
-                          mt={'18%'}
-                        />
-                      </Box>
-                      {select && (
-                        <Box className="dropdown">
-                          {gender &&
-                            gender.map((lang: any, num: any) => (
-                              <Text
-                                className={'choosen_langs'}
-                                ml={'5px'}
-                                key={num}
-                                _hover={{ bgColor: '#377498' }}
-                                id={'language'}
-                                onClick={(e: any) =>
-                                  handleProfile(e, lang.label, lang.value)
-                                }
-                              >
-                                {lang.label}
-                              </Text>
-                            ))}
-                        </Box>
-                      )}
-                    </Box>
-                  </Box>
-                  <Box position={'relative'} mb={'100px'}>
-                    <Text
-                      onClick={() => setSelect(!select)}
-                      className={'choosen_lang'}
-                      ml={'9% !important'}
-                    >
-                      Language
-                    </Text>
-                    <Img
-                      className="formfield"
-                      w={'100%'}
-                      h={'auto'}
-                      src={preloadedAssets.FormField}
-                      onClick={() => setSelect(!select)}
-                    />
-                    <Box
-                      w={'100%'}
-                      position={'absolute'}
-                      display={'flex'}
-                      onClick={() => setSelect(!select)}
-                      top={'95%'}
-                    >
-                      <Box w={'80%'} display={'flex'} justifyContent={'center'}>
-                        <Text
-                          // transform={'translate(0px,25px)'}
-                          // textAlign={'center'}
-                          onClick={() => setSelect(!select)}
-                          className={'choosen_lang'}
-                        >
-                          {profileData?.language}
-                        </Text>
-                      </Box>
-                      <Box w={'20%'}>
-                        <Img
-                          src={preloadedAssets.Selected}
-                          className={'select'}
-                          mt={'18%'}
-                        />
-                      </Box>
-                      {select && (
-                        <Box className="dropdown">
-                          {languages &&
-                            languages.map((lang: any, num: any) => (
-                              <Text
-                                className={'choosen_langs'}
-                                ml={'5px'}
-                                key={num}
-                                _hover={{ bgColor: '#377498' }}
-                                id={'language'}
-                                onClick={(e: any) =>
-                                  handleProfile(e, lang.label, lang.value)
-                                }
-                              >
-                                {lang.label}
-                              </Text>
-                            ))}
-                        </Box>
-                      )}
-                    </Box>
-                  </Box>
-                  <Box display={'flex'} justifyContent={'center'} w={'100%'}>
-                    <Button
-                      className="okay"
-                      onClick={() => setIsLanguage(false)}
-                    >
-                      <Img
-                        src={preloadedAssets.OkayBtn}
-                        w={'100%'}
-                        h={'auto'}
-                      />
-                    </Button>
-                  </Box>
-                </Box>
-              </Box>
-            ) : null}
-          </Box>
-        </Box>
-      ) : null}
       <Box
         position="relative"
         w={'100%'}
@@ -527,23 +238,27 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     className="btns left-btn mouse_style"
                     bg={'none'}
                     _hover={{ bg: 'none' }}
-                    onClick={() => setCurrentScreenId(1)}
+                    onClick={() => {
+                      setCurrentScreenId(1);
+
+                      if (screenIdset !== currentScreenId) {
+                        setPreLogDatas((prev: any) => ({
+                          ...prev,
+                          screenIdSeq: [...prev.screenIdSeq, currentScreenId],
+                        }));
+                      }
+                    }}
                   ></Button>
                   <Box w={'25%'} position={'relative'}>
-                    <input
-                      style={{
-                        width: '100%',
-                      }}
+                    <FormLabel
+                      style={{ width: '100%' }}
                       className="player_name"
-                      placeholder={'Enter Alias Name'}
-                      value={playerInfo.name}
-                      onChange={(e: any) =>
-                        setProfileData((prev: any) => ({
-                          ...prev,
-                          name: e.target.value,
-                        }))
-                      }
-                    />
+                      textAlign={"center"} 
+                      me={0}
+                      mb={1}
+                    > 
+                    {profileData.name} 
+                      </FormLabel>
                   </Box>
                   <Button
                     className="btns right-btn mouse_style"
@@ -554,34 +269,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                 </Box>
               </Box>
             </Box>
-            {/* <Box
-              position={'fixed'}    
-              // left={0}
-              right={'0px'}
-              bottom={0}
-              zIndex={999}
-              w={'100vw'}
-              h={'100vh'}
-            >
-              <Canvas
-                camera={{ position: [3, 3, 10] }}
-              // style={{ width: '50%', height: '50vh'}}
-              >
-                <directionalLight
-                  position={[5, 5, 5]}
-                  intensity={0.8}
-                  color={0xffccaa}
-                  castShadow
-                />
-                <ambientLight intensity={5.5} />
-                <pointLight
-                  position={[5, 5, 5]}
-                  color={0xff0000}
-                  intensity={1}
-                />
-                <Model />
-              </Canvas>
-            </Box> */}
           </GridItem>
         </Grid>
       </Box>

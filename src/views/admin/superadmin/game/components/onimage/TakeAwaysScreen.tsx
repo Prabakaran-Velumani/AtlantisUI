@@ -28,8 +28,8 @@ const TakewayScreen: React.FC<{
             alignItems={'center'}
           >
             <Box w={'auto'} position={'relative'} h={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-              <Img src={imageSrc} h={'auto'} w={'100%'}  transition={'transform 0.3s ease'} transform={{lg:'scale(1)','2xl':'scale(1.3)'}} />
-              <Box position={'absolute'}  transition={'transform 0.3s ease'} transform={{lg:'scale(1)','2xl':'scale(1.25)'}} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'} w={'100%'} h={'40%'} top={{base:'35.5%','2xl':'38%'}} fontFamily={'AtlantisText'}>
+              <Img src={imageSrc} h={'auto'} w={'100%'} transition={'transform 0.3s ease'} transform={{ lg: 'scale(1)', '2xl': 'scale(1.3)' }} />
+              <Box position={'absolute'} transition={'transform 0.3s ease'} transform={{ lg: 'scale(1)', '2xl': 'scale(1.25)' }} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'} w={'100%'} h={'40%'} top={{ base: '35.5%', '2xl': '38%' }} fontFamily={'AtlantisText'}>
                 <Box className='takeaway_content'>
                   {data &&
                     data.map((it: any, ind: number) => {
