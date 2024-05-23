@@ -342,7 +342,6 @@ const LeaderBoard: React.FC<{
                 </Box>
               </Box>
               <Box>
-
                 {shuffledUsers.map((item, index) => (
                   <Box
                     className="content-lead"
@@ -357,16 +356,19 @@ const LeaderBoard: React.FC<{
                     <>
                       <Img
                         src={preloadedAssets.Entry}
-                        className="list-pad"
-                        _hover={{ filter: 'grayscale(50%)' }}
+                        className={'list-pad'}
+                        _hover={{ filter: 'grayscale(0%)'}}
+                        filter={index === 0 ? 'grayscale(0%)' : 'grayscale(50%)'}
                       />
-                      <Box className='list-wrapper'
-                        _hover={{ filter: 'grayscale(50%)' }}
+                      <Box
+                       className={'list-wrapper'}
+                        _hover={{ filter: 'grayscale(0%)'}}
+                        filter={index === 0 ? 'grayscale(0%)' : 'grayscale(50%)'}
                       >
                         <Box w={'30%'}>
                           <Text
                             textAlign={'center'}
-                            color={'#D9C7A2'}
+                            color={'#39305D'}
                           >
                             {item.name ? item.name : 'Guest'}
                           </Text>
@@ -376,10 +378,10 @@ const LeaderBoard: React.FC<{
                           display={'flex'}
                           justifyContent={'space-between'}
                         >
-                          <Text textAlign={'center'} color={'#D9C7A2'}>
+                          <Text textAlign={'center'} color={'#39305D'}>
                             {item.dailyPosition !== undefined ? item.dailyPosition : index + 1}
                           </Text>
-                          <Text textAlign={'center'} color={'#D9C7A2'}>
+                          <Text textAlign={'center'} color={'#39305D'}>
                             {item.score ? item.score : 0}
                           </Text>
                         </Box>
@@ -388,10 +390,10 @@ const LeaderBoard: React.FC<{
                           display={'flex'}
                           justifyContent={'space-between'}
                         >
-                          <Text textAlign={'center'} color={'#D9C7A2'}>
+                          <Text textAlign={'center'} color={'#39305D'}>
                             {item.alltimePosition !== undefined ? item.alltimePosition : index + 1}
                           </Text>
-                          <Text textAlign={'center'} color={'#D9C7A2'}>
+                          <Text textAlign={'center'} color={'#39305D'}>
                             {item.allTimeScore ? item.allTimeScore : 0}
                           </Text>
                         </Box>
@@ -400,7 +402,6 @@ const LeaderBoard: React.FC<{
                   </Box>
                 ))}
               </Box>
-
             </Box>
             <Box className='top-bar'>
               <Box className='list-wrapper'
