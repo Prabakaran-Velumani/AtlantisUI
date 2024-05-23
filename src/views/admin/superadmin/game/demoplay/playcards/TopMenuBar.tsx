@@ -28,6 +28,9 @@ interface TopMenuProps {
   audioObj: any;
   questState: any;
   setIsOpenCustomModal: (value: boolean) => void;
+  EnumType:any;
+  getPrevLogDatas:any;
+  setPreLogDatas:any;
 }
 
 const TopMenuBar: React.FC<TopMenuProps> = ({
@@ -45,12 +48,15 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
   setAudioObj,
   audioObj,
   questState,
-  setIsOpenCustomModal
+  setIsOpenCustomModal,
+  EnumType,
+  getPrevLogDatas,
+  setPreLogDatas
 }) => {
   const [geFinalscorequest, SetFinalscore] = useState(null);
   const { profile, setProfile } = useContext<{ profile: any, setProfile: any }>(ScoreContext);
   const [progressPercent, setProgressPercent] = useState<any>(0);
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   useEffect(() => { 
     const scores = profile?.score; 
     if (scores && scores.length > 0) { 
@@ -67,17 +73,34 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     }
  
   }, []);
-  const handleOverView = () => {
-    // check a  condtion here 
-    if (currentScreenId === 2) {
-      setHomeLeaderBoard(currentScreenId);
-      setCurrentScreenId(15);
-      return;
-    } else {
-      setHomeLeaderBoard(currentScreenId);
-      setCurrentScreenId(4);
-      return;
-    }
+  // const handleOverView = () => {
+  //   // check a  condtion here 
+  //   if (currentScreenId === 2) {
+  //     setHomeLeaderBoard(currentScreenId);
+  //     setCurrentScreenId(15);
+  //     return;
+  //   } else {
+  //     setHomeLeaderBoard(currentScreenId);
+  //     setCurrentScreenId(4);
+  //     return;
+  //   }
+  //   };
+    const handleOverView = () => {
+      if (!isButtonDisabled) {
+        setIsButtonDisabled(true); // Disable the button
+        if (currentScreenId === 2 || currentScreenId === 15) {
+          setHomeLeaderBoard(currentScreenId);
+          setCurrentScreenId(15);
+        } else {
+          setHomeLeaderBoard(currentScreenId);
+          setCurrentScreenId(4);
+        }
+        
+        // Re-enable the button after a delay (e.g., 1 second)
+        setTimeout(() => {
+          setIsButtonDisabled(false);
+        }, 5000);
+      }
     };
   useEffect(() => {
     const progressResult = () => {
@@ -120,9 +143,31 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     progressResult();
   }, [data, currentScreenId, questState])
 
-  const handleMusicVolume = (vol: any) => {
-    setAudioObj((prev: any) => ({ ...prev, "volume": vol }));
-  }
+  // const handleMusicVolume = (vol: any) => {
+  //   setAudioObj((prev: any) => ({ ...prev, "volume": vol }));
+  // }
+  const handleMusicVolume = (sliderValue: number, type: string ) => {
+    if (!isNaN(sliderValue) && isFinite(sliderValue)) {
+      const newVolume = sliderValue / 100;
+  
+      setAudioObj((prev: any) => ({
+        ...prev,
+        type: type === EnumType.BGM ? EnumType.BGM : EnumType.VOICE, // Update type based on parameter
+        volume: newVolume.toString()
+      }));
+    }
+  };
+  useEffect(() => {
+    // Update preLogDatas with the new audio volume
+    const { type, volume } = audioObj;
+    const newAudioVolume = type === EnumType.BGM ? { bgVolume: volume } : { voVolume: volume };
+    setPreLogDatas((prev:any) => ({
+      ...prev,
+      audioVolumeValue: { ...prev.audioVolumeValue, ...newAudioVolume }
+    }));
+
+ 
+  }, [audioObj]);
 
   const totalPoints = useMemo(() => {
     let total: number = 0;
@@ -143,7 +188,6 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     return total;
   }, [profile.score, profile.replayScore, currentScreenId]);
 
-  console.log('current',currentScreenId)
   return (
     <Box className="top-menu-home-section">
       {dontShowTopMenu && !isSettingOpen ? (
@@ -303,6 +347,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                       height={'70%'}
                       position={'relative'}
                       zIndex={9999}
+                      pointerEvents={isButtonDisabled ? 'none' : 'auto'}
                     />
                   </Tooltip>
                   <Tooltip label="Settings"
@@ -364,7 +409,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
               src={preloadedAssets.SettingPad}
               className="setting-pad"
             />
-            <Box className="music-volume volumes">
+            {/* <Box className="music-volume volumes">
               <Slider
                 aria-label="slider-ex-4"
                 defaultValue={30}
@@ -410,6 +455,63 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                   height="15px"
                   borderRadius="80px"
                 >
+                  <Box position="relative">
+                    <Img w={'100%'} h={'auto'} src={preloadedAssets.VolumeTrack} alt="Volume Track" />
+                    <Box
+                      position="absolute"
+                      top="47%"
+                      left="45%"
+                      transform="translate(-50%, -50%)"
+                      width="86%"
+                    >
+                      <SliderFilledTrack className="filled-volume" bg="pink.500" />
+                    </Box>
+                  </Box>
+                </SliderTrack>
+                <SliderThumb boxSize={9} background={'transparent'}>
+                  <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
+                </SliderThumb>
+              </Slider>
+            </Box> */}
+             <Box className="music-volume volumes">
+              <Slider
+                aria-label="music-volume-slider"
+                // defaultValue={getPrevLogDatas?.audioVolumeValue?.bgVolume ? getPrevLogDatas?.audioVolumeValue?.bgVolume * 100 : 25}
+                // defaultValue={parseFloat(getPrevLogDatas.audioVolumeValue.bgVolume) * 100}
+                // defaultValue={parseFloat(getPrevLogDatas.audioVolumeValue.voVolume) * 100}
+                defaultValue={getPrevLogDatas?.audioVolumeValue?.bgVolume * 100 || 25}
+                onChangeEnd={(value) => handleMusicVolume(value, EnumType.BGM)}
+              >
+                <SliderTrack className="slider-track" height="15px" borderRadius="80px">
+                  <Box position="relative">
+                    <Img w={'100%'} h={'auto'} src={preloadedAssets.VolumeTrack} alt="Volume Track" />
+                    <Box
+                      position="absolute"
+                      top="47%"
+                      left="45%"
+                      transform="translate(-50%, -50%)"
+                      width="86%"
+                    >
+                      <SliderFilledTrack className="filled-volume" bg="pink.500" />
+                    </Box>
+                  </Box>
+                </SliderTrack>
+                <SliderThumb boxSize={10} background={'transparent'}>
+                  <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
+                </SliderThumb>
+              </Slider>
+            </Box>
+
+            <Box className="voice-volume volumes">
+              <Slider
+                aria-label="slider-ex-4"
+                // defaultValue={getPrevLogDatas?.audioVolumeValue?.voVolume ? getPrevLogDatas?.audioVolumeValue?.voVolume * 100 : 25}
+                //  defaultValue={parseFloat(getPrevLogDatas.audioVolumeValue.bgVolume) * 100}
+                // defaultValue={getPrevLogDatas?.audioVolumeValue?.bgVolume * 100 || 25}
+                 defaultValue={getPrevLogDatas?.audioVolumeValue?.voVolume * 100 || 25}
+                onChangeEnd={(value) => handleMusicVolume(value, EnumType.VOICE)}
+              >
+                <SliderTrack className="slider-track" height="15px" borderRadius="80px">
                   <Box position="relative">
                     <Img w={'100%'} h={'auto'} src={preloadedAssets.VolumeTrack} alt="Volume Track" />
                     <Box

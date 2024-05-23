@@ -50,7 +50,6 @@ const CharacterModal: React.FC<{
             const newMixer = new THREE.AnimationMixer(gltf.scene);
             mixer.current = newMixer;
             const animations = gltf.animations;
-            console.log('animations', animations);
             if (animations && animations.length > 0) {
               const syncAudioAndAnimationDuration = async (
                 audioDuration: number,

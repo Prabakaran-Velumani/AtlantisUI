@@ -84,7 +84,6 @@ if(formState?.name || formData?.gender || formData?.language){
   setPreLogDatas((prev:any) => ({...prev,previewProfile:{ ...formState,
     score:getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile.score : []}}))
 }
-console.log("FormState UseEffect")
 },[formState])
 
 
@@ -153,7 +152,6 @@ const handleProfileSubmit = () => {
     setIsOpenCustomModal(false);
   }
 };
-console.log('isOpenCustomModal',isOpenCustomModal)
   return (
     isOpenCustomModal && (
       <Box id="container" className="Play-station">

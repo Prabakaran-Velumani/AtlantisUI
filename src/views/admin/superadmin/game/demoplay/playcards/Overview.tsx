@@ -37,7 +37,6 @@ const ThankYou: React.FC<{
   backGroundImg,
 }) => {
   const handleHome = () => {
-    // console.log('homeLeaderBoard', homeLeaderBoard);
     if (homeLeaderBoard) {
       setCurrentScreenId(homeLeaderBoard);
     }

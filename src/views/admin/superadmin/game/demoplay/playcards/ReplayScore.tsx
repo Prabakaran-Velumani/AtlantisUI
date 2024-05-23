@@ -23,6 +23,8 @@ type replayScoreProps = {
   gameinfodata:any;
   profileData:any;
   setPreLogDatas:any;
+  replayNextHandler :any;
+  data:any;
 }
 
 const ReplayScore: React.FC<replayScoreProps> = ({
@@ -44,15 +46,13 @@ const ReplayScore: React.FC<replayScoreProps> = ({
   gameInfoquest,
   gameinfodata,
   profileData,
-  setPreLogDatas
+  setPreLogDatas,
+  replayNextHandler ,
+  data,
 }) => {
   const [replayMessage, setReplayMessage] = useState<string>(null);
   const playerInfo = useContext(ProfileContext);
   const { profile, setProfile } = useContext(ScoreContext);
-console.log("profile", profile);
-console.log("playerInfo", playerInfo);
-console.log("profilescore", profilescore);
-console.log("getPrevLogDatas", getPrevLogDatas);
 
   useEffect(() => {
     const currentQuestMasterData = gameInfo?.gameQuest[profile?.currentQuest - 1];
@@ -78,25 +78,35 @@ console.log("getPrevLogDatas", getPrevLogDatas);
       if (getPrevLogDatas.nevigatedSeq) {
         const getnevigatedSeq = getPrevLogDatas.nevigatedSeq;
         const convertArray = Object.keys(getnevigatedSeq);
-        const getLastquest = convertArray[convertArray.length - 1];
-        const findseq = getnevigatedSeq[getLastquest];
-        const getLastSeq = findseq[getnevigatedSeq[getLastquest].length - 1];
-        // const lastActiveBlockSeq = getPrevLogDatas.lastActiveBlockSeq;
+        // const getLastquest = convertArray[convertArray.length - 1];
+        // const findseq = getnevigatedSeq[getLastquest];
+        // const getLastSeq = findseq[getnevigatedSeq[getLastquest].length - 1];
+        const LastPreviousActiveBlock =getPrevLogDatas.lastActiveBlockSeq;
+       const lastActiveBlock =Object.keys(getPrevLogDatas.lastActiveBlockSeq);
+       const lastActivityquest = lastActiveBlock[0];
+       const findActiveBlockId = LastPreviousActiveBlock[lastActivityquest];
+       const lenCompleteQuest = Object.keys(getnevigatedSeq);
+       let checkcompleteQuest =lenCompleteQuest;
+       
+       if(Object.keys(gameInfo.blocks).length !==convertArray.length)
+         {
+           checkcompleteQuest.push((convertArray.length + 1).toString());
+         }
         let SetLastSeqData: any;
-        for (const key in gameInfo.blocks[getLastquest]) {
-          const data = gameInfo.blocks[getLastquest][key];
-          if (data.blockPrimarySequence === getLastSeq) {
+        for (const key in gameInfo.blocks[lastActivityquest]) {
+          const data = gameInfo.blocks[lastActivityquest][key];
+          if (data.blockId === findActiveBlockId[0]) {
             SetLastSeqData = data;
             break;
           }
 
         }
-        if(convertArray.length > 0)
+        if(convertArray.length > 0 &&  getPrevLogDatas.previewProfile.score.length > 0)
           {
             setProfile((prev: any) => ({
               ...prev,
               currentQuest: SetLastSeqData.blockQuestNo,
-              completedLevels: convertArray,
+              completedLevels: checkcompleteQuest,
               score: getPrevLogDatas.previewProfile?.score ? getPrevLogDatas.previewProfile.score : [],
             }));
           }
@@ -115,11 +125,10 @@ console.log("getPrevLogDatas", getPrevLogDatas);
           'Interaction'
         ) {
           const optionsFiltered = [];
-          const primarySequence = getLastSeq;
-  
+          const primarySequence = findActiveBlockId[0];
           for (const option of gameInfoquest) {
             if (profileData?.Audiogetlanguage.length > 0) {
-              if (option?.qpSequence === primarySequence) {
+              if (option?.qpQuestionId === primarySequence) {
                 const profilesetlan = profileData?.Audiogetlanguage.find(
                   (key: any) => key?.textId === option.qpOptionId,
                 );
@@ -129,14 +138,13 @@ console.log("getPrevLogDatas", getPrevLogDatas);
                     ...option,
                     qpOptionText: profilesetlan.content,
                   };
-                  console.log('languagecont',languagecont);
                   optionsFiltered.push(languagecont);
                 } else {
                   optionsFiltered.push(option);
                 }
               }
             } else {
-              if (option?.qpSequence === primarySequence) {
+              if (option?.qpQuestionId === primarySequence) {
                 optionsFiltered.push(option);
               }
             }
@@ -164,12 +172,19 @@ console.log("getPrevLogDatas", getPrevLogDatas);
       if (getPrevLogDatas.nevigatedSeq) {
         const getnevigatedSeq = getPrevLogDatas.nevigatedSeq;
         const convertArray = Object.keys(getnevigatedSeq);
-        if (convertArray.length > 0) {
+        const lenCompleteQuest = Object.keys(getnevigatedSeq);
+        let checkcompleteQuest =lenCompleteQuest;
+        
+        if(Object.keys(gameInfo).length !==convertArray.length)
+          {
+            checkcompleteQuest.push((convertArray.length + 1).toString());
+          }
+        if (convertArray.length > 0 &&  getPrevLogDatas.previewProfile.score.length > 0) {
           setProfile((prev: any) => ({
             ...prev,
             currentQuest: parseInt(convertArray[convertArray.length -1 ]),
-            completedLevels: convertArray,
-            score: getPrevLogDatas.previewProfile?.score ? getPrevLogDatas.previewProfile?.score : [],
+            completedLevels: checkcompleteQuest,
+            score: getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile?.score : [],
           }));
           if(getPrevLogDatas.previewProfile?.score?.length > 0)
             {
@@ -204,10 +219,11 @@ console.log("getPrevLogDatas", getPrevLogDatas);
         setPreLogDatas((prev: any) => ({
           ...prev,
           nevigatedSeq: [],
-          screenIdSeq: [],
+          screenIdSeq: [1],
           lastActiveBlockSeq: '',
           selectedOptions: '',
         }));
+        setCurrentScreenId(1);
         setReplayIsOpen(false);
         return false;
       }
@@ -358,12 +374,22 @@ console.log("getPrevLogDatas", getPrevLogDatas);
                   <Text className='replay_game_text'>
                     {replayMessage}
                   </Text>
+
                   <Box display={'flex'} justifyContent={'center'} w={'100%'}>
-                      <Button
+                    {replayState === "mandatoryReplay" ?<><Button
                         background={'transparent !important'}
                       >
                         <Img src={preloadedAssets?.OkayBtn} onClick={()=>{setReplayIsOpen(false);handleReplayButtonClick()}} className='replay_game_btn' />
-                      </Button>
+                      </Button></> : replayState === "optionalReplay" ? <><Button
+                        background={'transparent !important'}
+                      >
+                        <Img src={preloadedAssets?.OkayBtn} onClick={()=>{setReplayIsOpen(false);handleReplayButtonClick()}} className='replay_game_btn' />
+                      </Button><Button
+                        background={'transparent !important'}
+                      >
+                        <Img src={preloadedAssets?.next} onClick={()=>{setReplayIsOpen(false);replayNextHandler(data)}} className='replay_game_btn' />
+                      </Button></> : null}
+                      
                     </Box>
                 </Box>
               </Box>

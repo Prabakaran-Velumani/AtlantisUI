@@ -68,7 +68,7 @@ const ChapterPage: React.FC<{
   profileData,
   gameOptionSuffled,
   setRepeatPrevOption,
-  setSelectedOption
+  setSelectedOption,
 }) => {
   const [questScores, setQuestScores] = useState(null);
 
@@ -260,7 +260,6 @@ if(scores!==undefined)
                     ...option,
                     qpOptionText: profilesetlan.content,
                   };
-                  console.log('languagecont',languagecont);
                   optionsFiltered.push(languagecont);
                 } else {
                   optionsFiltered.push(option);
@@ -314,7 +313,6 @@ if(scores!==undefined)
   };
 
 
-console.log('profile',profile.playerGrandTotal?.questScores)
   
   return (
     <>
@@ -403,7 +401,7 @@ console.log('profile',profile.playerGrandTotal?.questScores)
                                     className="amount-score"
                                     textAlign={'center'}
                                   >
-                                    {profile.playerGrandTotal ? profile.playerGrandTotal?.questScores[it] ?  profile.playerGrandTotal?.questScores[it] : 0: 0}/{questScores &&  questScores[it] !==null && questScores[it] > 0  ? questScores[it] : 0}{' '}
+                                    {profile.playerGrandTotal ? profile.playerGrandTotal?.questScores[it] ?  profile.playerGrandTotal?.questScores[it] : 0: 0}/{questScores &&  questScores[it] !==null && questScores[it] > 0  ? questScores[it] : 0 }{' '}
                                    
                                   </Text>
                                   <Img h={'25px'} w={'auto'} src={preloadedAssets.MoneyIcon} zIndex={5}/>

@@ -98,10 +98,8 @@ const styleflex = {};
 //   try { 
 //     const apiResponse = await updatePreviewLogs(playerInputs);
 //     if(apiResponse.status == 200){
-//       console.log("Player's manual Feedback updated");
 //     }
 //     else{
-//       console.log("failed - ",apiResponse?.message);
 //     }
 //     // if (apiResponse) {
 //     //   setPlayerInputs((prevState) => ({
@@ -111,7 +109,6 @@ const styleflex = {};
 //     // }
 //   } catch (error) {
 //     console.error('Error during API call kishore:', error);
-//     console.log("playerInputs",playerInputs);
 
 //   }
 // };

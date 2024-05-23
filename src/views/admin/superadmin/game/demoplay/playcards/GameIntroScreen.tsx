@@ -22,11 +22,9 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
 
   const Handlemodel = () => {
     if (getPrevLogDatas.playerType === 'creator') {
-      console.log('hellow')
       const getplayerid = getPrevLogDatas.playerId;
       if (getplayerid === gameInfo.gameCreatedUserId) {
         const getLastModifiedid = getPrevLogDatas.lastModifiedBlockSeq;
-        console.log('getPrevLogDatas.playerType',getLastModifiedid)
         if (getLastModifiedid !== null) {
           setLastModified(true);
           setModelControl(true);
@@ -34,7 +32,6 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
         }
         else {
           if (getPrevLogDatas.screenIdSeq.length > 0) {
-            console.log('getPrevLogDatas.playerType',getPrevLogDatas.playerType)
             setModelControl(true);
             return false;
           }
@@ -50,7 +47,6 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
       else
       {
         if (getPrevLogDatas.screenIdSeq.length > 0) {
-          console.log('getPrevLogDatas.playerType',getPrevLogDatas.playerType)
           setModelControl(true);
           return false;
         }
@@ -66,7 +62,6 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
     else
     {
       if (getPrevLogDatas.screenIdSeq.length > 0) {
-        console.log('getPrevLogDatas.playerType',getPrevLogDatas.playerType)
         setModelControl(true);
         return false;
       }
@@ -82,11 +77,9 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
   
     // const screens1 = [1];
     // if (!screens1.includes(currentScreenId)) {
-    //   console.log('getPrevLogDatas.screenIdSeq ***', getPrevLogDatas.screenIdSeq);
     //   if (getPrevLogDatas.screenIdSeq != null) {
     //     const myArray = JSON.parse(getPrevLogDatas.screenIdSeq);
     //     const lastValue = myArray[myArray.length - 1];
-    //     console.log('getPrevLogDatas&&&', lastValue, '...', JSON.parse(getPrevLogDatas.screenIdSeq));
     //     setModelControl(true);
     //     return false;
     //   }

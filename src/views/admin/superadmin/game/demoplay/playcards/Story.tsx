@@ -122,39 +122,43 @@ const Story: React.FC<{
           setShowNote(false);
           interactionNext === true && setInteractionNext(false);
         }, 1000);
-        SetAudioOptions({ qpOptionId: '' });
+        if(type==='Note' || type==='Dialog' || type=== 'Interaction')
+          {
+
+            SetAudioOptions({ qpOptionId: '' });
+          }
         const currentQuest = data
           ? parseInt(data?.blockPrimarySequence.split('.')[0])
           : null;
-
-        if (getPrevLogDatas.nevigatedSeq[currentQuest]) {
-          if (
-            !getPrevLogDatas.nevigatedSeq[currentQuest].includes(
-              data.blockPrimarySequence,
-            )
-          ) {
+         
+          if (getPrevLogDatas.nevigatedSeq[currentQuest]) {
+            if (
+              !getPrevLogDatas.nevigatedSeq[currentQuest].includes(
+                data.blockPrimarySequence,
+              )
+            ) {
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                lastActiveBlockSeq:{[currentQuest]:[data.blockId]},
+                nevigatedSeq: {
+                  ...prev.nevigatedSeq,
+                  [currentQuest]: [
+                    ...(prev.nevigatedSeq[currentQuest] || []),
+                    data.blockPrimarySequence,
+                  ],
+                },
+              }));
+            }
+          } else {
             setPreLogDatas((prev: any) => ({
               ...prev,
-              lastActiveBlockSeq: {currentQuest:data.blockId},
+              lastActiveBlockSeq:{ [currentQuest]:[data.blockId]},
               nevigatedSeq: {
                 ...prev.nevigatedSeq,
-                [currentQuest]: [
-                  ...(prev.nevigatedSeq[currentQuest] || []),
-                  data.blockPrimarySequence,
-                ],
+                [currentQuest]: [data.blockPrimarySequence],
               },
             }));
           }
-        } else {
-          setPreLogDatas((prev: any) => ({
-            ...prev,
-            lastActiveBlockSeq: {currentQuest:data.blockId},
-            nevigatedSeq: {
-              ...prev.nevigatedSeq,
-              [currentQuest]: [data.blockPrimarySequence],
-            },
-          }));
-        }
 
         if (gameInfo.hasOwnProperty('blocks')) {
           let previousPrimarySeq = navTrack[navTrack.length - 1];
@@ -188,14 +192,22 @@ const Story: React.FC<{
     useEffect(() => {
       const fetchData = async () => {
         if (profileData?.Audiogetlanguage.length !== 0) {
+          // setAudioObj({
+          //   url: '',
+          //   type: EnumType.VOICE,
+          //   volume: '0.5',
+          //   loop: false, // Voice doesn't loop
+          //   autoplay: true, // Autoplay is disabled
+          // });
+          setAudioObj((prev:any)=>({
+            ...prev,
+            url: '',
+            type: EnumType.VOICE,
+            // volume: '0.5',
+            loop: false, // Voice doesn't loop
+            autoplay: true, // Autoplay is disabled
+          }));
           if (AudioOptions.qpOptionId === '') {
-            setAudioObj({
-              url: '',
-              type: EnumType.VOICE,
-              volume: '0.5',
-              loop: false, // Voice doesn't loop
-              autoplay: true, // Autoplay is disabled
-            });
             const GetblocktextAudioFiltered =
               profileData?.Audiogetlanguage.filter(
                 (key: any) => key?.textId === data?.blockId,
@@ -208,28 +220,33 @@ const Story: React.FC<{
                 (item: any) => item.content,
               );
               setContentByLanguage(Filteredcontent);
-              console.log('FilteredFieldName', FilteredFieldName);
               if (FilteredFieldName[0] === 'blockText') {
                 const audioUrls = GetblocktextAudioFiltered.map((item: any) =>
                   item.audioUrls !== ''
                     ? JSON.parse(item.audioUrls)[0]?.audioUrl
                     : item.audioUrls,
                 );
-                console.log('audioUrls', audioUrls);
                 try {
                   const normalizedPath = audioUrls[0];
                   if (normalizedPath !== '') {
                     const fullUrl = `${API_SERVER}${normalizedPath}`;
                     const responseblockText = await fetch(fullUrl);
-                    console.log('responseblockText', responseblockText);
                     if (responseblockText.ok) {
-                      setAudioObj({
+                      setAudioObj((prev :any)=>({
+                        ...prev,
                         url: fullUrl,
                         type: EnumType.VOICE,
-                        volume: '0.5',
+                        // volume: '0.5',
                         loop: false, // Voice doesn't loop
                         autoplay: true, // Autoplay is disabled
-                      });
+                      }));
+                      // setAudioObj({
+                      //   url: fullUrl,
+                      //   type: EnumType.VOICE,
+                      //   // volume: '0.5',
+                      //   loop: false, // Voice doesn't loop
+                      //   autoplay: true, // Autoplay is disabled
+                      // });
                     }
                   }
                   // Handle the response
@@ -240,13 +257,6 @@ const Story: React.FC<{
             }
           } else {
             if (AudioOptions.qpOptionId) {
-              setAudioObj({
-                url: '',
-                type: EnumType.VOICE,
-                volume: '0.5',
-                loop: false, // Voice doesn't loop
-                autoplay: true, // Autoplay is disabled
-              });
               const optionAudioFiltered = profileData?.Audiogetlanguage.filter(
                 (key: any) => key?.textId === AudioOptions?.qpOptionId,
               );
@@ -275,13 +285,21 @@ const Story: React.FC<{
                         const qpOptionTextUrl = `${API_SERVER}${normalizedPath}`;
                         const responseqpOptionText = await fetch(qpOptionTextUrl);
                         if (responseqpOptionText.ok) {
-                          setAudioObj({
+                          setAudioObj((prev:any)=>({
+                            ...prev,
                             url: qpOptionTextUrl,
                             type: EnumType.VOICE,
-                            volume: '0.5',
+                            // volume: '0.5',
                             loop: false,
                             autoplay: true,
-                          });
+                          }));
+                          // setAudioObj({
+                          //   url: qpOptionTextUrl,
+                          //   type: EnumType.VOICE,
+                          //   // volume: '0.5',
+                          //   loop: false,
+                          //   autoplay: true,
+                          // });
                         }
                         /*
                           else {
@@ -314,6 +332,16 @@ const Story: React.FC<{
                       console.error('Error fetching data:', error);
                     }
                   }
+                  else{
+                    setAudioObj((prev :any)=>({
+                      ...prev,
+                      url: '',
+                      type: EnumType.VOICE,
+                      // volume: '0.5',
+                      loop: false,
+                      autoplay: true,
+                    }));
+                  }
                 }
                 if (responseAudioFiltered.length > 0) {
                   const QResTaudioUrls = responseAudioFiltered.map((item: any) =>
@@ -331,23 +359,89 @@ const Story: React.FC<{
                           qRespOptionTextUrl,
                         );
                         if (responseqpOptionText.ok) {
-                          setAudioObj({
+                          setAudioObj((prev :any)=>({
+                            ...prev,
                             url: qRespOptionTextUrl,
                             type: EnumType.VOICE,
-                            volume: '0.5',
+                            // volume: '0.5',
                             loop: false,
                             autoplay: true,
-                          });
+                          }));
+                          // setAudioObj({
+                          //   url: qRespOptionTextUrl,
+                          //   type: EnumType.VOICE,
+                          //   // volume: '0.5',
+                          //   loop: false,
+                          //   autoplay: true,
+                          // });
                         }
+                        else{
+                          setAudioObj((prev :any)=>({
+                            ...prev,
+                            url: '',
+                            type: EnumType.VOICE,
+                            // volume: '0.5',
+                            loop: false,
+                            autoplay: true,
+                          }));
+                        }
+                      }else{
+                        setAudioObj((prev :any)=>({
+                          ...prev,
+                          url: '',
+                          type: EnumType.VOICE,
+                          // volume: '0.5',
+                          loop: false,
+                          autoplay: true,
+                        }));
                       }
                     } catch (error) {
                       console.error('Error fetching data:', error);
                     }
+                  }else{
+                    setAudioObj((prev :any)=>({
+                      ...prev,
+                      url: '',
+                      type: EnumType.VOICE,
+                      // volume: '0.5',
+                      loop: false,
+                      autoplay: true,
+                    }));
                   }
                 }
+                else{
+                  setAudioObj((prev :any)=>({
+                    ...prev,
+                    url: '',
+                    type: EnumType.VOICE,
+                    // volume: '0.5',
+                    loop: false,
+                    autoplay: true,
+                  }));
+                }
               }
+            }else{
+              setAudioObj((prev :any)=>({
+                ...prev,
+                url: '',
+                type: EnumType.VOICE,
+                // volume: '0.5',
+                loop: false,
+                autoplay: true,
+              }));
             }
           }
+        }
+        else
+        {
+          setAudioObj((prev:any)=>({
+            ...prev,
+            url: '',
+            type: EnumType.VOICE,
+            // volume: '0.5',
+            loop: true, // Voice doesn't loop
+            autoplay: true,
+          }));
         }
       };
       fetchData();
@@ -958,7 +1052,6 @@ const Player: React.FC = () => {
   const [isHovered, setIsHovered] = useState<any>(false);
 
   const mixer = new THREE.AnimationMixer(gltf.scene);
-  console.log('*****gltf', gltf.animations);
   const action = mixer.clipAction(gltf.animations[12]);
 
   useFrame((state, delta) => {

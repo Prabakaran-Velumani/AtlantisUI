@@ -254,7 +254,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [isPrevNavigation, setIsPrevNavigation] = useState(false);
   const [replayIsOpen, setReplayIsOpen] = useState(false);
   const gameScore = useContext(ScoreContext);
-  console.log('profile?.score.length',profile?.score?.length,'..',profile);
   const scoreComp = profile?.score!==undefined ? profile?.score?.length > 0 ? profile?.score[0]?.score : 0 : 0;
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [questWiseMaxTotal, setQuestWiseMaxTotal] =
@@ -499,7 +498,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           });
 
           // const total = scores.reduce((acc: any, row: any) => {
-          //   console.log('acc',acc,'..',row)
           //   const quest = profile?.currentQuest;
           //   if (row.quest == quest) {
           //     return acc + row.score;
@@ -646,13 +644,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         screens.includes(currentScreenId) &&
         ![2, 10, 0].includes(currentScreenId)
       ) {
-        setAudioObj({
+        setAudioObj((prev)=>({
+          ...prev,
           url: gameInfo?.bgMusic,
           type: EnumType.BGM,
-          volume: '0.5',
+          // volume: '0.5',
           loop: true, // Voice doesn't loop
           autoplay: true,
-        });
+        }));
       }
     }
   }, [gameInfo]);
@@ -676,13 +675,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     //   autoplay: true,
     // });
     if (![2, 10, 0].includes(currentScreenId)) {
-      setAudioObj({
+      setAudioObj((prev)=>({
+        ...prev,
         url: audio,
         type: EnumType.BGM,
-        volume: '0.5',
+        // volume: '0.5',
         loop: true, // Voice doesn't loop
         autoplay: true,
-      });
+      }));
     }
   }, [audio]);
 
@@ -692,7 +692,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       audio: any,
     ) => {
       if (audioRef.current) {
-        audioRef.current.src = audio.url;
+
+        // audioRef.current.src = audio.url;
+        if (audioRef.current.src !== audio.url) {
+          audioRef.current.src = audio.url;
+        }
         audioRef.current.volume = parseFloat(audio.volume);
         audioRef.current.loop = audio.loop;
         audioRef.current.autoplay = audio.autoplay;
@@ -929,12 +933,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         )
         .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-      // console.log('navPrevBlock',navPrevBlock,'...',newTrackSequence,'...',navTrack,'...',navPrevBlock.length,'..',current)
     if (navPrevBlock.length > 0) {
-// console.log('navPrevBlock[0].blockLeadTo == current.blockSecondaryId',parseInt(navPrevBlock[0].blockLeadTo) == current.blockSecondaryId)
       if (navPrevBlock[0].blockSecondaryId === current.blockSecondaryId) {
         navTrack.pop();
-        console.log('... 3',current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,'...',current,'..',gameInfo?.blocks[profile?.currentQuest]['1'])
         const lastPrevNavTrack = navTrack[navTrack.length - 1];
         const prevousBlock = current
           ? Object.keys(demoBlocks[quest] || {})
@@ -943,7 +944,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             )
             .map((key: any) => demoBlocks[quest]?.[key])
           : [];
-          // console.log('lastPrevNavTrack',lastPrevNavTrack,'....',prevousBlock);
         if (prevousBlock.length !== 0) {
           setType(prevousBlock[0]?.blockChoosen);
           setData(prevousBlock[0]);
@@ -994,7 +994,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             ...prev,
             lastBlockModifiedDate: null,
             lastModifiedBlockSeq: null,
-            lastActiveBlockSeq: prevousBlock[0].blockId,
+            lastActiveBlockSeq: {[prevousBlock[0].blockQuestNo]:[prevousBlock[0].blockId]},
             nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
           }));
           return false;
@@ -1025,7 +1025,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         }
         getSeqprevious.sort((a: any, b: any) => a - b);
         const currentIndex = getSeqprevious.indexOf(current.blockPrimarySequence);
-        console.log('...',current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,'...',current,'..',gameInfo?.blocks[profile?.currentQuest]['1'])
         if (current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence) {
           if (currentIndex !== -1) {
             if (currentIndex > 0) {
@@ -1088,7 +1087,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   ...prev,
                   lastBlockModifiedDate: null,
                   lastModifiedBlockSeq: null,
-                  lastActiveBlockSeq: prevousBlock[0].blockId,
+                  lastActiveBlockSeq:{[prevousBlock[0].blockQuestNo]: [prevousBlock[0].blockId]},
                   nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
                 }));
                 return false;
@@ -1103,7 +1102,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   ...prev,
                   lastBlockModifiedDate: null,
                   lastModifiedBlockSeq: null,
-                  lastActiveBlockSeq: current.blockId,
+                  lastActiveBlockSeq:{[current.blockQuestNo] :[current.blockId]},
                   nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
                 }));
                 return false;
@@ -1183,7 +1182,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   ...prev,
                   lastBlockModifiedDate: null,
                   lastModifiedBlockSeq: null,
-                  lastActiveBlockSeq: prevousBlock[0].blockId,
+                  lastActiveBlockSeq: {[prevousBlock[0].blockQuestNo]:[prevousBlock[0].blockId]},
                   nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
                 }));
                 return false;
@@ -1198,7 +1197,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   ...prev,
                   lastBlockModifiedDate: null,
                   lastModifiedBlockSeq: null,
-                  lastActiveBlockSeq: current.blockId,
+                  lastActiveBlockSeq:{[current.blockQuestNo]:[current.blockId]},
                   nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
                 }));
                 return false;
@@ -1262,7 +1261,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 ...prev,
                 lastBlockModifiedDate: null,
                 lastModifiedBlockSeq: null,
-                lastActiveBlockSeq: prevousBlock[0].blockId,
+                lastActiveBlockSeq: {[prevousBlock[0].blockQuestNo]:[prevousBlock[0].blockId]},
                 nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
               }));
               return false;
@@ -1277,7 +1276,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 ...prev,
                 lastBlockModifiedDate: null,
                 lastModifiedBlockSeq: null,
-                lastActiveBlockSeq: current.blockId,
+                lastActiveBlockSeq: {[current.blockQuestNo]:[current.blockId]},
                 nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
               }));
               return false;
@@ -1318,7 +1317,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
       getSeqprevious.sort((a: any, b: any) => a - b);
       const currentIndex = getSeqprevious.indexOf(current.blockPrimarySequence);
-      console.log('... 1',current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,'...',current,'..',gameInfo?.blocks[profile?.currentQuest]['1']);
       if (current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence) {
         if (currentIndex !== -1) {
           if (currentIndex > 0) {
@@ -1381,7 +1379,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 ...prev,
                 lastBlockModifiedDate: null,
                 lastModifiedBlockSeq: null,
-                lastActiveBlockSeq: prevousBlock[0].blockId,
+                lastActiveBlockSeq: {[prevousBlock[0].blockQuestNo]:[prevousBlock[0].blockId]},
                 nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
               }));
               return false;
@@ -1396,7 +1394,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 ...prev,
                 lastBlockModifiedDate: null,
                 lastModifiedBlockSeq: null,
-                lastActiveBlockSeq: current.blockId,
+                lastActiveBlockSeq: {[current.blockQuestNo]:[current.blockId]},
                 nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
               }));
               return false;
@@ -1461,7 +1459,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 ...prev,
                 lastBlockModifiedDate: null,
                 lastModifiedBlockSeq: null,
-                lastActiveBlockSeq: prevousBlock[0].blockId,
+                lastActiveBlockSeq: {[prevousBlock[0].blockQuestNo]:[prevousBlock[0].blockId]},
                 nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
               }));
               return false;
@@ -1476,7 +1474,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 ...prev,
                 lastBlockModifiedDate: null,
                 lastModifiedBlockSeq: null,
-                lastActiveBlockSeq: current.blockId,
+                lastActiveBlockSeq: {[current.blockQuestNo]:[current.blockId]},
                 nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
               }));
               return false;
@@ -1541,7 +1539,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               ...prev,
               lastBlockModifiedDate: null,
               lastModifiedBlockSeq: null,
-              lastActiveBlockSeq: prevousBlock[0].blockId,
+              lastActiveBlockSeq: {[prevousBlock[0].blockQuestNo]:[prevousBlock[0].blockId]},
               nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
             }));
             return false;
@@ -1556,7 +1554,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               ...prev,
               lastBlockModifiedDate: null,
               lastModifiedBlockSeq: null,
-              lastActiveBlockSeq: current.blockId,
+              lastActiveBlockSeq:{[current.blockQuestNo]:[current.blockId]},
               nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
             }));
             return false;
@@ -1578,6 +1576,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
 
   }
+
 
 
   const checkAndUpdateScores = async () => {
@@ -1650,6 +1649,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const getData = (next: any) => {
+   
     if (navi === '' || navi !== 'Repeat Question') {
       setRepeatPrevOption([]);
     }
@@ -1676,7 +1676,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
     SetPreviouseStored(next);
-
+    setPreLogDatas((prev: any) => ({
+      ...prev,
+      lastBlockModifiedDate: null,
+      lastModifiedBlockSeq: null,
+    }));
     // setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
@@ -1701,7 +1705,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       previousBlock: next?.blockPrimarySequence,
       currentBlock: nextSeq,
     }));
-    const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    const nextLevel =  currentQuest != null ? String(currentQuest + 1) : null
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
@@ -2019,7 +2023,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             if (demoBlocks.hasOwnProperty(nextLevel)) {
               setProfile((prev: any) => {
                 const data = { ...prev };
-                if (!profile.completedLevels.includes(currentQuest)) {
+                if (!profile.completedLevels.includes(String(currentQuest))) {
                   data.completedLevels = [...data.completedLevels, nextLevel];
                 }
 
@@ -2041,7 +2045,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
-              if (!profile.completedLevels.includes(currentQuest)) {
+              if (!profile.completedLevels.includes(String(currentQuest))) {
                 data.completedLevels = [...data.completedLevels, nextLevel];
               }
               return data;
@@ -2251,7 +2255,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             if (demoBlocks.hasOwnProperty(nextLevel)) {
               setProfile((prev: any) => {
                 const data = { ...prev };
-                if (!profile.completedLevels.includes(currentQuest)) {
+                if (!profile.completedLevels.includes(String(currentQuest))) {
                   data.completedLevels = [...data.completedLevels, nextLevel];
                 }
 
@@ -2283,7 +2287,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
-              if (!profile.completedLevels.includes(currentQuest)) {
+              if (!profile.completedLevels.includes(String(currentQuest))) {
                 data.completedLevels = [...data.completedLevels, nextLevel];
               }
 
@@ -2377,9 +2381,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return false;
             } else {
               if (demoBlocks.hasOwnProperty(nextLevel)) {
+               
                 setProfile((prev: any) => {
                   const data = { ...prev };
-                  if (!profile.completedLevels.includes(currentQuest)) {
+                  if (!profile.completedLevels.includes(String(currentQuest))) {
                     data.completedLevels = [...data.completedLevels, nextLevel];
                   }
 
@@ -2410,8 +2415,18 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               // return false;
             }
           } else {
-            if (data && type) {
+            if (demoBlocks.hasOwnProperty(nextLevel)) {
               setFeedbackNavigateNext(false);
+              setProfile((prev: any) => {
+                const data = { ...prev };
+                if (!profile.completedLevels.includes(String(currentQuest))) {
+                  data.completedLevels = [...data.completedLevels, nextLevel];
+                }
+      
+                return data;
+              });
+              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+              setData(demoBlocks[nextLevel]['1']);
               setCurrentScreenId(13);
               return false;
             } else {
@@ -2436,7 +2451,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       } else if (demoBlocks.hasOwnProperty(nextLevel)) {
         setProfile((prev: any) => {
           const data = { ...prev };
-          if (!profile.completedLevels.includes(currentQuest)) {
+          if (!profile.completedLevels.includes(String(currentQuest))) {
             data.completedLevels = [...data.completedLevels, nextLevel];
           }
 
@@ -2502,7 +2517,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         //   return false;
         // }
         if (feedbackList.length !== 0) {
-          getFeedbackData(data);
+          getFeedbackData();
           setFeedbackNavigateNext(false);
           setCurrentScreenId(14); //Navigate to together all feedback
           return false;
@@ -2662,7 +2677,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
-              if (!profile.completedLevels.includes(currentQuest)) {
+              if (!profile.completedLevels.includes(String(currentQuest))) {
                 data.completedLevels = [...data.completedLevels, nextLevel];
               }
               return data;
@@ -2682,7 +2697,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         if (demoBlocks.hasOwnProperty(nextLevel)) {
           setProfile((prev: any) => {
             const data = { ...prev };
-            if (!profile.completedLevels.includes(currentQuest)) {
+            if (!profile.completedLevels.includes(String(currentQuest))) {
               data.completedLevels = [...data.completedLevels, nextLevel];
             }
             return data;
@@ -2886,7 +2901,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             if (demoBlocks.hasOwnProperty(nextLevel)) {
               setProfile((prev: any) => {
                 const data = { ...prev };
-                if (!profile.completedLevels.includes(currentQuest)) {
+                if (!profile.completedLevels.includes(String(currentQuest))) {
                   data.completedLevels = [...data.completedLevels, nextLevel];
                 }
                 return data;
@@ -2907,7 +2922,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
-              if (!profile.completedLevels.includes(currentQuest)) {
+              if (!profile.completedLevels.includes(String(currentQuest))) {
                 data.completedLevels = [...data.completedLevels, nextLevel];
               }
               return data;
@@ -3144,13 +3159,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ![2, 10, 0].includes(currentScreenId) &&
       backGroundBgmscreens.includes(currentScreenId)
     ) {
-      setAudioObj({
+      setAudioObj((prev)=>({
+        ...prev,
         url: audio,
         type: EnumType.BGM,
-        volume: '0.5',
+        // volume: '0.5',
         loop: true, // Voice doesn't loop
         autoplay: true,
-      });
+      }));
       if (backgroundBgmRef.current) {
         try {
           backgroundBgmRef.current.play().catch((error) => {
@@ -3452,43 +3468,43 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setData(gameInfo?.blocks[profile?.currentQuest]['1']);
     setCurrentScreenId(2);
   };
-  const replayNextHandler = (data: any) => {
-    // const currentQuest = data
-    //   ? parseInt(data?.blockPrimarySequence.split('.')[0])
-    //   : null;
-    // const nextLevel = currentQuest != null ? currentQuest === Object.keys(demoBlocks).length ? currentQuest : String(currentQuest + 1) : null;
-    // if (demoBlocks.hasOwnProperty(nextLevel)) {
-    //   setProfile((prev: any) => {
-    //     const data = { ...prev };
-    //     if (!profile.completedLevels.includes(currentQuest)) {
-    //       data.completedLevels = [...data.completedLevels, nextLevel];
-    //     }
+  const replayNextHandler = () => {
+    const currentQuest = data
+      ? parseInt(data?.blockPrimarySequence.split('.')[0])
+      : null;
+      // currentQuest === Object.keys(demoBlocks).length ? currentQuest :
+    const nextLevel = currentQuest != null ?  String(currentQuest + 1) : null;
+    if (demoBlocks.hasOwnProperty(nextLevel)) {
+      setProfile((prev: any) => {
+        const data = { ...prev };
+        if (!profile.completedLevels.includes(String(currentQuest))) {
+          data.completedLevels = [...data.completedLevels, nextLevel];
+        }
 
-    //     return data;
-    //   });
-    //   setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-    //   setData(demoBlocks[nextLevel]['1']);
-    //   setCurrentScreenId(13);
-    //   return false;
-    // } else {
-    //   if (
-    //     gameInfo.gameData?.gameIsShowReflectionScreen !== 'false' &&
-    //     gameInfo?.reflectionQuestions.length > 0
-    //   ) {
-    //     setCurrentScreenId(3); //Navigate to Reflection screen
-    //     return false;
-    //   } else if (gameInfo.gameData?.gameIsShowTakeaway !== 'false') {
-    //     setCurrentScreenId(7); //Navigate to Takeaway screen
-    //     return false;
-    //   } else {
-    //     setType(null);
-    //     setData(null);
-    //     setCurrentScreenId(5); //Navigate to Thank you screen
-    //     return false;
-    //   }
-    // }
-    setCurrentScreenId(4);
-    return false;
+        return data;
+      });
+      setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+      setData(demoBlocks[nextLevel]['1']);
+      setCurrentScreenId(13);
+      return false;
+    } else {
+      if (
+        gameInfo.gameData?.gameIsShowReflectionScreen !== 'false' &&
+        gameInfo?.reflectionQuestions.length > 0
+      ) {
+        setCurrentScreenId(3); //Navigate to Reflection screen
+        return false;
+      } else if (gameInfo.gameData?.gameIsShowTakeaway !== 'false') {
+        setCurrentScreenId(7); //Navigate to Takeaway screen
+        return false;
+      } else {
+        setType(null);
+        setData(null);
+        setCurrentScreenId(5); //Navigate to Thank you screen
+        return false;
+      }
+    }
+    
   };
 
   const handleAudioError = () => {
@@ -3568,11 +3584,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
   useEffect(() => {
     if (FeedbackNavigatenext === true) {
+      setisScreenshot(false);
       getData(data);
     }
   }, [FeedbackNavigatenext]);
 
-  const getFeedbackData = (getdata: any) => {
+  const getFeedbackData = () => {
     setisScreenshot(true);
     const groupedFeedback: { [key: string]: any[] } = {};
     feedbackList.forEach((feedback) => {
@@ -3697,6 +3714,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         lastBlockModifiedDate: getPrevLogDatas.lastBlockModifiedDate,
         lastModifiedBlockSeq: getPrevLogDatas.lastModifiedBlockSeq,
         playerInputs: getPrevLogDatas.playerInputs,
+        audioVolumeValue:getPrevLogDatas.audioVolumeValue
       };
 
       const previousDataString = JSON.stringify(data);
@@ -3779,7 +3797,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   /** replay prompt functions for replay point & previous navigation to chapter selection screen*/
 
   const handleReplayButtonClick = () => {
-    console.log('handleReplayButtonClick()');
     setType(demoBlocks[profile?.currentQuest]['1']?.blockChoosen);
     setData(demoBlocks[profile?.currentQuest]['1']);
     if (
@@ -3850,6 +3867,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               audioObj={audioObj}
               questState={questState}
               setIsOpenCustomModal={setIsOpenCustomModal}
+              EnumType={EnumType}
+              getPrevLogDatas={getPrevLogDatas}
+              setPreLogDatas={setPreLogDatas}
             />
           </Box>
           <Flex
@@ -3910,7 +3930,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 gameinfodata={gameInfo.gameData.gameShuffle}
                 profileData={profileData} 
                 setQuestState={setQuestState} setOptions={setOptions}    
-                setPreLogDatas={setPreLogDatas}         
+                setPreLogDatas={setPreLogDatas}      
+                replayNextHandler ={replayNextHandler}
+                data={data}  
                  />
             )}
             {(() => {
@@ -4180,6 +4202,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                               setData={setData}
                               type={type}
                               questWiseMaxTotal={questWiseMaxTotal} /// Pass questWiseMaxTotal as a prop
+                              gameInfoTotalScore = {gameInfo?.completionQuestOptions}
                             />
                           </Box>
                         </Box>

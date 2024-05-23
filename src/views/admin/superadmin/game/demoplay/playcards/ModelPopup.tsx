@@ -84,12 +84,20 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
       if (getPrevLogDatas.nevigatedSeq) {
         const getnevigatedSeq = getPrevLogDatas.nevigatedSeq;
         const convertArray = Object.keys(getnevigatedSeq);
-        if (convertArray.length > 0) {
+        const lenCompleteQuest = Object.keys(getnevigatedSeq);
+          let checkcompleteQuest =lenCompleteQuest;
+          
+          if(Object.keys(gameInfo).length !==convertArray.length)
+            {
+              checkcompleteQuest.push((convertArray.length + 1).toString());
+            }
+            
+        if (convertArray.length > 0 &&  getPrevLogDatas.previewProfile.score.length > 0) {
           setProfile((prev: any) => ({
             ...prev,
             currentQuest: filteredData.blockQuestNo,
-            completedLevels: convertArray,
-            score: getPrevLogDatas.previewProfile?.score,
+            completedLevels: checkcompleteQuest,
+            score: getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile?.score : [],
           }));
           if(getPrevLogDatas.previewProfile?.score?.length > 0)
             {
@@ -106,13 +114,13 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
             ...prev,
             currentQuest: filteredData.blockQuestNo,
             completedLevels: ['1'],
-            score: getPrevLogDatas.previewProfile?.score,
+            score: getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile?.score : [],
           }));
           if(getPrevLogDatas.previewProfile?.score?.length > 0)
             {
               setQuestState((prevquestdataList: any) => ({
                 ...prevquestdataList,
-                [filteredData.blockQuestNo]: 'completed',
+                [1]: 'Started',
               }));
             }
         }
@@ -139,7 +147,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
                   ...option,
                   qpOptionText: profilesetlan.content,
                 };
-                console.log('languagecont',languagecont);
                 optionsFiltered.push(languagecont);
               } else {
                 optionsFiltered.push(option);
@@ -177,12 +184,20 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
         if (getPrevLogDatas.nevigatedSeq) {
           const getnevigatedSeq = getPrevLogDatas.nevigatedSeq;
           const convertArray = Object.keys(getnevigatedSeq);
-          if (convertArray.length > 0) {
+          const lenCompleteQuest = Object.keys(getnevigatedSeq);
+          let checkcompleteQuest =lenCompleteQuest;
+          
+          if(Object.keys(gameInfo).length !==convertArray.length)
+            {
+              checkcompleteQuest.push((convertArray.length + 1).toString());
+            }
+            
+          if (convertArray.length > 0 &&  getPrevLogDatas.previewProfile.score.length > 0) {
             setProfile((prev: any) => ({
               ...prev,
               currentQuest: parseInt(convertArray[convertArray.length -1 ]),
-              completedLevels: convertArray,
-              score: getPrevLogDatas.previewProfile?.score,
+              completedLevels: checkcompleteQuest,
+              score: getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile?.score : [],
             }));
             if(getPrevLogDatas.previewProfile?.score?.length > 0)
               {
@@ -191,22 +206,18 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
                   [parseInt(convertArray[convertArray.length -1 ])]: 'completed',
                 }));
               }
-              else{
-                    setQuestState((prevquestdataList: any) => ({
-                      ...prevquestdataList,
-                      [parseInt(convertArray[convertArray.length -1 ])]: 'Started',
-                    }));
-                  
-              }
           }
           else
           {
             setProfile((prev: any) => ({
               ...prev,
               currentQuest: 1,
-              completedLevels: ['1']
+              completedLevels: ['1'],
             })); 
-                  
+            setQuestState((prevquestdataList: any) => ({
+              ...prevquestdataList,
+              [1]: 'Started',
+            }));  
               
           }
         }
@@ -217,7 +228,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
           setReplayState('Prompt');
           setModelControl(false);
           setReplayIsOpen(true);
-          console.log('replayState');
           return false;
         }
         else {
@@ -263,6 +273,14 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
         const getLastquest = convertArray[convertArray.length - 1];
         const findseq = getnevigatedSeq[getLastquest];
         const getLastSeq = findseq[getnevigatedSeq[getLastquest].length - 1];
+        const lenCompleteQuest = Object.keys(getnevigatedSeq);
+          let checkcompleteQuest =lenCompleteQuest;
+          
+          if(Object.keys(gameInfo).length !==convertArray.length)
+            {
+              checkcompleteQuest.push((convertArray.length + 1).toString());
+            }
+            
         let SetLastSeqData: any;
         for (const key in gameInfo[getLastquest]) {
           const data = gameInfo[getLastquest][key];
@@ -272,15 +290,13 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
           }
 
         }
-        // console.log('score',getPrevLogDatas.previewProfile,'....',getPrevLogDatas.previewProfile?.score) ;//{"score":[{"seqId":"1.1","score":100,"quest":1,"scoreEarnedDate":"15-05-2024"}],"name":"Book","language":0,"gender":"Male"}
-        // return;
-        if(convertArray.length > 0)
+        if(convertArray.length > 0 &&  getPrevLogDatas.previewProfile.score.length > 0) 
           {
             setProfile((prev: any) => ({
               ...prev,
               currentQuest: SetLastSeqData.blockQuestNo,
-              completedLevels: convertArray,
-              score: getPrevLogDatas.previewProfile?.score,
+              completedLevels: checkcompleteQuest,
+              score: getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile?.score : [],
             }));
             if(getPrevLogDatas.previewProfile?.score?.length > 0)
               {
@@ -295,15 +311,13 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
               ...prev,
               currentQuest: SetLastSeqData.blockQuestNo,
               completedLevels: ['1'],
-              score: getPrevLogDatas.previewProfile?.score,
+              score: getPrevLogDatas.previewProfile?.score ?getPrevLogDatas.previewProfile?.score: [],
             }));
-            if(getPrevLogDatas.previewProfile?.score?.length > 0)
-              {
-                setQuestState((prevquestdataList: any) => ({
+            setQuestState((prevquestdataList: any) => ({
                   ...prevquestdataList,
-                  [SetLastSeqData.blockQuestNo]: 'completed',
+                  [1]: 'Started',
                 }));
-              }
+              
           }
         setData(SetLastSeqData);
         setType(SetLastSeqData.blockChoosen);
@@ -326,7 +340,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
                     ...option,
                     qpOptionText: profilesetlan.content,
                   };
-                  console.log('languagecont',languagecont);
                   optionsFiltered.push(languagecont);
                 } else {
                   optionsFiltered.push(option);
@@ -360,12 +373,20 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
       if (getPrevLogDatas.nevigatedSeq) {
         const getnevigatedSeq = getPrevLogDatas.nevigatedSeq;
         const convertArray = Object.keys(getnevigatedSeq);
-        if (convertArray.length > 0) {
+        const lenCompleteQuest = Object.keys(getnevigatedSeq);
+          let checkcompleteQuest =lenCompleteQuest;
+          
+          if(Object.keys(gameInfo).length !==convertArray.length)
+            {
+              checkcompleteQuest.push((convertArray.length + 1).toString());
+            }
+            
+        if (convertArray.length > 0 &&  getPrevLogDatas.previewProfile.score.length > 0) {
           setProfile((prev: any) => ({
             ...prev,
             currentQuest: parseInt(convertArray[convertArray.length -1 ]),
-            completedLevels: convertArray,
-            score: getPrevLogDatas.previewProfile?.score,
+            completedLevels: checkcompleteQuest,
+            score: getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile?.score : [],
           }));
           if(getPrevLogDatas.previewProfile?.score?.length > 0)
             {
@@ -381,6 +402,10 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
             ...prev,
             currentQuest: 1,
             completedLevels: ['1'],
+          }));
+          setQuestState((prevquestdataList: any) => ({
+            ...prevquestdataList,
+            [1]: 'Started',
           }));
         }
       }

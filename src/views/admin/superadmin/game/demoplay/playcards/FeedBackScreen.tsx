@@ -178,7 +178,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                         <Img
                           src={preloadedAssets.right}
                           className={'interaction_button'}
-                          onClick={() => getFeedbackData(data)}
+                          onClick={() => getFeedbackData()}
                         />
                       </Box>
                     </Box>

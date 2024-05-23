@@ -1482,7 +1482,7 @@ setlanguageCount(CountResult?.data?.count)
                         
                           if (!input[inputkey]?.navigateObjects[alp.option]) {
                             toast({
-                              title: `${alp.option} is Empty On This Sequence ${key.id} `,
+                              title: `This ${alp.option}  is Empty On This Sequence ${key.id} `,
                               status: 'error',
                               duration: 3000,
                               isClosable: true,
@@ -1493,7 +1493,7 @@ setlanguageCount(CountResult?.data?.count)
                       }
                       else {
                         toast({
-                          title: `This ${alp.option} is Empty On This Sequence ${key.id} `,
+                          title: `This ${alp.option}  Navigate is Empty On This Sequence ${key.id} `,
                           status: 'error',
                           duration: 3000,
                           isClosable: true,

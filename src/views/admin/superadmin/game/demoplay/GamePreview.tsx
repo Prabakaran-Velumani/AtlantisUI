@@ -90,7 +90,8 @@ const GamePreview = () => {
     lastModifiedBlockSeq: '',
     lastBlockModifiedDate:'',
     updatedAt:'',
-    playerInputs:''
+    playerInputs:'',
+    audioVolumeValue:{},
   });
   //End
   const user: any = JSON.parse(localStorage.getItem('user'));
@@ -99,11 +100,11 @@ const GamePreview = () => {
     try {
       if (gameInfo?.gameId) {
         const data = {
-          gameId: gameInfo?.gameId ?? null,
+          previewGameId: gameInfo?.gameId ?? null,
           playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
-          type: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null
+          playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null
         };
-        if (data?.gameId === null && data?.playerId === null && data?.type === null) {
+        if (data?.previewGameId === null && data?.playerId === null && data?.playerType === null) {
           console.error('User data not available.');
           return false;
         }
@@ -116,14 +117,14 @@ const GamePreview = () => {
           previewGameId: updatePreviewLogsResponse.data.previewGameId,
           nevigatedSeq: updatePreviewLogsResponse.data.nevigatedSeq ? JSON.parse(updatePreviewLogsResponse.data.nevigatedSeq): [],
           screenIdSeq: updatePreviewLogsResponse.data.screenIdSeq ? JSON.parse(updatePreviewLogsResponse.data.screenIdSeq) :[],
-          lastActiveBlockSeq: updatePreviewLogsResponse.data.lastActiveBlockSeq,
+          lastActiveBlockSeq: updatePreviewLogsResponse.data.lastActiveBlockSeq ? JSON.parse(updatePreviewLogsResponse.data.lastActiveBlockSeq) :[],
           selectedOptions: updatePreviewLogsResponse.data.selectedOptions ? JSON.parse(updatePreviewLogsResponse.data.selectedOptions) :[],
           previewProfile: updatePreviewLogsResponse.data.previewProfile ? JSON.parse(updatePreviewLogsResponse.data.previewProfile) : [],
           lastModifiedBlockSeq: updatePreviewLogsResponse.data.lastModifiedBlockSeq,
           lastBlockModifiedDate:updatePreviewLogsResponse.data.lastBlockModifiedDate,
           updatedAt:updatePreviewLogsResponse.data.updatedAt,
           playerInputs: updatePreviewLogsResponse.data.playerInputs? JSON.parse(updatePreviewLogsResponse.data.playerInputs) : [],
-          
+          audioVolumeValue: updatePreviewLogsResponse.data.audioVolumeValue ? JSON.parse(updatePreviewLogsResponse.data.audioVolumeValue): null
         });
         return updatePreviewLogsResponse;
 
@@ -256,32 +257,35 @@ const GamePreview = () => {
       }, {});
       return transformedArray;
     };
-    const completionOptions = gameQuest.map((qst: any, i: number) => {
+    const completionScreenData = info?.data;
+    const completionOptions = Object.entries(completionScreenData).map((qst: any, i: number) => {
       const item = {
-        gameId: qst.gameId,
-        questNo: qst.gameQuestNo,
-        gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
-        gameMinScore: qst.gameMinScore,
-        gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
-        gameDistinctionScore: qst.gameDistinctionScore,
-        gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
-        gameIsSetBadge: qst.gameIsSetBadge,
-        gameBadge: qst.gameBadge,
-        gameBadgeName: qst.gameBadgeName,
-        gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
-        gameAwardBadgeScore: qst.gameAwardBadgeScore,
-        gameScreenTitle: qst.gameScreenTitle,
-        gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage,
+        gameTotalScore:qst[1].gameTotalScore,
+        gameId: qst[1].gameId,
+        questNo: qst[1].gameQuestNo,
+        gameIsSetMinPassScore: qst[1].gameIsSetMinPassScore,
+        gameIsSetDistinctionScore: qst[1].gameIsSetDistinctionScore,
+        gameDistinctionScore: qst[1].gameDistinctionScore,
+        gameIsSetSkillWiseScore: qst[1].gameIsSetSkillWiseScore,
+        gameIsSetBadge: qst[1].gameIsSetBadge,
+        gameBadge: qst[1].gameBadge,
+        gameBadgeName: qst[1].gameBadgeName,
+        gameIsSetCriteriaForBadge: qst[1].gameIsSetCriteriaForBadge,
+        gameAwardBadgeScore: qst[1].gameAwardBadgeScore,
+        gameScreenTitle: qst[1].gameScreenTitle,
+        gameIsSetCongratsSingleMessage:
+          qst[1].gameIsSetCongratsSingleMessage,
         gameIsSetCongratsScoreWiseMessage:
-          qst.gameIsSetCongratsScoreWiseMessage,
-        gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
-        gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage,
+          qst[1].gameIsSetCongratsScoreWiseMessage,
+        gameCompletedCongratsMessage: qst[1].gameCompletedCongratsMessage,
+        gameMinimumScoreCongratsMessage:
+          qst[1].gameMinimumScoreCongratsMessage,
         gameaboveMinimumScoreCongratsMessage:
-          qst.gameaboveMinimumScoreCongratsMessage,
+          qst[1].gameaboveMinimumScoreCongratsMessage,
         gameLessthanDistinctionScoreCongratsMessage:
-          qst.gameLessthanDistinctionScoreCongratsMessage,
+          qst[1].gameLessthanDistinctionScoreCongratsMessage,
         gameAboveDistinctionScoreCongratsMessage:
-          qst.gameAboveDistinctionScoreCongratsMessage,
+          qst[1].gameAboveDistinctionScoreCongratsMessage,
       };
       return item;
     });
@@ -369,32 +373,35 @@ const GamePreview = () => {
       return transformedArray;
     };
 
-    const completionOptions = gameQuest.map((qst: any, i: number) => {
+    const completionScreenData = info?.data;
+    const completionOptions = Object.entries(completionScreenData).map((qst: any, i: number) => {
       const item = {
-        gameId: qst.gameId,
-        questNo: qst.gameQuestNo,
-        gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
-        gameMinScore: qst.gameMinScore,
-        gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
-        gameDistinctionScore: qst.gameDistinctionScore,
-        gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
-        gameIsSetBadge: qst.gameIsSetBadge,
-        gameBadge: qst.gameBadge,
-        gameBadgeName: qst.gameBadgeName,
-        gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
-        gameAwardBadgeScore: qst.gameAwardBadgeScore,
-        gameScreenTitle: qst.gameScreenTitle,
-        gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage,
+        gameTotalScore:qst[1].gameTotalScore,
+        gameId: qst[1].gameId,
+        questNo: qst[1].gameQuestNo,
+        gameIsSetMinPassScore: qst[1].gameIsSetMinPassScore,
+        gameIsSetDistinctionScore: qst[1].gameIsSetDistinctionScore,
+        gameDistinctionScore: qst[1].gameDistinctionScore,
+        gameIsSetSkillWiseScore: qst[1].gameIsSetSkillWiseScore,
+        gameIsSetBadge: qst[1].gameIsSetBadge,
+        gameBadge: qst[1].gameBadge,
+        gameBadgeName: qst[1].gameBadgeName,
+        gameIsSetCriteriaForBadge: qst[1].gameIsSetCriteriaForBadge,
+        gameAwardBadgeScore: qst[1].gameAwardBadgeScore,
+        gameScreenTitle: qst[1].gameScreenTitle,
+        gameIsSetCongratsSingleMessage:
+          qst[1].gameIsSetCongratsSingleMessage,
         gameIsSetCongratsScoreWiseMessage:
-          qst.gameIsSetCongratsScoreWiseMessage,
-        gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
-        gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage,
+          qst[1].gameIsSetCongratsScoreWiseMessage,
+        gameCompletedCongratsMessage: qst[1].gameCompletedCongratsMessage,
+        gameMinimumScoreCongratsMessage:
+          qst[1].gameMinimumScoreCongratsMessage,
         gameaboveMinimumScoreCongratsMessage:
-          qst.gameaboveMinimumScoreCongratsMessage,
+          qst[1].gameaboveMinimumScoreCongratsMessage,
         gameLessthanDistinctionScoreCongratsMessage:
-          qst.gameLessthanDistinctionScoreCongratsMessage,
+          qst[1].gameLessthanDistinctionScoreCongratsMessage,
         gameAboveDistinctionScoreCongratsMessage:
-          qst.gameAboveDistinctionScoreCongratsMessage,
+          qst[1].gameAboveDistinctionScoreCongratsMessage,
       };
       return item;
     });
