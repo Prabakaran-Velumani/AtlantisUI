@@ -4292,7 +4292,23 @@ bottom: 38px;
 font-family: 'AtlantisContent';
 }
 
+.feedback_unknown{
+  width: auto;
+  height: 5vh;
+}
+.exlamatry{
+  position : absolute;
+   color: #fff; 
+   font-size : 3vh; 
+  right: 25px;
+}
 @media screen and (orientation: portrait) {
+  .feedback_unknown{
+    height: 5vw;
+  }
+  .exlamatry{
+     font-size : 3vw; 
+  }
   .story_options_area{
     height: 35vw;
   }
