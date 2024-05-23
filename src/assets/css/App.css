@@ -6061,12 +6061,14 @@ font-family: 'AtlantisContent';
   height: 100px;
   width: auto;    
   background-position-x: -2px;
-  background-position-y: calc(100px - 40px);  
-  background-position: center;
+  /* background-position-y: calc(100px - 40px);  default*/
+  background-position-y: 23px;  /* based on js func */
+  /* background-position: center; */
   background-size: 35px;      
 }
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .black-scrollbar::-webkit-scrollbar-thumb {
-  background: black;
+  /* background: black; */
+  background-position-y: 149px;   /* based on js func */
 }
 
 
