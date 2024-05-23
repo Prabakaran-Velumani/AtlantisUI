@@ -67,13 +67,18 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     }
  
   }, []);
-
   const handleOverView = () => {
-
-    setHomeLeaderBoard(currentScreenId);
-    setCurrentScreenId(15); //overview Screen
-  };
-
+    // check a  condtion here 
+    if (currentScreenId === 2) {
+      setHomeLeaderBoard(currentScreenId);
+      setCurrentScreenId(15);
+      return;
+    } else {
+      setHomeLeaderBoard(currentScreenId);
+      setCurrentScreenId(4);
+      return;
+    }
+    };
   useEffect(() => {
     const progressResult = () => {
       //calculate Progress based on screen, Need to show different progress for current screen is in story, progress of the current quest, unless  show the entire game progress
@@ -125,7 +130,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
       const scoreArray = questState[parseInt(profile?.currentQuest)] == 'Started' ? profile?.score : profile?.replayScore;
       if (scoreArray?.length > 0) {
         total = scoreArray.reduce((acc: number, cur: any) => {
-          if (cur.quest === profile.currentQuest) {
+          if (cur.quest == profile.currentQuest) {
             return acc + cur.score;
           } else {
             return acc;
@@ -136,7 +141,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
       total = profile.score!==undefined ? profile.score.reduce((acc: number, cur: any) => acc + cur.score, 0) : 0;
     }
     return total;
-  }, [profile?.score, profile?.replayScore, currentScreenId]);
+  }, [profile.score, profile.replayScore, currentScreenId]);
 
   console.log('current',currentScreenId)
   return (
@@ -364,8 +369,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                 aria-label="slider-ex-4"
                 defaultValue={30}
                 name="musicVolume"
-                onChangeEnd={(val) => { handleMusicVolume(val) }}
-                value={audioObj.volume ?? 0}
+                // onChangeEnd={(val) => { handleMusicVolume(val) }}
+                // value={audioObj.volume ?? 0}
               >
                 <SliderTrack
                   className="slider-track"
@@ -382,16 +387,16 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                       width="86%"
                     >
                       <SliderFilledTrack className="filled-volume" bg="pink.500" />
+                      <SliderThumb
+                        boxSize={10}
+                        background={'transparent'}                        
+                      // left={'calc(100% - 30%)'}
+                      >
+                        <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
+                      </SliderThumb>
                     </Box>
                   </Box>
-                </SliderTrack>
-                <SliderThumb
-                  boxSize={10}
-                  background={'transparent'}
-                // left={'calc(100% - 30%)'}
-                >
-                  <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
-                </SliderThumb>
+                </SliderTrack>                
               </Slider>
             </Box>
             <Box className="voice-volume volumes">
@@ -415,12 +420,13 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                       width="86%"
                     >
                       <SliderFilledTrack className="filled-volume" bg="pink.500" />
+                      <SliderThumb boxSize={10} background={'transparent'} >
+                        <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
+                      </SliderThumb>
                     </Box>
                   </Box>
                 </SliderTrack>
-                <SliderThumb boxSize={9} background={'transparent'}>
-                  <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
-                </SliderThumb>
+                
               </Slider>
             </Box>
             <Box className="btns">

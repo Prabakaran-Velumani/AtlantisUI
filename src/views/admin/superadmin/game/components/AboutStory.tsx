@@ -47,7 +47,6 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
 
       },
     ]);
-
   const [storyLine, setStoryline] = useState<String>();
   const [title, setTitle] = useState<String>();
   const [nonplayerName, setNonplayerName] = useState<String>();
@@ -237,7 +236,6 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
   const selectHandler = (selectedOption: any) => {
     // Check if selectedOption is null (i.e., when clearing the selection)
     const categoryId = selectedOption ? selectedOption.value : ""; // Assuming value is the property holding the category ID
-
     setFormData((prev: any) => ({
       ...prev,
       gameCategoryId: categoryId,
@@ -255,7 +253,6 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
       }));
     }
   };
-
 
   // const [selectedCategories, setSelectedCategories] = useState([]);
 

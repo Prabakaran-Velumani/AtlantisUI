@@ -257,7 +257,7 @@ const LeaderBoard: React.FC<{
           <Box className="Leaderboard-screen">
             <Img src={imageSrc} className="leaderboard-img" />
             <Text className='title'>LeaderBoard</Text>
-            <Box className="content-box">
+            <Box className="content-box" id='leaderboard_id'>
               <Box className="table-heading"
                 fontFamily={'AtlantisText'}
                 display={'flex'}
@@ -348,7 +348,7 @@ const LeaderBoard: React.FC<{
                     key={index}
                     _hover={{
                       filter: 'grayscale(50%)',
-                      transform: 'scale(1.001)',
+                      transform: 'scale(1.0)',
                       transition: 'transform 0.3s ease-in-out',
                       opacity: '0.8',
                     }}

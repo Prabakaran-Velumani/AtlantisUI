@@ -79,18 +79,16 @@ interface Badge {
   gasAssetName: string;
 }
 
-const TyContentScreen: React.FC<{
-  formData: any; imageSrc: any; preview: any, preloadedAssets?: any,
-  ThankyouFeedback?: any
-}> = ({
+const TyContentScreen: React.FC<{ formData: any; imageSrc: any; preview: any, preloadedAssets?: any,
+  ThankyouFeedback?:any }> = ({
   formData,
   imageSrc,
   preview,
   preloadedAssets,
   ThankyouFeedback,
 }) => {
-    const renderContentTy = () => {
-      const linkRegex = /(https?:\/\/[^\s]+)/g;
+  const renderContentTy = () => {
+    const linkRegex = /(https?:\/\/[^\s]+)/g;
 
       const parts = formData.gameThankYouMessage?.split(linkRegex);
 

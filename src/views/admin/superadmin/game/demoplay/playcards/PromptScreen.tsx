@@ -81,7 +81,8 @@ useEffect(()=>{
 useEffect(()=>{
 if(formState?.name || formData?.gender || formData?.language){
   setProfileData((prev:any) => ({ ...prev, ...formState}));
-  setPreLogDatas((prev:any) => ({...prev,previewProfile:{ ...formState}}))
+  setPreLogDatas((prev:any) => ({...prev,previewProfile:{ ...formState,
+    score:getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile.score : []}}))
 }
 console.log("FormState UseEffect")
 },[formState])
@@ -145,7 +146,10 @@ const handleProfileSubmit = () => {
 
   if (!isErrorPresent) {
     setProfileData((prev: any) => ({ ...prev, ...formState }));
-    setPreLogDatas((prev: any) => ({ ...prev, previewProfile: { ...prev.previewProfile, ...formState } }));
+    setPreLogDatas((prev:any) => ({...prev,previewProfile:{...formState,
+      score:getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile.score : []}}))
+  
+    // setPreLogDatas((prev: any) => ({ ...prev, previewProfile: { ...prev.previewProfile, ...formState } }));
     setIsOpenCustomModal(false);
   }
 };
@@ -207,7 +211,7 @@ console.log('isOpenCustomModal',isOpenCustomModal)
                   </Box>
                 </Box>
               </Box>
-              <Box position={'relative'} mb={'50px'}>
+              <Box position={'relative'} mb={'10%'}>
                 <Text
                   onClick={() => setIsGenderSelected(!isGenderSelected)}
                   className={'choosen_lang'}
@@ -265,7 +269,7 @@ console.log('isOpenCustomModal',isOpenCustomModal)
                   )}
                 </Box>
               </Box>
-              <Box position={'relative'} mb={'100px'}>
+              <Box position={'relative'} mb={'20%'}>
                 <Text
                   onClick={() => setIsLanguageSelected(!isLanguageSelected)}
                   className={'choosen_lang'}

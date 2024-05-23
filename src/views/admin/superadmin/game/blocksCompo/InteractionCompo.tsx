@@ -13,7 +13,7 @@ import {
   Button,
   Icon,
   List,
-  ListItem,
+  ListItem, 
   Img,
   Avatar,
   Input,
@@ -655,16 +655,16 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
       }
 
     }
-  };
+};
 
-  const handleRight = () => {
-    const container = document.getElementById(seq.id);
+const handleRight = () => {
+  const container = document.getElementById(seq.id);
 
     if (container) {
       container.scrollLeft += 700;
       setShowcount(container.scrollLeft + 300)
       if (container.scrollLeft > 0) {
-        setShowLeftButton(true);
+          setShowLeftButton(true);
       }
 
     }

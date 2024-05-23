@@ -85,7 +85,6 @@ console.log("getPrevLogDatas", getPrevLogDatas);
         let SetLastSeqData: any;
         for (const key in gameInfo.blocks[getLastquest]) {
           const data = gameInfo.blocks[getLastquest][key];
-          console.log('data.blockId',data.blockId)
           if (data.blockPrimarySequence === getLastSeq) {
             SetLastSeqData = data;
             break;
@@ -98,7 +97,7 @@ console.log("getPrevLogDatas", getPrevLogDatas);
               ...prev,
               currentQuest: SetLastSeqData.blockQuestNo,
               completedLevels: convertArray,
-              score: getPrevLogDatas.previewProfile?.score,
+              score: getPrevLogDatas.previewProfile?.score ? getPrevLogDatas.previewProfile.score : [],
             }));
           }
           else{
@@ -106,7 +105,7 @@ console.log("getPrevLogDatas", getPrevLogDatas);
               ...prev,
               currentQuest: SetLastSeqData.blockQuestNo,
               completedLevels: ['1'],
-              score: getPrevLogDatas.previewProfile?.score,
+              score:getPrevLogDatas.previewProfile?.score ?  getPrevLogDatas.previewProfile.score : [],
             }));
           }
         setData(SetLastSeqData);
@@ -170,7 +169,7 @@ console.log("getPrevLogDatas", getPrevLogDatas);
             ...prev,
             currentQuest: parseInt(convertArray[convertArray.length -1 ]),
             completedLevels: convertArray,
-            score: getPrevLogDatas.previewProfile?.score,
+            score: getPrevLogDatas.previewProfile?.score ? getPrevLogDatas.previewProfile?.score : [],
           }));
           if(getPrevLogDatas.previewProfile?.score?.length > 0)
             {

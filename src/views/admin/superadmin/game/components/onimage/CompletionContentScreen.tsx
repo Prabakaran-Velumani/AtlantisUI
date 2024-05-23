@@ -63,48 +63,50 @@ const CompletionContentScreen: React.FC<{
       console.log('compliData ...', compliData);
     }, [compliData]);
 
-    return (
-      <>
-        {imageSrc && preview ? (
-          <>
-            <Box className="comple-screen">
-              <Img src={imageSrc} className="bg-img" />
-              <Box className="title">
-                <Text fontFamily={'AtlantisText'} textAlign={'center'}>
-                  {compliData[CompKeyCount]?.gameScreenTitle}
-                </Text>
-              </Box>
-              <Box className='content-box'>
-                <Box className="congratulations">
-                  <Box className="content" mt="0px">
+      
 
-                    {/* {compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false' ? (
+  return (
+    <>
+      {imageSrc && preview ? (
+        <>
+          <Box className="comple-screen">
+            <Img src={imageSrc} className="bg-img" />          
+            <Box className="title">
+              <Text fontFamily={'AtlantisText'} textAlign={'center'}>
+                {compliData[CompKeyCount]?.gameScreenTitle}
+              </Text>
+            </Box>
+            <Box className='content-box'>
+              <Box className="congratulations">
+                <Box className="content" mt="0px">
+                  
+                {/* {compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false' ? (
                   <>{compliData[CompKeyCount]?.gameCompletedCongratsMessage}</>
                 ): <></>}  */}
-                    {/* {(compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') ? ( */}
-                    {((compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' || compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === undefined) && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') ? (
-                      <>{compliData[CompKeyCount]?.gameCompletedCongratsMessage || "Congratulations! You have Completed..."}</>
-                    ) : <></>}
-                    {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false' ? (
-                      <>{compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage}</>
-                    ) : <></>}
-                    {/* {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' ? (
+    {/* {(compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') ? ( */}
+    {((compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'true' || compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === undefined ) && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage === 'false' && compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'false') || (compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false') ? (
+                <>{compliData[CompKeyCount]?.gameCompletedCongratsMessage || "Congratulations! You have Completed..."}</>
+                ): <></>} 
+    {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'false' ? (
+                  <>{compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage}</>
+                ): <></>} 
+    {/* {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' ? (
                   <>{compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage} {compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage === '' || compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage === '' ? '' : '&'} {compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage}</>
                 ): <></>}  */}
-                    {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' ? (
-                      <>{compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage} </>
-                    ) : <></>}
-                    {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' ? (
-                      <>{compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage}</>
-                    ) : <></>}
+                {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' ? (
+                  <>{compliData[CompKeyCount]?.gameAboveDistinctionScoreCongratsMessage} </>
+                ): <></>} 
+    {compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage === 'true' && compliData[CompKeyCount]?.gameIsSetMinPassScore === 'true' && compliData[CompKeyCount]?.gameIsSetDistinctionScore === 'false' ? (
+                  <>{compliData[CompKeyCount]?.gameaboveMinimumScoreCongratsMessage}</>
+                ): <></>} 
 
 
 
-                    {compliData[CompKeyCount]?.gameCompletedCongratsMessage === '' && (
-                      <><div style={{ height: '100px' }}></div></>
-                    )}
-                    {/* {compliData[CompKeyCount]?.gameCompletedCongratsMessage} */}
-                    {/* {
+              {compliData[CompKeyCount]?.gameCompletedCongratsMessage === '' && (
+                  <><div style={{height:'100px'}}></div></>
+                )} 
+                {/* {compliData[CompKeyCount]?.gameCompletedCongratsMessage} */}
+                  {/* {
                   compliData[CompKeyCount]?.gameIsSetCongratsSingleMessage !=
                     true &&
                   compliData[CompKeyCount]?.gameIsSetCongratsScoreWiseMessage !=

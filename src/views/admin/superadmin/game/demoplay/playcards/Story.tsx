@@ -135,7 +135,7 @@ const Story: React.FC<{
           ) {
             setPreLogDatas((prev: any) => ({
               ...prev,
-              lastActiveBlockSeq: data.blockId,
+              lastActiveBlockSeq: {currentQuest:data.blockId},
               nevigatedSeq: {
                 ...prev.nevigatedSeq,
                 [currentQuest]: [
@@ -148,7 +148,7 @@ const Story: React.FC<{
         } else {
           setPreLogDatas((prev: any) => ({
             ...prev,
-            lastActiveBlockSeq: data.blockId,
+            lastActiveBlockSeq: {currentQuest:data.blockId},
             nevigatedSeq: {
               ...prev.nevigatedSeq,
               [currentQuest]: [data.blockPrimarySequence],
@@ -369,34 +369,33 @@ const Story: React.FC<{
 
       if (questState[profile?.currentQuest] === 'Started') {
         setProfile((prev: any) => {
-          const { seqId, score: newScore } = score !== null ? score : 0;
-          // if (prev?.score !== undefined) {
-          const index = prev?.score?.findIndex((item: any) => item.seqId === seqId);
-          if (index !== -1) {
-            const updatedScore = [...prev.score];
-            updatedScore[index] = { ...updatedScore[index], score: newScore };
-            return { ...prev, score: updatedScore };
-          } else {
-            const newScoreArray = [
-              ...prev.score,
-              {
-                seqId: seqId,
-                score: newScore,
-                quest: parseInt(seqId.split('.')[0]),
-                scoreEarnedDate: currentDate,
-              },
-            ];
+          const { seqId, score: newScore } = score;
+            const index = prev.score.findIndex((item: any) => item.seqId === seqId);
+            if (index !== -1) {
+              const updatedScore = [...prev.score];
+              updatedScore[index] = { ...updatedScore[index], score: newScore };
+              return { ...prev, score: updatedScore };
+            } 
+          else {
+              const newScoreArray = [
+                ...prev.score,
+                {
+                  seqId: seqId,
+                  score: newScore,
+                  quest: parseInt(seqId.split('.')[0]),
+                  scoreEarnedDate: currentDate,
+                },
+              ];
 
-            return { ...prev, score: newScoreArray };
-          }
-          // }
+              return { ...prev, score: newScoreArray };
+            }
+         
 
         });
       } else {
         // update the replayScore when a player want to replay. Scores were hanlded seperatly, after Quest completion, if the calculated total score is lesser than replay score total then replace the score by replayscore, other wise score not changed, then reset the replayscore to {}
         setProfile((prev: any) => {
-          const { seqId, score: newScore } = score !== null ? score : 0;
-          if (prev?.replayScore !== undefined) {
+          const { seqId, score: newScore } = score;
             const index = prev.replayScore.findIndex(
               (item: any) => item.seqId === seqId,
             );
@@ -416,7 +415,7 @@ const Story: React.FC<{
               ];
               return { ...prev, replayScore: newScoreArray };
             }
-          }
+          
 
         });
       }
@@ -544,7 +543,7 @@ const Story: React.FC<{
                           <Img
                             src={preloadedAssets.left}
                             className={'interaction_button'}
-                            onClick={() => LastModiPrevData(data)}
+                            onClick={() =>LastModiPrevData(data)}
                           />
                           <Img
                             src={preloadedAssets.right}
