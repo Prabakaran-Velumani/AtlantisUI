@@ -184,8 +184,7 @@ option {
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #dfdfdf;
-  border-radius: 30px;
-  cursor: pointer;
+  border-radius: 30px;  
 }
 
 .block-compo::-webkit-scrollbar {
@@ -203,7 +202,6 @@ option {
 .block-compo::-webkit-scrollbar-thumb {
   background: #0000;
   border-radius: 30px;
-  cursor: pointer;
 }
 
 .AddScores {
@@ -239,7 +237,6 @@ option {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;
-  cursor: pointer;
   background-size: contain;
   height: 30px;
 }
@@ -254,7 +251,6 @@ option {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;
-  cursor: pointer;
   background-size: contain;
   height: 30px;
 }
@@ -277,7 +273,6 @@ option {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;
-  cursor: pointer;
   background-size: contain;
   height: 30px;
 }
@@ -299,7 +294,6 @@ option {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;
-  cursor: pointer;
   background-size: contain;
   /*height: 300px;*/
 }
@@ -322,7 +316,6 @@ option {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;
-  cursor: pointer;
   background-size: contain;
   /*height: 300px;*/
 }
@@ -344,7 +337,6 @@ option {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;
-  cursor: pointer;
   background-size: contain;
   /*height: 300px;*/
 }
@@ -1623,7 +1615,6 @@ transform: translate(-167px, -84px);
   background: url('../img/games/Leaderboard\ Scroll\ Cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;
-  cursor: pointer;
   background-size: contain;
 }
 .choosen_lang {
@@ -4021,7 +4012,6 @@ grid-row: 1 / 2;
   background: url('../img/games/Leaderboard\ Scroll\ Cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;
-  cursor: pointer;
   background-size: contain;
 } */
 .interaction_button {
@@ -6029,18 +6019,25 @@ grid-row: 1 / 2;
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box::-webkit-scrollbar-track {
   background: url('../img/games/Leaderboard\ Scroll\ Bar.png');
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 }
 
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box::-webkit-scrollbar-thumb {
   background: url('../img/games/Leaderboard\ Scroll\ Cross.png');
   background-repeat: no-repeat;
-  border-radius: 30px;
-  cursor: pointer;
-  background-size: contain;
-  /*height: 300px;*/
-  /* background-size: 26px 63px; */
+  border-radius: 30px;  
+  background-size: contain;  
+  object-fit: contain;    
+  height: 100px;
+  width: auto;    
+  background-position-x: -2px;
+  background-position-y: calc(100px - 40px);  
+  background-position: center;
+  background-size: 35px;      
 }
+
+
+
 
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .table-heading {
   display: flex;
@@ -6355,7 +6352,6 @@ grid-row: 1 / 2;
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;
-  cursor: pointer;
   background-size: contain;
   /*height: 300px;*/
   /* background-size: 26px 63px; */
@@ -6676,7 +6672,6 @@ grid-row: 1 / 2;
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;
-  cursor: pointer;
   background-size: contain;
   height: 30px;
 }
@@ -6703,7 +6698,6 @@ grid-row: 1 / 2;
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;
-  cursor: pointer;
   background-size: contain;
   height: 30px;
 }
@@ -6724,7 +6718,6 @@ grid-row: 1 / 2;
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;
-  cursor: pointer;
   background-size: contain;
   height: 30px;
 }
@@ -6913,8 +6906,7 @@ grid-row: 1 / 2;
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box::-webkit-scrollbar-thumb {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
-  border-radius: 30px;
-  cursor: pointer;
+  border-radius: 30px;  
   background-size: contain;
   height: 30px;
 }
@@ -6935,8 +6927,18 @@ grid-row: 1 / 2;
 .feedback_content_text::-webkit-scrollbar-thumb {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
-  border-radius: 30px;
-  cursor: pointer;
+  border-radius: 30px; 
   background-size: contain;
   height: 30px;
+}
+
+
+
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+}
+input[data-autocompleted] {
+    background-color: transparent !important;
 }
