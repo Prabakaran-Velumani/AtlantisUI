@@ -1,5 +1,5 @@
 import { Img, Text, SimpleGrid, Box } from '@chakra-ui/react';
-import React from 'react';
+import React, { useRef } from 'react';
 
 /* for reflection question inside the image */
 import ref from 'assets/img/screens/refquestions.png';
@@ -251,10 +251,60 @@ const LeaderBoard: React.FC<{
       setShuffledUsers(newSortedUsers);
     }
 
+    // useEffect(()=> {
+
+    //   const Scrolling = (e: any) => {
+    //     const container = document.getElementById('leaderboard_id');        
+    //     console.log('container', e)
+    //   }
+
+    //   window.addEventListener('mousewheel', Scrolling);      
+    //   return () => {      
+    //     window.removeEventListener('mousewheel', Scrolling);
+    //   };
+
+    // },[])
+
+    const containerRef = useRef<any>(null);
+    let lastScrollTop = 0;
+
+    useEffect(() => {
+      const container = containerRef?.current;
+      if (!container) return; // Early return if container is not available
+  
+      console.log('container', container);
+
+      const handleScroll = () => {
+        let currentScrollTop = container?.scrollTop;
+
+        console.log('currentScrollTop', currentScrollTop);        
+  
+        if (currentScrollTop > lastScrollTop) {
+          // Scrolling down
+          container.classList.add('content-box');
+          container.classList.remove('black-scrollbar');
+        } else {
+          // Scrolling up
+          container.classList.add('black-scrollbar');
+          container.classList.remove('content-box');
+        }
+  
+        lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
+      };
+  
+      container.addEventListener('scroll', handleScroll);
+  
+      return () => {
+        container.removeEventListener('scroll', handleScroll);
+      };
+    }, []);
+  
+    
+
     return (
       <>
         {imageSrc && (
-          <Box className="Leaderboard-screen">
+          <Box className="Leaderboard-screen" ref={containerRef}>
             <Img src={imageSrc} className="leaderboard-img" />
             <Text className='title'>LeaderBoard</Text>
             <Box className="content-box" id='leaderboard_id'>
