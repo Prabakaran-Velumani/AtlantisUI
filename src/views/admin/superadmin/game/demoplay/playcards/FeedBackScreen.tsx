@@ -145,7 +145,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                         <Box
                           w={'70%'}
                           h={'65%'}
-                          overflowY={'scroll'}
+                          overflowY={'auto'}
                           className="feedback_content_text"
                         >
                           <Box display={'flex'} mt={'10px'} alignItems={'center'}>

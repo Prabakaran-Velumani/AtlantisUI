@@ -3836,7 +3836,7 @@ grid-row: 1 / 2;
   width: calc(90vh - 40vh);
   height: 20vh;
   /* overflow-y: auto; */
-  overflow-y: scroll;
+  overflow-y: auto;
   /* scrollbar-width: none; */
   /* Hide scrollbar for Firefox */
   /* -ms-overflow-style: none; */
