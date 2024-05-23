@@ -185,7 +185,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     } else {
       total = profile.score!==undefined ? profile.score.reduce((acc: number, cur: any) => acc + cur.score, 0) : 0;
     }
-    return total;
+    return (isNaN(total) || total < 0) ? 0 : total;
   }, [profile.score, profile.replayScore, currentScreenId]);
 
   return (

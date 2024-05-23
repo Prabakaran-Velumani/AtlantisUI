@@ -400,7 +400,7 @@ if(scores!==undefined)
                                     className="amount-score"
                                     textAlign={'center'}
                                   >
-                                    {profile.playerGrandTotal ? profile.playerGrandTotal?.questScores[it] ?  profile.playerGrandTotal?.questScores[it] : 0: 0}/{questScores &&  questScores[it] !==null && questScores[it] > 0  ? questScores[it] : 0 }{' '}
+                                    {profile.playerGrandTotal ? profile.playerGrandTotal?.questScores[it] ?  profile.playerGrandTotal?.questScores[it] : 0: 0}/{questScores &&  questScores[it] !==null && questScores[it] > 0  ? questScores[it] : gameQuest.gameTotalScore !==null ? gameQuest.gameTotalScore : 0}{' '}
                                    
                                   </Text>
                                   <Img h={'25px'} w={'auto'} src={preloadedAssets.MoneyIcon} zIndex={5}/>
@@ -416,88 +416,6 @@ if(scores!==undefined)
                                   )) : (
                                     <Img src={preloadedAssets.Lock} className="lock" width={'97%'} position={'absolute'} bg={'#2b2828d6'} top={'0'} />
                                   )}
-
-                              {/* {profile.completedLevels.includes(it) ? ( */}
-                              {/* {(questState[it] === 'completed' || questState[it] === 'replayallowed') ? (
-                                <Box className={'completed_level'}>
-                                  <Box position={'relative'} display={'flex'} justifyContent={'center'}> 
-                                    <Img w={'40%'} h={'auto'} src={preloadedAssets?.Completed} />
-                                    {/* <Text
-                                      position={'absolute'}
-                                      textAlign={'center'}
-                                      fontFamily={'AtlantisText'}
-                                      color={'#D9C7A2'}
-                                      zIndex={999999}
-                                      right={'43%'}
-                                      bottom={'52%'}
-                                      fontSize={'2.8vh'}
-                                      className={'quest_complete'}
-                                      textShadow="-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
-                                    >
-                                      Completed
-                                    </Text> */}
-                                  {/* </Box>
-                                </Box>
-                              ) : (
-                                ''
-                              )}
-                              <Box
-                                w={'100%'}
-                                position={'absolute'}
-                                bottom={'0'}
-                                color={'#D9C7A2'}
-                                fontFamily={'AtlantisText'}
-                                zIndex={999999}
-                              >
-                                <Text
-                                  className="amount-score"
-                                  textAlign={'center'}
-                                >
-                                  {profile.playerGrandTotal ? profile.playerGrandTotal?.questScores[it] ?  profile.playerGrandTotal?.questScores[it] : 0: 0}/{questScores &&  questScores[it] !==null && questScores[it] > 0  ? questScores[it] : 0}{' '}
-                                  <Icon as={BiMoney} />
-                                  <Img src={preloadedAssets.MoneyIcon} zIndex={5}/>
-                                </Text>
-                              </Box>
-
-                              {profile.completedLevels.includes(it) ? (
-                                Object.entries(questState).map(
-                                  ([questId, status], index) =>
-                                    questId === it && status === 'completed' ? (
-                                      <Img
-                                        key={index}
-                                        src={preloadedAssets.Lock}
-                                        className="lock"
-                                        width={'97%'}
-                                        position={'absolute'}
-                                        bg={'#2b2828d6'}
-                                        top={'0'}
-                                      />
-                                    ) : questId === it &&
-                                      status ===
-                                        'replayallowed' ? null : questId ===
-                                        it && status === 'locked' ? (
-                                      <Img
-                                        key={index}
-                                        src={preloadedAssets.Lock}
-                                        className="lock"
-                                        width={'97%'}
-                                        position={'absolute'}
-                                        bg={'#2b2828d6'}
-                                        top={'0'}
-                                      />
-                                    ) : questId === it &&
-                                      status === 'Started' ? null : null,
-                                )
-                              ) : (
-                                <Img
-                                  src={preloadedAssets.Lock}
-                                  className="lock"
-                                  width={'97%'}
-                                  position={'absolute'}
-                                  bg={'#2b2828d6'}
-                                  top={'0'}
-                                />
-                              )} */}
                             </Box>
                           </motion.div>
                         );

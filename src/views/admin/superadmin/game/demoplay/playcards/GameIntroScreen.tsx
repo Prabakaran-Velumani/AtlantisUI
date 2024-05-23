@@ -134,7 +134,7 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
                 >
                   <Text className={'play_screen_text'}>
                     The Demo Play
-                  </Text>
+                  </Text> 
                 </Box>
                 <Box
                   w={'100%'}

@@ -66,22 +66,15 @@ const Completion: React.FC<{
         (quest: any) => quest.questNo == profile?.currentQuest,
       ),
     );
-
-
     const [geFinalscorequest, SetFinalscore] = useState(profile.playerGrandTotal.questScores[parseInt(profile.currentQuest)]);
     const [questScores, setQuestScores] = useState(questWiseMaxTotal);
-    // const { profile, setProfile } = useContext(ScoreContext);
+
     useEffect(() => {
       setShowComplete(true);
       setTimeout(() => {
         setShowComplete(false);
       }, 1000);
     }, []);
-    const playedSeqId: any = [];
-    profile?.score.forEach((item: any) => {
-      playedSeqId.push(item.seqId);
-    });
-    console.log('playedSeqId', playedSeqId);
     useEffect(() => {
       const groupedByQuest: any = {};
       questOptions.forEach((item: any) => {
@@ -111,10 +104,6 @@ const Completion: React.FC<{
       console.log('playedOptionId',playedOptionId)
       const maxScoresByQuest:any ={};
       for (const questNo in groupedByQuest) {
-        // if(questNo === parseInt(profile?.currentQuest))
-        //   {
-
-        //   }
         const questData = groupedByQuest[questNo];
         const maxScoresBySequence: any = {};
 
@@ -134,92 +123,24 @@ const Completion: React.FC<{
         );
         maxScoresByQuest[questNo] = maxScoreForQuest;
       }
-     /* const maxScoresByQuest: any = {};
-      for (const questNo in groupedByQuest) {
-        const questData = groupedByQuest[questNo];
-        const maxScoresBySequence: any = {};
-
-        questData.forEach((item: any) => {
-          const sequence = item.qpSequence;
-          const score = parseInt(item.qpScore);
-          if (
-            !maxScoresBySequence[sequence] ||
-            score > maxScoresBySequence[sequence]
-          ) {
-            maxScoresBySequence[sequence] = score;
-          }
-        });
-        const maxScoreForQuest = Object.values(maxScoresBySequence).reduce(
-          (acc: any, score: any) => acc + score,
-          0,
-        );
-        maxScoresByQuest[questNo] = maxScoreForQuest;
-      }
-      */
+    
       setQuestScores(maxScoresByQuest);
     }, []);
-    // useEffect(() => {
-    //   /** this functionality moves to parent component */
-
-    //   const scores = questState =='Started' ? profile?.score : profile?.replayScore;
-    //   const sums: any = {};
-    //   scores.forEach((score: any) => {
-    //     const quest = score.quest;
-    //     if (!sums[quest]) {
-    //       sums[quest] = 0;
-    //     }
-    //     sums[quest] += score.score;
-    //   });
-
-    //   // const getFinalscores = Object.values(sums);
-    //   const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
-    //     quest,
-    //     score,
-    //   }));
-    //   const getscores = getFinalscores.find(
-    //     (row: any) => row.quest == profile?.currentQuest,
-    //   );
-    //   const finalscore = getscores?.score;
-    //   if (finalscore !== undefined) {
-    //     SetFinalscore(finalscore);
-    //   }
-
-    //   /** Already has badge images in preloadedAssets as Quest_1 or Quest_1-shadow */
-    //   const fetchDatass = async () => {
-    //     if (curretQuestOptions?.gameBadge) {
-    //       /** here 4 is to refer gasAssetType at asset table */
-    //       const result = await getImages(4);
-
-    //       if (result?.status !== 'Success') {
-    //         console.error('getbackground error:' + result?.message);
-    //         return;
-    //       }
-    //       const selectedGasId = curretQuestOptions?.gameBadge;
-    //       const selectedGasImage = result?.data.find(
-    //         (gas: any) => gas.gasId == selectedGasId,
-    //       );
-
-    //       const imageUrl =
-    //         selectedGasImage?.gasAssetImage || 'defaultImageURL.jpg';
-    //       setbImg(imageUrl);
-    //     }
-    //   };
-    //   fetchDatass();
-    // }, []);
-
+  
     const getcompletionquest = currentQuestNo - 1;
 
 
-    /** This useEffect Only hanldes the total within the quest total */
-    useEffect(() => {
-      const questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).reduce((totalScore: number, [key, value]: [any, any]) => {
-        if (key == profile.currentQuest) {
-          return totalScore + value;
-        }
-        return totalScore;
-      }, 0);
-      SetFinalscore(questTotalScore);
-    }, [profile.score])
+  /** This useEffect Only hanldes the total within the quest total */
+useEffect(()=>{
+  console.log("profile?.playerGrandTotal", profile?.playerGrandTotal);
+const questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).reduce((totalScore: number, [key, value]: [any, any]) => {
+  if (key == profile.currentQuest) {
+      return totalScore + value;
+  }
+  return totalScore;
+}, 0);
+  SetFinalscore(questTotalScore);
+},[profile.score])
 
     return (
       <>
@@ -245,42 +166,29 @@ const Completion: React.FC<{
                         ?.gameIsSetCongratsScoreWiseMessage !== 'true'
                       ? completionScreenQuestOptions[getcompletionquest]
                         ?.gameCompletedCongratsMessage
-                      : completionScreenQuestOptions[getcompletionquest]
-                        ?.gameIsSetCongratsScoreWiseMessage === 'true'
-                        ? completionScreenQuestOptions[getcompletionquest]
-                          ?.gameIsSetMinPassScore &&
-                          completionScreenQuestOptions[getcompletionquest]
-                            ?.gameMinScore &&
-                          completionScreenQuestOptions[getcompletionquest]?.gameMinScore >
-                          0
-                          ? (geFinalscorequest ? geFinalscorequest : 0) <
-                            completionScreenQuestOptions[getcompletionquest]?.gameMinScore
-                            ? completionScreenQuestOptions[getcompletionquest]
-                              ?.gameMinimumScoreCongratsMessage
-                            : completionScreenQuestOptions[getcompletionquest]
-                              ?.gameIsSetDistinctionScore &&
-                              (geFinalscorequest ? geFinalscorequest : 0) <
-                              completionScreenQuestOptions[getcompletionquest]
-                                ?.gameDistinctionScore
-                              ? completionScreenQuestOptions[getcompletionquest]
-                                ?.gameaboveMinimumScoreCongratsMessage
-                              : completionScreenQuestOptions[getcompletionquest]
-                                ?.gameIsSetDistinctionScore &&
-                                (geFinalscorequest ? geFinalscorequest : 0) >=
-                                completionScreenQuestOptions[getcompletionquest]
-                                  ?.gameDistinctionScore
-                                ? completionScreenQuestOptions[getcompletionquest]
-                                  ?.gameAboveDistinctionScoreCongratsMessage
-                                : completionScreenQuestOptions[getcompletionquest]
-                                  ?.gameIsSetCongratsSingleMessage === 'true' &&
-                                completionScreenQuestOptions[getcompletionquest]
-                                  ?.gameCompletedCongratsMessage
-                          : completionScreenQuestOptions[getcompletionquest]
-                            ?.gameCompletedCongratsMessage
-                        : completionScreenQuestOptions[getcompletionquest]
-                          ?.gameCompletedCongratsMessage}
-                </Box>
+                  : completionScreenQuestOptions[getcompletionquest]
+                      ?.gameCompletedCongratsMessage}
               </Box>
+            </Box>
+            {/* <Box className="rewards-img-box">
+              <Img className="rewards-arrow-img" src={preloadedAssets.rew} />
+            </Box>
+            <Box className="points-box">
+              <Box className="box-1">
+                <Img src={preloadedAssets.back} className="box-1_img" />
+                <Text className="points-text" fontFamily={'content'}>
+                  points
+                </Text>
+                <Box className="inside-box-1">
+                  <Img
+                    src={preloadedAssets.point}
+                    className="inside-box-1_img"
+                  />
+                  <Text className="inside-points-text" fontFamily={'content'}>
+                       {geFinalscorequest <= 0 ? 0 : geFinalscorequest}{'/'}{questScores}
+                  </Text>
+                </Box>
+              </Box> */}
               <Box className="rewards-img-box">
                 <Img className="rewards-arrow-img" src={preloadedAssets.rew} />
               </Box>
