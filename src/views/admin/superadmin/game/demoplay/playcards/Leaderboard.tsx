@@ -304,7 +304,7 @@ const LeaderBoard: React.FC<{
     return (
       <>
         {imageSrc && (
-          <Box className="Leaderboard-screen">
+          <Box className="Leaderboard-screen" ref={containerRef}>
             <Img src={imageSrc} className="leaderboard-img" />
             <Text className='title'>LeaderBoard</Text>
             <Box className="content-box" id='leaderboard_id'  ref={containerRef}>
