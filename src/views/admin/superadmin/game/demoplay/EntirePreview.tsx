@@ -390,6 +390,24 @@ useEffect(()=>{
       console.log("preLogDatasIni", preLogDatasIni)
       setProfile({...preLogDatasIni.previewScore});
     }
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Pause the audio when the page is hidden
+        if (!audioRef.current?.paused) {
+          audioRef.current?.pause();
+        }
+      } else {
+        // Resume the audio when the page becomes visible again
+        if (audioRef.current?.paused) {
+          audioRef.current?.play();
+        }
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
 },[preLogDatasIni])
   
   
@@ -609,25 +627,6 @@ useEffect(()=>{
         setOptions(optionsFiltered);
       }
     }
-
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        // Pause the audio when the page is hidden
-        if (!audioRef.current?.paused) {
-          audioRef.current?.pause();
-        }
-      } else {
-        // Resume the audio when the page becomes visible again
-        if (audioRef.current?.paused) {
-          audioRef.current?.play();
-        }
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
   }, [profile?.currentQuest]);
 
   useEffect(() => {
