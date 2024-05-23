@@ -200,6 +200,7 @@ console.log('isOpenCustomModal',isOpenCustomModal)
                       style={{
                         width: '100%',
                       }}
+                      autoComplete='off'
                       type={'text'}
                       id={'name'}
                       className="player_profilename"

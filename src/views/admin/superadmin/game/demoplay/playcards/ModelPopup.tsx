@@ -443,7 +443,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
               
                   <Box
                     display={'flex'}
-                    justifyContent={'space-between'}
+                    justifyContent={ NavigateBlockEmpty === true ? 'center':'space-between'}
                     w={'100%'}
                   >
                     { NavigateBlockEmpty === true ?  

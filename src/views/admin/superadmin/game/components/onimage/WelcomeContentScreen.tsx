@@ -130,7 +130,7 @@ const WelcomeContentScreen: React.FC<{
         transition={{ duration: 0.5, delay: 0.5 }}
         style={{ height: '100%' }}
       >
-        {imageSrc && preview && currentTab === 5 && (formData.gameIsShowSkill === "true" || formData.gameIsShowLearningOutcome=== "true" || formData.gameIsShowAuhorName=== "true" || formData.gameIsShowStoryline=== "true" || formData.gameIsShowGameDuration=== "true" || formData.gameIsShowAdditionalWelcomeNote=== "true") ? (
+        {imageSrc && preview && currentTab === 5 && (formData.gameIsShowSkill === "true" || formData.gameIsShowLearningOutcome === "true" || formData.gameIsShowAuhorName === "true" || formData.gameIsShowStoryline === "true" || formData.gameIsShowGameDuration === "true" || formData.gameIsShowAdditionalWelcomeNote === "true") ? (
           <Box className="welcome-screen">
             <Box className="welcome-screen-box">
               <Img src={imageSrc} className=" welcome-pad" />
@@ -425,9 +425,9 @@ const WelcomeContentScreen: React.FC<{
                           }}
                           mt={'2px'}
                           fontFamily={'content'}
-                          // position={'absolute'}
-                          // display={'flex'}
-                          // alignItems={'center'}
+                        // position={'absolute'}
+                        // display={'flex'}
+                        // alignItems={'center'}
                         >
                           <>
                             {' '}
@@ -458,13 +458,13 @@ const WelcomeContentScreen: React.FC<{
                             className="text_welcome"
                             // mt={'20px'}
                             fontSize={'1rem'}
-                            // fontFamily={'content'}
+                          // fontFamily={'content'}
                           >
                             {formData.gameStoryLine}
                           </Text>
                         )}
                         {formData.gameIsShowSkill === 'true' ||
-                        formData.gameIsShowLearningOutcome === 'true' ? (
+                          formData.gameIsShowLearningOutcome === 'true' ? (
                           <motion.div
                             initial={{ opacity: 0, y: 50 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -485,7 +485,7 @@ const WelcomeContentScreen: React.FC<{
                         <Box
                           className={
                             formData.gameIsShowSkill === 'true' ||
-                            formData.gameIsShowLearningOutcome === 'true'
+                              formData.gameIsShowLearningOutcome === 'true'
                               ? 'rewards-box'
                               : 'empty-rewards-box'
                           }
@@ -621,7 +621,7 @@ const WelcomeContentScreen: React.FC<{
                             </Text>
                           </Box>
                         )}
-                        {formData.gameIsShowAdditionalWelcomeNote ==='true' && (
+                        {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
                           <Box className="text_cont" textAlign={'center'}>
                             <Text
                               fontSize={'1rem'}

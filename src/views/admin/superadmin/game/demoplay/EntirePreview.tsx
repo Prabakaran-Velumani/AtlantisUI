@@ -625,7 +625,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     };
     calculateQuestGrandTotal();
     calculatePlayerGrandTotal();
-  }, [profile.score, profile.replayScore, currentScreenId]);
+  }, [profile?.score, profile?.replayScore, currentScreenId]);
 
   useEffect(() => {
     if (!gameInfo?.bgMusic) {
@@ -2926,6 +2926,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         }
       } else {
         /** IF a block not has navi option then it leads to next block */
+        console.log('nextBlock',nextBlock)
         if (nextBlock && nextBlock[0]?.blockChoosen) {
           setType(nextBlock[0]?.blockChoosen);
           setData(nextBlock[0]);

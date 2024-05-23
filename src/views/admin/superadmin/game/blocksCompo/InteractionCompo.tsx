@@ -647,12 +647,12 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
 
     const container = document.getElementById(seq.id);
     if (container) {
-        container.scrollLeft -= 700;
+      container.scrollLeft -= 700;
 
 
-        if (container.scrollLeft <= 0) {
-            setShowLeftButton(false);
-        }
+      if (container.scrollLeft <= 0) {
+        setShowLeftButton(false);
+      }
 
     }
 };
@@ -660,15 +660,15 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
 const handleRight = () => {
   const container = document.getElementById(seq.id);
 
-  if (container) {
+    if (container) {
       container.scrollLeft += 700;
       setShowcount(container.scrollLeft + 300)
       if (container.scrollLeft > 0) {
           setShowLeftButton(true);
       }
 
-  }
-};
+    }
+  };
   const scrollToElement1 = (id: any) => {
     const element = document.getElementById(id);
     if (element) {
@@ -812,7 +812,7 @@ const handleRight = () => {
         boxShadow={'1px 1px 17px #69627914'}
         borderRadius={'8px'}
         zIndex={99}
-        right={{base:'-140px',lg:''}}
+        right={{ base: '-140px', lg: '' }}
         className="MiniShowBox"
       >
         <List>
@@ -853,35 +853,35 @@ const handleRight = () => {
   return (
     <>
       {/* {showLeftButton && (   commented by nivetha */}
-        <Box
-          className="goLeft"
-          display={'flex'}
-          alignItems={'center'}
-          height={'100%'}
+      <Box
+        className="goLeft"
+        display={'flex'}
+        alignItems={'center'}
+        height={'100%'}
+        position={'absolute'}
+        left={0}
+      >
+        <Button
+          onClick={handleLeft}
           position={'absolute'}
           left={0}
+          zIndex={9}
+          background={'#0000'}
+          _hover={{ background: '#0000' }}
+          boxShadow={'unset'}
         >
-          <Button
-            onClick={handleLeft}
+          <Icon as={MdArrowBack} color={'#fff'} />
+          <Box
+            content='""'
+            height={'30px'}
+            width={'30px'}
+            borderRadius={'30px'}
+            zIndex={-9}
+            background={'#11047a'}
             position={'absolute'}
-            left={0}
-            zIndex={9}
-            background={'#0000'}
-            _hover={{ background: '#0000' }}
-            boxShadow={'unset'}
-          >
-            <Icon as={MdArrowBack} color={'#fff'} />
-            <Box
-              content='""'
-              height={'30px'}
-              width={'30px'}
-              borderRadius={'30px'}
-              zIndex={-9}
-              background={'#11047a'}
-              position={'absolute'}
-            ></Box>
-          </Button>
-        </Box>
+          ></Box>
+        </Button>
+      </Box>
       {/*  )} */}
       <Box id={`${seq.id}`} w={'auto'} height={'100%'} overflowX={seq?.id === targetSequence?.id ? 'scroll' : 'hidden'} className='scroll_hide' overflowY={'hidden'}>
         <Box w={'100vw'} display={'flex'}>
@@ -1138,7 +1138,7 @@ const handleRight = () => {
                       <Text>Feedback</Text>
                     </Button>
                   ) : null}
-                     {interactionBlock?.[`Title${seq.input}`] !== seq?.input ? (
+                  {interactionBlock?.[`Title${seq.input}`] !== seq?.input ? (
                     <Button
                       mr={'10px'}
                       w={'130px'}
@@ -1184,7 +1184,7 @@ const handleRight = () => {
                       <Text>Skills</Text>
                     </Button>
                   ) : null}
-               
+
                 </Flex>
               </Box>
             </Box>

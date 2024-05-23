@@ -9,10 +9,10 @@ export default function Default(props: {
 	placeholder?: string;
 	type?: string;
 	isRequired?: boolean;
-	 
+
 	[x: string]: any;
 }) {
-	const { id, label, extra, placeholder, type, isRequired,mb, ...rest } = props;
+	const { id, label, extra, placeholder, type, isRequired, mb, ...rest } = props;
 	// Chakra Color Mode
 	const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
 
@@ -27,11 +27,11 @@ export default function Default(props: {
 				fontWeight='bold'
 				_hover={{ cursor: 'pointer' }}>
 				{label}
-        {isRequired && <Text as='span' color='red.500'>*</Text>} {/* Display asterisk if isRequired is true */}
-        <Text fontSize='sm' fontWeight='400' ms='2px'>
-          {extra}
-        </Text>
-      </FormLabel>
+				{isRequired && <Text as='span' color='red.500'>*</Text>} {/* Display asterisk if isRequired is true */}
+				<Text fontSize='sm' fontWeight='400' ms='2px'>
+					{extra}
+				</Text>
+			</FormLabel>
 			<Input
 				{...rest}
 				type={type}
@@ -42,7 +42,6 @@ export default function Default(props: {
 				_placeholder={{ fontWeight: '400', color: 'secondaryGray.600' }}
 				h='44px'
 				maxH='44px'
-				
 			/>
 		</Flex>
 	);

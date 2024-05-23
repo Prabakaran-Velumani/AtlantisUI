@@ -169,7 +169,6 @@ const handleNext =() =>
                  {renderContentTy()}
                </Box>
              </Box>
-
              {formData.gameIsCollectLearnerFeedback === 'true' && (
                <>
                  <Text
@@ -350,7 +349,6 @@ const handleNext =() =>
                          </div>
                        </div>
                      )}
-
                      {formData.gameOthers === 'true' && (
                      <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameOthers' && trueValuesArray.length==3) || (trueValuesArray.length==1)) ? 'span 2' : '' }}>
 
