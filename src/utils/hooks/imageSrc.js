@@ -79,10 +79,12 @@ import MoneyIcon from 'assets/img/games/MoneyIcon.png';
 import profile from '../../assets/img/games/profile.png';
 import cancel from 'assets/img/games/cancel.png';
 import leadBtn from 'assets/img/games/LeadBtn.png';
+import ModelQ from 'assets/img/games/modelq.png';
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
  */
 export const assetImageSrc = [
+  { assetType: 'ModelQ', src: ModelQ },
   { assetType: 'leadBtn', src: leadBtn }, 
   { assetType: 'cancel', src: cancel }, 
   { assetType: 'StarsBg', src: StarsBg }, 
