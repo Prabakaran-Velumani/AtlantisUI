@@ -1,4 +1,4 @@
-import { Box, Icon, useToast } from '@chakra-ui/react';
+import { Box, Icon, Img, useToast } from '@chakra-ui/react';
 
 import React, {
   Suspense,
@@ -26,8 +26,8 @@ import CharacterGlb from 'assets/img/games/Character_sample.glb';
 import Merlin from 'assets/img/games/Merlin.glb';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-
-
+import { motion } from 'framer-motion';
+import Horse from 'assets/img/games/horseload.gif';
 const EntirePreview = lazy(() => import('./EntirePreview'));
 const gameScreens = [
   'Completion',
@@ -56,9 +56,9 @@ const GamePreview = () => {
     score: [],
     completedLevels: ['1'],
     currentQuest: 1,
-    replayScore:[],
-    playerGrandTotal:{questScores:{}},
-    todayEarnedScore: [{quest:1, score:0, earnedDate: ""}],  
+    replayScore: [],
+    playerGrandTotal: { questScores: {} },
+    todayEarnedScore: [{ quest: 1, score: 0, earnedDate: "" }],
   });
   const [currentScore, setCurrentScore] = useState(0);
   const toast = useToast();
@@ -88,9 +88,9 @@ const GamePreview = () => {
     selectedOptions: '',
     previewProfile: '',
     lastModifiedBlockSeq: '',
-    lastBlockModifiedDate:'',
-    updatedAt:'',
-    playerInputs:''
+    lastBlockModifiedDate: '',
+    updatedAt: '',
+    playerInputs: ''
   });
   //End
   const user: any = JSON.parse(localStorage.getItem('user'));
@@ -114,16 +114,16 @@ const GamePreview = () => {
           playerId: updatePreviewLogsResponse.data.playerId,
           playerType: updatePreviewLogsResponse.data.playerType,
           previewGameId: updatePreviewLogsResponse.data.previewGameId,
-          nevigatedSeq: updatePreviewLogsResponse.data.nevigatedSeq ? JSON.parse(updatePreviewLogsResponse.data.nevigatedSeq): [],
-          screenIdSeq: updatePreviewLogsResponse.data.screenIdSeq ? JSON.parse(updatePreviewLogsResponse.data.screenIdSeq) :[],
+          nevigatedSeq: updatePreviewLogsResponse.data.nevigatedSeq ? JSON.parse(updatePreviewLogsResponse.data.nevigatedSeq) : [],
+          screenIdSeq: updatePreviewLogsResponse.data.screenIdSeq ? JSON.parse(updatePreviewLogsResponse.data.screenIdSeq) : [],
           lastActiveBlockSeq: updatePreviewLogsResponse.data.lastActiveBlockSeq,
-          selectedOptions: updatePreviewLogsResponse.data.selectedOptions ? JSON.parse(updatePreviewLogsResponse.data.selectedOptions) :[],
+          selectedOptions: updatePreviewLogsResponse.data.selectedOptions ? JSON.parse(updatePreviewLogsResponse.data.selectedOptions) : [],
           previewProfile: updatePreviewLogsResponse.data.previewProfile ? JSON.parse(updatePreviewLogsResponse.data.previewProfile) : [],
           lastModifiedBlockSeq: updatePreviewLogsResponse.data.lastModifiedBlockSeq,
-          lastBlockModifiedDate:updatePreviewLogsResponse.data.lastBlockModifiedDate,
-          updatedAt:updatePreviewLogsResponse.data.updatedAt,
-          playerInputs: updatePreviewLogsResponse.data.playerInputs? JSON.parse(updatePreviewLogsResponse.data.playerInputs) : [],
-          
+          lastBlockModifiedDate: updatePreviewLogsResponse.data.lastBlockModifiedDate,
+          updatedAt: updatePreviewLogsResponse.data.updatedAt,
+          playerInputs: updatePreviewLogsResponse.data.playerInputs ? JSON.parse(updatePreviewLogsResponse.data.playerInputs) : [],
+
         });
         return updatePreviewLogsResponse;
 
@@ -149,7 +149,7 @@ const GamePreview = () => {
 
     fetchPreviewLogs();
   }, [previewLogsData]);
-//End get the stored Preview Log Data, if has otherwise create a new record
+  //End get the stored Preview Log Data, if has otherwise create a new record
 
   useEffect(() => {
     const fetchData = async () => {
@@ -170,7 +170,7 @@ const GamePreview = () => {
         // const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: CharacterGlb }]);
         const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: Merlin }]);
         // Use preloadedGLBs[CharacterGlb] if you need the preloaded GLB data
-        setLoadedGLBs((prev:any)=> ({...prev, preloadedGLBs}))
+        setLoadedGLBs((prev: any) => ({ ...prev, preloadedGLBs }))
         const loader = new GLTFLoader();
         const parsedGlbArray = [];
         loader.parse(preloadedGLBs, '', (gltf) => {
@@ -323,10 +323,10 @@ const GamePreview = () => {
             let objkeyValue = key.split('_')[1];
             let objKey = `Quest_${objkeyValue}`;
             let objKeyValue = API_SERVER + '/' + value;
-            let badgeUrl =  value.split('.');
-            const shadowBadgeUrl = badgeUrl[0]+'-shadow.'+badgeUrl[1];
+            let badgeUrl = value.split('.');
+            const shadowBadgeUrl = badgeUrl[0] + '-shadow.' + badgeUrl[1];
             apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
-            apiImageSetArr.push({ assetType: objKey+'-shadow', src: API_SERVER + '/' +shadowBadgeUrl });
+            apiImageSetArr.push({ assetType: objKey + '-shadow', src: API_SERVER + '/' + shadowBadgeUrl });
           });
           setApiImageSet(apiImageSetArr);
           return true;
@@ -451,11 +451,11 @@ const GamePreview = () => {
             let objKey = `Quest_${objkeyValue}`;
             let objKeyValue = API_SERVER + '/' + value;
             apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
-            let badgeUrl =  value.split('.');
-            const shadowBadgeUrl = badgeUrl[0]+'-shadow.'+badgeUrl[1];
-            apiImageSetArr.push({ assetType: objKey+'-shadow', src:  API_SERVER + '/' + shadowBadgeUrl });
+            let badgeUrl = value.split('.');
+            const shadowBadgeUrl = badgeUrl[0] + '-shadow.' + badgeUrl[1];
+            apiImageSetArr.push({ assetType: objKey + '-shadow', src: API_SERVER + '/' + shadowBadgeUrl });
           });
-          setApiImageSet(apiImageSetArr);          
+          setApiImageSet(apiImageSetArr);
           return true;
         },
       ),
@@ -483,7 +483,7 @@ const GamePreview = () => {
         position: 'top-right',
       });
       return false;
-    } 
+    }
     else if (!inputdata.tabId) {
       toast({
         title: 'Select Feedback Options',
@@ -542,12 +542,12 @@ const GamePreview = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-      // const glbAndApiImageSet = {...apiImageSet, glb: CharacterGlb};
-      const resolvedResult: any = await preloadedImages(apiImageSet);
-      setApiUrlAssetImageUrls(resolvedResult);
-    } catch (error) {
-      console.error('Error preloading images:', error);
-    }
+        // const glbAndApiImageSet = {...apiImageSet, glb: CharacterGlb};
+        const resolvedResult: any = await preloadedImages(apiImageSet);
+        setApiUrlAssetImageUrls(resolvedResult);
+      } catch (error) {
+        console.error('Error preloading images:', error);
+      }
     };
     apiImageSet && fetchData();
   }, [apiImageSet]);
@@ -556,7 +556,7 @@ const GamePreview = () => {
     return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls, ...loadedGLBs };
   }, [apiUrlAssetImageUrls, staticAssetImageUrls, loadedGLBs]);
 
-  
+
   useEffect(() => {
     if (
       gameInfo &&
@@ -571,7 +571,20 @@ const GamePreview = () => {
 
   return (
     <>
-      <Suspense fallback={<h1>Loading please wait...</h1>}>
+      <Suspense fallback={<motion.div style={{ width: '100%',
+       height: '100vh',
+        // backgroundColor: 'rgba(0, 0, 0, 1)', 
+        backdropFilter: 'blur(10px)',
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center'
+       }}
+         initial={{ opacity: 0 }} 
+         animate={{ opacity: 1 }}
+
+      >
+        <Img src={Horse} w={'auto'} h='150px'/> 
+      </motion.div>}>
         {contentReady && (
           gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
             gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (

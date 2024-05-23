@@ -134,7 +134,11 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                         alignItems={'center'}
                       >
                         <Box w={'70%'} >
-                          <Img src={preloadedAssets.on} h={'4vh'} w={'100%'} />
+                          <Img src={preloadedAssets.on}  h={'4vh'} w={'100%'} />
+                          <Box w={'90%'} display={'flex'} justifyContent={'flex-end'} position={'relative'}>
+                         <Img src={preloadedAssets.ModelQ} h={'5vh'} w={'auto'}/>
+                         <Text position={'absolute'} color={'#fff'} fontSize={'3vh'} right={'25px'} >!</Text>
+                      </Box>
                         </Box>
                         <Box className="feed_list">
                           {' '}

@@ -853,6 +853,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
   return (
     <>
       {/* {showLeftButton && (   commented by nivetha */}
+     { seq?.id === targetSequence?.id &&
       <Box
         className="goLeft"
         display={'flex'}
@@ -882,6 +883,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
           ></Box>
         </Button>
       </Box>
+       }
       {/*  )} */}
       <Box id={`${seq.id}`} w={'auto'} height={'100%'} overflowX={seq?.id === targetSequence?.id ? 'scroll' : 'hidden'} className='scroll_hide' overflowY={'hidden'}>
         <Box w={'100vw'} display={'flex'}>
