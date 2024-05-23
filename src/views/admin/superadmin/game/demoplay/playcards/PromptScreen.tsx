@@ -211,7 +211,7 @@ console.log('isOpenCustomModal',isOpenCustomModal)
                   </Box>
                 </Box>
               </Box>
-              <Box position={'relative'} mb={'50px'}>
+              <Box position={'relative'} mb={'10%'}>
                 <Text
                   onClick={() => setIsGenderSelected(!isGenderSelected)}
                   className={'choosen_lang'}
@@ -269,7 +269,7 @@ console.log('isOpenCustomModal',isOpenCustomModal)
                   )}
                 </Box>
               </Box>
-              <Box position={'relative'} mb={'100px'}>
+              <Box position={'relative'} mb={'20%'}>
                 <Text
                   onClick={() => setIsLanguageSelected(!isLanguageSelected)}
                   className={'choosen_lang'}

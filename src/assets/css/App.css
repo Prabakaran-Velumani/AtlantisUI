@@ -3643,7 +3643,7 @@ grid-row: 1 / 2;
   font-family: 'AtlantisText';
 }
 .player_profilename{
-  height: 5vh;
+  height: 5.5vh;
   background-color: transparent;
   outline: none;
   text-align: center;
@@ -3708,11 +3708,11 @@ grid-row: 1 / 2;
 }
 
 .chapter_title {
-  font-size: 5.5vh;
+  font-size: 3.5vw;
   width: 100%;
   font-family: AtlantisText;
   position: absolute;
-  top: 10%;
+  top: 7%;
   display: flex;
   justify-content: center;
 }
@@ -4379,7 +4379,8 @@ font-family: 'AtlantisContent';
   }
 
   .chapter_title {
-    font-size: 5vw;
+    font-size: 4vh;
+    top: 6%;
   }
 
   .close_model {
@@ -4462,9 +4463,14 @@ font-family: 'AtlantisContent';
   }
 
   .vertex {
-    /* height: 68vw; */
-    height: 53vw;
+    height: 68vw;
+    /* height: 72vw; */
     width: calc(90vw - 31vw);
+    top: 12%;
+  }
+  .player_profilename {
+    font-size: 4.5vw;
+    height: 5vw;
   }
   .replay_game_text{
    font-size: 6vw;
