@@ -4292,16 +4292,6 @@ bottom: 38px;
 font-family: 'AtlantisContent';
 }
 
-.dialogue_scroll{
-position: fixed;
-height: 61px;
-overflow-y: scroll;
-width: 85%;
-font-size: 3vh;
-bottom: 38px;
-font-family: 'AtlantisContent';
-}
-
 @media screen and (orientation: portrait) {
   .story_options_area{
     height: 35vw;
