@@ -15,8 +15,11 @@ import Sample from 'assets/img/games/Merlin.glb';
 import { useLayoutEffect, useRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
-import Model from './Model';
+// import Model from './Model';
+// import Player from './Player';
 import ReplayGame from './ReplayGame';
+// import SelectedNPCs from './SelectedNPCs';
+import {SelectedNPCType} from './SelectedNPCs';
 
 const Story: React.FC<{
   imageSrc?: any;
@@ -58,6 +61,10 @@ const Story: React.FC<{
   getPrevLogDatas: any;
   RepeatSelectOption: any;
   RepeatPrevOption: any;
+  SelectedNPCs: React.FC<SelectedNPCType>;
+  Player:  React.FC;
+  // CharacterModal:  React.FC;
+  ModelPlayer:  React.FC;
 }> = ({
   data,
   type,
@@ -98,6 +105,10 @@ const Story: React.FC<{
   setPreLogDatas,
   RepeatSelectOption,
   RepeatPrevOption,
+  SelectedNPCs,
+  Player,
+  // CharacterModal,
+  ModelPlayer
 }) => {
     const [showNote, setShowNote] = useState(true),
       [first, setFirst] = useState(false);
@@ -113,6 +124,8 @@ const Story: React.FC<{
       BGM: 'bgm',
       VOICE: 'voice',
     };
+    const [isSpeaking ,setIsSpeaking]=useState<boolean>(false);
+    const [isStartsAnimationPlay ,setIsStartsAnimationPlay]=useState<boolean>(true);
 
     useEffect(() => {
       if (data && type) {
@@ -515,6 +528,7 @@ const Story: React.FC<{
       }
       setInteractionNext(true);
     };
+    console.log("******profile", profile);
 
     useEffect(() => {
       if (interactionNext === true) {
@@ -674,34 +688,11 @@ const Story: React.FC<{
         {data && type === 'Dialog' && (
           <Box className="chapter_potrait">
             <Img src={backGroundImg} className="dialogue_screen" />
-            {selectedNpc && (
-              <Box className={'player_character_image'}>
-                <Canvas camera={{ position: [0, 1, 9] }}>
-                  {' '}
-                  {/* For Single view */}
-                  {/* <Environment preset={"park"} background />   */}
-                  <directionalLight
-                    position={[2.0, 78.0, 100]}
-                    intensity={0.8}
-                    color={'ffffff'}
-                    castShadow
-                  />
-                  <ambientLight intensity={0.5} />
-                  {/* <OrbitControls   />  */}
-                  <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
-                  {/* COMPONENTS */}
-                  {/* <Player /> */}
-                  <Model
-                    position={[-3, -1.8, 5]}
-                    rotation={[0, 1, 0]}
-                    isSpeaking={false}
-                  />
-                  {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
-                  {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
-                  {/* <Parrot /> */}
-                </Canvas>
-              </Box>
-            )}
+            <SelectedNPCs preloadedAssets={preloadedAssets} isStartsAnimationPlay={isStartsAnimationPlay} isSpeaking={isSpeaking} selectedNpc={selectedNpc}/>
+             {/* {selectedNpc && (
+              <Box className={'player_character_image'}> 
+             </Box>
+            )}  */}
             <Img className={'dialogue_image'} src={preloadedAssets.dial} />
             <Box position={'relative'}>
               <Box
@@ -817,12 +808,13 @@ const Story: React.FC<{
             RepeatSelectOption={RepeatSelectOption}
             RepeatPrevOption={RepeatPrevOption}
             contentByLanguage={contentByLanguage}
+            currentScreenId={2}
           />
         )}
         {data && type === 'response' && (
           <Box className="chapter_potrait">
             <Img src={backGroundImg} className="dialogue_screen" />
-            {selectedPlayer && (
+            {/* {selectedPlayer && (
               <Img
                 src={`${API_SERVER}/${selectedPlayer}`}
                 className={'narrator_character_image'}
@@ -830,7 +822,8 @@ const Story: React.FC<{
             )}
             {selectedNpc && (
               <Img src={selectedNpc} className={'player_character_image'} />
-            )}
+            )} */}
+             <SelectedNPCs preloadedAssets={preloadedAssets} isStartsAnimationPlay={isStartsAnimationPlay} isSpeaking={isSpeaking} selectedNpc={selectedNpc}/>
             <Img className={'dialogue_image'} src={preloadedAssets.dial} />
             <Box position={'relative'}>
               <Box
@@ -1005,36 +998,6 @@ const Story: React.FC<{
                             onClick={() => getData(data)}
                           />
                         </Box>
-                        {/* <Box
-                          w={'120%'}
-                          onClick={() => getData(data)}
-                          mt={'20px'}
-                          display={'flex'}
-                          justifyContent={'center'}
-                          position={'absolute'}
-                          bottom={'-8%'}
-                        >
-                          <Img
-                            src={preloadedAssets.next}
-                            h={'7vh'}
-                            className={'story_note_next_button'}
-                          />
-                        </Box>
-                        <Box
-                          display={'flex'}
-                          position={'fixed'}
-                          justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
-                          w={'95%'}
-                          bottom={'0'}
-                        >
-
-                        <Img
-                          src={preloadedAssets.left}
-                          w={'70px'}
-                          h={'50px'}
-                          onClick={() => {  LastModiPrevData(data)}}
-                        />
-                        </Box> */}
                       </Box>
                     </Box>
                   </Box>
@@ -1046,65 +1009,5 @@ const Story: React.FC<{
       </>
     );
   };
-const Player: React.FC = () => {
-  const groupRef = useRef<any>();
-  const gltf = useLoader(GLTFLoader, Sample);
-  const [isHovered, setIsHovered] = useState<any>(false);
 
-  const mixer = new THREE.AnimationMixer(gltf.scene);
-  const action = mixer.clipAction(gltf.animations[12]);
-
-  useFrame((state, delta) => {
-    // Rotate the model on the Y-axis
-
-    if (groupRef.current) {
-      // groupRef.current.rotation.y += delta;
-      // groupRef.current.rotation.x += delta;
-      // groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime) * 2;
-      groupRef.current.castShadow = true;
-    }
-
-    mixer.update(delta);
-  });
-
-  // !isHovered &&
-  action.play();
-
-  useLayoutEffect(() => {
-    if (groupRef.current) {
-      groupRef.current.traverse((obj: any) => {
-        if (obj.isMesh) {
-          obj.castShadow = true;
-          obj.receiveShadow = true;
-        }
-      });
-    }
-  }, []);
-
-  gltf.scene.traverse((child) => {
-    if (child instanceof THREE.Mesh) {
-      // child.material.color.set(0xffccaaf0); // Set your desired color
-      child.material.color.set(0xffffff); // Set your desired color
-      child.material.roughness = 0.4; // Adjust roughness as needed
-      child.material.metalness = 0.8; // Adjust metalness as needed
-      // child.material.map.format = THREE.RGBAFormat;
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-      {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}
-      <primitive
-        object={gltf.scene}
-        position={[5, -5, 0]}
-        rotation={[0, -1, 0]}
-      />{' '}
-      {/* For Single view */}
-      {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>
-        <planeGeometry args={[100, 500]} />
-        <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />
-      </mesh> */}
-    </group>
-  );
-};
 export default Story;

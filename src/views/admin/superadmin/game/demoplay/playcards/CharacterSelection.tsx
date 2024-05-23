@@ -33,19 +33,6 @@ import Select from 'assets/img/games/select_character.png';
 
 // Three js
 import { Canvas, useLoader, useFrame } from 'react-three-fiber';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-
-// import { useGLTF } from '@react-three/drei';
-// import { Environment, OrbitControls } from '@react-three/drei';
-// import { FBXLoader } from 'three/addons/loaders/FBXLoader';
-// Components
-// import PlayingCharacter from '../three/PlayingCharacter';
-// import Sphere from '../three/Sphere';
-// import Trex from '../three/Trex';
-// import { Parrot } from '../three/Parrot';
-// Import ProfileContext from EntirePreview
 import { ProfileContext } from '../EntirePreview';
 import {
   getGameLanguages,
@@ -56,7 +43,7 @@ import { useParams } from 'react-router-dom';
 import { OrbitControls } from '@react-three/drei/core/OrbitControls';
 // import {Parrot}  from '../three/Parrot';
 import PlayingCharacter from './PlayingCharacter';
-import Model from './Model';
+// import Model from './Model';
 interface PlayGamesProps {
   formData?: any;
   state?: any;
@@ -70,10 +57,10 @@ interface PlayGamesProps {
   setProfileData?: any;
   demoBlocks?: any;
   preloadedAssets?: any;
-  setprevScreenId: any;
   currentScreenId: any;
   setPreLogDatas: any;
   getPrevLogDatas: any;
+  ModelPlayer:any;
 }
 
 const spokenLanguages = [
@@ -112,10 +99,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   demoBlocks,
   formData,
   preloadedAssets,
-  setprevScreenId,
   currentScreenId,
   setPreLogDatas,
   getPrevLogDatas,
+  ModelPlayer
 }) => {
   const [i, setI] = useState(0);
   const [toggleLeft, setToggleLeft] = useState(false);
@@ -145,9 +132,9 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     xl: '90%',
     xxl: '90%',
   });
-  const screenIdset =
-    getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
-
+  // const screenIdset =
+  //   getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+    const screenIdset = (getPrevLogDatas?.screenIdSeq?.length -1) >=0 ? getPrevLogDatas?.screenIdSeq[(getPrevLogDatas?.screenIdSeq?.length -1)]:  1;
   return (
     <>
       <Box
@@ -205,13 +192,10 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                       castShadow
                     />
                     <ambientLight intensity={0.5} />
-                    {/* <OrbitControls   />  */}
                     <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
                     {/* COMPONENTS */}
-                    <Model position={[0, -1.5, 4]} />
-                    {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
-                    {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
-                    {/* <Parrot /> */}
+                    {/* <Model position={[0, -1.5, 4]} /> */}
+                    <ModelPlayer position={[0, -1.5, 4]} rotation={[0,0,0]}/>
                   </Canvas>
                   <Img
                     onMouseDown={() => setToggleRight(true)}

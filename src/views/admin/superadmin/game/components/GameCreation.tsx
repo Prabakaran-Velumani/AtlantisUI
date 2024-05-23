@@ -2521,8 +2521,10 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
       setFormData(formDataWithoutLastTab);
       const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
+      console.log('idddddddd', MaxBlockQuestNumber)
       if (result.status === 'Success') {
         const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
+        console.log('Max QuestNo:', maxQuestNo);
         if (maxQuestNo < 5) {
           setOpenQuest(true);
         } else {
@@ -3127,10 +3129,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       }
     }
   };
-  const validateNavigation = (block:any) =>
-    {
 
-    }
   function truncateText(text: any, maxLength: any, maxLineLength: 10) {
     if (text.length <= maxLength) {
       return text;

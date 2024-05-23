@@ -20,11 +20,10 @@ const Welcome: React.FC<{
   intro: any;
   screen: any;
   preloadedAssets:any;
-  setprevScreenId:any;
   currentScreenId:any;
   setPreLogDatas:any;
   getPrevLogDatas:any;
-}> = ({ formData, imageSrc, preview, setCurrentScreenId, intro, screen, preloadedAssets,currentScreenId,setprevScreenId,setPreLogDatas,getPrevLogDatas }) => {
+}> = ({ formData, imageSrc, preview, setCurrentScreenId, intro, screen, preloadedAssets,currentScreenId,setPreLogDatas,getPrevLogDatas }) => {
   const { id } = useParams();
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);
@@ -110,7 +109,7 @@ const Welcome: React.FC<{
     return null;
   };
   // const link = extractLink(formData.gameAdditionalWelcomeNote);
-  const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
+  const screenIdset = (getPrevLogDatas?.screenIdSeq?.length -1) >=0 ? getPrevLogDatas?.screenIdSeq[(getPrevLogDatas?.screenIdSeq?.length -1)]:  1;
   
   return (
     <>
@@ -248,8 +247,8 @@ const Welcome: React.FC<{
                                   w={'50px'}
                                   h={'20px'}
                                   justifyContent={'space-between'}
-                                  font-weight={'300'}
-                                  margin-left={'5px'}
+                                  fontWeight={'300'}
+                                  marginLeft={'5px'}
                                 >
                                   <Text color={'#D9C7A2'}>
                                     {filteredSkillName}
@@ -302,8 +301,8 @@ const Welcome: React.FC<{
                                     w={'50px'}
                                     h={'20px'}
                                     justifyContent={'space-between'}
-                                    font-weight={'300'}
-                                    margin-left={'5px'}
+                                    fontWeight={'300'}
+                                    marginLeft={'5px'}
                                   >
                                     <Text color={'#D9C7A2'}>
                                       {contentAfterBullet}

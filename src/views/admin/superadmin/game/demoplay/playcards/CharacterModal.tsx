@@ -8,7 +8,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 const cameraPosition = [2, -1.8, 5.8];
 const rotation = { x: 0, y: 11.5, z: 0 }; //degree to rotate
 const animationsArray = [1, 0, 1, 1, 0];
-const audioDuration = 27;
+const audioDuration = 15;
 /**End */
 
 /**** ###props:
@@ -23,8 +23,8 @@ const audioDuration = 27;
  ******/
 const CharacterModal: React.FC<{
   preloadedAssets: any;
-  isStartsAnimationPlay: boolean;
-}> = ({ preloadedAssets, isStartsAnimationPlay }) => {
+  isStartsAnimationPlay?: boolean;
+}> = ({ preloadedAssets, isStartsAnimationPlay=false }) => {
   const clock = new THREE.Clock();
   const groupRef = useRef<any>();
   const [gltf, setGltf] = useState(null);

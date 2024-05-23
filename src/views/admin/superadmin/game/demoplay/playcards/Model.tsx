@@ -19,7 +19,7 @@ import React, {
   // import { Parrot } from '../three/Parrot';
   // Import ProfileContext from EntirePreview
   
- const Model: React.FC<{isSpeaking?:any,position:any,rotation?:any}> = ({isSpeaking,position,rotation}) => {
+ const Model: React.FC<{isSpeaking?:any,position?:any,rotation?:any}> = ({isSpeaking,position,rotation}) => {
     const groupRef = useRef<any>();
     const gltf = useLoader(GLTFLoader, Sample);  
     const [isHovered, setIsHovered] = useState<any>(false);    

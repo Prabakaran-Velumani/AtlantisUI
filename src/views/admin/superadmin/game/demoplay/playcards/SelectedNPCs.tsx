@@ -4,7 +4,7 @@ import { Canvas } from 'react-three-fiber'
 import CharacterModal from './CharacterModal'
 import Model from './Model'
 
-type SelectedNPCType ={
+interface SelectedNPCType {
     preloadedAssets: any;
     isStartsAnimationPlay?: boolean;
     isSpeaking?: boolean;
@@ -44,3 +44,4 @@ const SelectedNPCs: React.FC<SelectedNPCType> = ({preloadedAssets, isStartsAnima
 }
 
 export default SelectedNPCs;
+export type { SelectedNPCType };

@@ -7,6 +7,7 @@ import Sample from 'assets/img/games/Merlin.glb';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 import Model from './Model';
+import Player from './Player';
 
 interface InteractionProps {
   backGroundImg: any;
@@ -22,9 +23,10 @@ interface InteractionProps {
   RepeatSelectOption: any;
   RepeatPrevOption:any;
   contentByLanguage:any;
+  currentScreenId? : number;
 }
 
-const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, options, optionClick, InteractionFunction, navTrack, preloadedAssets, selectedPlayer, LastModiPrevData, RepeatSelectOption, RepeatPrevOption ,contentByLanguage}) => {
+const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, options, optionClick, InteractionFunction, navTrack, preloadedAssets, selectedPlayer, LastModiPrevData, RepeatSelectOption, RepeatPrevOption ,contentByLanguage, currentScreenId}) => {
   const [prevSelectOption, setprevselectoptions] = useState<any>();
   useEffect(() => {
     if (RepeatSelectOption === true) {
@@ -235,7 +237,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
             <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
 
             {/* COMPONENTS */}
-            <Player />
+            <Player currentScreenId={currentScreenId}/>
             <Model isSpeaking={option} position={[-3, -1.8, 5]} rotation={[0, 1, 0]} />
             {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
             {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
@@ -247,64 +249,4 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
   );
 }
 
-const Player: React.FC = () => {
-  const groupRef = useRef<any>();
-  const gltf = useLoader(GLTFLoader, Sample);
-  const [isHovered, setIsHovered] = useState<any>(false);
-
-  const mixer = new THREE.AnimationMixer(gltf.scene);
-  const action = mixer.clipAction(gltf.animations[1]);
-
-  useFrame((state, delta) => {
-    // Rotate the model on the Y-axis
-
-    if (groupRef.current) {
-      // groupRef.current.rotation.y += delta;
-      // groupRef.current.rotation.x += delta;
-      // groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime) * 2;
-      groupRef.current.castShadow = true;
-    }
-
-    mixer.update(delta);
-  });
-
-  // !isHovered &&
-  action.play();
-
-  useLayoutEffect(() => {
-    if (groupRef.current) {
-      groupRef.current.traverse((obj: any) => {
-        if (obj.isMesh) {
-          obj.castShadow = true;
-          obj.receiveShadow = true;
-        }
-      });
-    }
-  }, []);
-
-  gltf.scene.traverse((child) => {
-    if (child instanceof THREE.Mesh) {
-      // child.material.color.set(0xffccaaf0); // Set your desired color
-      child.material.color.set(0xffffff); // Set your desired color
-      child.material.roughness = 0.4; // Adjust roughness as needed
-      child.material.metalness = 0.8; // Adjust metalness as needed
-      // child.material.map.format = THREE.RGBAFormat;
-    }
-  });
-
-  function handleClick() {
-    console.log('Character Click!')
-  }
-
-  return (
-    <group ref={groupRef}>
-      {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}
-      <primitive object={gltf.scene} position={[5, -5, 0]} rotation={[0, -1, 0]} />   {/* For Single view */}
-      {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>
-        <planeGeometry args={[100, 500]} />
-        <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />
-      </mesh> */}
-    </group>
-  )
-};
 export default Interaction;

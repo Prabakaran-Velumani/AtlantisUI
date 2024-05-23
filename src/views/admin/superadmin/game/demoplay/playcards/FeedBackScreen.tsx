@@ -10,15 +10,10 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import next from 'assets/img/screens/next.png';
-import feedi from 'assets/img/screens/feed.png';
-import InteractionScreenShot from './InteractionScreenShot';
+import React, { useEffect, lazy, Suspense } from 'react';
 import Close from 'assets/img/games/close.png';
 import { Canvas, useFrame, useLoader } from 'react-three-fiber';
 import Sample from 'assets/img/games/Merlin.glb';
-// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-// import * as THREE from 'three';
 import Model from './Model';
 import { useLayoutEffect, useRef, useState } from 'react';
 import room from 'assets/img/games/Compressed.glb';
@@ -26,6 +21,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 import hdr from 'assets/models/bg.hdr';
+const InteractionScreenShot = lazy(()=> import('./InteractionScreenShot'));
 interface FeedBackScreenShotProps {
     backgroundScreenUrl: any;
     first: any;
@@ -198,6 +194,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                 isScreenshot={isScreenshot}
                 preloadedAssets={preloadedAssets}
                 profileData={profileData}
+                currentScreenId={9}
               />
             )}
       </>
@@ -310,58 +307,5 @@ const ThreeScene = () => {
   );
 };
 
-// const Player: React.FC = () => {
-//   const groupRef = useRef<any>();
-//   const HDRMap = useLoader(RGBELoader, hdr);
-//   const gltf = useLoader(GLTFLoader, room);
-//   const [isHovered, setIsHovered] = useState<any>(false);
-//   const mixer = new THREE.AnimationMixer(gltf.scene);
-//   // const action = mixer.clipAction(gltf.animations[10]);
-
-//   useFrame((state, delta) => {
-//     if (groupRef.current) {
-//       groupRef.current.castShadow = true;
-//     }
-//     mixer.update(delta);
-//   });
-
-//   // !isHovered &&
-//   // action.play();
-
-//   useLayoutEffect(() => {
-//     if (groupRef.current) {
-//       groupRef.current.traverse((obj: any) => {
-//         if (obj.isMesh) {
-//           obj.castShadow = true;
-//           obj.receiveShadow = true;
-//         }
-//       });
-//     }
-//   }, []);
-
-//   gltf.scene.traverse((child) => {
-//     if (child instanceof THREE.Mesh && child.material.map) {
-//       child.material.color.set(0xffffff); // Set your desired color
-//       child.material.roughness = 0.4; // Adjust roughness as needed
-//       child.material.metalness = 0.8; // Adjust metalness as needed
-//       if (child.material.map) {
-//         child.material.map.minFilter = THREE.LinearFilter;
-//         child.material.map.magFilter = THREE.LinearFilter;
-//       }
-//     }
-//   });
-
-//   return (
-//     <group ref={groupRef}>
-//       {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}
-//       <primitive object={HDRMap} />
-//       <primitive object={gltf.scene} position={[-0.2,-1.5, 0.7]} rotation={[-0.1, -1.4, 0]} />
-//       {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>
-//         <planeGeometry args={[100, 500]} />
-//         <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />
-//       </mesh> */}
-//     </group>
-//   )
-// };
 
 export default FeedBackScreen;

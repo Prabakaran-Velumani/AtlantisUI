@@ -24,8 +24,10 @@ import { IoIosRefresh } from 'react-icons/io';
 import PlayInfo from './playcards/playinfo';
 import CharacterGlb from 'assets/img/games/Character_sample.glb';
 import Merlin from 'assets/img/games/Merlin.glb';
+import collector from 'assets/img/games/collector.glb';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import Model from './playcards/Model';
 
 
 const EntirePreview = lazy(() => import('./EntirePreview'));
@@ -43,7 +45,29 @@ const gameScreens = [
 // const Tab5attribute = [6, 4,3, 7, 1,5 ];
 
 export const ScoreContext = createContext<any>(null);
+export type ProfileType = {
+  score: any[];
+  completedLevels: string[];
+  currentQuest: number;
+  replayScore: any[];
+  playerGrandTotal: {
+    questScores: Record<string, any>;
+  };
+  todayEarnedScore: {
+    quest: number;
+    score: number;
+    earnedDate: string;
+  }[];
+};
 
+const initialProfileObject: ProfileType = {
+  score: [],
+  completedLevels: ['1'],
+  currentQuest: 1,
+  replayScore: [],
+  playerGrandTotal: { questScores: {} },
+  todayEarnedScore: [{ quest: 1, score: 0, earnedDate: "" }],
+};
 const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
@@ -51,15 +75,7 @@ const GamePreview = () => {
   const [gameInfo, setGameInfo] = useState<any | null>(null);
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
-  // const [currentScreenId, setCurrentScreenId] = useState<number>(InitialScreenId);
-  const [profile, setProfile] = useState({
-    score: [],
-    completedLevels: ['1'],
-    currentQuest: 1,
-    replayScore:[],
-    playerGrandTotal:{questScores:{}},
-    todayEarnedScore: [{quest:1, score:0, earnedDate: ""}],  
-  });
+    const [profile, setProfile] = useState(initialProfileObject);
   const [currentScore, setCurrentScore] = useState(0);
   const toast = useToast();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -71,29 +87,10 @@ const GamePreview = () => {
   const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
   const [componentsLoaded, setComponentsLoaded] = useState(false);
   const [loadedGLBs, setLoadedGLBs] = useState<any>(null);
-  // Newly added start
-  const [prevnaviseq, setprevNaviseq] = useState([]);
-  const [LastActivityseq, setLastActivityseq] = useState([]);
-  const [prevSelectedOptionseq, setprevSelectedOptionseq] = useState([]);
-  const [prevScreenId, setprevScreenId] = useState([]);
-  const [previewLogsData, setPreviewLogsData] = useState<any>(null);
-  const [getPrevLogDatas, setPreLogDatas] = useState({
-    previewLogId: '',
-    playerId: '',
-    playerType: '',
-    previewGameId: '',
-    nevigatedSeq: [],
-    screenIdSeq: [],
-    lastActiveBlockSeq: '',
-    selectedOptions: '',
-    previewProfile: '',
-    lastModifiedBlockSeq: '',
-    lastBlockModifiedDate:'',
-    updatedAt:'',
-    playerInputs:'',
-    audioVolumeValue:{},
-  });
-  //End
+  const [previewLogsDataIni, setPreviewLogsDataIni] = useState<any>(null);
+  const [preLogDatasIni, setPreLogDatasIni] = useState<any>(null);
+  const [initialStateUpdate, setInitialStateUpdate]=useState<boolean>(false);
+  
   const user: any = JSON.parse(localStorage.getItem('user'));
   //get the stored Preview Log Data, if has otherwise create a new record
   const fetchPreviewLogsData = async () => {
@@ -110,7 +107,7 @@ const GamePreview = () => {
         }
         const userDataString = JSON.stringify(data);
         const updatePreviewLogsResponse = await updatePreviewlogs(userDataString);
-        setPreLogDatas({
+        setPreLogDatasIni({
           previewLogId: updatePreviewLogsResponse.data.previewLogId,
           playerId: updatePreviewLogsResponse.data.playerId,
           playerType: updatePreviewLogsResponse.data.playerType,
@@ -124,7 +121,8 @@ const GamePreview = () => {
           lastBlockModifiedDate:updatePreviewLogsResponse.data.lastBlockModifiedDate,
           updatedAt:updatePreviewLogsResponse.data.updatedAt,
           playerInputs: updatePreviewLogsResponse.data.playerInputs? JSON.parse(updatePreviewLogsResponse.data.playerInputs) : [],
-          audioVolumeValue: updatePreviewLogsResponse.data.audioVolumeValue ? JSON.parse(updatePreviewLogsResponse.data.audioVolumeValue): null
+          audioVolumeValue: updatePreviewLogsResponse.data.audioVolumeValue ? updatePreviewLogsResponse.data.audioVolumeValue: {bgVolume: 0.3, voVolume:0.3},
+          previewScore: updatePreviewLogsResponse.data.previewScore ? JSON.parse(updatePreviewLogsResponse.data.previewScore): initialProfileObject,
         });
         return updatePreviewLogsResponse;
 
@@ -137,19 +135,22 @@ const GamePreview = () => {
   useEffect(() => {
     const fetchPreviewLogs = async () => {
       const Reponse = await fetchPreviewLogsData();
-      if (Reponse) {
-        setPreviewLogsData(Reponse);
+      console.log("********Reponse.data", Reponse)
+      if (Reponse?.status =="Success") {
+        setPreviewLogsDataIni(Reponse);
+        setProfile({...Reponse?.data?.previewScore})
+        setInitialStateUpdate(true);
       }
     }
     fetchPreviewLogs();
   }, [gameInfo]);
-  useEffect(() => {
-    const fetchPreviewLogs = async () => {
-      const Reponse = await fetchPreviewLogsData();
-    }
+  // useEffect(() => {
+  //   const fetchPreviewLogs = async () => {
+  //     const Reponse = await fetchPreviewLogsData();
+  //   }
 
-    fetchPreviewLogs();
-  }, [previewLogsData]);
+  //   fetchPreviewLogs();
+  // }, [previewLogsData]);
 //End get the stored Preview Log Data, if has otherwise create a new record
 
   useEffect(() => {
@@ -169,7 +170,7 @@ const GamePreview = () => {
         // assetImageSrc['characterGlb'] = CharacterGlb;
         // { assetType: 'characterGlb', src: characterGlb },
         // const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: CharacterGlb }]);
-        const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: Merlin }]);
+        const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: collector }]);
         // Use preloadedGLBs[CharacterGlb] if you need the preloaded GLB data
         setLoadedGLBs((prev:any)=> ({...prev, preloadedGLBs}))
         const loader = new GLTFLoader();
@@ -469,73 +470,73 @@ const GamePreview = () => {
     );
   };
 
-  const handleSubmitReview = async (inputdata: any) => {
-    /** Sample post data
-   * {"data" :{
-    "reviewerId": 4,
-    "reviewGameId": 3,
-    "review": "Character Tab",
-    "tabId": 2,
-    "tabAttribute": null,
-    "tabAttributeValue": ""
-   }
-} 
-   */
-    if (!inputdata.reviewerId || !inputdata.reviewGameId) {
-      toast({
-        title: 'You are Unauthorized..!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
-      });
-      return false;
-    } 
-    else if (!inputdata.tabId) {
-      toast({
-        title: 'Select Feedback Options',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
-      });
-      return false;
-    } else if (!inputdata.review) {
-      toast({
-        title: 'Review Field is Empty',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
-      });
-      return false;
-    }
+//   const handleSubmitReview = async (inputdata: any) => {
+//     /** Sample post data
+//    * {"data" :{
+//     "reviewerId": 4,
+//     "reviewGameId": 3,
+//     "review": "Character Tab",
+//     "tabId": 2,
+//     "tabAttribute": null,
+//     "tabAttributeValue": ""
+//    }
+// } 
+//    */
+//     if (!inputdata.reviewerId || !inputdata.reviewGameId) {
+//       toast({
+//         title: 'You are Unauthorized..!',
+//         status: 'error',
+//         duration: 3000,
+//         isClosable: true,
+//         position: 'top-right',
+//       });
+//       return false;
+//     } 
+//     else if (!inputdata.tabId) {
+//       toast({
+//         title: 'Select Feedback Options',
+//         status: 'error',
+//         duration: 3000,
+//         isClosable: true,
+//         position: 'top-right',
+//       });
+//       return false;
+//     } else if (!inputdata.review) {
+//       toast({
+//         title: 'Review Field is Empty',
+//         status: 'error',
+//         duration: 3000,
+//         isClosable: true,
+//         position: 'top-right',
+//       });
+//       return false;
+//     }
 
-    const addReviewResponse = await SubmitReview(
-      JSON.stringify({ data: inputdata, id: uuid }),
-    );
-    if (addReviewResponse?.status === 'Failure') {
-      toast({
-        title: 'Failed to Add Review',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
-      });
-      return false;
-    }
-    if (addReviewResponse?.status === 'Success') {
-      toast({
-        title: 'Review added Successfully..!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
-      });
-      fetchGameData();
-      return true;
-    }
-  };
+//     const addReviewResponse = await SubmitReview(
+//       JSON.stringify({ data: inputdata, id: uuid }),
+//     );
+//     if (addReviewResponse?.status === 'Failure') {
+//       toast({
+//         title: 'Failed to Add Review',
+//         status: 'error',
+//         duration: 3000,
+//         isClosable: true,
+//         position: 'top-right',
+//       });
+//       return false;
+//     }
+//     if (addReviewResponse?.status === 'Success') {
+//       toast({
+//         title: 'Review added Successfully..!',
+//         status: 'success',
+//         duration: 3000,
+//         isClosable: true,
+//         position: 'top-right',
+//       });
+//       fetchGameData();
+//       return true;
+//     }
+//   };
   const handleMouseMove = () => {
     setIsHovered(true);
     clearTimeout(timeout);
@@ -578,7 +579,20 @@ const GamePreview = () => {
 
   return (
     <>
-      <Suspense fallback={<h1>Loading please wait...</h1>}>
+      <Suspense fallback={
+              <Box
+              backgroundImage={preloadedAssets?.StarsBg}
+              w={'100% !important'}
+              h={'100vh'}
+              backgroundRepeat={'no-repeat'}
+              backgroundSize={'cover'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              className="Game-Screen"
+              backgroundColor={'#0d161e'}
+            >      
+            </Box>
+        }>
         {contentReady && (
           gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
             gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
@@ -589,37 +603,32 @@ const GamePreview = () => {
               (
                 <ScoreContext.Provider value={{ profile, setProfile }}>
                   <Box id="container" >
-                    {isHovered && (
-                      <Icon
-                        as={IoIosRefresh}
-                        position={'fixed'}
-                        top={'20px'}
-                        left={'48%'}
-                        color={'white'}
-                        zIndex={999999}
-                        width={'60px'}
-                        height={'60px'}
-                        padding={'20px'}
-                        borderRadius={'50%'}
-                        bg={'grey'}
-                        cursor={'pointer'}
-                        onClick={() => window.location.reload()}
-                      />
-                    )}
+                    <Box
+                          backgroundImage={preloadedAssets?.StarsBg}
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                          backgroundColor={'#0d161e'}
+                        >
                     <EntirePreview
                       currentScore={currentScore}
                       setCurrentScore={setCurrentScore}
-                      //Newly Added states for preview activity track
-                      setprevScreenId={setprevScreenId}
-                      setPreLogDatas={setPreLogDatas}
-                      getPrevLogDatas={getPrevLogDatas}
-                      //End - Newly Added states for preview activity track
                       gameInfo={gameInfo}
-                      handleSubmitReview={handleSubmitReview}
                       isReviewDemo={id ? false : true}
                       preloadedAssets={preloadedAssets}
                       InitialScreenId={InitialScreenId}
+                      fetchGameData={fetchGameData}
+                      fetchPreviewLogsData={fetchPreviewLogsData}
+                      previewLogsDataIni={previewLogsDataIni}
+                      preLogDatasIni={preLogDatasIni}
+                      initialStateUpdate={initialStateUpdate}
+                      setInitialStateUpdate={setInitialStateUpdate}
                     />
+                    </Box>
                   </Box>
                 </ScoreContext.Provider>
               ))

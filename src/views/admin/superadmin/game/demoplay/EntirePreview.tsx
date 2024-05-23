@@ -23,6 +23,7 @@ import {
   ModalContent,
   ModalCloseButton,
   ModalBody,
+  useToast
 } from '@chakra-ui/react';
 import { lazy } from 'react';
 import { motion } from 'framer-motion';
@@ -50,13 +51,16 @@ import {
   getPreview,
   getGameLanguages,
   getContentRelatedLanguage,
+  SubmitReview
 } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
 import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
-import ReplayScore from './playcards/ReplayScore';
+import { useParams } from 'react-router-dom';
+import {ProfileType} from "./GamePreview";
+const ReplayScore = lazy(() => import('./playcards/ReplayScore'));
 const Story = lazy(() => import('./playcards/Story'));
 const Welcome = lazy(() => import('./playcards/Welcome'));
 const ThankYou = lazy(() => import('./playcards/Thankyou'));
@@ -79,7 +83,12 @@ const LanguageSelectionPrompt = lazy(
   () => import('./playcards/LanguageSelectionPrompt'),
 );
 const PromptScreen = lazy(() => import('./playcards/PromptScreen'));
-// const CharacterModal = lazy(() => import ('./playcards/CharacterModal'));
+const CharacterModal = lazy(() => import ('./playcards/CharacterModal'));
+const Player = lazy(() => import ('./playcards/Player'));
+const ModelPlayer = lazy(() => import ('./playcards/Model'));
+const SelectedNPCs= lazy(() => import ('./playcards/SelectedNPCs'));
+
+var i=0;
 
 interface Review {
   reviewerId: String | null;
@@ -92,17 +101,37 @@ interface Review {
 
 interface ShowPreviewProps {
   gameInfo: any;
-  handleSubmitReview: (data: any) => Promise<boolean>;
   isReviewDemo: boolean;
   currentScore: any;
   setCurrentScore: any;
   preloadedAssets: any;
   InitialScreenId: number;
-  setprevScreenId?: any;
-  setPreviewLogsId?: any;
-  getPreviewLogsId?: any;
-  setPreLogDatas?: any;
-  getPrevLogDatas?: any;
+  fetchGameData: ()=>void;
+  fetchPreviewLogsData: ()=> void;
+  previewLogsDataIni: any;
+  preLogDatasIni: any;
+  initialStateUpdate: boolean;
+  setInitialStateUpdate: any;
+}
+
+
+// Define the interface for the state
+interface PrevLogData {
+  previewLogId: string;
+  playerId: string;
+  playerType: string;
+  previewGameId: string;
+  nevigatedSeq: any[];
+  screenIdSeq: any[];
+  lastActiveBlockSeq: string;
+  selectedOptions: any;
+  previewProfile: any;
+  lastModifiedBlockSeq: string;
+  lastBlockModifiedDate: string;
+  updatedAt: string;
+  playerInputs: any;
+  audioVolumeValue: any | null;
+  previewScore: ProfileType;
 }
 
 type TabAttributeSet = {
@@ -154,15 +183,17 @@ export const ProfileContext = createContext<ProfileDataType>({
 type QuestWiseMaxTotal = { [key: number]: number };
 const EntirePreview: React.FC<ShowPreviewProps> = ({
   gameInfo,
-  handleSubmitReview,
   isReviewDemo,
   currentScore,
   setCurrentScore,
   preloadedAssets,
   InitialScreenId,
-  setprevScreenId,
-  getPrevLogDatas,
-  setPreLogDatas,
+  fetchGameData,
+  fetchPreviewLogsData,
+  previewLogsDataIni,
+  preLogDatasIni,
+  initialStateUpdate,
+  setInitialStateUpdate
 }) => {
   const user: any = JSON.parse(localStorage.getItem('user'));
   const { colorMode, toggleColorMode } = useColorMode();
@@ -279,76 +310,26 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [replayState, setReplayState] = useState<string>(null);
   const [optionalReplay, setOptionalReplay] = useState<string>(null);
   const [isNoteClosed, setIsNoteClosed] = useState(false);
-  useEffect(() => {
-    setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
-  }, [scoreComp]);
-
-  useEffect(() => {
-    if(profile.score!==undefined)
-      {
-         const currentDate = new Date();
-    // Get day, month, and year
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const year = currentDate.getFullYear();
-
-    // Format date as DD-MM-YYYY
-    const formattedDate = `${day}-${month}-${year}`;
-    //  scoreEarnedDate: profile?.score.map((item: any) => item.scoreEarnedDate)
-    const toDayScore =  profile?.score.reduce((total: any, acc: any) => {
-      if (acc.scoreEarnedDate === formattedDate) {
-        return total + acc.score;
-      } else {
-        return total;
-      }
-    }, 0);
-    const totalEarnScore = profile?.score.reduce(
-      (acc: any, obj: any) => acc + parseInt(obj.score),
-      0,
-    );
-    setPreLogDatas((prev: any) => ({
-      ...prev,
-      previewProfile: { ...prev.previewProfile, score: profile.score },
-    }));
-
-    setPlayerTodayScore(toDayScore);
-      }
-   
-  }, [profile?.score]);
-  // This for  Translation content based on lang 09.05.2024
-  useEffect(() => {
-    const fetchGameContent = async () => {
-      const languageId = getPrevLogDatas?.previewProfile?.language
-        ? getPrevLogDatas?.previewProfile?.language
-        : profileData.language;
-      if (getPrevLogDatas?.previewProfile?.language) {
-        setProfileData((prev: any) => ({
-          ...prev,
-          language: getPrevLogDatas?.previewProfile?.language,
-        }));
-      }
-      const gameContentResult = await getContentRelatedLanguage(
-        gameInfo?.gameData.gameId,
-        languageId,
-      );
-      if (gameContentResult.status === 'Success') {
-        const data = gameContentResult.data;
-        setProfileData((prev: any) => ({
-          ...prev,
-          Audiogetlanguage: data.map((x: any) => ({
-            content: x.content,
-            audioUrls: x.audioUrls,
-            textId: x.textId,
-            fieldName: x.fieldName,
-          })),
-        }));
-      }
-    };
-    if (profileData.language !== '') {
-      fetchGameContent();
-    }
-  }, [profileData?.language]);
-
+  
+  const [previewLogsData, setPreviewLogsData] = useState<any>(previewLogsDataIni); /** Used to load the table data for the first time only */
+  /*
+  const [getPrevLogDatas, setPreLogDatas] = useState<PrevLogData>({
+    previewLogId: '',
+    playerId: '',
+    playerType: '',
+    previewGameId: '',
+    nevigatedSeq: [],
+    screenIdSeq: [],
+    lastActiveBlockSeq: '',
+    selectedOptions: '',
+    previewProfile: {},
+    lastModifiedBlockSeq: '',
+    lastBlockModifiedDate:'',
+    updatedAt:'',
+    playerInputs:'',
+    audioVolumeValue: {},
+  }); /** Handles the updated Data on run time, initial */
+  const [getPrevLogDatas, setPreLogDatas] = useState<PrevLogData>({...preLogDatasIni}); /** Handles the updated Data on run time, initial */
   const [voiceIds, setVoiceIds] = useState<any>();
   const [feedbackList, setFeedbackList] = useState([]);
   const [interactionCount, setinteractionCount] = useState(null);
@@ -390,6 +371,181 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     loop: true, // Background loops
     autoplay: true,
   });
+  const { uuid } = useParams();
+  const toast = useToast();
+
+  //  useEffect(() => {
+  //   const fetchPreviewLogs = async () => {
+  //     const Reponse = await fetchPreviewLogsData();
+  //   }
+  //   fetchPreviewLogs();
+  // }, [previewLogsData]);
+//End get the stored Preview Log Data, if has otherwise create a new record
+
+useEffect(()=>{
+  //Initial loading data, it has inital vlaues of preview_logs of the player for this game
+  if(preLogDatasIni)
+    {
+      setPreLogDatas(preLogDatasIni);
+      console.log("preLogDatasIni", preLogDatasIni)
+      setProfile({...preLogDatasIni.previewScore});
+    }
+},[preLogDatasIni])
+  
+  
+  const handleSubmitReview = async (inputdata: any) => {
+    /** Sample post data
+   * {"data" :{
+    "reviewerId": 4,
+    "reviewGameId": 3,
+    "review": "Character Tab",
+    "tabId": 2,
+    "tabAttribute": null,
+    "tabAttributeValue": ""
+   }
+} 
+   */
+    if (!inputdata.reviewerId || !inputdata.reviewGameId) {
+      toast({
+        title: 'You are Unauthorized..!',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+      return false;
+    } 
+    else if (!inputdata.tabId) {
+      toast({
+        title: 'Select Feedback Options',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+      return false;
+    } else if (!inputdata.review) {
+      toast({
+        title: 'Review Field is Empty',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+      return false;
+    }
+
+    const addReviewResponse = await SubmitReview(
+      JSON.stringify({ data: inputdata, id: uuid }),
+    );
+    if (addReviewResponse?.status === 'Failure') {
+      toast({
+        title: 'Failed to Add Review',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+      return false;
+    }
+    if (addReviewResponse?.status === 'Success') {
+      toast({
+        title: 'Review added Successfully..!',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+      fetchGameData();
+      return true;
+    }
+  };
+  
+
+  useEffect(() => {
+    setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
+  }, [scoreComp]);
+
+  useEffect(() => {
+    if(profile.score!==undefined)
+      {
+         const currentDate = new Date();
+    // Get day, month, and year
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = currentDate.getFullYear();
+
+    // Format date as DD-MM-YYYY
+    const formattedDate = `${day}-${month}-${year}`;
+    //  scoreEarnedDate: profile?.score.map((item: any) => item.scoreEarnedDate)
+    const toDayScore =  profile?.score.reduce((total: any, acc: any) => {
+      if (acc.scoreEarnedDate === formattedDate) {
+        return total + acc.score;
+      } else {
+        return total;
+      }
+    }, 0);
+    const totalEarnScore = profile?.score.reduce(
+      (acc: any, obj: any) => acc + parseInt(obj.score),
+      0,
+    );
+    setPreLogDatas((prev: any) => ({
+      ...prev,
+      previewProfile: { ...prev.previewProfile, score: profile.score },
+    }));
+    setPlayerTodayScore(toDayScore);
+  }
+  
+}, [profile?.score]);
+
+
+
+useEffect(()=>{
+  console.log("useEffect profile ", profile)
+  if(profile)
+    {
+      setPreLogDatas((prev:any)=> ({...prev, previewScore: profile}));
+    }
+  
+},[profile])
+
+  // This for  Translation content based on lang 09.05.2024
+  useEffect(() => {
+    const fetchGameContent = async () => {
+      const languageId = getPrevLogDatas?.previewProfile?.language
+        ? getPrevLogDatas?.previewProfile?.language
+        : profileData.language;
+      if (getPrevLogDatas?.previewProfile?.language) {
+        setProfileData((prev: any) => ({
+          ...prev,
+          language: getPrevLogDatas?.previewProfile?.language,
+        }));
+      }
+      const gameContentResult = await getContentRelatedLanguage(
+        gameInfo?.gameData.gameId,
+        languageId,
+      );
+      if (gameContentResult.status === 'Success') {
+        const data = gameContentResult.data;
+        setProfileData((prev: any) => ({
+          ...prev,
+          Audiogetlanguage: data.map((x: any) => ({
+            content: x.content,
+            audioUrls: x.audioUrls,
+            textId: x.textId,
+            fieldName: x.fieldName,
+          })),
+        }));
+      }
+    };
+    if (profileData.language !== '') {
+      fetchGameContent();
+    }
+  }, [profileData?.language]);
+
+
+
+
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
     if (res?.status === 'success' && res?.url) {
@@ -404,8 +560,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
   useEffect(() => {
     setDemoBlocks(gameInfo?.blocks);
-
-    if (data === null) {
+    
+    if (data === null && profile.currentQuest) {
+      console.log("profile.currentQuest", profile.currentQuest);
       setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
       setData(gameInfo?.blocks[profile?.currentQuest]['1']);
       if (
@@ -478,7 +635,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const scores =
         questState[profile?.currentQuest] == 'Started'
           ? profile?.score
-          : profile?.replayScore.length > 0
+          : profile?.replayScore?.length > 0
           ? profile?.replayScore
           : profile?.score;
       let total: number = 0;
@@ -487,7 +644,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         //For chapter Selection Screen
         if(profile.score!==undefined)
           {
-             if (scores.length > 0) {
+             if (scores?.length > 0) {
           // Calculate scores for each quest
           scores.forEach((score: any) => {
             if (questScores[score.quest]) {
@@ -3520,34 +3677,30 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         if (resLang?.status === 'Success') {
           if (resLang?.data.length > 0) {
             const data = resLang?.data;
+            const ifEnglishExist = data.filter((lang: any)=>lang.value===1 );
+            console.log("ifEnglishExist ---", ifEnglishExist);
+            if(ifEnglishExist.length === 0)
+              {
+                data.unshift({ value: 1, label: 'English' });
+              }
             setGameLanguages(data);
-            data.unshift({ value: 0, label: 'English' });
 
             setHasMulitLanguages(true);
           } else {
+            setGameLanguages([{ value: 1, label: 'English' }]);
             setProfileData((prev: any) => ({
               ...prev,
-              language: 'English',
+              language: 1,
             }));
             setPreLogDatas((prev: any) => ({
-           
               ...prev,
               previewProfile: {
                 ...prev.previewProfile,
-                language: 'English',
-                // language: data[0]?.label,
-              },
-             
+                language: 1,
+              }, 
             }));
             setHasMulitLanguages(true);
-            setIsOpenCustomModal(true);
           }
-          // else {
-          //   setProfileData((prev: any) => ({
-          //     ...prev,
-          //     language: "English",
-          //   }));
-          // }
         }
       }
     };
@@ -3714,7 +3867,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         lastBlockModifiedDate: getPrevLogDatas.lastBlockModifiedDate,
         lastModifiedBlockSeq: getPrevLogDatas.lastModifiedBlockSeq,
         playerInputs: getPrevLogDatas.playerInputs,
-        audioVolumeValue:getPrevLogDatas.audioVolumeValue
+        previewScore: getPrevLogDatas.previewScore,
       };
 
       const previousDataString = JSON.stringify(data);
@@ -3723,6 +3876,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       );
     };
     updatepreviousdatas();
+    console.log("preLogDatasIni", i++);
   }, [getPrevLogDatas]);
 
   //  Newly Added  for prviouse stored
@@ -3744,8 +3898,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               ];
 
               updatedOptions[existingIndex] = {
-                blockId: currentdata.blockId,
-                optionId: OptionSelectId,
+                blockId: currentdata.blockId.toString(),
+                optionId: OptionSelectId.toString(),
               };
               setPreLogDatas((prev: any) => ({
                 ...prev,
@@ -3981,7 +4135,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             <Welcome
                               intro={audio}
                               currentScreenId={currentScreenId}
-                              setprevScreenId={setprevScreenId}
                               setCurrentScreenId={setCurrentScreenId}
                               formData={gameInfo?.gameData}
                               imageSrc={preloadedAssets.backgroundImage}
@@ -4040,6 +4193,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           getPrevLogDatas={getPrevLogDatas}
                           RepeatSelectOption={RepeatSelectOption}
                           RepeatPrevOption={RepeatPrevOption}
+                          /**Model Components passed as props*/
+                          SelectedNPCs={SelectedNPCs}
+                          Player={Player}
+                          // CharacterModal={CharacterModal}
+                          ModelPlayer={ModelPlayer}
+                          /**Model Components */
                         />
                       )}
                     </>
@@ -4327,7 +4486,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       }
                       setPreLogDatas={setPreLogDatas}
                       getPrevLogDatas={getPrevLogDatas}
-                      setprevScreenId={setprevScreenId}
                       currentScreenId={currentScreenId}
                       setModelControl={setModelControl}
                       gameInfo={gameInfo.gameData}
@@ -4357,7 +4515,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       <Characterspage
                         profileData={profileData}
                         setProfileData={setProfileData}
-                        setprevScreenId={setprevScreenId}
                         currentScreenId={currentScreenId}
                         setSelectedPlayer={setSelectedPlayer}
                         players={gameInfo?.gamePlayers}
@@ -4368,6 +4525,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         preloadedAssets={preloadedAssets}
                         setPreLogDatas={setPreLogDatas}
                         getPrevLogDatas={getPrevLogDatas}
+                        ModelPlayer={ModelPlayer}
                       />
                     </>
                   );
@@ -4390,7 +4548,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         gameQuest={gameInfo?.gameQuest}
                         setFeedbackList={setFeedbackList}
                         preloadedAssets={preloadedAssets}
-                        setprevScreenId={setprevScreenId}
                         currentScreenId={currentScreenId}
                         setPreLogDatas={setPreLogDatas}
                         getPrevLogDatas={getPrevLogDatas}

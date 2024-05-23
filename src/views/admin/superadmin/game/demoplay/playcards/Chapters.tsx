@@ -38,7 +38,6 @@ const ChapterPage: React.FC<{
   setOptions?: any;
   setFeedbackList?: any;
   preloadedAssets?: any;
-  setprevScreenId:any;
   currentScreenId:any;
   setPreLogDatas:any;
   getPrevLogDatas:any;
@@ -62,7 +61,7 @@ const ChapterPage: React.FC<{
   setOptions,
   setFeedbackList,
   preloadedAssets,
-  setprevScreenId,currentScreenId,
+  currentScreenId,
   setPreLogDatas,
   getPrevLogDatas,
   profileData,

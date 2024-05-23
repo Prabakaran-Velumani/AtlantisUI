@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Grid, GridItem, Img, Modal, ModalBody, ModalContent, ModalOverlay, Text } from '@chakra-ui/react';
-import right from 'assets/img/games/right.png';
-import left from 'assets/img/games/left.png';
-import parch from 'assets/img/games/parch.png';
-import on from 'assets/img/games/on.png';
-import off from 'assets/img/games/off.png';
-import TopMenu from 'assets/img/games/top-menu.png';
-import Overview from 'assets/img/games/game-overview.png';
-import Setting from 'assets/img/games/settings.png';
-import SettingPad from 'assets/img/games/setting-pad.png';
-import SliderPointer from 'assets/img/games/slider-pointer.png';
-import Close from 'assets/img/games/close.png';
+import { Canvas } from 'react-three-fiber';
+import Model from './Model';
+import Player from './Player';
+
 
 interface InteractionScreenShotProps {
   data?: any;
@@ -21,9 +14,11 @@ interface InteractionScreenShotProps {
   isScreenshot?: any;
   preloadedAssets?: any;
   profileData?:any;
+  selectedPlayer?: any;
+  currentScreenId? : number;
 }
 
-const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, options, geTfeedBackoption, isScreenshot, preloadedAssets ,profileData}) => {
+const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, backGroundImg, option, options, geTfeedBackoption, isScreenshot, preloadedAssets ,profileData,selectedPlayer, currentScreenId}) => {
   const [QuestContentByLanguage, setQuestContentByLanguage] = useState(null);
   useEffect(() => {
     const GetblocktextAudioFiltered =
@@ -178,6 +173,31 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                 </Box>
               </Box>
             </Box>
+            {selectedPlayer && (
+              <Box className={'player_character_image'}>
+                <Canvas camera={{ position: [0, 1, 9] }}>
+                  {' '}
+                  {/* For Single view */}
+                  {/* <Environment preset={"park"} background />   */}
+                  <directionalLight
+                    position={[2.0, 78.0, 100]}
+                    intensity={0.8}
+                    color={'ffffff'}
+                    castShadow
+                  />
+                  <ambientLight intensity={0.5} />
+                  {/* <OrbitControls   />  */}
+                  <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
+                  {/* COMPONENTS */}
+                  <Player currentScreenId={currentScreenId}/>
+                  <Model
+                    isSpeaking={option}
+                    position={[-3, -1.8, 5]}
+                    rotation={[0, 1, 0]}
+                  />
+                </Canvas>
+              </Box>
+            )}
           </Box>
         </ModalBody>
       </ModalContent>
