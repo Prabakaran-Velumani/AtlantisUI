@@ -281,12 +281,12 @@ const LeaderBoard: React.FC<{
   
         if (currentScrollTop > lastScrollTop) {
           // Scrolling down
-          container.classList.add('content-box');
-          container.classList.remove('black-scrollbar');
+          // container.classList.add('content-box');
+          container.classList.add('black-scrollbar');
         } else {
           // Scrolling up
-          container.classList.add('black-scrollbar');
-          container.classList.remove('content-box');
+          container.classList.remove('black-scrollbar');
+          // container.classList.remove('content-box');
         }
   
         lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
@@ -304,10 +304,10 @@ const LeaderBoard: React.FC<{
     return (
       <>
         {imageSrc && (
-          <Box className="Leaderboard-screen" ref={containerRef}>
+          <Box className="Leaderboard-screen">
             <Img src={imageSrc} className="leaderboard-img" />
             <Text className='title'>LeaderBoard</Text>
-            <Box className="content-box" id='leaderboard_id'>
+            <Box className="content-box" id='leaderboard_id'  ref={containerRef}>
               <Box className="table-heading"
                 fontFamily={'AtlantisText'}
                 display={'flex'}
