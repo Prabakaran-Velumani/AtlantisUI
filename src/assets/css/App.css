@@ -6065,7 +6065,9 @@ font-family: 'AtlantisContent';
   background-position: center;
   background-size: 35px;      
 }
-
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .black-scrollbar::-webkit-scrollbar-thumb {
+  background: black;
+}
 
 
 
