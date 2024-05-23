@@ -642,7 +642,7 @@ const Story: React.FC<{
                         width={'100%'}
                         mt="20px"
                         position={'fixed'}
-                        top="70%"
+                        top="78%"
                         display={'flex'}
                         justifyContent={'center'}
                       >
