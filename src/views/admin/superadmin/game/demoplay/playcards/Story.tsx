@@ -631,6 +631,7 @@ const Story: React.FC<{
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
                   color={'#312821'}
+                  textTransform={'capitalize'}
                 >
                   {data.blockRoll === 'Narrator'
                     ? data.blockRoll
@@ -743,6 +744,7 @@ const Story: React.FC<{
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
                   color={'#312821'}
+                  textTransform={'capitalize'}
                 >
                   {data.blockResponseRoll === 'Narrator'
                     ? data.blockResponseRoll

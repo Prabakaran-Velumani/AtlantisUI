@@ -6467,10 +6467,11 @@ font-family: 'AtlantisContent';
   max-height: 70vh;
   transform: translate(0, 7%);
   position: absolute;
-  overflow-y: auto;
 }
 
+
 .EntirePreview .Game-Screen .Images .thankyou-screen .content {
+  overflow-y: auto;
   width: 100%;
 }
 
@@ -6606,7 +6607,7 @@ font-family: 'AtlantisContent';
 
 .EntirePreview .Game-Screen .buttonfeel3 {
   margin-left: 5px;
-  height: 55px;
+  height: 9.5vh;
   padding: 5px;
 }
 
