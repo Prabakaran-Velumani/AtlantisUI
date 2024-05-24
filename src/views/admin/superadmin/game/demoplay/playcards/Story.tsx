@@ -641,26 +641,9 @@ const Story: React.FC<{
               </Box>
             </Box>
             <Box             
-              className='dialogue_scroll'
-              // position={'fixed'}
-              // h={'61px'}
-              // overflowY={'scroll'}
-              // w={'85%'}
-              // fontSize={'3vh'}
-              // bottom={'38px'}
-              // fontFamily={'AtlantisContent'}
-              // css={{
-              //   // Hide scrollbar for webkit-based browsers (Safari, Chrome)
-              //   '&::-webkit-scrollbar': {
-              //     display: 'none',
-              //   },
-              //   // Hide scrollbar for Mozilla-based browsers (Firefox)
-              //   'scrollbar-width': 'none', // For Firefox
-              //   '-ms-overflow-style': 'none', // For IE and Edge
-              // }}
+              className='dialogue_scroll'              
             >
-              <Box 
-              // transform={'translateY(26%)'}
+              <Box             
               >
                 {showTypingEffect === false ? (
                   <TypingEffect
@@ -770,17 +753,7 @@ const Story: React.FC<{
               </Box>
             </Box>
             <Box
-              // display={'flex'}
-              position={'fixed'}
-              // alignItems={'center'}
-              // justifyContent={'space-between'}
-              h={'61px'}
-              overflowY={'scroll'}
-              w={'85%'}
-              fontSize={'3vh'}
-              bottom={'38px'}
-              fontFamily={'AtlantisContent'}
-              // transform={'translateY(26%)'}
+              className='dialogue_scroll'
             >
               {showTypingEffect === false ? (
                 <TypingEffect
