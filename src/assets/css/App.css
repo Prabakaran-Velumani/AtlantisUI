@@ -5850,15 +5850,17 @@ font-family: 'AtlantisContent';
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .text {
-  font-size: 4vh;
-  font-family: 'AtlantisContent';
-  color: var(--atlantis-text-color);
-  margin-top: 1%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  letter-spacing: 1px;
+  font-size: 3vh;
+    font-family: 'AtlantisContent';
+    color: var(--atlantis-text-color);
+    margin-top: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    letter-spacing: 1px;
+    line-height: 4vh;
+    text-align: center;
 }
 
 .text_welcome {
@@ -5934,7 +5936,7 @@ font-family: 'AtlantisContent';
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .inside-box p {
-  font-size: 3.5vh;
+  font-size: 3vh;
   font-family: 'AtlantisContent';
   color: var(--atlantis-text-color);
   word-break: break-all;
@@ -7046,3 +7048,10 @@ input[data-autocompleted] {
   height: 30px;
 }
  
+
+.exlamatry {
+  position: absolute;
+  color: #fff;
+  font-size: 3vh;
+  right: 6.5%;
+}

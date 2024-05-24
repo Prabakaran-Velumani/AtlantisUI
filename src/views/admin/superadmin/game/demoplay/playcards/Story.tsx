@@ -137,13 +137,15 @@ const Story: React.FC<{
         }, 1000);
         if(type==='Note' || type==='Dialog' || type=== 'Interaction')
           {
-
             SetAudioOptions({ qpOptionId: '' });
           }
         const currentQuest = data
           ? parseInt(data?.blockPrimarySequence.split('.')[0])
           : null;
-         
+          setPreLogDatas((prev: any) => ({
+            ...prev,
+            lastActiveBlockSeq:{ [currentQuest]:[data.blockId]},
+          }));
           if (getPrevLogDatas.nevigatedSeq[currentQuest]) {
             if (
               !getPrevLogDatas.nevigatedSeq[currentQuest].includes(
@@ -152,7 +154,7 @@ const Story: React.FC<{
             ) {
               setPreLogDatas((prev: any) => ({
                 ...prev,
-                lastActiveBlockSeq:{[currentQuest]:[data.blockId]},
+                // lastActiveBlockSeq:{[currentQuest]:[data.blockId]},
                 nevigatedSeq: {
                   ...prev.nevigatedSeq,
                   [currentQuest]: [
@@ -165,7 +167,7 @@ const Story: React.FC<{
           } else {
             setPreLogDatas((prev: any) => ({
               ...prev,
-              lastActiveBlockSeq:{ [currentQuest]:[data.blockId]},
+              // lastActiveBlockSeq:{ [currentQuest]:[data.blockId]},
               nevigatedSeq: {
                 ...prev.nevigatedSeq,
                 [currentQuest]: [data.blockPrimarySequence],
@@ -205,22 +207,14 @@ const Story: React.FC<{
     useEffect(() => {
       const fetchData = async () => {
         if (profileData?.Audiogetlanguage.length !== 0) {
-          // setAudioObj({
-          //   url: '',
-          //   type: EnumType.VOICE,
-          //   volume: '0.5',
-          //   loop: false, // Voice doesn't loop
-          //   autoplay: true, // Autoplay is disabled
-          // });
           setAudioObj((prev:any)=>({
             ...prev,
             url: '',
             type: EnumType.VOICE,
-            // volume: '0.5',
             loop: false, // Voice doesn't loop
             autoplay: true, // Autoplay is disabled
           }));
-          if (AudioOptions.qpOptionId === '') {
+          if (AudioOptions.qpOptionId === '' && (type === 'Note' || type === 'Dialog' || type === 'Interaction') ) {
             const GetblocktextAudioFiltered =
               profileData?.Audiogetlanguage.filter(
                 (key: any) => key?.textId === data?.blockId,
@@ -249,20 +243,11 @@ const Story: React.FC<{
                         ...prev,
                         url: fullUrl,
                         type: EnumType.VOICE,
-                        // volume: '0.5',
                         loop: false, // Voice doesn't loop
                         autoplay: true, // Autoplay is disabled
                       }));
-                      // setAudioObj({
-                      //   url: fullUrl,
-                      //   type: EnumType.VOICE,
-                      //   // volume: '0.5',
-                      //   loop: false, // Voice doesn't loop
-                      //   autoplay: true, // Autoplay is disabled
-                      // });
                     }
                   }
-                  // Handle the response
                 } catch (error) {
                   console.error('Error fetching data:', error);
                 }
@@ -281,7 +266,9 @@ const Story: React.FC<{
                   (key: any) => key?.fieldName === 'qpResponse',
                 );
                 const FilteredResponsecontent = responseAudioFiltered[0].content;
-                if (getoptionsAudioFiltered.length > 0) {
+                if(type === 'Interaction')
+                  {
+                    if (getoptionsAudioFiltered.length > 0) {
                   const QOTaudioUrls = getoptionsAudioFiltered.map((item: any) =>
                     item.audioUrls !== ''
                       ? JSON.parse(item.audioUrls)[0]?.audioUrl
@@ -289,11 +276,8 @@ const Story: React.FC<{
                   );
 
                   if (QOTaudioUrls.length > 0) {
-                    // const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
-                    // const normalizedPath = relativePath.replace(/\\/g, '/');
                     try {
                       const normalizedPath = QOTaudioUrls[0];
-                      // const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
                       if (normalizedPath !== '') {
                         const qpOptionTextUrl = `${API_SERVER}${normalizedPath}`;
                         const responseqpOptionText = await fetch(qpOptionTextUrl);
@@ -306,40 +290,7 @@ const Story: React.FC<{
                             loop: false,
                             autoplay: true,
                           }));
-                          // setAudioObj({
-                          //   url: qpOptionTextUrl,
-                          //   type: EnumType.VOICE,
-                          //   // volume: '0.5',
-                          //   loop: false,
-                          //   autoplay: true,
-                          // });
                         }
-                        /*
-                          else {
-                            const getAudioFiltered1 = optionAudioFiltered.filter(
-                              (key: any) => key?.fieldName === 'qpOptions',
-                            );
-                            if (getAudioFiltered1.length > 0) {
-                              const QPaudioUrls = getAudioFiltered1.map(
-                                (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
-                              );
-                              if (QPaudioUrls.length > 0) {
-                                const normalizedPath = QPaudioUrls[0];
-                                const qpOptionsUrl = `${API_SERVER}${normalizedPath}`;
-                                const responsequestoption = await fetch(qpOptionsUrl);
-                                if (responsequestoption.ok) {
-                                  setAudioObj({
-                                    url: qpOptionsUrl,
-                                    type: EnumType.VOICE,
-                                    volume: '0.5',
-                                    loop: false,
-                                    autoplay: true,
-                                  });
-                                }
-                              }
-                            }
-                          }
-                          */
                       }
                     } catch (error) {
                       console.error('Error fetching data:', error);
@@ -350,13 +301,15 @@ const Story: React.FC<{
                       ...prev,
                       url: '',
                       type: EnumType.VOICE,
-                      // volume: '0.5',
                       loop: false,
                       autoplay: true,
                     }));
                   }
                 }
-                if (responseAudioFiltered.length > 0) {
+                  }
+               else if(type === 'response')
+                  {
+                    if (responseAudioFiltered.length > 0) {
                   const QResTaudioUrls = responseAudioFiltered.map((item: any) =>
                     item.audioUrls !== ''
                       ? JSON.parse(item.audioUrls)[0]?.audioUrl
@@ -380,13 +333,6 @@ const Story: React.FC<{
                             loop: false,
                             autoplay: true,
                           }));
-                          // setAudioObj({
-                          //   url: qRespOptionTextUrl,
-                          //   type: EnumType.VOICE,
-                          //   // volume: '0.5',
-                          //   loop: false,
-                          //   autoplay: true,
-                          // });
                         }
                         else{
                           setAudioObj((prev :any)=>({
@@ -422,6 +368,7 @@ const Story: React.FC<{
                     }));
                   }
                 }
+                  }
                 else{
                   setAudioObj((prev :any)=>({
                     ...prev,
@@ -462,7 +409,6 @@ const Story: React.FC<{
 
     const InteractionFunction = () => {
       setIsGetsPlayAudioConfirmation(true);
-
       /**Get current data mm-dd-yyyy */
       const currentDateTime = new Date();
       const day: String = String(currentDateTime.getDate()).padStart(2, '0');
@@ -813,15 +759,6 @@ const Story: React.FC<{
         {data && type === 'response' && (
           <Box className="chapter_potrait">
             <Img src={backGroundImg} className="dialogue_screen" />
-            {/* {selectedPlayer && (
-              <Img
-                src={`${API_SERVER}/${selectedPlayer}`}
-                className={'narrator_character_image'}
-              />
-            )}
-            {selectedNpc && (
-              <Img src={selectedNpc} className={'player_character_image'} />
-            )} */}
              <SelectedNPCs preloadedAssets={preloadedAssets} isStartsAnimationPlay={isStartsAnimationPlay} isSpeaking={isSpeaking} selectedNpc={selectedNpc}/>
             <Img className={'dialogue_image'} src={preloadedAssets.dial} />
             <Box position={'relative'}>
@@ -855,19 +792,7 @@ const Story: React.FC<{
                 </Box>
               </Box>
             </Box>
-            <Box
-              // display={'flex'}
-              position={'fixed'}
-              // alignItems={'center'}
-              // justifyContent={'space-between'}
-              h={'61px'}
-              overflowY={'scroll'}
-              w={'85%'}
-              fontSize={'3vh'}
-              bottom={'38px'}
-              fontFamily={'AtlantisContent'}
-              // transform={'translateY(26%)'}
-            >
+            <Box  className='dialogue_scroll'>
               {showTypingEffect === false ? (
                 <TypingEffect
                   text={resMsg}

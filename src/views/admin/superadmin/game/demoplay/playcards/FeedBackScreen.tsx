@@ -133,7 +133,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                           <Img src={preloadedAssets.on} h={'4vh'} w={'100%'} />
                           <Box w={'90%'} display={'flex'} justifyContent={'flex-end'} position={'relative'} onClick={()=>setisScreenshot(true)}>
                             <Img src={preloadedAssets.ModelQ} h={'5vh'} w={'auto'} />
-                            <Text position={'absolute'} color={'#fff'} fontSize={'3vh'} right={'25px'} >!</Text>
+                            <Text className='exlamatry'>!</Text>
                           </Box>
                         </Box>
                         <Box className="feed_list">

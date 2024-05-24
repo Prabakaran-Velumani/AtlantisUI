@@ -349,7 +349,7 @@ const ChapterPage: React.FC<{
                   initial="hidden"
                   animate="visible"
                 >
-                  <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={2}>
+                  <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{base:7,md:4,lg:7}}>
                     {demoBlocks &&
                       Object.keys(demoBlocks).map((it: any, num: number) => {
                         return (
