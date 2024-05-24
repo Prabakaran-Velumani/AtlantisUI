@@ -111,6 +111,42 @@ const Welcome: React.FC<{
   };
   // const link = extractLink(formData.gameAdditionalWelcomeNote);
   const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
+
+  const containerRef = useRef<any>(null);
+  let lastScrollTop = 0;
+
+  useEffect(() => {
+    const container = containerRef?.current;
+    if (!container) return; // Early return if container is not available
+
+    console.log('container', container);
+
+    const handleScroll = () => {
+      let currentScrollTop = container?.scrollTop;
+
+      console.log('currentScrollTop', currentScrollTop);        
+
+      if (currentScrollTop > lastScrollTop) {
+        // Scrolling down
+        // container.classList.add('content-box');
+        container.classList.add('scrollbar-down');
+      } else {
+        // Scrolling up
+        container.classList.remove('scrollbar-down');
+        // container.classList.remove('content-box');
+      }
+
+      lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
+    };
+
+    container.addEventListener('scroll', handleScroll);
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+
   
   return (
     <>
@@ -166,7 +202,7 @@ const Welcome: React.FC<{
               </Text>
             )}
           </Box>
-          <Box className="content-box" fontFamily={'gametext'}>
+          <Box className="content-box" ref={containerRef}  fontFamily={'gametext'}>
             <Box w={'60%'} className="content">
               {formData.gameIsShowStoryline === 'true' && (
                 <Text

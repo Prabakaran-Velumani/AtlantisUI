@@ -220,7 +220,7 @@ option {
   background-size: contain;
 }
 
-.EntirePreview .Game-Screen .Images .welcome-screen .content-box::-webkit-scrollbar {
+/* .EntirePreview .Game-Screen .Images .welcome-screen .content-box::-webkit-scrollbar {
   width: 16px;
   height: 18px;
   border-radius: 30px;
@@ -239,7 +239,7 @@ option {
   border-radius: 30px;
   background-size: contain;
   height: 30px;
-}
+} */
 
 .AddScores .Main-Content .Game-Screen .Images .welcome-screen .content-box .content::-webkit-scrollbar-track {
   background: url('../img/games/scroll.png');
@@ -5859,6 +5859,7 @@ font-family: 'AtlantisContent';
   align-items: center;
   width: 100%;
   letter-spacing: 1px;
+  text-align: center;
 }
 
 .text_welcome {
@@ -6066,11 +6067,30 @@ font-family: 'AtlantisContent';
   /* background-position: center; */
   background-size: 35px;      
 }
-.EntirePreview .Game-Screen .Images .Leaderboard-screen .black-scrollbar::-webkit-scrollbar-thumb {
+.EntirePreview .Game-Screen .Images .Leaderboard-screen .scrollbar-down::-webkit-scrollbar-thumb {
   /* background: black; */
   background-position-y: 149px;   /* based on js func */
 }
 
+/* common scrollbar */
+.content-box::-webkit-scrollbar-thumb {
+  background: url('../img/games/Leaderboard\ Scroll\ Cross.png');
+  background-repeat: no-repeat;
+  border-radius: 30px;  
+  background-size: contain;  
+  object-fit: contain;    
+  height: 100px;
+  width: auto;    
+  background-position-x: -2px;
+  /* background-position-y: calc(100px - 40px);  default*/
+  background-position-y: 23px;  /* based on js func */
+  /* background-position: center; */
+  background-size: 35px;      
+}
+.scrollbar-down::-webkit-scrollbar-thumb {
+  /* background: black; */
+  background-position-y: 149px;   /* based on js func */
+}
 
 
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .table-heading {
@@ -6929,10 +6949,12 @@ font-family: 'AtlantisContent';
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box::-webkit-scrollbar {
-  width: 16px;
+  /* width: 16px; old */
+  width: 1.4rem;
   height: 18px;
   border-radius: 30px;
   background-size: contain;
+  user-select: none;
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box::-webkit-scrollbar-track {
@@ -6942,11 +6964,27 @@ font-family: 'AtlantisContent';
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box::-webkit-scrollbar-thumb {
-  background: url('../img/games/cross.png');
+  /* background: url('../img/games/cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;  
   background-size: contain;
-  height: 30px;
+  height: 30px; */
+
+  background: url(data:image/png;base64,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);
+  background-repeat: no-repeat;
+  border-radius: 30px;
+  background-size: contain;
+  object-fit: contain;
+  height: 100px;
+  width: auto;
+  background-position-x: -3px;
+  background-position-y: calc(1.4rem - 1vh);
+  /* background-position: center; */
+  background-size: 28px;
+}
+
+.EntirePreview .Game-Screen .Images .welcome-screen .scrollbar-down::-webkit-scrollbar-thumb {
+  background-position-y: calc(1.4rem - -7.5vh);
 }
 
 .feedback_content_text::-webkit-scrollbar {

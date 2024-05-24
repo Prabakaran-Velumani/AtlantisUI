@@ -251,19 +251,6 @@ const LeaderBoard: React.FC<{
       setShuffledUsers(newSortedUsers);
     }
 
-    // useEffect(()=> {
-
-    //   const Scrolling = (e: any) => {
-    //     const container = document.getElementById('leaderboard_id');        
-    //     console.log('container', e)
-    //   }
-
-    //   window.addEventListener('mousewheel', Scrolling);      
-    //   return () => {      
-    //     window.removeEventListener('mousewheel', Scrolling);
-    //   };
-
-    // },[])
 
     const containerRef = useRef<any>(null);
     let lastScrollTop = 0;
@@ -282,10 +269,10 @@ const LeaderBoard: React.FC<{
         if (currentScrollTop > lastScrollTop) {
           // Scrolling down
           // container.classList.add('content-box');
-          container.classList.add('black-scrollbar');
+          container.classList.add('scrollbar-down');
         } else {
           // Scrolling up
-          container.classList.remove('black-scrollbar');
+          container.classList.remove('scrollbar-down');
           // container.classList.remove('content-box');
         }
   
