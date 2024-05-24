@@ -21,8 +21,8 @@ const Reflection: React.FC<{
       formData?.gameReflectionQuestion &&
       answers.length == formData?.gameReflectionQuestion
     ) {
-      let validate = answers.filter((ans:any) => ans === undefined || ans.text.trim()==='');
-     validate.length === 0 ? setIsFormValid(true) :setIsFormValid(false);
+      let validate = answers.filter((ans: any) => ans === undefined || ans.text.trim() === '');
+      validate.length === 0 ? setIsFormValid(true) : setIsFormValid(false);
     } else {
       formData?.gameIsLearnerMandatoryQuestion
         ? setIsFormValid(false)
@@ -57,18 +57,16 @@ const Reflection: React.FC<{
       setCurrentScreenId(5);//Navigate to Thank you screen
     }
   }
-  const backNavigation = () =>
-    {
-      if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-        setCurrentScreenId(4); //Navigate to leaderboard
-        return false;
-      }
-      else
-      {
-        setCurrentScreenId(13);
-        return false;
-      }
+  const backNavigation = () => {
+    if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+      setCurrentScreenId(4); //Navigate to leaderboard
+      return false;
     }
+    else {
+      setCurrentScreenId(13);
+      return false;
+    }
+  }
 
   return (
     <>
@@ -128,6 +126,7 @@ const Reflection: React.FC<{
                           src={preloadedAssets.ref}
                         />
                         <Textarea
+                          resize={'none'}
                           bottom={0}
                           outline={'none'}
                           focusBorderColor="none"
@@ -161,7 +160,7 @@ const Reflection: React.FC<{
               className='left-right-btn'
             >
               <Box w={'80%'} display={'flex'} justifyContent={'space-between'}>
-                <Img src={preloadedAssets.left} w={'50px'} h={'50px'} cursor={'pointer'} onClick={backNavigation}/>
+                <Img src={preloadedAssets.left} w={'50px'} h={'50px'} cursor={'pointer'} onClick={backNavigation} />
                 {isFormValid && (
                   <Img
                     src={preloadedAssets.right}
