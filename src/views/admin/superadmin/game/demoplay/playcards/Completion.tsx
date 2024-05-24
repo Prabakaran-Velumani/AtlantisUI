@@ -68,12 +68,34 @@ const Completion: React.FC<{
     );
     const [geFinalscorequest, SetFinalscore] = useState(profile.playerGrandTotal?.questScores[parseInt(profile.currentQuest)]);
     const [questScores, setQuestScores] = useState(questWiseMaxTotal);
-
+    const [quetCompletionMessage, setQuestCompletionMessage]= useState<string>("");
     useEffect(() => {
       setShowComplete(true);
       setTimeout(() => {
         setShowComplete(false);
       }, 1000);
+const findQuestCompletionMessage=()=>{
+      const playerCurrentQuestGrandTotal = profile.playerGrandTotal.questScores[parseInt(currentQuestNo)];
+  let completionScreenMessage="";
+  const currentQuesTGameData=completionScreenQuestOptions[getcompletionquest];
+  if(currentQuesTGameData?.gameIsSetCongratsSingleMessage === 'true'){
+    completionScreenMessage = currentQuesTGameData?.gameCompletedCongratsMessage;
+  } 
+  else if(currentQuesTGameData?.gameIsSetCongratsScoreWiseMessage ==='true'){
+    if(playerCurrentQuestGrandTotal < currentQuesTGameData?.gameDistinctionScore)
+      {
+        completionScreenMessage =  currentQuesTGameData?.gameaboveMinimumScoreCongratsMessage;
+      }
+      else{
+        completionScreenMessage = currentQuesTGameData?.gameAboveDistinctionScoreCongratsMessage; 
+      }
+  }
+  else{
+    completionScreenMessage = currentQuesTGameData?.gameCompletedCongratsMessage;
+  }
+  setQuestCompletionMessage(completionScreenMessage);
+}
+  findQuestCompletionMessage()
     }, []);
     // useEffect(() => {
     //   const groupedByQuest: any = {};
@@ -129,10 +151,8 @@ const Completion: React.FC<{
   
     const getcompletionquest = currentQuestNo - 1;
 
-
   /** This useEffect Only hanldes the total within the quest total */
 useEffect(()=>{
-  console.log("profile?.playerGrandTotal", profile?.playerGrandTotal);
 const questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).reduce((totalScore: number, [key, value]: [any, any]) => {
   if (key == profile.currentQuest) {
       return totalScore + value;
@@ -140,8 +160,8 @@ const questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).r
   return totalScore;
 }, 0);
   SetFinalscore(questTotalScore);
-},[profile.score])
 
+},[profile.score])
     return (
       <>
         <motion.div
@@ -159,7 +179,7 @@ const questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).r
             <Box className="content-box">
               <Box className="congratulations">
                 <Box className="content" mt="0px">
-                  {
+                  {/* {
                     completionScreenQuestOptions[getcompletionquest]
                       ?.gameIsSetCongratsSingleMessage !== 'true' &&
                       completionScreenQuestOptions[getcompletionquest]
@@ -167,28 +187,11 @@ const questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).r
                       ? completionScreenQuestOptions[getcompletionquest]
                         ?.gameCompletedCongratsMessage
                   : completionScreenQuestOptions[getcompletionquest]
-                      ?.gameCompletedCongratsMessage}
+                      ?.gameCompletedCongratsMessage} */}
+
+                  {quetCompletionMessage}
               </Box>
             </Box>
-            {/* <Box className="rewards-img-box">
-              <Img className="rewards-arrow-img" src={preloadedAssets.rew} />
-            </Box>
-            <Box className="points-box">
-              <Box className="box-1">
-                <Img src={preloadedAssets.back} className="box-1_img" />
-                <Text className="points-text" fontFamily={'content'}>
-                  points
-                </Text>
-                <Box className="inside-box-1">
-                  <Img
-                    src={preloadedAssets.point}
-                    className="inside-box-1_img"
-                  />
-                  <Text className="inside-points-text" fontFamily={'content'}>
-                       {geFinalscorequest <= 0 ? 0 : geFinalscorequest}{'/'}{questScores}
-                  </Text>
-                </Box>
-              </Box> */}
               <Box className="rewards-img-box">
                 <Img className="rewards-arrow-img" src={preloadedAssets.rew} />
               </Box>

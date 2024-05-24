@@ -137,7 +137,7 @@ const GamePreview = () => {
       const Reponse = await fetchPreviewLogsData();
       if (Reponse?.status =="Success") {
         setPreviewLogsDataIni(Reponse);
-        setProfile({...Reponse?.data?.previewScore})
+        // setProfile({...Reponse?.data?.previewScore})
         setInitialStateUpdate(true);
       }
     }
