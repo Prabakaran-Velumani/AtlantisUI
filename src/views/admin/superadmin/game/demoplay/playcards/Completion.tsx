@@ -66,7 +66,7 @@ const Completion: React.FC<{
         (quest: any) => quest.questNo == profile?.currentQuest,
       ),
     );
-    const [geFinalscorequest, SetFinalscore] = useState(profile.playerGrandTotal.questScores[parseInt(profile.currentQuest)]);
+    const [geFinalscorequest, SetFinalscore] = useState(profile.playerGrandTotal?.questScores[parseInt(profile.currentQuest)]);
     const [questScores, setQuestScores] = useState(questWiseMaxTotal);
 
     useEffect(() => {
@@ -75,57 +75,57 @@ const Completion: React.FC<{
         setShowComplete(false);
       }, 1000);
     }, []);
-    useEffect(() => {
-      const groupedByQuest: any = {};
-      questOptions.forEach((item: any) => {
-        const questNo = item.qpQuestNo;
-        if (!groupedByQuest[questNo]) {
-          groupedByQuest[questNo] = [];
-        }
-        groupedByQuest[questNo].push(item);
-      });
-      console.log('groupedByQuest', groupedByQuest);
-      const playedSeqId: any = [];
-      const playedOptionId: any = [];
-      profile?.score.forEach((item: any) => {
-        playedSeqId.push(item.seqId);
-      });
-      console.log('playedSeqId', playedSeqId);
-      if (playedSeqId.length > 0) {
-        for (const key in gameInfo.blocks[profile?.currentQuest]) {
-          const data = gameInfo.blocks[profile?.currentQuest][key];
-          const  seqIdFilter = playedSeqId.filter((item:any,num:number) => parseInt(item[num]))
-          if(seqIdFilter[0] === data.blockPrimarySequence)
-            {
-              playedOptionId.push(data.blockId);
-            }
-        }
-      }
-      console.log('playedOptionId',playedOptionId)
-      const maxScoresByQuest:any ={};
-      for (const questNo in groupedByQuest) {
-        const questData = groupedByQuest[questNo];
-        const maxScoresBySequence: any = {};
+    // useEffect(() => {
+    //   const groupedByQuest: any = {};
+    //   questOptions.forEach((item: any) => {
+    //     const questNo = item.qpQuestNo;
+    //     if (!groupedByQuest[questNo]) {
+    //       groupedByQuest[questNo] = [];
+    //     }
+    //     groupedByQuest[questNo].push(item);
+    //   });
+    //   console.log('groupedByQuest', groupedByQuest);
+    //   const playedSeqId: any = [];
+    //   const playedOptionId: any = [];
+    //   profile?.score.forEach((item: any) => {
+    //     playedSeqId.push(item.seqId);
+    //   });
+    //   console.log('playedSeqId', playedSeqId);
+    //   if (playedSeqId.length > 0) {
+    //     for (const key in gameInfo.blocks[profile?.currentQuest]) {
+    //       const data = gameInfo.blocks[profile?.currentQuest][key];
+    //       const  seqIdFilter = playedSeqId.filter((item:any,num:number) => parseInt(item[num]))
+    //       if(seqIdFilter[0] === data.blockPrimarySequence)
+    //         {
+    //           playedOptionId.push(data.blockId);
+    //         }
+    //     }
+    //   }
+    //   console.log('playedOptionId',playedOptionId)
+    //   const maxScoresByQuest:any ={};
+    //   for (const questNo in groupedByQuest) {
+    //     const questData = groupedByQuest[questNo];
+    //     const maxScoresBySequence: any = {};
 
-        questData.forEach((item: any) => {
-          const sequence = item.qpSequence;
-          const score = parseInt(item.qpScore);
-          if (
-            !maxScoresBySequence[sequence] ||
-            score > maxScoresBySequence[sequence]
-          ) {
-            maxScoresBySequence[sequence] = score;
-          }
-        });
-        const maxScoreForQuest = Object.values(maxScoresBySequence).reduce(
-          (acc: any, score: any) => acc + score,
-          0,
-        );
-        maxScoresByQuest[questNo] = maxScoreForQuest;
-      }
+    //     questData.forEach((item: any) => {
+    //       const sequence = item.qpSequence;
+    //       const score = parseInt(item.qpScore);
+    //       if (
+    //         !maxScoresBySequence[sequence] ||
+    //         score > maxScoresBySequence[sequence]
+    //       ) {
+    //         maxScoresBySequence[sequence] = score;
+    //       }
+    //     });
+    //     const maxScoreForQuest = Object.values(maxScoresBySequence).reduce(
+    //       (acc: any, score: any) => acc + score,
+    //       0,
+    //     );
+    //     maxScoresByQuest[questNo] = maxScoreForQuest;
+    //   }
     
-      setQuestScores(maxScoresByQuest);
-    }, []);
+    //   setQuestScores(maxScoresByQuest);
+    // }, []);
   
     const getcompletionquest = currentQuestNo - 1;
 

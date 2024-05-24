@@ -131,7 +131,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                       >
                         <Box w={'70%'} >
                           <Img src={preloadedAssets.on} h={'4vh'} w={'100%'} />
-                          <Box w={'90%'} display={'flex'} justifyContent={'flex-end'} position={'relative'}>
+                          <Box w={'90%'} display={'flex'} justifyContent={'flex-end'} position={'relative'} onClick={()=>setisScreenshot(true)}>
                             <Img src={preloadedAssets.ModelQ} h={'5vh'} w={'auto'} />
                             <Text position={'absolute'} color={'#fff'} fontSize={'3vh'} right={'25px'} >!</Text>
                           </Box>
@@ -178,7 +178,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                         <Img
                           src={preloadedAssets.right}
                           className={'interaction_button'}
-                          onClick={() => getFeedbackData()}
+                          onClick={() => getFeedbackData(data)}
                         />
                       </Box>
                     </Box>

@@ -43,8 +43,6 @@ const hasFormState = ()=>{
   return false;
 }
 useEffect(()=>{
-  console.log("getPrevLogDatas?.previewProfile", getPrevLogDatas?.previewProfile);
-  console.log("hasFormState", hasFormState())
   if(hasFormState()){
     setFormState({
       name: getPrevLogDatas?.previewProfile?.name || '',
@@ -151,8 +149,6 @@ useEffect(() => {
   return () => clearTimeout(timer); // Cleanup the timeout if the component unmounts
 }, [isError]);
 
-
-console.log("isOpenCustomModal", isOpenCustomModal)
   return (
     isOpenCustomModal && (
       <Box id="container" className="Play-station">

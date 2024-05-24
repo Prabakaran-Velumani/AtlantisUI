@@ -386,9 +386,12 @@ useEffect(()=>{
   //Initial loading data, it has inital vlaues of preview_logs of the player for this game
   if(preLogDatasIni)
     {
+
+      // const parsedLogData = {...preLogDatasIni, audioVolumeValue: JSON.parse(preLogDatasIni.audioVolumeValue)}
+      console.log("audioVolumeValue", typeof(preLogDatasIni.audioVolumeValue));
       setPreLogDatas(preLogDatasIni);
-      console.log("preLogDatasIni", preLogDatasIni)
-      setProfile({...preLogDatasIni.previewScore});
+      setProfile(preLogDatasIni?.previewScore);
+      
     }
     const handleVisibilityChange = () => {
       if (document.hidden) {
@@ -517,14 +520,11 @@ useEffect(()=>{
 }, [profile?.score]);
 
 
-
 useEffect(()=>{
-  console.log("useEffect profile ", profile)
   if(profile)
     {
-      setPreLogDatas((prev:any)=> ({...prev, previewScore: profile}));
+      setPreLogDatas((prev:any)=> ({...prev, previewScore:profile}));
     }
-  
 },[profile])
 
   // This for  Translation content based on lang 09.05.2024
@@ -580,7 +580,6 @@ useEffect(()=>{
     setDemoBlocks(gameInfo?.blocks);
     
     if (data === null && profile.currentQuest) {
-      console.log("profile.currentQuest", profile.currentQuest);
       setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
       setData(gameInfo?.blocks[profile?.currentQuest]['1']);
       if (
@@ -1805,7 +1804,12 @@ useEffect(()=>{
   };
 
   const getData = (next: any) => {
-   
+   console.log('next 1805',next,'....',currentScreenId)
+  //  if(next === null && currentScreenId ===6)
+  //   {
+  //     console.log("^^^^ in if")
+  //   }
+  //   else{
     if (navi === '' || navi !== 'Repeat Question') {
       setRepeatPrevOption([]);
     }
@@ -1832,12 +1836,12 @@ useEffect(()=>{
       }
     }
     SetPreviouseStored(next);
+    console.log('***** 1839',next)
     setPreLogDatas((prev: any) => ({
       ...prev,
       lastBlockModifiedDate: null,
       lastModifiedBlockSeq: null,
     }));
-    // setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
@@ -1855,13 +1859,14 @@ useEffect(()=>{
       ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
     setCurrentQuestNo(currentQuest);
-
+    console.log('##### 1862')
     setGame3Position((prev: any) => ({
       ...prev,
       previousBlock: next?.blockPrimarySequence,
       currentBlock: nextSeq,
     }));
-    const nextLevel =  currentQuest != null ? String(currentQuest + 1) : null
+    // const nextLevel =  currentQuest != null ? String(currentQuest + 1) : null
+    const nextLevel = parseInt(profile?.currentQuest)+1 || null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
@@ -1869,8 +1874,10 @@ useEffect(()=>{
           )
           .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-
+if(currentScreenId ===2)
+  {
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
+      console.log('##### 1879')
       const optionsFiltered = [];
       for (const option of gameInfo.questOptions) {
         if (profileData?.Audiogetlanguage.length > 0) {
@@ -1906,13 +1913,16 @@ useEffect(()=>{
       setOptions(optionsFiltered);
     }
     if (type === 'Interaction' && resMsg !== '') {
+      console.log('##### 1915')
       setType('response');
       return false;
-    } else if (
+    } 
+    else if (
       (type === 'Interaction' || type === 'response') &&
       feed !== '' &&
       gameInfo?.gameData?.gameIsShowInteractionFeedBack !== 'Completion'
     ) {
+      console.log('##### 1920')
       setType('feedback');
       return false;
     } else if (
@@ -1920,7 +1930,9 @@ useEffect(()=>{
       type === 'response' ||
       type === 'feedback'
     ) {
+      console.log('##### 1928')
       if (navi === 'Repeat Question') {
+        console.log('##### 1934')
         setRepeatSelectOption(true);
         RepeatPrevOption.push(getSelectedOptions.options);
         setRepeatPrevOption(RepeatPrevOption);
@@ -1964,6 +1976,7 @@ useEffect(()=>{
         setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
+        console.log('##### 1978')
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         if (next?.blockChoosen === 'Interaction') {
@@ -2004,6 +2017,7 @@ useEffect(()=>{
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
+        console.log('##### 2019');
         // setType(demoBlocks[quest]['1']?.blockChoosen);
         // setData(demoBlocks[quest]['1']);
         // setSelectedOption(null);
@@ -2013,6 +2027,7 @@ useEffect(()=>{
         setReplayIsOpen(true);
         return false;
       } else if (navi === 'Select Block') {
+        console.log('##### 2029');
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -2119,6 +2134,7 @@ useEffect(()=>{
           return false;
         }
       } else if (navi === 'Complete') {
+        console.log('##### 2136');
         //check the replay Quest score is higher than score in profile context
         checkAndUpdateScores();
         const Nextcurrentquest = next?.blockQuestNo;
@@ -2146,6 +2162,7 @@ useEffect(()=>{
             return false;
           }
         } else */
+
         if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = getgameinfoquest?.gameMinScore;
           const scores = profile?.score;
@@ -2176,6 +2193,7 @@ useEffect(()=>{
             setReplayIsOpen(true);
             return false;
           } else {
+            /*
             if (demoBlocks.hasOwnProperty(nextLevel)) {
               setProfile((prev: any) => {
                 const data = { ...prev };
@@ -2196,8 +2214,89 @@ useEffect(()=>{
               setData(null);
               return false;
             }
+            */
+           if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+            {
+              setType(next?.blockChoosen);
+              setData(next);
+              setCurrentScreenId(6);
+              return false;
+            }
+            else if(feedbackList.length !== 0)
+              {
+                setType(next?.blockChoosen);
+                setData(next);
+                setCurrentScreenId(6);
+                return false;
+              }
+            else
+            {
+              if (demoBlocks.hasOwnProperty(nextLevel)) {
+                setProfile((prev: any) => {
+                  const data = { ...prev };
+                  // if (!profile.completedLevels.includes(String(currentQuest))) {
+                  //   data.completedLevels = [...data.completedLevels, nextLevel];
+                  // }
+  
+                  if (!profile.completedLevels.includes(String(nextLevel))) {
+                    data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                  }
+                  return data;
+                });
+  
+                setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                setData(demoBlocks[nextLevel]['1']);
+                setCurrentScreenId(6);
+                return false;
+              } else {
+                setCurrentScreenId(6);
+                setType(null);
+                setData(null);
+                return false;
+              }
+            }
           }
         } else {
+          if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+            {
+              setType(next?.blockChoosen);
+              setData(next);
+              setCurrentScreenId(6);
+              return false;
+            }
+            else if(feedbackList.length !== 0)
+              {
+                setType(next?.blockChoosen);
+                setData(next);
+                setCurrentScreenId(6);
+                return false;
+              }
+            else
+            {
+              if (demoBlocks.hasOwnProperty(nextLevel)) {
+                setProfile((prev: any) => {
+                  const data = { ...prev };
+                  // if (!profile.completedLevels.includes(String(currentQuest))) {
+                  //   data.completedLevels = [...data.completedLevels, nextLevel];
+                  // }
+                  if (!profile.completedLevels.includes(String(nextLevel))) {
+                    data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                  }
+                  return data;
+                });
+  
+                setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                setData(demoBlocks[nextLevel]['1']);
+                setCurrentScreenId(6);
+                return false;
+              } else {
+                setCurrentScreenId(6);
+                setType(null);
+                setData(null);
+                return false;
+              }
+            }
+            /*
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
@@ -2216,6 +2315,7 @@ useEffect(()=>{
             setData(null);
             return false;
           }
+          */
         }
         /*
         if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
@@ -2248,6 +2348,7 @@ useEffect(()=>{
         }
         */
       } else {
+        console.log('##### 2350');
         /** IF a block not has navi option then it leads to next block */
         if (nextBlock && nextBlock[0]?.blockChoosen) {
           setType(nextBlock[0]?.blockChoosen);
@@ -2305,9 +2406,13 @@ useEffect(()=>{
           return false;
         }
       }
+      console.log('##### 2408');
     }
-
+  }
+    console.log('##### 2410')
     if (currentScreenId === 6) {
+      console.log("^^^^^^^^currentScreenId", currentScreenId)
+      console.log("gameInfo?.gameData?", gameInfo?.gameData)
       //Completion
       const {
         currentQuest,
@@ -2316,6 +2421,7 @@ useEffect(()=>{
         haveNextQuest,
         totalScore,
       } = calScore();
+      
       // if (gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') {
       //   const Completionpage = Object.entries(questState).map(
       //     ([questId, status]) => ({ questId, status }),
@@ -2371,10 +2477,16 @@ useEffect(()=>{
       //     }
       //   }
       // }
-      if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-        setCurrentScreenId(4); //Navigate to leaderboard
-        return false;
+      console.log("currentQuest---",currentQuest,"  #### currentGameData---",currentGameData,"  #### nextLevel---",nextLevel,"  #### haveNextQuest---",haveNextQuest,"  #### totalScore---",totalScore,"  #### ")
+
+     console.log("^^^^^gameInfo?.gameData?.gameIsShowLeaderboard === 'true'", gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+     console.log("^^^^haveNextQuest", haveNextQuest)
+     
+     if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+       setCurrentScreenId(4); //Navigate to leaderboard
+       return false;
       } else if (haveNextQuest) {
+        console.log("^^^^currentGameData?.gameIsSetMinPassScore === 'true'", currentGameData?.gameIsSetMinPassScore === 'true')
         if (currentGameData?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = currentGameData?.gameMinScore;
           const scores = profile?.score;
@@ -2402,12 +2514,106 @@ useEffect(()=>{
             finalscore < currentGameData?.gameDistinctionScore &&
             gameInfo.gameData?.gameDisableOptionalReplays === 'false'
           ) {
+            console.log("IF OptionalReplay")
             setReplayState('optionalReplay');
             setReplayIsOpen(true);
             // setCurrentScreenId(8); //Navigate to replaygame prompt screen
             return false;
             //set to prompt it for replay the game
           } else {
+               if(feedbackList.length !== 0 && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion')
+                {
+                  const Completionpage = Object.entries(questState).map(
+                        ([questId, status]) => ({ questId, status }),
+                      );
+                      const OpenStraigntCompletionPage = Completionpage.find(
+                        (row: any) =>
+                          row.questId === profile.currentQuest && row.status === 'completed',
+                      );
+                      if (OpenStraigntCompletionPage !== undefined) {
+                        setFeedbackList([]);
+                        setCurrentScreenId(13);
+                        return false;
+                      }
+                      if (feedbackList.length !== 0) {
+                        getFeedbackData(next);
+                        setFeedbackNavigateNext(false);
+                        setCurrentScreenId(14); //Navigate to together all feedback
+                        return false;
+                      }else {
+                            if (demoBlocks.hasOwnProperty(nextLevel)) {
+                              setProfile((prev: any) => {
+                                const data = { ...prev };
+                                // if (!profile.completedLevels.includes(currentQuest)) {
+                                //   data.completedLevels = [...data.completedLevels, nextLevel];
+                                // }
+                                if (!profile.completedLevels.includes(String(nextLevel))) {
+                                  data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                                }
+                                return data;
+                              });
+                  
+                              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                              setData(demoBlocks[nextLevel]['1']);
+                              setCurrentScreenId(13);
+                              return false;
+                            } else {
+                              if (
+                                gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
+                                gameInfo?.reflectionQuestions.length > 0
+                              ) {
+                                setCurrentScreenId(3); //Navigate to Reflection screen
+                                return false;
+                              } else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
+                                setCurrentScreenId(7); //Navigate to takeaway screen
+                                return false;
+                              } else {
+                                setType(null);
+                                setData(null);
+                                setCurrentScreenId(5);
+                                return false;
+                              }
+                            }
+                          }
+                }
+              else
+              {
+             
+                if (demoBlocks.hasOwnProperty(nextLevel)) {
+                  setProfile((prev: any) => {
+                    const data = { ...prev };
+                    // if (!profile.completedLevels.includes(String(currentQuest))) {
+                    //   data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                    // }
+                    if (!profile.completedLevels.includes(String(nextLevel))) {
+                      data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                    }
+    
+                    return data;
+                  });
+                  setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                  setData(demoBlocks[nextLevel]['1']);
+                  setCurrentScreenId(13);
+                  return false;
+                } else {
+                 if (
+                    gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+                    gameInfo?.reflectionQuestions.length > 0
+                  ) {
+                    setCurrentScreenId(3); //reflection screen
+                    return false;
+                  } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+                    setCurrentScreenId(7); //takeaway
+                    return false;
+                  } else {
+                    setType(null);
+                    setData(null);
+                    setCurrentScreenId(5); //thank you screen
+                    return false;
+                  }
+                }
+              }
+              /*
             if (demoBlocks.hasOwnProperty(nextLevel)) {
               setProfile((prev: any) => {
                 const data = { ...prev };
@@ -2438,15 +2644,72 @@ useEffect(()=>{
                 return false;
               }
             }
+            */
           }
         } else {
-          if (demoBlocks.hasOwnProperty(nextLevel)) {
+          if(feedbackList.length !== 0 && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion')
+              {
+                const Completionpage = Object.entries(questState).map(
+                  ([questId, status]) => ({ questId, status }),
+                );
+                const OpenStraigntCompletionPage = Completionpage.find(
+                  (row: any) =>
+                    row.questId === profile.currentQuest && row.status === 'completed',
+                );
+                if (OpenStraigntCompletionPage !== undefined) {
+                  setFeedbackList([]);
+                  setCurrentScreenId(13);
+                  return false;
+                }
+                if (feedbackList.length !== 0) {
+                  getFeedbackData(next);
+                  setFeedbackNavigateNext(false);
+                  setCurrentScreenId(14); //Navigate to together all feedback
+                  return false;
+                }else {
+                      if (demoBlocks.hasOwnProperty(nextLevel)) {
+                        setProfile((prev: any) => {
+                          const data = { ...prev };
+                          // if (!profile.completedLevels.includes(currentQuest)) {
+                          //   data.completedLevels = [...data.completedLevels, nextLevel];
+                          // }
+                          if (!profile.completedLevels.includes(String(nextLevel))) {
+                            data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                          }
+            
+                          return data;
+                        });
+            
+                        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                        setData(demoBlocks[nextLevel]['1']);
+                        setCurrentScreenId(13);
+                        return false;
+                      } else {
+                        if (
+                          gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
+                          gameInfo?.reflectionQuestions.length > 0
+                        ) {
+                          setCurrentScreenId(3); //Navigate to Reflection screen
+                          return false;
+                        } else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
+                          setCurrentScreenId(7); //Navigate to takeaway screen
+                          return false;
+                        } else {
+                          setType(null);
+                          setData(null);
+                          setCurrentScreenId(5);
+                          return false;
+                        }
+                      }
+                    }
+              }
+          else{
+            if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
-              if (!profile.completedLevels.includes(String(currentQuest))) {
-                data.completedLevels = [...data.completedLevels, nextLevel];
+              if (!profile.completedLevels.includes(String(nextLevel))) {
+                data.completedLevels = [...data.completedLevels, String(nextLevel)];
               }
-
               return data;
             });
             setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -2470,13 +2733,16 @@ useEffect(()=>{
               return false;
             }
           }
+          }
+          
         }
         // Dont Want to Check This Condition
         /*else if (gameInfo.gameData?.gameDisableOptionalReplays === 'false') {
           setCurrentScreenId(8); //Navigate to replaygame prompt screen
           return false;
         }*/
-      } else if (
+      }
+      else if (
         gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
         gameInfo?.reflectionQuestions.length > 0
       ) {
@@ -2540,10 +2806,12 @@ useEffect(()=>{
                
                 setProfile((prev: any) => {
                   const data = { ...prev };
-                  if (!profile.completedLevels.includes(String(currentQuest))) {
-                    data.completedLevels = [...data.completedLevels, nextLevel];
+                  // if (!profile.completedLevels.includes(String(currentQuest))) {
+                  //   data.completedLevels = [...data.completedLevels, nextLevel];
+                  // }
+                  if (!profile.completedLevels.includes(String(nextLevel))) {
+                    data.completedLevels = [...data.completedLevels, String(nextLevel)];
                   }
-
                   return data;
                 });
                 setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -2575,10 +2843,12 @@ useEffect(()=>{
               setFeedbackNavigateNext(false);
               setProfile((prev: any) => {
                 const data = { ...prev };
-                if (!profile.completedLevels.includes(String(currentQuest))) {
-                  data.completedLevels = [...data.completedLevels, nextLevel];
+                // if (!profile.completedLevels.includes(String(currentQuest))) {
+                //   data.completedLevels = [...data.completedLevels, nextLevel];
+                // }
+                if (!profile.completedLevels.includes(String(nextLevel))) {
+                  data.completedLevels = [...data.completedLevels, String(nextLevel)];
                 }
-      
                 return data;
               });
               setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -2607,10 +2877,12 @@ useEffect(()=>{
       } else if (demoBlocks.hasOwnProperty(nextLevel)) {
         setProfile((prev: any) => {
           const data = { ...prev };
-          if (!profile.completedLevels.includes(String(currentQuest))) {
-            data.completedLevels = [...data.completedLevels, nextLevel];
+          // if (!profile.completedLevels.includes(String(currentQuest))) {
+          //   data.completedLevels = [...data.completedLevels, nextLevel];
+          // }
+          if (!profile.completedLevels.includes(String(nextLevel))) {
+            data.completedLevels = [...data.completedLevels, String(nextLevel)];
           }
-
           return data;
         });
         setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -2673,7 +2945,7 @@ useEffect(()=>{
         //   return false;
         // }
         if (feedbackList.length !== 0) {
-          getFeedbackData();
+          getFeedbackData(data);
           setFeedbackNavigateNext(false);
           setCurrentScreenId(14); //Navigate to together all feedback
           return false;
@@ -2721,8 +2993,20 @@ useEffect(()=>{
             setReplayIsOpen(true);
             return false;
           } else {
-            if (data && type) {
+            if (demoBlocks.hasOwnProperty(nextLevel)) {
               setFeedbackNavigateNext(false);
+              setProfile((prev: any) => {
+                const data = { ...prev };
+                // if (!profile.completedLevels.includes(String(nextLevel))) {
+                //   data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                // }
+                if (!profile.completedLevels.includes(String(nextLevel))) {
+                  data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                }
+                return data;
+              });
+              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+              setData(demoBlocks[nextLevel]['1']);
               setCurrentScreenId(13);
               return false;
             } else {
@@ -2744,8 +3028,21 @@ useEffect(()=>{
             }
           }
         } else {
-          if (data && type) {
+          if (demoBlocks.hasOwnProperty(nextLevel)) {
             setFeedbackNavigateNext(false);
+            setProfile((prev: any) => {
+              const data = { ...prev };
+              // if (!profile.completedLevels.includes(String(nextLevel))) {
+              //   data.completedLevels = [...data.completedLevels, String(nextLevel)];
+              // }
+              if (!profile.completedLevels.includes(String(nextLevel))) {
+                data.completedLevels = [...data.completedLevels, String(nextLevel)];
+              }
+              return data;
+            });
+
+            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+            setData(demoBlocks[nextLevel]['1']);
             setCurrentScreenId(13);
             return false;
           } else {
@@ -2767,8 +3064,21 @@ useEffect(()=>{
           }
         }
       } else {
-        if (data && type) {
+        if (demoBlocks.hasOwnProperty(nextLevel)) {
           setFeedbackNavigateNext(false);
+          setProfile((prev: any) => {
+            const data = { ...prev };
+            // if (!profile.completedLevels.includes(String(currentQuest))) {
+            //   data.completedLevels = [...data.completedLevels, nextLevel];
+            // }
+            if (!profile.completedLevels.includes(String(nextLevel))) {
+              data.completedLevels = [...data.completedLevels, String(nextLevel)];
+            }
+            return data;
+          });
+
+          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+          setData(demoBlocks[nextLevel]['1']);
           setCurrentScreenId(13);
           return false;
         } else {
@@ -2830,6 +3140,46 @@ useEffect(()=>{
           setReplayIsOpen(true);
           return false;
         } else {
+          if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+            {
+              setType(next?.blockChoosen);
+              setData(next);
+              setCurrentScreenId(6);
+              return false;
+            }
+            else if(feedbackList.length !== 0)
+              {
+                setType(next?.blockChoosen);
+                setData(next);
+                setCurrentScreenId(6);
+                return false;
+              }
+            else
+            {
+              if (demoBlocks.hasOwnProperty(nextLevel)) {
+                setProfile((prev: any) => {
+                  const data = { ...prev };
+                  // if (!profile.completedLevels.includes(String(currentQuest))) {
+                  //   data.completedLevels = [...data.completedLevels, nextLevel];
+                  // }
+                  if (!profile.completedLevels.includes(String(nextLevel))) {
+                    data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                  }
+                  return data;
+                });
+  
+                setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                setData(demoBlocks[nextLevel]['1']);
+                setCurrentScreenId(6);
+                return false;
+              } else {
+                setCurrentScreenId(6);
+                setType(null);
+                setData(null);
+                return false;
+              }
+            }
+            /*
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
@@ -2848,8 +3198,50 @@ useEffect(()=>{
             setCurrentScreenId(6);
             return false;
           }
+          */
         }
       } else {
+        if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+          {
+            setType(next?.blockChoosen);
+            setData(next);
+            setCurrentScreenId(6);
+            return false;
+          }
+          else if(feedbackList.length !== 0)
+            {
+              setType(next?.blockChoosen);
+              setData(next);
+              setCurrentScreenId(6);
+              return false;
+            }
+          else
+          {
+            if (demoBlocks.hasOwnProperty(nextLevel)) {
+              setProfile((prev: any) => {
+                const data = { ...prev };
+                // if (!profile.completedLevels.includes(String(currentQuest))) {
+                //   data.completedLevels = [...data.completedLevels, nextLevel];
+                // }
+                if (!profile.completedLevels.includes(String(nextLevel))) {
+                  data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                }
+
+                return data;
+              });
+
+              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+              setData(demoBlocks[nextLevel]['1']);
+              setCurrentScreenId(6);
+              return false;
+            } else {
+              setCurrentScreenId(6);
+              setType(null);
+              setData(null);
+              return false;
+            }
+          }
+         /*
         if (demoBlocks.hasOwnProperty(nextLevel)) {
           setProfile((prev: any) => {
             const data = { ...prev };
@@ -2868,8 +3260,11 @@ useEffect(()=>{
           setCurrentScreenId(6);
           return false;
         }
+        */
       }
     }
+    if(currentScreenId === 2)
+    {
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
         const currentBlockinteraction =
@@ -3054,6 +3449,47 @@ useEffect(()=>{
             setReplayIsOpen(true);
             return false;
           } else {
+            if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+              {
+                setType(next?.blockChoosen);
+                setData(next);
+                setCurrentScreenId(6);
+                return false;
+              }
+              else if(feedbackList.length !== 0)
+                {
+                  setType(next?.blockChoosen);
+                  setData(next);
+                  setCurrentScreenId(6);
+                  return false;
+                }
+              else
+              {
+                if (demoBlocks.hasOwnProperty(nextLevel)) {
+                  setProfile((prev: any) => {
+                    const data = { ...prev };
+                    // if (!profile.completedLevels.includes(String(currentQuest))) {
+                    //   data.completedLevels = [...data.completedLevels, nextLevel];
+                    // }
+                    if (!profile.completedLevels.includes(String(nextLevel))) {
+                      data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                    }
+                    return data;
+                  });
+    
+                  setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                  setData(demoBlocks[nextLevel]['1']);
+                  setFeedbackNavigateNext(false);
+                  setCurrentScreenId(6);
+                  return false;
+                } else {
+                  setCurrentScreenId(6);
+                  setType(null);
+                  setData(null);
+                  return false;
+                }
+              }
+              /*
             if (demoBlocks.hasOwnProperty(nextLevel)) {
               setProfile((prev: any) => {
                 const data = { ...prev };
@@ -3073,8 +3509,50 @@ useEffect(()=>{
               setCurrentScreenId(6);
               return false;
             }
+            */
           }
         } else {
+          if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+            {
+              setType(next?.blockChoosen);
+              setData(next);
+              setCurrentScreenId(6);
+              return false;
+            }
+            else if(feedbackList.length !== 0)
+              {
+                setType(next?.blockChoosen);
+                setData(next);
+                setCurrentScreenId(6);
+                return false;
+              }
+            else
+            {
+              if (demoBlocks.hasOwnProperty(nextLevel)) {
+                setProfile((prev: any) => {
+                  const data = { ...prev };
+                  // if (!profile.completedLevels.includes(String(currentQuest))) {
+                  //   data.completedLevels = [...data.completedLevels, nextLevel];
+                  // }
+                  if (!profile.completedLevels.includes(String(nextLevel))) {
+                    data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                  }
+                  return data;
+                });
+  
+                setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                setData(demoBlocks[nextLevel]['1']);
+                setFeedbackNavigateNext(false);
+                setCurrentScreenId(6);
+                return false;
+              } else {
+                setCurrentScreenId(6);
+                setType(null);
+                setData(null);
+                return false;
+              }
+            }
+/*
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
@@ -3094,10 +3572,10 @@ useEffect(()=>{
             setCurrentScreenId(6);
             return false;
           }
+          */
         }
       } else {
         /** IF a block not has navi option then it leads to next block */
-        console.log('nextBlock',nextBlock)
         if (nextBlock && nextBlock[0]?.blockChoosen) {
           setType(nextBlock[0]?.blockChoosen);
           setData(nextBlock[0]);
@@ -3202,22 +3680,53 @@ useEffect(()=>{
       setSelectedOption(null);
       return false;
     }
+  }
+
   };
 
   const calScore = () => {
-    const currentQuest = data?.blockPrimarySequence.split('.')[0] ?? null;
+    // const currentQuest = data?.blockPrimarySequence.split('.')[0] ?? null;
+    const currentQuest = profile?.currentQuest || "1";
+    console.log("^^^^^currentQuest", currentQuest)
     const currentGameData = gameInfo.gameQuest.find(
       (row: any) => row.gameQuestNo == profile?.currentQuest,
     );
-    const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    console.log("^^^^^currentGameData", currentGameData)
+    // const nextLevel = currentQuest != null ? String(parseInt(currentQuest) + 1) : null;
+    const nextLevel = parseInt(profile?.currentQuest)+1 || null;
+    console.log("^^^^^nextLevel", nextLevel)
     const haveNextQuest = gameInfo.gameQuest.some(
       (row: any) => row.gameQuestNo > profile?.currentQuest,
     );
-    const totalScore = profile?.score.forEach((item: any) => {
-      if (item && item.marks) {
-        return item.marks.reduce((acc: any, mark: any) => acc + mark, 0);
+    console.log("^^^^^haveNextQuest", haveNextQuest)
+    let totalScore = 0;
+    const ifPlayInProgress = profile?.replayScore?.length > 0 && profile?.replayScore?.some((item:any)=> item.quest === profile?.currentQuest);
+    if(ifPlayInProgress){
+      totalScore = profile?.replayScore.reduce((acc: any, row: any) => {
+          if(row.quest === profile?.currentQuest){
+              return acc+ row.score;
+          }
+          return acc;
+
+        // if (item. && item.score) {
+        //   return item.marks.reduce((acc: any, mark: any) => acc + mark, 0);
+        // }
+      }, 0);
+    }
+  else{  
+    // totalScore = profile?.score.forEach((item: any) => {
+    //   if (item && item.marks) {
+    //     return item.marks.reduce((acc: any, mark: any) => acc + mark, 0);
+    //   }
+    // });
+    profile?.score.reduce((acc: any, row: any) => {
+      if(row.quest === profile?.currentQuest){
+          return acc+ row.score;
       }
-    });
+      return acc;
+  }, 0);
+  }
+    console.log("^^^^^totalScore", totalScore)
     return {
       currentQuest: currentQuest,
       currentGameData: currentGameData,
@@ -3349,14 +3858,13 @@ useEffect(()=>{
 
     setFeedBackFromValue();
 
-    const screens = [1, 10, 12, 8, 14, 9, 15, 16, 0, 6, 4];
+    const screens = [10, 12, 8, 14, 9, 15, 16, 0, 6, 4];
     if (!screens.includes(currentScreenId)) {
-      const screenIdset =
-        getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+      const screenIdset = (getPrevLogDatas?.screenIdSeq?.length - 1 > 0) ? (getPrevLogDatas?.screenIdSeq[getPrevLogDatas?.screenIdSeq?.length -1]): [];
       if (screenIdset !== currentScreenId) {
         setPreLogDatas((prev: any) => ({
           ...prev,
-          screenIdSeq: [...prev.screenIdSeq, currentScreenId],
+          screenIdSeq:  prev?.screenIdSeq?.length >0 ? [...prev?.screenIdSeq, currentScreenId] : [],
         }));
       }
     }
@@ -3629,13 +4137,16 @@ useEffect(()=>{
     const currentQuest = data
       ? parseInt(data?.blockPrimarySequence.split('.')[0])
       : null;
-      // currentQuest === Object.keys(demoBlocks).length ? currentQuest :
-    const nextLevel = currentQuest != null ?  String(currentQuest + 1) : null;
+    // const nextLevel = currentQuest != null ?  String(currentQuest + 1) : null;
+    const nextLevel = parseInt(profile?.currentQuest)+1 || null;
     if (demoBlocks.hasOwnProperty(nextLevel)) {
       setProfile((prev: any) => {
         const data = { ...prev };
-        if (!profile.completedLevels.includes(String(currentQuest))) {
-          data.completedLevels = [...data.completedLevels, nextLevel];
+        // if (!profile.completedLevels.includes(String(currentQuest))) {
+        //   data.completedLevels = [...data.completedLevels, nextLevel];
+        // }
+        if (!profile.completedLevels.includes(String(nextLevel))) {
+          data.completedLevels = [...data.completedLevels, String(nextLevel)];
         }
 
         return data;
@@ -3678,7 +4189,6 @@ useEffect(()=>{
           if (resLang?.data.length > 0) {
             const data = resLang?.data;
             const ifEnglishExist = data.filter((lang: any)=>lang.value===1 );
-            console.log("ifEnglishExist ---", ifEnglishExist);
             if(ifEnglishExist.length === 0)
               {
                 data.unshift({ value: 1, label: 'English' });
@@ -3728,12 +4238,6 @@ useEffect(()=>{
   };
 
   const dontShowTopMenu = ![3, 4, 5, 6, 7, 10].includes(currentScreenId);
-  // currentScreenId !== 7 &&
-  // currentScreenId !== 6 &&
-  // currentScreenId !== 5 &&
-  // currentScreenId !== 4 &&
-  // currentScreenId !== 3 &&
-  // currentScreenId !== 10;
 
   useEffect(() => {
     if (FeedbackNavigatenext === true) {
@@ -3742,7 +4246,7 @@ useEffect(()=>{
     }
   }, [FeedbackNavigatenext]);
 
-  const getFeedbackData = () => {
+  const getFeedbackData = (data:any) => {
     setisScreenshot(true);
     const groupedFeedback: { [key: string]: any[] } = {};
     feedbackList.forEach((feedback) => {
@@ -3868,6 +4372,7 @@ useEffect(()=>{
         lastModifiedBlockSeq: getPrevLogDatas.lastModifiedBlockSeq,
         playerInputs: getPrevLogDatas.playerInputs,
         previewScore: getPrevLogDatas.previewScore,
+        // audioVolumeValue: JSON.stringify(getPrevLogDatas.audioVolumeValue),
       };
 
       const previousDataString = JSON.stringify(data);
@@ -3876,7 +4381,6 @@ useEffect(()=>{
       );
     };
     updatepreviousdatas();
-    console.log("preLogDatasIni", i++);
   }, [getPrevLogDatas]);
 
   //  Newly Added  for prviouse stored
@@ -3885,72 +4389,61 @@ useEffect(()=>{
       const currentQuest = currentdata
         ? parseInt(currentdata?.blockPrimarySequence.split('.')[0])
         : null;
-      if (currentdata?.blockChoosen === 'Interaction') {
-        if (currentQuest === parseInt(profile.currentQuest)) {
-          if (getPrevLogDatas.selectedOptions[profile?.currentQuest]) {
-            const existingIndex = getPrevLogDatas.selectedOptions[
-              profile?.currentQuest
-            ]?.findIndex((item: any) => item.blockId === currentdata.blockId);
-
-            if (existingIndex !== -1) {
-              const updatedOptions = [
-                ...getPrevLogDatas.selectedOptions[profile?.currentQuest],
-              ];
-
-              updatedOptions[existingIndex] = {
-                blockId: currentdata.blockId.toString(),
-                optionId: OptionSelectId.toString(),
-              };
-              setPreLogDatas((prev: any) => ({
-                ...prev,
-                selectedOptions: {
-                  ...prev.selectedOptions,
-                  [profile?.currentQuest]: updatedOptions,
-                },
-              }));
-            } else {
-              setPreLogDatas((prev: any) => ({
-                ...prev,
-                selectedOptions: {
-                  ...prev.selectedOptions,
-                  [profile?.currentQuest]: [
-                    ...prev.selectedOptions[profile?.currentQuest],
-                    {
-                      blockId: currentdata.blockId,
-                      optionId: [OptionSelectId],
-                    },
-                  ],
-                },
-              }));
+        if (currentdata?.blockChoosen === 'Interaction') {
+          if (currentQuest === parseInt(profile.currentQuest)) {
+            if (getPrevLogDatas.selectedOptions[profile?.currentQuest]) {
+              const existingIndex = getPrevLogDatas.selectedOptions[profile?.currentQuest]?.findIndex((item: any) => item.blockId === currentdata.blockId);
+              console.log('existingIndex', existingIndex);
+              if (existingIndex !== -1) {
+                const updatedOptions = [...getPrevLogDatas.selectedOptions[profile?.currentQuest]];
+                console.log();
+                updatedOptions[existingIndex] = { blockId: currentdata.blockId, optionId: OptionSelectId };
+                setPreLogDatas((prev: any) => ({
+                  ...prev,
+                  selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: updatedOptions }
+                }));
+              }
+              else {
+                setPreLogDatas((prev: any) => ({
+                  ...prev,
+                  selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [...prev.selectedOptions[profile?.currentQuest], { blockId: currentdata.blockId, optionId: OptionSelectId }] }
+                }));
+              }
+  
             }
-          } else {
+            else {
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [{ blockId: currentdata.blockId, optionId: OptionSelectId }] }
+              }));
+  
+            }
+  
+          }
+          else {
             setPreLogDatas((prev: any) => ({
               ...prev,
-              selectedOptions: {
-                ...prev.selectedOptions,
-                [profile?.currentQuest]: [
-                  { blockId: currentdata.blockId, optionId: [OptionSelectId] },
-                ],
-              },
+              selectedOptions: { [profile?.currentQuest]: [{ blockId: currentdata.blockId, optionId: OptionSelectId }] }
             }));
           }
-        } else {
-          setPreLogDatas((prev: any) => ({
-            ...prev,
-            selectedOptions: {
-              [profile?.currentQuest]: [
-                { blockId: currentdata.blockId, optionId: OptionSelectId },
-              ],
-            },
-          }));
         }
-      }
     }
   };
 
   /** replay prompt functions for replay point & previous navigation to chapter selection screen*/
 
-  const handleReplayButtonClick = () => {
+  const handleReplayButtonClick = (replayType: string) => {
+    /**replayType become ['mandatoryReplay', 'optionalReplay','replayPointPrompt'] **/
+
+    if(replayType === 'mandatoryReplay'){
+      //s***************
+      setPreLogDatas((prev: any) => ({
+        ...prev,
+        selectedOptions: {
+          [profile?.currentQuest]: [ ],
+        },
+      }));
+    }
     setType(demoBlocks[profile?.currentQuest]['1']?.blockChoosen);
     setData(demoBlocks[profile?.currentQuest]['1']);
     if (
@@ -3999,6 +4492,9 @@ useEffect(()=>{
     }
     setCurrentScreenId(2);
   };
+
+  console.log("profile", profile)
+  console.log("getPrevLogDatas", getPrevLogDatas)
 
   return (
     <ProfileContext.Provider value={profileData}>

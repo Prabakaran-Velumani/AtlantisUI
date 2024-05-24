@@ -38,13 +38,13 @@ const ChapterPage: React.FC<{
   setOptions?: any;
   setFeedbackList?: any;
   preloadedAssets?: any;
-  currentScreenId:any;
-  setPreLogDatas:any;
-  getPrevLogDatas:any;
-  profileData:any;
-  gameOptionSuffled:any;
-  setRepeatPrevOption:any;
-  setSelectedOption:any;
+  currentScreenId: any;
+  setPreLogDatas: any;
+  getPrevLogDatas: any;
+  profileData: any;
+  gameOptionSuffled: any;
+  setRepeatPrevOption: any;
+  setSelectedOption: any;
 }> = ({
   imageSrc,
   demoBlocks,
@@ -114,46 +114,66 @@ const ChapterPage: React.FC<{
     //   );
     //   setCompleted(completedLevels);
     // }
-    const currentQuest = profile.currentQuest;
+    const currentQuest = profile?.currentQuest;
+    console.log('^^^^^^^ quest state',questState)
     gameQuest.map((item: any, index: number) => {
       const questNoAsString = item.gameQuestNo.toString();
-      if (profile.completedLevels.includes(questNoAsString)) {
+      if (profile?.completedLevels?.includes(questNoAsString)) {
         const scores = profile?.score;
-if(scores!==undefined)
-  {
-     const sums: any = {};
-        scores.forEach((score: any) => {
-          const quest = score.quest;
-          if (!sums[quest]) {
-            sums[quest] = 0;
-          }
-          sums[quest] += score.score;
-        });
-        const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
-          quest,
-          score,
-        }));
-        const getscores = getFinalscores.find(
-          (row: any) => row.quest == item.gameQuestNo,
-        );
-        const finalscore = getscores?.score;
-        if (formData?.gameDisableOptionalReplays === 'false') {
-          if (item?.gameIsSetMinPassScore === 'true') {
-            const getminpassscore = item?.gameMinScore;
+        if (scores !== undefined) {
+          const sums: any = {};
+          scores.forEach((score: any) => {
+            const quest = score.quest;
+            if (!sums[quest]) {
+              sums[quest] = 0;
+            }
+            sums[quest] += score.score;
+          });
+          const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
+            quest,
+            score,
+          }));
+          const getscores = getFinalscores.find(
+            (row: any) => row.quest == item.gameQuestNo,
+          );
+          const finalscore = getscores?.score;
+          if (formData?.gameDisableOptionalReplays === 'false') {
+            if (item?.gameIsSetMinPassScore === 'true') {
+              const getminpassscore = item?.gameMinScore;
 
-            if (
-              finalscore >= getminpassscore &&
-              finalscore < item?.gameDistinctionScore
-            ) {
-              setQuestState((prevquestdataList: any) => ({
-                ...prevquestdataList,
-                [item.gameQuestNo]: 'replayallowed',
-              }));
-            } else {
-              if (finalscore !== undefined) {
+              if (
+                finalscore >= getminpassscore &&
+                finalscore < item?.gameDistinctionScore
+              ) {
                 setQuestState((prevquestdataList: any) => ({
                   ...prevquestdataList,
                   [item.gameQuestNo]: 'replayallowed',
+                }));
+              } else {
+                if (finalscore !== undefined) {
+                  setQuestState((prevquestdataList: any) => ({
+                    ...prevquestdataList,
+                    [item.gameQuestNo]: 'replayallowed',
+                  }));
+                  return false;
+                } else {
+                  setQuestState((prevquestdataList: any) => ({
+                    ...prevquestdataList,
+                    [item.gameQuestNo]: 'Started',
+                  }));
+                  return false;
+                }
+              }
+            } else {
+              // setQuestState((prevquestdataList: any) => ({
+              //   ...prevquestdataList,
+              //   [item.gameQuestNo]: 'replayallowed'
+              // }));
+
+              if (finalscore !== undefined) {
+                setQuestState((prevquestdataList: any) => ({
+                  ...prevquestdataList,
+                  [item.gameQuestNo]: 'completed',
                 }));
                 return false;
               } else {
@@ -165,89 +185,66 @@ if(scores!==undefined)
               }
             }
           } else {
-            // setQuestState((prevquestdataList: any) => ({
-            //   ...prevquestdataList,
-            //   [item.gameQuestNo]: 'replayallowed'
-            // }));
-
+            //Mandatory replay, even though formData?.gameDisableOptionalReplays is false, could allow when the min scroe is not set, or if has min score, then score less than minscore, it could navaigate to replay point
             if (finalscore !== undefined) {
               setQuestState((prevquestdataList: any) => ({
                 ...prevquestdataList,
                 [item.gameQuestNo]: 'completed',
               }));
-              return false;
             } else {
               setQuestState((prevquestdataList: any) => ({
                 ...prevquestdataList,
                 [item.gameQuestNo]: 'Started',
               }));
-              return false;
             }
           }
-        } else {
-          //Mandatory replay, even though formData?.gameDisableOptionalReplays is false, could allow when the min scroe is not set, or if has min score, then score less than minscore, it could navaigate to replay point
-          if (finalscore !== undefined) {
-            setQuestState((prevquestdataList: any) => ({
-              ...prevquestdataList,
-              [item.gameQuestNo]: 'completed',
-            }));
-          } else {
-            setQuestState((prevquestdataList: any) => ({
-              ...prevquestdataList,
-              [item.gameQuestNo]: 'Started',
-            }));
-          }
         }
-  }
-       
       } else {
         setQuestState((prevquestdataList: any) => ({
           ...prevquestdataList,
-          [item.gameQuestNo]: 'locked',
+          [item.gameQuestNo]: 'Started',
         }));
       }
     });
   }, [profile]);
 
   const handleChapter = (it: any) => {
-   
+    console.log('******it', it);
     const Completionpage = Object.entries(questState).map(
       ([questId, status]) => ({ questId, status }),
     );
     const OpenStraigntCompletionPage = Completionpage.find(
       (row: any) => row.questId === it && row.status === 'completed',
     );
-
+    console.log("OpenStraigntCompletionPage", OpenStraigntCompletionPage)
+    
     if (OpenStraigntCompletionPage !== undefined) {
-          setProfile((prev: any) => ({
-            ...prev,
-            currentQuest: it,
-          }));
-     
+      setProfile((prev: any) => ({
+        ...prev,
+        currentQuest: it,
+      }));
       setFeedbackList([]);
       setCurrentScreenId(6);
     } else {
-    
-       if (profile.completedLevels.includes(it)) {
-        const screenIdset = getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length -1];
-        if(screenIdset !== currentScreenId)
-          {
-            setPreLogDatas((prev:any) => ({
-          ...prev,
-          screenIdSeq: [...prev.screenIdSeq, currentScreenId]
-        }));
-          }
+      console.log("profile", profile);
+      if (profile?.completedLevels?.includes(it)) {
+        const screenIdset =
+          getPrevLogDatas?.screenIdSeq[
+            getPrevLogDatas?.screenIdSeq?.length - 1
+          ];
+        if (screenIdset !== currentScreenId) {
+          setPreLogDatas((prev: any) => ({
+            ...prev,
+            screenIdSeq: [...prev.screenIdSeq, currentScreenId],
+          }));
+        }
         setType(demoBlocks[it]['1']?.blockChoosen);
         setData(demoBlocks[it]['1']);
         setRepeatPrevOption([]);
         setSelectedOption(null);
-        if (
-          demoBlocks[it]['1']?.blockChoosen ===
-          'Interaction'
-        ) {
+        if (demoBlocks[it]['1']?.blockChoosen === 'Interaction') {
           const optionsFiltered = [];
-          const primarySequence =
-          demoBlocks[it]['1'].blockPrimarySequence;
+          const primarySequence = demoBlocks[it]['1'].blockPrimarySequence;
           for (const option of questOptions) {
             if (profileData?.Audiogetlanguage.length > 0) {
               if (option?.qpSequence === primarySequence) {
@@ -282,15 +279,18 @@ if(scores!==undefined)
           setOptions(optionsFiltered);
         }
         setFeedbackList([]);
-        const updatedCompletedLevels = new Set([...profile.completedLevels, it])      
+        const updatedCompletedLevels = new Set([
+          ...profile?.completedLevels,
+          it,
+        ]);
         setProfile((prev: any) => ({
           ...prev,
           currentQuest: it,
-          completedLevels: [...updatedCompletedLevels]
+          completedLevels: [...updatedCompletedLevels],
         }));
         setCurrentScreenId(2);
+      }
     }
-  }
   };
   const container = {
     hidden: { opacity: 1, scale: 0 },
@@ -312,7 +312,6 @@ if(scores!==undefined)
   };
 
 
-  
   return (
     <>
       <Box
@@ -387,26 +386,44 @@ if(scores!==undefined)
                                 </Text>
                               </Box>
                               <Box
-                                  w={'100%'}
-                                  position={'absolute'}
-                                  bottom={'0'}
-                                  color={'#D9C7A2'}
-                                  fontFamily={'AtlantisText'}
-                                  zIndex={999999}
-                                  display={'flex'}
-                                  justifyContent={'center'}
+                                w={'100%'}
+                                position={'absolute'}
+                                bottom={'0'}
+                                color={'#D9C7A2'}
+                                fontFamily={'AtlantisText'}
+                                zIndex={999999}
+                                display={'flex'}
+                                justifyContent={'center'}
+                              >
+                                <Text
+                                  className="amount-score"
+                                  textAlign={'center'}
                                 >
-                                  <Text
-                                    className="amount-score"
-                                    textAlign={'center'}
-                                  >
-                                    {profile.playerGrandTotal ? profile.playerGrandTotal?.questScores[it] ?  profile.playerGrandTotal?.questScores[it] : 0: 0}/{questScores &&  questScores[it] !==null && questScores[it] > 0  ? questScores[it] : gameQuest.gameTotalScore !==null ? gameQuest.gameTotalScore : 0}{' '}
-                                   
-                                  </Text>
-                                  <Img h={'25px'} w={'auto'} src={preloadedAssets.MoneyIcon} zIndex={5}/>
-                                </Box>
+                                  {profile?.playerGrandTotal
+                                    ? profile?.playerGrandTotal?.questScores[it]
+                                      ? profile?.playerGrandTotal?.questScores[
+                                          it
+                                        ]
+                                      : 0
+                                    : 0}
+                                  /
+                                  {questScores &&
+                                  questScores[it] !== null &&
+                                  questScores[it] > 0
+                                    ? questScores[it]
+                                    : gameQuest?.gameTotalScore !== null
+                                    ? gameQuest?.gameTotalScore
+                                    : 0}{' '}
+                                </Text>
+                                <Img
+                                  h={'25px'}
+                                  w={'auto'}
+                                  src={preloadedAssets.MoneyIcon}
+                                  zIndex={5}
+                                />
+                              </Box>
 
-                                { profile.completedLevels.includes(it) ?
+                              { profile?.completedLevels?.includes(it) ?
                                   Object.entries(questState).map(([questId, status], index) => (
                                     questId === it && status === 'completed' ?
                                       ( <Box className={'completed_level'}> <Box position={'relative'} display={'flex'} justifyContent={'center'}> <Img w={'40%'} h={'auto'} src={preloadedAssets?.Completed} /> </Box></Box>)
@@ -416,6 +433,111 @@ if(scores!==undefined)
                                   )) : (
                                     <Img src={preloadedAssets.Lock} className="lock" width={'97%'} position={'absolute'} bg={'#2b2828d6'} top={'0'} />
                                   )}
+                              {/* {profile?.completedLevels?.includes(it) ? (
+                                Object.entries(questState).map(
+                                  ([questId, status], index) =>
+                                    questId === it && status === 'completed' ? (
+                                      <Box className={'completed_level'}>
+                                        {' '}
+                                        <Box
+                                          position={'relative'}
+                                          display={'flex'}
+                                          justifyContent={'center'}
+                                        >
+                                          {' '}
+                                          <Img
+                                            w={'40%'}
+                                            h={'auto'}
+                                            src={preloadedAssets?.Completed}
+                                          />{' '}
+                                        </Box>
+                                      </Box>
+                                    ) : questId === it &&
+                                      status === 'replayallowed' ? (
+                                      <Box className={'completed_level'}>
+                                        {' '}
+                                        <Box
+                                          position={'relative'}
+                                          display={'flex'}
+                                          justifyContent={'center'}
+                                        >
+                                          {' '}
+                                          <Img
+                                            w={'40%'}
+                                            h={'auto'}
+                                            src={preloadedAssets?.Completed}
+                                          />{' '}
+                                        </Box>
+                                      </Box>
+                                    ) : questId === it &&
+                                      status === 'locked' ? (
+                                      <Img
+                                        key={index}
+                                        src={preloadedAssets.Lock}
+                                        className="lock"
+                                        width={'97%'}
+                                        position={'absolute'}
+                                        bg={'#2b2828d6'}
+                                        top={'0'}
+                                      />
+                                    ) : questId === it &&
+                                      status === 'Started' ? null : null,
+                                )
+                              ) : (
+                                <Img
+                                  src={preloadedAssets.Lock}
+                                  className="lock"
+                                  width={'97%'}
+                                  position={'absolute'}
+                                  bg={'#2b2828d6'}
+                                  top={'0'}
+                                />
+                              )} */}
+
+                          {/* {
+                          profile?.completedLevels?.includes(it) ? (
+                                  Object.entries(questState).map(
+                                    ([questId, status], index) =>
+                                      questId === it &&
+                                      (status === 'completed' || status === 'replayallowed' )? (
+                                        <Img
+                                          key={index}
+                                          src={preloadedAssets.Lock}
+                                          className="lock"
+                                          width={'97%'}
+                                          position={'absolute'}
+                                          bg={'#2b2828d6'}
+                                          top={'0'}
+                                        />
+                                      ) : questId === it &&
+                                        // status ===
+                                        //   'replayallowed' ? null : questId ===
+                                        //   it && 
+                                          status === 'locked' ? (
+                                        <Img
+                                          key={index}
+                                          src={preloadedAssets.Lock}
+                                          className="lock"
+                                          width={'97%'}
+                                          position={'absolute'}
+                                          bg={'#2b2828d6'}
+                                          top={'0'}
+                                        />
+                                      ) : questId === it &&
+                                        status === 'Started' ? null : null,
+                                  )
+                                ) : null 
+                                (
+                                  <Img
+                                    src={preloadedAssets.Lock}
+                                    className="lock"
+                                    width={'97%'}
+                                    position={'absolute'}
+                                    bg={'#2b2828d6'}
+                                    top={'0'}
+                                  />
+                                )
+                                } */}
                             </Box>
                           </motion.div>
                         );

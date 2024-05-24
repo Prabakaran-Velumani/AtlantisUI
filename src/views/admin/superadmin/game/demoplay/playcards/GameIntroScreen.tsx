@@ -18,10 +18,8 @@ interface GameIntroType {
 
 const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentScreenId, setIsGetsPlayAudioConfirmation, setPreLogDatas, getPrevLogDatas, currentScreenId, setModelControl, gameInfo, setLastModified, hasMulitLanguages, setIsOpenCustomModal}) => {
 
-
   const Handlemodel = () => {
     if (getPrevLogDatas?.playerType === 'creator') {
-      console.log('hellow')
       const getplayerid = getPrevLogDatas?.playerId;
       if (getplayerid === gameInfo?.gameCreatedUserId) {
         const getLastModifiedid = getPrevLogDatas?.lastModifiedBlockSeq;

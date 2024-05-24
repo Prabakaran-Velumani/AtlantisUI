@@ -121,7 +121,7 @@ const GamePreview = () => {
           lastBlockModifiedDate:updatePreviewLogsResponse.data.lastBlockModifiedDate,
           updatedAt:updatePreviewLogsResponse.data.updatedAt,
           playerInputs: updatePreviewLogsResponse.data.playerInputs? JSON.parse(updatePreviewLogsResponse.data.playerInputs) : [],
-          audioVolumeValue: updatePreviewLogsResponse.data.audioVolumeValue ? updatePreviewLogsResponse.data.audioVolumeValue: {bgVolume: 0.3, voVolume:0.3},
+          audioVolumeValue: updatePreviewLogsResponse.data.audioVolumeValue ? JSON.parse(updatePreviewLogsResponse.data.audioVolumeValue): {bgVolume: 0.3, voVolume:0.3},
           previewScore: updatePreviewLogsResponse.data.previewScore ? JSON.parse(updatePreviewLogsResponse.data.previewScore): initialProfileObject,
         });
         return updatePreviewLogsResponse;
@@ -135,7 +135,6 @@ const GamePreview = () => {
   useEffect(() => {
     const fetchPreviewLogs = async () => {
       const Reponse = await fetchPreviewLogsData();
-      console.log("********Reponse.data", Reponse)
       if (Reponse?.status =="Success") {
         setPreviewLogsDataIni(Reponse);
         setProfile({...Reponse?.data?.previewScore})

@@ -370,13 +370,6 @@ const Welcome: React.FC<{
               src={preloadedAssets.next}
               onClick={() =>{
                 setCurrentScreenId(12); 
-                if(screenIdset !==  currentScreenId)
-                  {
-                     setPreLogDatas((prev:any) => ({
-                  ...prev,
-                  screenIdSeq: [...prev.screenIdSeq, currentScreenId]
-                   }));
-                  }
                
             }}
             />

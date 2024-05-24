@@ -111,12 +111,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 
   const selectPlayerClick = () => {
     const i = 0; // Assuming you are referring to a specific player index
-    const screenIdset =
-      getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+
+    const screenIdset = getPrevLogDatas?.screenIdSeq[getPrevLogDatas?.screenIdSeq?.length - 1] ;
     if (screenIdset !== currentScreenId) {
       setPreLogDatas((prev: any) => ({
         ...prev,
-        screenIdSeq: [...prev.screenIdSeq, currentScreenId],
+        screenIdSeq: [...prev?.screenIdSeq, currentScreenId],
       }));
     }
 
@@ -134,7 +134,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   });
   // const screenIdset =
   //   getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
-    const screenIdset = (getPrevLogDatas?.screenIdSeq?.length -1) >=0 ? getPrevLogDatas?.screenIdSeq[(getPrevLogDatas?.screenIdSeq?.length -1)]:  1;
   return (
     <>
       <Box
@@ -224,13 +223,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                     _hover={{ bg: 'none' }}
                     onClick={() => {
                       setCurrentScreenId(1);
-
-                      if (screenIdset !== currentScreenId) {
-                        setPreLogDatas((prev: any) => ({
-                          ...prev,
-                          screenIdSeq: [...prev.screenIdSeq, currentScreenId],
-                        }));
-                      }
                     }}
                   ></Button>
                   <Box w={'25%'} position={'relative'}>
