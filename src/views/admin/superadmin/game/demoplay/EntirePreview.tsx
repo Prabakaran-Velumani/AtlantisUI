@@ -1804,12 +1804,6 @@ useEffect(()=>{
   };
 
   const getData = (next: any) => {
-   console.log('next 1805',next,'....',currentScreenId)
-  //  if(next === null && currentScreenId ===6)
-  //   {
-  //     console.log("^^^^ in if")
-  //   }
-  //   else{
     if (navi === '' || navi !== 'Repeat Question') {
       setRepeatPrevOption([]);
     }
@@ -1836,7 +1830,6 @@ useEffect(()=>{
       }
     }
     SetPreviouseStored(next);
-    console.log('***** 1839',next)
     setPreLogDatas((prev: any) => ({
       ...prev,
       lastBlockModifiedDate: null,
@@ -1859,7 +1852,6 @@ useEffect(()=>{
       ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
     setCurrentQuestNo(currentQuest);
-    console.log('##### 1862')
     setGame3Position((prev: any) => ({
       ...prev,
       previousBlock: next?.blockPrimarySequence,
@@ -2409,10 +2401,7 @@ if(currentScreenId ===2)
       console.log('##### 2408');
     }
   }
-    console.log('##### 2410')
     if (currentScreenId === 6) {
-      console.log("^^^^^^^^currentScreenId", currentScreenId)
-      console.log("gameInfo?.gameData?", gameInfo?.gameData)
       //Completion
       const {
         currentQuest,
@@ -3687,18 +3676,14 @@ if(currentScreenId ===2)
   const calScore = () => {
     // const currentQuest = data?.blockPrimarySequence.split('.')[0] ?? null;
     const currentQuest = profile?.currentQuest || "1";
-    console.log("^^^^^currentQuest", currentQuest)
     const currentGameData = gameInfo.gameQuest.find(
       (row: any) => row.gameQuestNo == profile?.currentQuest,
     );
-    console.log("^^^^^currentGameData", currentGameData)
     // const nextLevel = currentQuest != null ? String(parseInt(currentQuest) + 1) : null;
     const nextLevel = parseInt(profile?.currentQuest)+1 || null;
-    console.log("^^^^^nextLevel", nextLevel)
     const haveNextQuest = gameInfo.gameQuest.some(
       (row: any) => row.gameQuestNo > profile?.currentQuest,
     );
-    console.log("^^^^^haveNextQuest", haveNextQuest)
     let totalScore = 0;
     const ifPlayInProgress = profile?.replayScore?.length > 0 && profile?.replayScore?.some((item:any)=> item.quest === profile?.currentQuest);
     if(ifPlayInProgress){
@@ -3726,7 +3711,6 @@ if(currentScreenId ===2)
       return acc;
   }, 0);
   }
-    console.log("^^^^^totalScore", totalScore)
     return {
       currentQuest: currentQuest,
       currentGameData: currentGameData,
@@ -4393,10 +4377,9 @@ if(currentScreenId ===2)
           if (currentQuest === parseInt(profile.currentQuest)) {
             if (getPrevLogDatas.selectedOptions[profile?.currentQuest]) {
               const existingIndex = getPrevLogDatas.selectedOptions[profile?.currentQuest]?.findIndex((item: any) => item.blockId === currentdata.blockId);
-              console.log('existingIndex', existingIndex);
+
               if (existingIndex !== -1) {
                 const updatedOptions = [...getPrevLogDatas.selectedOptions[profile?.currentQuest]];
-                console.log();
                 updatedOptions[existingIndex] = { blockId: currentdata.blockId, optionId: OptionSelectId };
                 setPreLogDatas((prev: any) => ({
                   ...prev,

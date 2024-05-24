@@ -162,6 +162,8 @@ const questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).r
   SetFinalscore(questTotalScore);
 
 },[profile.score])
+
+console.log("questScores", questScores)
     return (
       <>
         <motion.div

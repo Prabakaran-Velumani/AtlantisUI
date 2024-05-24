@@ -56,22 +56,19 @@ const ReplayScore: React.FC<replayScoreProps> = ({
 
   useEffect(() => {
     const currentQuestMasterData = gameInfo?.gameQuest[profile?.currentQuest - 1];
-    // const currentQuestMasterData =profile?.playerGrandTotal[profile?.currentQuest-1];   
-    // if (currentQuestMasterData?.hasOwnProperty('gameTotalScore')) {
-      // if (isReplay === true && isOptionalReplay !== true) {
+    
       if (replayState === "mandatoryReplay") {
-        // const differedScore = currentQuestMasterData?.gameTotalScore ? (parseInt(currentQuestMasterData?.gameTotalScore) - parseInt(profilescore)) : null;
-        // const differedScore = profile?.playerGrandTotal[profile?.currentQuest-1] ? (parseInt(profile?.playerGrandTotal[profile?.       currentQuest-1]) - parseInt(profilescore)) : null;
-        console.log("currentQuestMasterData.gameMinScore", currentQuestMasterData.gameMinScore)
-        console.log("profile?.playerGrandTotal[profile?.currentQuest-1]", profile?.playerGrandTotal.questScores[profile?.currentQuest])
-        const differedScore = parseInt(currentQuestMasterData.gameMinScore) - parseInt(profile?.playerGrandTotal.questScores[profile?.currentQuest]);
+        const currentQuestIndex = profile?.currentQuest - 1;
+        const previousQuestScore = profile?.playerGrandTotal.questScores[currentQuestIndex] || 0;
+        const differedScore = parseInt(currentQuestMasterData.gameMinScore) - parseInt(previousQuestScore);
         setReplayMessage(`You are only ${differedScore ?? 'few'} points away from a minimum score. Click 'OKAY' to Play Again?`)
       }
-      // else if (isOptionalReplay === true) {
       else if (replayState === 'optionalReplay') {
-        const differedScore = parseInt(currentQuestMasterData.gameDistinctionScore) - parseInt(profile?.playerGrandTotal.questScores[profile?.currentQuest-1]);
+        const currentQuestIndex = profile?.currentQuest - 1;
+        const previousQuestScore = profile?.playerGrandTotal.questScores[currentQuestIndex] || 0; // Default to 0 if undefined
+
+        const differedScore = parseInt(currentQuestMasterData.gameDistinctionScore) - parseInt(previousQuestScore);
         setReplayMessage(`You are only ${differedScore ?? 'few'} points away from a perfect score. Would you like to replay?`)
-        // setReplayMessage(`Your score is below the distinction level. Would you like to play again?`);
       }
       else {
         setReplayMessage(`Would you like to play again?`);
