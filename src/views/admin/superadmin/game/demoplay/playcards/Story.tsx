@@ -689,13 +689,9 @@ const Story: React.FC<{
                 src={preloadedAssets.right}
                 w={'70px'}
                 h={'50px'}
-                // cursor={'pointer'}
                 onClick={() => Updatecontent()}
               />
             </Box>
-            {/* </>
-          )} */}
-            {/* </motion.div> */}
           </Box>
         )}
         {data && type === 'Interaction' && (

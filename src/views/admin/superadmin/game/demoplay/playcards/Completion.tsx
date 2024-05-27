@@ -1,5 +1,5 @@
 import { Box, Grid, GridItem, Img, Text } from '@chakra-ui/react';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useMemo } from 'react';
 import { getImages } from 'utils/game/gameService';
 import { motion } from 'framer-motion';
 import { ScoreContext } from '../GamePreview';
@@ -69,6 +69,7 @@ const Completion: React.FC<{
     const [geFinalscorequest, SetFinalscore] = useState(profile.playerGrandTotal?.questScores[parseInt(profile.currentQuest)]);
     const [questScores, setQuestScores] = useState(questWiseMaxTotal);
     const [quetCompletionMessage, setQuestCompletionMessage]= useState<string>("");
+
     useEffect(() => {
       setShowComplete(true);
       setTimeout(() => {
@@ -102,15 +103,30 @@ const findQuestCompletionMessage=()=>{
 
   /** This useEffect Only hanldes the total within the quest total */
 useEffect(()=>{
-const questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).reduce((totalScore: number, [key, value]: [any, any]) => {
+let questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).reduce((totalScore: number, [key, value]: [any, any]) => {
   if (key == profile.currentQuest) {
       return totalScore + value;
   }
   return totalScore;
 }, 0);
+questTotalScore = questTotalScore <= 0 ? 0 : questTotalScore;
   SetFinalscore(questTotalScore);
-
 },[profile.score])
+
+const currentQuestScore = useMemo(() => {
+  if (questScores && questScores[profile?.currentQuest]) {
+    return questScores[profile?.currentQuest];
+  } else {
+    const totalFlowScore =profile.score?.reduce((acc: number, item: any)=>{
+      if(item?.quest == profile?.currentQuest)
+        {
+          return  acc + parseInt(item.score);
+        }
+        return acc;
+    },0)
+    return totalFlowScore >0 ? totalFlowScore : (curretQuestOptions?.gameTotalScore[0]?.maxScore ?? 0);
+  }
+}, [questScores, profile?.currentQuest, gameInfoTotalScore]);
 
     return (
       <>
@@ -129,17 +145,7 @@ const questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).r
             <Box className="content-box">
               <Box className="congratulations">
                 <Box className="content" mt="0px">
-                  {/* {
-                    completionScreenQuestOptions[getcompletionquest]
-                      ?.gameIsSetCongratsSingleMessage !== 'true' &&
-                      completionScreenQuestOptions[getcompletionquest]
-                        ?.gameIsSetCongratsScoreWiseMessage !== 'true'
-                      ? completionScreenQuestOptions[getcompletionquest]
-                        ?.gameCompletedCongratsMessage
-                  : completionScreenQuestOptions[getcompletionquest]
-                      ?.gameCompletedCongratsMessage} */}
-
-                  {quetCompletionMessage}
+                      {quetCompletionMessage}
               </Box>
             </Box>
               <Box className="rewards-img-box">
@@ -157,13 +163,14 @@ const questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).r
                       className="inside-box-1_img"
                     />
                     <Text className="inside-points-text" fontFamily={'content'}>
-                      {geFinalscorequest <= 0 ? 0 : geFinalscorequest}{'/'}{questScores && questScores[profile?.currentQuest] ? questScores[profile?.currentQuest] : Object.keys(gameInfoTotalScore).map(num => {
+                      {/* {geFinalscorequest <= 0 ? 0 : geFinalscorequest}{'/'}{questScores && questScores[profile?.currentQuest] ? questScores[profile?.currentQuest] : Object.keys(gameInfoTotalScore).map(num => {
                         if (gameInfoTotalScore[num]?.questNo === parseInt(profile?.currentQuest)) {
                           return gameInfoTotalScore[num].gameTotalScore[0].maxScore;
                         } else {
                           return 0;
                         }
-                      })}
+                      })} */}
+                      {` ${geFinalscorequest}/${currentQuestScore}`}
                     </Text>
                   </Box>
                 </Box>

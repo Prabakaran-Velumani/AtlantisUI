@@ -555,9 +555,6 @@ useEffect(()=>{
     }
   }, [profileData?.language]);
 
-
-
-
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
     if (res?.status === 'success' && res?.url) {
@@ -754,7 +751,6 @@ useEffect(()=>{
                 parseInt(option.qpScore),
               );
               qpScoresOption.sort((a: any, b: any) => b - a);
-              // GrandMaximumscore.push(qpScoresOption[0]);
               GrandMaximumscore += qpScoresOption[0];
             }
           });
@@ -853,7 +849,6 @@ useEffect(()=>{
             try {
               backgroundBgmRef.current.play().catch((error) => {
                 // Handle play promise rejection
-                // console.error('Error playing background BGM:', error);
               });
             } catch (error) {
               console.error('Background BGM ref is not available.', error);
@@ -3725,15 +3720,12 @@ if(currentScreenId ===2)
         ...prev,
         url: audio,
         type: EnumType.BGM,
-        // volume: '0.5',
         loop: true, // Voice doesn't loop
         autoplay: true,
       }));
       if (backgroundBgmRef.current) {
         try {
           backgroundBgmRef.current.play().catch((error) => {
-            // Handle play promise rejection
-            // console.error('Error playing background BGM:', error);
           }); // Play background BGM
         } catch (error) {
           console.error('Background BGM ref is not available.', error);
@@ -4602,6 +4594,7 @@ if(currentScreenId ===2)
                               setCurrentScreenId={setCurrentScreenId}
                               preloadedAssets={preloadedAssets}
                               setPreLogDatas={setPreLogDatas}
+                              getPrevLogDatas={getPrevLogDatas}
                             />
                           </Box>
                         </Box>

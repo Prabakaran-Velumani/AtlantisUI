@@ -11,10 +11,25 @@ const Reflection: React.FC<{
   setCurrentScreenId?: any;
   preloadedAssets: any;
   setPreLogDatas: any;
-}> = ({ formData, reflectionQuestions, imageSrc, gameInfo, setCurrentScreenId, preloadedAssets, setPreLogDatas }) => {
+  getPrevLogDatas: any;
+}> = ({ formData, reflectionQuestions, imageSrc, gameInfo, setCurrentScreenId, preloadedAssets, setPreLogDatas, getPrevLogDatas }) => {
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [answers, setAnswers] = useState<any>([]);
   const [RefAnswer, setrefAnswer] = useState<any>([]);
+  
+  useEffect(()=>{
+const storedRefAnswers =  getPrevLogDatas?.playerInputs?.Reflection;
+if(storedRefAnswers)
+  {
+    setrefAnswer(storedRefAnswers);
+    const modifedAnswers = storedRefAnswers.map((item: { [key: string]: string }) => {
+      const key = Object.keys(item)[0]; // Get the key of the current object
+      return { text: item[key] }; // Return a new object with the "text" property
+    });
+    setAnswers(modifedAnswers)
+  }
+  },[])
+
   useEffect(() => {
     if (
       formData?.gameIsLearnerMandatoryQuestion &&
@@ -31,16 +46,13 @@ const Reflection: React.FC<{
   }, [answers]);
 
   const updateAnswer = (e: any, index: any) => {
-    // if(e.target.value!=='')
-    //   {       
+   
     const updatedAnswers = [...answers];
     updatedAnswers[index] = { ...updatedAnswers[index], text: e.target.value };
     const updatedRefAnswers = [...RefAnswer];
     updatedRefAnswers[index] = { ...updatedRefAnswers[index], [`ref${index + 1}`]: e.target.value };
     setAnswers(updatedAnswers);
     setrefAnswer(updatedRefAnswers);
-    // }
-
   };
 
   const nextNavigation = () => {
@@ -48,6 +60,7 @@ const Reflection: React.FC<{
       ...prev,
       playerInputs: {
         Reflection: RefAnswer,
+        ...prev.playerInputs
       }
     }));
     if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {

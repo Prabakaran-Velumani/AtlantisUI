@@ -72,7 +72,6 @@ const ChapterPage: React.FC<{
   const [questScores, setQuestScores] = useState(null);
 
   const [AllowedReplayOption, setAllowedReplayOption] = useState(null);
-
   useEffect(() => {
     const groupedByQuest: any = {};
     questOptions.forEach((item: any) => {
@@ -82,38 +81,26 @@ const ChapterPage: React.FC<{
       }
       groupedByQuest[questNo].push(item);
     });
-    const maxScoresByQuest: any = {};
+    let maxScoresByQuest: { key: string; value: number }[] = [];
+
     for (const questNo in groupedByQuest) {
       const questData = groupedByQuest[questNo];
-      const maxScoresBySequence: any = {};
+      let maxScoresBySequence: any = {};
 
-      questData.forEach((item: any) => {
-        const sequence = item.qpSequence;
-        const score = parseInt(item.qpScore);
-
-        if (
-          !maxScoresBySequence[sequence] ||
-          score > maxScoresBySequence[sequence]
-        ) {
-          maxScoresBySequence[sequence] = score;
+      maxScoresBySequence = questData.reduce((acc:any, obj:any) => {
+        if (!acc[questNo] || acc[questNo] < obj.qpScore) {
+            acc[questNo] = obj.qpScore;
         }
-      });
-      const maxScoreForQuest = Object.values(maxScoresBySequence).reduce(
-        (acc: any, score: any) => acc + score,
-        0,
-      );
-      maxScoresByQuest[questNo] = maxScoreForQuest;
+        return acc;
+    }, {});
+    // maxScoresByQuest.push(maxScoresBySequence);
+     maxScoresByQuest={...maxScoresByQuest, ...maxScoresBySequence};
+
     }
     setQuestScores(maxScoresByQuest);
   }, []);
   const { profile, setProfile } = useContext(ScoreContext);
   useEffect(() => {
-    // if (profile.completedLevels.length !== 0) {
-    //   const completedLevels = profile.completedLevels.map(
-    //     (item: any) => item,
-    //   );
-    //   setCompleted(completedLevels);
-    // }
     const currentQuest = profile?.currentQuest;
 
     gameQuest.map((item: any, index: number) => {
@@ -432,111 +419,6 @@ const ChapterPage: React.FC<{
                                   )) : (
                                     <Img src={preloadedAssets.Lock} className="lock" width={'97%'} position={'absolute'} bg={'#2b2828d6'} top={'0'} />
                                   )}
-                              {/* {profile?.completedLevels?.includes(it) ? (
-                                Object.entries(questState).map(
-                                  ([questId, status], index) =>
-                                    questId === it && status === 'completed' ? (
-                                      <Box className={'completed_level'}>
-                                        {' '}
-                                        <Box
-                                          position={'relative'}
-                                          display={'flex'}
-                                          justifyContent={'center'}
-                                        >
-                                          {' '}
-                                          <Img
-                                            w={'40%'}
-                                            h={'auto'}
-                                            src={preloadedAssets?.Completed}
-                                          />{' '}
-                                        </Box>
-                                      </Box>
-                                    ) : questId === it &&
-                                      status === 'replayallowed' ? (
-                                      <Box className={'completed_level'}>
-                                        {' '}
-                                        <Box
-                                          position={'relative'}
-                                          display={'flex'}
-                                          justifyContent={'center'}
-                                        >
-                                          {' '}
-                                          <Img
-                                            w={'40%'}
-                                            h={'auto'}
-                                            src={preloadedAssets?.Completed}
-                                          />{' '}
-                                        </Box>
-                                      </Box>
-                                    ) : questId === it &&
-                                      status === 'locked' ? (
-                                      <Img
-                                        key={index}
-                                        src={preloadedAssets.Lock}
-                                        className="lock"
-                                        width={'97%'}
-                                        position={'absolute'}
-                                        bg={'#2b2828d6'}
-                                        top={'0'}
-                                      />
-                                    ) : questId === it &&
-                                      status === 'Started' ? null : null,
-                                )
-                              ) : (
-                                <Img
-                                  src={preloadedAssets.Lock}
-                                  className="lock"
-                                  width={'97%'}
-                                  position={'absolute'}
-                                  bg={'#2b2828d6'}
-                                  top={'0'}
-                                />
-                              )} */}
-
-                          {/* {
-                          profile?.completedLevels?.includes(it) ? (
-                                  Object.entries(questState).map(
-                                    ([questId, status], index) =>
-                                      questId === it &&
-                                      (status === 'completed' || status === 'replayallowed' )? (
-                                        <Img
-                                          key={index}
-                                          src={preloadedAssets.Lock}
-                                          className="lock"
-                                          width={'97%'}
-                                          position={'absolute'}
-                                          bg={'#2b2828d6'}
-                                          top={'0'}
-                                        />
-                                      ) : questId === it &&
-                                        // status ===
-                                        //   'replayallowed' ? null : questId ===
-                                        //   it && 
-                                          status === 'locked' ? (
-                                        <Img
-                                          key={index}
-                                          src={preloadedAssets.Lock}
-                                          className="lock"
-                                          width={'97%'}
-                                          position={'absolute'}
-                                          bg={'#2b2828d6'}
-                                          top={'0'}
-                                        />
-                                      ) : questId === it &&
-                                        status === 'Started' ? null : null,
-                                  )
-                                ) : null 
-                                (
-                                  <Img
-                                    src={preloadedAssets.Lock}
-                                    className="lock"
-                                    width={'97%'}
-                                    position={'absolute'}
-                                    bg={'#2b2828d6'}
-                                    top={'0'}
-                                  />
-                                )
-                                } */}
                             </Box>
                           </motion.div>
                         );

@@ -28,8 +28,7 @@ import collector from 'assets/img/games/collector.glb';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import Model from './playcards/Model';
-
-
+const NoAuth= lazy(() => import('./playcards/NoAuth'));
 const EntirePreview = lazy(() => import('./EntirePreview'));
 const gameScreens = [
   'Completion',
@@ -90,7 +89,7 @@ const GamePreview = () => {
   const [previewLogsDataIni, setPreviewLogsDataIni] = useState<any>(null);
   const [preLogDatasIni, setPreLogDatasIni] = useState<any>(null);
   const [initialStateUpdate, setInitialStateUpdate]=useState<boolean>(false);
-  
+  const [isAuthFailed, setIsAuthFailed]= useState<boolean>(false);
   const user: any = JSON.parse(localStorage.getItem('user'));
   //get the stored Preview Log Data, if has otherwise create a new record
   const fetchPreviewLogsData = async () => {
@@ -107,24 +106,26 @@ const GamePreview = () => {
         }
         const userDataString = JSON.stringify(data);
         const updatePreviewLogsResponse = await updatePreviewlogs(userDataString);
+        if(updatePreviewLogsResponse?.status === "Success" || isAuthFailed === false){
         setPreLogDatasIni({
-          previewLogId: updatePreviewLogsResponse.data.previewLogId,
-          playerId: updatePreviewLogsResponse.data.playerId,
-          playerType: updatePreviewLogsResponse.data.playerType,
-          previewGameId: updatePreviewLogsResponse.data.previewGameId,
-          nevigatedSeq: updatePreviewLogsResponse.data.nevigatedSeq ? JSON.parse(updatePreviewLogsResponse.data.nevigatedSeq): [],
-          screenIdSeq: updatePreviewLogsResponse.data.screenIdSeq ? JSON.parse(updatePreviewLogsResponse.data.screenIdSeq) :[],
-          lastActiveBlockSeq: updatePreviewLogsResponse.data.lastActiveBlockSeq ? JSON.parse(updatePreviewLogsResponse.data.lastActiveBlockSeq) :[],
-          selectedOptions: updatePreviewLogsResponse.data.selectedOptions ? JSON.parse(updatePreviewLogsResponse.data.selectedOptions) :[],
-          previewProfile: updatePreviewLogsResponse.data.previewProfile ? JSON.parse(updatePreviewLogsResponse.data.previewProfile) : [],
-          lastModifiedBlockSeq: updatePreviewLogsResponse.data.lastModifiedBlockSeq,
-          lastBlockModifiedDate:updatePreviewLogsResponse.data.lastBlockModifiedDate,
-          updatedAt:updatePreviewLogsResponse.data.updatedAt,
-          playerInputs: updatePreviewLogsResponse.data.playerInputs? JSON.parse(updatePreviewLogsResponse.data.playerInputs) : [],
-          audioVolumeValue: updatePreviewLogsResponse.data.audioVolumeValue ? JSON.parse(updatePreviewLogsResponse.data.audioVolumeValue): {bgVolume: 0.3, voVolume:0.3},
-          previewScore: updatePreviewLogsResponse.data.previewScore ? JSON.parse(updatePreviewLogsResponse.data.previewScore): initialProfileObject,
+          previewLogId: updatePreviewLogsResponse.data?.previewLogId,
+          playerId: updatePreviewLogsResponse.data?.playerId,
+          playerType: updatePreviewLogsResponse.data?.playerType,
+          previewGameId: updatePreviewLogsResponse.data?.previewGameId,
+          nevigatedSeq: updatePreviewLogsResponse.data?.nevigatedSeq ? JSON.parse(updatePreviewLogsResponse.data.nevigatedSeq): [],
+          screenIdSeq: updatePreviewLogsResponse.data?.screenIdSeq ? JSON.parse(updatePreviewLogsResponse.data.screenIdSeq) :[],
+          lastActiveBlockSeq: updatePreviewLogsResponse.data?.lastActiveBlockSeq ? JSON.parse(updatePreviewLogsResponse.data.lastActiveBlockSeq) :[],
+          selectedOptions: updatePreviewLogsResponse.data?.selectedOptions ? JSON.parse(updatePreviewLogsResponse.data.selectedOptions) :[],
+          previewProfile: updatePreviewLogsResponse.data?.previewProfile ? JSON.parse(updatePreviewLogsResponse.data.previewProfile) : [],
+          lastModifiedBlockSeq: updatePreviewLogsResponse.data?.lastModifiedBlockSeq,
+          lastBlockModifiedDate:updatePreviewLogsResponse.data?.lastBlockModifiedDate,
+          updatedAt:updatePreviewLogsResponse.data?.updatedAt,
+          playerInputs: updatePreviewLogsResponse.data?.playerInputs? JSON.parse(updatePreviewLogsResponse.data.playerInputs) : [],
+          audioVolumeValue: updatePreviewLogsResponse.data?.audioVolumeValue ? JSON.parse(updatePreviewLogsResponse.data.audioVolumeValue): {bgVolume: 0.3, voVolume:0.3},
+          previewScore: updatePreviewLogsResponse.data?.previewScore ? JSON.parse(updatePreviewLogsResponse.data.previewScore): initialProfileObject,
         });
         return updatePreviewLogsResponse;
+      }
 
       }
     } catch (error) {
@@ -137,21 +138,16 @@ const GamePreview = () => {
       const Reponse = await fetchPreviewLogsData();
       if (Reponse?.status =="Success") {
         setPreviewLogsDataIni(Reponse);
-        // setProfile({...Reponse?.data?.previewScore})
         setInitialStateUpdate(true);
+        isAuthFailed && setIsAuthFailed(false);
+      }
+      else{
+        setIsAuthFailed(true);
       }
     }
     fetchPreviewLogs();
   }, [gameInfo]);
-  // useEffect(() => {
-  //   const fetchPreviewLogs = async () => {
-  //     const Reponse = await fetchPreviewLogsData();
-  //   }
-
-  //   fetchPreviewLogs();
-  // }, [previewLogsData]);
-//End get the stored Preview Log Data, if has otherwise create a new record
-
+  
   useEffect(() => {
     const fetchData = async () => {
       // assetImageSrc['characterGlb'] = CharacterGlb;
@@ -592,10 +588,10 @@ const GamePreview = () => {
             >      
             </Box>
         }>
-        {contentReady && (
+        {contentReady && (isAuthFailed ||
           gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
-            gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
-            <h1> {'Your are Not Authorized....'}</h1>
+            gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES'  ? (
+              <NoAuth isAuthFailed={isAuthFailed}/>
           ) : (
             gameInfo?.gameId &&
             (

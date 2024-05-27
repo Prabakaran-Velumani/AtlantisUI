@@ -68,7 +68,7 @@ const ThankYou: React.FC<{
   
   // Filter properties where the value is 'true'
   const trueValuesArray = propertiesToCheck.filter(property => formData[property] === 'true');
-  const  [userInputs,setUserInputs] = useState<any>([]);
+  const  [userInputs,setUserInputs] = useState<any>(getPrevLogDatas?.playerInputs?.Thankyou);
 
   var thirdValue = "";
   if (trueValuesArray.length >= 3) {
@@ -85,33 +85,19 @@ const styleflex = {};
     });
   }
 
-const updateDatabase = async ()=>{
-};
 
-useEffect(()=>{
-  setPreLogDatas((prev: any) => ({
-    ...prev,
-    playerInputs: {
-      ...prev.playerInputs, // Ensure prev.playerInputs exists
-      ThankYou: userInputs // Assign userInputs to ThankYou key
-    }
-  }));
-  const debouncedUpdateDatabase = debounce(updateDatabase, 1000); 
-  return ()=>{
-    debouncedUpdateDatabase.cancel();
-  };
-},[userInputs])
-const handleNext =() =>
+  const handleNext =() =>
   {
     setPreLogDatas((prev: any) => ({
       ...prev,
       playerInputs: {
         ...prev.playerInputs, // Ensure prev.playerInputs exists
-        ThankYou: userInputs // Assign userInputs to ThankYou key
+        Thankyou: userInputs // Assign userInputs to ThankYou key
       }
     }));
     setCurrentScreenId(13);
   }
+
   return (
     <>
       {preloadedAssets.Thankyou && (
@@ -360,6 +346,7 @@ const handleNext =() =>
                                     fontFamily="AtlantisText"
                                     // onBlur={updateDatabase}
                                     onChange={(e:any)=>setUserInputs(e.target.value)}
+                                    value={userInputs}
                                   />
                             </div>
                           </div>
