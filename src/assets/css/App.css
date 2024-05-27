@@ -3954,7 +3954,7 @@ grid-row: 1 / 2;
   height: 25%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   font-weight: 500;
   font-family: AtlantisText;
   line-height: 1;

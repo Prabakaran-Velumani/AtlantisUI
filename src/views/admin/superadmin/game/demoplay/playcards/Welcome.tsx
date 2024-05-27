@@ -23,7 +23,8 @@ const Welcome: React.FC<{
   currentScreenId:any;
   setPreLogDatas:any;
   getPrevLogDatas:any;
-}> = ({ formData, imageSrc, preview, setCurrentScreenId, intro, screen, preloadedAssets,currentScreenId,setPreLogDatas,getPrevLogDatas }) => {
+
+}> = ({ formData, imageSrc, preview, setCurrentScreenId, intro, screen, preloadedAssets,currentScreenId,setPreLogDatas,getPrevLogDatas  }) => {
   const { id } = useParams();
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);

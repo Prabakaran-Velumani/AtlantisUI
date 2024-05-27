@@ -350,6 +350,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [RepeatSelectOption, setRepeatSelectOption] = useState<boolean>(false);
   const [RepeatPrevOption, setRepeatPrevOption] = useState<any>([]);
   const [modelScreen, setModelScreen] = useState<Boolean>(false);
+  const [isInitialLoadScreenWelcome, setIsInitialLoadScreenWelcome] = useState<boolean>(false);
 
   /******************************This for controll backgroud bgm and voice 09.05.2024**********************************/
   const EnumType = {
@@ -374,23 +375,17 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const { uuid } = useParams();
   const toast = useToast();
 
-  //  useEffect(() => {
-  //   const fetchPreviewLogs = async () => {
-  //     const Reponse = await fetchPreviewLogsData();
-  //   }
-  //   fetchPreviewLogs();
-  // }, [previewLogsData]);
-//End get the stored Preview Log Data, if has otherwise create a new record
-
 useEffect(()=>{
   //Initial loading data, it has inital vlaues of preview_logs of the player for this game
   if(preLogDatasIni)
     {
-
-      // const parsedLogData = {...preLogDatasIni, audioVolumeValue: JSON.parse(preLogDatasIni.audioVolumeValue)}
-      console.log("audioVolumeValue", typeof(preLogDatasIni.audioVolumeValue));
       setPreLogDatas(preLogDatasIni);
       setProfile(preLogDatasIni?.previewScore);
+      const {name, gender, lang}= preLogDatasIni?.previewScore ?? {name:'', gender:'',lang:''};
+      if(name==="" || gender==="" || lang =='')
+        {
+          setIsInitialLoadScreenWelcome(true);
+        }
       
     }
     const handleVisibilityChange = () => {
@@ -767,9 +762,6 @@ useEffect(()=>{
         } else {
           console.log('*****Options are not provided.');
         }
-
-        //[{1: 500}, {2: 200}]
-
         setQuestWiseMaxTotal((prev: any) => {
           return { ...prev, [profile?.currentQuest]: GrandMaximumscore };
         });
@@ -1869,7 +1861,6 @@ useEffect(()=>{
 if(currentScreenId ===2)
   {
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
-      console.log('##### 1879')
       const optionsFiltered = [];
       for (const option of gameInfo.questOptions) {
         if (profileData?.Audiogetlanguage.length > 0) {
@@ -1905,7 +1896,6 @@ if(currentScreenId ===2)
       setOptions(optionsFiltered);
     }
     if (type === 'Interaction' && resMsg !== '') {
-      console.log('##### 1915')
       setType('response');
       return false;
     } 
@@ -1914,7 +1904,6 @@ if(currentScreenId ===2)
       feed !== '' &&
       gameInfo?.gameData?.gameIsShowInteractionFeedBack !== 'Completion'
     ) {
-      console.log('##### 1920')
       setType('feedback');
       return false;
     } else if (
@@ -1922,9 +1911,7 @@ if(currentScreenId ===2)
       type === 'response' ||
       type === 'feedback'
     ) {
-      console.log('##### 1928')
       if (navi === 'Repeat Question') {
-        console.log('##### 1934')
         setRepeatSelectOption(true);
         RepeatPrevOption.push(getSelectedOptions.options);
         setRepeatPrevOption(RepeatPrevOption);
@@ -1968,7 +1955,6 @@ if(currentScreenId ===2)
         setSelectedOption(null);
         return false;
       } else if (navi === 'New Block') {
-        console.log('##### 1978')
         setType(nextBlock[0]?.blockChoosen);
         setData(nextBlock[0]);
         if (next?.blockChoosen === 'Interaction') {
@@ -2009,17 +1995,11 @@ if(currentScreenId ===2)
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
-        console.log('##### 2019');
-        // setType(demoBlocks[quest]['1']?.blockChoosen);
-        // setData(demoBlocks[quest]['1']);
-        // setSelectedOption(null);
-        // setCurrentScreenId(16);
         setSelectedOption(null);
         setReplayState('replayPointPrompt');
         setReplayIsOpen(true);
         return false;
       } else if (navi === 'Select Block') {
-        console.log('##### 2029');
         const selectedNext = Object.keys(demoBlocks[currentQuest])
           .filter((item: any) => {
             return (
@@ -2126,7 +2106,6 @@ if(currentScreenId ===2)
           return false;
         }
       } else if (navi === 'Complete') {
-        console.log('##### 2136');
         //check the replay Quest score is higher than score in profile context
         checkAndUpdateScores();
         const Nextcurrentquest = next?.blockQuestNo;
@@ -2340,7 +2319,6 @@ if(currentScreenId ===2)
         }
         */
       } else {
-        console.log('##### 2350');
         /** IF a block not has navi option then it leads to next block */
         if (nextBlock && nextBlock[0]?.blockChoosen) {
           setType(nextBlock[0]?.blockChoosen);
@@ -2398,7 +2376,6 @@ if(currentScreenId ===2)
           return false;
         }
       }
-      console.log('##### 2408');
     }
   }
     if (currentScreenId === 6) {
@@ -2410,72 +2387,11 @@ if(currentScreenId ===2)
         haveNextQuest,
         totalScore,
       } = calScore();
-      
-      // if (gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') {
-      //   const Completionpage = Object.entries(questState).map(
-      //     ([questId, status]) => ({ questId, status }),
-      //   );
-      //   const OpenStraigntCompletionPage = Completionpage.find(
-      //     (row: any) =>
-      //       row.questId === profile.currentQuest && row.status === 'completed',
-      //   );
-      //   if (OpenStraigntCompletionPage !== undefined) {
-      //     setFeedbackList([]);
-      //     setCurrentScreenId(13);
-      //     return false;
-      //   }
-      //   if (feedbackList.length !== 0) {
-      //     getFeedbackData(data);
-      //     setFeedbackNavigateNext(false);
-      //     setCurrentScreenId(14); //Navigate to together all feedback
-      //     return false;
-      //   } else {
-      //     if (demoBlocks.hasOwnProperty(nextLevel)) {
-      //       setProfile((prev: any) => {
-      //         const data = { ...prev };
-      //         if (!profile.completedLevels.includes(currentQuest)) {
-      //           data.completedLevels = [...data.completedLevels, nextLevel];
-      //         }
-
-      //         return data;
-      //       });
-
-      //       setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-      //       setData(demoBlocks[nextLevel]['1']);
-      //       setCurrentScreenId(13);
-      //       return false;
-      //     } else {
-      //       if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-      //         setCurrentScreenId(4); //Navigate to leaderboard
-      //         return false;
-      //       } else if (
-      //         gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
-      //         gameInfo?.reflectionQuestions.length > 0
-      //       ) {
-      //         setCurrentScreenId(3); //Navigate to Reflection screen
-      //         return false;
-      //       } else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
-      //         setCurrentScreenId(7); //Navigate to takeaway screen
-      //         return false;
-      //       } else {
-      //         setType(null);
-      //         setData(null);
-      //         setCurrentScreenId(5);
-      //         return false;
-      //       }
-      //     }
-      //   }
-      // }
-      console.log("currentQuest---",currentQuest,"  #### currentGameData---",currentGameData,"  #### nextLevel---",nextLevel,"  #### haveNextQuest---",haveNextQuest,"  #### totalScore---",totalScore,"  #### ")
-
-     console.log("^^^^^gameInfo?.gameData?.gameIsShowLeaderboard === 'true'", gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
-     console.log("^^^^haveNextQuest", haveNextQuest)
-     
+           
      if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
        setCurrentScreenId(4); //Navigate to leaderboard
        return false;
       } else if (haveNextQuest) {
-        console.log("^^^^currentGameData?.gameIsSetMinPassScore === 'true'", currentGameData?.gameIsSetMinPassScore === 'true')
         if (currentGameData?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = currentGameData?.gameMinScore;
           const scores = profile?.score;
@@ -2487,8 +2403,6 @@ if(currentScreenId ===2)
             }
             sums[quest] += score.score;
           });
-
-          // const getFinalscores = Object.values(sums);
           const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
             quest,
             score,
@@ -2503,7 +2417,6 @@ if(currentScreenId ===2)
             finalscore < currentGameData?.gameDistinctionScore &&
             gameInfo.gameData?.gameDisableOptionalReplays === 'false'
           ) {
-            console.log("IF OptionalReplay")
             setReplayState('optionalReplay');
             setReplayIsOpen(true);
             // setCurrentScreenId(8); //Navigate to replaygame prompt screen
@@ -4155,8 +4068,7 @@ if(currentScreenId ===2)
         setCurrentScreenId(5); //Navigate to Thank you screen
         return false;
       }
-    }
-    
+    }    
   };
 
   const handleAudioError = () => {
@@ -4475,9 +4387,6 @@ if(currentScreenId ===2)
     }
     setCurrentScreenId(2);
   };
-
-  console.log("profile", profile)
-  console.log("getPrevLogDatas", getPrevLogDatas)
 
   return (
     <ProfileContext.Provider value={profileData}>
@@ -5298,6 +5207,8 @@ if(currentScreenId ===2)
             setPreLogDatas={setPreLogDatas}
             getPrevLogDatas={getPrevLogDatas}
             currentScreenId={currentScreenId}
+            isInitialLoadScreenWelcome={isInitialLoadScreenWelcome}
+            setIsInitialLoadScreenWelcome={setIsInitialLoadScreenWelcome}
           />
         </Box>
       </Box>

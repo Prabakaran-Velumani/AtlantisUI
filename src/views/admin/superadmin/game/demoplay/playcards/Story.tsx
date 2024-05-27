@@ -473,7 +473,6 @@ const Story: React.FC<{
       }
       setInteractionNext(true);
     };
-    console.log("******profile", profile);
 
     useEffect(() => {
       if (interactionNext === true) {
@@ -605,24 +604,8 @@ const Story: React.FC<{
                               getNoteNextData()
                             }}
                           />
-                          {/* <Img src={preloadedAssets.next} h={'7vh'} className={'story_note_next_button'}  /> */}
                         </Box>
                       </Box>
-                      {/* <Box
-                        display={'flex'}
-                        position={'fixed'}
-                        justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
-                        w={'95%'}
-                        bottom={'0'}
-                      >
-                        <Img
-                          src={preloadedAssets.left}
-                          w={'70px'}
-                          h={'50px'}
-                          cursor={'pointer'}
-                          onClick={() => {  LastModiPrevData(data)}}
-                        />
-                      </Box> */}
                     </Box>
                   </Box>
                 </motion.div>
@@ -634,10 +617,6 @@ const Story: React.FC<{
           <Box className="chapter_potrait">
             <Img src={backGroundImg} className="dialogue_screen" />
             <SelectedNPCs preloadedAssets={preloadedAssets} isStartsAnimationPlay={isStartsAnimationPlay} isSpeaking={isSpeaking} selectedNpc={selectedNpc}/>
-             {/* {selectedNpc && (
-              <Box className={'player_character_image'}> 
-             </Box>
-            )}  */}
             <Img className={'dialogue_image'} src={preloadedAssets.dial} />
             <Box position={'relative'}>
               <Box
@@ -671,27 +650,8 @@ const Story: React.FC<{
               </Box>
             </Box>
             <Box             
-              className='dialogue_scroll'
-              // position={'fixed'}
-              // h={'61px'}
-              // overflowY={'scroll'}
-              // w={'85%'}
-              // fontSize={'3vh'}
-              // bottom={'38px'}
-              // fontFamily={'AtlantisContent'}
-              // css={{
-              //   // Hide scrollbar for webkit-based browsers (Safari, Chrome)
-              //   '&::-webkit-scrollbar': {
-              //     display: 'none',
-              //   },
-              //   // Hide scrollbar for Mozilla-based browsers (Firefox)
-              //   'scrollbar-width': 'none', // For Firefox
-              //   '-ms-overflow-style': 'none', // For IE and Edge
-              // }}
-            >
-              <Box 
-              // transform={'translateY(26%)'}
-              >
+              className='dialogue_scroll'>
+              <Box>
                 {showTypingEffect === false ? (
                   <TypingEffect
                     text={

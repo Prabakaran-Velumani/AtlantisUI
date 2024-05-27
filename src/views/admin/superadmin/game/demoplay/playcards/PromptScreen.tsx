@@ -15,6 +15,8 @@ type languageProps = {
     setPreLogDatas: (val: any)=> void;
     getPrevLogDatas: any;
     currentScreenId: number;
+    isInitialLoadScreenWelcome:boolean;
+    setIsInitialLoadScreenWelcome: (value: boolean)=>void;
 }
 const genderList = ['Male', 'Female', 'Others'];
 const IsErrorInitialState: { name: string | null; language: string | null; gender: string | null } = { name: null,
@@ -24,7 +26,7 @@ const IsErrorInitialState: { name: string | null; language: string | null; gende
 
 
 const defaultLanguage = ''; // Default to empty string instead of 0
-const PromptScreen  : React.FC<languageProps> = ({formData, preloadedAssets, gameLanguages, hasMulitLanguages, setHasMulitLanguages, profileData,setProfileData, setIsOpenCustomModal, isOpenCustomModal, setPreLogDatas, getPrevLogDatas, currentScreenId})=> {
+const PromptScreen  : React.FC<languageProps> = ({formData, preloadedAssets, gameLanguages, hasMulitLanguages, setHasMulitLanguages, profileData,setProfileData, setIsOpenCustomModal, isOpenCustomModal, setPreLogDatas, getPrevLogDatas, currentScreenId, isInitialLoadScreenWelcome, setIsInitialLoadScreenWelcome })=> {
 
 const [isLanguageSelected, setIsLanguageSelected] = useState(false); //to handle the dropdown open and hide for language
 const [isGenderSelected, setIsGenderSelected] = useState(false); //to handle the dropdown open and hide for gender
@@ -59,7 +61,7 @@ useEffect(()=>{
   /*** Profile Screen Control logic */
   if(hasFormState()){
   const {name, language, gender} = getPrevLogDatas?.previewProfile;
-  if(currentScreenId === 1 && name && gender)
+  if(currentScreenId === 1 && name && gender && language)
     {
       if((name || name?.trim() !=="" )   &&  (gender || gender !=='' ))
         {
@@ -75,7 +77,7 @@ useEffect(()=>{
         }
       }
   else{
-    if(currentScreenId === 1 )
+    if(currentScreenId === 1 && isInitialLoadScreenWelcome)
     {
       setTimeout(() => {
         setIsOpenCustomModal(true);
@@ -133,6 +135,9 @@ const handleProfileSubmit = () => {
     setPreLogDatas((prev:any) => ({...prev,previewProfile:{...formState,
       score:getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile.score : []}}))
     setIsOpenCustomModal(false);
+    if(isInitialLoadScreenWelcome){
+      setIsInitialLoadScreenWelcome(false);
+    }
   }
 };
 
@@ -150,7 +155,7 @@ useEffect(() => {
 }, [isError]);
 
   return (
-    isOpenCustomModal && (
+    (isOpenCustomModal || (isOpenCustomModal && isInitialLoadScreenWelcome)) && (
       <Box id="container" className="Play-station">
       <Box className="top-menu-home-section">  
           <Box className="Setting-box">

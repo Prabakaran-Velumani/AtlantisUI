@@ -115,7 +115,7 @@ const ChapterPage: React.FC<{
     //   setCompleted(completedLevels);
     // }
     const currentQuest = profile?.currentQuest;
-    console.log('^^^^^^^ quest state',questState)
+
     gameQuest.map((item: any, index: number) => {
       const questNoAsString = item.gameQuestNo.toString();
       if (profile?.completedLevels?.includes(questNoAsString)) {
@@ -209,14 +209,13 @@ const ChapterPage: React.FC<{
   }, [profile]);
 
   const handleChapter = (it: any) => {
-    console.log('******it', it);
     const Completionpage = Object.entries(questState).map(
       ([questId, status]) => ({ questId, status }),
     );
     const OpenStraigntCompletionPage = Completionpage.find(
       (row: any) => row.questId === it && row.status === 'completed',
     );
-    console.log("OpenStraigntCompletionPage", OpenStraigntCompletionPage)
+    
     
     if (OpenStraigntCompletionPage !== undefined) {
       setProfile((prev: any) => ({
@@ -226,7 +225,7 @@ const ChapterPage: React.FC<{
       setFeedbackList([]);
       setCurrentScreenId(6);
     } else {
-      console.log("profile", profile);
+      
       if (profile?.completedLevels?.includes(it)) {
         const screenIdset =
           getPrevLogDatas?.screenIdSeq[
