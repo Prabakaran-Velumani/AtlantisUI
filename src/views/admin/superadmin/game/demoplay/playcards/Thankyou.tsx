@@ -1,20 +1,11 @@
 import { Box, Button, Icon, Img, Text, Textarea } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { ImHappy } from 'react-icons/im';
-import { TfiFaceSad } from 'react-icons/tfi';
-import { BsEmojiSunglasses } from 'react-icons/bs';
-import { FaRegFaceMehBlank } from 'react-icons/fa6';
-import { BsEmojiNeutral } from 'react-icons/bs';
-import { RiEmotionHappyLine } from 'react-icons/ri';
-import { FaRegTired } from 'react-icons/fa';
 import next from 'assets/img/screens/next.png'
 import Feedback from 'assets/img/screens/Feedback.png';
 import {
   FaHatCowboy,
 } from 'react-icons/fa';
 import { debounce } from 'lodash';
-
-// import { updatePreviewLogs } from 'utils/game/gameService';
 
 interface Badge {
   gasId: number;
@@ -93,25 +84,6 @@ const styleflex = {};
       justifyContent: 'center',
     });
   }
-
-//  const updateDatabase = async () => {
-//   try { 
-//     const apiResponse = await updatePreviewLogs(playerInputs);
-//     if(apiResponse.status == 200){
-//     }
-//     else{
-//     }
-//     // if (apiResponse) {
-//     //   setPlayerInputs((prevState) => ({
-//     //     ...prevState,
-//     //     reflection: apiResponse.reflection,
-//     //   }));
-//     // }
-//   } catch (error) {
-//     console.error('Error during API call kishore:', error);
-
-//   }
-// };
 
 const updateDatabase = async ()=>{
 };

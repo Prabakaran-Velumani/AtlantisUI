@@ -49,18 +49,12 @@ const Player: React.FC<{currentScreenId?: number}> = ({currentScreenId}) => {
 
   return (
     <group ref={groupRef}>
-      {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}
       <primitive
         object={gltf.scene}
         position={[2,9].includes(currentScreenId) ? [5, -6.8, 0] : [5, -5, 0]}
         rotation={[0, -1, 0]}
         scale={2.8}
       />{' '}
-      {/* For Single view */}
-      {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>
-              <planeGeometry args={[100, 500]} />
-              <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />
-            </mesh> */}
     </group>
   );
 };

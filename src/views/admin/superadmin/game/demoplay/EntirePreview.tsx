@@ -4375,10 +4375,6 @@ if(currentScreenId ===2)
     setCurrentScreenId(2);
   };
 
-
-  console.log("isInitialLoadScreenWelcome", isInitialLoadScreenWelcome);
-  console.log("isOpenCustomModal", isOpenCustomModal);
-
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="EntirePreview-wrapper">

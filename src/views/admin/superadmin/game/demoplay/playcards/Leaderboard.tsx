@@ -251,33 +251,14 @@ const LeaderBoard: React.FC<{
       setShuffledUsers(newSortedUsers);
     }
 
-    // useEffect(()=> {
-
-    //   const Scrolling = (e: any) => {
-    //     const container = document.getElementById('leaderboard_id');        
-    //     console.log('container', e)
-    //   }
-
-    //   window.addEventListener('mousewheel', Scrolling);      
-    //   return () => {      
-    //     window.removeEventListener('mousewheel', Scrolling);
-    //   };
-
-    // },[])
-
     const containerRef = useRef<any>(null);
     let lastScrollTop = 0;
 
     useEffect(() => {
       const container = containerRef?.current;
       if (!container) return; // Early return if container is not available
-  
-      console.log('container', container);
-
       const handleScroll = () => {
         let currentScrollTop = container?.scrollTop;
-
-        console.log('currentScrollTop', currentScrollTop);        
   
         if (currentScrollTop > lastScrollTop) {
           // Scrolling down
@@ -298,8 +279,6 @@ const LeaderBoard: React.FC<{
         container.removeEventListener('scroll', handleScroll);
       };
     }, []);
-  
-    
 
     return (
       <>

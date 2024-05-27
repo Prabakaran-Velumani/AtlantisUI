@@ -108,37 +108,6 @@ const ThankYou: React.FC<{
             </GridItem>
           </Grid>
         </Box>
-        // <Box className='Thankyou-section'>
-        //     <Img src={preloadedAssets.overview} className="bg-thankyou" />
-        //   <Box className="thankyou-screen">
-        //     <Box className="thankyou-screen-box">
-        //     </Box>
-        //     <Box
-        //       w={'100%'}
-        //       fontFamily={'content'}
-        //       display={'flex'}
-        //       justifyContent={'center'}
-        //       alignItems={'center'}
-        //       className="tq-msg"
-        //     >
-        //       <Box
-        //         mt={{ base: '0px', sm: '0px', md: '20px', lg: '20px' }}
-        //         lineHeight={1}
-        //         textAlign={'center'}
-        //         color="#D9C7A2"
-        //         fontWeight="300"
-        //       >
-        //       <Text>{'StoryLine...'}</Text>
-        //       <Text>{formData.gameStoryLine}</Text>
-        //       </Box>
-        //     </Box>
-        //   </Box>
-        //   <Img
-        //       src={preloadedAssets.Close}
-        //       className='close-btn'
-        //       onClick={() => handleHome() }
-        //     />
-        // </Box>
       )}
     </>
   );

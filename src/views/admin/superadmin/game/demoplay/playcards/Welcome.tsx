@@ -93,7 +93,6 @@ const Welcome: React.FC<{
     });
     return <React.Fragment>{contentWithLinks}</React.Fragment>;
   };
-  // const audioRef = React.useRef(null);
 
   const data =
     formData?.gameLearningOutcome !== ''
@@ -109,7 +108,6 @@ const Welcome: React.FC<{
     }
     return null;
   };
-  // const link = extractLink(formData.gameAdditionalWelcomeNote);
   const screenIdset = (getPrevLogDatas?.screenIdSeq?.length -1) >=0 ? getPrevLogDatas?.screenIdSeq[(getPrevLogDatas?.screenIdSeq?.length -1)]:  1;
   
   return (

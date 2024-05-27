@@ -151,17 +151,12 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
         const getLastScreenId = screenlast[screenlast.length - 1];
         if (getLastScreenId === 2) {
           setLastModified(false);
-          //isSetStoryScreen(true);
           setReplayState('Prompt');
           setModelControl(false);
           setReplayIsOpen(true);
           return false;
         }
         else {
-          console.log('getPrevLogDatas', getPrevLogDatas.previewScore);
-          // if (getPrevLogDatas?.previewScore) {
-          //   setProfile(getPrevLogDatas.previewScore);
-          // }
           setCurrentScreenId(getLastScreenId);
           setModelControl(false);
           return false;

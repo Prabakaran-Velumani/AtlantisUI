@@ -75,18 +75,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
       SetFinalscore(sums);
     }
   }, []);
-  // const handleOverView = () => {
-  //   // check a  condtion here
-  //   if (currentScreenId === 2) {
-  //     setHomeLeaderBoard(currentScreenId);
-  //     setCurrentScreenId(15);
-  //     return;
-  //   } else {
-  //     setHomeLeaderBoard(currentScreenId);
-  //     setCurrentScreenId(4);
-  //     return;
-  //   }
-  //   };
+
   const handleOverView = () => {
     if (!isButtonDisabled) {
       setIsButtonDisabled(true); // Disable the button
@@ -158,9 +147,6 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     progressResult();
   }, [data, currentScreenId, questState]);
 
-  // const handleMusicVolume = (vol: any) => {
-  //   setAudioObj((prev: any) => ({ ...prev, "volume": vol }));
-  // }
   const handleMusicVolume = (sliderValue: number, type: string) => {
     if (!isNaN(sliderValue) && isFinite(sliderValue)) {
       const newVolume = sliderValue / 100;
@@ -183,8 +169,6 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     else{
        updatedAudioData =  {...preLogAudioData, voVolume : volume };
     }    
-    // const newAudioVolume = type === EnumType.BGM ? {...getPrevLogDatas, audioVolumeVlaue: updatedAudioData};
-    // console.log("^^^^^^^updatedAudioData", updatedAudioData)
     setPreLogDatas((prev: any) => ({...prev,audioVolumeValue: updatedAudioData}));
   }, [audioObj]);
 

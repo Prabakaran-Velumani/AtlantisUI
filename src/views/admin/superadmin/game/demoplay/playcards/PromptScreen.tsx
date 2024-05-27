@@ -61,24 +61,14 @@ useEffect(()=>{
   /*** Profile Screen Control logic */
   if(hasFormState()){
   const {name, language, gender} = getPrevLogDatas?.previewProfile;
-  console.log("currentScreenId === 1 && name && gender && language", currentScreenId === 1 && name && gender && language )
   if(currentScreenId === 1 && name && gender && language)
     {
-      // if((!name)   &&  (!gender ) )
-      //   {
           if(hasMulitLanguages && isInitialLoadScreenWelcome)
           {
-            // if((language!=undefined && language ==='') || language === 0  || language ==='English'){
               setIsOpenCustomModal(true);
-            // }
           }
-        // }
-        // else{
-        //   setIsOpenCustomModal(true);
-        // }
       }
   else{
-    console.log("currentScreenId === 1 && isInitialLoadScreenWelcome", currentScreenId === 1 && isInitialLoadScreenWelcome)
     if(currentScreenId === 1 && isInitialLoadScreenWelcome)
       {
         setTimeout(() => {
@@ -87,11 +77,6 @@ useEffect(()=>{
       } 
     }
   }
-  // else{
-  //   console.log("currentScreenId === 1", currentScreenId === 1 )
-  //   if(currentScreenId===1)
-  //   setIsOpenCustomModal(true);
-  // }
   },[hasMulitLanguages, currentScreenId])
 
 useEffect(()=>{

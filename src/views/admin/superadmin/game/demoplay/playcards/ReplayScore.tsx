@@ -55,8 +55,7 @@ const ReplayScore: React.FC<replayScoreProps> = ({
   const { profile, setProfile } = useContext(ScoreContext);
 
   useEffect(() => {
-    const currentQuestMasterData = gameInfo?.gameQuest[profile?.currentQuest - 1];
-    
+    const currentQuestMasterData = gameInfo?.gameQuest[profile?.currentQuest - 1];    
       if (replayState === "mandatoryReplay") {
         const currentQuestIndex = profile?.currentQuest - 1;
         const previousQuestScore = profile?.playerGrandTotal.questScores[currentQuestIndex] || 0;
@@ -73,7 +72,6 @@ const ReplayScore: React.FC<replayScoreProps> = ({
       else {
         setReplayMessage(`Would you like to play again?`);
       }
-    // }
   }, []);
   const QuestBlocklastpaused = () => {
     if (getPrevLogDatas.nevigatedSeq) {
@@ -81,9 +79,6 @@ const ReplayScore: React.FC<replayScoreProps> = ({
       const lastActiveBlock = Object.keys(getPrevLogDatas.lastActiveBlockSeq);
       const lastActivityquest = lastActiveBlock[0];
       const findActiveBlockId = LastPreviousActiveBlock[lastActivityquest];
-      // if (getPrevLogDatas?.previewScore) {
-      //   setProfile(getPrevLogDatas.previewScore);
-      // }
       let SetLastSeqData: any;
       for (const key in gameInfo.blocks[lastActivityquest]) {
         const data = gameInfo.blocks[lastActivityquest][key];
@@ -136,8 +131,6 @@ const ReplayScore: React.FC<replayScoreProps> = ({
         setOptions(optionsFiltered);
       }
       setReplayIsOpen(false);
-      //isSetStoryScreen(false);
-      // setReplayState(null)
       setCurrentScreenId(2);
       return false;
     }

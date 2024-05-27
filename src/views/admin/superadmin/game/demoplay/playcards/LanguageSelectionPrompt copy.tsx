@@ -53,7 +53,6 @@ const handleProfile = (e: any, lang?: any, langId?: any) => {
     if(gameContentId){
       fetchGameContent();
     }
-    // console.log('gameContentId',gameContentId)
   },[gameContentId])
 
 return (
