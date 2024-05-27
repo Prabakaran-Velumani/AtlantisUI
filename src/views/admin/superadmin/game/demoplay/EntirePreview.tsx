@@ -381,6 +381,7 @@ useEffect(()=>{
     {
       setPreLogDatas(preLogDatasIni);
       setProfile(preLogDatasIni?.previewScore);
+      setSelectedPlayer(preLogDatasIni?.previewProfile?.selectedPlayer ?? null);
       const {name, gender, language}= preLogDatasIni?.previewProfile ?? {name:'', gender:'',language:''};
       if(!name || !gender || !language)
         {

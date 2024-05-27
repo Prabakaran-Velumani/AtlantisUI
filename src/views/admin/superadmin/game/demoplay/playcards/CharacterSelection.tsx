@@ -117,6 +117,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
       setPreLogDatas((prev: any) => ({
         ...prev,
         screenIdSeq: [...prev?.screenIdSeq, currentScreenId],
+        previewProfile: {...prev.previewProfile, selectedPlayer:players[i]}
       }));
     }
 
