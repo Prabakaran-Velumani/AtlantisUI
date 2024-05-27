@@ -61,34 +61,37 @@ useEffect(()=>{
   /*** Profile Screen Control logic */
   if(hasFormState()){
   const {name, language, gender} = getPrevLogDatas?.previewProfile;
+  console.log("currentScreenId === 1 && name && gender && language", currentScreenId === 1 && name && gender && language )
   if(currentScreenId === 1 && name && gender && language)
     {
-      if((name || name?.trim() !=="" )   &&  (gender || gender !=='' ))
-        {
-          if(hasMulitLanguages)
+      // if((!name)   &&  (!gender ) )
+      //   {
+          if(hasMulitLanguages && isInitialLoadScreenWelcome)
           {
-            if((language!=undefined && language ==='') || language === 0  || language ==='English'){
+            // if((language!=undefined && language ==='') || language === 0  || language ==='English'){
               setIsOpenCustomModal(true);
-            }
+            // }
           }
-        }
-        else{
-          setIsOpenCustomModal(true);
-        }
+        // }
+        // else{
+        //   setIsOpenCustomModal(true);
+        // }
       }
   else{
+    console.log("currentScreenId === 1 && isInitialLoadScreenWelcome", currentScreenId === 1 && isInitialLoadScreenWelcome)
     if(currentScreenId === 1 && isInitialLoadScreenWelcome)
-    {
-      setTimeout(() => {
-        setIsOpenCustomModal(true);
-      }, 200);
-    } 
+      {
+        setTimeout(() => {
+          setIsOpenCustomModal(true);
+        }, 200);
+      } 
     }
   }
-  else{
-    if(currentScreenId===1)
-    setIsOpenCustomModal(true);
-  }
+  // else{
+  //   console.log("currentScreenId === 1", currentScreenId === 1 )
+  //   if(currentScreenId===1)
+  //   setIsOpenCustomModal(true);
+  // }
   },[hasMulitLanguages, currentScreenId])
 
 useEffect(()=>{
@@ -99,17 +102,6 @@ if(formState?.name || formData?.gender || formData?.language){
 }
 },[formState])
 
-
-// const handleProfile = (e: any, input?: any) => {
-//   const { id, value } = e.target;
-//   if(id== "gender"){
-//     setIsGenderSelected(false);
-//   }
-//   else if(id== "language"){
-//     setIsLanguageSelected(false);
-//   }
-//   setFormState((prev:any)=> ({...prev, [id]: id=='name' ? value :  input}));
-// };
 const handleProfile = (e: any, input?: any) => {
   const { id, value } = e.target;
   if (id === 'gender') {
@@ -155,7 +147,7 @@ useEffect(() => {
 }, [isError]);
 
   return (
-    (isOpenCustomModal || (isOpenCustomModal && isInitialLoadScreenWelcome)) && (
+    (isOpenCustomModal || (currentScreenId === 1 && isInitialLoadScreenWelcome)) && (
       <Box id="container" className="Play-station">
       <Box className="top-menu-home-section">  
           <Box className="Setting-box">

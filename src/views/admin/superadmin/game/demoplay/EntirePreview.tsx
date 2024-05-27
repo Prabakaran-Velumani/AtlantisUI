@@ -382,7 +382,7 @@ useEffect(()=>{
       setPreLogDatas(preLogDatasIni);
       setProfile(preLogDatasIni?.previewScore);
       const {name, gender, lang}= preLogDatasIni?.previewScore ?? {name:'', gender:'',lang:''};
-      if(name==="" || gender==="" || lang =='')
+      if(!name || !gender || !lang)
         {
           setIsInitialLoadScreenWelcome(true);
         }
@@ -4211,19 +4211,6 @@ if(currentScreenId ===2)
         }
       }
 
-      // const optionsFiltered = gameInfo?.questOptions.filter(
-      //   (key: any) => key?.qpSequence === GetSeqData[0]?.blockPrimarySequence,
-      // );
-      // if (gameInfo?.gameData?.gameShuffle === 'true') {
-      //   for (let i = optionsFiltered.length - 1; i > 0; i--) {
-      //     const j = Math.floor(Math.random() * (i + 1));
-      //     [optionsFiltered[i], optionsFiltered[j]] = [
-      //       optionsFiltered[j],
-      //       optionsFiltered[i],
-      //     ];
-      //   }
-      // }
-
       const SelectedoptionsFiltered = optionsFiltered.filter(
         (key: any) =>
           key?.qpOptions ==
@@ -4387,6 +4374,10 @@ if(currentScreenId ===2)
     }
     setCurrentScreenId(2);
   };
+
+
+  console.log("isInitialLoadScreenWelcome", isInitialLoadScreenWelcome);
+  console.log("isOpenCustomModal", isOpenCustomModal);
 
   return (
     <ProfileContext.Provider value={profileData}>
