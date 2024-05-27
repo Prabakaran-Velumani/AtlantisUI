@@ -51,10 +51,7 @@ useEffect(()=>{
       language: getPrevLogDatas?.previewProfile?.language || defaultLanguage,
       gender: getPrevLogDatas?.previewProfile?.gender || '',
     });
-    // setIsExistingValueUpdated(true);
   }
-
-
 },[getPrevLogDatas])
 
 useEffect(()=>{

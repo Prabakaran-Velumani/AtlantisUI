@@ -381,12 +381,11 @@ useEffect(()=>{
     {
       setPreLogDatas(preLogDatasIni);
       setProfile(preLogDatasIni?.previewScore);
-      const {name, gender, lang}= preLogDatasIni?.previewScore ?? {name:'', gender:'',lang:''};
-      if(!name || !gender || !lang)
+      const {name, gender, language}= preLogDatasIni?.previewProfile ?? {name:'', gender:'',language:''};
+      if(!name || !gender || !language)
         {
           setIsInitialLoadScreenWelcome(true);
-        }
-      
+        } 
     }
     const handleVisibilityChange = () => {
       if (document.hidden) {
@@ -402,7 +401,6 @@ useEffect(()=>{
       }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
-
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
