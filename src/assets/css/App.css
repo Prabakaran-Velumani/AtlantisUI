@@ -4340,7 +4340,7 @@ font-family: 'AtlantisContent';
   position : absolute;
    color: #fff; 
    font-size : 3vh; 
-  right: 25px;
+  right: 7%;
 }
 
 .thankyou_next_btn{
@@ -6440,11 +6440,11 @@ font-family: 'AtlantisContent';
 }
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content {
-  font-family: 'AtlantisText';
+  font-family: 'AtlantisContent';
   word-break: break-all;
   display: flex;
   align-items: center;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   font-weight: 400;
   color: var(--atlantis-text-color);
   width: 100%;
