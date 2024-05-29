@@ -40,7 +40,7 @@
   }
   .EntirePreview .Game-Screen .Images .Thankyou-section .thankyou-screen {
     width: calc(77vw - (-34vw));
-    max-width: 81vh;
+    max-width: 82vh;
     height: calc(47vh - (11vh));
     max-height: 47vw;
   }

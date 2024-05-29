@@ -367,15 +367,15 @@ const ThankYou: React.FC<{
                               border: '2px solid #b3a484',
                             }}
                           >
-                            <div className="buttonfeel3">
+                            <div className="buttonfeel3" style = {{height:'100%'}} >
                               <Textarea
-                                paddingTop="20px"
+                                // paddingTop="20px"
                                 outline="none"
                                 focusBorderColor="none"
                                 border="none"
                                 width="100%"
                                 color="#D9C7A2"
-                                className='thnakyou_textarea'
+                                className='thankyou_textarea'
                                 resize={'none'}
                                 _focus={{ boxShadow: 'none', border: 'none' }}
                                 fontFamily="AtlantisText"
