@@ -4348,9 +4348,29 @@ font-family: 'AtlantisContent';
   position : absolute;
    color: #fff; 
    font-size : 3vh; 
-  right: 25px;
+  right: 7%;
+}
+
+.thankyou_next_btn{
+  height: 9vh;
+}
+.thankyou_textarea{
+  box-sizing: border-box;
+  height:7vh
+}
+.thankyou_next_div{
+  bottom: 0px;
 }
 @media screen and (orientation: portrait) {
+  .thankyou_next_div{
+    bottom: 6%;
+  }
+  .thankyou_textarea{
+    height:7vw;
+  }
+  .thankyou_next_btn{
+    height: 9vw;
+  }
   .mouse_style {
     height: 6vw;
   }
@@ -6440,11 +6460,11 @@ font-family: 'AtlantisContent';
 }
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content {
-  font-family: 'AtlantisText';
+  font-family: 'AtlantisContent';
   word-break: break-all;
   display: flex;
   align-items: center;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   font-weight: 400;
   color: var(--atlantis-text-color);
   width: 100%;
@@ -6556,7 +6576,7 @@ font-family: 'AtlantisContent';
 .EntirePreview .Game-Screen .Images .bg-thankyou {
   height: 100vh;
   width: auto;
-  object-fit: contain;
+  /* object-fit: contain; */
 }
 
 .EntirePreview .Game-Screen .Images .thankyou-screen {
@@ -6573,18 +6593,19 @@ font-family: 'AtlantisContent';
   /* height: 47vh; */
   width: calc(77vh - (-55vh));
   max-width: 81vw;
-  height: calc(47vw - (8vw));
-  max-height: 70vh;
+  height: 68vh;
+  /* max-height: 70vh; */
   transform: translate(0, 7%);
   position: absolute;
-  overflow-y: auto;
-  overflow-x: hidden;
+  /* overflow-y: auto;
+  overflow-x: hidden; */
 }
 
 
 .EntirePreview .Game-Screen .Images .thankyou-screen .content {
   overflow-y: auto;
   width: 100%;
+  height: 100%;
 }
 
 .EntirePreview .Game-Screen .Images .thankyou-screen .tq-msg {
@@ -6739,6 +6760,7 @@ font-family: 'AtlantisContent';
   grid-gap: 1.3rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   width: 100%;
+  margin-right: 2px;
   /* overflow-y: scroll; modify
     height: 280px;   */
 }
@@ -6785,7 +6807,7 @@ font-family: 'AtlantisContent';
   width: 100vw;
   display: flex;
   align-items: center;
-
+  
 }
 
 .EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div div svg {
@@ -7175,27 +7197,35 @@ input[data-autocompleted] {
   background-size: contain;
   height: 30px;
 }
-.EntirePreview .Game-Screen .Images .thankyou-screen::-webkit-scrollbar {
+.EntirePreview .Game-Screen .Images .thankyou-screen .content::-webkit-scrollbar {
   width: 16px;
   height: 18px;
   border-radius: 30px;
   background-size: contain;
 }
 
-.EntirePreview .Game-Screen .Images .thankyou-screen::-webkit-scrollbar-track {
+.EntirePreview .Game-Screen .Images .thankyou-screen .content::-webkit-scrollbar-track {
   background: url('../img/games/scroll.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
 
-.EntirePreview .Game-Screen .Images .thankyou-screen::-webkit-scrollbar-thumb {
+.EntirePreview .Game-Screen .Images .thankyou-screen .content::-webkit-scrollbar-thumb {
   background: url('../img/games/cross.png');
   background-repeat: no-repeat;
   border-radius: 30px;  
   background-size: contain;
   height: 30px;
 }
- 
+
+.thankyou_textarea{
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.thankyou_textarea::-webkit-scrollbar{
+  display: none;
+}
 
 
 

@@ -349,7 +349,7 @@ const ThankYou: React.FC<{
                         </div>
                       )}
                       {formData.gameOthers === 'true' && (
-                        <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameOthers' && trueValuesArray.length == 3) || (trueValuesArray.length == 1)) ? 'span 2' : '' }}>
+                        <div className='content-box' style={{ gridColumn: ((thirdValue === 'gameOthers' && trueValuesArray.length === 3) || (trueValuesArray.length === 1)) ? 'span 2' : '' }}>
                           <Text
                             fontSize={16}
                             fontWeight="300"
@@ -367,19 +367,15 @@ const ThankYou: React.FC<{
                               border: '2px solid #b3a484',
                             }}
                           >
-                            <div className="buttonfeel3">
-                              {/* <p>
-                                <Icon as={FaRegCommentDots} />
-                              </p> */}
-
+                            <div className="buttonfeel3" style = {{height:'100%'}} >
                               <Textarea
-                                paddingTop="20px"
+                                // paddingTop="20px"
                                 outline="none"
                                 focusBorderColor="none"
                                 border="none"
                                 width="100%"
                                 color="#D9C7A2"
-                                height={'100%'}
+                                className='thankyou_textarea'
                                 resize={'none'}
                                 _focus={{ boxShadow: 'none', border: 'none' }}
                                 fontFamily="AtlantisText"
@@ -430,10 +426,10 @@ const ThankYou: React.FC<{
                 </>
               )}
             </Box>
-            <Box width={'100%'} display={'flex'} justifyContent={'center'} mt={'3%'} position={'relative'}>
-              <Img src={next} w={'auto'} h={'9vh'} onClick={() => handleNext()} position={'absolute'} />
-            </Box>
           </Box>
+            <Box width={'100%'} display={'flex'} justifyContent={'center'} position={'absolute'} className='thankyou_next_div'>
+              <Img src={next} className='thankyou_next_btn' w={'auto'} onClick={() => handleNext()} />
+            </Box>
         </Box>
       )}
     </>

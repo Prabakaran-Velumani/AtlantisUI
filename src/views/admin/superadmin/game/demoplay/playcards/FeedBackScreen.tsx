@@ -72,6 +72,8 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
     setisScreenshot(false);
   };
 
+// console.log(interactionBlockArray);
+
   return (
     <>
       <>
@@ -125,7 +127,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                       />
                       <Box
                         position={'absolute'}
-                        top={0}
+                        top={{base: '-7px', sm: '-7px', lg: '-15px'}}
                         width={'100%'}
                         h={'100%'}
                         display={'flex'}
@@ -137,7 +139,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                           <Img src={preloadedAssets.on} h={'4vh'} w={'100%'} />
                           <Box w={'90%'} display={'flex'} justifyContent={'flex-end'} position={'relative'}>
                             <Img src={preloadedAssets.ModelQ}  className='feedback_unknown' />
-                            <Text className='exlamatry' >!</Text>
+                            <Text className='exlamatry'>!</Text>
                           </Box>
                         </Box>
                         <Box className="feed_list">
@@ -152,7 +154,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                         </Box>
                         <Box
                           w={'70%'}
-                          h={'65%'}
+                          h={'66%'}
                           overflowY={'auto'}
                           className="feedback_content_text"
                         >

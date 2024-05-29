@@ -27,7 +27,7 @@ const ReplayGame: React.FC<{
   setData: any;
   replayNextHandler: any;
   preloadedAssets: any;
-  setOptionalReplay? : any;
+  setOptionalReplay?: any;
 }> = ({
   setOptionalReplay,
   formData,
@@ -89,12 +89,12 @@ const ReplayGame: React.FC<{
                     {replayMessage}
                   </Text>
                   <Box display={'flex'} justifyContent={'center'} w={'100%'}>
-                      <Button
-                        background={'transparent !important'}
-                      >
-                        <Img src={preloadedAssets?.OkayBtn} onClick={()=>setOptionalReplay(false)} className='replay_game_btn' />
-                      </Button>
-                    </Box>
+                    <Button
+                      background={'transparent !important'}
+                    >
+                      <Img src={preloadedAssets?.OkayBtn} onClick={() => setOptionalReplay(false)} className='replay_game_btn' />
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
             </Box>

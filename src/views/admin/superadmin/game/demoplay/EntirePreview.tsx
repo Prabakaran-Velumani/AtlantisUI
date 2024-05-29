@@ -3507,7 +3507,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             const data = resLang?.data;
             setGameLanguages(data);
             data.unshift({ value: 0, label: 'English' });
-
             setHasMulitLanguages(true);
           } else {
             setProfileData((prev: any) => ({
