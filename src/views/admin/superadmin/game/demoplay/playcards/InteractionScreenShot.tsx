@@ -37,6 +37,9 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
       setQuestContentByLanguage(Filteredcontent);
     }
   }, [data?.blockId]);
+
+   console.log(data);
+
   return (
     <Modal isOpen={true} onClose={isScreenshot} size={'medium'} closeOnOverlayClick={false}>
       <ModalOverlay zIndex={9999} />
