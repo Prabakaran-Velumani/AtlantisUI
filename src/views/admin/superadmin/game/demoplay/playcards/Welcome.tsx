@@ -29,7 +29,8 @@ const Welcome: React.FC<{
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);
   const [authorArray, setauthorArray] = useState<any[]>([]);
-  const [showComplete, setShowComplete] = useState(false);
+  const [showComplete, setShowComplete] = useState(false)
+  const [blackScreen, setBlackScreen] = useState(false)  
   useEffect(() => {
     setShowComplete(true);
     setTimeout(() => {
@@ -147,14 +148,20 @@ const Welcome: React.FC<{
   }, []);
 
 
+
+  // useEffect(()=> {
+  //   setBlackScreen(true)       
+  // },[blackScreen])
+
   
   return (
     <>
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5, duration: 1 }}
-      >
+      > */}
+       <Box className={`welcome-black-shadow ${blackScreen && 'welcome-end-black-shadow'}`}>
         <Box className="welcome-screen">
           <Box className="welcome-screen-box">
             <Img src={screen} className="welcome-pad" />
@@ -406,6 +413,9 @@ const Welcome: React.FC<{
             <Img
               src={preloadedAssets.next}
               onClick={() =>{
+                setBlackScreen(true)
+
+                setTimeout(()=> {
                 setCurrentScreenId(12); 
                 if(screenIdset !==  currentScreenId)
                   {
@@ -414,12 +424,15 @@ const Welcome: React.FC<{
                   screenIdSeq: [...prev.screenIdSeq, currentScreenId]
                    }));
                   }
+                },1000)
                
             }}
             />
           </Box>
         </Box>
-      </motion.div>
+       </Box>
+        
+      {/* </motion.div> */}
     </>
   );
 };

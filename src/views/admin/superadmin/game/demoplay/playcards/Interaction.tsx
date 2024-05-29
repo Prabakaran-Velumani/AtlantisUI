@@ -98,13 +98,13 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                 </Box>
                 <Box
                   textAlign={'center'}
-                  h={'25%'}
+                  h={'17%'}
                   display={'flex'}
                   justifyContent={'center'}
                   alignItems={'center'}
                   fontWeight={500}
-                  fontFamily={'AtlantisText'}
-                  lineHeight={1}
+                  fontFamily={'AtlantisContent'}
+                  lineHeight={1.1}
                   w={'96%'}
                   marginTop={'15px'}
                   position={'relative'}
@@ -124,7 +124,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
                     justifyContent={'flex-start'}
                   >
                     <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
-                    <Text textAlign={'justify'}>
+                    <Text>
                       {contentByLanguage!==null? contentByLanguage: data?.blockText}
                     </Text>
                   </Box>

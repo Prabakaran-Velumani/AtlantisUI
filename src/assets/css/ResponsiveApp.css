@@ -198,6 +198,7 @@
   /* WELCOME SCREEN**************************************** */
   .EntirePreview .Game-Screen .Images .welcome-screen {    
     height: 100vw;
+    width: 100vh;
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .welcome-pad {
     height: 100vw;    
@@ -217,7 +218,8 @@
     transform: translateY(19%); 
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .text {
-    font-size: 4vw;
+    font-size: 3vw;
+    line-height: 4vw;
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-arrow-img {    
     height: 4vw;
@@ -229,7 +231,7 @@
     height: 4vw; 
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .inside-box p {
-    font-size: 3.5vw;  
+    font-size: 3vw;  
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .author p{
     font-size: 3.5vw;      

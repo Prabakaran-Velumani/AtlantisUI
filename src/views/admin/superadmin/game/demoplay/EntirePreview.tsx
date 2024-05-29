@@ -25,7 +25,7 @@ import {
   ModalBody,
 } from '@chakra-ui/react';
 import { lazy } from 'react';
-import { motion } from 'framer-motion';
+import { LazyMotion, domAnimation, motion, m, domMax } from 'framer-motion';
 import React, {
   Suspense,
   useEffect,
@@ -3919,7 +3919,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 0:
                   return (
                     <>
-                      {
+                      {                        
                         <PlayInfo
                           onOpen={onOpen1}
                           onClose={onClose1}
@@ -3928,51 +3928,53 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           setIsGetsPlayAudioConfirmation={
                             setIsGetsPlayAudioConfirmation
                           }
-                        />
+                        />                           
                       }
                     </>
                   );
                 case 1:
                   return (
-                    <>
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
+                    <>     
+                      {/* <Box className='welcome-black-shadow'> */}
                         <Box
-                          backgroundImage={preloadedAssets?.StarsBg}
-                          w={'100% !important'}
+                          w={'100%'}
                           h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
                           alignItems={'center'}
                           justifyContent={'center'}
-                          className="Game-Screen"
-                          backgroundColor={'#0d161e'}
+                          position={'relative'}
+                          overflow={'visible'}
+                          style={{ perspective: '1000px' }}
+                          className="Main-Content"
                         >
-                          <Box className="Images" h={'100vh !important'}>
-                            <Welcome
-                              intro={audio}
-                              currentScreenId={currentScreenId}
-                              setprevScreenId={setprevScreenId}
-                              setCurrentScreenId={setCurrentScreenId}
-                              formData={gameInfo?.gameData}
-                              imageSrc={preloadedAssets.backgroundImage}
-                              screen={preloadedAssets.Screen5}
-                              preview={true}
-                              preloadedAssets={preloadedAssets}
-                              setPreLogDatas={setPreLogDatas}
-                              getPrevLogDatas={getPrevLogDatas}
-                            />
+                          <Box
+                            backgroundImage={preloadedAssets?.StarsBg}
+                            w={'100% !important'}
+                            h={'100vh'}
+                            backgroundRepeat={'no-repeat'}
+                            backgroundSize={'cover'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            className="Game-Screen"
+                            backgroundColor={'#0d161e'}
+                          >
+                            <Box className="Images" h={'100vh !important'}>
+                              <Welcome
+                                intro={audio}
+                                currentScreenId={currentScreenId}
+                                setprevScreenId={setprevScreenId}
+                                setCurrentScreenId={setCurrentScreenId}
+                                formData={gameInfo?.gameData}
+                                imageSrc={preloadedAssets.backgroundImage}
+                                screen={preloadedAssets.Screen5}
+                                preview={true}
+                                preloadedAssets={preloadedAssets}
+                                setPreLogDatas={setPreLogDatas}
+                                getPrevLogDatas={getPrevLogDatas}
+                              />
+                            </Box>
                           </Box>
-                        </Box>
-                      </Box>
+                        </Box> 
+                      {/* </Box> */}
                     </>
                   );
                 case 2:
@@ -4025,7 +4027,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   );
                 case 3:
                   return (
-                    <>
+                    <>                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -4056,44 +4058,46 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   );
                 case 4:
                   return (
-                    <Box
-                      w={'100%'}
-                      h={'100vh'}
-                      alignItems={'center'}
-                      justifyContent={'center'}
-                      position={'relative'}
-                      overflow={'visible'}
-                      style={{ perspective: '1000px' }}
-                      className="Main-Content"
-                    >
+                    <>                      
                       <Box
-                        backgroundImage={preloadedAssets.StarsBg}
-                        backgroundColor={'#0d161e'}
-                        w={'100% !important'}
+                        w={'100%'}
                         h={'100vh'}
-                        backgroundRepeat={'no-repeat'}
-                        backgroundSize={'cover'}
                         alignItems={'center'}
                         justifyContent={'center'}
-                        className="Game-Screen"
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
                       >
-                        <Box className="Images" zIndex={99}>
-                          <LeaderBoard
-                            homeLeaderBoard={homeLeaderBoard}
-                            setHomeLeaderBoard={setHomeLeaderBoard}
-                            setCurrentScreenId={setCurrentScreenId}
-                            formData={gameInfo?.gameData}
-                            imageSrc={preloadedAssets.Lead}
-                            getData={getData}
-                            data={data}
-                            gameInfo={gameInfo}
-                            preloadedAssets={preloadedAssets}
-                            setPlayerTodayScore={setPlayerTodayScore}
-                            playerTodayScore={playerTodayScore}
-                          />
+                        <Box
+                          backgroundImage={preloadedAssets.StarsBg}
+                          backgroundColor={'#0d161e'}
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                        >
+                          <Box className="Images" zIndex={99}>
+                            <LeaderBoard
+                              homeLeaderBoard={homeLeaderBoard}
+                              setHomeLeaderBoard={setHomeLeaderBoard}
+                              setCurrentScreenId={setCurrentScreenId}
+                              formData={gameInfo?.gameData}
+                              imageSrc={preloadedAssets.Lead}
+                              getData={getData}
+                              data={data}
+                              gameInfo={gameInfo}
+                              preloadedAssets={preloadedAssets}
+                              setPlayerTodayScore={setPlayerTodayScore}
+                              playerTodayScore={playerTodayScore}
+                            />
+                          </Box>
                         </Box>
                       </Box>
-                    </Box>
+                    </>
                   );
                 case 5:
                   return (
@@ -4352,6 +4356,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 case 13:
                   return (
                     <>
+                    {/* <Box className='black-shadow'> */}
                       <ChapterPage
                         setCurrentQuestNo={setCurrentQuestNo}
                         questState={questState}
@@ -4377,6 +4382,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         setRepeatPrevOption={setRepeatPrevOption}
                         setSelectedOption={setSelectedOption}
                       />
+                      {/* </Box> */}
                     </>
                   );
                 case 14:

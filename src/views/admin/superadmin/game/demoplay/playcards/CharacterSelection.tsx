@@ -120,9 +120,14 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const [i, setI] = useState(0);
   const [toggleLeft, setToggleLeft] = useState(false);
   const [toggleRight, setToggleRight] = useState(false)
+  const [blackScreen, setBlackScreen] = useState(false)  
   const toast = useToast();
 
   const selectPlayerClick = () => {
+
+    setBlackScreen(true)
+
+    setTimeout(()=> {
     const i = 0; // Assuming you are referring to a specific player index
     const screenIdset =
       getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
@@ -136,6 +141,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
     // Set the selected player
     setSelectedPlayer(players[i]);    
     setCurrentScreenId(13);//navigate to Chapter selection
+  },1000)
   };
 
 
@@ -148,129 +154,142 @@ const Characterspage: React.FC<PlayGamesProps> = ({
   const screenIdset =
     getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
 
-  return (
-    <>
-      <Box
-        position="relative"
-        w={'100%'}
-        height="100vh"
-        backgroundImage={preloadedAssets.StarsBg}
-        backgroundColor={'#0d161e'}
-        backgroundSize={'cover'}
-        backgroundRepeat={'no-repeat'}
-        className="CharacterScreen chapter_potrait"
-      >
-        <Grid
-          templateColumns="repeat(1, 1fr)"
-          gap={4}
-          position="absolute"
-          top="50%"
-          left="50%"
-          transform="translate(-50%, -50%)"
-          width="100%"
-        >
-          <GridItem colSpan={1} position={'relative'}>
-            <Box display={'flex'} justifyContent={'center'}>
-              <Img
-                src={preloadedAssets.Select}
-                className={'character_template'}
-                loading="lazy"
-              />
-              <Box className={'character_select_area'}>
-                <Box
-                  w={'55%'}
-                  display={'flex'}
-                  alignItems={'center'}
-                  justifyContent={'space-between'}
-                >
-                  <Img
-                    src={preloadedAssets.Selected}
-                    className={`character_toggle_left ${
-                      toggleLeft ? 'toggle_effect_on' : 'toggle_effect_off'
-                    }`}
-                    onMouseDown={() => setToggleLeft(true)}
-                    onMouseUp={() => setToggleLeft(false)}
-                  />
-                  <Canvas
-                    camera={{ position: [0, 1, 9] }}
-                    dpr={window.devicePixelRatio}
-                  >
-                    {' '}
-                    {/* For Single view */}
-                    {/* <Environment preset={"park"} background />   */}
-                    <directionalLight
-                      position={[2.0, 78.0, 100]}
-                      intensity={0.8}
-                      color={'ffffff'}
-                      castShadow
-                    />
-                    <ambientLight intensity={0.5} />
-                    {/* <OrbitControls   />  */}
-                    <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
-                    {/* COMPONENTS */}
-                    <Model position={[0, -1.5, 4]} />
-                    {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
-                    {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
-                    {/* <Parrot /> */}
-                  </Canvas>
-                  <Img
-                    onMouseDown={() => setToggleRight(true)}
-                    onMouseUp={() => setToggleRight(false)}
-                    src={preloadedAssets.Selected}
-                    className={`character_toggle_right ${
-                      toggleRight ? 'toggle_effect_on' : 'toggle_effect_off'
-                    }`}
-                  />
-                </Box>
-              </Box>
-              <Box className={'select_player'}>
-                <Button
-                  w={'15%'}
-                  bg={'none'}
-                  className="mouse_style"
-                  _hover={{ bg: 'none' }}
-                  onClick={selectPlayerClick}
-                ></Button>
-              </Box>
-              <Box className={'character_next'}>
-                <Box className={'character_buttons'}>
-                  <Button
-                    className="btns left-btn mouse_style"
-                    bg={'none'}
-                    _hover={{ bg: 'none' }}
-                    onClick={() => {
-                      setCurrentScreenId(1);
 
-                      if (screenIdset !== currentScreenId) {
-                        setPreLogDatas((prev: any) => ({
-                          ...prev,
-                          screenIdSeq: [...prev.screenIdSeq, currentScreenId],
-                        }));
-                      }
-                    }}
-                  ></Button>
-                  <Box w={'25%'} position={'relative'}>
-                    <FormLabel
-                      style={{ width: '100%' }}
-                      className="player_name"
-                      textAlign={"center"} 
-                      me={0}
-                      mb={1}
-                    > 
-                    {profileData.name} 
-                      </FormLabel>
+  // useEffect(()=> {
+  //   setBlackScreen(true)       
+  // },[blackScreen])
+
+
+  return (
+    <>      
+      <Box className={`black-shadow ${blackScreen && 'end-black-shadow'}`}>
+      {/* <Box className='black-shadow'> */}
+        <Box
+          position="relative"
+          w={'100%'}
+          height="100vh"
+          backgroundImage={preloadedAssets.StarsBg}
+          backgroundColor={'#0d161e'}
+          backgroundSize={'cover'}
+          backgroundRepeat={'no-repeat'}
+          className="CharacterScreen chapter_potrait"
+        >          
+            <Grid
+              templateColumns="repeat(1, 1fr)"
+              gap={4}
+              position="absolute"
+              top="50%"
+              left="50%"
+              transform="translate(-50%, -50%)"
+              width="100%"
+            >
+              <GridItem colSpan={1} position={'relative'}>
+                <Box display={'flex'} justifyContent={'center'}>
+                  <Img
+                    src={preloadedAssets.Select}
+                    className={'character_template'}
+                    loading="lazy"
+                  />
+                  <Box className={'character_select_area'}>
+                    <Box
+                      w={'55%'}
+                      display={'flex'}
+                      alignItems={'center'}
+                      justifyContent={'space-between'}
+                    >
+                      <Img
+                        src={preloadedAssets.Selected}
+                        className={`character_toggle_left ${
+                          toggleLeft ? 'toggle_effect_on' : 'toggle_effect_off'
+                        }`}
+                        onMouseDown={() => setToggleLeft(true)}
+                        onMouseUp={() => setToggleLeft(false)}
+                      />
+                      <Canvas
+                        camera={{ position: [0, 1, 9] }}
+                        dpr={window.devicePixelRatio}
+                      >
+                        {' '}
+                        {/* For Single view */}
+                        {/* <Environment preset={"park"} background />   */}
+                        <directionalLight
+                          position={[2.0, 78.0, 100]}
+                          intensity={0.8}
+                          color={'ffffff'}
+                          castShadow
+                        />
+                        <ambientLight intensity={0.5} />
+                        {/* <OrbitControls   />  */}
+                        <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
+                        {/* COMPONENTS */}
+                        <Model position={[0, -1.5, 4]} />
+                        {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
+                        {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
+                        {/* <Parrot /> */}
+                      </Canvas>
+                      <Img
+                        onMouseDown={() => setToggleRight(true)}
+                        onMouseUp={() => setToggleRight(false)}
+                        src={preloadedAssets.Selected}
+                        className={`character_toggle_right ${
+                          toggleRight ? 'toggle_effect_on' : 'toggle_effect_off'
+                        }`}
+                      />
+                    </Box>
                   </Box>
-                  <Button
-                    className="btns right-btn mouse_style"
-                    bg={'none'}
-                    _hover={{ bg: 'none' }}
-                    onClick={selectPlayerClick}
-                  ></Button>
+                  <Box className={'select_player'}>
+                    <Button
+                      w={'15%'}
+                      bg={'none'}
+                      className="mouse_style"
+                      _hover={{ bg: 'none' }}
+                      onClick={selectPlayerClick}
+                    ></Button>
+                  </Box>
+                  <Box className={'character_next'}>
+                    <Box className={'character_buttons'}>
+                      <Button
+                        className="btns left-btn mouse_style"
+                        bg={'none'}
+                        _hover={{ bg: 'none' }}
+                        onClick={() => {
+                          setBlackScreen(true)
+
+                          setTimeout(()=> {
+                          setCurrentScreenId(1);
+
+                          if (screenIdset !== currentScreenId) {
+                            setPreLogDatas((prev: any) => ({
+                              ...prev,
+                              screenIdSeq: [...prev.screenIdSeq, currentScreenId],
+                            }));
+                          }
+                        },1000)
+                        }}
+                      ></Button>
+                      <Box w={'25%'} position={'relative'}>
+                        <FormLabel
+                          style={{ width: '100%' }}
+                          className="player_name"
+                          textAlign={"center"} 
+                          me={0}
+                          mb={1}
+                        > 
+                        {profileData.name} 
+                          </FormLabel>
+                      </Box>
+                      <Button
+                        className="btns right-btn mouse_style"
+                        bg={'none'}
+                        _hover={{ bg: 'none' }}
+                        onClick={selectPlayerClick}
+                      ></Button>
+                    </Box>
+                  </Box>
                 </Box>
-              </Box>
-            </Box>
-          </GridItem>
-        </Grid>
+              </GridItem>
+            </Grid>          
+        </Box>
       </Box>
     </>
   );

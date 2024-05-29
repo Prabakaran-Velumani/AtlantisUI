@@ -532,12 +532,13 @@ const Story: React.FC<{
                         </Box>
                       </Box>
                       <Box
-                        width={'100%'}
-                        mt="20px"
-                        position={'fixed'}
-                        top="78%"
-                        display={'flex'}
-                        justifyContent={'center'}
+                        // width={'100%'}
+                        // mt="20px"
+                        // position={'fixed'}
+                        // top="78%"
+                        // display={'flex'}
+                        // justifyContent={'center'}
+                        className='story_block_btns_box'
                       >
                         <Box className="story_block_btns">
                           <Img
@@ -641,26 +642,9 @@ const Story: React.FC<{
               </Box>
             </Box>
             <Box             
-              className='dialogue_scroll'
-              // position={'fixed'}
-              // h={'61px'}
-              // overflowY={'scroll'}
-              // w={'85%'}
-              // fontSize={'3vh'}
-              // bottom={'38px'}
-              // fontFamily={'AtlantisContent'}
-              // css={{
-              //   // Hide scrollbar for webkit-based browsers (Safari, Chrome)
-              //   '&::-webkit-scrollbar': {
-              //     display: 'none',
-              //   },
-              //   // Hide scrollbar for Mozilla-based browsers (Firefox)
-              //   'scrollbar-width': 'none', // For Firefox
-              //   '-ms-overflow-style': 'none', // For IE and Edge
-              // }}
+              className='dialogue_scroll'              
             >
-              <Box 
-              // transform={'translateY(26%)'}
+              <Box             
               >
                 {showTypingEffect === false ? (
                   <TypingEffect
@@ -770,17 +754,7 @@ const Story: React.FC<{
               </Box>
             </Box>
             <Box
-              // display={'flex'}
-              position={'fixed'}
-              // alignItems={'center'}
-              // justifyContent={'space-between'}
-              h={'61px'}
-              overflowY={'scroll'}
-              w={'85%'}
-              fontSize={'3vh'}
-              bottom={'38px'}
-              fontFamily={'AtlantisContent'}
-              // transform={'translateY(26%)'}
+              className='dialogue_scroll'
             >
               {showTypingEffect === false ? (
                 <TypingEffect
@@ -868,7 +842,7 @@ const Story: React.FC<{
                         />
                         <Box
                           position={'absolute'}
-                          top={0}
+                          top={{base: '-7px', sm: '-7px', lg: '-15px'}}
                           width={'100%'}
                           h={'100%'}
                           display={'flex'}
@@ -882,8 +856,8 @@ const Story: React.FC<{
                           <Box className="feed_list"> Interaction </Box>
                           <Box
                             w={'70%'}
-                            h={'75%'}
-                            overflowY={'scroll'}
+                            h={'66%'}
+                            overflowY={'auto'}
                             className="feedback_content_text"
                           >
                             <Box display={'flex'} mt={'10px'}>

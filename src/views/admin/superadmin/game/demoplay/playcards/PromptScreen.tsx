@@ -1,5 +1,6 @@
 import { Box, Img, Button, Text, FormLabel, Input, FormHelperText, FormErrorMessage, FormControl, CloseButton} from '@chakra-ui/react'
 import React, {useEffect, useState} from 'react';
+import { motion } from 'framer-motion';
 
 
 type languageProps = {
@@ -158,6 +159,7 @@ console.log('isOpenCustomModal',isOpenCustomModal)
     isOpenCustomModal && (
       <Box id="container" className="Play-station">
       <Box className="top-menu-home-section">  
+        <motion.div initial={{ opacity: 0, y: -100 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.5 }}>
           <Box className="Setting-box">
             <Img
               src={preloadedAssets.Lang}
@@ -168,7 +170,7 @@ console.log('isOpenCustomModal',isOpenCustomModal)
               <FormLabel className={'label'} me={'0'}>
                 Profile
               </FormLabel>
-              <Box position={'relative'}>
+              <Box position={'relative'} mb={'10%'}>
                 <Text
                   // onClick={() => setSelect(!select)}
                   className={'choosen_lang'}
@@ -342,6 +344,7 @@ console.log('isOpenCustomModal',isOpenCustomModal)
               </Box>
             </Box>
           </Box>
+        </motion.div>
       </Box>
     </Box>
     )

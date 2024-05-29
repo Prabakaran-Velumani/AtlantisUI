@@ -1,4 +1,4 @@
-import { Box, Icon, useToast } from '@chakra-ui/react';
+import { Box, Icon, Img, useToast } from '@chakra-ui/react';
 
 import React, {
   Suspense,
@@ -10,6 +10,7 @@ import React, {
   useState,
   lazy,
 } from 'react';
+import { LazyMotion, domAnimation, motion, m, domMax } from 'framer-motion';
 import { preloadedImages, preloadedGLBFiles } from 'utils/hooks/function';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { json, useParams } from 'react-router-dom';
@@ -92,6 +93,7 @@ const GamePreview = () => {
     updatedAt:'',
     playerInputs:''
   });
+  const [isVisible, setIsVisible] = useState<any>(false);
   //End
   const user: any = JSON.parse(localStorage.getItem('user'));
   //get the stored Preview Log Data, if has otherwise create a new record
@@ -569,9 +571,23 @@ const GamePreview = () => {
     }
   }, [gameInfo, preloadedAssets, componentsLoaded]);
 
+
+  useEffect(() => {
+    setIsVisible(true);
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 5000);
+
+    // Cleanup the timer when the component unmounts
+    return () => clearTimeout(timer);
+  }, []);
+
+  console.log('isVisible',isVisible)
+
   return (
     <>
-      <Suspense fallback={<h1>Loading please wait...</h1>}>
+      {/* <Suspense fallback={<Img src={preloadedAssets.InitialImg} width={'100vw'} h={'100vh'}/>}> */}
+      <Suspense fallback={<Box bg={'#000'} h={'100vh'} w={'100vw'}>Loading...</Box>}>
         {contentReady && (
           gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
             gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
