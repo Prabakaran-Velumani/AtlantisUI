@@ -271,7 +271,7 @@ console.log('isOpenCustomModal',isOpenCustomModal)
                   )}
                 </Box>
               </Box>
-              <Box position={'relative'} mb={'20%'}>
+              <Box position={'relative'} mb={'10%'}>
                 <Text
                   onClick={() => setIsLanguageSelected(!isLanguageSelected)}
                   className={'choosen_lang'}
@@ -336,6 +336,7 @@ console.log('isOpenCustomModal',isOpenCustomModal)
                   onClick={() => handleProfileSubmit()}
                 >
                   <Img
+                    className='profile-okay-btn'
                     src={preloadedAssets.OkayBtn}
                     w={'100%'}
                     h={'auto'}

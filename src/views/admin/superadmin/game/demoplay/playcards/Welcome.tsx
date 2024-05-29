@@ -168,7 +168,7 @@ const Welcome: React.FC<{
           </Box>
           <Box className="top-title">
             <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-              <Box w='32%' lineHeight={'40px'}>
+              <Box>
                 <Text
                   className="title"
                   fontSize={{
@@ -370,11 +370,11 @@ const Welcome: React.FC<{
                   className="author"
                 >
                   <Text
-                    position={'absolute'}
-                    right={'0px'}
-                    left={'0px'}
-                    bottom={'0px'}
-                    top={'20px'}
+                    // position={'absolute'}
+                    // right={'0px'}
+                    // left={'0px'}
+                    // bottom={'0px'}
+                    // top={'20px'}
                     fontSize={{
                       base: '11px',
                       sm: '12px',
