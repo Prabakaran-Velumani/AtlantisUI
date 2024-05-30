@@ -131,12 +131,12 @@ const InteractionScreenShot: React.FC<InteractionScreenShotProps> = ({ data, bac
                   <Box
                     className='screenshot_content'
                     w={'60%'}
-                    fontSize={{ md: '1.5vw', lg: '1.9vw' }}
+                   
                     letterSpacing={1}
                     justifyContent={'flex-start'}
                   >
                     <Img src={preloadedAssets.qs} h={'1em'} w={'1em'} />
-                    <Text textAlign={'justify'}>
+                    <Text textAlign={'justify'} fontFamily={'AtlantisContent'} className='font_inter_ss'>
                     {QuestContentByLanguage!==null ? QuestContentByLanguage : data[0]?.blockText}
                     </Text>
                   </Box>

@@ -79,7 +79,6 @@ const ThankYou: React.FC<{
                   />
                   <Box
                     className={'story_overview_content'}
-                    // bg={'blue.300'}
                   >
                     <Text className='story_overview_title' >Story Line...</Text>
                     <Box
