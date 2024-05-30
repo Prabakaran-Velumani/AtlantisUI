@@ -142,7 +142,7 @@ const FeedBackScreen: React.FC<FeedBackScreenShotProps> = ({
                             <Text className='exlamatry'>!</Text>
                           </Box>
                         </Box>
-                        <Box className="feed_list">
+                        <Box className="feed_list" position={'absolute'} top={'14%'}>
                           {' '}
                           Interaction{' '}
                           {currentScreenId === 14 &&
