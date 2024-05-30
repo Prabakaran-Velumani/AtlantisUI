@@ -7,9 +7,7 @@ const initialState = {
   currentQuest: 1,
   isDispatched: false,
   activeBlockSeq: 1,
-  CompKeyCount: 0,
-  reflectionPageUpdated: false
-
+  CompKeyCount: 0
 };
 const reduxInitialState = null;
 export const previewSlice = createSlice({
@@ -17,21 +15,24 @@ export const previewSlice = createSlice({
   initialState: reduxInitialState,
   reducers: {
     updatePreviewData: (state, action) => {
-      if (!action.payload) {
+      const payload = action?.payload;
+      console.log("action payload", payload);
+      console.log("!payload || !payload.gameId", !payload || !payload.gameId);
+      if (!payload || !payload.gameId) {
         return initialState;
+      } 
+      else{
+        console.log("^^^^^^^^^ state", {...state})
+        const existingState = {...state};
+        // const gameId = existingState?.hasOwnProperty([payload.gameId]);
+        const gameId = payload?.gameId;
+        console.log("gameId", gameId);
+        if(gameId)
+        {
+          const newState = {...state, [gameId]: {...state[payload.gameId] || {}, ...payload}};
+          return newState;
+        }
       }
-        if(action.payload.hasOwnProperty('currentQuest'))
-            {
-                const newState = { ...state,[action.payload.gameId]:{...state[action.payload.gameId],activeBlockSeq : 1,...action.payload} };
-                return newState;
-            }
-            else{
-              if(action.payload.activeBlockSeq!== undefined)
-                {
-                  const newState = { ...state,[action.payload.gameId]:{...state[action.payload.gameId],...action.payload}  };
-                  return newState;
-                }
-            }
     },
     createPreviewData:(state,action) =>
       {
@@ -44,22 +45,42 @@ export const previewSlice = createSlice({
           else{
             let newState ={} ;
             const newInitialState ={...initialState,gameId:action.payload};
+            console.log("newInitialState", newInitialState);
             if(state === null )
-              {  newState = { [action.payload]:newInitialState};
-
+              {  
+                newState = { [action.payload]:newInitialState};
               }
               else{
                  newState = { ...state, [action.payload]:newInitialState};
               }
             return newState;
-           }
-          
-          
+           }          
+      },
+      removeGame: (state, action) =>{
+        const gameId = action.payload;
+        // console.log("gameId", gameId)
+        // console.log("Object.keys(state).some(id => id===gameId", Object.keys(state).some(id => id===gameId));
+        
+        if(gameId && Object.keys(state).some(id => id===gameId))
+          {
+            const newState = Object.keys(state).filter(id => id!==gameId);
+            console.log("newState",newState)
+            return newState;
+          }
+      },
+      resetGameDispatchState: (state,action) =>{
+        if(action?.payload)
+          {
+            console.log("resetGameDispatchState", {...state[action.payload]});
+            const newState = {...state, [action.payload]:{...(state[action.payload]), isDispatched: false}};
+            console.log("resetGameDispatchState", newState);
+            return newState;
+          }
       }
   },
   extraReducers(builder) {},
 });
 
-export const { updatePreviewData,createPreviewData } = previewSlice.actions;
+export const { updatePreviewData,createPreviewData, removeGame, resetGameDispatchState } = previewSlice.actions;
 
 export default previewSlice.reducer;

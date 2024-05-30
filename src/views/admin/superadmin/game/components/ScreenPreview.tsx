@@ -21,15 +21,10 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
-import TakeAwaysContentScreen from './onimage/TakeAwaysScreen';
-// import Sample from '../../../../assets/img/games/Character_sample.glb';
-// import WelcomeContentScreen from './onimage/WelcomeContentScreen';
-import Screen1 from '../../../../../assets/img/screens/screen1.png';
-import leaderboard from '../../../../../assets/img/screens/Leaderboard.png';
-
-import ReflectionContentScreen from './onimage/ReflectionScreen';
-import TyContentScreen from './onimage/TyContentScreen';
-import { getGameCreatorDemoData,getPreviewLogsData } from 'utils/game/gameService';
+import {
+  getGameCreatorDemoData,
+  getPreviewLogsData,
+} from 'utils/game/gameService';
 import TypingEffect from '../demoplay/playcards/Typing';
 import {
   API_SERVER,
@@ -43,45 +38,38 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
 import { preloadedImages } from 'utils/hooks/function';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
-import { updatePreviewData } from 'store/preview/previewSlice';
-import LeaderBoard from '../demoplay/playcards/Leaderboard';
+import {
+  updatePreviewData,
+  removeGame,
+  resetGameDispatchState,
+} from 'store/preview/previewSlice';
 import { useParams } from 'react-router-dom';
-
+import { HashLoader } from 'react-spinners';
+import { isError } from 'lodash';
+const TakeAwaysContentScreen = lazy(() => import('./onimage/TakeAwaysScreen'));
+const ReflectionContentScreen = lazy(
+  () => import('./onimage/ReflectionScreen'),
+);
+const TyContentScreen = lazy(() => import('./onimage/TyContentScreen'));
+const LeaderBoard = lazy(() => import('../demoplay/playcards/Leaderboard'));
+const ScreenPreviewErrorPrompt = lazy(
+  () => import('./ScreenPreviewErrorPrompt'),
+);
 const WelcomeContentScreen = lazy(
   () => import('./onimage/WelcomeContentScreen'),
 );
-// const WelcomeContentScreen = lazy(
-//   () => import('./onimage/PreviewWelcomeScreen'),
-// );
 const CompletionContentScreen = lazy(
   () => import('./onimage/CompletionContentScreen'),
 );
 const PreviewEndOfStory = lazy(() => import('./onimage/PreviewEndOfStory'));
+
 const ScreenPreview = () => {
   const { id } = useParams();
-   const statePreview =useSelector((state: RootState) => (state.preview!==null ? state.preview[parseInt(id)] : null));
-   const InitialState={
-    gameId:id,
-    currentTab: 3,
-  currentSubTab: 0,
-  currentQuest: 1,
-  isDispatched: false,
-  activeBlockSeq: 1,
-  CompKeyCount: 0,
-  reflectionPageUpdated: false
-  } 
-  const {
-    gameId:gameid,
-    currentTab: currentTab,
-    currentSubTab: currentSubTab,
-    currentQuest: currentQuest,
-    activeBlockSeq: activeBlockSeq,
-    isDispatched: isDispatched,
-    CompKeyCount: CompKeyCount,
-    reflectionPageUpdated: reflectionPageUpdated,
-  } = statePreview!==null ? statePreview : InitialState;
+  const previewStateData = useSelector((state: RootState) =>
+    state.preview !== null ? state.preview[parseInt(id)] : null,
+  );
   const dispatch = useDispatch();
-  const [gameInfo, setGameInfo] = useState<any>();
+  const [gameInfo, setGameInfo] = useState<any>(null);
   const [contentReady, setContentReady] = useState<boolean>(false);
   const [apiImageSet, setApiImageSet] = useState<any>();
   const [staticAssetImageUrls, setStaticAssetImageUrls] = useState<any>(null);
@@ -95,15 +83,9 @@ const ScreenPreview = () => {
   const [optionNavigation, setOptionNavigation] = useState(null);
   const [showNote, setShowNote] = useState(false),
     [first, setFirst] = useState(false);
-  const [game3Position, setGame3Position] = useState({
-    previousBlock: '',
-    currentBlock: '',
-    nextBlock: '',
-  });
   const [data, setData] = useState(null);
   const [type, setType] = useState<string>('');
   const [resMsg, setResMsg] = useState<string>('');
-
   const [feed, setFeed] = useState<string>('');
   const [endOfQuest, setEndOfQuest] = useState<boolean>(false);
   const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
@@ -125,36 +107,71 @@ const ScreenPreview = () => {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [RefelectionAnswer, setRefelectionAnswer] = useState<any>([]);
   const [ThankyouFeedback, setThankyouFeedback] = useState<any>(null);
+  const [errMessage, setErrMessage] = useState<string>(null);
+  const [showPromptScreen, setShowPromptScreen] = useState<boolean>(false);
   const user: any = JSON.parse(localStorage.getItem('user'));
+  const [componentsLoaded, setComponentsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchData = async () => {
       const resolvedResult: any = await preloadedImages(assetImageSrc);
       setStaticAssetImageUrls(resolvedResult);
     };
     fetchData();
+    loadComponents();
+
+    return () => {
+      dispatch(removeGame(parseInt(id)));
+    };
   }, []);
 
   useEffect(() => {
-    if (gameInfo) {
+    if (
+      gameInfo &&
+      previewStateData?.currentQuest &&
+      previewStateData?.activeBlockSeq
+    ) {
       setDemoBlocks(gameInfo?.blocks);
-      const currentBlock = gameInfo?.blocks[currentQuest][activeBlockSeq];
+      const currentBlock =
+        gameInfo?.blocks[previewStateData?.currentQuest][
+          previewStateData?.activeBlockSeq
+        ];
       setType(currentBlock?.blockChoosen);
       if (currentBlock?.blockChoosen === 'Interaction') {
         setInteractionOptions(gameInfo, currentBlock);
       }
       setData(currentBlock);
     }
-  }, [gameInfo, isDispatched, activeBlockSeq, currentQuest]);
+  }, [gameInfo, previewStateData]);
 
-  const replayQuest = () => {
-    dispatch(updatePreviewData({ activeBlockSeq: 1, isDispatched: true ,gameId:parseInt(id)}));
-    setEndOfQuest(false);
+  /**** Handling Content Update logic */
+  useEffect(() => {
+    if (
+      previewStateData &&
+      previewStateData?.gameId &&
+      previewStateData?.isDispatched === true
+    ) {
+      fetchDataFromApi(previewStateData?.gameId);
+      dispatch(resetGameDispatchState(previewStateData?.gameId));
+    }
+  }, [previewStateData]);
+
+  /*Handling Content Update logic ******/
+
+  /****Functions ******/
+
+  const resetDefaultValues = () => {
+    setData(null);
+    setType(null);
   };
-  const fetchDataFromApi = useCallback(async () => {
+
+  const fetchDataFromApi = async (gameid: any = null) => {
     try {
-      if (gameid && isDispatched) {
+      if (gameid) {
         const gamedata = await getGameCreatorDemoData(gameid);
         if (!gamedata?.error && gamedata) {
+          setIsLoading(true);
           const {
             gameview,
             image,
@@ -163,7 +180,7 @@ const ScreenPreview = () => {
             gameQuest,
             ...gameData
           } = gamedata?.result;
-          const completionScreenData =gamedata?.data ;
+          const completionScreenData = gamedata?.data;
           const sortBlockSequence = (blockArray: []) => {
             const transformedArray = blockArray.reduce(
               (result: any, obj: any) => {
@@ -181,69 +198,41 @@ const ScreenPreview = () => {
             );
             return transformedArray;
           };
-          /*
-          const completionOptions = gameQuest.map((qst: any, i: number) => {
-            const item = {
-              gameId: qst.gameId,
-              questNo: qst.gameQuestNo,
-              gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
-              gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
-              gameDistinctionScore: qst.gameDistinctionScore,
-              gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
-              gameIsSetBadge: qst.gameIsSetBadge,
-              gameBadge: qst.gameBadge,
-              gameBadgeName: qst.gameBadgeName,
-              gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
-              gameAwardBadgeScore: qst.gameAwardBadgeScore,
-              gameScreenTitle: qst.gameScreenTitle,
-              gameIsSetCongratsSingleMessage:
-                qst.gameIsSetCongratsSingleMessage,
-              gameIsSetCongratsScoreWiseMessage:
-                qst.gameIsSetCongratsScoreWiseMessage,
-              gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
-              gameMinimumScoreCongratsMessage:
-                qst.gameMinimumScoreCongratsMessage,
-              gameaboveMinimumScoreCongratsMessage:
-                qst.gameaboveMinimumScoreCongratsMessage,
-              gameLessthanDistinctionScoreCongratsMessage:
-                qst.gameLessthanDistinctionScoreCongratsMessage,
-              gameAboveDistinctionScoreCongratsMessage:
-                qst.gameAboveDistinctionScoreCongratsMessage,
-            };
-            return item;
-          });
-          */
-          const completionOptions = Object.entries(completionScreenData).map((qst: any, i: number) => {
-            const item = {
-              gameTotalScore:qst[1].gameTotalScore,
-              gameId: qst[1].gameId,
-              questNo: qst[1].gameQuestNo,
-              gameIsSetMinPassScore: qst[1].gameIsSetMinPassScore,
-              gameIsSetDistinctionScore: qst[1].gameIsSetDistinctionScore,
-              gameDistinctionScore: qst[1].gameDistinctionScore,
-              gameIsSetSkillWiseScore: qst[1].gameIsSetSkillWiseScore,
-              gameIsSetBadge: qst[1].gameIsSetBadge,
-              gameBadge: qst[1].gameBadge,
-              gameBadgeName: qst[1].gameBadgeName,
-              gameIsSetCriteriaForBadge: qst[1].gameIsSetCriteriaForBadge,
-              gameAwardBadgeScore: qst[1].gameAwardBadgeScore,
-              gameScreenTitle: qst[1].gameScreenTitle,
-              gameIsSetCongratsSingleMessage:
-                qst[1].gameIsSetCongratsSingleMessage,
-              gameIsSetCongratsScoreWiseMessage:
-                qst[1].gameIsSetCongratsScoreWiseMessage,
-              gameCompletedCongratsMessage: qst[1].gameCompletedCongratsMessage,
-              gameMinimumScoreCongratsMessage:
-                qst[1].gameMinimumScoreCongratsMessage,
-              gameaboveMinimumScoreCongratsMessage:
-                qst[1].gameaboveMinimumScoreCongratsMessage,
-              gameLessthanDistinctionScoreCongratsMessage:
-                qst[1].gameLessthanDistinctionScoreCongratsMessage,
-              gameAboveDistinctionScoreCongratsMessage:
-                qst[1].gameAboveDistinctionScoreCongratsMessage,
-            };
-            return item;
-          });
+
+          const completionOptions = Object.entries(completionScreenData).map(
+            (qst: any, i: number) => {
+              const item = {
+                gameTotalScore: qst[1].gameTotalScore,
+                gameId: qst[1].gameId,
+                questNo: qst[1].gameQuestNo,
+                gameIsSetMinPassScore: qst[1].gameIsSetMinPassScore,
+                gameIsSetDistinctionScore: qst[1].gameIsSetDistinctionScore,
+                gameDistinctionScore: qst[1].gameDistinctionScore,
+                gameIsSetSkillWiseScore: qst[1].gameIsSetSkillWiseScore,
+                gameIsSetBadge: qst[1].gameIsSetBadge,
+                gameBadge: qst[1].gameBadge,
+                gameBadgeName: qst[1].gameBadgeName,
+                gameIsSetCriteriaForBadge: qst[1].gameIsSetCriteriaForBadge,
+                gameAwardBadgeScore: qst[1].gameAwardBadgeScore,
+                gameScreenTitle: qst[1].gameScreenTitle,
+                gameIsSetCongratsSingleMessage:
+                  qst[1].gameIsSetCongratsSingleMessage,
+                gameIsSetCongratsScoreWiseMessage:
+                  qst[1].gameIsSetCongratsScoreWiseMessage,
+                gameCompletedCongratsMessage:
+                  qst[1].gameCompletedCongratsMessage,
+                gameMinimumScoreCongratsMessage:
+                  qst[1].gameMinimumScoreCongratsMessage,
+                gameaboveMinimumScoreCongratsMessage:
+                  qst[1].gameaboveMinimumScoreCongratsMessage,
+                gameLessthanDistinctionScoreCongratsMessage:
+                  qst[1].gameLessthanDistinctionScoreCongratsMessage,
+                gameAboveDistinctionScoreCongratsMessage:
+                  qst[1].gameAboveDistinctionScoreCongratsMessage,
+              };
+              return item;
+            },
+          );
 
           let reflectionData: any = [];
           for (let i = 0; i < gamedata?.resultReflection?.length; i++) {
@@ -306,24 +295,43 @@ const ScreenPreview = () => {
               },
             ),
           );
-        }
-        else{
-          console.log('gamedata',gamedata,'....',gameid);
+        } else {
+          resetDefaultValues();
+          setErrMessage('Insufficient Preview Data Available');
+          setShowPromptScreen(true);
         }
       } else {
-        console.log('game id is missing...');
+        setErrMessage('Insufficient Preview Data Available');
+        setShowPromptScreen(true);
       }
     } catch (error) {
+      setErrMessage('Insufficient Preview Data Available');
+      setShowPromptScreen(true);
       console.error('Error fetching data:', error);
     }
-  }, [gameid, isDispatched]);
+  };
+
+  const loadComponents = async () => {
+    // Load all the lazy-loaded components
+    await Promise.all([
+      PreviewEndOfStory,
+      CompletionContentScreen,
+      WelcomeContentScreen,
+      ScreenPreviewErrorPrompt,
+      TakeAwaysContentScreen,
+      ReflectionContentScreen,
+      TyContentScreen,
+      LeaderBoard,
+    ]);
+    setComponentsLoaded(true);
+  };
+
   const setInteractionOptions = (gameInfo: any, currentBlock: any) => {
     const optionsFiltered = gameInfo?.questOptions.filter(
       (key: any) => key?.qpSequence === currentBlock?.blockPrimarySequence,
     );
 
     if (gameInfo?.gameData?.gameShuffle === 'true') {
-
       for (let i = optionsFiltered.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [optionsFiltered[i], optionsFiltered[j]] = [
@@ -334,15 +342,7 @@ const ScreenPreview = () => {
     }
 
     setOptions(optionsFiltered);
-
   };
-
-  useEffect(() => {
-    if (gameid && isDispatched) {
-      fetchDataFromApi();
-      dispatch(updatePreviewData({ isDispatched: false , gameId:parseInt(id)}));
-    }
-  }, [gameid, isDispatched]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -360,11 +360,11 @@ const ScreenPreview = () => {
     let count = 0;
     const prefix = 'playerCharacterImage_';
     // Check if any key in the object starts with the given prefix
-    Object.keys(preloadedAssets).forEach(key => {
+    Object.keys(preloadedAssets).forEach((key) => {
       if (key.startsWith(prefix)) {
         count++;
       }
-    })
+    });
     // If count is 0, return null or handle the case appropriately
     if (count === 0) {
       return null;
@@ -374,18 +374,6 @@ const ScreenPreview = () => {
     setSelectedPlayer(preloadedAssets.selectedPlayerKey);
     // return preloadedAssets.selectedPlayerKey;
   }, [preloadedAssets]);
-  useEffect(() => {
-    if (gameInfo && preloadedAssets) {
-      setContentReady(true);
-    } else {
-      setContentReady(false);
-    }
-  }, [gameInfo, preloadedAssets]);
-
-  useEffect(() => {
-    dispatch(updatePreviewData({ isDispatched: false ,gameId:parseInt(id)}));
-  }, [CompKeyCount]);
-
 
   const prevData = (current: any) => {
     const quest = current ? current?.blockPrimarySequence.split('.')[0] : null;
@@ -397,12 +385,12 @@ const ScreenPreview = () => {
       const newTrackSequence = navTrack[navTrack.length - 1];
       const prevBlock = current
         ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) =>
-              demoBlocks[quest]?.[key]?.blockPrimarySequence ==
-              newTrackSequence,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
+            .filter(
+              (key) =>
+                demoBlocks[quest]?.[key]?.blockPrimarySequence ==
+                newTrackSequence,
+            )
+            .map((key: any) => demoBlocks[quest]?.[key])
         : [];
       if (
         prevBlock.length !== 0 &&
@@ -445,10 +433,10 @@ const ScreenPreview = () => {
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
-        .filter(
-          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-        )
-        .map((key: any) => demoBlocks[quest]?.[key])
+          .filter(
+            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
       : [];
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
@@ -470,10 +458,7 @@ const ScreenPreview = () => {
       setOptions(optionsFiltered);
     }
 
-    if (
-      type === 'Interaction' &&
-      resMsg !== ''
-    ) {
+    if (type === 'Interaction' && resMsg !== '') {
       setType('response');
       return false;
     } else if (
@@ -489,7 +474,8 @@ const ScreenPreview = () => {
       type === 'feedback'
     ) {
       if (navi === 'Repeat Question') {
-        const currentBlockinteraction = gameInfo?.blocks[currentQuest][currentBlock];
+        const currentBlockinteraction =
+          gameInfo?.blocks[currentQuest][currentBlock];
         setInteractionOptions(gameInfo, currentBlockinteraction);
         setType(next?.blockChoosen);
         setData(next);
@@ -522,7 +508,9 @@ const ScreenPreview = () => {
           if (selectedNext[0]?.blockChoosen === 'Interaction') {
             const optionsFiltered = [];
             for (const option of gameInfo.questOptions) {
-              if (option?.qpSequence === selectedNext[0]?.blockPrimarySequence) {
+              if (
+                option?.qpSequence === selectedNext[0]?.blockPrimarySequence
+              ) {
                 optionsFiltered.push(option);
               }
             }
@@ -540,8 +528,7 @@ const ScreenPreview = () => {
           setData(selectedNext && selectedNext[0]);
           setSelectedOption(null);
           return false;
-        }
-        else {
+        } else {
           setType(nextBlock[0]?.blockChoosen);
           if (nextBlock[0]?.blockChoosen === 'Interaction') {
             const optionsFiltered = [];
@@ -620,7 +607,9 @@ const ScreenPreview = () => {
           if (selectedNext[0]?.blockChoosen === 'Interaction') {
             const optionsFiltered = [];
             for (const option of gameInfo.questOptions) {
-              if (option?.qpSequence === selectedNext[0]?.blockPrimarySequence) {
+              if (
+                option?.qpSequence === selectedNext[0]?.blockPrimarySequence
+              ) {
                 optionsFiltered.push(option);
               }
             }
@@ -636,8 +625,7 @@ const ScreenPreview = () => {
             setOptions(optionsFiltered);
           }
           setData(selectedNext && selectedNext[0]);
-        }
-        else {
+        } else {
           setType(nextBlock[0]?.blockChoosen);
           if (nextBlock[0]?.blockChoosen === 'Interaction') {
             const optionsFiltered = [];
@@ -659,10 +647,10 @@ const ScreenPreview = () => {
           }
           setData(nextBlock[0]);
         }
-        setGame3Position((prev: any) => ({
-          ...prev,
-          nextBlock: selectedNext[0]?.blockPrimarySequence,
-        }));
+        // setGame3Position((prev: any) => ({
+        //   ...prev,
+        //   nextBlock: selectedNext[0]?.blockPrimarySequence,
+        // }));
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
@@ -688,7 +676,6 @@ const ScreenPreview = () => {
   };
   useEffect(() => {
     if (data && type) {
-
       /** this logic is used to hanlde the navigation options in both forward and backward navigation */
       if (gameInfo.hasOwnProperty('blocks')) {
         let previousPrimarySeq = navTrack[navTrack.length - 1];
@@ -724,11 +711,10 @@ const ScreenPreview = () => {
   const Updatecontent = () => {
     if (showTypingEffect === false) {
       setShowTypingEffect(true);
-    }
-    else {
+    } else {
       getData(data);
     }
-  }
+  };
   const handleCloseWindow = () => {
     window.close();
   };
@@ -736,535 +722,204 @@ const ScreenPreview = () => {
   const SkipContentForBackNavigation = () => {
     if (showTypingEffect === false) {
       setShowTypingEffect(true);
+    } else {
+      prevData(data);
     }
-    else {
-      prevData(data)
-    }
-  }
+  };
 
   const getNoteNextData = () => {
     setIsPrevNavigation(false);
-    getData(data)
-  }
+    getData(data);
+  };
+
   useEffect(() => {
-    // Check if playerId is defined before making the API call
-
-
-    const data = {
-      previewGameId: gameid,
-      playerId: user?.data?.id,
-      playerType: user?.data?.id ? 'creator' : null,
-
+    if (gameInfo && preloadedAssets && componentsLoaded) {
+      setContentReady(true);
+    } else {
+      setContentReady(false);
+      if (gameInfo === undefined) {
+        setErrMessage('Insufficient data to display the preview');
+        setShowPromptScreen(true);
+      }
     }
-    if (data) {
-      const getPreviewLogs = async () => {
-        try {
-          // Make API call to get preview logs data
-          const previewData = JSON.stringify(data)
-          const gameContentResult = await getPreviewLogsData(previewData);
-          if (gameContentResult && gameContentResult.playerInputs) {
-            const { playerInputs } = gameContentResult;
-            const parsedInputs = JSON.parse(playerInputs);
+  }, [gameInfo, preloadedAssets, componentsLoaded]);
 
-            if (parsedInputs && parsedInputs.Reflection && Array.isArray(parsedInputs.Reflection)) {
-              // Use map to iterate over the Reflection array
-              const reflectionItems = parsedInputs.Reflection.map((reflection: any, index: any) => {
-                const refKey = `ref${index + 1}`; // Generate the key based on index
-                const refValue = reflection[refKey]; // Get the value corresponding to the key
-                // Perform any action with the reflection item (e.g., log it)
-                console.log(`${refKey}: ${refValue}`);
-
-                // Return the processed item if needed
-                return { [refKey]: refValue }; // Return an object with the key and value
-              });
-              setRefelectionAnswer(reflectionItems);
-              // Use reflectionItems as needed within the component
-            }
-            if (parsedInputs && parsedInputs.ThankYou)
-              {
-                console.log('parsedInputs.ThankYou',parsedInputs.ThankYou);
-                const Thankyoufeedback = parsedInputs.ThankYou;
-                setThankyouFeedback(Thankyoufeedback);
-              }
-          }
-
-
-          // Handle the result as needed
-        } catch (error) {
-          // Handle errors
-          console.error("Error fetching preview logs:", error);
+  useEffect(() => {
+    if (contentReady && gameInfo) {
+      if (previewStateData && previewStateData?.gameId) {
+        if ([1, 2, 3, 6].includes(previewStateData?.currentTab)) {
+          setErrMessage('Preview Not Avilable for this selection');
+          setShowPromptScreen(true);
+        } else {
+          setErrMessage(null);
+          setShowPromptScreen(false);
         }
-      };
-
-      // Call the function to get preview logs data
-      getPreviewLogs();
+      }
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+    } else if (gameInfo === undefined) {
+      setShowPromptScreen(true);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+    } else {
+      if (previewStateData && previewStateData?.gameId) {
+        if ([1, 2, 3, 6].includes(previewStateData?.currentTab)) {
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 3000);
+          setErrMessage('Preview Not Avilable for this selection');
+          setShowPromptScreen(true);
+        } else {
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 3000);
+          setErrMessage(null);
+          setShowPromptScreen(false);
+        }
+      }
     }
-  }, [gameid]);
+  }, [contentReady, gameInfo, previewStateData]);
+
   return (
-
-    <Box id="container">
-      <Suspense fallback={<h1>Loading please wait...</h1>}>
-        {(contentReady || endOfQuest) && (
-          <motion.div
-            initial={{ opacity: 0, background: '#000' }}
-            animate={{ opacity: 1, background: '#0000' }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            <Box id="EntirePreview-wrapper">
-              <Box className="EntirePreview-content">
-                <Box h={'100vh !important'} className="Images">
-                  <Flex height="100vh" className="EntirePreview">
-                    <Button
-                      className="demo-btn"
-                      bg="#11047a"
-                      _hover={{ bg: '#190793' }}
-                      color="#fff"
-                      style={{
-                        position: 'absolute',
-                        top: '2vh',
-                        right: '0vw',
-                        pointerEvents: 'auto',
-                        zIndex: 1, // High z-index value
-                        visibility: 'visible',
-                      }}
-                      mr={'17px'}
-                      mt={'6px'}
-                      ml={'11px'}
-                      onClick={handleEntirePrev}
-                    >
-                      Demo Play
-                    </Button>
-                    {(currentTab === 1 || currentTab === 2 || currentTab === 3) && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
+    <>
+      {isLoading && <HashLoader color="#3b38e0" />}
+      <Box id="container">
+        <Suspense fallback={<HashLoader color="#3b38e0" />}>
+          {(contentReady || endOfQuest) && (
+            <motion.div
+              initial={{ opacity: 0, background: '#000' }}
+              animate={{ opacity: 1, background: '#0000' }}
+              transition={{ duration: 1, delay: 0.5 }}
+            >
+              <Box id="EntirePreview-wrapper">
+                <Box className="EntirePreview-content">
+                  <Box h={'100vh !important'} className="Images">
+                    <Flex height="100vh" className="EntirePreview">
+                      <Button
+                        className="demo-btn"
+                        bg="#11047a"
+                        _hover={{ bg: '#190793' }}
+                        color="#fff"
+                        style={{
+                          position: 'absolute',
+                          top: '2vh',
+                          right: '0vw',
+                          pointerEvents: 'auto',
+                          zIndex: 1, // High z-index value
+                          visibility: 'visible',
+                        }}
+                        mr={'17px'}
+                        mt={'6px'}
+                        ml={'11px'}
+                        onClick={handleEntirePrev}
                       >
+                        Demo Play
+                      </Button>
+                      {previewStateData?.currentTab === 4 && data === null && (
                         <Box
-                          w={'100% !important'}
+                          w={'100%'}
                           h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
                           alignItems={'center'}
                           justifyContent={'center'}
-                          className="Game-Screen"
-                          backgroundImage={preloadedAssets.backgroundImage}
+                          position={'relative'}
+                          overflow={'visible'}
+                          style={{ perspective: '1000px' }}
+                          className="Main-Content"
                         >
-                          <Box className="Images">
-                            <Text
-                              fontSize={{
-                                base: '13px',
-                                sm: '13px',
-                                md: '15px',
-                                lg: '20px',
-                              }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available</Text>
-                          </Box>
-                        </Box>
-                      </Box>
-                    )}
-                    {/*                     
-                    {currentTab === 3 && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                      >
-                        <Box
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
-                          className="Game-Screen"
-                          backgroundImage={preloadedAssets.backgroundImage}
-                        >
-                          <Box className="Images">
-
-                            <WelcomeContentScreen
-                              // backgroundImage={preloadedAssets.backgroundImage}
-                              formData={gameInfo.gameData}
-                              imageSrc={preloadedAssets?.Screen5}
-                              preview={true}
-                              preloadedAssets={preloadedAssets}
-                            />
-
-                          </Box>
-                        </Box>
-                      </Box>
-                    )} */}
-                    {currentTab === 4 && data === null && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
-                          className="Game-Screen"
-                          backgroundImage={preloadedAssets.backgroundImage}
-                        >
-                          <Box className="Images">
-                            <Text
-                              fontSize={{
-                                base: '13px',
-                                sm: '13px',
-                                md: '15px',
-                                lg: '20px',
-                              }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available("No Preview Yet
-                              Kindly add blocks to your story to generate the preview.
-                              ")</Text>
-                          </Box>
-                        </Box>
-                      </Box>
-                    )}
-                    {currentTab === 4 && data && type === 'Note' && (
-                      <Box
-                        position="relative"
-                        w={'100%'}
-                        height="100vh"
-                        backgroundImage={preloadedAssets?.backgroundImage}
-                        backgroundSize={'cover'}
-                        backgroundRepeat={'no-repeat'}
-                        className="chapter_potrait"
-                      >
-                        <Grid
-                          templateColumns="repeat(1, 1fr)"
-                          gap={4}
-                          position="absolute"
-                          top="50%"
-                          left="50%"
-                          transform="translate(-50%, -50%)"
-                          className="story_note_grid"
-                        >
-                          <GridItem colSpan={1} position={'relative'}>
-                            <Box display={'flex'} justifyContent={'center'}>
-                              <Img
-                                src={preloadedAssets?.note}
-                                className="story_note_image"
-                                loading="lazy"
-                              />
-                              <Box
-                                className={'story_note_content'}
-                              >
-                                <Box
-                                  w={'100%'}
-                                  display={'flex'}
-                                  justifyContent={'center'}
-                                >
-                                  <Box className={'story_note_block'}>
-                                    <Text textAlign={'center'}>
-                                      {data?.blockText}
-                                    </Text>
-                                  </Box>
-                                </Box>
-                                <Box
-                                  w={'100%'}
-                                  onClick={() => getNoteNextData()}
-                                  mt={'20px'}
-                                  display={'flex'}
-                                  justifyContent={'center'}
-                                  cursor={'pointer'}
-                                  position={'fixed'}
-                                  top={'70%'}
-                                >
-                                  <Img
-                                    src={preloadedAssets.next}
-                                    h={'7vh'}
-                                    className={'story_note_next_button'}
-                                  />
-                                </Box>
-                              </Box>
-                            </Box>
-                          </GridItem>
-                        </Grid>
-                      </Box>
-                    )}
-                    {currentTab === 4 && data && type === 'Dialog' && (
-                      <Box className="chapter_potrait">
-                        <Img
-                          src={preloadedAssets?.backgroundImage}
-                          className="dialogue_screen"
-                        />
-                        <Img
-                          className={'dialogue_image'}
-                          src={preloadedAssets?.dial}
-                        />
-                        {/* {!showNote && (
-                          <> */}
-                        <Box position={'relative'}>
-                          <Img
-                            src={preloadedAssets?.char}
-                            position={'fixed'}
-                            h={'100px'}
-                            w={'30%'}
-                            left={'5%'}
-                            bottom={'105px'}
-                          />
-                          <Text
-                            position={'fixed'}
-                            left={{ base: '17%', md: '18%' }}
-                            bottom={'130px'}
-                            fontSize={{ base: '30px', xl: '2vw' }}
-                            fontWeight={500}
-                            textAlign={'center'}
-                            fontFamily={'AtlantisText'}
-                            color={'#312821'}
+                          <Box
+                            w={'100% !important'}
+                            h={'100vh'}
+                            backgroundRepeat={'no-repeat'}
+                            backgroundSize={'cover'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            className="Game-Screen"
+                            backgroundImage={preloadedAssets.backgroundImage}
                           >
-                            {data.blockRoll === 'Narrator'
-                              ? data.blockRoll
-                              : gameInfo?.gameData?.gameNonPlayerName}
-                          </Text>
-                        </Box>
-                        <Box
-                          display={'flex'}
-                          position={'fixed'}
-                          alignItems={'center'}
-                          justifyContent={'space-between'}
-                          h={'61px'}
-                          overflowY={'scroll'}
-                          w={'85%'}
-                          fontSize={{ base: '19px', lg: '1.8vw' }}
-                          bottom={'38px'}
-                          fontFamily={'AtlantisContent'}
-                        >
-                          {showTypingEffect === false ? (
-                            <TypingEffect
-                              text={data?.blockText}
-                              speed={50}
-                              setSpeedIsOver={setShowTypingEffect}
+                            <ScreenPreviewErrorPrompt
+                              preloadedAssets={preloadedAssets}
+                              errMessage={`***** No preview available for the current selection. Kindly add blocks to your story to generate the preview.`}
                             />
-                          ) : (
-                            data?.blockText
-                          )}
+                          </Box>
                         </Box>
-                        <Box
-                          display={'flex'}
-                          position={'fixed'}
-                          justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
-                          w={'95%'}
-                          bottom={'0'}
-                        >
-                          {navTrack.length > 1 &&
-                            <Img
-                              src={preloadedAssets?.left}
-                              w={'70px'}
-                              h={'50px'}
-                              cursor={'pointer'}
-                              onClick={() => SkipContentForBackNavigation()}
-                            />
-                          }
-                          <Img
-                            src={preloadedAssets?.right}
-                            w={'70px'}
-                            h={'50px'}
-                            cursor={'pointer'}
-                            onClick={() => Updatecontent()}
-                          />
-                        </Box>
-                        {/* </>
-                        )} */}
-                      </Box>
-                    )}
-                    {currentTab === 4 && data && type === 'Interaction' && (
-                      <Box
-                        position="relative"
-                        w={'100%'}
-                        height="100vh"
-                        backgroundImage={preloadedAssets?.backgroundImage}
-                        backgroundSize={'cover'}
-                        backgroundRepeat={'no-repeat'}
-                        className="chapter_potrait"
-                      >
-                        <Grid
-                          templateColumns="repeat(1, 1fr)"
-                          gap={4}
-                          position="absolute"
-                          top="50%"
-                          left="50%"
-                          transform="translate(-50%, -50%)"
-                          w={'90%'}
-                        >
-                          <GridItem colSpan={1} position={'relative'}>
-                            <Box
-                              position={'relative'}
-                              className="story_interaction_image"
+                      )}
+                      {previewStateData?.currentTab === 4 &&
+                        data &&
+                        type === 'Note' && (
+                          <Box
+                            position="relative"
+                            w={'100%'}
+                            height="100vh"
+                            backgroundImage={preloadedAssets?.backgroundImage}
+                            backgroundSize={'cover'}
+                            backgroundRepeat={'no-repeat'}
+                            className="chapter_potrait"
+                          >
+                            <Grid
+                              templateColumns="repeat(1, 1fr)"
+                              gap={4}
+                              position="absolute"
+                              top="50%"
+                              left="50%"
+                              transform="translate(-50%, -50%)"
+                              className="story_note_grid"
                             >
-                              {selectedPlayer && (
-                                <Img
-                                  src={selectedPlayer}
-                                  position={'fixed'}
-                                  right={'100px'}
-                                  bottom={'-20px'}
-                                  w={'350px'}
-                                  h={'540px'}
-                                  loading="lazy"
-                                />
-                              )}
-                              {preloadedAssets?.nonplayerImage && (
-                                <Img
-                                  src={preloadedAssets?.nonplayerImage}
-                                  position={'fixed'}
-                                  right={'500px'}
-                                  bottom={'20px'}
-                                  w={'350px'}
-                                  h={'540px'}
-                                  loading="lazy"
-                                />)}
-                              <Img
-                                src={preloadedAssets?.parch}
-                                w={'auto'}
-                                h={'100%'}
-                                loading="lazy"
-                              />
-                              <Box
-                                position={'absolute'}
-                                top={{ base: '5%', md: '6%' }}
-                                className="story_interaction_content"
-                              >
-                                <Box
-                                  textAlign={'center'}
-                                  display={'flex'}
-                                  justifyContent={'center'}
-                                  alignItems={'center'}
-                                  fontWeight={500}
-                                  fontSize={{ md: '3vw', lg: '2.5vw' }}
-                                  fontFamily={'AtlantisText'}
-                                  lineHeight={1}
-                                  w={'100%'}
-                                  h={'10%'}
-                                  className={'interaction_heading_potrait'}
-                                >
-                                  <Box w={'80%'} color={'#312821'}>
-                                    Interaction{' '}
-                                  </Box>
-                                </Box>
-                                <Box
-                                  textAlign={'center'}
-                                  h={'25%'}
-                                  display={'flex'}
-                                  justifyContent={'center'}
-                                  alignItems={'center'}
-                                  fontWeight={500}
-                                  fontFamily={'AtlantisText'}
-                                  lineHeight={1}
-                                  w={'96%'}
-                                  overflowY={'scroll'}
-                                  marginTop={'15px'}
-                                >
-                                  <Box className={'story_intraction_question'}>
-                                    {data?.blockText}
-                                  </Box>
-                                </Box>
-                                <Box
-                                  mt={'10px'}
-                                  w={'100%'}
-                                  h={'40%'}
-                                  fontWeight={500}
-                                  overflowY={'scroll'}
-                                  display={'flex'}
-                                  justifyContent={'center'}
-                                >
-                                  <Box w={'60%'}>
-                                    {options &&
-                                      options.map((item: any, ind: number) => (
-                                        <Box
-                                          w={'100%'}
-                                          mb={'10px'}
-                                          lineHeight={1}
-                                          key={ind}
-                                          color={
-                                            selectedOption === ind
-                                              ? 'purple'
-                                              : ''
-                                          }
-                                          textAlign={'center'}
-                                          cursor={'pointer'}
-                                          onClick={() =>
-                                            handleValidate(item, ind)
-                                          }
-                                          fontFamily={'AtlantisText'}
-                                        >
-                                          <Img
-                                            src={
-                                              selectedOption === ind
-                                                ? preloadedAssets?.on
-                                                : preloadedAssets?.off
-                                            }
-                                            h={'4vh'}
-                                            w={'100%'}
-                                          />
-                                          <Box
-                                            className={
-                                              'story_interaction_option'
-                                            }
-                                          >
-                                            {/* {item?.qpOptionText} */}
-                                            {`${String.fromCharCode(65 + ind)}). ${item?.qpOptionText}`}
-                                          </Box>
-                                        </Box>
-                                      ))}
-                                  </Box>
-                                </Box>
-                                <Box
-                                  w={'98%'}
-                                  display={'flex'}
-                                  justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
-                                >
-                                  {navTrack.length > 1 &&
-                                    <Img
-                                      src={preloadedAssets?.left}
-                                      className={'interaction_button'}
-                                      onClick={() => prevData(data)}
-                                    />
-                                  }
-                                  {selectedOption !== null && (
-                                    <Box className={'blinking-wave'} onClick={() => getData(data)} borderRadius={'50%'}>
+                              <GridItem colSpan={1} position={'relative'}>
+                                <Box display={'flex'} justifyContent={'center'}>
+                                  <Img
+                                    src={preloadedAssets?.note}
+                                    className="story_note_image"
+                                    loading="lazy"
+                                  />
+                                  <Box className={'story_note_content'}>
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Box className={'story_note_block'}>
+                                        <Text textAlign={'center'}>
+                                          {data?.blockText}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={'100%'}
+                                      onClick={() => getNoteNextData()}
+                                      mt={'20px'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                      cursor={'pointer'}
+                                      position={'fixed'}
+                                      top={'70%'}
+                                    >
                                       <Img
-                                        src={preloadedAssets?.right}
-                                        className={'interaction_button'}
-                                        onClick={() => getData(data)}
+                                        src={preloadedAssets.next}
+                                        h={'7vh'}
+                                        className={'story_note_next_button'}
                                       />
                                     </Box>
-                                  )}
+                                  </Box>
                                 </Box>
-                              </Box>
-                            </Box>
-                          </GridItem>
-                        </Grid>
-                      </Box>
-                    )}
-                    {currentTab === 4 && data && type === 'response' && (
-                      <Box className="chapter_potrait">
-                        <Img
-                          src={preloadedAssets?.backgroundImage}
-                          className="dialogue_screen"
-                        />
-                        <Img
-                          className={'dialogue_image'}
-                          src={preloadedAssets?.dial}
-                        />
-                        {!showNote && (
-                          <>
+                              </GridItem>
+                            </Grid>
+                          </Box>
+                        )}
+                      {previewStateData?.currentTab === 4 &&
+                        data &&
+                        type === 'Dialog' && (
+                          <Box className="chapter_potrait">
+                            <Img
+                              src={preloadedAssets?.backgroundImage}
+                              className="dialogue_screen"
+                            />
+                            <Img
+                              className={'dialogue_image'}
+                              src={preloadedAssets?.dial}
+                            />
+
                             <Box position={'relative'}>
                               <Img
                                 src={preloadedAssets?.char}
@@ -1272,13 +927,13 @@ const ScreenPreview = () => {
                                 h={'100px'}
                                 w={'30%'}
                                 left={'5%'}
-                                bottom={'93px'}
+                                bottom={'105px'}
                               />
                               <Text
                                 position={'fixed'}
                                 left={{ base: '17%', md: '18%' }}
-                                bottom={'118px'}
-                                fontSize={{ base: '30px', xl: '2.2vw' }}
+                                bottom={'130px'}
+                                fontSize={{ base: '30px', xl: '2vw' }}
                                 fontWeight={500}
                                 textAlign={'center'}
                                 fontFamily={'AtlantisText'}
@@ -1286,6 +941,8 @@ const ScreenPreview = () => {
                               >
                                 {data.blockRoll === 'Narrator'
                                   ? data.blockRoll
+                                  : data.blockRoll === '999999'
+                                  ? 'Player Name'
                                   : gameInfo?.gameData?.gameNonPlayerName}
                               </Text>
                             </Box>
@@ -1297,27 +954,38 @@ const ScreenPreview = () => {
                               h={'61px'}
                               overflowY={'scroll'}
                               w={'85%'}
-                              fontSize={{ base: '30px', lg: '1.8vw' }}
+                              fontSize={{ base: '19px', lg: '1.8vw' }}
                               bottom={'38px'}
                               fontFamily={'AtlantisContent'}
                             >
                               {showTypingEffect === false ? (
                                 <TypingEffect
-                                  text={resMsg}
+                                  text={data?.blockText}
                                   speed={50}
                                   setSpeedIsOver={setShowTypingEffect}
                                 />
                               ) : (
-                                resMsg
+                                data?.blockText
                               )}
                             </Box>
                             <Box
                               display={'flex'}
                               position={'fixed'}
-                              justifyContent={'end'}
+                              justifyContent={
+                                navTrack.length > 1 ? 'space-between' : 'end'
+                              }
                               w={'95%'}
                               bottom={'0'}
                             >
+                              {navTrack.length > 1 && (
+                                <Img
+                                  src={preloadedAssets?.left}
+                                  w={'70px'}
+                                  h={'50px'}
+                                  cursor={'pointer'}
+                                  onClick={() => SkipContentForBackNavigation()}
+                                />
+                              )}
                               <Img
                                 src={preloadedAssets?.right}
                                 w={'70px'}
@@ -1326,437 +994,667 @@ const ScreenPreview = () => {
                                 onClick={() => Updatecontent()}
                               />
                             </Box>
-                          </>
+                            {/* </>
+                          )} */}
+                          </Box>
                         )}
-                      </Box>
-                    )}
-                    {currentTab === 4 && data && type === 'feedback' && (
-                      <Box
-                        position="relative"
-                        w={'100%'}
-                        height="100vh"
-                        backgroundImage={preloadedAssets?.backgroundImage}
-                        backgroundSize={'cover'}
-                        backgroundRepeat={'no-repeat'}
-                        className="chapter_potrait"
-                      >
-                        <Grid
-                          templateColumns="repeat(1, 1fr)"
-                          gap={4}
-                          position="absolute"
-                          top="50%"
-                          left="50%"
-                          transform="translate(-50%, -50%)"
-                          className="story_note_grid"
-                        >
-                          <GridItem colSpan={1} position={'relative'}>
-                            <Box display={'flex'} justifyContent={'center'}>
-                              <Img
-                                src={preloadedAssets?.feedi}
-                                className="story_note_image"
-                                loading="lazy"
-                              />
-                              <Box
-                                className={'story_note_content'}
-                              // bg={'blue.300'}
-                              >
+                      {previewStateData?.currentTab === 4 &&
+                        data &&
+                        type === 'Interaction' && (
+                          <Box
+                            position="relative"
+                            w={'100%'}
+                            height="100vh"
+                            backgroundImage={preloadedAssets?.backgroundImage}
+                            backgroundSize={'cover'}
+                            backgroundRepeat={'no-repeat'}
+                            className="chapter_potrait"
+                          >
+                            <Grid
+                              templateColumns="repeat(1, 1fr)"
+                              gap={4}
+                              position="absolute"
+                              top="50%"
+                              left="50%"
+                              transform="translate(-50%, -50%)"
+                              w={'90%'}
+                            >
+                              <GridItem colSpan={1} position={'relative'}>
                                 <Box
-                                  w={'100%'}
-                                  display={'flex'}
-                                  justifyContent={'center'}
+                                  position={'relative'}
+                                  className="story_interaction_image"
                                 >
-                                  <Box className={'story_note_block'}>
-                                    <Text textAlign={'center'}>{feed}</Text>
+                                  {selectedPlayer && (
+                                    <Img
+                                      src={selectedPlayer}
+                                      position={'fixed'}
+                                      right={'100px'}
+                                      bottom={'-20px'}
+                                      w={'350px'}
+                                      h={'540px'}
+                                      loading="lazy"
+                                    />
+                                  )}
+                                  {preloadedAssets?.nonplayerImage && (
+                                    <Img
+                                      src={preloadedAssets?.nonplayerImage}
+                                      position={'fixed'}
+                                      right={'500px'}
+                                      bottom={'20px'}
+                                      w={'350px'}
+                                      h={'540px'}
+                                      loading="lazy"
+                                    />
+                                  )}
+                                  <Img
+                                    src={preloadedAssets?.parch}
+                                    w={'auto'}
+                                    h={'100%'}
+                                    loading="lazy"
+                                  />
+                                  <Box
+                                    position={'absolute'}
+                                    top={{ base: '5%', md: '6%' }}
+                                    className="story_interaction_content"
+                                  >
+                                    <Box
+                                      textAlign={'center'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                      alignItems={'center'}
+                                      fontWeight={500}
+                                      fontSize={{ md: '3vw', lg: '2.5vw' }}
+                                      fontFamily={'AtlantisText'}
+                                      lineHeight={1}
+                                      w={'100%'}
+                                      h={'10%'}
+                                      className={'interaction_heading_potrait'}
+                                    >
+                                      <Box w={'80%'} color={'#312821'}>
+                                        Interaction{' '}
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      textAlign={'center'}
+                                      h={'25%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                      alignItems={'center'}
+                                      fontWeight={500}
+                                      fontFamily={'AtlantisText'}
+                                      lineHeight={1}
+                                      w={'96%'}
+                                      overflowY={'scroll'}
+                                      marginTop={'15px'}
+                                    >
+                                      <Box
+                                        className={'story_intraction_question'}
+                                      >
+                                        {data?.blockText}
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      mt={'10px'}
+                                      w={'100%'}
+                                      h={'40%'}
+                                      fontWeight={500}
+                                      overflowY={'scroll'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Box w={'60%'}>
+                                        {options &&
+                                          options.map(
+                                            (item: any, ind: number) => (
+                                              <Box
+                                                w={'100%'}
+                                                mb={'10px'}
+                                                lineHeight={1}
+                                                key={ind}
+                                                color={
+                                                  selectedOption === ind
+                                                    ? 'purple'
+                                                    : ''
+                                                }
+                                                textAlign={'center'}
+                                                cursor={'pointer'}
+                                                onClick={() =>
+                                                  handleValidate(item, ind)
+                                                }
+                                                fontFamily={'AtlantisText'}
+                                              >
+                                                <Img
+                                                  src={
+                                                    selectedOption === ind
+                                                      ? preloadedAssets?.on
+                                                      : preloadedAssets?.off
+                                                  }
+                                                  h={'4vh'}
+                                                  w={'100%'}
+                                                />
+                                                <Box
+                                                  className={
+                                                    'story_interaction_option'
+                                                  }
+                                                >
+                                                  {/* {item?.qpOptionText} */}
+                                                  {`${String.fromCharCode(
+                                                    65 + ind,
+                                                  )}). ${item?.qpOptionText}`}
+                                                </Box>
+                                              </Box>
+                                            ),
+                                          )}
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={'98%'}
+                                      display={'flex'}
+                                      justifyContent={
+                                        navTrack.length > 1
+                                          ? 'space-between'
+                                          : 'end'
+                                      }
+                                    >
+                                      {navTrack.length > 1 && (
+                                        <Img
+                                          src={preloadedAssets?.left}
+                                          className={'interaction_button'}
+                                          onClick={() => prevData(data)}
+                                        />
+                                      )}
+                                      {selectedOption !== null && (
+                                        <Box
+                                          className={'blinking-wave'}
+                                          onClick={() => getData(data)}
+                                          borderRadius={'50%'}
+                                        >
+                                          <Img
+                                            src={preloadedAssets?.right}
+                                            className={'interaction_button'}
+                                            onClick={() => getData(data)}
+                                          />
+                                        </Box>
+                                      )}
+                                    </Box>
                                   </Box>
                                 </Box>
+                              </GridItem>
+                            </Grid>
+                          </Box>
+                        )}
+                      {previewStateData?.currentTab === 4 &&
+                        data &&
+                        type === 'response' && (
+                          <Box className="chapter_potrait">
+                            <Img
+                              src={preloadedAssets?.backgroundImage}
+                              className="dialogue_screen"
+                            />
+                            <Img
+                              className={'dialogue_image'}
+                              src={preloadedAssets?.dial}
+                            />
+                            {!showNote && (
+                              <>
+                                <Box position={'relative'}>
+                                  <Img
+                                    src={preloadedAssets?.char}
+                                    position={'fixed'}
+                                    h={'100px'}
+                                    w={'30%'}
+                                    left={'5%'}
+                                    bottom={'93px'}
+                                  />
+                                  <Text
+                                    position={'fixed'}
+                                    left={{ base: '17%', md: '18%' }}
+                                    bottom={'118px'}
+                                    fontSize={{ base: '30px', xl: '2.2vw' }}
+                                    fontWeight={500}
+                                    textAlign={'center'}
+                                    fontFamily={'AtlantisText'}
+                                    color={'#312821'}
+                                  >
+                                    {/* {data.blockRoll === 'Narrator'
+                                    ? data.blockRoll
+                                    : gameInfo?.gameData?.gameNonPlayerName} */}
+                                    {data.blockRoll === 'Narrator'
+                                      ? data.blockRoll
+                                      : data.blockRoll === '999999'
+                                      ? 'Player Name'
+                                      : gameInfo?.gameData?.gameNonPlayerName}
+                                  </Text>
+                                </Box>
                                 <Box
-                                  w={'100%'}
-                                  onClick={() => getData(data)}
-                                  mt={'20px'}
                                   display={'flex'}
-                                  justifyContent={'center'}
-                                  cursor={'pointer'}
                                   position={'fixed'}
-                                  top={'70%'}
+                                  alignItems={'center'}
+                                  justifyContent={'space-between'}
+                                  h={'61px'}
+                                  overflowY={'scroll'}
+                                  w={'85%'}
+                                  fontSize={{ base: '30px', lg: '1.8vw' }}
+                                  bottom={'38px'}
+                                  fontFamily={'AtlantisContent'}
+                                >
+                                  {showTypingEffect === false ? (
+                                    <TypingEffect
+                                      text={resMsg}
+                                      speed={50}
+                                      setSpeedIsOver={setShowTypingEffect}
+                                    />
+                                  ) : (
+                                    resMsg
+                                  )}
+                                </Box>
+                                <Box
+                                  display={'flex'}
+                                  position={'fixed'}
+                                  justifyContent={'end'}
+                                  w={'95%'}
+                                  bottom={'0'}
                                 >
                                   <Img
-                                    src={preloadedAssets.next}
-                                    h={'7vh'}
-                                    className={'story_note_next_button'}
+                                    src={preloadedAssets?.right}
+                                    w={'70px'}
+                                    h={'50px'}
+                                    cursor={'pointer'}
+                                    onClick={() => Updatecontent()}
                                   />
                                 </Box>
-                              </Box>
-                            </Box>
-                          </GridItem>
-                        </Grid>
-                      </Box>
-                    )}
-                    {currentTab === 5 && currentSubTab === 0 && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
-                          className="Game-Screen"
-                          backgroundImage={preloadedAssets.backgroundImage}
-                        >
-                          <Box className="Images">
-                            <CompletionContentScreen
-                              preview={true}
-                              formData={gameInfo.gameData}
-                              imageSrc={preloadedAssets.Completion}
-                              compliData={gameInfo.completionQuestOptions}
-                              CompKeyCount={CompKeyCount}
-                              preloadedAssets={preloadedAssets}
-                            />
+                              </>
+                            )}
                           </Box>
-                        </Box>
-                      </Box>
-                    )}
-                    {currentTab === 5 && currentSubTab === 1 && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
-                          className="Game-Screen"
-                          backgroundImage={preloadedAssets.backgroundImage}
-                        >
-                          <Box className="Images">
-                            <Box className="LearderBoards">
-                              {gameInfo.gameData.gameIsShowLeaderboard === "true" ? <LeaderBoard
-                                formData={gameInfo?.gameData}
-                                imageSrc={preloadedAssets.Lead}
-                                getData={getData}
-                                data={data}
-                                preloadedAssets={preloadedAssets}
-                              /> : <Box><Text
-                                fontSize={{
-                                  base: '13px',
-                                  sm: '13px',
-                                  md: '15px',
-                                  lg: '20px',
-                                }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available ("The Leadboard screen preview will appear once you complete the story and head to the design section to Enable the Leadboard Screen.")</Text></Box>}
-
-                            </Box>
-                          </Box>
-                        </Box>
-                      </Box>
-                    )}
-                    {currentTab === 5 && currentSubTab === 2 && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box className="Game-Screen">
-                          <Box className="Images">
-                            {gameInfo.gameData.gameIsShowReflectionScreen === "true" ? <ReflectionContentScreen
-                              preview={true}
-                              formData={gameInfo.gameData}
-                              imageSrc={preloadedAssets?.RefBg}
-                              reflectionQuestions={
-                                gameInfo?.reflectionQuestions
-                              }
-                              reflectionQuestionsdefault={
-                                reflectionQuestionsdefault
-                              }
-                              preloadedAssets={preloadedAssets}
-                              RefelectionAnswer={RefelectionAnswer}
-                            /> :
-                              <Box
-                                w={'100%'}
-                                h={'100vh'}
-                                alignItems={'center'}
-                                justifyContent={'center'}
-                                position={'relative'}
-                                overflow={'visible'}
-                                style={{ perspective: '1000px' }}
-                                className="Main-Content"
-                              >
-                                <Box
-                                  w={'100% !important'}
-                                  h={'100vh'}
-                                  backgroundRepeat={'no-repeat'}
-                                  backgroundSize={'cover'}
-                                  alignItems={'center'}
-                                  justifyContent={'center'}
-                                  className="Game-Screen"
-                                  backgroundImage={preloadedAssets.backgroundImage}
-                                >
-                                  <Box className="Images">
-                                    <Text
-                                      fontSize={{
-                                        base: '13px',
-                                        sm: '13px',
-                                        md: '15px',
-                                        lg: '20px',
-                                      }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available("The Reflection screen preview will appear once you complete the story and head to the design section to enable the Reflection screen.")</Text>
+                        )}
+                      {previewStateData?.currentTab === 4 &&
+                        data &&
+                        type === 'feedback' && (
+                          <Box
+                            position="relative"
+                            w={'100%'}
+                            height="100vh"
+                            backgroundImage={preloadedAssets?.backgroundImage}
+                            backgroundSize={'cover'}
+                            backgroundRepeat={'no-repeat'}
+                            className="chapter_potrait"
+                          >
+                            <Grid
+                              templateColumns="repeat(1, 1fr)"
+                              gap={4}
+                              position="absolute"
+                              top="50%"
+                              left="50%"
+                              transform="translate(-50%, -50%)"
+                              className="story_note_grid"
+                            >
+                              <GridItem colSpan={1} position={'relative'}>
+                                <Box display={'flex'} justifyContent={'center'}>
+                                  <Img
+                                    src={preloadedAssets?.feedi}
+                                    className="story_note_image"
+                                    loading="lazy"
+                                  />
+                                  <Box
+                                    className={'story_note_content'}
+                                    // bg={'blue.300'}
+                                  >
+                                    <Box
+                                      w={'100%'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                    >
+                                      <Box className={'story_note_block'}>
+                                        <Text textAlign={'center'}>{feed}</Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={'100%'}
+                                      onClick={() => getData(data)}
+                                      mt={'20px'}
+                                      display={'flex'}
+                                      justifyContent={'center'}
+                                      cursor={'pointer'}
+                                      position={'fixed'}
+                                      top={'70%'}
+                                    >
+                                      <Img
+                                        src={preloadedAssets.next}
+                                        h={'7vh'}
+                                        className={'story_note_next_button'}
+                                      />
+                                    </Box>
                                   </Box>
                                 </Box>
+                              </GridItem>
+                            </Grid>
+                          </Box>
+                        )}
+                      {previewStateData?.currentTab === 5 &&
+                        previewStateData?.currentSubTab === 0 && (
+                          <Box
+                            w={'100%'}
+                            h={'100vh'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            position={'relative'}
+                            overflow={'visible'}
+                            style={{ perspective: '1000px' }}
+                            className="Main-Content"
+                          >
+                            <Box
+                              w={'100% !important'}
+                              h={'100vh'}
+                              backgroundRepeat={'no-repeat'}
+                              backgroundSize={'cover'}
+                              alignItems={'center'}
+                              justifyContent={'center'}
+                              className="Game-Screen"
+                              backgroundImage={preloadedAssets.backgroundImage}
+                            >
+                              <Box className="Images">
+                                <CompletionContentScreen
+                                  preview={true}
+                                  formData={gameInfo.gameData}
+                                  imageSrc={preloadedAssets.Completion}
+                                  compliData={gameInfo.completionQuestOptions}
+                                  CompKeyCount={previewStateData?.CompKeyCount}
+                                  preloadedAssets={preloadedAssets}
+                                />
                               </Box>
-                            }
+                            </Box>
                           </Box>
-                        </Box>
-                      </Box>
-                    )}
-                    {currentTab === 5 && currentSubTab === 3 && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
+                        )}
+                      {previewStateData?.currentTab === 5 &&
+                        previewStateData?.currentSubTab === 1 && (
+                          <Box
+                            w={'100%'}
+                            h={'100vh'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            position={'relative'}
+                            overflow={'visible'}
+                            style={{ perspective: '1000px' }}
+                            className="Main-Content"
+                          >
+                            <Box
+                              w={'100% !important'}
+                              h={'100vh'}
+                              backgroundRepeat={'no-repeat'}
+                              backgroundSize={'cover'}
+                              alignItems={'center'}
+                              justifyContent={'center'}
+                              className="Game-Screen"
+                              backgroundImage={preloadedAssets.backgroundImage}
+                            >
+                              {gameInfo.gameData.gameIsShowLeaderboard ===
+                              'true' ? (
+                                <Box className="Images">
+                                  <Box className="LearderBoards">
+                                    <LeaderBoard
+                                      formData={gameInfo?.gameData}
+                                      imageSrc={preloadedAssets.Lead}
+                                      getData={getData}
+                                      data={data}
+                                      preloadedAssets={preloadedAssets}
+                                    />
+                                  </Box>
+                                </Box>
+                              ) : (
+                                <ScreenPreviewErrorPrompt
+                                  preloadedAssets={preloadedAssets}
+                                  errMessage={`No preview available for the current selection. The Leadboard screen preview will appear once you complete the story and head to the design section to Enable the Leadboard Screen.`}
+                                />
+                              )}
+                            </Box>
+                          </Box>
+                        )}
+                      {previewStateData?.currentTab === 5 &&
+                        previewStateData?.currentSubTab === 2 && (
+                          <Box
+                            w={'100%'}
+                            h={'100vh'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            position={'relative'}
+                            overflow={'visible'}
+                            style={{ perspective: '1000px' }}
+                            className="Main-Content"
+                          >
+                            <Box className="Game-Screen">
+                              <Box className="Images">
+                                {gameInfo.gameData
+                                  .gameIsShowReflectionScreen === 'true' ? (
+                                  <ReflectionContentScreen
+                                    preview={true}
+                                    formData={gameInfo.gameData}
+                                    imageSrc={preloadedAssets?.RefBg}
+                                    reflectionQuestions={
+                                      gameInfo?.reflectionQuestions
+                                    }
+                                    reflectionQuestionsdefault={
+                                      reflectionQuestionsdefault
+                                    }
+                                    preloadedAssets={preloadedAssets}
+                                    RefelectionAnswer={RefelectionAnswer}
+                                  />
+                                ) : (
+                                  <Box
+                                    w={'100%'}
+                                    h={'100vh'}
+                                    alignItems={'center'}
+                                    justifyContent={'center'}
+                                    position={'relative'}
+                                    overflow={'visible'}
+                                    style={{ perspective: '1000px' }}
+                                    className="Main-Content"
+                                  >
+                                    <Box
+                                      w={'100% !important'}
+                                      h={'100vh'}
+                                      backgroundRepeat={'no-repeat'}
+                                      backgroundSize={'cover'}
+                                      alignItems={'center'}
+                                      justifyContent={'center'}
+                                      className="Game-Screen"
+                                      backgroundImage={
+                                        preloadedAssets.backgroundImage
+                                      }
+                                    >
+                                      <ScreenPreviewErrorPrompt
+                                        preloadedAssets={preloadedAssets}
+                                        errMessage={`No preview available for the current selection. The Reflection screen preview will appear once you complete the story and head to the design section to enable the Reflection screen.`}
+                                      />
+                                    </Box>
+                                  </Box>
+                                )}
+                              </Box>
+                            </Box>
+                          </Box>
+                        )}
+                      {previewStateData?.currentTab === 5 &&
+                        previewStateData?.currentSubTab === 3 && (
+                          <Box
+                            w={'100%'}
+                            h={'100vh'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            position={'relative'}
+                            overflow={'visible'}
+                            style={{ perspective: '1000px' }}
+                            className="Main-Content"
+                          >
+                            <Box
+                              w={'100% !important'}
+                              h={'100vh'}
+                              backgroundRepeat={'no-repeat'}
+                              backgroundSize={'cover'}
+                              alignItems={'center'}
+                              justifyContent={'center'}
+                              className="Game-Screen"
+                              backgroundImage={preloadedAssets.backgroundImage}
+                            >
+                              <Box className="Images">
+                                {gameInfo.gameData.gameIsShowTakeaway ===
+                                'true' ? (
+                                  <TakeAwaysContentScreen
+                                    preview={true}
+                                    formData={gameInfo.gameData}
+                                    imageSrc={preloadedAssets?.Screen4}
+                                    preloadedAssets={preloadedAssets}
+                                  />
+                                ) : (
+                                  <ScreenPreviewErrorPrompt
+                                    preloadedAssets={preloadedAssets}
+                                    errMessage={`No preview available for the current selection. The Takeaway screen preview will appear once you complete the story and head to the design section to create the Takeaway screen.`}
+                                  />
+                                )}
+                              </Box>
+                            </Box>
+                          </Box>
+                        )}
+                      {previewStateData?.currentTab === 5 &&
+                        previewStateData?.currentSubTab === 4 && (
+                          <Box
+                            w={'100%'}
+                            h={'100vh'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            position={'relative'}
+                            overflow={'visible'}
+                            style={{ perspective: '1000px' }}
+                            className="Main-Content"
+                          >
+                            <Box
+                              w={'100% !important'}
+                              h={'100vh'}
+                              backgroundRepeat={'no-repeat'}
+                              backgroundSize={'cover'}
+                              alignItems={'center'}
+                              justifyContent={'center'}
+                              className="Game-Screen"
+                              backgroundImage={preloadedAssets.backgroundImage}
+                            >
+                              <Box className="Images">
+                                <WelcomeContentScreen
+                                  formData={gameInfo.gameData}
+                                  imageSrc={preloadedAssets?.Screen5}
+                                  preview={true}
+                                  preloadedAssets={preloadedAssets}
+                                />
+                              </Box>
+                            </Box>
+                          </Box>
+                        )}
+                      {previewStateData?.currentTab === 5 &&
+                        previewStateData?.currentSubTab === 5 && (
+                          <Box
+                            w={'100%'}
+                            h={'100vh'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            position={'relative'}
+                            overflow={'visible'}
+                            style={{ perspective: '1000px' }}
+                            className="Main-Content"
+                          >
+                            <Box
+                              w={'100% !important'}
+                              h={'100vh'}
+                              backgroundRepeat={'no-repeat'}
+                              backgroundSize={'cover'}
+                              alignItems={'center'}
+                              justifyContent={'center'}
+                              className="Game-Screen"
+                              backgroundImage={preloadedAssets.backgroundImage}
+                            >
+                              <Box className="Images">
+                                <TyContentScreen
+                                  formData={gameInfo.gameData}
+                                  imageSrc={preloadedAssets?.Screen6}
+                                  preview={true}
+                                  preloadedAssets={preloadedAssets}
+                                  ThankyouFeedback={ThankyouFeedback}
+                                />
+                              </Box>
+                            </Box>
+                          </Box>
+                        )}
+
+                      {showPromptScreen && (
                         <Box
-                          w={'100% !important'}
+                          w={'100%'}
                           h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
                           alignItems={'center'}
                           justifyContent={'center'}
-                          className="Game-Screen"
-                          backgroundImage={preloadedAssets.backgroundImage}
+                          position={'absolute'}
+                          overflow={'visible'}
+                          style={{ perspective: '1000px' }}
+                          className="Main-Content"
+                          top={0}
                         >
-                          <Box className="Images">
-                            {gameInfo.gameData.gameIsShowTakeaway === "true" ? <TakeAwaysContentScreen
-                              preview={true}
-                              formData={gameInfo.gameData}
-                              imageSrc={preloadedAssets?.Screen4}
+                          <Box
+                            w={'100% !important'}
+                            h={'100vh'}
+                            backgroundRepeat={'no-repeat'}
+                            backgroundSize={'cover'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            className="Game-Screen"
+                            backgroundImage={preloadedAssets.StarsBg}
+                          >
+                            <ScreenPreviewErrorPrompt
                               preloadedAssets={preloadedAssets}
-                            /> : <Box><Text
-                              fontSize={{
-                                base: '13px',
-                                sm: '13px',
-                                md: '15px',
-                                lg: '20px',
-                              }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available ("The Takeaway screen preview will appear once you complete the story and head to the design section to create the Takeaway screen.")</Text></Box>}
-
-                          </Box>
-                        </Box>
-                      </Box>
-                    )}
-                    {currentTab === 5 && currentSubTab === 4 && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
-                          className="Game-Screen"
-                          backgroundImage={preloadedAssets.backgroundImage}
-                        >
-                          <Box className="Images">
-
-                            <WelcomeContentScreen
-                              formData={gameInfo.gameData}
-                              imageSrc={preloadedAssets?.Screen5}
-                              preview={true}
-                              preloadedAssets={preloadedAssets}
+                              errMessage={
+                                errMessage ||
+                                'Insufficient data to display the preview'
+                              }
                             />
                           </Box>
                         </Box>
-                      </Box>
-                    )}
-                    {currentTab === 5 && currentSubTab === 5 && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
-                          className="Game-Screen"
-                          backgroundImage={preloadedAssets.backgroundImage}
-                        >
-                          <Box className="Images">
-                            <TyContentScreen
-                              formData={gameInfo.gameData}
-                              imageSrc={preloadedAssets?.Screen6}
-                              preview={true}
-                              preloadedAssets={preloadedAssets}
-                              ThankyouFeedback={ThankyouFeedback}
-                            />
-                          </Box>
-                        </Box>
-                      </Box>
-                    )}
-                    {currentTab === 6 && currentSubTab === 5 && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
-                          className="Game-Screen"
-                          backgroundImage={preloadedAssets.backgroundImage}
-                        >
-                          <Box className="Images">
-                            <Text
-                              fontSize={{
-                                base: '13px',
-                                sm: '13px',
-                                md: '15px',
-                                lg: '20px',
-                              }} style={{ textAlign: 'center', color: 'white' }}>Preview Is Not Available</Text>
-                          </Box>
-                        </Box>
-                      </Box>
-                    )}
-
-                    {endOfQuest && (
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box
-                          backgroundImage={preloadedAssets?.backgroundImage}
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
-                          className="Game-Screen"
-                        >
-                          <Box className="Images">
-                            <PreviewEndOfStory
-                              setEndOfQuest={setEndOfQuest}
-                              preloadedAssets={preloadedAssets}
-                              replayQuest={replayQuest}
-                            />
-                          </Box>
-                        </Box>
-                      </Box>
-                    )}
-                  </Flex>
-                </Box>
-              </Box>
-            </Box>
-          </motion.div>
-        )}
-        {gameInfo === undefined &&
-          (
-            <motion.div
-              initial={{ opacity: 0, background: '#000' }}
-              animate={{ opacity: 1, background: '#0000' }}
-              transition={{ duration: 1, delay: 0.5 }}
-            >
-              <Box id="EntirePreview-wrapper">
-                <Box className="EntirePreview-content">
-                  <Box h={'100vh !important'} className="Images">
-                    <Flex height="100vh" className="EntirePreview">
-                    <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
-                        <Box
-                          w={'100% !important'}
-                          h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
-                          className="Game-Screen"
-                          backgroundImage={preloadedAssets.backgroundImage}
-                        >
-                          <Box className="Images">
-                            <Text
-                              fontSize={{
-                                base: '13px',
-                                sm: '13px',
-                                md: '15px',
-                                lg: '20px',
-                              }} style={{ textAlign: 'center' }}>Preview Is Not Available ("No Preview Yet
-                              Kindly add blocks to your story to generate the preview.")</Text>
-                          </Box>
-                        </Box>
-                      </Box>
+                      )}
                     </Flex>
                   </Box>
                 </Box>
               </Box>
-
             </motion.div>
           )}
-      </Suspense>
-    </Box>
+
+          {showPromptScreen && (
+            <Box
+              w={'100%'}
+              h={'100vh'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              position={'absolute'}
+              overflow={'visible'}
+              style={{ perspective: '1000px' }}
+              className="Main-Content"
+              top={0}
+            >
+              <Box
+                w={'100% !important'}
+                h={'100vh'}
+                backgroundRepeat={'no-repeat'}
+                backgroundSize={'cover'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                className="Game-Screen"
+                backgroundImage={preloadedAssets.StarsBg}
+              >
+                <ScreenPreviewErrorPrompt
+                  preloadedAssets={preloadedAssets}
+                  errMessage={
+                    errMessage || 'Insufficient data to display the preview'
+                  }
+                />
+              </Box>
+            </Box>
+          )}
+        </Suspense>
+      </Box>
+    </>
   );
 };
+
 export default ScreenPreview;

@@ -55,8 +55,7 @@ export default function OrderStep(props: {
 			setProgressBlockItems(Object.values(BlockItems));
 		}
 	}, [BlockItems]);
-	console.log('BlockItems', listBlockItems);
-
+	
 	const handleNavigation = (nid: number) => {
 
 		if (nid) {
@@ -75,9 +74,7 @@ export default function OrderStep(props: {
 		e.currentTarget.style.boxShadow = 'none';
 	};
 
-	const { isOpen, onOpen, onClose } = useDisclosure();
-	// console.log('progressBlockItems',progressBlockItems)
-	// console.log('listQuest',listQuest)	
+	const { isOpen, onOpen, onClose } = useDisclosure();	
 	const handleDeleteClick = (item: any) => {
 	
 	
