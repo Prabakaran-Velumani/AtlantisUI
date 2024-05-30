@@ -784,9 +784,9 @@ const ScreenPreview = () => {
 
   return (
     <>
-      {isLoading && <HashLoader color="#3b38e0" />}
+      {isLoading && <Box className='hash-loader'><HashLoader color="#3b38e0" /></Box>}
       <Box id="container">
-        <Suspense fallback={<HashLoader color="#3b38e0" />}>
+        <Suspense fallback={''}>
           {(contentReady || endOfQuest) && (
             <motion.div
               initial={{ opacity: 0, background: '#000' }}
@@ -1587,7 +1587,7 @@ const ScreenPreview = () => {
                           h={'100vh'}
                           alignItems={'center'}
                           justifyContent={'center'}
-                          position={'absolute'}
+                          // position={'absolute'}
                           overflow={'visible'}
                           style={{ perspective: '1000px' }}
                           className="Main-Content"
@@ -1620,7 +1620,7 @@ const ScreenPreview = () => {
             </motion.div>
           )}
 
-          {showPromptScreen && (
+          {(gameInfo === undefined && showPromptScreen) && (
             <Box
               w={'100%'}
               h={'100vh'}

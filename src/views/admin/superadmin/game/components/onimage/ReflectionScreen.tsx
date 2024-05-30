@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import ref from 'assets/img/screens/refquestions.png';
 import qs from 'assets/img/screens/QS.png';
+import PreviewReflectionScreen from './PreviewReflectionScreen';
 
 interface Badge {
   gasId: number;
@@ -99,7 +100,19 @@ const ReflectionScreen: React.FC<{
     }, []);
     return (
       <>
-        {imageSrc && (
+        {preview ? 
+          <PreviewReflectionScreen 
+            formData={formData}
+            imageSrc={imageSrc}
+            reflectionQuestions={formData.gameReflectionQuestion }
+            reflectionQuestionsdefault={reflectionQuestionsdefault}
+            preloadedAssets={preloadedAssets}
+            RefelectionAnswer={RefelectionAnswer}
+            answers={answers}
+            updateAnswer={updateAnswer}            
+            isFormValid={isFormValid}            
+           />
+         : (
           <Box
             w={'100%'}
             h={'100%'}
@@ -115,7 +128,7 @@ const ReflectionScreen: React.FC<{
                     columns={{ base: 2 }}
                     spacing={2}
                     className="grid"
-                    gap={2}
+                    gap={3}
                   >
                     {Array.from(
                       { length: formData.gameReflectionQuestion },
@@ -133,11 +146,14 @@ const ReflectionScreen: React.FC<{
                               lg: '15px',
                             }}
                           >
-                            <Img src={qs} alt="ref" w={'20px'} h={'20px'} />
+                            <Img src={qs} alt="ref" w={'20px'} h={'20px'}  />
                             {preview ? (
                               <Text
                                 className="text drop"
-                                style={{ whiteSpace: 'break-spaces' }}
+                                style={{ whiteSpace: 'unset' }}
+                                fontFamily={'AtlantisText'}
+                                fontSize={'4.5vh'}
+                                letterSpacing={'0.5px'}
                               >
                                 {` ${reflectionQuestions[`ref${index + 1}`]?.padEnd(
                                   90,
@@ -188,7 +204,7 @@ const ReflectionScreen: React.FC<{
                               _focus={{ boxShadow: 'none', border: 'none' }}
                               fontFamily={'AtlantisText'}
                               value={answers[index]?.text}
-                              onChange={(e: any) => updateAnswer(e, index)}
+                              onChange={(e: any) => updateAnswer(e, index)}                                                                                                                  
                             />
                             {/* ) : null} */}
                           </Box>
