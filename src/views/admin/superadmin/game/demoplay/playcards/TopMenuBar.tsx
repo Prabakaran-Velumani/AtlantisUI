@@ -271,7 +271,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                       <Img src={preloadedAssets?.Scorebox} h={'100%'} width={'auto'} />
                       <Box position={'absolute'} display={'flex'} justifyContent={'center'} alignItems={'center'} top={0} left={'26%'} w={'68%'} h={'100%'}>
                         <Text className="score_text">
-                        {totalPoints}
+                          {totalPoints}
                         </Text>
                       </Box>
                     </Box>

@@ -165,7 +165,7 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
                 >
                   <Button
                     w={'90%'}
-                    h={'5vh'}
+                    h={{base: '6vw', sm: '6vw', lg: '5vh'}}
                     bg={'none'}
                     _hover={{ bg: 'none' }}
                     className='mouse_style'
