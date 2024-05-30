@@ -1096,11 +1096,12 @@ const ScreenPreview = () => {
                                     <Box
                                       mt={'10px'}
                                       w={'100%'}
-                                      h={'40%'}
+                                      h={'35vh'}
                                       fontWeight={500}
                                       overflowY={'scroll'}
                                       display={'flex'}
-                                      justifyContent={'center'}
+                                      justifyContent={'center'}                                      
+                                      className='scrollbar-interaction-screen-preview'                                     
                                     >
                                       <Box w={'60%'}>
                                         {options &&

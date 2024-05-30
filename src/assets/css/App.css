@@ -7097,7 +7097,10 @@ input[data-autocompleted] {
   background-size: contain;
   height: 30px;
 }
- 
+
+.scrollbar-interaction-screen-preview {
+  scrollbar-width: none;
+}
 
 .exlamatry {
   position: absolute;
@@ -7123,3 +7126,4 @@ input[data-autocompleted] {
   letter-spacing: 1px;
   margin-bottom: 2vh;
 }
+
