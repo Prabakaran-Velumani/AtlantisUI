@@ -858,7 +858,7 @@ const Story: React.FC<{
                           <Box className="feed_list"> Interaction </Box>
                           <Box
                             w={'70%'}
-                            h={'66%'}
+                            h={'60%'}
                             overflowY={'auto'}
                             className="feedback_content_text"
                           >

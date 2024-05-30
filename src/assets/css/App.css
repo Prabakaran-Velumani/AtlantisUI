@@ -3865,10 +3865,12 @@ grid-row: 1 / 2;
 
 .story_overview_block {
   width: calc(80vh - 15vh);
-  height: 30vh;
+  margin-top: 3vh;
+  height: 27vh;
   overflow-y: auto;
-  font-size: 4vh;
-  font-family: AtlantisText;
+  font-size: 3.5vh;
+  font-family: AtlantisContent;
+  letter-spacing: 1px;
   color: #D9C7A2;
   display: flex;
   justify-content: center;
@@ -3982,7 +3984,7 @@ grid-row: 1 / 2;
   transform: translateY(2%);
   width: 60%;
   letter-spacing: 0.5px;
-  font-size: 3vh;
+  font-size: 4vh;
   display: flex;
 }
 
@@ -4231,8 +4233,9 @@ grid-row: 1 / 2;
 
 .feed_list {
   text-align: center;
-  font-family: 'AtlantisContent';
-  font-size: 3vh;
+  font-family: 'AtlantisText';
+  font-size: 4vh;
+  letter-spacing: 0.5px;
 }
 
 .top-menu-home-section .progress-box .progressing .level {
@@ -4257,8 +4260,9 @@ grid-row: 1 / 2;
 
 .feedback_content_text {
   font-size: 3.5vh;
-  font-family: 'AtlantisText';
+  font-family: 'AtlantisContent';
   color: var(--dialog-title-color);
+  letter-spacing: 0.1px;
 }
 
 .scroll_hide::-webkit-scrollbar {
@@ -4399,7 +4403,7 @@ font-family: 'AtlantisContent';
   }
 
   .feed_list {
-    font-size: 3vw;
+    font-size: 4.5vw;
   }
 
   .feedback_content_text {
@@ -4624,7 +4628,7 @@ font-family: 'AtlantisContent';
     font-size: 3vw;
   }
   .story_note_block p {
-    font-size: var(--default-game-text-size-portrait);
+    font-size: 3.5vw;
   }
 
   .story_overview_title {
@@ -4633,8 +4637,9 @@ font-family: 'AtlantisContent';
 
   .story_overview_block {
     width: calc(80vw - 15vw);
-    height: 30vw;
-    font-size: 4vw;
+    height: 27vw;
+    font-size: 3.5vw;
+    margin-top: 3vw;
   }
 
   .top-menu-home-section .Setting-box .volumes.voice-volume {
@@ -4649,7 +4654,8 @@ font-family: 'AtlantisContent';
     width : calc(47vw - -20vw);
   }
   .interaction_heading_potrait {
-    font-size: 3.5vh !important;
+    font-size: 5vw !important;
+    margin-top: 2px;
   }
   .thankyou_btn{
     width: calc(77vw - (-55vw));
@@ -4679,7 +4685,7 @@ font-family: 'AtlantisContent';
 
   .story_intraction_question {
     transform: translateY(21%);
-    font-size: 3vw;
+    font-size: 4.5vw;
   }
 
   .screenshot_content {
@@ -4687,7 +4693,7 @@ font-family: 'AtlantisContent';
   }
 
   .story_interaction_option {
-    font-size: 3vw;
+    font-size: 4vw;
     line-height: 4vw;
   }
 
@@ -4847,11 +4853,11 @@ font-family: 'AtlantisContent';
   }
 
   .feedback_content_text::-webkit-scrollbar {
-    width: 2.5vw;
+    width: 2.5vw !important;
   }
   .feedback_content_text::-webkit-scrollbar-thumb {
-    background-size: 2.5vw;  
-    background-position-x: -0.5vw;
+    background-size: 2.5vw !important;  
+    background-position-x: -0.5vw !important;
   }
 
   /* .story_completion_image{
