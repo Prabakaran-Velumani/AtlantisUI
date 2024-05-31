@@ -488,7 +488,7 @@ left: 260px; */
 .replay_prompt_text{
   color: #d9c7a2;
     font-family: 'AtlantisContent';
-    font-size: 4.5vh;
+    font-size: 3.5vh;
     text-align: center;
     letter-spacing: 1px;
     /* margin-bottom: 4%; */
@@ -1046,10 +1046,12 @@ font-family: 'AtlantisText';
   height: 45vh;
     width: calc(90vh - -8vh);
     position: absolute;
-    top: 22%;
+    top: 31%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    overflow: auto;
+    scrollbar-width: none;
 }
 .replay-vertex{
   height: 25vh;
@@ -4183,10 +4185,10 @@ grid-row: 1 / 2;
 
 .player_character_image {
   position: fixed;
-  bottom: 135px;
-  width: 50vw;
-  height: 45vh;
-  transform: translateX(24vw);
+  /* bottom: 135px; */
+  width: 66vw;
+  height: 66vh;
+  transform: translate(24vw, 10vh);
   transition: transform 1s ease;
 }
 
@@ -4317,11 +4319,11 @@ grid-row: 1 / 2;
 }
 .replay_game_btn_prompt{
   width: auto;
-  height: 9.5vh;
+  height: 8vh;
 }
 .replay_game_btn_cancel{
   width: auto;
-  height: 9.5vh;
+  height: 7vh;
 }
 
 .animate_error{
@@ -4511,9 +4513,14 @@ font-family: 'AtlantisContent';
   }
 
   .player_character_image {
-    width: 50vh;
+    /* old */
+    /* width: 50vh;
     height: 45vw;
-    transform: translateX(24vw);
+    transform: translateX(24vw); */
+    /* new */
+    width: auto;
+    height: 95vw;
+    transform: translate(24vh, 10vw);
   }
 
   .title_replay {
@@ -4585,7 +4592,7 @@ font-family: 'AtlantisContent';
    font-size: 4vw;
   }
   .replay_prompt_text{
-    font-size: 4.5vw;
+    font-size: 3.5vw;
   }
   .replay-vertex{
     height: 28vw;
@@ -4607,10 +4614,10 @@ font-family: 'AtlantisContent';
     height: 9vw;
   }
   .replay_game_btn_prompt{
-    height: 9.5vw;
+    height: 8vw;
   }
   .replay_game_btn_cancel{
-    height: 9.5vw;
+    height: 7vw;
   }
   
   .character_buttons {

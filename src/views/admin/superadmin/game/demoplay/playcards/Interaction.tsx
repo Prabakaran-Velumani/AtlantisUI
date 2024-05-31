@@ -44,6 +44,9 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
 
   }, [RepeatSelectOption]);
 
+  const playerHeight = document.getElementById('player');
+  console.log('player', playerHeight)
+
   return (
     <Box
       position="relative"
@@ -230,8 +233,8 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
         </GridItem>
       </Grid>
       {selectedPlayer && (
-        <Box className={'player_character_image'}>
-          <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */}
+        <Box className={'player_character_image'}>          
+          <Canvas id={'player'} camera={{ position: [0, 1, 9] }} > {/* For Single view */}
             {/* <Environment preset={"park"} background />   */}
             <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
             <ambientLight intensity={0.5} />
@@ -240,7 +243,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
 
             {/* COMPONENTS */}
             <Player currentScreenId={currentScreenId}/>
-            <Model isSpeaking={option} position={[-3, -1.8, 5]} rotation={[0, 1, 0]} />
+            <Model isSpeaking={option} position={[-3, -1.5, 4]} rotation={[0, 1, 0]} />
             {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
             {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
             {/* <Parrot /> */}

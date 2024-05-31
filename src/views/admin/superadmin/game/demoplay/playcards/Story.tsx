@@ -624,24 +624,25 @@ const Story: React.FC<{
                 <Img src={preloadedAssets.char} w={'100%'} height={'100%'} />
                 <Box
                   position={'absolute'}
-                  top={0}
-                  w={'100%'}
-                  height={'100%'}
+                  top={'31%'}
+                  left={'25.5%'}
+                  w={'48%'}
+                  height={'42%'}
                   display={'flex'}
                   justifyContent={'center'}
                   alignItems={'center'}
-                  fontSize={{ base: '30px', xl: '2vw' }}
+                  fontSize={{ base: '1.8rem', xl: '1.8rem' }}
                   fontWeight={500}
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
                   color={'#312821'}
                   textTransform={'capitalize'}
                 >
-                  {data.blockRoll === 'Narrator'
+                  <Text whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>{data.blockRoll === 'Narrator'
                     ? data.blockRoll
                     : data.blockRoll === '999999'
                       ? profileData.name
-                      : formData.gameNonPlayerName}
+                      : formData.gameNonPlayerName}</Text>
                 </Box>
               </Box>
             </Box>
