@@ -8,7 +8,6 @@ interface GameIntroType {
   setIsGetsPlayAudioConfirmation: (value: boolean) => void;
   setPreLogDatas?: any;
   getPrevLogDatas?: any;
-  setprevScreenId?: any;
   currentScreenId?: any;
   setModelControl: any;
   gameInfo: any;
@@ -17,31 +16,26 @@ interface GameIntroType {
   setIsOpenCustomModal: (value: boolean)=> void;
 }
 
-const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentScreenId, setIsGetsPlayAudioConfirmation, setPreLogDatas, getPrevLogDatas, setprevScreenId, currentScreenId, setModelControl, gameInfo, setLastModified, hasMulitLanguages, setIsOpenCustomModal}) => {
-
+const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentScreenId, setIsGetsPlayAudioConfirmation, setPreLogDatas, getPrevLogDatas, currentScreenId, setModelControl, gameInfo, setLastModified, hasMulitLanguages, setIsOpenCustomModal}) => {
 
   const Handlemodel = () => {
-    if (getPrevLogDatas.playerType === 'creator') {
-      console.log('hellow')
-      const getplayerid = getPrevLogDatas.playerId;
-      if (getplayerid === gameInfo.gameCreatedUserId) {
-        const getLastModifiedid = getPrevLogDatas.lastModifiedBlockSeq;
-        console.log('getPrevLogDatas.playerType',getLastModifiedid)
+    if (getPrevLogDatas?.playerType === 'creator') {
+      const getplayerid = getPrevLogDatas?.playerId;
+      if (getplayerid === gameInfo?.gameCreatedUserId) {
+        const getLastModifiedid = getPrevLogDatas?.lastModifiedBlockSeq;
         if (getLastModifiedid !== null) {
           setLastModified(true);
           setModelControl(true);
           return false;
         }
         else {
-          if (getPrevLogDatas.screenIdSeq.length > 0) {
-            console.log('getPrevLogDatas.playerType',getPrevLogDatas.playerType)
+          if (getPrevLogDatas?.screenIdSeq?.length > 0) {
             setModelControl(true);
             return false;
           }
           else
           {
             setCurrentScreenId(1);
-
             return false;
           }
 
@@ -49,8 +43,7 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
       }
       else
       {
-        if (getPrevLogDatas.screenIdSeq.length > 0) {
-          console.log('getPrevLogDatas.playerType',getPrevLogDatas.playerType)
+        if (getPrevLogDatas?.screenIdSeq?.length > 0) {
           setModelControl(true);
           return false;
         }
@@ -65,8 +58,7 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
     }
     else
     {
-      if (getPrevLogDatas.screenIdSeq.length > 0) {
-        console.log('getPrevLogDatas.playerType',getPrevLogDatas.playerType)
+      if (getPrevLogDatas?.screenIdSeq?.length > 0) {
         setModelControl(true);
         return false;
       }
@@ -77,24 +69,8 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
       }
 
     }
-    
+}
 
-  
-    // const screens1 = [1];
-    // if (!screens1.includes(currentScreenId)) {
-    //   console.log('getPrevLogDatas.screenIdSeq ***', getPrevLogDatas.screenIdSeq);
-    //   if (getPrevLogDatas.screenIdSeq != null) {
-    //     const myArray = JSON.parse(getPrevLogDatas.screenIdSeq);
-    //     const lastValue = myArray[myArray.length - 1];
-    //     console.log('getPrevLogDatas&&&', lastValue, '...', JSON.parse(getPrevLogDatas.screenIdSeq));
-    //     setModelControl(true);
-    //     return false;
-    //   }
-
-    // }
-
-
-  }
   return (
     <Box
       position="relative"
@@ -156,7 +132,7 @@ const GameIntroScreen: React.FC<GameIntroType> = ({ preloadedAssets, setCurrentS
                 >
                   <Text className={'play_screen_text'}>
                     The Demo Play
-                  </Text>
+                  </Text> 
                 </Box>
                 <Box
                   w={'100%'}

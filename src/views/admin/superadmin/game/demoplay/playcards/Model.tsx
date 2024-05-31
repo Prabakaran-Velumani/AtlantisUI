@@ -9,17 +9,8 @@ import React, {
   import { Canvas, useLoader, useFrame } from 'react-three-fiber';
   import * as THREE from 'three';
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-  // import { useGLTF } from '@react-three/drei';
-  // import { Environment, OrbitControls } from '@react-three/drei';
-  // import { FBXLoader } from 'three/addons/loaders/FBXLoader';
-  // Components
-  // import PlayingCharacter from '../three/PlayingCharacter';
-  // import Sphere from '../three/Sphere';
-  // import Trex from '../three/Trex';
-  // import { Parrot } from '../three/Parrot';
-  // Import ProfileContext from EntirePreview
   
- const Model: React.FC<{isSpeaking?:any,position:any,rotation?:any}> = ({isSpeaking,position,rotation}) => {
+ const Model: React.FC<{isSpeaking?:any,position?:any,rotation?:any}> = ({isSpeaking,position,rotation}) => {
     const groupRef = useRef<any>();
     const gltf = useLoader(GLTFLoader, Sample);  
     const [isHovered, setIsHovered] = useState<any>(false);    
@@ -29,18 +20,12 @@ import React, {
   
     useFrame((state, delta) => {
       // Rotate the model on the Y-axis
-      
       if (groupRef.current) {      
-        // groupRef.current.rotation.y += delta;
-        // groupRef.current.rotation.x += delta;
-        // groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime) * 2;
         groupRef.current.castShadow = true;
       }
-  
       mixer.update(delta);    
     });
     
-    // !isHovered &&
      action.play();
   
     useLayoutEffect(() => {
@@ -70,12 +55,7 @@ import React, {
   
     return (    
       <group ref={groupRef}>      
-        {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}        
         <primitive object={gltf.scene} position={position} rotation={rotation} />   {/* For Single view */} 
-        {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={()=> setIsHovered(true)} onPointerLeave={()=> setIsHovered(false)}>            
-          <planeGeometry args={[100, 500]} />
-          <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />
-        </mesh>     */}
       </group>
     )
   };

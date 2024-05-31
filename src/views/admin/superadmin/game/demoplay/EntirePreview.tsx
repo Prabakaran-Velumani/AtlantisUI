@@ -23,6 +23,7 @@ import {
   ModalContent,
   ModalCloseButton,
   ModalBody,
+  useToast
 } from '@chakra-ui/react';
 import { lazy } from 'react';
 import { LazyMotion, domAnimation, motion, m, domMax } from 'framer-motion';
@@ -50,13 +51,16 @@ import {
   getPreview,
   getGameLanguages,
   getContentRelatedLanguage,
+  SubmitReview
 } from 'utils/game/gameService';
 import { EnumType } from 'typescript';
 import { ScoreContext } from './GamePreview';
 import Profile from 'assets/img/games/profile.png';
 import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
-import ReplayScore from './playcards/ReplayScore';
+import { useParams } from 'react-router-dom';
+import {ProfileType} from "./GamePreview";
+const ReplayScore = lazy(() => import('./playcards/ReplayScore'));
 const Story = lazy(() => import('./playcards/Story'));
 const Welcome = lazy(() => import('./playcards/Welcome'));
 const ThankYou = lazy(() => import('./playcards/Thankyou'));
@@ -79,7 +83,12 @@ const LanguageSelectionPrompt = lazy(
   () => import('./playcards/LanguageSelectionPrompt'),
 );
 const PromptScreen = lazy(() => import('./playcards/PromptScreen'));
-// const CharacterModal = lazy(() => import ('./playcards/CharacterModal'));
+const CharacterModal = lazy(() => import ('./playcards/CharacterModal'));
+const Player = lazy(() => import ('./playcards/Player'));
+const ModelPlayer = lazy(() => import ('./playcards/Model'));
+const SelectedNPCs= lazy(() => import ('./playcards/SelectedNPCs'));
+
+var i=0;
 
 interface Review {
   reviewerId: String | null;
@@ -92,17 +101,37 @@ interface Review {
 
 interface ShowPreviewProps {
   gameInfo: any;
-  handleSubmitReview: (data: any) => Promise<boolean>;
   isReviewDemo: boolean;
   currentScore: any;
   setCurrentScore: any;
   preloadedAssets: any;
   InitialScreenId: number;
-  setprevScreenId?: any;
-  setPreviewLogsId?: any;
-  getPreviewLogsId?: any;
-  setPreLogDatas?: any;
-  getPrevLogDatas?: any;
+  fetchGameData: ()=>void;
+  fetchPreviewLogsData: ()=> void;
+  previewLogsDataIni: any;
+  preLogDatasIni: any;
+  initialStateUpdate: boolean;
+  setInitialStateUpdate: any;
+}
+
+
+// Define the interface for the state
+interface PrevLogData {
+  previewLogId: string;
+  playerId: string;
+  playerType: string;
+  previewGameId: string;
+  nevigatedSeq: any[];
+  screenIdSeq: any[];
+  lastActiveBlockSeq: string;
+  selectedOptions: any;
+  previewProfile: any;
+  lastModifiedBlockSeq: string;
+  lastBlockModifiedDate: string;
+  updatedAt: string;
+  playerInputs: any;
+  audioVolumeValue: any | null;
+  previewScore: ProfileType;
 }
 
 type TabAttributeSet = {
@@ -154,15 +183,17 @@ export const ProfileContext = createContext<ProfileDataType>({
 type QuestWiseMaxTotal = { [key: number]: number };
 const EntirePreview: React.FC<ShowPreviewProps> = ({
   gameInfo,
-  handleSubmitReview,
   isReviewDemo,
   currentScore,
   setCurrentScore,
   preloadedAssets,
   InitialScreenId,
-  setprevScreenId,
-  getPrevLogDatas,
-  setPreLogDatas,
+  fetchGameData,
+  fetchPreviewLogsData,
+  previewLogsDataIni,
+  preLogDatasIni,
+  initialStateUpdate,
+  setInitialStateUpdate
 }) => {
   const user: any = JSON.parse(localStorage.getItem('user'));
   const { colorMode, toggleColorMode } = useColorMode();
@@ -254,7 +285,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [isPrevNavigation, setIsPrevNavigation] = useState(false);
   const [replayIsOpen, setReplayIsOpen] = useState(false);
   const gameScore = useContext(ScoreContext);
-  console.log('profile?.score.length',profile?.score?.length,'..',profile);
   const scoreComp = profile?.score!==undefined ? profile?.score?.length > 0 ? profile?.score[0]?.score : 0 : 0;
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [questWiseMaxTotal, setQuestWiseMaxTotal] =
@@ -280,6 +310,173 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [replayState, setReplayState] = useState<string>(null);
   const [optionalReplay, setOptionalReplay] = useState<string>(null);
   const [isNoteClosed, setIsNoteClosed] = useState(false);
+  
+  const [previewLogsData, setPreviewLogsData] = useState<any>(previewLogsDataIni); /** Used to load the table data for the first time only */
+  /*
+  const [getPrevLogDatas, setPreLogDatas] = useState<PrevLogData>({
+    previewLogId: '',
+    playerId: '',
+    playerType: '',
+    previewGameId: '',
+    nevigatedSeq: [],
+    screenIdSeq: [],
+    lastActiveBlockSeq: '',
+    selectedOptions: '',
+    previewProfile: {},
+    lastModifiedBlockSeq: '',
+    lastBlockModifiedDate:'',
+    updatedAt:'',
+    playerInputs:'',
+    audioVolumeValue: {},
+  }); /** Handles the updated Data on run time, initial */
+  const [getPrevLogDatas, setPreLogDatas] = useState<PrevLogData>({...preLogDatasIni}); /** Handles the updated Data on run time, initial */
+  const [voiceIds, setVoiceIds] = useState<any>();
+  const [feedbackList, setFeedbackList] = useState([]);
+  const [interactionCount, setinteractionCount] = useState(null);
+  const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
+    useState<boolean>(false);
+  const [reflectionAnswers, setReflectionAnswers] = useState([]);
+  const [resolution, setResolution] = useState(null);
+  const [navTrack, setNavTrack] = useState([]);
+  const [currentTrackPointer, setCurrentTrackPointer] = useState(0);
+  const [currentScreenId, setCurrentScreenId] =
+    useState<number>(InitialScreenId);
+  const [hasMulitLanguages, setHasMulitLanguages] = useState<boolean>(false); // This state to control the auto Initialization of the Language selection Modal popup
+  const [isOpenCustomModal, setIsOpenCustomModal] = useState<boolean>(false); //This state to control the opening of Language selection Modal popup by click event
+  const [gameLanguages, setGameLanguages] = useState([]);
+  const [NavigateBlockEmpty, setNavigateBlockEmpty] = useState<boolean>(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [RepeatSelectOption, setRepeatSelectOption] = useState<boolean>(false);
+  const [RepeatPrevOption, setRepeatPrevOption] = useState<any>([]);
+  const [modelScreen, setModelScreen] = useState<Boolean>(false);
+  const [isInitialLoadScreenWelcome, setIsInitialLoadScreenWelcome] = useState<boolean>(false);
+
+  /******************************This for controll backgroud bgm and voice 09.05.2024**********************************/
+  const EnumType = {
+    BGM: 'bgm',
+    VOICE: 'voice',
+  };
+  const backgroundBgmRef = useRef<HTMLAudioElement>(null);
+  const voiceRef = useRef<HTMLAudioElement>(null);
+  const [audioObj, setAudioObj] = useState<{
+    url: string;
+    type: string;
+    volume: string;
+    loop: boolean;
+    autoplay: boolean;
+  }>({
+    url: '',
+    type: EnumType.BGM,
+    volume: '0.5',
+    loop: true, // Background loops
+    autoplay: true,
+  });
+  const { uuid } = useParams();
+  const toast = useToast();
+
+useEffect(()=>{
+  //Initial loading data, it has inital vlaues of preview_logs of the player for this game
+  if(preLogDatasIni)
+    {
+      setPreLogDatas(preLogDatasIni);
+      setProfile(preLogDatasIni?.previewScore);
+      setSelectedPlayer(preLogDatasIni?.previewProfile?.selectedPlayer ?? null);
+      const {name, gender, language}= preLogDatasIni?.previewProfile ?? {name:'', gender:'',language:''};
+      if(!name || !gender || !language)
+        {
+          setIsInitialLoadScreenWelcome(true);
+        } 
+    }
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Pause the audio when the page is hidden
+        if (!audioRef.current?.paused) {
+          audioRef.current?.pause();
+        }
+      } else {
+        // Resume the audio when the page becomes visible again
+        if (audioRef.current?.paused) {
+          audioRef.current?.play();
+        }
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+},[preLogDatasIni])
+  
+  
+  const handleSubmitReview = async (inputdata: any) => {
+    /** Sample post data
+   * {"data" :{
+    "reviewerId": 4,
+    "reviewGameId": 3,
+    "review": "Character Tab",
+    "tabId": 2,
+    "tabAttribute": null,
+    "tabAttributeValue": ""
+   }
+} 
+   */
+    if (!inputdata.reviewerId || !inputdata.reviewGameId) {
+      toast({
+        title: 'You are Unauthorized..!',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+      return false;
+    } 
+    else if (!inputdata.tabId) {
+      toast({
+        title: 'Select Feedback Options',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+      return false;
+    } else if (!inputdata.review) {
+      toast({
+        title: 'Review Field is Empty',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+      return false;
+    }
+
+    const addReviewResponse = await SubmitReview(
+      JSON.stringify({ data: inputdata, id: uuid }),
+    );
+    if (addReviewResponse?.status === 'Failure') {
+      toast({
+        title: 'Failed to Add Review',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+      return false;
+    }
+    if (addReviewResponse?.status === 'Success') {
+      toast({
+        title: 'Review added Successfully..!',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+      fetchGameData();
+      return true;
+    }
+  };
+  
+
   useEffect(() => {
     setProfileData((prev: any) => ({ ...prev, score: scoreComp }));
   }, [scoreComp]);
@@ -311,11 +508,19 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ...prev,
       previewProfile: { ...prev.previewProfile, score: profile.score },
     }));
-
     setPlayerTodayScore(toDayScore);
-      }
-   
-  }, [profile?.score]);
+  }
+  
+}, [profile?.score]);
+
+
+useEffect(()=>{
+  if(profile)
+    {
+      setPreLogDatas((prev:any)=> ({...prev, previewScore:profile}));
+    }
+},[profile])
+
   // This for  Translation content based on lang 09.05.2024
   useEffect(() => {
     const fetchGameContent = async () => {
@@ -350,47 +555,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     }
   }, [profileData?.language]);
 
-  const [voiceIds, setVoiceIds] = useState<any>();
-  const [feedbackList, setFeedbackList] = useState([]);
-  const [interactionCount, setinteractionCount] = useState(null);
-  const [isGetsPlayAudioConfirmation, setIsGetsPlayAudioConfirmation] =
-    useState<boolean>(false);
-  const [reflectionAnswers, setReflectionAnswers] = useState([]);
-  const [resolution, setResolution] = useState(null);
-  const [navTrack, setNavTrack] = useState([]);
-  const [currentTrackPointer, setCurrentTrackPointer] = useState(0);
-  const [currentScreenId, setCurrentScreenId] =
-    useState<number>(InitialScreenId);
-  const [hasMulitLanguages, setHasMulitLanguages] = useState<boolean>(false); // This state to control the auto Initialization of the Language selection Modal popup
-  const [isOpenCustomModal, setIsOpenCustomModal] = useState<boolean>(false); //This state to control the opening of Language selection Modal popup by click event
-  const [gameLanguages, setGameLanguages] = useState([]);
-  const [NavigateBlockEmpty, setNavigateBlockEmpty] = useState<boolean>(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const [RepeatSelectOption, setRepeatSelectOption] = useState<boolean>(false);
-  const [RepeatPrevOption, setRepeatPrevOption] = useState<any>([]);
-  const [modelScreen, setModelScreen] = useState<Boolean>(false);
-
-  /******************************This for controll backgroud bgm and voice 09.05.2024**********************************/
-  const EnumType = {
-    BGM: 'bgm',
-    VOICE: 'voice',
-  };
-  const backgroundBgmRef = useRef<HTMLAudioElement>(null);
-  const voiceRef = useRef<HTMLAudioElement>(null);
-  const [audioObj, setAudioObj] = useState<{
-    url: string;
-    type: string;
-    volume: string;
-    loop: boolean;
-    autoplay: boolean;
-  }>({
-    url: '',
-    type: EnumType.BGM,
-    volume: '0.5',
-    loop: true, // Background loops
-    autoplay: true,
-  });
   const fetchDefaultBgMusic = async () => {
     const res = await getTestAudios(); //default bg audio fetch
     if (res?.status === 'success' && res?.url) {
@@ -405,8 +569,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
   useEffect(() => {
     setDemoBlocks(gameInfo?.blocks);
-
-    if (data === null) {
+    
+    if (data === null && profile.currentQuest) {
       setType(gameInfo?.blocks[profile?.currentQuest]['1']?.blockChoosen);
       setData(gameInfo?.blocks[profile?.currentQuest]['1']);
       if (
@@ -453,25 +617,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setOptions(optionsFiltered);
       }
     }
-
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        // Pause the audio when the page is hidden
-        if (!audioRef.current?.paused) {
-          audioRef.current?.pause();
-        }
-      } else {
-        // Resume the audio when the page becomes visible again
-        if (audioRef.current?.paused) {
-          audioRef.current?.play();
-        }
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
   }, [profile?.currentQuest]);
 
   useEffect(() => {
@@ -479,7 +624,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const scores =
         questState[profile?.currentQuest] == 'Started'
           ? profile?.score
-          : profile?.replayScore.length > 0
+          : profile?.replayScore?.length > 0
           ? profile?.replayScore
           : profile?.score;
       let total: number = 0;
@@ -488,7 +633,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         //For chapter Selection Screen
         if(profile.score!==undefined)
           {
-             if (scores.length > 0) {
+             if (scores?.length > 0) {
           // Calculate scores for each quest
           scores.forEach((score: any) => {
             if (questScores[score.quest]) {
@@ -499,7 +644,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           });
 
           // const total = scores.reduce((acc: any, row: any) => {
-          //   console.log('acc',acc,'..',row)
           //   const quest = profile?.currentQuest;
           //   if (row.quest == quest) {
           //     return acc + row.score;
@@ -607,16 +751,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 parseInt(option.qpScore),
               );
               qpScoresOption.sort((a: any, b: any) => b - a);
-              // GrandMaximumscore.push(qpScoresOption[0]);
               GrandMaximumscore += qpScoresOption[0];
             }
           });
         } else {
           console.log('*****Options are not provided.');
         }
-
-        //[{1: 500}, {2: 200}]
-
         setQuestWiseMaxTotal((prev: any) => {
           return { ...prev, [profile?.currentQuest]: GrandMaximumscore };
         });
@@ -646,13 +786,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         screens.includes(currentScreenId) &&
         ![2, 10, 0].includes(currentScreenId)
       ) {
-        setAudioObj({
+        setAudioObj((prev)=>({
+          ...prev,
           url: gameInfo?.bgMusic,
           type: EnumType.BGM,
-          volume: '0.5',
+          // volume: '0.5',
           loop: true, // Voice doesn't loop
           autoplay: true,
-        });
+        }));
       }
     }
   }, [gameInfo]);
@@ -676,13 +817,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     //   autoplay: true,
     // });
     if (![2, 10, 0].includes(currentScreenId)) {
-      setAudioObj({
+      setAudioObj((prev)=>({
+        ...prev,
         url: audio,
         type: EnumType.BGM,
-        volume: '0.5',
+        // volume: '0.5',
         loop: true, // Voice doesn't loop
         autoplay: true,
-      });
+      }));
     }
   }, [audio]);
 
@@ -692,7 +834,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       audio: any,
     ) => {
       if (audioRef.current) {
-        audioRef.current.src = audio.url;
+
+        // audioRef.current.src = audio.url;
+        if (audioRef.current?.src !== audio.url) {
+          audioRef.current.src = audio.url;
+        }
         audioRef.current.volume = parseFloat(audio.volume);
         audioRef.current.loop = audio.loop;
         audioRef.current.autoplay = audio.autoplay;
@@ -701,15 +847,14 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         if (audioObj.autoplay) {
           if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
             try {
-              backgroundBgmRef.current.play().catch((error) => {
+              backgroundBgmRef.current?.play().catch((error) => {
                 // Handle play promise rejection
-                // console.error('Error playing background BGM:', error);
               });
             } catch (error) {
               console.error('Background BGM ref is not available.', error);
             }
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current.play().catch((error) => {
+            voiceRef.current?.play().catch((error) => {
               // Handle play promise rejection
               console.error('Error playing voice:', error);
             });
@@ -718,7 +863,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
             backgroundBgmRef.current.pause();
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current.pause();
+            voiceRef.current?.pause();
           }
         }
       }
@@ -929,12 +1074,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         )
         .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-      // console.log('navPrevBlock',navPrevBlock,'...',newTrackSequence,'...',navTrack,'...',navPrevBlock.length,'..',current)
     if (navPrevBlock.length > 0) {
-// console.log('navPrevBlock[0].blockLeadTo == current.blockSecondaryId',parseInt(navPrevBlock[0].blockLeadTo) == current.blockSecondaryId)
       if (navPrevBlock[0].blockSecondaryId === current.blockSecondaryId) {
         navTrack.pop();
-        console.log('... 3',current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,'...',current,'..',gameInfo?.blocks[profile?.currentQuest]['1'])
         const lastPrevNavTrack = navTrack[navTrack.length - 1];
         const prevousBlock = current
           ? Object.keys(demoBlocks[quest] || {})
@@ -943,7 +1085,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             )
             .map((key: any) => demoBlocks[quest]?.[key])
           : [];
-          // console.log('lastPrevNavTrack',lastPrevNavTrack,'....',prevousBlock);
         if (prevousBlock.length !== 0) {
           setType(prevousBlock[0]?.blockChoosen);
           setData(prevousBlock[0]);
@@ -994,7 +1135,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             ...prev,
             lastBlockModifiedDate: null,
             lastModifiedBlockSeq: null,
-            lastActiveBlockSeq: prevousBlock[0].blockId,
+            lastActiveBlockSeq: {[prevousBlock[0].blockQuestNo]:[prevousBlock[0].blockId]},
             nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
           }));
           return false;
@@ -1025,7 +1166,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         }
         getSeqprevious.sort((a: any, b: any) => a - b);
         const currentIndex = getSeqprevious.indexOf(current.blockPrimarySequence);
-        console.log('...',current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,'...',current,'..',gameInfo?.blocks[profile?.currentQuest]['1'])
         if (current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence) {
           if (currentIndex !== -1) {
             if (currentIndex > 0) {
@@ -1088,7 +1228,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   ...prev,
                   lastBlockModifiedDate: null,
                   lastModifiedBlockSeq: null,
-                  lastActiveBlockSeq: prevousBlock[0].blockId,
+                  lastActiveBlockSeq:{[prevousBlock[0].blockQuestNo]: [prevousBlock[0].blockId]},
                   nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
                 }));
                 return false;
@@ -1103,7 +1243,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   ...prev,
                   lastBlockModifiedDate: null,
                   lastModifiedBlockSeq: null,
-                  lastActiveBlockSeq: current.blockId,
+                  lastActiveBlockSeq:{[current.blockQuestNo] :[current.blockId]},
                   nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
                 }));
                 return false;
@@ -1183,7 +1323,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   ...prev,
                   lastBlockModifiedDate: null,
                   lastModifiedBlockSeq: null,
-                  lastActiveBlockSeq: prevousBlock[0].blockId,
+                  lastActiveBlockSeq: {[prevousBlock[0].blockQuestNo]:[prevousBlock[0].blockId]},
                   nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
                 }));
                 return false;
@@ -1198,7 +1338,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                   ...prev,
                   lastBlockModifiedDate: null,
                   lastModifiedBlockSeq: null,
-                  lastActiveBlockSeq: current.blockId,
+                  lastActiveBlockSeq:{[current.blockQuestNo]:[current.blockId]},
                   nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
                 }));
                 return false;
@@ -1262,7 +1402,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 ...prev,
                 lastBlockModifiedDate: null,
                 lastModifiedBlockSeq: null,
-                lastActiveBlockSeq: prevousBlock[0].blockId,
+                lastActiveBlockSeq: {[prevousBlock[0].blockQuestNo]:[prevousBlock[0].blockId]},
                 nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
               }));
               return false;
@@ -1277,7 +1417,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 ...prev,
                 lastBlockModifiedDate: null,
                 lastModifiedBlockSeq: null,
-                lastActiveBlockSeq: current.blockId,
+                lastActiveBlockSeq: {[current.blockQuestNo]:[current.blockId]},
                 nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
               }));
               return false;
@@ -1318,7 +1458,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
       getSeqprevious.sort((a: any, b: any) => a - b);
       const currentIndex = getSeqprevious.indexOf(current.blockPrimarySequence);
-      console.log('... 1',current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence,'...',current,'..',gameInfo?.blocks[profile?.currentQuest]['1']);
       if (current.blockPrimarySequence !== gameInfo?.blocks[profile?.currentQuest]['1']?.blockPrimarySequence) {
         if (currentIndex !== -1) {
           if (currentIndex > 0) {
@@ -1381,7 +1520,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 ...prev,
                 lastBlockModifiedDate: null,
                 lastModifiedBlockSeq: null,
-                lastActiveBlockSeq: prevousBlock[0].blockId,
+                lastActiveBlockSeq: {[prevousBlock[0].blockQuestNo]:[prevousBlock[0].blockId]},
                 nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
               }));
               return false;
@@ -1396,7 +1535,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 ...prev,
                 lastBlockModifiedDate: null,
                 lastModifiedBlockSeq: null,
-                lastActiveBlockSeq: current.blockId,
+                lastActiveBlockSeq: {[current.blockQuestNo]:[current.blockId]},
                 nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
               }));
               return false;
@@ -1461,7 +1600,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 ...prev,
                 lastBlockModifiedDate: null,
                 lastModifiedBlockSeq: null,
-                lastActiveBlockSeq: prevousBlock[0].blockId,
+                lastActiveBlockSeq: {[prevousBlock[0].blockQuestNo]:[prevousBlock[0].blockId]},
                 nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
               }));
               return false;
@@ -1476,7 +1615,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 ...prev,
                 lastBlockModifiedDate: null,
                 lastModifiedBlockSeq: null,
-                lastActiveBlockSeq: current.blockId,
+                lastActiveBlockSeq: {[current.blockQuestNo]:[current.blockId]},
                 nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
               }));
               return false;
@@ -1541,7 +1680,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               ...prev,
               lastBlockModifiedDate: null,
               lastModifiedBlockSeq: null,
-              lastActiveBlockSeq: prevousBlock[0].blockId,
+              lastActiveBlockSeq: {[prevousBlock[0].blockQuestNo]:[prevousBlock[0].blockId]},
               nevigatedSeq: { ...prev.nevigatedSeq, [prevousBlock[0].blockQuestNo]: updateNavigateSeq }
             }));
             return false;
@@ -1556,7 +1695,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               ...prev,
               lastBlockModifiedDate: null,
               lastModifiedBlockSeq: null,
-              lastActiveBlockSeq: current.blockId,
+              lastActiveBlockSeq:{[current.blockQuestNo]:[current.blockId]},
               nevigatedSeq: { ...prev.nevigatedSeq, [current.blockQuestNo]: updateNavigateSeq }
             }));
             return false;
@@ -1578,6 +1717,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
 
   }
+
 
 
   const checkAndUpdateScores = async () => {
@@ -1676,8 +1816,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       }
     }
     SetPreviouseStored(next);
-
-    // setAudioObj((prev) => ({ ...prev, url: '', type: 'api', loop: false }));
+    setPreLogDatas((prev: any) => ({
+      ...prev,
+      lastBlockModifiedDate: null,
+      lastModifiedBlockSeq: null,
+    }));
     const currentBlock = next
       ? parseInt(next?.blockPrimarySequence.split('.')[1])
       : null;
@@ -1695,13 +1838,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ? parseInt(next?.blockPrimarySequence.split('.')[0])
       : null;
     setCurrentQuestNo(currentQuest);
-
     setGame3Position((prev: any) => ({
       ...prev,
       previousBlock: next?.blockPrimarySequence,
       currentBlock: nextSeq,
     }));
-    const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    // const nextLevel =  currentQuest != null ? String(currentQuest + 1) : null
+    const nextLevel = parseInt(profile?.currentQuest)+1 || null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
           .filter(
@@ -1709,7 +1852,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           )
           .map((key: any) => demoBlocks[quest]?.[key])
       : [];
-
+if(currentScreenId ===2)
+  {
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
       const optionsFiltered = [];
       for (const option of gameInfo.questOptions) {
@@ -1748,7 +1892,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     if (type === 'Interaction' && resMsg !== '') {
       setType('response');
       return false;
-    } else if (
+    } 
+    else if (
       (type === 'Interaction' || type === 'response') &&
       feed !== '' &&
       gameInfo?.gameData?.gameIsShowInteractionFeedBack !== 'Completion'
@@ -1844,10 +1989,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         setSelectedOption(null);
         return false;
       } else if (navi === 'Replay Point') {
-        // setType(demoBlocks[quest]['1']?.blockChoosen);
-        // setData(demoBlocks[quest]['1']);
-        // setSelectedOption(null);
-        // setCurrentScreenId(16);
         setSelectedOption(null);
         setReplayState('replayPointPrompt');
         setReplayIsOpen(true);
@@ -1986,6 +2127,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             return false;
           }
         } else */
+
         if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = getgameinfoquest?.gameMinScore;
           const scores = profile?.score;
@@ -2016,10 +2158,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             setReplayIsOpen(true);
             return false;
           } else {
+            /*
             if (demoBlocks.hasOwnProperty(nextLevel)) {
               setProfile((prev: any) => {
                 const data = { ...prev };
-                if (!profile.completedLevels.includes(currentQuest)) {
+                if (!profile.completedLevels.includes(String(currentQuest))) {
                   data.completedLevels = [...data.completedLevels, nextLevel];
                 }
 
@@ -2036,12 +2179,93 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               setData(null);
               return false;
             }
+            */
+           if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+            {
+              setType(next?.blockChoosen);
+              setData(next);
+              setCurrentScreenId(6);
+              return false;
+            }
+            else if(feedbackList.length !== 0)
+              {
+                setType(next?.blockChoosen);
+                setData(next);
+                setCurrentScreenId(6);
+                return false;
+              }
+            else
+            {
+              if (demoBlocks.hasOwnProperty(nextLevel)) {
+                setProfile((prev: any) => {
+                  const data = { ...prev };
+                  // if (!profile.completedLevels.includes(String(currentQuest))) {
+                  //   data.completedLevels = [...data.completedLevels, nextLevel];
+                  // }
+  
+                  if (!profile.completedLevels.includes(String(nextLevel))) {
+                    data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                  }
+                  return data;
+                });
+  
+                setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                setData(demoBlocks[nextLevel]['1']);
+                setCurrentScreenId(6);
+                return false;
+              } else {
+                setCurrentScreenId(6);
+                setType(null);
+                setData(null);
+                return false;
+              }
+            }
           }
         } else {
+          if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+            {
+              setType(next?.blockChoosen);
+              setData(next);
+              setCurrentScreenId(6);
+              return false;
+            }
+            else if(feedbackList.length !== 0)
+              {
+                setType(next?.blockChoosen);
+                setData(next);
+                setCurrentScreenId(6);
+                return false;
+              }
+            else
+            {
+              if (demoBlocks.hasOwnProperty(nextLevel)) {
+                setProfile((prev: any) => {
+                  const data = { ...prev };
+                  // if (!profile.completedLevels.includes(String(currentQuest))) {
+                  //   data.completedLevels = [...data.completedLevels, nextLevel];
+                  // }
+                  if (!profile.completedLevels.includes(String(nextLevel))) {
+                    data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                  }
+                  return data;
+                });
+  
+                setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                setData(demoBlocks[nextLevel]['1']);
+                setCurrentScreenId(6);
+                return false;
+              } else {
+                setCurrentScreenId(6);
+                setType(null);
+                setData(null);
+                return false;
+              }
+            }
+            /*
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
-              if (!profile.completedLevels.includes(currentQuest)) {
+              if (!profile.completedLevels.includes(String(currentQuest))) {
                 data.completedLevels = [...data.completedLevels, nextLevel];
               }
               return data;
@@ -2056,6 +2280,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             setData(null);
             return false;
           }
+          */
         }
         /*
         if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
@@ -2146,7 +2371,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         }
       }
     }
-
+  }
     if (currentScreenId === 6) {
       //Completion
       const {
@@ -2156,64 +2381,10 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         haveNextQuest,
         totalScore,
       } = calScore();
-      // if (gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') {
-      //   const Completionpage = Object.entries(questState).map(
-      //     ([questId, status]) => ({ questId, status }),
-      //   );
-      //   const OpenStraigntCompletionPage = Completionpage.find(
-      //     (row: any) =>
-      //       row.questId === profile.currentQuest && row.status === 'completed',
-      //   );
-      //   if (OpenStraigntCompletionPage !== undefined) {
-      //     setFeedbackList([]);
-      //     setCurrentScreenId(13);
-      //     return false;
-      //   }
-      //   if (feedbackList.length !== 0) {
-      //     getFeedbackData(data);
-      //     setFeedbackNavigateNext(false);
-      //     setCurrentScreenId(14); //Navigate to together all feedback
-      //     return false;
-      //   } else {
-      //     if (demoBlocks.hasOwnProperty(nextLevel)) {
-      //       setProfile((prev: any) => {
-      //         const data = { ...prev };
-      //         if (!profile.completedLevels.includes(currentQuest)) {
-      //           data.completedLevels = [...data.completedLevels, nextLevel];
-      //         }
-
-      //         return data;
-      //       });
-
-      //       setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-      //       setData(demoBlocks[nextLevel]['1']);
-      //       setCurrentScreenId(13);
-      //       return false;
-      //     } else {
-      //       if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-      //         setCurrentScreenId(4); //Navigate to leaderboard
-      //         return false;
-      //       } else if (
-      //         gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
-      //         gameInfo?.reflectionQuestions.length > 0
-      //       ) {
-      //         setCurrentScreenId(3); //Navigate to Reflection screen
-      //         return false;
-      //       } else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
-      //         setCurrentScreenId(7); //Navigate to takeaway screen
-      //         return false;
-      //       } else {
-      //         setType(null);
-      //         setData(null);
-      //         setCurrentScreenId(5);
-      //         return false;
-      //       }
-      //     }
-      //   }
-      // }
-      if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
-        setCurrentScreenId(4); //Navigate to leaderboard
-        return false;
+           
+     if (gameInfo?.gameData?.gameIsShowLeaderboard === 'true') {
+       setCurrentScreenId(4); //Navigate to leaderboard
+       return false;
       } else if (haveNextQuest) {
         if (currentGameData?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = currentGameData?.gameMinScore;
@@ -2226,8 +2397,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             }
             sums[quest] += score.score;
           });
-
-          // const getFinalscores = Object.values(sums);
           const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
             quest,
             score,
@@ -2248,10 +2417,103 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             return false;
             //set to prompt it for replay the game
           } else {
+               if(feedbackList.length !== 0 && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion')
+                {
+                  const Completionpage = Object.entries(questState).map(
+                        ([questId, status]) => ({ questId, status }),
+                      );
+                      const OpenStraigntCompletionPage = Completionpage.find(
+                        (row: any) =>
+                          row.questId === profile.currentQuest && row.status === 'completed',
+                      );
+                      if (OpenStraigntCompletionPage !== undefined) {
+                        setFeedbackList([]);
+                        setCurrentScreenId(13);
+                        return false;
+                      }
+                      if (feedbackList.length !== 0) {
+                        getFeedbackData(next);
+                        setFeedbackNavigateNext(false);
+                        setCurrentScreenId(14); //Navigate to together all feedback
+                        return false;
+                      }else {
+                            if (demoBlocks.hasOwnProperty(nextLevel)) {
+                              setProfile((prev: any) => {
+                                const data = { ...prev };
+                                // if (!profile.completedLevels.includes(currentQuest)) {
+                                //   data.completedLevels = [...data.completedLevels, nextLevel];
+                                // }
+                                if (!profile.completedLevels.includes(String(nextLevel))) {
+                                  data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                                }
+                                return data;
+                              });
+                  
+                              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                              setData(demoBlocks[nextLevel]['1']);
+                              setCurrentScreenId(13);
+                              return false;
+                            } else {
+                              if (
+                                gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
+                                gameInfo?.reflectionQuestions.length > 0
+                              ) {
+                                setCurrentScreenId(3); //Navigate to Reflection screen
+                                return false;
+                              } else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
+                                setCurrentScreenId(7); //Navigate to takeaway screen
+                                return false;
+                              } else {
+                                setType(null);
+                                setData(null);
+                                setCurrentScreenId(5);
+                                return false;
+                              }
+                            }
+                          }
+                }
+              else
+              {
+             
+                if (demoBlocks.hasOwnProperty(nextLevel)) {
+                  setProfile((prev: any) => {
+                    const data = { ...prev };
+                    // if (!profile.completedLevels.includes(String(currentQuest))) {
+                    //   data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                    // }
+                    if (!profile.completedLevels.includes(String(nextLevel))) {
+                      data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                    }
+    
+                    return data;
+                  });
+                  setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                  setData(demoBlocks[nextLevel]['1']);
+                  setCurrentScreenId(13);
+                  return false;
+                } else {
+                 if (
+                    gameInfo?.gameData?.gameIsShowReflectionScreen === 'true' &&
+                    gameInfo?.reflectionQuestions.length > 0
+                  ) {
+                    setCurrentScreenId(3); //reflection screen
+                    return false;
+                  } else if (gameInfo?.gameData?.gameIsShowTakeaway === 'true') {
+                    setCurrentScreenId(7); //takeaway
+                    return false;
+                  } else {
+                    setType(null);
+                    setData(null);
+                    setCurrentScreenId(5); //thank you screen
+                    return false;
+                  }
+                }
+              }
+              /*
             if (demoBlocks.hasOwnProperty(nextLevel)) {
               setProfile((prev: any) => {
                 const data = { ...prev };
-                if (!profile.completedLevels.includes(currentQuest)) {
+                if (!profile.completedLevels.includes(String(currentQuest))) {
                   data.completedLevels = [...data.completedLevels, nextLevel];
                 }
 
@@ -2278,15 +2540,72 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 return false;
               }
             }
+            */
           }
         } else {
-          if (demoBlocks.hasOwnProperty(nextLevel)) {
+          if(feedbackList.length !== 0 && gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion')
+              {
+                const Completionpage = Object.entries(questState).map(
+                  ([questId, status]) => ({ questId, status }),
+                );
+                const OpenStraigntCompletionPage = Completionpage.find(
+                  (row: any) =>
+                    row.questId === profile.currentQuest && row.status === 'completed',
+                );
+                if (OpenStraigntCompletionPage !== undefined) {
+                  setFeedbackList([]);
+                  setCurrentScreenId(13);
+                  return false;
+                }
+                if (feedbackList.length !== 0) {
+                  getFeedbackData(next);
+                  setFeedbackNavigateNext(false);
+                  setCurrentScreenId(14); //Navigate to together all feedback
+                  return false;
+                }else {
+                      if (demoBlocks.hasOwnProperty(nextLevel)) {
+                        setProfile((prev: any) => {
+                          const data = { ...prev };
+                          // if (!profile.completedLevels.includes(currentQuest)) {
+                          //   data.completedLevels = [...data.completedLevels, nextLevel];
+                          // }
+                          if (!profile.completedLevels.includes(String(nextLevel))) {
+                            data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                          }
+            
+                          return data;
+                        });
+            
+                        setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                        setData(demoBlocks[nextLevel]['1']);
+                        setCurrentScreenId(13);
+                        return false;
+                      } else {
+                        if (
+                          gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
+                          gameInfo?.reflectionQuestions.length > 0
+                        ) {
+                          setCurrentScreenId(3); //Navigate to Reflection screen
+                          return false;
+                        } else if (gameInfo.gameData?.gameIsShowTakeaway === 'true') {
+                          setCurrentScreenId(7); //Navigate to takeaway screen
+                          return false;
+                        } else {
+                          setType(null);
+                          setData(null);
+                          setCurrentScreenId(5);
+                          return false;
+                        }
+                      }
+                    }
+              }
+          else{
+            if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
-              if (!profile.completedLevels.includes(currentQuest)) {
-                data.completedLevels = [...data.completedLevels, nextLevel];
+              if (!profile.completedLevels.includes(String(nextLevel))) {
+                data.completedLevels = [...data.completedLevels, String(nextLevel)];
               }
-
               return data;
             });
             setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -2310,13 +2629,16 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return false;
             }
           }
+          }
+          
         }
         // Dont Want to Check This Condition
         /*else if (gameInfo.gameData?.gameDisableOptionalReplays === 'false') {
           setCurrentScreenId(8); //Navigate to replaygame prompt screen
           return false;
         }*/
-      } else if (
+      }
+      else if (
         gameInfo.gameData?.gameIsShowReflectionScreen === 'true' &&
         gameInfo?.reflectionQuestions.length > 0
       ) {
@@ -2377,12 +2699,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               return false;
             } else {
               if (demoBlocks.hasOwnProperty(nextLevel)) {
+               
                 setProfile((prev: any) => {
                   const data = { ...prev };
-                  if (!profile.completedLevels.includes(currentQuest)) {
-                    data.completedLevels = [...data.completedLevels, nextLevel];
+                  // if (!profile.completedLevels.includes(String(currentQuest))) {
+                  //   data.completedLevels = [...data.completedLevels, nextLevel];
+                  // }
+                  if (!profile.completedLevels.includes(String(nextLevel))) {
+                    data.completedLevels = [...data.completedLevels, String(nextLevel)];
                   }
-
                   return data;
                 });
                 setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -2410,8 +2735,20 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               // return false;
             }
           } else {
-            if (data && type) {
+            if (demoBlocks.hasOwnProperty(nextLevel)) {
               setFeedbackNavigateNext(false);
+              setProfile((prev: any) => {
+                const data = { ...prev };
+                // if (!profile.completedLevels.includes(String(currentQuest))) {
+                //   data.completedLevels = [...data.completedLevels, nextLevel];
+                // }
+                if (!profile.completedLevels.includes(String(nextLevel))) {
+                  data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                }
+                return data;
+              });
+              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+              setData(demoBlocks[nextLevel]['1']);
               setCurrentScreenId(13);
               return false;
             } else {
@@ -2436,10 +2773,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       } else if (demoBlocks.hasOwnProperty(nextLevel)) {
         setProfile((prev: any) => {
           const data = { ...prev };
-          if (!profile.completedLevels.includes(currentQuest)) {
-            data.completedLevels = [...data.completedLevels, nextLevel];
+          // if (!profile.completedLevels.includes(String(currentQuest))) {
+          //   data.completedLevels = [...data.completedLevels, nextLevel];
+          // }
+          if (!profile.completedLevels.includes(String(nextLevel))) {
+            data.completedLevels = [...data.completedLevels, String(nextLevel)];
           }
-
           return data;
         });
         setType(demoBlocks[nextLevel]['1']?.blockChoosen);
@@ -2550,8 +2889,20 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             setReplayIsOpen(true);
             return false;
           } else {
-            if (data && type) {
+            if (demoBlocks.hasOwnProperty(nextLevel)) {
               setFeedbackNavigateNext(false);
+              setProfile((prev: any) => {
+                const data = { ...prev };
+                // if (!profile.completedLevels.includes(String(nextLevel))) {
+                //   data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                // }
+                if (!profile.completedLevels.includes(String(nextLevel))) {
+                  data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                }
+                return data;
+              });
+              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+              setData(demoBlocks[nextLevel]['1']);
               setCurrentScreenId(13);
               return false;
             } else {
@@ -2573,8 +2924,21 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             }
           }
         } else {
-          if (data && type) {
+          if (demoBlocks.hasOwnProperty(nextLevel)) {
             setFeedbackNavigateNext(false);
+            setProfile((prev: any) => {
+              const data = { ...prev };
+              // if (!profile.completedLevels.includes(String(nextLevel))) {
+              //   data.completedLevels = [...data.completedLevels, String(nextLevel)];
+              // }
+              if (!profile.completedLevels.includes(String(nextLevel))) {
+                data.completedLevels = [...data.completedLevels, String(nextLevel)];
+              }
+              return data;
+            });
+
+            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+            setData(demoBlocks[nextLevel]['1']);
             setCurrentScreenId(13);
             return false;
           } else {
@@ -2596,8 +2960,21 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           }
         }
       } else {
-        if (data && type) {
+        if (demoBlocks.hasOwnProperty(nextLevel)) {
           setFeedbackNavigateNext(false);
+          setProfile((prev: any) => {
+            const data = { ...prev };
+            // if (!profile.completedLevels.includes(String(currentQuest))) {
+            //   data.completedLevels = [...data.completedLevels, nextLevel];
+            // }
+            if (!profile.completedLevels.includes(String(nextLevel))) {
+              data.completedLevels = [...data.completedLevels, String(nextLevel)];
+            }
+            return data;
+          });
+
+          setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+          setData(demoBlocks[nextLevel]['1']);
           setCurrentScreenId(13);
           return false;
         } else {
@@ -2659,10 +3036,50 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setReplayIsOpen(true);
           return false;
         } else {
+          if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+            {
+              setType(next?.blockChoosen);
+              setData(next);
+              setCurrentScreenId(6);
+              return false;
+            }
+            else if(feedbackList.length !== 0)
+              {
+                setType(next?.blockChoosen);
+                setData(next);
+                setCurrentScreenId(6);
+                return false;
+              }
+            else
+            {
+              if (demoBlocks.hasOwnProperty(nextLevel)) {
+                setProfile((prev: any) => {
+                  const data = { ...prev };
+                  // if (!profile.completedLevels.includes(String(currentQuest))) {
+                  //   data.completedLevels = [...data.completedLevels, nextLevel];
+                  // }
+                  if (!profile.completedLevels.includes(String(nextLevel))) {
+                    data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                  }
+                  return data;
+                });
+  
+                setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                setData(demoBlocks[nextLevel]['1']);
+                setCurrentScreenId(6);
+                return false;
+              } else {
+                setCurrentScreenId(6);
+                setType(null);
+                setData(null);
+                return false;
+              }
+            }
+            /*
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
-              if (!profile.completedLevels.includes(currentQuest)) {
+              if (!profile.completedLevels.includes(String(currentQuest))) {
                 data.completedLevels = [...data.completedLevels, nextLevel];
               }
               return data;
@@ -2677,12 +3094,54 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             setCurrentScreenId(6);
             return false;
           }
+          */
         }
       } else {
+        if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+          {
+            setType(next?.blockChoosen);
+            setData(next);
+            setCurrentScreenId(6);
+            return false;
+          }
+          else if(feedbackList.length !== 0)
+            {
+              setType(next?.blockChoosen);
+              setData(next);
+              setCurrentScreenId(6);
+              return false;
+            }
+          else
+          {
+            if (demoBlocks.hasOwnProperty(nextLevel)) {
+              setProfile((prev: any) => {
+                const data = { ...prev };
+                // if (!profile.completedLevels.includes(String(currentQuest))) {
+                //   data.completedLevels = [...data.completedLevels, nextLevel];
+                // }
+                if (!profile.completedLevels.includes(String(nextLevel))) {
+                  data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                }
+
+                return data;
+              });
+
+              setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+              setData(demoBlocks[nextLevel]['1']);
+              setCurrentScreenId(6);
+              return false;
+            } else {
+              setCurrentScreenId(6);
+              setType(null);
+              setData(null);
+              return false;
+            }
+          }
+         /*
         if (demoBlocks.hasOwnProperty(nextLevel)) {
           setProfile((prev: any) => {
             const data = { ...prev };
-            if (!profile.completedLevels.includes(currentQuest)) {
+            if (!profile.completedLevels.includes(String(currentQuest))) {
               data.completedLevels = [...data.completedLevels, nextLevel];
             }
             return data;
@@ -2697,8 +3156,11 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
           setCurrentScreenId(6);
           return false;
         }
+        */
       }
     }
+    if(currentScreenId === 2)
+    {
     if (next?.blockShowNavigate) {
       if (next?.blockShowNavigate === 'Repeat Question') {
         const currentBlockinteraction =
@@ -2883,10 +3345,51 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             setReplayIsOpen(true);
             return false;
           } else {
+            if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+              {
+                setType(next?.blockChoosen);
+                setData(next);
+                setCurrentScreenId(6);
+                return false;
+              }
+              else if(feedbackList.length !== 0)
+                {
+                  setType(next?.blockChoosen);
+                  setData(next);
+                  setCurrentScreenId(6);
+                  return false;
+                }
+              else
+              {
+                if (demoBlocks.hasOwnProperty(nextLevel)) {
+                  setProfile((prev: any) => {
+                    const data = { ...prev };
+                    // if (!profile.completedLevels.includes(String(currentQuest))) {
+                    //   data.completedLevels = [...data.completedLevels, nextLevel];
+                    // }
+                    if (!profile.completedLevels.includes(String(nextLevel))) {
+                      data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                    }
+                    return data;
+                  });
+    
+                  setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                  setData(demoBlocks[nextLevel]['1']);
+                  setFeedbackNavigateNext(false);
+                  setCurrentScreenId(6);
+                  return false;
+                } else {
+                  setCurrentScreenId(6);
+                  setType(null);
+                  setData(null);
+                  return false;
+                }
+              }
+              /*
             if (demoBlocks.hasOwnProperty(nextLevel)) {
               setProfile((prev: any) => {
                 const data = { ...prev };
-                if (!profile.completedLevels.includes(currentQuest)) {
+                if (!profile.completedLevels.includes(String(currentQuest))) {
                   data.completedLevels = [...data.completedLevels, nextLevel];
                 }
                 return data;
@@ -2902,12 +3405,54 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               setCurrentScreenId(6);
               return false;
             }
+            */
           }
         } else {
+          if(gameInfo?.gameData?.gameIsShowLeaderboard === 'true')
+            {
+              setType(next?.blockChoosen);
+              setData(next);
+              setCurrentScreenId(6);
+              return false;
+            }
+            else if(feedbackList.length !== 0)
+              {
+                setType(next?.blockChoosen);
+                setData(next);
+                setCurrentScreenId(6);
+                return false;
+              }
+            else
+            {
+              if (demoBlocks.hasOwnProperty(nextLevel)) {
+                setProfile((prev: any) => {
+                  const data = { ...prev };
+                  // if (!profile.completedLevels.includes(String(currentQuest))) {
+                  //   data.completedLevels = [...data.completedLevels, nextLevel];
+                  // }
+                  if (!profile.completedLevels.includes(String(nextLevel))) {
+                    data.completedLevels = [...data.completedLevels, String(nextLevel)];
+                  }
+                  return data;
+                });
+  
+                setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+                setData(demoBlocks[nextLevel]['1']);
+                setFeedbackNavigateNext(false);
+                setCurrentScreenId(6);
+                return false;
+              } else {
+                setCurrentScreenId(6);
+                setType(null);
+                setData(null);
+                return false;
+              }
+            }
+/*
           if (demoBlocks.hasOwnProperty(nextLevel)) {
             setProfile((prev: any) => {
               const data = { ...prev };
-              if (!profile.completedLevels.includes(currentQuest)) {
+              if (!profile.completedLevels.includes(String(currentQuest))) {
                 data.completedLevels = [...data.completedLevels, nextLevel];
               }
               return data;
@@ -2923,6 +3468,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             setCurrentScreenId(6);
             return false;
           }
+          */
         }
       } else {
         /** IF a block not has navi option then it leads to next block */
@@ -3031,22 +3577,48 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       setSelectedOption(null);
       return false;
     }
+  }
+
   };
 
   const calScore = () => {
-    const currentQuest = data?.blockPrimarySequence.split('.')[0] ?? null;
+    // const currentQuest = data?.blockPrimarySequence.split('.')[0] ?? null;
+    const currentQuest = profile?.currentQuest || "1";
     const currentGameData = gameInfo.gameQuest.find(
       (row: any) => row.gameQuestNo == profile?.currentQuest,
     );
-    const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
+    // const nextLevel = currentQuest != null ? String(parseInt(currentQuest) + 1) : null;
+    const nextLevel = parseInt(profile?.currentQuest)+1 || null;
     const haveNextQuest = gameInfo.gameQuest.some(
       (row: any) => row.gameQuestNo > profile?.currentQuest,
     );
-    const totalScore = profile?.score.forEach((item: any) => {
-      if (item && item.marks) {
-        return item.marks.reduce((acc: any, mark: any) => acc + mark, 0);
+    let totalScore = 0;
+    const ifPlayInProgress = profile?.replayScore?.length > 0 && profile?.replayScore?.some((item:any)=> item.quest === profile?.currentQuest);
+    if(ifPlayInProgress){
+      totalScore = profile?.replayScore.reduce((acc: any, row: any) => {
+          if(row.quest === profile?.currentQuest){
+              return acc+ row.score;
+          }
+          return acc;
+
+        // if (item. && item.score) {
+        //   return item.marks.reduce((acc: any, mark: any) => acc + mark, 0);
+        // }
+      }, 0);
+    }
+  else{  
+    // totalScore = profile?.score.forEach((item: any) => {
+    //   if (item && item.marks) {
+    //     return item.marks.reduce((acc: any, mark: any) => acc + mark, 0);
+    //   }
+    // });
+    profile?.score.reduce((acc: any, row: any) => {
+      if(row.quest === profile?.currentQuest){
+          return acc+ row.score;
       }
-    });
+      return acc;
+  }, 0);
+  }
     return {
       currentQuest: currentQuest,
       currentGameData: currentGameData,
@@ -3145,18 +3717,16 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       ![2, 10, 0].includes(currentScreenId) &&
       backGroundBgmscreens.includes(currentScreenId)
     ) {
-      setAudioObj({
+      setAudioObj((prev)=>({
+        ...prev,
         url: audio,
         type: EnumType.BGM,
-        volume: '0.5',
         loop: true, // Voice doesn't loop
         autoplay: true,
-      });
+      }));
       if (backgroundBgmRef.current) {
         try {
           backgroundBgmRef.current.play().catch((error) => {
-            // Handle play promise rejection
-            // console.error('Error playing background BGM:', error);
           }); // Play background BGM
         } catch (error) {
           console.error('Background BGM ref is not available.', error);
@@ -3177,14 +3747,13 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
 
     setFeedBackFromValue();
 
-    const screens = [1, 10, 12, 8, 14, 9, 15, 16, 0, 6, 4];
+    const screens = [10, 12, 8, 14, 9, 15, 16, 0, 6, 4];
     if (!screens.includes(currentScreenId)) {
-      const screenIdset =
-        getPrevLogDatas.screenIdSeq[getPrevLogDatas.screenIdSeq.length - 1];
+      const screenIdset = (getPrevLogDatas?.screenIdSeq?.length - 1 > 0) ? (getPrevLogDatas?.screenIdSeq[getPrevLogDatas?.screenIdSeq?.length -1]): [];
       if (screenIdset !== currentScreenId) {
         setPreLogDatas((prev: any) => ({
           ...prev,
-          screenIdSeq: [...prev.screenIdSeq, currentScreenId],
+          screenIdSeq:  prev?.screenIdSeq?.length >0 ? [...prev?.screenIdSeq, currentScreenId] : [],
         }));
       }
     }
@@ -3453,43 +4022,45 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     setData(gameInfo?.blocks[profile?.currentQuest]['1']);
     setCurrentScreenId(2);
   };
-  const replayNextHandler = (data: any) => {
-    // const currentQuest = data
-    //   ? parseInt(data?.blockPrimarySequence.split('.')[0])
-    //   : null;
-    // const nextLevel = currentQuest != null ? currentQuest === Object.keys(demoBlocks).length ? currentQuest : String(currentQuest + 1) : null;
-    // if (demoBlocks.hasOwnProperty(nextLevel)) {
-    //   setProfile((prev: any) => {
-    //     const data = { ...prev };
-    //     if (!profile.completedLevels.includes(currentQuest)) {
-    //       data.completedLevels = [...data.completedLevels, nextLevel];
-    //     }
+  const replayNextHandler = () => {
+    const currentQuest = data
+      ? parseInt(data?.blockPrimarySequence.split('.')[0])
+      : null;
+    // const nextLevel = currentQuest != null ?  String(currentQuest + 1) : null;
+    const nextLevel = parseInt(profile?.currentQuest)+1 || null;
+    if (demoBlocks.hasOwnProperty(nextLevel)) {
+      setProfile((prev: any) => {
+        const data = { ...prev };
+        // if (!profile.completedLevels.includes(String(currentQuest))) {
+        //   data.completedLevels = [...data.completedLevels, nextLevel];
+        // }
+        if (!profile.completedLevels.includes(String(nextLevel))) {
+          data.completedLevels = [...data.completedLevels, String(nextLevel)];
+        }
 
-    //     return data;
-    //   });
-    //   setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-    //   setData(demoBlocks[nextLevel]['1']);
-    //   setCurrentScreenId(13);
-    //   return false;
-    // } else {
-    //   if (
-    //     gameInfo.gameData?.gameIsShowReflectionScreen !== 'false' &&
-    //     gameInfo?.reflectionQuestions.length > 0
-    //   ) {
-    //     setCurrentScreenId(3); //Navigate to Reflection screen
-    //     return false;
-    //   } else if (gameInfo.gameData?.gameIsShowTakeaway !== 'false') {
-    //     setCurrentScreenId(7); //Navigate to Takeaway screen
-    //     return false;
-    //   } else {
-    //     setType(null);
-    //     setData(null);
-    //     setCurrentScreenId(5); //Navigate to Thank you screen
-    //     return false;
-    //   }
-    // }
-    setCurrentScreenId(4);
-    return false;
+        return data;
+      });
+      setType(demoBlocks[nextLevel]['1']?.blockChoosen);
+      setData(demoBlocks[nextLevel]['1']);
+      setCurrentScreenId(13);
+      return false;
+    } else {
+      if (
+        gameInfo.gameData?.gameIsShowReflectionScreen !== 'false' &&
+        gameInfo?.reflectionQuestions.length > 0
+      ) {
+        setCurrentScreenId(3); //Navigate to Reflection screen
+        return false;
+      } else if (gameInfo.gameData?.gameIsShowTakeaway !== 'false') {
+        setCurrentScreenId(7); //Navigate to Takeaway screen
+        return false;
+      } else {
+        setType(null);
+        setData(null);
+        setCurrentScreenId(5); //Navigate to Thank you screen
+        return false;
+      }
+    }    
   };
 
   const handleAudioError = () => {
@@ -3505,33 +4076,28 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         if (resLang?.status === 'Success') {
           if (resLang?.data.length > 0) {
             const data = resLang?.data;
+            const ifEnglishExist = data.filter((lang: any)=>lang.value===1 );
+            if(ifEnglishExist.length === 0)
+              {
+                data.unshift({ value: 1, label: 'English' });
+              }
             setGameLanguages(data);
-            data.unshift({ value: 0, label: 'English' });
             setHasMulitLanguages(true);
           } else {
+            setGameLanguages([{ value: 1, label: 'English' }]);
             setProfileData((prev: any) => ({
               ...prev,
-              language: 'English',
+              language: 1,
             }));
             setPreLogDatas((prev: any) => ({
-           
               ...prev,
               previewProfile: {
                 ...prev.previewProfile,
-                language: 'English',
-                // language: data[0]?.label,
-              },
-             
+                language: 1,
+              }, 
             }));
             setHasMulitLanguages(true);
-            setIsOpenCustomModal(true);
           }
-          // else {
-          //   setProfileData((prev: any) => ({
-          //     ...prev,
-          //     language: "English",
-          //   }));
-          // }
         }
       }
     };
@@ -3559,20 +4125,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   };
 
   const dontShowTopMenu = ![3, 4, 5, 6, 7, 10].includes(currentScreenId);
-  // currentScreenId !== 7 &&
-  // currentScreenId !== 6 &&
-  // currentScreenId !== 5 &&
-  // currentScreenId !== 4 &&
-  // currentScreenId !== 3 &&
-  // currentScreenId !== 10;
 
   useEffect(() => {
     if (FeedbackNavigatenext === true) {
+      setisScreenshot(false);
       getData(data);
     }
   }, [FeedbackNavigatenext]);
 
-  const getFeedbackData = (getdata: any) => {
+  const getFeedbackData = (data:any) => {
     setisScreenshot(true);
     const groupedFeedback: { [key: string]: any[] } = {};
     feedbackList.forEach((feedback) => {
@@ -3641,19 +4202,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         }
       }
 
-      // const optionsFiltered = gameInfo?.questOptions.filter(
-      //   (key: any) => key?.qpSequence === GetSeqData[0]?.blockPrimarySequence,
-      // );
-      // if (gameInfo?.gameData?.gameShuffle === 'true') {
-      //   for (let i = optionsFiltered.length - 1; i > 0; i--) {
-      //     const j = Math.floor(Math.random() * (i + 1));
-      //     [optionsFiltered[i], optionsFiltered[j]] = [
-      //       optionsFiltered[j],
-      //       optionsFiltered[i],
-      //     ];
-      //   }
-      // }
-
       const SelectedoptionsFiltered = optionsFiltered.filter(
         (key: any) =>
           key?.qpOptions ==
@@ -3697,6 +4245,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
         lastBlockModifiedDate: getPrevLogDatas.lastBlockModifiedDate,
         lastModifiedBlockSeq: getPrevLogDatas.lastModifiedBlockSeq,
         playerInputs: getPrevLogDatas.playerInputs,
+        previewScore: getPrevLogDatas.previewScore,
+        // audioVolumeValue: JSON.stringify(getPrevLogDatas.audioVolumeValue),
       };
 
       const previousDataString = JSON.stringify(data);
@@ -3713,73 +4263,60 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
       const currentQuest = currentdata
         ? parseInt(currentdata?.blockPrimarySequence.split('.')[0])
         : null;
-      if (currentdata?.blockChoosen === 'Interaction') {
-        if (currentQuest === parseInt(profile.currentQuest)) {
-          if (getPrevLogDatas.selectedOptions[profile?.currentQuest]) {
-            const existingIndex = getPrevLogDatas.selectedOptions[
-              profile?.currentQuest
-            ]?.findIndex((item: any) => item.blockId === currentdata.blockId);
+        if (currentdata?.blockChoosen === 'Interaction') {
+          if (currentQuest === parseInt(profile.currentQuest)) {
+            if (getPrevLogDatas.selectedOptions[profile?.currentQuest]) {
+              const existingIndex = getPrevLogDatas.selectedOptions[profile?.currentQuest]?.findIndex((item: any) => item.blockId === currentdata.blockId);
 
-            if (existingIndex !== -1) {
-              const updatedOptions = [
-                ...getPrevLogDatas.selectedOptions[profile?.currentQuest],
-              ];
-
-              updatedOptions[existingIndex] = {
-                blockId: currentdata.blockId,
-                optionId: OptionSelectId,
-              };
-              setPreLogDatas((prev: any) => ({
-                ...prev,
-                selectedOptions: {
-                  ...prev.selectedOptions,
-                  [profile?.currentQuest]: updatedOptions,
-                },
-              }));
-            } else {
-              setPreLogDatas((prev: any) => ({
-                ...prev,
-                selectedOptions: {
-                  ...prev.selectedOptions,
-                  [profile?.currentQuest]: [
-                    ...prev.selectedOptions[profile?.currentQuest],
-                    {
-                      blockId: currentdata.blockId,
-                      optionId: [OptionSelectId],
-                    },
-                  ],
-                },
-              }));
+              if (existingIndex !== -1) {
+                const updatedOptions = [...getPrevLogDatas.selectedOptions[profile?.currentQuest]];
+                updatedOptions[existingIndex] = { blockId: currentdata.blockId, optionId: OptionSelectId };
+                setPreLogDatas((prev: any) => ({
+                  ...prev,
+                  selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: updatedOptions }
+                }));
+              }
+              else {
+                setPreLogDatas((prev: any) => ({
+                  ...prev,
+                  selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [...prev.selectedOptions[profile?.currentQuest], { blockId: currentdata.blockId, optionId: OptionSelectId }] }
+                }));
+              }
+  
             }
-          } else {
+            else {
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                selectedOptions: { ...prev.selectedOptions, [profile?.currentQuest]: [{ blockId: currentdata.blockId, optionId: OptionSelectId }] }
+              }));
+  
+            }
+  
+          }
+          else {
             setPreLogDatas((prev: any) => ({
               ...prev,
-              selectedOptions: {
-                ...prev.selectedOptions,
-                [profile?.currentQuest]: [
-                  { blockId: currentdata.blockId, optionId: [OptionSelectId] },
-                ],
-              },
+              selectedOptions: { [profile?.currentQuest]: [{ blockId: currentdata.blockId, optionId: OptionSelectId }] }
             }));
           }
-        } else {
-          setPreLogDatas((prev: any) => ({
-            ...prev,
-            selectedOptions: {
-              [profile?.currentQuest]: [
-                { blockId: currentdata.blockId, optionId: OptionSelectId },
-              ],
-            },
-          }));
         }
-      }
     }
   };
 
   /** replay prompt functions for replay point & previous navigation to chapter selection screen*/
 
-  const handleReplayButtonClick = () => {
-    console.log('handleReplayButtonClick()');
+  const handleReplayButtonClick = (replayType: string) => {
+    /**replayType become ['mandatoryReplay', 'optionalReplay','replayPointPrompt'] **/
+
+    if(replayType === 'mandatoryReplay'){
+      //s***************
+      setPreLogDatas((prev: any) => ({
+        ...prev,
+        selectedOptions: {
+          [profile?.currentQuest]: [ ],
+        },
+      }));
+    }
     setType(demoBlocks[profile?.currentQuest]['1']?.blockChoosen);
     setData(demoBlocks[profile?.currentQuest]['1']);
     if (
@@ -3850,6 +4387,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
               audioObj={audioObj}
               questState={questState}
               setIsOpenCustomModal={setIsOpenCustomModal}
+              EnumType={EnumType}
+              getPrevLogDatas={getPrevLogDatas}
+              setPreLogDatas={setPreLogDatas}
             />
           </Box>
           <Flex
@@ -3910,7 +4450,9 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                 gameinfodata={gameInfo.gameData.gameShuffle}
                 profileData={profileData} 
                 setQuestState={setQuestState} setOptions={setOptions}    
-                setPreLogDatas={setPreLogDatas}         
+                setPreLogDatas={setPreLogDatas}      
+                replayNextHandler ={replayNextHandler}
+                data={data}  
                  />
             )}
             {(() => {
@@ -3960,7 +4502,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                               <Welcome
                                 intro={audio}
                                 currentScreenId={currentScreenId}
-                                setprevScreenId={setprevScreenId}
                                 setCurrentScreenId={setCurrentScreenId}
                                 formData={gameInfo?.gameData}
                                 imageSrc={preloadedAssets.backgroundImage}
@@ -3973,7 +4514,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                             </Box>
                           </Box>
                         </Box> 
-                      {/* </Box> */}
                     </>
                   );
                 case 2:
@@ -4020,6 +4560,12 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                           getPrevLogDatas={getPrevLogDatas}
                           RepeatSelectOption={RepeatSelectOption}
                           RepeatPrevOption={RepeatPrevOption}
+                          /**Model Components passed as props*/
+                          SelectedNPCs={SelectedNPCs}
+                          Player={Player}
+                          // CharacterModal={CharacterModal}
+                          ModelPlayer={ModelPlayer}
+                          /**Model Components */
                         />
                       )}
                     </>
@@ -4049,6 +4595,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                               setCurrentScreenId={setCurrentScreenId}
                               preloadedAssets={preloadedAssets}
                               setPreLogDatas={setPreLogDatas}
+                              getPrevLogDatas={getPrevLogDatas}
                             />
                           </Box>
                         </Box>
@@ -4184,6 +4731,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                               setData={setData}
                               type={type}
                               questWiseMaxTotal={questWiseMaxTotal} /// Pass questWiseMaxTotal as a prop
+                              gameInfoTotalScore = {gameInfo?.completionQuestOptions}
                             />
                           </Box>
                         </Box>
@@ -4308,7 +4856,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       }
                       setPreLogDatas={setPreLogDatas}
                       getPrevLogDatas={getPrevLogDatas}
-                      setprevScreenId={setprevScreenId}
                       currentScreenId={currentScreenId}
                       setModelControl={setModelControl}
                       gameInfo={gameInfo.gameData}
@@ -4338,7 +4885,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                       <Characterspage
                         profileData={profileData}
                         setProfileData={setProfileData}
-                        setprevScreenId={setprevScreenId}
                         currentScreenId={currentScreenId}
                         setSelectedPlayer={setSelectedPlayer}
                         players={gameInfo?.gamePlayers}
@@ -4349,6 +4895,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         preloadedAssets={preloadedAssets}
                         setPreLogDatas={setPreLogDatas}
                         getPrevLogDatas={getPrevLogDatas}
+                        ModelPlayer={ModelPlayer}
                       />
                     </>
                   );
@@ -4372,7 +4919,6 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
                         gameQuest={gameInfo?.gameQuest}
                         setFeedbackList={setFeedbackList}
                         preloadedAssets={preloadedAssets}
-                        setprevScreenId={setprevScreenId}
                         currentScreenId={currentScreenId}
                         setPreLogDatas={setPreLogDatas}
                         getPrevLogDatas={getPrevLogDatas}
@@ -4645,6 +5191,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
             setPreLogDatas={setPreLogDatas}
             getPrevLogDatas={getPrevLogDatas}
             currentScreenId={currentScreenId}
+            isInitialLoadScreenWelcome={isInitialLoadScreenWelcome}
+            setIsInitialLoadScreenWelcome={setIsInitialLoadScreenWelcome}
           />
         </Box>
       </Box>

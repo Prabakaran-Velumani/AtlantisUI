@@ -8,12 +8,8 @@ if (process.env.REACT_APP_BACKEND_SERVER) {
         // BACKEND_SERVER = "http://192.168.1.51:5557";
         // BACKEND_SERVER = "http://192.168.1.51:5557";
 }
-
 export const API_SERVER = BACKEND_SERVER;
-
 export const Notelength = 150;
 export const Dialoglength = 300;
 export const Responselength = 300;
-
 export const DemoPlayRoutePath = '/game/creator/demoplay/';
-

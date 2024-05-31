@@ -11,7 +11,7 @@ import Setting from 'assets/img/games/settings.png';
 import SettingPad from 'assets/img/games/setting-pad.png';
 import SliderPointer from 'assets/img/games/slider-pointer.png';
 import Close from 'assets/img/games/close.png';
-import { ScoreContext } from '../GamePreview';
+import { ScoreContext,ProfileType } from '../GamePreview';
 import { motion } from 'framer-motion';
 interface ModelPopupProps {
   data?: any;
@@ -38,17 +38,25 @@ interface ModelPopupProps {
   setPreLogDatas: any;
   setNavigateBlockEmpty: any;
   NavigateBlockEmpty: any;
-  profileData:any;
-  setQuestState:any;
-  setReplayState:any;
-  setReplayIsOpen:any;
+  profileData: any;
+  setQuestState: any;
+  setReplayState: any;
+  setReplayIsOpen: any;
 }
 
-const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, options, geTfeedBackoption, ModelControl, preloadedAssets, setModelControl, getPrevLogDatas, setCurrentScreenId, setLastModified, LastModified, setType, setData, gameInfo, setOptions, gameInfoquest, gameinfodata, isStoryScreen, isSetStoryScreen, setPreLogDatas, setNavigateBlockEmpty, NavigateBlockEmpty ,profileData,setQuestState,setReplayState,setReplayIsOpen}) => {
+const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, options, geTfeedBackoption, ModelControl, preloadedAssets, setModelControl, getPrevLogDatas, setCurrentScreenId, setLastModified, LastModified, setType, setData, gameInfo, setOptions, gameInfoquest, gameinfodata, isStoryScreen, isSetStoryScreen, setPreLogDatas, setNavigateBlockEmpty, NavigateBlockEmpty, profileData, setQuestState, setReplayState, setReplayIsOpen}) => {
   const [QuestScreen, SetQuestScreen] = useState<boolean>(false);
   const [QuestSelectionPage, SetQuestSelectionPage] = useState<boolean>(false);
   const [PlayAgain, SetPlayAgain] = useState<boolean>(false);
-  const { profile, setProfile } = useContext(ScoreContext);
+  const initialProfileObject: ProfileType = {
+    score: [],
+    completedLevels: ['1'],
+    currentQuest: 1,
+    replayScore: [],
+    playerGrandTotal: { questScores: {} },
+    todayEarnedScore: [{ quest: 1, score: 0, earnedDate: "" }],
+  };
+  // const { profile, setProfile } = useContext(ScoreContext);
   const NextScreen = () => {
     setPreLogDatas((prev: any) => ({
       ...prev,
@@ -56,6 +64,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
       screenIdSeq: [],
       lastActiveBlockSeq: '',
       selectedOptions: '',
+      previewScore:initialProfileObject,
     }));
     setModelControl(false);
     setLastModified(false);
@@ -65,6 +74,9 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
   const continueScreen = () => {
     if (LastModified === true) {
       const getLastModifiedid = getPrevLogDatas.lastModifiedBlockSeq;
+      // if (getPrevLogDatas?.previewScore) {
+      //  setProfile(getPrevLogDatas.previewScore);
+      // }
       // const getLastModifieddata = new Date(getPrevLogDatas.lastBlockModifiedDate).getTime();
       // const getupdatedAt = new Date(getPrevLogDatas.updatedAt).getTime();
       let filteredData: any;
@@ -79,42 +91,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
         }
         if (filteredData) {
           break;
-        }
-      }
-      if (getPrevLogDatas.nevigatedSeq) {
-        const getnevigatedSeq = getPrevLogDatas.nevigatedSeq;
-        const convertArray = Object.keys(getnevigatedSeq);
-        if (convertArray.length > 0) {
-          setProfile((prev: any) => ({
-            ...prev,
-            currentQuest: filteredData.blockQuestNo,
-            completedLevels: convertArray,
-            score: getPrevLogDatas.previewProfile?.score,
-          }));
-          if(getPrevLogDatas.previewProfile?.score?.length > 0)
-            {
-              setQuestState((prevquestdataList: any) => ({
-                ...prevquestdataList,
-                [filteredData.blockQuestNo]: 'completed',
-              }));
-            }
-         
-        }
-        else
-        {
-          setProfile((prev: any) => ({
-            ...prev,
-            currentQuest: filteredData.blockQuestNo,
-            completedLevels: ['1'],
-            score: getPrevLogDatas.previewProfile?.score,
-          }));
-          if(getPrevLogDatas.previewProfile?.score?.length > 0)
-            {
-              setQuestState((prevquestdataList: any) => ({
-                ...prevquestdataList,
-                [filteredData.blockQuestNo]: 'completed',
-              }));
-            }
         }
       }
       setData(filteredData);
@@ -139,7 +115,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
                   ...option,
                   qpOptionText: profilesetlan.content,
                 };
-                console.log('languagecont',languagecont);
                 optionsFiltered.push(languagecont);
               } else {
                 optionsFiltered.push(option);
@@ -174,54 +149,14 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
       if (getPrevLogDatas.screenIdSeq.length > 0) {
         const screenlast = getPrevLogDatas.screenIdSeq;
         const getLastScreenId = screenlast[screenlast.length - 1];
-        if (getPrevLogDatas.nevigatedSeq) {
-          const getnevigatedSeq = getPrevLogDatas.nevigatedSeq;
-          const convertArray = Object.keys(getnevigatedSeq);
-          if (convertArray.length > 0) {
-            setProfile((prev: any) => ({
-              ...prev,
-              currentQuest: parseInt(convertArray[convertArray.length -1 ]),
-              completedLevels: convertArray,
-              score: getPrevLogDatas.previewProfile?.score,
-            }));
-            if(getPrevLogDatas.previewProfile?.score?.length > 0)
-              {
-                setQuestState((prevquestdataList: any) => ({
-                  ...prevquestdataList,
-                  [parseInt(convertArray[convertArray.length -1 ])]: 'completed',
-                }));
-              }
-              else{
-                    setQuestState((prevquestdataList: any) => ({
-                      ...prevquestdataList,
-                      [parseInt(convertArray[convertArray.length -1 ])]: 'Started',
-                    }));
-                  
-              }
-          }
-          else
-          {
-            setProfile((prev: any) => ({
-              ...prev,
-              currentQuest: 1,
-              completedLevels: ['1']
-            })); 
-                  
-              
-          }
-        }
         if (getLastScreenId === 2) {
-        
           setLastModified(false);
-          //isSetStoryScreen(true);
           setReplayState('Prompt');
           setModelControl(false);
           setReplayIsOpen(true);
-          console.log('replayState');
           return false;
         }
         else {
-
           setCurrentScreenId(getLastScreenId);
           setModelControl(false);
           return false;
@@ -263,6 +198,13 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
         const getLastquest = convertArray[convertArray.length - 1];
         const findseq = getnevigatedSeq[getLastquest];
         const getLastSeq = findseq[getnevigatedSeq[getLastquest].length - 1];
+        const lenCompleteQuest = Object.keys(getnevigatedSeq);
+        let checkcompleteQuest = lenCompleteQuest;
+
+        if (Object.keys(gameInfo).length !== convertArray.length) {
+          checkcompleteQuest.push((convertArray.length + 1).toString());
+        }
+
         let SetLastSeqData: any;
         for (const key in gameInfo[getLastquest]) {
           const data = gameInfo[getLastquest][key];
@@ -272,39 +214,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
           }
 
         }
-        // console.log('score',getPrevLogDatas.previewProfile,'....',getPrevLogDatas.previewProfile?.score) ;//{"score":[{"seqId":"1.1","score":100,"quest":1,"scoreEarnedDate":"15-05-2024"}],"name":"Book","language":0,"gender":"Male"}
-        // return;
-        if(convertArray.length > 0)
-          {
-            setProfile((prev: any) => ({
-              ...prev,
-              currentQuest: SetLastSeqData.blockQuestNo,
-              completedLevels: convertArray,
-              score: getPrevLogDatas.previewProfile?.score,
-            }));
-            if(getPrevLogDatas.previewProfile?.score?.length > 0)
-              {
-                setQuestState((prevquestdataList: any) => ({
-                  ...prevquestdataList,
-                  [SetLastSeqData.blockQuestNo]: 'completed',
-                }));
-              }
-          }
-          else{
-            setProfile((prev: any) => ({
-              ...prev,
-              currentQuest: SetLastSeqData.blockQuestNo,
-              completedLevels: ['1'],
-              score: getPrevLogDatas.previewProfile?.score,
-            }));
-            if(getPrevLogDatas.previewProfile?.score?.length > 0)
-              {
-                setQuestState((prevquestdataList: any) => ({
-                  ...prevquestdataList,
-                  [SetLastSeqData.blockQuestNo]: 'completed',
-                }));
-              }
-          }
         setData(SetLastSeqData);
         setType(SetLastSeqData.blockChoosen);
         if (
@@ -313,20 +222,19 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
         ) {
           const optionsFiltered = [];
           const primarySequence = getLastSeq;
-  
+
           for (const option of gameInfoquest) {
             if (profileData?.Audiogetlanguage.length > 0) {
               if (option?.qpSequence === primarySequence) {
                 const profilesetlan = profileData?.Audiogetlanguage.find(
                   (key: any) => key?.textId === option.qpOptionId,
                 );
-  
+
                 if (profilesetlan) {
                   const languagecont = {
                     ...option,
                     qpOptionText: profilesetlan.content,
                   };
-                  console.log('languagecont',languagecont);
                   optionsFiltered.push(languagecont);
                 } else {
                   optionsFiltered.push(option);
@@ -357,33 +265,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
       }
     }
     else if (QuestSelectionPage === true) {
-      if (getPrevLogDatas.nevigatedSeq) {
-        const getnevigatedSeq = getPrevLogDatas.nevigatedSeq;
-        const convertArray = Object.keys(getnevigatedSeq);
-        if (convertArray.length > 0) {
-          setProfile((prev: any) => ({
-            ...prev,
-            currentQuest: parseInt(convertArray[convertArray.length -1 ]),
-            completedLevels: convertArray,
-            score: getPrevLogDatas.previewProfile?.score,
-          }));
-          if(getPrevLogDatas.previewProfile?.score?.length > 0)
-            {
-              setQuestState((prevquestdataList: any) => ({
-                ...prevquestdataList,
-                [parseInt(convertArray[convertArray.length -1 ])]: 'completed',
-              }));
-            }
-        }
-        else
-        {
-          setProfile((prev: any) => ({
-            ...prev,
-            currentQuest: 1,
-            completedLevels: ['1'],
-          }));
-        }
-      }
       setModelControl(false);
       //isSetStoryScreen(false);
       setCurrentScreenId(13);
@@ -438,42 +319,42 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
                   justifyContent={'space-between'}
                 >
                   <Box className="replay_game_text">
-                 { LastModified === true ? ' Would you like to view the lastModified sequence?' : NavigateBlockEmpty === true ? 'Dont have any blocks. So, navigate to the first block.' : '  Do you want to continue from the screen where you last paused?'}
+                    {LastModified === true ? ' Would you like to view the lastModified sequence?' : NavigateBlockEmpty === true ? 'Dont have any blocks. So, navigate to the first block.' : '  Do you want to continue from the screen where you last paused?'}
                   </Box>
-              
+
                   <Box
                     display={'flex'}
-                    justifyContent={ NavigateBlockEmpty === true ? 'center':'space-between'}
+                    justifyContent={NavigateBlockEmpty === true ? 'center' : 'space-between'}
                     w={'100%'}
                   >
-                    { NavigateBlockEmpty === true ?  
-                    <Button background={'transparent !important'}>
-                      <Img
-                        src={preloadedAssets?.OkayBtn}
-                        className="replay_game_btn"
-                        onClick={HandleBlockScreen}
-                      />
-                    </Button> 
-                    : 
-                    <>
-                    <Button background={'transparent !important'}>
-                      <Img
-                        src={preloadedAssets?.cancel}
-                        
-                        onClick={NextScreen}
-                        className="replay_game_btn_cancel"
-                      />
-                    </Button>
-                    <Button background={'transparent !important'}>
-                      <Img
-                        src={preloadedAssets?.OkayBtn}
-                        className="replay_game_btn"
-                        onClick={continueScreen}
-                      />
-                    </Button>
-                    </>
-                    
-                   } 
+                    {NavigateBlockEmpty === true ?
+                      <Button background={'transparent !important'}>
+                        <Img
+                          src={preloadedAssets?.OkayBtn}
+                          className="replay_game_btn"
+                          onClick={HandleBlockScreen}
+                        />
+                      </Button>
+                      :
+                      <>
+                        <Button background={'transparent !important'}>
+                          <Img
+                            src={preloadedAssets?.cancel}
+
+                            onClick={NextScreen}
+                            className="replay_game_btn_cancel"
+                          />
+                        </Button>
+                        <Button background={'transparent !important'}>
+                          <Img
+                            src={preloadedAssets?.OkayBtn}
+                            className="replay_game_btn"
+                            onClick={continueScreen}
+                          />
+                        </Button>
+                      </>
+
+                    }
                   </Box>
                 </Box>
               </Box>

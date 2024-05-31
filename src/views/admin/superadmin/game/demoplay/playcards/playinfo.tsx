@@ -67,7 +67,6 @@ export default function PlayInfo(props: {
             </Box>
             </Box>
           </Box>
-         
         </ModalBody>
       </ModalContent>
     </Modal>

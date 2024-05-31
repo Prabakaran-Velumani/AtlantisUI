@@ -1,20 +1,11 @@
 import { Box, Button, Icon, Img, Text, Textarea } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { ImHappy } from 'react-icons/im';
-import { TfiFaceSad } from 'react-icons/tfi';
-import { BsEmojiSunglasses } from 'react-icons/bs';
-import { FaRegFaceMehBlank } from 'react-icons/fa6';
-import { BsEmojiNeutral } from 'react-icons/bs';
-import { RiEmotionHappyLine } from 'react-icons/ri';
-import { FaRegTired } from 'react-icons/fa';
 import next from 'assets/img/screens/next.png'
 import Feedback from 'assets/img/screens/Feedback.png';
 import {
   FaHatCowboy,
 } from 'react-icons/fa';
 import { debounce } from 'lodash';
-
-// import { updatePreviewLogs } from 'utils/game/gameService';
 
 interface Badge {
   gasId: number;
@@ -77,7 +68,7 @@ const ThankYou: React.FC<{
 
   // Filter properties where the value is 'true'
   const trueValuesArray = propertiesToCheck.filter(property => formData[property] === 'true');
-  const [userInputs, setUserInputs] = useState<any>([]);
+  const  [userInputs,setUserInputs] = useState<any>(getPrevLogDatas?.playerInputs?.Thankyou);
 
   var thirdValue = "";
   if (trueValuesArray.length >= 3) {
@@ -94,54 +85,19 @@ const ThankYou: React.FC<{
     });
   }
 
-  //  const updateDatabase = async () => {
-  //   try { 
-  //     const apiResponse = await updatePreviewLogs(playerInputs);
-  //     if(apiResponse.status == 200){
-  //       console.log("Player's manual Feedback updated");
-  //     }
-  //     else{
-  //       console.log("failed - ",apiResponse?.message);
-  //     }
-  //     // if (apiResponse) {
-  //     //   setPlayerInputs((prevState) => ({
-  //     //     ...prevState,
-  //     //     reflection: apiResponse.reflection,
-  //     //   }));
-  //     // }
-  //   } catch (error) {
-  //     console.error('Error during API call kishore:', error);
-  //     console.log("playerInputs",playerInputs);
 
-  //   }
-  // };
-
-  const updateDatabase = async () => {
-  };
-
-  useEffect(() => {
+  const handleNext =() =>
+  {
     setPreLogDatas((prev: any) => ({
       ...prev,
       playerInputs: {
         ...prev.playerInputs, // Ensure prev.playerInputs exists
-        ThankYou: userInputs // Assign userInputs to ThankYou key
-      }
-    }));
-    const debouncedUpdateDatabase = debounce(updateDatabase, 1000);
-    return () => {
-      debouncedUpdateDatabase.cancel();
-    };
-  }, [userInputs])
-  const handleNext = () => {
-    setPreLogDatas((prev: any) => ({
-      ...prev,
-      playerInputs: {
-        ...prev.playerInputs, // Ensure prev.playerInputs exists
-        ThankYou: userInputs // Assign userInputs to ThankYou key
+        Thankyou: userInputs // Assign userInputs to ThankYou key
       }
     }));
     setCurrentScreenId(13);
   }
+
   return (
     <>
       {preloadedAssets.Thankyou && (
@@ -369,7 +325,6 @@ const ThankYou: React.FC<{
                           >
                             <div className="buttonfeel3" style = {{height:'100%'}} >
                               <Textarea
-                                // paddingTop="20px"
                                 outline="none"
                                 focusBorderColor="none"
                                 border="none"
@@ -379,8 +334,8 @@ const ThankYou: React.FC<{
                                 resize={'none'}
                                 _focus={{ boxShadow: 'none', border: 'none' }}
                                 fontFamily="AtlantisText"
-                                // onBlur={updateDatabase}
                                 onChange={(e: any) => setUserInputs(e.target.value)}
+                                value={userInputs}
                               />
                             </div>
                           </div>

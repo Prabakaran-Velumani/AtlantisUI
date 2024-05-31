@@ -28,6 +28,9 @@ interface TopMenuProps {
   audioObj: any;
   questState: any;
   setIsOpenCustomModal: (value: boolean) => void;
+  EnumType: any;
+  getPrevLogDatas: any;
+  setPreLogDatas: any;
 }
 
 const TopMenuBar: React.FC<TopMenuProps> = ({
@@ -45,66 +48,90 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
   setAudioObj,
   audioObj,
   questState,
-  setIsOpenCustomModal
+  setIsOpenCustomModal,
+  EnumType,
+  getPrevLogDatas,
+  setPreLogDatas,
 }) => {
   const [geFinalscorequest, SetFinalscore] = useState(null);
-  const { profile, setProfile } = useContext<{ profile: any, setProfile: any }>(ScoreContext);
+  const { profile, setProfile } = useContext<{ profile: any; setProfile: any }>(
+    ScoreContext,
+  );
   const [progressPercent, setProgressPercent] = useState<any>(0);
-
-  useEffect(() => { 
-    const scores = profile?.score; 
-    if (scores && scores.length > 0) { 
-      const sums = scores?.reduce((accumulator: { [key: string]: number }, score: any) => {
-        const quest = score.quest; 
-        if(accumulator?.[quest] != undefined) 
-          { 
-              accumulator[quest] = (accumulator[quest] || 0) + score.score;
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  useEffect(() => {
+    const scores = profile?.score;
+    if (scores && scores.length > 0) {
+      const sums = scores?.reduce(
+        (accumulator: { [key: string]: number }, score: any) => {
+          const quest = score.quest;
+          if (accumulator?.[quest] != undefined) {
+            accumulator[quest] = (accumulator[quest] || 0) + score.score;
             return accumulator;
           }
-         
-      }, 0);
+        },
+        0,
+      );
       SetFinalscore(sums);
     }
- 
   }, []);
+
   const handleOverView = () => {
-    // check a  condtion here 
-    if (currentScreenId === 2) {
-      setHomeLeaderBoard(currentScreenId);
-      setCurrentScreenId(15);
-      return;
-    } else {
-      setHomeLeaderBoard(currentScreenId);
-      setCurrentScreenId(4);
-      return;
+    if (!isButtonDisabled) {
+      setIsButtonDisabled(true); // Disable the button
+      if (currentScreenId === 2 || currentScreenId === 15) {
+        setHomeLeaderBoard(currentScreenId);
+        setCurrentScreenId(15);
+      } else {
+        setHomeLeaderBoard(currentScreenId);
+        setCurrentScreenId(4);
+      }
+
+      // Re-enable the button after a delay (e.g., 1 second)
+      setTimeout(() => {
+        setIsButtonDisabled(false);
+      }, 10000);
     }
-    };
+  };
   useEffect(() => {
     const progressResult = () => {
       //calculate Progress based on screen, Need to show different progress for current screen is in story, progress of the current quest, unless  show the entire game progress
       if (currentScreenId === 2) {
         const currentQuestBlocks = demoBlocks[profile?.currentQuest];
         const totalblockCount = Object.keys(currentQuestBlocks).length;
-        const keyWithValueOfCurrentBlock = Object.keys(currentQuestBlocks).find((key: any) => {
-          const obj = currentQuestBlocks[key];
-          const blockPrimarySequence = obj?.blockPrimarySequence;
-          if (blockPrimarySequence) {
-            const hasMatchingSequence = blockPrimarySequence.trim() === (data?.blockPrimarySequence || '').trim();
-            return hasMatchingSequence;
-          }
-          return false;
-        });
-        const progressBarRatio: any = keyWithValueOfCurrentBlock && (parseInt(keyWithValueOfCurrentBlock) > 0 ? (parseInt(keyWithValueOfCurrentBlock) - 1) / totalblockCount : 0);
-        setProgressPercent(progressBarRatio && progressBarRatio > 0 ? progressBarRatio : 0);
-      }
-      else {
+        const keyWithValueOfCurrentBlock = Object.keys(currentQuestBlocks).find(
+          (key: any) => {
+            const obj = currentQuestBlocks[key];
+            const blockPrimarySequence = obj?.blockPrimarySequence;
+            if (blockPrimarySequence) {
+              const hasMatchingSequence =
+                blockPrimarySequence.trim() ===
+                (data?.blockPrimarySequence || '').trim();
+              return hasMatchingSequence;
+            }
+            return false;
+          },
+        );
+        const progressBarRatio: any =
+          keyWithValueOfCurrentBlock &&
+          (parseInt(keyWithValueOfCurrentBlock) > 0
+            ? (parseInt(keyWithValueOfCurrentBlock) - 1) / totalblockCount
+            : 0);
+        setProgressPercent(
+          progressBarRatio && progressBarRatio > 0 ? progressBarRatio : 0,
+        );
+      } else {
         const uniqueQuestIds = [...new Set(profile?.completedLevels)]; //returns ['1', '2', '3'] if it has ['1','2','2','3']
 
         //collect the actually completed quest list to show the the progress
         const completedQuestList = uniqueQuestIds.filter((quest: any) => {
-          const isCurrentQuestCompleted = Object.entries(questState).some(([key, value]: [any, any]) => {
-            return key === quest && ['replayallowed', 'completed'].includes(value);
-          });
+          const isCurrentQuestCompleted = Object.entries(questState).some(
+            ([key, value]: [any, any]) => {
+              return (
+                key === quest && ['replayallowed', 'completed'].includes(value)
+              );
+            },
+          );
           return isCurrentQuestCompleted;
         });
 
@@ -115,19 +142,43 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
         }
         setProgressPercent(gameProgress && gameProgress > 0 ? gameProgress : 0);
       }
-    }
+    };
 
     progressResult();
-  }, [data, currentScreenId, questState])
+  }, [data, currentScreenId, questState]);
 
-  const handleMusicVolume = (vol: any) => {
-    setAudioObj((prev: any) => ({ ...prev, "volume": vol }));
-  }
+  const handleMusicVolume = (sliderValue: number, type: string) => {
+    if (!isNaN(sliderValue) && isFinite(sliderValue)) {
+      const newVolume = sliderValue / 100;
+
+      setAudioObj((prev: any) => ({
+        ...prev,
+        type: type === EnumType.BGM ? EnumType.BGM : EnumType.VOICE, // Update type based on parameter
+        volume: newVolume.toString(),
+      }));
+    }
+  };
+  useEffect(() => {
+    // Update preLogDatas with the new audio volume
+    const { type, volume } = audioObj;
+    const preLogAudioData = getPrevLogDatas?.audioVolumeValue ? {...getPrevLogDatas.audioVolumeValue} : {bgVolume: 0.5 , voVolume: 0.5 };
+    let updatedAudioData:any ;
+    if(type === EnumType.BGM){
+       updatedAudioData =  {...preLogAudioData, bgVolume : volume };
+    }
+    else{
+       updatedAudioData =  {...preLogAudioData, voVolume : volume };
+    }    
+    setPreLogDatas((prev: any) => ({...prev,audioVolumeValue: updatedAudioData}));
+  }, [audioObj]);
 
   const totalPoints = useMemo(() => {
     let total: number = 0;
     if ([2, 4, 6, 8, 9, 14].includes(currentScreenId)) {
-      const scoreArray = questState[parseInt(profile?.currentQuest)] == 'Started' ? profile?.score : profile?.replayScore;
+      const scoreArray =
+        questState[parseInt(profile?.currentQuest)] == 'Started'
+          ? profile?.score
+          : profile?.replayScore;
       if (scoreArray?.length > 0) {
         total = scoreArray.reduce((acc: number, cur: any) => {
           if (cur.quest == profile.currentQuest) {
@@ -138,21 +189,34 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
         }, 0);
       }
     } else {
-      total = profile.score!==undefined ? profile.score.reduce((acc: number, cur: any) => acc + cur.score, 0) : 0;
+      total =
+        profile.score !== undefined
+          ? profile.score.reduce((acc: number, cur: any) => acc + cur.score, 0)
+          : 0;
     }
-    return total;
+    return isNaN(total) || total < 0 ? 0 : total;
   }, [profile.score, profile.replayScore, currentScreenId]);
 
-  console.log('current',currentScreenId)
   return (
     <Box className="top-menu-home-section">
       {dontShowTopMenu && !isSettingOpen ? (
         <>
-          <Box w='100%' h='auto' position={'relative'}>
-            <Img src={preloadedAssets.TopMenu} className="top-menu-img" h={'auto !important'} />
-            <Box className='new-top-menu' >
-              <Box w={'10%'} h={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                <Tooltip label="Home"
+          <Box w="100%" h="auto" position={'relative'}>
+            <Img
+              src={preloadedAssets.TopMenu}
+              className="top-menu-img"
+              h={'auto !important'}
+            />
+            <Box className="new-top-menu">
+              <Box
+                w={'10%'}
+                h={'100%'}
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+              >
+                <Tooltip
+                  label="Home"
                   display={'flex'}
                   justifyContent={'center'}
                   alignItems={'center'}
@@ -181,7 +245,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                     onClick={() => setCurrentScreenId(1)}
                   />
                 </Tooltip>
-                <Tooltip label="Profile"
+                <Tooltip
+                  label="Profile"
                   display={'flex'}
                   justifyContent={'center'}
                   alignItems={'center'}
@@ -211,9 +276,16 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                   />
                 </Tooltip>
               </Box>
-              <Box w={'42.5%'} >
-                <Box w='90%' h={'100%'} display={'flex'} justifyContent={'space-between'} alignItems={'center'} >
-                  <Tooltip label="Progress"
+              <Box w={'42.5%'}>
+                <Box
+                  w="90%"
+                  h={'100%'}
+                  display={'flex'}
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                >
+                  <Tooltip
+                    label="Progress"
                     display={'flex'}
                     justifyContent={'center'}
                     alignItems={'center'}
@@ -233,21 +305,66 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                     overflow={'hidden'}
                     lineHeight={'25px'}
                   >
-                    <Box h={'70%'} w={'auto'} position={'relative'} zIndex={9999}>
-                      <Img src={preloadedAssets?.ProgressBar} h={'100%'} width={'auto'} />
-                      <Box position={'absolute'} display={'flex'} top={0} left={'4%'} w={'90%'} h={'100%'}>
-                        <Box w={'28.5%'} display={'flex'} justifyContent={'center'} alignItems={'center'} h={'100%'}>
-                          <Text textAlign={'center'} className='progress_percentage'>{Math.floor(progressPercent * 100)}%</Text>
+                    <Box
+                      h={'70%'}
+                      w={'auto'}
+                      position={'relative'}
+                      zIndex={9999}
+                    >
+                      <Img
+                        src={preloadedAssets?.ProgressBar}
+                        h={'100%'}
+                        width={'auto'}
+                      />
+                      <Box
+                        position={'absolute'}
+                        display={'flex'}
+                        top={0}
+                        left={'4%'}
+                        w={'90%'}
+                        h={'100%'}
+                      >
+                        <Box
+                          w={'28.5%'}
+                          display={'flex'}
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                          h={'100%'}
+                        >
+                          <Text
+                            textAlign={'center'}
+                            className="progress_percentage"
+                          >
+                            {Math.floor(progressPercent * 100)}%
+                          </Text>
                         </Box>
-                        <Box display={'flex'} alignItems={'center'} w={'70%'} h={'100%'} >
-                          {Array.from({ length: Math.floor(progressPercent * 100 / 10) }, (_, index) => (
-                            <Box w={'9%'} h={'40%'} ml={'1%'} background={'linear-gradient(to bottom, #009400, #00000000)'}></Box>
-                          ))}
+                        <Box
+                          display={'flex'}
+                          alignItems={'center'}
+                          w={'70%'}
+                          h={'100%'}
+                        >
+                          {Array.from(
+                            {
+                              length: Math.floor((progressPercent * 100) / 10),
+                            },
+                            (_, index) => (
+                              <Box
+                                w={'9%'}
+                                h={'40%'}
+                                ml={'1%'}
+                                background={
+                                  'linear-gradient(to bottom, #009400, #00000000)'
+                                }
+                              ></Box>
+                            ),
+                          )}
                         </Box>
                       </Box>
                     </Box>
                   </Tooltip>
-                  <Tooltip label="Score"
+                  <Tooltip
+                    label="Score"
                     display={'flex'}
                     justifyContent={'center'}
                     alignItems={'center'}
@@ -267,16 +384,37 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                     overflow={'hidden'}
                     lineHeight={'25px'}
                   >
-                    <Box h={'70%'} w={'auto'} position={'relative'} zIndex={9999}>
-                      <Img src={preloadedAssets?.Scorebox} h={'100%'} width={'auto'} />
-                      <Box position={'absolute'} display={'flex'} justifyContent={'center'} alignItems={'center'} top={0} left={'26%'} w={'68%'} h={'100%'}>
-                        <Text className="score_text">
-                          {totalPoints}
-                        </Text>
+                    <Box
+                      h={'70%'}
+                      w={'auto'}
+                      position={'relative'}
+                      zIndex={9999}
+                    >
+                      <Img
+                        src={preloadedAssets?.Scorebox}
+                        h={'100%'}
+                        width={'auto'}
+                      />
+                      <Box
+                        position={'absolute'}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                        top={0}
+                        left={'26%'}
+                        w={'68%'}
+                        h={'100%'}
+                      >
+                        <Text className="score_text">{totalPoints}</Text>
                       </Box>
                     </Box>
                   </Tooltip>
-                  <Tooltip label={currentScreenId === 2 || currentScreenId === 15 ? "Overview" :'LeaderBoard'}
+                  <Tooltip
+                    label={
+                      currentScreenId === 2 || currentScreenId === 15
+                        ? 'Overview'
+                        : 'LeaderBoard'
+                    }
                     display={'flex'}
                     justifyContent={'center'}
                     alignItems={'center'}
@@ -297,15 +435,21 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                     lineHeight={'25px'}
                   >
                     <Img
-                      src={currentScreenId === 2 || currentScreenId === 15 ? preloadedAssets.Overview : preloadedAssets.leadBtn}
+                      src={
+                        currentScreenId === 2 || currentScreenId === 15
+                          ? preloadedAssets.Overview
+                          : preloadedAssets.leadBtn
+                      }
                       onClick={handleOverView}
                       width={'auto'}
                       height={'70%'}
                       position={'relative'}
                       zIndex={9999}
+                      pointerEvents={isButtonDisabled ? 'none' : 'auto'}
                     />
                   </Tooltip>
-                  <Tooltip label="Settings"
+                  <Tooltip
+                    label="Settings"
                     display={'flex'}
                     justifyContent={'center'}
                     alignItems={'center'}
@@ -360,17 +504,16 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
               justifyContent: 'center',
             }}
           >
-            <Img
-              src={preloadedAssets.SettingPad}
-              className="setting-pad"
-            />
+            <Img src={preloadedAssets.SettingPad} className="setting-pad" />
+
             <Box className="music-volume volumes">
               <Slider
-                aria-label="slider-ex-4"
-                defaultValue={30}
-                name="musicVolume"
-                // onChangeEnd={(val) => { handleMusicVolume(val) }}
-                // value={audioObj.volume ?? 0}
+               aria-label="slider-ex-4"
+               name="musicVolume"
+                defaultValue={
+                  getPrevLogDatas?.audioVolumeValue?.bgVolume * 100 || 25
+                }
+                onChangeEnd={(value) => handleMusicVolume(value, EnumType.BGM)}
               >
                 <SliderTrack
                   className="slider-track"
@@ -378,7 +521,12 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                   borderRadius="80px"
                 >
                   <Box position="relative">
-                    <Img w={'100%'} h={'auto'} src={preloadedAssets.VolumeTrack} alt="Volume Track" />
+                    <Img
+                      w={'100%'}
+                      h={'auto'}
+                      src={preloadedAssets.VolumeTrack}
+                      alt="Volume Track"
+                    />
                     <Box
                       position="absolute"
                       top="47%"
@@ -399,11 +547,16 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                 </SliderTrack>                
               </Slider>
             </Box>
+
             <Box className="voice-volume volumes">
               <Slider
                 aria-label="slider-ex-4"
-                defaultValue={30}
-                name="voiceVolume"
+                defaultValue={
+                  getPrevLogDatas?.audioVolumeValue?.voVolume * 100 || 25
+                }
+                onChangeEnd={(value) =>
+                  handleMusicVolume(value, EnumType.VOICE)
+                }
               >
                 <SliderTrack
                   className="slider-track"
@@ -411,7 +564,12 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                   borderRadius="80px"
                 >
                   <Box position="relative">
-                    <Img w={'100%'} h={'auto'} src={preloadedAssets.VolumeTrack} alt="Volume Track" />
+                    <Img
+                      w={'100%'}
+                      h={'auto'}
+                      src={preloadedAssets.VolumeTrack}
+                      alt="Volume Track"
+                    />
                     <Box
                       position="absolute"
                       top="47%"
@@ -426,7 +584,6 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                     </Box>
                   </Box>
                 </SliderTrack>
-                
               </Slider>
             </Box>
             <Box className="btns">

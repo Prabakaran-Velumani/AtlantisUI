@@ -4,7 +4,7 @@ import { Canvas } from 'react-three-fiber'
 import CharacterModal from './CharacterModal'
 import Model from './Model'
 
-type SelectedNPCType ={
+interface SelectedNPCType {
     preloadedAssets: any;
     isStartsAnimationPlay?: boolean;
     isSpeaking?: boolean;
@@ -17,7 +17,7 @@ const SelectedNPCs: React.FC<SelectedNPCType> = ({preloadedAssets, isStartsAnima
     return (
         <>
     {selectedNpc ? (
-        <Box className={'player_character_image'}>
+        <Box className={'player_character_image got'}>
           <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */}
             {/* <Environment preset={"park"} background />   */}
             <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
@@ -26,15 +26,8 @@ const SelectedNPCs: React.FC<SelectedNPCType> = ({preloadedAssets, isStartsAnima
             <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
 
             {/* COMPONENTS */}
-            {/* <Canvas> */}
               <CharacterModal preloadedAssets={preloadedAssets} isStartsAnimationPlay={isStartsAnimationPlay}/>
-          {/* </Canvas> */}
-
-            {/* <Player /> */}
-            <Model position={[-3, -1.8, 5]} rotation={[0, 1, 0]} isSpeaking={false} />
-            {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
-            {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
-            {/* <Parrot /> */}
+              <Model position={[-3, -1.5, 4]} rotation={[0, 1, 0]} isSpeaking={false} />
           </Canvas>
         </Box>
       )
@@ -44,3 +37,4 @@ const SelectedNPCs: React.FC<SelectedNPCType> = ({preloadedAssets, isStartsAnima
 }
 
 export default SelectedNPCs;
+export type { SelectedNPCType };

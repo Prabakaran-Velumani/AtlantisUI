@@ -526,8 +526,8 @@ const WelcomeContentScreen: React.FC<{
                                             className="text-wrapper"
                                             display={'flex'}
                                             justifyContent={'space-between'}
-                                            font-weight={'300'}
-                                            margin-left={'5px'}
+                                            fontWeight={'300'}
+                                            marginLeft={'5px'}
                                           >
                                             <Text
                                               color={'#D9C7A2'}
@@ -582,8 +582,8 @@ const WelcomeContentScreen: React.FC<{
                                               // w={'50px'}
                                               // h={'20px'}
                                               justifyContent={'space-between'}
-                                              font-weight={'300'}
-                                              margin-left={'5px'}
+                                              fontWeight={'300'}
+                                              marginLeft={'5px'}
                                             >
                                               <Text
                                                 color={'#D9C7A2'}

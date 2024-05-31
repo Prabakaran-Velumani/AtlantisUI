@@ -88,7 +88,7 @@ import { AiFillMessage } from 'react-icons/ai';
 import { getAllReviews } from 'utils/reviews/reviews';
 import { API_SERVER } from 'config/constant';
 import { useDispatch } from 'react-redux';
-import { updatePreviewData ,createPreviewData} from '../../../../../store/preview/previewSlice';
+import { updatePreviewData ,createPreviewData, removeGame} from '../../../../../store/preview/previewSlice';
 import { Dispatch } from '@reduxjs/toolkit'; // Import Dispatch type from @reduxjs/toolkit
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
@@ -522,9 +522,12 @@ const GameCreation = () => {
         dispatch(createPreviewData(PreviewgameId));
 
     }
-    else {
-      dispatch(updatePreviewData(null));
-    }
+    // else {
+    //   dispatch(updatePreviewData(null));
+    // }
+    // return (()=>{
+    //   dispatch(removeGame(id));
+    // })
   }, [id]);
   /////////////////////////////////
   useEffect(() => {
@@ -1044,7 +1047,8 @@ setlanguageCount(CountResult?.data?.count)
 
   useEffect(() => {
     dispatch(
-      updatePreviewData({ isDispatched: true, CompKeyCount: CompKeyCount, gameId:parseInt(id) }),
+      // updatePreviewData({ isDispatched: true, CompKeyCount: CompKeyCount, gameId:parseInt(id) }),
+      updatePreviewData({CompKeyCount: CompKeyCount, gameId:parseInt(id) }),
     );
   }, [CompKeyCount]);
 
@@ -1056,6 +1060,7 @@ setlanguageCount(CountResult?.data?.count)
         currentTab: tab,
         currentSubTab: currentTab,
         currentQuest: questTabState,
+        activeBlockSeq: 1
       };
       dispatch(updatePreviewData(previewData));
       
@@ -1065,10 +1070,10 @@ setlanguageCount(CountResult?.data?.count)
   const handleEntirePrev = async () => {
     const previewData = {
     gameId: parseInt(id),
-      currentTab: tab,
-      currentSubTab: currentTab,
-      currentQuest: questTabState,
-      isDispatched: true,
+      currentTab: tab, //if just tab changed, shift the content
+      currentSubTab: currentTab, //if just SubTab changed in Design Section, shift the content
+      currentQuest: questTabState, //if just quest changed, shift the content
+      isDispatched: true, //used to load the latest content, if it true then fetch the latest Data from API
     };
     dispatch(updatePreviewData(previewData));
     const url = `/screen/preview/${id}`;
@@ -1482,7 +1487,7 @@ setlanguageCount(CountResult?.data?.count)
                         
                           if (!input[inputkey]?.navigateObjects[alp.option]) {
                             toast({
-                              title: `${alp.option} is Empty On This Sequence ${key.id} `,
+                              title: `This ${alp.option}  is Empty On This Sequence ${key.id} `,
                               status: 'error',
                               duration: 3000,
                               isClosable: true,
@@ -1493,7 +1498,7 @@ setlanguageCount(CountResult?.data?.count)
                       }
                       else {
                         toast({
-                          title: `This ${alp.option} is Empty On This Sequence ${key.id} `,
+                          title: `This ${alp.option}  Navigate is Empty On This Sequence ${key.id} `,
                           status: 'error',
                           duration: 3000,
                           isClosable: true,
@@ -2521,8 +2526,10 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
       setFormData(formDataWithoutLastTab);
       const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
+      console.log('idddddddd', MaxBlockQuestNumber)
       if (result.status === 'Success') {
         const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
+        console.log('Max QuestNo:', maxQuestNo);
         if (maxQuestNo < 5) {
           setOpenQuest(true);
         } else {
@@ -3127,10 +3134,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       }
     }
   };
-  const validateNavigation = (block:any) =>
-    {
 
-    }
   function truncateText(text: any, maxLength: any, maxLineLength: 10) {
     if (text.length <= maxLength) {
       return text;
@@ -3415,6 +3419,8 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
         // Set to an empty string or any default value
       }));
     }
+
+    // dispatch(updatePreviewData({isDispatched: true ,gameId:parseInt(id)}));
   }
 
   const handlecompletion = (e: any) => {
@@ -3755,19 +3761,17 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
     debounce(async (data: any) => {
       try {
         const datas = JSON.stringify(data);
+        console.log("!!!!datas", datas)
         const resu = await createReflection(datas);
+        console.log("!!!!resu", resu)
         if (resu.status !== 'Success') {
           return false;
         }
         if (resu.status == 'Success') {
+          console.log("Reflection updated done. Usedispatch has called...!")
           dispatch(
-            updatePreviewData({
-             
-                isDispatched: true,
-              reflectionPageUpdated: true,
-              gameId:parseInt(id)
-            
-            }),
+            updatePreviewData({isDispatched: true, // reflectionPageUpdated: true,
+              gameId:parseInt(id)}),
           );
         }
       } catch (error) {
@@ -3803,7 +3807,9 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       try {
         const result = await updateGame(id, data);
         if (result?.status !== 'Success') {
+          
         } else {
+          console.log("game data updated done. UseDispatch has called...!")
           dispatch(updatePreviewData({isDispatched: true ,gameId:parseInt(id) }));
         }
       } catch (error) {
@@ -3834,7 +3840,8 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
         if (result?.status !== 'Success') {
           return console.log('updateBackground error :' + result?.err);
         } else {
-          console.log('result data', result.data);
+          console.log("Story updated done. Use Dispatch has called...!")
+          dispatch(updatePreviewData({isDispatched: true ,gameId:parseInt(id)}));
         }
       } catch (error) {
         console.error('An error occurred while sending the request:', error);
@@ -3842,7 +3849,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
     }, 500),
     [id], // Empty dependency array to ensure that the function is only created once
   );
-
+//// debounced for auto upload when onchange in Completion Screen(s)
   const debouncedCompliSubmit = useCallback(
     debounce(async (data: any) => {
       try {
@@ -3852,6 +3859,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
         if (result?.status !== 'Success') {
           console.log('data not updated');
         } else {
+          console.log("Completion Screen Data updated done. Usedispatch has called...!")
           dispatch(updatePreviewData({isDispatched: true ,gameId:parseInt(id)}));
         }
       } catch (error) {
@@ -3895,8 +3903,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       if (Object.keys(Completion).length) debouncedCompliSubmit(compliData);
     }
   }, [compliData]);
-
-  ////handleCompliStore
 
   useEffect(() => {
     const selectBlockoptions = items.map((item: any) => ({
@@ -4157,6 +4163,12 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
   const handleTargetQuest = (progressItem: any, progressIndex: number) => {
     setTargetSequence(progressItem);
     tarSeqRef = document.getElementById(`tarSeqRef${progressItem?.id}`);
+    /**update the choosed block sequence to show the screenpreview */
+    const clickedQuestSeq=progressItem?.id;
+    const clickedQuestNo=parseInt(clickedQuestSeq.split('.')[0])
+    const clickedSeqNo=parseInt(clickedQuestSeq.split('.')[1]) 
+    dispatch(updatePreviewData({currentQuest: clickedQuestNo, activeBlockSeq:clickedSeqNo, gameId:parseInt(id)}));
+    /**End of update the choosed block sequence to show the screenpreview */
 
     if (tarSeqRef) {
       tarSeqRef.scrollIntoView({
@@ -4328,7 +4340,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       }
     }
     dispatch(
-      updatePreviewData({ activeBlockSeq: parseInt(seq.id.split('.')[1]) ,gameId:parseInt(id) }),
+      updatePreviewData({ activeBlockSeq: parseInt(seq.id.split('.')[1]) , gameId:parseInt(id) }),
     );
   };
 

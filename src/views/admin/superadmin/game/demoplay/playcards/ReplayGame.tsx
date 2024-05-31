@@ -100,56 +100,6 @@ const ReplayGame: React.FC<{
             </Box>
           </Box>
         </Box>
-
-        {/* {imageSrc && (
-        <>
-          <Box className="takeaway-screen">
-            <Box className="takeaway-screen-box">
-              <Box position={'relative'}>
-                <Img src={imageSrc} className="bg-replay" />
-                <Box className="replay_content">
-                  <Box className="replay_content_center">
-                    <Box className="title_replay">
-                      <Text fontFamily={'AtlantisContent'} textAlign={'center'}>
-                          {replayMessage}
-                      </Text>
-                    </Box>
-                    <Box
-                      w={'100%'}
-                      display={'flex'}
-                      justifyContent={
-                        formData?.gameMinScore < profile?.score
-                          ? 'space-between'
-                          : 'center'
-                      }
-                    >
-                      {isReplay === true ? (
-                        <Img
-                          src={preloadedAssets.replayBtn}
-                          className="replay_buttons"
-                          onClick={replayGame}
-                        />
-                      ) : isOptionalReplay === true ?
-                      ( 
-                        <>
-                      <Img
-                        src={preloadedAssets.replayBtn}
-                        className="replay_buttons"
-                        onClick={replayGame}
-                      />
-                      <Img
-                        src={preloadedAssets.next}
-                        className="replay_buttons"
-                        onClick={() => replayNextHandler(data)}
-                      /> </>) : null}
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        </>
-      )} */}
       </>
     );
   };

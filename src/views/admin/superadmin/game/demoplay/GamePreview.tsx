@@ -25,10 +25,11 @@ import { IoIosRefresh } from 'react-icons/io';
 import PlayInfo from './playcards/playinfo';
 import CharacterGlb from 'assets/img/games/Character_sample.glb';
 import Merlin from 'assets/img/games/Merlin.glb';
+import collector from 'assets/img/games/collector.glb';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-
-
+import Model from './playcards/Model';
+const NoAuth= lazy(() => import('./playcards/NoAuth'));
 const EntirePreview = lazy(() => import('./EntirePreview'));
 const gameScreens = [
   'Completion',
@@ -44,7 +45,29 @@ const gameScreens = [
 // const Tab5attribute = [6, 4,3, 7, 1,5 ];
 
 export const ScoreContext = createContext<any>(null);
+export type ProfileType = {
+  score: any[];
+  completedLevels: string[];
+  currentQuest: number;
+  replayScore: any[];
+  playerGrandTotal: {
+    questScores: Record<string, any>;
+  };
+  todayEarnedScore: {
+    quest: number;
+    score: number;
+    earnedDate: string;
+  }[];
+};
 
+const initialProfileObject: ProfileType = {
+  score: [],
+  completedLevels: ['1'],
+  currentQuest: 1,
+  replayScore: [],
+  playerGrandTotal: { questScores: {} },
+  todayEarnedScore: [{ quest: 1, score: 0, earnedDate: "" }],
+};
 const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
@@ -52,15 +75,7 @@ const GamePreview = () => {
   const [gameInfo, setGameInfo] = useState<any | null>(null);
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
-  // const [currentScreenId, setCurrentScreenId] = useState<number>(InitialScreenId);
-  const [profile, setProfile] = useState({
-    score: [],
-    completedLevels: ['1'],
-    currentQuest: 1,
-    replayScore:[],
-    playerGrandTotal:{questScores:{}},
-    todayEarnedScore: [{quest:1, score:0, earnedDate: ""}],  
-  });
+    const [profile, setProfile] = useState(initialProfileObject);
   const [currentScore, setCurrentScore] = useState(0);
   const toast = useToast();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -72,62 +87,48 @@ const GamePreview = () => {
   const [apiUrlAssetImageUrls, setApiUrlAssetImageUrls] = useState<any>(null); //preloaded Api image urls
   const [componentsLoaded, setComponentsLoaded] = useState(false);
   const [loadedGLBs, setLoadedGLBs] = useState<any>(null);
-  // Newly added start
-  const [prevnaviseq, setprevNaviseq] = useState([]);
-  const [LastActivityseq, setLastActivityseq] = useState([]);
-  const [prevSelectedOptionseq, setprevSelectedOptionseq] = useState([]);
-  const [prevScreenId, setprevScreenId] = useState([]);
-  const [previewLogsData, setPreviewLogsData] = useState<any>(null);
-  const [getPrevLogDatas, setPreLogDatas] = useState({
-    previewLogId: '',
-    playerId: '',
-    playerType: '',
-    previewGameId: '',
-    nevigatedSeq: [],
-    screenIdSeq: [],
-    lastActiveBlockSeq: '',
-    selectedOptions: '',
-    previewProfile: '',
-    lastModifiedBlockSeq: '',
-    lastBlockModifiedDate:'',
-    updatedAt:'',
-    playerInputs:''
-  });
+  const [previewLogsDataIni, setPreviewLogsDataIni] = useState<any>(null);
+  const [preLogDatasIni, setPreLogDatasIni] = useState<any>(null);
+  const [initialStateUpdate, setInitialStateUpdate]=useState<boolean>(false);
+  const [isAuthFailed, setIsAuthFailed]= useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<any>(false);
-  //End
   const user: any = JSON.parse(localStorage.getItem('user'));
+  
   //get the stored Preview Log Data, if has otherwise create a new record
   const fetchPreviewLogsData = async () => {
     try {
       if (gameInfo?.gameId) {
         const data = {
-          gameId: gameInfo?.gameId ?? null,
+          previewGameId: gameInfo?.gameId ?? null,
           playerId: gameInfo?.reviewer?.ReviewerId ?? user?.data?.id,
-          type: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null
+          playerType: gameInfo?.reviewer?.ReviewerId ? 'reviewer' : user?.data?.id ? 'creator' : null
         };
-        if (data?.gameId === null && data?.playerId === null && data?.type === null) {
+        if (data?.previewGameId === null && data?.playerId === null && data?.playerType === null) {
           console.error('User data not available.');
           return false;
         }
         const userDataString = JSON.stringify(data);
         const updatePreviewLogsResponse = await updatePreviewlogs(userDataString);
-        setPreLogDatas({
-          previewLogId: updatePreviewLogsResponse.data.previewLogId,
-          playerId: updatePreviewLogsResponse.data.playerId,
-          playerType: updatePreviewLogsResponse.data.playerType,
-          previewGameId: updatePreviewLogsResponse.data.previewGameId,
-          nevigatedSeq: updatePreviewLogsResponse.data.nevigatedSeq ? JSON.parse(updatePreviewLogsResponse.data.nevigatedSeq): [],
-          screenIdSeq: updatePreviewLogsResponse.data.screenIdSeq ? JSON.parse(updatePreviewLogsResponse.data.screenIdSeq) :[],
-          lastActiveBlockSeq: updatePreviewLogsResponse.data.lastActiveBlockSeq,
-          selectedOptions: updatePreviewLogsResponse.data.selectedOptions ? JSON.parse(updatePreviewLogsResponse.data.selectedOptions) :[],
-          previewProfile: updatePreviewLogsResponse.data.previewProfile ? JSON.parse(updatePreviewLogsResponse.data.previewProfile) : [],
-          lastModifiedBlockSeq: updatePreviewLogsResponse.data.lastModifiedBlockSeq,
-          lastBlockModifiedDate:updatePreviewLogsResponse.data.lastBlockModifiedDate,
-          updatedAt:updatePreviewLogsResponse.data.updatedAt,
-          playerInputs: updatePreviewLogsResponse.data.playerInputs? JSON.parse(updatePreviewLogsResponse.data.playerInputs) : [],
-          
+        if(updatePreviewLogsResponse?.status === "Success" || isAuthFailed === false){
+        setPreLogDatasIni({
+          previewLogId: updatePreviewLogsResponse.data?.previewLogId,
+          playerId: updatePreviewLogsResponse.data?.playerId,
+          playerType: updatePreviewLogsResponse.data?.playerType,
+          previewGameId: updatePreviewLogsResponse.data?.previewGameId,
+          nevigatedSeq: updatePreviewLogsResponse.data?.nevigatedSeq ? JSON.parse(updatePreviewLogsResponse.data.nevigatedSeq): [],
+          screenIdSeq: updatePreviewLogsResponse.data?.screenIdSeq ? JSON.parse(updatePreviewLogsResponse.data.screenIdSeq) :[],
+          lastActiveBlockSeq: updatePreviewLogsResponse.data?.lastActiveBlockSeq ? JSON.parse(updatePreviewLogsResponse.data.lastActiveBlockSeq) :[],
+          selectedOptions: updatePreviewLogsResponse.data?.selectedOptions ? JSON.parse(updatePreviewLogsResponse.data.selectedOptions) :[],
+          previewProfile: updatePreviewLogsResponse.data?.previewProfile ? JSON.parse(updatePreviewLogsResponse.data.previewProfile) : [],
+          lastModifiedBlockSeq: updatePreviewLogsResponse.data?.lastModifiedBlockSeq,
+          lastBlockModifiedDate:updatePreviewLogsResponse.data?.lastBlockModifiedDate,
+          updatedAt:updatePreviewLogsResponse.data?.updatedAt,
+          playerInputs: updatePreviewLogsResponse.data?.playerInputs? JSON.parse(updatePreviewLogsResponse.data.playerInputs) : [],
+          audioVolumeValue: updatePreviewLogsResponse.data?.audioVolumeValue ? JSON.parse(updatePreviewLogsResponse.data.audioVolumeValue): {bgVolume: 0.3, voVolume:0.3},
+          previewScore: updatePreviewLogsResponse.data?.previewScore ? JSON.parse(updatePreviewLogsResponse.data.previewScore): initialProfileObject,
         });
         return updatePreviewLogsResponse;
+      }
 
       }
     } catch (error) {
@@ -138,21 +139,18 @@ const GamePreview = () => {
   useEffect(() => {
     const fetchPreviewLogs = async () => {
       const Reponse = await fetchPreviewLogsData();
-      if (Reponse) {
-        setPreviewLogsData(Reponse);
+      if (Reponse?.status =="Success") {
+        setPreviewLogsDataIni(Reponse);
+        setInitialStateUpdate(true);
+        isAuthFailed && setIsAuthFailed(false);
+      }
+      else{
+        setIsAuthFailed(true);
       }
     }
     fetchPreviewLogs();
   }, [gameInfo]);
-  useEffect(() => {
-    const fetchPreviewLogs = async () => {
-      const Reponse = await fetchPreviewLogsData();
-    }
-
-    fetchPreviewLogs();
-  }, [previewLogsData]);
-//End get the stored Preview Log Data, if has otherwise create a new record
-
+  
   useEffect(() => {
     const fetchData = async () => {
       // assetImageSrc['characterGlb'] = CharacterGlb;
@@ -170,7 +168,7 @@ const GamePreview = () => {
         // assetImageSrc['characterGlb'] = CharacterGlb;
         // { assetType: 'characterGlb', src: characterGlb },
         // const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: CharacterGlb }]);
-        const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: Merlin }]);
+        const preloadedGLBs: any = await preloadedGLBFiles([{ assetType: 'characterGlb', src: collector }]);
         // Use preloadedGLBs[CharacterGlb] if you need the preloaded GLB data
         setLoadedGLBs((prev:any)=> ({...prev, preloadedGLBs}))
         const loader = new GLTFLoader();
@@ -258,32 +256,35 @@ const GamePreview = () => {
       }, {});
       return transformedArray;
     };
-    const completionOptions = gameQuest.map((qst: any, i: number) => {
+    const completionScreenData = info?.data;
+    const completionOptions = Object.entries(completionScreenData).map((qst: any, i: number) => {
       const item = {
-        gameId: qst.gameId,
-        questNo: qst.gameQuestNo,
-        gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
-        gameMinScore: qst.gameMinScore,
-        gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
-        gameDistinctionScore: qst.gameDistinctionScore,
-        gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
-        gameIsSetBadge: qst.gameIsSetBadge,
-        gameBadge: qst.gameBadge,
-        gameBadgeName: qst.gameBadgeName,
-        gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
-        gameAwardBadgeScore: qst.gameAwardBadgeScore,
-        gameScreenTitle: qst.gameScreenTitle,
-        gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage,
+        gameTotalScore:qst[1].gameTotalScore,
+        gameId: qst[1].gameId,
+        questNo: qst[1].gameQuestNo,
+        gameIsSetMinPassScore: qst[1].gameIsSetMinPassScore,
+        gameIsSetDistinctionScore: qst[1].gameIsSetDistinctionScore,
+        gameDistinctionScore: qst[1].gameDistinctionScore,
+        gameIsSetSkillWiseScore: qst[1].gameIsSetSkillWiseScore,
+        gameIsSetBadge: qst[1].gameIsSetBadge,
+        gameBadge: qst[1].gameBadge,
+        gameBadgeName: qst[1].gameBadgeName,
+        gameIsSetCriteriaForBadge: qst[1].gameIsSetCriteriaForBadge,
+        gameAwardBadgeScore: qst[1].gameAwardBadgeScore,
+        gameScreenTitle: qst[1].gameScreenTitle,
+        gameIsSetCongratsSingleMessage:
+          qst[1].gameIsSetCongratsSingleMessage,
         gameIsSetCongratsScoreWiseMessage:
-          qst.gameIsSetCongratsScoreWiseMessage,
-        gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
-        gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage,
+          qst[1].gameIsSetCongratsScoreWiseMessage,
+        gameCompletedCongratsMessage: qst[1].gameCompletedCongratsMessage,
+        gameMinimumScoreCongratsMessage:
+          qst[1].gameMinimumScoreCongratsMessage,
         gameaboveMinimumScoreCongratsMessage:
-          qst.gameaboveMinimumScoreCongratsMessage,
+          qst[1].gameaboveMinimumScoreCongratsMessage,
         gameLessthanDistinctionScoreCongratsMessage:
-          qst.gameLessthanDistinctionScoreCongratsMessage,
+          qst[1].gameLessthanDistinctionScoreCongratsMessage,
         gameAboveDistinctionScoreCongratsMessage:
-          qst.gameAboveDistinctionScoreCongratsMessage,
+          qst[1].gameAboveDistinctionScoreCongratsMessage,
       };
       return item;
     });
@@ -371,32 +372,35 @@ const GamePreview = () => {
       return transformedArray;
     };
 
-    const completionOptions = gameQuest.map((qst: any, i: number) => {
+    const completionScreenData = info?.data;
+    const completionOptions = Object.entries(completionScreenData).map((qst: any, i: number) => {
       const item = {
-        gameId: qst.gameId,
-        questNo: qst.gameQuestNo,
-        gameIsSetMinPassScore: qst.gameIsSetMinPassScore,
-        gameMinScore: qst.gameMinScore,
-        gameIsSetDistinctionScore: qst.gameIsSetDistinctionScore,
-        gameDistinctionScore: qst.gameDistinctionScore,
-        gameIsSetSkillWiseScore: qst.gameIsSetSkillWiseScore,
-        gameIsSetBadge: qst.gameIsSetBadge,
-        gameBadge: qst.gameBadge,
-        gameBadgeName: qst.gameBadgeName,
-        gameIsSetCriteriaForBadge: qst.gameIsSetCriteriaForBadge,
-        gameAwardBadgeScore: qst.gameAwardBadgeScore,
-        gameScreenTitle: qst.gameScreenTitle,
-        gameIsSetCongratsSingleMessage: qst.gameIsSetCongratsSingleMessage,
+        gameTotalScore:qst[1].gameTotalScore,
+        gameId: qst[1].gameId,
+        questNo: qst[1].gameQuestNo,
+        gameIsSetMinPassScore: qst[1].gameIsSetMinPassScore,
+        gameIsSetDistinctionScore: qst[1].gameIsSetDistinctionScore,
+        gameDistinctionScore: qst[1].gameDistinctionScore,
+        gameIsSetSkillWiseScore: qst[1].gameIsSetSkillWiseScore,
+        gameIsSetBadge: qst[1].gameIsSetBadge,
+        gameBadge: qst[1].gameBadge,
+        gameBadgeName: qst[1].gameBadgeName,
+        gameIsSetCriteriaForBadge: qst[1].gameIsSetCriteriaForBadge,
+        gameAwardBadgeScore: qst[1].gameAwardBadgeScore,
+        gameScreenTitle: qst[1].gameScreenTitle,
+        gameIsSetCongratsSingleMessage:
+          qst[1].gameIsSetCongratsSingleMessage,
         gameIsSetCongratsScoreWiseMessage:
-          qst.gameIsSetCongratsScoreWiseMessage,
-        gameCompletedCongratsMessage: qst.gameCompletedCongratsMessage,
-        gameMinimumScoreCongratsMessage: qst.gameMinimumScoreCongratsMessage,
+          qst[1].gameIsSetCongratsScoreWiseMessage,
+        gameCompletedCongratsMessage: qst[1].gameCompletedCongratsMessage,
+        gameMinimumScoreCongratsMessage:
+          qst[1].gameMinimumScoreCongratsMessage,
         gameaboveMinimumScoreCongratsMessage:
-          qst.gameaboveMinimumScoreCongratsMessage,
+          qst[1].gameaboveMinimumScoreCongratsMessage,
         gameLessthanDistinctionScoreCongratsMessage:
-          qst.gameLessthanDistinctionScoreCongratsMessage,
+          qst[1].gameLessthanDistinctionScoreCongratsMessage,
         gameAboveDistinctionScoreCongratsMessage:
-          qst.gameAboveDistinctionScoreCongratsMessage,
+          qst[1].gameAboveDistinctionScoreCongratsMessage,
       };
       return item;
     });
@@ -464,73 +468,73 @@ const GamePreview = () => {
     );
   };
 
-  const handleSubmitReview = async (inputdata: any) => {
-    /** Sample post data
-   * {"data" :{
-    "reviewerId": 4,
-    "reviewGameId": 3,
-    "review": "Character Tab",
-    "tabId": 2,
-    "tabAttribute": null,
-    "tabAttributeValue": ""
-   }
-} 
-   */
-    if (!inputdata.reviewerId || !inputdata.reviewGameId) {
-      toast({
-        title: 'You are Unauthorized..!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
-      });
-      return false;
-    } 
-    else if (!inputdata.tabId) {
-      toast({
-        title: 'Select Feedback Options',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
-      });
-      return false;
-    } else if (!inputdata.review) {
-      toast({
-        title: 'Review Field is Empty',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
-      });
-      return false;
-    }
+//   const handleSubmitReview = async (inputdata: any) => {
+//     /** Sample post data
+//    * {"data" :{
+//     "reviewerId": 4,
+//     "reviewGameId": 3,
+//     "review": "Character Tab",
+//     "tabId": 2,
+//     "tabAttribute": null,
+//     "tabAttributeValue": ""
+//    }
+// } 
+//    */
+//     if (!inputdata.reviewerId || !inputdata.reviewGameId) {
+//       toast({
+//         title: 'You are Unauthorized..!',
+//         status: 'error',
+//         duration: 3000,
+//         isClosable: true,
+//         position: 'top-right',
+//       });
+//       return false;
+//     } 
+//     else if (!inputdata.tabId) {
+//       toast({
+//         title: 'Select Feedback Options',
+//         status: 'error',
+//         duration: 3000,
+//         isClosable: true,
+//         position: 'top-right',
+//       });
+//       return false;
+//     } else if (!inputdata.review) {
+//       toast({
+//         title: 'Review Field is Empty',
+//         status: 'error',
+//         duration: 3000,
+//         isClosable: true,
+//         position: 'top-right',
+//       });
+//       return false;
+//     }
 
-    const addReviewResponse = await SubmitReview(
-      JSON.stringify({ data: inputdata, id: uuid }),
-    );
-    if (addReviewResponse?.status === 'Failure') {
-      toast({
-        title: 'Failed to Add Review',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
-      });
-      return false;
-    }
-    if (addReviewResponse?.status === 'Success') {
-      toast({
-        title: 'Review added Successfully..!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
-      });
-      fetchGameData();
-      return true;
-    }
-  };
+//     const addReviewResponse = await SubmitReview(
+//       JSON.stringify({ data: inputdata, id: uuid }),
+//     );
+//     if (addReviewResponse?.status === 'Failure') {
+//       toast({
+//         title: 'Failed to Add Review',
+//         status: 'error',
+//         duration: 3000,
+//         isClosable: true,
+//         position: 'top-right',
+//       });
+//       return false;
+//     }
+//     if (addReviewResponse?.status === 'Success') {
+//       toast({
+//         title: 'Review added Successfully..!',
+//         status: 'success',
+//         duration: 3000,
+//         isClosable: true,
+//         position: 'top-right',
+//       });
+//       fetchGameData();
+//       return true;
+//     }
+//   };
   const handleMouseMove = () => {
     setIsHovered(true);
     clearTimeout(timeout);
@@ -586,49 +590,59 @@ const GamePreview = () => {
 
   return (
     <>
+      {/* <Suspense fallback={
+              <Box
+              backgroundImage={preloadedAssets?.StarsBg}
+              w={'100% !important'}
+              h={'100vh'}
+              backgroundRepeat={'no-repeat'}
+              backgroundSize={'cover'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              className="Game-Screen"
+              backgroundColor={'#0d161e'}
+            >      
+            </Box>
+        }>
+        {contentReady && (isAuthFailed || */}
       {/* <Suspense fallback={<Img src={preloadedAssets.InitialImg} width={'100vw'} h={'100vh'}/>}> */}
       <Suspense fallback={<Box bg={'#000'} h={'100vh'} w={'100vw'}>Loading...</Box>}>
-        {contentReady && (
+        {contentReady &&  (isAuthFailed ||
           gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
-            gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES' ? (
-            <h1> {'Your are Not Authorized....'}</h1>
+            gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES'  ? (
+              <NoAuth isAuthFailed={isAuthFailed}/>
           ) : (
             gameInfo?.gameId &&
             (
               (
                 <ScoreContext.Provider value={{ profile, setProfile }}>
                   <Box id="container" >
-                    {isHovered && (
-                      <Icon
-                        as={IoIosRefresh}
-                        position={'fixed'}
-                        top={'20px'}
-                        left={'48%'}
-                        color={'white'}
-                        zIndex={999999}
-                        width={'60px'}
-                        height={'60px'}
-                        padding={'20px'}
-                        borderRadius={'50%'}
-                        bg={'grey'}
-                        cursor={'pointer'}
-                        onClick={() => window.location.reload()}
-                      />
-                    )}
+                    <Box
+                          backgroundImage={preloadedAssets?.StarsBg}
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                          backgroundColor={'#0d161e'}
+                        >
                     <EntirePreview
                       currentScore={currentScore}
                       setCurrentScore={setCurrentScore}
-                      //Newly Added states for preview activity track
-                      setprevScreenId={setprevScreenId}
-                      setPreLogDatas={setPreLogDatas}
-                      getPrevLogDatas={getPrevLogDatas}
-                      //End - Newly Added states for preview activity track
                       gameInfo={gameInfo}
-                      handleSubmitReview={handleSubmitReview}
                       isReviewDemo={id ? false : true}
                       preloadedAssets={preloadedAssets}
                       InitialScreenId={InitialScreenId}
+                      fetchGameData={fetchGameData}
+                      fetchPreviewLogsData={fetchPreviewLogsData}
+                      previewLogsDataIni={previewLogsDataIni}
+                      preLogDatasIni={preLogDatasIni}
+                      initialStateUpdate={initialStateUpdate}
+                      setInitialStateUpdate={setInitialStateUpdate}
                     />
+                    </Box>
                   </Box>
                 </ScoreContext.Provider>
               ))

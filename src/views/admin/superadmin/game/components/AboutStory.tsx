@@ -598,29 +598,27 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                   <FormLabel fontWeight='bold' fontSize='sm' mb='8px' ml='10px'>
                     Category<Text as='span' color='red.500'>*</Text>
                   </FormLabel>
-                  <Select
-                    menuPortalTarget={document.body}
-                    styles={{
-                      menuPortal: base => ({ ...base, zIndex: 9999, }), control: (provided: any, state: any) => ({
-                        ...provided,
-                        borderRadius: '15px',
-                        height: '45px',
-                        padding: '0 !important',
-                        width: '100%'
-                        // window.innerWidth < 768 ? '100%' : '300px'
-                      }),
-                    }}
-                    options={defaultCat}
-                    onChange={(selectedOption) => selectHandler(selectedOption)}
-                    isClearable={true} // Optional: allow clearing the selection
-                    isSearchable={true} // Optional: enable searching  
-                    className='react-select'
-                    value={
-                      defaultCat.find((option) => option.value === formData.gameCategoryId) || null
-                    }
-
-                  // styles={customStyle}           
-                  />
+            <Select
+              menuPortalTarget={document.body}
+              styles={{
+                menuPortal: base => ({ ...base, zIndex: 9999, }), control: (provided: any, state: any) => ({
+                  ...provided,
+                  borderRadius: '15px',
+                  height: '45px',
+                  padding: '0 !important',
+                  width: '100%'
+                  // window.innerWidth < 768 ? '100%' : '300px'
+                }),
+              }}
+              options={defaultCat}
+              onChange={(selectedOption) => selectHandler(selectedOption)}
+              isClearable={true} // Optional: allow clearing the selection
+              isSearchable={true} // Optional: enable searching  
+              className='react-select'
+              value={
+                defaultCat.find((option) => option.value === formData.gameCategoryId) || null
+              }
+            />
                 </FormControl>
               </Box>
             </SimpleGrid>

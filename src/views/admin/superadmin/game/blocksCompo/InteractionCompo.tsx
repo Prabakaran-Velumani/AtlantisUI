@@ -647,12 +647,10 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
 
     const container = document.getElementById(seq.id);
     if (container) {
-      container.scrollLeft -= 700;
-
-
-      if (container.scrollLeft <= 0) {
-        setShowLeftButton(false);
-      }
+        container.scrollLeft -= 700;
+        if (container.scrollLeft <= 0) {
+            setShowLeftButton(false);
+        }
 
     }
 };

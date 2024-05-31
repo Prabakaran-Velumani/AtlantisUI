@@ -15,8 +15,11 @@ import Sample from 'assets/img/games/Merlin.glb';
 import { useLayoutEffect, useRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
-import Model from './Model';
+// import Model from './Model';
+// import Player from './Player';
 import ReplayGame from './ReplayGame';
+// import SelectedNPCs from './SelectedNPCs';
+import {SelectedNPCType} from './SelectedNPCs';
 
 const Story: React.FC<{
   imageSrc?: any;
@@ -58,6 +61,10 @@ const Story: React.FC<{
   getPrevLogDatas: any;
   RepeatSelectOption: any;
   RepeatPrevOption: any;
+  SelectedNPCs: React.FC<SelectedNPCType>;
+  Player:  React.FC;
+  // CharacterModal:  React.FC;
+  ModelPlayer:  React.FC;
 }> = ({
   data,
   type,
@@ -98,6 +105,10 @@ const Story: React.FC<{
   setPreLogDatas,
   RepeatSelectOption,
   RepeatPrevOption,
+  SelectedNPCs,
+  Player,
+  // CharacterModal,
+  ModelPlayer
 }) => {
     const [showNote, setShowNote] = useState(true),
       [first, setFirst] = useState(false);
@@ -113,6 +124,8 @@ const Story: React.FC<{
       BGM: 'bgm',
       VOICE: 'voice',
     };
+    const [isSpeaking ,setIsSpeaking]=useState<boolean>(false);
+    const [isStartsAnimationPlay ,setIsStartsAnimationPlay]=useState<boolean>(true);
 
     useEffect(() => {
       if (data && type) {
@@ -122,39 +135,45 @@ const Story: React.FC<{
           setShowNote(false);
           interactionNext === true && setInteractionNext(false);
         }, 1000);
-        SetAudioOptions({ qpOptionId: '' });
+        if(type==='Note' || type==='Dialog' || type=== 'Interaction')
+          {
+            SetAudioOptions({ qpOptionId: '' });
+          }
         const currentQuest = data
           ? parseInt(data?.blockPrimarySequence.split('.')[0])
           : null;
-
-        if (getPrevLogDatas.nevigatedSeq[currentQuest]) {
-          if (
-            !getPrevLogDatas.nevigatedSeq[currentQuest].includes(
-              data.blockPrimarySequence,
-            )
-          ) {
+          setPreLogDatas((prev: any) => ({
+            ...prev,
+            lastActiveBlockSeq:{ [currentQuest]:[data.blockId]},
+          }));
+          if (getPrevLogDatas.nevigatedSeq[currentQuest]) {
+            if (
+              !getPrevLogDatas.nevigatedSeq[currentQuest].includes(
+                data.blockPrimarySequence,
+              )
+            ) {
+              setPreLogDatas((prev: any) => ({
+                ...prev,
+                // lastActiveBlockSeq:{[currentQuest]:[data.blockId]},
+                nevigatedSeq: {
+                  ...prev.nevigatedSeq,
+                  [currentQuest]: [
+                    ...(prev.nevigatedSeq[currentQuest] || []),
+                    data.blockPrimarySequence,
+                  ],
+                },
+              }));
+            }
+          } else {
             setPreLogDatas((prev: any) => ({
               ...prev,
-              lastActiveBlockSeq: {currentQuest:data.blockId},
+              // lastActiveBlockSeq:{ [currentQuest]:[data.blockId]},
               nevigatedSeq: {
                 ...prev.nevigatedSeq,
-                [currentQuest]: [
-                  ...(prev.nevigatedSeq[currentQuest] || []),
-                  data.blockPrimarySequence,
-                ],
+                [currentQuest]: [data.blockPrimarySequence],
               },
             }));
           }
-        } else {
-          setPreLogDatas((prev: any) => ({
-            ...prev,
-            lastActiveBlockSeq: {currentQuest:data.blockId},
-            nevigatedSeq: {
-              ...prev.nevigatedSeq,
-              [currentQuest]: [data.blockPrimarySequence],
-            },
-          }));
-        }
 
         if (gameInfo.hasOwnProperty('blocks')) {
           let previousPrimarySeq = navTrack[navTrack.length - 1];
@@ -188,14 +207,14 @@ const Story: React.FC<{
     useEffect(() => {
       const fetchData = async () => {
         if (profileData?.Audiogetlanguage.length !== 0) {
-          if (AudioOptions.qpOptionId === '') {
-            setAudioObj({
-              url: '',
-              type: EnumType.VOICE,
-              volume: '0.5',
-              loop: false, // Voice doesn't loop
-              autoplay: true, // Autoplay is disabled
-            });
+          setAudioObj((prev:any)=>({
+            ...prev,
+            url: '',
+            type: EnumType.VOICE,
+            loop: false, // Voice doesn't loop
+            autoplay: true, // Autoplay is disabled
+          }));
+          if (AudioOptions.qpOptionId === '' && (type === 'Note' || type === 'Dialog' || type === 'Interaction') ) {
             const GetblocktextAudioFiltered =
               profileData?.Audiogetlanguage.filter(
                 (key: any) => key?.textId === data?.blockId,
@@ -208,31 +227,27 @@ const Story: React.FC<{
                 (item: any) => item.content,
               );
               setContentByLanguage(Filteredcontent);
-              console.log('FilteredFieldName', FilteredFieldName);
               if (FilteredFieldName[0] === 'blockText') {
                 const audioUrls = GetblocktextAudioFiltered.map((item: any) =>
                   item.audioUrls !== ''
                     ? JSON.parse(item.audioUrls)[0]?.audioUrl
                     : item.audioUrls,
                 );
-                console.log('audioUrls', audioUrls);
                 try {
                   const normalizedPath = audioUrls[0];
                   if (normalizedPath !== '') {
                     const fullUrl = `${API_SERVER}${normalizedPath}`;
                     const responseblockText = await fetch(fullUrl);
-                    console.log('responseblockText', responseblockText);
                     if (responseblockText.ok) {
-                      setAudioObj({
+                      setAudioObj((prev :any)=>({
+                        ...prev,
                         url: fullUrl,
                         type: EnumType.VOICE,
-                        volume: '0.5',
                         loop: false, // Voice doesn't loop
                         autoplay: true, // Autoplay is disabled
-                      });
+                      }));
                     }
                   }
-                  // Handle the response
                 } catch (error) {
                   console.error('Error fetching data:', error);
                 }
@@ -240,13 +255,6 @@ const Story: React.FC<{
             }
           } else {
             if (AudioOptions.qpOptionId) {
-              setAudioObj({
-                url: '',
-                type: EnumType.VOICE,
-                volume: '0.5',
-                loop: false, // Voice doesn't loop
-                autoplay: true, // Autoplay is disabled
-              });
               const optionAudioFiltered = profileData?.Audiogetlanguage.filter(
                 (key: any) => key?.textId === AudioOptions?.qpOptionId,
               );
@@ -258,7 +266,9 @@ const Story: React.FC<{
                   (key: any) => key?.fieldName === 'qpResponse',
                 );
                 const FilteredResponsecontent = responseAudioFiltered[0].content;
-                if (getoptionsAudioFiltered.length > 0) {
+                if(type === 'Interaction')
+                  {
+                    if (getoptionsAudioFiltered.length > 0) {
                   const QOTaudioUrls = getoptionsAudioFiltered.map((item: any) =>
                     item.audioUrls !== ''
                       ? JSON.parse(item.audioUrls)[0]?.audioUrl
@@ -266,56 +276,40 @@ const Story: React.FC<{
                   );
 
                   if (QOTaudioUrls.length > 0) {
-                    // const relativePath = QOTaudioUrls[0].split('\\uploads\\')[1];
-                    // const normalizedPath = relativePath.replace(/\\/g, '/');
                     try {
                       const normalizedPath = QOTaudioUrls[0];
-                      // const qpOptionTextUrl = `${API_SERVER}/uploads/${normalizedPath}`;
                       if (normalizedPath !== '') {
                         const qpOptionTextUrl = `${API_SERVER}${normalizedPath}`;
                         const responseqpOptionText = await fetch(qpOptionTextUrl);
                         if (responseqpOptionText.ok) {
-                          setAudioObj({
+                          setAudioObj((prev:any)=>({
+                            ...prev,
                             url: qpOptionTextUrl,
                             type: EnumType.VOICE,
-                            volume: '0.5',
+                            // volume: '0.5',
                             loop: false,
                             autoplay: true,
-                          });
+                          }));
                         }
-                        /*
-                          else {
-                            const getAudioFiltered1 = optionAudioFiltered.filter(
-                              (key: any) => key?.fieldName === 'qpOptions',
-                            );
-                            if (getAudioFiltered1.length > 0) {
-                              const QPaudioUrls = getAudioFiltered1.map(
-                                (item: any) => JSON.parse(item.audioUrls)[0]?.audioUrl,
-                              );
-                              if (QPaudioUrls.length > 0) {
-                                const normalizedPath = QPaudioUrls[0];
-                                const qpOptionsUrl = `${API_SERVER}${normalizedPath}`;
-                                const responsequestoption = await fetch(qpOptionsUrl);
-                                if (responsequestoption.ok) {
-                                  setAudioObj({
-                                    url: qpOptionsUrl,
-                                    type: EnumType.VOICE,
-                                    volume: '0.5',
-                                    loop: false,
-                                    autoplay: true,
-                                  });
-                                }
-                              }
-                            }
-                          }
-                          */
                       }
                     } catch (error) {
                       console.error('Error fetching data:', error);
                     }
                   }
+                  else{
+                    setAudioObj((prev :any)=>({
+                      ...prev,
+                      url: '',
+                      type: EnumType.VOICE,
+                      loop: false,
+                      autoplay: true,
+                    }));
+                  }
                 }
-                if (responseAudioFiltered.length > 0) {
+                  }
+               else if(type === 'response')
+                  {
+                    if (responseAudioFiltered.length > 0) {
                   const QResTaudioUrls = responseAudioFiltered.map((item: any) =>
                     item.audioUrls !== ''
                       ? JSON.parse(item.audioUrls)[0]?.audioUrl
@@ -331,23 +325,83 @@ const Story: React.FC<{
                           qRespOptionTextUrl,
                         );
                         if (responseqpOptionText.ok) {
-                          setAudioObj({
+                          setAudioObj((prev :any)=>({
+                            ...prev,
                             url: qRespOptionTextUrl,
                             type: EnumType.VOICE,
-                            volume: '0.5',
+                            // volume: '0.5',
                             loop: false,
                             autoplay: true,
-                          });
+                          }));
                         }
+                        else{
+                          setAudioObj((prev :any)=>({
+                            ...prev,
+                            url: '',
+                            type: EnumType.VOICE,
+                            // volume: '0.5',
+                            loop: false,
+                            autoplay: true,
+                          }));
+                        }
+                      }else{
+                        setAudioObj((prev :any)=>({
+                          ...prev,
+                          url: '',
+                          type: EnumType.VOICE,
+                          // volume: '0.5',
+                          loop: false,
+                          autoplay: true,
+                        }));
                       }
                     } catch (error) {
                       console.error('Error fetching data:', error);
                     }
+                  }else{
+                    setAudioObj((prev :any)=>({
+                      ...prev,
+                      url: '',
+                      type: EnumType.VOICE,
+                      // volume: '0.5',
+                      loop: false,
+                      autoplay: true,
+                    }));
                   }
                 }
+                  }
+                else{
+                  setAudioObj((prev :any)=>({
+                    ...prev,
+                    url: '',
+                    type: EnumType.VOICE,
+                    // volume: '0.5',
+                    loop: false,
+                    autoplay: true,
+                  }));
+                }
               }
+            }else{
+              setAudioObj((prev :any)=>({
+                ...prev,
+                url: '',
+                type: EnumType.VOICE,
+                // volume: '0.5',
+                loop: false,
+                autoplay: true,
+              }));
             }
           }
+        }
+        else
+        {
+          setAudioObj((prev:any)=>({
+            ...prev,
+            url: '',
+            type: EnumType.VOICE,
+            // volume: '0.5',
+            loop: true, // Voice doesn't loop
+            autoplay: true,
+          }));
         }
       };
       fetchData();
@@ -355,7 +409,6 @@ const Story: React.FC<{
 
     const InteractionFunction = () => {
       setIsGetsPlayAudioConfirmation(true);
-
       /**Get current data mm-dd-yyyy */
       const currentDateTime = new Date();
       const day: String = String(currentDateTime.getDate()).padStart(2, '0');
@@ -415,7 +468,6 @@ const Story: React.FC<{
               ];
               return { ...prev, replayScore: newScoreArray };
             }
-          
 
         });
       }
@@ -532,12 +584,6 @@ const Story: React.FC<{
                         </Box>
                       </Box>
                       <Box
-                        // width={'100%'}
-                        // mt="20px"
-                        // position={'fixed'}
-                        // top="78%"
-                        // display={'flex'}
-                        // justifyContent={'center'}
                         className='story_block_btns_box'
                       >
                         <Box className="story_block_btns">
@@ -553,24 +599,8 @@ const Story: React.FC<{
                               getNoteNextData()
                             }}
                           />
-                          {/* <Img src={preloadedAssets.next} h={'7vh'} className={'story_note_next_button'}  /> */}
                         </Box>
                       </Box>
-                      {/* <Box
-                        display={'flex'}
-                        position={'fixed'}
-                        justifyContent={navTrack.length > 1 ? 'space-between' : 'end'}
-                        w={'95%'}
-                        bottom={'0'}
-                      >
-                        <Img
-                          src={preloadedAssets.left}
-                          w={'70px'}
-                          h={'50px'}
-                          cursor={'pointer'}
-                          onClick={() => {  LastModiPrevData(data)}}
-                        />
-                      </Box> */}
                     </Box>
                   </Box>
                 </motion.div>
@@ -581,34 +611,7 @@ const Story: React.FC<{
         {data && type === 'Dialog' && (
           <Box className="chapter_potrait">
             <Img src={backGroundImg} className="dialogue_screen" />
-            {selectedNpc && (
-              <Box className={'player_character_image'}>
-                <Canvas camera={{ position: [0, 1, 9] }}>
-                  {' '}
-                  {/* For Single view */}
-                  {/* <Environment preset={"park"} background />   */}
-                  <directionalLight
-                    position={[2.0, 78.0, 100]}
-                    intensity={0.8}
-                    color={'ffffff'}
-                    castShadow
-                  />
-                  <ambientLight intensity={0.5} />
-                  {/* <OrbitControls   />  */}
-                  <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
-                  {/* COMPONENTS */}
-                  {/* <Player /> */}
-                  <Model
-                    position={[-3, -1.8, 5]}
-                    rotation={[0, 1, 0]}
-                    isSpeaking={false}
-                  />
-                  {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
-                  {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
-                  {/* <Parrot /> */}
-                </Canvas>
-              </Box>
-            )}
+            <SelectedNPCs preloadedAssets={preloadedAssets} isStartsAnimationPlay={isStartsAnimationPlay} isSpeaking={isSpeaking} selectedNpc={selectedNpc}/>
             <Img className={'dialogue_image'} src={preloadedAssets.dial} />
             <Box position={'relative'}>
               <Box
@@ -621,32 +624,31 @@ const Story: React.FC<{
                 <Img src={preloadedAssets.char} w={'100%'} height={'100%'} />
                 <Box
                   position={'absolute'}
-                  top={0}
-                  w={'100%'}
-                  height={'100%'}
+                  top={'31%'}
+                  left={'25.5%'}
+                  w={'48%'}
+                  height={'42%'}
                   display={'flex'}
                   justifyContent={'center'}
                   alignItems={'center'}
-                  fontSize={{ base: '30px', xl: '2vw' }}
+                  fontSize={{ base: '1.8rem', xl: '1.8rem' }}
                   fontWeight={500}
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
                   color={'#312821'}
                   textTransform={'capitalize'}
                 >
-                  {data.blockRoll === 'Narrator'
+                  <Text whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>{data.blockRoll === 'Narrator'
                     ? data.blockRoll
                     : data.blockRoll === '999999'
                       ? profileData.name
-                      : formData.gameNonPlayerName}
+                      : formData.gameNonPlayerName}</Text>
                 </Box>
               </Box>
             </Box>
             <Box             
-              className='dialogue_scroll'              
-            >
-              <Box             
-              >
+              className='dialogue_scroll'>
+              <Box>
                 {showTypingEffect === false ? (
                   <TypingEffect
                     text={
@@ -684,13 +686,9 @@ const Story: React.FC<{
                 src={preloadedAssets.right}
                 w={'70px'}
                 h={'50px'}
-                // cursor={'pointer'}
                 onClick={() => Updatecontent()}
               />
             </Box>
-            {/* </>
-          )} */}
-            {/* </motion.div> */}
           </Box>
         )}
         {data && type === 'Interaction' && (
@@ -708,20 +706,13 @@ const Story: React.FC<{
             RepeatSelectOption={RepeatSelectOption}
             RepeatPrevOption={RepeatPrevOption}
             contentByLanguage={contentByLanguage}
+            currentScreenId={2}
           />
         )}
         {data && type === 'response' && (
           <Box className="chapter_potrait">
             <Img src={backGroundImg} className="dialogue_screen" />
-            {selectedPlayer && (
-              <Img
-                src={`${API_SERVER}/${selectedPlayer}`}
-                className={'narrator_character_image'}
-              />
-            )}
-            {selectedNpc && (
-              <Img src={selectedNpc} className={'player_character_image'} />
-            )}
+             <SelectedNPCs preloadedAssets={preloadedAssets} isStartsAnimationPlay={isStartsAnimationPlay} isSpeaking={isSpeaking} selectedNpc={selectedNpc}/>
             <Img className={'dialogue_image'} src={preloadedAssets.dial} />
             <Box position={'relative'}>
               <Box
@@ -755,9 +746,7 @@ const Story: React.FC<{
                 </Box>
               </Box>
             </Box>
-            <Box
-              className='dialogue_scroll'
-            >
+            <Box  className='dialogue_scroll'>
               {showTypingEffect === false ? (
                 <TypingEffect
                   text={resMsg}
@@ -889,7 +878,7 @@ const Story: React.FC<{
                             className={'interaction_button'}
                             onClick={() => getData(data)}
                           />
-                        </Box>       
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
@@ -901,66 +890,5 @@ const Story: React.FC<{
       </>
     );
   };
-const Player: React.FC = () => {
-  const groupRef = useRef<any>();
-  const gltf = useLoader(GLTFLoader, Sample);
-  const [isHovered, setIsHovered] = useState<any>(false);
 
-  const mixer = new THREE.AnimationMixer(gltf.scene);
-  console.log('*****gltf', gltf.animations);
-  const action = mixer.clipAction(gltf.animations[12]);
-
-  useFrame((state, delta) => {
-    // Rotate the model on the Y-axis
-
-    if (groupRef.current) {
-      // groupRef.current.rotation.y += delta;
-      // groupRef.current.rotation.x += delta;
-      // groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime) * 2;
-      groupRef.current.castShadow = true;
-    }
-
-    mixer.update(delta);
-  });
-
-  // !isHovered &&
-  action.play();
-
-  useLayoutEffect(() => {
-    if (groupRef.current) {
-      groupRef.current.traverse((obj: any) => {
-        if (obj.isMesh) {
-          obj.castShadow = true;
-          obj.receiveShadow = true;
-        }
-      });
-    }
-  }, []);
-
-  gltf.scene.traverse((child) => {
-    if (child instanceof THREE.Mesh) {
-      // child.material.color.set(0xffccaaf0); // Set your desired color
-      child.material.color.set(0xffffff); // Set your desired color
-      child.material.roughness = 0.4; // Adjust roughness as needed
-      child.material.metalness = 0.8; // Adjust metalness as needed
-      // child.material.map.format = THREE.RGBAFormat;
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-      {/* <primitive object={gltf.scene} position={[3, 0 , 0]} /> */}
-      <primitive
-        object={gltf.scene}
-        position={[5, -5, 0]}
-        rotation={[0, -1, 0]}
-      />{' '}
-      {/* For Single view */}
-      {/* <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2, 5, 0]} receiveShadow onClick={handleClick} onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>
-        <planeGeometry args={[100, 500]} />
-        <shadowMaterial color={isHovered ? 'orange' : 'lightblue'} opacity={0.5} />
-      </mesh> */}
-    </group>
-  );
-};
 export default Story;

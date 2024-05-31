@@ -9,11 +9,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import ref from 'assets/img/screens/refquestions.png';
 import qs from 'assets/img/screens/QS.png';
-import question from 'assets/img/games/question.png';
-import right from 'assets/img/games/right.png';
-import left from 'assets/img/games/left.png';
-import refsep from 'assets/img/games/refseparate.png';
-import next from 'assets/img/screens/next.png';
 
 interface Badge {
   gasId: number;
@@ -125,10 +120,8 @@ const ReflectionScreen: React.FC<{
                     {Array.from(
                       { length: formData.gameReflectionQuestion },
                       (_, index) => (
-                        // <GridItem key={index} colSpan={2}>
                         <Box>
                           <Box className='heading-wrapper'
-                            // w={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? { base: '150px', sm: '300px', md: '350px', lg: '380px' } : { base: '150px', sm: '100px', md: '150px', lg: '180px' }}
                             lineHeight={1}
                             display={'flex'}
                             wordBreak="break-all"
@@ -172,15 +165,8 @@ const ReflectionScreen: React.FC<{
                           </Box>
                           <Box position={'relative'} className='input-wrapper'>
                             <Img
-                              // w={(arrayInfoQn === 3 && index === 2) || (arrayInfoQn === 1 && index === 0) ? '420px' : '200px'}
                               w={'100%'}
                               h={'50px'}
-                              // h={{
-                              //   base: '20px',
-                              //   sm: '40px',
-                              //   md: '70px',
-                              //   lg: '50px',
-                              // }}
                               padding-top={'20px'}
                               src={ref}
                             />

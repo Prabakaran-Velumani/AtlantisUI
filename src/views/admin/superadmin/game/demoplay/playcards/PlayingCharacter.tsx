@@ -5,7 +5,6 @@ import { Canvas, useLoader, useFrame  } from 'react-three-fiber';
 import { Environment, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-
 import Sample from 'assets/img/games/Character_sample.glb';
 
 const PlayingChracter: React.FC = () => {
@@ -16,7 +15,6 @@ const PlayingChracter: React.FC = () => {
     
     useEffect(() => {
       if(gltf.animations.length > 0){
-
         mixer.current = new THREE.AnimationMixer(gltf.scene);
         const action = mixer.current.clipAction(gltf.animations[0]);
         action.play();
@@ -31,9 +29,6 @@ const PlayingChracter: React.FC = () => {
       // Rotate the model on the Y-axis
       
       if (groupRef.current) {      
-        // groupRef.current.rotation.y += delta;
-        // groupRef.current.rotation.x += delta;
-        // groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime) * 2;
         groupRef.current.castShadow = true;
         if (mixer.current) {
           mixer.current.update(delta);    
@@ -41,8 +36,6 @@ const PlayingChracter: React.FC = () => {
       }
   
     });
-    
-    // !isHovered && action.play();
   
     useLayoutEffect(() => {
       if (groupRef.current) {
