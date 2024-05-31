@@ -45,6 +45,8 @@ const ChapterPage: React.FC<{
   gameOptionSuffled: any;
   setRepeatPrevOption: any;
   setSelectedOption: any;
+  questWiseMaxTotal:any;
+  gameInfoTotalScore:any;
 }> = ({
   imageSrc,
   demoBlocks,
@@ -68,34 +70,91 @@ const ChapterPage: React.FC<{
   gameOptionSuffled,
   setRepeatPrevOption,
   setSelectedOption,
+  questWiseMaxTotal,
+  gameInfoTotalScore
 }) => {
   const [questScores, setQuestScores] = useState(null);
 
   const [AllowedReplayOption, setAllowedReplayOption] = useState(null);
   useEffect(() => {
-    const groupedByQuest: any = {};
-    questOptions.forEach((item: any) => {
-      const questNo = item.qpQuestNo;
-      if (!groupedByQuest[questNo]) {
-        groupedByQuest[questNo] = [];
+     let GrandMaximumscore: any = {};
+    let currentScores: any[];
+    let getquest:any[];
+    let maxScoreByQuest: { key: string; value: number }[] = [];
+    profile?.score.map((profileQuest:any) =>
+      {
+        if(!getquest?.includes(profileQuest?.quest))
+          {
+            const scores = profile?.score;
+            const sums: any = {};
+            scores.forEach((score: any) => {
+              const quest = score.quest;
+              if (!sums[quest]) {
+                sums[quest] = 0;
+              }
+              sums[quest] += score.score;
+            });
+            const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
+              quest,
+              score,
+            }));
+            getquest = getFinalscores;
+          }
+      })
+    
+      getquest?.map((profileQuest:any) =>
+    {
+       const questStatus = questState[profileQuest?.quest];
+    if (questStatus === 'completed') {
+      // If the quest is completed, compare the scores
+      if (profile?.score !== null && profile?.replayScore !== null) {
+        currentScores =
+          profile.score > profile.replayScore
+            ? profile.score
+            : profile.replayScore;
+      } 
+    } else if (questStatus === 'Started') {
+      // If the quest is started, consider the score
+      if (questStatus === 'Started') {
+        currentScores = profile?.score !== null || profile.score!==undefined ? profile.score : null; //null or currentScores or replayScore
       }
-      groupedByQuest[questNo].push(item);
-    });
-    let maxScoresByQuest: { key: string; value: number }[] = [];
-
-    for (const questNo in groupedByQuest) {
-      const questData = groupedByQuest[questNo];
-      let maxScoresBySequence: any = {};
-
-      maxScoresBySequence = questData.reduce((acc: any, obj: any) => {
-        if (!acc[questNo] || acc[questNo] < obj.qpScore) {
-          acc[questNo] = obj.qpScore;
-        }
-        return acc;
-      }, {});
-      maxScoresByQuest = { ...maxScoresByQuest, ...maxScoresBySequence };
     }
-    setQuestScores(maxScoresByQuest);
+    else
+    {
+      if (profile?.score.length > 0) {
+        currentScores = profile?.score 
+      } 
+    }
+        const currentQuestseqId = Array.isArray(currentScores)
+          ? currentScores.map((item) => item.seqId)
+          : [];
+              // Check if currentScores is an array and has items  const qpScoreEntries = filteredOptions.map(option => ({ qpScore: option.qpScore }));
+              if (Array.isArray(currentScores) && currentScores.length > 0) {
+                // Map currentScores to extract scores
+                const scores = currentScores.map((item) => item.score);
+      
+                const result = currentQuestseqId.map((seqId) => {
+                  const QuestNo = seqId.split('.')[0];
+                  if (QuestNo == profileQuest?.quest) {
+                    const filteredOptions = questOptions?.filter(
+                      (option: any) => option.qpSequence == seqId,
+                    );
+                    const qpScoresOption = filteredOptions.map((option: any) =>
+                      parseInt(option.qpScore),
+                    );
+                    qpScoresOption.sort((a: any, b: any) => b - a);
+                    if (!GrandMaximumscore[profileQuest?.quest]) {
+                      GrandMaximumscore[profileQuest?.quest] = 0;
+                    }
+                    GrandMaximumscore[profileQuest?.quest] += qpScoresOption[0];
+                  }
+                  maxScoreByQuest = {...maxScoreByQuest, ...GrandMaximumscore}
+                });
+              } else {
+                console.log('*****Options are not provided.');
+              }
+    })
+    setQuestScores(maxScoreByQuest);
   }, []);
   const { profile, setProfile } = useContext(ScoreContext);
   useEffect(() => {
@@ -214,6 +273,10 @@ const ChapterPage: React.FC<{
           getPrevLogDatas?.screenIdSeq[
             getPrevLogDatas?.screenIdSeq?.length - 1
           ];
+          
+
+
+          
         if (screenIdset !== currentScreenId) {
           setPreLogDatas((prev: any) => ({
             ...prev,
@@ -261,13 +324,18 @@ const ChapterPage: React.FC<{
           setOptions(optionsFiltered);
         }
         setFeedbackList([]);
+       
+
+
         const updatedCompletedLevels = new Set([
           ...profile?.completedLevels,
           it,
         ]);
+        const resettedReplayScore =profile?.replayScore && profile.replayScore.filter((score: any)=> parseInt(score.quest) !== parseInt(it));
         setProfile((prev: any) => ({
           ...prev,
           currentQuest: it,
+          replayScore: [...resettedReplayScore],
           completedLevels: [...updatedCompletedLevels],
         }));
         setCurrentScreenId(2);
@@ -292,7 +360,6 @@ const ChapterPage: React.FC<{
       opacity: 1,
     },
   };
-
   return (
     <>
       <Box className='black-shadow'>       
@@ -332,8 +399,46 @@ const ChapterPage: React.FC<{
                     animate="visible"                    
                   >
                     <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{base:7,md:4,lg:7}}>
-                      {demoBlocks &&
-                        Object.keys(demoBlocks).map((it: any, num: number) => {
+                    {demoBlocks &&
+                      Object.keys(demoBlocks).map((it: any, num: number) => {
+                        const scores = profile?.score;
+                        const sums: any = {};
+                        scores.forEach((score: any) => {
+                          const quest = score.quest;
+                          if (!sums[quest]) {
+                            sums[quest] = 0;
+                          }
+                          sums[quest] += score.score;
+                        });
+                        const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
+                          quest,
+                          score,
+                        }));
+                        
+                        const Replayscores = profile?.replayScore.length > 0 ? profile?.replayScore :null;
+                        const Replaysums: any = {};
+                        Replayscores?.forEach((score: any) => {
+                          const quest = score.quest;
+                          if (!Replaysums[quest]) {
+                            Replaysums[quest] = 0;
+                          }
+                          Replaysums[quest] += score.score;
+                        });
+                        const getReplayFinalscores = Object.entries(Replaysums).map(([quest, score]) => ({
+                          quest,
+                          score,
+                        }));
+                        let TotalScore :any = 0 ;
+                           if((parseInt(getFinalscores[num]?.quest) === parseInt(it)))
+                          {
+                            if(((parseInt(getFinalscores[num]?.quest) === parseInt(it)) ? getFinalscores[num]?.score : 0 ) < ((parseInt(getReplayFinalscores[num]?.quest) === parseInt(it)) ? getReplayFinalscores[num].score : 0))
+                              {
+                                TotalScore = getReplayFinalscores[num]?.score;
+                              }
+                              else{
+                                TotalScore = getFinalscores[num]?.score;
+                              }
+                          }
                           return (
                             <motion.div
                               key={num}
@@ -381,46 +486,90 @@ const ChapterPage: React.FC<{
                                       className="amount-score"
                                       textAlign={'center'}
                                     >
-                                      {/* {profile.playerGrandTotal ? profile.playerGrandTotal?.questScores[it] ?  profile.playerGrandTotal?.questScores[it] : 0: 0}/{questScores &&  questScores[it] !==null && questScores[it] > 0  ? questScores[it] : 0}{' '} */}
-
-
-                                      {profile?.playerGrandTotal
-                                    ? profile?.playerGrandTotal?.questScores[it]
-                                      ? profile?.playerGrandTotal?.questScores[
-                                          it
-                                        ]
-                                      : 0
-                                    : 0}
+                                     {TotalScore ? TotalScore : 0}
                                   /
                                   {questScores &&
                                   questScores[it] !== null &&
                                   questScores[it] > 0
                                     ? questScores[it]
-                                    : gameQuest?.gameTotalScore !== null
-                                    ? gameQuest?.gameTotalScore
+                                    : gameInfoTotalScore[num]?.questNo === parseInt(it) 
+                                    ? gameInfoTotalScore[num].gameTotalScore[0].maxScore
                                     : 0}{' '}
-                                    
-                                    </Text>
-                                    <Img h={'25px'} w={'auto'} src={preloadedAssets.MoneyIcon} zIndex={5}/>
-                                  </Box>
-
-                                  { profile?.completedLevels.includes(it) ?
-                                    Object.entries(questState).map(([questId, status], index) => (
-                                      questId === it && status === 'completed' ?
-                                        ( <Box className={'completed_level'}> <Box position={'relative'} display={'flex'} justifyContent={'center'}> <Img w={'40%'} h={'auto'} src={preloadedAssets?.Completed} /> </Box></Box>)
-                                        : questId === it && status === 'replayallowed' ? (<Box className={'completed_level'}> <Box position={'relative'} display={'flex'} justifyContent={'center'}> <Img w={'40%'} h={'auto'} src={preloadedAssets?.Completed} /> </Box></Box>) : questId === it && status === 'locked' ? (
-                                          <Img key={index} src={preloadedAssets.Lock} className="lock" width={'97%'} position={'absolute'} bg={'#2b2828d6'} top={'0'} />
-                                        ) : questId === it && status === 'Started' ? null : null
-                                    )) : (
-                                      <Img src={preloadedAssets.Lock} className="lock" width={'97%'} position={'absolute'} bg={'#2b2828d6'} top={'0'} />
-                                    )}
+                                </Text>
+                                <Img
+                                  h={'25px'}
+                                  w={'auto'}
+                                  src={preloadedAssets.MoneyIcon}
+                                  zIndex={5}
+                                />
                               </Box>
-                            </motion.div>
-                          );
-                        })}
-                    </SimpleGrid>
-                  </motion.div>
-                </Box>
+                              {profile?.completedLevels?.includes(it) ? (
+                                Object.entries(questState).map(
+                                  ([questId, status], index) =>
+                                    questId === it && status === 'completed' ? (
+                                      <Box className={'completed_level'}>
+                                        {' '}
+                                        <Box
+                                          position={'relative'}
+                                          display={'flex'}
+                                          justifyContent={'center'}
+                                        >
+                                          {' '}
+                                          <Img
+                                            w={'40%'}
+                                            h={'auto'}
+                                            src={preloadedAssets?.Completed}
+                                          />{' '}
+                                        </Box>
+                                      </Box>
+                                    ) : questId === it &&
+                                      status === 'replayallowed' ? (
+                                      <Box className={'completed_level'}>
+                                        {' '}
+                                        <Box
+                                          position={'relative'}
+                                          display={'flex'}
+                                          justifyContent={'center'}
+                                        >
+                                          {' '}
+                                          <Img
+                                            w={'40%'}
+                                            h={'auto'}
+                                            src={preloadedAssets?.Completed}
+                                          />{' '}
+                                        </Box>
+                                      </Box>
+                                    ) : questId === it &&
+                                      status === 'locked' ? (
+                                      <Img
+                                        key={index}
+                                        src={preloadedAssets.Lock}
+                                        className="lock"
+                                        width={'97%'}
+                                        position={'absolute'}
+                                        bg={'#2b2828d6'}
+                                        top={'0'}
+                                      />
+                                    ) : questId === it &&
+                                      status === 'Started' ? null : null,
+                                )
+                              ) : (
+                                <Img
+                                  src={preloadedAssets.Lock}
+                                  className="lock"
+                                  width={'97%'}
+                                  position={'absolute'}
+                                  bg={'#2b2828d6'}
+                                  top={'0'}
+                                />
+                              )}
+                            </Box>
+                          </motion.div>
+                        );
+                      })}
+                  </SimpleGrid>
+                </motion.div>
+              </Box>
               </Box>
             </GridItem>
           </Grid>

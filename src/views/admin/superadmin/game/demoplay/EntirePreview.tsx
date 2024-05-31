@@ -372,6 +372,8 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
     loop: true, // Background loops
     autoplay: true,
   });
+  const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
+  const [score, setScore] = useState(null);
   const { uuid } = useParams();
   const toast = useToast();
 
@@ -520,7 +522,6 @@ useEffect(()=>{
       setPreLogDatas((prev:any)=> ({...prev, previewScore:profile}));
     }
 },[profile])
-
   // This for  Translation content based on lang 09.05.2024
   useEffect(() => {
     const fetchGameContent = async () => {
@@ -638,7 +639,7 @@ useEffect(()=>{
       const questScores: any = {};
       if (currentScreenId === 13) {
         //For chapter Selection Screen
-        if(profile.score!==undefined)
+        if(profile?.score.length > 0)
           {
              if (scores?.length > 0) {
           // Calculate scores for each quest
@@ -649,7 +650,6 @@ useEffect(()=>{
               questScores[score.quest] = score.score;
             }
           });
-
           // const total = scores.reduce((acc: any, row: any) => {
           //   const quest = profile?.currentQuest;
           //   if (row.quest == quest) {
@@ -658,7 +658,7 @@ useEffect(()=>{
           //     return acc;
           //   }
           // }, 0);
-
+               
           setProfile((prev: any) => ({
             ...prev,
             playerGrandTotal: {
@@ -733,10 +733,7 @@ useEffect(()=>{
             console.log(' *****Invalid score provided for started quest.');
             return; // Exit function if score is not provided for started quest
           }
-        } else {
-          console.log(' *****Invalid quest status:', questStatus);
-          return; // Exit function if the quest status is neither "completed" nor "Started"
-        }
+        } 
         // Check if currentScores is an array before mapping
         const currentQuestseqId = Array.isArray(currentScores)
           ? currentScores.map((item) => item.seqId)
@@ -1721,7 +1718,7 @@ useEffect(()=>{
 
   const checkAndUpdateScores = async () => {
     const currentQuest = profile.currentQuest;
-    if (questState[currentQuest] !== 'Started') {
+    // if (questState[currentQuest] !== 'Started') {
       const calcQuestGrandTotal = async (
         scores: any,
         currentQuestNo: any = null,
@@ -1729,6 +1726,7 @@ useEffect(()=>{
         if (scores?.length <= 0) {
           return 0;
         }
+        
         if (currentQuestNo != null) {
           // Sum score of a quest
           const totalScore = scores.reduce((total: number, sc: any) => {
@@ -1785,7 +1783,7 @@ useEffect(()=>{
           replayScore: currentQuestRemovedReplayScoreArr,
         }));
       }
-    }
+    // }
   };
 
   const getData = (next: any) => {
@@ -4565,6 +4563,10 @@ if(currentScreenId ===2)
                           // CharacterModal={CharacterModal}
                           ModelPlayer={ModelPlayer}
                           /**Model Components */
+                          setScore={setScore}
+  SetAudioOptions={SetAudioOptions}
+  score={score}
+  AudioOptions={AudioOptions}
                         />
                       )}
                     </>
@@ -4731,6 +4733,7 @@ if(currentScreenId ===2)
                               type={type}
                               questWiseMaxTotal={questWiseMaxTotal} /// Pass questWiseMaxTotal as a prop
                               gameInfoTotalScore = {gameInfo?.completionQuestOptions}
+                              setProfile={setProfile}
                             />
                           </Box>
                         </Box>
@@ -4925,6 +4928,9 @@ if(currentScreenId ===2)
                         gameOptionSuffled={gameInfo?.gameData?.gameShuffle}
                         setRepeatPrevOption={setRepeatPrevOption}
                         setSelectedOption={setSelectedOption}
+                        questWiseMaxTotal={questWiseMaxTotal}
+                        gameInfoTotalScore = {gameInfo?.completionQuestOptions}
+
                       />
                       {/* </Box> */}
                     </>

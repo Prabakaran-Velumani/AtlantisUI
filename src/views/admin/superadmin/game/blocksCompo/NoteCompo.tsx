@@ -68,6 +68,8 @@ interface PropsNote {
   currentseq?: any;
   ShowReview?: any;
   targetSequence?: any;
+  blockOnFocusHanlder:any;
+  blockOnBlurHanlder:any;
 }
 interface Block {
   blockPrimarySequence: string;
@@ -100,6 +102,8 @@ const NoteCompo: React.FC<PropsNote> = ({
   currentseq,
   reviews,
   ShowReview,
+  blockOnFocusHanlder,
+  blockOnBlurHanlder,
 }) => {
   const textareaRef = useRef(null);
   const [blockData, setBlockData] = useState<Block[]>([]);
@@ -118,13 +122,11 @@ const NoteCompo: React.FC<PropsNote> = ({
           id,
           formDataGamelanguageCode,
         );
-        console.log('fetchedBlockData', fetchedBlockData.data.blockData);
 
         // Find the block with matching blockPrimarySequence and seq.id
         const matchingBlock = fetchedBlockData.data.blockData.find(
           (block: any) => block.blockPrimarySequence === seq.id,
         );
-        console.log('Matching Block Updated1:', matchingBlock);
 
         // Update the state variable with the matching block content
         if (matchingBlock) {
@@ -179,7 +181,6 @@ const NoteCompo: React.FC<PropsNote> = ({
   const handleMiniNDInewblock = (value?: any, seq?: any, i?: any) => {
     handleNDI(value);
     if (value !== '') {
-      // console.log('seqval',seq,'i',i, 'value',value);
       handleSelectBlock(
         { value: currentseq },
         currentseq,
@@ -331,6 +332,9 @@ const NoteCompo: React.FC<PropsNote> = ({
             className={`${seq.id}`}
             name={`Note${seq.input}`}
             onChange={handleInput}
+            onFocus={(e:any) => blockOnFocusHanlder(e,seq)}
+            onBlur={(e:any) => blockOnBlurHanlder(e,seq)}
+
             onClick={(e) => justClick(e, seq)}
             value={
               formDataGamelanguageCode

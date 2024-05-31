@@ -22,7 +22,7 @@ interface Badge {
   gasAssetName: string;
 }
 
-const ThankYou: React.FC<{
+const OverView: React.FC<{
   formData: any;
   imageSrc: any;
   preloadedAssets: any;
@@ -83,10 +83,15 @@ const ThankYou: React.FC<{
   }, []);
   // Ref for the scrollable container
 
-    const handleHome = () => {
-      // console.log('homeLeaderBoard', homeLeaderBoard);
-      if (homeLeaderBoard) {
-        setCurrentScreenId(homeLeaderBoard);
+  const handleHome = () => {
+    if (homeLeaderBoard) {
+        console.log('homeLeaderBoard',homeLeaderBoard)
+        if(homeLeaderBoard === 15)
+          {
+            setCurrentScreenId(2);
+            return;
+          }
+      setCurrentScreenId(homeLeaderBoard);
       }
     };
 
@@ -184,13 +189,13 @@ const ThankYou: React.FC<{
                       </Box>
                     </Box>
                   </Box>
-
-                </motion.div>
-              </GridItem>
-            </Grid>
-          </Box>
-        )}
-      </>
-    );
-  };
-export default ThankYou;
+                
+              </motion.div>
+            </GridItem>
+          </Grid>
+        </Box>
+      )}
+    </>
+  );
+};
+export default OverView;

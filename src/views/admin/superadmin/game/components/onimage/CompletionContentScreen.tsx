@@ -61,7 +61,6 @@ const CompletionContentScreen: React.FC<{
       };
       fetchDatass();
     }, [compliData]);
-
     return (
       <>
         {imageSrc && preview ? (

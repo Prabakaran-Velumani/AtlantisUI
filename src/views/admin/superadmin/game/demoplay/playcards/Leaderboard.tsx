@@ -98,7 +98,20 @@ const LeaderBoard: React.FC<{
       let playerScore:any;
       if(profile!==null)
         {
-          playerScore = { name: playerInfo.name, score: playerTodayScore, allTimeScore: Object.values(profile.playerGrandTotal?.questScores).reduce((total: number, acc: any) => { return total + parseInt(acc) }, 0) };
+          const Finalscore = Object.values(profile.playerGrandTotal?.questScores).reduce((total: number, acc: any) => { return total + parseInt(acc) }, 0);
+          const scores = profile?.score;
+          let getScore:number = 0;
+          if (scores && scores.length > 0) {
+          const sums = scores?.reduce(
+            (accumulator: { [key: string]: number }, score: any) => {
+                accumulator= (accumulator || 0) + score.score;
+                return accumulator;
+            },
+            0,
+          ); 
+          getScore = sums
+        }
+          playerScore = { name: playerInfo.name, score: playerTodayScore, allTimeScore: !Finalscore? getScore : Finalscore };
         }
         else{
           playerScore = { name: 'Player', score: 100, allTimeScore: 1000};

@@ -179,6 +179,7 @@ const NDIMain: React.FC<NDIMainProps> = ({
     [lastInputName, setLastInputName] = useState<any>();
   const [inputtextValue, setinputtextValue] = useState('');
   const [blockWiseReviewCount, setBlockWiseReviewCount] = useState<{ [key: string]: { readCount: number, unReadCount: number, Total: number } }>({});
+  const [FocusInputValue, setFocusInputValue] = useState<string>(null);
   const user: any = JSON.parse(localStorage.getItem('user'));
   const previewStoreData = useSelector((state: RootState) => state.preview);
   const dispatch: Dispatch<any> = useDispatch();
@@ -347,7 +348,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
         ]);
       }
     }
-    // console.log('hello', seq.type);
     setInput((prevInput: any) => {
       const noteKey = `Note${count}`;
       const dialogKey = `Dialog${count}`;
@@ -592,7 +592,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
   };
   const delSeq = (seq: any, i: any, name: any) => {
     // removeDataBySeqs(seq.id);
-    console.log('dispatch');
     dispatch(
       updatePreviewData({ isDispatched: true ,gameId:parseInt(id) }),
     );
@@ -902,7 +901,6 @@ const NDIMain: React.FC<NDIMainProps> = ({
       console.error('An error occurred while sending the request:', error);
     }
     console.log('save', JSON.stringify(input));
-    // console.log('Saved data');
   };
 
   const handleBlockRoll = (selectedOption: any, i: any, keyvalue: any) => {
@@ -921,19 +919,11 @@ const NDIMain: React.FC<NDIMainProps> = ({
     });
   };
   const handleDialogBlockRoll = (selectedOption: any, i: any,keyvalue: any) => {
-    console.log('!@#SelectedOptionDialog--',selectedOption)
-    console.log('!@#SelectedOptionDialogType--',typeof(selectedOption?.value))
-    console.log('!@#iDialog--',i)
-    console.log('!@#keyvalue--',keyvalue)
-
-
     let key = i - 1;
     setInput((prevInput: any) => {
       // const interactionKey = `Dialog${items[key]?.input}`;
       const dialogKey = keyvalue;
-      console.log("dialogkey",dialogKey)
       const blockroll = selectedOption.value;
-console.log("blockroll",blockroll)
       return {
         ...prevInput,
         [dialogKey]: {
@@ -946,7 +936,6 @@ console.log("blockroll",blockroll)
   };
   const handleResponseRoll = (selectedOption: any, i: any, keyvalue: any) => {
     let key = i - 1;
-    // console.log('blockroll', items[key].input + '---' + i + '-------' + items);
     setInput((prevInput: any) => {
       const interactionKey = keyvalue;
       const responseRoll = selectedOption.value;
@@ -1083,7 +1072,6 @@ console.log("blockroll",blockroll)
     keyvalue: any,
   ) => {
     const key = i - 1;
-    // console.log(`handleOptionEmotion - ${items[key]?.input} --- ${i} --- ${selectedOption.value}`);
     const selectedValues = selectedOption.map((option: any) => option.value);
 
     const resultString = selectedValues.join(', ');
@@ -1108,8 +1096,6 @@ console.log("blockroll",blockroll)
           validation: any,
           setValidation: any,
         ) {
-          // console.log('item12$$', optionemotion); // OptionA
-          // console.log('item13$$', interactionKey);  // Interaction6
           const optionEmotionKey = `optionsEmotion${i}${item?.option}`;
           const isValid =
             optionsemotionObject?.[item?.option] === '' ? true : false;
@@ -1138,7 +1124,6 @@ console.log("blockroll",blockroll)
     keyvalue: any,
   ) => {
     const key = i - 1;
-    // console.log(`handle,OptionEmotion - ${items[key]?.input} --- ${i} --- ${selectedOption.value}`);
     setInput((prevInput: any) => {
       const interactionKey = keyvalue;
       const OptionVoice = selectedOption.value;
@@ -1169,7 +1154,6 @@ console.log("blockroll",blockroll)
     keyvalue: any,
   ) => {
     const key = i - 1;
-    // console.log(`handleOptionEmotion - ${items[key]?.input} --- ${i} --- ${selectedOption.value}`);
     const selectedValues = selectedOption.map((option: any) => option.value);
 
     const resultString = selectedValues.join(', ');
@@ -1308,7 +1292,6 @@ console.log("blockroll",blockroll)
     keyvalue: any,
   ) => {
     let key = i - 1;
-    // console.log('blockroll', items[key].input + '---' + i + '-------' + items)
     setInput((prevInput: any) => {
       const interactionKey = keyvalue;
       const navigate = menuvalue;
@@ -1331,7 +1314,6 @@ console.log("blockroll",blockroll)
     keyvalue: any,
   ) => {
     let key = i - 1;
-    //  console.log('blockroll', items[key].input + '---' + i + '-------' + items)
     setInput((prevInput: any) => {
       const interactionKey = keyvalue;
       const navigate = menuvalue;
@@ -1378,7 +1360,6 @@ console.log("blockroll",blockroll)
     keyvalue: any,
   ) => {
     let key = i - 1;
-    // console.log('blockroll', items[key].input + '---' + i + '-------' + items)
     setInput((prevInput: any) => {
       const interactionKey = keyvalue;
       const navigate = menuvalue;
@@ -1401,7 +1382,6 @@ console.log("blockroll",blockroll)
     keyvalue: any,
   ) => {
     let key = i - 1;
-    //  console.log('blockroll', items[key].input + '---' + i + '-------' + items)
     setInput((prevInput: any) => {
       const interactionKey = keyvalue;
       const navigate = menuvalue;
@@ -1425,7 +1405,6 @@ console.log("blockroll",blockroll)
     keyvalue: any,
   ) => {
 
-    // console.log('setBlock', menuvalue + '-----------' + i + '------' + foroption)
     const key = i - 1;
 
     setInput((prevInput: any) => {
@@ -1486,9 +1465,49 @@ console.log("blockroll",blockroll)
       };
     });
   };
-
+const LastBlockModifiedApi = async (modifieddata:any) =>
+  {
+        const Values = items.filter((item:any,i:number) => item?.input === modifieddata?.input);
+        let modifiedid, quest = '';
+        if(Values[0]?.type === 'Note')
+          {
+             modifiedid = Values[0]?.input;
+             quest = Values[0]?.questNo;
+          }
+          else if(Values[0]?.type === 'Dialog')
+            {
+              modifiedid = Values[0]?.input;
+          quest = Values[0]?.questNo;
+            }
+            else if (Values[0]?.type === 'Interaction')
+              {
+                modifiedid = Values[0]?.input;
+          quest = Values[0]?.questNo;
+              }
+       
+        const modified = {
+          Input: modifiedid, Quest: quest
+        }
+        const data = {
+          previewGameId: GameId,
+          playerId: user?.data?.id,
+          playerType: user?.data?.id ? 'creator' : null,
+          lastModifiedBlockSeq: modified,
+        }
+        const modifiedDataString = JSON.stringify(data);
+        const result = await BlockModifiedLog(modifiedDataString);
+      
+  }
   //navin-end
-
+  const blockOnFocusHanlder = async (e:any,seqId:any)=>{
+        setFocusInputValue(e.target.value);
+    }
+    const blockOnBlurHanlder = (e:any,seqId:any)=>{
+      if(FocusInputValue !== e.target.value)
+        {
+          LastBlockModifiedApi(seqId);
+        }
+    } 
   // onChange Function
   const handleInput = async (e: any, i?: any, BlockNum?: any) => {
     const textarea = e.target;
@@ -1685,6 +1704,7 @@ console.log("blockroll",blockroll)
       }
     });
     //newlyadded start
+    /*
     if (BlockNum) {
       const NoteKey = `Note${items[i]?.input}`;
       const DialogKey = `Dialog${items[i]?.input}`;
@@ -1714,7 +1734,7 @@ console.log("blockroll",blockroll)
       const modifiedDataString = JSON.stringify(data);
       const result = await BlockModifiedLog(modifiedDataString);
     }
-
+*/
     //end 
   };
   const handleSelect = (selectedOption: any, e: any, data: string) => {
@@ -1977,15 +1997,12 @@ console.log("blockroll",blockroll)
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   //This function use for review read state update 0 to 1 
   const handleMouseEnter = async (review: any, index: number) => {
-    // console.log("handleMouseEnter reviews",review);
     try {
 
       if (review.readStatus === 0) {
         const sendreviews = JSON.stringify(review);
-        // console.log("gameReviewerId",sendreviews);
         // Make the API call with the extracted data
         const res = await addReadStatus(sendreviews);
-        // console.log("res", res);
         if (res?.status === 200 || res?.status === "Success") {
           // const updatedReview = {...review, "readStatus": 1}
           reviews[index] = { ...review, "readStatus": 1 };
@@ -1993,10 +2010,8 @@ console.log("blockroll",blockroll)
           const updatedReviews = [...reviews];
           setReviews(updatedReviews);
           const filteredReviews = updatedReviews.filter((item: any) => item.tabId === '4');
-          // console.log("filteredReviews",filteredReviews);
         }
         // Handle the API response (optional)
-        // console.log('API Response:', res);
       }
 
       return;
@@ -2156,6 +2171,8 @@ console.log("blockroll",blockroll)
                                     handleNDI={handleNDI}
                                     validation={validation}
                                     currentseq={count}
+                                    blockOnFocusHanlder={blockOnFocusHanlder}
+                                    blockOnBlurHanlder={blockOnBlurHanlder}
                                   />
                                   {/* Review Preview Accordian for Note*/}
                                   {ShowReview ? (
@@ -2311,7 +2328,6 @@ console.log("blockroll",blockroll)
                                       ? reviews && reviews.find((item: any) => {
                                         const tabAttributeValue = `${seq?.questNo}@${seq?.input}`;
                                         const isMatched = item?.tabAttributeValue === tabAttributeValue;
-                                        console.log('tabAttributeValue:', item?.tabAttributeValue, 'Is Matched:', isMatched);
                                         return isMatched;
                                       })
                                         ? '#E2E8F0'
@@ -2359,6 +2375,8 @@ console.log("blockroll",blockroll)
                                     setSelectBlock={setSelectBlock}
                                     validation={validation}
                                     currentseq={count}
+                                    blockOnFocusHanlder={blockOnFocusHanlder}
+                                    blockOnBlurHanlder={blockOnBlurHanlder}
                                   />
                                   {/* Accordian For Dialog Blocks */}
                                   {ShowReview ? (
@@ -2574,6 +2592,8 @@ console.log("blockroll",blockroll)
                                     setSelectBlock={setSelectBlock}
                                     validation={validation}
                                     currentseq={count}
+                                    blockOnFocusHanlder={blockOnFocusHanlder}
+                                    blockOnBlurHanlder={blockOnBlurHanlder}
                                   />
                                   {/* Accordian for Interaction Blocks */}
                                   {ShowReview ? (

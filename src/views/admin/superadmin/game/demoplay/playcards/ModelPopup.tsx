@@ -56,16 +56,22 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
     playerGrandTotal: { questScores: {} },
     todayEarnedScore: [{ quest: 1, score: 0, earnedDate: "" }],
   };
-  // const { profile, setProfile } = useContext(ScoreContext);
+  const { profile, setProfile } = useContext(ScoreContext);
   const NextScreen = () => {
+    // setPreLogDatas((prev:any) => ({...prev,previewProfile:{ ...formState,
+    //   score:getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile.score : []}}))
     setPreLogDatas((prev: any) => ({
       ...prev,
       nevigatedSeq: [],
       screenIdSeq: [],
       lastActiveBlockSeq: '',
+      lastModifiedBlockSeq: null,
+      lastBlockModifiedDate: null,
       selectedOptions: '',
       previewScore:initialProfileObject,
+      previewProfile:{...getPrevLogDatas.previewProfile,score:[]}
     }));
+    setProfile(initialProfileObject);
     setModelControl(false);
     setLastModified(false);
     setCurrentScreenId(1);
