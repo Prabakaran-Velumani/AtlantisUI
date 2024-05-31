@@ -135,7 +135,7 @@ const ScreenPreview = () => {
       setDemoBlocks(gameInfo?.blocks);
       const currentBlock =
         gameInfo?.blocks[previewStateData?.currentQuest][
-          previewStateData?.activeBlockSeq
+        previewStateData?.activeBlockSeq
         ];
       setType(currentBlock?.blockChoosen);
       if (currentBlock?.blockChoosen === 'Interaction') {
@@ -205,6 +205,7 @@ const ScreenPreview = () => {
                 gameTotalScore: qst[1].gameTotalScore,
                 gameId: qst[1].gameId,
                 questNo: qst[1].gameQuestNo,
+                gameMinScore: qst[1].gameMinScore,
                 gameIsSetMinPassScore: qst[1].gameIsSetMinPassScore,
                 gameIsSetDistinctionScore: qst[1].gameIsSetDistinctionScore,
                 gameDistinctionScore: qst[1].gameDistinctionScore,
@@ -310,7 +311,10 @@ const ScreenPreview = () => {
       console.error('Error fetching data:', error);
     }
   };
-
+  const replayQuest = () => {
+    dispatch(updatePreviewData({ activeBlockSeq: 1, isDispatched: true ,gameId:parseInt(id)}));
+    setEndOfQuest(false);
+  };
   const loadComponents = async () => {
     // Load all the lazy-loaded components
     await Promise.all([
@@ -385,12 +389,12 @@ const ScreenPreview = () => {
       const newTrackSequence = navTrack[navTrack.length - 1];
       const prevBlock = current
         ? Object.keys(demoBlocks[quest] || {})
-            .filter(
-              (key) =>
-                demoBlocks[quest]?.[key]?.blockPrimarySequence ==
-                newTrackSequence,
-            )
-            .map((key: any) => demoBlocks[quest]?.[key])
+          .filter(
+            (key) =>
+              demoBlocks[quest]?.[key]?.blockPrimarySequence ==
+              newTrackSequence,
+          )
+          .map((key: any) => demoBlocks[quest]?.[key])
         : [];
       if (
         prevBlock.length !== 0 &&
@@ -433,10 +437,10 @@ const ScreenPreview = () => {
     const nextLevel = currentQuest != null ? String(currentQuest + 1) : null;
     const nextBlock = next
       ? Object.keys(demoBlocks[quest] || {})
-          .filter(
-            (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
-          )
-          .map((key: any) => demoBlocks[quest]?.[key])
+        .filter(
+          (key) => demoBlocks[quest]?.[key]?.blockPrimarySequence === nextSeq,
+        )
+        .map((key: any) => demoBlocks[quest]?.[key])
       : [];
 
     if (nextBlock[0]?.blockChoosen === 'Interaction') {
@@ -942,8 +946,8 @@ const ScreenPreview = () => {
                                 {data.blockRoll === 'Narrator'
                                   ? data.blockRoll
                                   : data.blockRoll === '999999'
-                                  ? 'Player Name'
-                                  : gameInfo?.gameData?.gameNonPlayerName}
+                                    ? 'Player Name'
+                                    : gameInfo?.gameData?.gameNonPlayerName}
                               </Text>
                             </Box>
                             <Box
@@ -1222,8 +1226,8 @@ const ScreenPreview = () => {
                                     {data.blockRoll === 'Narrator'
                                       ? data.blockRoll
                                       : data.blockRoll === '999999'
-                                      ? 'Player Name'
-                                      : gameInfo?.gameData?.gameNonPlayerName}
+                                        ? 'Player Name'
+                                        : gameInfo?.gameData?.gameNonPlayerName}
                                   </Text>
                                 </Box>
                                 <Box
@@ -1297,7 +1301,7 @@ const ScreenPreview = () => {
                                   />
                                   <Box
                                     className={'story_note_content'}
-                                    // bg={'blue.300'}
+                                  // bg={'blue.300'}
                                   >
                                     <Box
                                       w={'100%'}
@@ -1388,7 +1392,7 @@ const ScreenPreview = () => {
                               backgroundImage={preloadedAssets.backgroundImage}
                             >
                               {gameInfo.gameData.gameIsShowLeaderboard ===
-                              'true' ? (
+                                'true' ? (
                                 <Box className="Images">
                                   <Box className="LearderBoards">
                                     <LeaderBoard
@@ -1496,7 +1500,7 @@ const ScreenPreview = () => {
                             >
                               <Box className="Images">
                                 {gameInfo.gameData.gameIsShowTakeaway ===
-                                'true' ? (
+                                  'true' ? (
                                   <TakeAwaysContentScreen
                                     preview={true}
                                     formData={gameInfo.gameData}
@@ -1580,7 +1584,37 @@ const ScreenPreview = () => {
                             </Box>
                           </Box>
                         )}
-
+                      {endOfQuest && (
+                        <Box
+                          w={'100%'}
+                          h={'100vh'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          position={'relative'}
+                          overflow={'visible'}
+                          style={{ perspective: '1000px' }}
+                          className="Main-Content"
+                        >
+                          <Box
+                            backgroundImage={preloadedAssets?.backgroundImage}
+                            w={'100% !important'}
+                            h={'100vh'}
+                            backgroundRepeat={'no-repeat'}
+                            backgroundSize={'cover'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            className="Game-Screen"
+                          >
+                            <Box className="Images">
+                              <PreviewEndOfStory
+                                setEndOfQuest={setEndOfQuest}
+                                preloadedAssets={preloadedAssets}
+                                replayQuest={replayQuest}
+                              />
+                            </Box>
+                          </Box>
+                        </Box>
+                      )}
                       {showPromptScreen && (
                         <Box
                           w={'100%'}

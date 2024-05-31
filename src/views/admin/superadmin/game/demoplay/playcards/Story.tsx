@@ -65,6 +65,10 @@ const Story: React.FC<{
   Player:  React.FC;
   // CharacterModal:  React.FC;
   ModelPlayer:  React.FC;
+  setScore:any;
+  SetAudioOptions:any;
+  score:any;
+  AudioOptions:any;
 }> = ({
   data,
   type,
@@ -108,15 +112,18 @@ const Story: React.FC<{
   SelectedNPCs,
   Player,
   // CharacterModal,
-  ModelPlayer
+  ModelPlayer,
+  setScore,
+  SetAudioOptions,
+  score,
+  AudioOptions,
 }) => {
     const [showNote, setShowNote] = useState(true),
       [first, setFirst] = useState(false);
     const userProfile = useContext(ProfileContext);
     const { profile, setProfile } = useContext(ScoreContext);
     const [showTypingEffect, setShowTypingEffect] = useState<any>(false);
-    const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
-    const [score, setScore] = useState(null);
+   
     const [interactionNext, setInteractionNext] = useState(null);
     const [optionalReplay, setOptionalReplay] = useState(false);
     const [contentByLanguage, setContentByLanguage] = useState(null);
@@ -406,8 +413,9 @@ const Story: React.FC<{
       };
       fetchData();
     }, [data, AudioOptions]);
-
+console.log('...409',score);
     const InteractionFunction = () => {
+
       setIsGetsPlayAudioConfirmation(true);
       /**Get current data mm-dd-yyyy */
       const currentDateTime = new Date();

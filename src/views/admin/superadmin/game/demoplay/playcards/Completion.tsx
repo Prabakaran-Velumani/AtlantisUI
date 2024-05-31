@@ -31,6 +31,7 @@ const Completion: React.FC<{
   preloadedAssets: any;
   questWiseMaxTotal: any;
   gameInfoTotalScore: any;
+  setProfile:any;
 }> = ({
   setCurrentScreenId,
   preview,
@@ -58,6 +59,7 @@ const Completion: React.FC<{
   preloadedAssets,
   questWiseMaxTotal,
   gameInfoTotalScore,
+  setProfile,
 }) => {
     const [imgb, setbImg] = useState<any>();
     const [showComplete, setShowComplete] = useState(false);
@@ -75,6 +77,8 @@ const Completion: React.FC<{
       setTimeout(() => {
         setShowComplete(false);
       }, 1000);
+
+      
 const findQuestCompletionMessage=()=>{
       const playerCurrentQuestGrandTotal = profile.playerGrandTotal.questScores[parseInt(currentQuestNo)];
   let completionScreenMessage="";
@@ -103,31 +107,79 @@ const findQuestCompletionMessage=()=>{
 
   /** This useEffect Only hanldes the total within the quest total */
 useEffect(()=>{
-let questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).reduce((totalScore: number, [key, value]: [any, any]) => {
+let questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).reduce((totalScore: any, [key, value]: [any, any]) => {
   if (key == profile.currentQuest) {
       return totalScore + value;
   }
   return totalScore;
 }, 0);
-questTotalScore = questTotalScore <= 0 ? 0 : questTotalScore;
+const scores = profile?.score;
+const sums: any = {};
+scores.forEach((score: any) => {
+  const quest = score.quest;
+  if (!sums[quest]) {
+    sums[quest] = 0;
+  }
+  sums[quest] += score.score;
+});
+const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
+  quest,
+  score,
+}));
+const getscores = getFinalscores.find(
+  (row: any) => row.quest === profile?.currentQuest,
+);
+const finalscore = getscores?.score;              
+questTotalScore = questTotalScore <= 0 ? finalscore : questTotalScore;
   SetFinalscore(questTotalScore);
+
 },[profile.score])
 
 const currentQuestScore = useMemo(() => {
   if (questScores && questScores[profile?.currentQuest]) {
     return questScores[profile?.currentQuest];
   } else {
-    const totalFlowScore =profile.score?.reduce((acc: number, item: any)=>{
-      if(item?.quest == profile?.currentQuest)
-        {
-          return  acc + parseInt(item.score);
+    let currentScores: any[];
+    let totalFlowScore:number = 0;
+    const questStatus = questState[profile?.currentQuest];
+      if (profile?.score.length > 0) {
+        currentScores = profile?.score 
+      } 
+    
+    const currentQuestseqId = Array.isArray(currentScores)
+    ? currentScores.map((item) => item.seqId)
+    : [];
+        if (Array.isArray(currentScores) && currentScores.length > 0) {
+          const result = currentQuestseqId.map((seqId) => {
+            const QuestNo = seqId.split('.')[0];
+            if (QuestNo == profile?.currentQuest) {
+              const filteredOptions = questOptions?.filter(
+                (option: any) => option.qpSequence == seqId,
+              );
+              const qpScoresOption = filteredOptions.map((option: any) =>
+                parseInt(option.qpScore),
+              );
+              qpScoresOption.sort((a: any, b: any) => b - a);
+              totalFlowScore += qpScoresOption[0];
+            }
+           
+          });
+        } else {
+          console.log('*****Options are not provided.');
         }
-        return acc;
-    },0)
+
+
+    // const totalFlowScore =profile.score?.reduce((acc: number, item: any)=>{
+    //   if(item?.quest == profile?.currentQuest)
+    //     {
+    //       return  acc + parseInt(item.score);
+    //     }
+    //     return acc;
+    // },0)
     return totalFlowScore >0 ? totalFlowScore : (curretQuestOptions?.gameTotalScore[0]?.maxScore ?? 0);
   }
+  
 }, [questScores, profile?.currentQuest, gameInfoTotalScore]);
-
     return (
       <>
         <motion.div

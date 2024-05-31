@@ -80,6 +80,8 @@ interface PropsDialog {
   handleMiniNDI?: any;
   currentseq?: any;
   targetSequence?: any;
+  blockOnFocusHanlder:any;
+  blockOnBlurHanlder:any;
 }
 
 const DialogCompo: React.FC<PropsDialog> = ({
@@ -117,6 +119,8 @@ const DialogCompo: React.FC<PropsDialog> = ({
   currentseq,
   reviews,
   ShowReview,
+  blockOnFocusHanlder,
+  blockOnBlurHanlder,
 }) => {
   const textareaRef = useRef(null);
   const selectValue = `Char${[seq.input]}`;
@@ -433,6 +437,8 @@ const DialogCompo: React.FC<PropsDialog> = ({
               className={`${seq.id}`}
               name={`Dialog${seq.input}`}
               onChange={handleInput}
+              onFocus={(e:any) => blockOnFocusHanlder(e,seq)}
+              onBlur={(e:any) => blockOnBlurHanlder(e,seq)}
               onClick={(e) => justClick(e, seq)}
               value={
                 language

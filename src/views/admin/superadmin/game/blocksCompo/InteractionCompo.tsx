@@ -102,6 +102,8 @@ interface PropsInteraction {
   handleMiniNDI?: any;
   currentseq?: any;
   ShowReview?: any;
+  blockOnFocusHanlder:any;
+  blockOnBlurHanlder:any;
 }
 const customButtonStyles = {
   display: 'flex',
@@ -173,6 +175,8 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
   currentseq,
   reviews,
   ShowReview,
+  blockOnFocusHanlder,
+  blockOnBlurHanlder,
 }) => {
   const initial = {
     [`block${index}`]: [''],
@@ -194,7 +198,6 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
 
   //Commented temporary Block - 14/May/24
   // useEffect(() => {
-  //   console.log('language', language);
   //   // Assume you have a function to get the translation ID dynamicallyz
 
   //   const fetchData = async () => {
@@ -280,7 +283,6 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
   }, [number]);
   // console.log('sequencial', alphabet);
   useEffect(() => {
-    console.log('alphabet', seq);
 
     // console.log('sequencial',  seq.id,'--',alphabet);
     // const currentAlpha = alphabet
@@ -300,7 +302,6 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
   const handleSubmit1 = (e: any) => {
     e.preventDefault();
 
-    console.log('seqqq', seq.input);
 
     const currentAlpha = alphabet[alphabet.length - 1];
     const currentLetter = currentAlpha.charAt(currentAlpha.length - 1);
@@ -331,7 +332,6 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
       console.log('finisho');
     }
   };
-  console.log('alphabet', alphabet);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const secondarycount = countalphabet + 1;
@@ -343,7 +343,6 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
         alphabet[0],
       );
 
-    console.log('Last element for seqs:', 'is', lastElement.option);
     const currentAlpha = lastElement.option;
     const currentLetter = currentAlpha.charAt(currentAlpha.length - 1);
     let nextLetter = '';
@@ -378,6 +377,7 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
   };
   const handleFocusOut = () => {
     setKeyUp(false);
+
   };
   const handleIconHover = (iconId: any, isHovered: any) => {
     setdelHovered((prevIsDelHovered: any) => ({
@@ -778,12 +778,10 @@ const handleRight = () => {
     i?: any,
     option?: any,
   ) => {
-    console.log('seqoption', seq, 'i', i, 'value', value, 'alp', option);
 
     handleNDI(value);
 
     if (value != '') {
-      console.log('seqoption', seq, 'i', i, 'value', value, 'option', alphabet);
       // handleSelectBlock({ value: seq.input + 1 }, seq.input + 1, `Option${alp.option}`, `Interaction${seq.input}`);
       handleSelectBlock(
         { value: currentseq },
@@ -800,7 +798,6 @@ const handleRight = () => {
     bodyRef?: any;
   }) => {
     const { seq, i, name, bodyRef } = props;
-    console.log('minibox1', name);
     return (
       <Box
         position={'absolute'}
@@ -983,6 +980,8 @@ const handleRight = () => {
                 className={`${seq.id}`}
                 name={`Interaction${seq.input}`}
                 onChange={handleInput}
+                onFocus={(e:any) => blockOnFocusHanlder(e,seq)}
+                onBlur={(e:any) => blockOnBlurHanlder(e,seq)}
                 onClick={(e) => justClick(e, seq)}
                 value={
                   language
@@ -1271,8 +1270,12 @@ const handleRight = () => {
                                     onChange={handleInput}
                                     pl={'25px'}
                                     onKeyDown={handleKeyDown}
-                                    onBlur={handleFocusOut}
-                                    borderRadius={'15px'}
+                                    onBlur={(e:any) => {
+                                      handleFocusOut();
+                                      blockOnBlurHanlder(e, seq);
+                                  }}
+                                  onFocus={(e:any) => blockOnFocusHanlder(e,seq)}
+                                    borderRadius={'15px'} 
                                     border={
                                       validation?.[
                                         `options${seq.input}${alp.option}`
@@ -1748,26 +1751,6 @@ const handleRight = () => {
                                     }
                                     position={'relative'}
                                   >
-                                    <>
-                                      {console.log(
-                                        'NoteinterleadShowinput',
-                                        input,
-                                        'seq',
-                                        seq.input,
-                                      )}
-                                      {console.log(
-                                        'noteinter1',
-                                        input?.[`Interaction${seq.input}`]
-                                          ?.navigateshowObjects?.[alp.option] ===
-                                        'Select Block',
-                                      )}
-                                      {console.log(
-                                        'noteinter2',
-                                        !input?.[`Interaction${seq.input}`]
-                                          ?.navigateObjects?.[alp.option],
-                                      )}
-                                    </>
-
                                     {input?.[`Interaction${seq.input}`]
                                       ?.navigateshowObjects?.[alp.option] ===
                                       'New Block' &&
@@ -2803,25 +2786,6 @@ const handleRight = () => {
     //                               : 'none'
     //                           }
     //                         >
-    //                           <>
-    //                             {console.log(
-    //                               'NoteinterleadShowinput',
-    //                               input,
-    //                               'seq',
-    //                               seq.input,
-    //                             )}
-    //                             {console.log(
-    //                               'noteinter1',
-    //                               input?.[`Interaction${seq.input}`]
-    //                                 ?.navigateshowObjects?.[alp.option] ===
-    //                               'Select Block',
-    //                             )}
-    //                             {console.log(
-    //                               'noteinter2',
-    //                               !input?.[`Interaction${seq.input}`]
-    //                                 ?.navigateObjects?.[alp.option],
-    //                             )}
-    //                           </>
 
     //                           {input?.[`Interaction${seq.input}`]
     //                             ?.navigateshowObjects?.[alp.option] ===
