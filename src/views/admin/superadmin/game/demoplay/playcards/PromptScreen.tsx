@@ -77,13 +77,13 @@ useEffect(()=>{
   }
   },[hasMulitLanguages, currentScreenId])
 
-useEffect(()=>{
-if(formState?.name || formData?.gender || formData?.language){
-  setProfileData((prev:any) => ({ ...prev, ...formState}));
-  setPreLogDatas((prev:any) => ({...prev,previewProfile:{ ...formState,
-    score:getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile.score : []}}))
-}
-},[formState])
+// useEffect(()=>{
+// if(formState?.name || formData?.gender || formData?.language){
+//   setProfileData((prev:any) => ({ ...prev, ...formState}));
+//   setPreLogDatas((prev:any) => ({...prev,previewProfile:{ ...formState,
+//     score:getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile.score : []}}))
+// }
+// },[formState])
 
 const handleProfile = (e: any, input?: any) => {
   const { id, value } = e.target;
@@ -92,8 +92,11 @@ const handleProfile = (e: any, input?: any) => {
   } else if (id === 'language') {
     setIsLanguageSelected(false);
   }
+  // Restrict the length of 'value' to a maximum of 15 characters if 'id' is 'name'
+  const trimmedValue = id === 'name' ? value.slice(0, 15) : value;
+
   setIsError((prevError) => ({ ...prevError, [id]: null }));
-  setFormState((prev: any) => ({ ...prev, [id]: id === 'name' ? value : input }));
+  setFormState((prev: any) => ({ ...prev, [id]: id === 'name' ? trimmedValue : input }));
 };
 
 const handleProfileSubmit = () => {
@@ -104,6 +107,7 @@ const handleProfileSubmit = () => {
   };
 
   setIsError(newErrors);
+  console.log("newErrors", newErrors)
   const isErrorPresent = Object.values(newErrors).some(error => error !== null);
   if (!isErrorPresent) {
     setProfileData((prev: any) => ({ ...prev, ...formState }));

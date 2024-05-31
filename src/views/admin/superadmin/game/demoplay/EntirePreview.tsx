@@ -1718,8 +1718,6 @@ useEffect(()=>{
 
   }
 
-
-
   const checkAndUpdateScores = async () => {
     const currentQuest = profile.currentQuest;
     if (questState[currentQuest] !== 'Started') {
