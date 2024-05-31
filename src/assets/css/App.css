@@ -3448,6 +3448,15 @@ transform: translate(-167px, -84px);
 }
 
 @media (orientation: portrait) {
+
+  .score_text{
+    font-size: 1.5vh;
+  }
+
+  .progress_percentage{
+    font-size: 1.1vh;
+  }
+
   .feedback_screenshot {
     width: 56vh !important;
     height: 80vw !important;
@@ -4014,6 +4023,10 @@ grid-row: 1 / 2;
   color: black;
 }
 
+.font_inter_ss{
+  font-size: 3.5vh;
+}
+
 .screenshot_content {
   display: flex;
   transform: translate(-2px, calc(90vh - 87vh));
@@ -4259,10 +4272,11 @@ grid-row: 1 / 2;
 }
 
 .feedback_content_text {
-  font-size: 3.5vh;
-  font-family: 'AtlantisContent';
-  color: var(--dialog-title-color);
-  letter-spacing: 0.1px;
+    word-spacing: 0.3em;
+    font-size: 3.2vh;
+    letter-spacing: normal;
+    font-family: 'AtlantisContent';
+    color: var(--dialog-title-color);
 }
 
 .scroll_hide::-webkit-scrollbar {
@@ -4695,7 +4709,9 @@ font-family: 'AtlantisContent';
   .screenshot_content {
     transform: translate(-2px, calc(90vw - 87vw));
   }
-
+  .font_inter_ss{
+    font-size: 3.5vw;
+  }
   .story_interaction_option {
     font-size: 4vw;
     line-height: 4vw;
@@ -4719,7 +4735,7 @@ font-family: 'AtlantisContent';
   .top-menu-home-section .Setting-box .btns {
     position: absolute;
     display: flex;
-    transform: translateY(30vw);
+    transform: translateY(26vw);
   }
 
   .character_potrait {
@@ -6238,7 +6254,8 @@ font-family: 'AtlantisContent';
   width: 100%;
   justify-content: space-between;
   font-family: 'AtlantisText';
-  font-size: 19px;
+  font-size: 21px;
+  letter-spacing: 1px;
 }
 
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box .table-heading img {
@@ -6272,7 +6289,9 @@ font-family: 'AtlantisContent';
   display: flex;
   justify-content: space-between;
   font-family: 'AtlantisText';
-  font-size: 19px;
+  font-size: 22px;
+  margin-left: 25px;
+  font-weight: bold;
 }
 
 .EntirePreview .Game-Screen .Images .Leaderboard-screen img.close-btn {
@@ -6476,7 +6495,7 @@ font-family: 'AtlantisContent';
   align-items: center;
   letter-spacing: 1px;
   font-weight: 400;
-  color: var(--atlantis-text-color);
+  color: 3.5vh !important;
   width: 100%;
   margin-bottom: 10px;
   /* font-size: 18px; */
@@ -6590,7 +6609,7 @@ font-family: 'AtlantisContent';
 }
 
 .EntirePreview .Game-Screen .Images .thankyou-screen {
-  font-family: 'AtlantisText';
+  font-family: 'AtlantisContent';
   letter-spacing: 0.4px;
   color: var(--atlantis-text-color);
   /* transform: translate(0, 239px);
@@ -6831,18 +6850,18 @@ font-family: 'AtlantisContent';
 }
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content {
-  font-family: 'AtlantisText';
+  font-family: 'AtlantisContent';
   /*letter-spacing: 2px;*/
   /*color: var(--atlantis-text-color);*/
   word-break: break-all;
   display: flex;
   align-items: center;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   font-weight: 400;
   color: #bdac88;
   width: 100%;
   margin-bottom: 10px;
-  font-size: 18px;
+  font-size: 3.5vh !important;
 }
 
 .EntirePreview .Game-Screen .Images .takeaway-screen .content-box .content img {
@@ -7187,6 +7206,28 @@ input[data-autocompleted] {
   background-position-x: -0.5vh;
 }
 
+.story_overview_block::-webkit-scrollbar {
+  width: 12px;
+  height: 18px;
+  border-radius: 30px;
+  background-size: contain;
+}
+
+.story_overview_block::-webkit-scrollbar-track {
+  background: url('../img/games/scroll.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.story_overview_block::-webkit-scrollbar-thumb {
+  background: url('../img/games/cross.png');
+  background-repeat: no-repeat;
+  border-radius: 30px;  
+  background-size: 100% 5px;
+  height: 5px !important;
+}
+
+
 .dialogue_scroll::-webkit-scrollbar {
   width: 12px;
   height: 18px;
@@ -7207,6 +7248,8 @@ input[data-autocompleted] {
   background-size: contain;
   height: 30px;
 }
+
+
 .EntirePreview .Game-Screen .Images .thankyou-screen .content::-webkit-scrollbar {
   width: 16px;
   height: 18px;
@@ -7325,3 +7368,7 @@ input[data-autocompleted] {
     opacity: 1;   
   }
 }
+
+
+
+/* scroll bar practise */
