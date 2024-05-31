@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 /** may pass via props in future */
-const cameraPosition = [2, -1.8, 5.8];
+const cameraPosition = [1, -1.5, 5.2];
 const rotation = { x: 0, y: 11.5, z: 0 }; //degree to rotate
 const animationsArray = [1, 0, 1, 1, 0];
 const audioDuration = 15;
