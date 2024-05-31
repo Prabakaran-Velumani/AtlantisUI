@@ -231,7 +231,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                   height={'70px'}
                   w={'150px'}
                   fontSize={'29px'}
-                  fontFamily={'Atlantis'}
+                  fontFamily={'AtlantisText'}
                   color={'#000'}
                   overflow={'hidden'}
                   lineHeight={'25px'}
@@ -261,7 +261,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                   height={'70px'}
                   w={'150px'}
                   fontSize={'29px'}
-                  fontFamily={'Atlantis'}
+                  fontFamily={'AtlantisText'}
                   color={'#000'}
                   overflow={'hidden'}
                   lineHeight={'25px'}
@@ -300,7 +300,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                     height={'70px'}
                     w={'150px'}
                     fontSize={'29px'}
-                    fontFamily={'Atlantis'}
+                    fontFamily={'AtlantisText'}
                     color={'#000'}
                     overflow={'hidden'}
                     lineHeight={'25px'}
@@ -379,7 +379,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                     height={'70px'}
                     w={'150px'}
                     fontSize={'29px'}
-                    fontFamily={'Atlantis'}
+                    fontFamily={'AtlantisText'}
                     color={'#000'}
                     overflow={'hidden'}
                     lineHeight={'25px'}
@@ -429,7 +429,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                     height={'70px'}
                     w={'150px'}
                     fontSize={'29px'}
-                    fontFamily={'Atlantis'}
+                    fontFamily={'AtlantisText'}
                     color={'#000'}
                     overflow={'hidden'}
                     lineHeight={'25px'}
@@ -464,7 +464,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                     height={'70px'}
                     w={'150px'}
                     fontSize={'29px'}
-                    fontFamily={'Atlantis'}
+                    fontFamily={'AtlantisText'}
                     color={'#000'}
                     overflow={'hidden'}
                     lineHeight={'25px'}
@@ -508,7 +508,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
 
             <Box className="music-volume volumes">
               <Slider
-                aria-label="music-volume-slider"
+               aria-label="slider-ex-4"
+               name="musicVolume"
                 defaultValue={
                   getPrevLogDatas?.audioVolumeValue?.bgVolume * 100 || 25
                 }
@@ -533,19 +534,17 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                       transform="translate(-50%, -50%)"
                       width="86%"
                     >
-                      <SliderFilledTrack
-                        className="filled-volume"
-                        bg="pink.500"
-                      />
-                      <SliderThumb boxSize={10} background={'transparent'}>
-                        <Img
-                          className="slider_thumb"
-                          src={preloadedAssets.SliderPointer}
-                        />
+                      <SliderFilledTrack className="filled-volume" bg="pink.500" />
+                      <SliderThumb
+                        boxSize={10}
+                        background={'transparent'}                        
+                      // left={'calc(100% - 30%)'}
+                      >
+                        <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
                       </SliderThumb>
                     </Box>
                   </Box>
-                </SliderTrack>
+                </SliderTrack>                
               </Slider>
             </Box>
 
@@ -578,15 +577,9 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                       transform="translate(-50%, -50%)"
                       width="86%"
                     >
-                      <SliderFilledTrack
-                        className="filled-volume"
-                        bg="pink.500"
-                      />
-                      <SliderThumb boxSize={10} background={'transparent'}>
-                        <Img
-                          className="slider_thumb"
-                          src={preloadedAssets.SliderPointer}
-                        />
+                      <SliderFilledTrack className="filled-volume" bg="pink.500" />
+                      <SliderThumb boxSize={10} background={'transparent'} >
+                        <Img className='slider_thumb' src={preloadedAssets.SliderPointer} />
                       </SliderThumb>
                     </Box>
                   </Box>

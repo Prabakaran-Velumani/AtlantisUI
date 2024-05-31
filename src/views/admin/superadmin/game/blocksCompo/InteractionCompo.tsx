@@ -658,15 +658,15 @@ const InteractionCompo: React.FC<PropsInteraction> = ({
 const handleRight = () => {
   const container = document.getElementById(seq.id);
 
-  if (container) {
+    if (container) {
       container.scrollLeft += 700;
       setShowcount(container.scrollLeft + 300)
       if (container.scrollLeft > 0) {
           setShowLeftButton(true);
       }
 
-  }
-};
+    }
+  };
   const scrollToElement1 = (id: any) => {
     const element = document.getElementById(id);
     if (element) {

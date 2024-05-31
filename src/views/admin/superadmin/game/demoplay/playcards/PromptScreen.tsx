@@ -1,5 +1,6 @@
 import { Box, Img, Button, Text, FormLabel, Input, FormHelperText, FormErrorMessage, FormControl, CloseButton} from '@chakra-ui/react'
 import React, {useEffect, useState} from 'react';
+import { motion } from 'framer-motion';
 
 
 type languageProps = {
@@ -132,6 +133,7 @@ useEffect(() => {
     (isOpenCustomModal || (currentScreenId === 1 && isInitialLoadScreenWelcome)) && (
       <Box id="container" className="Play-station">
       <Box className="top-menu-home-section">  
+        <motion.div initial={{ opacity: 0, y: -100 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.5 }}>
           <Box className="Setting-box">
             <Img
               src={preloadedAssets.Lang}
@@ -142,7 +144,7 @@ useEffect(() => {
               <FormLabel className={'label'} me={'0'}>
                 Profile
               </FormLabel>
-              <Box position={'relative'}>
+              <Box position={'relative'} mb={'10%'}>
                 <Text
                   className={'choosen_lang'}
                   ml={'9% !important'}
@@ -243,7 +245,7 @@ useEffect(() => {
                   )}
                 </Box>
               </Box>
-              <Box position={'relative'} mb={'20%'}>
+              <Box position={'relative'} mb={'10%'}>
                 <Text
                   onClick={() => setIsLanguageSelected(!isLanguageSelected)}
                   className={'choosen_lang'}
@@ -309,6 +311,7 @@ useEffect(() => {
                   onClick={() => handleProfileSubmit()}
                 >
                   <Img
+                    className='profile-okay-btn'
                     src={preloadedAssets.OkayBtn}
                     w={'100%'}
                     h={'auto'}
@@ -317,6 +320,7 @@ useEffect(() => {
               </Box>
             </Box>
           </Box>
+        </motion.div>
       </Box>
     </Box>
     )

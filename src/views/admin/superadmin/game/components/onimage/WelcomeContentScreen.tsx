@@ -130,7 +130,7 @@ const WelcomeContentScreen: React.FC<{
         transition={{ duration: 0.5, delay: 0.5 }}
         style={{ height: '100%' }}
       >
-        {imageSrc && preview && currentTab === 5 && (formData.gameIsShowSkill === "true" || formData.gameIsShowLearningOutcome=== "true" || formData.gameIsShowAuhorName=== "true" || formData.gameIsShowStoryline=== "true" || formData.gameIsShowGameDuration=== "true" || formData.gameIsShowAdditionalWelcomeNote=== "true") ? (
+        {imageSrc && preview && currentTab === 5 && (formData.gameIsShowSkill === "true" || formData.gameIsShowLearningOutcome === "true" || formData.gameIsShowAuhorName === "true" || formData.gameIsShowStoryline === "true" || formData.gameIsShowGameDuration === "true" || formData.gameIsShowAdditionalWelcomeNote === "true") ? (
           <Box className="welcome-screen">
             <Box className="welcome-screen-box">
               <Img src={imageSrc} className=" welcome-pad" />

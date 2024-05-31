@@ -40,7 +40,7 @@
   }
   .EntirePreview .Game-Screen .Images .Thankyou-section .thankyou-screen {
     width: calc(77vw - (-34vw));
-    max-width: 81vh;
+    max-width: 82vh;
     height: calc(47vh - (11vh));
     max-height: 47vw;
   }
@@ -198,29 +198,34 @@
   /* WELCOME SCREEN**************************************** */
   .EntirePreview .Game-Screen .Images .welcome-screen {    
     height: 100vw;
+    width: 100vh;
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .welcome-pad {
-    height: 100vw;    
+    height: 90vw;    
   } 
   .EntirePreview .Game-Screen .Images .welcome-screen .top-title {    
     top: 21vw;
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .top-title .title {
-    font-size: 3.5vw;  
+    font-size: 4vw;  
+    width: 30vw;
+    height: 5vw;
+    margin-top: 6vw;
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .top-title .duration {
-    font-size: 3.5vw;
+    font-size: 4vw;
   } 
   .EntirePreview .Game-Screen .Images .welcome-screen .content-box {   
-    height: 45vw !important;
-    width: calc(50vw - (-20vw)) !important;  
-    transform: translateY(19%); 
+    height: 35vw !important;
+    width: calc(47vw - (-17vw)) !important;  
+    transform: translateY(18%); 
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .text {
-    font-size: 3vw;
+    font-size: 4vw;
+    line-height: 5vw;
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-arrow-img {    
-    height: 4vw;
+    height: 5vw;
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .skill-text { 
     font-size: 4vw;  
@@ -229,13 +234,16 @@
     height: 4vw; 
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .rewards-box .box-1 .inside-box p {
-    font-size: 3vw;  
+    font-size: 4vw;  
+  }
+  .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .author{
+    margin: 2vw 0px;    
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .author p{
-    font-size: 3.5vw;      
+    font-size: 4vw;      
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content .renderContent p{
-    font-size: 3.5vw;  
+    font-size: 4vw;  
   }
   .EntirePreview .Game-Screen .Images .welcome-screen .next-btn {
     transform: translate(0, 35vw);   
@@ -331,7 +339,7 @@
     flex-direction: column;
   }
   .EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div div {
-    width: 100%;     
+    width: 99%;     
   }
   .EntirePreview .Game-Screen .buttonfeel {
     margin-right: 0;
@@ -448,7 +456,7 @@
     flex-direction: column;
   }
   .EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div div {
-    width: 100%;     
+    width: 99%;     
   }
   .EntirePreview .Game-Screen .buttonfeel {
     margin-right: 0;   
@@ -539,7 +547,7 @@
     flex-direction: column;
   }
   .EntirePreview .Game-Screen .Images .thankyou-screen .collect-learner-feedback .grid .content-box .content-div div {
-    width: 100%;     
+    width: 99%;     
   }
   .EntirePreview .Game-Screen .buttonfeel {
     margin-right: 0;

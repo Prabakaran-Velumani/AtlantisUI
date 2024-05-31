@@ -26,7 +26,7 @@ import {
   useToast
 } from '@chakra-ui/react';
 import { lazy } from 'react';
-import { motion } from 'framer-motion';
+import { LazyMotion, domAnimation, motion, m, domMax } from 'framer-motion';
 import React, {
   Suspense,
   useEffect,
@@ -3472,6 +3472,7 @@ if(currentScreenId ===2)
         }
       } else {
         /** IF a block not has navi option then it leads to next block */
+        console.log('nextBlock',nextBlock)
         if (nextBlock && nextBlock[0]?.blockChoosen) {
           setType(nextBlock[0]?.blockChoosen);
           setData(nextBlock[0]);
@@ -4081,7 +4082,6 @@ if(currentScreenId ===2)
                 data.unshift({ value: 1, label: 'English' });
               }
             setGameLanguages(data);
-
             setHasMulitLanguages(true);
           } else {
             setGameLanguages([{ value: 1, label: 'English' }]);
@@ -4460,7 +4460,7 @@ if(currentScreenId ===2)
                 case 0:
                   return (
                     <>
-                      {
+                      {                        
                         <PlayInfo
                           onOpen={onOpen1}
                           onClose={onClose1}
@@ -4469,50 +4469,51 @@ if(currentScreenId ===2)
                           setIsGetsPlayAudioConfirmation={
                             setIsGetsPlayAudioConfirmation
                           }
-                        />
+                        />                           
                       }
                     </>
                   );
                 case 1:
                   return (
-                    <>
-                      <Box
-                        w={'100%'}
-                        h={'100vh'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        position={'relative'}
-                        overflow={'visible'}
-                        style={{ perspective: '1000px' }}
-                        className="Main-Content"
-                      >
+                    <>     
+                      {/* <Box className='welcome-black-shadow'> */}
                         <Box
-                          backgroundImage={preloadedAssets?.StarsBg}
-                          w={'100% !important'}
+                          w={'100%'}
                           h={'100vh'}
-                          backgroundRepeat={'no-repeat'}
-                          backgroundSize={'cover'}
                           alignItems={'center'}
                           justifyContent={'center'}
-                          className="Game-Screen"
-                          backgroundColor={'#0d161e'}
+                          position={'relative'}
+                          overflow={'visible'}
+                          style={{ perspective: '1000px' }}
+                          className="Main-Content"
                         >
-                          <Box className="Images" h={'100vh !important'}>
-                            <Welcome
-                              intro={audio}
-                              currentScreenId={currentScreenId}
-                              setCurrentScreenId={setCurrentScreenId}
-                              formData={gameInfo?.gameData}
-                              imageSrc={preloadedAssets.backgroundImage}
-                              screen={preloadedAssets.Screen5}
-                              preview={true}
-                              preloadedAssets={preloadedAssets}
-                              setPreLogDatas={setPreLogDatas}
-                              getPrevLogDatas={getPrevLogDatas}
-                            />
+                          <Box
+                            backgroundImage={preloadedAssets?.StarsBg}
+                            w={'100% !important'}
+                            h={'100vh'}
+                            backgroundRepeat={'no-repeat'}
+                            backgroundSize={'cover'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            className="Game-Screen"
+                            backgroundColor={'#0d161e'}
+                          >
+                            <Box className="Images" h={'100vh !important'}>
+                              <Welcome
+                                intro={audio}
+                                currentScreenId={currentScreenId}
+                                setCurrentScreenId={setCurrentScreenId}
+                                formData={gameInfo?.gameData}
+                                imageSrc={preloadedAssets.backgroundImage}
+                                screen={preloadedAssets.Screen5}
+                                preview={true}
+                                preloadedAssets={preloadedAssets}
+                                setPreLogDatas={setPreLogDatas}
+                                getPrevLogDatas={getPrevLogDatas}
+                              />
+                            </Box>
                           </Box>
-                        </Box>
-                      </Box>
+                        </Box> 
                     </>
                   );
                 case 2:
@@ -4571,7 +4572,7 @@ if(currentScreenId ===2)
                   );
                 case 3:
                   return (
-                    <>
+                    <>                    
                       <Box
                         w={'100%'}
                         h={'100vh'}
@@ -4603,44 +4604,46 @@ if(currentScreenId ===2)
                   );
                 case 4:
                   return (
-                    <Box
-                      w={'100%'}
-                      h={'100vh'}
-                      alignItems={'center'}
-                      justifyContent={'center'}
-                      position={'relative'}
-                      overflow={'visible'}
-                      style={{ perspective: '1000px' }}
-                      className="Main-Content"
-                    >
+                    <>                      
                       <Box
-                        backgroundImage={preloadedAssets.StarsBg}
-                        backgroundColor={'#0d161e'}
-                        w={'100% !important'}
+                        w={'100%'}
                         h={'100vh'}
-                        backgroundRepeat={'no-repeat'}
-                        backgroundSize={'cover'}
                         alignItems={'center'}
                         justifyContent={'center'}
-                        className="Game-Screen"
+                        position={'relative'}
+                        overflow={'visible'}
+                        style={{ perspective: '1000px' }}
+                        className="Main-Content"
                       >
-                        <Box className="Images" zIndex={99}>
-                          <LeaderBoard
-                            homeLeaderBoard={homeLeaderBoard}
-                            setHomeLeaderBoard={setHomeLeaderBoard}
-                            setCurrentScreenId={setCurrentScreenId}
-                            formData={gameInfo?.gameData}
-                            imageSrc={preloadedAssets.Lead}
-                            getData={getData}
-                            data={data}
-                            gameInfo={gameInfo}
-                            preloadedAssets={preloadedAssets}
-                            setPlayerTodayScore={setPlayerTodayScore}
-                            playerTodayScore={playerTodayScore}
-                          />
+                        <Box
+                          backgroundImage={preloadedAssets.StarsBg}
+                          backgroundColor={'#0d161e'}
+                          w={'100% !important'}
+                          h={'100vh'}
+                          backgroundRepeat={'no-repeat'}
+                          backgroundSize={'cover'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          className="Game-Screen"
+                        >
+                          <Box className="Images" zIndex={99}>
+                            <LeaderBoard
+                              homeLeaderBoard={homeLeaderBoard}
+                              setHomeLeaderBoard={setHomeLeaderBoard}
+                              setCurrentScreenId={setCurrentScreenId}
+                              formData={gameInfo?.gameData}
+                              imageSrc={preloadedAssets.Lead}
+                              getData={getData}
+                              data={data}
+                              gameInfo={gameInfo}
+                              preloadedAssets={preloadedAssets}
+                              setPlayerTodayScore={setPlayerTodayScore}
+                              playerTodayScore={playerTodayScore}
+                            />
+                          </Box>
                         </Box>
                       </Box>
-                    </Box>
+                    </>
                   );
                 case 5:
                   return (
@@ -4899,6 +4902,7 @@ if(currentScreenId ===2)
                 case 13:
                   return (
                     <>
+                    {/* <Box className='black-shadow'> */}
                       <ChapterPage
                         setCurrentQuestNo={setCurrentQuestNo}
                         questState={questState}
@@ -4923,6 +4927,7 @@ if(currentScreenId ===2)
                         setRepeatPrevOption={setRepeatPrevOption}
                         setSelectedOption={setSelectedOption}
                       />
+                      {/* </Box> */}
                     </>
                   );
                 case 14:

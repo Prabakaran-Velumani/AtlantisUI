@@ -1,4 +1,4 @@
-import { Box, Icon, useToast } from '@chakra-ui/react';
+import { Box, Icon, Img, useToast } from '@chakra-ui/react';
 
 import React, {
   Suspense,
@@ -10,6 +10,7 @@ import React, {
   useState,
   lazy,
 } from 'react';
+import { LazyMotion, domAnimation, motion, m, domMax } from 'framer-motion';
 import { preloadedImages, preloadedGLBFiles } from 'utils/hooks/function';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
 import { json, useParams } from 'react-router-dom';
@@ -90,7 +91,9 @@ const GamePreview = () => {
   const [preLogDatasIni, setPreLogDatasIni] = useState<any>(null);
   const [initialStateUpdate, setInitialStateUpdate]=useState<boolean>(false);
   const [isAuthFailed, setIsAuthFailed]= useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<any>(false);
   const user: any = JSON.parse(localStorage.getItem('user'));
+  
   //get the stored Preview Log Data, if has otherwise create a new record
   const fetchPreviewLogsData = async () => {
     try {
@@ -572,9 +575,22 @@ const GamePreview = () => {
     }
   }, [gameInfo, preloadedAssets, componentsLoaded]);
 
+
+  useEffect(() => {
+    setIsVisible(true);
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 5000);
+
+    // Cleanup the timer when the component unmounts
+    return () => clearTimeout(timer);
+  }, []);
+
+  console.log('isVisible',isVisible)
+
   return (
     <>
-      <Suspense fallback={
+      {/* <Suspense fallback={
               <Box
               backgroundImage={preloadedAssets?.StarsBg}
               w={'100% !important'}
@@ -588,7 +604,10 @@ const GamePreview = () => {
             >      
             </Box>
         }>
-        {contentReady && (isAuthFailed ||
+        {contentReady && (isAuthFailed || */}
+      {/* <Suspense fallback={<Img src={preloadedAssets.InitialImg} width={'100vw'} h={'100vh'}/>}> */}
+      <Suspense fallback={<Box bg={'#000'} h={'100vh'} w={'100vw'}>Loading...</Box>}>
+        {contentReady &&  (isAuthFailed ||
           gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
             gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES'  ? (
               <NoAuth isAuthFailed={isAuthFailed}/>

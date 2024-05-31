@@ -29,7 +29,8 @@ const Welcome: React.FC<{
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);
   const [authorArray, setauthorArray] = useState<any[]>([]);
-  const [showComplete, setShowComplete] = useState(false);
+  const [showComplete, setShowComplete] = useState(false)
+  const [blackScreen, setBlackScreen] = useState(false)  
   useEffect(() => {
     setShowComplete(true);
     setTimeout(() => {
@@ -109,21 +110,63 @@ const Welcome: React.FC<{
     return null;
   };
   const screenIdset = (getPrevLogDatas?.screenIdSeq?.length -1) >=0 ? getPrevLogDatas?.screenIdSeq[(getPrevLogDatas?.screenIdSeq?.length -1)]:  1;
+
+  const containerRef = useRef<any>(null);
+  let lastScrollTop = 0;
+
+  useEffect(() => {
+    const container = containerRef?.current;
+    if (!container) return; // Early return if container is not available
+
+    console.log('container', container);
+
+    const handleScroll = () => {
+      let currentScrollTop = container?.scrollTop;
+
+      console.log('currentScrollTop', currentScrollTop);        
+
+      if (currentScrollTop > lastScrollTop) {
+        // Scrolling down
+        // container.classList.add('content-box');
+        container.classList.add('scrollbar-down');
+      } else {
+        // Scrolling up
+        container.classList.remove('scrollbar-down');
+        // container.classList.remove('content-box');
+      }
+
+      lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
+    };
+
+    container.addEventListener('scroll', handleScroll);
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+
+
+  // useEffect(()=> {
+  //   setBlackScreen(true)       
+  // },[blackScreen])
+
   
   return (
     <>
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5, duration: 1 }}
-      >
+      > */}
+       <Box className={`welcome-black-shadow ${blackScreen && 'welcome-end-black-shadow'}`}>
         <Box className="welcome-screen">
           <Box className="welcome-screen-box">
             <Img src={screen} className="welcome-pad" />
           </Box>
           <Box className="top-title">
             <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-              <Box w='32%' lineHeight={'40px'}>
+              <Box>
                 <Text
                   className="title"
                   fontSize={{
@@ -164,7 +207,7 @@ const Welcome: React.FC<{
               </Text>
             )}
           </Box>
-          <Box className="content-box" fontFamily={'gametext'}>
+          <Box className="content-box" ref={containerRef}  fontFamily={'gametext'}>
             <Box w={'60%'} className="content">
               {formData.gameIsShowStoryline === 'true' && (
                 <Text
@@ -325,11 +368,11 @@ const Welcome: React.FC<{
                   className="author"
                 >
                   <Text
-                    position={'absolute'}
-                    right={'0px'}
-                    left={'0px'}
-                    bottom={'0px'}
-                    top={'20px'}
+                    // position={'absolute'}
+                    // right={'0px'}
+                    // left={'0px'}
+                    // bottom={'0px'}
+                    // top={'20px'}
                     fontSize={{
                       base: '11px',
                       sm: '12px',
@@ -368,13 +411,24 @@ const Welcome: React.FC<{
             <Img
               src={preloadedAssets.next}
               onClick={() =>{
+                setBlackScreen(true)
+                setTimeout(()=> {
                 setCurrentScreenId(12); 
-               
+                // if(screenIdset !==  currentScreenId)
+                //   {
+                //      setPreLogDatas((prev:any) => ({
+                //   ...prev,
+                //   screenIdSeq: [...prev.screenIdSeq, currentScreenId]
+                //    }));
+                //   }
+                },1000)
             }}
             />
           </Box>
         </Box>
-      </motion.div>
+       </Box>
+        
+      {/* </motion.div> */}
     </>
   );
 };

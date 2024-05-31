@@ -263,10 +263,10 @@ const LeaderBoard: React.FC<{
         if (currentScrollTop > lastScrollTop) {
           // Scrolling down
           // container.classList.add('content-box');
-          container.classList.add('black-scrollbar');
+          container.classList.add('scrollbar-down');
         } else {
           // Scrolling up
-          container.classList.remove('black-scrollbar');
+          container.classList.remove('scrollbar-down');
           // container.classList.remove('content-box');
         }
   

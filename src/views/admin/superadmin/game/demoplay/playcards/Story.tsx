@@ -584,12 +584,7 @@ const Story: React.FC<{
                         </Box>
                       </Box>
                       <Box
-                        width={'100%'}
-                        mt="20px"
-                        position={'fixed'}
-                        top="78%"
-                        display={'flex'}
-                        justifyContent={'center'}
+                        className='story_block_btns_box'
                       >
                         <Box className="story_block_btns">
                           <Img
@@ -640,6 +635,7 @@ const Story: React.FC<{
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
                   color={'#312821'}
+                  textTransform={'capitalize'}
                 >
                   {data.blockRoll === 'Narrator'
                     ? data.blockRoll
@@ -739,6 +735,7 @@ const Story: React.FC<{
                   textAlign={'center'}
                   fontFamily={'AtlantisText'}
                   color={'#312821'}
+                  textTransform={'capitalize'}
                 >
                   {data.blockResponseRoll === 'Narrator'
                     ? data.blockResponseRoll
@@ -835,7 +832,7 @@ const Story: React.FC<{
                         />
                         <Box
                           position={'absolute'}
-                          top={0}
+                          top={{base: '-7px', sm: '-7px', lg: '-15px'}}
                           width={'100%'}
                           h={'100%'}
                           display={'flex'}
@@ -849,8 +846,8 @@ const Story: React.FC<{
                           <Box className="feed_list"> Interaction </Box>
                           <Box
                             w={'70%'}
-                            h={'75%'}
-                            overflowY={'scroll'}
+                            h={'60%'}
+                            overflowY={'auto'}
                             className="feedback_content_text"
                           >
                             <Box display={'flex'} mt={'10px'}>

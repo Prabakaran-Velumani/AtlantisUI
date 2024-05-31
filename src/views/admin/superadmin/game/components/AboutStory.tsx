@@ -21,7 +21,7 @@ import AddCourse from "./AddCourse"
 import narrator from 'assets/img/games/meeting_room.png';
 import back from 'assets/img/games/narrator.png';
 import { getSkills, getDefaultCat, getDefaultSkill, getGameStoryLine } from "utils/game/gameService"
-import { getallcategory,getCategoryList } from "utils/category/category"
+import { getallcategory, getCategoryList } from "utils/category/category"
 
 import { useParams } from "react-router-dom"
 import { AiOutlineEnter } from "react-icons/ai";
@@ -35,7 +35,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
   //navin 16-12
   const [openCourse, setOpenCourse] = useState(false),
     // [defaultskills,setDefaultSkills] = useState([]),
-    [defaultCat,setDefaultCat] = useState([]),
+    [defaultCat, setDefaultCat] = useState([]),
     [skills, setSkills] = useState([]),
     [Catgory, setCatgory] = useState([]),
 
@@ -47,7 +47,6 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
 
       },
     ]);
-    
   const [storyLine, setStoryline] = useState<String>();
   const [title, setTitle] = useState<String>();
   const [nonplayerName, setNonplayerName] = useState<String>();
@@ -65,7 +64,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
     const result = await getCategoryList();
     if (result?.status !== 'Success')
       return console.log('getbackruond error:' + result?.message);
-      setDefaultCat(result?.data);
+    setDefaultCat(result?.data);
 
   };
   //nivetha end 
@@ -114,10 +113,10 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
 
   // console.log('skill,cat',formData.gameSkills,formData.gameCategoryId)
 
-  useEffect(()=>{
+  useEffect(() => {
     // fetchDefaultcat();
     fetchCategoryList();
-  },[])
+  }, [])
   // console.log('defaultCat',defaultCat);
   let borderColor = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
   let bg = useColorModeValue('brand.500', 'brand.400');
@@ -237,7 +236,6 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
   const selectHandler = (selectedOption: any) => {
     // Check if selectedOption is null (i.e., when clearing the selection)
     const categoryId = selectedOption ? selectedOption.value : ""; // Assuming value is the property holding the category ID
-  
     setFormData((prev: any) => ({
       ...prev,
       gameCategoryId: categoryId,
@@ -245,7 +243,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
     }));
   };
 
- //nivetha end 
+  //nivetha end 
   const checkvalue = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const trimmedValue1 = e.currentTarget.value.trim(); // Use currentTarget instead of target
     if (trimmedValue1 !== '') {
@@ -255,7 +253,6 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
       }));
     }
   };
- 
 
   // const [selectedCategories, setSelectedCategories] = useState([]);
 
@@ -601,7 +598,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                   <FormLabel fontWeight='bold' fontSize='sm' mb='8px' ml='10px'>
                     Category<Text as='span' color='red.500'>*</Text>
                   </FormLabel>
-<Select
+            <Select
               menuPortalTarget={document.body}
               styles={{
                 menuPortal: base => ({ ...base, zIndex: 9999, }), control: (provided: any, state: any) => ({
@@ -621,8 +618,6 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
               value={
                 defaultCat.find((option) => option.value === formData.gameCategoryId) || null
               }
-
-            // styles={customStyle}           
             />
                 </FormControl>
               </Box>

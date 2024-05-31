@@ -23,7 +23,7 @@ const ReflectionScreen: React.FC<{
   reflectionQuestionsdefault: any;
   preview: any;
   preloadedAssets?: any;
-  RefelectionAnswer?:any;
+  RefelectionAnswer?: any;
 }> = ({
   formData,
   reflectionQuestions,
