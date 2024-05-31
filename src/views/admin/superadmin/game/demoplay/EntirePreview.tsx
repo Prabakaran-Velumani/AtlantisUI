@@ -836,7 +836,7 @@ useEffect(()=>{
       if (audioRef.current) {
 
         // audioRef.current.src = audio.url;
-        if (audioRef.current.src !== audio.url) {
+        if (audioRef.current?.src !== audio.url) {
           audioRef.current.src = audio.url;
         }
         audioRef.current.volume = parseFloat(audio.volume);
@@ -847,14 +847,14 @@ useEffect(()=>{
         if (audioObj.autoplay) {
           if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
             try {
-              backgroundBgmRef.current.play().catch((error) => {
+              backgroundBgmRef.current?.play().catch((error) => {
                 // Handle play promise rejection
               });
             } catch (error) {
               console.error('Background BGM ref is not available.', error);
             }
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current.play().catch((error) => {
+            voiceRef.current?.play().catch((error) => {
               // Handle play promise rejection
               console.error('Error playing voice:', error);
             });
@@ -863,7 +863,7 @@ useEffect(()=>{
           if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
             backgroundBgmRef.current.pause();
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current.pause();
+            voiceRef.current?.pause();
           }
         }
       }

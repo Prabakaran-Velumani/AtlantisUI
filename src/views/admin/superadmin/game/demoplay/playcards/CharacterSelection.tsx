@@ -240,12 +240,12 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                           setTimeout(()=> {
                           setCurrentScreenId(1);
 
-                          if (screenIdset !== currentScreenId) {
-                            setPreLogDatas((prev: any) => ({
-                              ...prev,
-                              screenIdSeq: [...prev.screenIdSeq, currentScreenId],
-                            }));
-                          }
+                          // if (screenIdset !== currentScreenId) {
+                          //   setPreLogDatas((prev: any) => ({
+                          //     ...prev,
+                          //     screenIdSeq: [...prev.screenIdSeq, currentScreenId],
+                          //   }));
+                          // }
                         },1000)
                         }}
                       ></Button>
