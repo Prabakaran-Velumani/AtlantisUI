@@ -17,7 +17,7 @@ const SelectedNPCs: React.FC<SelectedNPCType> = ({preloadedAssets, isStartsAnima
     return (
         <>
     {selectedNpc ? (
-        <Box className={'player_character_image'}>
+        <Box className={'player_character_image got'}>
           <Canvas camera={{ position: [0, 1, 9] }} > {/* For Single view */}
             {/* <Environment preset={"park"} background />   */}
             <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
@@ -27,7 +27,7 @@ const SelectedNPCs: React.FC<SelectedNPCType> = ({preloadedAssets, isStartsAnima
 
             {/* COMPONENTS */}
               <CharacterModal preloadedAssets={preloadedAssets} isStartsAnimationPlay={isStartsAnimationPlay}/>
-              <Model position={[-3, -1.8, 5]} rotation={[0, 1, 0]} isSpeaking={false} />
+              <Model position={[-3, -1.5, 4]} rotation={[0, 1, 0]} isSpeaking={false} />
           </Canvas>
         </Box>
       )

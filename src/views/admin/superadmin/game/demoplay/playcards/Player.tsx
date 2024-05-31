@@ -51,7 +51,7 @@ const Player: React.FC<{currentScreenId?: number}> = ({currentScreenId}) => {
     <group ref={groupRef}>
       <primitive
         object={gltf.scene}
-        position={[2,9].includes(currentScreenId) ? [5, -6.8, 0] : [5, -5, 0]}
+        position={[2,9].includes(currentScreenId) ? [2, -6.2, -2.5] : [5, -5, 0]}
         rotation={[0, -1, 0]}
         scale={2.8}
       />{' '}
