@@ -3882,7 +3882,8 @@ grid-row: 1 / 2;
   letter-spacing: 1px;
   color: #D9C7A2;
   display: flex;
-  justify-content: center;
+  
+  /* justify-content: center; */
 }
 
 .story_note_block {
@@ -7211,6 +7212,7 @@ input[data-autocompleted] {
   height: 18px;
   border-radius: 30px;
   background-size: contain;
+  display: none;
 }
 
 .story_overview_block::-webkit-scrollbar-track {
@@ -7221,10 +7223,13 @@ input[data-autocompleted] {
 
 .story_overview_block::-webkit-scrollbar-thumb {
   background: url('../img/games/cross.png');
-  background-repeat: no-repeat;
+  /* background-repeat: no-repeat; */
   border-radius: 30px;  
-  background-size: 100% 5px;
+  /* background-size: 100% 5px; */
   height: 5px !important;
+  background-position: center bottom, center -40px;
+  background-repeat: no-repeat, no-repeat;
+  background-size: contain, contain;
 }
 
 
