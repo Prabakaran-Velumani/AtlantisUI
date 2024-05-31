@@ -315,7 +315,7 @@ if(scores!==undefined)
   };
 
 
-console.log('profile',profile.playerGrandTotal?.questScores)
+
   
   return (
     <>
