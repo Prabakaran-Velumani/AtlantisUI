@@ -5017,9 +5017,7 @@ if(currentScreenId ===2)
                         questWiseMaxTotal={questWiseMaxTotal}
                         gameInfoTotalScore = {gameInfo?.completionQuestOptions}
                         gameInfo = {gameInfo}
-
                       />
-                      {/* </Box> */}
                     </>
                   );
                 case 14:

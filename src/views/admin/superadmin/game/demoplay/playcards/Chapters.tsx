@@ -433,7 +433,6 @@ getQuestwisePlayerScore().then((score :any) => {
       opacity: 1,
     },
   };
-
   return (
     <>
       <Box className='black-shadow'>       
