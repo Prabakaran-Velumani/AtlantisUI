@@ -356,6 +356,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
                                 background={
                                   'linear-gradient(to bottom, #009400, #00000000)'
                                 }
+                                key={index}
                               ></Box>
                             ),
                           )}

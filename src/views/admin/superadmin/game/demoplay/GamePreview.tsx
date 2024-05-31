@@ -196,8 +196,8 @@ const GamePreview = () => {
     handleFullScreen();
   }, [id]);
 
-  const element = document.getElementById('root');
   const handleFullScreen = () => {
+    const element = document.getElementById('root');
     if (element) {
       try {
         if (document.fullscreenEnabled) {
@@ -468,79 +468,6 @@ const GamePreview = () => {
     );
   };
 
-//   const handleSubmitReview = async (inputdata: any) => {
-//     /** Sample post data
-//    * {"data" :{
-//     "reviewerId": 4,
-//     "reviewGameId": 3,
-//     "review": "Character Tab",
-//     "tabId": 2,
-//     "tabAttribute": null,
-//     "tabAttributeValue": ""
-//    }
-// } 
-//    */
-//     if (!inputdata.reviewerId || !inputdata.reviewGameId) {
-//       toast({
-//         title: 'You are Unauthorized..!',
-//         status: 'error',
-//         duration: 3000,
-//         isClosable: true,
-//         position: 'top-right',
-//       });
-//       return false;
-//     } 
-//     else if (!inputdata.tabId) {
-//       toast({
-//         title: 'Select Feedback Options',
-//         status: 'error',
-//         duration: 3000,
-//         isClosable: true,
-//         position: 'top-right',
-//       });
-//       return false;
-//     } else if (!inputdata.review) {
-//       toast({
-//         title: 'Review Field is Empty',
-//         status: 'error',
-//         duration: 3000,
-//         isClosable: true,
-//         position: 'top-right',
-//       });
-//       return false;
-//     }
-
-//     const addReviewResponse = await SubmitReview(
-//       JSON.stringify({ data: inputdata, id: uuid }),
-//     );
-//     if (addReviewResponse?.status === 'Failure') {
-//       toast({
-//         title: 'Failed to Add Review',
-//         status: 'error',
-//         duration: 3000,
-//         isClosable: true,
-//         position: 'top-right',
-//       });
-//       return false;
-//     }
-//     if (addReviewResponse?.status === 'Success') {
-//       toast({
-//         title: 'Review added Successfully..!',
-//         status: 'success',
-//         duration: 3000,
-//         isClosable: true,
-//         position: 'top-right',
-//       });
-//       fetchGameData();
-//       return true;
-//     }
-//   };
-  const handleMouseMove = () => {
-    setIsHovered(true);
-    clearTimeout(timeout);
-    setTimer(setTimeout(() => setIsHovered(false), 2000)); // Adjust the timeout duration as needed
-  };
-
   useEffect(() => {
     return () => clearTimeout(timeout); // Cleanup the timer on component unmount
   }, [timeout]);
@@ -562,7 +489,6 @@ const GamePreview = () => {
     return { ...apiUrlAssetImageUrls, ...staticAssetImageUrls, ...loadedGLBs };
   }, [apiUrlAssetImageUrls, staticAssetImageUrls, loadedGLBs]);
 
-  
   useEffect(() => {
     if (
       gameInfo &&
@@ -575,7 +501,6 @@ const GamePreview = () => {
     }
   }, [gameInfo, preloadedAssets, componentsLoaded]);
 
-
   useEffect(() => {
     setIsVisible(true);
     const timer = setTimeout(() => {
@@ -585,8 +510,6 @@ const GamePreview = () => {
     // Cleanup the timer when the component unmounts
     return () => clearTimeout(timer);
   }, []);
-
-  console.log('isVisible',isVisible)
 
   return (
     <>

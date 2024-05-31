@@ -861,7 +861,7 @@ useEffect(()=>{
           }
         } else {
           if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
-            backgroundBgmRef.current.pause();
+            backgroundBgmRef.current?.pause();
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
             voiceRef.current?.pause();
           }

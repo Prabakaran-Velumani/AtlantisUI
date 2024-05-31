@@ -25,10 +25,8 @@ const IsErrorInitialState: { name: string | null; language: string | null; gende
   gender: null,
 };
 
-
 const defaultLanguage = ''; // Default to empty string instead of 0
 const PromptScreen  : React.FC<languageProps> = ({formData, preloadedAssets, gameLanguages, hasMulitLanguages, setHasMulitLanguages, profileData,setProfileData, setIsOpenCustomModal, isOpenCustomModal, setPreLogDatas, getPrevLogDatas, currentScreenId, isInitialLoadScreenWelcome, setIsInitialLoadScreenWelcome })=> {
-
 const [isLanguageSelected, setIsLanguageSelected] = useState(false); //to handle the dropdown open and hide for language
 const [isGenderSelected, setIsGenderSelected] = useState(false); //to handle the dropdown open and hide for gender
 const [isError, setIsError] = useState(IsErrorInitialState);
@@ -77,14 +75,6 @@ useEffect(()=>{
   }
   },[hasMulitLanguages, currentScreenId])
 
-// useEffect(()=>{
-// if(formState?.name || formData?.gender || formData?.language){
-//   setProfileData((prev:any) => ({ ...prev, ...formState}));
-//   setPreLogDatas((prev:any) => ({...prev,previewProfile:{ ...formState,
-//     score:getPrevLogDatas.previewProfile.score ? getPrevLogDatas.previewProfile.score : []}}))
-// }
-// },[formState])
-
 const handleProfile = (e: any, input?: any) => {
   const { id, value } = e.target;
   if (id === 'gender') {
@@ -107,7 +97,6 @@ const handleProfileSubmit = () => {
   };
 
   setIsError(newErrors);
-  console.log("newErrors", newErrors)
   const isErrorPresent = Object.values(newErrors).some(error => error !== null);
   if (!isErrorPresent) {
     setProfileData((prev: any) => ({ ...prev, ...formState }));

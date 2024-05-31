@@ -205,9 +205,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                         <pointLight position={[1.0, 4.0, 0.0]} color={'ffffff'} />
                         {/* COMPONENTS */}
                         <ModelPlayer position={[0, -1.5, 4]} rotation={[0,0,0]}/>
-                        {/* <Sphere position={[0,0,0]} size={[1,30,30]} color={'orange'}  />   */}
-                        {/* <Trex position={[0,0,0]} size={[1,30,30]} color={'red'}  />             */}
-                        {/* <Parrot /> */}
+                       
                       </Canvas>
                       <Img
                         onMouseDown={() => setToggleRight(true)}
@@ -239,13 +237,6 @@ const Characterspage: React.FC<PlayGamesProps> = ({
 
                           setTimeout(()=> {
                           setCurrentScreenId(1);
-
-                          // if (screenIdset !== currentScreenId) {
-                          //   setPreLogDatas((prev: any) => ({
-                          //     ...prev,
-                          //     screenIdSeq: [...prev.screenIdSeq, currentScreenId],
-                          //   }));
-                          // }
                         },1000)
                         }}
                       ></Button>
@@ -257,7 +248,7 @@ const Characterspage: React.FC<PlayGamesProps> = ({
                           me={0}
                           mb={1}
                         > 
-                        {profileData.name} 
+                        {getPrevLogDatas?.previewProfile?.name} 
                           </FormLabel>
                       </Box>
                       <Button
