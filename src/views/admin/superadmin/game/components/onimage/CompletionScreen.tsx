@@ -96,6 +96,7 @@ const CompletionScreen: React.FC<{
 
       fetchDatass(); // Call the asynchronous function
     }, [compliData]);
+   
 
     return (
       <>

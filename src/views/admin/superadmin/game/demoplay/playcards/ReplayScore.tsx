@@ -1,6 +1,6 @@
 import { Box, Button, Img, Text } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
-import { ScoreContext } from '../GamePreview';
+import { ScoreContext ,ProfileType} from '../GamePreview';
 import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
 type replayScoreProps = {
@@ -53,7 +53,14 @@ const ReplayScore: React.FC<replayScoreProps> = ({
   const [replayMessage, setReplayMessage] = useState<string>(null);
   const playerInfo = useContext(ProfileContext);
   const { profile, setProfile } = useContext(ScoreContext);
-
+  const initialProfileObject: ProfileType = {
+    score: [],
+    completedLevels: ['1'],
+    currentQuest: 1,
+    replayScore: [],
+    playerGrandTotal: { questScores: {} },
+    todayEarnedScore: [{ quest: 1, score: 0, earnedDate: "" }],
+  };
   useEffect(() => {
     const currentQuestMasterData = gameInfo?.gameQuest[profile?.currentQuest - 1];    
       if (replayState === "mandatoryReplay") {
@@ -149,8 +156,13 @@ const ReplayScore: React.FC<replayScoreProps> = ({
       nevigatedSeq: [],
       screenIdSeq: [1],
       lastActiveBlockSeq: '',
+      lastModifiedBlockSeq: null,
+      lastBlockModifiedDate: null,
       selectedOptions: '',
+      previewScore:initialProfileObject,
+      previewProfile:{...getPrevLogDatas.previewProfile,score:[]}
     }));
+    setProfile(initialProfileObject);
     setCurrentScreenId(1);
     setReplayIsOpen(false);
     return false;

@@ -21,7 +21,7 @@ interface Badge {
   gasAssetName: string;
 }
 
-const ThankYou: React.FC<{
+const OverView: React.FC<{
   formData: any;
   imageSrc: any;
   preloadedAssets: any;
@@ -38,6 +38,11 @@ const ThankYou: React.FC<{
 }) => {
   const handleHome = () => {
     if (homeLeaderBoard) {
+        if(homeLeaderBoard === 15)
+          {
+            setCurrentScreenId(2);
+            return;
+          }
       setCurrentScreenId(homeLeaderBoard);
     }
   };
@@ -111,4 +116,4 @@ const ThankYou: React.FC<{
     </>
   );
 };
-export default ThankYou;
+export default OverView;

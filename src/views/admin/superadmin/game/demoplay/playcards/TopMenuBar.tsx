@@ -76,7 +76,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     }
   }, []);
 
-  const handleOverView = () => {
+  const handleOverView = () => { 
+    console.log('@@@@@@@',isButtonDisabled,'...',currentScreenId)
     if (!isButtonDisabled) {
       setIsButtonDisabled(true); // Disable the button
       if (currentScreenId === 2 || currentScreenId === 15) {
@@ -90,7 +91,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
       // Re-enable the button after a delay (e.g., 1 second)
       setTimeout(() => {
         setIsButtonDisabled(false);
-      }, 10000);
+      }, 1000);
     }
   };
   useEffect(() => {
@@ -174,7 +175,8 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
 
   const totalPoints = useMemo(() => {
     let total: number = 0;
-    if ([2, 4, 6, 8, 9, 14].includes(currentScreenId)) {
+    let TotalScore:number = 0 ;
+    if ([2, 4, 6, 8, 9, 14,15].includes(currentScreenId)) {
       const scoreArray =
         questState[parseInt(profile?.currentQuest)] == 'Started'
           ? profile?.score
@@ -188,15 +190,28 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
           }
         }, 0);
       }
+      if([4, 6, 8, 9, 14].includes(currentScreenId))
+        {
+          if (profile?.score.length > 0) {
+            TotalScore = profile?.score?.reduce((acc: number, cur: any) => {
+              if (cur.quest == profile.currentQuest) {
+                return acc + cur.score;
+              } else {
+                return acc;
+              }
+            }, 0);
+          }
+        }
     } else {
       total =
-        profile.score !== undefined
+        profile?.score.length > 0
           ? profile.score.reduce((acc: number, cur: any) => acc + cur.score, 0)
           : 0;
     }
-    return isNaN(total) || total < 0 ? 0 : total;
+   
+    return isNaN(total) || total === 0 ? TotalScore : total;
   }, [profile.score, profile.replayScore, currentScreenId]);
-
+  
   return (
     <Box className="top-menu-home-section">
       {dontShowTopMenu && !isSettingOpen ? (
