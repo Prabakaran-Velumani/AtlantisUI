@@ -37,65 +37,58 @@ const ThankYou: React.FC<{
   homeLeaderBoard,
   backGroundImg,
 }) => {
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [maxScrollHeight, setMaxScrollHeight] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null); // Define the type of the ref
+  const sliderRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    // Calculate the maximum scroll height based on the content's height
+    if (containerRef.current) {
+      const { scrollHeight, clientHeight } = containerRef.current;
+      setMaxScrollHeight(scrollHeight - clientHeight);
+    }
+  }, [formData]); // Recalculate when formData changes
 
-    // scroll bar states {
-    const [scrollPosition, setScrollPosition] = useState(0);
-    const [maxScrollHeight, setMaxScrollHeight] = useState(0);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const sliderRef = useRef<HTMLInputElement>(null);
-    // }
+  const handleSliderChange = (value: number) => {
+    setScrollPosition(value);
+    // Calculate the scroll position relative to the maximum scroll height
+    const newScrollPosition = maxScrollHeight - (value / 100) * maxScrollHeight;
+    // Scroll the container to the corresponding position
+    if (containerRef.current) {
+      containerRef.current.scrollTop = newScrollPosition;
+    }
+  };
 
-    // take the initial scroll content height {
-    useEffect(() => {
-
-      if (containerRef.current) {
-        const { scrollHeight, clientHeight } = containerRef.current;
-        console.log('scrollHeight-clientHeight', scrollHeight - clientHeight)
-        setMaxScrollHeight(scrollHeight - clientHeight);
-      }
-    }, [formData]);
-    // }
-
-
-    // handle the range meter functionality {
-    const handleSliderChange = (value: number) => {
-      setScrollPosition(value);
-      const newScrollPosition = maxScrollHeight - (value / 100) * maxScrollHeight;
-      if (containerRef.current) {
-        containerRef.current.scrollTop = newScrollPosition;
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current && sliderRef.current) {
+        const { scrollTop, clientHeight } = containerRef.current;
+        const newScrollPosition = (scrollTop / (containerRef.current.scrollHeight - clientHeight)) * 100;
+        console.log('New scroll position:', newScrollPosition); // Check the new scroll position
+        setScrollPosition(Math.floor(newScrollPosition));
+        sliderRef.current.value = newScrollPosition.toString(); // Update slider value
+        console.log('Slider value:', sliderRef.current.value); // Check the slider value
       }
     };
-   // }
-
-   // handle the onscroll inside the content {
-    useEffect(() => {
-      const handleScroll = () => {
-        if (containerRef.current && sliderRef.current) {
-          const { scrollTop, clientHeight } = containerRef.current;
-          const newScrollPosition = (scrollTop / maxScrollHeight) * maxScrollHeight;
-          setScrollPosition(Math.floor(maxScrollHeight - newScrollPosition));
-          sliderRef.current.value = newScrollPosition.toString();
-        }
-      };
-
+  
+    if (containerRef.current) {
+      containerRef.current.addEventListener('scroll', handleScroll);
+    }
+  
+    return () => {
       if (containerRef.current) {
-        containerRef.current.addEventListener('scroll', handleScroll);
+        containerRef.current.removeEventListener('scroll', handleScroll);
       }
-
-      return () => {
-        if (containerRef.current) {
-          containerRef.current.removeEventListener('scroll', handleScroll);
-        }
-      };
-    }, []);
-     // }
+    };
+  }, []);
+  // Ref for the scrollable container
 
     const handleHome = () => {
+      // console.log('homeLeaderBoard', homeLeaderBoard);
       if (homeLeaderBoard) {
         setCurrentScreenId(homeLeaderBoard);
       }
     };
-
 
     return (
       <>
@@ -154,7 +147,7 @@ const ThankYou: React.FC<{
                               value={scrollPosition}
                               ref={sliderRef}
                               min={0}
-                              max={maxScrollHeight}
+                              max={maxScrollHeight || 100}
                             >
                               <SliderTrack
                                 w={'2vw'}
@@ -167,7 +160,7 @@ const ThankYou: React.FC<{
                                 <SliderFilledTrack bg="transparent" />
                               </SliderTrack>
                               <SliderThumb
-                                _focus={{ outline: 'none', border: 'none' }}
+                                _focus={{ outline: 'none',border:'none'}}
                                 className={'thumb_scroll'}
                                 style={{ WebkitTapHighlightColor: 'transparent' }}
                                 bg="none"
