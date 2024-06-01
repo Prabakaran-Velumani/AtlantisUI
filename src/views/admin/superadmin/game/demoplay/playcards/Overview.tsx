@@ -38,7 +38,6 @@ const OverView: React.FC<{
 }) => {
   const handleHome = () => {
     if (homeLeaderBoard) {
-        console.log('homeLeaderBoard',homeLeaderBoard)
         if(homeLeaderBoard === 15)
           {
             setCurrentScreenId(2);

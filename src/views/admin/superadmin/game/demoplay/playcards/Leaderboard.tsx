@@ -109,20 +109,60 @@ const LeaderBoard: React.FC<{
       let playerScore:any;
       if(profile!==null)
         {
-          const Finalscore = Object.values(profile.playerGrandTotal?.questScores).reduce((total: number, acc: any) => { return total + parseInt(acc) }, 0);
           const scores = profile?.score;
-          let getScore:number = 0;
-          if (scores && scores.length > 0) {
-          const sums = scores?.reduce(
-            (accumulator: { [key: string]: number }, score: any) => {
-                accumulator= (accumulator || 0) + score.score;
-                return accumulator;
-            },
-            0,
-          ); 
-          getScore = sums
-        }
-          playerScore = { name: playerInfo.name, score: playerTodayScore, allTimeScore: !Finalscore? getScore : Finalscore };
+          const sums: any = {};
+          scores?.forEach((score: any) => {
+            const quest = score.quest;
+            if (!sums[quest]) {
+              sums[quest] = 0;
+            }
+                sums[quest] += score.score;
+              
+            
+          });
+       
+          let getFinalscores ={};
+          Object.entries(sums).forEach(([quest, score]) => 
+           {
+             const IntQuest = parseInt(quest);
+             const newQuest = {...getFinalscores, [IntQuest]: score};
+             getFinalscores={...newQuest};
+          
+         });
+          
+          const Replayscores = profile?.replayScore.length > 0 ? profile?.replayScore :null;
+          const Replaysums: {[key: number]: number} = {};
+          Replayscores?.forEach((score: any) => {
+            const quest = score.quest;
+            if (!Replaysums[quest]) {
+              Replaysums[quest] = 0;
+            }
+      
+                Replaysums[quest] += score.score;
+              
+          });
+      
+          let getReplayFinalscores : {[key: number]:  number} ={};
+           Object.entries(Replaysums).forEach(([quest, score]) => 
+            {
+              const IntQuest = parseInt(quest);
+              getReplayFinalscores = { ...getReplayFinalscores, [IntQuest]: score};
+          });
+
+          const TodayTotalScore = Object.entries(getFinalscores).reduce((tot:number, acc: any)=>{
+          let newTotal = tot;
+          let questNo = acc[0];
+          let questHasReplay=Object.keys(getReplayFinalscores).some((quest)=> quest === questNo );
+          if(questHasReplay)
+            {
+              getReplayFinalscores[questNo] > acc[1] ? (tot+=getReplayFinalscores[questNo]) : (tot+=acc[1]) 
+            }
+            else{
+              tot+=acc[1];
+            }
+            return tot;
+            },0);
+          playerScore = { name: playerInfo.name, score: playerTodayScore, allTimeScore: TodayTotalScore};
         }
         else{
           playerScore = { name: 'Player', score: 100, allTimeScore: 1000};

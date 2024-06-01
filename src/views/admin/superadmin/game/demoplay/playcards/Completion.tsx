@@ -113,7 +113,36 @@ let questTotalScore = Object.entries(profile?.playerGrandTotal?.questScores).red
   }
   return totalScore;
 }, 0);
-const scores = profile?.score;
+let scores:any = [];
+const questStatus = questState[profile?.currentQuest];
+if (questStatus === 'completed') {
+  // If the quest is completed, compare the scores
+  if (profile?.score !== null && profile?.replayScore !== null) {
+    scores =
+      profile.score > profile.replayScore
+        ? profile.score
+        : profile.replayScore;
+  } 
+} else if (questStatus === 'Started') {
+  // If the quest is started, consider the score
+    scores = profile?.score !== null || profile.score!==undefined ? profile.score : null; //null or scores or replayScore
+  
+}
+else
+{
+  if (profile?.score !== null && profile?.replayScore !== null) {
+    scores =
+      profile.score > profile.replayScore
+        ? profile.score
+        : profile.replayScore;
+
+  } 
+  else{
+    if (profile?.score.length > 0) {
+      scores = profile?.score 
+  }
+  } 
+}
 const sums: any = {};
 scores.forEach((score: any) => {
   const quest = score.quest;
@@ -142,9 +171,34 @@ const currentQuestScore = useMemo(() => {
     let currentScores: any[];
     let totalFlowScore:number = 0;
     const questStatus = questState[profile?.currentQuest];
-      if (profile?.score.length > 0) {
-        currentScores = profile?.score 
+    if (questStatus === 'completed') {
+      // If the quest is completed, compare the scores
+      if (profile?.score !== null && profile?.replayScore !== null) {
+        currentScores =
+          profile.score > profile.replayScore
+            ? profile.score
+            : profile.replayScore;
       } 
+    } else if (questStatus === 'Started') {
+      // If the quest is started, consider the score
+        currentScores = profile?.score !== null || profile.score!==undefined ? profile.score : null; //null or currentScores or replayScore
+      
+    }
+    else
+    {
+      if (profile?.score !== null && profile?.replayScore !== null) {
+        currentScores =
+          profile.score > profile.replayScore
+            ? profile.score
+            : profile.replayScore;
+
+      } 
+      else{
+        if (profile?.score.length > 0) {
+          currentScores = profile?.score 
+      }
+      } 
+    }
     
     const currentQuestseqId = Array.isArray(currentScores)
     ? currentScores.map((item) => item.seqId)

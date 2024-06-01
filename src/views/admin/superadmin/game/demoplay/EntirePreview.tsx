@@ -409,7 +409,6 @@ useEffect(()=>{
     };
 },[preLogDatasIni])
   
-  
   const handleSubmitReview = async (inputdata: any) => {
     /** Sample post data
    * {"data" :{
@@ -494,6 +493,87 @@ useEffect(()=>{
 
     // Format date as DD-MM-YYYY
     const formattedDate = `${day}-${month}-${year}`;
+
+    const scores = profile?.score;
+    const sums: any = {};
+    scores?.forEach((score: any) => {
+      const quest = score.quest;
+      if (!sums[quest]) {
+        sums[quest] = 0;
+      }
+      if(score.scoreEarnedDate === formattedDate)
+        {
+          sums[quest] += score.score;
+        }
+      
+    });
+ 
+    let getFinalscores ={};
+    Object.entries(sums).forEach(([quest, score]) => 
+     {
+       const IntQuest = parseInt(quest);
+       const newQuest = {...getFinalscores, [IntQuest]: score};
+       getFinalscores={...newQuest};
+    
+   });
+    
+    const Replayscores = profile?.replayScore.length > 0 ? profile?.replayScore :null;
+    const Replaysums: {[key: number]: number} = {};
+    Replayscores?.forEach((score: any) => {
+      const quest = score.quest;
+      if (!Replaysums[quest]) {
+        Replaysums[quest] = 0;
+      }
+      if(score.scoreEarnedDate === formattedDate)
+        {
+
+          Replaysums[quest] += score.score;
+        }
+    });
+
+
+
+
+
+    let getReplayFinalscores : {[key: number]:  number} ={};
+     Object.entries(Replaysums).forEach(([quest, score]) => 
+      {
+        const IntQuest = parseInt(quest);
+        getReplayFinalscores = { ...getReplayFinalscores, [IntQuest]: score};
+    });
+    // const TodayTotalScore = getFinalscores.map((item:any) => 
+    // {
+
+    //   Object.entries(item).forEach((rec :any)=>{
+
+
+    //   })
+    //     //  const CheckScore = getReplayFinalscores.map((quest:any,i:number) =>{ if(quest?.quest === item.quest){ return quest?.score < item.score ? ;} return undefined }).filter((value:any) => value!==undefined);
+    //     //  if(CheckScore.length > 0)
+    //     //   {
+            
+    //     //   }
+    //       // else{
+    //       //   return item.score
+    //       // }
+    // });
+
+    const TodayTotalScore = Object.entries(getFinalscores).reduce((tot:number, acc: any)=>{
+      let newTotal = tot;
+      let questNo = acc[0];
+      let questHasReplay=Object.keys(getReplayFinalscores).some((quest)=> quest === questNo );
+      if(questHasReplay)
+        {
+
+          getReplayFinalscores[questNo] > acc[1] ? (tot+=getReplayFinalscores[questNo]) : (tot+=acc[1]) 
+        }
+        else{
+          tot+=acc[1];
+        }
+        return tot;
+        },0);
+
+
     //  scoreEarnedDate: profile?.score.map((item: any) => item.scoreEarnedDate)
     const toDayScore =  profile?.score.reduce((total: any, acc: any) => {
       if (acc.scoreEarnedDate === formattedDate) {
@@ -510,7 +590,7 @@ useEffect(()=>{
       ...prev,
       previewProfile: { ...prev.previewProfile, score: profile.score },
     }));
-    setPlayerTodayScore(toDayScore);
+    setPlayerTodayScore(TodayTotalScore);
   }
   
 }, [profile?.score]);
@@ -844,23 +924,23 @@ useEffect(()=>{
         if (audioObj.autoplay) {
           if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
             try {
-              backgroundBgmRef.current.play().catch((error) => {
+              backgroundBgmRef.current?.play().catch((error) => {
                 // Handle play promise rejection
               });
             } catch (error) {
               console.error('Background BGM ref is not available.', error);
             }
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current.play().catch((error) => {
+            voiceRef.current?.play().catch((error) => {
               // Handle play promise rejection
               console.error('Error playing voice:', error);
             });
           }
         } else {
           if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
-            backgroundBgmRef.current.pause();
+            backgroundBgmRef.current?.pause();
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current.pause();
+            voiceRef.current?.pause();
           }
         }
       }
@@ -2127,7 +2207,36 @@ if(currentScreenId ===2)
 
         if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = getgameinfoquest?.gameMinScore;
-          const scores = profile?.score;
+          let scores:any = [];
+          const questStatus = questState[profile?.currentQuest];
+          if (questStatus === 'completed') {
+            // If the quest is completed, compare the scores
+            if (profile?.score !== null && profile?.replayScore !== null) {
+              scores =
+                profile.score > profile.replayScore
+                  ? profile.score
+                  : profile.replayScore;
+            } 
+          } else if (questStatus === 'Started') {
+            // If the quest is started, consider the score
+              scores = profile?.score !== null || profile.score!==undefined ? profile.score : null; //null or scores or replayScore
+            
+          }
+          else
+          {
+            if (profile?.score !== null && profile?.replayScore !== null) {
+              scores =
+                profile.score > profile.replayScore
+                  ? profile.score
+                  : profile.replayScore;
+      
+            } 
+            else{
+              if (profile?.score.length > 0) {
+                scores = profile?.score 
+            }
+            } 
+          }
           const sums: any = {};
           scores.forEach((score: any) => {
             const quest = score.quest;
@@ -3004,7 +3113,32 @@ if(currentScreenId ===2)
       );
       if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
         const getminpassscore = getgameinfoquest?.gameMinScore;
-        const scores = profile?.score;
+        let scores:any = [];
+        const questStatus = questState[profile?.currentQuest];
+        if (questStatus === 'completed') {
+          if (profile?.score !== null && profile?.replayScore !== null) {
+            scores =
+              profile.score > profile.replayScore
+                ? profile.score
+                : profile.replayScore;
+          } 
+        } else if (questStatus === 'Started') {
+            scores = profile?.score !== null || profile.score!==undefined ? profile.score : null; 
+        }
+        else
+        {
+          if (profile?.score !== null && profile?.replayScore !== null) {
+            scores =
+              profile.score > profile.replayScore
+                ? profile.score
+                : profile.replayScore;
+          } 
+          else{
+            if (profile?.score.length > 0) {
+              scores = profile?.score 
+          }
+          } 
+        }
         const sums: any = {};
         scores.forEach((score: any) => {
           const quest = score.quest;
@@ -3013,8 +3147,6 @@ if(currentScreenId ===2)
           }
           sums[quest] += score.score;
         });
-
-        // const getFinalscores = Object.values(sums);
         const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
           quest,
           score,
@@ -3314,7 +3446,36 @@ if(currentScreenId ===2)
          } else */
         if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = getgameinfoquest?.gameMinScore;
-          const scores = profile?.score;
+          let scores:any = [];
+          const questStatus = questState[profile?.currentQuest];
+          if (questStatus === 'completed') {
+            // If the quest is completed, compare the scores
+            if (profile?.score !== null && profile?.replayScore !== null) {
+              scores =
+                profile.score > profile.replayScore
+                  ? profile.score
+                  : profile.replayScore;
+            } 
+          } else if (questStatus === 'Started') {
+            // If the quest is started, consider the score
+              scores = profile?.score !== null || profile.score!==undefined ? profile.score : null; //null or scores or replayScore
+            
+          }
+          else
+          {
+            if (profile?.score !== null && profile?.replayScore !== null) {
+              scores =
+                profile.score > profile.replayScore
+                  ? profile.score
+                  : profile.replayScore;
+      
+            } 
+            else{
+              if (profile?.score.length > 0) {
+                scores = profile?.score 
+            }
+            } 
+          }
           const sums: any = {};
           scores.forEach((score: any) => {
             const quest = score.quest;
