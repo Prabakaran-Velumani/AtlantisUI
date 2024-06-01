@@ -22,6 +22,7 @@ import { BiMoney } from 'react-icons/bi';
 import { GiCoins } from 'react-icons/gi';
 import { ScoreContext } from '../GamePreview';
 import rib from 'assets/img/games/ribbon.png';
+import { set } from 'lodash';
 const ChapterPage: React.FC<{
   formData?: any;
   imageSrc: any;
@@ -74,6 +75,7 @@ const ChapterPage: React.FC<{
   gameInfoTotalScore
 }) => {
   const [questScores, setQuestScores] = useState(null);
+  const [questWisePlayerScore, setQuestWisePlayerScore] = useState(null);
 
   const [AllowedReplayOption, setAllowedReplayOption] = useState(null);
   useEffect(() => {
@@ -115,14 +117,22 @@ const ChapterPage: React.FC<{
       } 
     } else if (questStatus === 'Started') {
       // If the quest is started, consider the score
-      if (questStatus === 'Started') {
         currentScores = profile?.score !== null || profile.score!==undefined ? profile.score : null; //null or currentScores or replayScore
-      }
+      
     }
     else
     {
-      if (profile?.score.length > 0) {
-        currentScores = profile?.score 
+      if (profile?.score !== null && profile?.replayScore !== null) {
+        currentScores =
+          profile.score > profile.replayScore
+            ? profile.score
+            : profile.replayScore;
+
+      } 
+      else{
+        if (profile?.score.length > 0) {
+          currentScores = profile?.score 
+      }
       } 
     }
         const currentQuestseqId = Array.isArray(currentScores)
@@ -155,6 +165,83 @@ const ChapterPage: React.FC<{
               }
     })
     setQuestScores(maxScoreByQuest);
+console.log('.....160',questState,'...',questScores,'...',profile)
+
+//setQuestPlayerScroe
+
+const getQuestwisePlayerScore = async()=>{
+let result: {[key: number]: number}= {};
+  if(demoBlocks){
+
+  Object.keys(demoBlocks).forEach((it: any, num: number) => {
+      const scores = profile?.score;
+      const sums: any = {};
+      scores?.forEach((score: any) => {
+        const quest = score.quest;
+        if (!sums[quest]) {
+          sums[quest] = 0;
+        }
+            sums[quest] += score.score;
+      });
+  
+      let getFinalscores:any ={};
+      Object.entries(sums).forEach(([quest, score]) => 
+      {
+        const IntQuest = parseInt(quest);
+        const newQuest = {...getFinalscores, [IntQuest]: score};
+        getFinalscores={...newQuest};
+      
+    });
+      
+      const Replayscores = profile?.replayScore.length > 0 ? profile?.replayScore :null;
+      const Replaysums: {[key: number]: number} = {};
+      Replayscores?.forEach((score: any) => {
+        const quest = score.quest;
+        if (!Replaysums[quest]) {
+          Replaysums[quest] = 0;
+        }
+            Replaysums[quest] += score.score; 
+      });
+  
+      let getReplayFinalscores : {[key: number]:  number} ={};
+      Object.entries(Replaysums).forEach(([quest, score]) => 
+        {
+          const IntQuest = parseInt(quest);
+          getReplayFinalscores = { ...getReplayFinalscores, [IntQuest]: score};
+      });
+    const TotalScore = Object.entries(getFinalscores).reduce((tot:number, acc: any)=>{
+      if(it == acc[0])
+        { let questHasReplay=Object.keys(getReplayFinalscores).some((quest)=> quest === acc[0] );
+            console.log("questHasReplay", questHasReplay)
+            if(questHasReplay)
+              {
+                console.log(" getReplayFinalscores[questNo] > acc[1]",  getReplayFinalscores[acc[0]] > acc[1],'...',getReplayFinalscores[acc[0]])
+      
+                getReplayFinalscores[acc[0]] > acc[1] ? (tot = getReplayFinalscores[acc[0]]) : (tot =acc[1]) 
+              }
+              else{
+                console.log("acc[1]^^^", acc[1])
+                tot =acc[1];
+              }
+              console.log("tot ----", tot)
+
+              return tot;
+        }
+         
+    },0);
+    console.log('00000',TotalScore,'...',getFinalscores[it]);
+    result = {...result, [parseInt(it)]: TotalScore ? TotalScore :getFinalscores[it]};
+console.log("TotalScore^^^", TotalScore)
+console.log("result^^^", result)
+    })
+  }
+return result;
+}
+
+getQuestwisePlayerScore().then((score :any) => {
+  setQuestWisePlayerScore(score);
+});
+
   }, []);
   const { profile, setProfile } = useContext(ScoreContext);
   useEffect(() => {
@@ -360,6 +447,12 @@ const ChapterPage: React.FC<{
       opacity: 1,
     },
   };
+
+
+
+console.log("questWisePlayerScore", questWisePlayerScore,'...');
+
+
   return (
     <>
       <Box className='black-shadow'>       
@@ -401,50 +494,13 @@ const ChapterPage: React.FC<{
                     <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{base:7,md:4,lg:7}}>
                     {demoBlocks &&
                       Object.keys(demoBlocks).map((it: any, num: number) => {
-                        const scores = profile?.score;
-                        const sums: any = {};
-                        scores.forEach((score: any) => {
-                          const quest = score.quest;
-                          if (!sums[quest]) {
-                            sums[quest] = 0;
-                          }
-                          sums[quest] += score.score;
-                        });
-                        const getFinalscores = Object.entries(sums).map(([quest, score]) => ({
-                          quest,
-                          score,
-                        }));
-                        
-                        const Replayscores = profile?.replayScore.length > 0 ? profile?.replayScore :null;
-                        const Replaysums: any = {};
-                        Replayscores?.forEach((score: any) => {
-                          const quest = score.quest;
-                          if (!Replaysums[quest]) {
-                            Replaysums[quest] = 0;
-                          }
-                          Replaysums[quest] += score.score;
-                        });
-                        const getReplayFinalscores = Object.entries(Replaysums).map(([quest, score]) => ({
-                          quest,
-                          score,
-                        }));
-                        let TotalScore :any = 0 ;
-                           if((parseInt(getFinalscores[num]?.quest) === parseInt(it)))
-                          {
-                            if(((parseInt(getFinalscores[num]?.quest) === parseInt(it)) ? getFinalscores[num]?.score : 0 ) < ((parseInt(getReplayFinalscores[num]?.quest) === parseInt(it)) ? getReplayFinalscores[num].score : 0))
-                              {
-                                TotalScore = getReplayFinalscores[num]?.score;
-                              }
-                              else{
-                                TotalScore = getFinalscores[num]?.score;
-                              }
-                          }
-                          return (
-                            <motion.div
-                              key={num}
-                              className="item"
-                              variants={item}
-                            >
+                          
+                        return (
+                          <motion.div
+                            key={num}
+                            className="item"
+                            variants={item}
+                          >
                               <Box
                                 position={'relative'}
                                 onClick={() => handleChapter(it)}
@@ -486,15 +542,17 @@ const ChapterPage: React.FC<{
                                       className="amount-score"
                                       textAlign={'center'}
                                     >
-                                     {TotalScore ? TotalScore : 0}
+                                     {questWisePlayerScore && questWisePlayerScore[it] ? questWisePlayerScore[it] : 0}
                                   /
                                   {questScores &&
                                   questScores[it] !== null &&
                                   questScores[it] > 0
                                     ? questScores[it]
-                                    : gameInfoTotalScore[num]?.questNo === parseInt(it) 
+                                    : 
+                                    gameInfoTotalScore[num]?.questNo === parseInt(it) 
                                     ? gameInfoTotalScore[num].gameTotalScore[0].maxScore
-                                    : 0}{' '}
+                                    :
+                                     0}{' '}
                                 </Text>
                                 <Img
                                   h={'25px'}

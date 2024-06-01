@@ -202,9 +202,21 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
           }
         }
     } else {
+      let scores:any = [];
+        if (profile?.score !== null && profile?.replayScore !== null) {
+          scores =
+            profile.score > profile.replayScore
+              ? profile.score
+              : profile.replayScore;
+        } 
+        else{
+          if (profile?.score.length > 0) {
+            scores = profile?.score 
+        }
+        } 
       total =
-        profile?.score.length > 0
-          ? profile.score.reduce((acc: number, cur: any) => acc + cur.score, 0)
+      scores.length > 0
+          ? scores.reduce((acc: number, cur: any) => acc + cur.score, 0)
           : 0;
     }
    
