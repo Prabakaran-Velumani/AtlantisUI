@@ -1,4 +1,4 @@
-import { Img, Text, SimpleGrid, Box } from '@chakra-ui/react';
+import { Img, Text, SimpleGrid, Box, Slider, SliderTrack, SliderFilledTrack, SliderThumb } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 
 /* for reflection question inside the image */
@@ -104,16 +104,23 @@ const LeaderBoard: React.FC<{
     const contextValue = useContext(ScoreContext);
     const { profile, setProfile } = contextValue !== null ? contextValue : { profile: null, setProfile: null };
     const [sortAse, setSortAse] = useState({ daily: true, allTime: true });
+  
+    // scroll bar states {
+      const [scrollPosition, setScrollPosition] = useState(0);
+      const [maxScrollHeight, setMaxScrollHeight] = useState(0);
+      const containerRef = useRef<HTMLDivElement>(null);
+      const sliderRef = useRef<HTMLInputElement>(null);
+      // }
+  
     useEffect(() => {
       //Sorted Users alltimeScore
-      let playerScore:any;
-      if(profile!==null)
-        {
-          playerScore = { name: playerInfo.name, score: playerTodayScore, allTimeScore: Object.values(profile.playerGrandTotal?.questScores).reduce((total: number, acc: any) => { return total + parseInt(acc) }, 0) };
-        }
-        else{
-          playerScore = { name: 'Player', score: 100, allTimeScore: 1000};
-        }
+      let playerScore: any;
+      if (profile !== null) {
+        playerScore = { name: playerInfo.name, score: playerTodayScore, allTimeScore: Object.values(profile.playerGrandTotal?.questScores).reduce((total: number, acc: any) => { return total + parseInt(acc) }, 0) };
+      }
+      else {
+        playerScore = { name: 'Player', score: 100, allTimeScore: 1000 };
+      }
 
       const mergedUsersPlayers = [playerScore, ...names].sort((a, b) => {
         // Sort by allTimeScore in descending order
@@ -123,7 +130,7 @@ const LeaderBoard: React.FC<{
         // If allTimeScores are equal, sort alphabetically by name
         return a.name.localeCompare(b.name);
       });
-    
+
       //Sorted Using Score-starts for score position      
       let sortedUsingScore = [...mergedUsersPlayers].sort((a, b) => {
         // Sort by daily score in descending order
@@ -146,15 +153,13 @@ const LeaderBoard: React.FC<{
         });
         return ({ ...usrScore, dailyPosition: dailyPositionIndex, alltimePosition: alltimePositionIndex });
       })
-      let  playerIndex :any;
-      if(profile!==null)
-        {
-       playerIndex = sortedUsingScore.findIndex(x => x.name === playerInfo.name);
-        }
-        else
-        {
-          playerIndex = sortedUsingScore.findIndex(x => x.name === 'Player');
-        }
+      let playerIndex: any;
+      if (profile !== null) {
+        playerIndex = sortedUsingScore.findIndex(x => x.name === playerInfo.name);
+      }
+      else {
+        playerIndex = sortedUsingScore.findIndex(x => x.name === 'Player');
+      }
       if (playerIndex !== -1) {
         // Remove it from its current position
         const unShiftedPlayer = sortedUsingScore.splice(playerIndex, 1)[0];
@@ -251,34 +256,81 @@ const LeaderBoard: React.FC<{
       setShuffledUsers(newSortedUsers);
     }
 
-    const containerRef = useRef<any>(null);
+    // const containerRef = useRef<any>(null);
     let lastScrollTop = 0;
 
-    useEffect(() => {
-      const container = containerRef?.current;
-      if (!container) return; // Early return if container is not available
-      const handleScroll = () => {
-        let currentScrollTop = container?.scrollTop;
+    // useEffect(() => {
+    //   const container = containerRef?.current;
+    //   if (!container) return; // Early return if container is not available
+    //   const handleScroll = () => {
+    //     let currentScrollTop = container?.scrollTop;
+
+    //     if (currentScrollTop > lastScrollTop) {
+    //       // Scrolling down
+    //       // container.classList.add('content-box');
+    //       container.classList.add('scrollbar-down');
+    //     } else {
+    //       // Scrolling up
+    //       container.classList.remove('scrollbar-down');
+    //       // container.classList.remove('content-box');
+    //     }
+
+    //     lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
+    //   };
+
+    //   container.addEventListener('scroll', handleScroll);
+
+    //   return () => {
+    //     container.removeEventListener('scroll', handleScroll);
+    //   };
+    // }, []);
+
+
+
+      // take the initial scroll content height {
+      useEffect(() => {
   
-        if (currentScrollTop > lastScrollTop) {
-          // Scrolling down
-          // container.classList.add('content-box');
-          container.classList.add('scrollbar-down');
-        } else {
-          // Scrolling up
-          container.classList.remove('scrollbar-down');
-          // container.classList.remove('content-box');
+        if (containerRef.current) {
+          const { scrollHeight, clientHeight } = containerRef.current;
+          console.log('scrollHeight-clientHeight', scrollHeight - clientHeight)
+          setMaxScrollHeight(scrollHeight - clientHeight);
+        }
+      }, [formData]);
+      // }
+  
+  
+      // handle the range meter functionality {
+      const handleSliderChange = (value: number) => {
+        setScrollPosition(value);
+        const newScrollPosition = maxScrollHeight - (value / 100) * maxScrollHeight;
+        if (containerRef.current) {
+          containerRef.current.scrollTop = newScrollPosition;
+        }
+      };
+     // }
+  
+     // handle the onscroll inside the content {
+      useEffect(() => {
+        const handleScroll = () => {
+          if (containerRef.current && sliderRef.current) {
+            const { scrollTop, clientHeight } = containerRef.current;
+            const newScrollPosition = (scrollTop / maxScrollHeight) * maxScrollHeight;
+            setScrollPosition(Math.floor(maxScrollHeight - newScrollPosition));
+            sliderRef.current.value = newScrollPosition.toString();
+          }
+        };
+  
+        if (containerRef.current) {
+          containerRef.current.addEventListener('scroll', handleScroll);
         }
   
-        lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
-      };
-  
-      container.addEventListener('scroll', handleScroll);
-  
-      return () => {
-        container.removeEventListener('scroll', handleScroll);
-      };
-    }, []);
+        return () => {
+          if (containerRef.current) {
+            containerRef.current.removeEventListener('scroll', handleScroll);
+          }
+        };
+      }, []);
+       // }
 
     return (
       <>
@@ -286,150 +338,184 @@ const LeaderBoard: React.FC<{
           <Box className="Leaderboard-screen">
             <Img src={imageSrc} className="leaderboard-img" />
             <Text className='title'>LeaderBoard</Text>
-            <Box className="content-box" id='leaderboard_id'  ref={containerRef}>
-              <Box className="table-heading"
-                fontFamily={'AtlantisText'}
-                display={'flex'}
-              >
-                <Box
-                  w={'200px'}
-                  h={'50px'}
+            <Box h={'auto'} w='auto' position={'absolute'} transform={'translateY(19%)'} display={'flex'}>
+              <Box className="content-box" id='leaderboard_id'  ref={containerRef}>
+                <Box className="table-heading"
+                  fontFamily={'AtlantisText'}
                   display={'flex'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
                 >
-                  <Text
-                    color={'#D9C7A2'}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    Player Name
-                  </Text>
-                </Box>
-                <Img
-                  src={preloadedAssets.Separator}
-                  className="dot-img"
-                  w={'10px'}
-                  h={'65px'}
-                  position={'relative'}
-                />
-                <Box w={'200px'} h={'50px'}>
-                  <Box w={'100%'} display={'flex'} justifyContent={'center'}>
-                    <Text color={'#D9C7A2'}
-                      onClick={() => {
-                        // Shuffle the daily leaderboard when All Time is clicked
-                        handleAllTimeClick('daily');
-                        setAllTimeClicked(true); // Update state to indicate All Time view
-                      }}
-                    >Daily</Text>
-                  </Box>
                   <Box
-                    w={'100%'}
+                    w={'200px'}
+                    h={'50px'}
                     display={'flex'}
-                    justifyContent={'space-between'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
                   >
-                    <Text textAlign={'center'} color={'#D9C7A2'}>
-                      Position
-                    </Text>
-                    <Text textAlign={'center'} color={'#D9C7A2'}>
-                      Score
-                    </Text>
-                  </Box>
-                </Box>
-                <Img
-                  src={preloadedAssets.Separator}
-                  className="dot-img"
-                  w={'10px'}
-                  h={'65px'}
-                  position={'relative'}
-                />
-                <Box w={'200px'} h={'50px'}>
-                  <Box w={'100%'} display={'flex'} justifyContent={'center'} >
                     <Text
                       color={'#D9C7A2'}
-                      onClick={() => {
-                        // Shuffle the daily leaderboard when All Time is clicked
-                        handleAllTimeClick('alltime');
-                        setAllTimeClicked(false);
-                      }}
                       style={{ cursor: 'pointer' }}
                     >
-                      All Time
+                      Player Name
                     </Text>
                   </Box>
-                  <Box
-                    w={'100%'}
-                    display={'flex'}
-                    justifyContent={'space-between'}
-                  >
-                    <Text textAlign={'center'} color={'#D9C7A2'}>
-                      Position
-                    </Text>
-                    <Text textAlign={'center'} color={'#D9C7A2'}>
-                      Score
-                    </Text>
+                  <Img
+                    src={preloadedAssets.Separator}
+                    className="dot-img"
+                    w={'10px'}
+                    h={'65px'}
+                    position={'relative'}
+                  />
+                  <Box w={'200px'} h={'50px'}>
+                    <Box w={'100%'} display={'flex'} justifyContent={'center'}>
+                      <Text color={'#D9C7A2'}
+                        onClick={() => {
+                          // Shuffle the daily leaderboard when All Time is clicked
+                          handleAllTimeClick('daily');
+                          setAllTimeClicked(true); // Update state to indicate All Time view
+                        }}
+                      >Daily</Text>
+                    </Box>
+                    <Box
+                      w={'100%'}
+                      display={'flex'}
+                      justifyContent={'space-between'}
+                    >
+                      <Text textAlign={'center'} color={'#D9C7A2'}>
+                        Position
+                      </Text>
+                      <Text textAlign={'center'} color={'#D9C7A2'}>
+                        Score
+                      </Text>
+                    </Box>
+                  </Box>
+                  <Img
+                    src={preloadedAssets.Separator}
+                    className="dot-img"
+                    w={'10px'}
+                    h={'65px'}
+                    position={'relative'}
+                  />
+                  <Box w={'200px'} h={'50px'}>
+                    <Box w={'100%'} display={'flex'} justifyContent={'center'} >
+                      <Text
+                        color={'#D9C7A2'}
+                        onClick={() => {
+                          // Shuffle the daily leaderboard when All Time is clicked
+                          handleAllTimeClick('alltime');
+                          setAllTimeClicked(false);
+                        }}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        All Time
+                      </Text>
+                    </Box>
+                    <Box
+                      w={'100%'}
+                      display={'flex'}
+                      justifyContent={'space-between'}
+                    >
+                      <Text textAlign={'center'} color={'#D9C7A2'}>
+                        Position
+                      </Text>
+                      <Text textAlign={'center'} color={'#D9C7A2'}>
+                        Score
+                      </Text>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-              <Box>
-                {shuffledUsers.map((item, index) => (
-                  <Box
-                    className="content-lead"
-                    key={index}
-                    _hover={{
-                      filter: 'grayscale(50%)',
-                      transform: 'scale(1.0)',
-                      transition: 'transform 0.3s ease-in-out',
-                      opacity: '0.8',
-                    }}
-                  >
-                    <>
-                      <Img
-                        src={preloadedAssets.Entry}
-                        className={'list-pad'}
-                        _hover={{ filter: 'grayscale(0%)'}}
-                        filter={index === 0 ? 'grayscale(0%)' : 'grayscale(50%)'}
-                      />
-                      <Box
-                       className={'list-wrapper'}
-                        _hover={{ filter: 'grayscale(0%)'}}
-                        filter={index === 0 ? 'grayscale(0%)' : 'grayscale(50%)'}
-                      >
-                        <Box w={'30%'}>
-                          <Text
-                            textAlign={'center'}
-                            color={'#39305D'}
+                <Box>
+                  {shuffledUsers.map((item, index) => (
+                    <Box
+                      className="content-lead"
+                      key={index}
+                      _hover={{
+                        filter: 'grayscale(50%)',
+                        transform: 'scale(1.0)',
+                        transition: 'transform 0.3s ease-in-out',
+                        opacity: '0.8',
+                      }}
+                    >
+                      <>
+                        <Img
+                          src={preloadedAssets.Entry}
+                          className={'list-pad'}
+                          _hover={{ filter: 'grayscale(0%)' }}
+                          filter={index === 0 ? 'grayscale(0%)' : 'grayscale(50%)'}
+                        />
+                        <Box
+                          className={'list-wrapper'}
+                          _hover={{ filter: 'grayscale(0%)' }}
+                          filter={index === 0 ? 'grayscale(0%)' : 'grayscale(50%)'}
+                        >
+                          <Box w={'30%'}>
+                            <Text
+                              textAlign={'center'}
+                              color={'#39305D'}
+                            >
+                              {item.name ? item.name : 'Guest'}
+                            </Text>
+                          </Box>
+                          <Box
+                            w={'30%'}
+                            display={'flex'}
+                            justifyContent={'space-between'}
                           >
-                            {item.name ? item.name : 'Guest'}
-                          </Text>
+                            <Text textAlign={'center'} color={'#39305D'}>
+                              {item.dailyPosition !== undefined ? item.dailyPosition : index + 1}
+                            </Text>
+                            <Text textAlign={'center'} color={'#39305D'}>
+                              {item.score ? item.score : 0}
+                            </Text>
+                          </Box>
+                          <Box
+                            w={'30%'}
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                          >
+                            <Text textAlign={'center'} color={'#39305D'}>
+                              {item.alltimePosition !== undefined ? item.alltimePosition : index + 1}
+                            </Text>
+                            <Text textAlign={'center'} color={'#39305D'}>
+                              {item.allTimeScore ? item.allTimeScore : 0}
+                            </Text>
+                          </Box>
                         </Box>
-                        <Box
-                          w={'30%'}
-                          display={'flex'}
-                          justifyContent={'space-between'}
-                        >
-                          <Text textAlign={'center'} color={'#39305D'}>
-                            {item.dailyPosition !== undefined ? item.dailyPosition : index + 1}
-                          </Text>
-                          <Text textAlign={'center'} color={'#39305D'}>
-                            {item.score ? item.score : 0}
-                          </Text>
-                        </Box>
-                        <Box
-                          w={'30%'}
-                          display={'flex'}
-                          justifyContent={'space-between'}
-                        >
-                          <Text textAlign={'center'} color={'#39305D'}>
-                            {item.alltimePosition !== undefined ? item.alltimePosition : index + 1}
-                          </Text>
-                          <Text textAlign={'center'} color={'#39305D'}>
-                            {item.allTimeScore ? item.allTimeScore : 0}
-                          </Text>
-                        </Box>
-                      </Box>
-                    </>
-                  </Box>
-                ))}
+                      </>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+              <Box h={'100%'} w={'2vw'} position={'absolute'} right={'-22px'}>
+                <Slider
+                  aria-label="slider-ex-3"
+                  defaultValue={30}
+                  orientation="vertical"
+                  onChange={handleSliderChange}
+                  minH="32"
+                  value={scrollPosition}
+                  ref={sliderRef}
+                  min={0}
+                  max={maxScrollHeight}
+                >
+                  <SliderTrack
+                    w={'2vw'}
+                    bg="none"
+                    backgroundImage={preloadedAssets.scroll}
+                    backgroundSize="contain"
+                    backgroundRepeat={'no-repeat'}
+                    backgroundPosition={'center'}
+                  >
+                    <SliderFilledTrack bg="transparent" />
+                  </SliderTrack>
+                  <SliderThumb
+                    _focus={{ outline: 'none', border: 'none' }}
+                    className={'thumb_scroll'}
+                    style={{ WebkitTapHighlightColor: 'transparent' }}
+                    bg="none"
+                    boxSize={6}>
+                    <Img src={preloadedAssets.Cross} w={'100%'} h={'100%'} />
+                  </SliderThumb>
+                </Slider>
               </Box>
             </Box>
             <Box className='top-bar'>

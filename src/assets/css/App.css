@@ -5954,7 +5954,7 @@ font-family: 'AtlantisContent';
 .EntirePreview .Game-Screen .Images .welcome-screen .welcome-pad {
   height: 90vh;
   width: auto;
-}
+} 
 
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box {
   position: absolute;
@@ -5965,7 +5965,7 @@ font-family: 'AtlantisContent';
   height: 35vh;
   width: calc(47vh - (-17vh));
   overflow-x: unset;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   transform: translateY(18%);
   margin-left: 1vh;
 }
@@ -6004,7 +6004,7 @@ font-family: 'AtlantisContent';
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box .content {
-  width: 100%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6197,11 +6197,11 @@ font-family: 'AtlantisContent';
 }
 
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box {
-  position: absolute;
+  /* position: absolute; */
   width: 65vw;
   height: 43vh;
   overflow-y: auto;
-  transform: translateY(19%);
+  /* transform: translateY(19%); */
 }
 
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box::-webkit-scrollbar {
@@ -6209,6 +6209,7 @@ font-family: 'AtlantisContent';
   /*height: 300px;*/
   border-radius: 30px;
   background-size: contain;
+  display: none;
 }
 
 .EntirePreview .Game-Screen .Images .Leaderboard-screen .content-box::-webkit-scrollbar-track {
@@ -7121,6 +7122,12 @@ font-family: 'AtlantisContent';
   }
 }
 
+.nested_welcomecontent{
+  overflow-y: auto;
+}
+.nested_welcomecontent::-webkit-scrollbar {
+  display: none;
+}
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box::-webkit-scrollbar {
   /* width: 16px; old */
   /* width: 1.4rem; */
@@ -7129,6 +7136,8 @@ font-family: 'AtlantisContent';
   border-radius: 30px;
   background-size: contain;
   user-select: none;
+  display: none;
+
 }
 
 .EntirePreview .Game-Screen .Images .welcome-screen .content-box::-webkit-scrollbar-track {
