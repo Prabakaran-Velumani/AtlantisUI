@@ -2,6 +2,10 @@ import {
   Box,
   Icon,
   Img,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
   Text,
 
   // brindha end
@@ -19,18 +23,74 @@ const Welcome: React.FC<{
   preview: any;
   intro: any;
   screen: any;
-  preloadedAssets:any;
-  currentScreenId:any;
-  setPreLogDatas:any;
-  getPrevLogDatas:any;
+  preloadedAssets: any;
+  currentScreenId: any;
+  setPreLogDatas: any;
+  getPrevLogDatas: any;
 
-}> = ({ formData, imageSrc, preview, setCurrentScreenId, intro, screen, preloadedAssets,currentScreenId,setPreLogDatas,getPrevLogDatas  }) => {
+}> = ({ formData, imageSrc, preview, setCurrentScreenId, intro, screen, preloadedAssets, currentScreenId, setPreLogDatas, getPrevLogDatas }) => {
   const { id } = useParams();
   const [profile, setProfile] = useState<any>([]);
   const [apSkl, setApSkl] = useState([]);
   const [authorArray, setauthorArray] = useState<any[]>([]);
   const [showComplete, setShowComplete] = useState(false)
-  const [blackScreen, setBlackScreen] = useState(false)  
+  const [blackScreen, setBlackScreen] = useState(false)
+
+  // scroll bar states {
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [maxScrollHeight, setMaxScrollHeight] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<HTMLInputElement>(null);
+  // }
+
+  // take the initial scroll content height {
+  useEffect(() => {
+
+    if (containerRef.current) {
+      const { scrollHeight, clientHeight } = containerRef.current;
+      console.log('scrollHeight-clientHeight', scrollHeight - clientHeight)
+      setMaxScrollHeight(scrollHeight - clientHeight);
+    }
+  }, [formData]);
+  // }
+
+
+  // handle the range meter functionality {
+  const handleSliderChange = (value: number) => {
+    setScrollPosition(value);
+    const newScrollPosition = maxScrollHeight - (value / 100) * maxScrollHeight;
+    if (containerRef.current) {
+      containerRef.current.scrollTop = newScrollPosition;
+    }
+  };
+  // }
+
+  // handle the onscroll inside the content {
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current && sliderRef.current) {
+        const { scrollTop, clientHeight } = containerRef.current;
+        const newScrollPosition = (scrollTop / maxScrollHeight) * maxScrollHeight;
+        console.log('newScrollPosition',newScrollPosition)
+        setScrollPosition(Math.floor(maxScrollHeight - newScrollPosition));
+        sliderRef.current.value = newScrollPosition.toString();
+      }
+    };
+
+    if (containerRef.current) {
+      containerRef.current.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        containerRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
+  // }
+
+
   useEffect(() => {
     setShowComplete(true);
     setTimeout(() => {
@@ -109,41 +169,41 @@ const Welcome: React.FC<{
     }
     return null;
   };
-  const screenIdset = (getPrevLogDatas?.screenIdSeq?.length -1) >=0 ? getPrevLogDatas?.screenIdSeq[(getPrevLogDatas?.screenIdSeq?.length -1)]:  1;
+  const screenIdset = (getPrevLogDatas?.screenIdSeq?.length - 1) >= 0 ? getPrevLogDatas?.screenIdSeq[(getPrevLogDatas?.screenIdSeq?.length - 1)] : 1;
 
-  const containerRef = useRef<any>(null);
-  let lastScrollTop = 0;
+  // const containerRef = useRef<any>(null);
+  // let lastScrollTop = 0;
 
-  useEffect(() => {
-    const container = containerRef?.current;
-    if (!container) return; // Early return if container is not available
+  // useEffect(() => {
+  //   const container = containerRef?.current;
+  //   if (!container) return; // Early return if container is not available
 
-    console.log('container', container);
+  //   console.log('container', container);
 
-    const handleScroll = () => {
-      let currentScrollTop = container?.scrollTop;
+  //   const handleScroll = () => {
+  //     let currentScrollTop = container?.scrollTop;
 
-      console.log('currentScrollTop', currentScrollTop);        
+  //     console.log('currentScrollTop', currentScrollTop);        
 
-      if (currentScrollTop > lastScrollTop) {
-        // Scrolling down
-        // container.classList.add('content-box');
-        container.classList.add('scrollbar-down');
-      } else {
-        // Scrolling up
-        container.classList.remove('scrollbar-down');
-        // container.classList.remove('content-box');
-      }
+  //     if (currentScrollTop > lastScrollTop) {
+  //       // Scrolling down
+  //       // container.classList.add('content-box');
+  //       container.classList.add('scrollbar-down');
+  //     } else {
+  //       // Scrolling up
+  //       container.classList.remove('scrollbar-down');
+  //       // container.classList.remove('content-box');
+  //     }
 
-      lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
-    };
+  //     lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
+  //   };
 
-    container.addEventListener('scroll', handleScroll);
+  //   container.addEventListener('scroll', handleScroll);
 
-    return () => {
-      container.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+  //   return () => {
+  //     container.removeEventListener('scroll', handleScroll);
+  //   };
+  // }, []);
 
 
 
@@ -151,7 +211,7 @@ const Welcome: React.FC<{
   //   setBlackScreen(true)       
   // },[blackScreen])
 
-  
+
   return (
     <>
       {/* <motion.div
@@ -159,7 +219,7 @@ const Welcome: React.FC<{
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5, duration: 1 }}
       > */}
-       <Box className={`welcome-black-shadow ${blackScreen && 'welcome-end-black-shadow'}`}>
+      <Box className={`welcome-black-shadow ${blackScreen && 'welcome-end-black-shadow'}`}>
         <Box className="welcome-screen">
           <Box className="welcome-screen-box">
             <Img src={screen} className="welcome-pad" />
@@ -207,130 +267,77 @@ const Welcome: React.FC<{
               </Text>
             )}
           </Box>
-          <Box className="content-box" ref={containerRef}  fontFamily={'gametext'}>
-            <Box w={'60%'} className="content">
-              {formData.gameIsShowStoryline === 'true' && (
-                <Text
-                  className="text"
-                  mt={'20px'}
-                  fontSize={{
-                    base: '11px',
-                    sm: '12px',
-                    md: '13px',
-                    lg: '15px',
-                  }}
-                  fontFamily={'content'}
-                >
-                  {formData.gameStoryLine}
-                </Text>
-              )}
-              {formData.gameIsShowSkill === 'true' ||
-                formData.gameIsShowLearningOutcome === 'true' ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1, duration: 0.5 }}
-                >
-                  <Img
-                    className="rewards-arrow-img"
-                    src={preloadedAssets.rew}
-                    mt={'25px'}
-                    alt="rew"
-                    w={'100%'}
-                    h={'20px'}
-                  />
-                </motion.div>
-              ) : (
-                ''
-              )}
-              <Box
-                className={
-                  formData.gameIsShowSkill === 'true' ||
-                    formData.gameIsShowLearningOutcome === 'true'
-                    ? 'rewards-box'
-                    : 'empty-rewards-box'
-                }
-              >
-                {formData.gameIsShowSkill === 'true' && (
-                  <>
-                    <Box className="box-1">
-                      <Img src={preloadedAssets.back} className="bg-img" />
-                      <Img
-                        className="rewards-arrow-img"
-                        display={'block !important'}
-                        src={preloadedAssets.SkillLearn}
-                        mt={'25px'}
-                        alt="rew"
-                        w={'100%'}
-                        h={'auto'}
-                      />
-                      <Box
-                        className="inside-box"
-                        mt={'10px'}
-                        w={'100%'}
-                      >
-                        {authorArray
-                          .map((authorItem, index) => {
-                            const skillName = findSkillName(authorItem);
-                            return skillName;
-                          })
-                          .filter((skillName) => skillName !== null)
-                          .map((filteredSkillName, index) => (
-                            <Box display={'flex'} key={index}>
-                              <Img
-                                src={preloadedAssets.write}
-                                w={'25px'}
-                                h={'25px'}
-                              />
-                              <Box>
-                                <Box
-                                  className="text-wrapper"
-                                  display={'flex'}
-                                  w={'50px'}
-                                  h={'20px'}
-                                  justifyContent={'space-between'}
-                                  fontWeight={'300'}
-                                  marginLeft={'5px'}
-                                >
-                                  <Text color={'#D9C7A2'}>
-                                    {filteredSkillName}
-                                  </Text>
-                                  <Text></Text>
-                                </Box>
-                              </Box>
-                            </Box>
-                          ))}
-                      </Box>
-                    </Box>
-                  </>
+          <Box className="content-box" fontFamily={'gametext'}>
+            <Box width={'100%'} h={'100%'} display={'flex'} justifyContent={'center'} className='nested_welcomecontent'>
+              <Box w={'60%'} className="content" ref={containerRef}>
+                {formData.gameIsShowStoryline === 'true' && (
+                  <Text
+                    className="text"
+                    mt={'20px'}
+                    fontSize={{
+                      base: '11px',
+                      sm: '12px',
+                      md: '13px',
+                      lg: '15px',
+                    }}
+                    fontFamily={'content'}
+                  >
+                    {formData.gameStoryLine}
+                  </Text>
                 )}
-                {formData.gameIsShowLearningOutcome === 'true' && (
-                  <>
-                    <Box className="box-1">
-                      <Img src={preloadedAssets.back} className="bg-img" />
-                      <Img
-                        className="rewards-arrow-img"
-                        display={'block !important'}
-                        src={preloadedAssets.SkillLearn}
-                        mt={'25px'}
-                        alt="rew"
-                        w={'100%'}
-                        h={'auto'}
-                      />
-                      <Box
-                        className="inside-box"
-                        mt={'10px'}
-                        w={'100%'}
-                      >
-                        {data &&
-                          data.map((it: any, ind: number) => {
-                            const bulletIndex = it.indexOf('\u2022');
-                            const contentAfterBullet =
-                              bulletIndex !== -1
-                                ? it.slice(bulletIndex + 1).trim()
-                                : it;
-                            return (
-                              <Box display={'flex'} key={ind}>
+                {formData.gameIsShowSkill === 'true' ||
+                  formData.gameIsShowLearningOutcome === 'true' ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1, duration: 0.5 }}
+                  >
+                    <Img
+                      className="rewards-arrow-img"
+                      src={preloadedAssets.rew}
+                      mt={'25px'}
+                      alt="rew"
+                      w={'100%'}
+                      h={'20px'}
+                    />
+                  </motion.div>
+                ) : (
+                  ''
+                )}
+                <Box
+                  className={
+                    formData.gameIsShowSkill === 'true' ||
+                      formData.gameIsShowLearningOutcome === 'true'
+                      ? 'rewards-box'
+                      : 'empty-rewards-box'
+                  }
+                >
+                  {formData.gameIsShowSkill === 'true' && (
+                    <>
+                      <Box className="box-1">
+                        <Img src={preloadedAssets.back} className="bg-img" />
+                        <Img
+                          className="rewards-arrow-img"
+                          display={'block !important'}
+                          src={preloadedAssets.SkillLearn}
+                          mt={'25px'}
+                          alt="rew"
+                          w={'100%'}
+                          h={'auto'}
+                        />
+                        <Box
+                          className="inside-box"
+                          mt={'10px'}
+                          w={'100%'}
+                        >
+                          {authorArray
+                            .map((authorItem, index) => {
+                              const skillName = findSkillName(authorItem);
+                              return skillName;
+                            })
+                            .filter((skillName) => skillName !== null)
+                            .map((filteredSkillName, index) => (
+                              <Box display={'flex'} key={index}>
                                 <Img
                                   src={preloadedAssets.write}
                                   w={'25px'}
@@ -347,87 +354,167 @@ const Welcome: React.FC<{
                                     marginLeft={'5px'}
                                   >
                                     <Text color={'#D9C7A2'}>
-                                      {contentAfterBullet}
+                                      {filteredSkillName}
                                     </Text>
                                     <Text></Text>
                                   </Box>
                                 </Box>
                               </Box>
-                            );
-                          })}
+                            ))}
+                        </Box>
                       </Box>
-                    </Box>
-                  </>
+                    </>
+                  )}
+                  {formData.gameIsShowLearningOutcome === 'true' && (
+                    <>
+                      <Box className="box-1">
+                        <Img src={preloadedAssets.back} className="bg-img" />
+                        <Img
+                          className="rewards-arrow-img"
+                          display={'block !important'}
+                          src={preloadedAssets.SkillLearn}
+                          mt={'25px'}
+                          alt="rew"
+                          w={'100%'}
+                          h={'auto'}
+                        />
+                        <Box
+                          className="inside-box"
+                          mt={'10px'}
+                          w={'100%'}
+                        >
+                          {data &&
+                            data.map((it: any, ind: number) => {
+                              const bulletIndex = it.indexOf('\u2022');
+                              const contentAfterBullet =
+                                bulletIndex !== -1
+                                  ? it.slice(bulletIndex + 1).trim()
+                                  : it;
+                              return (
+                                <Box display={'flex'} key={ind}>
+                                  <Img
+                                    src={preloadedAssets.write}
+                                    w={'25px'}
+                                    h={'25px'}
+                                  />
+                                  <Box>
+                                    <Box
+                                      className="text-wrapper"
+                                      display={'flex'}
+                                      w={'50px'}
+                                      h={'20px'}
+                                      justifyContent={'space-between'}
+                                      fontWeight={'300'}
+                                      marginLeft={'5px'}
+                                    >
+                                      <Text color={'#D9C7A2'}>
+                                        {contentAfterBullet}
+                                      </Text>
+                                      <Text></Text>
+                                    </Box>
+                                  </Box>
+                                </Box>
+                              );
+                            })}
+                        </Box>
+                      </Box>
+                    </>
+                  )}
+                </Box>
+                {formData.gameIsShowAuhorName === 'true' && (
+                  <Box
+                    w={'100%'}
+                    h={'50px'}
+                    position={'relative'}
+                    className="author"
+                  >
+                    <Text
+                      // position={'absolute'}
+                      // right={'0px'}
+                      // left={'0px'}
+                      // bottom={'0px'}
+                      // top={'20px'}
+                      fontSize={{
+                        base: '11px',
+                        sm: '12px',
+                        md: '13px',
+                        lg: '15px',
+                      }}
+                      fontFamily={'content'}
+                      color={'black'}
+                      textAlign={'center'}
+                    >
+                      *Author* <br /> {formData.gameAuthorName}
+                    </Text>
+                  </Box>
+                )}
+                {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
+                  <Box
+                    className="renderContent"
+                    letterSpacing={'1px'}
+                  >
+                    <Text
+                      fontSize={{
+                        base: '11px',
+                        sm: '12px',
+                        md: '13px',
+                        lg: '15px',
+                      }}
+                      fontFamily={'content'}
+                    >
+                      {renderContent()}
+                    </Text>
+                  </Box>
                 )}
               </Box>
-              {formData.gameIsShowAuhorName === 'true' && (
-                <Box
-                  w={'100%'}
-                  h={'50px'}
-                  position={'relative'}
-                  className="author"
+              <Box h={'100%'} w={'2vw'} position={'absolute'} right={'-22px'}>
+                <Slider
+                  aria-label="slider-ex-3"
+                  defaultValue={30}
+                  orientation="vertical"
+                  onChange={handleSliderChange}
+                  minH="32"
+                  value={scrollPosition}
+                  ref={sliderRef}
+                  min={0}
+                  max={maxScrollHeight}
                 >
-                  <Text
-                    // position={'absolute'}
-                    // right={'0px'}
-                    // left={'0px'}
-                    // bottom={'0px'}
-                    // top={'20px'}
-                    fontSize={{
-                      base: '11px',
-                      sm: '12px',
-                      md: '13px',
-                      lg: '15px',
-                    }}
-                    fontFamily={'content'}
-                    color={'black'}
-                    textAlign={'center'}
+                  <SliderTrack
+                    w={'2vw'}
+                    bg="none"
+                    backgroundImage={preloadedAssets.scroll}
+                    backgroundSize="contain"
+                    backgroundRepeat={'no-repeat'}
+                    backgroundPosition={'center'}
                   >
-                    *Author* <br /> {formData.gameAuthorName}
-                  </Text>
-                </Box>
-              )}
-              {formData.gameIsShowAdditionalWelcomeNote === 'true' && (
-                <Box
-                  className="renderContent"
-                  letterSpacing={'1px'}
-                >
-                  <Text
-                    fontSize={{
-                      base: '11px',
-                      sm: '12px',
-                      md: '13px',
-                      lg: '15px',
-                    }}
-                    fontFamily={'content'}
-                  >
-                    {renderContent()}
-                  </Text>
-                </Box>
-              )}
+                    <SliderFilledTrack bg="transparent" />
+                  </SliderTrack>
+                  <SliderThumb
+                    _focus={{ outline: 'none', border: 'none' }}
+                    className={'thumb_scroll'}
+                    style={{ WebkitTapHighlightColor: 'transparent' }}
+                    bg="none"
+                    boxSize={6}>
+                    <Img src={preloadedAssets.Cross} w={'100%'} h={'100%'} />
+                  </SliderThumb>
+                </Slider>
+              </Box>
             </Box>
           </Box>
           <Box className="next-btn">
             <Img
               src={preloadedAssets.next}
-              onClick={() =>{
+              onClick={() => {
                 setBlackScreen(true)
-                setTimeout(()=> {
-                setCurrentScreenId(12); 
-                // if(screenIdset !==  currentScreenId)
-                //   {
-                //      setPreLogDatas((prev:any) => ({
-                //   ...prev,
-                //   screenIdSeq: [...prev.screenIdSeq, currentScreenId]
-                //    }));
-                //   }
-                },1000)
-            }}
+                setTimeout(() => {
+                  setCurrentScreenId(12);
+                }, 1000)
+              }}
             />
           </Box>
         </Box>
-       </Box>
-        
+      </Box>
+
       {/* </motion.div> */}
     </>
   );
