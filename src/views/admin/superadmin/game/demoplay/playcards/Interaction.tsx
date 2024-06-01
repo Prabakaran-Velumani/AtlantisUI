@@ -55,6 +55,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
       backgroundImage={backGroundImg}
       backgroundSize={'cover'}
       backgroundRepeat={'no-repeat'}
+      zIndex={9}
       className="chapter_potrait"
     >
       <Grid
@@ -233,7 +234,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
         </GridItem>
       </Grid>
       {selectedPlayer && (
-        <Box className={'player_character_image'}>          
+        <Box className={'player_character_image'} zIndex={'-9'}>          
           <Canvas id={'player'} camera={{ position: [0, 1, 9] }} > {/* For Single view */}
             {/* <Environment preset={"park"} background />   */}
             <directionalLight position={[2.0, 78.0, 100]} intensity={0.8} color={'ffffff'} castShadow />
