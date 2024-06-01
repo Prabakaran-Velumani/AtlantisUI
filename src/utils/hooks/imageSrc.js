@@ -87,7 +87,7 @@ import Cross from 'assets/img/games/cross.png';
  import write from '../../assets/img/games/Writing.png';
  */
 export const assetImageSrc = [
-  { assetType: 'scroll', src: scroll }, 
+  { assetType: 'scroll', src: scroll },
   { assetType: 'Cross', src: Cross },
   { assetType: 'ModelQ', src: ModelQ },
   { assetType: 'leadBtn', src: leadBtn }, 
