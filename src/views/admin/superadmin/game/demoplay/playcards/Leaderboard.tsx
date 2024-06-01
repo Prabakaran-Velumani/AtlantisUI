@@ -142,7 +142,6 @@ const LeaderBoard: React.FC<{
           let newTotal = tot;
           let questNo = acc[0];
           let questHasReplay=Object.keys(getReplayFinalscores).some((quest)=> quest === questNo );
-
           if(questHasReplay)
             {
               getReplayFinalscores[questNo] > acc[1] ? (tot+=getReplayFinalscores[questNo]) : (tot+=acc[1]) 

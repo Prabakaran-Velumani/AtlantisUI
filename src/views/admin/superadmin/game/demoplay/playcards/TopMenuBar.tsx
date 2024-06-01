@@ -209,9 +209,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
             if (!sums[quest]) {
               sums[quest] = 0;
             }
-                sums[quest] += score.score;
-              
-            
+                sums[quest] += score.score;            
           });
        
           let getFinalscores ={};
@@ -220,7 +218,6 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
              const IntQuest = parseInt(quest);
              const newQuest = {...getFinalscores, [IntQuest]: score};
              getFinalscores={...newQuest};
-          
          });
           
           const Replayscores = profile?.replayScore.length > 0 ? profile?.replayScore :null;
@@ -230,9 +227,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
             if (!Replaysums[quest]) {
               Replaysums[quest] = 0;
             }
-      
                 Replaysums[quest] += score.score;
-              
           });
       
           let getReplayFinalscores : {[key: number]:  number} ={};
