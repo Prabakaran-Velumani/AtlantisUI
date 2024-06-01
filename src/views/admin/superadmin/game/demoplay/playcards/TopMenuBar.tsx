@@ -202,22 +202,63 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
           }
         }
     } else {
-      let scores:any = [];
-        if (profile?.score !== null && profile?.replayScore !== null) {
-          scores =
-            profile.score > profile.replayScore
-              ? profile.score
-              : profile.replayScore;
-        } 
-        else{
-          if (profile?.score.length > 0) {
-            scores = profile?.score 
-        }
-        } 
-      total =
-      scores.length > 0
-          ? scores.reduce((acc: number, cur: any) => acc + cur.score, 0)
-          : 0;
+      const scores = profile?.score;
+          const sums: any = {};
+          scores?.forEach((score: any) => {
+            const quest = score.quest;
+            if (!sums[quest]) {
+              sums[quest] = 0;
+            }
+                sums[quest] += score.score;
+              
+            
+          });
+       
+          let getFinalscores ={};
+          Object.entries(sums).forEach(([quest, score]) => 
+           {
+             const IntQuest = parseInt(quest);
+             const newQuest = {...getFinalscores, [IntQuest]: score};
+             getFinalscores={...newQuest};
+          
+         });
+          
+          const Replayscores = profile?.replayScore.length > 0 ? profile?.replayScore :null;
+          const Replaysums: {[key: number]: number} = {};
+          Replayscores?.forEach((score: any) => {
+            const quest = score.quest;
+            if (!Replaysums[quest]) {
+              Replaysums[quest] = 0;
+            }
+      
+                Replaysums[quest] += score.score;
+              
+          });
+      
+          let getReplayFinalscores : {[key: number]:  number} ={};
+           Object.entries(Replaysums).forEach(([quest, score]) => 
+            {
+              const IntQuest = parseInt(quest);
+              getReplayFinalscores = { ...getReplayFinalscores, [IntQuest]: score};
+          });
+
+        total = Object.entries(getFinalscores).reduce((tot:number, acc: any)=>{
+          let newTotal = tot;
+          let questNo = acc[0];
+          let questHasReplay=Object.keys(getReplayFinalscores).some((quest)=> quest === questNo );
+          if(questHasReplay)
+            {
+              getReplayFinalscores[questNo] > acc[1] ? (tot+=getReplayFinalscores[questNo]) : (tot+=acc[1]) 
+            }
+            else{
+              tot+=acc[1];
+            }
+            return tot;
+            },0);
+      // total =
+      // scores.length > 0
+      //     ? scores.reduce((acc: number, cur: any) => acc + cur.score, 0)
+      //     : 0;
     }
    
     return isNaN(total) || total === 0 ? TotalScore : total;

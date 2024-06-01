@@ -483,7 +483,7 @@ useEffect(()=>{
   }, [scoreComp]);
 
   useEffect(() => {
-    if(profile.score!==undefined)
+    if(profile.score.length > 0)
       {
          const currentDate = new Date();
     // Get day, month, and year
