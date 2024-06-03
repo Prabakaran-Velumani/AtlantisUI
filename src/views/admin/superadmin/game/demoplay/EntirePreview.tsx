@@ -648,6 +648,12 @@ useEffect(()=>{
       });
     }
   };
+  const fetchDefaultAudioBgMusic = async () => {
+    const res = await getTestAudios(); //default bg audio fetch
+    if (res?.status === 'success' && res?.url) {
+      setAudio(res?.url)
+    }
+  };
   useEffect(() => {
     setDemoBlocks(gameInfo?.blocks);
     
@@ -893,19 +899,28 @@ useEffect(()=>{
     //   loop: false,
     //   autoplay: true,
     // });
-    if (![2, 10, 0].includes(currentScreenId)) {
-      setAudioObj((prev)=>({
-        ...prev,
-        url: audio,
-        type: EnumType.BGM,
-        // volume: '0.5',
-        loop: true, // Voice doesn't loop
-        autoplay: true,
-      }));
-    }
+    if(audio!=='')
+      {
+        if (![2, 10, 0].includes(currentScreenId)) {
+          setAudioObj((prev)=>({
+            ...prev,
+            url: audio,
+            type: EnumType.BGM,
+            // volume: '0.5',
+            loop: true, // Voice doesn't loop
+            autoplay: true,
+          }));
+        }
+      }
+      else{
+
+      }
   }, [audio]);
 
   useEffect(() => {
+    if (voiceRef.current) {
+      voiceRef.current.pause();
+    }
     const handleAudio = (
       audioRef: React.RefObject<HTMLAudioElement>,
       audio: any,
@@ -931,10 +946,15 @@ useEffect(()=>{
               console.error('Background BGM ref is not available.', error);
             }
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current?.play().catch((error) => {
-              // Handle play promise rejection
+            try {
+              voiceRef?.current?.play().catch((error) => {
+                // Handle play promise rejection
+                // console.error('Error playing voice:', error);
+              });
+            } catch (error) {
               console.error('Error playing voice:', error);
-            });
+            }
+           
           }
         } else {
           if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
@@ -975,7 +995,29 @@ useEffect(()=>{
   }, [gameInfo?.gameData]);
 
   useEffect(() => {
-    ![2, 10, 0].includes(currentScreenId) && setAudio(gameInfo?.bgMusic ?? '');
+      // currentScreenId > 0 &&
+      //   currentScreenId === 1 &&
+      //   isGetsPlayAudioConfirmation &&
+      //   setAudioObj({
+      //     url: gameInfo?.bgMusic,
+      //     type: 'bgm',
+      //     volume: '0.5',
+      //     loop: true,
+      //     autoplay: true,
+      //   });
+      if(![2, 10, 0].includes(currentScreenId))
+        {
+          if(!gameInfo?.bgMusic)
+            {
+              fetchDefaultAudioBgMusic();
+            }
+            else{
+              setAudio(gameInfo?.bgMusic)
+            }
+
+        }
+    
+    // ![2, 10, 0].includes(currentScreenId) && setAudio(gameInfo?.bgMusic ?? '');
   }, [currentScreenId, gameInfo]);
 
   const prevData = (current: any) => {
