@@ -905,6 +905,8 @@ useEffect(()=>{
     }
   }, [audio]);
 
+
+  /******************Need to handle the audio play and pause */
   useEffect(() => {
     const handleAudio = (
       audioRef: React.RefObject<HTMLAudioElement>,
@@ -931,16 +933,22 @@ useEffect(()=>{
               console.error('Background BGM ref is not available.', error);
             }
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current?.play().catch((error) => {
-              // Handle play promise rejection
+            console.log("voiceRef?.current", voiceRef?.current);
+            voiceRef?.current?.play().catch((error) => {
               console.error('Error playing voice:', error);
             });
           }
         } else {
           if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
-            backgroundBgmRef.current?.pause();
+            if(!backgroundBgmRef?.current?.paused)
+              {
+                backgroundBgmRef?.current?.pause();
+              }
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current?.pause();
+            if(!voiceRef?.current?.paused)
+              {
+                voiceRef?.current?.pause();
+              }
           }
         }
       }

@@ -541,17 +541,7 @@ console.log("questWisePlayerScore", questWisePlayerScore,'...');
                                     <Text
                                       className="amount-score"
                                       textAlign={'center'}
-                                    >
-                                      {/* {profile.playerGrandTotal ? profile.playerGrandTotal?.questScores[it] ?  profile.playerGrandTotal?.questScores[it] : 0: 0}/{questScores &&  questScores[it] !==null && questScores[it] > 0  ? questScores[it] : 0}{' '} */}
-
-
-                                      {profile?.playerGrandTotal
-                                    ? profile?.playerGrandTotal?.questScores[it]
-                                      ? profile?.playerGrandTotal?.questScores[
-                                          it
-                                        ]
-                                      : parseInt(getFinalscores[num]?.quest) === parseInt(it)? getFinalscores[num].score: 0
-                                    : 0} */}
+                                    >                                   
                                      {questWisePlayerScore && questWisePlayerScore[it] ? questWisePlayerScore[it] : 0}
                                   /
                                   {questScores &&
