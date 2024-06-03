@@ -850,6 +850,8 @@ useEffect(()=>{
       }
   }, [audio]);
 
+
+  /******************Need to handle the audio play and pause */
   useEffect(() => {
     if (voiceRef.current) {
       voiceRef.current.pause();
@@ -891,9 +893,15 @@ useEffect(()=>{
           }
         } else {
           if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
-            backgroundBgmRef.current?.pause();
+            if(!backgroundBgmRef?.current?.paused)
+              {
+                backgroundBgmRef?.current?.pause();
+              }
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current?.pause();
+            if(!voiceRef?.current?.paused)
+              {
+                voiceRef?.current?.pause();
+              }
           }
         }
       }
