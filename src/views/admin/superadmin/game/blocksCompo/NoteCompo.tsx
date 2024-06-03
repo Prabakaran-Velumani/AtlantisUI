@@ -428,14 +428,8 @@ const NoteCompo: React.FC<PropsNote> = ({
                           ? showSelectBlock.find(
                             (option: any) =>
                               option.value ===
-                              input?.[`Note${seq.input}`]?.Notenavigate,
-                          )?.label !== undefined
-                            ? showSelectBlock.find(
-                              (option: any) =>
-                                option.value ===
-                                input?.[`Note${seq.input}`]?.Notenavigate,
-                            )?.label
-                            : `${(parseFloat(seq.id) + 0.1).toFixed(1)}`
+                              parseInt(input?.[`Note${seq.input}`]?.Notenavigate),
+                          )?.label 
                           : input?.[`Note${seq.input}`]?.NoteleadShow ===
                             'Select Block'
                             ? showSelectBlock.find(

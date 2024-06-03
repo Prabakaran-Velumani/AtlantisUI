@@ -568,15 +568,8 @@ const DialogCompo: React.FC<PropsDialog> = ({
                             ? showSelectBlock.find(
                               (option: any) =>
                                 option.value ===
-                                input?.[`Dialog${seq.input}`]?.Dialognavigate,
-                            )?.label === undefined
-                              ? `${(parseFloat(seq.id) + 0.1).toFixed(1)}`
-                              : showSelectBlock.find(
-                                (option: any) =>
-                                  option.value ===
-                                  input?.[`Dialog${seq.input}`]
-                                    ?.Dialognavigate,
-                              )?.label
+                                parseInt(input?.[`Dialog${seq.input}`]?.Dialognavigate),
+                            )?.label 
                             : input?.[`Dialog${seq.input}`]?.DialogleadShow ===
                               'Select Block'
                               ? showSelectBlock.find(
