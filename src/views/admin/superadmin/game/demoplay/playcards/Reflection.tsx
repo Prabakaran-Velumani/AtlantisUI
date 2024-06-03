@@ -16,7 +16,7 @@ const Reflection: React.FC<{
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [answers, setAnswers] = useState<any>([]);
   const [RefAnswer, setrefAnswer] = useState<any>([]);
-  
+  const [reflectionFilter,setReflectionFilter] = useState<any>([reflectionQuestions]);
   useEffect(()=>{
 const storedRefAnswers =  getPrevLogDatas?.playerInputs?.Reflection;
 if(storedRefAnswers)
@@ -28,6 +28,11 @@ if(storedRefAnswers)
     });
     setAnswers(modifedAnswers)
   }
+  if(reflectionQuestions)
+    {
+       const ReflectionFilter = reflectionQuestions.filter((item: any, index: number) => (item?.translationId === getPrevLogDatas.previewProfile?.language));
+       setReflectionFilter(ReflectionFilter);
+    }
   },[])
 
   useEffect(() => {
@@ -80,7 +85,6 @@ if(storedRefAnswers)
       return false;
     }
   }
-
   return (
     <>
       {imageSrc && (
@@ -95,7 +99,8 @@ if(storedRefAnswers)
             </Box>
             <Box className="content-ref">
               <SimpleGrid columns={{ base: 2 }} spacing={2} className="grid">
-                {reflectionQuestions.map((item: any, index: number) => (
+                {reflectionFilter?.map((item: any, index: number) =>
+                (
                   <>
                     <Box key={index}>
                       <Box className='heading-wrapper'

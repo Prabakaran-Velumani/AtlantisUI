@@ -1835,11 +1835,11 @@ const handleRight = () => {
                                                 ? showSelectBlock.find(
                                                   (option: any) =>
                                                     option.value ===
-                                                    input?.[
+                                                    parseInt(input?.[
                                                       `Interaction${seq.input}`
                                                     ]?.navigateObjects?.[
                                                     alp.option
-                                                    ],
+                                                    ]),
                                                 )?.label
                                                 : input?.[`Interaction${seq.input}`]
                                                   ?.navigateshowObjects?.[
