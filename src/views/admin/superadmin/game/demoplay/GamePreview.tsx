@@ -9,6 +9,7 @@ import React, {
   useRef,
   useState,
   lazy,
+  useContext,
 } from 'react';
 import { LazyMotion, domAnimation, motion, m, domMax } from 'framer-motion';
 import { preloadedImages, preloadedGLBFiles } from 'utils/hooks/function';
@@ -29,6 +30,7 @@ import collector from 'assets/img/games/collector.glb';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import Model from './playcards/Model';
+import { useAuth } from "../../../../../contexts/auth.context";
 const NoAuth= lazy(() => import('./playcards/NoAuth'));
 const EntirePreview = lazy(() => import('./EntirePreview'));
 const gameScreens = [
@@ -39,6 +41,8 @@ const gameScreens = [
   'Welcome',
   'ThanksScreen',
 ];
+
+
 // const gameScreens = ['GameIntro', "4": 'Welcome', "2": 'Reflection',"1": "Leaderboard", "" : "5": "ThanksScreen", "0": "Completion","3": "TakeAway"];
 
 // const Tab5attribute = [{'attribute': 0,"currentScreenName": "Completion", "currentScreenId": 6} ];
@@ -93,8 +97,9 @@ const GamePreview = () => {
   const [isAuthFailed, setIsAuthFailed]= useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<any>(false);
   const user: any = JSON.parse(localStorage.getItem('user'));
-  
-  //get the stored Preview Log Data, if has otherwise create a new record
+  // const { user, setUser } = useAuth();
+  // console.log("*************authContext", user)
+  // //get the stored Preview Log Data, if has otherwise create a new record
   const fetchPreviewLogsData = async () => {
     try {
       if (gameInfo?.gameId) {

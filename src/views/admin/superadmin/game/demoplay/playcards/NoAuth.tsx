@@ -11,7 +11,21 @@ const NoAuth: React.FC<{isAuthFailed:boolean}> = ({isAuthFailed}) => {
   return (
     <Box position={'absolute'} display={'flex'} justifyContent={"center"} alignItems={"center"}>
         {isAuthFailed ? 
+        <>
         <Text onClick={()=>goHome()}> {"You are not Authorized User...! You are not allowed"}</Text>
+
+        {/* <Button bg="#11047a" 
+                _hover={{ bg: '#190793' }} 
+                color="#fff" 
+                h={'46px'} 
+                w={'128px'} 
+                display={'block'} 
+                mr={'17px'} 
+                mt={'6px'} 
+                ml={'11px'}
+                onClick={()=>goHome()}> {"Go to Login page"}
+            </Button> */}
+            </>
         :
         <>
             <Text>{"You are not Authorized User...! Please login."}</Text>

@@ -1,17 +1,6 @@
 import { Img, Text, SimpleGrid, Box } from '@chakra-ui/react';
 import React, { useRef } from 'react';
-
-/* for reflection question inside the image */
-import ref from 'assets/img/screens/refquestions.png';
-import qs from 'assets/img/screens/QS.png';
-import Entry from 'assets/img/games/entry.png';
-import Label from 'assets/img/games/label.png';
-import Separator from 'assets/img/games/separator.png';
-import Close from 'assets/img/games/close.png';
-import Arrow from 'assets/img/games/arrow.png';
 import { useContext, useState, useEffect } from 'react';
-// import React, { useState } from 'react';
-
 import { ProfileContext } from '../EntirePreview';
 import { ScoreContext } from '../GamePreview';
 
@@ -67,8 +56,8 @@ const names = [
   // { name: 'Chelsea', score: 100, allTimeScore: 700 },
   // { name: 'Brian', score: 400, allTimeScore: 600 }
 ]
-
 const usersWithAllTimeScore = names.sort(() => Math.random() - 0.5).slice(0, 9);
+
 
 const LeaderBoard: React.FC<{
   formData?: any;
@@ -162,6 +151,72 @@ const LeaderBoard: React.FC<{
         sortedUsingScore.unshift(unShiftedPlayer);
         setShuffledUsers(sortedUsingScore);
       }
+
+      if(profile.score.length > 0)
+        {
+           const currentDate = new Date();
+      // Get day, month, and year
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const year = currentDate.getFullYear();
+      // Format date as DD-MM-YYYY
+      const formattedDate = `${day}-${month}-${year}`;
+
+      const scores = profile?.score;
+      const sums: any = {};
+      scores?.forEach((score: any) => {
+        const quest = score.quest;
+        if (!sums[quest]) {
+          sums[quest] = 0;
+        }
+        if(score.scoreEarnedDate === formattedDate)
+          {
+            sums[quest] += score.score;
+          }
+
+      });
+      let getFinalscores ={};
+      Object.entries(sums).forEach(([quest, score]) => 
+       {
+         const IntQuest = parseInt(quest);
+         const newQuest = {...getFinalscores, [IntQuest]: score};
+         getFinalscores={...newQuest};
+
+     });
+      const Replayscores = profile?.replayScore.length > 0 ? profile?.replayScore :null;
+      const Replaysums: {[key: number]: number} = {};
+      Replayscores?.forEach((score: any) => {
+        const quest = score.quest;
+        if (!Replaysums[quest]) {
+          Replaysums[quest] = 0;
+        }
+        if(score.scoreEarnedDate === formattedDate)
+          {
+            Replaysums[quest] += score.score;
+          }
+      });
+
+      let getReplayFinalscores : {[key: number]:  number} ={};
+       Object.entries(Replaysums).forEach(([quest, score]) => 
+        {
+          const IntQuest = parseInt(quest);
+          getReplayFinalscores = { ...getReplayFinalscores, [IntQuest]: score};
+      });
+      const TodayTotalScore = Object.entries(getFinalscores).reduce((tot:number, acc: any)=>{
+        let questNo = acc[0];
+        let questHasReplay=Object.keys(getReplayFinalscores).some((quest)=> quest === questNo );
+        if(questHasReplay)
+          {
+
+            getReplayFinalscores[questNo] > acc[1] ? (tot+=getReplayFinalscores[questNo]) : (tot+=acc[1]) 
+          }
+          else{
+            tot+=acc[1];
+          }
+          return tot;
+          },0);
+      setPlayerTodayScore(TodayTotalScore);
+    }
     }, []);
 
     const handleHome = () => {
@@ -261,8 +316,6 @@ const LeaderBoard: React.FC<{
         let currentScrollTop = container?.scrollTop;
   
         if (currentScrollTop > lastScrollTop) {
-          // Scrolling down
-          // container.classList.add('content-box');
           container.classList.add('scrollbar-down');
         } else {
           // Scrolling up

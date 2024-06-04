@@ -385,23 +385,11 @@ const Story: React.FC<{
                 ...prev,
                 url: '',
                 type: EnumType.VOICE,
-                // volume: '0.5',
                 loop: false,
                 autoplay: true,
               }));
             }
           }
-        }
-        else
-        {
-          setAudioObj((prev:any)=>({
-            ...prev,
-            url: '',
-            type: EnumType.VOICE,
-            // volume: '0.5',
-            loop: true, // Voice doesn't loop
-            autoplay: true,
-          }));
         }
       };
       fetchData();

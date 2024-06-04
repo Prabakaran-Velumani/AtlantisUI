@@ -57,10 +57,10 @@ const ReplayScore: React.FC<replayScoreProps> = ({
   useEffect(() => {
     const currentQuestMasterData = gameInfo?.gameQuest[profile?.currentQuest - 1];    
       if (replayState === "mandatoryReplay") {
-        const currentQuestIndex = profile?.currentQuest - 1;
+        const currentQuestIndex = profile?.currentQuest;
         const previousQuestScore = profile?.playerGrandTotal.questScores[currentQuestIndex] || 0;
         const differedScore = parseInt(currentQuestMasterData.gameMinScore) - parseInt(previousQuestScore);
-        setReplayMessage(`You are only ${differedScore ?? 'few'} points away from a minimum score. Click 'OKAY' to Play Again?`)
+        setReplayMessage(`You are only ${differedScore ?? 'few'} points lower than minimum score. Click 'OKAY' to Play Again?`)
       }
       else if (replayState === 'optionalReplay') {
         const currentQuestIndex = profile?.currentQuest - 1;
