@@ -80,11 +80,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
   const continueScreen = () => {
     if (LastModified === true) {
       const getLastModifiedid = getPrevLogDatas.lastModifiedBlockSeq;
-      // if (getPrevLogDatas?.previewScore) {
-      //  setProfile(getPrevLogDatas.previewScore);
-      // }
-      // const getLastModifieddata = new Date(getPrevLogDatas.lastBlockModifiedDate).getTime();
-      // const getupdatedAt = new Date(getPrevLogDatas.updatedAt).getTime();
       let filteredData: any;
       for (const key in gameInfo) {
         const innerObj = gameInfo[key];
@@ -147,9 +142,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
       setModelControl(false); // for model show
       setLastModified(false); // for last modified 
       return false;
-
-
-
     }
     else {
       if (getPrevLogDatas.screenIdSeq.length > 0) {
@@ -167,12 +159,8 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
           setModelControl(false);
           return false;
         }
-
       }
-
     }
-
-
   }
   const handleChange = (e: any) => {
     const { name, value, checked } = e.target;
@@ -325,7 +313,7 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
                   justifyContent={'space-between'}
                 >
                   <Box className="replay_game_text">
-                    {LastModified === true ? ' Would you like to view the lastModified sequence?' : NavigateBlockEmpty === true ? 'Dont have any blocks. So, navigate to the first block.' : '  Do you want to continue from the screen where you last paused?'}
+                    {LastModified === true ? ' Would you like to view the last modified sequence?' : NavigateBlockEmpty === true ? 'No blocks available. Click "Okay" to redirecting to the initial block' : 'Do you want to continue from the screen where you last paused?'}
                   </Box>
 
                   <Box
@@ -368,142 +356,6 @@ const ModelPopup: React.FC<ModelPopupProps> = ({ data, backGroundImg, option, op
           </Box>
         </Box>
       </Box>
-      {/* 
-    <Modal isOpen={true} onClose={ModelControl} closeOnOverlayClick={false} size={'medium'} >
-    <ModalOverlay />
-    <ModalContent
-      className='feedback_screenshot'
-      backgroundImage={backGroundImg}
-      backgroundSize={'cover'}
-      filter={'contrast(70%)'}
-      backgroundRepeat={'no-repeat'}
-      boxShadow={'inset 0px 5px 100px 25px white'}
-      borderRadius={'35px !important'}
-    >
-      <ModalBody width={'100%'} height={'100%'}>
-
-        <Box className="top-menu-home-section-screenshot">
-
-        </Box>
-
-        <Box className="story_interaction_image_screenshot">
-          <Box position={'relative'} h={'100%'}>
-            <Box
-              position={'absolute'}
-              top={{ sm: '18px', md: '8%' }}
-              h={'80% !important'}
-              className="story_interaction_image_screenshot_content"
-            >
-              <Box
-                textAlign={'center'}
-                display={'flex'}
-                justifyContent={'center'}
-                alignItems={'center'}
-                fontWeight={700}
-                fontSize={{ md: '1.5vw', lg: '1.9vw' }}
-                fontFamily={'AtlantisText'}
-                lineHeight={1}
-                w={'100%'}
-                h={'5%'}
-              >
-                <Box w={'80%'}>
-                  {LastModified === true ? 'Would you like to view the lastModified sequence?' : isStoryScreen === true ?
-
-                    <><Box style={{ textAlign: 'center' }}>  Choose  Any One Option ?</Box>
-
-                      <Box >
-                        Do you want to continue from the Quest where you last paused?
-                        <Switch
-                          isChecked={QuestScreen === true ? true : false}
-                          color="#fff"
-                          colorScheme="brandScheme"
-                          size="md"
-                          id="lastpausedQuest"
-                          name="lastpausedQuest"
-                          onChange={handleChange}
-                        />
-                      </Box>
-                      <Box >
-                        Would you like to navigate to the Quest Selection page?
-                        <Switch
-                          isChecked={QuestSelectionPage === true ? true : false}
-                          color="#fff"
-                          colorScheme="brandScheme"
-                          size="md"
-                          id="questSelectionPage"
-                          name="questSelectionPage"
-                          onChange={handleChange}
-                        />
-                      </Box>
-                      <Box >
-                        Do you want to Play Again
-                        <Switch
-                          isChecked={PlayAgain === true ? true : false}
-                          color="#fff"
-                          colorScheme="brandScheme"
-                          size="md"
-                          id="playAgain"
-                          name="playAgain"
-                          onChange={handleChange}
-                        />
-                      </Box>
-                    </> : NavigateBlockEmpty === true ? 'Dont have any blocks. So, navigate to the first block.' : '  Do you want to continue from the screen where you last paused?'}
-
-                </Box>
-              </Box>
-              <Box
-                className='story_screenshot_interaction_question'
-              >
-                <Box
-                  className='screenshot_content'
-                  w={'60%'}
-                  fontSize={{ md: '1.5vw', lg: '1.9vw' }}
-                  letterSpacing={1}
-                  justifyContent={'flex-start'}
-                >
-
-                </Box>
-              </Box>
-              <Box
-                mt={'10px'}
-                w={'100%'}
-                h={'40%'}
-                fontWeight={500}
-                overflowY={'scroll'}
-                display={'flex'}
-                justifyContent={'center'}
-                className={'screenshot_interaction_options'}
-              >
-                <Box w={'60%'}>
-
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-
-      </ModalBody>
-      <ModalFooter>
-        <>
-          {/* <Img
-            src={preloadedAssets.replayBtn}
-            className="replay_buttons"
-          /> 
-
-
-
-          {NavigateBlockEmpty === true ? <Button onClick={() => { HandleBlockScreen() }} > Ok</Button> : isStoryScreen === false ? <> <Button onClick={() => { continueScreen() }}> Yes</Button>
-            <Button onClick={() => { NextScreen() }} > No</Button></> : <Button onClick={() => { HandleScreen() }} > Ok</Button>}
-
-          {/* <Img
-            src={preloadedAssets.next}
-            className="replay_buttons"
-          /> 
-        </>
-      </ModalFooter>
-    </ModalContent>
-  </Modal> 
-  */}
     </>
   );
 }

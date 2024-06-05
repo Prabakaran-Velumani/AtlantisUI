@@ -4523,7 +4523,8 @@ if(currentScreenId ===2)
     }
     setCurrentScreenId(2);
   };
-
+console.log("profile", profile)
+console.log("getPrevLogDatas", getPrevLogDatas)
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="EntirePreview-wrapper">

@@ -171,7 +171,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     }    
     setPreLogDatas((prev: any) => ({...prev,audioVolumeValue: updatedAudioData}));
   }, [audioObj]);
-
+console.log("^^^^^setQuestState", questState)
   const totalPoints = useMemo(() => {
     let total: number = 0;
     let TotalScore:number = 0 ;
@@ -263,7 +263,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
    
     return isNaN(total) || total === 0 ? TotalScore : total;
   }, [profile.score, profile.replayScore, currentScreenId]);
-  
+  console.log("^^^^^totalPoints", totalPoints)
   return (
     <Box className="top-menu-home-section">
       {dontShowTopMenu && !isSettingOpen ? (

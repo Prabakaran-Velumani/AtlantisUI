@@ -165,10 +165,8 @@ const ChapterPage: React.FC<{
               }
     })
     setQuestScores(maxScoreByQuest);
-console.log('.....160',questState,'...',questScores,'...',profile)
 
-//setQuestPlayerScroe
-
+/**** setQuestPlayerScroe***/
 const getQuestwisePlayerScore = async()=>{
 let result: {[key: number]: number}= {};
   if(demoBlocks){
@@ -212,27 +210,17 @@ let result: {[key: number]: number}= {};
     const TotalScore = Object.entries(getFinalscores).reduce((tot:number, acc: any)=>{
       if(it == acc[0])
         { let questHasReplay=Object.keys(getReplayFinalscores).some((quest)=> quest === acc[0] );
-            console.log("questHasReplay", questHasReplay)
             if(questHasReplay)
-              {
-                console.log(" getReplayFinalscores[questNo] > acc[1]",  getReplayFinalscores[acc[0]] > acc[1],'...',getReplayFinalscores[acc[0]])
-      
+              {   
                 getReplayFinalscores[acc[0]] > acc[1] ? (tot = getReplayFinalscores[acc[0]]) : (tot =acc[1]) 
               }
               else{
-                console.log("acc[1]^^^", acc[1])
                 tot =acc[1];
               }
-              console.log("tot ----", tot)
-
               return tot;
         }
-         
     },0);
-    console.log('00000',TotalScore,'...',getFinalscores[it]);
     result = {...result, [parseInt(it)]: TotalScore ? TotalScore :getFinalscores[it]};
-console.log("TotalScore^^^", TotalScore)
-console.log("result^^^", result)
     })
   }
 return result;
@@ -246,7 +234,6 @@ getQuestwisePlayerScore().then((score :any) => {
   const { profile, setProfile } = useContext(ScoreContext);
   useEffect(() => {
     const currentQuest = profile?.currentQuest;
-
     gameQuest.map((item: any, index: number) => {
       const questNoAsString = item.gameQuestNo.toString();
       if (profile?.completedLevels?.includes(questNoAsString)) {
@@ -447,11 +434,6 @@ getQuestwisePlayerScore().then((score :any) => {
       opacity: 1,
     },
   };
-
-
-
-console.log("questWisePlayerScore", questWisePlayerScore,'...');
-
 
   return (
     <>

@@ -637,7 +637,7 @@ const Story: React.FC<{
                   <Text whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>{data.blockRoll === 'Narrator'
                     ? data.blockRoll
                     : data.blockRoll === '999999'
-                      ? profileData.name
+                      ? getPrevLogDatas?.previewProfile?.name || "player"
                       : formData.gameNonPlayerName}</Text>
                 </Box>
               </Box>
@@ -737,7 +737,7 @@ const Story: React.FC<{
                   {data.blockResponseRoll === 'Narrator'
                     ? data.blockResponseRoll
                     : data.blockResponseRoll === '999999'
-                      ? profileData.name
+                      ? getPrevLogDatas?.previewProfile?.name || "player"
                       : formData.gameNonPlayerName}
                 </Box>
               </Box>

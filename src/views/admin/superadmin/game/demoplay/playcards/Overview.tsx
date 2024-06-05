@@ -64,10 +64,8 @@ const OverView: React.FC<{
       if (containerRef.current && sliderRef.current) {
         const { scrollTop, clientHeight } = containerRef.current;
         const newScrollPosition = (scrollTop / (containerRef.current.scrollHeight - clientHeight)) * 100;
-        console.log('New scroll position:', newScrollPosition); // Check the new scroll position
         setScrollPosition(Math.floor(newScrollPosition));
         sliderRef.current.value = newScrollPosition.toString(); // Update slider value
-        console.log('Slider value:', sliderRef.current.value); // Check the slider value
       }
     };
   

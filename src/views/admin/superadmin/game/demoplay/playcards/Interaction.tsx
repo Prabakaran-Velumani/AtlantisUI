@@ -45,8 +45,7 @@ const Interaction: React.FC<InteractionProps> = ({ backGroundImg, data, option, 
   }, [RepeatSelectOption]);
 
   const playerHeight = document.getElementById('player');
-  console.log('player', playerHeight)
-
+  
   return (
     <Box
       position="relative"
