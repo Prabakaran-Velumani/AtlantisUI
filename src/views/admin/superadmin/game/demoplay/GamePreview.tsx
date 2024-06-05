@@ -1,48 +1,38 @@
-import { Box, Icon, Img, useToast } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 
-import React, {
+import {
   Suspense,
   createContext,
   useEffect,
-  useLayoutEffect,
   useMemo,
-  useRef,
   useState,
   lazy,
   useContext,
 } from 'react';
-import { LazyMotion, domAnimation, motion, m, domMax } from 'framer-motion';
 import { preloadedImages, preloadedGLBFiles } from 'utils/hooks/function';
 import { assetImageSrc } from 'utils/hooks/imageSrc';
-import { json, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
   getGameDemoData,
-  SubmitReview,
   getGameCreatorDemoData,
   updatePreviewlogs
 } from 'utils/game/gameService';
 import { API_SERVER } from 'config/constant';
-import { IoIosRefresh } from 'react-icons/io';
-import PlayInfo from './playcards/playinfo';
-import CharacterGlb from 'assets/img/games/Character_sample.glb';
-import Merlin from 'assets/img/games/Merlin.glb';
 import collector from 'assets/img/games/collector.glb';
-import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import Model from './playcards/Model';
-import { useAuth } from "../../../../../contexts/auth.context";
+/**to sync the changes when a creator is a player, want to view the latest changes on time */
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'store/reducers';
+import { 
+  updatePreviewData,
+  removeGame,
+  resetGameDispatchState,
+  resetGameModifiedState
+} from 'store/preview/previewSlice';
+
+
 const NoAuth= lazy(() => import('./playcards/NoAuth'));
 const EntirePreview = lazy(() => import('./EntirePreview'));
-const gameScreens = [
-  'Completion',
-  'Leaderboard',
-  'Reflection',
-  'TakeAway',
-  'Welcome',
-  'ThanksScreen',
-];
-
-
 // const gameScreens = ['GameIntro', "4": 'Welcome', "2": 'Reflection',"1": "Leaderboard", "" : "5": "ThanksScreen", "0": "Completion","3": "TakeAway"];
 
 // const Tab5attribute = [{'attribute': 0,"currentScreenName": "Completion", "currentScreenId": 6} ];
@@ -72,16 +62,23 @@ const initialProfileObject: ProfileType = {
   playerGrandTotal: { questScores: {} },
   todayEarnedScore: [{ quest: 1, score: 0, earnedDate: "" }],
 };
+
+let creatorDataSlice: {[key: string]: number} = {};
 const GamePreview = () => {
   const { uuid } = useParams();
   const { id } = useParams();
+  
+  const previewStateData = useSelector((state: RootState) =>
+    id && state.preview ? state.preview[id] : null,
+  );
+  const dispatch = useDispatch();
+  // console.log("previewStateData", previewStateData)
   const InitialScreenId = id ? 10 : 1; //replace 10: game Intro, 1: welcome screen by which screen you want to play
   const [gameInfo, setGameInfo] = useState<any | null>(null);
   const [timeout, setTimer] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
     const [profile, setProfile] = useState(initialProfileObject);
   const [currentScore, setCurrentScore] = useState(0);
-  const toast = useToast();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(null);
   const [showGame, setShowGame] = useState(false);
@@ -97,9 +94,7 @@ const GamePreview = () => {
   const [isAuthFailed, setIsAuthFailed]= useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<any>(false);
   const user: any = JSON.parse(localStorage.getItem('user'));
-  // const { user, setUser } = useAuth();
-  // console.log("*************authContext", user)
-  // //get the stored Preview Log Data, if has otherwise create a new record
+    //get the stored Preview Log Data, if has otherwise create a new record
   const fetchPreviewLogsData = async () => {
     try {
       if (gameInfo?.gameId) {
@@ -177,8 +172,7 @@ const GamePreview = () => {
         // Use preloadedGLBs[CharacterGlb] if you need the preloaded GLB data
         setLoadedGLBs((prev:any)=> ({...prev, preloadedGLBs}))
         const loader = new GLTFLoader();
-        const parsedGlbArray = [];
-        loader.parse(preloadedGLBs, '', (gltf) => {
+        loader.parse(preloadedGLBs, '', () => {
           // parsedGlbArray = preloadedGLBs
         });
         // setLoadedGLBs(gltf.scene);
@@ -262,7 +256,7 @@ const GamePreview = () => {
       return transformedArray;
     };
     const completionScreenData = info?.data;
-    const completionOptions = Object.entries(completionScreenData).map((qst: any, i: number) => {
+    const completionOptions = completionScreenData && Object.entries(completionScreenData).map((qst: any) => {
       const item = {
         gameTotalScore:qst[1].gameTotalScore,
         gameId: qst[1].gameId,
@@ -316,31 +310,6 @@ const GamePreview = () => {
         src: API_SERVER + '/' + info?.assets?.npcUrl,
       },
     ];
-
-    let playerCharectorsUrls = info?.assets?.playerCharectorsUrl.map(
-      (item: any, index: number) => {
-        let objValue = API_SERVER + '/' + item;
-        let objKey = `playerCharacterImage_${index}`;
-        apiImageSetArr.push({ assetType: objKey, src: objValue });
-      },
-    );
-    let gameQuestBadges = await Promise.all(
-      info?.assets?.badges.map(
-        async (item: Record<string, string>) => {
-          Object.entries(item).forEach(([key, value]) => {
-            let objkeyValue = key.split('_')[1];
-            let objKey = `Quest_${objkeyValue}`;
-            let objKeyValue = API_SERVER + '/' + value;
-            let badgeUrl =  value.split('.');
-            const shadowBadgeUrl = badgeUrl[0]+'-shadow.'+badgeUrl[1];
-            apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
-            apiImageSetArr.push({ assetType: objKey+'-shadow', src: API_SERVER + '/' +shadowBadgeUrl });
-          });
-          setApiImageSet(apiImageSetArr);
-          return true;
-        },
-      ),
-    );
   };
 
   /** THis function used to update gameInfo state on initial render and after every submition of a review
@@ -348,9 +317,8 @@ const GamePreview = () => {
    * Should update game info after update, delete, new review submition using this function updateGameInfo
    */
   const updateGameInfo = async (info: any) => {
-    const {
+      const {
       gameReviewerId,
-      creatorId,
       emailId,
       activeStatus,
       reviews,
@@ -378,7 +346,7 @@ const GamePreview = () => {
     };
 
     const completionScreenData = info?.data;
-    const completionOptions = Object.entries(completionScreenData).map((qst: any, i: number) => {
+    const completionOptions = Object.entries(completionScreenData).map((qst: any) => {
       const item = {
         gameTotalScore:qst[1].gameTotalScore,
         gameId: qst[1].gameId,
@@ -447,30 +415,6 @@ const GamePreview = () => {
       },
     ];
 
-    let playerCharectorsUrls = info?.assets?.playerCharectorsUrl.map(
-      (item: any, index: number) => {
-        let objValue = API_SERVER + '/' + item;
-        let objKey = `playerCharacterImage_${index}`;
-        apiImageSetArr.push({ assetType: objKey, src: objValue });
-      },
-    );
-    let gameQuestBadges = await Promise.all(
-      info?.assets?.badges.map(
-        async (item: Record<string, string>) => {
-          Object.entries(item).forEach(([key, value]) => {
-            let objkeyValue = key.split('_')[1];
-            let objKey = `Quest_${objkeyValue}`;
-            let objKeyValue = API_SERVER + '/' + value;
-            apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
-            let badgeUrl =  value.split('.');
-            const shadowBadgeUrl = badgeUrl[0]+'-shadow.'+badgeUrl[1];
-            apiImageSetArr.push({ assetType: objKey+'-shadow', src:  API_SERVER + '/' + shadowBadgeUrl });
-          });
-          setApiImageSet(apiImageSetArr);          
-          return true;
-        },
-      ),
-    );
   };
 
   useEffect(() => {
@@ -516,6 +460,71 @@ const GamePreview = () => {
     return () => clearTimeout(timer);
   }, []);
 
+
+  const hanldeLastModifiedActivity= async()=>{
+    const {
+      currentTab = null,
+      currentSubTab = null,
+      currentQuest = null,
+      activeBlockSeq = null,
+      CompKeyCount = null
+    } = previewStateData || {};
+                  
+  if(currentTab)
+    switch(currentTab){
+      case 3: // o/v content modified
+              return {screenId: 1}
+      case 4: // story content modified
+              return {screenId: 2, currentQuest: currentQuest || 1 , activeBlockSeq: activeBlockSeq || 1}
+              
+      case 5: // design content modified
+            switch(currentSubTab){
+            case 0: //completion screen
+              return {screenId: 6,  CompKeyCount: CompKeyCount || 0}
+              
+            case 1: //Leaderboard
+              return {screenId: 4}
+              
+            case 2: //Reflection
+              return {screenId: 3}
+              
+            case 3://take away
+              return {screenId: 7}
+              
+            case 4://welcome
+              return {screenId: 1}
+              
+            case 5://thank you
+              return {screenId: 5}
+              
+            }              
+              break;
+
+      case 6: // preference content modified
+              return {screenId: 10} //load it from the  begining
+      default:
+        return {screenId: 10} 
+    }
+  }
+
+  useEffect(()=>{
+   const handleDataFetch = async () => {
+      if (id && previewStateData?.isModified) {
+        await fetchCreatorDemoData();  // Wait for the async function to complete
+        creatorDataSlice = await hanldeLastModifiedActivity();
+      }
+      // else{
+      //   creatorDataSlice=null;
+      // }
+    };
+    handleDataFetch();
+    console.log("previewStateData", previewStateData)
+  },[previewStateData])
+console.log("preloadedAssets", preloadedAssets);
+console.log("  gameInfo?.reviewer?.ReviewerStatus",  gameInfo?.reviewer?.ReviewerStatus);
+console.log("  gameInfo?.reviewer?.ReviewerDeleteStatus",  gameInfo?.reviewer?.ReviewerDeleteStatus);
+console.log("  gameInfo",  gameInfo);
+console.log("  isAuthFailed",  isAuthFailed);
   return (
     <>
       {/* <Suspense fallback={
@@ -569,6 +578,7 @@ const GamePreview = () => {
                       preLogDatasIni={preLogDatasIni}
                       initialStateUpdate={initialStateUpdate}
                       setInitialStateUpdate={setInitialStateUpdate}
+                      creatorDataSlice={creatorDataSlice}
                     />
                     </Box>
                   </Box>

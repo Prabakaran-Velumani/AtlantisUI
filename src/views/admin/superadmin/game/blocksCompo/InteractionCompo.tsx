@@ -1492,6 +1492,7 @@ const handleRight = () => {
                                         `Interaction${seq.input}`,
                                       )
                                     }
+                                    
                                   />
                                 </Td>
                               )}
@@ -1512,6 +1513,8 @@ const handleRight = () => {
                                         title={alp.option}
                                         name={`Interaction${seq.input}`}
                                         onChange={handleInput}
+                                        onFocus={(e:any) => blockOnFocusHanlder(e,seq)}
+                                        onBlur={(e:any) => blockOnBlurHanlder(e,seq)}
                                         pl={'25px'}
                                         borderRadius={'15px'}
                                         value={
@@ -1607,6 +1610,8 @@ const handleRight = () => {
                                         title={alp.option}
                                         name={`Interaction${seq.input}`}
                                         onChange={handleInput}
+                                        onFocus={(e:any) => blockOnFocusHanlder(e,seq)}
+                                        onBlur={(e:any) => blockOnBlurHanlder(e,seq)}
                                         pl={'25px'}
                                         borderRadius={'15px'}
                                         value={
@@ -1687,6 +1692,8 @@ const handleRight = () => {
                                   title={alp.option}
                                   name={`Interaction${seq.input}`}
                                   onChange={handleInput}
+                                  onFocus={(e:any) => blockOnFocusHanlder(e,seq)}
+                                  onBlur={(e:any) => blockOnBlurHanlder(e,seq)}
                                   onKeyPress={(e) => {
                                     const allowedKeys = [
                                       '0',

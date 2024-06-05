@@ -26,6 +26,7 @@ type replayScoreProps = {
   setPreLogDatas: any;
   replayNextHandler: any;
   data: any;
+  QuestBlocklastpaused: ()=> void;
 }
 
 const ReplayScore: React.FC<replayScoreProps> = ({
@@ -50,6 +51,7 @@ const ReplayScore: React.FC<replayScoreProps> = ({
   setPreLogDatas,
   replayNextHandler,
   data,
+  QuestBlocklastpaused
 }) => {
   const [replayMessage, setReplayMessage] = useState<string>(null);
   const playerInfo = useContext(ProfileContext);
@@ -81,102 +83,69 @@ const ReplayScore: React.FC<replayScoreProps> = ({
         setReplayMessage(`Would you like to play again?`);
       }
   }, []);
-  const QuestBlocklastpaused = () => {
-    if (getPrevLogDatas.nevigatedSeq) {
-      const LastPreviousActiveBlock = getPrevLogDatas.lastActiveBlockSeq;
-      const lastActiveBlock = Object.keys(getPrevLogDatas.lastActiveBlockSeq);
-      const lastActivityquest = lastActiveBlock[0];
-      const findActiveBlockId = LastPreviousActiveBlock[lastActivityquest];
-      let SetLastSeqData: any;
-      for (const key in gameInfo.blocks[lastActivityquest]) {
-        const data = gameInfo.blocks[lastActivityquest][key];
-        if (data.blockId === findActiveBlockId[0]) {
-          SetLastSeqData = data;
-          break;
-        }
-      }
-      setProfile((prev: any)=> ({...prev, currentQuest: lastActivityquest}))
-      setData(SetLastSeqData);
-      setType(SetLastSeqData.blockChoosen);
+  // const QuestBlocklastpaused = () => {
+  //   if (getPrevLogDatas.nevigatedSeq) {
+  //     const LastPreviousActiveBlock = getPrevLogDatas.lastActiveBlockSeq;
+  //     const lastActiveBlock = Object.keys(getPrevLogDatas.lastActiveBlockSeq);
+  //     const lastActivityquest = lastActiveBlock[0];
+  //     const findActiveBlockId = LastPreviousActiveBlock[lastActivityquest];
+  //     let SetLastSeqData: any;
+  //     for (const key in gameInfo.blocks[lastActivityquest]) {
+  //       const data = gameInfo.blocks[lastActivityquest][key];
+  //       if (data.blockId === findActiveBlockId[0]) {
+  //         SetLastSeqData = data;
+  //         break;
+  //       }
+  //     }
+  //     setProfile((prev: any)=> ({...prev, currentQuest: lastActivityquest}))
+  //     setData(SetLastSeqData);
+  //     setType(SetLastSeqData.blockChoosen);
+  //     if (
+  //       SetLastSeqData.blockChoosen ===
+  //       'Interaction'
+  //     ) {
+  //       const optionsFiltered = [];
+  //       const primarySequence = findActiveBlockId[0];
+  //       for (const option of gameInfoquest) {
+  //         if (profileData?.Audiogetlanguage.length > 0) {
+  //           if (option?.qpQuestionId === primarySequence) {
+  //             const profilesetlan = profileData?.Audiogetlanguage.find(
+  //               (key: any) => key?.textId === option.qpOptionId,
+  //             );
 
-      /** Started - update the questStates like  {1: 'completed'/'Started'/'replayallowed'}*/
-      const replayScore = getPrevLogDatas?.previewScore?.replayScore;
-      const completedLevels = getPrevLogDatas?.previewScore?.completedLevels.slice(0, -1);
-      // {1: 'Started', 2: 'Started', 3: 'Started'}
-      
-            let findQuestState:{[key: number]: string} = {};
-        const questNoArr = gameInfo?.gameQuest?.map((quest:any)=>{
-          return parseInt(quest.gameQuestNo);
-        })
-        
-
-        questNoArr.forEach((questNo: number)=>{
-          const isQuestExistInReplay = replayScore.find((replayItem: any)=> replayItem.quest == questNo);
-          if(isQuestExistInReplay){
-             findQuestState = {...findQuestState, [questNo] : "replayallowed"};
-          }
-          else{
-              if(completedLevels?.length === 0 && questNo == 1)
-              {
-                findQuestState = {...findQuestState, [1] : "Started"};
-              }
-            else if(completedLevels.includes(String(questNo))){
-              findQuestState = gameInfo?.gameData?.gameDisableOptionalReplays === 'false'? {...findQuestState, [questNo] : "replayallowed"} :  {...findQuestState, [questNo] : "completed"};
-            }
-            else{
-              findQuestState = {...findQuestState, [questNo] : "locked"};
-            }
-          } 
-        })
-          setQuestState(findQuestState);
-          /** Ended - update the questStates like  {1: 'completed'/'Started'/'replayallowed'}*/
-      if (
-        SetLastSeqData.blockChoosen ===
-        'Interaction'
-      ) {
-        const optionsFiltered = [];
-        const primarySequence = findActiveBlockId[0];
-        for (const option of gameInfoquest) {
-          if (profileData?.Audiogetlanguage.length > 0) {
-            if (option?.qpQuestionId === primarySequence) {
-              const profilesetlan = profileData?.Audiogetlanguage.find(
-                (key: any) => key?.textId === option.qpOptionId,
-              );
-
-              if (profilesetlan) {
-                const languagecont = {
-                  ...option,
-                  qpOptionText: profilesetlan.content,
-                };
-                optionsFiltered.push(languagecont);
-              } else {
-                optionsFiltered.push(option);
-              }
-            }
-          } else {
-            if (option?.qpQuestionId === primarySequence) {
-              optionsFiltered.push(option);
-            }
-          }
-        }
-        if (gameinfodata === 'true') {
-          for (let i = optionsFiltered.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [optionsFiltered[i], optionsFiltered[j]] = [
-              optionsFiltered[j],
-              optionsFiltered[i],
-            ]; // Swap elements at indices i and j
-          }
-        }
-        setOptions(optionsFiltered);
-      }
-      setReplayIsOpen(false);
-      setCurrentScreenId(2);
-      return false;
-    }
-  }
+  //             if (profilesetlan) {
+  //               const languagecont = {
+  //                 ...option,
+  //                 qpOptionText: profilesetlan.content,
+  //               };
+  //               optionsFiltered.push(languagecont);
+  //             } else {
+  //               optionsFiltered.push(option);
+  //             }
+  //           }
+  //         } else {
+  //           if (option?.qpQuestionId === primarySequence) {
+  //             optionsFiltered.push(option);
+  //           }
+  //         }
+  //       }
+  //       if (gameinfodata === 'true') {
+  //         for (let i = optionsFiltered.length - 1; i > 0; i--) {
+  //           const j = Math.floor(Math.random() * (i + 1));
+  //           [optionsFiltered[i], optionsFiltered[j]] = [
+  //             optionsFiltered[j],
+  //             optionsFiltered[i],
+  //           ]; // Swap elements at indices i and j
+  //         }
+  //       }
+  //       setOptions(optionsFiltered);
+  //     }
+  //     setReplayIsOpen(false);
+  //     setCurrentScreenId(2);
+  //     return false;
+  //   }
+  // }
   const QuestSelectionScreen = () => {
-    
     setReplayIsOpen(false);
     setCurrentScreenId(13);
     return false;

@@ -46,7 +46,7 @@ import { setStory, BlockModifiedLog } from 'utils/game/gameService';
 import NDITabs from './dragNdrop/QuestTab';
 import ChatButton from './ChatButton';
 import { addReadStatus } from 'utils/reviews/reviews';
-import { updatePreviewData } from '../../../../../store/preview/previewSlice';
+import { updatePreviewData, onFocusField,onBlurField } from '../../../../../store/preview/previewSlice';
 import { useDispatch,useSelector } from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit'; // Import Dispatch type from @reduxjs/toolkit
 import { RootState } from 'store/reducers';
@@ -179,7 +179,8 @@ const NDIMain: React.FC<NDIMainProps> = ({
     [lastInputName, setLastInputName] = useState<any>();
   const [inputtextValue, setinputtextValue] = useState('');
   const [blockWiseReviewCount, setBlockWiseReviewCount] = useState<{ [key: string]: { readCount: number, unReadCount: number, Total: number } }>({});
-  const [FocusInputValue, setFocusInputValue] = useState<string>(null);
+  const [focusInputValue, setFocusInputValue] = useState<string>('');
+  const [focusedSeqId, setFocusedSeqId] = useState<string>(null);
   const user: any = JSON.parse(localStorage.getItem('user'));
   const previewStoreData = useSelector((state: RootState) => state.preview);
   const dispatch: Dispatch<any> = useDispatch();
@@ -1499,21 +1500,44 @@ const LastBlockModifiedApi = async (modifieddata:any) =>
       
   }
   //navin-end
+
+  //handles the content updation for Demoplay
   const blockOnFocusHanlder = async (e:any,seqId:any)=>{
         setFocusInputValue(e.target.value);
+        setFocusedSeqId(seqId);
+        // {gameId: id, focusValue: string}
+        dispatch(onFocusField({gameId: id, focusValue: e.target.value}))
+        
     }
     const blockOnBlurHanlder = (e:any,seqId:any)=>{
-      if(FocusInputValue !== e.target.value)
+       // {gameId: id, blurValue: string}
+      dispatch(onBlurField({gameId: id, blurValue: e.target.value}))
+      if(focusInputValue !== e.target.value)
         {
           LastBlockModifiedApi(seqId);
         }
     } 
+useEffect(()=>{
+  const handleVisibilityChange = () => {
+    if (document.hidden && focusInputValue && focusedSeqId && inputtextValue) {
+       blockOnBlurHanlder({ target: { value: inputtextValue }}, focusedSeqId);
+      
+    }
+  };
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  return () => {
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+  };
+},[])
+
   // onChange Function
   const handleInput = async (e: any, i?: any, BlockNum?: any) => {
     const textarea = e.target;
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
     setinputtextValue(textarea.value);
+
 
     const getLastDigit = e.target.name.slice(-1);
     const match = e.target.name.match(/([a-zA-Z]+)(\d+)/);

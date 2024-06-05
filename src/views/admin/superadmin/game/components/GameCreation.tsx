@@ -98,6 +98,7 @@ import CenterMode from './MobileProgressBar'
 // import loadingImage from 'assets/img/games/loading.gif';
 import loadingImage from 'assets/img/games/loady.gif';
 import { HashLoader } from 'react-spinners';
+import {DemoPlayRoutePath} from 'config/constant';
 const steps = [
   { title: 'BackGround' },
   { title: 'Non Playing Charater' },
@@ -468,7 +469,7 @@ const GameCreation = () => {
   const [RefelectionAnswer, setRefelectionAnswer] = useState<any>([]);
   const [ThankyouFeedback, setThankyouFeedback] = useState<any>(null);
   const user: any = JSON.parse(localStorage.getItem('user'));
-
+  const [isGameHasBlock, setIsGameHasBlock] = useState(false);
   const voic = async () => {
     const result = await getVoices();
 
@@ -612,7 +613,7 @@ const GameCreation = () => {
    const fetchLanguagescount = async () => {
     try {
       const CountResult = await getLanguagescount(id);
-console.log("CountResult",CountResult)
+
 setlanguageCount(CountResult?.data?.count)
      
     } catch (error) {
@@ -1020,8 +1021,12 @@ setlanguageCount(CountResult?.data?.count)
 
     if (result2?.status !== 'Success') {
       console.log(result2?.message);
+      
     } else {
       setListBlockItems(result2.BlockObject);
+      const countOfBlock =  Object.keys(result2.BlockObject).some((item:any)=> item);
+      countOfBlock && setIsGameHasBlock(true) ;
+      console.log("^^^^^^^^countOfBlock", countOfBlock)
       console.log('result2.gameIn', result2.gameIn);
       setListQuest(result2.gameIn);
     }
@@ -1076,7 +1081,9 @@ setlanguageCount(CountResult?.data?.count)
       isDispatched: true, //used to load the latest content, if it true then fetch the latest Data from API
     };
     dispatch(updatePreviewData(previewData));
-    const url = `/screen/preview/${id}`;
+    // navigate(`${DemoPlayRoutePath+id}`);
+    // const url = `/screen/preview/${id}`;
+    const url = `${DemoPlayRoutePath+id}`;
     window.open(url, '_blank');
   };
 
@@ -5607,7 +5614,8 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                       ) : null}
                        <Box display={{base:'none',xl:'flex'}}>         
                   
-                  {(tab >2 && tab < 6) && (tab === 3 ? (formData.gameIsShowSkill === "true" || formData.gameIsShowLearningOutcome=== "true" || formData.gameIsShowAuhorName=== "true" || formData.gameIsShowStoryline=== "true" || formData.gameIsShowGameDuration=== "true" || formData.gameIsShowAdditionalWelcomeNote=== "true"): true) ? (
+                  {/* {(tab > 3 && tab < 6) && (tab === 3 ? (formData.gameIsShowSkill === "true" || formData.gameIsShowLearningOutcome=== "true" || formData.gameIsShowAuhorName=== "true" || formData.gameIsShowStoryline=== "true" || formData.gameIsShowGameDuration=== "true" || formData.gameIsShowAdditionalWelcomeNote=== "true"): true) ? ( */}
+                  {((tab === 4 && isGameHasBlock) || [5,6].includes(tab)) ? (
                         <Button
                           bg="#11047a"
                           _hover={{ bg: '#190793' }}
@@ -5700,7 +5708,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                     </Flex>
                   )}
                   
-                  {(tab !== 1 && tab !== 2 && (tab === 3 && formData.gameIsShowSkill || formData.gameIsShowLearningOutcome || formData.gameIsShowAuhorName || formData.gameIsShowStoryline ||
+                  {/* {(tab !== 1 && tab !== 2 && (tab === 3 && formData.gameIsShowSkill || formData.gameIsShowLearningOutcome || formData.gameIsShowAuhorName || formData.gameIsShowStoryline ||
                     formData.gameIsShowGameDuration || formData.gameIsShowAdditionalWelcomeNote)) ?
                            (
                     <Box display={'flex'} alignItems={'center'} w={'60%'}>
@@ -5721,7 +5729,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                         Preview
                       </Button>
                     </Box>
-                  ) : null}
+                  ) : null} */}
                   {tab === 5 ? (
                     <Flex justify={'flex-start'} alignItems={'center'}>
                       <IoArrowForwardCircle
