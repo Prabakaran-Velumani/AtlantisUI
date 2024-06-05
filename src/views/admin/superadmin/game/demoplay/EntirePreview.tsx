@@ -60,6 +60,14 @@ import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
 import { useParams } from 'react-router-dom';
 import {ProfileType} from "./GamePreview";
+
+import { useDispatch } from 'react-redux';
+import { RootState } from 'store/reducers';
+import { 
+  resetGameModifiedState
+} from 'store/preview/previewSlice';
+
+
 const ReplayScore = lazy(() => import('./playcards/ReplayScore'));
 const Story = lazy(() => import('./playcards/Story'));
 const Welcome = lazy(() => import('./playcards/Welcome'));
@@ -112,6 +120,7 @@ interface ShowPreviewProps {
   preLogDatasIni: any;
   initialStateUpdate: boolean;
   setInitialStateUpdate: any;
+  creatorDataSlice: any;
 }
 
 
@@ -193,13 +202,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   previewLogsDataIni,
   preLogDatasIni,
   initialStateUpdate,
-  setInitialStateUpdate
+  setInitialStateUpdate,
+  creatorDataSlice
 }) => {
+  
   const user: any = JSON.parse(localStorage.getItem('user'));
   const { colorMode, toggleColorMode } = useColorMode();
   const maxTextLength = 80;
   const audioRef = React.useRef(null);
-
+  const dispatch = useDispatch ();
   //state added by rajesh for profile screen
   const [isLanguage, setIsLanguage] = useState(null);
   // selected option color change
@@ -375,6 +386,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
   const [score, setScore] = useState(null);
   const { uuid } = useParams();
+  
   const toast = useToast();
 
 useEffect(()=>{
@@ -933,7 +945,6 @@ useEffect(()=>{
               console.error('Background BGM ref is not available.', error);
             }
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            console.log("voiceRef?.current", voiceRef?.current);
             voiceRef?.current?.play().catch((error) => {
               console.error('Error playing voice:', error);
             });
@@ -3637,7 +3648,6 @@ if(currentScreenId ===2)
         }
       } else {
         /** IF a block not has navi option then it leads to next block */
-        console.log('nextBlock',nextBlock)
         if (nextBlock && nextBlock[0]?.blockChoosen) {
           setType(nextBlock[0]?.blockChoosen);
           setData(nextBlock[0]);
@@ -4531,6 +4541,110 @@ if(currentScreenId ===2)
     setCurrentScreenId(2);
   };
 
+  const QuestBlocklastpaused = async (type : string = null) => {
+    const setBlockData = async (lastActivityquest: any, findActiveBlockId: any, SetLastSeqData: any )=>{
+      setProfile((prev: any)=> ({...prev, currentQuest: lastActivityquest}))
+      setData(SetLastSeqData);
+      setType(SetLastSeqData.blockChoosen);
+      if (
+        SetLastSeqData.blockChoosen ===
+        'Interaction'
+      ) {
+        const optionsFiltered = [];
+        const primarySequence = findActiveBlockId[0];
+        const gameInfoquest = gameInfo.questOptions;
+        for (const option of gameInfoquest) {
+          if (profileData?.Audiogetlanguage.length > 0) {
+            if (option?.qpQuestionId === primarySequence) {
+              const profilesetlan = profileData?.Audiogetlanguage.find(
+                (key: any) => key?.textId === option.qpOptionId,
+              );
+
+              if (profilesetlan) {
+                const languagecont = {
+                  ...option,
+                  qpOptionText: profilesetlan.content,
+                };
+                optionsFiltered.push(languagecont);
+              } else {
+                optionsFiltered.push(option);
+              }
+            }
+          } else {
+            if (option?.qpQuestionId === primarySequence) {
+              optionsFiltered.push(option);
+            }
+          }
+        }
+        const gameinfodata= gameInfo?.gameData?.gameShuffle;
+        if (gameinfodata === 'true') {
+          for (let i = optionsFiltered.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [optionsFiltered[i], optionsFiltered[j]] = [
+              optionsFiltered[j],
+              optionsFiltered[i],
+            ]; // Swap elements at indices i and j
+          }
+        }
+        setOptions(optionsFiltered);
+      }
+      setReplayIsOpen(false);
+      setCurrentScreenId(2);
+      return false;
+      }
+    if (getPrevLogDatas.nevigatedSeq && type !== "owner") {
+      const LastPreviousActiveBlock = getPrevLogDatas.lastActiveBlockSeq;
+      const lastActiveBlock = Object.keys(getPrevLogDatas.lastActiveBlockSeq);
+      const lastActivityquest :number = parseInt(lastActiveBlock[0]);
+      const findActiveBlockId = LastPreviousActiveBlock[lastActivityquest];
+      let SetLastSeqData: any;
+      for (const key in gameInfo.blocks[lastActivityquest]) {
+        const data = gameInfo.blocks[lastActivityquest][key];
+        if (data.blockId === findActiveBlockId[0]) {
+          SetLastSeqData = data;
+          break;
+        }
+      }
+      const result = await setBlockData(lastActivityquest, findActiveBlockId, SetLastSeqData)
+    }
+    else if(type === "owner" && creatorDataSlice?.screenId === 2)
+      {       
+        const lastActivityquest :number = parseInt(creatorDataSlice?.currentQuest);
+        const pSeq = `${lastActivityquest}.${creatorDataSlice?.activeBlockSeq}`;
+        let SetLastSeqData = {};
+        let activeBlock:number[]= [];
+
+      SetLastSeqData = Object.values(gameInfo.blocks[lastActivityquest]).find((item:any)=>{
+       if(item.blockPrimarySequence == pSeq && item.blockQuestNo == lastActivityquest){
+         activeBlock.push(item?.blockId);
+         return true;
+        }
+        return false;
+      });
+      const result = await setBlockData(lastActivityquest, activeBlock, SetLastSeqData)
+      dispatch(resetGameModifiedState(getPrevLogDatas.previewGameId));
+      }
+    }
+    
+  useEffect(()=>{
+    if(creatorDataSlice){
+      console.log("creatorDataSlice", creatorDataSlice);
+      // console.log("getPrevLogDatas", getPrevLogDatas);
+      switch(creatorDataSlice?.screenId){
+        case 2:
+          QuestBlocklastpaused("owner");
+          break;
+        case 5 : 
+            break
+
+
+      }
+
+    }
+  },[creatorDataSlice])
+
+
+
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="EntirePreview-wrapper">
@@ -4603,10 +4717,7 @@ if(currentScreenId ===2)
                 handleReplayButtonClick={handleReplayButtonClick}
                 replayState={replayState}
                 setCurrentScreenId={setCurrentScreenId}
-                // isReplay={isReplay}
                 gameInfo={gameInfo}
-                // isOptionalReplay={isOptionalReplay}
-                // setOptionalReplay={setOptionalReplay}
                 profilescore={profilescore}
                 getPrevLogDatas={getPrevLogDatas}
                 setData={setData}
@@ -4618,6 +4729,7 @@ if(currentScreenId ===2)
                 setPreLogDatas={setPreLogDatas}      
                 replayNextHandler ={replayNextHandler}
                 data={data}  
+                QuestBlocklastpaused={QuestBlocklastpaused}
                  />
             )}
             {(() => {
@@ -5059,7 +5171,7 @@ if(currentScreenId ===2)
                         setSelectedPlayer={setSelectedPlayer}
                         players={gameInfo?.gamePlayers}
                         formData={gameInfo?.gameData}
-                        imageSrc={preloadedAssets.backgroundImage}
+                        imageSrc={preloadedAssets.StarsBg}
                         setCurrentScreenId={setCurrentScreenId}
                         demoBlocks={demoBlocks}
                         preloadedAssets={preloadedAssets}

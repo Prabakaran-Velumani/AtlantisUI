@@ -367,25 +367,14 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
       textareaRefs.current.style.height = scrollHeight + "px";
     }
   }, [value]);
-  ///////////////////////////////////////////////////////
+  
+
+
+  
 
   return (
     <>
       <Card mb={{ base: '0px', xl: '20px', sm: '20px' }}>
-
-        {/* <SimpleGrid>
-  <Box width='500px'>
-  <Textarea
-  mb="10px"
-  id="gameLz"
-  // label="Check"
-  placeholder="eg. Oliver"
-  name="gameLz"
-  onChange={resizer}
-  height={height}
-  />
-  </Box>
-</SimpleGrid> */}
         <Flex
           direction="column"
           alignItems="center"
@@ -402,23 +391,9 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                 Title<Text as='span' color='red.500'>*</Text>
               </FormLabel>
               <InputField
-                //ref={textareaRefss}
-                //style={{
-                //...styles.textareaDefaultStyle,
-                //height: formData?.gameTitle ? `${textareaRefss.current?.scrollHeight}px` : '35px',
-                //}}
-
                 id="title"
-                // minHeight="45px"
-                mb="0px"
-                // me="30px"
-
-                //label="Author"
-                //placeholder="eg. Admin"
-                //name="gameAuthorName"
-                width="100%"
-                // value={formData?.gameTitle}
-                // onChange={handleChange}
+                 mb="0px"
+                 width="100%"
                 value={languages !== undefined && languages !== null && languages !== '' ? String(title) : formData?.gameTitle}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   // Check if languages is empty
