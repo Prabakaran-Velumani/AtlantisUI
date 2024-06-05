@@ -4,7 +4,7 @@ import {
   Box,
   useDisclosure,
   useColorModeValue,
-} from '@chakra-ui/react';
+} from '@chakra-ui/react'; 
 import Footer from 'components/footer/FooterAdmin';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin';
@@ -30,7 +30,9 @@ import SecondPage from 'views/admin/superadmin/game/secondPage';
 import ListPreview from 'views/admin/superadmin/game/components/ListPreview';
 import LearnerUpdation from 'views/admin/superadmin/learner/components/learnerUpdation';
 import ScreenPreview from 'views/admin/superadmin/game/components/ScreenPreview';
-
+/***************************M5***************************** */
+import AssingLeaner from  'views/admin/superadmin/Cohort/components/AssingLearner';
+import SuperAdminCategoryCreation from 'views/admin/superadmin/category/components/CategoryCreation';
 // Custom Chakra theme
 const usePath = () => {
   const location = useLocation();
@@ -107,6 +109,15 @@ export default function Dashboard(props: { [x: string]: any }) {
                   path="/superadmin/game/creation/:id"
                   element={<GameCreation />}
                 />
+                  <Route
+                  path="/superadmin/category/creation/:id"
+                  element={<SuperAdminCategoryCreation />}
+                />
+                <Route
+                  path="/superadmin/category/creation"
+                  element={<SuperAdminCategoryCreation />}
+                />
+                
                 <Route path="/superadmin/game/home" element={<Fristpage />} />
 
                 <Route
@@ -132,6 +143,17 @@ export default function Dashboard(props: { [x: string]: any }) {
                 />
                 <Route path="/superadmin/game/:id" element={<GameCreation />} />
                 {/* <Route path="/superadmin/game/creation/:id/preview/:currentTab/:currentSubTab" element={<ScreenPreview />} /> */}
+              {/* m5 */}
+              <Route
+                  path="/superadmin/cohort/creation"
+                  element={<AssingLeaner />}
+                />
+                   <Route
+                  path="/superadmin/cohort/creation/:id"
+                  element={<AssingLeaner />}
+                />
+                {/* m5 -end */}
+              
                 {role === 'Creator' ? (
                   <>
                     <Route

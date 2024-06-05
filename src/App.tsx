@@ -26,6 +26,17 @@ import { useAuth } from 'contexts/auth.context';
 import { logout } from 'store/user/userSlice';
 import { updatePreviewData } from 'store/preview/previewSlice';
 import InteractionScreenShot from 'views/admin/superadmin/game/demoplay/playcards/InteractionScreenShot';
+import CohortsLearnerPrint from 'views/admin/superadmin/Cohort/components/CohortsLearnerPrint';
+import CohortsGamePrint from '../src/views/admin/superadmin/Cohort/components/CohortsGamePrint';
+// Lokie Added 04/06/2024
+import AssignGames from '../src/views/admin/superadmin/learner_activity/AssignedGames'
+// Lokie End 04/06/2024
+import SkillWiseScorePrint from 'views/admin/superadmin/gamewise_activity/components/SkillWiseScorePrint';
+import FeedBackGameWise from 'views/admin/superadmin/gamewise_activity/components/FeedBackGameWise';
+import PrintGameWiseActivity from '../src/views/admin/superadmin/gamewise_activity/components/PrintGameWiseActivity';
+
+import PrintGameList from 'views/admin/superadmin/creatorActivity/components/PrintGamesList';
+import PrintLearnerDetails from 'views/admin/superadmin/creatorActivity/components/PrintLearnerDetails';
 
 export default function Main() {
   const [currentTheme, setCurrentTheme] = useState(initialTheme);
@@ -81,6 +92,20 @@ useEffect(() => {
         />
           {/* <Route path="/screen/preview/" element={<OrientationLock />} /> */}
         <Route path="/" element={<Navigate to="/admin" replace />} />
+
+
+        <Route path="/gameFeedback/:id" element={<FeedBackGameWise />} />
+        <Route path="/gameAnswer/:id"element={<PrintGameWiseActivity/>} />
+        <Route path="/Noofgame/:id"element={<PrintGameList/>} />
+        <Route path="/Noofgamelaunch/:id"element={<PrintGameList/>} />
+        <Route path="/Noofgamepublish/:id"element={<PrintGameList/>} />
+        <Route path="/learnerDetails/:id"element={<PrintLearnerDetails/>} />
+
+        <Route path="/AssignedGames/:id"element={<AssignGames/>} />
+        <Route path="/getSkillWiseScore/:id" element={<SkillWiseScorePrint />} />
+        <Route path="/CohortsLearnerPrint/:id" element={<CohortsLearnerPrint />} />
+        <Route path="/coshorts/:id"element={<CohortsGamePrint/>}  />
+
       </Routes>      
     </ChakraProvider>
   );

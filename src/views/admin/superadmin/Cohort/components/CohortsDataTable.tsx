@@ -34,9 +34,16 @@ import {
 
 type RowObj = {
   sNo: number;
-  industryName: string;
-  status: string;
-  action: any;
+  chId:any;
+  CohortName: string;
+  NoGames: any;
+  NoLearners: any;
+  // status: JSX.Element;
+  action: JSX.Element;
+  // lenUserName:any;
+  // lenMail:any;
+  
+  value:any;
 };
 
 interface ColumnObj {
@@ -44,25 +51,28 @@ interface ColumnObj {
   accessor: keyof RowObj;
 }
 
-interface IndustryDataTableProps {
+interface cohortsDataTableProps {
   data: RowObj[];
 }
 
 type DataCol = TableInstance<RowObj>;
 
-const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
+const CohortsTable: React.FC<cohortsDataTableProps> = ({ data }) => {
   const [lastPage, setLastPage] = useState<any>();
 
   const navigate = useNavigate();
   const handleNavigate = () => {
     navigate('creation');
   };
-
+  
   const columns: ColumnObj[] = React.useMemo(
     () => [
       { Header: 'S.No', accessor: 'sNo' },
-      { Header: 'Industry Name', accessor: 'industryName' },
-      { Header: 'Status', accessor: 'status' },
+      // { Header: 'Learner Name', accessor: 'lenUserName' },
+      // { Header: 'Learner Mail', accessor: 'lenMail' },
+      { Header: 'Cohort Name', accessor: 'CohortName' },
+      { Header: 'No Games', accessor: 'NoGames' },
+      { Header: 'No Learners', accessor: 'NoLearners' },
       { Header: 'Action', accessor: 'action' },
     ],
     [],
@@ -188,6 +198,7 @@ const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
                 />
               }
             />
+            
             <Input
               type="text"
               placeholder="Search..."
@@ -198,6 +209,26 @@ const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
               w={{ base: '100%', sm: '100%', xl: '300px' }}
             />
           </InputGroup>
+          {/* <Tooltip
+            label="Create a New Category"
+            hasArrow
+            placement="right-start"
+          >
+          <Button
+            ml={{ sm: 0, md: 10 }}
+            mt={{sm:5,md:0}}
+            padding={2}
+            boxShadow={'3px 4px 12px #2e292940'}
+            _hover={{ bg: '#3311db', boxShadow: '3px 4px 12px #2e292975' }}
+            background="#3311db"
+            color="#fff"
+            w={{ sm: '100%', md: 70 }}
+            onClick={handleNavigate}
+          >
+                 Assign Learner 
+          </Button>
+          
+          </Tooltip> */}
           <Tooltip
             label="Create a New Category"
             hasArrow
@@ -214,8 +245,9 @@ const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
             w={{ sm: '100%', md: 70 }}
             onClick={handleNavigate}
           >
-            New
+                 Assign 
           </Button>
+          
           </Tooltip>
         </Flex>
       </Flex>
@@ -354,31 +386,6 @@ const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
             </Button>{' '}
           </Box>
           <Box>
-            {/* <span>
-            {' '}  {' '}
-            <Input
-                type="number"
-                defaultValue={pageIndex + 1}
-                onChange={(e) => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                gotoPage(page);
-                }}
-                style={{ width: '50px' }}
-            />
-            </span>{' '}
-            <select
-            value={pageSize}
-            onChange={(e) => {
-                setPageSize(Number(e.target.value));
-            }}
-            style={{ border: '1px solid #56555930',  padding: '5px', borderRadius: '7px', height: '40px'}}
-            >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
-                <option key={pageSize} value={pageSize}>
-                {pageSize}
-                </option>
-            ))}
-            </select> */}
           </Box>
         </Box>
       </Box>
@@ -386,4 +393,4 @@ const IndustryDataTable: React.FC<IndustryDataTableProps> = ({ data }) => {
   );
 };
 
-export default IndustryDataTable;
+export default CohortsTable;

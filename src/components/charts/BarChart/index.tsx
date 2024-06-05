@@ -2,8 +2,8 @@ import React from 'react';
 import Chart from 'react-apexcharts';
 
 type ChartProps = {
-  // using `interface` is also ok
-  [x: string]: any;
+  chartData: any[];
+  chartOptions: any;
 };
 type ChartState = {
   chartData: any[];
@@ -11,7 +11,7 @@ type ChartState = {
 };
 
 class ColumnChart extends React.Component<ChartProps, ChartState> {
-  constructor(props: { chartData: any[]; chartOptions: any }) {
+  constructor(props: ChartProps) {
     super(props);
     this.state = {
       chartData: [],
@@ -24,6 +24,12 @@ class ColumnChart extends React.Component<ChartProps, ChartState> {
       chartData: this.props.chartData,
       chartOptions: this.props.chartOptions,
     });
+  }
+
+  componentDidUpdate(prevProps: ChartProps, prevState: ChartState) {
+    if (prevState.chartData !== this.state.chartData || prevState.chartOptions !== this.state.chartOptions) {
+      console.log('this.state.chartOptions', this.state.chartOptions, '...', this.state.chartData);
+    }
   }
 
   render() {

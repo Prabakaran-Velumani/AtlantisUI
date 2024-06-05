@@ -3,32 +3,32 @@ import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Flex, Box, Button, useColorModeValue, IconButton, Tooltip } from '@chakra-ui/react';
 import Card from 'components/card/Card';
-import IndustryDataTable from './components/IndustryDataTable';
+import CategoryDataTable from './components/CategoryDataTable';
 import { MdEdit, MdDelete } from 'react-icons/md';
 import Popup from 'components/alerts/Popup';
 import OnToast from 'components/alerts/toast';
-import { getIndustry,deleteIndustry,IndustryStatus } from 'utils/industry/industry';
+import { getCategory,removeCategory,getOneCategory,getCategoryList,CategoryStatus} from 'utils/category/category';
 import { Switch } from '@chakra-ui/react'
-interface IndustryData {
-  itId: number;
-  itIndustryName: string;
+interface CategoryData {
+  id: number;
+  CategoryName: string;
   itStatus: string;
 }
 
 interface RowObj {
-  itId: number;
+  id: number;
   sNo: number;
-  industryName: string;
+  CategoryName: string;
   status:any;
   action:any;
 }
 
-interface IndustryDataTableProps {
+interface CategoryDataTableProps {
   data: RowObj[];
 }
 
-const IndustryCreation: React.FC = () => {
-  const [apiData, setApiData] = useState<IndustryData[]>([]);
+const CategoryCreation: React.FC = () => {
+  const [apiData, setApiData] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(true);
   const [alert, setAlert] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -42,35 +42,35 @@ const IndustryCreation: React.FC = () => {
   });
   const navigate = useNavigate();
   const fetchData = async () =>{
-    const result = await getIndustry();
-    if(result?.status !== 'Success') return console.log('getIndustry Error :',result?.message);
+    const result = await getCategoryList();
+    if(result?.status !== 'Success') return console.log('getCategory Error :',result?.message);
     setApiData(result?.data);
   } 
 
-  const handleDelete = async (itId: number) => {
-    setDeleteId(itId);
+  const handleDelete = async (id: number) => {
+    setDeleteId(id);
     setIsOpen(true); 
   };
 
-  const handleNavigate = (itId?: number) => {
-    if (itId) {
-      navigate(`/admin/superadmin/industry/creation/${itId}`);
+  const handleNavigate = (id?: number) => {
+    if (id) {
+      navigate(`/admin/superadmin/category/creation/${id}`);
     } else {
       navigate('creation');
     } 
   };
-  const handleStatus = async (lenId?: number, status?: string) => {
+  const handleStatus = async (id?: number, status?: string) => {
     setFormData(formData => ({
       ...formData,
       lenStatus: status
     }));
     let data = JSON.stringify(formData);
-    if (lenId) {
-      const result = await IndustryStatus(lenId, data);
+    if (id) {
+      const result = await CategoryStatus(id,data);
 
       if (result?.status !== 'Success') return console.log('updateLearner Error:', result?.message);
       fetchData();
-      navigate('/admin/superadmin/industry');
+      navigate('/admin/superadmin/category');
     };
   }
   const actionBtns = (data: any) => {    
@@ -80,7 +80,7 @@ const IndustryCreation: React.FC = () => {
           <div>
             <IconButton
               icon={<MdEdit />}
-              onClick={() => handleNavigate(data?.itId)}
+              onClick={() => handleNavigate(data?.id)}
               aria-label="Edit"
               variant="ghost"
               color="#656565cf"
@@ -91,7 +91,7 @@ const IndustryCreation: React.FC = () => {
           <div>              
             <IconButton
               icon={<MdDelete />}
-              onClick={() => handleDelete(data?.itId)}
+              onClick={() => handleDelete(data?.id)}
               aria-label="Delete"
               variant="ghost"
               color="#656565cf"
@@ -102,16 +102,16 @@ const IndustryCreation: React.FC = () => {
     )
   }
 
-  const transformData = (apiData: IndustryData[]): RowObj[] => {
+  const transformData = (apiData: CategoryData[]): RowObj[] => {
     return apiData.map((data, index) => ({
-      itId: data.itId,
+      id: data.id,
       sNo: index + 1,
-      industryName: data.itIndustryName,
+      CategoryName: data.CategoryName,
      
       status: (
         <>
        
-         <Switch  colorScheme={'brandScheme'} onChange={() => handleStatus(data?.itId, 'Active')} defaultChecked={data?.itStatus === 'Active'} />
+         <Switch  colorScheme={'brandScheme'} onChange={() => handleStatus(data?.id, 'Active')} defaultChecked={data?.itStatus === 'Active'} />
         
         </>
       ),
@@ -123,7 +123,7 @@ const IndustryCreation: React.FC = () => {
     const deleteData = async () => {
       try {
         if (isConfirm && deleteId) {
-          const result = await deleteIndustry(deleteId);
+          const result = await removeCategory(deleteId);
           if (result?.status !== 'Success') {
             setIsOpen(false);
             setMsg('Industry Not Deleted: ' + result?.message);
@@ -134,7 +134,7 @@ const IndustryCreation: React.FC = () => {
           }
   
           setIsOpen(false);
-          setMsg('Industry Deleted');
+          setMsg('Category Deleted');
           setToastStatus('success');
           setAlert(true);
           setIsConfirm(false);
@@ -158,7 +158,7 @@ const IndustryCreation: React.FC = () => {
     <>
       <Box mb={{ base: '75px', md:'100px', xl: '100px' }}></Box>
       {/* <Card mb={{ base: '0px', xl: '20px' }} boxShadow={'1px 1px 12px #2e292914'} p={'10px 0'}>             */}
-        <IndustryDataTable data={transformedData} />
+        <CategoryDataTable data={transformedData} />
       {/* </Card> */}
       {isOpen ? <Popup setIsConfirm={setIsConfirm} setIsOpen={setIsOpen} msg={''} setmsg={''} /> : null }
       {alert  ? <OnToast msg={msg} status={toastStatus}  setAlert={setAlert}
@@ -167,4 +167,4 @@ const IndustryCreation: React.FC = () => {
   );
 };
 
-export default IndustryCreation;
+export default CategoryCreation;

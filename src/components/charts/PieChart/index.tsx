@@ -3,6 +3,8 @@ import ReactApexChart from 'react-apexcharts';
 
 type ChartProps = {
 	[x: string]: any;
+	chartData: any[];
+  chartOptions: any;
 };
 type ChartState = {
 	chartData: any[];
@@ -10,22 +12,30 @@ type ChartState = {
 };
 
 class PieChart extends React.Component<ChartProps, ChartState> {
-	constructor(props: { chartData: any[]; chartOptions: any }) {
+	constructor(props: ChartProps) {
 		super(props);
 
 		this.state = {
 			chartData: [],
 			chartOptions: {}
 		};
+		console.log('this.state',this.state.chartData,'..',this.state.chartOptions);
 	}
-
+   
 	componentDidMount() {
 		this.setState({
 			chartData: this.props.chartData,
 			chartOptions: this.props.chartOptions
 		});
 	}
-
+	componentDidUpdate(prevProps: ChartProps) {
+		if (prevProps.chartData !== this.props.chartData || prevProps.chartOptions !== this.props.chartOptions) {
+		  this.setState({
+			chartData: this.props.chartData,
+			chartOptions: this.props.chartOptions
+		  });
+		}
+	  }
 	render() {
 		return (
 			<ReactApexChart

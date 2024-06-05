@@ -4,6 +4,59 @@ export const urls = {
   adminLogin: '/admin/login',
   /********************dashboard************************* */
   noofCompany: '/dashboard/noofcompany',
+  noOfGames: '/dashboard/noOfGames',
+  noOfLeaners: '/dashboard/noOfLeaners',
+  noOfCreators:'/dashboard/noOfCreators',
+  addgameassetbackground: '/gameassets/background/add',
+  updategameassetbackground: '/gameassets/background/update',
+  getgamebackgroundasset: '/gameassets/background/getAll',
+  getgameassetimage: '/gameassets/getassets',
+  deletegameassetbackground: '/gameassets/background/delete',
+
+  addgameassetwelcome: '/gameassets/welcome/add',
+  getgameWelcomeasset: '/gameassets/welcome/getAll',
+  updategameassetwelcome: '/gameassets/welcome/update',
+  deletegameassetwelcome: '/gameassets/welcome/delete',
+
+
+  addgameassetthankyou: '/gameassets/thankyou/add',
+  getgamethankyouasset: '/gameassets/thankyou/getAll',
+  updategameassetthankyou: '/gameassets/thankyou/update',
+  deletegameassetthankyou: '/gameassets/thankyou/delete',
+
+
+  addgameassetbadge: '/gameassets/badge/add',
+  getgamebadgeasset: '/gameassets/badge/getAll',
+  updategameassetbadge: '/gameassets/badge/update',
+  deletegameassetbadge: '/gameassets/badge/delete',
+
+  addgameassetreflection: '/gameassets/reflection/add',
+  getgamereflectionasset: '/gameassets/reflection/getAll',
+  updategameassetreflection: '/gameassets/reflection/update',
+  deletegameassetreflection: '/gameassets/reflection/delete',
+
+  addgameassetcompletion: '/gameassets/completion/add',
+  getgamecompletionasset: '/gameassets/completion/getAll',
+  updategameassetcompletion: '/gameassets/completion/update',
+  deletegameassetcompletion: '/gameassets/completion/delete',
+
+  addgameassetleaderboard: '/gameassets/leaderboard/add',
+  getgameleaderboardasset: '/gameassets/leaderboard/getAll',
+  updategameassetleaderboard: '/gameassets/leaderboard/update',
+  deletegameassetleaderboard: '/gameassets/leaderboard/delete',
+
+
+  addgameassettakeaway: '/gameassets/takeaway/add',
+  getgametakeawayasset: '/gameassets/takeaway/getAll',
+  updategameassettakeaway: '/gameassets/takeaway/update',
+  deletegameassettakeaway: '/gameassets/takeaway/delete',
+  
+
+
+  addgameassetaudio:'/gameassets/audios/add',
+  getaddgameaudio :'/gameassets/audios/getAll',
+  deleteaddgameassetaudio :'/gameassets/audios/delete',
+  updategameassetaudio:'/gameassets/audios/update',
   /*********companies***************** */
   createCopmany: '/companies/create',
   getCompany: '/companies/getCompany/',
@@ -49,7 +102,8 @@ export const urls = {
   updateLearner: '/learner/updatelearner/',
   deleteLearner: '/learner/deletelearner/',
   learnerStatus: '/learner/learnerstatus/',
-
+ 
+ 
   /*********************cohorts***************************** */
   addcohorts: '/cohorts/addcohorts',
   getcohorts: '/cohorts/getcohorts',
@@ -57,7 +111,9 @@ export const urls = {
   checkCohorts: '/cohorts/check/',
   reomvecohorts: '/cohorts/reomve/',
   getAllCohorts: '/cohorts/getAllCohorts',
-  /*******************mail**************************** */
+  // getcohortsPrint:'/cohorts/getcohortsDetails/',
+  // cohortsLearnerAllDatas:'/cohorts/cohortsLearnerDatas/',  
+/*******************mail**************************** */
   learnerMail: '/mail/learnerAdded/',
   /**************gameassign******************** */
   createAssign: '/gameassign/create',
@@ -71,7 +127,9 @@ export const urls = {
   removeCategory: '/category/removeCategory/',
   getCategory: '/category/getCategory/',
   getCategoryList: '/category/getCategoryList',
-
+// vb 03.01.2024
+  categorystatus: '/category/updateStatus/',
+// vb 03.01.2024
   /*****************animation********************************** */
   getImages: '/animation/getBackground/',
   getPlayer: '/animation/getPlayer',
@@ -99,7 +157,7 @@ export const urls = {
   bulkComplete: '/completion/bulkCreate',
   /*****************game******************************* */
   getGameById: '/game/getGameById/',
-  creategameAssign: '/gameassign/create',
+  creategameAssign:'/gameassign/create',
   updateGame: '/game/updateGame/',
   gameList: '/game/getAllgame/',
   addgame: '/game/addgame',
@@ -139,6 +197,7 @@ export const urls = {
   createScormConfig: '/scorm/createScormConfig/',
   updateScormConfig: '/scorm/updateScormConfig/',
   getScormConfig: '/scorm/getScormConfig/',
+  
   /****************************upload Badge ********************************/
   uploadBadge: '/game/uploadbadge/',
   uploadAudio: '/game/uploadaudio/',
@@ -177,9 +236,27 @@ getLanguagescount:'/languages/getlanguagecount',
      getGameCreatorPreview: '/game/creator/demo/' ,
 
 /*****************previewlog table get a reocred*************************/
-getPreviewLogsData:'/preview/priviewlogs'
+getPreviewLogsData:'/preview/priviewlogs',
 
-
+ /*********************creatoractivity************************** */
+  createactivitystatus:'/activityc/createactivitystatus', 
+ /*********************activity************************** */
+ getGameWiseData:'/activity/getGameWiseData',
+ getSkillWiseScore:'/activity/getSkillWiseScore/',
+ getGameAnswer:'/activity/answer/',
+ gamesListData:'/activity/gamesListData/',
+ updatecohortsgame:'/activity/updatecohortsgame',
+ updatecohortsLearner:'/activity/updatecohortsLearner',
+ getLearnerFilter:'/activity/getLearnerFilter',
+ getAssignedGames:'/activity/getAssignedGames',
+ learnerListData:'/activity/learnerListData/',
+ GameCompleteList:'/activity/getGameCompleteList/',
+ getAllLearners:'/activity/getAllLearners',
+ getGamesList:'/activity/getGamesList/',
+ getLearnerData: '/activity/getLearnerData/',
+ getCreatorName:'/activity/getCreatorName',
+ getcohortsPrint:'/activity/getcohortsDetails/',
+ cohortsLearnerAllDatas:'/activity/cohortsLearnerDatas/',  
 
 };
 

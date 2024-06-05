@@ -7,11 +7,13 @@ import {
   MdSafetyCheck,
   MdCreate,
   MdLogout,
+  MdGames,
+  MdLocalActivity,
    
 } from 'react-icons/md';
 import { SlGameController } from "react-icons/sl";
 // Admin Imports
-import DashboardsDefault from 'views/admin/dashboards/default';
+import Dashboards from 'views/admin/dashboards/rtl/index';
 import SuperAdminCompany from 'views/admin/superadmin/company/index';
 import SuperAdminPlan from 'views/admin/superadmin/plan/index';
 import SuperAdminIndustry from 'views/admin/superadmin/industry/index';
@@ -25,8 +27,12 @@ import { IoBuild } from 'react-icons/io5';
 // import { FaBuilding } from "react-icons/fa6";
 import { FaBuildingColumns } from "react-icons/fa6";
 import { GiClassicalKnowledge } from 'react-icons/gi';
+import { VscGroupByRefType } from "react-icons/vsc";
 import ProfileSetting from 'views/admin/creator/settings/index';
-
+import Chortors from 'views/admin/superadmin/Cohort/index';
+import SuperAdminCreatorActivity from 'views/admin/superadmin/creatorActivity/index';
+import GameWiseActivity from 'views/admin/superadmin/gamewise_activity/index';
+import LearnerActivity from 'views/admin/superadmin/learner_activity/index';
 import Logout from 'views/admin/creator/settings/components/LogOut';
 
 // import { useAuth } from 'contexts/auth.context';
@@ -47,7 +53,7 @@ const routes = [
     layout: '/admin',
     path: '/dashboards',
     icon: ( <Icon as={MdHome} width="20px" height="20px" color="#ffffff" /> ),
-    component: <DashboardsDefault />,
+    component: <Dashboards />,
   },
   isAdmin &&{
     
@@ -108,6 +114,15 @@ const routes = [
     secondary: true,
     protected: true, 
   },
+  {
+    name: 'Cohorts',
+    path: '/superadmin/cohort',
+    layout: '/admin',
+    icon: ( <Icon as={VscGroupByRefType} width="20px" height="20px" color="#ffffff" /> ),
+    component: <Chortors />,
+    secondary: true,
+    protected: true, 
+  },
   // vb 02.01.2024
   isAdmin && {
     name: 'Creator',
@@ -136,6 +151,37 @@ const routes = [
     secondary: true,
     protected: true, 
   },
+  isAdmin && {
+    name: 'Creator Activity',
+    path: '/superadmin/creator_activity',
+    layout: '/admin',
+    icon: ( <Icon as={IoBuild} width="20px" height="20px" color="#ffffff" /> ),
+    component: <SuperAdminCreatorActivity/>,
+    secondary: true,
+    protected: true, 
+  },
+    {
+    name: 'Learner Activity',
+    path: '/superadmin/learner_activity',
+    layout: '/admin',
+    icon: ( <Icon as={MdLocalActivity } width="20px" height="20px" color="#ffffff" /> ),
+    component: <LearnerActivity />,
+    secondary: true,
+    protected: true, 
+
+  },
+    { 
+    name: 'Game-Wise Activity',
+    path: '/superadmin/gamewise_activity',
+    layout: '/admin',
+    icon: ( <Icon as={MdGames } width="20px" height="20px" color="#ffffff" /> ),
+    component: <GameWiseActivity />,
+    secondary: true,
+    protected: true, 
+
+  },
+
+  
   {
     name: 'Profile Settings',
     path: `/creator/settings/${id}`,

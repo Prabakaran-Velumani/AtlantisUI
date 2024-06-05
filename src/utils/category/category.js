@@ -8,8 +8,10 @@ import { getMethod, postMethod, putMethod ,urls} from 'utils/url/urls';
 // getCategory:'/category/getCategory',
 // getCategoryList:'/category/getCategoryList',
 export async function createCategory(data) {
-  try {
+  try { 
+
     const response = await fetch(`${API_SERVER}${urls.createCategory}`,postMethod(data));
+    console.log('response',response);
     const result = await response.json();
     return result;
   } catch (err) {
@@ -38,7 +40,7 @@ export async function getCategory(id) {
 }
 
 
-export async function updateCategory(idv, data) {
+export async function updateCategory(idv,data) {
   try {
     const response = await fetch(`${API_SERVER}${urls.updateCategory}${idv}`, putMethod(data));
     const result = await response.json();
@@ -52,6 +54,7 @@ export async function getCategoryList(idv) {
   try {
     const response = await fetch(`${API_SERVER}${urls.getCategoryList}`, getMethod);
     const result = await response.json();
+    console.log(' response 1',result);
     return result;
   } catch (err) {
     console.log('getCategoryList Error:', err);
@@ -68,4 +71,25 @@ export async function removeCategory(id){
     catch (err) {
         console.log('removeCategory Error:', err);
       }
+}
+
+export async function getOneCategory(id){
+  try{
+      const response = await fetch(`${API_SERVER}${urls.getCategory}${id}`,getMethod);
+      const result = await response.json();
+      return result;
+  }
+  catch (err) {
+      console.log('getCategory Error:', err);
+    }
+}
+
+export async function CategoryStatus(id, data) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.categorystatus}${id}`, putMethod(data));
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.log('updateStatus Error:', err);
+  }
 }

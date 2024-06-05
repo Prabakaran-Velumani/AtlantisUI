@@ -22,6 +22,7 @@ import SelectField from 'components/fields/SelectField';
 import Card from 'components/card/Card';
 import OnToast from 'components/alerts/toast';
 import { addIndustry, updateIndustry ,getIndustryById} from 'utils/industry/industry';
+
 // import IndustryCreation from '..';
 
 // Define the type for the options
@@ -123,7 +124,6 @@ useEffect(() => {
         if(result?.status !== 'Success')
         {
           setButtonDisabled(false);
-           console.log('updateIndustry Error :',result?.message);
         //  alert(result?.message);
          setMsg('Failed to update Industry');
           setToastStatus('error');
@@ -144,7 +144,6 @@ useEffect(() => {
         const result = await addIndustry(data);
         if(result?.status !== 'Success') { 
           setButtonDisabled(false);
-          console.log('updateIndustry Error :',result?.message);
           setMsg('Failed to Add industry');
           setToastStatus('error');
           setAlert(true);
