@@ -48,6 +48,7 @@ const ChapterPage: React.FC<{
   setSelectedOption: any;
   questWiseMaxTotal:any;
   gameInfoTotalScore:any;
+  gameInfo: any;
 }> = ({
   imageSrc,
   demoBlocks,
@@ -72,7 +73,8 @@ const ChapterPage: React.FC<{
   setRepeatPrevOption,
   setSelectedOption,
   questWiseMaxTotal,
-  gameInfoTotalScore
+  gameInfoTotalScore,
+  gameInfo
 }) => {
   const [questScores, setQuestScores] = useState(null);
   const [questWisePlayerScore, setQuestWisePlayerScore] = useState(null);
@@ -269,6 +271,8 @@ getQuestwisePlayerScore().then((score :any) => {
                 }));
               } else {
                 if (finalscore !== undefined) {
+                  const status = gameInfo?.gameData?.gameDisableOptionalReplays === 'false' ? "replayallowed" : "completed";
+                  
                   setQuestState((prevquestdataList: any) => ({
                     ...prevquestdataList,
                     [item.gameQuestNo]: 'replayallowed',
@@ -283,15 +287,11 @@ getQuestwisePlayerScore().then((score :any) => {
                 }
               }
             } else {
-              // setQuestState((prevquestdataList: any) => ({
-              //   ...prevquestdataList,
-              //   [item.gameQuestNo]: 'replayallowed'
-              // }));
-
+ console.log("$$$$finalscore !== undefined")
               if (finalscore !== undefined) {
                 setQuestState((prevquestdataList: any) => ({
                   ...prevquestdataList,
-                  [item.gameQuestNo]: 'completed',
+                  [item.gameQuestNo]: 'replayallowed',
                 }));
                 return false;
               } else {

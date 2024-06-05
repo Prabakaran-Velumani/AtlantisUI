@@ -137,11 +137,14 @@ const LeaderBoard: React.FC<{
               const IntQuest = parseInt(quest);
               getReplayFinalscores = { ...getReplayFinalscores, [IntQuest]: score};
           });
+          console.log("$$$$getReplayFinalscores", getReplayFinalscores)
+          console.log("$$$$getFinalscores", getFinalscores)
 
           const TodayTotalScore = Object.entries(getFinalscores).reduce((tot:number, acc: any)=>{
           let newTotal = tot;
           let questNo = acc[0];
           let questHasReplay=Object.keys(getReplayFinalscores).some((quest)=> quest === questNo );
+          console.log("$$$$questHasReplay", questHasReplay)
           if(questHasReplay)
             {
               getReplayFinalscores[questNo] > acc[1] ? (tot+=getReplayFinalscores[questNo]) : (tot+=acc[1]) 
@@ -255,6 +258,8 @@ const LeaderBoard: React.FC<{
           const IntQuest = parseInt(quest);
           getReplayFinalscores = { ...getReplayFinalscores, [IntQuest]: score};
       });
+      console.log("-----getReplayFinalscores", getReplayFinalscores)
+      console.log("-----getFinalscores", getFinalscores)
       const TodayTotalScore = Object.entries(getFinalscores).reduce((tot:number, acc: any)=>{
         let questNo = acc[0];
         let questHasReplay=Object.keys(getReplayFinalscores).some((quest)=> quest === questNo );
@@ -273,6 +278,7 @@ const LeaderBoard: React.FC<{
     }, []);
 
     const handleHome = () => {
+      console.log("-----handleHome")
       if (homeLeaderBoard) {
         setCurrentScreenId(homeLeaderBoard);
         setHomeLeaderBoard(null);
@@ -385,7 +391,7 @@ const LeaderBoard: React.FC<{
         container.removeEventListener('scroll', handleScroll);
       };
     }, []);
-
+console.log("------homeLeaderBoard", homeLeaderBoard)
     return (
       <>
         {imageSrc && (

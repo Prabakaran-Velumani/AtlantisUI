@@ -255,10 +255,6 @@ console.log("^^^^^setQuestState", questState)
             }
             return tot;
             },0);
-      // total =
-      // scores.length > 0
-      //     ? scores.reduce((acc: number, cur: any) => acc + cur.score, 0)
-      //     : 0;
     }
    
     return isNaN(total) || total === 0 ? TotalScore : total;

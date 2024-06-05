@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { ScoreContext ,ProfileType} from '../GamePreview';
 import { ProfileContext } from '../EntirePreview';
 import { motion } from 'framer-motion';
+import { GiConsoleController } from 'react-icons/gi';
 type replayScoreProps = {
   preloadedAssets: any;
   setReplayIsOpen: (value: boolean) => void;
@@ -97,6 +98,38 @@ const ReplayScore: React.FC<replayScoreProps> = ({
       setProfile((prev: any)=> ({...prev, currentQuest: lastActivityquest}))
       setData(SetLastSeqData);
       setType(SetLastSeqData.blockChoosen);
+
+      /** Started - update the questStates like  {1: 'completed'/'Started'/'replayallowed'}*/
+      const replayScore = getPrevLogDatas?.previewScore?.replayScore;
+      const completedLevels = getPrevLogDatas?.previewScore?.completedLevels.slice(0, -1);
+      // {1: 'Started', 2: 'Started', 3: 'Started'}
+      
+            let findQuestState:{[key: number]: string} = {};
+        const questNoArr = gameInfo?.gameQuest?.map((quest:any)=>{
+          return parseInt(quest.gameQuestNo);
+        })
+        
+
+        questNoArr.forEach((questNo: number)=>{
+          const isQuestExistInReplay = replayScore.find((replayItem: any)=> replayItem.quest == questNo);
+          if(isQuestExistInReplay){
+             findQuestState = {...findQuestState, [questNo] : "replayallowed"};
+          }
+          else{
+              if(completedLevels?.length === 0 && questNo == 1)
+              {
+                findQuestState = {...findQuestState, [1] : "Started"};
+              }
+            else if(completedLevels.includes(String(questNo))){
+              findQuestState = gameInfo?.gameData?.gameDisableOptionalReplays === 'false'? {...findQuestState, [questNo] : "replayallowed"} :  {...findQuestState, [questNo] : "completed"};
+            }
+            else{
+              findQuestState = {...findQuestState, [questNo] : "locked"};
+            }
+          } 
+        })
+          setQuestState(findQuestState);
+          /** Ended - update the questStates like  {1: 'completed'/'Started'/'replayallowed'}*/
       if (
         SetLastSeqData.blockChoosen ===
         'Interaction'
@@ -143,9 +176,7 @@ const ReplayScore: React.FC<replayScoreProps> = ({
     }
   }
   const QuestSelectionScreen = () => {
-    // if (getPrevLogDatas?.previewScore) {
-    //   setProfile(getPrevLogDatas.previewScore);
-    // }
+    
     setReplayIsOpen(false);
     setCurrentScreenId(13);
     return false;
@@ -167,6 +198,7 @@ const ReplayScore: React.FC<replayScoreProps> = ({
     setReplayIsOpen(false);
     return false;
   }
+  
   return (
     <>
       <Box id="container" className="Play-station">

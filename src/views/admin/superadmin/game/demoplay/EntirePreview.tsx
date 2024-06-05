@@ -514,7 +514,6 @@ useEffect(()=>{
        const IntQuest = parseInt(quest);
        const newQuest = {...getFinalscores, [IntQuest]: score};
        getFinalscores={...newQuest};
-    
    });
     
     const Replayscores = profile?.replayScore.length > 0 ? profile?.replayScore :null;
@@ -531,33 +530,12 @@ useEffect(()=>{
         }
     });
 
-
-
-
-
     let getReplayFinalscores : {[key: number]:  number} ={};
      Object.entries(Replaysums).forEach(([quest, score]) => 
       {
         const IntQuest = parseInt(quest);
         getReplayFinalscores = { ...getReplayFinalscores, [IntQuest]: score};
     });
-    // const TodayTotalScore = getFinalscores.map((item:any) => 
-    // {
-
-    //   Object.entries(item).forEach((rec :any)=>{
-
-
-    //   })
-    //     //  const CheckScore = getReplayFinalscores.map((quest:any,i:number) =>{ if(quest?.quest === item.quest){ return quest?.score < item.score ? ;} return undefined }).filter((value:any) => value!==undefined);
-    //     //  if(CheckScore.length > 0)
-    //     //   {
-            
-    //     //   }
-    //       // else{
-    //       //   return item.score
-    //       // }
-    // });
-
     const TodayTotalScore = Object.entries(getFinalscores).reduce((tot:number, acc: any)=>{
       let newTotal = tot;
       let questNo = acc[0];
@@ -730,14 +708,6 @@ useEffect(()=>{
               questScores[score.quest] = score.score;
             }
           });
-          // const total = scores.reduce((acc: any, row: any) => {
-          //   const quest = profile?.currentQuest;
-          //   if (row.quest == quest) {
-          //     return acc + row.score;
-          //   } else {
-          //     return acc;
-          //   }
-          // }, 0);
                
           setProfile((prev: any) => ({
             ...prev,
@@ -763,13 +733,6 @@ useEffect(()=>{
               questScores[score.quest] = score.score;
             }
           });
-          // total = scoreArray.reduce((acc: number, cur: any) => {
-          //   if (cur.quest == profile.currentQuest) {
-          //     return acc + cur.score;
-          //   } else {
-          //     return acc;
-          //   }
-          // }, 0);
           setProfile((prev: any) => ({
             ...prev,
             playerGrandTotal: {
@@ -965,7 +928,6 @@ useEffect(()=>{
   }, [gameInfo?.gameData]);
 
   useEffect(() => {
-    // ![2, 10, 0].includes(currentScreenId) && setAudio(gameInfo?.bgMusic ?? '');
     if(![2, 10, 0].includes(currentScreenId))
       {
         if(!gameInfo?.bgMusic)
@@ -1788,40 +1750,34 @@ useEffect(()=>{
         return false;
       }
     }
-
-
-
-
-
-
   }
+  const calcQuestGrandTotal = async (
+    scores: any,
+    currentQuestNo: any = null,
+  ) => {
+    if (scores?.length <= 0) {
+      return 0;
+    }
+    
+    if (currentQuestNo != null) {
+      // Sum score of a quest
+      const totalScore = scores.reduce((total: number, sc: any) => {
+        if (sc.quest == currentQuestNo) {
+          return total + sc.score;
+        } else {
+          return total;
+        }
+      }, 0);
+      return totalScore; // Return the total score
+    } else {
+      //Sum up all the scores
+      return scores.reduce((total: number, sc: any) => total + sc.score, 0);
+    }
+  };
 
   const checkAndUpdateScores = async () => {
     const currentQuest = profile.currentQuest;
     // if (questState[currentQuest] !== 'Started') {
-      const calcQuestGrandTotal = async (
-        scores: any,
-        currentQuestNo: any = null,
-      ) => {
-        if (scores?.length <= 0) {
-          return 0;
-        }
-        
-        if (currentQuestNo != null) {
-          // Sum score of a quest
-          const totalScore = scores.reduce((total: number, sc: any) => {
-            if (sc.quest == currentQuestNo) {
-              return total + sc.score;
-            } else {
-              return total;
-            }
-          }, 0);
-          return totalScore; // Return the total score
-        } else {
-          //Sum up all the scores
-          return scores.reduce((total: number, sc: any) => total + sc.score, 0);
-        }
-      };
       const scoreTotal = await calcQuestGrandTotal(
         profile.score,
         profile.currentQuest,
@@ -1830,7 +1786,11 @@ useEffect(()=>{
         profile.replayScore,
         profile.currentQuest,
       );
-      if (scoreTotal < replayScoreTotal) {
+    
+      console.log("$$$$$scoreTotal", scoreTotal)
+      console.log("$$$$$replayScoreTotal", replayScoreTotal)
+
+      if (scoreTotal <= replayScoreTotal) {
         const currentQuestRemovedScoreArr = profile.score.filter(
           (item: any) => item.quest != profile.currentQuest,
         );
@@ -1849,6 +1809,8 @@ useEffect(()=>{
         const currentQuestRemovedReplayScoreArr = profile.replayScore.filter(
           (item: any) => item.quest != profile.currentQuest,
         );
+        console.log("$$$$$currentQuestRemovedReplayScoreArr", currentQuestRemovedReplayScoreArr)
+        console.log("$$$$$concatenatedScoreArr", concatenatedScoreArr)
         setProfile((prev: any) => ({
           ...prev,
           score: concatenatedScoreArr,
@@ -1863,7 +1825,6 @@ useEffect(()=>{
           replayScore: currentQuestRemovedReplayScoreArr,
         }));
       }
-    // }
   };
 
   const getData = (next: any) => {
@@ -2177,34 +2138,15 @@ if(currentScreenId ===2)
           return false;
         }
       } else if (navi === 'Complete') {
+        console.log("$$$$$navi === 'Complete'");
         //check the replay Quest score is higher than score in profile context
         checkAndUpdateScores();
         const Nextcurrentquest = next?.blockQuestNo;
         const getgameinfoquest = gameInfo?.gameQuest.find(
           (row: any) => row.gameQuestNo == Nextcurrentquest,
         );
-        //this place no need to check this condition .....
-        /*if (getgameinfoquest?.gameIsSetCongratsScoreWiseMessage === 'true') {
-          if (demoBlocks.hasOwnProperty(nextLevel)) {
-            setProfile((prev: any) => {
-              const data = { ...prev };
-              if (!profile.completedLevels.includes(currentQuest)) {
-                data.completedLevels = [...data.completedLevels, nextLevel];
-              }
-              return data;
-            });
-            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-            setData(demoBlocks[nextLevel]['1']);
-            setCurrentScreenId(6);
-            return false;
-          } else {
-            setCurrentScreenId(6);
-            setType(null);
-            setData(null);
-            return false;
-          }
-        } else */
-
+ 
+        
         if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = getgameinfoquest?.gameMinScore;
           let scores:any = [];
@@ -2480,6 +2422,7 @@ if(currentScreenId ===2)
   }
     if (currentScreenId === 6) {
       //Completion
+      console.log("$$$$$currentScreenId === 6");
       const {
         currentQuest,
         currentGameData,
@@ -2492,6 +2435,7 @@ if(currentScreenId ===2)
        setCurrentScreenId(4); //Navigate to leaderboard
        return false;
       } else if (haveNextQuest) {
+          checkAndUpdateScores();
         if (currentGameData?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = currentGameData?.gameMinScore;
           const scores = profile?.score;
@@ -2933,19 +2877,12 @@ if(currentScreenId ===2)
       }
     }
     if (currentScreenId === 4) {
+      console.log("&&&&&checkAndUpdateScores")
+      checkAndUpdateScores();
       if (gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') {
         const Completionpage = Object.entries(questState).map(
           ([questId, status]) => ({ questId, status }),
-        );
-        // const OpenStraigntCompletionPage = Completionpage.find(
-        //   (row: any) =>
-        //     row.questId === profile.currentQuest && row.status === 'completed',
-        // );
-        // if (OpenStraigntCompletionPage !== undefined) {
-        //   setFeedbackList([]);
-        //   setCurrentScreenId(13);
-        //   return false;
-        // }
+        );       
         if (feedbackList.length !== 0) {
           getFeedbackData(data);
           setFeedbackNavigateNext(false);
@@ -3415,6 +3352,7 @@ if(currentScreenId ===2)
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
+        console.log("$$$$$$next?.blockShowNavigate === 'Complete'")
         //check the replay Quest score is higher than score in profile context
         checkAndUpdateScores();
 
@@ -4462,7 +4400,6 @@ if(currentScreenId ===2)
   };
 
   /** replay prompt functions for replay point & previous navigation to chapter selection screen*/
-
   const handleReplayButtonClick = (replayType: string) => {
     /**replayType become ['mandatoryReplay', 'optionalReplay','replayPointPrompt'] **/
 
@@ -4523,6 +4460,9 @@ if(currentScreenId ===2)
     }
     setCurrentScreenId(2);
   };
+
+
+  console.log("questState", questState)
 console.log("profile", profile)
 console.log("getPrevLogDatas", getPrevLogDatas)
   return (
@@ -4597,10 +4537,7 @@ console.log("getPrevLogDatas", getPrevLogDatas)
                 handleReplayButtonClick={handleReplayButtonClick}
                 replayState={replayState}
                 setCurrentScreenId={setCurrentScreenId}
-                // isReplay={isReplay}
                 gameInfo={gameInfo}
-                // isOptionalReplay={isOptionalReplay}
-                // setOptionalReplay={setOptionalReplay}
                 profilescore={profilescore}
                 getPrevLogDatas={getPrevLogDatas}
                 setData={setData}
@@ -5092,6 +5029,7 @@ console.log("getPrevLogDatas", getPrevLogDatas)
                         setSelectedOption={setSelectedOption}
                         questWiseMaxTotal={questWiseMaxTotal}
                         gameInfoTotalScore = {gameInfo?.completionQuestOptions}
+                        gameInfo = {gameInfo}
 
                       />
                       {/* </Box> */}
