@@ -310,31 +310,6 @@ const GamePreview = () => {
         src: API_SERVER + '/' + info?.assets?.npcUrl,
       },
     ];
-
-    let playerCharectorsUrls = info?.assets?.playerCharectorsUrl.map(
-      (item: any, index: number) => {
-        let objValue = API_SERVER + '/' + item;
-        let objKey = `playerCharacterImage_${index}`;
-        apiImageSetArr.push({ assetType: objKey, src: objValue });
-      },
-    );
-    let gameQuestBadges = await Promise.all(
-      info?.assets?.badges.map(
-        async (item: Record<string, string>) => {
-          Object.entries(item).forEach(([key, value]) => {
-            let objkeyValue = key.split('_')[1];
-            let objKey = `Quest_${objkeyValue}`;
-            let objKeyValue = API_SERVER + '/' + value;
-            let badgeUrl =  value.split('.');
-            const shadowBadgeUrl = badgeUrl[0]+'-shadow.'+badgeUrl[1];
-            apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
-            apiImageSetArr.push({ assetType: objKey+'-shadow', src: API_SERVER + '/' +shadowBadgeUrl });
-          });
-          setApiImageSet(apiImageSetArr);
-          return true;
-        },
-      ),
-    );
   };
 
   /** THis function used to update gameInfo state on initial render and after every submition of a review
@@ -440,30 +415,6 @@ const GamePreview = () => {
       },
     ];
 
-    let playerCharectorsUrls = info?.assets?.playerCharectorsUrl.map(
-      (item: any, index: number) => {
-        let objValue = API_SERVER + '/' + item;
-        let objKey = `playerCharacterImage_${index}`;
-        apiImageSetArr.push({ assetType: objKey, src: objValue });
-      },
-    );
-    let gameQuestBadges = await Promise.all(
-      info?.assets?.badges.map(
-        async (item: Record<string, string>) => {
-          Object.entries(item).forEach(([key, value]) => {
-            let objkeyValue = key.split('_')[1];
-            let objKey = `Quest_${objkeyValue}`;
-            let objKeyValue = API_SERVER + '/' + value;
-            apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
-            let badgeUrl =  value.split('.');
-            const shadowBadgeUrl = badgeUrl[0]+'-shadow.'+badgeUrl[1];
-            apiImageSetArr.push({ assetType: objKey+'-shadow', src:  API_SERVER + '/' + shadowBadgeUrl });
-          });
-          setApiImageSet(apiImageSetArr);          
-          return true;
-        },
-      ),
-    );
   };
 
   useEffect(() => {
