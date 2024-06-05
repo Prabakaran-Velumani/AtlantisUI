@@ -1788,12 +1788,6 @@ useEffect(()=>{
         return false;
       }
     }
-
-
-
-
-
-
   }
 
   const checkAndUpdateScores = async () => {

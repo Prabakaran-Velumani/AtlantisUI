@@ -263,7 +263,7 @@ console.log("^^^^^setQuestState", questState)
    
     return isNaN(total) || total === 0 ? TotalScore : total;
   }, [profile.score, profile.replayScore, currentScreenId]);
-  console.log("^^^^^totalPoints", totalPoints)
+
   return (
     <Box className="top-menu-home-section">
       {dontShowTopMenu && !isSettingOpen ? (

@@ -401,7 +401,7 @@ const Story: React.FC<{
       };
       fetchData();
     }, [data, AudioOptions]);
-
+console.log('...409',score);
     const InteractionFunction = () => {
 
       setIsGetsPlayAudioConfirmation(true);

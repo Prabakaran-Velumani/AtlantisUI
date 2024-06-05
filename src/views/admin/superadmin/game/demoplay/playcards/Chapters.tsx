@@ -435,6 +435,11 @@ getQuestwisePlayerScore().then((score :any) => {
     },
   };
 
+
+
+console.log("questWisePlayerScore", questWisePlayerScore,'...');
+
+
   return (
     <>
       <Box className='black-shadow'>       
