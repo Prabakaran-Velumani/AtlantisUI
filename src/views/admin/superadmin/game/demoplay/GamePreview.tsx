@@ -310,6 +310,31 @@ const GamePreview = () => {
         src: API_SERVER + '/' + info?.assets?.npcUrl,
       },
     ];
+
+    let playerCharectorsUrls = info?.assets?.playerCharectorsUrl.map(
+      (item: any, index: number) => {
+        let objValue = API_SERVER + '/' + item;
+        let objKey = `playerCharacterImage_${index}`;
+        apiImageSetArr.push({ assetType: objKey, src: objValue });
+      },
+    );
+    let gameQuestBadges = await Promise.all(
+      info?.assets?.badges.map(
+        async (item: Record<string, string>) => {
+          Object.entries(item).forEach(([key, value]) => {
+            let objkeyValue = key.split('_')[1];
+            let objKey = `Quest_${objkeyValue}`;
+            let objKeyValue = API_SERVER + '/' + value;
+            let badgeUrl =  value.split('.');
+            const shadowBadgeUrl = badgeUrl[0]+'-shadow.'+badgeUrl[1];
+            apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
+            apiImageSetArr.push({ assetType: objKey+'-shadow', src: API_SERVER + '/' +shadowBadgeUrl });
+          });
+          setApiImageSet(apiImageSetArr);
+          return true;
+        },
+      ),
+    );
   };
 
   /** THis function used to update gameInfo state on initial render and after every submition of a review
@@ -415,6 +440,30 @@ const GamePreview = () => {
       },
     ];
 
+    let playerCharectorsUrls = info?.assets?.playerCharectorsUrl.map(
+      (item: any, index: number) => {
+        let objValue = API_SERVER + '/' + item;
+        let objKey = `playerCharacterImage_${index}`;
+        apiImageSetArr.push({ assetType: objKey, src: objValue });
+      },
+    );
+    let gameQuestBadges = await Promise.all(
+      info?.assets?.badges.map(
+        async (item: Record<string, string>) => {
+          Object.entries(item).forEach(([key, value]) => {
+            let objkeyValue = key.split('_')[1];
+            let objKey = `Quest_${objkeyValue}`;
+            let objKeyValue = API_SERVER + '/' + value;
+            apiImageSetArr.push({ assetType: objKey, src: objKeyValue });
+            let badgeUrl =  value.split('.');
+            const shadowBadgeUrl = badgeUrl[0]+'-shadow.'+badgeUrl[1];
+            apiImageSetArr.push({ assetType: objKey+'-shadow', src:  API_SERVER + '/' + shadowBadgeUrl });
+          });
+          setApiImageSet(apiImageSetArr);          
+          return true;
+        },
+      ),
+    );
   };
 
   useEffect(() => {
@@ -543,7 +592,19 @@ console.log("  isAuthFailed",  isAuthFailed);
         }>
         {contentReady && (isAuthFailed || */}
       {/* <Suspense fallback={<Img src={preloadedAssets.InitialImg} width={'100vw'} h={'100vh'}/>}> */}
-      <Suspense fallback={<Box bg={'#000'} h={'100vh'} w={'100vw'}>Loading...</Box>}>
+      <Suspense fallback={<Box bg={'#000'} h={'100vh'} w={'100vw'}>  
+          <Box
+              backgroundImage={preloadedAssets?.StarsBg}
+              w={'100% !important'}
+              h={'100vh'}
+              backgroundRepeat={'no-repeat'}
+              backgroundSize={'cover'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              className="Game-Screen"
+              backgroundColor={'#0d161e'}
+            >      
+            </Box></Box>}>
         {contentReady &&  (isAuthFailed ||
           gameInfo?.reviewer?.ReviewerStatus === 'Inactive' ||
             gameInfo?.reviewer?.ReviewerDeleteStatus === 'YES'  ? (
