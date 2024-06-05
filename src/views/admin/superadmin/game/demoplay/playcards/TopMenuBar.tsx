@@ -171,7 +171,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     }    
     setPreLogDatas((prev: any) => ({...prev,audioVolumeValue: updatedAudioData}));
   }, [audioObj]);
-console.log("^^^^^setQuestState", questState)
+
   const totalPoints = useMemo(() => {
     let total: number = 0;
     let TotalScore:number = 0 ;

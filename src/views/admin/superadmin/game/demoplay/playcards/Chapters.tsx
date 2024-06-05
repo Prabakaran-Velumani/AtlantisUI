@@ -287,7 +287,6 @@ getQuestwisePlayerScore().then((score :any) => {
                 }
               }
             } else {
- console.log("$$$$finalscore !== undefined")
               if (finalscore !== undefined) {
                 setQuestState((prevquestdataList: any) => ({
                   ...prevquestdataList,

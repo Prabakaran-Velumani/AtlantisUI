@@ -1787,9 +1787,6 @@ useEffect(()=>{
         profile.currentQuest,
       );
     
-      console.log("$$$$$scoreTotal", scoreTotal)
-      console.log("$$$$$replayScoreTotal", replayScoreTotal)
-
       if (scoreTotal <= replayScoreTotal) {
         const currentQuestRemovedScoreArr = profile.score.filter(
           (item: any) => item.quest != profile.currentQuest,
@@ -1809,8 +1806,7 @@ useEffect(()=>{
         const currentQuestRemovedReplayScoreArr = profile.replayScore.filter(
           (item: any) => item.quest != profile.currentQuest,
         );
-        console.log("$$$$$currentQuestRemovedReplayScoreArr", currentQuestRemovedReplayScoreArr)
-        console.log("$$$$$concatenatedScoreArr", concatenatedScoreArr)
+
         setProfile((prev: any) => ({
           ...prev,
           score: concatenatedScoreArr,
@@ -2138,7 +2134,6 @@ if(currentScreenId ===2)
           return false;
         }
       } else if (navi === 'Complete') {
-        console.log("$$$$$navi === 'Complete'");
         //check the replay Quest score is higher than score in profile context
         checkAndUpdateScores();
         const Nextcurrentquest = next?.blockQuestNo;
@@ -2422,7 +2417,6 @@ if(currentScreenId ===2)
   }
     if (currentScreenId === 6) {
       //Completion
-      console.log("$$$$$currentScreenId === 6");
       const {
         currentQuest,
         currentGameData,
@@ -2877,7 +2871,6 @@ if(currentScreenId ===2)
       }
     }
     if (currentScreenId === 4) {
-      console.log("&&&&&checkAndUpdateScores")
       checkAndUpdateScores();
       if (gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') {
         const Completionpage = Object.entries(questState).map(
@@ -3352,7 +3345,6 @@ if(currentScreenId ===2)
         setSelectedOption(null);
         return false;
       } else if (next?.blockShowNavigate === 'Complete') {
-        console.log("$$$$$$next?.blockShowNavigate === 'Complete'")
         //check the replay Quest score is higher than score in profile context
         checkAndUpdateScores();
 
@@ -3568,7 +3560,6 @@ if(currentScreenId ===2)
         }
       } else {
         /** IF a block not has navi option then it leads to next block */
-        console.log('nextBlock',nextBlock)
         if (nextBlock && nextBlock[0]?.blockChoosen) {
           setType(nextBlock[0]?.blockChoosen);
           setData(nextBlock[0]);
@@ -4461,10 +4452,6 @@ if(currentScreenId ===2)
     setCurrentScreenId(2);
   };
 
-
-  console.log("questState", questState)
-console.log("profile", profile)
-console.log("getPrevLogDatas", getPrevLogDatas)
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="EntirePreview-wrapper">
