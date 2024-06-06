@@ -255,6 +255,7 @@ const LeaderBoard: React.FC<{
           const IntQuest = parseInt(quest);
           getReplayFinalscores = { ...getReplayFinalscores, [IntQuest]: score};
       });
+
       const TodayTotalScore = Object.entries(getFinalscores).reduce((tot:number, acc: any)=>{
         let questNo = acc[0];
         let questHasReplay=Object.keys(getReplayFinalscores).some((quest)=> quest === questNo );
