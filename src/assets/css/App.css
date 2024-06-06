@@ -7384,3 +7384,42 @@ input[data-autocompleted] {
 
 
 /* scroll bar practise */
+
+
+
+
+
+
+
+
+/* COHORTS COMPONENT */
+/* .cohorts-leaner-print {
+  height: 100%;
+  width: 100%;
+  background: url('../img/print/newImg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  object-fit: contain;
+  background-attachment: fixed;  
+  z-index: 9;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.cohorts-leaner-print::before {
+  content: '';
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  backdrop-filter: blur(0px);
+  z-index: -9;
+}
+
+.container {
+  padding: 50px 100px;
+}
+
+.cohorts-card {  
+  width: 70vw;  
+  border: 2px solid grey;
+} */
