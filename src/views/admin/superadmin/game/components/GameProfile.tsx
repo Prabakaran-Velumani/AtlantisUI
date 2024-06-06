@@ -91,7 +91,7 @@ export default function Settings(props: {
   };
 
   return (
-    <Card width={'100%'} mb="20px" alignItems="center">
+    <Card width={'100%'} mb="20px" alignItems="center" boxShadow={'3px 3px 16px 4px rgb(112 144 176 / 13%)'}>
       <Flex
         w="100%"
         bgGradient="linear(to-b, brand.400, brand.600)"
@@ -108,10 +108,10 @@ export default function Settings(props: {
         mb="15px"
       />
       <Box>
-      <Text fontSize="2xl" textColor={textColorPrimary} fontWeight="700">
+      <Text fontSize="2xl" textColor={textColorPrimary} fontWeight="700" textAlign='center' >
         {profile.gameTitle}
       </Text>
-      <Flex justifyContent="center" mx="auto" px="15px">
+      <Flex justifyContent="center" mx="auto" px="15px" mb="10px">
         <Text
           me="4px"
           color={textColorSecondary}
@@ -123,23 +123,11 @@ export default function Settings(props: {
           {profile.gameStoryLine}{' '}
         </Text>
       </Flex>
-      <Flex justifyContent="center" mb="15px" mt="15px" mx="auto" px="15px">
-        <Text
-          color={textColorSecondary}
-          fontSize="sl"
-          fontWeight="400"
-          lineHeight="100%"
-        >
-          Author: {profile.gameAuthorName}
-        </Text>
-      </Flex>
       <Flex direction="column" mb="10px">
         <Text fontSize="xl" color={textColorPrimary} fontWeight="bold">
-          Learning Outcomes :
+          Duration :
         </Text>
-        <Text fontSize="md" mb="15px" mt="15px" color={textColorSecondary}>
-          {profile.gameLearningOutcome}
-        </Text>
+        <Text fontSize="md" mb="15px" mt="15px" color={textColorSecondary}></Text>
       </Flex>
       <Flex direction="column" mb="10px">
         <Text fontSize="xl" color={textColorPrimary} fontWeight="bold">
@@ -164,16 +152,28 @@ export default function Settings(props: {
               </Tag>
             ))}
         </Text>
-      </Flex>
+      </Flex> 
       <Flex direction="column" mb="10px">
         <Text fontSize="xl" color={textColorPrimary} fontWeight="bold">
-          Duration :
+          Learning Outcomes :
         </Text>
-        <Text fontSize="md" mb="15px" mt="15px" color={textColorSecondary}></Text>
-      </Flex>
+        <Text fontSize="md" mb="15px" mt="15px" color={textColorSecondary}>
+          {profile.gameLearningOutcome}
+        </Text>
+      </Flex>        
+      <Flex justifyContent="center" mb="15px" mt="15px" mx="auto" px="15px">
+        <Text
+          color={textColorSecondary}
+          fontSize="sl"
+          fontWeight="400"
+          lineHeight="100%"
+        >
+          Author: {profile.gameAuthorName}
+        </Text>
+      </Flex>              
       </Box>
       <Box w={'100%'} display={'flex'} justifyContent={'center'} mb="15px" mt="15px">
-        <Box w={'80%'} display={'flex'} justifyContent={'flex-end'}>
+        <Box w={'80%'} display={'flex'} justifyContent={'center'}>
         <Button
           variant="darkBrand"
           color="white"

@@ -137,7 +137,7 @@ function SignIn() {
         flexDirection="column"
       >
         <Box me="auto">
-          <Heading color={textColor} fontSize="36px" mb="15px">
+          <Heading color={textColor} fontSize="36px" mb="15px" className='ll'>
             Sign In
           </Heading>
           {/* <Text
