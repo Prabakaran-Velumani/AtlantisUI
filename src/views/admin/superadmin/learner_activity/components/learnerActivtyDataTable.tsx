@@ -296,7 +296,7 @@ const LearnerActivityDataTable: React.FC<CustomLearnerDataTableProps> = ({
   };
 
   const getPageNumbers = () => {
-    const pageCount = 5; // Adjust the number of visible page numbers as needed
+    const pageCount = 3; // Adjust the number of visible page numbers as needed
     const currentPage = pageIndex + 1;
     const pages = [];
 

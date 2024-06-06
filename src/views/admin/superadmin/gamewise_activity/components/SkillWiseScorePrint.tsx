@@ -68,10 +68,8 @@ console.log("gamedata",gamedata);
   console.log("skillScore",skillScore);
   
 return (
-    <div style={{ fontFamily: 'Arial, sans-serif' }}>
-      <br />
-      <br />
-      <table style={{ borderCollapse: 'collapse', width: '75%', marginLeft: "110px", marginRight: "60px" }}>
+    <div style={{ fontFamily: 'Arial, sans-serif', margin: '30px'}}>     
+      <table style={{ borderCollapse: 'collapse', width: '100%', border: '1px solid black'}}>
         <thead>
            
             <tr style={{ textAlign: 'center' }}>

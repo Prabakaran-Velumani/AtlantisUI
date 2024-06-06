@@ -361,7 +361,8 @@ const AssignCohorts: React.FC = () => {
       backgroundColor: '#d0d0d0',
     },
     content: {
-      height: '100%', 
+      height:'100%',
+      maxHeight: '450px', 
     },
   };
 
@@ -455,6 +456,7 @@ const AssignCohorts: React.FC = () => {
                 setTabState('Assignlearner');
               }}
               bg={tabState === 'Assignlearner' ? 'linear-gradient(to bottom, #7551ff, #3311db)' : ''}
+              _hover={{  bg:tabState === 'Assignlearner' ? 'linear-gradient(to bottom, #7551ff, #3311db)' : '',color: tabState === 'Assignlearner' ? 'white' : ''}}
               color={tabState === 'Assignlearner' ? 'white' : ''}
               _focus={{ bg: 'linear-gradient(to bottom, #7551ff, #3311db)', color: 'white' }}
             >
@@ -469,6 +471,7 @@ const AssignCohorts: React.FC = () => {
               h="46px"
               ms="auto"
               _focus={{ bg: 'linear-gradient(to bottom, #7551ff, #3311db)', color: 'white' }}
+              _hover={{  bg:tabState === 'AssignGames' ? 'linear-gradient(to bottom, #7551ff, #3311db)' : '',color: tabState === 'AssignGames' ? 'white' : ''}}
               bg={tabState === 'AssignGames' ? 'linear-gradient(to bottom, #7551ff, #3311db)' : ''}
               color={tabState === 'AssignGames' ? 'white' : ''}
               onClick={() => {
@@ -557,7 +560,7 @@ const AssignCohorts: React.FC = () => {
           </Box>
           {/* </SimpleGrid> */}
           {tabState === "Assignlearner" ? (
-            <SimpleGrid  columns={{base:1,md:2}}>
+            <SimpleGrid  columns={{base:1,md:2}} pt={2}>
               <Box style={styles.container}>
                 <Box style={styles.content}>
                   {learnerFilterList.length === 0 ? (
@@ -623,7 +626,7 @@ const AssignCohorts: React.FC = () => {
                   ))}
                 </Box>
               </Box>
-              <Box style={styles.container}>
+              <Box style={styles.container} backgroundColor={'#f7f7f7'} borderRadius={'15px'}>
                 <Box style={styles.content}>
                   {LearnerAssignData?.map((item, index) =>
                   (
@@ -645,7 +648,7 @@ const AssignCohorts: React.FC = () => {
               </Box>
             </SimpleGrid>)
             :
-            <SimpleGrid  columns={{base:1,md:2}}>
+            <SimpleGrid  columns={{base:1,md:2}} pt={2} >
               <Box style={styles.container}>
                 <Box style={styles.content}>
                   {filterGamesList.length === 0 ? (
@@ -709,7 +712,7 @@ const AssignCohorts: React.FC = () => {
                   ))}
                 </Box>
               </Box>
-              <Box style={styles.container}>
+              <Box style={styles.container} backgroundColor={'#f7f7f7'} borderRadius={'15px'}>
                 <Box style={styles.content}>
                   {GameAssignData?.map((item, index) =>
                   (
