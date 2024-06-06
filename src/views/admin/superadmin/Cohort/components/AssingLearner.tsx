@@ -15,13 +15,18 @@ import {
   Tabs,
   TabList,
   Tab,
+  FormControl,
+  Icon,
+  Checkbox,
 } from '@chakra-ui/react';
 import Select from 'react-select';
 // Custom Imports
 import InputField from 'components/fields/InputField';
 import Card from 'components/card/Card';
 import OnToast from 'components/alerts/toast';
-import { learnerListData, addcohorts, updatecohortsLearner, checkCohorts, updatecohorts,gamesListData, updatecohortsgame } from 'utils/cohorts/cohorts';
+import { learnerListData, addcohorts, updatecohortsLearner, checkCohorts, updatecohorts, gamesListData, updatecohortsgame } from 'utils/cohorts/cohorts';
+import { CiCircleCheck } from 'react-icons/ci';
+import { FaCircleCheck } from 'react-icons/fa6';
 const AssignCohorts: React.FC = () => {
   const toast = useToast();
   const [formData, setFormData] = useState({
@@ -55,9 +60,9 @@ const AssignCohorts: React.FC = () => {
     navigate('/admin/superadmin/cohort/');
   };
   const fetchData = async () => {
-    if (id? id : cohortsId) {
+    if (id ? id : cohortsId) {
       try {
-        const cohortId = id? id : cohortsId;
+        const cohortId = id ? id : cohortsId;
         const result = await checkCohorts(cohortId);
         if (result.status !== 'Success') {
           console.log('getIndustry Error', result?.message);
@@ -67,7 +72,7 @@ const AssignCohorts: React.FC = () => {
           setFormData({
             chCohortsName: cohorsData.chCohortsName,
           });
-          setCohortsId(id? id : cohortsId);
+          setCohortsId(id ? id : cohortsId);
           /********************This For Learner Assigned Data************************************************ */
           if (cohorsData.learnersListAssigned.length > 0) {
             setLearnerAssignData(cohorsData.learnersListAssigned);
@@ -88,7 +93,7 @@ const AssignCohorts: React.FC = () => {
               setAllLearnerList(learnersNotAssigned);
             }
           }
-           /********************This For game Assigned Data************************************************ */
+          /********************This For game Assigned Data************************************************ */
           if (cohorsData.gameListAssigned.length > 0) {
             setGameAssignData(cohorsData.gameListAssigned);
 
@@ -101,13 +106,13 @@ const AssignCohorts: React.FC = () => {
             if (GamesList.status === 'Success') {
               // setAllGames(GamesList?.data);
               const learnersNotAssigned = GamesList?.data
-                .map((item:any) => {
+                .map((item: any) => {
                   if (!gamegetData.includes(item.gameId)) {
                     return item;
                   }
                   return undefined;
                 })
-                .filter((item:any) => item !== undefined);
+                .filter((item: any) => item !== undefined);
               setAllGames(learnersNotAssigned);
             }
           }
@@ -142,27 +147,25 @@ const AssignCohorts: React.FC = () => {
 
   }, [tabState])
   useEffect(() => {
-    if(tabState === 'Assignlearner')
-      {
-        if (searchMail.length > 0) {
-          const FilterValue = AllLearnerList.filter(option => searchMail?.includes(option.lenId));
-          setLearnerFilterList(FilterValue);
-        }
-        else {
-          setLearnerFilterList([])
-        }
+    if (tabState === 'Assignlearner') {
+      if (searchMail.length > 0) {
+        const FilterValue = AllLearnerList.filter(option => searchMail?.includes(option.lenId));
+        setLearnerFilterList(FilterValue);
       }
-    else if(tabState === 'AssignGames')
-      {
-        if (searchGame.length > 0) {
-          const FilterValue = allGames.filter(option => searchGame?.includes(option.gameId));
-          setFilterGamesList(FilterValue);
-        }
-        else {
-          setFilterGamesList([])
-        }
+      else {
+        setLearnerFilterList([])
       }
-  }, [searchMail,searchGame]);
+    }
+    else if (tabState === 'AssignGames') {
+      if (searchGame.length > 0) {
+        const FilterValue = allGames.filter(option => searchGame?.includes(option.gameId));
+        setFilterGamesList(FilterValue);
+      }
+      else {
+        setFilterGamesList([])
+      }
+    }
+  }, [searchMail, searchGame]);
 
 
   /********************** For Learners Function start *********************************** */
@@ -259,7 +262,7 @@ const AssignCohorts: React.FC = () => {
     }
   };
 
-  
+
   const gamesList = async () => {
     const data = JSON.stringify(user.data);
     const AllGamesList = await gamesListData(data);
@@ -337,8 +340,8 @@ const AssignCohorts: React.FC = () => {
     setSelectedLearnerItems([]);
     setSelectedGameItems([]);
   };
- 
-  
+
+
   const styles = {
     app: {
       display: 'flex',
@@ -348,7 +351,7 @@ const AssignCohorts: React.FC = () => {
     container: {
       flex: 1,
       overflowY: 'scroll' as 'scroll',
-      padding: '20px',
+      padding: '10px',
       boxSizing: 'border-box' as 'border-box',
     },
     leftContainer: {
@@ -358,7 +361,7 @@ const AssignCohorts: React.FC = () => {
       backgroundColor: '#d0d0d0',
     },
     content: {
-      height: '1500px', // This is to demonstrate the scroll effect
+      height: '100%', 
     },
   };
 
@@ -370,7 +373,7 @@ const AssignCohorts: React.FC = () => {
     control: (provided: any, state: any) => ({
       ...provided,
       borderRadius: '15px',
-      height: '45px',
+      height: '100%',
       padding: '0 !important',
       width: '100%',
     }),
@@ -402,32 +405,17 @@ const AssignCohorts: React.FC = () => {
     <>
       <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={'75px'} position={'relative'}>
         <Card bg={'linear-gradient(to bottom, #7551ff, #3311db)'} w={'100%'} h={'300'} position={'absolute'} alignItems={'center'}></Card>
-        <Card mb={{ base: '0px', xl: '20px' }} width={{ sm: '95%', lg: '70%' }} marginTop={'120px'}>
-          <Flex direction="column" ms="10px">
-            {/* <Button
-              mt="20px"
-              mr="100%"
-              variant={tabState === 'Assignlearner' ? "darkBrand" : "light"}
-              fontSize="sm"
-              borderRadius="16px"
-              w={{ base: '128px', md: '148px' }}
-              h="46px"
-              ms="auto"
-              onClick={() => {
-                setTabState('Assignlearner');
-              }}
-            >
-              Assing Learners
-            </Button> */}
-            <Tabs>
-              <TabList>
+        <Card mb={{ base: '0px', xl: '20px' }} width={{ base: '95%', lg: '70%' }} marginTop={'120px'}>
+          {/* <Flex direction="column" ms="10px" width={'100%'}>
+            <Tabs isFitted>
+              <TabList >
                 <Tab
                   mt="20px"
                   mr="20px"
-                  // variant={tabState === 'Assignlearner' ? "darkBrand" : "light"}
                   fontSize="sm"
                   borderRadius="16px"
-                  w={{ base: '128px', md: '148px' }}
+                  _selected={{ color: 'white',background:'linear-gradient(to bottom, #7551ff, #3311db)'}}
+                  w={ '100%'}
                   h="46px"
                   ms="auto"
                   onClick={() => {
@@ -439,11 +427,10 @@ const AssignCohorts: React.FC = () => {
                 <Tab
                   mt="20px"
                   mr="200px"
-                  // variant={tabState === 'AssignGames' ? "darkBrand" :"light"}
-
+                  _selected={{ color: 'white',background:'linear-gradient(to bottom, #7551ff, #3311db)'}}
                   fontSize="sm"
                   borderRadius="16px"
-                  w={{ base: '128px', md: '148px' }}
+                  w={'100%'}
                   h="46px"
                   ms="auto"
                   onClick={() => {
@@ -453,25 +440,64 @@ const AssignCohorts: React.FC = () => {
                   Assign Games
                 </Tab>
               </TabList>
-              {/* Add TabPanels and other related components here if needed */}
             </Tabs>
-          </Flex>
-          <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '20px' }}>
-            <Flex direction="column" ms="10px">
-              <InputField
-                mb="0px"
-                me="30px"
-                name="itIndustryName"
-                value={formData.chCohortsName}
-                onChange={handleChange}
-                label="Cohorts Name"
-                placeholder="eg. High Demand"
-                isRequired={true}
-              />
-            </Flex>
-          </SimpleGrid>
-          <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '20px' }}>
-            <Box>
+          </Flex> */}
+          <Box width={'100%'} p={2} display={'flex'} justifyContent={'center'} border={'2px solid #7551ff'} borderRadius={'20px'}>
+            <Button
+
+              // variant="darkBrand"
+              fontSize="sm"
+              borderRadius="16px"
+              w={'100%'}
+              h="46px"
+              ms="auto"
+              onClick={() => {
+                setTabState('Assignlearner');
+              }}
+              bg={tabState === 'Assignlearner' ? 'linear-gradient(to bottom, #7551ff, #3311db)' : ''}
+              color={tabState === 'Assignlearner' ? 'white' : ''}
+              _focus={{ bg: 'linear-gradient(to bottom, #7551ff, #3311db)', color: 'white' }}
+            >
+              Assign Learners
+            </Button>
+            <Button
+
+              // variant="darkBrand"
+              fontSize="sm"
+              borderRadius="16px"
+              w={'100%'}
+              h="46px"
+              ms="auto"
+              _focus={{ bg: 'linear-gradient(to bottom, #7551ff, #3311db)', color: 'white' }}
+              bg={tabState === 'AssignGames' ? 'linear-gradient(to bottom, #7551ff, #3311db)' : ''}
+              color={tabState === 'AssignGames' ? 'white' : ''}
+              onClick={() => {
+                setTabState('AssignGames');
+              }}
+            >
+              Assign Games
+            </Button>
+          </Box>
+          {/* <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '20px' }}>
+            <Flex direction="column" ms="10px"> */}
+          <Box w={{ base: '100%', md: '50%' }} mt={'10px'}>
+            <InputField
+              mb="0px"
+              me="30px"
+              width='100%'
+              name="itIndustryName"
+              value={formData.chCohortsName}
+              onChange={handleChange}
+              label="Cohorts Name"
+              placeholder="eg. High Demand"
+              isRequired={true}
+            />
+          </Box>
+          {/* </Flex>
+          </SimpleGrid> */}
+          {/* <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={{ base: '20px', xl: '20px' }}> */}
+          <Box width={'100%'} display={'flex'} flexDir={{ base: 'column', md: 'row' }} alignItems={'flex-end'}>
+            <FormControl width={{ base: '100%', md: '50%' }} >
               <FormLabel fontWeight='bold' fontSize='sm' mb='8px' mt='10px' ml='10px'>
                 Search <Text as='span' color='red.500'></Text>
               </FormLabel>
@@ -496,132 +522,169 @@ const AssignCohorts: React.FC = () => {
                 isMulti
                 value={tabState === 'Assignlearner' ? formattedOptions.filter(option => searchMail?.includes(option.value)) : formattedGameOptions.filter(option => searchGame?.includes(option.value))}
                 onChange={tabState === 'Assignlearner' ? handleOption : handleGameOption}
-              // styles={customStyle}           
               />
-            </Box>
-            {cohortsId !== null ? (<Box ml={'20px'}>
-              <Button
-                mt="20px"
-                variant="darkBrand"
-                fontSize="sm"
-                borderRadius="16px"
-                w={{ base: '128px', md: '148px' }}
-                h="46px"
-                ms="auto"
-                // onClick={handleLearnerAssign}
-                onClick={tabState === 'Assignlearner' ? handleLearnerAssign : handleGameAssign}
-              >
-                {tabState === 'Assignlearner' ? " Update ASSIGN LEARNER" : " Update ASSIGN GAME"}
-                {/* Assign */}
-              </Button>
-            </Box>) : <Box ml={'20px'}>
-              <Button
-                mt="20px"
-                variant="darkBrand"
-                fontSize="sm"
-                borderRadius="16px"
-                w={{ base: '128px', md: '148px' }}
-                h="46px"
-                ms="auto"
-                // onClick={handleLearnerAssign}
-                onClick={tabState === 'Assignlearner' ? handleLearnerAssign : handleGameAssign}
-              >
-                {tabState === 'Assignlearner' ? "ASSIGN LEARNER" : "ASSIGN GAME"}
-                {/* Assign */}
-              </Button>
-            </Box>}
-
-          </SimpleGrid>
-          {tabState === "Assignlearner" ? (<SimpleGrid style={styles.app}>
-            <Box style={styles.container}>
-              <Box style={styles.content}>
-                {learnerFilterList.length === 0 ? (
-                  <><input
-                    type="checkbox"
-                    id="selectAll"
-                    checked={allSelected}
-                    onChange={handleLearnerSelectAll}
-                  />
-                    <label htmlFor="selectAll">Select All</label></>
-
-                ) : null}
-
-                {learnerFilterList.length === 0 && AllLearnerList?.map((item, index) => (
-                  <Box
-                    key={index}
-                    onClick={() => handleLearnerSelectedData(item.lenId)}
-                    style={{
-                      backgroundColor: selectedLearnerItems.includes(item.lenId) ? 'lightblue' : 'transparent',
-                      cursor: 'pointer',
-                      padding: '10px',
-                      margin: '5px',
-                    }}
-                  >
-                    {item.lenMail} / {item.lenUserName}
-                  </Box>
-                ))}
-                {learnerFilterList.length > 0 && learnerFilterList?.map((item, index) => (
-                  <Box
-                    key={index}
-                    onClick={() => handleLearnerSelectedData(item.lenId)}
-                    style={{
-                      backgroundColor: selectedLearnerItems.includes(item.lenId) ? 'lightblue' : 'transparent',
-                      cursor: 'pointer',
-                      padding: '10px',
-                      margin: '5px',
-                    }}
-                  >
-                    {item.lenMail} / {item.lenUserName}
-                  </Box>
-                ))}
+            </FormControl>
+            {cohortsId !== null ? (
+              <Box ml={'20px'} width={{ base: '100%', md: '50%' }}>
+                <Button
+                  mt="20px"
+                  variant="darkBrand"
+                  fontSize="sm"
+                  borderRadius="16px"
+                  w={'100%'}
+                  h="46px"
+                  ms="auto"
+                  // onClick={handleLearnerAssign}
+                  onClick={tabState === 'Assignlearner' ? handleLearnerAssign : handleGameAssign}
+                >
+                  {tabState === 'Assignlearner' ? " Update ASSIGN LEARNER" : " Update ASSIGN GAME"}
+                </Button>
+              </Box>) :
+              <Box ml={'20px'} width={{ base: '100%', md: '50%' }}>
+                <Button
+                  mt="20px"
+                  variant="darkBrand"
+                  fontSize="sm"
+                  borderRadius="16px"
+                  w={'100%'}
+                  h="46px"
+                  ms="auto"
+                  onClick={tabState === 'Assignlearner' ? handleLearnerAssign : handleGameAssign}
+                >
+                  {tabState === 'Assignlearner' ? "ASSIGN LEARNER" : "ASSIGN GAME"}
+                </Button>
+              </Box>}
+          </Box>
+          {/* </SimpleGrid> */}
+          {tabState === "Assignlearner" ? (
+            <SimpleGrid  columns={{base:1,md:2}}>
+              <Box style={styles.container}>
+                <Box style={styles.content}>
+                  {learnerFilterList.length === 0 ? (
+                    <>
+                      <Box width={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                        <Checkbox
+                          type="checkbox"
+                          id="selectAll"
+                          checked={allSelected}
+                          onChange={handleLearnerSelectAll}
+                          fontSize={'0.875rem'}
+                          fontWeight={'bold'}
+                          color='#1b2559'
+                        >
+                          Select All
+                        </Checkbox>
+                      </Box>
+                    </>
+                  ) : null}
+                  {learnerFilterList.length === 0 && AllLearnerList?.map((item, index) => (
+                    <Box
+                      key={index}
+                      onClick={() => handleLearnerSelectedData(item.lenId)}
+                      style={{
+                        border: selectedLearnerItems.includes(item.lenId) ? '2px solid #11047A' : '2px solid #e1e1e1',
+                        borderRadius: '8px',
+                        // backgroundColor: selectedLearnerItems.includes(item.lenId) ? 'lightblue' : 'transparent',
+                        cursor: 'pointer',
+                        padding: '10px',
+                        margin: '5px',
+                        position: 'relative',
+                      }}
+                    >
+                      {item.lenMail} / {item.lenUserName}
+                      {selectedLearnerItems.includes(item.lenId) ?
+                        <div>
+                          <Icon as={FaCircleCheck} color={'#11047A'} position='absolute' right='-8px' top='-5px' />
+                        </div>
+                        : null}
+                    </Box>
+                  ))}
+                  {learnerFilterList.length > 0 && learnerFilterList?.map((item, index) => (
+                    <Box
+                      key={index}
+                      onClick={() => handleLearnerSelectedData(item.lenId)}
+                      style={{
+                        border: selectedLearnerItems.includes(item.lenId) ? '2px solid #11047A' : '2px solid #e1e1e1',
+                        borderRadius: '8px',
+                        // backgroundColor: selectedLearnerItems.includes(item.lenId) ? 'lightblue' : 'transparent',
+                        cursor: 'pointer',
+                        padding: '10px',
+                        margin: '5px',
+                        position: 'relative',
+                      }}
+                    >
+                      {item.lenMail} / {item.lenUserName}
+                      {selectedLearnerItems.includes(item.lenId) ?
+                        <div>
+                          <Icon as={FaCircleCheck} color={'#11047A'} position='absolute' right='-8px' top='-5px' />
+                        </div>
+                        : null}
+                    </Box>
+                  ))}
+                </Box>
               </Box>
-            </Box>
-            <Box style={styles.container}>
-              <Box style={styles.content}>
-                {LearnerAssignData?.map((item, index) =>
-                (
-                  <Box
-                    key={index}
-                    style={{
+              <Box style={styles.container}>
+                <Box style={styles.content}>
+                  {LearnerAssignData?.map((item, index) =>
+                  (
+                    <Box
+                      key={index}
+                      style={{
 
-                      cursor: 'pointer',
-                      padding: '10px',
-                      margin: '5px',
-                    }}
-                  >
-                    {item.lenMail} / {item.lenUserName}
-                  </Box>
-                ))
-                }
+                        cursor: 'pointer',
+                        padding: '10px',
+                        margin: '5px',
+                      }}
+                    >
+                      {item.lenMail} / {item.lenUserName}
+                    </Box>
+                  ))
+                  }
 
+                </Box>
               </Box>
-            </Box>
-          </SimpleGrid>)
+            </SimpleGrid>)
             :
-            <SimpleGrid style={styles.app}>
+            <SimpleGrid  columns={{base:1,md:2}}>
               <Box style={styles.container}>
                 <Box style={styles.content}>
                   {filterGamesList.length === 0 ? (
-                    <><input
-                      type="checkbox"
-                      id="selectAll"
-                      checked={allSelected}
-                      onChange={handleGameSelectAll}
-                    />
-                      <label htmlFor="selectAll">Select All</label></>
+                    <>
+                      <Box width={'100%'} display={'flex'} justifyContent={'flex-end'}>
+                        <Checkbox
+                          type="checkbox"
+                          id="selectAll"
+                          checked={allSelected}
+                          onChange={handleGameSelectAll}
+                          fontSize={'0.875rem'}
+                          fontWeight={'bold'}
+                          color='#1b2559'
+                        >
+                          Select All
+                        </Checkbox>
+                      </Box>
+                    </>
                   ) : null}
                   {filterGamesList.length === 0 && allGames?.map((item, index) => (
                     <Box
                       key={index}
                       onClick={() => handleGameSelectedData(item.gameId)}
                       style={{
-                        backgroundColor: selectedGameItems.includes(item.gameId) ? 'lightblue' : 'transparent',
+                        border: selectedGameItems.includes(item.gameId) ? '2px solid #11047A' : '2px solid #e1e1e1',
+                        borderRadius: '8px',
+                        // backgroundColor: selectedGameItems.includes(item.gameId) ? 'lightblue' : 'transparent',
                         cursor: 'pointer',
                         padding: '10px',
                         margin: '5px',
+                        position: 'relative',
                       }}
                     >
                       {item.gameTitle}
+                      {selectedGameItems.includes(item.gameId) ?
+                        <div>
+                          <Icon as={FaCircleCheck} color={'#11047A'} position='absolute' right='-8px' top='-5px' />
+                        </div>
+                        : null}
                     </Box>
                   ))}
                   {filterGamesList.length > 0 && filterGamesList?.map((item, index) => (
@@ -629,13 +692,19 @@ const AssignCohorts: React.FC = () => {
                       key={index}
                       onClick={() => handleGameSelectedData(item.gameId)}
                       style={{
-                        backgroundColor: selectedGameItems.includes(item.gameId) ? 'lightblue' : 'transparent',
+                        border: selectedGameItems.includes(item.gameId) ? '2px solid #11047A' : '2px solid #e1e1e1',
+                        borderRadius: '8px',
                         cursor: 'pointer',
                         padding: '10px',
                         margin: '5px',
                       }}
                     >
                       {item.gameTitle}
+                      {selectedGameItems.includes(item.gameId) ?
+                        <div>
+                          <Icon as={FaCircleCheck} color={'#11047A'} position='absolute' right='-8px' top='-5px' />
+                        </div>
+                        : null}
                     </Box>
                   ))}
                 </Box>
@@ -647,7 +716,6 @@ const AssignCohorts: React.FC = () => {
                     <Box
                       key={index}
                       style={{
-
                         cursor: 'pointer',
                         padding: '10px',
                         margin: '5px',
@@ -661,13 +729,12 @@ const AssignCohorts: React.FC = () => {
                 </Box>
               </Box>
             </SimpleGrid>}
-
           <Flex justify="space-between">
             <Button
               variant="light"
               fontSize="sm"
               borderRadius="16px"
-              w={{ base: '128px', md: '148px' }}
+              w={'100%'}
               h="46px"
               mt="20px"
               onClick={handleBack}

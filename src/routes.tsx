@@ -168,7 +168,6 @@ const routes = [
     component: <LearnerActivity />,
     secondary: true,
     protected: true, 
-
   },
     { 
     name: 'Game-Wise Activity',
