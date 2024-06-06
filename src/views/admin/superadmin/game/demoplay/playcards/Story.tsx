@@ -401,7 +401,6 @@ const Story: React.FC<{
       };
       fetchData();
     }, [data, AudioOptions]);
-
     const InteractionFunction = () => {
 
       setIsGetsPlayAudioConfirmation(true);

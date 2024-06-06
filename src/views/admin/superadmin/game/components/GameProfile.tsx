@@ -85,13 +85,11 @@ export default function Settings(props: {
     const matchedSkill = skills.find(
       (option) => option.id === Number(authorNumber),
     );
-
-    console.log('matchedSkill', matchedSkill);
     return matchedSkill ? matchedSkill.name : null;
   };
 
   return (
-    <Card width={'100%'} mb="20px" alignItems="center">
+    <Card width={'100%'} mb="20px" alignItems="center" boxShadow={"2px 5px 40px 4px rgba(112, 144,176 / 19%)"}>
       <Flex
         w="100%"
         bgGradient="linear(to-b, brand.400, brand.600)"
@@ -173,7 +171,7 @@ export default function Settings(props: {
       </Flex>
       </Box>
       <Box w={'100%'} display={'flex'} justifyContent={'center'} mb="15px" mt="15px">
-        <Box w={'80%'} display={'flex'} justifyContent={'flex-end'}>
+        <Box w={'80%'} display={'flex'} justifyContent={'center'}>
         <Button
           variant="darkBrand"
           color="white"

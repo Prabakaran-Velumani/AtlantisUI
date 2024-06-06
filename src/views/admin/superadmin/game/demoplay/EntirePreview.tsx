@@ -60,6 +60,14 @@ import { FaDesktop, FaMobileAlt } from 'react-icons/fa';
 import { IoMdTabletLandscape } from 'react-icons/io';
 import { useParams } from 'react-router-dom';
 import {ProfileType} from "./GamePreview";
+
+import { useDispatch } from 'react-redux';
+import { RootState } from 'store/reducers';
+import { 
+  resetGameModifiedState
+} from 'store/preview/previewSlice';
+
+
 const ReplayScore = lazy(() => import('./playcards/ReplayScore'));
 const Story = lazy(() => import('./playcards/Story'));
 const Welcome = lazy(() => import('./playcards/Welcome'));
@@ -112,6 +120,7 @@ interface ShowPreviewProps {
   preLogDatasIni: any;
   initialStateUpdate: boolean;
   setInitialStateUpdate: any;
+  creatorDataSlice: any;
 }
 
 
@@ -193,13 +202,15 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   previewLogsDataIni,
   preLogDatasIni,
   initialStateUpdate,
-  setInitialStateUpdate
+  setInitialStateUpdate,
+  creatorDataSlice
 }) => {
+  
   const user: any = JSON.parse(localStorage.getItem('user'));
   const { colorMode, toggleColorMode } = useColorMode();
   const maxTextLength = 80;
   const audioRef = React.useRef(null);
-
+  const dispatch = useDispatch ();
   //state added by rajesh for profile screen
   const [isLanguage, setIsLanguage] = useState(null);
   // selected option color change
@@ -375,6 +386,7 @@ const EntirePreview: React.FC<ShowPreviewProps> = ({
   const [AudioOptions, SetAudioOptions] = useState({ qpOptionId: '' });
   const [score, setScore] = useState(null);
   const { uuid } = useParams();
+  
   const toast = useToast();
 
 useEffect(()=>{
@@ -514,7 +526,6 @@ useEffect(()=>{
        const IntQuest = parseInt(quest);
        const newQuest = {...getFinalscores, [IntQuest]: score};
        getFinalscores={...newQuest};
-    
    });
     
     const Replayscores = profile?.replayScore.length > 0 ? profile?.replayScore :null;
@@ -531,33 +542,12 @@ useEffect(()=>{
         }
     });
 
-
-
-
-
     let getReplayFinalscores : {[key: number]:  number} ={};
      Object.entries(Replaysums).forEach(([quest, score]) => 
       {
         const IntQuest = parseInt(quest);
         getReplayFinalscores = { ...getReplayFinalscores, [IntQuest]: score};
     });
-    // const TodayTotalScore = getFinalscores.map((item:any) => 
-    // {
-
-    //   Object.entries(item).forEach((rec :any)=>{
-
-
-    //   })
-    //     //  const CheckScore = getReplayFinalscores.map((quest:any,i:number) =>{ if(quest?.quest === item.quest){ return quest?.score < item.score ? ;} return undefined }).filter((value:any) => value!==undefined);
-    //     //  if(CheckScore.length > 0)
-    //     //   {
-            
-    //     //   }
-    //       // else{
-    //       //   return item.score
-    //       // }
-    // });
-
     const TodayTotalScore = Object.entries(getFinalscores).reduce((tot:number, acc: any)=>{
       let newTotal = tot;
       let questNo = acc[0];
@@ -730,14 +720,6 @@ useEffect(()=>{
               questScores[score.quest] = score.score;
             }
           });
-          // const total = scores.reduce((acc: any, row: any) => {
-          //   const quest = profile?.currentQuest;
-          //   if (row.quest == quest) {
-          //     return acc + row.score;
-          //   } else {
-          //     return acc;
-          //   }
-          // }, 0);
                
           setProfile((prev: any) => ({
             ...prev,
@@ -763,13 +745,6 @@ useEffect(()=>{
               questScores[score.quest] = score.score;
             }
           });
-          // total = scoreArray.reduce((acc: number, cur: any) => {
-          //   if (cur.quest == profile.currentQuest) {
-          //     return acc + cur.score;
-          //   } else {
-          //     return acc;
-          //   }
-          // }, 0);
           setProfile((prev: any) => ({
             ...prev,
             playerGrandTotal: {
@@ -887,6 +862,8 @@ useEffect(()=>{
       }
   }, [audio]);
 
+
+  /******************Need to handle the audio play and pause */
   useEffect(() => {
     if (voiceRef.current) {
       voiceRef.current.pause();
@@ -928,9 +905,15 @@ useEffect(()=>{
           }
         } else {
           if (audioObj.type === EnumType.BGM && backgroundBgmRef.current) {
-            backgroundBgmRef.current?.pause();
+            if(!backgroundBgmRef?.current?.paused)
+              {
+                backgroundBgmRef?.current?.pause();
+              }
           } else if (audioObj.type === EnumType.VOICE && voiceRef.current) {
-            voiceRef.current?.pause();
+            if(!voiceRef?.current?.paused)
+              {
+                voiceRef?.current?.pause();
+              }
           }
         }
       }
@@ -965,7 +948,6 @@ useEffect(()=>{
   }, [gameInfo?.gameData]);
 
   useEffect(() => {
-    // ![2, 10, 0].includes(currentScreenId) && setAudio(gameInfo?.bgMusic ?? '');
     if(![2, 10, 0].includes(currentScreenId))
       {
         if(!gameInfo?.bgMusic)
@@ -1788,40 +1770,34 @@ useEffect(()=>{
         return false;
       }
     }
-
-
-
-
-
-
   }
+  const calcQuestGrandTotal = async (
+    scores: any,
+    currentQuestNo: any = null,
+  ) => {
+    if (scores?.length <= 0) {
+      return 0;
+    }
+    
+    if (currentQuestNo != null) {
+      // Sum score of a quest
+      const totalScore = scores.reduce((total: number, sc: any) => {
+        if (sc.quest == currentQuestNo) {
+          return total + sc.score;
+        } else {
+          return total;
+        }
+      }, 0);
+      return totalScore; // Return the total score
+    } else {
+      //Sum up all the scores
+      return scores.reduce((total: number, sc: any) => total + sc.score, 0);
+    }
+  };
 
   const checkAndUpdateScores = async () => {
     const currentQuest = profile.currentQuest;
     // if (questState[currentQuest] !== 'Started') {
-      const calcQuestGrandTotal = async (
-        scores: any,
-        currentQuestNo: any = null,
-      ) => {
-        if (scores?.length <= 0) {
-          return 0;
-        }
-        
-        if (currentQuestNo != null) {
-          // Sum score of a quest
-          const totalScore = scores.reduce((total: number, sc: any) => {
-            if (sc.quest == currentQuestNo) {
-              return total + sc.score;
-            } else {
-              return total;
-            }
-          }, 0);
-          return totalScore; // Return the total score
-        } else {
-          //Sum up all the scores
-          return scores.reduce((total: number, sc: any) => total + sc.score, 0);
-        }
-      };
       const scoreTotal = await calcQuestGrandTotal(
         profile.score,
         profile.currentQuest,
@@ -1830,7 +1806,8 @@ useEffect(()=>{
         profile.replayScore,
         profile.currentQuest,
       );
-      if (scoreTotal < replayScoreTotal) {
+    
+      if (scoreTotal <= replayScoreTotal) {
         const currentQuestRemovedScoreArr = profile.score.filter(
           (item: any) => item.quest != profile.currentQuest,
         );
@@ -1849,6 +1826,7 @@ useEffect(()=>{
         const currentQuestRemovedReplayScoreArr = profile.replayScore.filter(
           (item: any) => item.quest != profile.currentQuest,
         );
+
         setProfile((prev: any) => ({
           ...prev,
           score: concatenatedScoreArr,
@@ -1863,7 +1841,6 @@ useEffect(()=>{
           replayScore: currentQuestRemovedReplayScoreArr,
         }));
       }
-    // }
   };
 
   const getData = (next: any) => {
@@ -2183,28 +2160,8 @@ if(currentScreenId ===2)
         const getgameinfoquest = gameInfo?.gameQuest.find(
           (row: any) => row.gameQuestNo == Nextcurrentquest,
         );
-        //this place no need to check this condition .....
-        /*if (getgameinfoquest?.gameIsSetCongratsScoreWiseMessage === 'true') {
-          if (demoBlocks.hasOwnProperty(nextLevel)) {
-            setProfile((prev: any) => {
-              const data = { ...prev };
-              if (!profile.completedLevels.includes(currentQuest)) {
-                data.completedLevels = [...data.completedLevels, nextLevel];
-              }
-              return data;
-            });
-            setType(demoBlocks[nextLevel]['1']?.blockChoosen);
-            setData(demoBlocks[nextLevel]['1']);
-            setCurrentScreenId(6);
-            return false;
-          } else {
-            setCurrentScreenId(6);
-            setType(null);
-            setData(null);
-            return false;
-          }
-        } else */
-
+ 
+        
         if (getgameinfoquest?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = getgameinfoquest?.gameMinScore;
           let scores:any = [];
@@ -2492,6 +2449,7 @@ if(currentScreenId ===2)
        setCurrentScreenId(4); //Navigate to leaderboard
        return false;
       } else if (haveNextQuest) {
+          checkAndUpdateScores();
         if (currentGameData?.gameIsSetMinPassScore === 'true') {
           const getminpassscore = currentGameData?.gameMinScore;
           const scores = profile?.score;
@@ -2933,19 +2891,11 @@ if(currentScreenId ===2)
       }
     }
     if (currentScreenId === 4) {
+      checkAndUpdateScores();
       if (gameInfo?.gameData?.gameIsShowInteractionFeedBack === 'Completion') {
         const Completionpage = Object.entries(questState).map(
           ([questId, status]) => ({ questId, status }),
-        );
-        // const OpenStraigntCompletionPage = Completionpage.find(
-        //   (row: any) =>
-        //     row.questId === profile.currentQuest && row.status === 'completed',
-        // );
-        // if (OpenStraigntCompletionPage !== undefined) {
-        //   setFeedbackList([]);
-        //   setCurrentScreenId(13);
-        //   return false;
-        // }
+        );       
         if (feedbackList.length !== 0) {
           getFeedbackData(data);
           setFeedbackNavigateNext(false);
@@ -3630,7 +3580,6 @@ if(currentScreenId ===2)
         }
       } else {
         /** IF a block not has navi option then it leads to next block */
-        console.log('nextBlock',nextBlock)
         if (nextBlock && nextBlock[0]?.blockChoosen) {
           setType(nextBlock[0]?.blockChoosen);
           setData(nextBlock[0]);
@@ -4462,7 +4411,6 @@ if(currentScreenId ===2)
   };
 
   /** replay prompt functions for replay point & previous navigation to chapter selection screen*/
-
   const handleReplayButtonClick = (replayType: string) => {
     /**replayType become ['mandatoryReplay', 'optionalReplay','replayPointPrompt'] **/
 
@@ -4523,8 +4471,111 @@ if(currentScreenId ===2)
     }
     setCurrentScreenId(2);
   };
-console.log("profile", profile)
-console.log("getPrevLogDatas", getPrevLogDatas)
+
+  const QuestBlocklastpaused = async (type : string = null) => {
+    const setBlockData = async (lastActivityquest: any, findActiveBlockId: any, SetLastSeqData: any )=>{
+      setProfile((prev: any)=> ({...prev, currentQuest: lastActivityquest}))
+      setData(SetLastSeqData);
+      setType(SetLastSeqData.blockChoosen);
+      if (
+        SetLastSeqData.blockChoosen ===
+        'Interaction'
+      ) {
+        const optionsFiltered = [];
+        const primarySequence = findActiveBlockId[0];
+        const gameInfoquest = gameInfo.questOptions;
+        for (const option of gameInfoquest) {
+          if (profileData?.Audiogetlanguage.length > 0) {
+            if (option?.qpQuestionId === primarySequence) {
+              const profilesetlan = profileData?.Audiogetlanguage.find(
+                (key: any) => key?.textId === option.qpOptionId,
+              );
+
+              if (profilesetlan) {
+                const languagecont = {
+                  ...option,
+                  qpOptionText: profilesetlan.content,
+                };
+                optionsFiltered.push(languagecont);
+              } else {
+                optionsFiltered.push(option);
+              }
+            }
+          } else {
+            if (option?.qpQuestionId === primarySequence) {
+              optionsFiltered.push(option);
+            }
+          }
+        }
+        const gameinfodata= gameInfo?.gameData?.gameShuffle;
+        if (gameinfodata === 'true') {
+          for (let i = optionsFiltered.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [optionsFiltered[i], optionsFiltered[j]] = [
+              optionsFiltered[j],
+              optionsFiltered[i],
+            ]; // Swap elements at indices i and j
+          }
+        }
+        setOptions(optionsFiltered);
+      }
+      setReplayIsOpen(false);
+      setCurrentScreenId(2);
+      return false;
+      }
+    if (getPrevLogDatas.nevigatedSeq && type !== "owner") {
+      const LastPreviousActiveBlock = getPrevLogDatas.lastActiveBlockSeq;
+      const lastActiveBlock = Object.keys(getPrevLogDatas.lastActiveBlockSeq);
+      const lastActivityquest :number = parseInt(lastActiveBlock[0]);
+      const findActiveBlockId = LastPreviousActiveBlock[lastActivityquest];
+      let SetLastSeqData: any;
+      for (const key in gameInfo.blocks[lastActivityquest]) {
+        const data = gameInfo.blocks[lastActivityquest][key];
+        if (data.blockId === findActiveBlockId[0]) {
+          SetLastSeqData = data;
+          break;
+        }
+      }
+      const result = await setBlockData(lastActivityquest, findActiveBlockId, SetLastSeqData)
+    }
+    else if(type === "owner" && creatorDataSlice?.screenId === 2)
+      {       
+        const lastActivityquest :number = parseInt(creatorDataSlice?.currentQuest);
+        const pSeq = `${lastActivityquest}.${creatorDataSlice?.activeBlockSeq}`;
+        let SetLastSeqData = {};
+        let activeBlock:number[]= [];
+
+      SetLastSeqData = Object.values(gameInfo.blocks[lastActivityquest]).find((item:any)=>{
+       if(item.blockPrimarySequence == pSeq && item.blockQuestNo == lastActivityquest){
+         activeBlock.push(item?.blockId);
+         return true;
+        }
+        return false;
+      });
+      const result = await setBlockData(lastActivityquest, activeBlock, SetLastSeqData)
+      dispatch(resetGameModifiedState(getPrevLogDatas.previewGameId));
+      }
+    }
+    
+  useEffect(()=>{
+    if(creatorDataSlice){
+      console.log("creatorDataSlice", creatorDataSlice);
+      // console.log("getPrevLogDatas", getPrevLogDatas);
+      switch(creatorDataSlice?.screenId){
+        case 2:
+          QuestBlocklastpaused("owner");
+          break;
+        case 5 : 
+            break
+
+
+      }
+
+    }
+  },[creatorDataSlice])
+
+
+
   return (
     <ProfileContext.Provider value={profileData}>
       <Box id="EntirePreview-wrapper">
@@ -4597,10 +4648,7 @@ console.log("getPrevLogDatas", getPrevLogDatas)
                 handleReplayButtonClick={handleReplayButtonClick}
                 replayState={replayState}
                 setCurrentScreenId={setCurrentScreenId}
-                // isReplay={isReplay}
                 gameInfo={gameInfo}
-                // isOptionalReplay={isOptionalReplay}
-                // setOptionalReplay={setOptionalReplay}
                 profilescore={profilescore}
                 getPrevLogDatas={getPrevLogDatas}
                 setData={setData}
@@ -4612,6 +4660,7 @@ console.log("getPrevLogDatas", getPrevLogDatas)
                 setPreLogDatas={setPreLogDatas}      
                 replayNextHandler ={replayNextHandler}
                 data={data}  
+                QuestBlocklastpaused={QuestBlocklastpaused}
                  />
             )}
             {(() => {
@@ -5053,7 +5102,7 @@ console.log("getPrevLogDatas", getPrevLogDatas)
                         setSelectedPlayer={setSelectedPlayer}
                         players={gameInfo?.gamePlayers}
                         formData={gameInfo?.gameData}
-                        imageSrc={preloadedAssets.backgroundImage}
+                        imageSrc={preloadedAssets.StarsBg}
                         setCurrentScreenId={setCurrentScreenId}
                         demoBlocks={demoBlocks}
                         preloadedAssets={preloadedAssets}
@@ -5092,9 +5141,8 @@ console.log("getPrevLogDatas", getPrevLogDatas)
                         setSelectedOption={setSelectedOption}
                         questWiseMaxTotal={questWiseMaxTotal}
                         gameInfoTotalScore = {gameInfo?.completionQuestOptions}
-
+                        gameInfo = {gameInfo}
                       />
-                      {/* </Box> */}
                     </>
                   );
                 case 14:
