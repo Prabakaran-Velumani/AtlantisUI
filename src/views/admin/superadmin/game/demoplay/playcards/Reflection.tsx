@@ -30,8 +30,8 @@ if(storedRefAnswers)
   }
   if(reflectionQuestions)
     {
-       const ReflectionFilter = reflectionQuestions.filter((item: any, index: number) => (item?.translationId === getPrevLogDatas.previewProfile?.language));
-       setReflectionFilter(ReflectionFilter);
+       const ReflectionFilter = reflectionQuestions.filter((item: any, index: number) => ((item?.translationId === 0 ? 1 :item?.translationId) === getPrevLogDatas.previewProfile?.language));
+          setReflectionFilter(reflectionQuestions);
     }
   },[])
 

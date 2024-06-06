@@ -117,7 +117,8 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
     // fetchDefaultcat();
     fetchCategoryList();
   }, [])
-  // console.log('defaultCat',defaultCat);
+  
+  console.log('defaultCat',defaultCat);
   let borderColor = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
   let bg = useColorModeValue('brand.500', 'brand.400');
   let pastelBlue = useColorModeValue('brand.100', 'brand.300');
