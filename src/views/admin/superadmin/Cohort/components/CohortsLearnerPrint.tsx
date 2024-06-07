@@ -77,6 +77,7 @@
 
 
 
+import { Box, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { cohortsLearnerAllDatas } from 'utils/cohorts/cohorts'; // Adjust the import path as needed
@@ -117,8 +118,8 @@ const CohortsLearnerPrint: React.FC = () => {
   }, [id]);
 
   return (
-    <div style={{ margin: '0 80px' }}>
-      <table style={{ borderCollapse: 'collapse', width: '100%', border: '1px solid black', marginTop: '70px' }}>
+    <div style={{ margin: '30px' }}>
+      <table style={{ borderCollapse: 'collapse', width: '100%', border: '1px solid black' }}>
         <thead>
           <tr>
             <th colSpan={4} align='left' >
@@ -130,7 +131,7 @@ const CohortsLearnerPrint: React.FC = () => {
             <th style={{ border: '1px solid black', padding: '8px' }}>Learner Name</th>
             <th style={{ border: '1px solid black', padding: '8px' }}>Learner Email</th>
             <th style={{ border: '1px solid black', padding: '8px' }}>Company Name</th>
-          </tr>
+          </tr> 
         </thead>
         <tbody>
           {learnerDetails.map((learner, index) => (
@@ -144,6 +145,41 @@ const CohortsLearnerPrint: React.FC = () => {
         </tbody>
       </table>
     </div>
+
+    // <Box className='cohorts-leaner-print'>
+    //   <Box className='container'>
+    //     <Box className='cohorts-card'>
+    //       <Box className='div-of-heading'>
+    //         <Text>Cohorts Name:</Text>
+    //         <Text>{cohortsName}</Text>
+    //       </Box>
+    //       <Box className='div-of-body'>
+    //         <Box className='table-card'>
+    //           <Table>
+    //             <Thead>
+    //               <Tr>
+    //                 <Th>S.no</Th>
+    //                 <Th>Learner Name</Th>
+    //                 <Th>Learner Email</Th>
+    //                 <Th>Company Name</Th>
+    //               </Tr>
+    //             </Thead>
+    //             <Tbody>
+    //               {learnerDetails.map((learner, index) => (
+    //                 <Tr>
+    //                   <Td>{index + 1}</Td>
+    //                   <Td>{learner.username}</Td>
+    //                   <Td>{learner.email}</Td>
+    //                   <Td>{learner.companyName}</Td>
+    //                 </Tr>
+    //               ))}
+    //             </Tbody>
+    //           </Table>
+    //         </Box>
+    //       </Box>
+    //     </Box>
+    //   </Box>
+    // </Box>
   );
 };
 

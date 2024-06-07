@@ -82,6 +82,7 @@ import leadBtn from 'assets/img/games/LeadBtn.png';
 import ModelQ from 'assets/img/games/modelq.png';
 import scroll from 'assets/img/games/scroll.png';
 import Cross from 'assets/img/games/cross.png';
+import introBgImage from 'assets/img/screens/fristscreenBackground.jpg'
 
 /*file not available but used list
  import write from '../../assets/img/games/Writing.png';
@@ -171,6 +172,7 @@ export const assetImageSrc = [
   { assetType: 'SkillLearn', src:SkillLearn},
   { assetType: 'MoneyIcon', src:MoneyIcon},
   { assetType: 'profile', src:profile},
+  { assetType: 'introBgImage', src:introBgImage},
   /*file not available but used list
   { assetType: 'write', src: write },
   */

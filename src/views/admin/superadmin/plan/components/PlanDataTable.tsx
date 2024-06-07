@@ -303,7 +303,7 @@ console.log('isConfirm',isConfirm);
   };
 
   const getPageNumbers = () => {
-    const pageCount = 5;
+    const pageCount = 3;
     const currentPage = pageIndex + 1;
     const pages = [];
 

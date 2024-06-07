@@ -71,9 +71,9 @@ const PrintLearnerDetails: React.FC = () => {
   };
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', margin: '20px' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif', margin: '30px' }}>
       <h1>Learner Details</h1>
-      <table style={{ borderCollapse: 'collapse', width: '100%', margin: '20px 0' }}>
+      <table style={{ borderCollapse: 'collapse', width: '100%', border: '1px solid black'}}>
         <thead>
         <tr>
             <th colSpan={5} style={{ ...cellStyleee }} >

@@ -229,7 +229,7 @@ const CreatorActivityDataTable: React.FC<CustomCreatorDataTableProps> = ({
   };
 
   const getPageNumbers = () => {
-    const pageCount = 5; // Adjust the number of visible page numbers as needed
+    const pageCount = 3; // Adjust the number of visible page numbers as needed
     const currentPage = pageIndex + 1;
     const pages = [];
 
@@ -528,7 +528,7 @@ useEffect(() => {
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     color={'#191919'}
                     textAlign={'start'}
-                    p={'10px 10px'}
+                    // p={'10px 10px'}
                   >
                     {column.render('Header')}
                     <span>
@@ -558,7 +558,7 @@ useEffect(() => {
                       <Td
                       whiteSpace={'nowrap'}
                       {...cell.getCellProps()}
-                      p={'12px'}
+                      // p={'12px'}
                       textAlign={'start'}
                       onClick={() => {
                         if (cell.column.id === 'noofgames') {

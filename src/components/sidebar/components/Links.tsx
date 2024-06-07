@@ -44,7 +44,8 @@ export function SidebarLinks(props: {
 
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName: string) => {
-    return location.pathname.includes(routeName);
+    const lastSegment = (path: string) => path.split('/').pop()?.toLowerCase();
+    return lastSegment(routeName) === lastSegment(location.pathname);
   };
 
   // this function creates the links and collapses that appear in the sidebar (left menu)

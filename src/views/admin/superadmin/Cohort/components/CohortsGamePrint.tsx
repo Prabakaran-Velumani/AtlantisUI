@@ -49,8 +49,8 @@ const Cohortsdatas: React.FC = () => {
     }
 
     return (
-        <div style={{ margin: '0 80px' }}>
-            <table style={{ borderCollapse: 'collapse', width: '100%', border: '1px solid black', marginTop: '70px' }}>
+        <div style={{ margin: '30px' }}>
+            <table style={{ borderCollapse: 'collapse', width: '100%', border: '1px solid black' }}>
                 <thead>
                    <tr>
                     <th colSpan={4} align='left' >
