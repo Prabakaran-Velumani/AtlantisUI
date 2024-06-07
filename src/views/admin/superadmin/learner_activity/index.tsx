@@ -137,6 +137,11 @@ const CreatorCreation: React.FC = () => {
 
     window.open(`/AssignedGames/${leanerId}`, 'AssignedGamesWindow', 'width=800,height=600');
   }
+  const handleBlockScore = (leanerId:number)=>{
+
+    window.open(`/BlockGameScore/${leanerId}` ,'width=800,height=600');
+  }
+
 
 
 
@@ -225,7 +230,25 @@ const CreatorCreation: React.FC = () => {
     originalScore: data.originalScore,
     finalScore:data.finalScore,
     progress: data.progress,
-    skillWiseScore: null,
+    // skillWiseScore: null,
+    skillWiseScore: (
+      <span
+      style={{
+        backgroundColor: 'transparent',
+        color: '#007bff',
+        padding: '0', 
+        border: 'none', 
+        borderRadius: '0', 
+        cursor: 'pointer', 
+        display: 'inline-block',
+        fontSize: '14px',
+        
+      }}
+      onClick={() => handleBlockScore(data?.leanerId)}
+    >
+      {data.gamesAssignedCount}
+    </span>
+    ),
     timeSpent:data.timeSpent,
     lastActive: data.lastActive,
     // timesAttended: data.timesAttended,

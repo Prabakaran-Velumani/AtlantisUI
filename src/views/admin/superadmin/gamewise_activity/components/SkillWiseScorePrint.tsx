@@ -9,10 +9,22 @@ interface BlockData {
   blockSkillTag: string | null;
 }
 
+// interface GameData {
+//   gameQuestNo: any;
+//   gameTitle:any
+//   dummyQuestions: { interaction: string }[];
+//   data: BlockData[];
+//   maxscoredata: Record<string, string>;
+// }
+
+
 interface GameData {
   gameQuestNo: any;
-  gameTitle:any
-  dummyQuestions: { interaction: string }[];
+  gameTitle: any;
+  gameStoryLine: any;
+  dummyQuestions: { interaction: string }[]; // Add this line
+  blockQuestion:any
+
   data: BlockData[];
   maxscoredata: Record<string, string>;
 }
@@ -89,30 +101,33 @@ return (
           </tr>
         </thead>
         <tbody>
-          {skillScore.map((game: GameData, gameIndex: number) => {
-            console.log("game:", game); // Add console log for game
-            console.log("maxscoredata", game.maxscoredata.length);
-            return (
-              <React.Fragment key={`game-${gameIndex}`}>
+        {skillScore.map((game: GameData, gameIndex: number) => {
+    console.log("game:", game); // Add console log for game
+    console.log("maxscoredata", game.maxscoredata.length);
+    return (
+        <React.Fragment key={`game-${gameIndex}`}>
+            <tr>
+                <td style={{ border: '1px solid black', padding: '8px' }} colSpan={4}>Game Quest No: {game.gameQuestNo}</td>
+            </tr>
+            {game.blockQuestion && game.blockQuestion[0] && // Add conditional check here
                 <tr>
-                  <td style={{ border: '1px solid black', padding: '8px' }} colSpan={4}>Game Quest No: {game.gameQuestNo}</td>
+                    <td style={{ border: '1px solid black', padding: '8px' }}>{gameIndex + 1}</td> {/* Adding S.No */}
+                    <td style={{ border: '1px solid black', padding: '8px' }}>{game.blockQuestion}</td> {/* Adding interaction */}
+                    <td style={{ border: '1px solid black', padding: '8px' }}>{game.data && game.data[0] && game.data[0].blockSkillTag || ""}</td> {/* Add conditional check */}
+                    <td style={{ border: '1px solid black', padding: '8px' }}>
+                        {/* Displaying the maximum score value without showing the key */}
+                        {Object.values(game.maxscoredata).map((score: string, scoreIndex: number) => (
+                            <div key={`score-${scoreIndex}`}>
+                                {score}
+                            </div>
+                        ))}
+                    </td>
                 </tr>
-                <tr>
-                  <td style={{ border: '1px solid black', padding: '8px' }}>{gameIndex + 1}</td> {/* Adding S.No */}
-                  <td style={{ border: '1px solid black', padding: '8px' }}>{game.dummyQuestions[0]?.interaction}</td> {/* Adding interaction */}
-                  <td style={{ border: '1px solid black', padding: '8px' }}>{game.data[0].blockSkillTag || "communication"}</td>
-                  <td style={{ border: '1px solid black', padding: '8px' }}>
-                    {/* Displaying the maximum score value without showing the key */}
-                    {Object.values(game.maxscoredata).map((score: string, scoreIndex: number) => (
-                      <div key={`score-${scoreIndex}`}>
-                        {score}
-                      </div>
-                    ))}
-                  </td>
-                </tr>
-              </React.Fragment>
-            );
-          })}
+            }
+        </React.Fragment>
+    );
+})}
+
         </tbody>
       </table>
     </div>
@@ -122,5 +137,7 @@ return (
 };
 
 export default SkillWiseScorePrint;
+
+
 
 

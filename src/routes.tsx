@@ -142,18 +142,9 @@ const routes = [
     secondary: true,
     protected: true, 
   },
-  isCreator && {
-    name: 'Games',
-    path: '/superadmin/game',
-    layout: '/admin',
-    icon: ( <Icon as={MdGamepad} width="20px" height="20px" color="#ffffff" /> ),
-    component: <Game />,
-    secondary: true,
-    protected: true, 
-  },
-  isAdmin && {
+  {
     name: 'Creator Activity',
-    path: '/superadmin/creator_activity',
+    path: '/superadmin/Creator_activity',
     layout: '/admin',
     icon: ( <Icon as={IoBuild} width="20px" height="20px" color="#ffffff" /> ),
     component: <SuperAdminCreatorActivity/>,
@@ -162,7 +153,7 @@ const routes = [
   },
     {
     name: 'Learner Activity',
-    path: '/superadmin/learner_activity',
+    path: '/superadmin/Learner_activity',
     layout: '/admin',
     icon: ( <Icon as={MdLocalActivity } width="20px" height="20px" color="#ffffff" /> ),
     component: <LearnerActivity />,
@@ -180,8 +171,6 @@ const routes = [
     protected: true, 
 
   },
-
-  
   {
     name: 'Profile Settings',
     path: `/creator/settings/${id}`,
@@ -192,7 +181,15 @@ const routes = [
     protected: true,
     
   },
-
+  isCreator && {
+    name: 'Games',
+    path: '/superadmin/game',
+    layout: '/admin',
+    icon: ( <Icon as={MdGamepad} width="20px" height="20px" color="#ffffff" /> ),
+    component: <Game />,
+    secondary: true,
+    protected: true, 
+  },
 
 ].filter(Boolean);
 

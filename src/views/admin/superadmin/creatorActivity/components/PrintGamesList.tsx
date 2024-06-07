@@ -146,15 +146,17 @@ return (
       <table style={{ borderCollapse: 'collapse', width: '100%', margin: '20px 0' }}>
         <thead>
            <tr>
-            <th colSpan={5} style={{ ...cellStyleee }} >
+            {getCreatorDetails[0]?.ctName ? <th colSpan={5} style={{ ...cellStyleee }} >
+           
             Creator Name :{getCreatorDetails[0]?.ctName}
-            </th>
+            </th> : null}
+            
             
           </tr>
           <tr>
-            <th colSpan={5} style={{ ...cellStylee }} >
+            {getCreatorDetails[0]?.lmscompany?.cpCompanyName ? <th colSpan={5} style={{ ...cellStylee }} >
            Company Name : {getCreatorDetails[0]?.lmscompany?.cpCompanyName}
-            </th>
+            </th>:null}
             
           </tr>
           <tr style={rowStyle}>

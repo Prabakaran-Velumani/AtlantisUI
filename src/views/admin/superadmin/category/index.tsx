@@ -7,7 +7,7 @@ import CategoryDataTable from './components/CategoryDataTable';
 import { MdEdit, MdDelete } from 'react-icons/md';
 import Popup from 'components/alerts/Popup';
 import OnToast from 'components/alerts/toast';
-import { getCategory,removeCategory,getOneCategory,getCategoryList,CategoryStatus} from 'utils/category/category';
+import { getCategory,removeCategory,getOneCategory,getCategoryList,CategoryStatus,CategoryDataGet} from 'utils/category/category';
 import { Switch } from '@chakra-ui/react'
 interface CategoryData {
   id: number;
@@ -42,7 +42,8 @@ const CategoryCreation: React.FC = () => {
   });
   const navigate = useNavigate();
   const fetchData = async () =>{
-    const result = await getCategoryList();
+    // const result = await getCategoryList();
+    const result = await CategoryDataGet();
     if(result?.status !== 'Success') return console.log('getCategory Error :',result?.message);
     setApiData(result?.data);
   } 
@@ -60,6 +61,7 @@ const CategoryCreation: React.FC = () => {
     } 
   };
   const handleStatus = async (id?: number, status?: string) => {
+    console.log('LOkie__id',id)
     setFormData(formData => ({
       ...formData,
       lenStatus: status
@@ -118,8 +120,12 @@ const CategoryCreation: React.FC = () => {
       action: actionBtns(data),
     }));
   };
+  useEffect(()=>{
+    console.log('apiData123',apiData);
+  },[apiData])
 
   useEffect(() => {
+    
     const deleteData = async () => {
       try {
         if (isConfirm && deleteId) {

@@ -11,7 +11,7 @@ const Popup = (props: {setIsConfirm:any, setIsOpen:any ,msg:any,setmsg:any}) => 
     const handleCancel = () => {
         setIsConfirm(false);
         setIsOpen(false);
-        setmsg('');
+        // setmsg(''); //Commanded By Lokie
     }
  
   return (

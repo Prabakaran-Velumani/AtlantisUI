@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
-
+ import * as XLSX from 'xlsx';
 // Chakra imports
-import { Flex, SimpleGrid, Text, Box, Button, useColorModeValue, useToast, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import { Flex, SimpleGrid, Text, Box, Button, useColorModeValue, useToast, Table, Thead, Tbody, Tr, Th, Td,Radio, RadioGroup, Stack } from '@chakra-ui/react';
 
 
 // Custom Imports
@@ -17,6 +17,8 @@ import { getCountries } from 'utils/company/companyService';
 import { addLearner, getLearnerById, learnerAdd, updateLearner } from 'utils/leaner/leaner';
 import OnToast from 'components/alerts/toast';
 import { FaLeaf } from 'react-icons/fa';
+import { FaUpload,FaFileExcel } from 'react-icons/fa';
+import {  FaTimes } from 'react-icons/fa';
 const CreatorCreation = () => {
     const isInvalid = true;
 
@@ -38,6 +40,7 @@ let selectDisable=false;
     const [companyOptions, setCompanyOptions] = useState([]);
     const [countryOptions, setCountryOptions] = useState([]);
     const [creatorOptions, setCreatorOptions] = useState([]);
+    const [StoreOption, setStoreOption] = useState('Mannual');
     const [isButtonDisabled, setButtonDisabled] = useState<boolean>(false);
     const [indicate, setIndicate] = useState<boolean>(false);
     const [emptyInfo, setEmptyInfo] = useState([]);
@@ -526,6 +529,176 @@ let selectDisable=false;
 
 
     // console.log('fsfsd', formData);
+    //     /**************Excel Upload Area ********************* */
+    const [excelData, setExcelData] = useState([]);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const handleFileUpload = (e:any) => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+  
+      reader.onload = (event) => {
+        const binaryString = event.target.result;
+        const workbook = XLSX.read(binaryString, { type: 'binary' });
+        const worksheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[worksheetName];
+        const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        setExcelData(data);
+        
+      };
+  
+      reader.readAsBinaryString(file);
+    };
+console.log('excelData',excelData)
+    // console.log('fsfsd', formData);
+    const  dragNdrop1=(event:any) => {
+        var fileName = URL.createObjectURL(event.target.files[0]);
+        var preview = document.getElementById("preview");
+        var previewImg = document.createElement("img");
+        previewImg.setAttribute("src", fileName);
+        preview.innerHTML = "";
+        preview.appendChild(previewImg);
+    }
+    const drag1 = () => {
+        const uploadFileParent = document.getElementById('uploadFile').parentNode as HTMLElement;
+        if (uploadFileParent) {
+            uploadFileParent.className = 'draging dragBox';
+        }
+    }
+    
+    const drop1=() =>   {
+        const uploadFileParent = document.getElementById('uploadFile').parentNode as HTMLElement;
+        if (uploadFileParent) {
+            uploadFileParent.className = 'dragBox';
+        }
+
+        
+    }
+    const drag = (event:any) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const uploadFileParent = document.getElementById('uploadFile').parentNode as HTMLElement;
+        if (uploadFileParent) {
+            uploadFileParent.className = 'draging dragBox';
+        }
+      };
+    
+      const drop = (event:any) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const file = event.dataTransfer.files[0];
+        if (file && (file.type === 'application/vnd.ms-excel' || file.name.endsWith('.xlsx') || file.name.endsWith('.xls'))) {
+          handleFileUpload(event);
+        } else {
+          console.log('Please drop a valid Excel file.');
+        }
+      };
+    
+      const dragNdrop = (event:any) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const file = event.target.files[0];
+        setSelectedFile(file);
+        console.log("selectedfile",selectedFile)
+        if (file && (file.type === 'application/vnd.ms-excel' || file.name.endsWith('.xlsx') || file.name.endsWith('.xls'))) {
+          handleFileUpload(event);
+        } else {
+          console.log('Please select a valid Excel file.');
+        }
+      };
+      const removeFile = () => {
+        setSelectedFile(null);
+        setNoOfRows(1)
+        // setExcelData([]); // Reset excelData to an empty array
+        setFormDatas({});
+        
+      };
+      const ArrayComparisonComponent = (excelhead:any) => {
+        const array1 = ['S.No','LEARNER NAME', 'LEARNER MAIL', 'LEARNER DEPARTMENT', 'LEARNER DESIGNATION', 'LEARNER COUNTRY', 'LEARNER AGE', 'LEARNER GENDER'];
+        const array2 =excelhead;
+      if(excelhead){
+        console.log("arrays1",array1);
+        console.log("arrays2",array2);
+        const arraysAreEqual = (arr1:any, arr2:any) => {
+          if (arr1.length !== arr2.length) {
+            return false;
+          }
+          return arr1.every((element:any, index:any) => element === arr2[index]);
+        };
+      
+       // return arraysAreEqual(array1, array2);
+        if (!arraysAreEqual(array1, array2)) {
+            setMsg('This file does not match');
+            setToastStatus('error');
+            setAlert(true);
+            removeFile();
+            return false;
+        }
+
+        return true;
+      }else{
+        
+        setMsg('this file does nOt match');
+            setToastStatus('error');
+            setAlert(true);
+            removeFile();
+            return false ;         
+// return  false;
+    
+      }
+       
+      };
+
+     
+
+useEffect(() => {
+    
+
+    if (excelData.length > 0) {
+        if(ArrayComparisonComponent(excelData[0]??null)){
+        setNoOfRows(excelData.length - 1);
+       
+        console.log('excelData', excelData?.length);
+      
+        const updatedFormDatas:any = {};
+        excelData?.slice(1)?.forEach((item, index) => {
+           const counId= mappedCountryOptions.find((country) => country?.label?.toLowerCase() === item[5]?.toLowerCase())?.value
+           console.log('counId',counId)
+          updatedFormDatas[index.toString()] = {
+            lenUserName: item[1],
+            lenMail: item[2],
+            lenDepartment: item[3],
+            lenDesignation: item[4],
+            lenCountryId: counId,
+            lenAge: item[6],
+            lenGender: item[7],
+            leanerId: [],
+            
+            
+          };
+        });
+        const excelwithoutsno = excelData[0].slice(1);
+        console.log("excelwithoutsno",excelwithoutsno);
+        setFormDatas((prevFormDatas) => ({
+          ...prevFormDatas,
+          ...updatedFormDatas,
+        }));
+      }
+    }
+    
+},[excelData])
+
+const expectedColumnHeaders = [
+    'learner Name',
+    'learner Mail',
+    'learner Department',
+    'learner Designation',
+    'learner Country',
+    'learner Age',
+    'learner Gender'
+];
+
+// /************************************** */
+
     return (
       <>
         <Box
@@ -571,6 +744,19 @@ let selectDisable=false;
                 {/* <Text fontSize='md' color={textColorSecondary}>
                                 Here you can change your Creator details
                             </Text> */}
+
+                    
+<SimpleGrid columns={{ sm: 1, md: 2, lg:1 }} spacing={{ base: '20px', xl: '20px' }}>
+                        <RadioGroup value={StoreOption}  onChange={(e) => setStoreOption(e)} >
+      <Stack direction='row'>
+        <Radio value='Mannual'><strong>Add Learner Mannuly</strong> </Radio>
+        <Radio value='Excel'><strong>Add By Excel</strong></Radio>
+      </Stack>
+    </RadioGroup>
+                            
+ 
+
+                        </SimpleGrid>
               </Flex>
               <SimpleGrid
                 columns={{ sm: 1, md: 2, lg: 3 }}
@@ -622,6 +808,49 @@ let selectDisable=false;
                   disabled={true}
                 />
               </SimpleGrid>
+
+ {StoreOption === 'Excel' && (
+     <SimpleGrid columns={{ sm: 1, md: 2, lg: 1 }} spacing={{ base: '20px', xl: '20px' }} style={{ marginTop: '20px' }}>
+     <div style={{ display: 'flex' }}>
+      <div className="uploadOuter">
+         <Text>Upload Excel Here<span color='red'>*</span></Text>
+         <span className="dragBox" onDragOver={drag} onDrop={drop}>
+         {selectedFile && (
+                <div>
+<span style={{ display: 'flex', alignItems: 'center' }}>
+  <FaFileExcel style={{ color: '#1D6F42', cursor: 'pointer', fontSize: '1.5em' }} />
+  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginLeft: '5px' }}>
+    {selectedFile.name}
+  </span>
+  <button onClick={removeFile} style={{ marginLeft: '5px', backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
+    <FaTimes  />
+  </button>
+</span>                   
+</div>
+ )}
+         {!selectedFile && (
+    <div>
+      Drag and Drop Excel file here
+      <input type="file" onChange={dragNdrop} id="uploadFile" />
+    </div>
+  )}
+         </span>
+       </div>
+     
+       <div >
+        
+       <a href={require('../sampleexcel/AtlantisSampleLearneData.xlsx')} download>
+       <FaFileExcel className="Dwonload-Excel" style={{ color: '#1D6F42', cursor: 'pointer' }} /></a>
+
+         <p className='Excelhead'>Sample Excel file available for download by clicking here.</p>
+         <Text className='ExcelNote'>   <span style={{ color: 'red' }}>Note: </span>Ensure that the country names are spelled correctly in Excel and that the gender names match those provided in the sample document. </Text>
+       </div>
+      
+     </div>
+     <div id="preview"></div>
+   </SimpleGrid>
+   
+)}
 
               {/* Table Input */}
               <Box m={'50px 0 20px 0'} w={'100%'} overflowX={'auto'}>

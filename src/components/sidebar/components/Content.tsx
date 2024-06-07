@@ -21,6 +21,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { logout } from 'store/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { updatePreviewData } from 'store/preview/previewSlice';
+import { logoutAuto } from 'utils/admin/adminService';
 
 // FUNCTIONS
 
@@ -35,10 +36,19 @@ function SidebarContent(props: {
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleLogout = () => { 
+  const handleLogout = async() => { 
+    const storedUserString = localStorage.getItem('user');
+    const storedUser = JSON.parse(storedUserString);
     setUser(null);
     dispatch(logout());
     dispatch(updatePreviewData(null))
+    const data = {
+      userid: storedUser.data.id,
+      userrole: storedUser.data.role
+    };
+
+    const datas = JSON.stringify(data);
+    await logoutAuto(datas);
     localStorage.removeItem('user')
     navigate('/auth/sign-in/default')
   }

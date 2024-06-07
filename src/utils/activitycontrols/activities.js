@@ -81,6 +81,17 @@ export async function getGameWiseData(data) {
       console.log('updateStatus Error:', err);
     }
   }
+
+  // 
+export async function getBlocklWiseScore(id) {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.getBlocklWiseScore}/${id}`, getMethod);
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.log('updateStatus Error:', err);
+  }
+}
   
   export async function cohortsLearnerAllDatas(id) {
     try {

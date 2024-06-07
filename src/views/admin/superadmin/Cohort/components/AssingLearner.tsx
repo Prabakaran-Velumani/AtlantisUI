@@ -48,16 +48,14 @@ const AssignCohorts: React.FC = () => {
   const [GameAssignData, setGameAssignData] = useState([]);
   const { id } = useParams();
 
-  console.log('....Assign after click');
-
   const handleBack = () => {
     // Navigate back to the previous page
     navigate('/admin/superadmin/cohort/');
   };
-  const fetchData = async () => {
-    if (id? id : cohortsId) {
+  const fetchData = async (getCohortsId:number) => {
+    if (getCohortsId) {
       try {
-        const cohortId = id? id : cohortsId;
+        const cohortId = getCohortsId;
         const result = await checkCohorts(cohortId);
         if (result.status !== 'Success') {
           console.log('getIndustry Error', result?.message);
@@ -67,7 +65,7 @@ const AssignCohorts: React.FC = () => {
           setFormData({
             chCohortsName: cohorsData.chCohortsName,
           });
-          setCohortsId(id? id : cohortsId);
+          setCohortsId(getCohortsId);
           /********************This For Learner Assigned Data************************************************ */
           if (cohorsData.learnersListAssigned.length > 0) {
             setLearnerAssignData(cohorsData.learnersListAssigned);
@@ -118,7 +116,10 @@ const AssignCohorts: React.FC = () => {
     }
   };
   useEffect(() => {
-    fetchData();
+if(id!==null)
+  {
+    fetchData(parseInt(id));
+  }
   }, [id])
   useEffect(() => {
     setLearnerFilterList([]);
@@ -234,8 +235,15 @@ const AssignCohorts: React.FC = () => {
         };
         const result = await updatecohortsLearner(JSON.stringify(data));
         if (result.status === 'success') {
+          setAllSelected(false);
           setSearchMail([]);
-          fetchData();
+          if(cohortsId!==null)
+            {
+              fetchData(cohortsId);
+            }
+            else{
+              fetchData(cohortsResult.data.chId);
+            }
         }
       }
 
@@ -270,6 +278,7 @@ const AssignCohorts: React.FC = () => {
   const handleGameSelectAll = () => {
     if (allSelected) {
       // setSelectedItems([]);
+
       setSelectedGameItems([]);
     } else {
       let pushAllGameId: any = [];
@@ -315,8 +324,15 @@ const AssignCohorts: React.FC = () => {
           };
           const result = await updatecohortsgame(JSON.stringify(data));
           if (result.status === 'success') {
+            setAllSelected(false);
             setSearchGame([]);
-            fetchData();
+            if(cohortsId!==null)
+            {
+              fetchData(cohortsId);
+            }
+            else{
+              fetchData(cohortsResult.data.chId);
+            }
           }
         }
       }

@@ -167,7 +167,7 @@ const CreatorActivityDataTable: React.FC<CustomCreatorDataTableProps> = ({
   const columns: ColumnObj[] = React.useMemo(
     () => [
       { Header: 'S.No', accessor: 'sNo' },
-      { Header: 'company Name', accessor: 'company' },
+      // { Header: 'company Name', accessor: 'company' },
       { Header: 'Creator Name', accessor: 'CreatorName' },
       { Header: 'No of Games ', accessor: 'noofgames' },
       { Header: 'No of Games Launched', accessor: 'noofgameslaunched' },

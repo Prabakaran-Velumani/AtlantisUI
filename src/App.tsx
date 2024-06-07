@@ -29,7 +29,8 @@ import InteractionScreenShot from 'views/admin/superadmin/game/demoplay/playcard
 import CohortsLearnerPrint from 'views/admin/superadmin/Cohort/components/CohortsLearnerPrint';
 import CohortsGamePrint from '../src/views/admin/superadmin/Cohort/components/CohortsGamePrint';
 // Lokie Added 04/06/2024
-import AssignGames from '../src/views/admin/superadmin/learner_activity/AssignedGames'
+import AssignGames from '../src/views/admin/superadmin/learner_activity/AssignedGames';
+import BlockScore from '../src/views/admin/superadmin/learner_activity/BlockScore';
 // Lokie End 04/06/2024
 import SkillWiseScorePrint from 'views/admin/superadmin/gamewise_activity/components/SkillWiseScorePrint';
 import FeedBackGameWise from 'views/admin/superadmin/gamewise_activity/components/FeedBackGameWise';
@@ -102,6 +103,7 @@ useEffect(() => {
         <Route path="/learnerDetails/:id"element={<PrintLearnerDetails/>} />
 
         <Route path="/AssignedGames/:id"element={<AssignGames/>} />
+        <Route path="/BlockGameScore/:id"element={<BlockScore/>} />
         <Route path="/getSkillWiseScore/:id" element={<SkillWiseScorePrint />} />
         <Route path="/CohortsLearnerPrint/:id" element={<CohortsLearnerPrint />} />
         <Route path="/coshorts/:id"element={<CohortsGamePrint/>}  />

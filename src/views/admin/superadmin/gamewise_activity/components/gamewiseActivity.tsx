@@ -180,7 +180,7 @@ const CreatorDataTable: React.FC<CreatorDataTableProps> = ({ data,setApiData,set
   const [lastPage, setLastPage] = useState<any>();
   const [companyOptions, setCompanyOptions] = useState([]);
   const [creatorOptions, setCreatorOptions] = useState([]);
-
+  const [selectedAssignOption, setSelectedAssignOption] = useState<OptionTypecon | null>(null);
   const [assignedOptions, setAssignedOptions] = useState([
     { value: '1', label: 'Assigned' },
     { value: '2', label: 'Not Assigned' },
@@ -391,10 +391,24 @@ let menuBg = useColorModeValue('white', 'navy.800');
     }
   };
 
-  const handleGameAssign = (selectedOption:any) => {
-    setSelected({ ...selected, gamesAssignCount: selectedOption?.value });
-    // Perform any other operations based on the selected option if needed
+  // const handleGameAssign = (selectedOption:any) => {
+  //   setSelected({ ...selected, gamesAssignCount: selectedOption?.value });
+  //   // Perform any other operations based on the selected option if needed
+  // };
+  const gameAssignid=apiData.map((data:any)=>data.gameID);
+  
+  const handleGameAssign = (selectedOption: OptionTypecon | null) => {
+    // Check if the selected option is "Assigned"
+    if (selectedOption && selectedOption.value === '1') {
+      setSelected({ ...selected, gamesAssignCount: gameAssignid });
+    } else {
+      // If "Not Assigned" or any other option is selected, don't send gameID
+      setSelected({ ...selected, gamesAssignCount: null });
+    }
+    
+    setSelectedAssignOption(selectedOption);
   };
+
 
   const handleProgress = (selectedOption:any) => {
     setSelected({ ...selected, progress: selectedOption?.value });
@@ -413,9 +427,10 @@ let menuBg = useColorModeValue('white', 'navy.800');
   console.log("apiData",apiData)
   const gameId=apiData.map((data:any)=>data.gameID)
   console.log("gameId",gameId)
+  
   useEffect(() => {
     handleClick();
-  }, [selected.companyId,selected.creatorId]);
+  }, [selected.companyId,selected.creatorId,selected.gamesAssignCount]);
 
 
   
@@ -472,11 +487,12 @@ let menuBg = useColorModeValue('white', 'navy.800');
       label="Games Assigned"
       options={assignedOptions}
       onChange={handleGameAssign}
-      value={
-        assignedOptions.find(
-          (option) => option.value === selected.gamesAssignCount,
-        ) || null
-      }
+      // value={
+      //   assignedOptions.find(
+      //     (option) => option.value === selected.gamesAssignCount,
+      //   ) || null
+      // }
+      value={selectedAssignOption}
       isDisabled={storage.data.role === 'Creator'}
       isClearable={true}
     />

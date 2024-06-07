@@ -18,6 +18,7 @@ const PrintLearnerDetails: React.FC = () => {
     const learnerFetchDetails = async () => {
       try {
         if (id) {
+          console.log('id',id);
           const result = await getLearnerData(Number(id));
           console.log('dataresulr',result);
           setCreatorDetails(result?.CreatorDetail);
@@ -100,7 +101,7 @@ const PrintLearnerDetails: React.FC = () => {
               <td style={cellStyle}>{learner.lenMail}</td>
             </tr>
           ))}
-          {!learnerData ? (<tr>
+          {learnerData.length === 0? (<tr>
             **No Data Found
           </tr>) : null}
         </tbody>

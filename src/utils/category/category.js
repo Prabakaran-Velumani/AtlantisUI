@@ -39,6 +39,16 @@ export async function getCategory(id) {
   }
 }
 
+export async function CategoryDataGet() {
+  try {
+    const response = await fetch(`${API_SERVER}${urls.CategoryDataGet}`,getMethod);
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.log('getCategory Error:', err);
+  }
+}
+
 
 export async function updateCategory(idv,data) {
   try {

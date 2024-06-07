@@ -2,6 +2,8 @@ export const urls = {
 
   /*******************admin******************* */
   adminLogin: '/admin/login',
+
+  logoutAuto: '/admin/logoutAuto',
   /********************dashboard************************* */
   noofCompany: '/dashboard/noofcompany',
   noOfGames: '/dashboard/noOfGames',
@@ -127,8 +129,9 @@ export const urls = {
   removeCategory: '/category/removeCategory/',
   getCategory: '/category/getCategory/',
   getCategoryList: '/category/getCategoryList',
+  CategoryDataGet:'/category/CategoryDataGet',
 // vb 03.01.2024
-  categorystatus: '/category/updateStatus/',
+  categorystatus: '/category/updatecatStatus/',
 // vb 03.01.2024
   /*****************animation********************************** */
   getImages: '/animation/getBackground/',
@@ -249,6 +252,7 @@ getPreviewLogsData:'/preview/priviewlogs',
  updatecohortsLearner:'/activity/updatecohortsLearner',
  getLearnerFilter:'/activity/getLearnerFilter',
  getAssignedGames:'/activity/getAssignedGames',
+ getBlocklWiseScore:'/activity/getBlocklWiseScore',
  learnerListData:'/activity/learnerListData/',
  GameCompleteList:'/activity/getGameCompleteList/',
  getAllLearners:'/activity/getAllLearners',

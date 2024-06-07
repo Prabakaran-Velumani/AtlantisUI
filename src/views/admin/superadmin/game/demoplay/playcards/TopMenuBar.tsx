@@ -171,7 +171,7 @@ const TopMenuBar: React.FC<TopMenuProps> = ({
     }    
     setPreLogDatas((prev: any) => ({...prev,audioVolumeValue: updatedAudioData}));
   }, [audioObj]);
-console.log("^^^^^setQuestState", questState)
+
   const totalPoints = useMemo(() => {
     let total: number = 0;
     let TotalScore:number = 0 ;
@@ -209,9 +209,7 @@ console.log("^^^^^setQuestState", questState)
             if (!sums[quest]) {
               sums[quest] = 0;
             }
-                sums[quest] += score.score;
-              
-            
+                sums[quest] += score.score;            
           });
        
           let getFinalscores ={};
@@ -220,7 +218,6 @@ console.log("^^^^^setQuestState", questState)
              const IntQuest = parseInt(quest);
              const newQuest = {...getFinalscores, [IntQuest]: score};
              getFinalscores={...newQuest};
-          
          });
           
           const Replayscores = profile?.replayScore.length > 0 ? profile?.replayScore :null;
@@ -230,9 +227,7 @@ console.log("^^^^^setQuestState", questState)
             if (!Replaysums[quest]) {
               Replaysums[quest] = 0;
             }
-      
                 Replaysums[quest] += score.score;
-              
           });
       
           let getReplayFinalscores : {[key: number]:  number} ={};
@@ -255,15 +250,11 @@ console.log("^^^^^setQuestState", questState)
             }
             return tot;
             },0);
-      // total =
-      // scores.length > 0
-      //     ? scores.reduce((acc: number, cur: any) => acc + cur.score, 0)
-      //     : 0;
     }
    
     return isNaN(total) || total === 0 ? TotalScore : total;
   }, [profile.score, profile.replayScore, currentScreenId]);
-  console.log("^^^^^totalPoints", totalPoints)
+  
   return (
     <Box className="top-menu-home-section">
       {dontShowTopMenu && !isSettingOpen ? (
