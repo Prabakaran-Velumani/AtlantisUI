@@ -613,7 +613,7 @@ if(id!==null)
                       {item.lenMail} / {item.lenUserName}
                       {selectedLearnerItems.includes(item.lenId) ?
                         <div>
-                          <Icon as={FaCircleCheck} color={'#11047A'} position='absolute' right='-8px' top='-5px' />
+                          <Icon as={FaCircleCheck} bg={'white'} color={'#11047A'} position='absolute' right='-8px' top='-5px' />
                         </div>
                         : null}
                     </Box>
@@ -635,7 +635,7 @@ if(id!==null)
                       {item.lenMail} / {item.lenUserName}
                       {selectedLearnerItems.includes(item.lenId) ?
                         <div>
-                          <Icon as={FaCircleCheck} color={'#11047A'} position='absolute' right='-8px' top='-5px' />
+                          <Icon as={FaCircleCheck} bg={'white'} color={'#11047A'} position='absolute' right='-8px' top='-5px' />
                         </div>
                         : null}
                     </Box>
@@ -701,7 +701,7 @@ if(id!==null)
                       {item.gameTitle}
                       {selectedGameItems.includes(item.gameId) ?
                         <div>
-                          <Icon as={FaCircleCheck} color={'#11047A'} position='absolute' right='-8px' top='-5px' />
+                          <Icon as={FaCircleCheck} bg={'white'} color={'#11047A'} position='absolute' right='-8px' top='-5px' />
                         </div>
                         : null}
                     </Box>
@@ -721,7 +721,7 @@ if(id!==null)
                       {item.gameTitle}
                       {selectedGameItems.includes(item.gameId) ?
                         <div>
-                          <Icon as={FaCircleCheck} color={'#11047A'} position='absolute' right='-8px' top='-5px' />
+                          <Icon as={FaCircleCheck} bg={'white'} color={'#11047A'} position='absolute' right='-8px' top='-5px' />
                         </div>
                         : null}
                     </Box>

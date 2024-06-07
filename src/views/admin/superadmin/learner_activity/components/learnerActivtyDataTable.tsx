@@ -674,6 +674,7 @@ useEffect(() => {
                         className="learnerForAction"
                         p={'12px'}
                         textAlign={'start'}
+                        color={'black !important'}
                       >
                         {cell.render('Cell')}
                       </Td>

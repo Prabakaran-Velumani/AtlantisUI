@@ -115,6 +115,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/redux-state-sync": "^3.1.9",
     "@types/three": "^0.130.0",
+    "@types/xlsx": "^0.0.36",
     "css-loader": "^6.7.1",
     "prettier": "^2.8.3",
     "prettier-plugin-tailwindcss": "^0.2.1"

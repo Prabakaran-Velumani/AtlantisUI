@@ -211,7 +211,7 @@ const CreatorCreation: React.FC = () => {
       <span
       style={{
         backgroundColor: 'transparent',
-        color: '#007bff',
+        // color: '#',
         padding: '0', 
         border: 'none', 
         borderRadius: '0', 
@@ -235,7 +235,7 @@ const CreatorCreation: React.FC = () => {
       <span
       style={{
         backgroundColor: 'transparent',
-        color: '#007bff',
+        // color: '#007bff',
         padding: '0', 
         border: 'none', 
         borderRadius: '0', 
