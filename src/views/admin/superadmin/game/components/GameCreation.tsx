@@ -775,7 +775,6 @@ setlanguageCount(CountResult?.data?.count)
     setReviews(reviews?.reviewlist);
     const images = await getCreatorBlocks(id);
     if (images?.status !== 'Success') {
-      console.log(images?.message);
     } else {
       setCblocks(images?.data);
       setQuest(images?.quest);
@@ -899,22 +898,6 @@ setlanguageCount(CountResult?.data?.count)
         setTimeout(() => {
           setAtuoSave(true);
         }, 2000);
-
-        // const itemsData = Object.values(itemsArray)
-        // const itemDataArr = itemsData.map((item: any) => item)
-        // const data = itemDataArr.slice(-1).find((item: any) => item)?.upNext
-        // setUpNext(data);
-        // console.log('data', itemsData);
-        // console.log('getInput', input)
-        // itemsData.forEach((item: any, i: number) => {
-        //     console.log('well', item);
-        //     setSequence((prev: any) => [...prev, item.id]);
-        //     setDummySequence((prev: any) => [...prev, item.id]);
-        // })
-
-        // const data = getSequence
-        // console.log('data',  data);
-        // console.log('getInput', result)
       }
     } catch (error) {
       setAtuoSave(true);
@@ -1026,8 +1009,7 @@ setlanguageCount(CountResult?.data?.count)
       setListBlockItems(result2.BlockObject);
       const countOfBlock =  Object.keys(result2.BlockObject).some((item:any)=> item);
       countOfBlock && setIsGameHasBlock(true) ;
-      console.log("^^^^^^^^countOfBlock", countOfBlock)
-      console.log('result2.gameIn', result2.gameIn);
+
       setListQuest(result2.gameIn);
     }
   };
@@ -1837,8 +1819,7 @@ if(formData.gameThankYouMessage ==='' || formData.gameThankYouMessage ===null ||
     const title4 = taby4?.getAttribute('title');
     const getFourElementHgt = tab4?.clientHeight + getfirstElementHgt;
     const tab4Height = tab == 4 && getFourElementHgt + getfirstElementHgt;
-    console.log('getFourElementHgttab', questTabState);
-    console.log('getFourElementHgt', getFourElementHgt);
+
     //tab5
     const tab5 = document.getElementById(`tab5`);
     const title5 = tab5?.getAttribute('title');
@@ -2084,8 +2065,6 @@ if(formData.gameThankYouMessage ==='' || formData.gameThankYouMessage ===null ||
     }
     // refelection Screen Validation
     if (formData.gameIsShowReflectionScreen === 'true') {
-      console.log("form length" + formData.gameReflectionQuestion);
-      console.log('reflectionQuestions1pri', reflectionQuestions);
       if (typeof reflectionQuestions === 'object' && reflectionQuestions !== null) {
 
         var keys = Object.keys(reflectionQuestions);
@@ -2098,7 +2077,6 @@ if(formData.gameThankYouMessage ==='' || formData.gameThankYouMessage ===null ||
           var keys1 = ['ref1', 'ref2', 'ref3', 'ref4'];
         }
 
-        console.log('keysref', keys1);
         //newlyadded end
         // Assuming formData.gameReflectionQuestion is the number of questions to check
         for (var i = 0; i < formData.gameReflectionQuestion; i++) {
@@ -2380,7 +2358,6 @@ console.log('reflectionQuestions1pri',reflectionQuestions);
       var keys1 = ['ref1', 'ref2', 'ref3', 'ref4'];
     }
 
-    console.log('keysref', keys1);
     //newlyadded end
     // Assuming formData.gameReflectionQuestion is the number of questions to check
     for (var i = 0; i < formData.gameReflectionQuestion; i++) {
@@ -2533,10 +2510,8 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
       const { gameLastTab, ...formDataWithoutLastTab } = result?.data;
       setFormData(formDataWithoutLastTab);
       const MaxBlockQuestNumber = await getMaxBlockQuestNo(id); // Assuming this function returns a promise
-      console.log('idddddddd', MaxBlockQuestNumber)
       if (result.status === 'Success') {
         const maxQuestNo = MaxBlockQuestNumber.data?.maxBlockQuestNo;
-        console.log('Max QuestNo:', maxQuestNo);
         if (maxQuestNo < 5) {
           setOpenQuest(true);
         } else {
@@ -2731,10 +2706,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                 var voice = input[inputkey]?.voice;
                 var blockRoll = input[inputkey]?.blockRoll;
                 var character=input[inputkey]?.character;//added by nivetha
-                console.log("characterdialog",character)
-                console.log("characterdialogType",typeof(character))
-                console.log("characterdialogAni",animation)
-
                
                 if (!Dialog) {
                   setValidation({
@@ -2817,7 +2788,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                   });
                   return false;
                 }
-                console.log('QuestionsEmotion', QuestionsEmotion)
+
                 //added condition blockRoll !==99999 by nivetha
                 if (blockRoll!=='99999' && blockRoll!==99999 && !QuestionsEmotion ) {
                   toast({
@@ -3167,13 +3138,10 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
     
      return item.temp.tempTitle === formData.gameTitle;
  });
- console.log('tempTitle Matched?', isMatchingTitle);
  
  const isMatchingStory = oldimg.some(item => {
-     console.log("Comparing story:", item.temp.tempStoryLine,'== ',formData.gameStoryLine,'--',formData.gameBackgroundId);
      return item.temp.tempStoryLine === formData.gameStoryLine;
  });
- console.log('tempStory Matched?', isMatchingStory);
 
  if (isMatchingTitle) {
      setFormData(prev => ({
@@ -3768,14 +3736,11 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
     debounce(async (data: any) => {
       try {
         const datas = JSON.stringify(data);
-        console.log("!!!!datas", datas)
         const resu = await createReflection(datas);
-        console.log("!!!!resu", resu)
         if (resu.status !== 'Success') {
           return false;
         }
         if (resu.status == 'Success') {
-          console.log("Reflection updated done. Usedispatch has called...!")
           dispatch(
             updatePreviewData({isDispatched: true, // reflectionPageUpdated: true,
               gameId:parseInt(id)}),
@@ -3816,7 +3781,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
         if (result?.status !== 'Success') {
           
         } else {
-          console.log("game data updated done. UseDispatch has called...!")
           dispatch(updatePreviewData({isDispatched: true ,gameId:parseInt(id) }));
         }
       } catch (error) {
@@ -3847,7 +3811,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
         if (result?.status !== 'Success') {
           return console.log('updateBackground error :' + result?.err);
         } else {
-          console.log("Story updated done. Use Dispatch has called...!")
           dispatch(updatePreviewData({isDispatched: true ,gameId:parseInt(id)}));
         }
       } catch (error) {
@@ -3864,9 +3827,7 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
 
         const result = await UpdateCompletionScreen(id, datas);
         if (result?.status !== 'Success') {
-          console.log('data not updated');
         } else {
-          console.log("Completion Screen Data updated done. Usedispatch has called...!")
           dispatch(updatePreviewData({isDispatched: true ,gameId:parseInt(id)}));
         }
       } catch (error) {
@@ -4415,11 +4376,8 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
   }, []);
   useEffect(() => {
     // Check if playerId is defined before making the API call
-    console.log("data");
 
     const GameId = id;
-    console.log("GameId", GameId);
-
     const data = {
       previewGameId: id,
       playerId: user?.data?.id,
@@ -4442,7 +4400,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
                 const refKey = `ref${index + 1}`; // Generate the key based on index
                 const refValue = reflection[refKey]; // Get the value corresponding to the key
                 // Perform any action with the reflection item (e.g., log it)
-                console.log(`${refKey}: ${refValue}`);
 
                 // Return the processed item if needed
                 return { [refKey]: refValue }; // Return an object with the key and value
@@ -4452,7 +4409,6 @@ else if (formData.gameIsShowAdditionalWelcomeNote === "true" && (formData.gameAd
             }
             if (parsedInputs && parsedInputs.ThankYou)
               {
-                console.log('parsedInputs.ThankYou',parsedInputs.ThankYou);
                 const Thankyoufeedback = parsedInputs.ThankYou;
                 setThankyouFeedback(Thankyoufeedback);
               }

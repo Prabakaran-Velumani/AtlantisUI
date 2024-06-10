@@ -1521,7 +1521,6 @@ useEffect(()=>{
   const handleVisibilityChange = () => {
     if (document.hidden && focusInputValue && focusedSeqId && inputtextValue) {
        blockOnBlurHanlder({ target: { value: inputtextValue }}, focusedSeqId);
-      
     }
   };
   document.addEventListener('visibilitychange', handleVisibilityChange);

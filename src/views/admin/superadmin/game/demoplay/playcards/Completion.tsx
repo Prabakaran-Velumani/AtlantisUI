@@ -288,18 +288,12 @@ const currentQuestScore = useMemo(() => {
                       {curretQuestOptions?.gameBadgeName}
                     </Text>
                     {curretQuestOptions?.gameBadge &&
-                      curretQuestOptions?.gameIsSetCriteriaForBadge === 'true' && curretQuestOptions?.gameAwardBadgeScore <= profile.score.reduce((acc: any, cur: any) => {
-                        if (cur.quest === currentQuestNo) {
-                          return acc + cur.score;
-                        } else {
-                          return acc;
-                        }
-                      }, 0) ?
+                      curretQuestOptions?.gameIsSetCriteriaForBadge === 'true' ? curretQuestOptions?.gameAwardBadgeScore <= geFinalscorequest ?
                       (
                         <Img className="inside-img" src={preloadedAssets[`Quest_${profile.currentQuest}`]} />
                       )
                       : <Img className="inside-img" src={preloadedAssets[`Quest_${profile.currentQuest}-shadow`]} />
-
+                      :<Img className="inside-img" src={preloadedAssets[`Quest_${profile.currentQuest}`]} />
                     }{' '}
                   </Box>
                 )}

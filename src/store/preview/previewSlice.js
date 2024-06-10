@@ -64,30 +64,33 @@ export const previewSlice = createSlice({
               }
             return newState;
            }          
-      },
-      removeGame: (state, action) =>{
+    },
+    removeGame: (state, action) =>{
         const gameId = action.payload;      
         if(gameId && Object.keys(state).some(id => id===gameId))
           {
             const newState = Object.keys(state).filter(id => id!==gameId);
             return newState;
           }
-      },
-      resetGameDispatchState: (state,action) =>{
+    },
+    resetGameDispatchState: (state,action) =>{
         if(action?.payload)
           {
             const newState = {...state, [action.payload]:{...(state[action.payload]), isDispatched: false}};
             return newState;
           }
-      },
-      onFocusField: (state, action)=>{
+    },
+    onFocusField: (state, action)=>{
         const payload= action?.payload;
+        console.log("payload", payload)
         const newState = {...state, [payload.gameId]:{...state[payload.gameId], onFocusValue: payload ? payload.focusValue : '', isModified: false}};
         return newState;
-      },
-      onBlurField: (state, action)=>{
-        //action.payload=> {gameId: number, blurValue: string}
-        const payload = action?.payload;
+    },
+    /***can use this this reducer function - onBlurField, when able to handle Content changes on focus and blur use this function to handle it */
+    onBlurField: (state, action)=>{
+          //action.payload=> {gameId: number, blurValue: string}
+          const payload = action?.payload;
+          console.log("payload", payload)
         if(payload.gameId){
           if(state[payload.gameId]?.onFocusValue?.trim() !== payload?.blurValue?.trim())
             {
@@ -99,19 +102,29 @@ export const previewSlice = createSlice({
               return newState;
             }
           }
-      },
-      resetGameModifiedState: (state,action) =>{
+    },
+    resetGameModifiedState: (state,action) =>{
         //payload only has gameId
         if(action?.payload)
           {
             const newState = {...state, [action.payload]:{...(state[action.payload]), isModified: false}};
             return newState;
           }
-      },
+    },
+    /***When you have the logic if value is modified, then use this reducer function - onFieldContentModified */
+    onFieldContentModified: (state, action)=>{
+      //action.payload=> {gameId: number, blurValue: string}
+      const payload = action?.payload;
+      console.log("payload", payload)
+    if(payload.gameId ){
+          const newState = {...state, [payload.gameId]:{ ...state[payload.gameId],onFocusValue: null, isModified:true}};
+          return newState;  
+      }
+    },
   },
   extraReducers(builder) {},
 });
 
-export const { updatePreviewData,createPreviewData, removeGame, resetGameDispatchState, onFocusField, onBlurField, resetGameModifiedState } = previewSlice.actions;
+export const { updatePreviewData,createPreviewData, removeGame, resetGameDispatchState, onFocusField, onBlurField, resetGameModifiedState, onFieldContentModified } = previewSlice.actions;
 
 export default previewSlice.reducer;

@@ -27,9 +27,9 @@ import { useParams } from "react-router-dom"
 import { AiOutlineEnter } from "react-icons/ai";
 // import ResizeTextarea from "react-textarea-autosize";
 // import {autosize} from "autosize";
-
-
-
+import { updatePreviewData, onFocusField,onBlurField, onFieldContentModified } from '../../../../../store/preview/previewSlice';
+import { useDispatch,useSelector } from 'react-redux';
+import { Dispatch } from '@reduxjs/toolkit'; // Import Dispatch type from @reduxjs/toolkit
 // const AboutStory : React.FC<{handleChange:(e:any)=>void,formData:any,setTags:any,setFormData:any,setCat:any,id:any}>= ({handleChange,formData,setTags,setFormData,setCat,id}) => {
 const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any, setDefaultSkills: any, formData: any, setTags: any, setFormData: any, setCat: any, id: any, languages: any }> = ({ handleChange, setDefaultSkills, defaultskills, formData, setTags, setFormData, setCat, id, languages }) => {
   //navin 16-12
@@ -50,7 +50,8 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
   const [storyLine, setStoryline] = useState<String>();
   const [title, setTitle] = useState<String>();
   const [nonplayerName, setNonplayerName] = useState<String>();
-
+  const dispatch: Dispatch<any> = useDispatch();
+  const [lastFocusedValue, setLastFocusedValue] = useState('');
   // const fetchDefaultcat = async () =>{
   //   setDefaultCat([]);
   //   const result = await getDefaultCat(id);
@@ -75,7 +76,6 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
 
     }));
   }, [defaultskills])
-  console.log('defaultskills', defaultskills)
   // useEffect(()=>{
   //   setFormData((prev:any) => ({
   //     ...prev,
@@ -100,9 +100,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
     if (formData.gameSkills) {
       try {
         const gameSkillsArray = JSON.parse(formData.gameSkills);
-        console.log('gameSkillsArray', gameSkillsArray);
         const categoryArray = formData?.gameCategoryId;
-        console.log(categoryArray);
         // Now, categoryArray is an array of objects
       } catch (error) {
         console.error('Error parsing gameCategoryId:', error);
@@ -110,15 +108,11 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
     }
   }, []);
 
-
-  // console.log('skill,cat',formData.gameSkills,formData.gameCategoryId)
-
   useEffect(() => {
     // fetchDefaultcat();
     fetchCategoryList();
   }, [])
   
-  console.log('defaultCat',defaultCat);
   let borderColor = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
   let bg = useColorModeValue('brand.500', 'brand.400');
   let pastelBlue = useColorModeValue('brand.100', 'brand.300');
@@ -132,19 +126,7 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
 
   let textColor = useColorModeValue('black', 'white');
 
-  // const keyPress = (e: any) => {
-  // 	if (e.keyCode === 13) {
-  // 		setDefaultCat([
-  // 			...defaultCat,
-  // 			{
-  // 				catName: e.target.value,
-  // 				catId: defaultCat.length === 0 ? 1 : defaultCat[defaultCat.length - 1].catId + 1
-  // 			}
-  // 		]);
-  // 		e.target.value = '';
-  // 	}
-  // };
-  const keyPressSkill = (e: any) => {
+    const keyPressSkill = (e: any) => {
     if (e.keyCode === 13) {
       const trimmedValue = e.target.value.trim(); // Remove leading and trailing whitespaces
 
@@ -156,6 +138,17 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
             crSkillId: defaultskills.length === 0 ? 1 : defaultskills[defaultskills.length - 1].crSkillId + 1
           }
         ]);
+        /*** Start - To track the changes */
+        const newSkillValues = [
+          ...defaultskills,
+          {
+            crSkillName: trimmedValue,
+            crSkillId: defaultskills.length === 0 ? 1 : defaultskills[defaultskills.length - 1].crSkillId + 1
+          }
+        ];
+       foundValueChange(defaultskills, newSkillValues);
+          /***End - To track the changes */
+
         setFormData((prev: any) => ({
           ...prev,
           isSkillsInvalid: false, // Include the new property in the state
@@ -333,8 +326,6 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
         // Call getBlockData with both game ID and translation ID
         if (languages) {
           const blockData = await getGameStoryLine(id, languages);
-
-          console.log("updatedBlockData", blockData.gameStoryLine);
           setStoryline(blockData.gameStoryLine)
           setTitle(blockData.gameTitle)
           setNonplayerName(blockData.gameNonPlayerName)
@@ -369,10 +360,44 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
     }
   }, [value]);
   
-
-
+  useEffect(()=>{
+    const handleVisibilityChange = () => {
+      console.log("handleVisibilityChange", lastFocusedValue)
+      if (document.hidden && lastFocusedValue) 
+      dispatch(onBlurField({gameId: id,blurValue: lastFocusedValue}));
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
   
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  },[])
+  
+const foundValueChange = async(original: any, updated: any)=>{
 
+  if (original.length !== updated.length) dispatch(onFieldContentModified({gameId: id}));
+
+    // const originalMap = new Map<number, any>(original.map((item:any) => [item.crSkillId, item]));
+    // const updatedMap = new Map<number, any>(updated.map((item:any) => [item.crSkillId, item]));
+
+    // for (const [id, originalItem] of originalMap) {
+    //     const updatedItem = updatedMap.get(id);
+    //     if (!updatedItem) dispatch(onFieldContentModified({gameId: id}));
+    //     for (const key in originalItem) {
+    //         if (originalItem[key] !== updatedItem[key]) dispatch(onFieldContentModified({gameId: id}));
+    //     }
+    // }
+
+    // for (const [id, updatedItem] of updatedMap) {
+    //     const originalItem = originalMap.get(id);
+    //     if (!originalItem) dispatch(onFieldContentModified({gameId: id}));
+    //     for (const key in updatedItem) {
+    //         if (updatedItem[key] !== originalItem[key]) dispatch(onFieldContentModified({gameId: id}));
+    //     }
+    // }
+    // return true;
+}
+  
   return (
     <>
       <Card mb={{ base: '0px', xl: '20px', sm: '20px' }}>
@@ -401,8 +426,11 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                   if (languages === undefined || languages === null || languages === '') {
                     // Call the handleChange function
                     handleChange(e);
-                  }
+                  };
+                   setLastFocusedValue(e.target.value);
                 }}
+                onFocus = {(e:any)=>dispatch(onFocusField({gameId: id,focusValue: e.target.value}))}
+                onBlur={(e:any)=>dispatch(onBlurField({gameId: id,focusValue: e.target.value}))}
                 placeholder="eg. Marketing Strategy"
                 name="gameTitle"
                 onKeyPress={checkvalue}
@@ -462,7 +490,8 @@ const AboutStory: React.FC<{ handleChange: (e: any) => void, defaultskills: any,
                     ref={textareaRef}
                     onKeyDown={(e: any) => keyPressSkill(e)}
                     style={styles.textareaStyle}
-
+                    onFocus = {(e:any)=>dispatch(onFocusField({gameId: id,focusValue: defaultskills}))}
+                    // onBlur={(e:any)=>dispatch(onBlurField({gameId: id,focusValue: e.target.value}))}
                   ></textarea>
                 </Flex>
                 <Text fontSize='xs' color='gray.500' mt='2px' style={{ textAlign: 'left' }}>
